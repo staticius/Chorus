@@ -14,9 +14,9 @@ plugins {
     kotlin("jvm")
 }
 
-group = "cn.powernukkitx"
+group = "org.endernx"
 version = "2.0.0-SNAPSHOT"
-description = "powernukkitx"
+description = "EnderNX"
 
 repositories {
     mavenLocal()
