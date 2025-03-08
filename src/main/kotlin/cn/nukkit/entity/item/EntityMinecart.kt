@@ -1,0 +1,68 @@
+package cn.nukkit.entity.item
+
+import cn.nukkit.Player
+import cn.nukkit.entity.*
+import cn.nukkit.event.entity.EntityDamageByBlockEvent
+import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
+import cn.nukkit.level.format.IChunk
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.utils.MinecartType
+
+/**
+ * @author Snake1999
+ * @since 2016/1/30
+ */
+class EntityMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt) {
+    override fun getIdentifier(): String {
+        return EntityID.Companion.MINECART
+    }
+
+    override fun getOriginalName(): String {
+        return getType().getName()
+    }
+
+    override fun getType(): MinecartType {
+        return MinecartType.MINECART_EMPTY
+    }
+
+    override fun getInteractButtonText(player: Player): String {
+        return "action.interact.ride.minecart"
+    }
+
+    override fun isRideable(): Boolean {
+        return true
+    }
+
+    override fun activate(x: Int, y: Int, z: Int, flag: Boolean) {
+        if (flag && this.getHealth() > 15 && this.attack(
+                EntityDamageByBlockEvent(
+                    level!!.getBlock(x, y, z), this, DamageCause.CONTACT, 1f
+                )
+            )
+            && !passengers.isEmpty()
+        ) {
+            this.dismountEntity(getPassenger()!!)
+        }
+    }
+
+    override fun onUpdate(currentTick: Int): Boolean {
+        var update: Boolean = super.onUpdate(currentTick)
+
+        if (passengers.isEmpty()) {
+            for (entity: Entity in level!!.getCollidingEntities(
+                boundingBox!!.grow(0.20000000298023224, 0.0, 0.20000000298023224),
+                this
+            )) {
+                if (entity.riding != null || (entity !is EntityLiving) || entity is Player || entity is EntitySwimmable) {
+                    continue
+                }
+
+                this.mountEntity(entity)
+                update = true
+                break
+            }
+        }
+
+        return update
+    }
+}

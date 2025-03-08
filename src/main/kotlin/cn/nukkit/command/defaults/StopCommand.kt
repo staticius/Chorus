@@ -1,0 +1,31 @@
+package cn.nukkit.command.defaults
+
+import cn.nukkit.command.CommandSender
+import cn.nukkit.command.data.CommandParameter
+import cn.nukkit.command.tree.ParamList
+import cn.nukkit.command.utils.CommandLogger
+import kotlin.collections.Map
+import kotlin.collections.set
+
+/**
+ * @author MagicDroidX (Nukkit Project)
+ */
+class StopCommand(name: String) : VanillaCommand(name, "commands.stop.description") {
+    init {
+        this.permission = "nukkit.command.stop"
+        commandParameters.clear()
+        commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
+        this.enableParamTree()
+    }
+
+    override fun execute(
+        sender: CommandSender,
+        commandLabel: String?,
+        result: Map.Entry<String, ParamList?>,
+        log: CommandLogger
+    ): Int {
+        log.addSuccess("commands.stop.start").output(true)
+        sender.server.shutdown()
+        return 1
+    }
+}

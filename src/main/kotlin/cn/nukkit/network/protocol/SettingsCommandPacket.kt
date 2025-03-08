@@ -1,0 +1,32 @@
+package cn.nukkit.network.protocol
+
+import cn.nukkit.network.connection.util.HandleByteBuf
+import lombok.*
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+class SettingsCommandPacket : DataPacket() {
+    var command: String? = null
+    var suppressOutput: Boolean = false
+
+    override fun decode(byteBuf: HandleByteBuf) {
+        this.command = byteBuf.readString()
+        this.suppressOutput = byteBuf.readBoolean()
+    }
+
+    override fun encode(byteBuf: HandleByteBuf) {
+        byteBuf.writeString(command!!)
+        byteBuf.writeBoolean(suppressOutput)
+    }
+
+    override fun pid(): Int {
+        return ProtocolInfo.Companion.SETTINGS_COMMAND_PACKET
+    }
+
+    override fun handle(handler: PacketHandler) {
+        handler.handle(this)
+    }
+}

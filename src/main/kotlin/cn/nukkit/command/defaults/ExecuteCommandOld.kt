@@ -1,0 +1,96 @@
+package cn.nukkit.command.defaults
+
+import cn.nukkit.command.CommandSender
+import cn.nukkit.command.ExecutorCommandSender
+import cn.nukkit.command.data.CommandParamType
+import cn.nukkit.command.data.CommandParameter
+import cn.nukkit.command.tree.ParamList
+import cn.nukkit.command.tree.node.PositionNode
+import cn.nukkit.command.utils.CommandLogger
+import cn.nukkit.entity.Entity
+import cn.nukkit.level.Locator
+import cn.nukkit.level.Transform
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.set
+
+class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute command", "commands.execute.usage") {
+    init {
+        this.permission = "nukkit.command.executeold"
+        commandParameters.clear()
+        commandParameters["default"] = arrayOf<CommandParameter?>(
+            CommandParameter.Companion.newType("origin", CommandParamType.TARGET),
+            CommandParameter.Companion.newType("position", CommandParamType.POSITION),
+            CommandParameter.Companion.newType("command", CommandParamType.COMMAND)
+        )
+        commandParameters["detect"] = arrayOf<CommandParameter?>(
+            CommandParameter.Companion.newType("origin", CommandParamType.TARGET),
+            CommandParameter.Companion.newType("position", CommandParamType.POSITION),
+            CommandParameter.Companion.newEnum("detect", arrayOf<String?>("detect")),
+            CommandParameter.Companion.newType("detectPos", CommandParamType.POSITION),
+            CommandParameter.Companion.newType("block", CommandParamType.INT),
+            CommandParameter.Companion.newType("data", CommandParamType.INT),
+            CommandParameter.Companion.newType("command", CommandParamType.COMMAND)
+        )
+        this.enableParamTree()
+    }
+
+    override fun execute(
+        sender: CommandSender,
+        commandLabel: String?,
+        result: Map.Entry<String, ParamList?>,
+        log: CommandLogger
+    ): Int {
+        var num = 0
+        val list = result.value
+        val entities = list!!.getResult<List<Entity>>(0)!!
+        if (entities.isEmpty()) {
+            log.addNoTargetMatch().output()
+            return 0
+        }
+        when (result.key) {
+            "default" -> {
+                val command = list.getResult<String>(2)
+                for (entity in entities) {
+                    val pos = (list[1] as PositionNode).get<Locator>(entity.locator)
+                    val executeSender = ExecutorCommandSender(
+                        sender, entity, Transform.fromObject(
+                            pos!!.position, pos.level
+                        )
+                    )
+                    val n = executeSender.server.executeCommand(executeSender, command)
+                    if (n == 0) {
+                        log.addError("commands.execute.failed", command, entity.name)
+                    } else num += n
+                }
+            }
+
+            "detect" -> {
+                val blockId = list.getResult<String>(4)
+                val meta = list.getResult<Int>(5)!!
+                val command = list.getResult<String>(6)
+                for (entity in entities) {
+                    val pos = (list[1] as PositionNode).get<Locator>(entity.locator)
+                    val detect = (list[3] as PositionNode).get<Locator>(
+                        pos!!
+                    )
+                    if (detect!!.levelBlock.id === blockId && detect!!.levelBlock.blockState.specialValue()
+                            .toInt() == meta
+                    ) {
+                        val executeSender = ExecutorCommandSender(
+                            sender, entity, Transform.fromObject(
+                                pos.position, pos.level
+                            )
+                        )
+                        val n = executeSender.server.executeCommand(executeSender, command)
+                        if (n == 0) {
+                            log.addError("commands.execute.failed", command, entity.name)
+                        } else num += n
+                    }
+                }
+            }
+        }
+        log.output()
+        return num
+    }
+}

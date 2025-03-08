@@ -1,0 +1,5744 @@
+package cn.nukkit
+
+import cn.nukkit.api.UsedByReflection
+import cn.nukkit.block.*
+import cn.nukkit.block.customblock.CustomBlock
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.BlockEntitySign
+import cn.nukkit.blockentity.BlockEntitySpawnable
+import cn.nukkit.camera.data.CameraPreset.Companion.presets
+import cn.nukkit.command.CommandSender
+import cn.nukkit.command.utils.RawText
+import cn.nukkit.config.ServerProperties.get
+import cn.nukkit.config.ServerPropertiesKeys
+import cn.nukkit.dialog.window.FormWindowDialog
+import cn.nukkit.entity.*
+import cn.nukkit.entity.Attribute.Companion.getAttribute
+import cn.nukkit.entity.EntityHuman.getSkin
+import cn.nukkit.entity.EntityHuman.getUniqueId
+import cn.nukkit.entity.data.EntityDataTypes
+import cn.nukkit.entity.data.EntityFlag
+import cn.nukkit.entity.data.PlayerFlag
+import cn.nukkit.entity.data.Skin
+import cn.nukkit.entity.effect.EffectType
+import cn.nukkit.entity.item.EntityFishingHook
+import cn.nukkit.entity.item.EntityItem
+import cn.nukkit.entity.item.EntityXpOrb
+import cn.nukkit.entity.mob.animal.EntityHorse
+import cn.nukkit.entity.mob.monster.EntityBoss
+import cn.nukkit.entity.projectile.EntityProjectile
+import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow
+import cn.nukkit.entity.projectile.abstract_arrow.EntityThrownTrident
+import cn.nukkit.event.block.WaterFrostEvent
+import cn.nukkit.event.entity.*
+import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
+import cn.nukkit.event.entity.EntityPortalEnterEvent.PortalType
+import cn.nukkit.event.inventory.InventoryPickupArrowEvent
+import cn.nukkit.event.inventory.InventoryPickupItemEvent
+import cn.nukkit.event.inventory.InventoryPickupTridentEvent
+import cn.nukkit.event.player.*
+import cn.nukkit.event.player.PlayerKickEvent.Reason.toString
+import cn.nukkit.event.player.PlayerTeleportEvent.TeleportCause
+import cn.nukkit.event.server.DataPacketSendEvent
+import cn.nukkit.form.window.Form
+import cn.nukkit.inventory.*
+import cn.nukkit.inventory.fake.FakeInventory
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.id
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.item.enchantment.Enchantment.level
+import cn.nukkit.lang.CommandOutputContainer
+import cn.nukkit.lang.LangCode
+import cn.nukkit.lang.LangCode.Companion.from
+import cn.nukkit.lang.TextContainer
+import cn.nukkit.lang.TextContainer.toString
+import cn.nukkit.lang.TranslationContainer
+import cn.nukkit.lang.TranslationContainer.parameters
+import cn.nukkit.level.*
+import cn.nukkit.level.Level.Companion.chunkHash
+import cn.nukkit.level.Level.Companion.generateChunkLoaderId
+import cn.nukkit.level.Level.Companion.getHashX
+import cn.nukkit.level.Level.Companion.getHashZ
+import cn.nukkit.level.Level.id
+import cn.nukkit.level.Level.safeSpawn
+import cn.nukkit.level.Locator.Companion.fromObject
+import cn.nukkit.level.Transform.pitch
+import cn.nukkit.level.Transform.yaw
+import cn.nukkit.level.format.IChunk
+import cn.nukkit.level.particle.PunchBlockParticle
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.*
+import cn.nukkit.math.BlockVector3.add
+import cn.nukkit.math.NukkitMath.round
+import cn.nukkit.math.Vector3.add
+import cn.nukkit.metadata.MetadataValue
+import cn.nukkit.nbt.tag.*
+import cn.nukkit.nbt.tag.CompoundTag.remove
+import cn.nukkit.nbt.tag.ListTag.add
+import cn.nukkit.nbt.tag.ListTag.get
+import cn.nukkit.network.connection.BedrockDisconnectReasons
+import cn.nukkit.network.connection.BedrockSession
+import cn.nukkit.network.process.SessionState
+import cn.nukkit.network.protocol.*
+import cn.nukkit.network.protocol.CameraShakePacket.CameraShakeAction
+import cn.nukkit.network.protocol.CameraShakePacket.CameraShakeType
+import cn.nukkit.network.protocol.types.*
+import cn.nukkit.network.protocol.types.GameType.Companion.from
+import cn.nukkit.permission.*
+import cn.nukkit.permission.BanList.isBanned
+import cn.nukkit.permission.BanList.remove
+import cn.nukkit.plugin.InternalPlugin
+import cn.nukkit.plugin.Plugin
+import cn.nukkit.scheduler.AsyncTask
+import cn.nukkit.scheduler.ServerScheduler.scheduleDelayedTask
+import cn.nukkit.scheduler.ServerScheduler.scheduleTask
+import cn.nukkit.scheduler.Task
+import cn.nukkit.scheduler.TaskHandler
+import cn.nukkit.scoreboard.IScoreboard
+import cn.nukkit.scoreboard.IScoreboardLine
+import cn.nukkit.scoreboard.data.DisplaySlot
+import cn.nukkit.scoreboard.data.SortOrder
+import cn.nukkit.scoreboard.displayer.IScoreboardViewer
+import cn.nukkit.scoreboard.scorer.PlayerScorer
+import cn.nukkit.utils.*
+import cn.nukkit.utils.Binary.Companion.writeUUID
+import cn.nukkit.utils.Config.remove
+import cn.nukkit.utils.Identifier.Companion.tryParse
+import cn.nukkit.utils.Identifier.toString
+import cn.nukkit.utils.PortalHelper.moveToTheEnd
+import cn.nukkit.utils.TextFormat.Companion.clean
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
+import com.google.common.base.Preconditions
+import com.google.common.base.Strings
+import com.google.common.collect.BiMap
+import com.google.common.collect.HashBiMap
+import com.google.common.collect.Sets
+import io.netty.util.internal.EmptyArrays
+import io.netty.util.internal.PlatformDependent
+import it.unimi.dsi.fastutil.Pair
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet
+import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap
+import lombok.extern.slf4j.Slf4j
+import org.jetbrains.annotations.ApiStatus
+import org.jetbrains.annotations.UnmodifiableView
+import java.net.InetSocketAddress
+import java.util.*
+import java.util.concurrent.*
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
+import java.util.function.Consumer
+import java.util.stream.Collectors
+import kotlin.concurrent.Volatile
+import kotlin.math.*
+
+/**
+ * 游戏玩家对象，代表操控的角色
+ *
+ *
+ * Game player object, representing the controlled character
+ *
+ * @author MagicDroidX &amp; Box (Nukkit Project)
+ */
+@Slf4j
+open class Player @UsedByReflection constructor(
+    /**
+     * Get the network Session for the player
+     *
+     * @return the network Session
+     */
+    val session: BedrockSession,
+    /** */
+    val playerInfo: PlayerInfo
+) :
+    EntityHuman(null, CompoundTag()), CommandSender, ChunkLoader, IPlayer, IScoreboardViewer {
+    var abilities: EntityAbilities = EntityAbilities()
+    var timer: EntityTimer = EntityTimer()
+    var agentId: Long = 0L
+    var dimensionId: Int = 0
+    var enchantmentSeed: Int = 0
+    override var enderChestInventory: List<EntityItemSlot> = ArrayList()
+    var fogCommandStack: List<String> = ArrayList()
+    var formatVersion: String = ""
+
+    //    @NotNull public Boolean hasSeenCredits = false;
+    //    @NotNull public List<EntityItemSlot> inventory = new ArrayList<>();
+    var leftShoulderRiderID: Long = 0L
+    var mapIndex: Int = 0
+    var playerGameMode: Int = 0
+    var playerLevel: Int = 0
+    var playerLevelProgress: Float = 0.0f
+    var playerUIItems: List<EntityItemSlot> = ArrayList()
+    var recipeUnlocking: CompoundTag = CompoundTag()
+    var RideID: Long = 0L
+    var rightShoulderRiderID: Long = 0L
+    var selectedContainerId: Int = 0
+    var selectedInventorySlot: Int = 0
+
+    //    @NotNull public Boolean sleeping = false;
+    var sleepTimer: Short = 0
+    var sneaking: Boolean = false
+    var spawnBlockPositionX: Int = 0
+    var spawnBlockPositionY: Int = 0
+    var spawnBlockPositionZ: Int = 0
+    var spawnDimension: Int = 0
+    var spawnX: Int = 0
+    var spawnY: Int = 0
+    var spawnZ: Int = 0
+
+    //    @NotNull public Integer timeSinceRest = 0;
+    var wardenThreatDecreaseTimer: Int = 0
+    var wardenThreatLevel: Int = 0
+    var wardenThreatLevelIncreaseCooldown: Int = 0
+
+
+    /** static fields */
+    var playedBefore: Boolean = false
+    var spawned: Boolean = false
+
+    @Volatile
+    var locallyInitialized: Boolean = false
+    var loggedIn: Boolean = false
+    val achievements: HashSet<String?> = HashSet()
+
+    /**
+     * 得到gamemode。
+     *
+     *
+     * Get gamemode.
+     *
+     * @return int
+     */
+    @JvmField
+    var gamemode: Int
+    var lastBreak: Long
+    var speed: Vector3? = null
+    var creationTime: Long = 0
+
+    /**
+     * 正在挖掘的方块
+     *
+     *
+     * block being dig
+     */
+    var breakingBlock: Block? = null
+
+    /**
+     * 正在挖掘的方向
+     *
+     *
+     * direction of dig
+     */
+    var breakingBlockFace: BlockFace? = null
+    var pickedXPOrb: Int = 0
+    var fishing: EntityFishingHook? = null
+    var lastSkinChange: Long
+    var breakingBlockTime: Long = 0
+    var blockBreakProgress: Double = 0.0
+
+    /**
+     * 得到原始套接字地址
+     *
+     * @return [InetSocketAddress]
+     */
+    val rawSocketAddress: InetSocketAddress?
+    val hiddenPlayers: MutableMap<UUID, Player> = HashMap()
+    val chunkSendCountPerTick: Int
+    val spawnThreshold: Int
+    var messageLimitCounter: Int = 2
+    var connected: AtomicBoolean = AtomicBoolean(true)
+
+    /**
+     * 得到套接字地址,如果开启waterdogpe兼容，该套接字地址是被修改为兼容waterdogpe型的，反正则与[.rawSocketAddress] 一样
+     *
+     *
+     * If waterdogpe compatibility is enabled, the address is modified to be waterdogpe compatible, otherwise it is the same as [.rawSocketAddress]
+     *
+     * @return [InetSocketAddress]
+     */
+    var socketAddress: InetSocketAddress?
+    /**
+     * 得到[.removeFormat]
+     *
+     *
+     * get [.removeFormat]
+     *
+     * @return boolean
+     */
+    /**
+     * 设置[.removeFormat]为指定值
+     *
+     * @param remove 是否清楚格式化字符<br></br>Whether remove the formatting character
+     */
+    /**
+     * 是否移除改玩家聊天中的颜色字符如 §c §1
+     *
+     *
+     * Whether to remove the color character in the chat of the changed player as §c §1
+     */
+    var removeFormat: Boolean = true
+    var displayName: String
+    var sleeping: Vector3? = null
+    var chunkLoadCount: Int = 0
+    var nextChunkOrderRun: Int = 1
+    var newPosition: Vector3? = null
+    var chunkRadius: Int
+    protected var viewDistance: Int
+    var spawnPoint: Locator?
+    protected var spawnPointType: SpawnPointType? = null
+    /**
+     * @return [.inAirTicks]
+     */
+    /**
+     * 代表玩家悬浮空中所经过的tick数.
+     *
+     *
+     * Represents the number of ticks the player has passed through the air.
+     */
+    var inAirTicks: Int = 0
+    var startAirTicks: Int = 5
+    protected var adventureSettings: AdventureSettings? = null
+
+    /**
+     * @since 1.2.1.0-PN
+     */
+    var isCheckingMovement: Boolean = true
+
+    /**
+     * 获取玩家的[PlayerFood]
+     *
+     *
+     * Get the player's [PlayerFood]
+     *
+     * @return the food data
+     */
+    @JvmField
+    var foodData: PlayerFood? = null
+    protected var enableClientCommand: Boolean = true
+    var formWindowCount: Int = 0
+    var formWindows: MutableMap<Int, Form<*>> = Int2ObjectOpenHashMap()
+    var serverSettings: MutableMap<Int, Form<*>> = Int2ObjectOpenHashMap()
+
+    /**
+     * 我们使用google的cache来存储NPC对话框发送信息
+     * 原因是发送过去的对话框客户端有几率不响应，在特定情况下我们无法清除这些对话框，这会导致内存泄漏
+     * 5分钟后未响应的对话框会被清除
+     *
+     *
+     * We use Google's cache to store NPC dialogs to send messages
+     * The reason is that there is a chance that the client will not respond to the dialogs sent, and in certain cases we cannot clear these dialogs, which can lead to memory leaks
+     * Unresponsive dialogs will be cleared after 5 minutes
+     */
+    var dialogWindows: Cache<String, FormWindowDialog?> =
+        Caffeine.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build()
+    var dummyBossBars: MutableMap<Long, DummyBossBar?> = Long2ObjectLinkedOpenHashMap()
+    var lastRightClickTime: Double = 0.0
+    var lastRightClickPos: Vector3? = null
+
+    /**
+     * 返回[Player.lastInAirTick]的值,代表玩家上次在空中的server tick
+     *
+     *
+     * Returns the value of [Player.lastInAirTick],represent the last server tick the player was in the air
+     *
+     * @return int
+     */
+    @JvmField
+    var lastInAirTick: Int = 0
+    private val clientMovements: Queue<Transform> = PlatformDependent.newMpscQueue(4)
+
+    @get:Synchronized
+    @set:Synchronized
+    var locale: AtomicReference<Locale?> = AtomicReference(null)
+    /**
+     * How many ticks have passed since the player last sleeped, 1 tick = 0.05 s
+     *
+     * @return the ticks
+     */
+    /**
+     * Set the timeSinceRest ticks
+     *
+     * @see .getTimeSinceRest
+     */
+    var timeSinceRest: Int = 0
+
+    /**
+     * 获得移动设备玩家面对载具时出现的交互按钮的语言硬编码。
+     *
+     *
+     * Get the language hardcoded for the interaction buttons that appear when mobile device players face the carrier.
+     */
+    var buttonText: String = "Button"
+        /**
+         * 设置移动设备玩家面对载具时出现的交互按钮的语言硬编码。
+         *
+         *
+         * Set the language hardcoded for the interaction buttons that appear when mobile device players face the carrier.
+         */
+        set(text) {
+            field = text
+            this.setDataProperty(EntityDataTypes.INTERACT_TEXT, field)
+        }
+    private var perm: PermissibleBase?
+    private var hash = 0
+    private var exp = 0
+
+    /**
+     * 得到该玩家的等级。
+     *
+     *
+     * Get the level of the player.
+     *
+     * @return int
+     */
+    var experienceLevel: Int = 0
+        private set
+    private var enchSeed = 0
+    private var loadingScreenId = 0
+    override val loaderId: Int
+    private var lastBreakPosition = BlockVector3()
+    private var hasSeenCredits = false
+    private var wasInSoulSandCompatible = false
+
+    /**
+     * 返回灵魂急行带来的速度增加倍速
+     *
+     *
+     * Return to the speed increase multiplier brought by SOUL_SPEED Enchantment
+     */
+    var soulSpeedMultiplier: Float = 1f
+        private set
+
+    /**
+     * 获取击杀该玩家的实体
+     *
+     *
+     * Get the entity that killed this player
+     *
+     * @return Entity | null
+     */
+    var killer: Entity? = null
+        private set
+    private var delayedPosTrackingUpdate: TaskHandler? = null
+    var showingCredits: Boolean = false
+    var lastBlockAction: PlayerBlockActionData? = null
+    var preLoginEventTask: AsyncTask? = null
+
+    /**
+     * 获取该玩家的登录链数据
+     *
+     *
+     * Get the login chain data of this player
+     *
+     * @return the login chain data
+     */
+    var loginChainData: LoginChainData
+
+    /**
+     * 玩家升级时播放音乐的时间
+     *
+     *
+     * Time to play sound when player upgrades
+     */
+    var lastPlayerdLevelUpSoundTime: Int = 0
+    /**
+     * @return [.lastAttackEntity]
+     */
+    /**
+     * 玩家最后攻击的实体.
+     *
+     *
+     * The entity that the player attacked last.
+     */
+    var lastAttackEntity: Entity? = null
+
+    /**
+     * Gets fog stack.
+     */
+    /**
+     * Set the fog stack, if you want to client effect,you need [.sendFogStack]
+     *
+     * @param fogStack the fog stack
+     */
+    /**
+     * 玩家迷雾设置
+     *
+     *
+     * Player Fog Settings
+     */
+    var fogStack: List<PlayerFogPacket.Fog> = ArrayList()
+    /**
+     * @return [.lastBeAttackEntity]
+     */
+    /**
+     * 最后攻击玩家的实体.
+     *
+     *
+     * The entity that the player is attacked last.
+     */
+    var lastBeAttackEntity: Entity? = null
+    private val playerHandle = PlayerHandle(this)
+    protected val playerChunkManager: PlayerChunkManager
+
+    /**
+     * Set the status of the current player opening sign
+     *
+     * @param frontSide true means open sign front, vice versa. If it is null, it means that the player has not opened sign
+     */
+    var isOpenSignFront: Boolean? = null
+    var isFlySneaking: Boolean = false
+
+    /** lastUseItem System and item cooldown */
+    protected val cooldownTickMap: HashMap<String, Int> = HashMap()
+    protected val lastUseItemMap: HashMap<String, Int> = HashMap(1)
+
+    /** */
+    /** inventory system */
+    protected var windowsCnt: Int = 1
+
+    /**
+     * 获取上一个关闭窗口对应的id
+     *
+     *
+     * Get the id corresponding to the last closed window
+     */
+    var closingWindowId: Int = Int.MIN_VALUE
+    val windows: BiMap<Inventory, Int> = HashBiMap.create()
+    val windowIndex: BiMap<Int, Inventory> = windows.inverse()
+    protected val permanentWindows: MutableSet<Int?> = IntOpenHashSet()
+
+    /**
+     * 获取该玩家的[CraftingGridInventory]
+     *
+     *
+     * Gets crafting grid of the player.
+     */
+    var craftingGrid: CraftingGridInventory? = null
+        protected set
+
+    /**
+     * 获取该玩家的[PlayerCursorInventory]
+     *
+     *
+     * Gets cursor inventory of the player.
+     */
+    var cursorInventory: PlayerCursorInventory? = null
+        protected set
+    var creativeOutputInventory: CreativeOutputInventory? = null
+        protected set
+
+    /**
+     * Player opens it own inventory
+     */
+    var inventoryOpen: Boolean = false
+
+    /**
+     * Player open it own ender chest inventory
+     */
+    var enderChestOpen: Boolean = false
+
+    /**
+     * Player open a fake Inventory
+     */
+    var fakeInventoryOpen: Boolean = false
+
+    /** */
+    /**todo hack for receive a error position after teleport */
+    private var lastTeleportMessage: Pair<Transform, Long>? = null
+
+    /**
+     * Get the player info.
+     */
+
+    init {
+        this.perm = PermissibleBase(this)
+        this.server = Server.Companion.getInstance()
+        this.lastBreak = -1
+        this.socketAddress = session.address
+        this.rawSocketAddress = socketAddress
+        this.loaderId = generateChunkLoaderId(this)
+        this.chunkSendCountPerTick = server.settings.chunkSettings().perTickSend()
+        this.spawnThreshold = server.settings.chunkSettings().spawnThreshold()
+        this.spawnPoint = null
+        this.gamemode = server.gamemode
+        this.level = server!!.defaultLevel
+        this.viewDistance = server.viewDistance
+        this.chunkRadius = viewDistance
+        this.boundingBox = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        this.lastSkinChange = -1
+        this.playerChunkManager = PlayerChunkManager(this)
+        this.creationTime = System.currentTimeMillis()
+        this.displayName = playerInfo.getUsername()
+        this.loginChainData = playerInfo.getData()
+        this.uuid = playerInfo.getUniqueId()
+        this.rawUUID = writeUUID(playerInfo.getUniqueId())
+        this.setSkin(playerInfo.getSkin())
+    }
+
+    fun onBlockBreakContinue(pos: Vector3, face: BlockFace?) {
+        if (this.isBreakingBlock()) {
+            val time = System.currentTimeMillis()
+            val block = level!!.getBlock(pos, false)
+            val miningTimeRequired = if (breakingBlock is CustomBlock) {
+                breakingBlock.breakTime(inventory!!.itemInHand, this)
+            } else breakingBlock!!.calculateBreakTime(
+                inventory!!.itemInHand,
+                this
+            )
+
+            if (miningTimeRequired > 0) {
+                val breakTick = ceil(miningTimeRequired * 20).toInt()
+                val pk = LevelEventPacket()
+                pk.evid = LevelEventPacket.EVENT_BLOCK_UPDATE_BREAK
+                pk.x = breakingBlock!!.position.south.toFloat()
+                pk.y = breakingBlock!!.position.up.toFloat()
+                pk.z = breakingBlock!!.position.west.toFloat()
+                pk.data = 65535 / breakTick
+                level!!.addChunkPacket(
+                    breakingBlock!!.position.floorX shr 4,
+                    breakingBlock!!.position.floorZ shr 4, pk
+                )
+                level!!.addParticle(PunchBlockParticle(pos, block!!))
+                if (breakingBlock is CustomBlock) {
+                    val timeDiff = time - breakingBlockTime
+                    blockBreakProgress += timeDiff / (miningTimeRequired * 1000)
+                    if (blockBreakProgress > 0.99) {
+                        this.onBlockBreakAbort(pos)
+                        this.onBlockBreakComplete(pos.asBlockVector3(), face)
+                    }
+                    breakingBlockTime = time
+                }
+            }
+        }
+    }
+
+    fun onBlockBreakStart(pos: Vector3, face: BlockFace) {
+        val blockPos = pos.asBlockVector3()
+        val currentBreak = System.currentTimeMillis()
+        // HACK: Client spams multiple left clicks so we need to skip them.
+        if ((lastBreakPosition.equals(blockPos) && (currentBreak - this.lastBreak) < 10) || pos.distanceSquared(this.position) > 1000) {
+            return
+        }
+
+        val target = level!!.getBlock(pos)
+        val playerInteractEvent = PlayerInteractEvent(
+            this,
+            inventory!!.itemInHand, target!!.position, face,
+            if (target.isAir) PlayerInteractEvent.Action.LEFT_CLICK_AIR else PlayerInteractEvent.Action.LEFT_CLICK_BLOCK
+        )
+        getServer().getPluginManager().callEvent(playerInteractEvent)
+        if (playerInteractEvent.isCancelled) {
+            inventory!!.sendHeldItem(this)
+            level.sendBlocks(arrayOf(this), arrayOf<Block?>(target), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0)
+            if (target.getLevelBlockAtLayer(1) is BlockLiquid) {
+                level.sendBlocks(
+                    arrayOf(this), arrayOf(
+                        target.getLevelBlockAtLayer(1)
+                    ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 1
+                )
+            }
+            return
+        }
+
+        target.onTouch(
+            pos,
+            getInventory().itemInHand, face, 0f, 0f, 0f, this, playerInteractEvent.action
+        )
+
+        val block = target.getSide(face)
+        if (block!!.id == Block.FIRE || block.id == BlockID.SOUL_FIRE) {
+            level!!.setBlock(block.position, Block.get(BlockID.AIR), true)
+            level!!.addLevelSoundEvent(block.position, LevelSoundEventPacket.SOUND_EXTINGUISH_FIRE)
+            return
+        }
+
+        if (block.id == BlockID.SWEET_BERRY_BUSH && block.isDefaultState) {
+            val oldItem = playerInteractEvent.item
+            val i =
+                level!!.useBreakOn(block.position, oldItem, this, true)
+            if (this.isSurvival || this.isAdventure) {
+                foodData!!.exhaust(0.005)
+                if (!i!!.equals(oldItem) || i.getCount() != oldItem!!.getCount()) {
+                    inventory!!.setItemInHand(i)
+                    inventory!!.sendHeldItem(getViewers().values)
+                }
+            }
+            return
+        }
+
+        val canChangeBlock = target.isBlockChangeAllowed(this)
+        if (!canChangeBlock) {
+            return
+        }
+
+        if (this.isSurvival || (this.isAdventure && canChangeBlock)) {
+            this.breakingBlockTime = currentBreak
+            val miningTimeRequired = if (target is CustomBlock) {
+                target.breakTime(inventory!!.itemInHand, this)
+            } else target.calculateBreakTime(inventory!!.itemInHand, this)
+            val breakTime = ceil(miningTimeRequired * 20).toInt()
+            if (breakTime > 0) {
+                val pk = LevelEventPacket()
+                pk.evid = LevelEventPacket.EVENT_BLOCK_START_BREAK
+                pk.x = pos.south.toFloat()
+                pk.y = pos.up.toFloat()
+                pk.z = pos.west.toFloat()
+                pk.data = 65535 / breakTime
+                level!!.addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, pk)
+
+                if (level!!.isAntiXrayEnabled && level!!.antiXraySystem!!.isPreDeObfuscate) {
+                    level!!.antiXraySystem!!.deObfuscateBlock(this, face, target)
+                }
+            }
+        }
+
+        this.breakingBlock = target
+        this.breakingBlockFace = face
+        this.lastBreak = currentBreak
+        this.lastBreakPosition = blockPos
+    }
+
+    fun onBlockBreakAbort(pos: Vector3) {
+        if (pos.distanceSquared(this.position) < 1000) { // same as with ACTION_START_BREAK
+            val pk = LevelEventPacket()
+            pk.evid = LevelEventPacket.EVENT_BLOCK_STOP_BREAK
+            pk.x = pos.south.toFloat()
+            pk.y = pos.up.toFloat()
+            pk.z = pos.west.toFloat()
+            pk.data = 0
+            level!!.addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, pk)
+        }
+        this.blockBreakProgress = 0.0
+        this.breakingBlock = null
+        this.breakingBlockFace = null
+    }
+
+    fun onBlockBreakComplete(blockPos: BlockVector3, face: BlockFace?) {
+        if (!this.spawned || !this.isAlive()) {
+            return
+        }
+
+        var handItem: Item? = getInventory().itemInHand
+        val clone: Item = handItem!!.clone()
+
+        val canInteract = this.canInteract(blockPos.add(0.5, 0.5, 0.5), (if (this.isCreative) 13 else 7).toDouble())
+        if (canInteract) {
+            handItem =
+                level!!.useBreakOn(blockPos.asVector3(), face, handItem, this, true)
+            if (handItem != null && this.isSurvival) {
+                foodData!!.exhaust(0.005)
+                if (handItem.equals(clone) && handItem.getCount() == clone.getCount()) {
+                    return
+                }
+
+                if (clone.id == handItem.id || handItem.isNull) {
+                    inventory!!.setItemInHand(handItem, false)
+                } else {
+                    Player.log.debug("Tried to set item " + handItem.id + " but " + this.getName() + " had item " + clone.id + " in their hand slot")
+                }
+                inventory!!.sendHeldItem(getViewers().values)
+            } else if (handItem == null) level.sendBlocks(
+                arrayOf(this), arrayOf(
+                    level!!.getBlock(blockPos.asVector3())
+                ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0
+            )
+            return
+        }
+
+        inventory!!.sendContents(this)
+        inventory!!.sendHeldItem(this)
+
+        if (blockPos.distanceSquared(this.position) < 100) {
+            val target = level!!.getBlock(blockPos.asVector3())
+            level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), UpdateBlockPacket.FLAG_ALL_PRIORITY)
+
+            val blockEntity = level!!.getBlockEntity(blockPos.asVector3())
+            if (blockEntity is BlockEntitySpawnable) {
+                blockEntity.spawnTo(this)
+            }
+        }
+    }
+
+    private fun setTitle(text: String) {
+        val packet = SetTitlePacket()
+        packet.text = text
+        packet.type = SetTitlePacket.TYPE_TITLE
+        this.dataPacket(packet)
+    }
+
+    //todo a lot on dimension
+    private fun setDimension(dimension: Int) {
+        val pk = ChangeDimensionPacket()
+        pk.dimension = dimension
+        pk.x = position.south.toFloat()
+        pk.y = position.up.toFloat()
+        pk.z = position.west.toFloat()
+        pk.respawn = false
+        pk.loadingScreenId = loadingScreenId++
+
+        this.dataPacket(pk)
+
+        level!!.sendChunks(this)
+
+        val playerActionPacket = PlayerActionPacket()
+        playerActionPacket.action = PlayerActionPacket.ACTION_DIMENSION_CHANGE_ACK
+        playerActionPacket.entityId = this.getId()
+        this.dataPacket(playerActionPacket)
+    }
+
+    private fun updateBlockingFlag() {
+        val shouldBlock = this.isItemCoolDownEnd("shield")
+                && (this.isSneaking() || getRiding() != null)
+                && (getInventory().itemInHand is ItemShield || getOffhandInventory()!!.getItem(0) is ItemShield)
+
+        if (isBlocking() != shouldBlock) {
+            this.setBlocking(shouldBlock)
+        }
+    }
+
+    public override fun initEntity() {
+        super.initEntity()
+        val level = if (namedTag!!.containsString("SpawnLevel")) {
+            server!!.getLevelByName(namedTag!!.getString("SpawnLevel")!!)
+        } else Server.Companion.getInstance().getDefaultLevel()
+        if (namedTag!!.containsInt("SpawnX") && namedTag!!.containsInt("SpawnY") && namedTag!!.containsInt("SpawnZ")) {
+            this.spawnPoint = Locator(
+                namedTag!!.getInt("SpawnX").toDouble(),
+                namedTag!!.getInt("SpawnY").toDouble(),
+                namedTag!!.getInt("SpawnZ").toDouble(), level!!
+            )
+        } else {
+            this.spawnPoint = level!!.safeSpawn
+            Player.log.info(
+                "Player {} cannot find the saved spawnpoint, reset the spawnpoint to {} {} {} / {}",
+                this.getName(),
+                spawnPoint!!.position.south,
+                spawnPoint!!.position.up,
+                spawnPoint!!.position.west,
+                spawnPoint!!.level.getName()
+            )
+        }
+        setDataFlag(EntityFlag.HIDDEN_WHEN_INVISIBLE)
+        setDataFlag(EntityFlag.PUSH_TOWARDS_CLOSEST_SPACE)
+        this.addDefaultWindows()
+        this.loggedIn = true
+
+        //todo remove these
+        if (namedTag!!.containsString("SpawnBlockLevel")) {
+            namedTag!!.remove("SpawnBlockLevel")
+        }
+        if (namedTag!!.containsInt("SpawnBlockPositionX") && namedTag!!.containsInt("SpawnBlockPositionY") && namedTag!!.containsInt(
+                "SpawnBlockPositionZ"
+            )
+        ) {
+            namedTag!!.remove("SpawnBlockPositionX")
+            namedTag!!.remove("SpawnBlockPositionY")
+            namedTag!!.remove("SpawnBlockPositionZ")
+        }
+    }
+
+    /**
+     * 完成completeLoginSequence后执行
+     */
+    fun doFirstSpawn() {
+        this.spawned = true
+
+        session.syncCraftingData()
+        session.syncInventory()
+        this.resetInventory()
+
+        this.setEnableClientCommand(true)
+
+        val setTimePacket = SetTimePacket()
+        setTimePacket.time = level!!.getTime()
+        this.dataPacket(setTimePacket)
+
+        this.noDamageTicks = 60
+
+        for (index in playerChunkManager.usedChunks) {
+            val chunkX = getHashX(index)
+            val chunkZ = getHashZ(index)
+            for (entity in level!!.getChunkEntities(chunkX, chunkZ)!!.values) {
+                if (this !== entity && !entity.closed && entity.isAlive()) {
+                    entity.spawnTo(this)
+                }
+            }
+        }
+
+        val experience = this.experience
+        if (experience != 0) {
+            this.sendExperience(experience)
+        }
+
+        val level = this.experienceLevel
+        if (level != 0) {
+            this.sendExperienceLevel(this.experienceLevel)
+        }
+
+        //Weather
+        this.level!!.sendWeather(this)
+
+        //FoodLevel
+        val food = this.foodData
+        if (food!!.isHungry) {
+            food.sendFood()
+        }
+
+        val scoreboardManager = getServer().getScoreboardManager()
+        scoreboardManager?.onPlayerJoin(this)
+
+        if (spawn.second() == null || spawn.second() == SpawnPointType.WORLD) {
+            this.setSpawn(this.level!!.safeSpawn, SpawnPointType.WORLD)
+        } else {
+            //update compass
+            val pk = SetSpawnPositionPacket()
+            pk.spawnType = SetSpawnPositionPacket.TYPE_WORLD_SPAWN
+            pk.x = spawn.first()!!.position.floorX
+            pk.y = spawn.first()!!.position.floorY
+            pk.z = spawn.first()!!.position.floorZ
+            pk.dimension = spawn.first()!!.level.dimension
+            this.dataPacket(pk)
+        }
+
+        this.sendFogStack()
+        this.sendCameraPresets()
+
+        Player.log.debug("Send Player Spawn Status Packet to {},wait init packet", getName())
+        this.sendPlayStatus(PlayStatusPacket.PLAYER_SPAWN)
+
+        //客户端初始化完毕再传送玩家，避免下落 (x)
+        //已经设置immobile了所以不用管下落了
+        val pos = if (server.getSettings().baseSettings()
+                .safeSpawn() && (this.gamemode and 0x01) == 0
+        ) {
+            Transform(
+                this.level!!.getSafeSpawn(this.position).position,
+                rotation,
+                headYaw,
+                this.level!!
+            )
+        } else {
+            Transform(
+                this.position,
+                rotation,
+                headYaw,
+                this.level!!
+            )
+        }
+        this.teleport(pos, TeleportCause.PLAYER_SPAWN)
+
+        if (this.getHealth() < 1) {
+            this.setHealth(0f)
+        } else setHealth(getHealth()) //sends health to player
+
+
+        this.level!!.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
+            session.machine.fire(SessionState.IN_GAME)
+        }, 5)
+    }
+
+    public override fun checkGroundState(movX: Double, movY: Double, movZ: Double, dx: Double, dy: Double, dz: Double) {
+        if (!this.onGround || movX != 0.0 || movY != 0.0 || movZ != 0.0) {
+            var onGround = false
+
+            val realBB = boundingBox!!.clone()
+            realBB.maxY = realBB.minY
+            realBB.minY = realBB.minY - 0.5
+
+            val b1 = level!!.getTickCachedBlock(
+                position.floorX,
+                position.floorY - 1, position.floorZ
+            )
+            val b2 = level!!.getTickCachedBlock(
+                position.floorX,
+                position.floorY, position.floorZ
+            )
+            val blocks = arrayOf<Block>(
+                level!!.getTickCachedBlock(
+                    position.floorX - 1,
+                    position.floorY - 1, position.floorZ
+                ),
+                level!!.getTickCachedBlock(
+                    position.floorX + 1,
+                    position.floorY - 1, position.floorZ
+                ),
+                level!!.getTickCachedBlock(
+                    position.floorX,
+                    position.floorY - 1, position.floorZ + 1
+                ),
+                level!!.getTickCachedBlock(
+                    position.floorX,
+                    position.floorY - 1, position.floorZ - 1
+                ),
+                level!!.getTickCachedBlock(
+                    position.floorX - 1,
+                    position.floorY - 1, position.floorZ - 1
+                ),
+                level!!.getTickCachedBlock(
+                    position.floorX + 1,
+                    position.floorY - 1, position.floorZ - 1
+                ),
+                level!!.getTickCachedBlock(
+                    position.floorX + 1,
+                    position.floorY - 1, position.floorZ + 1
+                ),
+                level!!.getTickCachedBlock(
+                    position.floorX - 1,
+                    position.floorY - 1, position.floorZ + 1
+                )
+            )
+            if ((!b1!!.canPassThrough() && b1.collidesWithBB(realBB)) || (!b2!!.canPassThrough() && b2.collidesWithBB(
+                    realBB
+                ))
+            ) {
+//                level.addParticle(new BlockForceFieldParticle(b1.add(0.5, 0, 0.5)));
+                onGround = true
+            }
+            for (block in blocks) {
+//                level.addParticle(new BlockForceFieldParticle(block.add(0.5, 0, 0.5)));
+                if (!block.canPassThrough() && block.collidesWithBB(realBB)) {
+                    onGround = true
+                }
+            }
+            this.onGround = onGround
+        }
+
+        this.isCollided = this.onGround
+    }
+
+    public override fun checkBlockCollision() {
+        var portal = false
+        var scaffolding = false
+        var endPortal = false
+        for (block in getCollisionBlocks()!!) {
+            if (this.isSpectator) {
+                continue
+            }
+
+            when (block.id) {
+                BlockID.PORTAL -> portal = true
+                BlockID.SCAFFOLDING -> scaffolding = true
+                BlockID.END_PORTAL -> endPortal = true
+            }
+
+            block.onEntityCollide(this)
+            block.getLevelBlockAtLayer(1)!!.onEntityCollide(this)
+        }
+        val scanBoundingBox = boundingBox!!.getOffsetBoundingBox(0.0, -0.125, 0.0)
+        scanBoundingBox.maxY = boundingBox!!.minY
+        val scaffoldingUnder = level!!.getCollisionBlocks(
+            scanBoundingBox,
+            true, true
+        ) { b: Block -> b.id == BlockID.SCAFFOLDING }
+
+        setDataFlagExtend(EntityFlag.IN_SCAFFOLDING, scaffolding)
+        setDataFlagExtend(EntityFlag.OVER_SCAFFOLDING, scaffoldingUnder.size > 0)
+        setDataFlagExtend(EntityFlag.IN_ASCENDABLE_BLOCK, scaffolding)
+        setDataFlagExtend(EntityFlag.OVER_DESCENDABLE_BLOCK, scaffoldingUnder.size > 0)
+
+        if (endPortal) { //handle endPortal teleport
+            if (!inEndPortal) {
+                inEndPortal = true
+                if (this.getRiding() == null && getPassengers().isEmpty()) {
+                    val ev = EntityPortalEnterEvent(this, PortalType.END)
+                    getServer().getPluginManager().callEvent(ev)
+
+                    if (!ev.isCancelled) {
+                        val newPos = moveToTheEnd(this.getLocator())
+                        if (newPos != null) {
+                            if (newPos.level.dimension == Level.DIMENSION_THE_END) {
+                                if (teleport(newPos, TeleportCause.END_PORTAL)) {
+                                    newPos.level.scheduler.scheduleDelayedTask(object : Task() {
+                                        override fun onRun(currentTick: Int) {
+                                            // dirty hack to make sure chunks are loaded and generated before spawning player
+                                            teleport(newPos, TeleportCause.END_PORTAL)
+                                            BlockEndPortal.spawnObsidianPlatform(newPos)
+                                        }
+                                    }, 5)
+                                }
+                            } else {
+                                if (!this.hasSeenCredits && !this.showingCredits) {
+                                    val playerShowCreditsEvent = PlayerShowCreditsEvent(this)
+                                    getServer().getPluginManager().callEvent(playerShowCreditsEvent)
+                                    if (!playerShowCreditsEvent.isCancelled) {
+                                        this.showCredits()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            inEndPortal = false
+        }
+
+        if (portal) {
+            if ((this.isCreative || this.isSpectator) && this.inPortalTicks < 80) {
+                this.inPortalTicks = 80
+            } else {
+                inPortalTicks++
+            }
+        } else {
+            this.inPortalTicks = 0
+        }
+    }
+
+    fun checkNearEntities() {
+        for (entity in level!!.getNearbyEntities(boundingBox!!.grow(1.0, 0.5, 1.0), this)) {
+            if (entity == null) continue
+            entity.scheduleUpdate()
+
+            if (!entity.isAlive() || !this.isAlive()) {
+                continue
+            }
+
+            this.pickupEntity(entity, true)
+        }
+    }
+
+    override fun clone(): Player {
+        throw RuntimeException("Should not be cloning Player!")
+    }
+
+    fun handleMovement(clientPos: Transform) {
+        if (this.firstMove) this.firstMove = false
+        var invalidMotion = false
+        val revertPos = getTransform().clone()
+        val distance = clientPos.position.distanceSquared(this.position)
+        //before check
+        if (distance > 128) {
+            invalidMotion = true
+        } else if (this.chunk == null || !chunk!!.chunkState.canSend()) {
+            val chunk =
+                level!!.getChunk(clientPos.position.chunkX, clientPos.position.chunkZ, false)
+            this.chunk = chunk
+            if (this.chunk == null || !chunk!!.chunkState.canSend()) {
+                invalidMotion = true
+                this.nextChunkOrderRun = 0
+                if (this.chunk != null) {
+                    this.chunk!!.removeEntity(this)
+                }
+            }
+        }
+
+        if (invalidMotion) {
+            this.revertClientMotion(revertPos)
+            this.resetClientMovement()
+            return
+        }
+
+        //update server-side position and rotation and aabb
+        val diffX = clientPos.x - position.south
+        val diffY = clientPos.y - position.up
+        val diffZ = clientPos.z - position.west
+        this.setRotation(clientPos.yaw, clientPos.pitch, clientPos.headYaw)
+        this.fastMove(diffX, diffY, diffZ)
+
+        //after check
+        val corrX = position.south - clientPos.x
+        val corrY = position.up - clientPos.y
+        val corrZ = position.west - clientPos.z
+        if (this.isCheckingMovement && (abs(corrX) > 0.5 || abs(corrY) > 0.5 || abs(corrZ) > 0.5) && this.riding == null && !this.hasEffect(
+                EffectType.LEVITATION
+            ) && !this.hasEffect(EffectType.SLOW_FALLING) && !server!!.allowFlight
+        ) {
+            val diff = corrX * corrX + corrZ * corrZ
+            //这里放宽了判断，否则对角穿过脚手架会判断非法移动。
+            if (diff > 1.2) {
+                val event = PlayerInvalidMoveEvent(this, true)
+                getServer().getPluginManager().callEvent(event)
+                if (!event.isCancelled && (event.isRevert.also { invalidMotion = it })) {
+                    Player.log.warn(getServer().getLanguage().tr("nukkit.player.invalidMove", this.getName()))
+                }
+            }
+            if (invalidMotion) {
+                this.setPositionAndRotation(
+                    revertPos.position.asVector3f().asVector3(),
+                    revertPos.yaw,
+                    revertPos.pitch,
+                    revertPos.headYaw
+                )
+                this.revertClientMotion(revertPos)
+                this.resetClientMovement()
+                return
+            }
+        }
+
+        //update server-side position and rotation and aabb
+        val last = Transform(
+            prevPosition.south,
+            prevPosition.up,
+            prevPosition.west, prevRotation.yaw, prevRotation.pitch, this.prevHeadYaw,
+            level!!
+        )
+        val now = this.getTransform()
+        prevPosition.south = now.position.south
+        prevPosition.up = now.position.up
+        prevPosition.west = now.position.west
+        prevRotation.yaw = now.rotation.yaw
+        prevRotation.pitch = now.rotation.pitch
+        this.prevHeadYaw = now.headYaw
+
+        var blocksAround: List<Block?>? = null
+        var collidingBlocks: List<Block?>? = null
+        if (this.blocksAround != null && this.collisionBlocks != null) {
+            blocksAround = ArrayList(this.blocksAround)
+            collidingBlocks = ArrayList(this.collisionBlocks)
+        }
+
+        if (!this.firstMove) {
+            if (clientMovements.isEmpty()) {
+                this.blocksAround = null
+                this.collisionBlocks = null
+            }
+            val ev = PlayerMoveEvent(this, last, now)
+            server.getPluginManager().callEvent(ev)
+
+            if (!(ev.isCancelled.also { invalidMotion = it })) { //Yes, this is intended
+                if (now != ev.to && this.riding == null) { //If plugins modify the destination
+                    if (this.gamemode != SPECTATOR) level!!.vibrationManager.callVibrationEvent(
+                        VibrationEvent(
+                            this, ev.to.clone().position, VibrationType.TELEPORT
+                        )
+                    )
+                    this.teleport(ev.to, null)
+                } else {
+                    if (this.gamemode != SPECTATOR && (last.position.south != now.position.south || last.position.up != now.position.up || last.position.west != now.position.west)) {
+                        if (this.isOnGround() && this.isGliding()) {
+                            level!!.vibrationManager.callVibrationEvent(
+                                VibrationEvent(
+                                    this,
+                                    this.getVector3(), VibrationType.ELYTRA_GLIDE
+                                )
+                            )
+                        } else if (this.isOnGround() && (getLocator()
+                                .getSide(BlockFace.DOWN)!!.levelBlock !is BlockWool) && !this.isSneaking()
+                        ) {
+                            level!!.vibrationManager.callVibrationEvent(
+                                VibrationEvent(
+                                    this,
+                                    this.getVector3(), VibrationType.STEP
+                                )
+                            )
+                        } else if (this.isTouchingWater()) {
+                            level!!.vibrationManager.callVibrationEvent(
+                                VibrationEvent(
+                                    this,
+                                    getTransform().clone().position, VibrationType.SWIM
+                                )
+                            )
+                        }
+                    }
+                    this.broadcastMovement(false)
+                }
+            } else {
+                this.blocksAround = blocksAround
+                this.collisionBlocks = collidingBlocks
+            }
+        }
+
+        //update speed
+        if (this.speed == null) {
+            this.speed = Vector3(
+                last.position.south - now.position.south,
+                last.position.up - now.position.up,
+                last.position.west - now.position.west
+            )
+        } else {
+            speed!!.setComponents(
+                last.position.south - now.position.south,
+                last.position.up - now.position.up,
+                last.position.west - now.position.west
+            )
+        }
+
+        handleLogicInMove(invalidMotion, distance)
+
+        //if plugin cancel move
+        if (invalidMotion) {
+            this.setPositionAndRotation(
+                revertPos.position.asVector3f().asVector3(),
+                revertPos.yaw,
+                revertPos.pitch,
+                revertPos.headYaw
+            )
+            this.revertClientMotion(revertPos)
+            this.resetClientMovement()
+        } else {
+            if (distance != 0.0 && this.nextChunkOrderRun > 20) {
+                this.nextChunkOrderRun = 20
+            }
+        }
+    }
+
+    fun offerMovementTask(newPosition: Transform) {
+        val distance = newPosition.position.distance(this.position)
+        val updatePosition = distance > MOVEMENT_DISTANCE_THRESHOLD //sqrt distance
+        val updateRotation =
+            Math.abs(rotation.pitch - newPosition.rotation.pitch) as Float > ROTATION_UPDATE_THRESHOLD || Math.abs(
+                rotation.yaw - newPosition.rotation.yaw
+            ) as Float > ROTATION_UPDATE_THRESHOLD || abs(
+                rotation.yaw - newPosition.headYaw
+            ).toFloat() > ROTATION_UPDATE_THRESHOLD
+        val isHandle = this.isAlive() && this.spawned && !this.isSleeping() && (updatePosition || updateRotation)
+        if (isHandle) {
+            //todo hack for receive a error position after teleport
+            val now = System.currentTimeMillis()
+            if (lastTeleportMessage != null && (now - lastTeleportMessage!!.right()) < 200) {
+                val dis = newPosition.position.distance(lastTeleportMessage!!.left().position)
+                if (dis < MOVEMENT_DISTANCE_THRESHOLD) return
+            }
+            this.newPosition = newPosition.position
+            clientMovements.offer(newPosition)
+        }
+    }
+
+
+    fun handleLogicInMove(invalidMotion: Boolean, distance: Double) {
+        if (!invalidMotion) {
+            //处理饱食度更新
+            if (foodData!!.isEnabled && getServer()!!.difficulty > 0) {
+                //UpdateFoodExpLevel
+                if (distance >= 0.05) {
+                    var jump = 0.0
+                    val swimming = if (this.isInsideOfWater()) 0.01 * distance else 0.0
+                    var distance2 = distance
+                    if (swimming != 0.0) distance2 = 0.0
+                    if (this.isSprinting()) {  //Running
+                        if (this.inAirTicks == 3 && swimming == 0.0) {
+                            jump = 0.2
+                        }
+                        foodData!!.exhaust(0.1 * distance2 + jump + swimming)
+                    } else {
+                        if (this.inAirTicks == 3 && swimming == 0.0) {
+                            jump = 0.05
+                        }
+                        foodData!!.exhaust(jump + swimming)
+                    }
+                }
+            }
+
+            //处理冰霜行者附魔
+            val frostWalker = inventory!!.boots.getEnchantment(Enchantment.ID_FROST_WALKER)
+            if (frostWalker != null && frostWalker.level > 0 && !this.isSpectator && position.up >= 1 && position.up <= 255) {
+                val radius = 2 + frostWalker.level
+                for (coordX in position.floorX - radius..<position.floorX + radius + 1) {
+                    for (coordZ in position.floorZ - radius..<position.floorZ + radius + 1) {
+                        var block = level!!.getBlock(coordX, position.floorY - 1, coordZ)
+                        var layer = 0
+                        if ((block!!.id != Block.WATER && (block.id != Block.FLOWING_WATER ||
+                                    block.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.LIQUID_DEPTH) != 0)) || !block.up().isAir
+                        ) {
+                            block = block.getLevelBlockAtLayer(1)
+                            layer = 1
+                            if ((block!!.id != Block.WATER && (block.id != Block.FLOWING_WATER ||
+                                        block.getPropertyValue(CommonBlockProperties.LIQUID_DEPTH) != 0)) || !block.up().isAir
+                            ) {
+                                continue
+                            }
+                        }
+                        val ev = WaterFrostEvent(block, this)
+                        server.getPluginManager().callEvent(ev)
+                        if (!ev.isCancelled) {
+                            level!!.setBlock(block.position, layer, Block.get(Block.FROSTED_ICE), true, false)
+                            level!!.scheduleUpdate(
+                                level!!.getBlock(block.position, layer)!!,
+                                ThreadLocalRandom.current().nextInt(20, 40)
+                            )
+                        }
+                    }
+                }
+            }
+
+            //处理灵魂急行附魔
+            //Handling Soul Speed Enchantment
+            val soulSpeedLevel = getInventory().boots.getEnchantmentLevel(Enchantment.ID_SOUL_SPEED)
+            if (soulSpeedLevel > 0) {
+                val levelBlock = getLocator().levelBlock
+                this.soulSpeedMultiplier = (soulSpeedLevel * 0.105f) + 1.3f
+
+                // levelBlock check is required because of soul sand being 1 pixel shorter than normal blocks
+                val isSoulSandCompatible = levelBlock!!.isSoulSpeedCompatible || levelBlock.down().isSoulSpeedCompatible
+
+                if (this.wasInSoulSandCompatible && !isSoulSandCompatible) {
+                    this.wasInSoulSandCompatible = false
+                    this.setMovementSpeed(this.getMovementSpeed() / this.soulSpeedMultiplier)
+                } else if (!this.wasInSoulSandCompatible && isSoulSandCompatible) {
+                    this.wasInSoulSandCompatible = true
+                    this.setMovementSpeed(this.getMovementSpeed() * this.soulSpeedMultiplier)
+                }
+            }
+        }
+    }
+
+    fun resetClientMovement() {
+        this.newPosition = null
+        this.positionChanged = false
+    }
+
+    fun revertClientMotion(originalPos: Transform) {
+        prevPosition.south = originalPos.x
+        prevPosition.up = originalPos.y
+        prevPosition.west = originalPos.z
+        prevRotation.yaw = originalPos.yaw
+        prevRotation.pitch = originalPos.pitch
+
+        val syncPos = originalPos.position.add(0.0, 0.00001, 0.0)
+        this.sendPosition(syncPos!!, originalPos.yaw, originalPos.pitch, MovePlayerPacket.MODE_RESET)
+
+        if (this.speed == null) {
+            this.speed = Vector3(0.0, 0.0, 0.0)
+        } else {
+            speed!!.setComponents(0.0, 0.0, 0.0)
+        }
+    }
+
+    /**
+     * 处理LOGIN_PACKET中执行
+     */
+    fun processLogin() {
+        if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_USERS)) {
+            server.getPluginManager().subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        }
+        if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
+            server.getPluginManager().subscribeToPermission(
+                Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
+                this
+            )
+        }
+
+        var oldPlayer: Player? = null
+        for (p in ArrayList<Player>(server.getOnlinePlayers().values)) {
+            if (p !== this && p.getName()
+                    .equals(this.getName(), ignoreCase = true) || this.getUniqueId() == p.getUniqueId()
+            ) {
+                oldPlayer = p
+                break
+            }
+        }
+        val nbt: CompoundTag?
+        if (oldPlayer != null) {
+            oldPlayer.saveNBT()
+            nbt = oldPlayer.namedTag
+            oldPlayer.close("disconnectionScreen.loggedinOtherLocation")
+        } else {
+            val existData: Boolean = Server.Companion.getInstance().hasOfflinePlayerData(this.getName())
+            nbt = if (existData) {
+                server!!.getOfflinePlayerData(this.getName(), false)
+            } else {
+                server!!.getOfflinePlayerData(this.uuid, true)
+            }
+        }
+
+        if (nbt == null) {
+            this.close(this.leaveMessage, "Invalid data")
+            return
+        }
+
+        server!!.updateName(this.playerInfo)
+
+        this.playedBefore = (nbt.getLong("lastPlayed") - nbt.getLong("firstPlayed")) > 1
+
+
+        nbt.putString("NameTag", this.getName())
+
+        val exp = nbt.getInt("EXP")
+        val expLevel = nbt.getInt("expLevel")
+        this.setExperience(exp, expLevel)
+
+        this.gamemode = nbt.getInt("playerGameType") and 0x03
+        if (server.forceGamemode) {
+            this.gamemode = server.gamemode
+            nbt.putInt("playerGameType", this.gamemode)
+        }
+
+        this.adventureSettings = AdventureSettings(this)
+        adventureSettings!!.init(nbt)
+
+        val level: Level
+        if ((server.getLevelByName(nbt.getString("Level")!!).also { level = it!! }) == null) {
+            this.level = server.defaultLevel
+            nbt.putString("Level", this.level!!.getName()!!)
+            val spawnLocation = this.level!!.safeSpawn
+            nbt.getList<FloatTag?>("Pos", FloatTag::class.java)
+                .add(FloatTag(spawnLocation.position.south))
+                .add(FloatTag(spawnLocation.position.up))
+                .add(FloatTag(spawnLocation.position.west))
+        } else {
+            this.level = level
+        }
+
+        for ((key, value) in nbt.getCompound("Achievements")!!.entrySet) {
+            if (value !is ByteTag) {
+                continue
+            }
+
+            if (value.getData() > 0) {
+                achievements.add(key)
+            }
+        }
+
+        nbt.putLong("lastPlayed", System.currentTimeMillis() / 1000)
+
+        val uuid = getUniqueId()
+        nbt.putLong("UUIDLeast", uuid!!.leastSignificantBits)
+        nbt.putLong("UUIDMost", uuid.mostSignificantBits)
+
+        if (server.autoSave) {
+            server.saveOfflinePlayerData(this.uuid!!, nbt, true)
+        }
+
+        val posList = nbt.getList("Pos", FloatTag::class.java)
+
+        super.init(
+            this.level!!.getChunk(
+                posList!!.get(0)!!.data.toInt() shr 4,
+                posList.get(2)!!.data.toInt() shr 4,
+                true
+            )!!, nbt
+        )
+
+        if (!namedTag!!.contains("foodLevel")) {
+            namedTag!!.putInt("foodLevel", 20)
+        }
+        val foodLevel = namedTag!!.getInt("foodLevel")
+        if (!namedTag!!.contains("foodSaturationLevel")) {
+            namedTag!!.putFloat("foodSaturationLevel", 20f)
+        }
+        val foodSaturationLevel = namedTag!!.getFloat("foodSaturationLevel")
+        this.foodData = PlayerFood(this, foodLevel, foodSaturationLevel)
+
+        if (this.isSpectator) {
+            this.onGround = false
+        }
+
+        if (namedTag!!.contains("enchSeed")) {
+            this.enchSeed = namedTag!!.getInt("enchSeed")
+        } else {
+            this.regenerateEnchantmentSeed()
+            namedTag!!.putInt("enchSeed", this.enchSeed)
+        }
+
+        if (!namedTag!!.contains("TimeSinceRest")) {
+            namedTag!!.putInt("TimeSinceRest", 0)
+        }
+        this.timeSinceRest = namedTag!!.getInt("TimeSinceRest")
+
+        if (!namedTag!!.contains("HasSeenCredits")) {
+            namedTag!!.putBoolean("HasSeenCredits", false)
+        }
+        this.hasSeenCredits = namedTag!!.getBoolean("HasSeenCredits")
+
+        //以下两个List的元素一一对应
+        if (!namedTag!!.contains("fogIdentifiers")) {
+            namedTag!!.putList("fogIdentifiers", ListTag<StringTag?>())
+        }
+        if (!namedTag!!.contains("userProvidedFogIds")) {
+            namedTag!!.putList("userProvidedFogIds", ListTag<StringTag?>())
+        }
+        val fogIdentifiers = namedTag!!.getList(
+            "fogIdentifiers",
+            StringTag::class.java
+        )
+        val userProvidedFogIds = namedTag!!.getList(
+            "userProvidedFogIds",
+            StringTag::class.java
+        )
+        for (i in 0..<fogIdentifiers!!.size()) {
+            fogStack.add(
+                i, PlayerFogPacket.Fog(
+                    tryParse(
+                        fogIdentifiers.get(i)!!.data!!
+                    )!!, userProvidedFogIds!!.get(i)!!.data!!
+                )
+            )
+        }
+
+        if (!server.settings.playerSettings().checkMovement()) {
+            this.isCheckingMovement = false
+        }
+
+        Player.log.info(
+            server.language.tr(
+                "nukkit.player.logIn",
+                TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
+                this.address,
+                port.toString(),
+                getId().toString(),
+                this.level!!.getName(),
+                round(position.south, 4).toString(),
+                round(position.up, 4).toString(),
+                round(position.west, 4).toString()
+            )
+        )
+    }
+
+    val safeSpawn: Vector3
+        get() {
+            val worldSpawnPoint = if (this.spawnPoint == null) {
+                server!!.defaultLevel!!.safeSpawn.position
+            } else {
+                spawnPoint!!.position
+            }
+            return worldSpawnPoint
+        }
+
+    /**
+     * 玩家客户端初始化完成后调用
+     */
+    fun onPlayerLocallyInitialized() {
+        if (locallyInitialized) return
+        locallyInitialized = true
+
+        //init entity data property
+        this.setDataProperty(EntityDataTypes.NAME, playerInfo.getUsername(), false)
+        this.setDataProperty(EntityDataTypes.NAMETAG_ALWAYS_SHOW, 1, false)
+
+        val playerJoinEvent = PlayerJoinEvent(
+            this,
+            TranslationContainer(
+                TextFormat.YELLOW.toString() + "%multiplayer.player.joined", *arrayOf(
+                    this.getDisplayName()
+                )
+            )
+        )
+
+        server.getPluginManager().callEvent(playerJoinEvent)
+
+        if (!playerJoinEvent.joinMessage.toString().trim { it <= ' ' }.isEmpty()) {
+            server!!.broadcastMessage(playerJoinEvent.joinMessage)
+        }
+
+        /*
+          我们在玩家客户端初始化后才发送游戏模式，以解决观察者模式疾跑速度不正确的问题
+          只有在玩家客户端进入游戏显示后再设置观察者模式，疾跑速度才正常
+          强制更新游戏模式以确保客户端会收到模式更新包
+          After initializing the player client, we send the game mode to address the issue of incorrect
+          sprint speed in spectator mode. Only after the player client enters the game display is spectator mode set,
+          and the sprint speed behaves normally. We force an update of the game mode to ensure that the client receives the
+          mode update packet.
+         */
+        this.setGamemode(this.gamemode, false, null, true)
+        this.sendData(hasSpawned.values.toArray<Player>(EMPTY_ARRAY), entityDataMap)
+        this.spawnToAll()
+        Arrays.stream(level!!.getEntities()).filter { entity: Entity ->
+            entity.getViewers().containsKey(
+                this.loaderId
+            ) && entity is EntityBoss
+        }.forEach { entity: Entity ->
+            (entity as EntityBoss).addBossbar(
+                this
+            )
+        }
+        this.refreshBlockEntity(1)
+    }
+
+    /**
+     * 判断重生锚是否有效如果重生锚有效则在重生锚上重生或者在床上重生
+     * 如果玩家以上2种都没有则在服务器重生点重生
+     *
+     *
+     * Determine if the respawn anchor is valid if the respawn anchor is valid then the anchor is respawned at the respawn anchor or reborn in bed
+     * If the player has none of the above 2 then respawn at the server respawn point
+     *
+     * @param block
+     * @return
+     */
+    fun isValidRespawnBlock(block: Block): Boolean {
+        if (block.id == BlockID.RESPAWN_ANCHOR && block.level.dimension == Level.DIMENSION_NETHER) {
+            val anchor = block as BlockRespawnAnchor
+            return anchor.charge > 0
+        }
+        if (block.id == BlockID.BED && block.level.dimension == Level.DIMENSION_OVERWORLD) {
+            val bed = block as BlockBed
+            return bed.isBedValid
+        }
+
+        return false
+    }
+
+    override var isBanned: Boolean
+        get() = server.getNameBans().isBanned(this.getName())
+        set(value) {
+            if (value) {
+                server.getNameBans().addBan(this.getName(), null, null, null)
+                this.kick(PlayerKickEvent.Reason.NAME_BANNED, "Banned by admin")
+            } else {
+                server.getNameBans().remove(this.getName())
+            }
+        }
+
+    fun respawn() {
+        //the player can't respawn if the server is hardcore
+        if (server!!.isHardcore) {
+            this.isBanned = true
+            return
+        }
+
+        this.resetInventory()
+
+        //level spawn point < block spawn = self spawn
+        val spawnPair = this.spawn
+        val playerRespawnEvent = PlayerRespawnEvent(this, spawnPair)
+        if (spawnPair.right() == SpawnPointType.BLOCK) { //block spawn
+            val spawnBlock = playerRespawnEvent.respawnPosition.first().levelBlock
+            if (spawnBlock != null && isValidRespawnBlock(spawnBlock)) {
+                // handle RESPAWN_ANCHOR state change when consume charge is true
+                if (spawnBlock.id == BlockID.RESPAWN_ANCHOR) {
+                    val respawnAnchor = spawnBlock as BlockRespawnAnchor
+                    val charge = respawnAnchor.charge
+                    if (charge > 0) {
+                        respawnAnchor.charge = charge - 1
+                        respawnAnchor.level.setBlock(respawnAnchor.position, spawnBlock)
+                        respawnAnchor.level.scheduleUpdate(respawnAnchor, 10)
+                        respawnAnchor.level.addSound(this.position, Sound.RESPAWN_ANCHOR_DEPLETE, 1f, 1f, this)
+                    }
+                }
+            } else { //block not available
+                val defaultSpawn = getServer()!!.defaultLevel!!.spawnLocation
+                this.setSpawn(defaultSpawn, SpawnPointType.WORLD)
+                playerRespawnEvent.respawnPosition = Pair.of(defaultSpawn, SpawnPointType.WORLD)
+                // handle spawn point change when block spawn not available
+                sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile." + (if (level!!.dimension == Level.DIMENSION_OVERWORLD) "bed" else "respawn_anchor") + ".notValid"))
+            }
+        }
+
+        server.pluginManager.callEvent(playerRespawnEvent)
+        val respawnPos = playerRespawnEvent.respawnPosition.first()
+
+        this.sendExperience()
+        this.sendExperienceLevel()
+
+        this.setSprinting(false)
+        this.setSneaking(false)
+
+        this.setDataProperty(EntityDataTypes.AIR_SUPPLY, 400, false)
+        this.fireTicks = 0
+        this.collisionBlocks = null
+        this.noDamageTicks = 60
+
+        this.removeAllEffects()
+        this.setHealth(getMaxHealth().toFloat())
+        foodData!!.setFood(20, 20f)
+
+        this.sendData(this)
+
+        this.setMovementSpeed(DEFAULT_SPEED)
+
+        getAdventureSettings()!!.update()
+        inventory!!.sendContents(this)
+        inventory!!.sendArmorContents(this)
+        offhandInventory!!.sendContents(this)
+        this.teleport(
+            Transform.fromObject(
+                respawnPos.position.add(
+                    0.0,
+                    getEyeHeight().toDouble(), 0.0
+                )!!, respawnPos.level
+            ), TeleportCause.PLAYER_SPAWN
+        )
+        this.spawnToAll()
+    }
+
+    public override fun checkChunks() {
+        if (this.chunk == null || (chunk!!.x !== (position.south.toInt() shr 4) || chunk!!.z !== (position.west.toInt() shr 4))) {
+            if (this.chunk != null) {
+                chunk!!.removeEntity(this)
+            }
+            this.chunk = level!!.getChunk(
+                position.south.toInt() shr 4,
+                position.west.toInt() shr 4, true
+            )
+
+            if (!this.justCreated) {
+                val newChunk =
+                    level!!.getChunkPlayers(position.south.toInt() shr 4, position.west.toInt() shr 4)
+                newChunk.remove(this.loaderId)
+
+                //List<Player> reload = new ArrayList<>();
+                for (player in ArrayList<Player>(hasSpawned.values)) {
+                    if (!newChunk.containsKey(player.loaderId)) {
+                        this.despawnFrom(player)
+                    } else {
+                        newChunk.remove(player.loaderId)
+                        //reload.add(player);
+                    }
+                }
+
+                for (player in newChunk.values) {
+                    this.spawnTo(player)
+                }
+            }
+
+            if (this.chunk == null) {
+                return
+            }
+
+            chunk!!.addEntity(this)
+        }
+    }
+
+    protected fun sendPlayStatus(status: Int, immediate: Boolean = false) {
+        val pk = PlayStatusPacket()
+        pk.status = status
+
+        if (immediate) {
+            this.dataPacketImmediately(pk)
+        } else {
+            this.dataPacket(pk)
+        }
+    }
+
+    fun forceSendEmptyChunks() {
+        val chunkPositionX = position.floorX shr 4
+        val chunkPositionZ = position.floorZ shr 4
+        for (x in -chunkRadius..<chunkRadius) {
+            for (z in -chunkRadius..<chunkRadius) {
+                val chunk = LevelChunkPacket()
+                chunk.chunkX = chunkPositionX + x
+                chunk.chunkZ = chunkPositionZ + z
+                chunk.data = EmptyArrays.EMPTY_BYTES
+                this.dataPacket(chunk)
+            }
+        }
+    }
+
+    fun addDefaultWindows() {
+        this.craftingGrid = CraftingGridInventory(this)
+        this.cursorInventory = PlayerCursorInventory(this)
+        this.creativeOutputInventory = CreativeOutputInventory(this)
+
+        this.addWindow(this.getInventory(), SpecialWindowId.PLAYER.id)
+        //addDefaultWindows when the player doesn't have a spawn yet,
+        // so we need to manually open it to add the player to the viewer
+        getInventory().open(this)
+        permanentWindows.add(SpecialWindowId.PLAYER.id)
+
+        this.addWindow(creativeOutputInventory!!, SpecialWindowId.CREATIVE.id)
+        creativeOutputInventory!!.open(this)
+        permanentWindows.add(SpecialWindowId.CREATIVE.id)
+
+        this.addWindow(getOffhandInventory()!!, SpecialWindowId.OFFHAND.id)
+        getOffhandInventory()!!.open(this)
+        permanentWindows.add(SpecialWindowId.OFFHAND.id)
+
+        this.addWindow(craftingGrid!!, SpecialWindowId.NONE.id)
+        craftingGrid!!.open(this)
+        permanentWindows.add(SpecialWindowId.NONE.id)
+
+        this.addWindow(cursorInventory!!, SpecialWindowId.CURSOR.id)
+        cursorInventory!!.open(this)
+        permanentWindows.add(SpecialWindowId.CURSOR.id)
+    }
+
+    public override fun getBaseOffset(): Float {
+        return super.getBaseOffset()
+    }
+
+    override fun onBlock(entity: Entity?, e: EntityDamageEvent, animate: Boolean) {
+        super.onBlock(entity, e, animate)
+        if (e.isBreakShield) {
+            this.setItemCoolDown(e.shieldBreakCoolDown, "shield")
+        }
+        if (animate) {
+            this.setDataFlag(EntityFlag.BLOCKED_USING_DAMAGED_SHIELD, true)
+            level!!.scheduler.scheduleTask(InternalPlugin.INSTANCE) {
+                if (this.isOnline) {
+                    this.setDataFlag(EntityFlag.BLOCKED_USING_DAMAGED_SHIELD, false)
+                }
+            }
+        }
+    }
+
+    public override fun getStepHeight(): Double {
+        return 0.6
+    }
+
+    val leaveMessage: TranslationContainer
+        /**
+         * 获取玩家离开的消息
+         *
+         * @return [TranslationContainer]
+         */
+        get() = TranslationContainer(
+            TextFormat.YELLOW.toString() + "%multiplayer.player.left",
+            getDisplayName()
+        )
+
+    override var isWhitelisted: Boolean
+        get() = server!!.isWhitelisted(getName().lowercase())
+        set(value) {
+            if (value) {
+                server!!.addWhitelist(getName().lowercase())
+            } else {
+                server!!.removeWhitelist(getName().lowercase())
+            }
+        }
+
+    override val player: Player
+        get() = this
+
+    override val firstPlayed: Long?
+        get() = if (this.namedTag != null) namedTag!!.getLong("firstPlayed") else null
+
+    override val lastPlayed: Long?
+        get() = if (this.namedTag != null) namedTag!!.getLong("lastPlayed") else null
+
+    override fun hasPlayedBefore(): Boolean {
+        return this.playedBefore
+    }
+
+    /**
+     * 获得玩家权限设置.
+     *
+     *
+     * Get player permission settings.
+     */
+    fun getAdventureSettings(): AdventureSettings? {
+        return adventureSettings
+    }
+
+    /**
+     * 用于设置玩家权限，对应游戏中的玩家权限设置.
+     *
+     *
+     * Used to set player permissions, corresponding to the game's player permissions settings.
+     *
+     * @param adventureSettings 玩家权限设置<br></br>player permissions settings
+     */
+    fun setAdventureSettings(adventureSettings: AdventureSettings) {
+        this.adventureSettings = adventureSettings.clone()
+        this.adventureSettings!!.update()
+    }
+
+
+    /**
+     * 设置[.inAirTicks]为0
+     *
+     *
+     * Set [.inAirTicks] to 0
+     */
+    fun resetInAirTicks() {
+        this.inAirTicks = 0
+    }
+
+    var allowFlight: Boolean
+        get() = getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT]
+        set(value) {
+            getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT] = value
+            getAdventureSettings()!!.update()
+        }
+
+
+    /**
+     * 设置允许修改世界(未知原因设置完成之后，玩家不允许挖掘方块，但是可以放置方块)
+     *
+     *
+     * Set allow to modify the world (after the unknown reason setting is completed, the player is not allowed to dig the blocks, but can place them)
+     *
+     * @param value 是否允许修改世界<br></br>Whether to allow modification of the world
+     */
+    fun setAllowModifyWorld(value: Boolean) {
+        getAdventureSettings()!![AdventureSettings.Type.WORLD_IMMUTABLE] = !value
+        getAdventureSettings()!![AdventureSettings.Type.BUILD] = value
+        getAdventureSettings()!![AdventureSettings.Type.WORLD_BUILDER] = value
+        getAdventureSettings()!!.update()
+    }
+
+    fun setAllowInteract(value: Boolean) {
+        setAllowInteract(value, value)
+    }
+
+    /**
+     * 设置允许交互世界/容器
+     *
+     * @param value      是否允许交互世界
+     * @param containers 是否允许交互容器
+     */
+    fun setAllowInteract(value: Boolean, containers: Boolean) {
+        getAdventureSettings()!![AdventureSettings.Type.WORLD_IMMUTABLE] = !value
+        getAdventureSettings()!![AdventureSettings.Type.DOORS_AND_SWITCHED] = value
+        getAdventureSettings()!![AdventureSettings.Type.OPEN_CONTAINERS] = containers
+        getAdventureSettings()!!.update()
+    }
+
+    fun setAutoJump(value: Boolean) {
+        getAdventureSettings()!![AdventureSettings.Type.AUTO_JUMP] = value
+        getAdventureSettings()!!.update()
+    }
+
+    fun hasAutoJump(): Boolean {
+        return getAdventureSettings()!![AdventureSettings.Type.AUTO_JUMP]
+    }
+
+    override fun spawnTo(player: Player) {
+        if (player.spawned && this.isAlive() && player.level == this.level && player.canSee(this) /* && !this.isSpectator()*/) {
+            super.spawnTo(player)
+
+            if (this.isSpectator) {
+                //发送旁观者的游戏模式给对方，使得对方客户端正确渲染玩家实体
+                val pk = UpdatePlayerGameTypePacket()
+                pk.gameType = GameType.SPECTATOR
+                pk.entityId = this.getId()
+                player.dataPacket(pk)
+            }
+        }
+    }
+
+    override fun getServer(): Server? {
+        return this.server
+    }
+
+    fun setRemoveFormat() {
+        this.removeFormat = true
+    }
+
+    /**
+     * @param player 玩家
+     * @return 是否可以看到该玩家<br></br>Whether the player can be seen
+     */
+    fun canSee(player: Player): Boolean {
+        return !hiddenPlayers.containsKey(player.getUniqueId())
+    }
+
+    /**
+     * 从当前玩家实例的视角中隐藏指定玩家player
+     *
+     *
+     * Hide the specified player from the view of the current player instance
+     *
+     * @param player 要隐藏的玩家<br></br>Players who want to hide
+     */
+    fun hidePlayer(player: Player) {
+        if (this === player) {
+            return
+        }
+        hiddenPlayers[player.getUniqueId()!!] = player
+        player.despawnFrom(this)
+    }
+
+    /**
+     * 从当前玩家实例的视角中显示指定玩家player
+     *
+     *
+     * Show the specified player from the view of the current player instance
+     *
+     * @param player 要显示的玩家<br></br>Players who want to show
+     */
+    fun showPlayer(player: Player) {
+        if (this === player) {
+            return
+        }
+        hiddenPlayers.remove(player.getUniqueId())
+        if (player.isOnline) {
+            player.spawnTo(this)
+        }
+    }
+
+    override fun canCollideWith(entity: Entity): Boolean {
+        return false
+    }
+
+    override fun canCollide(): Boolean {
+        return gamemode != SPECTATOR
+    }
+
+    override fun resetFallDistance() {
+        super.resetFallDistance()
+        if (this.inAirTicks != 0) {
+            this.startAirTicks = 5
+        }
+        this.inAirTicks = 0
+        this.highestPosition = position.up
+    }
+
+    override val isOnline: Boolean
+        get() = connected.get() && this.loggedIn
+
+    override var isOp: Boolean
+        get() = server!!.isOp(this.getName())
+        set(value) {
+            if (value == field) {
+                return
+            }
+
+            if (value) {
+                server!!.addOp(this.getName())
+            } else {
+                server!!.removeOp(this.getName())
+            }
+        }
+
+    override fun isPermissionSet(name: String?): Boolean {
+        return perm!!.isPermissionSet(name)
+    }
+
+    override fun isPermissionSet(permission: Permission): Boolean {
+        return perm!!.isPermissionSet(permission)
+    }
+
+    override fun hasPermission(name: String?): Boolean {
+        return this.perm != null && perm!!.hasPermission(name)
+    }
+
+    override fun hasPermission(permission: Permission): Boolean {
+        return perm!!.hasPermission(permission)
+    }
+
+    override fun addAttachment(plugin: Plugin): PermissionAttachment {
+        return this.addAttachment(plugin, null)
+    }
+
+    override fun addAttachment(plugin: Plugin, name: String?): PermissionAttachment {
+        return this.addAttachment(plugin, name, null)
+    }
+
+    override fun addAttachment(plugin: Plugin, name: String?, value: Boolean?): PermissionAttachment {
+        return perm!!.addAttachment(plugin, name, value)
+    }
+
+    override fun removeAttachment(attachment: PermissionAttachment) {
+        perm!!.removeAttachment(attachment)
+    }
+
+    override fun recalculatePermissions() {
+        server.getPluginManager().unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        server.getPluginManager().unsubscribeFromPermission(
+            Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
+            this
+        )
+
+        if (this.perm == null) {
+            return
+        }
+
+        perm!!.recalculatePermissions()
+
+        if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_USERS)) {
+            server.getPluginManager().subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        }
+
+        if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
+            server.getPluginManager().subscribeToPermission(
+                Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
+                this
+            )
+        }
+
+        if (this.isEnableClientCommand() && spawned) {
+            session.syncAvailableCommands()
+        }
+    }
+
+    fun isEnableClientCommand(): Boolean {
+        return this.enableClientCommand
+    }
+
+    fun setEnableClientCommand(enable: Boolean) {
+        this.enableClientCommand = enable
+        session.setEnableClientCommand(enable)
+    }
+
+    override val effectivePermissions: Map<String?, PermissionAttachmentInfo>
+        get() = perm!!.effectivePermissions
+
+    override fun isPlayer(): Boolean {
+        return true
+    }
+
+    override fun asPlayer(): Player? {
+        return this
+    }
+
+    override val isEntity: Boolean
+        get() = true
+
+    override fun asEntity(): Entity? {
+        return this
+    }
+
+    fun removeAchievement(achievementId: String?) {
+        achievements.remove(achievementId)
+    }
+
+    fun hasAchievement(achievementId: String?): Boolean {
+        return achievements.contains(achievementId)
+    }
+
+    fun isConnected(): Boolean {
+        return connected.get()
+    }
+
+    /**
+     * 得到该玩家的显示名称
+     *
+     *
+     * Get the display name of the player
+     *
+     * @return [.displayName]
+     */
+    fun getDisplayName(): String {
+        return this.displayName
+    }
+
+    /**
+     * 只是改变玩家聊天时和在服务器玩家列表中的显示名(不影响命令的玩家参数名,也不影响玩家头顶显示名称)
+     *
+     *
+     * Just change the name displayed during player chat and in the server player list  (Does not affect the player parameter name of the command, nor does it affect the player header display name)
+     *
+     * @param displayName 显示名称
+     */
+    fun setDisplayName(displayName: String) {
+        this.displayName = displayName
+        if (this.spawned) {
+            server!!.updatePlayerListData(
+                getUniqueId()!!, this.getId(), this.getDisplayName(),
+                getSkin()!!,
+                loginChainData.xUID
+            )
+        }
+    }
+
+    override fun setSkin(skin: Skin?) {
+        super.setSkin(skin)
+        if (this.spawned) {
+//            this.server.updatePlayerListData(this.getUniqueId(), this.getId(), this.getDisplayName(), skin, this.getLoginChainData().getXUID());
+            val skinPacket = PlayerSkinPacket()
+            skinPacket.uuid = this.getUniqueId()
+            skinPacket.skin = this.getSkin()
+            skinPacket.newSkinName = getSkin()!!.getSkinId()
+            skinPacket.oldSkinName = ""
+            Server.Companion.broadcastPacket(Server.Companion.getInstance().getOnlinePlayers().values, skinPacket)
+        }
+    }
+
+    val rawAddress: String
+        /**
+         * 得到原始地址
+         *
+         * @return [String]
+         */
+        get() = rawSocketAddress!!.address.hostAddress
+
+    val rawPort: Int
+        /**
+         * 得到原始端口
+         *
+         * @return int
+         */
+        get() = rawSocketAddress!!.port
+
+
+    /**
+     * Close all form windows
+     */
+    fun closeFormWindows() {
+        formWindows.clear()
+        this.dataPacket(ClientboundCloseFormPacket())
+    }
+
+    val address: String
+        /**
+         * 得到地址,如果开启waterdogpe兼容，该地址是被修改为兼容waterdogpe型的，反之则与[.rawSocketAddress] 一样
+         *
+         *
+         * If waterdogpe compatibility is enabled, the address is modified to be waterdogpe compatible, otherwise it is the same as [.rawSocketAddress]
+         *
+         * @return [String]
+         */
+        get() = socketAddress!!.address.hostAddress
+
+    val port: Int
+        /**
+         * @see .getRawPort
+         */
+        get() = socketAddress!!.port
+
+    val nextPosition: Locator
+        /**
+         * 获得下一个tick客户端玩家将要移动的位置
+         *
+         *
+         * Get the position where the next tick client player will move
+         *
+         * @return the next position
+         */
+        get() = if (this.newPosition != null) Locator(
+            newPosition!!.south,
+            newPosition!!.up,
+            newPosition!!.west,
+            level!!
+        ) else getLocator()
+
+    /**
+     * 玩家是否在睡觉
+     *
+     *
+     * Whether the player is sleeping
+     *
+     * @return boolean
+     */
+    fun isSleeping(): Boolean {
+        return this.sleeping != null
+    }
+
+
+    /**
+     * 返回玩家当前是否正在使用某项物品（右击并按住）。
+     *
+     *
+     * Returns whether the player is currently using an item (right-click and hold).
+     */
+    fun isUsingItem(itemId: String): Boolean {
+        return getLastUseTick(itemId) != -1 && this.getDataFlag(EntityFlag.USING_ITEM)
+    }
+
+    /**
+     * Sets the cooldown time for the specified item to use
+     *
+     * @param coolDownTick the cool down tick
+     * @param itemId       the item id
+     */
+    fun setItemCoolDown(coolDownTick: Int, itemId: Identifier) {
+        val pk = PlayerStartItemCoolDownPacket()
+        pk.coolDownDuration = coolDownTick
+        pk.itemCategory = itemId.toString()
+        cooldownTickMap[itemId.toString()] = level!!.tick + coolDownTick
+        this.dataPacket(pk)
+    }
+
+    /**
+     * the cooldown of specified item is end
+     *
+     * @param itemId the item
+     * @return the boolean
+     */
+    fun isItemCoolDownEnd(itemId: Identifier): Boolean {
+        val tick = cooldownTickMap.getOrDefault(itemId.toString(), 0)
+        val result = level!!.tick - tick > 0
+        if (result) {
+            cooldownTickMap.remove(itemId.toString())
+        }
+        return result
+    }
+
+    fun setItemCoolDown(coolDown: Int, category: String) {
+        val pk = PlayerStartItemCoolDownPacket()
+        pk.coolDownDuration = coolDown
+        pk.itemCategory = category
+        cooldownTickMap[category] = level!!.tick + coolDown
+        this.dataPacket(pk)
+    }
+
+    fun isItemCoolDownEnd(category: String): Boolean {
+        val tick = cooldownTickMap.getOrDefault(category, 0)
+        val result = level!!.tick - tick > 0
+        if (result) {
+            cooldownTickMap.remove(category)
+        }
+        return result
+    }
+
+    /**
+     * Start last use tick for an item(right-click).
+     *
+     * @param itemId the item id
+     */
+    fun setLastUseTick(itemId: String, tick: Int) {
+        lastUseItemMap[itemId] = tick
+        this.setDataFlag(EntityFlag.USING_ITEM, true)
+    }
+
+    fun removeLastUseTick(itemId: String) {
+        lastUseItemMap.remove(itemId)
+        this.setDataFlag(EntityFlag.USING_ITEM, false)
+    }
+
+    fun getLastUseTick(itemId: String): Int {
+        return lastUseItemMap.getOrDefault(itemId, -1)
+    }
+
+    @JvmOverloads
+    fun unloadChunk(x: Int, z: Int, level: Level? = null) {
+        var level = level
+        level = level ?: this.level
+        val index = chunkHash(x, z)
+        if (level!!.unregisterChunkLoader(this, x, z, false)) {
+            if (playerChunkManager.usedChunks.contains(index)) {
+                for (entity in level.getChunkEntities(x, z)!!.values) {
+                    if (entity !== this) {
+                        entity.despawnFrom(this)
+                    }
+                }
+                playerChunkManager.usedChunks.remove(index)
+            }
+        }
+    }
+
+    val isInOverWorld: Boolean
+        /**
+         * @return 玩家是否在主世界(维度为0)<br></br>Is the player in the world(Dimension equal 0)
+         */
+        get() = level!!.dimension == 0
+
+    val spawn: Pair<Locator?, SpawnPointType?>
+        /**
+         * 获取该玩家的可用重生点,
+         *
+         *
+         * Get the player's Spawn point
+         *
+         * @return [Locator]
+         */
+        get() = Pair.of(spawnPoint, spawnPointType)
+
+    /**
+     * 设置玩家的出生点/复活点。
+     *
+     *
+     * Set the player's birth point.
+     *
+     * @param pos 出生点位置
+     */
+    fun setSpawn(pos: Locator, spawnPointType: SpawnPointType?) {
+        Preconditions.checkNotNull(pos)
+        Preconditions.checkNotNull(pos.level)
+        this.spawnPoint = Locator(
+            pos.position.south, pos.position.up, pos.position.west,
+            level!!
+        )
+        this.spawnPointType = spawnPointType
+        val pk = SetSpawnPositionPacket()
+        pk.spawnType = SetSpawnPositionPacket.TYPE_PLAYER_SPAWN
+        pk.x = spawnPoint!!.position.south.toInt()
+        pk.y = spawnPoint!!.position.up.toInt()
+        pk.z = spawnPoint!!.position.west.toInt()
+        pk.dimension = spawnPoint!!.level.dimension
+        this.dataPacket(pk)
+    }
+
+    fun sendChunk(x: Int, z: Int, packet: DataPacket) {
+        if (!this.isConnected()) {
+            return
+        }
+
+        chunkLoadCount++
+        playerChunkManager.usedChunks.add(chunkHash(x, z))
+        this.dataPacket(packet)
+
+        if (this.spawned) {
+            for (entity in level!!.getChunkEntities(x, z)!!.values) {
+                if (this !== entity && !entity.closed && entity.isAlive()) {
+                    entity.spawnTo(this)
+                }
+            }
+        }
+    }
+
+
+    @JvmOverloads
+    fun updateTrackingPositions(delayed: Boolean = false) {
+        val server = getServer()
+        if (delayed) {
+            if (delayedPosTrackingUpdate != null) {
+                delayedPosTrackingUpdate!!.cancel()
+            }
+            val scheduler = if (level == null) server.getScheduler() else level!!.scheduler
+            delayedPosTrackingUpdate = scheduler!!.scheduleDelayedTask(
+                null,
+                { this.updateTrackingPositions() }, 10
+            )
+            return
+        }
+        val positionTrackingService = server!!.positionTrackingService
+        positionTrackingService.forceRecheck(this)
+    }
+
+
+    /**
+     * @param packet 发送的数据包<br></br>packet to send
+     */
+    fun dataPacket(packet: DataPacket) {
+        session.sendPacket(packet)
+    }
+
+    val ping: Int
+        /**
+         * 得到该玩家的网络延迟。
+         *
+         *
+         * Get the network latency of the player.
+         *
+         * @return int
+         */
+        get() = session.ping.toInt()
+
+    fun sleepOn(pos: Vector3): Boolean {
+        if (!this.isOnline) {
+            return false
+        }
+
+        for (p in level!!.getNearbyEntities(boundingBox!!.grow(2.0, 1.0, 2.0), this)) {
+            if (p is Player) {
+                if (p.sleeping != null && pos.distance(p.sleeping!!) <= 0.1) {
+                    return false
+                }
+            }
+        }
+
+        val ev: PlayerBedEnterEvent
+        server.getPluginManager().callEvent(
+            PlayerBedEnterEvent(
+                this,
+                level!!.getBlock(pos)!!
+            ).also { ev = it })
+        if (ev.isCancelled) {
+            return false
+        }
+
+        this.sleeping = pos.clone()
+        this.teleport(
+            Transform(
+                pos.south + 0.5, pos.up + 0.5, pos.west + 0.5,
+                rotation.yaw, rotation.pitch,
+                level!!
+            ), null
+        )
+
+        this.setDataProperty(
+            EntityDataTypes.BED_POSITION,
+            BlockVector3(pos.south.toInt(), pos.up.toInt(), pos.west.toInt())
+        )
+        this.setPlayerFlag(PlayerFlag.SLEEP)
+        this.setSpawn(fromObject(pos, level!!), SpawnPointType.BLOCK)
+        level!!.sleepTicks = 75
+
+        this.timeSinceRest = 0
+
+        return true
+    }
+
+    fun stopSleep() {
+        if (this.sleeping != null) {
+            server.getPluginManager().callEvent(
+                PlayerBedLeaveEvent(
+                    this,
+                    level!!.getBlock(
+                        sleeping!!
+                    )!!
+                )
+            )
+
+            this.sleeping = null
+            this.setDataProperty(EntityDataTypes.BED_POSITION, BlockVector3(0, 0, 0))
+            this.setPlayerFlag(PlayerFlag.SLEEP)
+
+
+            level!!.sleepTicks = 0
+
+            val pk = AnimatePacket()
+            pk.eid = this.getId()
+            pk.action = AnimatePacket.Action.WAKE_UP
+            this.dataPacket(pk)
+        }
+    }
+
+    fun awardAchievement(achievementId: String): Boolean {
+        if (!Server.Companion.getInstance().getProperties().get(ServerPropertiesKeys.ACHIEVEMENTS, true)) {
+            return false
+        }
+
+        val achievement: Achievement = Achievement.Companion.achievements.get(achievementId)
+
+        if (achievement == null || hasAchievement(achievementId)) {
+            return false
+        }
+
+        for (id in achievement.requires) {
+            if (!this.hasAchievement(id)) {
+                return false
+            }
+        }
+        val event = PlayerAchievementAwardedEvent(this, achievementId)
+        server.getPluginManager().callEvent(event)
+
+        if (event.isCancelled) {
+            return false
+        }
+
+        achievements.add(achievementId)
+        achievement.broadcast(this)
+        return true
+    }
+
+    fun setGamemode(gamemode: Int): Boolean {
+        return this.setGamemode(gamemode, false, null)
+    }
+
+    /**
+     * AdventureSettings=null
+     *
+     * @see .setGamemode
+     */
+    fun setGamemode(gamemode: Int, serverSide: Boolean): Boolean {
+        return this.setGamemode(gamemode, serverSide, null)
+    }
+
+    fun setGamemode(gamemode: Int, serverSide: Boolean, newSettings: AdventureSettings?): Boolean {
+        return this.setGamemode(gamemode, serverSide, newSettings, false)
+    }
+
+    /**
+     * Set GameMode
+     *
+     * @param gamemode    The player game mode to set
+     * @param serverSide  Whether to update only the game mode of players on the server side. If true, the game mode update package will not be sent to the client
+     * @param newSettings New Adventure Settings
+     * @param forceUpdate Whether to force an update. If true, the check for the parameter 'gamemode' will be canceled
+     * @return gamemode
+     */
+    fun setGamemode(
+        gamemode: Int,
+        serverSide: Boolean,
+        newSettings: AdventureSettings?,
+        forceUpdate: Boolean
+    ): Boolean {
+        var newSettings = newSettings
+        if (!forceUpdate && (gamemode < 0 || gamemode > 3 || this.gamemode == gamemode)) {
+            return false
+        }
+
+        if (newSettings == null) {
+            newSettings = getAdventureSettings()!!.clone()
+            newSettings.set(AdventureSettings.Type.WORLD_IMMUTABLE, (gamemode and 0x02) > 0)
+            newSettings.set(AdventureSettings.Type.BUILD, (gamemode and 0x02) <= 0)
+            newSettings.set(AdventureSettings.Type.WORLD_BUILDER, (gamemode and 0x02) <= 0)
+            newSettings.set(AdventureSettings.Type.ALLOW_FLIGHT, (gamemode and 0x01) > 0)
+            newSettings.set(AdventureSettings.Type.NO_CLIP, gamemode == SPECTATOR)
+            newSettings[AdventureSettings.Type.FLYING] = when (gamemode) {
+                SURVIVAL -> false
+                CREATIVE -> newSettings[AdventureSettings.Type.FLYING]
+                ADVENTURE -> false
+                SPECTATOR -> true
+                else -> throw IllegalStateException("Unexpected game mode: $gamemode")
+            }
+        }
+
+        val ev: PlayerGameModeChangeEvent
+        server.getPluginManager().callEvent(PlayerGameModeChangeEvent(this, gamemode, newSettings).also { ev = it })
+
+        if (ev.isCancelled) {
+            return false
+        }
+
+        this.gamemode = gamemode
+
+        if (this.isSpectator) {
+            this.onGround = false
+            this.setDataFlag(EntityFlag.HAS_COLLISION, false)
+        } else {
+            this.setDataFlag(EntityFlag.HAS_COLLISION, true)
+        }
+
+        namedTag!!.putInt("playerGameType", this.gamemode)
+
+        this.setAdventureSettings(ev.newAdventureSettings)
+
+        if (!serverSide) {
+            val pk = UpdatePlayerGameTypePacket()
+            val networkGamemode = toNetworkGamemode(gamemode)
+            pk.gameType = from(networkGamemode)
+            pk.entityId = this.getId()
+            val players: HashSet<Player> =
+                Sets.newHashSet<Player>(Server.Companion.getInstance().getOnlinePlayers().values)
+            //不向自身发送UpdatePlayerGameTypePacket，我们将使用SetPlayerGameTypePacket
+            players.remove(this)
+            //我们需要给所有玩家发送此包，来使玩家客户端能正确渲染玩家实体
+            //eg: 观察者模式玩家对于gm 0 1 2的玩家不可见
+            Server.Companion.broadcastPacket(players, pk)
+            //对于自身，我们使用SetPlayerGameTypePacket来确保与WaterDog的兼容
+            val pk2 = SetPlayerGameTypePacket()
+            pk2.gamemode = networkGamemode
+            this.dataPacket(pk2)
+        }
+
+        this.resetFallDistance()
+
+        return true
+    }
+
+    fun sendSettings() {
+        getAdventureSettings()!!.update()
+    }
+
+    val isSurvival: Boolean
+        /**
+         * 该玩家是否为生存模式。
+         *
+         *
+         * Whether the player is in survival mode?
+         *
+         * @return boolean
+         */
+        get() = this.gamemode == SURVIVAL
+
+    val isCreative: Boolean
+        /**
+         * 该玩家是否为创造模式。
+         *
+         *
+         * Whether the player is in creative mode?
+         *
+         * @return boolean
+         */
+        get() = this.gamemode == CREATIVE
+
+    val isSpectator: Boolean
+        /**
+         * 该玩家是否为观察者模式。
+         *
+         *
+         * Whether the player is in spectator mode?
+         *
+         * @return boolean
+         */
+        get() = this.gamemode == SPECTATOR
+
+    val isAdventure: Boolean
+        /**
+         * 该玩家是否为冒险模式。
+         *
+         *
+         * Whether the player is in adventure mode?
+         *
+         * @return boolean
+         */
+        get() = this.gamemode == ADVENTURE
+
+    override fun getDrops(): Array<Item?> {
+        if (!this.isCreative && !this.isSpectator) {
+            return super.getDrops()
+        }
+
+        return Item.EMPTY_ARRAY
+    }
+
+    @ApiStatus.Internal
+    fun fastMove(dx: Double, dy: Double, dz: Double): Boolean {
+        position.south += dx
+        position.up += dy
+        position.west += dz
+        this.recalculateBoundingBox(true)
+
+        this.checkChunks()
+
+        if (!this.isSpectator) {
+            this.checkGroundState(dx, dy, dz, dx, dy, dz)
+            this.updateFallState(this.onGround)
+        }
+        return true
+    }
+
+
+    @ApiStatus.Internal
+    fun reCalcOffsetBoundingBox(): AxisAlignedBB {
+        val dx = this.getWidth() / 2
+        val dz = this.getWidth() / 2
+        return offsetBoundingBox.setBounds(
+            position.south - dx,
+            position.up,
+            position.west - dz,
+            position.south + dx, position.up + this.getHeight(), position.west + dz
+        )
+    }
+
+    override fun moveDelta() {
+        this.sendPosition(
+            this.position,
+            rotation.yaw, rotation.pitch, MovePlayerPacket.MODE_NORMAL, getViewers().values.toArray(EMPTY_ARRAY)
+        )
+    }
+
+    /**
+     * 每次调用此方法都会向客户端发送motion包。若多次调用，motion将在客户端叠加
+     *
+     *
+     *
+     * @param motion 运动向量<br></br>a motion vector
+     * @return 调用是否成功
+     */
+    override fun setMotion(motion: Vector3): Boolean {
+        if (super.setMotion(motion)) {
+            if (this.chunk != null) {
+                this.addMotion(this.motion.south, this.motion.up, this.motion.west) //Send to others
+                val pk = SetEntityMotionPacket()
+                pk.eid = this.getId()
+                pk.motionX = motion.south.toFloat()
+                pk.motionY = motion.up.toFloat()
+                pk.motionZ = motion.west.toFloat()
+                this.dataPacket(pk) //Send to self
+            }
+            if (this.motion.up > 0) {
+                //todo: check this
+                this.startAirTicks =
+                    ((-(ln(this.getGravity() / (this.getGravity() + this.getDrag() * this.motion.up))) / this.getDrag()) * 2 + 5).toInt()
+            }
+
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * Send attributes to client
+     */
+    fun sendAttributes() {
+        val pk = UpdateAttributesPacket()
+        pk.entityId = this.getId()
+        pk.entries = arrayOf(
+            getAttribute(Attribute.MAX_HEALTH)!!
+                .setMaxValue(getMaxHealth().toFloat())
+                .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f),
+            getAttribute(Attribute.MAX_HUNGER)!!
+                .setValue(foodData!!.food.toFloat()),
+            getAttribute(Attribute.MOVEMENT_SPEED)!!.setValue(this.getMovementSpeed()),
+            getAttribute(Attribute.EXPERIENCE_LEVEL)!!.setValue(
+                experienceLevel.toFloat()
+            ),
+            getAttribute(Attribute.EXPERIENCE)!!.setValue(
+                (experience.toFloat()) / calculateRequireExperience(
+                    experienceLevel
+                )
+            )
+        )
+        this.dataPacket(pk)
+    }
+
+    /**
+     * Send the fog settings to the client
+     */
+    fun sendFogStack() {
+        val pk = PlayerFogPacket()
+        pk.fogStack = this.fogStack
+        this.dataPacket(pk)
+    }
+
+    /**
+     * Send camera presets to cilent
+     */
+    fun sendCameraPresets() {
+        val pk = CameraPresetsPacket()
+        pk.presets.addAll(presets.values)
+        dataPacket(pk)
+    }
+
+    override fun getHeight(): Float {
+        if (riding is EntityHorse) {
+            return 1.1f
+        }
+        return super.getHeight()
+    }
+
+    override fun setSwimming(value: Boolean) {
+        //Stopping a swim at a height of 1 block will still send a STOPSWIMMING ACTION from the client, but the player will still be swimming height,so skip the action
+        if (!value && level!!.getBlock(position.up()!!)!!.isSolid && level!!.getBlock(
+                position.down()!!
+            )!!.isSolid
+        ) {
+            return
+        }
+        super.setSwimming(value)
+    }
+
+    override fun onUpdate(currentTick: Int): Boolean {
+        if (!this.loggedIn) {
+            return false
+        }
+
+        val tickDiff = currentTick - this.lastUpdate
+
+        if (tickDiff <= 0) {
+            return true
+        }
+
+        this.messageLimitCounter = 2
+
+        this.lastUpdate = currentTick
+
+        if (this.fishing != null && level!!.tick % 20 == 0) {
+            if (position.distance(fishing!!.position) > 33) {
+                this.stopFishing(false)
+            }
+        }
+
+        if (!this.isAlive() && this.spawned) {
+            if (level!!.gameRules!!.getBoolean(GameRule.DO_IMMEDIATE_RESPAWN)) {
+                this.despawnFromAll()
+                return true
+            }
+            level!!.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, { this.despawnFromAll() }, 10)
+            return true
+        }
+
+        if (this.spawned) {
+            if (motion.south != 0.0 || motion.up != 0.0 || motion.west != 0.0) {
+                this.setMotion(this.motion)
+                motion.setComponents(0.0, 0.0, 0.0)
+            }
+
+            while (!clientMovements.isEmpty()) {
+                this.positionChanged = true
+                this.handleMovement(clientMovements.poll())
+            }
+
+            if (!this.isSpectator) {
+                this.checkNearEntities()
+            }
+
+            this.entityBaseTick(tickDiff)
+
+            if (getServer()!!.difficulty == 0 && level!!.gameRules!!.getBoolean(GameRule.NATURAL_REGENERATION)) {
+                if (this.getHealth() < this.getMaxHealth() && this.ticksLived % 20 == 0) {
+                    this.heal(1f)
+                }
+            }
+
+            if (this.isOnFire() && this.lastUpdate % 10 == 0) {
+                if (this.isCreative && !this.isInsideOfFire()) {
+                    this.extinguish()
+                } else if (level!!.isRaining) {
+                    if (level!!.canBlockSeeSky(this.position)) {
+                        this.extinguish()
+                    }
+                }
+            }
+
+            if (!this.isSpectator && this.speed != null) {
+                if (this.onGround) {
+                    if (this.inAirTicks != 0) {
+                        this.startAirTicks = 5
+                    }
+                    this.inAirTicks = 0
+                    this.highestPosition = position.up
+                    if (this.isGliding()) {
+                        this.setGliding(false)
+                    }
+                } else {
+                    this.lastInAirTick = level!!.tick
+                    //check fly for player
+                    if (this.isCheckingMovement && !this.isGliding() && !server!!.allowFlight && !getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT] && this.inAirTicks > 20 && !this.isSleeping() && !this.isImmobile() && !this.isSwimming() && this.riding == null && !this.hasEffect(
+                            EffectType.LEVITATION
+                        ) && !this.hasEffect(EffectType.SLOW_FALLING)
+                    ) {
+                        val expectedVelocity =
+                            (-this.getGravity()) / (getDrag().toDouble()) - ((-this.getGravity()) / (getDrag().toDouble())) * exp(
+                                -(getDrag().toDouble()) * ((this.inAirTicks - this.startAirTicks).toDouble())
+                            )
+                        val diff = (speed!!.up - expectedVelocity) * (speed!!.up - expectedVelocity)
+
+                        val block = level!!.getBlock(this.position)
+                        val blockId = block!!.id
+                        val ignore = blockId == Block.LADDER || blockId == Block.VINE || blockId == Block.WEB
+                                || blockId == Block.SCAFFOLDING // || (blockId == Block.SWEET_BERRY_BUSH && block.getDamage() > 0);
+
+                        if (!this.hasEffect(EffectType.JUMP_BOOST) && diff > 0.6 && expectedVelocity < speed!!.up && !ignore) {
+                            if (this.inAirTicks < 150) {
+                                val ev = PlayerInvalidMoveEvent(this, true)
+                                getServer().getPluginManager().callEvent(ev)
+
+                                if (!ev.isCancelled) {
+                                    this.setMotion(Vector3(0.0, expectedVelocity, 0.0))
+                                }
+                            } else if (this.kick(
+                                    PlayerKickEvent.Reason.FLYING_DISABLED,
+                                    "Flying is not enabled on this server"
+                                )
+                            ) {
+                                return false
+                            }
+                        }
+                        if (ignore) {
+                            this.resetFallDistance()
+                        }
+                    }
+
+                    if (position.up > highestPosition) {
+                        this.highestPosition = position.up
+                    }
+
+                    // Wiki: 使用鞘翅滑翔时在垂直高度下降率低于每刻 0.5 格的情况下，摔落高度被重置为 1 格。
+                    // Wiki: 玩家在较小的角度和足够低的速度上着陆不会受到坠落伤害。着陆时临界伤害角度为50°，伤害值等同于玩家从滑行的最高点直接摔落到着陆点受到的伤害。
+                    if (this.isGliding() && abs(speed!!.up) < 0.5 && rotation.pitch <= 40) {
+                        this.resetFallDistance()
+                    }
+
+                    ++this.inAirTicks
+                }
+
+                if (this.foodData != null) {
+                    foodData!!.tick(tickDiff)
+                }
+
+                //鞘翅检查和耐久计算
+                if (this.isGliding()) {
+                    val playerInventory = this.getInventory()
+                    if (playerInventory != null) {
+                        val chestplate = playerInventory.chestplate
+                        if ((chestplate == null || chestplate.id != ItemID.ELYTRA)) {
+                            this.setGliding(false)
+                        } else if (this.age % (20 * (chestplate.getEnchantmentLevel(Enchantment.ID_DURABILITY) + 1)) == 0 && !isCreative) {
+                            val newDamage = chestplate.damage + 1
+                            if (newDamage < chestplate.maxDurability) {
+                                chestplate.damage = newDamage
+                                playerInventory.setChestplate(chestplate)
+                            } else {
+                                this.setGliding(false)
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!this.isSleeping()) {
+                timeSinceRest++
+            }
+
+            if (server!!.serverAuthoritativeMovement > 0 && this.breakingBlock != null) { //仅服务端权威使用，因为客户端权威continue break是正常的
+                onBlockBreakContinue(breakingBlock!!.position, this.breakingBlockFace)
+            }
+
+            //reset move status
+            this.newPosition = null
+            this.positionChanged = false
+            if (this.speed == null) {
+                this.speed = Vector3(0.0, 0.0, 0.0)
+            } else {
+                speed!!.setComponents(0.0, 0.0, 0.0)
+            }
+        }
+
+        if (currentTick % 10 == 0) {
+            this.checkInteractNearby()
+        }
+
+        if (this.spawned && !dummyBossBars.isEmpty() && currentTick % 100 == 0) {
+            dummyBossBars.values.forEach(Consumer { obj: DummyBossBar? -> obj!!.updateBossEntityPosition() })
+        }
+
+        updateBlockingFlag()
+
+        val foodData = foodData
+        if (this.ticksLived % 40 == 0 && foodData != null) {
+            foodData.sendFood()
+        }
+
+        return true
+    }
+
+    /**
+     * 检查附近可交互的实体(插件一般不使用)
+     *
+     *
+     * Check for nearby interactable entities (not generally used by plugins)
+     */
+    fun checkInteractNearby() {
+        val interactDistance = if (isCreative) 5 else 3
+        if (canInteract(this.position, interactDistance.toDouble())) {
+            if (getEntityPlayerLookingAt(interactDistance) != null) {
+                val onInteract = getEntityPlayerLookingAt(interactDistance)
+                buttonText = onInteract!!.getInteractButtonText(this)
+            } else {
+                buttonText = ""
+            }
+        } else {
+            buttonText = ""
+        }
+    }
+
+    private fun getEntityAtPosition(nearbyEntities: Array<Entity>, x: Int, y: Int, z: Int): EntityInteractable? {
+        for (nearestEntity in nearbyEntities) {
+            if (nearestEntity.position.floorX == x && nearestEntity.position.floorY == y && nearestEntity.position.floorZ == z && nearestEntity is EntityInteractable
+                && (nearestEntity as EntityInteractable).canDoInteraction()
+            ) {
+                return nearestEntity
+            }
+        }
+        return null
+    }
+
+    /**
+     * 返回玩家目前正在看的实体。
+     *
+     *
+     * Returns the Entity the player is looking at currently
+     *
+     * @param maxDistance 检查实体的最大距离<br></br>the maximum distance to check for entities
+     * @return Entity|null    如果没有找到实体，则为NULL，或者是实体的一个实例。<br></br>either NULL if no entity is found or an instance of the entity
+     */
+    fun getEntityPlayerLookingAt(maxDistance: Int): EntityInteractable? {
+        var entity: EntityInteractable? = null
+
+
+        val nearbyEntities = level!!.getNearbyEntities(
+            boundingBox!!.grow(maxDistance.toDouble(), maxDistance.toDouble(), maxDistance.toDouble()),
+            this
+        )
+
+        // get all blocks in looking direction until the max interact distance is reached (it's possible that startblock isn't found!)
+        try {
+            val itr = BlockIterator(
+                level!!,
+                getLocator().position, getDirectionVector(), getEyeHeight().toDouble(), maxDistance
+            )
+            if (itr.hasNext()) {
+                var block: Block?
+                while (itr.hasNext()) {
+                    block = itr.next()
+                    entity = getEntityAtPosition(
+                        nearbyEntities,
+                        block!!.position.floorX,
+                        block.position.floorY,
+                        block.position.floorZ
+                    )
+                    if (entity != null) {
+                        break
+                    }
+                }
+            }
+        } catch (ex: Exception) {
+            // nothing to log here!
+        }
+
+        return entity
+    }
+
+    fun getEnchantmentSeed(): Int {
+        return this.enchSeed
+    }
+
+    fun setEnchantmentSeed(seed: Int) {
+        this.enchSeed = seed
+    }
+
+    fun regenerateEnchantmentSeed() {
+        this.enchSeed = ThreadLocalRandom.current().nextInt(Int.MAX_VALUE)
+    }
+
+    fun checkNetwork() {
+        if (!this.isOnline) {
+            return
+        }
+
+        if (nextChunkOrderRun-- <= 0 || this.chunk == null) {
+            playerChunkManager.tick()
+        }
+
+        if (this.chunkLoadCount >= this.spawnThreshold && !this.spawned && loggedIn) {
+            session.notifyTerrainReady()
+        }
+    }
+
+    @JvmOverloads
+    fun canInteract(pos: Vector3, maxDistance: Double, maxDiff: Double = 6.0): Boolean {
+        if (position.distanceSquared(pos) > maxDistance * maxDistance) {
+            return false
+        }
+
+        val dV = this.getDirectionPlane()
+        val dot = dV.dot(Vector2(position.south, position.west))
+        val dot1 = dV.dot(Vector2(pos.south, pos.west))
+        return (dot1 - dot) >= -maxDiff
+    }
+
+    /**
+     * 以该玩家的身份发送一条聊天信息。如果消息以/（正斜杠）开头，它将被视为一个命令。
+     *
+     *
+     * Sends a chat message as this player. If the message begins with a / (forward-slash) it will be treated
+     * as a command.
+     *
+     * @param message 发送的信息<br></br>message to send
+     * @return successful
+     */
+    fun chat(message: String): Boolean {
+        var message = message
+        if (!this.spawned || !this.isAlive()) {
+            return false
+        }
+
+        this.resetInventory()
+
+        if (this.removeFormat) {
+            message = clean(message, true)!!
+        }
+
+        for (msg in message.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+            if (!msg.trim { it <= ' ' }.isEmpty() && msg.length <= 512 && messageLimitCounter-- > 0) {
+                val chatEvent = PlayerChatEvent(this, msg)
+                server.getPluginManager().callEvent(chatEvent)
+                if (!chatEvent.isCancelled) {
+                    server.broadcastMessage(
+                        getServer().getLanguage().tr(
+                            chatEvent.format, *arrayOf<String?>(
+                                chatEvent.player!!.getDisplayName(), chatEvent.message
+                            )
+                        ), chatEvent.getRecipients()
+                    )
+                }
+            }
+        }
+
+        return true
+    }
+
+    /**
+     * [PlayerKickEvent.Reason] = [PlayerKickEvent.Reason.UNKNOWN]
+     *
+     * @see .kick
+     */
+    fun kick(reason: String, isAdmin: Boolean): Boolean {
+        return this.kick(PlayerKickEvent.Reason.UNKNOWN, reason, isAdmin)
+    }
+
+    /**
+     * [PlayerKickEvent.Reason] = [PlayerKickEvent.Reason.UNKNOWN]
+     *
+     * @see .kick
+     */
+    /**
+     * reason=empty string
+     *
+     * @see .kick
+     */
+    @JvmOverloads
+    fun kick(reason: String = ""): Boolean {
+        return kick(PlayerKickEvent.Reason.UNKNOWN, reason)
+    }
+
+    /**
+     * @see .kick
+     */
+    /**
+     * @see .kick
+     */
+    @JvmOverloads
+    fun kick(reason: PlayerKickEvent.Reason, isAdmin: Boolean = true): Boolean {
+        return this.kick(reason, reason.toString(), isAdmin)
+    }
+
+    /**
+     * 踢出该玩家
+     *
+     *
+     * Kick out the player
+     *
+     * @param reason       原因枚举<br></br>Cause Enumeration
+     * @param reasonString 原因字符串<br></br>Reason String
+     * @param isAdmin      是否来自管理员踢出<br></br>Whether from the administrator kicked out
+     * @return boolean
+     */
+    /**
+     * @see .kick
+     */
+    @JvmOverloads
+    fun kick(reason: PlayerKickEvent.Reason, reasonString: String, isAdmin: Boolean = true): Boolean {
+        val ev: PlayerKickEvent
+        server.getPluginManager().callEvent(
+            PlayerKickEvent(
+                this, reason,
+                leaveMessage
+            ).also { ev = it })
+        if (!ev.isCancelled) {
+            val message = if (isAdmin) {
+                if (!Server.Companion.getInstance().getNameBans().isBanned(getName())) {
+                    "Kicked by admin." + (if (!reasonString.isEmpty()) " Reason: $reasonString" else "")
+                } else {
+                    reasonString
+                }
+            } else {
+                if (reasonString.isEmpty()) {
+                    "disconnectionScreen.noReason"
+                } else {
+                    reasonString
+                }
+            }
+
+            this.close(ev.quitMessage, message)
+
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * 设置玩家的可视距离(范围 0--[Server.getViewDistance])
+     *
+     *
+     * Set the player's viewing distance (range 0--[Server.getViewDistance])
+     *
+     * @param distance 可视距离
+     */
+    fun setViewDistance(distance: Int) {
+        this.chunkRadius = distance
+
+        val pk = ChunkRadiusUpdatedPacket()
+        pk.radius = distance
+
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 得到玩家的可视距离
+     *
+     *
+     * Get the player's viewing distance
+     *
+     * @return int
+     */
+    fun getViewDistance(): Int {
+        return this.chunkRadius
+    }
+
+    override fun sendMessage(message: String) {
+        val pk = TextPacket()
+        pk.type = TextPacket.TYPE_RAW
+        pk.message = server.getLanguage().tr(message)
+        this.dataPacket(pk)
+    }
+
+    override fun sendMessage(message: TextContainer) {
+        if (message is TranslationContainer) {
+            this.sendTranslation(message.text, message.parameters)
+            return
+        }
+        this.sendMessage(message.text)
+    }
+
+
+    override fun sendCommandOutput(container: CommandOutputContainer) {
+        if (level!!.gameRules!!.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
+            val pk = CommandOutputPacket()
+            pk.messages.addAll(container.messages)
+            pk.commandOriginData = CommandOriginData(
+                CommandOriginData.Origin.PLAYER,
+                getUniqueId()!!, "", null
+            ) //Only players can effect
+            pk.type = CommandOutputType.ALL_OUTPUT //Useless
+            pk.successCount = container.successCount //Useless,maybe used for server-client interaction
+            this.dataPacket(pk)
+        }
+    }
+
+    /**
+     * 在玩家聊天栏发送一个JSON文本
+     *
+     *
+     * Send a JSON text in the player chat bar
+     *
+     * @param text JSON文本<br></br>Json text
+     */
+    fun sendRawTextMessage(text: RawText) {
+        val pk = TextPacket()
+        pk.type = TextPacket.TYPE_OBJECT
+        pk.message = text.toRawText()
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 在玩家聊天栏发送一个多语言翻译文本，示例:<br></br>`message="Test Message {%0} {%1}" parameters=["Hello","World"]`<br></br>
+     * 实际消息内容`"Test Message Hello World"`
+     *
+     *
+     * Send a multilingual translated text in the player chat bar, example:<br></br> `message="Test Message {%0} {%1}" parameters=["Hello", "World"]`<br></br>
+     * actual message content `"Test Message Hello World"`
+     *
+     * @param message    消息
+     * @param parameters 参数
+     */
+    /**
+     * @see .sendTranslation
+     */
+    @JvmOverloads
+    fun sendTranslation(message: String, parameters: Array<String?> = EmptyArrays.EMPTY_STRINGS) {
+        val pk = TextPacket()
+        if (server.getSettings().baseSettings().forceServerTranslate()) {
+            pk.type = TextPacket.TYPE_RAW
+            pk.message = server.getLanguage().tr(message, *parameters)
+        } else {
+            pk.type = TextPacket.TYPE_TRANSLATION
+            pk.message = server.getLanguage().tr(message, parameters, "nukkit.", true)
+            for (i in parameters.indices) {
+                parameters[i] = server.getLanguage().tr(parameters[i], parameters, "nukkit.", true)
+            }
+            pk.parameters = parameters
+        }
+        this.dataPacket(pk)
+    }
+
+    /**
+     * @see .sendChat
+     */
+    fun sendChat(message: String) {
+        this.sendChat("", message)
+    }
+
+    /**
+     * 在玩家聊天栏发送一个文本
+     *
+     *
+     * Send a text in the player chat bar
+     *
+     * @param message 消息
+     */
+    fun sendChat(source: String, message: String) {
+        val pk = TextPacket()
+        pk.type = TextPacket.TYPE_CHAT
+        pk.source = source
+        pk.message = server.getLanguage().tr(message)
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 在玩家物品栏上方发送一个弹出式的文本
+     *
+     *
+     * Send a pop-up text above the player's item bar
+     *
+     * @param message 消息
+     */
+    // TODO: Support Translation Parameters
+    /**
+     * @see .sendPopup
+     */
+    @JvmOverloads
+    fun sendPopup(message: String, subtitle: String? = "") {
+        val pk = TextPacket()
+        pk.type = TextPacket.TYPE_POPUP
+        pk.message = message
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 在玩家物品栏上方发送一个提示文本
+     *
+     *
+     * Send a tip text above the player's item bar
+     *
+     * @param message 消息
+     */
+    fun sendTip(message: String) {
+        val pk = TextPacket()
+        pk.type = TextPacket.TYPE_TIP
+        pk.message = message
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 清除掉玩家身上正在显示的标题信息。
+     *
+     *
+     * Clears away the title info being displayed on the player.
+     */
+    fun clearTitle() {
+        val pk = SetTitlePacket()
+        pk.type = SetTitlePacket.TYPE_CLEAR
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 为下一个显示的标题重新设置标题动画时间和副标题。
+     *
+     *
+     * Resets both title animation times and subtitle for the next shown title.
+     */
+    fun resetTitleSettings() {
+        val pk = SetTitlePacket()
+        pk.type = SetTitlePacket.TYPE_RESET
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 设置副标题，在主标题下方显示。
+     *
+     *
+     * Set subtitle to be displayed below the main title.
+     *
+     * @param subtitle 副标题
+     */
+    fun setSubtitle(subtitle: String) {
+        val pk = SetTitlePacket()
+        pk.type = SetTitlePacket.TYPE_SUBTITLE
+        pk.text = subtitle
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 设置一个JSON文本副标题。
+     *
+     *
+     * Set a JSON text subtitle.
+     *
+     * @param text JSON文本<br></br>JSON text
+     */
+    fun setRawTextSubTitle(text: RawText) {
+        val pk = SetTitlePacket()
+        pk.type = SetTitlePacket.TYPE_SUBTITLE_JSON
+        pk.text = text.toRawText()
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 设置标题动画时间
+     *
+     *
+     * Set title animation time
+     *
+     * @param fadein   淡入时间
+     * @param duration 持续时间
+     * @param fadeout  淡出时间
+     */
+    fun setTitleAnimationTimes(fadein: Int, duration: Int, fadeout: Int) {
+        val pk = SetTitlePacket()
+        pk.type = SetTitlePacket.TYPE_ANIMATION_TIMES
+        pk.fadeInTime = fadein
+        pk.stayTime = duration
+        pk.fadeOutTime = fadeout
+        this.dataPacket(pk)
+    }
+
+    /**
+     * 设置一个JSON文本标题。
+     *
+     *
+     * Set a JSON text title.
+     *
+     * @param text JSON文本<br></br>JSON text
+     */
+    fun setRawTextTitle(text: RawText) {
+        val pk = SetTitlePacket()
+        pk.type = SetTitlePacket.TYPE_TITLE_JSON
+        pk.text = text.toRawText()
+        this.dataPacket(pk)
+    }
+
+
+    /**
+     * 在玩家视角正中央发送一个标题文本。
+     *
+     *
+     * Send a title text in the center of the player's view.
+     *
+     * @param title    标题
+     * @param subtitle 副标题
+     * @param fadeIn   淡入时间<br></br>fadeIn time(tick)
+     * @param stay     持续时间<br></br>stay time
+     * @param fadeOut  淡出时间<br></br>fadeOut time
+     */
+    /**
+     * `subtitle=null,fadeIn=20,stay=20,fadeOut=5`
+     *
+     * @see .sendTitle
+     */
+    /**
+     * `fadeIn=20,stay=20,fadeOut=5`
+     *
+     * @see .sendTitle
+     */
+    @JvmOverloads
+    fun sendTitle(title: String?, subtitle: String? = null, fadeIn: Int = 20, stay: Int = 20, fadeOut: Int = 5) {
+        this.setTitleAnimationTimes(fadeIn, stay, fadeOut)
+        if (!Strings.isNullOrEmpty(subtitle)) {
+            this.setSubtitle(subtitle!!)
+        }
+        // title won't send if an empty string is used.
+        this.setTitle((if (Strings.isNullOrEmpty(title)) " " else title)!!)
+    }
+
+    /**
+     * 在玩家物品栏上方发送一个ActionBar消息。
+     *
+     *
+     * Send a ActionBar text above the player's item bar.
+     *
+     * @param title    消息
+     * @param fadein   淡入时间
+     * @param duration 持续时间
+     * @param fadeout  淡出时间
+     */
+    /**
+     * fadein=1,duration=0,fadeout=1
+     *
+     * @see .sendActionBar
+     */
+    @JvmOverloads
+    fun sendActionBar(title: String, fadein: Int = 1, duration: Int = 0, fadeout: Int = 1) {
+        val pk = SetTitlePacket()
+        pk.type = SetTitlePacket.TYPE_ACTION_BAR
+        pk.text = title
+        pk.fadeInTime = fadein
+        pk.stayTime = duration
+        pk.fadeOutTime = fadeout
+        this.dataPacket(pk)
+    }
+
+    /**
+     * fadein=1,duration=0,fadeout=1
+     *
+     * @see .setRawTextActionBar
+     */
+    fun setRawTextActionBar(text: RawText) {
+        this.setRawTextActionBar(text, 1, 0, 1)
+    }
+
+    /**
+     * 设置一个JSON ActionBar消息。
+     *
+     *
+     * Set a JSON ActionBar text.
+     *
+     * @param text     JSON文本<br></br>JSON text
+     * @param fadein   淡入时间
+     * @param duration 持续时间
+     * @param fadeout  淡出时间
+     */
+    fun setRawTextActionBar(text: RawText, fadein: Int, duration: Int, fadeout: Int) {
+        val pk = SetTitlePacket()
+        pk.type = SetTitlePacket.TYPE_ACTIONBAR_JSON
+        pk.text = text.toRawText()
+        pk.fadeInTime = fadein
+        pk.stayTime = duration
+        pk.fadeOutTime = fadeout
+        this.dataPacket(pk)
+    }
+
+
+    override fun close() {
+        this.close("")
+    }
+
+    /**
+     * `notify=true`
+     *
+     * @see .close
+     */
+    fun close(reason: String) {
+        this.close(this.leaveMessage, reason)
+    }
+
+    fun close(message: String, reason: String) {
+        this.close(TextContainer(message), reason)
+    }
+
+    /**
+     * 关闭该玩家的连接及其一切活动，和[.kick]差不多效果，区别在于[.kick]是基于`close`实现的。
+     *
+     *
+     * Closing the player's connection and all its activities is almost as function as [.kick], the difference is that [.kick] is implemented based on `close`.
+     *
+     * @param message PlayerQuitEvent事件消息<br></br>PlayerQuitEvent message
+     * @param reason  登出原因<br></br>Reason for logout
+     */
+    /**
+     * `reason="generic",notify=true`
+     *
+     * @see .close
+     */
+    @JvmOverloads
+    fun close(message: TextContainer?, reason: String = "generic") {
+        var reason = reason
+        if (!connected.compareAndSet(true, false) && this.closed) {
+            return
+        }
+        //output logout infomation
+        Player.log.info(
+            getServer().getLanguage().tr(
+                "nukkit.player.logOut",
+                TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
+                this.address,
+                port.toString(),
+                getServer().getLanguage().tr(reason)
+            )
+        )
+
+        resetInventory()
+        for (inv in windows.keys) {
+            if (permanentWindows.contains(windows[inv])) {
+                val windowId = this.getWindowId(inv)
+                playerHandle.closingWindowId = windowId
+                inv.close(this)
+                updateTrackingPositions(true)
+            }
+        }
+
+        //handle scoreboardManager#beforePlayerQuit
+        val scoreboardManager = getServer().getScoreboardManager()
+        scoreboardManager?.beforePlayerQuit(this)
+
+        //dismount horse
+        if (riding is EntityRideable) {
+            riding.dismountEntity(this)
+        }
+
+        unloadAllUsedChunk()
+
+        //send disconnection packet
+        val packet = DisconnectPacket()
+        if (reason == null || reason.isBlank()) {
+            packet.hideDisconnectionScreen = true
+            reason = BedrockDisconnectReasons.DISCONNECTED
+        }
+        packet.message = reason
+        session.sendPacketSync(packet)
+
+        //call quit event
+        var ev: PlayerQuitEvent? = null
+        if (this.getName() != null && !getName().isEmpty()) {
+            server.getPluginManager().callEvent(PlayerQuitEvent(this, message, true, reason).also { ev = it })
+            if (this.fishing != null) {
+                this.stopFishing(false)
+            }
+        }
+        // Close the temporary windows first, so they have chance to change all inventories before being disposed
+        if (ev != null && ev!!.autoSave && namedTag != null) {
+            this.save()
+        }
+        super.close()
+
+        windows.clear()
+        hiddenPlayers.clear()
+        //remove player from playerlist
+        server!!.removeOnlinePlayer(this)
+        //remove player from players map
+        server.removePlayer(this)
+
+        server.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        server.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE, this)
+        // broadcast disconnection message
+        if (ev != null && (this.getName() != "") && this.spawned && (ev!!.quitMessage.toString() != "")) {
+            server.broadcastMessage(ev!!.quitMessage)
+        }
+
+        hasSpawned.clear()
+        this.loggedIn = false
+        this.spawned = false
+        this.spawnPoint = null
+        this.riding = null
+        this.chunk = null
+
+        if (this.perm != null) {
+            perm!!.clearPermissions()
+            this.perm = null
+        }
+        if (this.inventory != null) {
+            this.inventory = null
+        }
+        if (this.offhandInventory != null) {
+            this.offhandInventory = null
+        }
+        if (this.enderChestInventory != null) {
+            this.enderChestInventory = null
+        }
+        if (this.creativeOutputInventory != null) {
+            this.creativeOutputInventory = null
+        }
+        if (this.cursorInventory != null) {
+            this.cursorInventory = null
+        }
+
+        //close player network session
+        Player.log.debug("Closing player network session")
+        Player.log.debug(reason)
+        checkNotNull(this.session)
+        session.close(null)
+    }
+
+    @Synchronized
+    fun unloadAllUsedChunk() {
+        //save player data
+        //unload chunk for the player
+        val iterator = playerChunkManager.usedChunks.iterator()
+        try {
+            while (iterator.hasNext()) {
+                val l = iterator.nextLong()
+                val chunkX = getHashX(l)
+                val chunkZ = getHashZ(l)
+                if (level!!.unregisterChunkLoader(this, chunkX, chunkZ, false)) {
+                    val pk = LevelChunkPacket()
+                    pk.chunkX = chunkX
+                    pk.chunkZ = chunkZ
+                    pk.dimension = level!!.dimension
+                    pk.subChunkCount = 0
+                    pk.data = ByteArray(0)
+                    this.sendChunk(chunkX, chunkZ, pk)
+                    for (entity in level!!.getChunkEntities(chunkX, chunkZ)!!.values) {
+                        if (entity !== this) {
+                            entity.despawnFrom(this)
+                        }
+                    }
+                    iterator.remove()
+                }
+            }
+        } catch (e: Exception) {
+            getServer().getLogger().error("Failed to unload all used chunks.", e)
+        } finally {
+            playerChunkManager.usedChunks.clear()
+        }
+    }
+
+    override fun saveNBT() {
+        super.saveNBT()
+        if (spawnPoint == null) {
+            namedTag!!.remove("SpawnX")
+                .remove("SpawnY")
+                .remove("SpawnZ")
+                .remove("SpawnLevel")
+                .remove("SpawnDimension")
+        } else {
+            namedTag!!.putInt("SpawnX", spawnPoint!!.position.floorX)
+                .putInt("SpawnY", spawnPoint!!.position.floorY)
+                .putInt("SpawnZ", spawnPoint!!.position.floorZ)
+            if (spawnPoint!!.level != null) {
+                namedTag!!.putString("SpawnLevel", spawnPoint!!.level.getName()!!)
+                namedTag!!.putInt("SpawnDimension", spawnPoint!!.level.dimension)
+            } else {
+                namedTag!!.putString(
+                    "SpawnLevel",
+                    server!!.defaultLevel!!.getName()!!
+                )
+                namedTag!!.putInt("SpawnDimension", server.defaultLevel!!.dimension)
+            }
+        }
+
+        adventureSettings!!.saveNBT()
+    }
+
+    @JvmOverloads
+    fun save(async: Boolean = false) {
+        check(!this.closed) { "Tried to save closed player" }
+
+        saveNBT()
+
+        if (this.level != null) {
+            namedTag!!.putString("Level", level!!.getName()!!)
+
+            val achievements = CompoundTag()
+            for (achievement in this.achievements) {
+                achievements.putByte(achievement, 1)
+            }
+
+            namedTag!!.putCompound("Achievements", achievements)
+            namedTag!!.putInt("playerGameType", this.gamemode)
+            namedTag!!.putLong("lastPlayed", System.currentTimeMillis() / 1000)
+            namedTag!!.putString("lastIP", this.address)
+            namedTag!!.putInt("EXP", this.experience)
+            namedTag!!.putInt("expLevel", this.experienceLevel)
+            namedTag!!.putInt("foodLevel", foodData!!.food)
+            namedTag!!.putFloat("foodSaturationLevel", foodData!!.saturation)
+            namedTag!!.putInt("enchSeed", this.enchSeed)
+
+            val fogIdentifiers = ListTag<StringTag?>()
+            val userProvidedFogIds = ListTag<StringTag?>()
+            fogStack.forEach(Consumer<PlayerFogPacket.Fog> { fog: PlayerFogPacket.Fog ->
+                fogIdentifiers.add(StringTag(fog.identifier().toString()))
+                userProvidedFogIds.add(StringTag(fog.userProvidedId()))
+            })
+            namedTag!!.putList("fogIdentifiers", fogIdentifiers)
+            namedTag!!.putList("userProvidedFogIds", userProvidedFogIds)
+
+            namedTag!!.putInt("TimeSinceRest", this.timeSinceRest)
+
+            if (!getName().isBlank() && this.namedTag != null) {
+                server!!.saveOfflinePlayerData(
+                    uuid!!,
+                    namedTag!!, async
+                )
+            }
+        }
+    }
+
+    override fun getOriginalName(): String {
+        return "Player"
+    }
+
+    override fun getName(): String {
+        return playerInfo.getUsername()
+    }
+
+
+    val languageCode: LangCode
+        get() {
+            val code = from(loginChainData.languageCode!!)
+            return code ?: LangCode.en_US
+        }
+
+    override fun kill() {
+        if (!this.spawned) {
+            return
+        }
+
+        val showMessages = level!!.gameRules!!.getBoolean(GameRule.SHOW_DEATH_MESSAGES)
+        var message = ""
+        val params: MutableList<String> = ArrayList()
+        val cause = this.getLastDamageCause()
+
+        if (showMessages) {
+            params.add(this.getDisplayName())
+
+            when (if (cause == null) DamageCause.CUSTOM else cause.cause) {
+                DamageCause.ENTITY_ATTACK -> if (cause is EntityDamageByEntityEvent) {
+                    val e = cause.damager
+                    killer = e
+                    if (e is Player) {
+                        message = "death.attack.player"
+                        params.add(e.getDisplayName())
+                        break
+                    } else if (e is EntityLiving) {
+                        message = "death.attack.mob"
+                        params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
+                        break
+                    } else {
+                        params.add("Unknown")
+                    }
+                }
+
+                DamageCause.PROJECTILE -> if (cause is EntityDamageByEntityEvent) {
+                    val e = cause.damager
+                    killer = e
+                    if (e is Player) {
+                        message = "death.attack.arrow"
+                        params.add(e.getDisplayName())
+                    } else if (e is EntityLiving) {
+                        message = "death.attack.arrow"
+                        params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
+                        break
+                    } else {
+                        params.add("Unknown")
+                    }
+                }
+
+                DamageCause.VOID -> message = "death.attack.outOfWorld"
+                DamageCause.FALL -> {
+                    if (cause!!.finalDamage > 2) {
+                        message = "death.fell.accident.generic"
+                        break
+                    }
+                    message = "death.attack.fall"
+                }
+
+                DamageCause.SUFFOCATION -> message = "death.attack.inWall"
+                DamageCause.LAVA -> {
+                    message = "death.attack.lava"
+
+                    if (killer is EntityProjectile) {
+                        val shooter = (killer as EntityProjectile).shootingEntity
+                        if (shooter != null) {
+                            killer = shooter
+                        }
+                        if (killer is EntityHuman) {
+                            message += ".player"
+                            params.add(if (shooter!!.getNameTag() != "") shooter.getNameTag() else shooter.getName())
+                        }
+                    }
+                }
+
+                DamageCause.FIRE -> message = "death.attack.onFire"
+                DamageCause.FIRE_TICK -> message = "death.attack.inFire"
+                DamageCause.DROWNING -> message = "death.attack.drown"
+                DamageCause.CONTACT -> if (cause is EntityDamageByBlockEvent) {
+                    val id = cause.damager.id
+                    if (id === BlockID.CACTUS) {
+                        message = "death.attack.cactus"
+                    } else if (id === BlockID.ANVIL) {
+                        message = "death.attack.anvil"
+                    }
+                }
+
+                DamageCause.BLOCK_EXPLOSION, DamageCause.ENTITY_EXPLOSION -> if (cause is EntityDamageByEntityEvent) {
+                    val e = cause.damager
+                    killer = e
+                    if (e is Player) {
+                        message = "death.attack.explosion.player"
+                        params.add(e.getDisplayName())
+                    } else if (e is EntityLiving) {
+                        message = "death.attack.explosion.player"
+                        params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
+                        break
+                    } else {
+                        message = "death.attack.explosion"
+                    }
+                } else {
+                    message = "death.attack.explosion"
+                }
+
+                DamageCause.MAGIC -> message = "death.attack.magic"
+                DamageCause.LIGHTNING -> message = "death.attack.lightningBolt"
+                DamageCause.HUNGER -> message = "death.attack.starve"
+                DamageCause.HOT_FLOOR -> message = "death.attack.magma"
+                else -> message = "death.attack.generic"
+            }
+        }
+
+        val ev: PlayerDeathEvent = PlayerDeathEvent(
+            this,
+            this.getDrops(), TranslationContainer(message, *params.toArray<String>(EmptyArrays.EMPTY_STRINGS)),
+            this.experienceLevel
+        )
+        ev.keepExperience = level!!.gameRules!!.getBoolean(GameRule.KEEP_INVENTORY)
+        ev.keepInventory = ev.keepExperience
+
+        server.getPluginManager().callEvent(ev)
+
+        if (!ev.isCancelled) {
+            if (this.fishing != null) {
+                this.stopFishing(false)
+            }
+
+            this.health = 0f
+            this.extinguish()
+            this.scheduleUpdate()
+            if (!ev.keepInventory && level!!.gameRules!!.getBoolean(GameRule.DO_ENTITY_DROPS)) {
+                for (item in ev.getDrops()!!) {
+                    if (!item.hasEnchantment(Enchantment.ID_VANISHING_CURSE) && item.applyEnchantments()) {
+                        level!!.dropItem(this.position, item, null, true, 40)
+                    }
+                }
+
+                if (this.inventory != null) {
+                    HashMap(inventory!!.contents).forEach { (slot: Int?, item: Item?) ->
+                        if (!item.keepOnDeath()) {
+                            inventory!!.clear(slot)
+                        }
+                    }
+                }
+                if (this.offhandInventory != null) {
+                    HashMap(offhandInventory!!.contents).forEach { (slot: Int?, item: Item?) ->
+                        if (!item.keepOnDeath()) {
+                            offhandInventory!!.clear(slot)
+                        }
+                    }
+                }
+            }
+
+            if (!ev.keepExperience && level!!.gameRules!!.getBoolean(GameRule.DO_ENTITY_DROPS)) {
+                if (this.isSurvival || this.isAdventure) {
+                    var exp = ev.experience * 7
+                    if (exp > 100) exp = 100
+                    level!!.dropExpOrb(this.position, exp)
+                }
+                this.setExperience(0, 0)
+            }
+
+            this.timeSinceRest = 0
+
+            val deathInfo = DeathInfoPacket()
+            deathInfo.translation = ev.translationDeathMessage
+            this.dataPacket(deathInfo)
+
+            if (showMessages && !ev.deathMessage.toString().isEmpty()) {
+                server!!.broadcast(ev.deathMessage, Server.Companion.BROADCAST_CHANNEL_USERS)
+            }
+            this.setDataProperty(
+                EntityDataTypes.PLAYER_LAST_DEATH_POS, BlockVector3(
+                    position.floorX, position.floorY, position.floorZ
+                )
+            )
+
+            val pk = RespawnPacket()
+            val pos = spawn.left()
+            pk.x = pos!!.position.south.toFloat()
+            pk.y = pos.position.up.toFloat()
+            pk.z = pos.position.west.toFloat()
+            pk.respawnState = RespawnPacket.STATE_SEARCHING_FOR_SPAWN
+            pk.runtimeEntityId = this.getId()
+            this.dataPacket(pk)
+        }
+    }
+
+    override fun setHealth(health: Float) {
+        var health = health
+        if (health < 1) {
+            health = 0f
+        }
+        super.setHealth(health)
+        val attribute: Attribute =
+            attributes.computeIfAbsent(Attribute.MAX_HEALTH) { obj: Int? -> getAttribute() }
+        attribute.setMaxValue((if (this.getAbsorption() % 2 != 0f) this.getMaxHealth() + 1 else this.getMaxHealth()).toFloat())
+            .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f)
+        if (this.spawned) {
+            val pk = UpdateAttributesPacket()
+            pk.entries = arrayOf<Attribute?>(attribute)
+            pk.entityId = this.getId()
+            this.dataPacket(pk)
+        }
+    }
+
+    override fun setMaxHealth(maxHealth: Int) {
+        super.setMaxHealth(maxHealth)
+
+        val attribute: Attribute =
+            attributes.computeIfAbsent(Attribute.MAX_HEALTH) { obj: Int? -> getAttribute() }
+        attribute.setMaxValue((if (this.getAbsorption() % 2 != 0f) this.getMaxHealth() + 1 else this.getMaxHealth()).toFloat())
+            .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f)
+        if (this.spawned) {
+            val pk = UpdateAttributesPacket()
+            pk.entries = arrayOf<Attribute?>(attribute)
+            pk.entityId = this.getId()
+            this.dataPacket(pk)
+        }
+    }
+
+    var experience: Int
+        /**
+         * 得到该玩家的经验值(并不会显示玩家从的经验值总数，而仅仅显示当前等级所在的经验值，即经验条)。
+         *
+         *
+         * Get the experience value of the player (it does not show the total experience value of the player from, but only the experience value where the current level is, i.e. the experience bar).
+         *
+         * @return int
+         */
+        get() = this.exp
+        /**
+         * `level = this.getExperienceLevel(),playLevelUpSound=false`
+         *
+         * @see .setExperience
+         */
+        set(exp) {
+            setExperience(exp, this.experienceLevel)
+        }
+
+
+    /**
+     * 增加该玩家的经验值
+     *
+     *
+     * Increase the experience value of the player
+     *
+     * @param add              经验值的数量
+     * @param playLevelUpSound 有无升级声音
+     */
+    /**
+     * playLevelUpSound=false
+     *
+     * @see .addExperience
+     */
+    @JvmOverloads
+    fun addExperience(add: Int, playLevelUpSound: Boolean = false) {
+        if (add == 0) return
+        val now = this.experience
+        var added = now + add
+        var level = this.experienceLevel
+        var most = calculateRequireExperience(level)
+        while (added >= most) {  //Level Up!
+            added = added - most
+            level++
+            most = calculateRequireExperience(level)
+        }
+        this.setExperience(added, level, playLevelUpSound)
+    }
+
+
+    /**
+     * playLevelUpSound=false
+     *
+     * @see .setExperience
+     */
+    fun setExperience(exp: Int, level: Int) {
+        setExperience(exp, level, false)
+    }
+
+    /**
+     * 设置该玩家的经验值和等级
+     *
+     *
+     * set the experience value and level of the player
+     *
+     * @param playLevelUpSound 有无升级声音
+     * @param exp              经验值
+     * @param level            等级
+     */
+    //todo something on performance, lots of exp orbs then lots of packets, could crash client
+    fun setExperience(exp: Int, level: Int, playLevelUpSound: Boolean) {
+        var exp = exp
+        var level = level
+        val expEvent = PlayerExperienceChangeEvent(
+            this,
+            experience,
+            experienceLevel, exp, level
+        )
+        server.getPluginManager().callEvent(expEvent)
+        if (expEvent.isCancelled) {
+            return
+        }
+        exp = expEvent.newExperience
+        level = expEvent.newExperienceLevel
+
+        val levelBefore = this.experienceLevel
+        this.exp = exp
+        this.experienceLevel = level
+
+        this.sendExperienceLevel(level)
+        this.sendExperience(exp)
+        if (playLevelUpSound && levelBefore < level && levelBefore / 5 != level / 5 && this.lastPlayerdLevelUpSoundTime < this.age - 100) {
+            this.lastPlayerdLevelUpSoundTime = this.age
+            this.level!!.addLevelSoundEvent(
+                this.position,
+                LevelSoundEventPacketV2.SOUND_LEVELUP,
+                min(7.0, (level / 5).toDouble()).toInt() shl 28,
+                "",
+                false, false
+            )
+        }
+    }
+
+    /**
+     * setExperience的实现部分，用来设置当前等级所对应的经验值，即经验条
+     *
+     *
+     * The implementation of setExperience is used to set the experience value corresponding to the current level, i.e. the experience bar
+     *
+     * @param exp 经验值
+     */
+    /**
+     * @see .sendExperience
+     */
+    @JvmOverloads
+    fun sendExperience(exp: Int = this.experience) {
+        if (this.spawned) {
+            var percent = (exp.toFloat()) / calculateRequireExperience(
+                experienceLevel
+            )
+            percent = max(0.0, min(1.0, percent.toDouble())).toFloat()
+            val attribute: Attribute =
+                attributes.computeIfAbsent(Attribute.EXPERIENCE) { obj: Int? -> getAttribute() }
+            attribute.setValue(percent)
+            this.syncAttribute(attribute)
+        }
+    }
+
+    /**
+     * setExperience的实现部分，用来设置当前等级
+     *
+     *
+     * The implementation of setExperience is used to set the level
+     *
+     * @param level 等级
+     */
+    /**
+     * @see .sendExperienceLevel
+     */
+    @JvmOverloads
+    fun sendExperienceLevel(level: Int = this.experienceLevel) {
+        if (this.spawned) {
+            val attribute: Attribute =
+                attributes.computeIfAbsent(Attribute.EXPERIENCE_LEVEL) { obj: Int? -> getAttribute() }
+            attribute.setValue(level.toFloat())
+            this.syncAttribute(attribute)
+        }
+    }
+
+    /**
+     * 以指定[Attribute]发送UpdateAttributesPacket数据包到该玩家。
+     *
+     *
+     * Send UpdateAttributesPacket packets to this player with the specified [Attribute].
+     *
+     * @param attribute the attribute
+     */
+    override fun syncAttribute(attribute: Attribute) {
+        val pk = UpdateAttributesPacket()
+        pk.entries = arrayOf(attribute)
+        pk.entityId = this.getId()
+        this.dataPacket(pk)
+    }
+
+    override fun syncAttributes() {
+        val pk = UpdateAttributesPacket()
+        pk.entries =
+            attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }
+                .toArray<Attribute> { _Dummy_.__Array__() }
+        pk.entityId = this.getId()
+        this.dataPacket(pk)
+    }
+
+    override fun setAbsorption(absorption: Float) {
+        if (absorption != this.absorption) {
+            this.absorption = absorption
+            val attribute: Attribute =
+                attributes.computeIfAbsent(Attribute.ABSORPTION) { obj: Int? -> getAttribute() }
+            attribute.setValue(absorption)
+            this.syncAttribute(attribute)
+        }
+    }
+
+    /**
+     * send=true
+     *
+     * @see .setMovementSpeed
+     */
+    override fun setMovementSpeed(speed: Float) {
+        setMovementSpeed(speed, true)
+    }
+
+    /**
+     * 设置该玩家的移动速度
+     *
+     *
+     * Set the movement speed of this player.
+     *
+     * @param speed 速度大小，注意默认移动速度为[.DEFAULT_SPEED]<br></br>Speed value, note that the default movement speed is [.DEFAULT_SPEED]
+     * @param send  是否发送数据包[UpdateAttributesPacket]到客户端<br></br>Whether to send [UpdateAttributesPacket] to the client
+     */
+    fun setMovementSpeed(speed: Float, send: Boolean) {
+        super.setMovementSpeed(speed)
+        if (this.spawned && send) {
+            this.sendMovementSpeed(speed)
+        }
+    }
+
+    /**
+     * 发送[Attribute.MOVEMENT_SPEED]属性到客户端
+     *
+     *
+     * Send [Attribute.MOVEMENT_SPEED] Attribute to Client.
+     *
+     * @param speed 属性值<br></br>the speed value
+     */
+    fun sendMovementSpeed(speed: Float) {
+        val attribute: Attribute =
+            attributes.computeIfAbsent(Attribute.MOVEMENT_SPEED) { obj: Int? -> getAttribute() }
+        attribute.setValue(speed)
+        this.syncAttribute(attribute)
+    }
+
+    override fun attack(source: EntityDamageEvent): Boolean {
+        if (!this.isAlive()) {
+            return false
+        }
+
+        if (this.isSpectator || this.isCreative) {
+            //source.setCancelled();
+            return false
+        } else if (getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT] && source.cause == DamageCause.FALL) {
+            //source.setCancelled();
+            return false
+        } else if (source.cause == DamageCause.FALL) {
+            if (level!!.getBlock(
+                    getLocator().position.floor()!!
+                        .add(0.5, -1.0, 0.5)!!
+                )!!
+                    .id == Block.SLIME
+            ) {
+                if (!this.isSneaking()) {
+                    //source.setCancelled();
+                    this.resetFallDistance()
+                    return false
+                }
+            }
+        }
+
+        if (super.attack(source)) { //!source.isCancelled()
+            if (this.getLastDamageCause() === source && this.spawned) {
+                if (source is EntityDamageByEntityEvent) {
+                    val damager = source.damager
+                    if (damager is Player) {
+                        damager.foodData!!.exhaust(0.1)
+                    }
+                    //保存攻击玩家的实体在lastBeAttackEntity
+                    this.lastBeAttackEntity = source.damager
+                }
+                val pk = EntityEventPacket()
+                pk.eid = this.getId()
+                pk.event = EntityEventPacket.HURT_ANIMATION
+                this.dataPacket(pk)
+            }
+            return true
+        } else {
+            return false
+        }
+    }
+
+    /**
+     * 在玩家面前的地面上掉落一个物品。如果物品投放成功，则返回。
+     *
+     *
+     * Drops an item on the ground in front of the player. Returns if the item drop was successful.
+     *
+     * @param item 掉落的物品<br></br>to drop
+     * @return 一个bool值，丢弃物品成功或该物品为空<br></br>bool if the item was dropped or if the item was null
+     */
+    fun dropItem(item: Item): Boolean {
+        if (!this.spawned || !this.isAlive()) {
+            return false
+        }
+
+        if (item.isNull) {
+            Player.log.debug("{} attempted to drop a null item ({})", this.getName(), item)
+            return true
+        }
+
+        val motion = getDirectionVector().multiply(0.4)
+
+        level!!.dropItem(position.add(0.0, 1.3, 0.0)!!, item, motion, 40)
+
+        this.setDataFlag(EntityFlag.USING_ITEM, false)
+        return true
+    }
+
+    /**
+     * 在玩家面前的地面上扔下一个物品。返回值为该掉落的物品。
+     *
+     *
+     * Drops an item on the ground in front of the player. Returns the dropped item.
+     *
+     * @param item 掉落的物品<br></br>to drop
+     * @return 如果物品被丢弃成功，则返回EntityItem；如果物品为空，则为null<br></br>EntityItem if the item was dropped or null if the item was null
+     */
+    fun dropAndGetItem(item: Item): EntityItem? {
+        if (!this.spawned || !this.isAlive()) {
+            return null
+        }
+
+        if (item.isNull) {
+            Player.log.debug("{} attempted to drop a null item ({})", this.getName(), item)
+            return null
+        }
+
+        val motion = getDirectionVector().multiply(0.4)
+
+        this.setDataFlag(EntityFlag.USING_ITEM, false)
+
+        return level!!.dropAndGetItem(position.add(0.0, 1.3, 0.0)!!, item, motion, 40)
+    }
+
+    /**
+     * [Player.moveDelta]的实现,仅发送[MovePlayerPacket]数据包到客户端
+     *
+     * @param pos     the pos of MovePlayerPacket
+     * @param yaw     the yaw of MovePlayerPacket
+     * @param pitch   the pitch of MovePlayerPacket
+     * @param mode    the mode of MovePlayerPacket
+     * @param targets 接受数据包的玩家们<br></br>players of receive the packet
+     */
+    /**
+     * @see .sendPosition
+     */
+    /**
+     * @see .sendPosition
+     */
+    /**
+     * @see .sendPosition
+     */
+    /**
+     * @see .sendPosition
+     */
+    @JvmOverloads
+    fun sendPosition(
+        pos: Vector3,
+        yaw: Double = rotation.yaw,
+        pitch: Double = rotation.pitch,
+        mode: Int = MovePlayerPacket.MODE_NORMAL,
+        targets: Array<Player>? = null
+    ) {
+        val pk = MovePlayerPacket()
+        pk.eid = this.getId()
+        pk.x = pos.south.toFloat()
+        pk.y = (pos.up + this.getEyeHeight()).toFloat()
+        pk.z = pos.west.toFloat()
+        pk.headYaw = yaw.toFloat()
+        pk.pitch = pitch.toFloat()
+        pk.yaw = yaw.toFloat()
+        pk.mode = mode
+        pk.onGround = this.onGround
+        if (this.riding != null) {
+            pk.ridingEid = riding!!.getId()
+            pk.mode = MovePlayerPacket.MODE_PITCH
+        }
+
+        if (targets != null) {
+            Server.Companion.broadcastPacket(targets, pk)
+        } else {
+            this.dataPacket(pk)
+        }
+    }
+
+    override fun teleport(transform: Transform, cause: TeleportCause?): Boolean {
+        if (!this.isOnline) {
+            return false
+        }
+        val from = this.getTransform()
+        this.lastTeleportMessage = Pair.of(from, System.currentTimeMillis())
+
+        var to = transform
+        //event
+        if (cause != null) {
+            val event = PlayerTeleportEvent(this, from, to, cause)
+            server.getPluginManager().callEvent(event)
+            if (event.isCancelled) return false
+            to = event.to
+        }
+
+        //remove inventory,ride,sign editor
+        for (window in ArrayList(windows.keys)) {
+            if (window === this.inventory) {
+                continue
+            }
+            this.removeWindow(window)
+        }
+        val currentRide = getRiding()
+        if (currentRide != null && !currentRide.dismountEntity(this)) {
+            return false
+        }
+        isOpenSignFront = null
+
+        this.setMotion(Vector3())
+
+        var switchLevel = false
+        if (to.level != from.level) {
+            switchLevel = true
+            unloadAllUsedChunk()
+            //unload entities for old level
+            Arrays.stream(from.level.getEntities()).forEach { e: Entity -> e.despawnFrom(this) }
+        }
+
+        clientMovements.clear()
+        //switch level, update pos and rotation, update aabb
+        if (setPositionAndRotation(to, to.yaw, to.pitch, to.headYaw)) {
+            //if switch level or the distance teleported is too far
+            if (switchLevel) {
+                playerChunkManager.handleTeleport()
+                //set nextChunkOrderRun is zero means that the next tick immediately execute the playerChunkManager#tick
+                this.nextChunkOrderRun = 0
+            } else if ((abs((from.position.chunkX - to.position.chunkX).toDouble()) >= this.getViewDistance())
+                || (abs((from.position.chunkZ - to.position.chunkZ).toDouble()) >= this.getViewDistance())
+            ) {
+                playerChunkManager.handleTeleport()
+                this.nextChunkOrderRun = 0
+            }
+            //send to client
+            this.sendPosition(to.position, to.rotation.yaw, to.rotation.pitch, MovePlayerPacket.MODE_TELEPORT)
+            this.newPosition = to.position
+        } else {
+            this.sendPosition(this.position, to.rotation.yaw, to.rotation.pitch, MovePlayerPacket.MODE_TELEPORT)
+            this.newPosition = this.position
+        }
+        //state update
+        this.positionChanged = true
+
+        if (switchLevel) {
+            refreshBlockEntity(10)
+            refreshChunkRender()
+        }
+        this.resetFallDistance()
+        //DummyBossBar
+        getDummyBossBars().values.forEach(Consumer { obj: DummyBossBar? -> obj!!.reshow() })
+        //Weather
+        level!!.sendWeather(this)
+        //Update time
+        level!!.sendTime(this)
+        updateTrackingPositions(true)
+        //Update gamemode
+        if (isSpectator) {
+            this.setGamemode(this.gamemode, false, null, true)
+        }
+        this.scheduleUpdate()
+        return true
+    }
+
+    fun refreshChunkRender() {
+        val origin = getViewDistance()
+        this.setViewDistance(1)
+        this.setViewDistance(32)
+        this.setViewDistance(origin)
+    }
+
+    fun refreshBlockEntity(delay: Int) {
+        level!!.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
+            for (b in level!!.getBlockEntities().values) {
+                if (b == null) continue
+                if (b is BlockEntitySpawnable) {
+                    val setAir = UpdateBlockPacket()
+                    setAir.blockRuntimeId = BlockAir.STATE.blockStateHash()
+                    setAir.flags = UpdateBlockPacket.FLAG_NETWORK
+                    setAir.x = b.position.floorX
+                    setAir.y = b.position.floorY
+                    setAir.z = b.position.floorZ
+                    this.dataPacket(setAir)
+
+                    val revertAir = UpdateBlockPacket()
+                    revertAir.blockRuntimeId = b.block.runtimeId
+                    revertAir.flags = UpdateBlockPacket.FLAG_NETWORK
+                    revertAir.x = b.position.floorX
+                    revertAir.y = b.position.floorY
+                    revertAir.z = b.position.floorZ
+                    this.dataPacket(revertAir)
+                    b.spawnTo(this)
+                }
+            }
+        }, delay, true)
+    }
+
+    /**
+     *
+     * Sends a form to a player and assigns a given ID to it
+     * To open a form safely, please use [Form.send]
+     *
+     * @param form The form to open
+     * @param id The ID to assign the form to
+     * @return The id assigned to the form
+     */
+    /**
+     *
+     * Sends a form to a player and assigns the next ID to it
+     * To open a form safely, please use [Form.send]
+     *
+     * @param form The form to open
+     * @return The id assigned to the form
+     */
+    @JvmOverloads
+    fun sendForm(form: Form<*>, id: Int = formWindowCount++): Int {
+        if (formWindows.size > 10) {
+            this.kick("Server sent to many forms. Please ")
+            return id
+        }
+
+        if (!form.isViewer(this)) {
+            form.viewers().add(this)
+        }
+
+        val packet = ModalFormRequestPacket()
+        packet.formId = id
+        packet.data = form.toJson()
+
+        formWindows[packet.formId] = form
+
+        this.dataPacket(packet)
+        return id
+    }
+
+    fun updateForm(form: Form<*>) {
+        if (!form.isViewer(this)) {
+            return
+        }
+
+        formWindows.entries
+            .stream()
+            .filter { f: Map.Entry<Int, Form<*>> -> f.value == form }
+            .map<Int> { java.util.Map.Entry.key }
+            .findFirst()
+            .ifPresent { id: Int? ->
+                val packet =
+                    ServerSettingsResponsePacket() // Exploiting some (probably unintended) protocol features here
+                packet.formId = id!!
+                packet.data = form.toJson()
+                this.dataPacket(packet)
+            }
+    }
+
+    fun checkClosedForms() {
+        formWindows.entries.removeIf { entry: Map.Entry<Int, Form<*>> ->
+            !entry.value.isViewer(
+                this
+            )
+        }
+    }
+
+    fun getFormWindows(): Map<Int, Form<*>> {
+        return formWindows
+    }
+
+    /**
+     * 向玩家展示一个NPC对话框.
+     *
+     *
+     * Show dialog window to the player.
+     *
+     * @param dialog NPC对话框<br></br>the dialog
+     * @param book   如果为true,将会立即更新该[FormWindowDialog.getSceneName]<br></br>If true, the [FormWindowDialog.getSceneName] will be updated immediately.
+     */
+    /**
+     * book=true
+     *
+     * @see .showDialogWindow
+     */
+    @JvmOverloads
+    fun showDialogWindow(dialog: FormWindowDialog, book: Boolean = true) {
+        val actionJson = dialog.buttonJSONData
+
+        if (book && dialogWindows.getIfPresent(dialog.sceneName) != null) dialog.updateSceneName()
+        dialog.bindEntity!!.setDataProperty(EntityDataTypes.HAS_NPC, true)
+        dialog.bindEntity!!.setDataProperty(EntityDataTypes.NPC_DATA, dialog.skinData)
+        dialog.bindEntity!!.setDataProperty(EntityDataTypes.ACTIONS, actionJson!!)
+        dialog.bindEntity!!.setDataProperty(EntityDataTypes.INTERACT_TEXT, dialog.content!!)
+
+        val packet = NPCDialoguePacket()
+        packet.runtimeEntityId = dialog.entityId
+        packet.action = NPCDialoguePacket.NPCDialogAction.OPEN
+        packet.dialogue = dialog.content!!
+        packet.npcName = dialog.title!!
+        if (book) packet.sceneName = dialog.sceneName
+        packet.actionJson = dialog.buttonJSONData!!
+        if (book) dialogWindows.put(dialog.sceneName, dialog)
+        this.dataPacket(packet)
+    }
+
+    /**
+     * 在游戏设置中显示一个新的设置页面。
+     * 你可以通过监听PlayerFormRespondedEvent来了解设置结果。
+     *
+     *
+     * Shows a new setting page in game settings.
+     * You can find out settings result by listening to PlayerFormRespondedEvent
+     *
+     * @param window to show on settings page
+     * @return form id to use in [PlayerFormRespondedEvent]
+     */
+    fun addServerSettings(window: Form<*>): Int {
+        val id = formWindowCount++
+
+        serverSettings[id] = window
+        return id
+    }
+
+    /**
+     * 创建并发送一个BossBar给玩家。
+     *
+     *
+     * Creates and sends a BossBar to the player
+     *
+     * @param text   BossBar信息<br></br>The BossBar message
+     * @param length BossBar百分比<br></br>The BossBar percentage
+     * @return bossBarId BossBar的ID，如果你想以后删除或更新BossBar，你应该存储它。<br></br>bossBarId The BossBar ID, you should store it if you want to remove or update the BossBar later
+     */
+    fun createBossBar(text: String, length: Int): Long {
+        val bossBar = DummyBossBar.Builder(this).text(text).length(length.toFloat()).build()
+        return this.createBossBar(bossBar)
+    }
+
+    /**
+     * 创建并发送一个BossBar给玩家。
+     *
+     *
+     * Creates and sends a BossBar to the player
+     *
+     * @param dummyBossBar DummyBossBar对象（通过[DummyBossBar.Builder]实例化）。<br></br>DummyBossBar Object (Instantiate it by the Class Builder)
+     * @return bossBarId BossBar的ID，如果你想以后删除或更新BossBar，你应该储存它。<br></br>bossBarId  The BossBar ID, you should store it if you want to remove or update the BossBar later
+     * @see DummyBossBar.Builder
+     */
+    fun createBossBar(dummyBossBar: DummyBossBar): Long {
+        dummyBossBars[dummyBossBar.bossBarId] = dummyBossBar
+        dummyBossBar.create()
+        return dummyBossBar.bossBarId
+    }
+
+    /**
+     * 获取一个DummyBossBar对象
+     *
+     *
+     * Get a DummyBossBar object
+     *
+     * @param bossBarId 要查找的BossBar ID<br></br>The BossBar ID
+     * @return DummyBossBar对象<br></br>DummyBossBar object
+     * @see DummyBossBar.setText
+     * @see DummyBossBar.setLength
+     * @see DummyBossBar.setColor
+     */
+    fun getDummyBossBar(bossBarId: Long): DummyBossBar? {
+        return dummyBossBars.getOrDefault(bossBarId, null)
+    }
+
+    /**
+     * 获取所有DummyBossBar对象
+     *
+     *
+     * Get all DummyBossBar objects
+     *
+     * @return DummyBossBars Map
+     */
+    fun getDummyBossBars(): Map<Long, DummyBossBar?> {
+        return dummyBossBars
+    }
+
+    /**
+     * 更新一个BossBar
+     *
+     *
+     * Updates a BossBar
+     *
+     * @param text      The new BossBar message
+     * @param length    The new BossBar length
+     * @param bossBarId The BossBar ID
+     */
+    fun updateBossBar(text: String, length: Int, bossBarId: Long) {
+        if (dummyBossBars.containsKey(bossBarId)) {
+            val bossBar = dummyBossBars[bossBarId]
+            bossBar!!.setText(text)
+            bossBar.setLength(length.toFloat())
+        }
+    }
+
+    /**
+     * 移除一个BossBar
+     *
+     *
+     * Removes a BossBar
+     *
+     * @param bossBarId The BossBar ID
+     */
+    fun removeBossBar(bossBarId: Long) {
+        if (dummyBossBars.containsKey(bossBarId)) {
+            dummyBossBars[bossBarId]!!.destroy()
+            dummyBossBars.remove(bossBarId)
+        }
+    }
+
+    /**
+     * 获取id从指定[Inventory]
+     *
+     *
+     * Get id from the specified [Inventory]
+     *
+     * @param inventory the inventory
+     * @return the window id
+     */
+    fun getWindowId(inventory: Inventory): Int {
+        Preconditions.checkNotNull(inventory)
+        if (windows.containsKey(inventory)) {
+            return windows[inventory]!!
+        }
+
+        return -1
+    }
+
+    /**
+     * 获取[Inventory]从指定id
+     *
+     *
+     * Get [Inventory] from the specified id
+     *
+     * @param id 窗口id<br></br>the window id
+     */
+    fun getWindowById(id: Int): Inventory? {
+        return windowIndex[id]
+    }
+
+    /**
+     * Add inventory to the current player.
+     *
+     * @param inventory The Inventory object representing the window, must not be null.
+     * @return The unique identifier assigned to the window if successfully added and opened; -1 if the window fails to be added.
+     */
+    fun addWindow(inventory: Inventory): Int {
+        Preconditions.checkNotNull(inventory)
+        if (windows.containsKey(inventory)) {
+            return windows[inventory]!!
+        }
+        val cnt = max(1.0, (++this.windowsCnt % 100).toDouble()).toInt()
+        this.windowsCnt = cnt
+        if (windowIndex.containsKey(cnt)) {
+            windowIndex[cnt]!!.close(this)
+        }
+        windows.forcePut(inventory, cnt)
+
+        if (this.spawned && inventory.open(this)) {
+            updateTrackingPositions(true)
+            return cnt
+        } else {
+            this.removeWindow(inventory)
+            return -1
+        }
+    }
+
+    fun addWindow(inventory: Inventory, forceId: Int?): Int {
+        Preconditions.checkNotNull(inventory)
+        if (windows.containsKey(inventory)) {
+            return windows[inventory]!!
+        }
+        val cnt: Int
+        if (forceId == null) {
+            cnt = max(1.0, (++this.windowsCnt % 101).toDouble()).toInt()
+            this.windowsCnt = cnt //1-100
+        } else {
+            cnt = forceId
+        }
+        if (windowIndex.containsKey(cnt)) {
+            windowIndex[cnt]!!.close(this)
+        }
+        windows.forcePut(inventory, cnt)
+
+        if (this.spawned) {
+            if (inventory.open(this)) {
+                updateTrackingPositions(true)
+                return cnt
+            } else {
+                this.removeWindow(inventory)
+                return -1
+            }
+        }
+        return cnt
+    }
+
+    val topWindow: Optional<Inventory>
+        get() {
+            for ((key, value) in this.windows) {
+                if (!permanentWindows.contains(value)) {
+                    return Optional.of(key)
+                }
+            }
+            return Optional.empty()
+        }
+
+    /**
+     * 移除该玩家身上的指定Inventory
+     *
+     *
+     * Remove the specified Inventory from the player
+     *
+     * @param inventory the inventory
+     */
+    fun removeWindow(inventory: Inventory) {
+        Preconditions.checkNotNull(inventory)
+        if (!permanentWindows.contains(windows[inventory])) {
+            val windowId = this.getWindowId(inventory)
+            playerHandle.closingWindowId = windowId
+            inventory.close(this)
+            windows.remove(inventory)
+            updateTrackingPositions(true)
+        }
+    }
+
+    /**
+     * 常用于刷新。
+     *
+     *
+     * Commonly used for refreshing.
+     */
+    fun sendAllInventories() {
+        for (inv in windows.keys) {
+            inv.sendContents(this)
+            if (inv is HumanInventory) {
+                inv.sendArmorContents(this)
+            }
+        }
+    }
+
+
+    @ApiStatus.Internal
+    fun resetInventory() {
+        if (spawned) {
+            val contents = craftingGrid!!.contents
+            craftingGrid!!.clearAll()
+            val puts: MutableList<Item> = ArrayList(contents.values)
+
+            val contents2 =
+                cursorInventory!!.contents
+            cursorInventory!!.clearAll()
+            puts.addAll(contents2.values)
+
+            val topWindow = topWindow
+            val value: Inventory
+            if (topWindow.isPresent) {
+                value = topWindow.get()
+                if (value is CraftTypeInventory || (value is FakeInventory && value.fakeInventoryType.isCraftType)) {
+                    puts.addAll(value.contents.values())
+                    value.clearAll()
+                }
+                removeWindow(value)
+            }
+            val drops = getInventory().addItem(*puts.toArray(Item.EMPTY_ARRAY))
+            for (drop in drops) {
+                this.dropItem(drop)
+            }
+        }
+    }
+
+    /**
+     * 清空[.windows]
+     *
+     *
+     * Remove all windows.
+     *
+     * @param permanent 如果为false则会跳过删除[.permanentWindows]里面对应的window<br></br>If false, it will skip deleting the corresponding window in [.permanentWindows]
+     */
+    @JvmOverloads
+    fun removeAllWindows(permanent: Boolean = false) {
+        for ((key, value) in ArrayList<Map.Entry<Int, Inventory>>(
+            windowIndex.entries
+        )) {
+            if (!permanent && permanentWindows.contains(key)) {
+                continue
+            }
+            this.removeWindow(value)
+        }
+    }
+
+    override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
+        server.getPlayerMetadata().setMetadata(this, metadataKey, newMetadataValue)
+    }
+
+    override fun getMetadata(metadataKey: String): List<MetadataValue> {
+        return server.getPlayerMetadata().getMetadata(this, metadataKey)
+    }
+
+    override fun hasMetadata(metadataKey: String): Boolean {
+        return server.getPlayerMetadata().hasMetadata(this, metadataKey)
+    }
+
+    override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
+        server.getPlayerMetadata().removeMetadata(this, metadataKey, owningPlugin)
+    }
+
+    override fun onChunkChanged(chunk: IChunk) {
+        playerChunkManager.addSendChunk(chunk.x, chunk.z)
+    }
+
+    override fun onChunkLoaded(chunk: IChunk?) {
+    }
+
+
+    override fun onChunkUnloaded(chunk: IChunk) {
+        this.unloadChunk(chunk.x, chunk.z, chunk.provider.level)
+    }
+
+    override val isLoaderActive: Boolean
+        get() = this.isConnected()
+
+    public override fun switchLevel(level: Level): Boolean {
+        if (super.switchLevel(level)) {
+            clientMovements.clear()
+            val spawnPosition = SetSpawnPositionPacket()
+            spawnPosition.spawnType = SetSpawnPositionPacket.TYPE_WORLD_SPAWN
+            val spawn = level.spawnLocation
+            spawnPosition.x = spawn.position.floorX
+            spawnPosition.y = spawn.position.floorY
+            spawnPosition.z = spawn.position.floorZ
+            spawnPosition.dimension = spawn.level.dimension
+            this.dataPacket(spawnPosition)
+
+            // Remove old chunks
+            this.forceSendEmptyChunks()
+
+            val setTime = SetTimePacket()
+            setTime.time = level.getTime()
+            this.dataPacket(setTime)
+
+            val gameRulesChanged = GameRulesChangedPacket()
+            gameRulesChanged.gameRules = level.gameRules
+            this.dataPacket(gameRulesChanged)
+
+            if (level.dimension == this.level!!.dimension) {
+                val packet = ChangeDimensionPacket()
+                packet.x = 0.0f
+                packet.y = 0.0f
+                packet.z = 0.0f
+                packet.respawn = false
+                packet.loadingScreenId = loadingScreenId++
+
+                if (this.level!!.dimension == Level.DIMENSION_NETHER) {
+                    packet.dimension = Level.DIMENSION_OVERWORLD
+                } else {
+                    packet.dimension = Level.DIMENSION_NETHER
+                }
+
+                this.dataPacket(packet)
+            }
+
+            this.setDimension(level.dimension)
+
+            updateTrackingPositions(true)
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * 设置是否检查该玩家移动
+     *
+     *
+     * Set whether to check for this player movement
+     *
+     * @param checkMovement the check movement
+     */
+    fun setCheckMovement(checkMovement: Boolean) {
+        this.isCheckingMovement = checkMovement
+    }
+
+    val usedChunks: @UnmodifiableView MutableSet<Long>
+        get() = Collections.unmodifiableSet(playerChunkManager.usedChunks)
+
+    override fun setSprinting(value: Boolean) {
+        if (value && this.getFreezingTicks() > 0) return
+        if (isSprinting() != value) {
+            super.setSprinting(value)
+            this.setMovementSpeed(if (value) getMovementSpeed() * 1.3f else getMovementSpeed() / 1.3f)
+
+            if (this.hasEffect(EffectType.SPEED)) {
+                val movementSpeed = this.getMovementSpeed()
+                this.sendMovementSpeed(if (value) movementSpeed * 1.3f else movementSpeed)
+            }
+        }
+    }
+
+    /**
+     * 传送该玩家到另一个服务器
+     *
+     *
+     * Teleport the player to another server
+     *
+     * @param address the address
+     */
+    fun transfer(address: InetSocketAddress) {
+        val hostName = address.address.hostAddress
+        val port = address.port
+        val pk = TransferPacket()
+        pk.address = hostName
+        pk.port = port
+        this.dataPacket(pk)
+    }
+
+    @ApiStatus.Internal
+    fun pickupEntity(entity: Entity, near: Boolean): Boolean {
+        if (!this.spawned || !this.isAlive() || !this.isOnline || this.isSpectator || entity.isClosed()) {
+            return false
+        }
+
+        if (near) {
+            var inventory: Inventory? = this.inventory
+            if (entity is EntityArrow && entity.hadCollision) {
+                val item = if (entity.getArrowItem() != null) entity.getArrowItem() else ItemArrow()
+                if (!this.isCreative) {
+                    // Should only collect to the offhand slot if the item matches what is already there
+                    if (offhandInventory!!.getItem(0).id == item!!.id && offhandInventory!!.canAddItem(
+                            item
+                        )
+                    ) {
+                        inventory = this.offhandInventory
+                    } else if (!inventory!!.canAddItem(item)) {
+                        return false
+                    }
+                }
+
+                val ev = InventoryPickupArrowEvent(inventory!!, entity)
+
+                val pickupMode = entity.getPickupMode()
+                if (pickupMode == EntityProjectile.PICKUP_NONE || (pickupMode == EntityProjectile.PICKUP_CREATIVE && !this.isCreative)) {
+                    ev.setCancelled()
+                }
+
+                server.getPluginManager().callEvent(ev)
+                if (ev.isCancelled) {
+                    return false
+                }
+
+                val pk = TakeItemEntityPacket()
+                pk.entityId = this.getId()
+                pk.target = entity.getId()
+                Server.Companion.broadcastPacket(entity.getViewers().values, pk)
+                this.dataPacket(pk)
+
+                if (!this.isCreative) {
+                    inventory.addItem(item!!.clone())
+                }
+                entity.close()
+                return true
+            } else if (entity is EntityThrownTrident) {
+                // Check Trident is returning to shooter
+                if (!entity.hadCollision) {
+                    if (entity.isNoClip()) {
+                        if (!(entity as EntityProjectile).shootingEntity!!.equals(this)) {
+                            return false
+                        }
+                    } else {
+                        return false
+                    }
+                }
+
+                if (!entity.isPlayer()) {
+                    return false
+                }
+
+                val item = entity.getItem()
+                if (!this.isCreative && !this.inventory!!.canAddItem(item)) {
+                    return false
+                }
+
+                val ev = InventoryPickupTridentEvent(this.inventory!!, entity)
+
+                val pickupMode = entity.getPickupMode()
+                if (pickupMode == EntityProjectile.PICKUP_NONE || (pickupMode == EntityProjectile.PICKUP_CREATIVE && !this.isCreative)) {
+                    ev.setCancelled()
+                }
+
+                server.getPluginManager().callEvent(ev)
+                if (ev.isCancelled) {
+                    return false
+                }
+
+                val pk = TakeItemEntityPacket()
+                pk.entityId = this.getId()
+                pk.target = entity.getId()
+                Server.Companion.broadcastPacket(entity.getViewers().values, pk)
+                this.dataPacket(pk)
+
+                if (!entity.isCreative()) {
+                    if (inventory!!.getItem(entity.getFavoredSlot()).isNull) {
+                        inventory.setItem(entity.getFavoredSlot(), item.clone())
+                    } else {
+                        inventory.addItem(item.clone())
+                    }
+                }
+                entity.close()
+                return true
+            } else if (entity is EntityItem) {
+                if (entity.getPickupDelay() <= 0) {
+                    val item = entity.getItem()
+
+                    if (item != null) {
+                        if (!this.isCreative && !this.inventory!!.canAddItem(item)) {
+                            return false
+                        }
+
+                        val ev: InventoryPickupItemEvent
+                        server.getPluginManager()
+                            .callEvent(InventoryPickupItemEvent(inventory!!, entity).also { ev = it })
+                        if (ev.isCancelled) {
+                            return false
+                        }
+
+                        if (item.blockUnsafe is BlockWood) {
+                            this.awardAchievement("mineWood")
+                        } else if (item.id == Item.DIAMOND) {
+                            this.awardAchievement("diamond")
+                        }
+
+                        val pk = TakeItemEntityPacket()
+                        pk.entityId = this.getId()
+                        pk.target = entity.getId()
+                        Server.Companion.broadcastPacket(entity.getViewers().values, pk)
+                        this.dataPacket(pk)
+
+                        this.inventory!!.addItem(item.clone())
+                        entity.close()
+                        return true
+                    }
+                }
+            }
+        }
+
+        val tick = level!!.tick
+        if (pickedXPOrb < tick && entity is EntityXpOrb && boundingBox!!.isVectorInside(entity.position)) {
+            if (entity.getPickupDelay() <= 0) {
+                var exp = entity.getExp()
+                entity.kill()
+                level!!.addLevelEvent(LevelEventPacket.EVENT_SOUND_EXPERIENCE_ORB_PICKUP, 0, this.position)
+                pickedXPOrb = tick
+
+                //Mending
+                val itemsWithMending = ArrayList<Int>()
+                for (i in 0..3) {
+                    if (inventory!!.getArmorItem(i).hasEnchantment(Enchantment.ID_MENDING)) {
+                        itemsWithMending.add(inventory!!.size + i)
+                    }
+                }
+                if (inventory!!.itemInHand.hasEnchantment(Enchantment.ID_MENDING)) {
+                    itemsWithMending.add(inventory!!.heldItemIndex)
+                }
+                if (itemsWithMending.size > 0) {
+                    val rand = Random()
+                    val itemToRepair = itemsWithMending[rand.nextInt(itemsWithMending.size)]
+                    val toRepair = inventory!!.getItem(itemToRepair)
+                    if (toRepair is ItemTool || toRepair is ItemArmor) {
+                        if (toRepair.damage > 0) {
+                            var dmg = toRepair.damage - exp
+                            if (dmg < 0) {
+                                exp = abs(dmg.toDouble()).toInt()
+                                dmg = 0
+                            }
+                            toRepair.damage = dmg
+                            inventory!!.setItem(itemToRepair, toRepair)
+                        }
+                    }
+                }
+
+                if (exp > 0) this.addExperience(exp, true)
+                return true
+            }
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        if ((this.hash == 0) || (this.hash == 485)) {
+            this.hash = (485 + (if (getUniqueId() != null) getUniqueId().hashCode() else 0))
+        }
+
+        return this.hash
+    }
+
+    override fun equals(obj: Any?): Boolean {
+        if (obj !is Player) {
+            return false
+        }
+        return this.getUniqueId() == obj.getUniqueId() && this.getId() == obj.getId()
+    }
+
+    /**
+     * 玩家是否在挖掘方块
+     *
+     *
+     * Whether the player is digging block
+     *
+     * @return the boolean
+     */
+    fun isBreakingBlock(): Boolean {
+        return this.breakingBlock != null
+    }
+
+    /**
+     * 显示一个XBOX账户的资料窗口
+     *
+     *
+     * Show a window of a XBOX account's profile
+     *
+     * @param xuid XUID
+     */
+    fun showXboxProfile(xuid: String?) {
+        val pk = ShowProfilePacket()
+        pk.xuid = xuid
+        this.dataPacket(pk)
+    }
+
+    /**
+     * Start fishing
+     *
+     * @param fishingRod fishing rod item
+     */
+    fun startFishing(fishingRod: Item?) {
+        val nbt = CompoundTag()
+            .putList(
+                "Pos", ListTag<FloatTag?>()
+                    .add(FloatTag(position.south))
+                    .add(FloatTag(position.up + this.getEyeHeight()))
+                    .add(FloatTag(position.west))
+            )
+            .putList(
+                "Motion", ListTag<FloatTag?>()
+                    .add(
+                        FloatTag(
+                            -sin(rotation.yaw / 180 + Math.PI) * cos(
+                                rotation.pitch / 180 * Math.PI
+                            )
+                        )
+                    )
+                    .add(FloatTag(-sin(rotation.pitch / 180 * Math.PI)))
+                    .add(
+                        FloatTag(
+                            cos(rotation.yaw / 180 * Math.PI) * cos(
+                                rotation.pitch / 180 * Math.PI
+                            )
+                        )
+                    )
+            )
+            .putList(
+                "Rotation", ListTag<FloatTag?>()
+                    .add(FloatTag(rotation.yaw.toFloat()))
+                    .add(FloatTag(rotation.pitch.toFloat()))
+            )
+        val f = 1.1
+        val fishingHook = EntityFishingHook(chunk, nbt, this)
+        fishingHook.setMotion(
+            Vector3(
+                -sin(Math.toRadians(rotation.yaw)) * cos(
+                    Math.toRadians(
+                        rotation.pitch
+                    )
+                ) * f * f,
+                -sin(Math.toRadians(rotation.pitch)) * f * f,
+                cos(Math.toRadians(rotation.yaw)) * cos(
+                    Math.toRadians(
+                        rotation.pitch
+                    )
+                ) * f * f
+            )
+        )
+        val ev = ProjectileLaunchEvent(fishingHook, this)
+        getServer().getPluginManager().callEvent(ev)
+        if (ev.isCancelled) {
+            fishingHook.close()
+        } else {
+            this.fishing = fishingHook
+            fishingHook.rod = fishingRod
+            fishingHook.checkLure()
+            fishingHook.spawnToAll()
+        }
+    }
+
+    /**
+     * Stop fishing
+     *
+     * @param click clicked or forced
+     */
+    fun stopFishing(click: Boolean) {
+        if (this.fishing != null && click) {
+            fishing!!.reelLine()
+        } else if (this.fishing != null) {
+            fishing!!.close()
+        }
+
+        this.fishing = null
+    }
+
+    override fun doesTriggerPressurePlate(): Boolean {
+        return this.gamemode != SPECTATOR
+    }
+
+    override fun toString(): String {
+        return "Player(name='" + getName() +
+                "', location=" + super.toString() +
+                ')'
+    }
+
+    /**
+     * 将物品添加到玩家的主要库存中，并将任何多余的物品丢在地上。
+     *
+     *
+     * Adds the items to the main player inventory and drops on the floor any excess.
+     *
+     * @param items The items to give to the player.
+     */
+    fun giveItem(vararg items: Item?) {
+        for (failed in getInventory().addItem(*items)) {
+            level!!.dropItem(this.position, failed)
+        }
+    }
+
+
+    // TODO: Support Translation Parameters
+    fun sendPopupJukebox(message: String) {
+        val pk = TextPacket()
+        pk.type = TextPacket.TYPE_JUKEBOX_POPUP
+        pk.message = message
+        this.dataPacket(pk)
+    }
+
+    fun sendSystem(message: String) {
+        val pk = TextPacket()
+        pk.type = TextPacket.TYPE_SYSTEM
+        pk.message = message
+        this.dataPacket(pk)
+    }
+
+
+    fun sendWhisper(message: String) {
+        this.sendWhisper("", message)
+    }
+
+
+    fun sendWhisper(source: String, message: String) {
+        val pk = TextPacket()
+        pk.type = TextPacket.TYPE_WHISPER
+        pk.source = source
+        pk.message = message
+        this.dataPacket(pk)
+    }
+
+
+    fun sendAnnouncement(message: String) {
+        this.sendAnnouncement("", message)
+    }
+
+
+    fun sendAnnouncement(source: String, message: String) {
+        val pk = TextPacket()
+        pk.type = TextPacket.TYPE_ANNOUNCEMENT
+        pk.source = source
+        pk.message = message
+        this.dataPacket(pk)
+    }
+
+
+    fun completeUsingItem(itemId: Int, action: Int) {
+        val pk = CompletedUsingItemPacket()
+        pk.itemId = itemId
+        pk.action = action
+        this.dataPacket(pk)
+    }
+
+
+    fun isShowingCredits(): Boolean {
+        return showingCredits
+    }
+
+
+    fun setShowingCredits(showingCredits: Boolean) {
+        this.showingCredits = showingCredits
+        if (showingCredits) {
+            val pk = ShowCreditsPacket()
+            pk.eid = this.getId()
+            pk.status = ShowCreditsPacket.STATUS_START_CREDITS
+            this.dataPacket(pk)
+        }
+    }
+
+
+    fun showCredits() {
+        this.setShowingCredits(true)
+    }
+
+
+    fun hasSeenCredits(): Boolean {
+        return showingCredits
+    }
+
+
+    fun setHasSeenCredits(hasSeenCredits: Boolean) {
+        this.hasSeenCredits = hasSeenCredits
+    }
+
+
+    fun dataPacketImmediately(packet: DataPacket): Boolean {
+        if (!this.isConnected()) {
+            return false
+        }
+        val ev = DataPacketSendEvent(this, packet)
+        server.getPluginManager().callEvent(ev)
+        if (ev.isCancelled) {
+            return false
+        }
+        session.sendPacketImmediately(packet)
+        return true
+    }
+
+    /**
+     * 玩家屏幕振动效果
+     *
+     *
+     * Player screen shake effect
+     *
+     * @param intensity   the intensity
+     * @param duration    the duration
+     * @param shakeType   the shake type
+     * @param shakeAction the shake action
+     */
+    fun shakeCamera(intensity: Float, duration: Float, shakeType: CameraShakeType?, shakeAction: CameraShakeAction?) {
+        val packet = CameraShakePacket()
+        packet.intensity = intensity
+        packet.duration = duration
+        packet.shakeType = shakeType
+        packet.shakeAction = shakeAction
+        this.dataPacket(packet)
+    }
+
+    /**
+     * 发送一个下弹消息框给玩家
+     *
+     *
+     * Send a Toast message box to the player
+     *
+     * @param title   the title
+     * @param content the content
+     */
+    fun sendToast(title: String, content: String) {
+        val pk = ToastRequestPacket()
+        pk.title = title
+        pk.content = content
+        this.dataPacket(pk)
+    }
+
+    override fun removeLine(line: IScoreboardLine) {
+        val packet = SetScorePacket()
+        packet.action = SetScorePacket.Action.REMOVE
+        val networkInfo = line.toNetworkInfo()
+        if (networkInfo != null) packet.infos.add(networkInfo)
+        this.dataPacket(packet)
+
+        val scorer = PlayerScorer(this)
+        if (line.scorer.equals(scorer) && line.scoreboard.getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
+            this.setScoreTag("")
+        }
+    }
+
+    override fun updateScore(line: IScoreboardLine) {
+        val packet = SetScorePacket()
+        packet.action = SetScorePacket.Action.SET
+        val networkInfo = line.toNetworkInfo()
+        if (networkInfo != null) packet.infos.add(networkInfo)
+        this.dataPacket(packet)
+
+        val scorer = PlayerScorer(this)
+        if (line.scorer.equals(scorer) && line.scoreboard.getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
+            this.setScoreTag(line.score + " " + line.scoreboard.displayName)
+        }
+    }
+
+    override fun display(scoreboard: IScoreboard, slot: DisplaySlot?) {
+        val pk = SetDisplayObjectivePacket()
+        pk.displaySlot = slot
+        pk.objectiveName = scoreboard.objectiveName
+        pk.displayName = scoreboard.displayName
+        pk.criteriaName = scoreboard.criteriaName
+        pk.sortOrder = scoreboard.sortOrder
+        this.dataPacket(pk)
+
+        //client won't storage the score of a scoreboard,so we should send the score to client
+        val pk2 = SetScorePacket()
+        pk2.infos =
+            scoreboard.lines.values().stream().map { obj: IScoreboardLine -> obj.toNetworkInfo() }.filter { obj: Any? ->
+                Objects.nonNull(
+                    obj
+                )
+            }.collect(Collectors.toList<T>())
+        pk2.action = SetScorePacket.Action.SET
+        this.dataPacket(pk2)
+
+        val scorer = PlayerScorer(this)
+        val line = scoreboard.getLine(scorer)
+        if (slot == DisplaySlot.BELOW_NAME && line != null) {
+            this.setScoreTag(line.score + " " + scoreboard.displayName)
+        }
+    }
+
+    override fun hide(slot: DisplaySlot?) {
+        val pk = SetDisplayObjectivePacket()
+        pk.displaySlot = slot
+        pk.objectiveName = ""
+        pk.displayName = ""
+        pk.criteriaName = ""
+        pk.sortOrder = SortOrder.ASCENDING
+        this.dataPacket(pk)
+
+        if (slot == DisplaySlot.BELOW_NAME) {
+            this.setScoreTag("")
+        }
+    }
+
+    override fun removeScoreboard(scoreboard: IScoreboard) {
+        val pk = RemoveObjectivePacket()
+        pk.objectiveName = scoreboard.objectiveName
+
+        this.dataPacket(pk)
+    }
+
+    /**
+     * Opens the player's sign editor GUI for the sign at the given position.
+     */
+    fun openSignEditor(position: Vector3, frontSide: Boolean) {
+        if (isOpenSignFront == null) {
+            val blockEntity = level!!.getBlockEntity(position)
+            if (blockEntity is BlockEntitySign) {
+                if (blockEntity.editorEntityRuntimeId == -1L) {
+                    blockEntity.editorEntityRuntimeId = this.getId()
+                    val openSignPacket = OpenSignPacket()
+                    openSignPacket.position = position.asBlockVector3()
+                    openSignPacket.frontSide = frontSide
+                    this.dataPacket(openSignPacket)
+                    isOpenSignFront = frontSide
+                }
+            } else {
+                throw IllegalArgumentException("Block at this position is not a sign")
+            }
+        }
+    }
+
+
+    companion object {
+        const val TAG_ABILITIES: String = "abilities"
+        const val TAG_TIMER: String = "timer"
+        const val TAG_AGENT_ID: String = "AgentID"
+        const val TAG_DIMENSION_ID: String = "DimensionId"
+        const val TAG_ENCHANTMENT_SEED: String = "EnchantmentSeed"
+        const val TAG_ENDER_CHEST_INVENTORY: String = "EnderChestInventory"
+        const val TAG_FOG_COMMAND_STACK: String = "fogCommandStack"
+        const val TAG_FORMAT_VERSION: String = "format_version"
+        const val TAG_HAS_SEEN_CREDITS: String = "HasSeenCredits"
+        const val TAG_INVENTORY: String = "Inventory"
+        const val TAG_LEFT_SHOULDER_RIDER_ID: String = "LeftShoulderRiderID"
+        const val TAG_MAP_INDEX: String = "MapIndex"
+        const val TAG_PLAYER_GAME_MODE: String = "PlayerGameMode"
+        const val TAG_PLAYER_LEVEL: String = "PlayerLevel"
+        const val TAG_PLAYER_LEVEL_PROGRESS: String = "PlayerLevelProgress"
+        const val TAG_PLAYER_UI_ITEMS: String = "PlayerUIItems"
+        const val TAG_RECIPE_UNLOCKING: String = "recipe_unlocking"
+        const val TAG_RIDE_ID: String = "RideID"
+        const val TAG_RIGHT_SHOULDER_RIDER_ID: String = "RightShoulderRiderID"
+        const val TAG_SELECTED_CONTAINER_ID: String = "SelectedContainerId"
+        const val TAG_SELECTED_INVENTORY_SLOT: String = "SelectedInventorySlot"
+        const val TAG_SLEEPING: String = "Sleeping"
+        const val TAG_SLEEP_TIMER: String = "SleepTimer"
+        const val TAG_SNEAKING: String = "Sneaking"
+        const val TAG_SPAWN_BLOCK_POSITION_X: String = "SpawnBlockPositionX"
+        const val TAG_SPAWN_BLOCK_POSITION_Y: String = "SpawnBlockPositionY"
+        const val TAG_SPAWN_BLOCK_POSITION_Z: String = "SpawnBlockPositionZ"
+        const val TAG_SPAWN_DIMENSION: String = "SpawnDimension"
+        const val TAG_SPAWN_X: String = "SpawnX"
+        const val TAG_SPAWN_Y: String = "SpawnY"
+        const val TAG_SPAWN_Z: String = "SpawnZ"
+        const val TAG_TIME_SINCE_REST: String = "TimeSinceRest"
+        const val TAG_WARDEN_THREAT_DECREASE_TIMER: String = "WardenThreatDecreaseTimer"
+        const val TAG_WARDEN_THREAT_LEVEL: String = "WardenThreatLevel"
+        const val TAG_WARDEN_THREAT_LEVEL_INCREASE_COOLDOWN: String = "WardenThreatLevelIncreaseCooldown"
+
+        /** static fields */
+        /**
+         * 一个承载玩家的空数组静态常量
+         *
+         *
+         * An empty array of static constants that host the player
+         */
+        @JvmField
+        val EMPTY_ARRAY: Array<Player?> = arrayOfNulls(0)
+        const val SURVIVAL: Int = 0
+        const val CREATIVE: Int = 1
+        const val ADVENTURE: Int = 2
+        const val SPECTATOR: Int = 3
+        const val DEFAULT_SPEED: Float = 0.1f
+        const val DEFAULT_FLY_SPEED: Float = 0.05f
+        const val MAXIMUM_SPEED: Float = 0.5f
+        const val PERMISSION_CUSTOM: Int = 3
+        const val PERMISSION_OPERATOR: Int = 2
+        const val PERMISSION_MEMBER: Int = 1
+        const val PERMISSION_VISITOR: Int = 0
+        protected const val RESOURCE_PACK_CHUNK_SIZE: Int = 8 * 1024 // 8KB
+        private const val ROTATION_UPDATE_THRESHOLD = 1f
+        private const val MOVEMENT_DISTANCE_THRESHOLD = 0.1f
+        const val NO_SHIELD_DELAY: Int = 10
+
+        /**
+         * 将服务端侧游戏模式转换为网络包适用的游戏模式ID
+         * 此方法是为了解决NK观察者模式ID为3而原版ID为6的问题
+         *
+         * @param gamemode 服务端侧游戏模式
+         * @return 网络层游戏模式ID
+         */
+        fun toNetworkGamemode(gamemode: Int): Int {
+            return if (gamemode != SPECTATOR) gamemode else GameType.SPECTATOR.ordinal
+        }
+
+        /**
+         * 计算玩家到达某等级所需要的经验值
+         *
+         *
+         * Calculates the amount of experience a player needs to reach a certain level
+         *
+         * @param level 等级
+         * @return int
+         */
+        fun calculateRequireExperience(level: Int): Int {
+            return if (level >= 30) {
+                112 + (level - 30) * 9
+            } else if (level >= 15) {
+                37 + (level - 15) * 5
+            } else {
+                7 + level * 2
+            }
+        }
+    }
+}

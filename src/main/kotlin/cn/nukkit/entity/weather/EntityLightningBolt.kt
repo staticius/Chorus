@@ -1,0 +1,220 @@
+package cn.nukkit.entity.weather
+
+import cn.nukkit.block.*
+import cn.nukkit.block.property.enums.OxidizationLevel
+import cn.nukkit.entity.*
+import cn.nukkit.event.block.BlockFadeEvent
+import cn.nukkit.event.block.BlockIgniteEvent
+import cn.nukkit.event.entity.EntityDamageEvent
+import cn.nukkit.level.*
+import cn.nukkit.level.format.IChunk
+import cn.nukkit.level.particle.ElectricSparkParticle
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.*
+import cn.nukkit.nbt.tag.CompoundTag
+import java.util.concurrent.*
+import java.util.function.IntConsumer
+import java.util.function.Supplier
+import kotlin.math.max
+
+/**
+ * @author boybook
+ * @since 2016/2/27
+ */
+class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt),
+    EntityLightningStrike {
+    override fun getIdentifier(): String {
+        return EntityID.Companion.LIGHTNING_BOLT
+    }
+
+    var state: Int = 0
+    var liveTime: Int = 0
+    protected var isEffect: Boolean = true
+
+    override fun initEntity() {
+        super.initEntity()
+
+        this.setHealth(4f)
+        this.setMaxHealth(4)
+
+        this.state = 2
+        this.liveTime = ThreadLocalRandom.current().nextInt(3) + 1
+
+        if (isEffect && level!!.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && (server!!.getDifficulty() >= 2)) {
+            val block: Block = getLocator().getLevelBlock()
+            if (block.isAir() || block.getId() == BlockID.TALL_GRASS) {
+                val fire: BlockFire = Block.get(BlockID.FIRE) as BlockFire
+                fire.position = block.position.clone()
+                fire.level = level!!
+                //                this.getLevel().setBlock(fire, fire, true); WTF???
+                if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {
+                    val e: BlockIgniteEvent =
+                        BlockIgniteEvent(block, null, this, BlockIgniteEvent.BlockIgniteCause.LIGHTNING)
+                    getServer()!!.pluginManager.callEvent(e)
+
+                    if (!e.isCancelled) {
+                        level!!.setBlock(fire.position, fire, true)
+                        level!!.scheduleUpdate(fire, fire.tickRate() + ThreadLocalRandom.current().nextInt(10))
+                    }
+                }
+            }
+        }
+    }
+
+    override fun isEffect(): Boolean {
+        return this.isEffect
+    }
+
+    override fun setEffect(e: Boolean) {
+        this.isEffect = e
+    }
+
+    override fun attack(source: EntityDamageEvent): Boolean {
+        //false?
+        source.setDamage(0f)
+        return super.attack(source)
+    }
+
+    override fun onUpdate(currentTick: Int): Boolean {
+        if (this.closed) {
+            return false
+        }
+
+        val tickDiff: Int = currentTick - this.lastUpdate
+
+        if (tickDiff <= 0 && !this.justCreated) {
+            return true
+        }
+
+        this.lastUpdate = currentTick
+
+        this.entityBaseTick(tickDiff)
+
+        if (this.state == 2) {
+            level!!.addSound(this.position, Sound.AMBIENT_WEATHER_THUNDER)
+            level!!.addSound(this.position, Sound.RANDOM_EXPLODE)
+
+            val down: Block = level!!.getBlock(position.down())
+            if (isVulnerableOxidizable(down)) {
+                val changes: MutableMap<Locator, OxidizationLevel> = LinkedHashMap()
+                changes.put(Locator(down.getVector3(), level!!), OxidizationLevel.UNAFFECTED)
+
+                val random: ThreadLocalRandom = ThreadLocalRandom.current()
+                val scans: Int = random.nextInt(3) + 3
+
+                val directionPos: Vector3 = Vector3()
+                val randomPos: Vector3 = Vector3()
+                val cleanOxidizationAround: Supplier<Vector3?> =
+                    Supplier<Vector3?> {
+                        for (attempt in 0..9) {
+                            randomPos.south = directionPos.south + (random.nextInt(3) - 1)
+                            randomPos.up = directionPos.up + (random.nextInt(3) - 1)
+                            randomPos.west = directionPos.west + (random.nextInt(3) - 1)
+                            val possibility: Block = level!!.getBlock(randomPos)
+                            if (isVulnerableOxidizable(possibility)) {
+                                val nextPos: Vector3 = randomPos.clone()
+                                changes.compute(Locator(nextPos, level!!)) { k: Locator?, v: OxidizationLevel? ->
+                                    val nextLevel: Int =
+                                        if (v == null) (possibility as Oxidizable).getOxidizationLevel().ordinal - 1 else v.ordinal - 1
+                                    OxidizationLevel.entries.get(max(0.0, nextLevel.toDouble()).toInt())
+                                }
+                                return@Supplier nextPos
+                            }
+                        }
+                        null
+                    }
+
+                val cleanOxidizationAroundLoop: IntConsumer = IntConsumer { count: Int ->
+                    directionPos.setComponents(down.position)
+                    for (i in 0..<count) {
+                        val next: Vector3? = cleanOxidizationAround.get()
+                        if (next != null) {
+                            directionPos.setComponents(next)
+                        } else {
+                            break
+                        }
+                    }
+                }
+
+                for (scan in 0..<scans) {
+                    val count: Int = random.nextInt(8) + 1
+                    cleanOxidizationAroundLoop.accept(count)
+                }
+
+                for (entry: Map.Entry<Locator, OxidizationLevel> in changes.entries) {
+                    val current: Block = level!!.getBlock(entry.key.position)
+                    val next: Block = (current as Oxidizable).getBlockWithOxidizationLevel(entry.value)
+                    val event: BlockFadeEvent = BlockFadeEvent(current, next)
+                    getServer()!!.pluginManager.callEvent(event)
+                    if (event.isCancelled) {
+                        break
+                    }
+                    level!!.setBlock(entry.key.position, event.newState)
+                    level!!.addParticle(ElectricSparkParticle(entry.key.position))
+                }
+            }
+        }
+
+        state--
+
+        if (this.state < 0) {
+            if (this.liveTime == 0) {
+                this.close()
+                return false
+            } else if (this.state < -ThreadLocalRandom.current().nextInt(10)) {
+                liveTime--
+                this.state = 1
+
+                if (this.isEffect && level!!.gameRules.getBoolean(GameRule.DO_FIRE_TICK)) {
+                    val block: Block = getLocator().getLevelBlock()
+
+                    if (block.isAir() || block.getId() == Block.TALL_GRASS) {
+                        val event: BlockIgniteEvent =
+                            BlockIgniteEvent(block, null, this, BlockIgniteEvent.BlockIgniteCause.LIGHTNING)
+                        getServer()!!.pluginManager.callEvent(event)
+
+                        if (!event.isCancelled) {
+                            val fire: Block = Block.get(BlockID.FIRE)
+                            level!!.setBlock(block.position, fire)
+                            level!!.scheduleUpdate(fire, fire.tickRate())
+                        }
+                    }
+                }
+            }
+        }
+
+        if (this.state >= 0) {
+            if (this.isEffect) {
+                val bb: AxisAlignedBB = getBoundingBox()!!.grow(3.0, 3.0, 3.0)
+                bb.setMaxX(bb.getMaxX() + 6)
+
+                for (entity: Entity in level!!.getCollidingEntities(bb, this)) {
+                    entity.onStruckByLightning(this)
+                }
+            }
+        }
+
+        return true
+    }
+
+    override fun getOriginalName(): String {
+        return "Lightning Bolt"
+    }
+
+    override fun spawnToAll() {
+        level!!.vibrationManager.callVibrationEvent(
+            VibrationEvent(
+                this,
+                this.getVector3(), VibrationType.LIGHTNING_STRIKE
+            )
+        )
+        super.spawnToAll()
+    }
+
+    companion object {
+        private fun isVulnerableOxidizable(block: Block): Boolean {
+            return block is Oxidizable && (block !is Waxable || !(block as Waxable).isWaxed())
+        }
+    }
+}

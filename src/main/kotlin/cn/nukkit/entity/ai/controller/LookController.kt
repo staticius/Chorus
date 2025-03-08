@@ -1,0 +1,43 @@
+package cn.nukkit.entity.ai.controller
+
+import cn.nukkit.entity.mob.EntityMob
+import cn.nukkit.math.BVector3
+import cn.nukkit.math.Vector3
+
+/**
+ * 处理实体Pitch/Yaw/HeadYaw
+ */
+class LookController(protected var lookAtTarget: Boolean, protected var lookAtRoute: Boolean) : IController {
+    override fun control(entity: EntityMob): Boolean {
+        val lookTarget = entity.lookTarget
+
+        if (lookAtRoute && entity.hasMoveDirection()) {
+            //clone防止异步导致的NPE
+            val moveDirectionEnd = entity.moveDirectionEnd.clone()
+            //构建路径方向向量
+            val routeDirectionVector = Vector3(
+                moveDirectionEnd.south - entity.position.south,
+                moveDirectionEnd.up - entity.position.up,
+                moveDirectionEnd.west - entity.position.west
+            )
+            val yaw = BVector3.getYawFromVector(routeDirectionVector)
+            entity.rotation.yaw = (yaw)
+            if (!lookAtTarget) {
+                entity.headYaw = (yaw)
+                if (entity.isEnablePitch) entity.rotation.pitch = (BVector3.getPitchFromVector(routeDirectionVector))
+            }
+        }
+        if (lookAtTarget && lookTarget != null) {
+            //构建指向玩家的向量
+            val toPlayerVector = Vector3(
+                lookTarget.south - entity.position.south,
+                lookTarget.up - entity.position.up,
+                lookTarget.west - entity.position.west
+            )
+            if (entity.isEnablePitch) entity.rotation.pitch = (BVector3.getPitchFromVector(toPlayerVector))
+            entity.headYaw = (BVector3.getYawFromVector(toPlayerVector))
+        }
+        if (!entity.isEnablePitch) entity.rotation.pitch = (0).toDouble()
+        return true
+    }
+}

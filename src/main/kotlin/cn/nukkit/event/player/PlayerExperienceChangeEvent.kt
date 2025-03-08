@@ -1,0 +1,25 @@
+package cn.nukkit.event.player
+
+import cn.nukkit.Player
+import cn.nukkit.event.Cancellable
+import cn.nukkit.event.HandlerList
+
+class PlayerExperienceChangeEvent(player: Player?, oldExp: Int, oldLevel: Int, newExp: Int, newLevel: Int) :
+    PlayerEvent(), Cancellable {
+    val oldExperience: Int
+    val oldExperienceLevel: Int
+    var newExperience: Int
+    var newExperienceLevel: Int
+
+    init {
+        this.player = player
+        this.oldExperience = oldExp
+        this.oldExperienceLevel = oldLevel
+        this.newExperience = newExp
+        this.newExperienceLevel = newLevel
+    }
+
+    companion object {
+        val handlers: HandlerList = HandlerList()
+    }
+}

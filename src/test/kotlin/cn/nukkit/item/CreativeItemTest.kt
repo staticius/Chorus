@@ -1,0 +1,57 @@
+package cn.nukkit.item
+
+import cn.nukkit.nbt.NBTIO
+import cn.nukkit.registry.CreativeItemRegistry
+import cn.nukkit.registry.Registries
+import com.google.gson.Gson
+import io.netty.util.internal.EmptyArrays
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import java.io.IOException
+import java.io.InputStreamReader
+import java.nio.ByteOrder
+import java.util.*
+
+class CreativeItemTest {
+    @Test
+    fun init() {
+        Registries.BLOCK.init()
+        Registries.POTION.init()
+        Registries.ITEM.init()
+        Assertions.assertDoesNotThrow {
+            try {
+                CreativeItemRegistry::class.java.classLoader.getResourceAsStream("creative_items.json").use { input ->
+                    val data =
+                        Gson().fromJson<Map<*, *>>(
+                            InputStreamReader(input),
+                            MutableMap::class.java
+                        )
+                    val items =
+                        data["items"] as List<Map<String, Any>>?
+                    for (i in items!!.indices) {
+                        val tag = items[i]
+                        val damage = (tag.getOrDefault("damage", 0) as Number).toInt()
+                        val nbt = if (tag.containsKey("nbt_b64")) Base64.getDecoder()
+                            .decode(tag["nbt_b64"].toString()) else EmptyArrays.EMPTY_BYTES
+                        val name = tag["id"].toString()
+                        val item = Item.get(name, damage, 1, nbt, false)
+                        require(!(item.isNull || (item.isBlock && item.blockUnsafe.isAir))) { "creative index $i $name" }
+                        val isBlock = tag.containsKey("block_state_b64")
+                        if (isBlock) {
+                            val blockTag =
+                                Base64.getDecoder().decode(tag["block_state_b64"].toString())
+                            val blockCompoundTag = NBTIO.read(blockTag, ByteOrder.LITTLE_ENDIAN)
+                            val blockHash = blockCompoundTag.getInt("network_id")
+                            val block =
+                                Registries.BLOCKSTATE[blockHash]
+                            requireNotNull(block) { "creative index $i $blockHash" }
+                            item.blockUnsafe = block.toBlock()
+                        }
+                    }
+                }
+            } catch (e: IOException) {
+                throw RuntimeException(e)
+            }
+        }
+    }
+}

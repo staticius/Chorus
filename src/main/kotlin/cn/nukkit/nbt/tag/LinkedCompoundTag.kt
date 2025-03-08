@@ -1,0 +1,35 @@
+package cn.nukkit.nbt.tag
+
+import kotlin.collections.LinkedHashMap
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.forEach
+import kotlin.collections.iterator
+import kotlin.collections.set
+
+class LinkedCompoundTag @JvmOverloads constructor(tags: MutableMap<String?, Tag?>? = LinkedHashMap()) :
+    CompoundTag(tags) {
+    override fun getTags(): MutableMap<String?, Tag?> {
+        return LinkedHashMap(this.tags)
+    }
+
+    override fun parseValue(): Map<String?, Any?> {
+        val value: MutableMap<String?, Any?> = LinkedHashMap(
+            tags!!.size
+        )
+
+        for ((key, value1) in tags) {
+            value[key] = value1.parseValue()
+        }
+
+        return value
+    }
+
+    override fun copy(): LinkedCompoundTag {
+        val nbt = LinkedCompoundTag()
+        getTags().forEach { (key: String?, value: Tag?) -> nbt.put(key, value!!.copy()) }
+        return nbt
+    }
+}

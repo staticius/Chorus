@@ -1,0 +1,330 @@
+package cn.nukkit.level.format.palette
+
+import cn.nukkit.Server
+import cn.nukkit.block.*
+import cn.nukkit.entity.data.EntityDataMap.get
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.level.format.ChunkSection
+import cn.nukkit.level.format.bitarray.BitArray
+import cn.nukkit.level.format.bitarray.BitArrayVersion
+import cn.nukkit.level.updater.block.BlockStateUpdaters
+import cn.nukkit.level.updater.util.tagupdater.CompoundTagUpdaterContext
+import cn.nukkit.nbt.NBTIO
+import cn.nukkit.nbt.stream.NBTInputStream
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.TreeMapCompoundTag
+import cn.nukkit.network.protocol.ProtocolInfo
+import cn.nukkit.utils.*
+import com.google.common.base.Objects
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufInputStream
+import io.netty.buffer.ByteBufOutputStream
+import lombok.extern.slf4j.Slf4j
+import java.io.IOException
+import java.nio.ByteOrder
+
+@Slf4j
+open class Palette<V> {
+    protected val palette: MutableList<V>
+    protected var bitArray: BitArray?
+
+    @JvmOverloads
+    constructor(first: V, version: BitArrayVersion = BitArrayVersion.V2) {
+        this.bitArray = version.createArray(ChunkSection.Companion.SIZE)
+        this.palette = ArrayList(16)
+        palette.add(first)
+    }
+
+    constructor(first: V, palette: MutableList<V?>, version: BitArrayVersion) {
+        this.bitArray = version.createArray(ChunkSection.Companion.SIZE)
+        this.palette = palette
+        this.palette.add(first)
+    }
+
+    fun get(index: Int): V {
+        val i = bitArray!![index]
+        return if (i >= palette.size) palette.getFirst() else palette[i]
+    }
+
+    open fun set(index: Int, value: V) {
+        val paletteIndex = this.paletteIndexFor(value)
+        bitArray!![index] = paletteIndex
+    }
+
+    /**
+     * Write the Palette data to the network buffer
+     *
+     * @param byteBuf    the byte buf
+     * @param serializer the serializer
+     */
+    fun writeToNetwork(byteBuf: ByteBuf, serializer: RuntimeDataSerializer<V>) {
+        writeWords(byteBuf, serializer)
+    }
+
+    fun readFromNetwork(byteBuf: ByteBuf, deserializer: RuntimeDataDeserializer<V>) {
+        readWords(byteBuf, readBitArrayVersion(byteBuf)!!)
+        val size = bitArray!!.readSizeFromNetwork(byteBuf)
+        for (i in 0..<size) palette.add(deserializer.deserialize(ByteBufVarInt.readInt(byteBuf)))
+    }
+
+    protected fun writeEmpty(byteBuf: ByteBuf, serializer: RuntimeDataSerializer<V>): Boolean {
+        if (this.isEmpty) {
+            byteBuf.writeByte(getPaletteHeader(BitArrayVersion.V0, true))
+            byteBuf.writeIntLE(serializer.serialize(palette.getFirst()))
+            return true
+        }
+        return false
+    }
+
+    protected fun writeLast(byteBuf: ByteBuf, last: Palette<V>?): Boolean {
+        if (last != null && last.palette == this.palette) {
+            byteBuf.writeByte(COPY_LAST_FLAG_HEADER.toInt())
+            return true
+        }
+        return false
+    }
+
+    protected fun writeWords(byteBuf: ByteBuf, serializer: RuntimeDataSerializer<V>) {
+        byteBuf.writeByte(getPaletteHeader(bitArray!!.version(), true))
+        for (word in bitArray!!.words()) byteBuf.writeIntLE(word)
+        bitArray!!.writeSizeToNetwork(byteBuf, palette.size)
+        for (value in this.palette) ByteBufVarInt.writeInt(byteBuf, serializer.serialize(value))
+    }
+
+    fun writeToStoragePersistent(byteBuf: ByteBuf, serializer: PersistentDataSerializer<V>) {
+        byteBuf.writeByte(getPaletteHeader(bitArray!!.version(), false))
+        for (word in bitArray!!.words()) byteBuf.writeIntLE(word)
+        byteBuf.writeIntLE(palette.size)
+        try {
+            ByteBufOutputStream(byteBuf).use { bufOutputStream ->
+                for (value in this.palette) {
+                    if (value == null) continue
+
+                    if (value is BlockState && value.identifier == BlockID.UNKNOWN) {
+                        NBTIO.write(value.blockStateTag.getCompound("Block"), bufOutputStream, ByteOrder.LITTLE_ENDIAN)
+                    } else {
+                        NBTIO.write(serializer.serialize(value), bufOutputStream, ByteOrder.LITTLE_ENDIAN)
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            throw RuntimeException(e)
+        }
+    }
+
+    fun readFromStoragePersistent(byteBuf: ByteBuf, deserializer: RuntimeDataDeserializer<V>) {
+        try {
+            ByteBufInputStream(byteBuf).use { bufInputStream ->
+                NBTInputStream(bufInputStream, ByteOrder.LITTLE_ENDIAN).use { nbtInputStream ->
+                    val bversion = readBitArrayVersion(byteBuf)
+                    if (bversion == BitArrayVersion.V0) {
+                        this.bitArray = bversion.createArray(ChunkSection.Companion.SIZE, null)
+                        palette.clear()
+                        addBlockPalette(byteBuf, deserializer, nbtInputStream)
+                        this.onResize(BitArrayVersion.V2)
+                        return
+                    }
+                    readWords(byteBuf, bversion!!)
+                    val paletteSize = byteBuf.readIntLE()
+                    for (i in 0..<paletteSize) {
+                        addBlockPalette(byteBuf, deserializer, nbtInputStream)
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            throw RuntimeException(e)
+        }
+    }
+
+    fun writeToStorageRuntime(byteBuf: ByteBuf, serializer: RuntimeDataSerializer<V>, last: Palette<V>?) {
+        if (writeLast(byteBuf, last)) return
+        if (writeEmpty(byteBuf, serializer)) return
+
+        byteBuf.writeByte(getPaletteHeader(bitArray!!.version(), true))
+        for (word in bitArray!!.words()) byteBuf.writeIntLE(word)
+        byteBuf.writeIntLE(palette.size)
+        for (value in this.palette) byteBuf.writeIntLE(serializer.serialize(value))
+    }
+
+    fun readFromStorageRuntime(byteBuf: ByteBuf, deserializer: RuntimeDataDeserializer<V>, last: Palette<V>) {
+        val header = byteBuf.readUnsignedByte()
+
+        if (hasCopyLastFlag(header)) {
+            last.copyTo(this)
+            return
+        }
+
+        val version = getVersionFromPaletteHeader(header)
+        if (version == BitArrayVersion.V0) {
+            this.bitArray = version.createArray(ChunkSection.Companion.SIZE, null)
+            palette.clear()
+            palette.add(deserializer.deserialize(byteBuf.readIntLE()))
+
+            this.onResize(BitArrayVersion.V2)
+            return
+        }
+
+        readWords(byteBuf, version!!)
+
+        val paletteSize = byteBuf.readIntLE()
+        for (i in 0..<paletteSize) palette.add(deserializer.deserialize(byteBuf.readIntLE()))
+    }
+
+    fun paletteIndexFor(value: V): Int {
+        var index = palette.indexOf(value)
+        if (index != -1) return index
+
+        index = palette.size
+        palette.add(value)
+
+        val version = bitArray!!.version()
+        if (index > version!!.maxEntryValue) {
+            val next = version.next
+            if (next != null) this.onResize(next)
+        }
+
+        return index
+    }
+
+    val isEmpty: Boolean
+        get() {
+            if (palette.size == 1) {
+                for (word in bitArray!!.words()) if (word.toLong() != 0L) {
+                    return false
+                }
+                return true
+            } else return false
+        }
+
+    @Throws(IOException::class)
+    protected fun addBlockPalette(
+        byteBuf: ByteBuf,
+        deserializer: RuntimeDataDeserializer<V>,
+        input: NBTInputStream
+    ) {
+        val p = PaletteUtils.fastReadBlockHash(input, byteBuf) //depend on LinkCompoundTag
+
+        val unknownState = BlockUnknown.PROPERTIES.defaultState as V
+
+        if (p == null) {
+            palette.add(unknownState)
+            return
+        }
+
+        var resultingBlockState: V? = unknownState
+        var semVersion = p.right()
+
+        if (semVersion == null) {
+            semVersion = ProtocolInfo.MINECRAFT_SEMVERSION
+        }
+
+        val version: Int =
+            CompoundTagUpdaterContext.Companion.makeVersion(semVersion!!.major, semVersion.minor, semVersion.patch)
+
+        var isBlockOutdated = false
+
+        if (p.left() == null) {     // is blockStateHash null
+            isBlockOutdated = true
+        } else {
+            val hash = p.left()
+            val currentState = deserializer.deserialize(hash)
+            if (hash != -2 && currentState === unknownState) {
+                byteBuf.resetReaderIndex()
+                isBlockOutdated = true
+            } else {
+                resultingBlockState = currentState
+            }
+        }
+
+        if (isBlockOutdated) {
+            val oldBlockNbt = input.readTag() as CompoundTag
+            val newNbtMap = BlockStateUpdaters.updateBlockState(oldBlockNbt, version)
+            val states = TreeMapCompoundTag(newNbtMap!!.getCompound("states").tags)
+
+            val newBlockNbt = CompoundTag()
+                .putString("name", newNbtMap.getString("name"))
+                .putCompound("states", states)
+
+            val hash = HashUtils.fnv1a_32_nbt(newBlockNbt)
+
+            resultingBlockState = deserializer.deserialize(hash)
+
+            // we send a warning if the resultingBlockState is null or unknown after updating it.
+            // this way the only possibility is that the block hash is not represented in block_palette.nbt
+            if (resultingBlockState == null || resultingBlockState === unknownState) {
+                resultingBlockState = unknownState
+                Palette.log.warn(
+                    "missing block palette, blockHash: {}, blockId {}",
+                    hash,
+                    oldBlockNbt.getString("name")
+                )
+            }
+        }
+
+        if (resultingBlockState === unknownState) {
+            val replaceWithUnknown: Boolean = Server.getInstance().settings.baseSettings().saveUnknownBlock()
+            if (replaceWithUnknown) {
+                palette.add(resultingBlockState)
+            }
+        } else if (resultingBlockState != null) {
+            palette.add(resultingBlockState)
+        }
+    }
+
+
+    protected fun readBitArrayVersion(byteBuf: ByteBuf): BitArrayVersion? {
+        val header = byteBuf.readUnsignedByte()
+        return getVersionFromPaletteHeader(header)
+    }
+
+    protected fun readWords(byteBuf: ByteBuf, version: BitArrayVersion) {
+        val wordCount = version.getWordsForSize(ChunkSection.Companion.SIZE)
+        val words = IntArray(wordCount)
+        for (i in 0..<wordCount) words[i] = byteBuf.readIntLE()
+
+        this.bitArray = version.createArray(ChunkSection.Companion.SIZE, words)
+        palette.clear()
+    }
+
+    protected fun onResize(version: BitArrayVersion) {
+        val newBitArray = version.createArray(ChunkSection.Companion.SIZE)
+        for (i in 0..<ChunkSection.Companion.SIZE) newBitArray[i] = bitArray!![i]
+
+        this.bitArray = newBitArray
+    }
+
+    fun copyTo(palette: Palette<V>) {
+        palette.bitArray = bitArray!!.copy()
+        palette.palette.clear()
+        palette.palette.addAll(this.palette)
+    }
+
+    override fun equals(o: Any?): Boolean {
+        if (this === o) return true
+        if (o !is Palette<*>) return false
+        return Objects.equal(palette, o.palette) && Objects.equal(bitArray, o.bitArray)
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hashCode(palette, bitArray)
+    }
+
+    companion object {
+        protected const val COPY_LAST_FLAG_HEADER: Byte = ((0x7F shl 1).toByte().toInt() or 1).toByte()
+        protected fun hasCopyLastFlag(header: Short): Boolean {
+            return (header.toInt() shr 1) == 0x7F
+        }
+
+        protected fun isPersistent(header: Short): Boolean {
+            return (header.toInt() and 1) == 0
+        }
+
+        protected fun getPaletteHeader(version: BitArrayVersion, runtime: Boolean): Int {
+            return (version.bits.toInt() shl 1) or (if (runtime) 1 else 0)
+        }
+
+        protected fun getVersionFromPaletteHeader(header: Short): BitArrayVersion? {
+            return BitArrayVersion.Companion.get(header.toInt() shr 1, true)
+        }
+    }
+}

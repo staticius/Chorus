@@ -1,0 +1,18 @@
+package cn.nukkit.item
+
+class ItemDiamondBoots : ItemArmor(ItemID.Companion.DIAMOND_BOOTS) {
+    override val tier: Int
+        get() = ItemArmor.Companion.TIER_DIAMOND
+
+    override val isBoots: Boolean
+        get() = true
+
+    override val armorPoints: Int
+        get() = 3
+
+    override val maxDurability: Int
+        get() = 430
+
+    override val toughness: Int
+        get() = 2
+}

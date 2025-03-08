@@ -1,0 +1,74 @@
+package cn.nukkit.command.selector.args.impl
+
+import cn.nukkit.Player
+import cn.nukkit.command.CommandSender
+import cn.nukkit.entity.Entity
+import cn.nukkit.level.Transform
+import cn.nukkit.registry.Registries
+import com.google.common.collect.ImmutableMap
+import java.util.function.Predicate
+
+class Type : CachedSimpleSelectorArgument() {
+    override fun cache(
+        selectorType: SelectorType?,
+        sender: CommandSender?,
+        basePos: Transform?,
+        vararg arguments: String
+    ): Predicate<Entity> {
+        val have = ArrayList<String>()
+        val dontHave = ArrayList<String>()
+        for (type in arguments) {
+            var type = type
+            val reversed: Boolean = ParseUtils.checkReversed(type)
+            if (reversed) {
+                type = completionPrefix(type.substring(1))
+                dontHave.add(type)
+            } else have.add(completionPrefix(type))
+        }
+        return Predicate { entity: Entity ->
+            have.stream().allMatch { type: String -> isType(entity, type) } && dontHave.stream()
+                .noneMatch { type: String -> isType(entity, type) }
+        }
+    }
+
+    override fun getDefaultValue(
+        values: Map<String?, List<String?>?>,
+        selectorType: SelectorType,
+        sender: CommandSender?
+    ): String? {
+        return if (selectorType == SelectorType.RANDOM_PLAYER) "minecraft:player" else null
+    }
+
+    val keyName: String
+        get() = "type"
+
+    val priority: Int
+        get() = 4
+
+    protected fun completionPrefix(type: String): String {
+        val completed = if (type.startsWith("minecraft:")) type else "minecraft:$type"
+        if (!ENTITY_TYPE2ID.containsKey(type) && !ENTITY_TYPE2ID.containsKey(completed)) {
+            //是自定义生物，不需要补全
+            return type
+        }
+        return completed
+    }
+
+    protected fun isType(entity: Entity, type: String): Boolean {
+        return if (entity is Player)  //player需要特判，因为EntityHuman的getNetworkId()返回-1
+            type == "minecraft:player"
+        else if (entity is CustomEntity) entity.getIdentifier() == type
+        else ENTITY_TYPE2ID.containsKey(type) && entity.networkId == ENTITY_TYPE2ID[type]
+    }
+
+    companion object {
+        val ENTITY_ID2TYPE: Map<Int, String> = Registries.ENTITY.entityId2NetworkIdMap
+        val ENTITY_TYPE2ID: Map<String, Int>
+
+        init {
+            val builder = ImmutableMap.builder<String, Int>()
+            ENTITY_ID2TYPE.forEach { (id: Int?, name: String?) -> builder.put(name, id) }
+            ENTITY_TYPE2ID = builder.build()
+        }
+    }
+}

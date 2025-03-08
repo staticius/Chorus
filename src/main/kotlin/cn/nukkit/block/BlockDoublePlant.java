@@ -1,0 +1,172 @@
+package cn.nukkit.block;
+
+import cn.nukkit.Player;
+import cn.nukkit.block.property.CommonBlockProperties;
+import cn.nukkit.block.property.enums.DoublePlantType;
+import cn.nukkit.item.Item;
+import cn.nukkit.item.ItemBlock;
+import cn.nukkit.item.ItemID;
+import cn.nukkit.level.Level;
+import cn.nukkit.level.particle.BoneMealParticle;
+import cn.nukkit.math.BlockFace;
+import cn.nukkit.tags.BlockTags;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+import static cn.nukkit.block.property.CommonBlockProperties.DOUBLE_PLANT_TYPE;
+import static cn.nukkit.block.property.CommonBlockProperties.UPPER_BLOCK_BIT;
+
+public abstract class BlockDoublePlant extends BlockFlowable {
+    public BlockDoublePlant(BlockState blockstate) {
+        super(blockstate);
+    }
+
+    @NotNull
+    public abstract DoublePlantType getDoublePlantType();
+
+    public boolean isTopHalf() {
+        return getPropertyValue(UPPER_BLOCK_BIT);
+    }
+
+    public void setTopHalf(boolean topHalf) {
+        setPropertyValue(UPPER_BLOCK_BIT, topHalf);
+    }
+
+    @Override
+    public Item toItem() {
+        int aux = getDoublePlantType().ordinal();
+        return new ItemBlock(this, aux);
+    }
+
+    /*@Override
+    public boolean canBeReplaced() {
+        return getDoublePlantType() == DoublePlantType.GRASS || getDoublePlantType() == DoublePlantType.FERN;
+    }*/
+
+    @Override
+    public String getName() {
+        return getDoublePlantType().name();
+    }
+
+    @Override
+    public int onUpdate(int type) {
+        if (type == Level.BLOCK_UPDATE_NORMAL) {
+            if (isTopHalf()) {
+                // Top
+                if (!(this.down() instanceof BlockDoublePlant)) {
+                    this.level.setBlock(this.position, Block.get(BlockID.AIR), false, true);
+                    return Level.BLOCK_UPDATE_NORMAL;
+                }
+            } else {
+                // Bottom
+                if (!isSupportValid(down())) {
+                    this.level.setBlock(this.position, Block.get(BlockID.AIR), false, true);
+                    return Level.BLOCK_UPDATE_NORMAL;
+                }
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+        Block up = up();
+
+        if (up.isAir() && isSupportValid(down())) {
+            setTopHalf(false);
+            this.level.setBlock(block.position, this, true, false); // If we update the bottom half, it will drop the item because there isn't a flower block above
+
+            setTopHalf(true);
+            this.level.setBlock(up.position, this, true, true);
+            this.level.updateAround(this.position);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isSupportValid(Block support) {
+        if(support instanceof BlockDoublePlant plant) {
+            return !plant.isTopHalf();
+        }
+        return support.is(BlockTags.DIRT);
+    }
+
+    @Override
+    public boolean onBreak(Item item) {
+        Block down = down();
+
+        if (isTopHalf()) { // Top half
+            this.level.useBreakOn(down.position);
+        } else {
+            this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
+        }
+
+        return true;
+    }
+
+    @Override
+    public Item[] getDrops(Item item) {
+        if (isTopHalf()) {
+            return Item.EMPTY_ARRAY;
+        }
+
+        if (getDoublePlantType() == DoublePlantType.GRASS || getDoublePlantType() == DoublePlantType.FERN) {
+            boolean dropSeeds = ThreadLocalRandom.current().nextInt(10) == 0;
+            if (item.isShears()) {
+                //todo enchantment
+                if (dropSeeds) {
+                    return new Item[]{
+                            Item.get(ItemID.WHEAT_SEEDS),
+                            toItem()
+                    };
+                } else {
+                    return new Item[]{
+                            toItem()
+                    };
+                }
+            }
+            if (dropSeeds) {
+                return new Item[]{
+                        Item.get(ItemID.WHEAT_SEEDS)
+                };
+            } else {
+                return Item.EMPTY_ARRAY;
+            }
+        }
+
+        return new Item[]{toItem()};
+    }
+
+    @Override
+    public boolean canBeActivated() {
+        return true;
+    }
+
+    @Override
+    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+        if (item.isFertilizer()) { //Bone meal
+            switch (getDoublePlantType()) {
+                case SUNFLOWER:
+                case SYRINGA:
+                case ROSE:
+                case PAEONIA:
+                    if (player != null && (player.gamemode & 0x01) == 0) {
+                        item.count--;
+                    }
+                    this.level.addParticle(new BoneMealParticle(this.position));
+                    this.level.dropItem(this.position, this.toItem());
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isFertilizable() {
+        return true;
+    }
+}

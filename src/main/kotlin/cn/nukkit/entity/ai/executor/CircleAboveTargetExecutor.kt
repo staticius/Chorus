@@ -1,0 +1,86 @@
+package cn.nukkit.entity.ai.executor
+
+import cn.nukkit.entity.*
+import cn.nukkit.entity.ai.memory.CoreMemoryTypes
+import cn.nukkit.entity.ai.memory.MemoryType
+import cn.nukkit.entity.mob.EntityMob
+import cn.nukkit.level.*
+import cn.nukkit.math.*
+import lombok.Getter
+import kotlin.math.cos
+import kotlin.math.sin
+
+@Getter
+class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置
+    protected var memory: MemoryType<out IVector3?>,
+    protected var speed: Float,
+    protected var updateRouteImmediatelyWhenTargetChange: Boolean = false,
+    protected var clearDataWhenLose: Boolean = false
+) :
+    EntityControl, IBehaviorExecutor {
+    protected var oldTarget: Vector3? = null
+    protected var enableRangeTest: Boolean = false
+
+    var sections: Int = 8
+
+    private var circleLoc = 0
+
+
+    override fun execute(entity: EntityMob): Boolean {
+        if (!entity.isEnablePitch) entity.isEnablePitch = true
+        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) {
+            return false
+        }
+        val target = entity.behaviorGroup!!.memoryStorage!![memory].getVector3()
+        val origin =
+            entity.behaviorGroup!!.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.LAST_ATTACK_ENTITY).transform.add(
+                0.0,
+                24.0,
+                0.0
+            )
+        val angleIncrement = 360.0 / sections
+        val angle = Math.toRadians((circleLoc * angleIncrement))
+        val particleX = origin.x + cos(angle) * 20
+        val particleZ = origin.z + sin(angle) * 20
+        val loc = Transform(particleX, origin.position.y, particleZ, angle, 0.0, origin.level)
+        if (entity.position.distance(loc.position) < 3) {
+            circleLoc++
+            circleLoc %= 8
+        }
+        setRouteTarget(entity, loc.position)
+        setLookTarget(entity, loc.position)
+        if (updateRouteImmediatelyWhenTargetChange) {
+            val floor = target.floor()
+
+            if (oldTarget == null || oldTarget == floor) entity.behaviorGroup!!.isForceUpdateRoute = true
+
+            oldTarget = floor
+        }
+
+        if (entity.movementSpeed != speed) entity.movementSpeed = speed
+
+        return true
+    }
+
+    override fun onStart(entity: EntityMob) {
+        entity.memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, false)
+    }
+
+    override fun onInterrupt(entity: EntityMob) {
+        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
+        entity.memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, true)
+        entity.isEnablePitch = false
+        if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+        circleLoc++
+        circleLoc %= 8
+    }
+
+    override fun onStop(entity: EntityMob) {
+        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
+        entity.memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, true)
+        entity.isEnablePitch = false
+        if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+        circleLoc++
+        circleLoc %= 8
+    }
+}

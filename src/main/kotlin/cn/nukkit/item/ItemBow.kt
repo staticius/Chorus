@@ -1,0 +1,175 @@
+package cn.nukkit.item
+
+import cn.nukkit.Player
+import cn.nukkit.Server
+import cn.nukkit.entity.*
+import cn.nukkit.entity.Entity.Companion.createEntity
+import cn.nukkit.entity.Entity.getTransform
+import cn.nukkit.entity.projectile.EntityProjectile
+import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow
+import cn.nukkit.event.entity.EntityShootBowEvent
+import cn.nukkit.event.entity.ProjectileLaunchEvent
+import cn.nukkit.item.enchantment.*
+import cn.nukkit.item.enchantment.bow.EnchantmentBow
+import cn.nukkit.level.Sound
+import cn.nukkit.level.Transform
+import cn.nukkit.math.*
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.FloatTag
+import cn.nukkit.nbt.tag.ListTag
+import java.util.*
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.sin
+
+/**
+ * @author MagicDroidX (Nukkit Project)
+ */
+class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
+    ItemTool(ItemID.Companion.BOW, meta, count, "Bow") {
+    override val maxDurability: Int
+        get() = ItemTool.Companion.DURABILITY_BOW
+
+    override val enchantAbility: Int
+        get() = 1
+
+    override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
+        return player.isCreative ||
+                player.getInventory().contents.values.stream().filter { item: Item? -> item is ItemArrow }
+                    .findFirst().isPresent ||
+                player.getOffhandInventory()!!.contents.values.stream().filter { item: Item? -> item is ItemArrow }
+                    .findFirst().isPresent
+    }
+
+    override fun onRelease(player: Player, ticksUsed: Int): Boolean {
+        val inventoryOptional = player.getInventory().contents.entries.stream()
+            .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow }.findFirst()
+        val offhandOptional = player.getOffhandInventory()!!.contents.entries.stream()
+            .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow }.findFirst()
+
+
+        if (offhandOptional.isEmpty && inventoryOptional.isEmpty && (player.isAdventure || player.isSurvival)) {
+            player.getOffhandInventory()!!.sendContents(player)
+            player.getInventory().sendContents(player)
+            return false
+        }
+
+        var damage = 2.0
+
+        val bowDamage = this.getEnchantment(Enchantment.Companion.ID_BOW_POWER)
+        if (bowDamage != null && bowDamage.level > 0) {
+            damage += bowDamage.level.toDouble() * 0.5 + 0.5
+        }
+
+        val flameEnchant = this.getEnchantment(Enchantment.Companion.ID_BOW_FLAME)
+        val flame = flameEnchant != null && flameEnchant.level > 0
+
+        var arrowTransform: Transform = player.getTransform()
+        val directionVector = player.getDirectionVector().multiply(1.1)
+        arrowTransform = arrowTransform.add(directionVector.getX(), 0.0, directionVector.getZ())
+        arrowTransform.setY(player.position.up + player.getEyeHeight() + directionVector.getY())
+
+        val itemArrow =
+            (if (offhandOptional.isPresent) offhandOptional.get().value else if (inventoryOptional.isPresent) inventoryOptional.get().value else ItemArrow()) as ItemArrow
+
+
+        val nbt = CompoundTag()
+            .putList(
+                "Pos", ListTag<FloatTag>()
+                    .add(FloatTag(arrowTransform.position.south))
+                    .add(FloatTag(arrowTransform.position.up))
+                    .add(FloatTag(arrowTransform.position.west))
+            )
+            .putList(
+                "Motion", ListTag<FloatTag>()
+                    .add(FloatTag(-sin(player.rotation.yaw / 180 * Math.PI) * cos(player.rotation.pitch / 180 * Math.PI)))
+                    .add(FloatTag(-sin(player.rotation.pitch / 180 * Math.PI)))
+                    .add(FloatTag(cos(player.rotation.yaw / 180 * Math.PI) * cos(player.rotation.pitch / 180 * Math.PI)))
+            )
+            .putList(
+                "Rotation", ListTag<FloatTag>()
+                    .add(FloatTag((if (player.rotation.yaw > 180) 360 else 0) - player.rotation.yaw.toFloat()))
+                    .add(FloatTag(-player.rotation.pitch.toFloat()))
+            )
+            .putShort("Fire", if (flame) 45 * 60 else 0)
+            .putDouble("damage", damage)
+
+        val p = ticksUsed.toDouble() / 20
+        val maxForce = 3.5
+        val f = min((p * p + p * 2) / 3, 1.0) * maxForce
+
+        val arrow = createEntity(Entity.ARROW, player.chunk, nbt, player, f == maxForce) as EntityArrow?
+        val copy = itemArrow.clone() as ItemArrow
+        copy.setCount(1)
+        arrow!!.setItem(copy)
+        if (arrow == null) {
+            return false
+        }
+        val entityShootBowEvent = EntityShootBowEvent(player, this, arrow, f)
+
+        if (f < 0.1 || ticksUsed < 3) {
+            entityShootBowEvent.setCancelled()
+        }
+
+        Server.getInstance().pluginManager.callEvent(entityShootBowEvent)
+        if (entityShootBowEvent.isCancelled) {
+            entityShootBowEvent.getProjectile().kill()
+            player.getInventory().sendContents(player)
+            player.getOffhandInventory()!!.sendContents(player)
+        } else {
+            entityShootBowEvent.getProjectile()
+                .setMotion(entityShootBowEvent.getProjectile().getMotion().multiply(entityShootBowEvent.force))
+            val infinityEnchant = this.getEnchantment(Enchantment.Companion.ID_BOW_INFINITY)
+            val infinity = infinityEnchant != null && infinityEnchant.level > 0
+            val projectile: EntityProjectile
+            if (infinity && (entityShootBowEvent.getProjectile().also { projectile = it }) is EntityArrow) {
+                (projectile as EntityArrow).setPickupMode(EntityProjectile.PICKUP_CREATIVE)
+            }
+
+            for (enc in this.enchantments) {
+                if (enc is EnchantmentBow) {
+                    enc.onBowShoot(player, arrow, this)
+                }
+            }
+
+            if (player.isAdventure || player.isSurvival) {
+                if (!infinity) {
+                    if (offhandOptional.isPresent) {
+                        val index = offhandOptional.get().key
+                        player.getOffhandInventory()!!
+                            .setItem(index, player.getOffhandInventory()!!.getItem(index).decrement(1))
+                    } else {
+                        val index = inventoryOptional.get().key
+                        player.getInventory().setItem(index, player.getInventory().getItem(index).decrement(1))
+                    }
+                }
+                if (!this.isUnbreakable) {
+                    val durability = this.getEnchantment(Enchantment.Companion.ID_DURABILITY)
+                    if (!(durability != null && durability.level > 0 && (100 / (durability.level + 1)) <= Random().nextInt(
+                            100
+                        ))
+                    ) {
+                        this.damage = this.damage + 1
+                        if (this.damage >= this.maxDurability) {
+                            player.level!!.addSound(player.position, Sound.RANDOM_BREAK)
+                            count--
+                        }
+                        player.getInventory().setItemInHand(this)
+                    }
+                }
+            }
+            if (entityShootBowEvent.getProjectile() != null) {
+                val projectev = ProjectileLaunchEvent(entityShootBowEvent.getProjectile(), player)
+                Server.getInstance().pluginManager.callEvent(projectev)
+                if (projectev.isCancelled) {
+                    entityShootBowEvent.getProjectile().kill()
+                } else {
+                    entityShootBowEvent.getProjectile().spawnToAll()
+                    player.level!!.addSound(player.position, Sound.RANDOM_BOW)
+                }
+            }
+        }
+
+        return true
+    }
+}

@@ -1,0 +1,34 @@
+package cn.nukkit.level.particle
+
+import cn.nukkit.math.Vector3
+import cn.nukkit.network.protocol.DataPacket
+import cn.nukkit.network.protocol.LevelEventPacket
+import cn.nukkit.utils.BlockColor
+
+/**
+ * @author xtypr
+ * @since 2015/12/27
+ * The name "spell" comes from minecraft wiki.
+ */
+open class SpellParticle @JvmOverloads constructor(pos: Vector3, protected val data: Int = 0) :
+    Particle(pos.south, pos.up, pos.west) {
+    constructor(pos: Vector3, blockColor: BlockColor) : this(pos, blockColor.red, blockColor.green, blockColor.blue)
+
+    constructor(pos: Vector3, r: Int, g: Int, b: Int) : this(pos, r, g, b, 0x00)
+
+    protected constructor(pos: Vector3, r: Int, g: Int, b: Int, a: Int) : this(
+        pos,
+        ((a and 0xff) shl 24) or ((r and 0xff) shl 16) or ((g and 0xff) shl 8) or (b and 0xff)
+    )
+
+    override fun encode(): Array<DataPacket> {
+        val pk = LevelEventPacket()
+        pk.evid = LevelEventPacket.EVENT_PARTICLE_POTION_SPLASH
+        pk.x = south.toFloat()
+        pk.y = up.toFloat()
+        pk.z = west.toFloat()
+        pk.data = this.data
+
+        return arrayOf(pk)
+    }
+}

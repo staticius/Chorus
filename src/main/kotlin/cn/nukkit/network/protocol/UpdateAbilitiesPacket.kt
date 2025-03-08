@@ -1,0 +1,102 @@
+package cn.nukkit.network.protocol
+
+import cn.nukkit.network.connection.util.HandleByteBuf
+import cn.nukkit.network.protocol.types.*
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
+import lombok.*
+import java.util.*
+import java.util.function.BiConsumer
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+class UpdateAbilitiesPacket : DataPacket() {
+    @JvmField
+    var entityId: Long = 0
+    @JvmField
+    var playerPermission: PlayerPermission? = null
+    @JvmField
+    var commandPermission: CommandPermission? = null
+    @JvmField
+    val abilityLayers: MutableList<AbilityLayer> = ObjectArrayList()
+
+    override fun decode(byteBuf: HandleByteBuf) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun encode(byteBuf: HandleByteBuf) {
+        byteBuf.writeLongLE(this.entityId)
+        byteBuf.writeUnsignedVarInt(playerPermission!!.ordinal)
+        byteBuf.writeUnsignedVarInt(commandPermission!!.ordinal)
+        byteBuf.writeArray(
+            this.abilityLayers
+        ) { byteBuf: HandleByteBuf, abilityLayer: AbilityLayer ->
+            this.writeAbilityLayer(
+                byteBuf,
+                abilityLayer
+            )
+        }
+    }
+
+    private fun writeAbilityLayer(byteBuf: HandleByteBuf, abilityLayer: AbilityLayer) {
+        byteBuf.writeShortLE(abilityLayer.layerType.ordinal)
+        byteBuf.writeIntLE(getAbilitiesNumber(abilityLayer.abilitiesSet))
+        byteBuf.writeIntLE(getAbilitiesNumber(abilityLayer.abilityValues))
+        byteBuf.writeFloatLE(abilityLayer.flySpeed)
+        byteBuf.writeFloatLE(abilityLayer.verticalFlySpeed)
+        byteBuf.writeFloatLE(abilityLayer.walkSpeed)
+    }
+
+    override fun pid(): Int {
+        return ProtocolInfo.Companion.UPDATE_ABILITIES_PACKET
+    }
+
+    override fun handle(handler: PacketHandler) {
+        handler.handle(this)
+    }
+
+    companion object {
+        val VALID_FLAGS: Array<PlayerAbility> = arrayOf(
+            PlayerAbility.BUILD,
+            PlayerAbility.MINE,
+            PlayerAbility.DOORS_AND_SWITCHES,
+            PlayerAbility.OPEN_CONTAINERS,
+            PlayerAbility.ATTACK_PLAYERS,
+            PlayerAbility.ATTACK_MOBS,
+            PlayerAbility.OPERATOR_COMMANDS,
+            PlayerAbility.TELEPORT,
+            PlayerAbility.INVULNERABLE,
+            PlayerAbility.FLYING,
+            PlayerAbility.MAY_FLY,
+            PlayerAbility.INSTABUILD,
+            PlayerAbility.LIGHTNING,
+            PlayerAbility.FLY_SPEED,
+            PlayerAbility.WALK_SPEED,
+            PlayerAbility.MUTED,
+            PlayerAbility.WORLD_BUILDER,
+            PlayerAbility.NO_CLIP,
+            PlayerAbility.PRIVILEGED_BUILDER,
+            PlayerAbility.VERTICAL_FLY_SPEED
+        )
+        val FLAGS_TO_BITS: EnumMap<PlayerAbility, Int> = EnumMap(
+            PlayerAbility::class.java
+        )
+
+        init {
+            for (i in VALID_FLAGS.indices) {
+                FLAGS_TO_BITS[VALID_FLAGS[i]] =
+                    (1 shl i)
+            }
+        }
+
+        private fun getAbilitiesNumber(abilities: Set<PlayerAbility>): Int {
+            var number = 0
+            for (ability in abilities) {
+                number = number or FLAGS_TO_BITS.getOrDefault(ability, 0)
+            }
+            return number
+        }
+    }
+}

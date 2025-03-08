@@ -1,0 +1,105 @@
+package cn.nukkit.entity.ai.executor
+
+import cn.nukkit.Server
+import cn.nukkit.entity.*
+import cn.nukkit.entity.ai.memory.CoreMemoryTypes
+import cn.nukkit.entity.ai.memory.MemoryType
+import cn.nukkit.entity.mob.EntityMob
+import cn.nukkit.entity.mob.monster.EntityWarden
+import cn.nukkit.event.entity.EntityDamageByEntityEvent
+import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
+import cn.nukkit.event.entity.EntityDamageEvent.DamageModifier
+import cn.nukkit.level.Sound
+import cn.nukkit.math.*
+import cn.nukkit.network.protocol.EntityEventPacket
+import java.util.*
+
+class WardenMeleeAttackExecutor(
+    protected var memory: MemoryType<out Entity?>,
+    protected var damage: Float,
+    protected var speed: Float
+) :
+    EntityControl, IBehaviorExecutor {
+    protected var attackTick: Int = 0
+    protected var coolDown: Int = 0
+    protected var oldTarget: Vector3? = null
+
+    override fun execute(entity: EntityMob): Boolean {
+        attackTick++
+        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
+        if (entity.movementSpeed != speed) entity.movementSpeed = speed
+        //获取目标位置（这个clone很重要）
+        val target = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (!target!!.isAlive) return false
+        this.coolDown = calCoolDown(entity, target)
+        val clonedTarget = target!!.position.clone()
+        //更新寻路target
+        setRouteTarget(entity, clonedTarget)
+        //更新视线target
+        setLookTarget(entity, clonedTarget)
+
+        val floor = clonedTarget.floor()
+
+        if (oldTarget == null || oldTarget != floor) entity.behaviorGroup!!.isForceUpdateRoute = true
+
+        oldTarget = floor
+
+        if (entity.position.distanceSquared(target!!.position) <= 4 && attackTick > coolDown) {
+            val damages: MutableMap<DamageModifier, Float> = EnumMap(
+                DamageModifier::class.java
+            )
+            damages[DamageModifier.BASE] = damage
+
+            val ev = EntityDamageByEntityEvent(
+                entity,
+                target!!, DamageCause.ENTITY_ATTACK, damages, 0.6f, null
+            )
+
+            ev.isBreakShield = true
+            target!!.attack(ev)
+            playAttackAnimation(entity)
+            entity.level!!.addSound(target!!.position, Sound.MOB_WARDEN_ATTACK)
+            attackTick = 0
+            return target!!.isUndead
+        }
+        return true
+    }
+
+    protected fun calCoolDown(entity: EntityMob, target: Entity?): Int {
+        if (entity is EntityWarden) {
+            val anger =
+                entity.getMemoryStorage()!!.get<MutableMap<Entity?, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
+                    .getOrDefault(target, 0)
+            return if (anger >= 145) 18 else 36
+        } else {
+            return 20
+        }
+    }
+
+    override fun onStart(entity: EntityMob) {
+        if (!entity.isEnablePitch) entity.isEnablePitch = true
+    }
+
+    override fun onStop(entity: EntityMob) {
+        removeRouteTarget(entity)
+        removeLookTarget(entity)
+        //重置速度
+        entity.movementSpeed = 0.1f
+        entity.isEnablePitch = false
+    }
+
+    override fun onInterrupt(entity: EntityMob) {
+        removeRouteTarget(entity)
+        removeLookTarget(entity)
+        //重置速度
+        entity.movementSpeed = 0.1f
+        entity.isEnablePitch = false
+    }
+
+    protected fun playAttackAnimation(entity: EntityMob) {
+        val pk = EntityEventPacket()
+        pk.eid = entity.id
+        pk.event = EntityEventPacket.ARM_SWING
+        Server.broadcastPacket(entity.viewers.values, pk)
+    }
+}

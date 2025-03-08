@@ -1,0 +1,166 @@
+package cn.nukkit.command.defaults
+
+import cn.nukkit.camera.instruction.impl.ClearInstruction.get
+import cn.nukkit.command.CommandSender
+import cn.nukkit.command.data.CommandParamType
+import cn.nukkit.command.data.CommandParameter
+import cn.nukkit.command.tree.ParamList
+import cn.nukkit.command.tree.node.PlayersNode
+import cn.nukkit.command.utils.CommandLogger
+import cn.nukkit.item.Item
+import java.util.List
+import kotlin.math.min
+
+class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.description", "commands.clear.usage") {
+    init {
+        this.permission = "nukkit.command.clear"
+        getCommandParameters().clear()
+        this.addCommandParameters(
+            "default", arrayOf<CommandParameter?>(
+                CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode()),
+                GenericParameter.Companion.ITEM_NAME.get(true),
+                CommandParameter.Companion.newType("data", true, CommandParamType.INT),
+                CommandParameter.Companion.newType("maxCount", true, CommandParamType.INT)
+            )
+        )
+        this.enableParamTree()
+    }
+
+    override fun execute(
+        sender: CommandSender,
+        commandLabel: String?,
+        result: Map.Entry<String, ParamList?>,
+        log: CommandLogger
+    ): Int {
+        val list = result.value
+        var targets = if (sender.isPlayer) List.of(sender.asPlayer()) else null
+        var maxCount = -1
+        var item: Item? = null
+
+        if (list!!.hasResult(0)) {
+            targets = list.getResult(0)
+            if (list.hasResult(1)) {
+                item = list.getResult(1)
+                var data = -1
+                if (list.hasResult(2)) {
+                    data = list.getResult(2)!!
+                    if (list.hasResult(3)) {
+                        maxCount = list.getResult(3)!!
+                    }
+                }
+                item!!.damage = data
+            }
+        }
+
+        if (targets == null || targets.isEmpty()) {
+            log.addNoTargetMatch().output()
+            return 0
+        }
+
+        for (target in targets) {
+            val inventory: HumanInventory = target.inventory
+            val offhand: HumanOffHandInventory = target.offhandInventory
+
+            if (item == null) {
+                var count = 0
+
+                for ((key, slot) in inventory.getContents().entries) {
+                    if (!slot.isNull) {
+                        count += slot.getCount()
+                        inventory.clear(key)
+                    }
+                }
+
+                val slot: Item = offhand.getItem(0)
+                if (!slot.isNull) {
+                    count += slot.getCount()
+                    offhand.clear(0)
+                }
+
+                if (count == 0) {
+                    log.addError("commands.clear.failure.no.items", target.name).output()
+                } else {
+                    log.addSuccess("commands.clear.success", target.name, count.toString()).output()
+                }
+            } else if (maxCount == 0) {
+                var count = 0
+
+                for ((_, slot) in inventory.getContents().entries) {
+                    if (item.equals(slot, item.hasMeta(), false)) {
+                        count += slot.getCount()
+                    }
+                }
+
+                val slot: Item = offhand.getItem(0)
+                if (item.equals(slot, item.hasMeta(), false)) {
+                    count += slot.getCount()
+                }
+
+                if (count == 0) {
+                    log.addError("commands.clear.failure.no.items", target.name).output()
+                    return 0
+                } else {
+                    log.addSuccess("commands.clear.testing", target.name, count.toString()).output()
+                }
+            } else if (maxCount == -1) {
+                var count = 0
+
+                for ((key, slot) in inventory.getContents().entries) {
+                    if (item.equals(slot, item.hasMeta(), false)) {
+                        count += slot.getCount()
+                        inventory.clear(key)
+                    }
+                }
+
+                val slot: Item = offhand.getItem(0)
+                if (item.equals(slot, item.hasMeta(), false)) {
+                    count += slot.getCount()
+                    offhand.clear(0)
+                }
+
+                if (count == 0) {
+                    log.addError("commands.clear.failure.no.items", target.name).output()
+                    return 0
+                } else {
+                    log.addSuccess("commands.clear.success", target.name, count.toString()).output()
+                }
+            } else {
+                var remaining = maxCount
+
+                for ((key, slot) in inventory.getContents().entries) {
+                    if (item.equals(slot, item.hasMeta(), false)) {
+                        val count = slot.getCount()
+                        val amount = min(count.toDouble(), remaining.toDouble()).toInt()
+
+                        slot.setCount(count - amount)
+                        inventory.setItem(key, slot)
+
+                        if ((amount.let { remaining -= it; remaining }) <= 0) {
+                            break
+                        }
+                    }
+                }
+
+                if (remaining > 0) {
+                    val slot: Item = offhand.getItem(0)
+                    if (item.equals(slot, item.hasMeta(), false)) {
+                        val count = slot.getCount()
+                        val amount = min(count.toDouble(), remaining.toDouble()).toInt()
+
+                        slot.setCount(count - amount)
+                        inventory.setItem(0, slot)
+                        remaining -= amount
+                    }
+                }
+
+                if (remaining == maxCount) {
+                    log.addError("commands.clear.failure.no.items", target.name).output()
+                    return 0
+                } else {
+                    log.addSuccess("commands.clear.success", target.name, (maxCount - remaining).toString()).output()
+                }
+            }
+        }
+        return targets.size
+    }
+}

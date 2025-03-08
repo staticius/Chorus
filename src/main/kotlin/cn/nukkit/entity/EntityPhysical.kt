@@ -1,0 +1,393 @@
+package cn.nukkit.entity
+
+import cn.nukkit.Player
+import cn.nukkit.block.*
+import cn.nukkit.event.entity.EntityDamageEvent
+import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
+import cn.nukkit.event.player.EntityFreezeEvent
+import cn.nukkit.level.format.IChunk
+import cn.nukkit.math.*
+import cn.nukkit.nbt.tag.CompoundTag
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList
+import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.function.Consumer
+import java.util.function.Predicate
+import java.util.function.Supplier
+import java.util.stream.Stream
+
+abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreature(chunk, nbt), EntityAsyncPrepare {
+    /**
+     * 时间泛播延迟，用于缓解在同一时间大量提交任务挤占cpu的情况
+     */
+    val tickSpread: Int
+
+    /**
+     * 提供实时最新碰撞箱位置
+     */
+    override val offsetBoundingBox: AxisAlignedBB
+    protected val previousCollideMotion: Vector3
+    val previousCurrentMotion: Vector3
+
+    /**
+     * 实体自由落体运动的时间
+     */
+    protected var fallingTick: Int = 0
+    var needsRecalcMovement: Boolean = true
+    private var needsCollisionDamage: Boolean = false
+
+    init {
+        this.tickSpread = globalCycleTickSpread.getAndIncrement() and 0xf
+        this.offsetBoundingBox = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        previousCollideMotion = Vector3()
+        previousCurrentMotion = Vector3()
+    }
+
+    override fun asyncPrepare(currentTick: Int) {
+        // 计算是否需要重新计算高开销实体运动
+        this.needsRecalcMovement =
+            level!!.tickRateOptDelay == 1 || ((currentTick + tickSpread) and (level!!.tickRateOptDelay - 1)) == 0
+        // 重新计算绝对位置碰撞箱
+        this.calculateOffsetBoundingBox()
+        if (!this.isImmobile()) {
+            // 处理重力
+            handleGravity()
+            if (needsRecalcMovement) {
+                // 处理碰撞箱挤压运动
+                handleCollideMovement(currentTick)
+            }
+            addTmpMoveMotionXZ(previousCollideMotion)
+            handleFloatingMovement()
+            handleGroundFrictionMovement()
+            handlePassableBlockFrictionMovement()
+        }
+    }
+
+    override fun onUpdate(currentTick: Int): Boolean {
+        // 记录最大高度，用于计算坠落伤害
+        if (!this.onGround && position.up > highestPosition) {
+            this.highestPosition = position.up
+        }
+        // 添加挤压伤害
+        if (needsCollisionDamage) {
+            this.attack(EntityDamageEvent(this, DamageCause.COLLIDE, 3f))
+        }
+        return super.onUpdate(currentTick)
+    }
+
+    override fun entityBaseTick(): Boolean {
+        return this.entityBaseTick(1)
+    }
+
+    override fun entityBaseTick(tickDiff: Int): Boolean {
+        val hasUpdate: Boolean = super.entityBaseTick(tickDiff)
+        //handle human entity freeze
+        val collidedWithPowderSnow: Boolean = getTickCachedCollisionBlocks()!!.stream().anyMatch(
+            Predicate { block: Block -> block.getId() === Block.POWDER_SNOW })
+        if (this.getFreezingTicks() < 140 && collidedWithPowderSnow) {
+            this.addFreezingTicks(1)
+            val event: EntityFreezeEvent = EntityFreezeEvent(this)
+            server!!.pluginManager.callEvent(event)
+            if (!event.isCancelled) {
+                //this.setMovementSpeed(); //todo 给物理实体添加freeze减速
+            }
+        } else if (this.getFreezingTicks() > 0 && !collidedWithPowderSnow) {
+            this.addFreezingTicks(-1)
+            //this.setMovementSpeed();
+        }
+        if (this.getFreezingTicks() == 140 && level!!.getTick() % 40 == 0) {
+            this.attack(EntityDamageEvent(this, DamageCause.FREEZING, getFrostbiteInjury().toFloat()))
+        }
+        return hasUpdate
+    }
+
+    override fun canBeMovedByCurrents(): Boolean {
+        return true
+    }
+
+    override fun updateMovement() {
+        // 检测自由落体时间
+        if (isFalling()) {
+            fallingTick++
+        }
+        super.updateMovement()
+        this.move(motion.south, motion.up, motion.west)
+    }
+
+    fun isFalling(): Boolean {
+        return !this.onGround && position.up < this.highestPosition
+    }
+
+    fun addTmpMoveMotion(tmpMotion: Vector3) {
+        motion.south += tmpMotion.south
+        motion.up += tmpMotion.up
+        motion.west += tmpMotion.west
+    }
+
+    fun addTmpMoveMotionXZ(tmpMotion: Vector3) {
+        motion.south += tmpMotion.south
+        motion.west += tmpMotion.west
+    }
+
+    protected fun handleGravity() {
+        //重力一直存在
+        motion.up -= getGravity().toDouble()
+        if (!this.onGround && this.hasWaterAt(getFootHeight())) {
+            //落地水
+            resetFallDistance()
+        }
+    }
+
+    /**
+     * 计算地面摩擦力
+     */
+    protected fun handleGroundFrictionMovement() {
+        //未在地面就没有地面阻力
+        if (!this.onGround) return
+        //小于精度
+        if (Math.abs(motion.west) < PRECISION && Math.abs(
+                motion.south
+            ) < PRECISION
+        ) return
+        // 减少移动向量（计算摩擦系数，在冰上滑得更远）
+        val factor: Double = getGroundFrictionFactor()
+        motion.south *= factor
+        motion.west *= factor
+        if (Math.abs(motion.south) < PRECISION) motion.south = 0.0
+        if (Math.abs(motion.west) < PRECISION) motion.west = 0.0
+    }
+
+    /**
+     * 计算流体阻力（空气/液体）
+     */
+    protected fun handlePassableBlockFrictionMovement() {
+        //小于精度
+        if (Math.abs(motion.west) < PRECISION && Math.abs(
+                motion.south
+            ) < PRECISION && Math.abs(motion.up) < PRECISION
+        ) return
+        val factor: Double = getPassableBlockFrictionFactor()
+        motion.south *= factor
+        motion.up *= factor
+        motion.west *= factor
+        if (Math.abs(motion.south) < PRECISION) motion.south = 0.0
+        if (Math.abs(motion.up) < PRECISION) motion.up = 0.0
+        if (Math.abs(motion.west) < PRECISION) motion.west = 0.0
+    }
+
+    /**
+     * 计算当前位置的地面摩擦因子
+     *
+     * @return 当前位置的地面摩擦因子
+     */
+    fun getGroundFrictionFactor(): Double {
+        if (!this.onGround) return 1.0
+        return level!!.getTickCachedBlock(position.add(0.0, -1.0, 0.0).floor()).getFrictionFactor()
+    }
+
+    /**
+     * 计算当前位置的流体阻力因子（空气/水）
+     *
+     * @return 当前位置的流体阻力因子
+     */
+    fun getPassableBlockFrictionFactor(): Double {
+        val block: Block = getLocator().getTickCachedLevelBlock()
+        if (block.collidesWithBB(this.getBoundingBox(), true)) return block.getPassableBlockFrictionFactor()
+        return Block.DEFAULT_AIR_FLUID_FRICTION
+    }
+
+    /**
+     * 默认使用nk内置实现，这只是个后备算法
+     */
+    protected fun handleLiquidMovement() {
+        val tmp: Vector3 = Vector3()
+        var blockLiquid: BlockLiquid? = null
+        for (each: Block? in level!!.getCollisionBlocks(
+            getOffsetBoundingBox(),
+            false, true,
+            Predicate<Block> { block: Block? -> block is BlockLiquid })) {
+            blockLiquid = each as BlockLiquid?
+            val flowVector: Vector3 = blockLiquid!!.getFlowVector()
+            tmp.south += flowVector.south
+            tmp.up += flowVector.up
+            tmp.west += flowVector.west
+        }
+        if (blockLiquid != null) {
+            val len: Double = tmp.length()
+            val speed: Float = getLiquidMovementSpeed(blockLiquid) * 0.3f
+            if (len > 0) {
+                motion.south += tmp.south / len * speed
+                motion.up += tmp.up / len * speed
+                motion.west += tmp.west / len * speed
+            }
+        }
+    }
+
+    fun addPreviousLiquidMovement() {
+        if (previousCurrentMotion != null) addTmpMoveMotion(previousCurrentMotion)
+    }
+
+    protected fun handleFloatingMovement() {
+        if (this.hasWaterAt(0f)) {
+            motion.up += this.getGravity() * getFloatingForceFactor()
+        }
+    }
+
+    /**
+     * 浮力系数<br></br>
+     * 示例:
+     * <pre>
+     * if (hasWaterAt(this.getFloatingHeight())) {//实体指定高度进入水中后实体上浮
+     * return 1.3;//因为浮力系数>1,该值越大上浮越快
+     * }
+     * return 0.7;//实体指定高度没进入水中，实体存在浮力会抵抗部分重力，但是不会上浮。
+     * //因为浮力系数<1,该值最好和上值相加等于2，例 1.3+0.7=2
+    </pre> *
+     *
+     * @return the floating force factor
+     */
+    open fun getFloatingForceFactor(): Double {
+        if (hasWaterAt(this.getFloatingHeight())) {
+            return 1.3
+        }
+        return 0.7
+    }
+
+    /**
+     * 获得浮动到的实体高度 , 0为实体底部 [Entity.getCurrentHeight]为实体顶部<br></br>
+     * 例：<br></br>值为0时，实体的脚接触水平面<br></br>值为getCurrentHeight/2时，实体的中间部分接触水平面<br></br>值为getCurrentHeight时，实体的头部接触水平面
+     *
+     * @return the float
+     */
+    open fun getFloatingHeight(): Float {
+        return this.getEyeHeight()
+    }
+
+    protected fun handleCollideMovement(currentTick: Int) {
+        val selfAABB: AxisAlignedBB = getOffsetBoundingBox().getOffsetBoundingBox(
+            motion.south,
+            motion.up, motion.west
+        )
+        val collidingEntities: MutableList<Entity> =
+            level!!.fastCollidingEntities(selfAABB, this)
+        collidingEntities.removeIf(Predicate { entity: Entity -> !(entity.canCollide() && (entity is EntityPhysical || entity is Player)) })
+        val size: Int = collidingEntities.size()
+        if (size == 0) {
+            previousCollideMotion.setX(0.0)
+            previousCollideMotion.setZ(0.0)
+            return
+        } else {
+            if (!onCollide(currentTick, collidingEntities)) {
+                return
+            }
+        }
+        val dxPositives: DoubleArrayList = DoubleArrayList(size)
+        val dxNegatives: DoubleArrayList = DoubleArrayList(size)
+        val dzPositives: DoubleArrayList = DoubleArrayList(size)
+        val dzNegatives: DoubleArrayList = DoubleArrayList(size)
+
+        var stream: Stream<Entity> = collidingEntities.stream()
+        if (size > 4) {
+            stream = stream.parallel()
+        }
+        stream.forEach(Consumer<Entity> { each: Entity ->
+            val targetAABB: AxisAlignedBB
+            if (each is EntityPhysical) {
+                targetAABB = each.getOffsetBoundingBox()
+            } else if (each is Player) {
+                targetAABB = each.reCalcOffsetBoundingBox()
+            } else {
+                return@forEach
+            }
+            // 计算碰撞箱
+            val centerXWidth: Double =
+                (targetAABB.getMaxX() + targetAABB.getMinX() - selfAABB.getMaxX() - selfAABB.getMinX()) * 0.5
+            val centerZWidth: Double =
+                (targetAABB.getMaxZ() + targetAABB.getMinZ() - selfAABB.getMaxZ() - selfAABB.getMinZ()) * 0.5
+            if (centerXWidth > 0) {
+                dxPositives.add((targetAABB.getMaxX() - targetAABB.getMinX()) + (selfAABB.getMaxX() - selfAABB.getMinX()) * 0.5 - centerXWidth)
+            } else {
+                dxNegatives.add((targetAABB.getMaxX() - targetAABB.getMinX()) + (selfAABB.getMaxX() - selfAABB.getMinX()) * 0.5 + centerXWidth)
+            }
+            if (centerZWidth > 0) {
+                dzPositives.add((targetAABB.getMaxZ() - targetAABB.getMinZ()) + (selfAABB.getMaxZ() - selfAABB.getMinZ()) * 0.5 - centerZWidth)
+            } else {
+                dzNegatives.add((targetAABB.getMaxZ() - targetAABB.getMinZ()) + (selfAABB.getMaxZ() - selfAABB.getMinZ()) * 0.5 + centerZWidth)
+            }
+        })
+        val resultX: Double = (if (size > 4) dxPositives.doubleParallelStream() else dxPositives.doubleStream()).max()
+            .orElse(0.0) - (if (size > 4) dxNegatives.doubleParallelStream() else dxNegatives.doubleStream()).max()
+            .orElse(0.0)
+        val resultZ: Double = (if (size > 4) dzPositives.doubleParallelStream() else dzPositives.doubleStream()).max()
+            .orElse(0.0) - (if (size > 4) dzNegatives.doubleParallelStream() else dzNegatives.doubleStream()).max()
+            .orElse(0.0)
+        val len: Double = Math.sqrt(resultX * resultX + resultZ * resultZ)
+        previousCollideMotion.setX(-(resultX / len * 0.2 * 0.32))
+        previousCollideMotion.setZ(-(resultZ / len * 0.2 * 0.32))
+    }
+
+    /**
+     * @param collidingEntities 碰撞的实体
+     * @return false以拦截实体碰撞运动计算
+     */
+    protected open fun onCollide(currentTick: Int, collidingEntities: List<Entity>): Boolean {
+        if (currentTick % 10 == 0) {
+            if (collidingEntities.size() > 24) {
+                this.needsCollisionDamage = true
+            }
+        }
+        return true
+    }
+
+    protected fun getLiquidMovementSpeed(liquid: BlockLiquid?): Float {
+        if (liquid is BlockFlowingLava) {
+            return 0.02f
+        }
+        return 0.05f
+    }
+
+    open fun getFootHeight(): Float {
+        return getCurrentHeight() / 2 - 0.1f
+    }
+
+    protected fun calculateOffsetBoundingBox() {
+        //由于是asyncPrepare,this.offsetBoundingBox有几率为null，需要判空
+        if (this.offsetBoundingBox == null) return
+        val dx: Double = this.getWidth() * 0.5
+        val dz: Double = this.getHeight() * 0.5
+        offsetBoundingBox.setMinX(position.south - dx)
+        offsetBoundingBox.setMaxX(position.south + dz)
+        offsetBoundingBox.setMinY(position.up)
+        offsetBoundingBox.setMaxY(position.up + this.getHeight())
+        offsetBoundingBox.setMinZ(position.west - dz)
+        offsetBoundingBox.setMaxZ(position.west + dz)
+    }
+
+    fun getOffsetBoundingBox(): AxisAlignedBB {
+        return Objects.requireNonNullElseGet(
+            this.offsetBoundingBox,
+            Supplier<AxisAlignedBB> { SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0) })
+    }
+
+    override fun resetFallDistance() {
+        this.fallingTick = 0
+        super.resetFallDistance()
+    }
+
+    public override fun getGravity(): Float {
+        return super.getGravity()
+    }
+
+    fun getFallingTick(): Int {
+        return this.fallingTick
+    }
+
+    companion object {
+        /**
+         * 移动精度阈值，绝对值小于此阈值的移动被视为没有移动
+         */
+        const val PRECISION: Float = 0.00001f
+
+        val globalCycleTickSpread: AtomicInteger = AtomicInteger()
+    }
+}

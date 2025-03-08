@@ -1,0 +1,79 @@
+package cn.nukkit.command.defaults
+
+import cn.nukkit.command.CommandSender
+import cn.nukkit.command.data.CommandEnum
+import cn.nukkit.command.data.CommandParamType
+import cn.nukkit.command.data.CommandParameter
+import cn.nukkit.command.tree.ParamList
+import cn.nukkit.command.utils.CommandLogger
+import cn.nukkit.lang.TranslationContainer
+import kotlin.collections.Map
+import kotlin.collections.set
+
+/**
+ * @author Angelic47 (Nukkit Project)
+ */
+class WeatherCommand(name: String) : VanillaCommand(name, "commands.weather.description", "commands.weather.usage") {
+    init {
+        this.permission = "nukkit.command.weather"
+        commandParameters.clear()
+        commandParameters["default"] = arrayOf<CommandParameter?>(
+            CommandParameter.Companion.newEnum("type", CommandEnum("WeatherType", "clear", "rain", "thunder")),
+            CommandParameter.Companion.newType("duration", true, CommandParamType.INT)
+        )
+        this.enableParamTree()
+    }
+
+    override fun execute(
+        sender: CommandSender,
+        commandLabel: String?,
+        result: Map.Entry<String, ParamList?>,
+        log: CommandLogger
+    ): Int {
+        val list = result.value
+        val weather = list!!.getResult<String>(0)
+        val level = sender.locator.level
+        val seconds = if (list.hasResult(1)) {
+            list.getResult(1)!!
+        } else {
+            600 * 20
+        }
+        when (weather) {
+            "clear" -> {
+                level.setRaining(false)
+                level.setThundering(false)
+                level.rainTime = seconds * 20
+                level.thunderTime = seconds * 20
+                log.addSuccess("commands.weather.clear").output(true)
+                return 1
+            }
+
+            "rain" -> {
+                level.setRaining(true)
+                level.rainTime = seconds * 20
+                log.addSuccess("commands.weather.rain").output(true)
+                return 1
+            }
+
+            "thunder" -> {
+                level.setThundering(true)
+                level.rainTime = seconds * 20
+                level.thunderTime = seconds * 20
+                log.addSuccess("commands.weather.thunder").output(true)
+                return 1
+            }
+
+            else -> {
+                sender.sendMessage(
+                    TranslationContainer(
+                        "commands.generic.usage", """
+     
+     ${this.commandFormatTips}
+     """.trimIndent()
+                    )
+                )
+                return 0
+            }
+        }
+    }
+}
