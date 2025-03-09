@@ -1,0 +1,17 @@
+package org.chorus.block
+
+import cn.nukkit.block.property.CommonBlockProperties
+
+class BlockSunflower : BlockDoublePlant {
+    constructor() : super(Companion.properties.getDefaultState())
+
+    constructor(blockstate: BlockState?) : super(blockstate)
+
+    override val doublePlantType: DoublePlantType
+        get() = DoublePlantType.SUNFLOWER
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SUNFLOWER, CommonBlockProperties.UPPER_BLOCK_BIT)
+            get() = Companion.field
+    }
+}

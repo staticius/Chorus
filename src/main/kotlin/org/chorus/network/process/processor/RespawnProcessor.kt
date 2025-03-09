@@ -1,0 +1,29 @@
+package org.chorus.network.process.processor
+
+import cn.nukkit.PlayerHandle
+import cn.nukkit.entity.Entity.getX
+import cn.nukkit.entity.Entity.getY
+import cn.nukkit.entity.Entity.getZ
+import cn.nukkit.network.process.DataPacketProcessor
+import cn.nukkit.network.protocol.ProtocolInfo
+import cn.nukkit.network.protocol.RespawnPacket
+
+class RespawnProcessor : DataPacketProcessor<RespawnPacket>() {
+    override fun handle(playerHandle: PlayerHandle, pk: RespawnPacket) {
+        val player = playerHandle.player
+        if (player.isAlive()) {
+            return
+        }
+        if (pk.respawnState == RespawnPacket.STATE_CLIENT_READY_TO_SPAWN) {
+            val respawn1 = RespawnPacket()
+            respawn1.x = player.getX().toFloat()
+            respawn1.y = player.getY().toFloat()
+            respawn1.z = player.getZ().toFloat()
+            respawn1.respawnState = RespawnPacket.STATE_READY_TO_SPAWN
+            player.dataPacket(respawn1)
+        }
+    }
+
+    override val packetId: Int
+        get() = ProtocolInfo.RESPAWN_PACKET
+}

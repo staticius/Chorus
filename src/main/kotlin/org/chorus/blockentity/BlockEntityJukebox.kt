@@ -1,0 +1,91 @@
+package org.chorus.blockentity
+
+import cn.nukkit.block.Block
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemMusicDisc
+import cn.nukkit.level.format.IChunk
+import cn.nukkit.nbt.NBTIO
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.network.protocol.PlaySoundPacket
+import cn.nukkit.network.protocol.StopSoundPacket
+import java.util.*
+
+/**
+ * @author CreeperFace
+ */
+class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
+    private var recordItem: Item? = null
+
+    override fun loadNBT() {
+        super.loadNBT()
+        if (namedTag.contains("RecordItem")) {
+            this.recordItem = NBTIO.getItemHelper(namedTag.getCompound("RecordItem"))
+        } else {
+            this.recordItem = Item.AIR
+        }
+    }
+
+    override val isBlockEntityValid: Boolean
+        get() = level
+            .getBlockIdAt(floorX, floorY, floorZ) === Block.JUKEBOX
+
+    fun setRecordItem(recordItem: Item) {
+        Objects.requireNonNull(recordItem, "Record item cannot be null")
+        this.recordItem = recordItem
+    }
+
+    fun getRecordItem(): Item? {
+        return recordItem
+    }
+
+
+    fun play() {
+        if (recordItem is ItemMusicDisc) {
+            val packet = PlaySoundPacket()
+            packet.name = recordItem.soundId
+            packet.volume = 1f
+            packet.pitch = 1f
+            packet.x = position.floorX
+            packet.y = position.floorY
+            packet.z = position.floorZ
+            level.addChunkPacket(
+                position.floorX shr 4,
+                position.floorZ shr 4, packet
+            )
+        }
+    }
+
+    //TODO: Transfer the stop sound to the new sound method
+    fun stop() {
+        if (recordItem is ItemMusicDisc) {
+            val packet = StopSoundPacket()
+            packet.name = recordItem.soundId
+            packet.stopAll = false
+            level.addChunkPacket(
+                position.floorX shr 4,
+                position.floorZ shr 4, packet
+            )
+        }
+    }
+
+    fun dropItem() {
+        if (!recordItem!!.isNull) {
+            stop()
+            level.dropItem(position.up(), this.recordItem)
+            this.recordItem = Item.AIR
+        }
+    }
+
+    override fun saveNBT() {
+        super.saveNBT()
+        namedTag.putCompound("RecordItem", NBTIO.putItemHelper(this.recordItem))
+    }
+
+    override val spawnCompound: CompoundTag
+        get() = super.getSpawnCompound()
+            .putCompound("RecordItem", NBTIO.putItemHelper(this.recordItem))
+
+    override fun onBreak(isSilkTouch: Boolean) {
+        this.dropItem()
+    }
+}

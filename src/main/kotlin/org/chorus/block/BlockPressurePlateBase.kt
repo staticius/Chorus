@@ -1,0 +1,230 @@
+package org.chorus.block
+
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.event.Event
+import cn.nukkit.event.block.BlockRedstoneEvent
+import cn.nukkit.event.entity.EntityInteractEvent
+import cn.nukkit.event.player.PlayerInteractEvent
+import cn.nukkit.item.*
+import cn.nukkit.item.ItemTool.Companion.getBestTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.SimpleAxisAlignedBB
+import cn.nukkit.network.protocol.LevelSoundEventPacket
+import cn.nukkit.utils.RedstoneComponent
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+
+/**
+ * @author Snake1999
+ * @since 2016/1/11
+ */
+abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(blockState),
+    RedstoneComponent {
+    @JvmField
+    protected var onPitch: Float = 0f
+    @JvmField
+    protected var offPitch: Float = 0f
+
+    protected abstract fun computeRedstoneStrength(): Int
+
+    override fun canPassThrough(): Boolean {
+        return true
+    }
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
+    }
+
+    override var minX: Double
+        get() = position.x + 0.625
+        set(minX) {
+            super.minX = minX
+        }
+
+    override var minZ: Double
+        get() = position.z + 0.625
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var minY: Double
+        get() = position.y + 0
+        set(minY) {
+            super.minY = minY
+        }
+
+    override var maxX: Double
+        get() = position.x + 0.9375
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxZ: Double
+        get() = position.z + 0.9375
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override var maxY: Double
+        get() = if (isActivated) position.y + 0.03125 else position.y + 0.0625
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override val isPowerSource: Boolean
+        get() = true
+
+    val isActivated: Boolean
+        get() = redstonePower == 0
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_NORMAL) {
+            if (!isSupportValid(down()!!, BlockFace.UP)) {
+                level.useBreakOn(this.position, getBestTool(toolType))
+            }
+        } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
+            val power = this.redstonePower
+
+            if (power > 0) {
+                this.updateState(power)
+            }
+        }
+
+        return 0
+    }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isSupportValid(down()!!, BlockFace.UP)) {
+            return false
+        }
+
+        level.setBlock(block.position, this, true, true)
+        return true
+    }
+
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+        return SimpleAxisAlignedBB(
+            position.x + 0.125,
+            position.y,
+            position.z + 0.125,
+            position.x + 0.875, position.y + 0.25, position.z + 0.875
+        )
+    }
+
+    override fun onEntityCollide(entity: Entity?) {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return
+        }
+
+        val power = redstonePower
+
+        if (power == 0) {
+            val ev: Event = if (entity is Player) {
+                PlayerInteractEvent(
+                    entity,
+                    null,
+                    position,
+                    null,
+                    PlayerInteractEvent.Action.PHYSICAL
+                )
+            } else {
+                EntityInteractEvent(entity, this)
+            }
+
+            level.server.pluginManager.callEvent(ev)
+
+            if (!ev.isCancelled) {
+                updateState(power)
+            }
+        }
+    }
+
+    protected fun updateState(oldStrength: Int) {
+        val strength = this.computeRedstoneStrength()
+        val wasPowered = oldStrength > 0
+        val isPowered = strength > 0
+
+        if (oldStrength != strength) {
+            this.redstonePower = strength
+            level.setBlock(this.position, this, false, false)
+
+            updateAroundRedstone()
+            updateAroundRedstone(getSide(BlockFace.DOWN)!!)
+
+            if (!isPowered && wasPowered) {
+                this.playOffSound()
+                level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
+            } else if (isPowered && !wasPowered) {
+                this.playOnSound()
+                level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
+            }
+        }
+
+        if (isPowered) {
+            level.scheduleUpdate(this, 20)
+        }
+    }
+
+    override fun onBreak(item: Item?): Boolean {
+        level.setBlock(this.position, get(BlockID.AIR), true, true)
+
+        if (this.redstonePower > 0) {
+            updateAroundRedstone()
+            updateAroundRedstone(getSide(BlockFace.DOWN)!!)
+        }
+
+        return true
+    }
+
+    override fun getWeakPower(side: BlockFace?): Int {
+        return redstonePower
+    }
+
+    override fun getStrongPower(side: BlockFace?): Int {
+        return if (side == BlockFace.UP) redstonePower else 0
+    }
+
+    var redstonePower: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REDSTONE_SIGNAL)
+        set(power) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REDSTONE_SIGNAL, power)
+        }
+
+    protected fun playOnSound() {
+        level.addLevelSoundEvent(
+            position.add(0.5, 0.1, 0.5)!!,
+            LevelSoundEventPacket.SOUND_POWER_ON,
+            blockState!!.blockStateHash()
+        )
+    }
+
+    protected fun playOffSound() {
+        level.addLevelSoundEvent(
+            position.add(0.5, 0.1, 0.5)!!,
+            LevelSoundEventPacket.SOUND_POWER_OFF,
+            blockState!!.blockStateHash()
+        )
+    }
+
+    companion object {
+        fun isSupportValid(block: Block, blockFace: BlockFace): Boolean {
+            return BlockLever.isSupportValid(block, blockFace) || block is BlockFence
+        }
+    }
+}

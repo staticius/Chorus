@@ -1,0 +1,570 @@
+package org.chorus.blockentity
+
+import cn.nukkit.block.*
+import cn.nukkit.block.BlockHopper.IHopper
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.block.HopperSearchItemEvent
+import cn.nukkit.event.inventory.InventoryMoveItemEvent
+import cn.nukkit.inventory.*
+import cn.nukkit.item.*
+import cn.nukkit.level.format.IChunk
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockVector3
+import cn.nukkit.math.SimpleAxisAlignedBB
+import cn.nukkit.nbt.NBTIO
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.registry.Registries
+import lombok.Getter
+import lombok.Setter
+
+/**
+ * @author CreeperFace
+ * @since 8.5.2017
+ */
+class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt), BlockEntityInventoryHolder,
+    IHopper {
+    protected var inventory: HopperInventory? = null
+
+    var transferCooldown: Int = 0
+
+    private var pickupArea: AxisAlignedBB? = null
+
+    var isDisabled: Boolean = false
+
+    private val temporalVector = BlockVector3()
+
+    //由容器矿车检测漏斗并通知更新，这样子能大幅优化性能
+    @Getter
+    @Setter
+    private val minecartInvPickupFrom: InventoryHolder? = null
+
+    @Getter
+    @Setter
+    private val minecartInvPushTo: InventoryHolder? = null
+
+    override fun initBlockEntity() {
+        super.initBlockEntity()
+        this.scheduleUpdate()
+    }
+
+    override fun loadNBT() {
+        super.loadNBT()
+        if (namedTag.contains("TransferCooldown")) {
+            this.transferCooldown = namedTag.getInt("TransferCooldown")
+        } else {
+            this.transferCooldown = 8
+        }
+
+        this.inventory = HopperInventory(this)
+
+        if (!namedTag.contains("Items") || namedTag["Items"] !is ListTag<*>) {
+            namedTag.putList("Items", ListTag<CompoundTag>())
+        }
+
+        for (i in 0..<this.size) {
+            inventory!!.setItem(i, this.getItem(i))
+        }
+
+        this.pickupArea = generatePickupArea()
+
+        checkDisabled()
+    }
+
+    protected fun generatePickupArea(): SimpleAxisAlignedBB {
+        return SimpleAxisAlignedBB(
+            position.x,
+            position.y,
+            position.z, position.x + 1, position.y + 2, position.z + 1
+        )
+    }
+
+    protected fun checkDisabled() {
+        if (block is BlockHopper) {
+            isDisabled = !(blockHopper).isEnabled()
+        }
+    }
+
+    val cooldownTick: Int
+        /**
+         * @return How much ticks does it take for the hopper to transfer an item
+         */
+        get() = 8
+
+    protected fun checkBlockStateValid(levelBlockState: BlockState): Boolean {
+        return levelBlockState.identifier == BlockID.HOPPER
+    }
+
+    override val isBlockEntityValid: Boolean
+        get() = level.getBlockIdAt(
+            position.floorX,
+            position.floorY,
+            position.floorZ
+        ) == Block.HOPPER
+
+    override var name: String
+        get() = if (this.hasName()) namedTag.getString("CustomName") else "Hopper"
+        set(name) {
+            if (name == null || name.isEmpty()) {
+                namedTag.remove("CustomName")
+                return
+            }
+
+            namedTag.putString("CustomName", name)
+        }
+
+    override fun hasName(): Boolean {
+        return namedTag.contains("CustomName")
+    }
+
+    val isOnTransferCooldown: Boolean
+        get() = this.transferCooldown > 0
+
+    fun setTransferCooldown(transferCooldown: Int) {
+        this.transferCooldown = transferCooldown
+    }
+
+    val size: Int
+        get() = 5
+
+    protected fun getSlotIndex(index: Int): Int {
+        val list = namedTag.getList("Items", CompoundTag::class.java)
+        for (i in 0..<list.size()) {
+            if (list[i].getByte("Slot").toInt() == index) {
+                return i
+            }
+        }
+
+        return -1
+    }
+
+    fun getItem(index: Int): Item {
+        val i = this.getSlotIndex(index)
+        if (i < 0) {
+            return Item.AIR
+        } else {
+            val data = namedTag.getList("Items")[i] as CompoundTag
+            return NBTIO.getItemHelper(data)
+        }
+    }
+
+    fun setItem(index: Int, item: Item) {
+        val i = this.getSlotIndex(index)
+
+        val d = NBTIO.putItemHelper(item, index)
+
+        if (item.isNull || item.getCount() <= 0) {
+            if (i >= 0) {
+                namedTag.getList("Items").all.removeAt(i)
+            }
+        } else if (i < 0) {
+            (namedTag.getList("Items", CompoundTag::class.java)).add(d)
+        } else {
+            (namedTag.getList("Items", CompoundTag::class.java)).add(i, d)
+        }
+    }
+
+    override fun saveNBT() {
+        super.saveNBT()
+        namedTag.putList("Items", ListTag<CompoundTag>())
+        for (index in 0..<this.size) {
+            this.setItem(index, inventory!!.getItem(index))
+        }
+
+        namedTag.putInt("TransferCooldown", this.transferCooldown)
+    }
+
+    override fun getInventory(): HopperInventory {
+        return inventory!!
+    }
+
+    override fun onUpdate(): Boolean {
+        if (this.closed) {
+            return false
+        }
+
+        if (isOnTransferCooldown) {
+            transferCooldown--
+            return true
+        }
+
+        if (isDisabled) {
+            return false
+        }
+
+        val blockSide = getSide(BlockFace.UP).tickCachedLevelBlock
+        val blockEntity =
+            level.getBlockEntity(temporalVector.setComponentsAdding(this.position, BlockFace.UP))
+
+        var changed = pushItems() || pushItemsIntoMinecart()
+
+        val event = HopperSearchItemEvent(this, false)
+        server.pluginManager.callEvent(event)
+        if (!event.isCancelled) {
+            changed = if (blockEntity is InventoryHolder || blockSide is BlockComposter) {
+                pullItems(this, this) || changed
+            } else {
+                pullItemsFromMinecart() || pickupItems(this, this, pickupArea) || changed
+            }
+        }
+
+        if (changed) {
+            this.setTransferCooldown(this.cooldownTick)
+            setDirty()
+        }
+
+        return true
+    }
+
+    override val isObservable: Boolean
+        get() = false
+
+    fun pullItemsFromMinecart(): Boolean {
+        if (inventory!!.isFull) {
+            return false
+        }
+
+        if (getMinecartInvPickupFrom() != null) {
+            val inv: Inventory = getMinecartInvPickupFrom().getInventory()
+
+            for (i in 0..<inv.size) {
+                val item = inv.getItem(i)
+
+                if (!item.isNull) {
+                    val itemToAdd = item.clone()
+                    itemToAdd.count = 1
+                    if (!inventory!!.canAddItem(itemToAdd)) continue
+
+                    val ev = InventoryMoveItemEvent(
+                        inv,
+                        this.inventory,
+                        this,
+                        itemToAdd,
+                        InventoryMoveItemEvent.Action.SLOT_CHANGE
+                    )
+                    server.pluginManager.callEvent(ev)
+                    if (ev.isCancelled) continue
+
+                    val items = inventory!!.addItem(itemToAdd)
+                    if (items.size >= 1) continue
+
+                    item.count--
+                    inv.setItem(i, item)
+
+                    //归位为null
+                    setMinecartInvPickupFrom(null)
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    override fun close() {
+        if (!closed) {
+            for (player in HashSet(getInventory().viewers)) {
+                player.removeWindow(this.getInventory())
+            }
+            super.close()
+        }
+    }
+
+    override fun onBreak(isSilkTouch: Boolean) {
+        for (content in inventory!!.contents.values) {
+            level.dropItem(this.position, content)
+        }
+        inventory!!.clearAll()
+    }
+
+
+    fun pushItemsIntoMinecart(): Boolean {
+        if (getMinecartInvPushTo() != null) {
+            val holderInventory: Inventory = getMinecartInvPushTo().getInventory()
+
+            if (holderInventory.isFull) return false
+
+            for (i in 0..<inventory!!.size) {
+                val item = inventory!!.getItem(i)
+
+                if (!item.isNull) {
+                    val itemToAdd = item.clone()
+                    itemToAdd.setCount(1)
+
+                    if (!holderInventory.canAddItem(itemToAdd)) continue
+
+                    val ev = InventoryMoveItemEvent(
+                        this.inventory, holderInventory,
+                        this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
+                    )
+                    server.pluginManager.callEvent(ev)
+
+                    if (ev.isCancelled) continue
+
+                    val items = holderInventory.addItem(itemToAdd)
+
+                    if (items.size > 0) continue
+
+                    item.count--
+                    inventory!!.setItem(i, item)
+
+                    //归位为null
+                    setMinecartInvPushTo(null)
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    fun pushItems(): Boolean {
+        if (inventory!!.isEmpty) {
+            return false
+        }
+
+        val levelBlockState = levelBlockState
+        if (!checkBlockStateValid(levelBlockState)) {
+            return false
+        }
+
+        val side = BlockFace.fromIndex(levelBlockState.getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
+        val sidePos = this.getSide(side)
+        val blockSide = sidePos.getLevelBlock(false)
+        if (blockSide.isAir) return false
+        val be = level.getBlockEntity(temporalVector.setComponentsAdding(this.position, side))
+
+        //漏斗应该有主动向被锁住的漏斗推送物品的能力
+        if (be is BlockEntityHopper && levelBlockState.isDefaultState && !be.isDisabled || be !is InventoryHolder && blockSide !is BlockComposter) {
+            return false
+        }
+
+        var event: InventoryMoveItemEvent
+
+        //Fix for furnace inputs
+        if (be is BlockEntityFurnace) {
+            val inventory = be.getInventory()
+            if (inventory!!.isFull) {
+                return false
+            }
+
+            var pushedItem = false
+
+            for (i in 0..<this.inventory!!.size) {
+                val item = this.inventory!!.getItem(i)
+                if (!item.isNull) {
+                    val itemToAdd = item.clone()
+                    itemToAdd.setCount(1)
+
+                    //Check direction of hopper
+                    if (this.block.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION) == 0) {
+                        val smelting = inventory.smelting
+                        if (smelting.isNull) {
+                            event = InventoryMoveItemEvent(
+                                this.inventory, inventory,
+                                this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
+                            )
+                            server.pluginManager.callEvent(event)
+
+                            if (!event.isCancelled) {
+                                inventory.setSmelting(itemToAdd)
+                                item.count--
+                                pushedItem = true
+                            }
+                        } else if (inventory.smelting.id == itemToAdd.id && inventory.smelting.damage == itemToAdd.damage && inventory.smelting.id == itemToAdd.id && smelting.count < smelting.maxStackSize) {
+                            event = InventoryMoveItemEvent(
+                                this.inventory, inventory,
+                                this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
+                            )
+                            server.pluginManager.callEvent(event)
+
+                            if (!event.isCancelled) {
+                                smelting.count++
+                                inventory.setSmelting(smelting)
+                                item.count--
+                                pushedItem = true
+                            }
+                        }
+                    } else if (Registries.FUEL.isFuel(itemToAdd)) {
+                        val fuel = inventory.fuel
+                        if (fuel.isNull) {
+                            event = InventoryMoveItemEvent(
+                                this.inventory, inventory,
+                                this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
+                            )
+                            server.pluginManager.callEvent(event)
+
+                            if (!event.isCancelled) {
+                                inventory.setFuel(itemToAdd)
+                                item.count--
+                                pushedItem = true
+                            }
+                        } else if (fuel.id == itemToAdd.id && fuel.damage == itemToAdd.damage && fuel.id == itemToAdd.id && fuel.count < fuel.maxStackSize) {
+                            event = InventoryMoveItemEvent(
+                                this.inventory, inventory,
+                                this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
+                            )
+                            server.pluginManager.callEvent(event)
+
+                            if (!event.isCancelled) {
+                                fuel.count++
+                                inventory.setFuel(fuel)
+                                item.count--
+                                pushedItem = true
+                            }
+                        }
+                    }
+
+                    if (pushedItem) {
+                        this.inventory!!.setItem(i, item)
+                    }
+                }
+            }
+
+            return pushedItem
+        } else if (be is BlockEntityBrewingStand) {
+            val inventory = be.getInventory()
+            if (inventory!!.isFull) {
+                return false
+            }
+
+            var pushedItem = false
+
+            for (i in 0..<this.inventory!!.size) {
+                val item = this.inventory!!.getItem(i)
+                if (!item.isNull) {
+                    val itemToAdd = item.clone()
+                    itemToAdd.setCount(1)
+
+                    //Check direction of hopper
+                    if (this.block.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION) == 0) {
+                        val ingredient = inventory.ingredient
+                        if (ingredient.isNull) {
+                            event = InventoryMoveItemEvent(
+                                this.inventory, inventory,
+                                this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
+                            )
+                            server.pluginManager.callEvent(event)
+
+                            if (!event.isCancelled) {
+                                inventory.ingredient = itemToAdd
+                                item.count--
+                                pushedItem = true
+                            }
+                        } else if (ingredient.id == itemToAdd.id && ingredient.damage == itemToAdd.damage && ingredient.id == itemToAdd.id && ingredient.count < ingredient.maxStackSize) {
+                            event = InventoryMoveItemEvent(
+                                this.inventory, inventory,
+                                this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
+                            )
+                            server.pluginManager.callEvent(event)
+
+                            if (!event.isCancelled) {
+                                ingredient.count++
+                                inventory.ingredient = ingredient
+                                item.count--
+                                pushedItem = true
+                            }
+                        }
+                    } else if (itemToAdd is ItemPotion || itemToAdd is ItemSplashPotion) {
+                        val productView = be.productView
+                        if (productView.canAddItem(itemToAdd)) {
+                            for (j in 1..3) {
+                                if (inventory.getItem(j).isNull) {
+                                    inventory.setItem(j, itemToAdd)
+                                    item.count--
+                                    pushedItem = true
+                                    break
+                                }
+                            }
+                        }
+                    }
+
+                    if (pushedItem) {
+                        this.inventory!!.setItem(i, item)
+                    }
+                }
+            }
+
+            return pushedItem
+        } else if (blockSide is BlockComposter) {
+            if (blockSide.isFull) {
+                return false
+            }
+
+            for (i in 0..<inventory!!.size) {
+                val item = inventory!!.getItem(i)
+
+                if (item.isNull) {
+                    continue
+                }
+
+                val itemToAdd = item.clone()
+                itemToAdd.setCount(1)
+
+                if (!blockSide.onActivate(item, null, BlockFace.DOWN, 0f, 0f, 0f)) {
+                    return false
+                }
+                item.count--
+                inventory!!.setItem(i, item)
+                return true
+            }
+        } else {
+            val inventory = if (be is RecipeInventoryHolder) be.ingredientView else (be as InventoryHolder).inventory
+
+            if (inventory.isFull) {
+                return false
+            }
+
+            for (i in 0..<this.inventory!!.size) {
+                val item = this.inventory!!.getItem(i)
+
+                if (!item.isNull) {
+                    val itemToAdd = item.clone()
+                    itemToAdd.setCount(1)
+
+                    if (!inventory.canAddItem(itemToAdd)) {
+                        continue
+                    }
+
+                    val ev = InventoryMoveItemEvent(
+                        this.inventory,
+                        inventory,
+                        this,
+                        itemToAdd,
+                        InventoryMoveItemEvent.Action.SLOT_CHANGE
+                    )
+                    server.pluginManager.callEvent(ev)
+
+                    if (ev.isCancelled) {
+                        continue
+                    }
+
+                    val items = inventory.addItem(itemToAdd)
+
+                    if (items.size > 0) {
+                        continue
+                    }
+
+                    item.count--
+                    this.inventory!!.setItem(i, item)
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    override val spawnCompound: CompoundTag
+        get() {
+            val c = super.getSpawnCompound().putBoolean("isMovable", this.isMovable)
+
+            if (this.hasName()) {
+                c.put("CustomName", namedTag["CustomName"])
+            }
+
+            return c
+        }
+}

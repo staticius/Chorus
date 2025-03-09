@@ -1,0 +1,151 @@
+package org.chorus.block
+
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityCampfire.getInventory
+import cn.nukkit.blockentity.BlockEntityChest.getInventory
+import cn.nukkit.blockentity.BlockEntityCommandBlock.getInventory
+import cn.nukkit.blockentity.BlockEntityCommandBlock.isPowered
+import cn.nukkit.blockentity.BlockEntityCommandBlock.successCount
+import cn.nukkit.blockentity.BlockEntitySpawnable.spawnTo
+import cn.nukkit.blockentity.ICommandBlock.setPowered
+import cn.nukkit.blockentity.ICommandBlock.trigger
+import cn.nukkit.entity.EntityHumanType.getInventory
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.*
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.math.Vector3.equals
+import cn.nukkit.utils.Faceable
+import kotlin.math.abs
+import kotlin.math.min
+
+//special thanks to wode
+open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityCommandBlock?> {
+    override val resistance: Double
+        get() = 6000000.0
+
+    override fun canBePushed(): Boolean {
+        return false
+    }
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
+    }
+
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return player != null && player.isCreative
+    }
+
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (player != null) {
+            if (!player.isCreative) return false
+            if (abs(player.position.floorX - position.x) < 2 && abs(player.position.floorZ - position.z) < 2) {
+                val y = player.position.y + player.getEyeHeight()
+                if (y - position.y > 2) {
+                    this.blockFace = BlockFace.UP
+                } else if (position.y - y > 0) {
+                    this.blockFace = BlockFace.DOWN
+                } else {
+                    this.blockFace = player.getHorizontalFacing().getOpposite()
+                }
+            } else {
+                this.blockFace = player.getHorizontalFacing().getOpposite()
+            }
+        } else {
+            this.blockFace = BlockFace.DOWN
+        }
+        return BlockEntityHolder.setBlockAndCreateEntity<BlockEntityCommandBlock?, BlockCommandBlock>(
+            this,
+            true,
+            true
+        ) != null
+    }
+
+    override fun canBeActivated(): Boolean {
+        return true
+    }
+
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (player != null) {
+            val itemInHand = player.getInventory().itemInHand
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull) || !instance!!.settings.gameplaySettings()
+                    .enableCommandBlocks()
+            ) {
+                return false
+            }
+            val tile: BlockEntityCommandBlock = this.getOrCreateBlockEntity()
+            tile.spawnTo(player)
+            player.addWindow(tile.getInventory())
+        }
+        return true
+    }
+
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
+            val tile: BlockEntityCommandBlock = this.blockEntity ?: return super.onUpdate(type)
+            if (this.isGettingPower) {
+                if (!tile.isPowered) {
+                    tile.setPowered()
+                    tile.trigger()
+                }
+            } else {
+                tile.isPowered = false
+            }
+        }
+        return super.onUpdate(type)
+    }
+
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
+    }
+
+    override val comparatorInputOverride: Int
+        get() = min(
+            getOrCreateBlockEntity().successCount.toDouble(),
+            TODO("Could not convert double literal '0xf' to Kotlin")
+        ).toInt()
+
+    override fun getBlockEntityClass(): Class<out BlockEntityCommandBlock> {
+        return BlockEntityCommandBlock::class.java
+    }
+
+    override fun getBlockEntityType(): String {
+        return BlockEntity.COMMAND_BLOCK
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            COMMAND_BLOCK,
+            CommonBlockProperties.CONDITIONAL_BIT,
+            CommonBlockProperties.FACING_DIRECTION
+        )
+            get() = Companion.field
+    }
+}

@@ -1,9 +1,0 @@
-package cn.nukkit.block
-
-class BlockInfoUpdate2 @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    Block(blockstate) {
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.Companion.INFO_UPDATE2)
-            get() = Companion.field
-    }
-}

@@ -1,0 +1,10 @@
+package org.chorus.item
+
+import cn.nukkit.block.*
+
+class ItemMelonSeeds @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
+    Item(ItemID.Companion.MELON_SEEDS, 0, count, "Melon Seeds") {
+    init {
+        this.block = Block.get(BlockID.MELON_STEM)
+    }
+}

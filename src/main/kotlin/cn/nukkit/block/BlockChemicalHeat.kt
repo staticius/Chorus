@@ -1,9 +1,0 @@
-package cn.nukkit.block
-
-class BlockChemicalHeat @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    Block(blockstate) {
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.CHEMICAL_HEAT)
-            get() = Companion.field
-    }
-}

@@ -1,0 +1,164 @@
+package org.chorus.block
+
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.BlockFace
+import cn.nukkit.network.protocol.LevelSoundEventPacket
+
+/**
+ * @author Nukkit Project Team
+ */
+class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockState) {
+    override val name: String
+        get() = "Cake Block"
+
+    override fun canBeActivated(): Boolean {
+        return true
+    }
+
+    override val hardness: Double
+        get() = 0.5
+
+    override val resistance: Double
+        get() = 0.5
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override var minX: Double
+        get() = position.x + (1 + biteCount * 2) / 16
+        set(minX) {
+            super.minX = minX
+        }
+
+    override var minY: Double
+        get() = position.y
+        set(minY) {
+            super.minY = minY
+        }
+
+    override var minZ: Double
+        get() = position.z + 0.0625
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x - 0.0625 + 1
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxY: Double
+        get() = position.y + 0.5
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override var maxZ: Double
+        get() = position.z - 0.0625 + 1
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!down()!!.isAir) {
+            level.setBlock(block.position, this, true, true)
+
+            return true
+        }
+        return false
+    }
+
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_NORMAL) {
+            if (down()!!.isAir) {
+                level.setBlock(this.position, get(AIR), true)
+
+                return Level.BLOCK_UPDATE_NORMAL
+            }
+        }
+
+        return 0
+    }
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
+    }
+
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
+        if (item.getBlock() is BlockCandle && this.biteCount == 0) {
+            return false
+        }
+        val damage = biteCount
+        if (player != null && (player.foodData!!.isHungry || player.isCreative || player.getServer()!!
+                .getDifficulty() == 0)
+        ) {
+            if (damage < CommonBlockProperties.BITE_COUNTER.getMax()) biteCount = damage + 1
+            if (damage >= CommonBlockProperties.BITE_COUNTER.getMax()) {
+                level.setBlock(this.position, get(AIR), true)
+            } else {
+                player.foodData!!.addFood(2, 0.4f)
+                level.setBlock(this.position, this, true)
+            }
+            level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_BURP)
+            level.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    player,
+                    position.add(0.5, 0.5, 0.5)!!, VibrationType.EAT
+                )
+            )
+            return true
+        }
+        return false
+    }
+
+    override val comparatorInputOverride: Int
+        get() = (7 - this.biteCount) * 2
+
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
+    }
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
+    }
+
+    override fun sticksToPiston(): Boolean {
+        return false
+    }
+
+    var biteCount: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BITE_COUNTER)
+        set(count) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BITE_COUNTER, count)
+        }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(CAKE, CommonBlockProperties.BITE_COUNTER)
+            get() = Companion.field
+    }
+}

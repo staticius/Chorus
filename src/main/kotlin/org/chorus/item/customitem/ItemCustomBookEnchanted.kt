@@ -1,0 +1,34 @@
+package org.chorus.item.customitem
+
+import cn.nukkit.item.ItemEnchantedBook
+import cn.nukkit.item.customitem.data.CreativeCategory
+import cn.nukkit.item.enchantment.*
+import cn.nukkit.nbt.tag.CompoundTag
+import java.util.function.Consumer
+
+abstract class ItemCustomBookEnchanted(id: String) : ItemEnchantedBook(id), CustomItem {
+    override val definition: CustomItemDefinition?
+        get() = CustomItemDefinition.Companion.customBuilder(this)
+            .name(name!!)
+            .texture("book_enchanted")
+            .allowOffHand(false)
+            .creativeCategory(CreativeCategory.ITEMS)
+            .creativeGroup("itemGroup.name.enchantedBook")
+            .foil(true)
+            .customBuild(Consumer<CompoundTag> { nbt: CompoundTag ->
+                nbt.getCompound("components")
+                    .getCompound("item_properties")
+                    .putString("enchantable_slot", "all")
+                    .putInt("enchantable_value", 20)
+                    .putBoolean("hand_equipped", false)
+                    .putFloat("mining_speed", 1f)
+                    .putBoolean("mirrored_art", false)
+                    .putInt("use_animation", 0)
+                    .putInt("use_duration", 0)
+                    .putBoolean("animates_in_toolbar", false)
+            }
+            )
+
+    val enchantment: Enchantment?
+        get() = Enchantment.Companion.getEnchantment(this.getId())
+}

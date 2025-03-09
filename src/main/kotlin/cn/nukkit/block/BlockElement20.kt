@@ -1,9 +1,0 @@
-package cn.nukkit.block
-
-class BlockElement20 @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    Block(blockstate) {
-    companion object {
-        val properties: BlockProperties = BlockProperties("minecraft:element_20")
-            get() = Companion.field
-    }
-}

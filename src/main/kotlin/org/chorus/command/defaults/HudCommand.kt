@@ -1,0 +1,95 @@
+package org.chorus.command.defaults
+
+import cn.nukkit.Player
+import cn.nukkit.command.CommandSender
+import cn.nukkit.command.data.CommandParamType
+import cn.nukkit.command.data.CommandParameter
+import cn.nukkit.command.tree.ParamList
+import cn.nukkit.command.tree.node.PlayersNode
+import cn.nukkit.command.utils.CommandLogger
+import cn.nukkit.network.protocol.SetHudPacket
+import cn.nukkit.network.protocol.types.hud.HudElement
+import cn.nukkit.network.protocol.types.hud.HudVisibility
+
+class HudCommand(name: String) : VanillaCommand(name, "commands.hud.description", "%commands.hud.usage") {
+    init {
+        this.permission = "nukkit.command.hud"
+        getCommandParameters().clear()
+        this.addCommandParameters(
+            "default", arrayOf<CommandParameter?>(
+                CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
+                CommandParameter.Companion.newEnum("visible", false, arrayOf<String?>("hide", "reset")),
+                CommandParameter.Companion.newEnum(
+                    "hud_element",
+                    false,
+                    arrayOf<String?>(
+                        "armor",
+                        "air_bubbles_bar",
+                        "crosshair",
+                        "food_bar",
+                        "health",
+                        "hotbar",
+                        "paper_doll",
+                        "tool_tips",
+                        "progress_bar",
+                        "touch_controls",
+                        "vehicle_health"
+                    )
+                )
+            )
+        )
+        this.enableParamTree()
+    }
+
+    override fun execute(
+        sender: CommandSender,
+        commandLabel: String?,
+        result: Map.Entry<String, ParamList?>,
+        log: CommandLogger
+    ): Int {
+        val list = result.value
+
+        val players = list!!.getResult<List<Player>>(0)!!
+        if (players.isEmpty()) {
+            log.addNoTargetMatch().output()
+            return 0
+        }
+
+        val visibility = when (list.getResult<Any>(1) as String) {
+            "hide" -> HudVisibility.HIDE
+            "reset" -> HudVisibility.RESET
+            else -> null
+        }
+
+        val element = when (list.getResult<Any>(2) as String) {
+            "armor" -> HudElement.ARMOR
+            "air_bubbles_bar" -> HudElement.AIR_BUBBLES_BAR
+            "crosshair" -> HudElement.CROSSHAIR
+            "food_bar" -> HudElement.FOOD_BAR
+            "health" -> HudElement.HEALTH
+            "hotbar" -> HudElement.HOTBAR
+            "paper_doll" -> HudElement.PAPER_DOLL
+            "tool_tips" -> HudElement.TOOL_TIPS
+            "progress_bar" -> HudElement.PROGRESS_BAR
+            "touch_controls" -> HudElement.TOUCH_CONTROLS
+            "vehicle_health" -> HudElement.VEHICLE_HEALTH
+            else -> null
+        }
+
+        if (visibility == null || element == null) {
+            return 0
+        }
+
+
+        for (player in players) {
+            val packet = SetHudPacket()
+            packet.elements.add(element)
+            packet.visibility = visibility
+            player.dataPacket(packet)
+
+            return 1
+        }
+
+        return 0
+    }
+}

@@ -1,0 +1,128 @@
+package org.chorus.entity.data.profession
+
+import cn.nukkit.block.BlockID
+import cn.nukkit.item.Item
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Sound
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.utils.TradeRecipeBuildUtils
+import java.util.*
+
+class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weapon", Sound.BLOCK_GRINDSTONE_USE) {
+    override fun buildTrades(seed: Int): ListTag<CompoundTag> {
+        val recipes: ListTag<CompoundTag> = ListTag()
+        val random: Random = Random(seed.toLong())
+
+        val enchantments: IntArray = intArrayOf(
+            Enchantment.ID_DURABILITY,
+            Enchantment.ID_DAMAGE_ALL,
+            Enchantment.ID_VANISHING_CURSE,
+            Enchantment.ID_DAMAGE_SMITE,
+            Enchantment.ID_DAMAGE_ARTHROPODS,
+            Enchantment.ID_LOOTING,
+            Enchantment.ID_FIRE_ASPECT
+        )
+
+        val ironsword: Item = Item.get(Item.IRON_SWORD)
+        val ironswordEnchantment: Enchantment =
+            Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
+        ironswordEnchantment.setLevel(1 + random.nextInt(ironswordEnchantment.getMaxLevel()))
+        ironsword.addEnchantment(ironswordEnchantment)
+
+        val diamondAxe: Item = Item.get(Item.DIAMOND_AXE)
+        val diamondAxeEnchantment: Enchantment =
+            Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
+        diamondAxeEnchantment.setLevel(1 + random.nextInt(diamondAxeEnchantment.getMaxLevel()))
+        diamondAxe.addEnchantment(diamondAxeEnchantment)
+
+        val diamondsword: Item = Item.get(Item.DIAMOND_SWORD)
+        val diamondswordEnchantment: Enchantment =
+            Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
+        diamondswordEnchantment.setLevel(1 + random.nextInt(diamondswordEnchantment.getMaxLevel()))
+        diamondsword.addEnchantment(diamondswordEnchantment)
+
+        recipes.add(
+            TradeRecipeBuildUtils.of(Item.get(Item.COAL, 0, 15), Item.get(Item.EMERALD))
+                .setMaxUses(16)
+                .setRewardExp(1.toByte())
+                .setTier(1)
+                .setTraderExp(2)
+                .setPriceMultiplierA(0.05f)
+                .build()
+        )
+            .add(
+                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 3), Item.get(Item.IRON_AXE))
+                    .setMaxUses(12)
+                    .setRewardExp(1.toByte())
+                    .setTier(1)
+                    .setTraderExp(1)
+                    .setPriceMultiplierA(0.2f)
+                    .build()
+            )
+            .add(
+                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 7 + random.nextInt(22 - 7)), ironsword)
+                    .setMaxUses(3)
+                    .setRewardExp(1.toByte())
+                    .setTier(1)
+                    .setTraderExp(1)
+                    .setPriceMultiplierA(0.05f)
+                    .build()
+            )
+            .add(
+                TradeRecipeBuildUtils.of(Item.get(Item.IRON_INGOT, 0, 4), Item.get(Item.EMERALD))
+                    .setMaxUses(12)
+                    .setRewardExp(1.toByte())
+                    .setTier(2)
+                    .setTraderExp(10)
+                    .setPriceMultiplierA(0.05f)
+                    .build()
+            )
+            .add(
+                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 36), Item.get(BlockID.BELL))
+                    .setMaxUses(12)
+                    .setRewardExp(1.toByte())
+                    .setTier(2)
+                    .setTraderExp(5)
+                    .setPriceMultiplierA(0.2f)
+                    .build()
+            )
+            .add(
+                TradeRecipeBuildUtils.of(Item.get(Item.FLINT, 0, 24), Item.get(Item.EMERALD))
+                    .setMaxUses(12)
+                    .setRewardExp(1.toByte())
+                    .setTier(3)
+                    .setTraderExp(20)
+                    .setPriceMultiplierA(0.05f)
+                    .build()
+            )
+            .add(
+                TradeRecipeBuildUtils.of(Item.get(Item.DIAMOND, 0, 1), Item.get(Item.EMERALD))
+                    .setMaxUses(12)
+                    .setRewardExp(1.toByte())
+                    .setTier(4)
+                    .setTraderExp(30)
+                    .setPriceMultiplierA(0.05f)
+                    .build()
+            )
+            .add(
+                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 17 + random.nextInt(32 - 17)), diamondAxe)
+                    .setMaxUses(3)
+                    .setRewardExp(1.toByte())
+                    .setTier(4)
+                    .setTraderExp(15)
+                    .setPriceMultiplierA(0.2f)
+                    .build()
+            )
+            .add(
+                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 13 + random.nextInt(27 - 13)), diamondsword)
+                    .setMaxUses(3)
+                    .setRewardExp(1.toByte())
+                    .setTier(5)
+                    .setTraderExp(30)
+                    .setPriceMultiplierA(0.2f)
+                    .build()
+            )
+        return recipes
+    }
+}

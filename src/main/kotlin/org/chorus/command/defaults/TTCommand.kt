@@ -1,0 +1,49 @@
+package org.chorus.command.defaults
+
+import cn.nukkit.command.CommandSender
+import cn.nukkit.command.data.CommandParamType
+import cn.nukkit.command.data.CommandParameter
+import cn.nukkit.command.tree.ParamList
+import cn.nukkit.command.tree.node.PlayersNode
+import cn.nukkit.command.utils.CommandLogger
+import cn.nukkit.inventory.fake.FakeStructBlock
+import kotlin.collections.Map
+import kotlin.collections.set
+
+class TTCommand(name: String) : TestCommand(name, "tt") {
+    var fakeStructBlock: FakeStructBlock? = null
+
+    init {
+        commandParameters.clear()
+        commandParameters["default"] = arrayOf<CommandParameter?>(
+            CommandParameter.Companion.newEnum("sub", arrayOf<String?>("get", "set")),
+            CommandParameter.Companion.newType("name", false, CommandParamType.TARGET, PlayersNode()),
+        )
+        this.enableParamTree()
+    }
+
+    override fun execute(
+        sender: CommandSender,
+        commandLabel: String?,
+        result: Map.Entry<String, ParamList?>,
+        log: CommandLogger
+    ): Int {
+        val value = result.value
+        val s = value!!.getResult<String>(0)
+
+        if (sender.isOp) {
+            val p = sender.asPlayer()
+            when (s) {
+                "get" -> {
+                    val itemInHand = p!!.inventory.itemInHand
+                    itemInHand.damage = 0
+                    p.inventory.setItemInHand(itemInHand)
+                }
+
+                "set" -> {
+                }
+            }
+            return 1
+        } else return 0
+    }
+}

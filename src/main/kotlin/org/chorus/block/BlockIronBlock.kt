@@ -1,0 +1,30 @@
+package org.chorus.block
+
+import cn.nukkit.item.ItemTool
+
+class BlockIronBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Iron Block"
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val hardness: Double
+        get() = 5.0
+
+    override val resistance: Double
+        get() = 10.0
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_STONE
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.Companion.IRON_BLOCK)
+            get() = Companion.field
+    }
+}

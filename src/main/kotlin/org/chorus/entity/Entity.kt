@@ -1,0 +1,3402 @@
+package org.chorus.entity
+
+import cn.nukkit.Player
+import cn.nukkit.Server
+import cn.nukkit.block.*
+import cn.nukkit.blockentity.BlockEntityPistonArm
+import cn.nukkit.entity.custom.CustomEntity
+import cn.nukkit.entity.data.*
+import cn.nukkit.entity.data.property.EntityProperty
+import cn.nukkit.entity.data.property.EnumEntityProperty
+import cn.nukkit.entity.effect.*
+import cn.nukkit.entity.item.EntityItem
+import cn.nukkit.entity.mob.EntityArmorStand
+import cn.nukkit.entity.mob.monster.EntityBoss
+import cn.nukkit.entity.mob.monster.EntityEnderDragon
+import cn.nukkit.entity.projectile.EntityProjectile
+import cn.nukkit.event.Event
+import cn.nukkit.event.block.FarmLandDecayEvent
+import cn.nukkit.event.entity.*
+import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
+import cn.nukkit.event.entity.EntityDamageEvent.DamageModifier
+import cn.nukkit.event.entity.EntityPortalEnterEvent.PortalType
+import cn.nukkit.event.player.PlayerInteractEvent
+import cn.nukkit.event.player.PlayerTeleportEvent.TeleportCause
+import cn.nukkit.item.*
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.*
+import cn.nukkit.level.format.IChunk
+import cn.nukkit.level.particle.ExplodeParticle
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.*
+import cn.nukkit.metadata.MetadataValue
+import cn.nukkit.metadata.Metadatable
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.FloatTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.nbt.tag.StringTag
+import cn.nukkit.network.protocol.*
+import cn.nukkit.network.protocol.AnimateEntityPacket.Animation
+import cn.nukkit.network.protocol.types.EntityLink
+import cn.nukkit.network.protocol.types.PropertySyncData
+import cn.nukkit.plugin.Plugin
+import cn.nukkit.registry.Registries
+import cn.nukkit.scheduler.Task
+import cn.nukkit.tags.ItemTags
+import cn.nukkit.utils.*
+import com.google.common.collect.Iterables
+import java.awt.Color
+import java.util.*
+import java.util.concurrent.*
+import java.util.concurrent.atomic.AtomicLong
+import java.util.function.Consumer
+import kotlin.concurrent.Volatile
+import kotlin.math.*
+
+/**
+ * @author MagicDroidX
+ */
+abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID, EntityDataTypes, IVector3 {
+    var chested: Boolean = false
+    var color: Byte = 0
+    var color2: Byte = 0
+    var customName: String? = null
+    var customNameVisible: Boolean? = null
+    var definitions: ListTag<StringTag>? = null
+    var fallDistance: Float = 0.0f
+    var fire: Short = 0
+    var identifier: String = ""
+    var internalComponents: CompoundTag = CompoundTag()
+    @JvmField
+    var invulnerable: Boolean = false
+    var isAngry: Boolean = false
+    var isAutonomous: Boolean = false
+    var isBaby: Boolean = false
+    var isEating: Boolean = false
+    var isGliding: Boolean = false
+    var isGlobal: Boolean = false
+    var isIllagerCaptain: Boolean = false
+    var isOrphaned: Boolean = false
+    var isOutOfControl: Boolean = false
+    var isRoaring: Boolean = false
+    var isScared: Boolean = false
+    var isStunned: Boolean = false
+    var isSwimming: Boolean = false
+    var isTamed: Boolean = false
+    var isTrusting: Boolean = false
+    var lastDimensionId: Int? = null
+    var linksTag: CompoundTag? = null
+    var lootDropped: Boolean = true
+    var markVariant: Int = 0
+
+    @JvmField
+    var onGround: Boolean = true
+    var ownerNew: Long = -1L
+    var persistent: Boolean = false
+    var portalCooldown: Int = 0
+    var saddled: Boolean = false
+    var sheared: Boolean = false
+    var showBottom: Boolean = false
+    var sitting: Boolean = false
+    var skinId: Int = 0
+    var strength: Int = 0
+    var strengthMax: Int = 0
+    var tags: ListTag<StringTag>? = null
+    var uniqueId: Long = 0L
+    var variant: Int = 0
+
+    @JvmField
+    var level: Level? = null
+
+    @JvmField
+    var position: Vector3 = Vector3()
+    @JvmField
+    var rotation: Rotator2 = Rotator2()
+    @JvmField
+    var motion: Vector3 = Vector3()
+
+    @JvmField
+    var prevPosition: Vector3 = position.clone()
+    @JvmField
+    var prevRotation: Rotator2 = rotation.clone()
+    var prevMotion: Vector3 = motion.clone()
+
+    @JvmField
+    protected val entityDataMap: EntityDataMap = EntityDataMap()
+    val passengers: MutableList<Entity?> = ArrayList()
+    val offsetBoundingBox: AxisAlignedBB = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    @JvmField
+    protected val hasSpawned: MutableMap<Int, Player> = ConcurrentHashMap()
+    protected val effects: MutableMap<EffectType?, Effect> = ConcurrentHashMap()
+
+    /**
+     * 这个实体骑在谁身上
+     *
+     *
+     * Who is this entity riding on
+     */
+    @JvmField
+    var riding: Entity? = null
+    @JvmField
+    var chunk: IChunk? = null
+    @JvmField
+    var blocksAround: MutableList<Block>? = ArrayList()
+    @JvmField
+    var collisionBlocks: MutableList<Block>? = ArrayList()
+
+    @JvmField
+    var firstMove: Boolean = true
+    var deadTicks: Int = 0
+
+    var entityCollisionReduction: Double = 0.0 // Higher than 0.9 will result a fast collisions
+    @JvmField
+    var boundingBox: AxisAlignedBB? = null
+    @JvmField
+    var positionChanged: Boolean = false
+    @JvmField
+    var motionChanged: Boolean = false
+    @JvmField
+    var ticksLived: Int = 0
+    @JvmField
+    var lastUpdate: Int = 0
+    @JvmField
+    var fireTicks: Int = 0
+    @JvmField
+    var inPortalTicks: Int = 0
+    var freezingTicks: Int = 0 //0 - 140
+    var scale: Float = 1f
+    @JvmField
+    var namedTag: CompoundTag? = null
+    @JvmField
+    var isCollided: Boolean = false
+    var isCollidedHorizontally: Boolean = false
+    var isCollidedVertically: Boolean = false
+    @JvmField
+    var noDamageTicks: Int = 0
+    @JvmField
+    var justCreated: Boolean = false
+    var fireProof: Boolean = false
+    @JvmField
+    var highestPosition: Double = 0.0
+    @JvmField
+    var closed: Boolean = false
+    var noClip: Boolean = false
+
+    /**
+     * spawned by server
+     *
+     *
+     * player's UUID is sent by client,so this value cannot be used in Player
+     */
+    protected var entityUniqueId: UUID? = null
+
+    /**
+     * runtime id (changed after you restart the server)
+     */
+    @Volatile
+    protected var id: Long = 0
+    protected var lastDamageCause: EntityDamageEvent? = null
+    @JvmField
+    protected var age: Int = 0
+    @JvmField
+    protected var health: Float = 20f
+    @JvmField
+    protected var absorption: Float = 0f
+
+    /**
+     * Player do not use
+     */
+    protected var ySize: Float = 0f
+    @JvmField
+    protected var inEndPortal: Boolean = false
+    @JvmField
+    protected var server: Server? = null
+    protected var isPlayer: Boolean = this is Player
+    private var maxHealth: Int = 20
+    protected var name: String? = null
+
+    @Volatile
+    private var initialized: Boolean = false
+
+    @Volatile
+    protected var saveWithChunk: Boolean = true
+    private val intProperties: MutableMap<String?, Int> = LinkedHashMap()
+    private val floatProperties: MutableMap<String?, Float> = LinkedHashMap()
+    @JvmField
+    protected val attributes: Map<Int, Attribute> = HashMap()
+
+    private fun idConvertToName(): String {
+        val path: String = getIdentifier().split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
+        val result: StringBuilder = StringBuilder()
+        val parts: Array<String> = path.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        for (part: String in parts) {
+            if (!part.isEmpty()) {
+                result.append(part.get(0).uppercaseChar()).append(part.substring(1)).append(" ")
+            }
+        }
+        this.name = result.toString().trim { it <= ' ' }.intern()
+        return name!!
+    }
+
+    init {
+        initEntityProperties(this.getIdentifier())
+
+        if (chunk != null) {
+            this.level = chunk.provider.level
+        }
+
+        if (this !is Player) {
+            this.init(chunk!!, nbt)
+        }
+    }
+
+    /**
+     * 获取该实体的标识符
+     *
+     *
+     * Get the identifier of the entity
+     *
+     * @return the identifier
+     */
+    abstract fun getIdentifier(): String
+
+    /**
+     * 实体高度
+     *
+     *
+     * entity Height
+     *
+     * @return the height
+     */
+    open fun getHeight(): Float {
+        return 0f
+    }
+
+
+    fun getCurrentHeight(): Float {
+        if (isSwimming()) {
+            return getSwimmingHeight()
+        } else {
+            return getHeight()
+        }
+    }
+
+    open fun getEyeHeight(): Float {
+        return getCurrentHeight() / 2 + 0.1f
+    }
+
+    open fun getWidth(): Float {
+        return 0f
+    }
+
+    open fun getLength(): Float {
+        return 0f
+    }
+
+    protected open fun getStepHeight(): Double {
+        return 0.0
+    }
+
+    open fun canCollide(): Boolean {
+        return true
+    }
+
+    open fun getGravity(): Float {
+        return 0f
+    }
+
+    protected open fun getDrag(): Float {
+        return 0f
+    }
+
+    protected open fun getBaseOffset(): Float {
+        return 0f
+    }
+
+    open fun getFrostbiteInjury(): Int {
+        return 1
+    }
+
+    /**
+     * 实体初始化顺序，先初始化Entity类字段->Entity构造函数->进入init方法->调用initEntity方法->子类字段初始化->子类构造函数
+     *
+     *
+     * 用于初始化实体的NBT和实体字段的方法
+     *
+     *
+     * Entity initialization order, first initialize the Entity class field->Entity constructor->Enter the init method->Call the init Entity method-> subclass field initialization-> subclass constructor
+     *
+     *
+     * The method used to initialize the NBT and entity fields of the entity
+     */
+    protected open fun initEntity() {
+        if (this !is Player) {
+            if (namedTag!!.contains(TAG_UNIQUE_ID)) {
+                val uid: Long = namedTag!!.getLong(TAG_UNIQUE_ID)
+                this.entityUniqueId = UUID(0L, uid)
+            } else {
+                val full_uuid: UUID = UUID.randomUUID()
+                this.entityUniqueId = UUID(0L, full_uuid.getLeastSignificantBits())
+            }
+        }
+
+        if (namedTag!!.contains(TAG_CUSTOM_NAME)) {
+            this.setNameTag(namedTag!!.getString(TAG_CUSTOM_NAME))
+        }
+        if (namedTag!!.contains(TAG_CUSTOM_NAME_VISIBLE)) {
+            this.setNameTagAlwaysVisible(namedTag!!.getBoolean(TAG_CUSTOM_NAME_VISIBLE))
+        }
+
+        entityDataMap.getOrCreateFlags()
+        entityDataMap.put(EntityDataTypes.Companion.AIR_SUPPLY, namedTag!!.getShort("Air"))
+        entityDataMap.put(EntityDataTypes.Companion.AIR_SUPPLY_MAX, 400)
+        entityDataMap.put(EntityDataTypes.Companion.NAME, "")
+        entityDataMap.put(EntityDataTypes.Companion.LEASH_HOLDER, -1)
+        entityDataMap.put(EntityDataTypes.Companion.SCALE, 1f)
+        entityDataMap.put(EntityDataTypes.Companion.HEIGHT, this.getHeight())
+        entityDataMap.put(EntityDataTypes.Companion.WIDTH, this.getWidth())
+        entityDataMap.put(EntityDataTypes.Companion.STRUCTURAL_INTEGRITY, getHealth().toInt())
+        entityDataMap.put(EntityDataTypes.Companion.VARIANT, this.variant)
+        this.sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+        this.setDataFlags(
+            EnumSet.of(
+                EntityFlag.CAN_CLIMB,
+                EntityFlag.BREATHING,
+                EntityFlag.HAS_COLLISION,
+                EntityFlag.HAS_GRAVITY
+            )
+        )
+    }
+
+    protected fun init(chunk: IChunk, nbt: CompoundTag?) {
+        if ((chunk == null || chunk.provider == null)) {
+            throw ChunkException("Invalid garbage Chunk given to Entity")
+        }
+        this.id = entityCount.getAndIncrement()
+        this.isPlayer = this is Player
+        this.justCreated = true
+        this.namedTag = nbt
+        this.chunk = chunk
+        this.level = (chunk.provider.level)
+        this.server = chunk.provider.level.server
+        this.boundingBox = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+        this.chested = namedTag!!.getBoolean(TAG_CHESTED)
+        this.color = namedTag!!.getByte(TAG_COLOR)
+        this.color2 = namedTag!!.getByte(TAG_COLOR2)
+        this.customName = if (namedTag!!.contains(TAG_CUSTOM_NAME)) namedTag!!.getString(TAG_CUSTOM_NAME) else null
+        this.customNameVisible = namedTag!!.getBoolean(TAG_CUSTOM_NAME_VISIBLE)
+
+
+        val posList: ListTag<FloatTag> = namedTag!!.getList(
+            TAG_POS,
+            FloatTag::class.java
+        )
+        val rotationList: ListTag<FloatTag> = namedTag!!.getList(
+            TAG_ROTATION,
+            FloatTag::class.java
+        )
+
+        this.setPositionAndRotation(
+            Vector3(
+                posList.get(0).data.toDouble(),
+                posList.get(1).data.toDouble(),
+                posList.get(2).data.toDouble()
+            ),
+            rotationList.get(0).data.toDouble(),
+            rotationList.get(1).data.toDouble()
+        )
+
+        if (namedTag!!.contains(TAG_MOTION)) {
+            val motionList: ListTag<FloatTag> = namedTag!!.getList(
+                TAG_MOTION,
+                FloatTag::class.java
+            )
+
+            this.setMotion(
+                Vector3(
+                    motionList.get(0).data.toDouble(),
+                    motionList.get(1).data.toDouble(),
+                    motionList.get(2).data.toDouble()
+                )
+            )
+        }
+
+        if (!namedTag!!.contains(TAG_FALL_DISTANCE)) {
+            namedTag!!.putFloat(TAG_FALL_DISTANCE, 0f)
+        }
+        this.fallDistance = namedTag!!.getFloat(TAG_FALL_DISTANCE)
+        this.highestPosition = position.y + namedTag!!.getFloat(TAG_FALL_DISTANCE)
+
+        if (!namedTag!!.contains(TAG_FIRE)) {
+            namedTag!!.putShort(TAG_FIRE, 0)
+        }
+        this.fireTicks =
+            namedTag!!.getShort(TAG_FIRE).toInt()
+
+        if (!namedTag!!.contains(TAG_ON_GROUND)) {
+            namedTag!!.putBoolean(TAG_ON_GROUND, false)
+        }
+        this.onGround = namedTag!!.getBoolean(TAG_ON_GROUND)
+
+        if (!namedTag!!.contains(TAG_INVULNERABLE)) {
+            namedTag!!.putBoolean(TAG_INVULNERABLE, false)
+        }
+        this.invulnerable = namedTag!!.getBoolean(TAG_INVULNERABLE)
+
+        this.variant = namedTag!!.getInt(TAG_VARIANT)
+
+        try {
+            this.initEntity()
+            if (this.initialized) return
+
+            this.initialized = true
+
+            this.chunk!!.addEntity(this)
+            level.addEntity(this)
+
+            val event: EntitySpawnEvent = EntitySpawnEvent(this)
+            server.pluginManager.callEvent(event)
+            if (event.isCancelled) {
+                this.close(false)
+            } else {
+                this.scheduleUpdate()
+                this.lastUpdate = level.getTick()
+            }
+        } catch (e: Exception) {
+            this.close(false)
+            throw e
+        }
+    }
+
+    fun hasCustomName(): Boolean {
+        return !getNameTag().isEmpty()
+    }
+
+    fun getNameTag(): String {
+        return this.getDataProperty<String>(EntityDataTypes.Companion.NAME, "")
+    }
+
+    fun setNameTag(name: String) {
+        this.setDataProperty(EntityDataTypes.Companion.NAME, name)
+    }
+
+    fun isNameTagVisible(): Boolean {
+        return this.getDataFlag(EntityFlag.CAN_SHOW_NAME)
+    }
+
+    fun setNameTagVisible(value: Boolean) {
+        this.setDataFlag(EntityFlag.CAN_SHOW_NAME, value)
+    }
+
+    fun isNameTagAlwaysVisible(): Boolean {
+        return getDataProperty<Byte>(EntityDataTypes.Companion.NAMETAG_ALWAYS_SHOW, 0.toByte()).toInt() == 1
+    }
+
+    fun setNameTagAlwaysVisible(value: Boolean) {
+        this.setDataProperty(EntityDataTypes.Companion.NAMETAG_ALWAYS_SHOW, if (value) 1 else 0)
+    }
+
+    fun getScoreTag(): String {
+        return this.getDataProperty<String>(EntityDataTypes.Companion.SCORE, "")
+    }
+
+    fun setScoreTag(score: String) {
+        this.setDataProperty(EntityDataTypes.Companion.SCORE, score)
+    }
+
+    fun isSneaking(): Boolean {
+        return this.getDataFlag(EntityFlag.SNEAKING)
+    }
+
+    fun setSneaking(value: Boolean) {
+        this.setDataFlag(EntityFlag.SNEAKING, value)
+    }
+
+    fun isSwimming(): Boolean {
+        return this.getDataFlag(EntityFlag.SWIMMING)
+    }
+
+    open fun setSwimming(value: Boolean) {
+        if (isSwimming() == value) {
+            return
+        }
+        this.setDataFlag(EntityFlag.SWIMMING, value)
+        if (java.lang.Float.compare(getSwimmingHeight(), getHeight()) != 0) {
+            recalculateBoundingBox(true)
+        }
+    }
+
+    fun isSprinting(): Boolean {
+        return this.getDataFlag(EntityFlag.SPRINTING)
+    }
+
+    open fun setSprinting(value: Boolean) {
+        this.setDataFlag(EntityFlag.SPRINTING, value)
+    }
+
+    fun isGliding(): Boolean {
+        return this.getDataFlag(EntityFlag.GLIDING)
+    }
+
+    fun setGliding(value: Boolean) {
+        this.setDataFlag(EntityFlag.GLIDING, value)
+    }
+
+    fun isImmobile(): Boolean {
+        return this.getDataFlag(EntityFlag.NO_AI)
+    }
+
+    fun setImmobile(value: Boolean) {
+        this.setDataFlag(EntityFlag.NO_AI, value)
+    }
+
+    fun canClimb(): Boolean {
+        return this.getDataFlag(EntityFlag.CAN_CLIMB)
+    }
+
+    fun setCanClimb(value: Boolean) {
+        this.setDataFlag(EntityFlag.CAN_CLIMB, value)
+    }
+
+    fun canClimbWalls(): Boolean {
+        return this.getDataFlag(EntityFlag.WALL_CLIMBING)
+    }
+
+    fun setCanClimbWalls(value: Boolean) {
+        this.setDataFlag(EntityFlag.WALL_CLIMBING, value)
+    }
+
+    fun getScale(): Float {
+        return this.scale
+    }
+
+    fun setScale(scale: Float) {
+        this.scale = scale
+        this.setDataProperty(EntityDataTypes.Companion.SCALE, this.scale)
+        this.recalculateBoundingBox()
+    }
+
+    open fun getSwimmingHeight(): Float {
+        return getHeight()
+    }
+
+    fun getPassengers(): List<Entity?> {
+        return passengers
+    }
+
+    fun getPassenger(): Entity? {
+        return Iterables.getFirst(this.passengers, null)
+    }
+
+    fun isPassenger(entity: Entity?): Boolean {
+        return passengers.contains(entity)
+    }
+
+    open fun isControlling(entity: Entity?): Boolean {
+        return passengers.indexOf(entity) == 0
+    }
+
+    fun hasControllingPassenger(): Boolean {
+        return !passengers.isEmpty() && isControlling(passengers.getFirst())
+    }
+
+    fun getRiding(): Entity? {
+        return riding
+    }
+
+    fun getEffects(): Map<EffectType?, Effect> {
+        return effects
+    }
+
+    fun removeAllEffects() {
+        for (effect: Effect in effects.values) {
+            this.removeEffect(effect.getType())
+        }
+    }
+
+    fun removeEffect(type: EffectType?) {
+        if (effects.containsKey(type)) {
+            val effect: Effect? = effects.get(type)
+
+            val event: EntityEffectRemoveEvent = EntityEffectRemoveEvent(this, effect)
+            Server.getInstance().pluginManager.callEvent(event)
+
+            if (event.isCancelled) {
+                return
+            }
+
+            if (this is Player && effect!!.getId() != null) {
+                val packet: MobEffectPacket = MobEffectPacket()
+                packet.eid = player.getId()
+                packet.effectId = effect.getId()!!
+                packet.eventId = MobEffectPacket.EVENT_REMOVE.toInt()
+                player.dataPacket(packet)
+            }
+
+            effect!!.remove(this)
+            effects.remove(type)
+
+            this.recalculateEffectColor()
+        }
+    }
+
+    fun getEffect(type: EffectType?): Effect {
+        return effects.getOrDefault(type, null)!!
+    }
+
+    fun hasEffect(type: EffectType?): Boolean {
+        return effects.containsKey(type)
+    }
+
+    fun addEffect(effect: Effect?) {
+        if (effect == null) {
+            return
+        }
+
+        val oldEffect: Effect? = this.getEffect(effect.getType())
+
+        val event: EntityEffectUpdateEvent = EntityEffectUpdateEvent(this, oldEffect, effect)
+        Server.getInstance().pluginManager.callEvent(event)
+
+        if (event.isCancelled) {
+            return
+        }
+
+        if (oldEffect != null && (abs(effect.getAmplifier().toDouble()) < abs(oldEffect.getAmplifier().toDouble()) ||
+                    (abs(effect.getAmplifier().toDouble()) == abs(oldEffect.getAmplifier().toDouble()) &&
+                            effect.getDuration() < oldEffect.getDuration())
+                    )
+        ) {
+            return
+        }
+
+        if (this is Player && effect.getId() != null) {
+            val packet: MobEffectPacket = MobEffectPacket()
+            packet.eid = player.getId()
+            packet.effectId = effect.getId()!!
+            packet.amplifier = effect.getAmplifier()
+            packet.particles = effect.isVisible()
+            packet.duration = effect.getDuration()
+            if (oldEffect != null) {
+                packet.eventId = MobEffectPacket.EVENT_MODIFY.toInt()
+            } else {
+                packet.eventId = MobEffectPacket.EVENT_ADD.toInt()
+            }
+
+            player.dataPacket(packet)
+        }
+
+        effect.add(this)
+        effects.put(effect.getType(), effect)
+
+        this.recalculateEffectColor()
+    }
+
+    @JvmOverloads
+    fun recalculateBoundingBox(send: Boolean = true) {
+        val entityHeight: Float = getCurrentHeight()
+        val height: Float = entityHeight * this.scale
+        val radius: Double = (this.getWidth() * this.scale) / 2.0
+        boundingBox!!.setBounds(
+            position.x - radius,
+            position.y,
+            position.z - radius,
+
+            position.x + radius,
+            position.y + height,
+            position.z + radius
+        )
+
+        var change: Boolean = false
+        if (getEntityDataMap().get<Float?>(EntityDataTypes.Companion.HEIGHT) != entityHeight) {
+            change = true
+            getEntityDataMap().put(EntityDataTypes.Companion.HEIGHT, entityHeight)
+        }
+        if (getEntityDataMap().get<Float?>(EntityDataTypes.Companion.WIDTH) != this.getWidth()) {
+            change = true
+            getEntityDataMap().put(EntityDataTypes.Companion.WIDTH, this.getWidth())
+        }
+        if (send && change) {
+            sendData(
+                hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY),
+                entityDataMap.copy(EntityDataTypes.Companion.WIDTH, EntityDataTypes.Companion.HEIGHT)
+            )
+        }
+    }
+
+    protected fun recalculateEffectColor() {
+        val color: IntArray = IntArray(3)
+        var count: Int = 0
+        var ambient: Boolean = true
+        for (effect: Effect in effects.values) {
+            if (effect.isVisible()) {
+                val effectColor: Color? = effect.getColor()
+                color.get(0) += effectColor!!.getRed() * effect.getLevel()
+                color.get(1) += effectColor.getGreen() * effect.getLevel()
+                color.get(2) += effectColor.getBlue() * effect.getLevel()
+                count += effect.getLevel()
+                if (!effect.isAmbient()) {
+                    ambient = false
+                }
+            }
+        }
+
+        if (count > 0) {
+            val r: Int = (color.get(0) / count) and 0xff
+            val g: Int = (color.get(1) / count) and 0xff
+            val b: Int = (color.get(2) / count) and 0xff
+            setDataProperties(
+                java.util.Map.of<EntityDataType<*>, Any>(
+                    EntityDataTypes.Companion.EFFECT_COLOR, (r shl 16) + (g shl 8) + b,
+                    EntityDataTypes.Companion.EFFECT_AMBIENCE, if (ambient) 1 else 0
+                )
+            )
+        } else {
+            setDataProperties(
+                java.util.Map.of<EntityDataType<*>, Any>(
+                    EntityDataTypes.Companion.EFFECT_COLOR, 0,
+                    EntityDataTypes.Companion.EFFECT_AMBIENCE, 0
+                )
+            )
+        }
+    }
+
+    open fun saveNBT() {
+        if (this !is Player) {
+            namedTag!!.putString(TAG_IDENTIFIER, this.getIdentifier())
+            if (!getNameTag().isEmpty()) {
+                namedTag!!.putString(TAG_CUSTOM_NAME, this.getNameTag())
+                namedTag!!.putBoolean(TAG_CUSTOM_NAME_VISIBLE, this.isNameTagAlwaysVisible())
+            } else {
+                namedTag!!.remove(TAG_CUSTOM_NAME)
+                namedTag!!.remove(TAG_CUSTOM_NAME_VISIBLE)
+            }
+            if (this.entityUniqueId == null) {
+                val full_uuid: UUID = UUID.randomUUID()
+                this.entityUniqueId = UUID(0L, full_uuid.getLeastSignificantBits())
+            }
+            namedTag!!.putLong(
+                TAG_UNIQUE_ID,
+                entityUniqueId!!.getLeastSignificantBits()
+            )
+        }
+
+        namedTag!!.putList(
+            TAG_POS, ListTag<FloatTag>()
+                .add(FloatTag(position.x.toFloat()))
+                .add(FloatTag(position.y.toFloat()))
+                .add(FloatTag(position.z.toFloat()))
+        )
+
+        namedTag!!.putList(
+            TAG_MOTION, ListTag<FloatTag>()
+                .add(FloatTag(motion.x.toFloat()))
+                .add(FloatTag(motion.y.toFloat()))
+                .add(FloatTag(motion.z.toFloat()))
+        )
+
+        namedTag!!.putList(
+            TAG_ROTATION, ListTag<FloatTag>()
+                .add(FloatTag(rotation.yaw.toFloat()))
+                .add(FloatTag(rotation.pitch.toFloat()))
+        )
+
+        namedTag!!.putFloat(TAG_FALL_DISTANCE, this.fallDistance)
+        namedTag!!.putShort(TAG_FIRE, this.fireTicks)
+        namedTag!!.putBoolean(TAG_ON_GROUND, this.onGround)
+        namedTag!!.putBoolean(TAG_INVULNERABLE, this.invulnerable)
+    }
+
+    /**
+     * The name that English name of the type of this entity.
+     */
+    open fun getOriginalName(): String {
+        return if (name == null) idConvertToName() else name!!
+    }
+
+    /**
+     * Similar to [.getName], but if the name is blank or empty it returns the static name instead.
+     */
+    fun getVisibleName(): String {
+        val name: String = getName()
+        if (!TextFormat.clean(name).trim { it <= ' ' }.isEmpty()) {
+            return name
+        } else {
+            return getOriginalName()
+        }
+    }
+
+    /**
+     * The current name used by this entity in the name tag, or the static name if the entity don't have nametag.
+     */
+    open fun getName(): String {
+        if (this.hasCustomName()) {
+            return this.getNameTag()
+        } else {
+            return this.getOriginalName()
+        }
+    }
+
+    /**
+     * 将这个实体在客户端生成，让该玩家可以看到它
+     *
+     *
+     * Spawn this entity on the client side so that the player can see it
+     *
+     * @param player the player
+     */
+    open fun spawnTo(player: Player) {
+        if (!hasSpawned.containsKey(player.getLoaderId()) && this.chunk != null && player.getUsedChunks().contains(
+                Level.chunkHash(
+                    chunk!!.x, chunk!!.z
+                )
+            )
+        ) {
+            hasSpawned.put(player.getLoaderId(), player)
+            player.dataPacket(createAddEntityPacket())
+        }
+
+        if (this.riding != null) {
+            riding!!.spawnTo(player)
+
+            val pkk: SetEntityLinkPacket = SetEntityLinkPacket()
+            pkk.vehicleUniqueId = riding!!.getId()
+            pkk.riderUniqueId = this.getId()
+            pkk.type = EntityLink.Type.RIDER
+            pkk.immediate = 1
+
+            player.dataPacket(pkk)
+        }
+    }
+
+    protected open fun createAddEntityPacket(): DataPacket {
+        val addEntity: AddEntityPacket = AddEntityPacket()
+        addEntity.type = this.getNetworkId()
+        addEntity.entityUniqueId = this.getId()
+        if (this is CustomEntity) {
+            addEntity.id = this.getIdentifier()
+        }
+        addEntity.entityRuntimeId = this.getId()
+        addEntity.yaw = rotation.yaw.toFloat()
+        addEntity.headYaw = rotation.yaw.toFloat()
+        addEntity.pitch = rotation.pitch.toFloat()
+        addEntity.x = position.x.toFloat()
+        addEntity.y = position.y.toFloat() + this.getBaseOffset()
+        addEntity.z = position.z.toFloat()
+        addEntity.speedX = motion.x.toFloat()
+        addEntity.speedY = motion.y.toFloat()
+        addEntity.speedZ = motion.z.toFloat()
+        addEntity.entityData = this.entityDataMap
+
+        addEntity.links = arrayOfNulls(passengers.size)
+        for (i in addEntity.links.indices) {
+            addEntity.links.get(i) = EntityLink(
+                this.getId(),
+                passengers.get(i)!!.getId(),
+                if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                false,
+                false
+            )
+        }
+
+        return addEntity
+    }
+
+    fun getViewers(): Map<Int, Player> {
+        return hasSpawned
+    }
+
+    fun sendPotionEffects(player: Player) {
+        for (effect: Effect in effects.values) {
+            if (effect.getId() != null) {
+                val packet: MobEffectPacket = MobEffectPacket()
+                packet.eid = this.getId()
+                packet.effectId = effect.getId()!!
+                packet.amplifier = effect.getAmplifier()
+                packet.particles = effect.isVisible()
+                packet.duration = effect.getDuration()
+                packet.eventId = MobEffectPacket.EVENT_ADD.toInt()
+                player.dataPacket(packet)
+            }
+        }
+    }
+
+    @JvmOverloads
+    fun sendData(player: Player, data: EntityDataMap? = null) {
+        val pk: SetEntityDataPacket = SetEntityDataPacket()
+        pk.eid = this.getId()
+        pk.entityData = if (data == null) this.entityDataMap else data
+        pk.syncedProperties = this.propertySyncData()
+
+        player.dataPacket(pk)
+    }
+
+    @JvmOverloads
+    fun sendData(players: Array<Player>, data: EntityDataMap? = null) {
+        val pk: SetEntityDataPacket = SetEntityDataPacket()
+        pk.eid = this.getId()
+        pk.entityData = if (data == null) this.entityDataMap else data
+        pk.syncedProperties = this.propertySyncData()
+
+        for (player: Player in players) {
+            if (player === this) {
+                continue
+            }
+            player.dataPacket(pk)
+        }
+        if (this is Player) {
+            player.dataPacket(pk)
+        }
+    }
+
+    open fun despawnFrom(player: Player) {
+        if (hasSpawned.containsKey(player.getLoaderId())) {
+            val pk: RemoveEntityPacket = RemoveEntityPacket()
+            pk.eid = this.getId()
+            player.dataPacket(pk)
+            hasSpawned.remove(player.getLoaderId())
+        }
+    }
+
+    /**
+     * 当一个实体被攻击时(即接受一个实体伤害事件 这个事件可以是由其他实体攻击导致，也可能是自然伤害)调用.
+     *
+     *
+     * Called when an entity is attacked (i.e. receives an entity damage event. This event can be caused by an attack by another entity, or it can be a natural damage).
+     *
+     * @param source 记录伤害源的事件<br></br>Record the event of the source of the attack
+     * @return 是否攻击成功<br></br>Whether the attack was successful
+     */
+    open fun attack(source: EntityDamageEvent): Boolean {
+        //火焰保护附魔实现
+        if (hasEffect(EffectType.Companion.FIRE_RESISTANCE)
+            && (source.cause == DamageCause.FIRE || source.cause == DamageCause.FIRE_TICK || source.cause == DamageCause.LAVA)
+        ) {
+            return false
+        }
+
+        //水生生物免疫溺水
+        if (this is EntitySwimmable && !swimmable.canDrown() && source.cause == DamageCause.DROWNING) return false
+
+        //飞行生物免疫摔伤
+        if (this is EntityFlyable && !flyable.hasFallingDamage() && source.cause == DamageCause.FALL) return false
+
+        //事件回调函数
+        getServer()!!.pluginManager.callEvent(source)
+        if (source.isCancelled) {
+            return false
+        }
+
+        // Make fire aspect to set the target in fire before dealing any damage so the target is in fire on death even if killed by the first hit
+        if (source is EntityDamageByEntityEvent) {
+            val enchantments: Array<Enchantment>? = source.getWeaponEnchantments()
+            if (enchantments != null) {
+                for (enchantment: Enchantment in enchantments) {
+                    enchantment.doAttack(source)
+                }
+            }
+        }
+
+        //吸收伤害实现
+        if (this.absorption > 0) {  // Damage Absorption
+            this.setAbsorption(
+                max(
+                    0.0,
+                    (this.getAbsorption() + source.getDamage(DamageModifier.ABSORPTION)).toDouble()
+                ).toFloat()
+            )
+        }
+
+        //修改最后一次伤害
+        setLastDamageCause(source)
+
+        //计算血量
+        val newHealth: Float = getHealth() - source.getFinalDamage()
+
+        //only player
+        if (newHealth < 1 && this is Player) {
+            if (source.cause != DamageCause.VOID && source.cause != DamageCause.SUICIDE) {
+                var totem: Boolean = false
+                var isOffhand: Boolean = false
+                if (player.getOffhandInventory().getItem(0) is ItemTotemOfUndying) {
+                    totem = true
+                    isOffhand = true
+                } else if (player.getInventory().getItemInHand() is ItemTotemOfUndying) {
+                    totem = true
+                }
+                //复活图腾实现
+                if (totem) {
+                    level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_TOTEM_USED)
+                    level.addParticleEffect(this.position, ParticleEffect.TOTEM)
+
+                    this.extinguish()
+                    this.removeAllEffects()
+                    this.setHealth(1f)
+
+                    this.addEffect(
+                        Effect.Companion.get(EffectType.Companion.REGENERATION).setDuration(800).setAmplifier(1)
+                    )
+                    this.addEffect(Effect.Companion.get(EffectType.Companion.FIRE_RESISTANCE).setDuration(800))
+                    this.addEffect(
+                        Effect.Companion.get(EffectType.Companion.ABSORPTION).setDuration(100).setAmplifier(1)
+                    )
+
+                    val pk: EntityEventPacket = EntityEventPacket()
+                    pk.eid = this.getId()
+                    pk.event = EntityEventPacket.CONSUME_TOTEM
+                    player.dataPacket(pk)
+
+                    if (isOffhand) {
+                        player.getOffhandInventory().clear(0, true)
+                    } else {
+                        player.getInventory().clear(player.getInventory().getHeldItemIndex(), true)
+                    }
+
+                    source.isCancelled = true
+                    return false
+                }
+            }
+        }
+
+        val attacker: Entity? = if (source is EntityDamageByEntityEvent) source.damager else null
+
+        setHealth(newHealth)
+
+        if (this !is EntityArmorStand) {
+            level!!.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    attacker,
+                    this.position, VibrationType.ENTITY_DAMAGE
+                )
+            )
+        }
+
+        return true
+    }
+
+    fun attack(damage: Float): Boolean {
+        return this.attack(EntityDamageEvent(this, DamageCause.CUSTOM, damage))
+    }
+
+
+    fun getAge(): Int {
+        return this.age
+    }
+
+    open fun getNetworkId(): Int {
+        return Registries.ENTITY.getEntityNetworkId(getIdentifier())
+    }
+
+    fun heal(source: EntityRegainHealthEvent) {
+        server!!.pluginManager.callEvent(source)
+        if (source.isCancelled) {
+            return
+        }
+        this.setHealth(this.getHealth() + source.amount)
+    }
+
+    fun heal(amount: Float) {
+        this.heal(EntityRegainHealthEvent(this, amount, EntityRegainHealthEvent.CAUSE_REGEN))
+    }
+
+    fun getHealth(): Float {
+        return health
+    }
+
+    open fun setHealth(health: Float) {
+        if (this.health == health) {
+            return
+        }
+
+        if (health < 1) {
+            if (this.isAlive()) {
+                this.kill()
+            }
+        } else if (health <= this.getMaxHealth() || health < this.health) {
+            this.health = health
+        } else {
+            this.health = getMaxHealth().toFloat()
+        }
+
+        setDataProperty(EntityDataTypes.Companion.STRUCTURAL_INTEGRITY, this.health.toInt())
+    }
+
+    fun isAlive(): Boolean {
+        return this.health > 0
+    }
+
+    fun isClosed(): Boolean {
+        return closed
+    }
+
+    fun getLastDamageCause(): EntityDamageEvent? {
+        return lastDamageCause
+    }
+
+    fun setLastDamageCause(type: EntityDamageEvent?) {
+        this.lastDamageCause = type
+    }
+
+    fun getMaxHealth(): Int {
+        return maxHealth
+    }
+
+    open fun setMaxHealth(maxHealth: Int) {
+        this.maxHealth = maxHealth
+    }
+
+    open fun canCollideWith(entity: Entity): Boolean {
+        return !this.justCreated && this !== entity && !this.noClip
+    }
+
+    /**
+     * Whether the entity is persisted to disk
+     *
+     * @return the boolean
+     */
+    fun canBeSavedWithChunk(): Boolean {
+        return saveWithChunk
+    }
+
+
+    /**
+     * Set this entity is persisted to disk
+     *
+     * @param saveWithChunk value
+     */
+    fun setCanBeSavedWithChunk(saveWithChunk: Boolean) {
+        this.saveWithChunk = saveWithChunk
+    }
+
+    protected fun checkObstruction(x: Double, y: Double, z: Double): Boolean {
+        if (level!!.fastCollisionCubes(this, this.getBoundingBox(), false).isEmpty() || this.noClip) {
+            return false
+        }
+
+        val i: Int = NukkitMath.floorDouble(x)
+        val j: Int = NukkitMath.floorDouble(y)
+        val k: Int = NukkitMath.floorDouble(z)
+
+        val diffX: Double = x - i
+        val diffY: Double = y - j
+        val diffZ: Double = z - k
+
+        if (!level!!.getBlock(i, j, k).isTransparent()) {
+            val flag: Boolean = level!!.getBlock(i - 1, j, k).isTransparent()
+            val flag1: Boolean = level!!.getBlock(i + 1, j, k).isTransparent()
+            val flag2: Boolean = level!!.getBlock(i, j - 1, k).isTransparent()
+            val flag3: Boolean = level!!.getBlock(i, j + 1, k).isTransparent()
+            val flag4: Boolean = level!!.getBlock(i, j, k - 1).isTransparent()
+            val flag5: Boolean = level!!.getBlock(i, j, k + 1).isTransparent()
+
+            var direction: Int = -1
+            var limit: Double = 9999.0
+
+            if (flag) {
+                limit = diffX
+                direction = 0
+            }
+
+            if (flag1 && 1 - diffX < limit) {
+                limit = 1 - diffX
+                direction = 1
+            }
+
+            if (flag2 && diffY < limit) {
+                limit = diffY
+                direction = 2
+            }
+
+            if (flag3 && 1 - diffY < limit) {
+                limit = 1 - diffY
+                direction = 3
+            }
+
+            if (flag4 && diffZ < limit) {
+                limit = diffZ
+                direction = 4
+            }
+
+            if (flag5 && 1 - diffZ < limit) {
+                direction = 5
+            }
+
+            val force: Double = ThreadLocalRandom.current().nextDouble() * 0.2 + 0.1
+
+            if (direction == 0) {
+                motion.x = -force
+
+                return true
+            }
+
+            if (direction == 1) {
+                motion.x = force
+
+                return true
+            }
+
+            if (direction == 2) {
+                motion.y = -force
+
+                return true
+            }
+
+            if (direction == 3) {
+                motion.y = force
+
+                return true
+            }
+
+            if (direction == 4) {
+                motion.z = -force
+
+                return true
+            }
+
+            if (direction == 5) {
+                motion.z = force
+
+                return true
+            }
+        }
+
+        return false
+    }
+
+    open fun entityBaseTick(): Boolean {
+        return this.entityBaseTick(1)
+    }
+
+    open fun entityBaseTick(tickDiff: Int): Boolean {
+        if (!this.isAlive()) {
+            if (this is EntityCreature) {
+                this.deadTicks += tickDiff
+                if (this.deadTicks >= 15) {
+                    //apply death smoke cloud only if it is a creature
+                    val aabb: AxisAlignedBB? = this.getBoundingBox()
+                    var x: Double = aabb!!.getMinX()
+                    while (x <= aabb.getMaxX()) {
+                        var z: Double = aabb.getMinZ()
+                        while (z <= aabb.getMaxZ()) {
+                            var y: Double = aabb.getMinY()
+                            while (y <= aabb.getMaxY()) {
+                                level!!.addParticle(ExplodeParticle(Vector3(x, y, z)))
+                                y += 0.5
+                            }
+                            z += 0.5
+                        }
+                        x += 0.5
+                    }
+                    this.despawnFromAll()
+                    if (!this.isPlayer) {
+                        this.close()
+                    }
+                }
+                return this.deadTicks < 15
+            } else {
+                this.despawnFromAll()
+                if (!this.isPlayer) {
+                    this.close()
+                }
+            }
+        }
+        if (!this.isPlayer) {
+            this.blocksAround = null
+            this.collisionBlocks = null
+        }
+        this.justCreated = false
+
+        if (riding != null && !riding!!.isAlive() && riding is EntityRideable) {
+            riding.dismountEntity(this)
+        }
+        updatePassengers()
+
+        if (!effects.isEmpty()) {
+            for (effect: Effect in effects.values) {
+                if (effect.canTick()) {
+                    effect.apply(this, 1.0)
+                }
+                effect.setDuration(effect.getDuration() - tickDiff)
+
+                if (effect.getDuration() <= 0) {
+                    this.removeEffect(effect.getType())
+                }
+            }
+        }
+
+        var hasUpdate: Boolean = false
+
+        this.checkBlockCollision()
+
+        if (position.y < (level!!.getMinHeight() - 18) && this.isAlive()) {
+            if (this is Player) {
+                if (!player.isCreative()) this.attack(EntityDamageEvent(this, DamageCause.VOID, 10f))
+            } else {
+                this.attack(EntityDamageEvent(this, DamageCause.VOID, 10f))
+                hasUpdate = true
+            }
+        }
+
+        if (this.fireTicks > 0) {
+            if (this.fireProof) {
+                this.fireTicks -= 4 * tickDiff
+                if (this.fireTicks < 0) {
+                    this.fireTicks = 0
+                }
+            } else {
+                if (!this.hasEffect(EffectType.Companion.FIRE_RESISTANCE) && ((this.fireTicks % 20) == 0 || tickDiff > 20)) {
+                    this.attack(EntityDamageEvent(this, DamageCause.FIRE_TICK, 1f))
+                }
+                this.fireTicks -= tickDiff
+            }
+            if (this.fireTicks <= 0) {
+                this.extinguish()
+            } else if (!this.fireProof && (this !is Player || !player.isSpectator())) {
+                this.setDataFlag(EntityFlag.ON_FIRE)
+                hasUpdate = true
+            }
+        }
+
+        if (this.noDamageTicks > 0) {
+            this.noDamageTicks -= tickDiff
+            if (this.noDamageTicks < 0) {
+                this.noDamageTicks = 0
+            }
+        }
+
+        if (this.inPortalTicks == 80) { //handle portal teleport
+            val ev: EntityPortalEnterEvent = EntityPortalEnterEvent(this, PortalType.NETHER)
+            getServer()!!.pluginManager.callEvent(ev) //call event
+
+            if (!ev.isCancelled && (level!!.getDimension() == Level.DIMENSION_OVERWORLD || level!!.getDimension() == Level.DIMENSION_NETHER)) {
+                val newPos: Locator? = PortalHelper.convertPosBetweenNetherAndOverworld(
+                    Locator(
+                        position.x, position.y, position.z,
+                        level!!
+                    )
+                )
+                if (newPos != null) {
+                    val nearestPortal: Locator? = PortalHelper.getNearestValidPortal(newPos)
+                    if (nearestPortal != null) {
+                        teleport(nearestPortal.add(0.5, 0.0, 0.5), TeleportCause.NETHER_PORTAL)
+                    } else {
+                        val finalPos: Locator = newPos.add(1.5, 1.0, 1.5)
+                        if (teleport(finalPos, TeleportCause.NETHER_PORTAL)) {
+                            level!!.getScheduler().scheduleDelayedTask(object : Task() {
+                                override fun onRun(currentTick: Int) {
+                                    // dirty hack to make sure chunks are loaded and generated before spawning
+                                    // player
+                                    inPortalTicks = 81
+                                    teleport(finalPos, TeleportCause.NETHER_PORTAL)
+                                    PortalHelper.spawnPortal(newPos)
+                                }
+                            }, 5)
+                        }
+                    }
+                }
+            }
+        }
+        this.age += tickDiff
+        this.ticksLived += tickDiff
+
+        return hasUpdate
+    }
+
+    @JvmOverloads
+    fun hasPosChanged(threshold: Double = 0.0001): Boolean {
+        return position.subtract(this.prevPosition).lengthSquared() > threshold
+    }
+
+    fun hasRotationChanged(): Boolean {
+        return this.hasRotationChanged(1.0)
+    }
+
+    open fun hasRotationChanged(threshold: Double): Boolean {
+        return rotation.subtract(this.prevRotation).lengthSquared() > threshold
+    }
+
+    @JvmOverloads
+    fun hasMotionChanged(threshold: Double = 0.0001): Boolean {
+        return motion.subtract(this.prevMotion).lengthSquared() > threshold
+    }
+
+    open fun updateMovement() {
+        val posChanged: Boolean = this.hasPosChanged()
+        val rotationChanged: Boolean = this.hasRotationChanged()
+
+        if (posChanged || rotationChanged) { //0.2 ** 2, 1.5 ** 2
+            if (posChanged) {
+                if (this.isOnGround()) {
+                    level!!.vibrationManager.callVibrationEvent(
+                        VibrationEvent(
+                            if (this is EntityProjectile) projectile.shootingEntity else this,
+                            position.clone(), VibrationType.STEP
+                        )
+                    )
+                } else if (this.isTouchingWater()) {
+                    level!!.vibrationManager.callVibrationEvent(
+                        VibrationEvent(
+                            if (this is EntityProjectile) projectile.shootingEntity else this,
+                            position.clone(), VibrationType.SWIM
+                        )
+                    )
+                }
+            }
+
+            this.moveDelta()
+
+            prevPosition.x = position.x
+            prevPosition.y = position.y
+            prevPosition.z = position.z
+
+            prevRotation.pitch = rotation.pitch
+            prevRotation.yaw = rotation.yaw
+
+            this.positionChanged = true
+        } else {
+            this.positionChanged = false
+        }
+
+        if (this.hasMotionChanged(0.025) || (this.hasMotionChanged(0.0001) && getMotion().lengthSquared() <= 0.0001)) { //0.05 ** 2
+            prevMotion.x = motion.x
+            prevMotion.y = motion.y
+            prevMotion.z = motion.z
+
+            this.addMotion(motion.x, motion.y, motion.z)
+        }
+    }
+
+    /**
+     * 增加运动 (仅发送数据包，如果需要请使用[.setMotion])
+     *
+     *
+     * Add motion (just sending packet will not make the entity actually move, use [.setMotion] if needed)
+     *
+     */
+    open fun moveDelta() {
+        val pk: MoveEntityDeltaPacket = MoveEntityDeltaPacket()
+        pk.runtimeEntityId = this.getId()
+        if (prevPosition.x != position.x) {
+            pk.x = position.x.toFloat()
+            pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_X.toInt()).toShort()
+        }
+        if (prevPosition.y != position.y) {
+            pk.y = position.y.toFloat()
+            pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_Y.toInt()).toShort()
+        }
+        if (prevPosition.z != position.z) {
+            pk.z = position.z.toFloat()
+            pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_Z.toInt()).toShort()
+        }
+        if (prevRotation.pitch != rotation.pitch) {
+            pk.pitch = rotation.pitch.toFloat()
+            pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_PITCH.toInt()).toShort()
+        }
+        if (prevRotation.yaw != rotation.yaw) {
+            pk.yaw = rotation.yaw.toFloat()
+            pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_YAW.toInt()).toShort()
+        }
+        if (this.onGround) {
+            pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_ON_GROUND.toInt()).toShort()
+        }
+        Server.broadcastPacket(getViewers().values, pk)
+    }
+
+    /*
+     * 请注意此方法仅向客户端发motion包，并不会真正的将motion数值加到实体的motion(x|y|z)上<p/>
+     * 如果你想在实体的motion基础上增加，请直接将要添加的motion数值加到实体的motion(x|y|z)上，像这样：<p/>
+     * entity.motionX += vector3.x;<p/>
+     * entity.motionY += vector3.y;<p/>
+     * entity.motionZ += vector3.z;<p/>
+     * 对于玩家实体，你不应该使用此方法！
+     */
+    fun addMotion(motionX: Double, motionY: Double, motionZ: Double) {
+        val pk: SetEntityMotionPacket = SetEntityMotionPacket()
+        pk.eid = this.getId()
+        pk.motionX = motionX.toFloat()
+        pk.motionY = motionY.toFloat()
+        pk.motionZ = motionZ.toFloat()
+
+        Server.broadcastPacket(hasSpawned.values, pk)
+    }
+
+
+    protected fun broadcastMovement(tp: Boolean) {
+        val pk: MoveEntityAbsolutePacket = MoveEntityAbsolutePacket()
+        pk.eid = this.getId()
+        pk.x = position.x
+        pk.y = position.y + this.getBaseOffset()
+        pk.z = position.z
+        pk.headYaw = rotation.yaw
+        pk.pitch = rotation.pitch
+        pk.yaw = rotation.yaw
+        pk.teleport = tp
+        pk.onGround = this.onGround
+        Server.broadcastPacket(hasSpawned.values, pk)
+    }
+
+    fun getDirectionVector(): Vector3 {
+        val pitch: Double = ((rotation.pitch + 90) * Math.PI) / 180
+        val yaw: Double = ((rotation.yaw + 90) * Math.PI) / 180
+        val x: Double = sin(pitch) * cos(yaw)
+        val z: Double = sin(pitch) * sin(yaw)
+        val y: Double = cos(pitch)
+        return Vector3(x, y, z).normalize()
+    }
+
+    fun getDirectionPlane(): Vector2 {
+        return (Vector2(
+            (-cos(Math.toRadians(rotation.yaw) - Math.PI / 2)).toFloat().toDouble(), (-sin(
+                Math.toRadians(
+                    rotation.yaw
+                ) - Math.PI / 2
+            )).toFloat().toDouble()
+        )).normalize()
+    }
+
+    fun getHorizontalFacing(): BlockFace {
+        return BlockFace.fromHorizontalIndex(NukkitMath.floorDouble((rotation.yaw * 4.0f / 360.0f) + 0.5) and 3)
+    }
+
+    open fun onUpdate(currentTick: Int): Boolean {
+        if (this.closed) {
+            return false
+        }
+
+        val tickDiff: Int = currentTick - this.lastUpdate
+        if (tickDiff <= 0) {
+            return false
+        }
+        this.lastUpdate = currentTick
+
+        val hasUpdate: Boolean = this.entityBaseTick(tickDiff)
+
+        if (!this.isImmobile()) {
+            this.updateMovement()
+        }
+
+        return hasUpdate
+    }
+
+    open fun mountEntity(entity: Entity): Boolean {
+        return mountEntity(entity, EntityLink.Type.RIDER)
+    }
+
+    /**
+     * Mount an Entity from a/into vehicle
+     *
+     * @param entity The target Entity
+     * @return `true` if the mounting successful
+     */
+    open fun mountEntity(entity: Entity, mode: EntityLink.Type): Boolean {
+        Objects.requireNonNull(entity, "The target of the mounting entity can't be null")
+
+        if (isPassenger(entity) || entity.riding != null && !entity.riding!!.dismountEntity(entity, false)) {
+            return false
+        }
+
+        // Entity entering a vehicle
+        val ev: EntityVehicleEnterEvent = EntityVehicleEnterEvent(entity, this)
+        server!!.pluginManager.callEvent(ev)
+        if (ev.isCancelled) {
+            return false
+        }
+
+        broadcastLinkPacket(entity, mode)
+
+        // Add variables to entity
+        entity.riding = this
+        entity.setDataFlag(EntityFlag.RIDING)
+        passengers.add(entity)
+
+        entity.setSeatPosition(getMountedOffset(entity))
+        updatePassengerPosition(entity)
+        return true
+    }
+
+    open fun dismountEntity(entity: Entity): Boolean {
+        return this.dismountEntity(entity, true)
+    }
+
+    open fun dismountEntity(entity: Entity, sendLinks: Boolean): Boolean {
+        // Run the events
+        val ev: EntityVehicleExitEvent = EntityVehicleExitEvent(entity, this)
+        server!!.pluginManager.callEvent(ev)
+        if (ev.isCancelled) {
+            val seatIndex: Int = passengers.indexOf(entity)
+            if (seatIndex == 0) {
+                this.broadcastLinkPacket(entity, EntityLink.Type.RIDER)
+            } else if (seatIndex != -1) {
+                this.broadcastLinkPacket(entity, EntityLink.Type.PASSENGER)
+            }
+            return false
+        }
+
+        if (sendLinks) {
+            broadcastLinkPacket(entity, EntityLink.Type.REMOVE)
+        }
+
+        // refresh the entity
+        entity.riding = null
+        entity.setDataFlag(EntityFlag.RIDING, false)
+        passengers.remove(entity)
+
+        entity.setSeatPosition(Vector3f())
+        updatePassengerPosition(entity)
+
+        if (entity is Player) {
+            entity.resetFallDistance()
+        }
+        return true
+    }
+
+    protected fun broadcastLinkPacket(rider: Entity, type: EntityLink.Type) {
+        val pk: SetEntityLinkPacket = SetEntityLinkPacket()
+        pk.vehicleUniqueId = getId() // To what?
+        pk.riderUniqueId = rider.getId() // From who?
+        pk.type = type
+        pk.riderInitiated = type != EntityLink.Type.REMOVE
+        Server.broadcastPacket(hasSpawned.values, pk)
+    }
+
+    open fun updatePassengers() {
+        if (passengers.isEmpty()) {
+            return
+        }
+
+        for (passenger: Entity in ArrayList(this.passengers)) {
+            if (!passenger.isAlive()) {
+                dismountEntity(passenger)
+                continue
+            }
+
+            updatePassengerPosition(passenger)
+        }
+    }
+
+    protected open fun updatePassengerPosition(passenger: Entity) {
+        passenger.setPosition(position.add(passenger.getSeatPosition().asVector3()))
+    }
+
+    fun getSeatPosition(): Vector3f {
+        return this.getDataProperty<Vector3f>(EntityDataTypes.Companion.SEAT_OFFSET)
+    }
+
+    fun setSeatPosition(pos: Vector3f) {
+        this.setDataProperty(EntityDataTypes.Companion.SEAT_OFFSET, pos)
+    }
+
+    open fun getMountedOffset(entity: Entity?): Vector3f {
+        return Vector3f(0f, getHeight() * 0.75f)
+    }
+
+    fun scheduleUpdate() {
+        level!!.updateEntities.put(this.getId(), this)
+    }
+
+    fun isOnFire(): Boolean {
+        return this.fireTicks > 0
+    }
+
+    open fun setOnFire(seconds: Int) {
+        val ticks: Int = seconds * 20
+        if (ticks > this.fireTicks) {
+            this.fireTicks = ticks
+        }
+    }
+
+    fun getAbsorption(): Float {
+        return absorption
+    }
+
+    open fun setAbsorption(absorption: Float) {
+        if (absorption != this.absorption) {
+            this.absorption = absorption
+        }
+    }
+
+    open fun syncAttribute(attribute: Attribute) {
+        val pk: UpdateAttributesPacket = UpdateAttributesPacket()
+        pk.entries = arrayOf(attribute)
+        pk.entityId = this.getId()
+        Server.broadcastPacket(getViewers().values, pk)
+    }
+
+    open fun syncAttributes() {
+        val pk: UpdateAttributesPacket = UpdateAttributesPacket()
+        pk.entries =
+            attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }
+                .toArray<Attribute> { _Dummy_.__Array__() }
+        pk.entityId = this.getId()
+        Server.broadcastPacket(getViewers().values, pk)
+    }
+
+
+    fun canBePushed(): Boolean {
+        return true
+    }
+
+    open fun getDirection(): BlockFace? {
+        var rotation: Double = rotation.yaw % 360
+        if (rotation < 0) {
+            rotation += 360.0
+        }
+        if ((0 <= rotation && rotation < 45) || (315 <= rotation && rotation < 360)) {
+            return BlockFace.SOUTH
+        } else if (45 <= rotation && rotation < 135) {
+            return BlockFace.WEST
+        } else if (135 <= rotation && rotation < 225) {
+            return BlockFace.NORTH
+        } else if (225 <= rotation && rotation < 315) {
+            return BlockFace.EAST
+        } else {
+            return null
+        }
+    }
+
+    fun extinguish() {
+        this.fireTicks = 0
+        this.setDataFlag(EntityFlag.ON_FIRE, false)
+    }
+
+    open fun resetFallDistance() {
+        this.highestPosition = level!!.getMinHeight().toDouble()
+    }
+
+    protected open fun updateFallState(onGround: Boolean) {
+        if (onGround) {
+            fallDistance = (this.highestPosition - position.y).toFloat()
+
+            if (fallDistance > 0) {
+                val pos: Locator = Locator(
+                    position.x,
+                    position.y, position.z,
+                    level!!
+                )
+                // check if we fell into at least 1 block of water
+                val lb: Block = pos.getLevelBlock()
+                val lb2: Block = pos.getLevelBlockAtLayer(1)
+                if (this is EntityLiving && this.riding == null && !(lb is BlockFlowingWater ||
+                            lb is BlockFence ||
+                            (lb2 is BlockFlowingWater && lb2.getMaxY() == 1.0))
+                ) {
+                    this.fall(fallDistance)
+                }
+                this.resetFallDistance()
+            }
+        }
+    }
+
+    fun getBoundingBox(): AxisAlignedBB? {
+        return this.boundingBox
+    }
+
+    open fun fall(fallDistance: Float) { //todo: check why @param fallDistance always less than the real distance
+        var fallDistance: Float = fallDistance
+        if (this.hasEffect(EffectType.Companion.SLOW_FALLING)) {
+            return
+        }
+
+        val floorLocation: Vector3 = position.floor()
+        val down: Block = level!!.getBlock(floorLocation.down())
+
+        val event: EntityFallEvent = EntityFallEvent(this, down, fallDistance)
+        server!!.pluginManager.callEvent(event)
+        if (event.isCancelled) {
+            return
+        }
+        fallDistance = event.fallDistance
+
+        if ((!this.isPlayer || level!!.gameRules
+                .getBoolean(GameRule.FALL_DAMAGE)) && down.useDefaultFallDamage()
+        ) {
+            val jumpBoost: Int = if (this.hasEffect(EffectType.Companion.JUMP_BOOST)) getEffect(
+                EffectType.Companion.JUMP_BOOST
+            ).getLevel() else 0
+            val damage: Float = fallDistance - 3.255f - jumpBoost
+
+            if (damage > 0) {
+                if (!this.isSneaking()) {
+                    if (this !is EntityItem ||
+                        !ItemTags.getTagSet(item!!.getIdentifier()).contains(ItemTags.WOOL)
+                    ) {
+                        level!!.vibrationManager.callVibrationEvent(
+                            VibrationEvent(
+                                this,
+                                position.clone(), VibrationType.HIT_GROUND
+                            )
+                        )
+                    }
+                }
+                this.attack(EntityDamageEvent(this, DamageCause.FALL, damage))
+            }
+        }
+
+        down.onEntityFallOn(this, fallDistance)
+
+        if (fallDistance > 0.75) { //todo: moving these into their own classes (method "onEntityFallOn()")
+            if (Block.FARMLAND == down.getId()) {
+                if (onPhysicalInteraction(down, false)) {
+                    return
+                }
+                if (this is EntityFlyable) return
+                val farmEvent: FarmLandDecayEvent = FarmLandDecayEvent(this, down)
+                server!!.pluginManager.callEvent(farmEvent)
+                if (farmEvent.isCancelled) return
+                level!!.setBlock(down.position, Block.get(Block.DIRT), false, true)
+                return
+            }
+
+            val floor: Block = level!!.getBlock(floorLocation)
+
+            if (floor is BlockTurtleEgg) {
+                if (onPhysicalInteraction(floor, ThreadLocalRandom.current().nextInt(10) >= 3)) {
+                    return
+                }
+                level!!.useBreakOn(this.position, null, null, true)
+            }
+        }
+    }
+
+    protected fun onPhysicalInteraction(block: Block, cancelled: Boolean): Boolean {
+        val ev: Event
+
+        if (this is Player) {
+            ev = PlayerInteractEvent(this, null, block.position, null, PlayerInteractEvent.Action.PHYSICAL)
+        } else {
+            ev = EntityInteractEvent(this, block)
+        }
+
+        ev.setCancelled(cancelled)
+
+        server!!.pluginManager.callEvent(ev)
+        return ev.isCancelled()
+    }
+
+    open fun applyEntityCollision(entity: Entity) {
+        if (entity.riding !== this && !entity.passengers.contains(this)) {
+            var dx: Double = entity.position.x - position.x
+            var dy: Double = entity.position.z - position.z
+            var dz: Double = NukkitMath.getDirection(dx, dy)
+
+            if (dz >= 0.009999999776482582) {
+                dz = MathHelper.sqrt(dz.toFloat()).toDouble()
+                dx /= dz
+                dy /= dz
+                var d3: Double = 1.0 / dz
+
+                if (d3 > 1.0) {
+                    d3 = 1.0
+                }
+
+                dx *= d3
+                dy *= d3
+                dx *= 0.05000000074505806
+                dy *= 0.05000000074505806
+                dx *= 1f + entityCollisionReduction
+
+                if (this.riding == null) {
+                    motion.x -= dx
+                    motion.y -= dy
+                }
+            }
+        }
+    }
+
+    open fun onStruckByLightning(entity: Entity) {
+        if (this.attack(EntityDamageByEntityEvent(entity, this, DamageCause.LIGHTNING, 5f))) {
+            if (this.fireTicks < 8 * 20) {
+                this.setOnFire(8)
+            }
+        }
+    }
+
+
+    open fun onPushByPiston(piston: BlockEntityPistonArm?) {
+    }
+
+    open fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
+        return onInteract(player, item)
+    }
+
+    fun onInteract(player: Player?, item: Item?): Boolean {
+        return false
+    }
+
+    protected open fun switchLevel(targetLevel: Level): Boolean {
+        if (this.closed) {
+            return false
+        }
+
+        val ev: EntityLevelChangeEvent = EntityLevelChangeEvent(this, this.level, targetLevel)
+        server!!.pluginManager.callEvent(ev)
+        if (ev.isCancelled) {
+            return false
+        }
+
+        level!!.removeEntity(this)
+        if (this.chunk != null) {
+            chunk!!.removeEntity(this)
+        }
+        this.despawnFromAll()
+
+        this.level = targetLevel
+        level!!.addEntity(this)
+        this.chunk = null
+        this.lastUpdate = level!!.getTick()
+        this.blocksAround = null
+        this.collisionBlocks = null
+        return true
+    }
+
+    fun getTransform(): Transform {
+        return Transform(
+            position.x,
+            position.y,
+            position.z, rotation.yaw, rotation.pitch, rotation.yaw,
+            level!!
+        )
+    }
+
+    fun getLocator(): Locator {
+        return Locator(
+            position.x, position.y, position.z,
+            level!!
+        )
+    }
+
+    fun isTouchingWater(): Boolean {
+        return hasWaterAt(0f) || hasWaterAt(this.getEyeHeight())
+    }
+
+    fun isInsideOfWater(): Boolean {
+        return hasWaterAt(this.getEyeHeight())
+    }
+
+
+    fun isUnderBlock(): Boolean {
+        val x: Int = position.getFloorX()
+        val y: Int = position.getFloorY()
+        val z: Int = position.getFloorZ()
+        for (i in y + 1..level!!.getMaxHeight()) {
+            if (!level!!.getBlock(x, i, z).isAir()) {
+                return true
+            }
+        }
+        return false
+    }
+
+
+    fun hasWaterAt(height: Float): Boolean {
+        return hasWaterAt(height, false)
+    }
+
+
+    protected fun hasWaterAt(height: Float, tickCached: Boolean): Boolean {
+        val y: Double = position.y + height
+        val block: Block = if (tickCached) level!!.getTickCachedBlock(
+            position.floor()
+        ) else level!!.getBlock(position.floor())
+
+        var layer1: Boolean = false
+        val block1: Block = if (tickCached) block.getTickCachedLevelBlockAtLayer(1) else block.getLevelBlockAtLayer(1)
+        if (block !is BlockBubbleColumn && (block is BlockFlowingWater
+                    || (block1 is BlockFlowingWater.also { layer1 = it })
+        )) {
+            val water: BlockFlowingWater = (if (layer1) block1 else block) as BlockFlowingWater
+            val f: Double = (block.position.y + 1) - (water.getFluidHeightPercent() - 0.1111111)
+            return y < f
+        }
+
+        return false
+    }
+
+    fun isInsideOfSolid(): Boolean {
+        val y: Double = position.y + this.getEyeHeight()
+        val block: Block = level!!.getBlock(
+            position.clone().setY(y).floor()
+        )
+
+        val bb: AxisAlignedBB? = block.getBoundingBox()
+
+        return bb != null && block.isSolid() && !block.isTransparent() && bb.intersectsWith(this.getBoundingBox())
+    }
+
+    fun isInsideOfFire(): Boolean {
+        for (block: Block? in getCollisionBlocks()!!) {
+            if (block is BlockFire) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+
+    fun <T : Block?> collideWithBlock(classType: Class<T>): Boolean {
+        for (block: Block? in getCollisionBlocks()!!) {
+            if (classType.isInstance(block)) {
+                return true
+            }
+        }
+        return false
+    }
+
+
+    fun isInsideOfLava(): Boolean {
+        for (block: Block? in getCollisionBlocks()!!) {
+            if (block is BlockFlowingLava) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    fun isOnLadder(): Boolean {
+        val b: Block = getTransform().getLevelBlock()
+
+        return Block.LADDER == b.getId()
+    }
+
+    /**
+     * Player do not use
+     */
+    open fun move(dx: Double, dy: Double, dz: Double): Boolean {
+        var dx: Double = dx
+        var dy: Double = dy
+        var dz: Double = dz
+        if (dx == 0.0 && dz == 0.0 && dy == 0.0) {
+            val value: Locator = this.getTransform()
+            value.position.setComponents(position.down())
+            this.onGround = !value.getTickCachedLevelBlock().canPassThrough()
+            return true
+        }
+
+
+        this.ySize *= 0.4f
+
+        val movX: Double = dx
+        val movY: Double = dy
+        val movZ: Double = dz
+
+        val axisalignedbb: AxisAlignedBB = boundingBox!!.clone()
+
+        var list: List<AxisAlignedBB> = if (this.noClip) AxisAlignedBB.EMPTY_LIST else level!!.fastCollisionCubes(
+            this,
+            boundingBox!!.addCoord(dx, dy, dz), false
+        )
+
+        for (bb: AxisAlignedBB in list) {
+            dy = bb.calculateYOffset(this.boundingBox, dy)
+        }
+
+        boundingBox!!.offset(0.0, dy, 0.0)
+
+        val fallingFlag: Boolean = (this.onGround || (dy != movY && movY < 0))
+
+        for (bb: AxisAlignedBB in list) {
+            dx = bb.calculateXOffset(this.boundingBox, dx)
+        }
+
+        boundingBox!!.offset(dx, 0.0, 0.0)
+
+        for (bb: AxisAlignedBB in list) {
+            dz = bb.calculateZOffset(this.boundingBox, dz)
+        }
+
+        boundingBox!!.offset(0.0, 0.0, dz)
+
+        if (this.getStepHeight() > 0 && fallingFlag && this.ySize < 0.05 && (movX != dx || movZ != dz)) {
+            val cx: Double = dx
+            val cy: Double = dy
+            val cz: Double = dz
+            dx = movX
+            dy = this.getStepHeight()
+            dz = movZ
+
+            val axisAlignedBB1: AxisAlignedBB = boundingBox!!.clone()
+
+            boundingBox!!.setBB(axisalignedbb)
+
+            list = level!!.fastCollisionCubes(
+                this,
+                boundingBox!!.addCoord(dx, dy, dz), false
+            )
+
+            for (bb: AxisAlignedBB in list) {
+                dy = bb.calculateYOffset(this.boundingBox, dy)
+            }
+
+            boundingBox!!.offset(0.0, dy, 0.0)
+
+            for (bb: AxisAlignedBB in list) {
+                dx = bb.calculateXOffset(this.boundingBox, dx)
+            }
+
+            boundingBox!!.offset(dx, 0.0, 0.0)
+
+            for (bb: AxisAlignedBB in list) {
+                dz = bb.calculateZOffset(this.boundingBox, dz)
+            }
+
+            boundingBox!!.offset(0.0, 0.0, dz)
+
+            boundingBox!!.offset(0.0, 0.0, dz)
+
+            if ((cx * cx + cz * cz) >= (dx * dx + dz * dz)) {
+                dx = cx
+                dy = cy
+                dz = cz
+                boundingBox!!.setBB(axisAlignedBB1)
+            } else {
+                this.ySize += 0.5f
+            }
+        }
+
+        position.x = (boundingBox!!.getMinX() + boundingBox!!.getMaxX()) / 2
+        position.y = boundingBox!!.getMinY() - this.ySize
+        position.z = (boundingBox!!.getMinZ() + boundingBox!!.getMaxZ()) / 2
+
+        this.checkChunks()
+
+        this.checkGroundState(movX, movY, movZ, dx, dy, dz)
+        this.updateFallState(this.onGround)
+
+        if (movX != dx) {
+            motion.x = 0.0
+        }
+
+        if (movY != dy) {
+            motion.y = 0.0
+        }
+
+        if (movZ != dz) {
+            motion.z = 0.0
+        }
+
+        // TODO: vehicle collision events (first we need to spawn them!)
+        return true
+    }
+
+    protected open fun checkGroundState(movX: Double, movY: Double, movZ: Double, dx: Double, dy: Double, dz: Double) {
+        if (this.noClip) {
+            this.isCollidedVertically = false
+            this.isCollidedHorizontally = false
+            this.isCollided = false
+            this.onGround = false
+        } else {
+            this.isCollidedVertically = movY != dy
+            this.isCollidedHorizontally = (movX != dx || movZ != dz)
+            this.isCollided = (this.isCollidedHorizontally || this.isCollidedVertically)
+            this.onGround = (movY != dy && movY < 0)
+        }
+    }
+
+    fun getBlocksAround(): List<Block>? {
+        if (this.blocksAround == null) {
+            val minX: Int = NukkitMath.floorDouble(boundingBox!!.getMinX())
+            val minY: Int = NukkitMath.floorDouble(boundingBox!!.getMinY())
+            val minZ: Int = NukkitMath.floorDouble(boundingBox!!.getMinZ())
+            val maxX: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxX())
+            val maxY: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxY())
+            val maxZ: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxZ())
+
+            this.blocksAround = ArrayList()
+
+            for (z in minZ..maxZ) {
+                for (x in minX..maxX) {
+                    for (y in minY..maxY) {
+                        val block: Block =
+                            level!!.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
+                        blocksAround.add(block)
+                    }
+                }
+            }
+        }
+
+        return this.blocksAround
+    }
+
+
+    fun getTickCachedBlocksAround(): List<Block>? {
+        if (this.blocksAround == null) {
+            val minX: Int = NukkitMath.floorDouble(boundingBox!!.getMinX())
+            val minY: Int = NukkitMath.floorDouble(boundingBox!!.getMinY())
+            val minZ: Int = NukkitMath.floorDouble(boundingBox!!.getMinZ())
+            val maxX: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxX())
+            val maxY: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxY())
+            val maxZ: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxZ())
+
+            this.blocksAround = ArrayList()
+
+            for (z in minZ..maxZ) {
+                for (x in minX..maxX) {
+                    for (y in minY..maxY) {
+                        blocksAround.add(level!!.getTickCachedBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble())))
+                    }
+                }
+            }
+        }
+
+        return this.blocksAround
+    }
+
+    fun getCollisionBlocks(): List<Block>? {
+        if (this.collisionBlocks == null) {
+            this.collisionBlocks = ArrayList()
+
+            for (b: Block in getBlocksAround()!!) {
+                if (b.collidesWithBB(this.getBoundingBox(), true)) {
+                    collisionBlocks.add(b)
+                }
+            }
+        }
+
+        return this.collisionBlocks
+    }
+
+
+    fun getTickCachedCollisionBlocks(): List<Block>? {
+        if (this.collisionBlocks == null) {
+            this.collisionBlocks = ArrayList()
+
+            for (b: Block in getTickCachedBlocksAround()!!) {
+                if (b.collidesWithBB(this.getBoundingBox(), true)) {
+                    collisionBlocks.add(b)
+                }
+            }
+        }
+
+        return this.collisionBlocks
+    }
+
+    /**
+     * Returns whether this entity can be moved by currents in liquids.
+     *
+     * @return boolean
+     */
+    open fun canBeMovedByCurrents(): Boolean {
+        return true
+    }
+
+    protected open fun checkBlockCollision() {
+        if (this.noClip) {
+            return
+        }
+
+        var needsReCalcCurrent: Boolean = true
+        if (this is EntityPhysical) {
+            needsReCalcCurrent = entityPhysical.needsRecalcMovement
+        }
+
+        var vector: Vector3 = Vector3(0.0, 0.0, 0.0)
+        var portal: Boolean = false
+        var scaffolding: Boolean = false
+        var endPortal: Boolean = false
+        for (block: Block in getTickCachedCollisionBlocks()!!) {
+            when (block.getId()) {
+                Block.PORTAL -> portal = true
+                BlockID.SCAFFOLDING -> scaffolding = true
+                BlockID.END_PORTAL -> endPortal = true
+            }
+
+            block.onEntityCollide(this)
+            block.getTickCachedLevelBlockAtLayer(1).onEntityCollide(this)
+            if (needsReCalcCurrent) block.addVelocityToEntity(this, vector)
+        }
+
+        setDataFlagExtend(EntityFlag.IN_SCAFFOLDING, scaffolding)
+
+        if (abs(position.y % 1) > 0.125) {
+            val minX: Int = NukkitMath.floorDouble(boundingBox!!.getMinX())
+            val minZ: Int = NukkitMath.floorDouble(boundingBox!!.getMinZ())
+            val maxX: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxX())
+            val maxZ: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxZ())
+            val Y: Int = position.y.toInt()
+
+            outerScaffolding@ for (i in minX..maxX) {
+                for (j in minZ..maxZ) {
+                    val transform: Transform = Transform(
+                        i.toDouble(), Y.toDouble(), j.toDouble(),
+                        level!!
+                    )
+                    if (BlockID.SCAFFOLDING == transform.getLevelBlock(false).getId()) {
+                        setDataFlagExtend(EntityFlag.OVER_SCAFFOLDING, true)
+                        break@outerScaffolding
+                    }
+                }
+            }
+        }
+
+        if (endPortal) { //handle endPortal teleport
+            if (!inEndPortal) {
+                inEndPortal = true
+                if (this.getRiding() == null && getPassengers().isEmpty() && (this !is EntityEnderDragon)) {
+                    val ev: EntityPortalEnterEvent = EntityPortalEnterEvent(this, PortalType.END)
+                    getServer()!!.pluginManager.callEvent(ev)
+
+                    if (!ev.isCancelled && (level!!.getDimension() == Level.DIMENSION_OVERWORLD || level!!.getDimension() == Level.DIMENSION_THE_END)) {
+                        val newPos: Locator? = PortalHelper.moveToTheEnd(this.getTransform())
+                        if (newPos != null) {
+                            if (newPos.level.getDimension() == Level.DIMENSION_THE_END) {
+                                if (teleport(newPos.add(0.5, 1.0, 0.5), TeleportCause.END_PORTAL)) {
+                                    newPos.level.getScheduler().scheduleDelayedTask(object : Task() {
+                                        override fun onRun(currentTick: Int) {
+                                            // dirty hack to make sure chunks are loaded and generated before spawning player
+                                            teleport(newPos.add(0.5, 1.0, 0.5), TeleportCause.END_PORTAL)
+                                            BlockEndPortal.spawnObsidianPlatform(newPos)
+                                        }
+                                    }, 5)
+                                }
+                            } else {
+                                if (teleport(newPos, TeleportCause.END_PORTAL)) {
+                                    newPos.level.getScheduler().scheduleDelayedTask(object : Task() {
+                                        override fun onRun(currentTick: Int) {
+                                            // dirty hack to make sure chunks are loaded and generated before spawning player
+                                            teleport(newPos, TeleportCause.END_PORTAL)
+                                        }
+                                    }, 5)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            inEndPortal = false
+        }
+
+        if (portal) {
+            if (this.inPortalTicks <= 80) {
+                // 81 means the server won't try to teleport
+                inPortalTicks++
+            }
+        } else {
+            this.inPortalTicks = 0
+        }
+
+        if (needsReCalcCurrent) if (vector.lengthSquared() > 0) {
+            vector = vector.normalize()
+            val d: Double = 0.018
+            val dx: Double = vector.x * d
+            val dy: Double = vector.y * d
+            val dz: Double = vector.z * d
+            motion.x += dx
+            motion.y += dy
+            motion.z += dz
+            if (this is EntityPhysical) {
+                entityPhysical.previousCurrentMotion.x = dx
+                entityPhysical.previousCurrentMotion.y = dy
+                entityPhysical.previousCurrentMotion.z = dz
+            }
+        } else {
+            if (this is EntityPhysical) {
+                entityPhysical.previousCurrentMotion.x = 0.0
+                entityPhysical.previousCurrentMotion.y = 0.0
+                entityPhysical.previousCurrentMotion.z = 0.0
+            }
+        }
+        else (this as EntityPhysical).addPreviousLiquidMovement()
+    }
+
+    fun setPositionAndRotation(pos: Vector3, yaw: Double, pitch: Double): Boolean {
+        this.setRotation(yaw, pitch)
+        return this.setPosition(pos)
+    }
+
+    fun setRotation(yaw: Double, pitch: Double) {
+        rotation.yaw = yaw
+        rotation.pitch = pitch
+        this.scheduleUpdate()
+    }
+
+    /**
+     * Whether the entity can activate pressure plates.
+     * Used for [cn.nukkit.entity.mob.EntityBat]s only.
+     *
+     * @return triggers pressure plate
+     */
+    open fun doesTriggerPressurePlate(): Boolean {
+        return true
+    }
+
+    open fun canPassThrough(): Boolean {
+        return true
+    }
+
+    protected open fun checkChunks() {
+        if (this.chunk == null || (chunk!!.x != (position.x.toInt() shr 4)) || chunk!!.z != (position.z.toInt() shr 4)) {
+            if (this.chunk != null) {
+                chunk!!.removeEntity(this)
+            }
+            this.chunk = level!!.getChunk(
+                position.x.toInt() shr 4,
+                position.z.toInt() shr 4, true
+            )
+
+            if (!this.justCreated) {
+                val newChunk: MutableMap<Int, Player> =
+                    level!!.getChunkPlayers(position.x.toInt() shr 4, position.z.toInt() shr 4)
+                for (player: Player in ArrayList<Player>(hasSpawned.values)) {
+                    if (!newChunk.containsKey(player.getLoaderId())) {
+                        this.despawnFrom(player)
+                    } else {
+                        newChunk.remove(player.getLoaderId())
+                    }
+                }
+
+                for (player: Player in newChunk.values) {
+                    this.spawnTo(player)
+                }
+            }
+
+            if (this.chunk == null) {
+                return
+            }
+
+            chunk!!.addEntity(this)
+        }
+    }
+
+    fun setPosition(pos: IVector3): Boolean {
+        if (this.closed) {
+            return false
+        }
+
+        if (pos is Locator && pos.level !== this.level) {
+            if (!this.switchLevel(pos.level)) {
+                return false
+            }
+        }
+
+        val vPos: Vector3 = pos.vector3
+
+        position.x = vPos.x
+        position.y = vPos.y
+        position.z = vPos.z
+
+        this.recalculateBoundingBox(false) // Don't need to send BB height/width to client on position change
+
+        this.checkChunks()
+
+        return true
+    }
+
+    fun getMotion(): Vector3 {
+        return Vector3(motion.x, motion.y, motion.z)
+    }
+
+    /**
+     * 设置一个运动向量(会使得实体移动这个向量的距离，非精准移动)
+     *
+     *
+     *
+     *
+     * Set a motion vector (will make the entity move the distance of this vector, not move precisely)
+     *
+     * @param motion 运动向量<br></br>a motion vector
+     * @return boolean
+     */
+    open fun setMotion(motion: Vector3): Boolean {
+        if (!this.justCreated) {
+            val ev: EntityMotionEvent = EntityMotionEvent(this, motion)
+            server!!.pluginManager.callEvent(ev)
+            if (ev.isCancelled) {
+                return false
+            }
+        }
+
+        this.motion.x = motion.x
+        this.motion.y = motion.y
+        this.motion.z = motion.z
+
+        if (!this.justCreated && !this.isImmobile()) {
+            this.updateMovement()
+        }
+
+        return true
+    }
+
+    fun isOnGround(): Boolean {
+        return onGround
+    }
+
+    open fun kill() {
+        this.health = 0f
+        this.scheduleUpdate()
+
+        for (passenger: Entity in ArrayList(this.passengers)) {
+            dismountEntity(passenger)
+        }
+    }
+
+    @JvmOverloads
+    fun teleport(pos: Vector3, cause: TeleportCause? = TeleportCause.PLUGIN): Boolean {
+        return this.teleport(
+            Transform.fromObject(
+                pos,
+                level!!, rotation.yaw, rotation.pitch, rotation.yaw
+            ), cause
+        )
+    }
+
+    @JvmOverloads
+    fun teleport(pos: Locator, cause: TeleportCause? = TeleportCause.PLUGIN): Boolean {
+        return this.teleport(
+            Transform.fromObject(
+                pos.position, pos.level,
+                rotation.yaw, rotation.pitch, rotation.yaw
+            ), cause
+        )
+    }
+
+    fun teleport(transform: Transform): Boolean {
+        return this.teleport(transform, TeleportCause.PLUGIN)
+    }
+
+    /**
+     * Teleport the entity to another location
+     *
+     * @param transform the another location
+     * @param cause    the teleported cause
+     * @return the boolean
+     */
+    open fun teleport(transform: Transform, cause: TeleportCause?): Boolean {
+        val yaw: Double = transform.rotation.yaw
+        val pitch: Double = transform.rotation.pitch
+
+        val from: Transform = this.getTransform()
+        var to: Transform = transform
+        if (cause != null) {
+            val ev: EntityTeleportEvent = EntityTeleportEvent(this, from, to, cause)
+            server!!.pluginManager.callEvent(ev)
+            if (ev.isCancelled) {
+                return false
+            }
+            to = ev.to
+        }
+
+        val currentRide: Entity? = getRiding()
+        if (currentRide != null && !currentRide.dismountEntity(this)) {
+            return false
+        }
+
+        this.positionChanged = true
+        this.ySize = 0f
+
+        this.setMotion(Vector3())
+
+        if (this.setPositionAndRotation(to.position, yaw, pitch)) {
+            this.resetFallDistance()
+            this.onGround = !this.noClip
+            this.updateMovement()
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * return runtime id (changed after restart the server),the id is incremental number
+     */
+    fun getId(): Long {
+        return this.id
+    }
+
+
+    /**
+     * Gets unique id(UUID)
+     */
+    open fun getUniqueId(): UUID? {
+        return this.entityUniqueId
+    }
+
+    fun respawnToAll() {
+        val players: Array<Player> = hasSpawned.values.toArray(Player.EMPTY_ARRAY)
+        hasSpawned.clear()
+
+        for (player: Player in players) {
+            this.spawnTo(player)
+        }
+    }
+
+    open fun spawnToAll() {
+        if (this.chunk == null || this.closed) {
+            return
+        }
+
+        for (player: Player in level!!.getChunkPlayers(
+            chunk!!.x,
+            chunk!!.z
+        ).values) {
+            if (player.isOnline()) {
+                this.spawnTo(player)
+            }
+        }
+    }
+
+    fun despawnFromAll() {
+        for (player: Player in ArrayList(hasSpawned.values)) {
+            this.despawnFrom(player)
+        }
+    }
+
+    open fun close() {
+        close(true)
+    }
+
+    private fun close(despawn: Boolean) {
+        if (!this.closed) {
+            this.closed = true
+
+            if (despawn) {
+                try {
+                    val event: EntityDespawnEvent = EntityDespawnEvent(this)
+
+                    server!!.pluginManager.callEvent(event)
+
+                    if (event.isCancelled) {
+                        this.closed = false
+                        return
+                    }
+                } catch (e: Throwable) {
+                    this.closed = false
+                    throw e
+                }
+            }
+
+            try {
+                this.despawnFromAll()
+            } finally {
+                try {
+                    if (this.chunk != null) {
+                        chunk!!.removeEntity(this)
+                    }
+                } finally {
+                    level!!.removeEntity(this)
+                }
+            }
+        }
+    }
+
+    fun setDataProperties(maps: Map<EntityDataType<*>, Any>) {
+        setDataProperties(maps, true)
+    }
+
+    fun setDataProperties(maps: Map<EntityDataType<*>, Any>, send: Boolean) {
+        val sendMap: EntityDataMap = EntityDataMap()
+        for (e: Map.Entry<EntityDataType<*>, Any> in maps.entries) {
+            val key: EntityDataType<*> = e.key
+            val value: Any = e.value
+            if (getEntityDataMap().containsKey(key) && getEntityDataMap().get(key) == value) {
+                continue
+            }
+            getEntityDataMap().put(key, value)
+            sendMap.put(key, value)
+        }
+        if (send) {
+            this.sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), sendMap)
+        }
+    }
+
+    fun setDataProperty(key: EntityDataType<*>, value: Any): Boolean {
+        return setDataProperty(key, value, true)
+    }
+
+    fun setDataProperty(key: EntityDataType<*>, value: Any, send: Boolean): Boolean {
+        if (getEntityDataMap().containsKey(key) && getEntityDataMap().get(key) == value) {
+            return false
+        }
+
+        getEntityDataMap().put(key, value)
+        if (send) {
+            val map: EntityDataMap = EntityDataMap()
+            map.put(key, value)
+            this.sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), map)
+        }
+        return true
+    }
+
+    fun getEntityDataMap(): EntityDataMap {
+        return this.entityDataMap
+    }
+
+    fun <T> getDataProperty(key: EntityDataType<T>): T {
+        return getEntityDataMap().get<T>(key)
+    }
+
+    fun <T> getDataProperty(key: EntityDataType<T>, d: T): T {
+        return getEntityDataMap().getOrDefault(key, d)
+    }
+
+    fun setDataFlag(entityFlag: EntityFlag) {
+        this.setDataFlag(entityFlag, true)
+    }
+
+    fun setDataFlag(entityFlag: EntityFlag, value: Boolean) {
+        if (getEntityDataMap().existFlag(entityFlag) xor value) {
+            getEntityDataMap().setFlag(entityFlag, value)
+            val entityDataMap: EntityDataMap = EntityDataMap()
+            entityDataMap.put(EntityDataTypes.Companion.FLAGS, getEntityDataMap().getFlags())
+            sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+        }
+    }
+
+    fun setDataFlags(entityFlags: EnumSet<EntityFlag?>) {
+        getEntityDataMap().put(EntityDataTypes.Companion.FLAGS, entityFlags)
+        sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+    }
+
+    fun setDataFlagExtend(entityFlag: EntityFlag) {
+        this.setDataFlag(entityFlag, true)
+    }
+
+    fun setDataFlagExtend(entityFlag: EntityFlag, value: Boolean) {
+        if (getEntityDataMap().existFlag(entityFlag) xor value) {
+            val entityFlags: EnumSet<EntityFlag> =
+                getEntityDataMap().getOrDefault<EnumSet<EntityFlag>>(
+                    EntityDataTypes.Companion.FLAGS_2, EnumSet.noneOf<EntityFlag>(
+                        EntityFlag::class.java
+                    )
+                )
+            if (value) {
+                entityFlags.add(entityFlag)
+            } else {
+                entityFlags.remove(entityFlag)
+            }
+            getEntityDataMap().put(EntityDataTypes.Companion.FLAGS_2, entityFlags)
+            val entityDataMap: EntityDataMap = EntityDataMap()
+            entityDataMap.put(EntityDataTypes.Companion.FLAGS_2, entityFlags)
+            sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+        }
+    }
+
+    fun setDataFlagsExtend(entityFlags: EnumSet<EntityFlag?>) {
+        getEntityDataMap().put(EntityDataTypes.Companion.FLAGS_2, entityFlags)
+        sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+    }
+
+    fun getDataFlag(id: EntityFlag?): Boolean {
+        return getEntityDataMap().getOrCreateFlags().contains(id)
+    }
+
+    fun setPlayerFlag(entityFlag: PlayerFlag) {
+        var flags: Byte =
+            getEntityDataMap().getOrDefault<Byte>(EntityDataTypes.Companion.PLAYER_FLAGS, 0.toByte())
+        flags = (flags.toInt() xor (1 shl entityFlag.getValue()).toByte().toInt()).toByte()
+        this.setDataProperty(EntityDataTypes.Companion.PLAYER_FLAGS, flags)
+    }
+
+    override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
+        server!!.entityMetadata.setMetadata(this, metadataKey, newMetadataValue)
+    }
+
+    override fun getMetadata(metadataKey: String): List<MetadataValue> {
+        return server!!.entityMetadata.getMetadata(this, metadataKey)
+    }
+
+    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue {
+        return server!!.entityMetadata.getMetadata(this, metadataKey, plugin)
+    }
+
+    override fun hasMetadata(metadataKey: String): Boolean {
+        return server!!.entityMetadata.hasMetadata(this, metadataKey)
+    }
+
+    override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
+        return server!!.entityMetadata.hasMetadata(this, metadataKey, plugin)
+    }
+
+    override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
+        server!!.entityMetadata.removeMetadata(this, metadataKey, owningPlugin)
+    }
+
+    open fun getServer(): Server? {
+        return server
+    }
+
+
+    open fun isUndead(): Boolean {
+        return false
+    }
+
+
+    fun isInEndPortal(): Boolean {
+        return inEndPortal
+    }
+
+
+    open fun isPreventingSleep(player: Player?): Boolean {
+        return false
+    }
+
+    override fun equals(obj: Any?): Boolean {
+        if (obj == null) {
+            return false
+        }
+        if (javaClass != obj.javaClass) {
+            return false
+        }
+        val other: Entity = obj as Entity
+        return this.getId() == other.getId()
+    }
+
+    override fun hashCode(): Int {
+        var hash: Int = 7
+        hash = (29 * hash + this.getId()).toInt()
+        return hash
+    }
+
+
+    fun isSpinAttacking(): Boolean {
+        return this.getDataFlag(EntityFlag.DAMAGE_NEARBY_MOBS)
+    }
+
+
+    fun setSpinAttacking(value: Boolean) {
+        this.setDataFlag(EntityFlag.DAMAGE_NEARBY_MOBS, value)
+    }
+
+
+    fun setSpinAttacking() {
+        this.setSpinAttacking(true)
+    }
+
+
+    fun isNoClip(): Boolean {
+        return noClip
+    }
+
+
+    fun setNoClip(noClip: Boolean) {
+        this.noClip = noClip
+        this.setDataFlag(EntityFlag.HAS_COLLISION, noClip)
+    }
+
+
+    open fun isBoss(): Boolean {
+        return this is EntityBoss
+    }
+
+
+    fun addTag(tag: String) {
+        namedTag!!.putList(
+            "Tags",
+            namedTag!!.getList("Tags", StringTag::class.java).add(StringTag(tag))
+        )
+    }
+
+
+    fun removeTag(tag: String) {
+        val tags: ListTag<StringTag> = namedTag!!.getList("Tags", StringTag::class.java)
+        tags.remove(StringTag(tag))
+        namedTag!!.putList("Tags", tags)
+    }
+
+
+    fun containTag(tag: String): Boolean {
+        return namedTag!!.getList(
+            "Tags",
+            StringTag::class.java
+        ).getAll().stream().anyMatch { t: StringTag -> t.data == tag }
+    }
+
+
+    fun getAllTags(): List<StringTag> {
+        return namedTag!!.getList("Tags", StringTag::class.java).getAll()
+    }
+
+
+    fun getFreezingEffectStrength(): Float {
+        return this.getDataProperty<Float>(EntityDataTypes.Companion.FREEZING_EFFECT_STRENGTH)
+    }
+
+
+    fun setFreezingEffectStrength(strength: Float) {
+        require(!(strength < 0 || strength > 1)) { "Freezing Effect Strength must be between 0 and 1" }
+        this.setDataProperty(EntityDataTypes.Companion.FREEZING_EFFECT_STRENGTH, strength)
+    }
+
+
+    fun getFreezingTicks(): Int {
+        return this.freezingTicks
+    }
+
+
+    fun setFreezingTicks(ticks: Int) {
+        this.freezingTicks = max(0.0, min(ticks.toDouble(), 140.0)).toInt()
+        setFreezingEffectStrength(ticks / 140f)
+    }
+
+
+    fun addFreezingTicks(increments: Int) {
+        if (freezingTicks + increments < 0) this.freezingTicks = 0
+        else if (freezingTicks + increments > 140) this.freezingTicks = 140
+        else this.freezingTicks += increments
+        setFreezingEffectStrength(this.freezingTicks / 140f)
+    }
+
+
+    fun setAmbientSoundInterval(interval: Float) {
+        this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_INTERVAL, interval)
+    }
+
+
+    fun setAmbientSoundIntervalRange(range: Float) {
+        this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_INTERVAL, range)
+    }
+
+
+    fun setAmbientSoundEvent(sound: Sound) {
+        this.setAmbientSoundEventName(sound.sound)
+    }
+
+
+    fun setAmbientSoundEventName(eventName: String) {
+        this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_EVENT_NAME, eventName)
+    }
+
+
+    fun playAnimation(animation: Animation) {
+        val viewers: HashSet<Player> = HashSet(getViewers().values)
+        if (this.isPlayer) viewers.add(this as Player)
+        playAnimation(animation, viewers)
+    }
+
+    /**
+     * Play the animation of this entity to a specified group of players
+     *
+     *
+     * 向指定玩家群体播放此实体的动画
+     *
+     * @param animation 动画对象 Animation objects
+     * @param players   可视玩家 Visible Player
+     */
+    fun playAnimation(animation: Animation, players: Collection<Player>) {
+        val pk: AnimateEntityPacket = AnimateEntityPacket()
+        pk.parseFromAnimation(animation)
+        pk.entityRuntimeIds.add(this.getId())
+        Server.broadcastPacket(players, pk)
+    }
+
+
+    fun playActionAnimation(action: AnimatePacket.Action?, rowingTime: Float) {
+        val viewers: HashSet<Player> = HashSet(getViewers().values)
+        if (this.isPlayer) viewers.add(this as Player)
+        playActionAnimation(action, rowingTime, viewers)
+    }
+
+    /**
+     * Play the action animation of this entity to a specified group of players
+     *
+     *
+     * 向指定玩家群体播放此实体的action动画
+     *
+     * @param action     the action
+     * @param rowingTime the rowing time
+     * @param players    可视玩家 Visible Player
+     */
+    fun playActionAnimation(action: AnimatePacket.Action?, rowingTime: Float, players: Collection<Player>) {
+        val pk: AnimatePacket = AnimatePacket()
+        pk.action = action
+        pk.rowingTime = rowingTime
+        pk.eid = this.getId()
+        Server.broadcastPacket(players, pk)
+    }
+
+    fun getLookingAngleAt(location: Vector3): Double {
+        val anglePosition: Double = abs(Math.toDegrees(atan2(location.x - position.x, location.z - position.z)))
+        val angleVector: Double = abs(
+            Math.toDegrees(
+                atan2(
+                    getDirectionVector().x, getDirectionVector().z
+                )
+            )
+        )
+        return abs(anglePosition - angleVector)
+    }
+
+    fun getLookingAngleAtPitch(location: Vector3): Double {
+        val anglePosition: Double = abs(Math.toDegrees(atan2(location.y - (position.y + getEyeHeight()), 0.0)))
+        val angleVector: Double = abs(rotation.pitch)
+        return abs(abs(anglePosition - angleVector) - 90)
+    }
+
+    fun isLookingAt(location: Vector3, tolerance: Double, checkRaycast: Boolean): Boolean {
+        return getLookingAngleAt(location) <= tolerance && getLookingAngleAtPitch(location) <= tolerance && (!checkRaycast || level!!.raycastBlocks(
+            location,
+            position.add(0.0, getEyeHeight().toDouble(), 0.0)
+        ).isEmpty())
+    }
+
+    private fun validateAndSetIntProperty(identifier: String, value: Int): Boolean {
+        if (!intProperties.containsKey(identifier)) return false
+        intProperties.put(identifier, value)
+        return true
+    }
+
+    fun setIntEntityProperty(identifier: String, value: Int): Boolean {
+        return validateAndSetIntProperty(identifier, value)
+    }
+
+
+    fun setBooleanEntityProperty(identifier: String, value: Boolean): Boolean {
+        return validateAndSetIntProperty(identifier, if (value) 1 else 0)
+    }
+
+    fun setFloatEntityProperty(identifier: String?, value: Float): Boolean {
+        if (!floatProperties.containsKey(identifier)) return false
+        floatProperties.put(identifier, value)
+        return true
+    }
+
+    fun setEnumEntityProperty(identifier: String, value: String): Boolean {
+        if (!intProperties.containsKey(identifier)) return false
+        val entityPropertyList: List<EntityProperty> = EntityProperty.Companion.getEntityProperty(
+            this.getIdentifier()
+        )
+
+        for (property: EntityProperty in entityPropertyList) {
+            if (identifier != property.getIdentifier() || property !is EnumEntityProperty) {
+                continue
+            }
+            val index: Int = property.findIndex(value)
+
+            if (index >= 0) {
+                intProperties.put(identifier, index)
+                return true
+            }
+            return false
+        }
+        return false
+    }
+
+    fun getIntEntityProperty(identifier: String?): Int {
+        return intProperties.get(identifier)!!
+    }
+
+    fun getBooleanEntityProperty(identifier: String?): Boolean {
+        return intProperties.get(identifier) == 1
+    }
+
+    fun getFloatEntityProperty(identifier: String?): Float {
+        return floatProperties.get(identifier)!!
+    }
+
+    fun getEnumEntityProperty(identifier: String): String? {
+        val entityPropertyList: List<EntityProperty> = EntityProperty.Companion.getEntityProperty(
+            this.getIdentifier()
+        )
+
+        for (property: EntityProperty in entityPropertyList) {
+            if (identifier != property.getIdentifier() || property !is EnumEntityProperty) {
+                continue
+            }
+            return property.getEnums().get(intProperties.get(identifier)!!)
+        }
+        return null
+    }
+
+    private fun initEntityProperties(entityIdentifier: String) {
+        val entityPropertyList: List<EntityProperty> = EntityProperty.Companion.getEntityProperty(entityIdentifier)
+        if (entityPropertyList.isEmpty()) return
+
+        for (property: EntityProperty in entityPropertyList) {
+            val identifier: String? = property.getIdentifier()
+
+            when (property) {
+                -> floatProperties.put(identifier, floatProperty.getDefaultValue())
+                -> intProperties.put(identifier, intProperty.getDefaultValue())
+                -> intProperties.put(identifier, if (booleanProperty.getDefaultValue()) 1 else 0)
+                -> intProperties.put(identifier, enumProperty.findIndex(enumProperty.getDefaultValue()))
+                else -> {}
+            }
+        }
+    }
+
+
+    private fun propertySyncData(): PropertySyncData {
+        val intValues: Collection<Int> = intProperties.values()
+        val intArray: IntArray = IntArray(intValues.size())
+        var i: Int = 0
+        for (value: Int in intValues) {
+            intArray.get(i++) = value
+        }
+
+        val floatValues: Collection<Float> = floatProperties.values()
+        val floatArray: FloatArray = FloatArray(floatValues.size())
+        i = 0
+        for (value: Float in floatValues) {
+            floatArray.get(i++) = value
+        }
+
+        return PropertySyncData(intArray, floatArray)
+    }
+
+    fun getAttributes(): Map<Int, Attribute> {
+        return attributes
+    }
+
+    fun isInitialized(): Boolean {
+        return initialized
+    }
+
+    fun getLevel(): Level {
+        return level!!
+    }
+
+    fun getChunkX(): Int {
+        return position.getChunkX()
+    }
+
+    fun getChunkZ(): Int {
+        return position.getChunkZ()
+    }
+
+    fun getX(): Double {
+        return position.x
+    }
+
+    fun getY(): Double {
+        return position.y
+    }
+
+    fun getZ(): Double {
+        return position.z
+    }
+
+    override fun getVector3(): Vector3 {
+        return position.clone()
+    }
+
+    companion object {
+        const val TAG_CHESTED: String = "Chested"
+        const val TAG_COLOR: String = "Color"
+        const val TAG_COLOR2: String = "Color2"
+        const val TAG_CUSTOM_NAME: String = "CustomName"
+        const val TAG_CUSTOM_NAME_VISIBLE: String = "CustomNameVisible"
+        const val TAG_DEFINITIONS: String = "definitions"
+        const val TAG_FALL_DISTANCE: String = "FallDistance"
+        const val TAG_FIRE: String = "Fire"
+        const val TAG_IDENTIFIER: String = "identifier"
+        const val TAG_INTERNAL_COMPONENTS: String = "InternalComponents"
+        const val TAG_INVULNERABLE: String = "Invulnerable"
+        const val TAG_IS_ANGRY: String = "IsAngry"
+        const val TAG_IS_AUTONOMOUS: String = "IsAutonomous"
+        const val TAG_IS_BABY: String = "IsBaby"
+        const val TAG_IS_EATING: String = "IsEating"
+        const val TAG_IS_GLIDING: String = "IsGliding"
+        const val TAG_IS_GLOBAL: String = "IsGlobal"
+        const val TAG_IS_ILLAGER_CAPTAIN: String = "IsIllagerCaptain"
+        const val TAG_IS_ORPHANED: String = "IsOrphaned"
+        const val TAG_IS_OUT_OF_CONTROL: String = "IsOutOfControl"
+        const val TAG_IS_ROARING: String = "IsRoaring"
+        const val TAG_IS_SCARED: String = "IsScared"
+        const val TAG_IS_STUNNED: String = "IsStunned"
+        const val TAG_IS_SWIMMING: String = "IsSwimming"
+        const val TAG_IS_TAMED: String = "IsTamed"
+        const val TAG_IS_TRUSTING: String = "IsTrusting"
+        const val TAG_LAST_DIMENSION_ID: String = "LastDimensionId"
+        const val TAG_LINKS_TAG: String = "LinksTag"
+        const val TAG_LOOT_DROPPED: String = "LootDropped"
+        const val TAG_MARK_VARIANT: String = "MarkVariant"
+        const val TAG_MOTION: String = "Motion"
+        const val TAG_ON_GROUND: String = "OnGround"
+        const val TAG_OWNER_NEW: String = "OwnerNew"
+        const val TAG_PERSISTENT: String = "Persistent"
+        const val TAG_PORTAL_COOLDOWN: String = "PortalCooldown"
+        const val TAG_POS: String = "Pos"
+        const val TAG_ROTATION: String = "Rotation"
+        const val TAG_SADDLED: String = "Saddled"
+        const val TAG_SHEARED: String = "Sheared"
+        const val TAG_SHOW_BOTTOM: String = "ShowBottom"
+        const val TAG_SKIN_ID: String = "SkinID"
+        const val TAG_STRENGTH: String = "Strength"
+        const val TAG_STRENGTH_MAX: String = "StrengthMax"
+        const val TAG_TAGS: String = "Tags"
+        const val TAG_UNIQUE_ID: String = "UniqueID"
+        const val TAG_VARIANT: String = "Variant"
+
+        @JvmField
+        val EMPTY_ARRAY: Array<Entity?> = arrayOfNulls(0)
+        var entityCount: AtomicLong = AtomicLong(1)
+
+        /**
+         * 从mc标准实体标识符创建实体，形如(minecraft:sheep)
+         *
+         *
+         * Create an entity from the entity identifier, like (minecraft:sheep)
+         *
+         * @param identifier the identifier
+         * @param pos        the pos
+         * @param args       the args
+         * @return the entity
+         */
+        fun createEntity(identifier: Identifier, pos: Locator, vararg args: Any?): Entity? {
+            return createEntity(
+                identifier.toString(),
+                Objects.requireNonNull(pos.getChunk()),
+                getDefaultNBT(pos.position),
+                *args
+            )
+        }
+
+        /**
+         * 创建一个实体从实体名,名称从[registerEntities][Entity.init]源代码查询
+         *
+         *
+         * Create an entity from entity name, name from [registerEntities][Entity.init] source code query
+         *
+         * @param name the name
+         * @param pos  the pos
+         * @param args the args
+         * @return the entity
+         */
+        @JvmStatic
+        fun createEntity(name: String, pos: Locator, vararg args: Any?): Entity? {
+            return createEntity(name, Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos.position), *args)
+        }
+
+        /**
+         * 创建一个实体从网络id
+         *
+         *
+         * Create an entity from the network id
+         *
+         * @param type 网络ID<br></br> network id
+         * @param pos  the pos
+         * @param args the args
+         * @return the entity
+         */
+        @JvmStatic
+        fun createEntity(type: Int, pos: Locator, vararg args: Any?): Entity? {
+            val entityIdentifier: String? = Registries.ENTITY.getEntityIdentifier(type)
+            if (entityIdentifier == null) return null
+            return createEntity(
+                entityIdentifier,
+                Objects.requireNonNull(pos.getChunk()),
+                getDefaultNBT(pos.position),
+                *args
+            )
+        }
+
+        /**
+         * 创建一个实体从网络id
+         *
+         *
+         * Create an entity from the network id
+         *
+         * @param type  网络ID<br></br> network id
+         * @param chunk the chunk
+         * @param nbt   the nbt
+         * @param args  the args
+         * @return the entity
+         */
+        @JvmStatic
+        fun createEntity(type: Int, chunk: IChunk, nbt: CompoundTag, vararg args: Any?): Entity? {
+            val entityIdentifier: String? = Registries.ENTITY.getEntityIdentifier(type)
+            if (entityIdentifier == null) return null
+            return Registries.ENTITY.provideEntity(entityIdentifier, chunk, nbt, *args)
+        }
+
+        @JvmStatic
+        fun createEntity(identifier: String, chunk: IChunk, nbt: CompoundTag, vararg args: Any?): Entity? {
+            Identifier.assertValid(identifier)
+            return Registries.ENTITY.provideEntity(identifier, chunk, nbt, *args)
+        }
+
+        /**
+         * 获取指定网络id实体的标识符
+         *
+         *
+         * Get the identifier of the specified network id entity
+         *
+         * @return the identifier
+         */
+        fun getIdentifier(networkID: Int): Identifier? {
+            val entityIdentifier: String? = Registries.ENTITY.getEntityIdentifier(networkID)
+            if (entityIdentifier == null) return null
+            return Identifier(entityIdentifier)
+        }
+
+        /**
+         * @see .getDefaultNBT
+         */
+        @JvmStatic
+        fun getDefaultNBT(pos: Vector3): CompoundTag {
+            return getDefaultNBT(pos, null)
+        }
+
+        fun getDefaultNBT(pos: Vector3, motion: Vector3?): CompoundTag {
+            return getDefaultNBT(pos, motion, 0f, 0f)
+        }
+
+        /**
+         * 获得该实体的默认NBT，带有位置,motion，yaw pitch等信息
+         *
+         *
+         * Get the default NBT of the entity, with information such as position, motion, yaw pitch, etc.
+         *
+         * @param pos    the pos
+         * @param motion the motion
+         * @param yaw    the yaw
+         * @param pitch  the pitch
+         * @return the default nbt
+         */
+        @JvmStatic
+        fun getDefaultNBT(pos: Vector3, motion: Vector3?, yaw: Float, pitch: Float): CompoundTag {
+            return CompoundTag()
+                .putList(
+                    TAG_POS, ListTag<FloatTag>()
+                        .add(FloatTag(pos.x.toFloat()))
+                        .add(FloatTag(pos.y.toFloat()))
+                        .add(FloatTag(pos.z.toFloat()))
+                )
+                .putList(
+                    TAG_MOTION, ListTag<FloatTag>()
+                        .add(FloatTag(if (motion != null) motion.x.toFloat() else 0f))
+                        .add(FloatTag(if (motion != null) motion.y.toFloat() else 0f))
+                        .add(FloatTag(if (motion != null) motion.z.toFloat() else 0f))
+                )
+                .putList(
+                    TAG_ROTATION, ListTag<FloatTag>()
+                        .add(FloatTag(yaw))
+                        .add(FloatTag(pitch))
+                )
+        }
+
+        /**
+         * Batch play animation on entity groups<br></br>
+         * This method is recommended if you need to play the same animation on a large number of entities at the same time, as it only sends packets once for each player, which greatly reduces bandwidth pressure
+         *
+         *
+         * 在实体群上批量播放动画<br></br>
+         * 若你需要同时在大量实体上播放同一动画，建议使用此方法，因为此方法只会针对每个玩家发送一次包，这能极大地缓解带宽压力
+         *
+         * @param animation 动画对象 Animation objects
+         * @param entities  需要播放动画的实体群 Group of entities that need to play animations
+         * @param players   可视玩家 Visible Player
+         */
+        fun playAnimationOnEntities(animation: Animation, entities: Collection<Entity>, players: Collection<Player>) {
+            val pk: AnimateEntityPacket = AnimateEntityPacket()
+            pk.parseFromAnimation(animation)
+            entities.forEach(Consumer { entity: Entity -> pk.entityRuntimeIds.add(entity.getId()) })
+            Server.broadcastPacket(players, pk)
+        }
+
+        /**
+         * @see .playAnimationOnEntities
+         */
+        fun playAnimationOnEntities(animation: Animation, entities: Collection<Entity>) {
+            val viewers: HashSet<Player> = HashSet()
+            entities.forEach(Consumer { entity: Entity ->
+                viewers.addAll(entity.getViewers().values())
+                if (entity.isPlayer) viewers.add(entity as Player)
+            })
+            playAnimationOnEntities(animation, entities, viewers)
+        }
+    }
+}

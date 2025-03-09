@@ -1,0 +1,87 @@
+package org.chorus.block
+
+import cn.nukkit.Player
+import cn.nukkit.block.Block.Companion.get
+import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.type.EnumPropertyType
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+
+abstract class BlockRedstoneRepeater(blockState: BlockState?) : BlockRedstoneDiode(blockState) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
+        val repeaterDelay = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REPEATER_DELAY)
+        if (repeaterDelay == 3) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REPEATER_DELAY, 0)
+        } else {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REPEATER_DELAY, repeaterDelay + 1)
+        }
+
+        level.setBlock(this.position, this, true, true)
+        return true
+    }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isSupportValid(down()!!)) {
+            return false
+        }
+        val blockFace = if (player != null) fromHorizontalIndex(
+            player.getDirection()!!
+                .getOpposite()!!.horizontalIndex
+        ) else BlockFace.SOUTH
+        setPropertyValue<MinecraftCardinalDirection, org.chorus.block.property.type.EnumPropertyType<MinecraftCardinalDirection>>(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(blockFace)
+        )
+        if (!level.setBlock(block.position, this, true, true)) {
+            return false
+        }
+
+        if (level.server.settings.levelSettings().enableRedstone()) {
+            if (shouldBePowered()) {
+                level.scheduleUpdate(this, 1)
+            }
+        }
+        return true
+    }
+
+    override val facing: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
+            getPropertyValue<MinecraftCardinalDirection, org.chorus.block.property.type.EnumPropertyType<MinecraftCardinalDirection>>(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+            )
+        )
+
+    override fun isAlternateInput(block: Block): Boolean {
+        return BlockRedstoneDiode.Companion.isDiode(block)
+    }
+
+    override fun toItem(): Item? {
+        return ItemRepeater()
+    }
+
+    override val delay: Int
+        get() = (1 + getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REPEATER_DELAY)) * 2
+
+    override val isLocked: Boolean
+        get() = this.powerOnSides > 0
+}

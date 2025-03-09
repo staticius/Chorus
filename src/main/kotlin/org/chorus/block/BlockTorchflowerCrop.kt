@@ -1,0 +1,125 @@
+package org.chorus.block
+
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.min
+
+class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockCrops(blockstate) {
+    override val name: String
+        get() = "Torchflower Crop"
+
+    override fun toItem(): Item? {
+        return Item.get(ItemID.TORCHFLOWER_SEEDS)
+    }
+
+    override val itemId: String
+        get() = ItemID.TORCHFLOWER_SEEDS
+
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        //Bone meal
+        if (item.isFertilizer) {
+            val max = maxGrowth
+            var growth = growth
+
+            if (growth == 1) {
+                val block = BlockTorchflower()
+                val ev = BlockGrowEvent(this, block)
+                instance!!.pluginManager.callEvent(ev)
+
+
+                level.setBlock(this.position, ev.newState!!, false, true)
+                level.addParticle(BoneMealParticle(this.position))
+
+                if (player != null && !player.isCreative) {
+                    item.count--
+                }
+                return true
+            }
+            if (growth < max) {
+                val block = clone() as BlockTorchflowerCrop
+                growth += 1
+                block.growth = min(growth.toDouble(), max.toDouble()).toInt()
+                val ev = BlockGrowEvent(this, block)
+                instance!!.pluginManager.callEvent(ev)
+
+                if (ev.isCancelled) {
+                    return false
+                }
+
+                level.setBlock(this.position, ev.newState!!, false, true)
+                level.addParticle(BoneMealParticle(this.position))
+
+                if (player != null && !player.isCreative) {
+                    item.count--
+                }
+            }
+
+            return true
+        }
+
+        return false
+    }
+
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_NORMAL) {
+            if (down()!!.id != BlockID.FARMLAND) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
+            }
+        } else if (type == Level.BLOCK_UPDATE_RANDOM) {
+            if (ThreadLocalRandom.current()
+                    .nextInt(2) == 1 && level.getFullLight(this.position) >= getMinimumLightLevel()
+            ) {
+                val growth = growth
+                if (growth == 1) {
+                    val block = BlockTorchflower()
+                    val ev = BlockGrowEvent(this, block)
+                    instance!!.pluginManager.callEvent(ev)
+
+                    if (ev.isCancelled) {
+                        return 0
+                    } else {
+                        level.setBlock(this.position, ev.newState!!, false, true)
+                        return Level.BLOCK_UPDATE_RANDOM
+                    }
+                }
+                if (growth < maxGrowth) {
+                    val block = clone() as BlockTorchflowerCrop
+                    block.growth = growth + 1
+                    val ev = BlockGrowEvent(this, block)
+                    instance!!.pluginManager.callEvent(ev)
+
+                    if (!ev.isCancelled) {
+                        level.setBlock(this.position, ev.newState!!, false, true)
+                    } else {
+                        return Level.BLOCK_UPDATE_RANDOM
+                    }
+                }
+            } else {
+                return Level.BLOCK_UPDATE_RANDOM
+            }
+        }
+
+        return 0
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.TORCHFLOWER_CROP, CommonBlockProperties.GROWTH)
+            get() = Companion.field
+    }
+}

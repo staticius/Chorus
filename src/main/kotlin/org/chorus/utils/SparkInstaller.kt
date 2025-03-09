@@ -1,0 +1,42 @@
+package org.chorus.utils
+
+import cn.nukkit.Server
+import lombok.extern.slf4j.Slf4j
+import java.io.*
+import java.nio.file.Files
+import javax.annotation.Nonnull
+
+@Slf4j
+object SparkInstaller {
+    @JvmStatic
+    fun initSpark(@Nonnull server: Server): Boolean {
+        var download = false
+        val spark = server.pluginManager.getPlugin("spark")
+        if (spark == null) {
+            download = true
+        }
+
+        if (download) {
+            try {
+                SparkInstaller::class.java.classLoader.getResourceAsStream("spark.jar").use { `in` ->
+                    checkNotNull(`in`)
+                    val targetPath = File(server.pluginPath, "spark.jar")
+                    if (!targetPath.exists()) {
+                        //Do not remove this try catch block!!!
+                        try {
+                            Files.copy(`in`, targetPath.toPath())
+                            server.pluginManager.enablePlugin(server.pluginManager.loadPlugin(targetPath)!!)
+                            SparkInstaller.log.info("Spark has been installed.")
+                        } catch (e: Exception) {
+                            SparkInstaller.log.warn("Failed to copy spark: {}", e.stackTrace.contentToString())
+                        }
+                    }
+                }
+            } catch (e: IOException) {
+                SparkInstaller.log.warn("Failed to download spark: {}", e.stackTrace.contentToString())
+            }
+        }
+
+        return download
+    }
+}

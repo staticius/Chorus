@@ -1,0 +1,147 @@
+package org.chorus.command.defaults
+
+import cn.nukkit.block.Block
+import cn.nukkit.command.CommandSender
+import cn.nukkit.command.data.CommandParamType
+import cn.nukkit.command.data.CommandParameter
+import cn.nukkit.command.tree.ParamList
+import cn.nukkit.command.utils.CommandLogger
+import cn.nukkit.level.Locator
+import cn.nukkit.math.*
+import cn.nukkit.utils.Utils
+import kotlin.math.max
+import kotlin.math.min
+
+class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testforblocks.description") {
+    init {
+        this.permission = "nukkit.command.testforblocks"
+        getCommandParameters().clear()
+        this.addCommandParameters(
+            "default", arrayOf<CommandParameter?>(
+                CommandParameter.Companion.newType("begin", false, CommandParamType.BLOCK_POSITION),
+                CommandParameter.Companion.newType("end", false, CommandParamType.BLOCK_POSITION),
+                CommandParameter.Companion.newType("destination", false, CommandParamType.BLOCK_POSITION),
+                CommandParameter.Companion.newEnum("mode", true, arrayOf<String?>("all", "masked"))
+            )
+        )
+        this.enableParamTree()
+    }
+
+    override fun execute(
+        sender: CommandSender,
+        commandLabel: String?,
+        result: Map.Entry<String, ParamList?>,
+        log: CommandLogger
+    ): Int {
+        val list = result.value
+        val begin = list!!.getResult<Locator>(0)
+        val end = list.getResult<Locator>(1)
+        val destination = list.getResult<Locator>(2)
+        var mode = TestForBlocksMode.ALL
+
+        if (list.hasResult(3)) {
+            val str = list.getResult<String>(3)
+            mode = TestForBlocksMode.valueOf(str!!.uppercase())
+        }
+
+        val blocksAABB: AxisAlignedBB = SimpleAxisAlignedBB(
+            min(begin!!.x, end!!.x), min(
+                begin.y, end.y
+            ), min(begin.z, end.z), max(begin.x, end.x), max(
+                begin.y, end.y
+            ), max(begin.z, end.z)
+        )
+        val size =
+            NukkitMath.floorDouble((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
+
+        if (size > 16 * 16 * 256 * 8) {
+            log.addError("commands.fill.tooManyBlocks", size.toString(), (16 * 16 * 256 * 8).toString())
+            log.addError("Operation will continue, but too many blocks may cause stuttering")
+            log.output()
+        }
+
+        val to = Vector3(
+            destination!!.x + (blocksAABB.maxX - blocksAABB.minX),
+            destination.y + (blocksAABB.maxY - blocksAABB.minY),
+            destination.z + (blocksAABB.maxZ - blocksAABB.minZ)
+        )
+        val destinationAABB: AxisAlignedBB = SimpleAxisAlignedBB(
+            min(destination.x, to.getX()), min(
+                destination.y, to.getY()
+            ), min(destination.z, to.getZ()), max(
+                destination.x, to.getX()
+            ), max(destination.y, to.getY()), max(
+                destination.z, to.getZ()
+            )
+        )
+
+        if (blocksAABB.minY < 0 || blocksAABB.maxY > 255 || destinationAABB.minY < 0 || destinationAABB.maxY > 255) {
+            log.addError("commands.testforblock.outOfWorld").output()
+            return 0
+        }
+
+        val level = begin.level
+
+        var sourceChunkX = NukkitMath.floorDouble(blocksAABB.minX) shr 4
+        var destinationChunkX = NukkitMath.floorDouble(destinationAABB.minX) shr 4
+        while (sourceChunkX <= NukkitMath.floorDouble(blocksAABB.maxX) shr 4) {
+            var sourceChunkZ = NukkitMath.floorDouble(blocksAABB.minZ) shr 4
+            var destinationChunkZ = NukkitMath.floorDouble(destinationAABB.minZ) shr 4
+            while (sourceChunkZ <= NukkitMath.floorDouble(blocksAABB.maxZ) shr 4) {
+                if (level.getChunkIfLoaded(sourceChunkX, sourceChunkZ) == null) {
+                    log.addError("commands.testforblock.outOfWorld").output()
+                    return 0
+                }
+                if (level.getChunkIfLoaded(destinationChunkX, destinationChunkZ) == null) {
+                    log.addError("commands.testforblock.outOfWorld").output()
+                    return 0
+                }
+                sourceChunkZ++
+                destinationChunkZ++
+            }
+            sourceChunkX++
+            destinationChunkX++
+        }
+
+        val blocks = Utils.getLevelBlocks(level, blocksAABB)
+        val destinationBlocks = Utils.getLevelBlocks(level, destinationAABB)
+        var count = 0
+
+        when (mode) {
+            TestForBlocksMode.ALL -> {
+                for (i in blocks.indices) {
+                    val block = blocks[i]
+                    val destinationBlock = destinationBlocks[i]
+
+                    if (block.equalsBlock(destinationBlock)) {
+                        ++count
+                    } else {
+                        log.addError("commands.compare.failed").output()
+                        return 0
+                    }
+                }
+            }
+
+            TestForBlocksMode.MASKED -> {
+                for (i in blocks.indices) {
+                    val block = blocks[i]
+                    val destinationBlock = destinationBlocks[i]
+
+                    if (block.equalsBlock(destinationBlock)) {
+                        ++count
+                    } else if (block.id !== Block.AIR) {
+                        log.addError("commands.compare.failed").output()
+                        return 0
+                    }
+                }
+            }
+        }
+        log.addSuccess("commands.compare.success", count.toString()).output()
+        return 1
+    }
+
+    enum class TestForBlocksMode {
+        ALL,
+        MASKED
+    }
+}

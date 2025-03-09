@@ -1,8 +1,0 @@
-package cn.nukkit.block
-
-class BlockHardBlueStainedGlass(blockstate: BlockState?) : Block(blockstate) {
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.HARD_BLUE_STAINED_GLASS)
-            get() = Companion.field
-    }
-}

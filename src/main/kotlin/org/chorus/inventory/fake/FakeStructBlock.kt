@@ -1,0 +1,97 @@
+package org.chorus.inventory.fake
+
+import cn.nukkit.Player
+import cn.nukkit.block.BlockStructureBlock
+import cn.nukkit.blockentity.*
+import cn.nukkit.entity.Entity.getLocator
+import cn.nukkit.math.BlockVector3
+import cn.nukkit.math.Vector3
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.network.protocol.BlockEntityDataPacket
+import cn.nukkit.network.protocol.UpdateBlockPacket
+import java.util.function.Consumer
+
+class FakeStructBlock : SingleFakeBlock(BlockStructureBlock(), BlockEntity.STRUCTURE_BLOCK) {
+    override fun getOffset(player: Player): Vector3 {
+        val floorX = player.position.floorX
+        val floorZ = player.position.floorZ
+        return Vector3(floorX.toDouble(), (player.level!!.minHeight + 1).toDouble(), floorZ.toDouble())
+    }
+
+    override fun create(player: Player) {
+        val pos: BlockVector3 = player.getLocator().position.floor().asBlockVector3()
+        create(pos, pos, player)
+    }
+
+    fun create(targetStart: BlockVector3, targetEnd: BlockVector3, player: Player) {
+        createAndGetLastPositions(player).add(this.getOffset(player))
+        lastPositions[player]!!.forEach(Consumer { position: Vector3 ->
+            val updateBlockPacket = UpdateBlockPacket()
+            updateBlockPacket.blockRuntimeId = block.runtimeId
+            updateBlockPacket.flags = UpdateBlockPacket.FLAG_NETWORK
+            updateBlockPacket.x = position.floorX
+            updateBlockPacket.y = position.floorY
+            updateBlockPacket.z = position.floorZ
+            player.dataPacket(updateBlockPacket)
+
+            val blockEntityDataPacket = BlockEntityDataPacket()
+            blockEntityDataPacket.x = position.floorX
+            blockEntityDataPacket.y = position.floorY
+            blockEntityDataPacket.z = position.floorZ
+            blockEntityDataPacket.namedTag = this.getBlockEntityDataAt(position, targetStart, targetEnd)
+            player.dataPacket(blockEntityDataPacket)
+        })
+    }
+
+    override fun remove(player: Player) {
+        lastPositions.getOrDefault(player, HashSet()).forEach(Consumer { position: Vector3 ->
+            val packet = UpdateBlockPacket()
+            packet.blockRuntimeId = player.level!!.getBlock(position).runtimeId
+            packet.flags = UpdateBlockPacket.FLAG_NETWORK
+            packet.x = position.floorX
+            packet.y = position.floorY
+            packet.z = position.floorZ
+            player.dataPacket(packet)
+        })
+        lastPositions.clear()
+    }
+
+    private fun getBlockEntityDataAt(base: Vector3, targetStart: BlockVector3, targetEnd: BlockVector3): CompoundTag {
+        var offsetX = targetStart.x - base.floorX
+        var offsetY = targetStart.y - base.floorY
+        var offsetZ = targetStart.z - base.floorZ
+        val sizeX: Int
+        val sizeY: Int
+        val sizeZ: Int
+        if (targetEnd.x - targetStart.x < 0) {
+            offsetX += targetEnd.x - targetStart.x
+            sizeX = targetStart.x - targetEnd.x + 1
+        } else {
+            sizeX = targetEnd.x - targetStart.x + 1
+        }
+        if (targetEnd.y - targetStart.y < 0) {
+            offsetY += targetEnd.y - targetStart.y
+            sizeY = targetStart.y - targetEnd.y + 1
+        } else {
+            sizeY = targetEnd.y - targetStart.y + 1
+        }
+        if (targetEnd.z - targetStart.z < 0) {
+            offsetZ += targetEnd.z - targetStart.z
+            sizeZ = targetStart.z - targetEnd.z + 1
+        } else {
+            sizeZ = targetEnd.z - targetStart.z + 1
+        }
+        return CompoundTag()
+            .putString("id", tileId!!)
+            .putInt("x", base.floorX)
+            .putInt("y", base.floorY)
+            .putInt("z", base.floorZ)
+            .putBoolean(IStructBlock.TAG_SHOW_BOUNDING_BOX, true)
+            .putInt(IStructBlock.TAG_X_STRUCTURE_OFFSET, offsetX)
+            .putInt(IStructBlock.TAG_Y_STRUCTURE_OFFSET, offsetY)
+            .putInt(IStructBlock.TAG_Z_STRUCTURE_OFFSET, offsetZ)
+            .putInt(IStructBlock.TAG_X_STRUCTURE_SIZE, sizeX)
+            .putInt(IStructBlock.TAG_Y_STRUCTURE_SIZE, sizeY)
+            .putInt(IStructBlock.TAG_Z_STRUCTURE_SIZE, sizeZ)
+    }
+}

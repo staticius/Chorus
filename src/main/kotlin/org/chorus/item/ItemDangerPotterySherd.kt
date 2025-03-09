@@ -1,0 +1,4 @@
+package org.chorus.item
+
+
+class ItemDangerPotterySherd : ItemPotterySherd(ItemID.Companion.DANGER_POTTERY_SHERD)

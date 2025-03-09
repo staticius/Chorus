@@ -1,0 +1,32 @@
+package org.chorus.network.protocol
+
+import cn.nukkit.network.connection.util.HandleByteBuf
+import cn.nukkit.utils.version.Version
+import java.util.*
+
+abstract class AbstractResourcePackDataPacket : DataPacket() {
+    abstract var packVersion: Version?
+
+    abstract var packId: UUID?
+
+    protected fun decodePackInfo(byteBuf: HandleByteBuf) {
+        val packInfo = byteBuf.readString()
+        val packInfoParts: Array<String> = packInfo.split("_", 2)
+        try {
+            packId = UUID.fromString(packInfoParts[0])
+        } catch (exception: IllegalArgumentException) {
+            packId = null
+        }
+        packVersion = if (packInfoParts.size > 1) Version(packInfoParts[1]) else null
+    }
+
+    protected fun encodePackInfo(byteBuf: HandleByteBuf) {
+        val packId = packId
+        val packVersion = packVersion
+        var packInfo = packId?.toString() ?: UUID(0, 0).toString()
+        if (packVersion != null) {
+            packInfo += "_$packVersion"
+        }
+        byteBuf.writeString(packInfo)
+    }
+}

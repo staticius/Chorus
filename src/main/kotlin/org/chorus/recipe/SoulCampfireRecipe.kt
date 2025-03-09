@@ -1,0 +1,21 @@
+package org.chorus.recipe
+
+import cn.nukkit.item.Item
+import cn.nukkit.recipe.descriptor.DefaultDescriptor
+import cn.nukkit.registry.RecipeRegistry
+import java.util.List
+
+class SoulCampfireRecipe(recipeId: String?, result: Item, ingredient: Item) :
+    CampfireRecipe(
+        recipeId
+            ?: RecipeRegistry.computeRecipeId(
+                List.of(result),
+                List.of(DefaultDescriptor(ingredient)),
+                RecipeType.SOUL_CAMPFIRE
+            ), result, ingredient
+    ) {
+    constructor(result: Item, ingredient: Item) : this(null, result, ingredient)
+
+    override val type: RecipeType
+        get() = RecipeType.SOUL_CAMPFIRE
+}

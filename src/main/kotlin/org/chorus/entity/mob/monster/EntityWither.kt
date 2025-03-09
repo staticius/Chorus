@@ -1,0 +1,436 @@
+package org.chorus.entity.mob.monster
+
+import cn.nukkit.Player
+import cn.nukkit.Server
+import cn.nukkit.block.*
+import cn.nukkit.entity.*
+import cn.nukkit.entity.ai.behavior.Behavior
+import cn.nukkit.entity.ai.behavior.IBehavior
+import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup
+import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup
+import cn.nukkit.entity.ai.controller.*
+import cn.nukkit.entity.ai.evaluator.*
+import cn.nukkit.entity.ai.executor.*
+import cn.nukkit.entity.ai.memory.CoreMemoryTypes
+import cn.nukkit.entity.ai.memory.MemoryType
+import cn.nukkit.entity.ai.route.finder.impl.SimpleSpaceAStarRouteFinder
+import cn.nukkit.entity.ai.route.posevaluator.FlyingPosEvaluator
+import cn.nukkit.entity.ai.sensor.ISensor
+import cn.nukkit.entity.ai.sensor.NearestPlayerSensor
+import cn.nukkit.entity.ai.sensor.NearestTargetEntitySensor
+import cn.nukkit.entity.data.EntityDataTypes
+import cn.nukkit.entity.data.EntityFlag
+import cn.nukkit.entity.mob.EntityMob
+import cn.nukkit.event.entity.EntityDamageEvent
+import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
+import cn.nukkit.event.entity.EntityExplosionPrimeEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Explosion
+import cn.nukkit.level.GameRule
+import cn.nukkit.level.Sound
+import cn.nukkit.level.format.IChunk
+import cn.nukkit.math.BlockFace
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.FloatTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.network.protocol.*
+import java.util.List
+import java.util.Set
+import java.util.function.Function
+
+class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), EntityFlyable, EntitySmite {
+    override fun getIdentifier(): String {
+        return EntityID.Companion.WITHER
+    }
+
+    public override fun requireBehaviorGroup(): IBehaviorGroup {
+        return BehaviorGroup(
+            this.tickSpread,
+            setOf<IBehavior>(),
+            Set.of<IBehavior>(
+                Behavior(
+                    PlaySoundExecutor(Sound.MOB_WITHER_AMBIENT), all(
+                        RandomSoundEvaluator(),
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
+                    ), 11, 1),
+                Behavior(
+                    WitherDashExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 1f, true, 64f, 0f), all(
+                        EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
+                        any(
+                            PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_ATTACK_DASH, 400),
+                            IBehaviorEvaluator { entity: EntityMob? -> getDataFlag(EntityFlag.CAN_DASH) }
+                        ),
+                        DistanceEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET, 65.0, 3.0),
+                        IBehaviorEvaluator { entity: EntityMob? -> getHealth() <= maxHealth / 2f },
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
+                    ), 10, 1),
+                Behavior(
+                    WitherDashExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 1f, true, 64f, 0f), all(
+                        EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
+                        any(
+                            PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_ATTACK_DASH, 400),
+                            IBehaviorEvaluator { entity: EntityMob? -> getDataFlag(EntityFlag.CAN_DASH) }
+                        ),
+                        DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER, 65.0, 3.0),
+                        IBehaviorEvaluator { entity: EntityMob? -> getHealth() <= maxHealth / 2f },
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
+                    ), 9, 1),
+                Behavior(
+                    WitherDashExecutor(
+                        CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET,
+                        1f,
+                        true,
+                        64f,
+                        0f
+                    ),
+                    all(
+                        EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                        any(
+                            PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_ATTACK_DASH, 400),
+                            IBehaviorEvaluator { entity: EntityMob? -> getDataFlag(EntityFlag.CAN_DASH) }
+                        ),
+                        DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET, 65.0, 3.0),
+                        IBehaviorEvaluator { entity: EntityMob? -> getHealth() <= maxHealth / 2f },
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
+                    ),
+                    8,
+                    1),
+                Behavior(
+                    MoveToTargetExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.7f, true, 64f, 16f), all(
+                        EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
+                        DistanceEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET, 65.0, 17.0),
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }), 7, 1
+                ),
+                Behavior(
+                    MoveToTargetExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.7f, true, 64f, 16f), all(
+                        EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
+                        DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER, 65.0, 17.0),
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
+                    ), 6, 1),
+                Behavior(
+                    MoveToTargetExecutor(
+                        CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET,
+                        0.7f,
+                        true,
+                        64f,
+                        16f
+                    ), all(
+                        EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                        DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET, 65.0, 17.0),
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
+                    ), 5, 1),
+                Behavior(
+                    WitherShootExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET), all(
+                        EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
+                        PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, 100),
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
+                    ), 4, 1),
+                Behavior(
+                    WitherShootExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER), all(
+                        EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
+                        PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, 100),
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
+                    ), 3, 1),
+                Behavior(
+                    WitherShootExecutor(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET), all(
+                        EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                        PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, 100),
+                        IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
+                    ), 2, 1),
+                Behavior(
+                    SpaceRandomRoamExecutor(0.15f, 12, 100, 20, false, -1, true, 10),
+                    { entity: EntityMob? -> age >= 200 }, 1, 1
+                )
+            ),
+            Set.of<ISensor>(
+                NearestPlayerSensor(64.0, 0.0, 20),
+                NearestTargetEntitySensor<Entity>(
+                    0.0, 64.0, 20,
+                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    Function<Entity, Boolean> { entity: Entity -> this.attackTarget(entity) })
+            ),
+            Set.of<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
+            SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
+            this
+        )
+    }
+
+    private var exploded = false
+    private var deathTicks = -1
+
+    override fun kill() {
+        if (deathTicks == -1) {
+            deathTicks = 190
+            level!!.addLevelSoundEvent(
+                this.position,
+                LevelSoundEventPacket.SOUND_DEATH,
+                -1,
+                EntityID.Companion.WITHER,
+                false,
+                false
+            )
+            val packet = EntityEventPacket()
+            packet.event = EntityEventPacket.DEATH_ANIMATION
+            packet.eid = getId()
+            Server.broadcastPacket(viewers.values, packet)
+            isImmobile = true
+        } else {
+            if (!this.exploded && this.lastDamageCause != null && DamageCause.SUICIDE != lastDamageCause!!.cause) {
+                this.exploded = true
+                this.explode()
+            }
+            super.kill()
+        }
+    }
+
+    override fun setHealth(health: Float) {
+        val healthBefore = getHealth()
+        val halfHealth = maxHealth / 2f
+        super.setHealth(health)
+        if (health <= halfHealth && healthBefore > halfHealth) {
+            if (!isInvulnerable()) {
+                this.explode()
+                setInvulnerable(176)
+            }
+        }
+    }
+
+    fun setInvulnerable(ticks: Int) {
+        this.setDataProperty(EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS, ticks)
+    }
+
+    fun isInvulnerable(): Boolean {
+        return getDataProperty<Int>(EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS!!) > 0
+    }
+
+    override fun attack(source: EntityDamageEvent): Boolean {
+        if (age < 200 || deathTicks != -1) return false
+        if (source.cause == DamageCause.ENTITY_EXPLOSION) {
+            return false
+        }
+        return super.attack(source)
+    }
+
+    override fun getWidth(): Float {
+        return 1.0f
+    }
+
+    override fun getHeight(): Float {
+        return 3.0f
+    }
+
+    override fun createAddEntityPacket(): DataPacket {
+        val addEntity = AddEntityPacket()
+        addEntity.type = networkId
+        addEntity.entityUniqueId = this.getId()
+        addEntity.entityRuntimeId = this.getId()
+        addEntity.yaw = rotation.yaw.toFloat()
+        addEntity.headYaw = rotation.yaw.toFloat()
+        addEntity.pitch = rotation.pitch.toFloat()
+        addEntity.x = position.x.toFloat()
+        addEntity.y = position.y.toFloat()
+        addEntity.z = position.z.toFloat()
+        addEntity.speedX = motion.x.toFloat()
+        addEntity.speedY = motion.y.toFloat()
+        addEntity.speedZ = motion.z.toFloat()
+        addEntity.entityData = this.entityDataMap
+        addEntity.attributes = arrayOf<Attribute>(
+            Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)!!.setMaxValue(getMaxDiffHealth().toFloat())
+                .setValue(getMaxDiffHealth().toFloat())
+        )
+        return addEntity
+    }
+
+    private fun getMaxDiffHealth(): Int {
+        return when (getServer()!!.difficulty) {
+            2 -> 450
+            3 -> 600
+            else -> 300
+        }
+    }
+
+    override fun initEntity() {
+        this.maxHealth = getMaxDiffHealth()
+        super.initEntity()
+        this.blockBreakSound = Sound.MOB_WITHER_BREAK_BLOCK
+        this.setInvulnerable(200)
+        this.setHealth(1f)
+    }
+
+    override fun onUpdate(currentTick: Int): Boolean {
+        if (!closed) {
+            if (deathTicks != -1) {
+                if (deathTicks <= 0) {
+                    kill()
+                } else deathTicks--
+            }
+            if (isInvulnerable()) {
+                this.setDataProperty(
+                    EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS, getDataProperty<Int>(
+                        EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS!!
+                    ) - 1
+                )
+            }
+            if (this.age == 200) {
+                this.explode()
+                setHealth(maxHealth.toFloat())
+                level!!.addSound(this.position, Sound.MOB_WITHER_SPAWN)
+            } else if (age < 200) {
+                heal(maxHealth / 200f)
+            }
+        }
+        return super.onUpdate(currentTick)
+    }
+
+    override fun attackTarget(entity: Entity): Boolean {
+        if (entity is EntityWither) return false
+        return entity is EntityMob
+    }
+
+    override fun addBossbar(player: Player) {
+        val pkBoss = BossEventPacket()
+        pkBoss.bossEid = this.id
+        pkBoss.type = BossEventPacket.TYPE_SHOW
+        pkBoss.title = this.getName()
+        pkBoss.color = 6
+        pkBoss.darkenSky = 1
+        pkBoss.healthPercent = 0f
+        player.dataPacket(pkBoss)
+    }
+
+    override fun getOriginalName(): String {
+        return "Wither"
+    }
+
+    override fun isUndead(): Boolean {
+        return true
+    }
+
+    override fun isPreventingSleep(player: Player?): Boolean {
+        return true
+    }
+
+    override fun isBoss(): Boolean {
+        return true
+    }
+
+    override fun getDrops(): Array<Item?> {
+        return arrayOf(Item.get(Item.NETHER_STAR))
+    }
+
+    override fun getExperienceDrops(): Int {
+        return 50
+    }
+
+    override fun move(dx: Double, dy: Double, dz: Double): Boolean {
+        if ((age % 40 == 0 || getDataFlag(EntityFlag.CAN_DASH) && age > 200)) {
+            val blocks = level!!.getCollisionBlocks(getBoundingBox()!!.grow(1.0, 1.0, 1.0))
+            if (blocks.size > 0) {
+                if (blockBreakSound != null) level!!.addSound(this.position, blockBreakSound)
+                for (collisionBlock in blocks) {
+                    if (collisionBlock !is BlockBedrock) {
+                        level!!.breakBlock(collisionBlock)
+                    }
+                }
+            }
+        }
+        return super.move(dx, dy, dz)
+    }
+
+    private fun explode() {
+        val ev = EntityExplosionPrimeEvent(this, 7.0)
+        server!!.pluginManager.callEvent(ev)
+        if (!ev.isCancelled) {
+            val explosion = Explosion(this.locator, ev.force.toFloat().toDouble(), this)
+            if (ev.isBlockBreaking && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
+                explosion.explodeA()
+            }
+            explosion.explodeB()
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun checkAndSpawnWither(block: Block): Boolean {
+            var check = block
+            var skullFace: BlockFace? = null
+            if (block.level.gameRules.getBoolean(GameRule.DO_MOB_SPAWNING)) {
+                for (face in Set.of<BlockFace>(BlockFace.UP, BlockFace.NORTH, BlockFace.EAST)) {
+                    val skulls = BooleanArray(5)
+                    ints@ for (i in -2..2) {
+                        if (block.getSide(face, i) is BlockWitherSkeletonSkull) {
+                            skulls[i + 2] = true
+                        } else skulls[i + 2] = false
+                    }
+                    var inrow = 0
+                    for (i in skulls.indices) {
+                        if (skulls[i]) {
+                            inrow++
+                            if (inrow == 2) check = block.getSide(face, i - 2)
+                        } else if (inrow < 3) {
+                            inrow = 0
+                        }
+                    }
+                    if (inrow >= 3) {
+                        skullFace = face
+                    }
+                }
+                if (skullFace == null) return false
+                if (check is BlockWitherSkeletonSkull) {
+                    faces@ for (blockFace in BlockFace.entries) {
+                        for (i in 1..2) {
+                            if (check.getSide(blockFace, i) !is BlockSoulSand) {
+                                continue@faces
+                            }
+                        }
+                        faces1@ for (face in Set.of<BlockFace>(BlockFace.UP, BlockFace.NORTH, BlockFace.EAST)) {
+                            for (i in -1..1) {
+                                if (check.getSide(blockFace).getSide(face, i) !is BlockSoulSand) {
+                                    continue@faces1
+                                }
+                            }
+
+                            for (i in 0..2) {
+                                val location = check.getSide(blockFace, i)
+                                location.level.breakBlock(location)
+                            }
+                            for (i in -1..1) {
+                                val location = check.getSide(blockFace).getSide(face, i)
+                                location.level.breakBlock(location)
+                                location.level.breakBlock(location.getSide(blockFace.opposite))
+                            }
+                            val pos = check.getSide(blockFace, 2)
+                            val nbt = CompoundTag()
+                                .putList(
+                                    "Pos", ListTag<FloatTag>()
+                                        .add(FloatTag(pos.position.x + 0.5))
+                                        .add(FloatTag(pos.position.y))
+                                        .add(FloatTag(pos.position.z + 0.5))
+                                )
+                                .putList(
+                                    "Motion", ListTag<FloatTag>()
+                                        .add(FloatTag(0f))
+                                        .add(FloatTag(0f))
+                                        .add(FloatTag(0f))
+                                )
+                                .putList(
+                                    "Rotation", ListTag<FloatTag>()
+                                        .add(FloatTag(0f))
+                                        .add(FloatTag(0f))
+                                )
+
+                            val wither: Entity = Entity.Companion.createEntity(
+                                EntityID.Companion.WITHER,
+                                check.level.getChunk(check.position.chunkX, check.position.chunkZ),
+                                nbt
+                            )
+                            wither.spawnToAll()
+                            return true
+                        }
+                    }
+                }
+            }
+            return false
+        }
+    }
+}

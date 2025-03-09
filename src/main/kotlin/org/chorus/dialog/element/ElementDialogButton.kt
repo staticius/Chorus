@@ -1,0 +1,66 @@
+package org.chorus.dialog.element
+
+import cn.nukkit.dialog.window.Dialog
+
+class ElementDialogButton @JvmOverloads constructor(// json 格式需要，勿改
+    var name: String, var text: String, nextDialog: Dialog? = null, mode: Mode = Mode.BUTTON_MODE, type: Int = 1
+) {
+    private var data: List<CmdLine>
+
+    @JvmField
+    @Transient
+    var nextDialog: Dialog? = null
+
+    class CmdLine(@JvmField var cmd_line: String, var cmd_ver: Int) {
+        companion object {
+            @Transient
+            const val CMD_VER: Int = 19
+        }
+    }
+
+    private var mode: Int
+
+    var type: Int
+
+    init {
+        this.nextDialog = nextDialog
+        this.data = updateButtonData()
+        this.mode = mode.ordinal
+        this.type = type
+    }
+
+    fun updateButtonData(): List<CmdLine> {
+        val list: MutableList<CmdLine> = ArrayList()
+        val split = text.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        for (str in split) {
+            list.add(CmdLine(str, CmdLine.CMD_VER))
+        }
+        return list
+    }
+
+    fun getData(): List<CmdLine> {
+        //data will not be updated by the client
+        //so we should update data with text content whenever we need it
+        data = updateButtonData()
+        return data
+    }
+
+    fun getMode(): Mode {
+        return when (mode) {
+            0 -> Mode.BUTTON_MODE
+            1 -> Mode.ON_EXIT
+            2 -> Mode.ON_ENTER
+            else -> throw IllegalStateException("Unexpected value: $mode")
+        }
+    }
+
+    fun setMode(mode: Mode) {
+        this.mode = mode.ordinal
+    }
+
+    enum class Mode {
+        BUTTON_MODE,
+        ON_EXIT,
+        ON_ENTER
+    }
+}

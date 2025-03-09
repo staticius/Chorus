@@ -1,0 +1,78 @@
+package org.chorus.block
+
+import cn.nukkit.event.block.BlockFadeEvent
+import cn.nukkit.item.*
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
+
+/**
+ * @author MagicDroidX (Nukkit Project)
+ */
+open class BlockIce : BlockTransparent {
+    constructor() : super(Companion.properties.defaultState)
+
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Ice"
+
+    override val resistance: Double
+        get() = 2.5
+
+    override val hardness: Double
+        get() = 0.5
+
+    val frictionFactor: Double
+        get() = 0.98
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun onBreak(item: Item): Boolean {
+        if (level.dimension == Level.DIMENSION_NETHER || item.getEnchantmentLevel(Enchantment.ID_SILK_TOUCH) > 0 || down()!!.isAir) {
+            return super.onBreak(item)
+        }
+
+        return level.setBlock(this.position, get(BlockID.Companion.FLOWING_WATER), true)
+    }
+
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_RANDOM) {
+            if (level.getBlockLightAt(
+                    position.x.toInt(),
+                    position.y.toInt(), position.z.toInt()
+                ) >= 12
+            ) {
+                val event = BlockFadeEvent(
+                    this,
+                    if (level.dimension == Level.DIMENSION_NETHER) get(BlockID.Companion.AIR) else get(BlockID.Companion.FLOWING_WATER)
+                )
+                level.server.pluginManager.callEvent(event)
+                if (!event.isCancelled) {
+                    level.setBlock(this.position, event.newState, true)
+                }
+                return Level.BLOCK_UPDATE_RANDOM
+            }
+        }
+        return 0
+    }
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
+    }
+
+    override fun canSilkTouch(): Boolean {
+        return true
+    }
+
+    override val burnChance: Int
+        get() = -1
+
+    override val lightFilter: Int
+        get() = 2
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.Companion.ICE)
+            get() = Companion.field
+    }
+}

@@ -1,0 +1,14 @@
+package org.chorus.block
+
+import cn.nukkit.utils.DyeColor
+
+class BlockGrayStainedGlassPane @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockGlassPaneStained(blockstate) {
+    override val dyeColor: DyeColor
+        get() = DyeColor.GRAY
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(GRAY_STAINED_GLASS_PANE)
+            get() = Companion.field
+    }
+}
