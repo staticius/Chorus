@@ -16,7 +16,7 @@ open class BoatDispenseBehavior : DefaultDispenseBehavior() {
         val target = block.getSide(face)
 
         if (target is BlockFlowingWater) {
-            pos.up += 1.0
+            pos.y += 1.0
         } else if (!target.isAir || target.down() !is BlockFlowingWater) {
             return super.dispense(block, face, item)
         }

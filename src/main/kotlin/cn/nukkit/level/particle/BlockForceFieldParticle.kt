@@ -9,9 +9,9 @@ class BlockForceFieldParticle @JvmOverloads constructor(pos: Vector3, scale: Int
     override fun encode(): Array<DataPacket> {
         val pk = LevelEventPacket()
         pk.evid = LevelEventPacket.EVENT_PARTICLE_DENY_BLOCK
-        pk.x = south.toFloat()
-        pk.y = up.toFloat()
-        pk.z = west.toFloat()
+        pk.x = x.toFloat()
+        pk.y = y.toFloat()
+        pk.z = z.toFloat()
         pk.data = this.data
 
         return arrayOf(pk)

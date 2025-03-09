@@ -117,7 +117,7 @@ class PotionThrowExecutor(
     protected fun throwPotion(entity: EntityMob) {
         val potionTransform = entity.transform
         val directionVector = entity.directionVector
-        potionTransform.setY(entity.position.up + entity.eyeHeight + directionVector!!.getY())
+        potionTransform.setY(entity.position.y + entity.eyeHeight + directionVector!!.getY())
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()

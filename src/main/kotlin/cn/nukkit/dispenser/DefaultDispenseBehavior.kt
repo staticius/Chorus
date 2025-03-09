@@ -23,9 +23,9 @@ open class DefaultDispenseBehavior : DispenseBehavior {
         val dispensePos = block.dispensePosition
 
         if (face.axis == BlockFace.Axis.Y) {
-            dispensePos.up -= 0.125
+            dispensePos.y -= 0.125
         } else {
-            dispensePos.up -= 0.15625
+            dispensePos.y -= 0.15625
         }
 
         val rand: Random = ThreadLocalRandom.current()
@@ -33,13 +33,13 @@ open class DefaultDispenseBehavior : DispenseBehavior {
 
         val offset = rand.nextDouble() * 0.1 + 0.2
 
-        motion.south = face.xOffset * offset
-        motion.up = 0.20000000298023224
-        motion.west = face.zOffset * offset
+        motion.x = face.xOffset * offset
+        motion.y = 0.20000000298023224
+        motion.z = face.zOffset * offset
 
-        motion.south += rand.nextGaussian() * 0.007499999832361937 * 6
-        motion.up += rand.nextGaussian() * 0.007499999832361937 * 6
-        motion.west += rand.nextGaussian() * 0.007499999832361937 * 6
+        motion.x += rand.nextGaussian() * 0.007499999832361937 * 6
+        motion.y += rand.nextGaussian() * 0.007499999832361937 * 6
+        motion.z += rand.nextGaussian() * 0.007499999832361937 * 6
 
         val clone = item.clone()
         clone.count = 1

@@ -55,7 +55,7 @@ class SpreadPlayersCommand(name: String) : VanillaCommand(name, "commands.spread
         }
         for (target in targets) {
             val vec3 = this.nextXZ(x, z, maxRange.toInt())
-            vec3.up = (target.level.getHighestBlockAt(vec3.floorX, vec3.floorZ) + 1).toDouble()
+            vec3.y = (target.level.getHighestBlockAt(vec3.floorX, vec3.floorZ) + 1).toDouble()
             target.teleport(vec3)
         }
         log.addSuccess(
@@ -67,8 +67,8 @@ class SpreadPlayersCommand(name: String) : VanillaCommand(name, "commands.spread
 
     private fun nextXZ(centerX: Double, centerZ: Double, maxRange: Int): Vector3 {
         val vec3 = Vector3(centerX, 0.0, centerZ)
-        vec3.south = Math.round(vec3.south) + random.nextInt(-maxRange, maxRange) + 0.5
-        vec3.west = Math.round(vec3.west) + random.nextInt(-maxRange, maxRange) + 0.5
+        vec3.x = Math.round(vec3.x) + random.nextInt(-maxRange, maxRange) + 0.5
+        vec3.z = Math.round(vec3.z) + random.nextInt(-maxRange, maxRange) + 0.5
         return vec3
     }
 }

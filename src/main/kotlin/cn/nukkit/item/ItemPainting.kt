@@ -55,40 +55,40 @@ class ItemPainting @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
         val direction = DIRECTION[face.index - 2]
         val motive = validMotives[ThreadLocalRandom.current().nextInt(validMotives.size)]
 
-        val position = Vector3(target.position.south + 0.5, target.position.up + 0.5, target.position.west + 0.5)
+        val position = Vector3(target.position.x + 0.5, target.position.y + 0.5, target.position.z + 0.5)
         val widthOffset = offset(motive.width)
 
         when (face.horizontalIndex) {
             0 -> {
-                position.south += widthOffset
-                position.west += OFFSET
+                position.x += widthOffset
+                position.z += OFFSET
             }
 
             1 -> {
-                position.south -= OFFSET
-                position.west += widthOffset
+                position.x -= OFFSET
+                position.z += widthOffset
             }
 
             2 -> {
-                position.south -= widthOffset
-                position.west -= OFFSET
+                position.x -= widthOffset
+                position.z -= OFFSET
             }
 
             3 -> {
-                position.south += OFFSET
-                position.west -= widthOffset
+                position.x += OFFSET
+                position.z -= widthOffset
             }
         }
-        position.up += offset(motive.height)
+        position.y += offset(motive.height)
 
         val nbt = CompoundTag()
             .putByte("Direction", direction)
             .putString("Motive", motive.title)
             .putList(
                 "Pos", ListTag<FloatTag>()
-                    .add(FloatTag(position.south))
-                    .add(FloatTag(position.up))
-                    .add(FloatTag(position.west))
+                    .add(FloatTag(position.x))
+                    .add(FloatTag(position.y))
+                    .add(FloatTag(position.z))
             )
             .putList(
                 "Motion", ListTag<FloatTag>()

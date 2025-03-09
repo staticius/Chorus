@@ -7,7 +7,6 @@ import cn.nukkit.item.ItemBlock
 import cn.nukkit.level.Level
 import cn.nukkit.plugin.Plugin
 import cn.nukkit.registry.ItemRuntimeIdRegistry.RuntimeEntry
-import cn.nukkit.registry.RegisterException
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import lombok.extern.slf4j.Slf4j
 import me.sunlan.fastreflection.FastConstructor
@@ -1312,9 +1311,9 @@ class BlockRegistry : BlockID,
         val constructor = CACHE_CONSTRUCTORS[identifier] ?: return null
         try {
             val b = constructor.invoke(null as Any?) as Block
-            b.position.south = x.toDouble()
-            b.position.up = y.toDouble()
-            b.position.west = z.toDouble()
+            b.position.x = x.toDouble()
+            b.position.y = y.toDouble()
+            b.position.z = z.toDouble()
             return b
         } catch (e: Throwable) {
             throw RuntimeException(e)
@@ -1325,9 +1324,9 @@ class BlockRegistry : BlockID,
         val constructor = CACHE_CONSTRUCTORS[identifier] ?: return null
         try {
             val b = constructor.invoke(null as Any?) as Block
-            b.position.south = x.toDouble()
-            b.position.up = y.toDouble()
-            b.position.west = z.toDouble()
+            b.position.x = x.toDouble()
+            b.position.y = y.toDouble()
+            b.position.z = z.toDouble()
             b.level = level
             return b
         } catch (e: Throwable) {
@@ -1339,9 +1338,9 @@ class BlockRegistry : BlockID,
         val constructor = CACHE_CONSTRUCTORS[identifier] ?: return null
         try {
             val b = constructor.invoke(null as Any?) as Block
-            b.position.south = x.toDouble()
-            b.position.up = y.toDouble()
-            b.position.west = z.toDouble()
+            b.position.x = x.toDouble()
+            b.position.y = y.toDouble()
+            b.position.z = z.toDouble()
             b.level = level
             b.layer = layer
             return b
@@ -1366,9 +1365,9 @@ class BlockRegistry : BlockID,
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
         try {
             val b = constructor.invoke(blockState) as Block
-            b.position.south = x.toDouble()
-            b.position.up = y.toDouble()
-            b.position.west = z.toDouble()
+            b.position.x = x.toDouble()
+            b.position.y = y.toDouble()
+            b.position.z = z.toDouble()
             return b
         } catch (e: Throwable) {
             throw RuntimeException(e)
@@ -1379,9 +1378,9 @@ class BlockRegistry : BlockID,
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
         try {
             val b = constructor.invoke(blockState) as Block
-            b.position.south = x.toDouble()
-            b.position.up = y.toDouble()
-            b.position.west = z.toDouble()
+            b.position.x = x.toDouble()
+            b.position.y = y.toDouble()
+            b.position.z = z.toDouble()
             b.level = level
             return b
         } catch (e: Throwable) {
@@ -1393,9 +1392,9 @@ class BlockRegistry : BlockID,
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
         try {
             val b = constructor.invoke(blockState) as Block
-            b.position.south = x.toDouble()
-            b.position.up = y.toDouble()
-            b.position.west = z.toDouble()
+            b.position.x = x.toDouble()
+            b.position.y = y.toDouble()
+            b.position.z = z.toDouble()
             b.level = level
             b.layer = layer
             return b

@@ -26,7 +26,7 @@ class FloatingTextParticle private constructor(
     title: String,
     text: String?
 ) :
-    Particle(pos.south, pos.up, pos.west) {
+    Particle(pos.x, pos.y, pos.z) {
     protected var uuid: UUID = UUID.randomUUID()
     var entityId: Long = -1
         protected set
@@ -112,9 +112,9 @@ class FloatingTextParticle private constructor(
             pk.username = ""
             pk.entityUniqueId = this.entityId
             pk.entityRuntimeId = this.entityId
-            pk.x = south.toFloat()
-            pk.y = (this.up - 0.75).toFloat()
-            pk.z = west.toFloat()
+            pk.x = x.toFloat()
+            pk.y = (this.y - 0.75).toFloat()
+            pk.z = z.toFloat()
             pk.speedX = 0f
             pk.speedY = 0f
             pk.speedZ = 0f

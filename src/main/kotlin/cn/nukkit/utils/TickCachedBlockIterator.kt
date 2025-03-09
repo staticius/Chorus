@@ -36,8 +36,8 @@ class TickCachedBlockIterator @JvmOverloads constructor(
     private var thirdFace: BlockFace? = null
 
     init {
-        val startClone = Vector3(start.south, start.up, start.west)
-        startClone.up += yOffset
+        val startClone = Vector3(start.x, start.y, start.z)
+        startClone.y += yOffset
 
         this.currentDistance = 0
 
@@ -49,8 +49,8 @@ class TickCachedBlockIterator @JvmOverloads constructor(
         var secondPosition = 0.0
         var thirdPosition = 0.0
 
-        val pos = Vector3(startClone.south, startClone.up, startClone.west)
-        val startBlock = level.getTickCachedBlock(Vector3(floor(pos.south), floor(pos.up), floor(pos.west)))
+        val pos = Vector3(startClone.x, startClone.y, startClone.z)
+        val startBlock = level.getTickCachedBlock(Vector3(floor(pos.x), floor(pos.y), floor(pos.z)))
 
         if (this.getXLength(direction) > mainDirection) {
             this.mainFace = this.getXFace(direction)
@@ -148,31 +148,31 @@ class TickCachedBlockIterator @JvmOverloads constructor(
     }
 
     private fun blockEquals(a: Block, b: Block): Boolean {
-        return a.position.south == b.position.south && a.position.up == b.position.up && a.position.west == b.position.west
+        return a.position.x == b.position.x && a.position.y == b.position.y && a.position.z == b.position.z
     }
 
     private fun getXFace(direction: Vector3): BlockFace {
-        return if ((direction.south) > 0) BlockFace.EAST else BlockFace.WEST
+        return if ((direction.x) > 0) BlockFace.EAST else BlockFace.WEST
     }
 
     private fun getYFace(direction: Vector3): BlockFace {
-        return if ((direction.up) > 0) BlockFace.UP else BlockFace.DOWN
+        return if ((direction.y) > 0) BlockFace.UP else BlockFace.DOWN
     }
 
     private fun getZFace(direction: Vector3): BlockFace {
-        return if ((direction.west) > 0) BlockFace.SOUTH else BlockFace.NORTH
+        return if ((direction.z) > 0) BlockFace.SOUTH else BlockFace.NORTH
     }
 
     private fun getXLength(direction: Vector3): Double {
-        return abs(direction.south)
+        return abs(direction.x)
     }
 
     private fun getYLength(direction: Vector3): Double {
-        return abs(direction.up)
+        return abs(direction.y)
     }
 
     private fun getZLength(direction: Vector3): Double {
-        return abs(direction.west)
+        return abs(direction.z)
     }
 
     private fun getPosition(direction: Double, position: Double, blockPosition: Double): Double {
@@ -180,15 +180,15 @@ class TickCachedBlockIterator @JvmOverloads constructor(
     }
 
     private fun getXPosition(direction: Vector3, position: Vector3, block: Block): Double {
-        return this.getPosition(direction.south, position.south, block.position.south)
+        return this.getPosition(direction.x, position.x, block.position.x)
     }
 
     private fun getYPosition(direction: Vector3, position: Vector3, block: Block): Double {
-        return this.getPosition(direction.up, position.up, block.position.up)
+        return this.getPosition(direction.y, position.y, block.position.y)
     }
 
     private fun getZPosition(direction: Vector3, position: Vector3, block: Block): Double {
-        return this.getPosition(direction.west, position.west, block.position.west)
+        return this.getPosition(direction.z, position.z, block.position.z)
     }
 
     override fun next(): Block? {

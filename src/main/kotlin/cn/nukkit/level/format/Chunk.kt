@@ -713,9 +713,9 @@ class Chunk : IChunk {
                         "Block entity validation of {} at {}, {} {} {} failed, removing as invalid.",
                         entity.javaClass.name,
                         getProvider().level.name,
-                        entity.position.south,
-                        entity.position.up,
-                        entity.position.west,
+                        entity.position.x,
+                        entity.position.y,
+                        entity.position.z,
                         e
                     )
                 } catch (e2: Exception) {

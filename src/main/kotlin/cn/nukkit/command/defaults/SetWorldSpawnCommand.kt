@@ -44,9 +44,9 @@ class SetWorldSpawnCommand(name: String) : VanillaCommand(name, "commands.setwor
         level.setSpawnLocation(pos)
         val round2 = DecimalFormat("##0.00")
         log.addSuccess(
-            "commands.setworldspawn.success", round2.format(pos!!.south),
-            round2.format(pos.up),
-            round2.format(pos.west)
+            "commands.setworldspawn.success", round2.format(pos!!.x),
+            round2.format(pos.y),
+            round2.format(pos.z)
         ).output(true)
         return 1
     }

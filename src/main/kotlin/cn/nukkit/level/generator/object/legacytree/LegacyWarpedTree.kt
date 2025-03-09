@@ -6,8 +6,8 @@ import cn.nukkit.block.BlockWarpedWartBlock
 
 class LegacyWarpedTree : LegacyNetherTree() {
     override val trunkBlockState: BlockState
-        get() = BlockWarpedStem.PROPERTIES.getDefaultState()
+        get() = BlockWarpedStem.properties.getDefaultState()
 
     override val leafBlockState: BlockState
-        get() = BlockWarpedWartBlock.PROPERTIES.getDefaultState()
+        get() = BlockWarpedWartBlock.properties.getDefaultState()
 }

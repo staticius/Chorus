@@ -107,16 +107,16 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
                             for (z in NukkitMath.floorDouble(aabb.minZ)..NukkitMath.floorDouble(aabb.maxZ)) {
                                 for (y in NukkitMath.floorDouble(aabb.minY)..NukkitMath.floorDouble(aabb.maxY)) {
                                     val isBorderX =
-                                        x == NukkitMath.floorDouble(from.position.south) || x == NukkitMath.floorDouble(
-                                            to.position.south
+                                        x == NukkitMath.floorDouble(from.position.x) || x == NukkitMath.floorDouble(
+                                            to.position.x
                                         )
                                     val isBorderZ =
-                                        z == NukkitMath.floorDouble(from.position.west) || z == NukkitMath.floorDouble(
-                                            to.position.west
+                                        z == NukkitMath.floorDouble(from.position.z) || z == NukkitMath.floorDouble(
+                                            to.position.z
                                         )
                                     val isBorderY =
-                                        y == NukkitMath.floorDouble(from.position.up) || y == NukkitMath.floorDouble(
-                                            to.position.up
+                                        y == NukkitMath.floorDouble(from.position.y) || y == NukkitMath.floorDouble(
+                                            to.position.y
                                         )
 
                                     if (isBorderX || isBorderZ || isBorderY) {
@@ -134,16 +134,16 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
                                 for (y in NukkitMath.floorDouble(aabb.minY)..NukkitMath.floorDouble(aabb.maxY)) {
                                     val block: Block
                                     val isBorderX =
-                                        x == NukkitMath.floorDouble(from.position.south) || x == NukkitMath.floorDouble(
-                                            to.position.south
+                                        x == NukkitMath.floorDouble(from.position.x) || x == NukkitMath.floorDouble(
+                                            to.position.x
                                         )
                                     val isBorderZ =
-                                        z == NukkitMath.floorDouble(from.position.west) || z == NukkitMath.floorDouble(
-                                            to.position.west
+                                        z == NukkitMath.floorDouble(from.position.z) || z == NukkitMath.floorDouble(
+                                            to.position.z
                                         )
                                     val isBorderY =
-                                        y == NukkitMath.floorDouble(from.position.up) || y == NukkitMath.floorDouble(
-                                            to.position.up
+                                        y == NukkitMath.floorDouble(from.position.y) || y == NukkitMath.floorDouble(
+                                            to.position.y
                                         )
 
                                     block = if (isBorderX || isBorderZ || isBorderY) {
@@ -176,7 +176,7 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
                         blocks = Utils.getLevelBlocks(level, aabb)
                         for (block in blocks) {
                             val players =
-                                level.getChunkPlayers(block.position.south.toInt() shr 4, block.position.west.toInt() shr 4)
+                                level.getChunkPlayers(block.position.x.toInt() shr 4, block.position.z.toInt() shr 4)
                             level.addParticle(DestroyBlockParticle(block.position.add(0.5), block), players.values)
                             blockManager.setBlockStateAt(
                                 block.position.floorX,

@@ -1,0 +1,144 @@
+package cn.nukkit.block
+
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityTarget
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.projectile.EntitySmallFireball
+import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow
+import cn.nukkit.entity.projectile.abstract_arrow.EntityThrownTrident
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.level.Locator
+import cn.nukkit.math.*
+import cn.nukkit.math.NukkitMath.ceilDouble
+import cn.nukkit.utils.RedstoneComponent
+import java.util.*
+
+/**
+ * @author joserobjr
+ */
+class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockTransparent(blockState), RedstoneComponent, BlockEntityHolder<BlockEntityTarget?> {
+    override val name: String
+        get() = "Target"
+
+    override val blockEntityClass: Class<out BlockEntityTarget>
+        get() = BlockEntityTarget::class.java
+
+    override val blockEntityType: String
+        get() = BlockEntity.TARGET
+
+    override val isPowerSource: Boolean
+        get() = true
+
+    override fun getWeakPower(face: BlockFace?): Int {
+        val target = blockEntity
+        return target?.activePower ?: 0
+    }
+
+    @JvmOverloads
+    fun activatePower(power: Int, ticks: Int = 4 * 2): Boolean {
+        var level = level
+        if (power <= 0 || ticks <= 0) {
+            return deactivatePower()
+        }
+
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return false
+        }
+
+        val target = orCreateBlockEntity!!
+        val previous = target.activePower
+        level.cancelSheduledUpdate(this.position, this)
+        level.scheduleUpdate(this, ticks)
+        target.activePower = power
+        if (previous != power) {
+            updateAroundRedstone()
+        }
+        return true
+    }
+
+    fun deactivatePower(): Boolean {
+        val target = blockEntity
+        if (target != null) {
+            val currentPower = target.activePower
+            target.activePower = 0
+            target.close()
+            if (currentPower != 0 && level.server.settings.levelSettings().enableRedstone()) {
+                updateAroundRedstone()
+            }
+            return true
+        }
+        return false
+    }
+
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_SCHEDULED) {
+            deactivatePower()
+            return type
+        }
+        return 0
+    }
+
+    override fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
+        var ticks = 8
+        if (projectile is EntityArrow || projectile is EntityThrownTrident || projectile is EntitySmallFireball) {
+            ticks = 20
+        }
+
+        val intercept = calculateIntercept(
+            locator.position,
+            locator.position.add(motion.multiply(2.0)!!)!!
+        )
+        if (intercept == null) {
+            return false
+        }
+
+        val faceHit: BlockFace = intercept.faceHit ?: return false
+
+        val hitVector = intercept.hitVector!!.subtract(
+            position.x * 2,
+            position.y * 2, position.z * 2
+        )
+        val axes: MutableList<BlockFace.Axis?> = ArrayList(Arrays.asList(*BlockFace.Axis.entries.toTypedArray()))
+        axes.remove(faceHit.axis)
+
+        val coords = doubleArrayOf(hitVector!!.getAxis(axes[0]!!), hitVector.getAxis(axes[1]!!))
+
+        for (i in 0..1) {
+            if (coords[i] == 0.5) {
+                coords[i] = 1.0
+            } else if (coords[i] <= 0 || coords[i] >= 1) {
+                coords[i] = 0.0
+            } else if (coords[i] < 0.5) {
+                coords[i] *= 2.0
+            } else {
+                coords[i] = (coords[i] / (-0.5)) + 2
+            }
+        }
+
+        val scale = (coords[0] + coords[1]) / 2
+        activatePower(ceilDouble(16 * scale), ticks)
+        return true
+    }
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
+
+    override val hardness: Double
+        get() = 0.5
+
+    override val resistance: Double
+        get() = 0.5
+
+    override val burnAbility: Int
+        get() = 15
+
+    override val burnChance: Int
+        get() = 0
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.TARGET)
+            get() = Companion.field
+    }
+}

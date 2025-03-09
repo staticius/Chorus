@@ -56,7 +56,7 @@ class BlockUpdateScheduler(level: Level, currentTick: Long) {
                     val entry = updateIterator.next()
 
                     val pos = entry.pos
-                    if (level.isChunkLoaded(floorDouble(pos.south) shr 4, floorDouble(pos.west) shr 4)) {
+                    if (level.isChunkLoaded(floorDouble(pos.x) shr 4, floorDouble(pos.z) shr 4)) {
                         val block = level.getBlock(entry.pos, entry.block.layer)
 
                         updateIterator.remove()

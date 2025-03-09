@@ -227,12 +227,12 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
         addEntity.yaw = rotation.yaw.toFloat()
         addEntity.headYaw = rotation.yaw.toFloat()
         addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.south.toFloat()
-        addEntity.y = position.up.toFloat()
-        addEntity.z = position.west.toFloat()
-        addEntity.speedX = motion.south.toFloat()
-        addEntity.speedY = motion.up.toFloat()
-        addEntity.speedZ = motion.west.toFloat()
+        addEntity.x = position.x.toFloat()
+        addEntity.y = position.y.toFloat()
+        addEntity.z = position.z.toFloat()
+        addEntity.speedX = motion.x.toFloat()
+        addEntity.speedY = motion.y.toFloat()
+        addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
         addEntity.attributes = arrayOf<Attribute>(
             Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)!!.setMaxValue(getMaxDiffHealth().toFloat())
@@ -403,9 +403,9 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                             val nbt = CompoundTag()
                                 .putList(
                                     "Pos", ListTag<FloatTag>()
-                                        .add(FloatTag(pos.position.south + 0.5))
-                                        .add(FloatTag(pos.position.up))
-                                        .add(FloatTag(pos.position.west + 0.5))
+                                        .add(FloatTag(pos.position.x + 0.5))
+                                        .add(FloatTag(pos.position.y))
+                                        .add(FloatTag(pos.position.z + 0.5))
                                 )
                                 .putList(
                                     "Motion", ListTag<FloatTag>()

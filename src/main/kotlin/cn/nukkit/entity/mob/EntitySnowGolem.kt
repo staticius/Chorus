@@ -181,9 +181,9 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                         val nbt: CompoundTag = CompoundTag()
                             .putList(
                                 "Pos", ListTag<FloatTag>()
-                                    .add(FloatTag(pos.position.south + 0.5))
-                                    .add(FloatTag(pos.position.up))
-                                    .add(FloatTag(pos.position.west + 0.5))
+                                    .add(FloatTag(pos.position.x + 0.5))
+                                    .add(FloatTag(pos.position.y))
+                                    .add(FloatTag(pos.position.z + 0.5))
                             )
                             .putList(
                                 "Motion", ListTag<FloatTag>()

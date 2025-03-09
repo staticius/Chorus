@@ -56,12 +56,12 @@ class EntityArrow @JvmOverloads constructor(
 
         val drag: Float = 1 - this.getDrag() * 20
 
-        motion.up -= (getGravity() * 2).toDouble()
-        if (motion.up < 0) {
-            motion.up *= drag / 1.5
+        motion.y -= (getGravity() * 2).toDouble()
+        if (motion.y < 0) {
+            motion.y *= drag / 1.5
         }
-        motion.south *= drag.toDouble()
-        motion.west *= drag.toDouble()
+        motion.x *= drag.toDouble()
+        motion.z *= drag.toDouble()
     }
 
     override fun initEntity() {

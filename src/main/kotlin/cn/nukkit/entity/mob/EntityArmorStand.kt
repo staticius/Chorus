@@ -112,7 +112,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
                 slot = EntityEquipment.Companion.MAIN_HAND
             }
         } else {
-            val clickHeight: Double = clickedPos.up - position.up
+            val clickHeight: Double = clickedPos.y - position.y
             if (clickHeight >= 0.1 && clickHeight < 0.55 && !getBoots().isNull()) {
                 isArmor = true
                 slot = EntityEquipment.Companion.FEET
@@ -274,19 +274,19 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
 
         val pos: Vector3 = getLocator().position
 
-        pos.up += 0.2
+        pos.y += 0.2
         level!!.dropItem(pos, getBoots())
 
-        pos.up = position.up + 0.6
+        pos.y = position.y + 0.6
         level!!.dropItem(pos, getLeggings())
 
-        pos.up = position.up + 1.4
+        pos.y = position.y + 1.4
         level!!.dropItem(if (byAttack) pos else this.position, Item.get(ItemID.ARMOR_STAND))
         level!!.dropItem(pos, getChestplate())
         level!!.dropItem(pos, getItemInHand())
         level!!.dropItem(pos, getItemInOffhand())
 
-        pos.up = position.up + 1.8
+        pos.y = position.y + 1.8
         level!!.dropItem(pos, getHelmet())
         equipment.clearAll()
 
@@ -392,27 +392,27 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
             if (getHealth() < getMaxHealth()) {
                 setHealth(getHealth() + 0.001f)
             }
-            motion.up -= getGravity().toDouble()
+            motion.y -= getGravity().toDouble()
 
             val highestPosition: Double = this.highestPosition
-            move(motion.south, motion.up, motion.west)
+            move(motion.x, motion.y, motion.z)
 
             val friction: Float = 1 - getDrag()
 
-            motion.south *= friction.toDouble()
-            motion.up *= (1 - getDrag()).toDouble()
-            motion.west *= friction.toDouble()
+            motion.x *= friction.toDouble()
+            motion.y *= (1 - getDrag()).toDouble()
+            motion.z *= friction.toDouble()
 
             updateMovement()
             hasUpdate = true
-            if (onGround && (highestPosition - position.up) >= 3) {
+            if (onGround && (highestPosition - position.y) >= 3) {
                 level!!.addSound(this.position, Sound.MOB_ARMOR_STAND_LAND)
             }
         }
 
-        return hasUpdate || !onGround || abs(motion.south) > 0.00001 || abs(
-            motion.up
-        ) > 0.00001 || abs(motion.west) > 0.00001
+        return hasUpdate || !onGround || abs(motion.x) > 0.00001 || abs(
+            motion.y
+        ) > 0.00001 || abs(motion.z) > 0.00001
     }
 
     override fun getDrag(): Float {

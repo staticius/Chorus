@@ -83,7 +83,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
                 namedTag.putBoolean("pairlead", false)
             } else if (this.doubleInventory == null) {
                 namedTag.putBoolean("pairlead", true)
-                if ((pair.position.south + (pair.position.west.toInt() shl 15)) > (position.south + (position.west.toInt() shl 15))) { //Order them correctly
+                if ((pair.position.x + (pair.position.z.toInt() shl 15)) > (position.x + (position.z.toInt() shl 15))) { //Order them correctly
                     this.doubleInventory = DoubleChestInventory(pair, this)
                 } else {
                     this.doubleInventory = DoubleChestInventory(this, pair)
@@ -109,7 +109,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
                     .getBlockEntityIfLoaded(
                         Vector3(
                             namedTag.getInt("pairx").toDouble(),
-                            position.up,
+                            position.y,
                             namedTag.getInt("pairz").toDouble()
                         )
                     )
@@ -129,7 +129,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
             val z1 = namedTag.getInt("pairz")
             val z2 = chest.namedTag.getInt("pairz")
 
-            if (!(chest.isPaired && (position.south == x2.toDouble() && position.west == z2.toDouble())) || !(this.isPaired && (chest.position.south == x1.toDouble() && chest.position.west == z1.toDouble()))) {
+            if (!(chest.isPaired && (position.x == x2.toDouble() && position.z == z2.toDouble())) || !(this.isPaired && (chest.position.x == x1.toDouble() && chest.position.z == z1.toDouble()))) {
                 return false
             }
         }
@@ -144,10 +144,10 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     }
 
     fun createPair(chest: BlockEntityChest) {
-        namedTag.putInt("pairx", chest.position.south.toInt())
-        namedTag.putInt("pairz", chest.position.west.toInt())
-        chest.namedTag.putInt("pairx", position.south.toInt())
-        chest.namedTag.putInt("pairz", position.west.toInt())
+        namedTag.putInt("pairx", chest.position.x.toInt())
+        namedTag.putInt("pairz", chest.position.z.toInt())
+        chest.namedTag.putInt("pairx", position.x.toInt())
+        chest.namedTag.putInt("pairz", position.z.toInt())
     }
 
     fun unpair(): Boolean {

@@ -41,6 +41,6 @@ data class PNXProtoChunk(val chunk: IChunk) : ProtoChunk {
     }
 
     companion object {
-        var water: cn.nukkit.block.BlockState = BlockFlowingWater.PROPERTIES.defaultState
+        var water: cn.nukkit.block.BlockState = BlockFlowingWater.properties.defaultState
     }
 }

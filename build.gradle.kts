@@ -14,9 +14,9 @@ plugins {
     kotlin("jvm")
 }
 
-group = "org.endernx"
+group = "org.chorus"
 version = "2.0.0-SNAPSHOT"
-description = "EnderNX"
+description = "Chorus"
 
 repositories {
     mavenLocal()

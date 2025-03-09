@@ -108,12 +108,12 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         addEntity.yaw = rotation.yaw.toFloat()
         addEntity.headYaw = rotation.yaw.toFloat()
         addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.south.toFloat()
-        addEntity.y = position.up.toFloat()
-        addEntity.z = position.west.toFloat()
-        addEntity.speedX = motion.south.toFloat()
-        addEntity.speedY = motion.up.toFloat()
-        addEntity.speedZ = motion.west.toFloat()
+        addEntity.x = position.x.toFloat()
+        addEntity.y = position.y.toFloat()
+        addEntity.z = position.z.toFloat()
+        addEntity.speedX = motion.x.toFloat()
+        addEntity.speedY = motion.y.toFloat()
+        addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
         addEntity.attributes = arrayOf<Attribute>(
             Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)!!.setMaxValue(200f).setValue(200f)
@@ -313,9 +313,9 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
             val target = entity.memoryStorage!!.get<Vector3>(CoreMemoryTypes.Companion.LOOK_TARGET)
                 ?: return false
             val toPlayerVector = Vector3(
-                entity.position.south - target.south,
-                entity.position.up - target.up,
-                entity.position.west - target.west
+                entity.position.x - target.x,
+                entity.position.y - target.y,
+                entity.position.z - target.z
             ).normalize()
             entity.headYaw = (BVector3.getYawFromVector(toPlayerVector))
             entity.rotation.yaw = (BVector3.getYawFromVector(toPlayerVector))

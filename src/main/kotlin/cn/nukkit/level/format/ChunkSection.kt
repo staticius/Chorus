@@ -34,8 +34,8 @@ data class ChunkSection(
     constructor(sectionY: Byte) : this(
         sectionY,
         arrayOf<BlockPalette?>(
-            BlockPalette(BlockAir.PROPERTIES.defaultState, ReferenceArrayList<BlockState?>(16), BitArrayVersion.V2),
-            BlockPalette(BlockAir.PROPERTIES.defaultState, ReferenceArrayList<BlockState?>(16), BitArrayVersion.V2)
+            BlockPalette(BlockAir.properties.defaultState, ReferenceArrayList<BlockState?>(16), BitArrayVersion.V2),
+            BlockPalette(BlockAir.properties.defaultState, ReferenceArrayList<BlockState?>(16), BitArrayVersion.V2)
         ),
         Palette<Int?>(BiomeID.Companion.PLAINS),
         NibbleArray(SIZE),
@@ -126,7 +126,7 @@ data class ChunkSection(
     }
 
     val isEmpty: Boolean
-        get() = blockLayer[0].isEmpty() && blockLayer[0]!![0] === BlockAir.PROPERTIES.defaultState
+        get() = blockLayer[0].isEmpty() && blockLayer[0]!![0] === BlockAir.properties.defaultState
 
     fun setNeedReObfuscate() {
         blockLayer[0]!!.setNeedReObfuscate()

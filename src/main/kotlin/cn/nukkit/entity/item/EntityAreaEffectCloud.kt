@@ -357,10 +357,10 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
 
         val height: Float = getHeight()
         boundingBox!!.setBounds(
-            position.south - radius,
-            position.up - height,
-            position.west - radius,
-            position.south + radius, position.up + height, position.west + radius
+            position.x - radius,
+            position.y - height,
+            position.z - radius,
+            position.x + radius, position.y + height, position.z + radius
         )
         this.setDataProperty(EntityDataTypes.Companion.HEIGHT, height, false)
         this.setDataProperty(EntityDataTypes.Companion.WIDTH, radius, false)

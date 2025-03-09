@@ -42,7 +42,7 @@ class ServerSettings : OkaeriConfig() {
 
     @Comment("nukkit.server.settings.gameplaysettings")
     @CustomKey("gameplay-settings")
-    private val gameplaySettings = GameplaySettings()
+    val gameplaySettings = GameplaySettings()
 
     @EqualsAndHashCode(callSuper = true)
     @Data

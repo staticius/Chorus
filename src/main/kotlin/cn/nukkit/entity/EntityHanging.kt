@@ -32,9 +32,9 @@ abstract class EntityHanging(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
         super.saveNBT()
 
         namedTag!!.putByte("Direction", getDirection()!!.horizontalIndex)
-        namedTag!!.putInt("TileX", position.south.toInt())
-        namedTag!!.putInt("TileY", position.up.toInt())
-        namedTag!!.putInt("TileZ", position.west.toInt())
+        namedTag!!.putInt("TileX", position.x.toInt())
+        namedTag!!.putInt("TileY", position.y.toInt())
+        namedTag!!.putInt("TileZ", position.z.toInt())
     }
 
     override fun getDirection(): BlockFace? {
@@ -61,13 +61,13 @@ abstract class EntityHanging(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
 
         this.checkBlockCollision()
 
-        if (prevRotation.yaw != rotation.yaw || prevPosition.south != position.south || prevPosition.up != position.up || prevPosition.west != position.west) {
+        if (prevRotation.yaw != rotation.yaw || prevPosition.x != position.x || prevPosition.y != position.y || prevPosition.z != position.z) {
             this.despawnFromAll()
             this.direction = (rotation.yaw / 90).toInt()
             prevRotation.yaw = rotation.yaw
-            prevPosition.south = position.south
-            prevPosition.up = position.up
-            prevPosition.west = position.west
+            prevPosition.x = position.x
+            prevPosition.y = position.y
+            prevPosition.z = position.z
             this.spawnToAll()
             return true
         }

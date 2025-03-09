@@ -119,11 +119,11 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
         }
         val radiusSquared = radius * radius
 
-        val conduitPos = Vector2(position.south, position.west)
+        val conduitPos = Vector2(position.x, position.z)
 
         level.players.values.stream()
             .filter { target: Player -> this.canAffect(target) }
-            .filter { p: Player -> conduitPos.distanceSquared(p.position.south, p.position.west) <= radiusSquared }
+            .filter { p: Player -> conduitPos.distanceSquared(p.position.x, p.position.z) <= radiusSquared }
             .forEach { p: Player ->
                 p.addEffect(
                     Effect.get(EffectType.CONDUIT_POWER)
@@ -155,10 +155,10 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
             val mobs = Arrays.stream<Entity>(
                 level.getCollidingEntities(
                     SimpleAxisAlignedBB(
-                        position.south - radius,
-                        position.up - radius,
-                        position.west - radius,
-                        position.south + 1 + radius, position.up + 1 + radius, position.west + 1 + radius
+                        position.x - radius,
+                        position.y - radius,
+                        position.z - radius,
+                        position.x + 1 + radius, position.y + 1 + radius, position.z + 1 + radius
                     )
                 )
             )

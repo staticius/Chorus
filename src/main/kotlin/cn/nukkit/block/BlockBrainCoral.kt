@@ -1,0 +1,17 @@
+package cn.nukkit.block
+
+open class BlockBrainCoral @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCoral(blockstate) {
+    override fun isDead(): Boolean {
+        return false
+    }
+
+    override fun getDeadCoral(): Block {
+        return BlockDeadBrainCoral()
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BRAIN_CORAL)
+            get() = Companion.field
+    }
+}

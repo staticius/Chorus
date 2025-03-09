@@ -177,64 +177,64 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
             }*/
 
             var bid: String = level!!.getBlockIdAt(
-                position.south.toInt(),
-                boundingBox!!.getMaxY().toInt(), position.west.toInt(), 0
+                position.x.toInt(),
+                boundingBox!!.getMaxY().toInt(), position.z.toInt(), 0
             )
             if (bid === BlockID.FLOWING_WATER || bid === BlockID.WATER || (level!!.getBlockIdAt(
-                    position.south.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.west.toInt(), 1
+                    position.x.toInt(),
+                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 1
                 ).also { bid = it }) === BlockID.FLOWING_WATER || bid === BlockID.WATER
             ) {
                 //item is fully in water or in still water
-                motion.up -= this.getGravity() * -0.015
+                motion.y -= this.getGravity() * -0.015
             } else if (lavaResistant && (level!!.getBlockIdAt(
-                    position.south.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.west.toInt(), 0
+                    position.x.toInt(),
+                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 0
                 ) === BlockID.FLOWING_LAVA || level!!.getBlockIdAt(
-                    position.south.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.west.toInt(), 0
+                    position.x.toInt(),
+                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 0
                 ) === BlockID.LAVA || level!!.getBlockIdAt(
-                    position.south.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.west.toInt(), 1
+                    position.x.toInt(),
+                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 1
                 ) === BlockID.FLOWING_LAVA || level!!.getBlockIdAt(
-                    position.south.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.west.toInt(), 1
+                    position.x.toInt(),
+                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 1
                 ) === BlockID.LAVA
                         )
             ) {
                 //item is fully in lava or in still lava
-                motion.up -= this.getGravity() * -0.015
+                motion.y -= this.getGravity() * -0.015
             } else if (this.isInsideOfWater() || lavaResistant && this.isInsideOfLava()) {
-                motion.up = this.getGravity() - 0.06 //item is going up in water, don't let it go back down too fast
+                motion.y = this.getGravity() - 0.06 //item is going up in water, don't let it go back down too fast
             } else {
-                motion.up -= getGravity().toDouble() //item is not in water
+                motion.y -= getGravity().toDouble() //item is not in water
             }
 
             if (this.checkObstruction(
-                    position.south,
-                    position.up, position.west
+                    position.x,
+                    position.y, position.z
                 )
             ) {
                 hasUpdate = true
             }
 
-            this.move(motion.south, motion.up, motion.west)
+            this.move(motion.x, motion.y, motion.z)
 
             var friction: Double = (1 - this.getDrag()).toDouble()
 
-            if (this.onGround && (abs(motion.south) > 0.00001 || abs(
-                    motion.west
+            if (this.onGround && (abs(motion.x) > 0.00001 || abs(
+                    motion.z
                 ) > 0.00001)
             ) {
                 friction *= level!!.getBlock(position.add(0.0, -1.0, 0.0).floor()).getFrictionFactor()
             }
 
-            motion.south *= friction
-            motion.up *= (1 - this.getDrag()).toDouble()
-            motion.west *= friction
+            motion.x *= friction
+            motion.y *= (1 - this.getDrag()).toDouble()
+            motion.z *= friction
 
             if (this.onGround) {
-                motion.up *= -0.5
+                motion.y *= -0.5
             }
 
             this.updateMovement()
@@ -251,9 +251,9 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
             }
         }
 
-        return hasUpdate || !this.onGround || abs(motion.south) > 0.00001 || abs(
-            motion.up
-        ) > 0.00001 || abs(motion.west) > 0.00001
+        return hasUpdate || !this.onGround || abs(motion.x) > 0.00001 || abs(
+            motion.y
+        ) > 0.00001 || abs(motion.z) > 0.00001
     }
 
     override fun setOnFire(seconds: Int) {
@@ -330,12 +330,12 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         val addEntity: AddItemEntityPacket = AddItemEntityPacket()
         addEntity.entityUniqueId = this.getId()
         addEntity.entityRuntimeId = this.getId()
-        addEntity.x = position.south.toFloat()
-        addEntity.y = position.up.toFloat() + this.getBaseOffset()
-        addEntity.z = position.west.toFloat()
-        addEntity.speedX = motion.south.toFloat()
-        addEntity.speedY = motion.up.toFloat()
-        addEntity.speedZ = motion.west.toFloat()
+        addEntity.x = position.x.toFloat()
+        addEntity.y = position.y.toFloat() + this.getBaseOffset()
+        addEntity.z = position.z.toFloat()
+        addEntity.speedX = motion.x.toFloat()
+        addEntity.speedY = motion.y.toFloat()
+        addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
         addEntity.item = this.getItem()
         return addEntity

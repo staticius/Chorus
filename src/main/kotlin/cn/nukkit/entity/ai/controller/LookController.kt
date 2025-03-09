@@ -16,9 +16,9 @@ class LookController(protected var lookAtTarget: Boolean, protected var lookAtRo
             val moveDirectionEnd = entity.moveDirectionEnd.clone()
             //构建路径方向向量
             val routeDirectionVector = Vector3(
-                moveDirectionEnd.south - entity.position.south,
-                moveDirectionEnd.up - entity.position.up,
-                moveDirectionEnd.west - entity.position.west
+                moveDirectionEnd.x - entity.position.x,
+                moveDirectionEnd.y - entity.position.y,
+                moveDirectionEnd.z - entity.position.z
             )
             val yaw = BVector3.getYawFromVector(routeDirectionVector)
             entity.rotation.yaw = (yaw)
@@ -30,9 +30,9 @@ class LookController(protected var lookAtTarget: Boolean, protected var lookAtRo
         if (lookAtTarget && lookTarget != null) {
             //构建指向玩家的向量
             val toPlayerVector = Vector3(
-                lookTarget.south - entity.position.south,
-                lookTarget.up - entity.position.up,
-                lookTarget.west - entity.position.west
+                lookTarget.x - entity.position.x,
+                lookTarget.y - entity.position.y,
+                lookTarget.z - entity.position.z
             )
             if (entity.isEnablePitch) entity.rotation.pitch = (BVector3.getPitchFromVector(toPlayerVector))
             entity.headYaw = (BVector3.getYawFromVector(toPlayerVector))

@@ -11,7 +11,7 @@ import cn.nukkit.utils.BlockColor
  * The name "spell" comes from minecraft wiki.
  */
 open class SpellParticle @JvmOverloads constructor(pos: Vector3, protected val data: Int = 0) :
-    Particle(pos.south, pos.up, pos.west) {
+    Particle(pos.x, pos.y, pos.z) {
     constructor(pos: Vector3, blockColor: BlockColor) : this(pos, blockColor.red, blockColor.green, blockColor.blue)
 
     constructor(pos: Vector3, r: Int, g: Int, b: Int) : this(pos, r, g, b, 0x00)
@@ -24,9 +24,9 @@ open class SpellParticle @JvmOverloads constructor(pos: Vector3, protected val d
     override fun encode(): Array<DataPacket> {
         val pk = LevelEventPacket()
         pk.evid = LevelEventPacket.EVENT_PARTICLE_POTION_SPLASH
-        pk.x = south.toFloat()
-        pk.y = up.toFloat()
-        pk.z = west.toFloat()
+        pk.x = x.toFloat()
+        pk.y = y.toFloat()
+        pk.z = z.toFloat()
         pk.data = this.data
 
         return arrayOf(pk)

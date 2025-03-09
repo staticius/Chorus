@@ -1,0 +1,36 @@
+package cn.nukkit.block
+
+import cn.nukkit.item.ItemTool
+
+class BlockNetheriteBlock : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
+
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Netherite Block"
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val hardness: Double
+        get() = 50.0
+
+    override val resistance: Double
+        get() = 1200.0
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_DIAMOND
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
+    }
+
+    override val isLavaResistant: Boolean
+        get() = true
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.NETHERITE_BLOCK)
+            get() = Companion.field
+    }
+}

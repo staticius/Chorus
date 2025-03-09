@@ -245,9 +245,9 @@ class TeleportCommand(name: String) :
                 }
                 val bv = BVector3.fromPos(
                     Vector3(
-                        lookAtLocator!!.position.south - pos!!.position.south,
-                        lookAtLocator.position.up - pos.position.up,
-                        lookAtLocator.position.west - pos.position.west
+                        lookAtLocator!!.position.x - pos!!.position.x,
+                        lookAtLocator.position.y - pos.position.y,
+                        lookAtLocator.position.z - pos.position.z
                     )
                 )
                 val target = Transform.fromObject(pos.position, pos.level, bv.yaw, bv.pitch)
@@ -406,9 +406,9 @@ class TeleportCommand(name: String) :
                 }
                 val bv = BVector3.fromPos(
                     Vector3(
-                        lookAtLocator!!.position.south - pos!!.position.south,
-                        lookAtLocator.position.up - pos.position.up,
-                        lookAtLocator.position.west - pos.position.west
+                        lookAtLocator!!.position.x - pos!!.position.x,
+                        lookAtLocator.position.y - pos.position.y,
+                        lookAtLocator.position.z - pos.position.z
                     )
                 )
                 val target = Transform.fromObject(pos.position, pos.level, bv.yaw, bv.pitch)

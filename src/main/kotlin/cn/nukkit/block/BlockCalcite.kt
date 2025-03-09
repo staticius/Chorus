@@ -1,0 +1,33 @@
+package cn.nukkit.block
+
+import cn.nukkit.item.ItemTool
+
+class BlockCalcite : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
+
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Calcite"
+
+    override val hardness: Double
+        get() = 0.75
+
+    override val resistance: Double
+        get() = 0.75
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(CALCITE)
+            get() = Companion.field
+    }
+}

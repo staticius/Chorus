@@ -130,13 +130,13 @@ open class EntityWindCharge @JvmOverloads constructor(
     }
 
     protected fun knockBack(entity: Entity) {
-        val knockback: Vector3 = Vector3(entity.motion.south, entity.motion.up, entity.motion.west)
-        knockback.south /= 2.0
-        knockback.up /= 2.0
-        knockback.west /= 2.0
-        knockback.south -= (this.getX() - entity.getX()) * getKnockbackStrength()
-        knockback.up += 0.3
-        knockback.west -= (this.getZ() - entity.getZ()) * getKnockbackStrength()
+        val knockback: Vector3 = Vector3(entity.motion.x, entity.motion.y, entity.motion.z)
+        knockback.x /= 2.0
+        knockback.y /= 2.0
+        knockback.z /= 2.0
+        knockback.x -= (this.getX() - entity.getX()) * getKnockbackStrength()
+        knockback.y += 0.3
+        knockback.z -= (this.getZ() - entity.getZ()) * getKnockbackStrength()
 
         entity.setMotion(knockback)
     }

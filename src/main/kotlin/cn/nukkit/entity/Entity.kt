@@ -302,7 +302,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         return true
     }
 
-    protected open fun getGravity(): Float {
+    open fun getGravity(): Float {
         return 0f
     }
 
@@ -427,7 +427,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             namedTag!!.putFloat(TAG_FALL_DISTANCE, 0f)
         }
         this.fallDistance = namedTag!!.getFloat(TAG_FALL_DISTANCE)
-        this.highestPosition = position.up + namedTag!!.getFloat(TAG_FALL_DISTANCE)
+        this.highestPosition = position.y + namedTag!!.getFloat(TAG_FALL_DISTANCE)
 
         if (!namedTag!!.contains(TAG_FIRE)) {
             namedTag!!.putShort(TAG_FIRE, 0)
@@ -700,13 +700,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         val height: Float = entityHeight * this.scale
         val radius: Double = (this.getWidth() * this.scale) / 2.0
         boundingBox!!.setBounds(
-            position.south - radius,
-            position.up,
-            position.west - radius,
+            position.x - radius,
+            position.y,
+            position.z - radius,
 
-            position.south + radius,
-            position.up + height,
-            position.west + radius
+            position.x + radius,
+            position.y + height,
+            position.z + radius
         )
 
         var change: Boolean = false
@@ -785,16 +785,16 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         namedTag!!.putList(
             TAG_POS, ListTag<FloatTag>()
-                .add(FloatTag(position.south.toFloat()))
-                .add(FloatTag(position.up.toFloat()))
-                .add(FloatTag(position.west.toFloat()))
+                .add(FloatTag(position.x.toFloat()))
+                .add(FloatTag(position.y.toFloat()))
+                .add(FloatTag(position.z.toFloat()))
         )
 
         namedTag!!.putList(
             TAG_MOTION, ListTag<FloatTag>()
-                .add(FloatTag(motion.south.toFloat()))
-                .add(FloatTag(motion.up.toFloat()))
-                .add(FloatTag(motion.west.toFloat()))
+                .add(FloatTag(motion.x.toFloat()))
+                .add(FloatTag(motion.y.toFloat()))
+                .add(FloatTag(motion.z.toFloat()))
         )
 
         namedTag!!.putList(
@@ -882,12 +882,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         addEntity.yaw = rotation.yaw.toFloat()
         addEntity.headYaw = rotation.yaw.toFloat()
         addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.south.toFloat()
-        addEntity.y = position.up.toFloat() + this.getBaseOffset()
-        addEntity.z = position.west.toFloat()
-        addEntity.speedX = motion.south.toFloat()
-        addEntity.speedY = motion.up.toFloat()
-        addEntity.speedZ = motion.west.toFloat()
+        addEntity.x = position.x.toFloat()
+        addEntity.y = position.y.toFloat() + this.getBaseOffset()
+        addEntity.z = position.z.toFloat()
+        addEntity.speedX = motion.x.toFloat()
+        addEntity.speedY = motion.y.toFloat()
+        addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
 
         addEntity.links = arrayOfNulls(passengers.size)
@@ -1226,37 +1226,37 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             val force: Double = ThreadLocalRandom.current().nextDouble() * 0.2 + 0.1
 
             if (direction == 0) {
-                motion.south = -force
+                motion.x = -force
 
                 return true
             }
 
             if (direction == 1) {
-                motion.south = force
+                motion.x = force
 
                 return true
             }
 
             if (direction == 2) {
-                motion.up = -force
+                motion.y = -force
 
                 return true
             }
 
             if (direction == 3) {
-                motion.up = force
+                motion.y = force
 
                 return true
             }
 
             if (direction == 4) {
-                motion.west = -force
+                motion.z = -force
 
                 return true
             }
 
             if (direction == 5) {
-                motion.west = force
+                motion.z = force
 
                 return true
             }
@@ -1330,7 +1330,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         this.checkBlockCollision()
 
-        if (position.up < (level!!.getMinHeight() - 18) && this.isAlive()) {
+        if (position.y < (level!!.getMinHeight() - 18) && this.isAlive()) {
             if (this is Player) {
                 if (!player.isCreative()) this.attack(EntityDamageEvent(this, DamageCause.VOID, 10f))
             } else {
@@ -1373,7 +1373,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             if (!ev.isCancelled && (level!!.getDimension() == Level.DIMENSION_OVERWORLD || level!!.getDimension() == Level.DIMENSION_NETHER)) {
                 val newPos: Locator? = PortalHelper.convertPosBetweenNetherAndOverworld(
                     Locator(
-                        position.south, position.up, position.west,
+                        position.x, position.y, position.z,
                         level!!
                     )
                 )
@@ -1447,9 +1447,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
             this.moveDelta()
 
-            prevPosition.south = position.south
-            prevPosition.up = position.up
-            prevPosition.west = position.west
+            prevPosition.x = position.x
+            prevPosition.y = position.y
+            prevPosition.z = position.z
 
             prevRotation.pitch = rotation.pitch
             prevRotation.yaw = rotation.yaw
@@ -1460,11 +1460,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         }
 
         if (this.hasMotionChanged(0.025) || (this.hasMotionChanged(0.0001) && getMotion().lengthSquared() <= 0.0001)) { //0.05 ** 2
-            prevMotion.south = motion.south
-            prevMotion.up = motion.up
-            prevMotion.west = motion.west
+            prevMotion.x = motion.x
+            prevMotion.y = motion.y
+            prevMotion.z = motion.z
 
-            this.addMotion(motion.south, motion.up, motion.west)
+            this.addMotion(motion.x, motion.y, motion.z)
         }
     }
 
@@ -1478,16 +1478,16 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     open fun moveDelta() {
         val pk: MoveEntityDeltaPacket = MoveEntityDeltaPacket()
         pk.runtimeEntityId = this.getId()
-        if (prevPosition.south != position.south) {
-            pk.x = position.south.toFloat()
+        if (prevPosition.x != position.x) {
+            pk.x = position.x.toFloat()
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_X.toInt()).toShort()
         }
-        if (prevPosition.up != position.up) {
-            pk.y = position.up.toFloat()
+        if (prevPosition.y != position.y) {
+            pk.y = position.y.toFloat()
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_Y.toInt()).toShort()
         }
-        if (prevPosition.west != position.west) {
-            pk.z = position.west.toFloat()
+        if (prevPosition.z != position.z) {
+            pk.z = position.z.toFloat()
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_Z.toInt()).toShort()
         }
         if (prevRotation.pitch != rotation.pitch) {
@@ -1526,9 +1526,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     protected fun broadcastMovement(tp: Boolean) {
         val pk: MoveEntityAbsolutePacket = MoveEntityAbsolutePacket()
         pk.eid = this.getId()
-        pk.x = position.south
-        pk.y = position.up + this.getBaseOffset()
-        pk.z = position.west
+        pk.x = position.x
+        pk.y = position.y + this.getBaseOffset()
+        pk.z = position.z
         pk.headYaw = rotation.yaw
         pk.pitch = rotation.pitch
         pk.yaw = rotation.yaw
@@ -1767,12 +1767,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     protected open fun updateFallState(onGround: Boolean) {
         if (onGround) {
-            fallDistance = (this.highestPosition - position.up).toFloat()
+            fallDistance = (this.highestPosition - position.y).toFloat()
 
             if (fallDistance > 0) {
                 val pos: Locator = Locator(
-                    position.south,
-                    position.up, position.west,
+                    position.x,
+                    position.y, position.z,
                     level!!
                 )
                 // check if we fell into at least 1 block of water
@@ -1877,8 +1877,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     open fun applyEntityCollision(entity: Entity) {
         if (entity.riding !== this && !entity.passengers.contains(this)) {
-            var dx: Double = entity.position.south - position.south
-            var dy: Double = entity.position.west - position.west
+            var dx: Double = entity.position.x - position.x
+            var dy: Double = entity.position.z - position.z
             var dz: Double = NukkitMath.getDirection(dx, dy)
 
             if (dz >= 0.009999999776482582) {
@@ -1898,8 +1898,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 dx *= 1f + entityCollisionReduction
 
                 if (this.riding == null) {
-                    motion.south -= dx
-                    motion.up -= dy
+                    motion.x -= dx
+                    motion.y -= dy
                 }
             }
         }
@@ -1953,16 +1953,16 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun getTransform(): Transform {
         return Transform(
-            position.south,
-            position.up,
-            position.west, rotation.yaw, rotation.pitch, rotation.yaw,
+            position.x,
+            position.y,
+            position.z, rotation.yaw, rotation.pitch, rotation.yaw,
             level!!
         )
     }
 
     fun getLocator(): Locator {
         return Locator(
-            position.south, position.up, position.west,
+            position.x, position.y, position.z,
             level!!
         )
     }
@@ -1995,7 +1995,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
 
     protected fun hasWaterAt(height: Float, tickCached: Boolean): Boolean {
-        val y: Double = position.up + height
+        val y: Double = position.y + height
         val block: Block = if (tickCached) level!!.getTickCachedBlock(
             position.floor()
         ) else level!!.getBlock(position.floor())
@@ -2006,7 +2006,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                     || (block1 is BlockFlowingWater.also { layer1 = it })
         )) {
             val water: BlockFlowingWater = (if (layer1) block1 else block) as BlockFlowingWater
-            val f: Double = (block.position.up + 1) - (water.getFluidHeightPercent() - 0.1111111)
+            val f: Double = (block.position.y + 1) - (water.getFluidHeightPercent() - 0.1111111)
             return y < f
         }
 
@@ -2014,7 +2014,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun isInsideOfSolid(): Boolean {
-        val y: Double = position.up + this.getEyeHeight()
+        val y: Double = position.y + this.getEyeHeight()
         val block: Block = level!!.getBlock(
             position.clone().setY(y).floor()
         )
@@ -2156,9 +2156,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             }
         }
 
-        position.south = (boundingBox!!.getMinX() + boundingBox!!.getMaxX()) / 2
-        position.up = boundingBox!!.getMinY() - this.ySize
-        position.west = (boundingBox!!.getMinZ() + boundingBox!!.getMaxZ()) / 2
+        position.x = (boundingBox!!.getMinX() + boundingBox!!.getMaxX()) / 2
+        position.y = boundingBox!!.getMinY() - this.ySize
+        position.z = (boundingBox!!.getMinZ() + boundingBox!!.getMaxZ()) / 2
 
         this.checkChunks()
 
@@ -2166,15 +2166,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         this.updateFallState(this.onGround)
 
         if (movX != dx) {
-            motion.south = 0.0
+            motion.x = 0.0
         }
 
         if (movY != dy) {
-            motion.up = 0.0
+            motion.y = 0.0
         }
 
         if (movZ != dz) {
-            motion.west = 0.0
+            motion.z = 0.0
         }
 
         // TODO: vehicle collision events (first we need to spawn them!)
@@ -2310,12 +2310,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         setDataFlagExtend(EntityFlag.IN_SCAFFOLDING, scaffolding)
 
-        if (abs(position.up % 1) > 0.125) {
+        if (abs(position.y % 1) > 0.125) {
             val minX: Int = NukkitMath.floorDouble(boundingBox!!.getMinX())
             val minZ: Int = NukkitMath.floorDouble(boundingBox!!.getMinZ())
             val maxX: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxX())
             val maxZ: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxZ())
-            val Y: Int = position.up.toInt()
+            val Y: Int = position.y.toInt()
 
             outerScaffolding@ for (i in minX..maxX) {
                 for (j in minZ..maxZ) {
@@ -2381,12 +2381,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         if (needsReCalcCurrent) if (vector.lengthSquared() > 0) {
             vector = vector.normalize()
             val d: Double = 0.018
-            val dx: Double = vector.south * d
-            val dy: Double = vector.up * d
-            val dz: Double = vector.west * d
-            motion.south += dx
-            motion.up += dy
-            motion.west += dz
+            val dx: Double = vector.x * d
+            val dy: Double = vector.y * d
+            val dz: Double = vector.z * d
+            motion.x += dx
+            motion.y += dy
+            motion.z += dz
             if (this is EntityPhysical) {
                 entityPhysical.previousCurrentMotion.x = dx
                 entityPhysical.previousCurrentMotion.y = dy
@@ -2428,18 +2428,18 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     protected open fun checkChunks() {
-        if (this.chunk == null || (chunk!!.x != (position.south.toInt() shr 4)) || chunk!!.z != (position.west.toInt() shr 4)) {
+        if (this.chunk == null || (chunk!!.x != (position.x.toInt() shr 4)) || chunk!!.z != (position.z.toInt() shr 4)) {
             if (this.chunk != null) {
                 chunk!!.removeEntity(this)
             }
             this.chunk = level!!.getChunk(
-                position.south.toInt() shr 4,
-                position.west.toInt() shr 4, true
+                position.x.toInt() shr 4,
+                position.z.toInt() shr 4, true
             )
 
             if (!this.justCreated) {
                 val newChunk: MutableMap<Int, Player> =
-                    level!!.getChunkPlayers(position.south.toInt() shr 4, position.west.toInt() shr 4)
+                    level!!.getChunkPlayers(position.x.toInt() shr 4, position.z.toInt() shr 4)
                 for (player: Player in ArrayList<Player>(hasSpawned.values)) {
                     if (!newChunk.containsKey(player.getLoaderId())) {
                         this.despawnFrom(player)
@@ -2474,9 +2474,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         val vPos: Vector3 = pos.vector3
 
-        position.south = vPos.south
-        position.up = vPos.up
-        position.west = vPos.west
+        position.x = vPos.x
+        position.y = vPos.y
+        position.z = vPos.z
 
         this.recalculateBoundingBox(false) // Don't need to send BB height/width to client on position change
 
@@ -2486,7 +2486,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun getMotion(): Vector3 {
-        return Vector3(motion.south, motion.up, motion.west)
+        return Vector3(motion.x, motion.y, motion.z)
     }
 
     /**
@@ -2509,9 +2509,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             }
         }
 
-        this.motion.south = motion.south
-        this.motion.up = motion.up
-        this.motion.west = motion.west
+        this.motion.x = motion.x
+        this.motion.y = motion.y
+        this.motion.z = motion.z
 
         if (!this.justCreated && !this.isImmobile()) {
             this.updateMovement()
@@ -3008,11 +3008,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun getLookingAngleAt(location: Vector3): Double {
-        val anglePosition: Double = abs(Math.toDegrees(atan2(location.south - position.south, location.west - position.west)))
+        val anglePosition: Double = abs(Math.toDegrees(atan2(location.x - position.x, location.z - position.z)))
         val angleVector: Double = abs(
             Math.toDegrees(
                 atan2(
-                    getDirectionVector().south, getDirectionVector().west
+                    getDirectionVector().x, getDirectionVector().z
                 )
             )
         )
@@ -3020,7 +3020,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun getLookingAngleAtPitch(location: Vector3): Double {
-        val anglePosition: Double = abs(Math.toDegrees(atan2(location.up - (position.up + getEyeHeight()), 0.0)))
+        val anglePosition: Double = abs(Math.toDegrees(atan2(location.y - (position.y + getEyeHeight()), 0.0)))
         val angleVector: Double = abs(rotation.pitch)
         return abs(abs(anglePosition - angleVector) - 90)
     }
@@ -3157,15 +3157,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun getX(): Double {
-        return position.south
+        return position.x
     }
 
     fun getY(): Double {
-        return position.up
+        return position.y
     }
 
     fun getZ(): Double {
-        return position.west
+        return position.z
     }
 
     override fun getVector3(): Vector3 {
@@ -3351,15 +3351,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             return CompoundTag()
                 .putList(
                     TAG_POS, ListTag<FloatTag>()
-                        .add(FloatTag(pos.south.toFloat()))
-                        .add(FloatTag(pos.up.toFloat()))
-                        .add(FloatTag(pos.west.toFloat()))
+                        .add(FloatTag(pos.x.toFloat()))
+                        .add(FloatTag(pos.y.toFloat()))
+                        .add(FloatTag(pos.z.toFloat()))
                 )
                 .putList(
                     TAG_MOTION, ListTag<FloatTag>()
-                        .add(FloatTag(if (motion != null) motion.south.toFloat() else 0f))
-                        .add(FloatTag(if (motion != null) motion.up.toFloat() else 0f))
-                        .add(FloatTag(if (motion != null) motion.west.toFloat() else 0f))
+                        .add(FloatTag(if (motion != null) motion.x.toFloat() else 0f))
+                        .add(FloatTag(if (motion != null) motion.y.toFloat() else 0f))
+                        .add(FloatTag(if (motion != null) motion.z.toFloat() else 0f))
                 )
                 .putList(
                     TAG_ROTATION, ListTag<FloatTag>()

@@ -1,0 +1,15 @@
+package cn.nukkit.block
+
+import java.util.Set
+
+class BlockCyanWool @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWool(blockstate) {
+    override fun getDyeColor(): DyeColor {
+        return DyeColor.CYAN
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(CYAN_WOOL, Set.of<String>(BlockTags.PNX_WOOL))
+            get() = Companion.field
+    }
+}

@@ -13,7 +13,7 @@ class ObjectDarkOakTree : TreeGenerator() {
      * The metadata value of the wood to use in tree generation.
      */
     private val DARK_OAK_WOOD: BlockState =
-        BlockDarkOakWood.PROPERTIES.getBlockState<BlockFace.Axis, EnumPropertyType<BlockFace.Axis>>(
+        BlockDarkOakWood.properties.getBlockState<BlockFace.Axis, EnumPropertyType<BlockFace.Axis>>(
             CommonBlockProperties.PILLAR_AXIS,
             BlockFace.Axis.Y
         )
@@ -21,7 +21,7 @@ class ObjectDarkOakTree : TreeGenerator() {
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val DARK_OAK_LEAVES: BlockState = BlockDarkOakLeaves.PROPERTIES.getDefaultState()
+    private val DARK_OAK_LEAVES: BlockState = BlockDarkOakLeaves.properties.getDefaultState()
 
     override fun generate(level: BlockManager, rand: RandomSourceProvider, position: Vector3): Boolean {
         val i: Int = rand.nextInt(3) + rand.nextInt(2) + 6

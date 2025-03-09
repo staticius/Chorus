@@ -19,9 +19,9 @@ class ShulkerBoxDispenseBehavior : DefaultDispenseBehavior() {
         val shulkerBox = item.block.clone() as BlockUndyedShulkerBox
         shulkerBox.level = block.level
         shulkerBox.layer = 0
-        shulkerBox.position.south = target.position.south
-        shulkerBox.position.up = target.position.up
-        shulkerBox.position.west = target.position.west
+        shulkerBox.position.x = target.position.x
+        shulkerBox.position.y = target.position.y
+        shulkerBox.position.z = target.position.z
 
         val shulkerBoxFace = if (shulkerBox.down().isTransparent) face else BlockFace.UP
 

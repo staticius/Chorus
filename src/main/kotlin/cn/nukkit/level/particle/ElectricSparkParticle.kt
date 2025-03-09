@@ -12,9 +12,9 @@ class ElectricSparkParticle(pos: Vector3) : GenericParticle(pos, Particle.Compan
     override fun encode(): Array<DataPacket> {
         val pk = LevelEventPacket()
         pk.evid = LevelEventPacket.EVENT_PARTICLE_ELECTRIC_SPARK
-        pk.x = south.toFloat()
-        pk.y = up.toFloat()
-        pk.z = west.toFloat()
+        pk.x = x.toFloat()
+        pk.y = y.toFloat()
+        pk.z = z.toFloat()
         pk.data = this.data
 
         return arrayOf(pk)

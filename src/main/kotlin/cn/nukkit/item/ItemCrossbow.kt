@@ -100,9 +100,9 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             val nbt = (CompoundTag())
                 .putList(
                     "Pos", ListTag<Tag>()
-                        .add(FloatTag(player.position.south))
-                        .add(FloatTag(player.position.up + player.getEyeHeight().toDouble()))
-                        .add(FloatTag(player.position.west))
+                        .add(FloatTag(player.position.x))
+                        .add(FloatTag(player.position.y + player.getEyeHeight().toDouble()))
+                        .add(FloatTag(player.position.z))
                 )
                 .putList(
                     "Motion", ListTag<Tag>()

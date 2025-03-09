@@ -102,12 +102,12 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
             for (i in 0..<this.spawnCount) {
                 if (playerInRange && nearbyEntities <= this.maxNearbyEntities) {
                     val pos = Locator(
-                        position.south + Utils.rand(
+                        position.x + Utils.rand(
                             -this.spawnRange,
                             spawnRange.toInt()
                         ),
                         this.y,
-                        position.west + Utils.rand(
+                        position.z + Utils.rand(
                             -this.spawnRange,
                             spawnRange.toInt()
                         ),

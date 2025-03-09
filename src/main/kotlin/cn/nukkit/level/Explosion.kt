@@ -113,23 +113,23 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                         )
                         val len = vector.length()
                         vector.setComponents(
-                            (vector.south / len) * this.STEP_LEN,
-                            (vector.up / len) * this.STEP_LEN,
-                            (vector.west / len) * this.STEP_LEN
+                            (vector.x / len) * this.STEP_LEN,
+                            (vector.y / len) * this.STEP_LEN,
+                            (vector.z / len) * this.STEP_LEN
                         )
-                        var pointerX = source.position.south
-                        var pointerY = source.position.up
-                        var pointerZ = source.position.west
+                        var pointerX = source.position.x
+                        var pointerY = source.position.y
+                        var pointerZ = source.position.z
 
                         var blastForce = this.size * (random.nextInt(700, 1301)) / 1000.0
                         while (blastForce > 0) {
                             val x = pointerX.toInt()
                             val y = pointerY.toInt()
                             val z = pointerZ.toInt()
-                            vBlock.south = (if (pointerX >= x) x else x - 1).toDouble()
-                            vBlock.up = (if (pointerY >= y) y else y - 1).toDouble()
-                            vBlock.west = (if (pointerZ >= z) z else z - 1).toDouble()
-                            if (!level.isYInRange(vBlock.up.toInt())) {
+                            vBlock.x = (if (pointerX >= x) x else x - 1).toDouble()
+                            vBlock.y = (if (pointerY >= y) y else y - 1).toDouble()
+                            vBlock.z = (if (pointerZ >= z) z else z - 1).toDouble()
+                            if (!level.isYInRange(vBlock.y.toInt())) {
                                 break
                             }
                             val block = level.getBlock(vBlock)
@@ -149,9 +149,9 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                                     }
                                 }
                             }
-                            pointerX += vector.south
-                            pointerY += vector.up
-                            pointerZ += vector.west
+                            pointerX += vector.x
+                            pointerY += vector.y
+                            pointerZ += vector.z
                             blastForce -= this.STEP_LEN * 0.75
                         }
                     }
@@ -173,8 +173,8 @@ class Explosion protected constructor(private val source: Locator, size: Double,
         val send: MutableList<Vector3> = ArrayList()
 
         val source = (Vector3(
-            source.position.south,
-            source.position.up, source.position.west
+            source.position.x,
+            source.position.y, source.position.z
         )).floor()
         var yield = (1.0 / this.size) * 100.0
 
@@ -214,12 +214,12 @@ class Explosion protected constructor(private val source: Locator, size: Double,
         }
 
         val explosionSize = this.size * 2.0
-        val minX = NukkitMath.floorDouble(this.source.position.south - explosionSize - 1).toDouble()
-        val maxX = NukkitMath.ceilDouble(this.source.position.south + explosionSize + 1).toDouble()
-        val minY = NukkitMath.floorDouble(this.source.position.up - explosionSize - 1).toDouble()
-        val maxY = NukkitMath.ceilDouble(this.source.position.up + explosionSize + 1).toDouble()
-        val minZ = NukkitMath.floorDouble(this.source.position.west - explosionSize - 1).toDouble()
-        val maxZ = NukkitMath.ceilDouble(this.source.position.west + explosionSize + 1).toDouble()
+        val minX = NukkitMath.floorDouble(this.source.position.x - explosionSize - 1).toDouble()
+        val maxX = NukkitMath.ceilDouble(this.source.position.x + explosionSize + 1).toDouble()
+        val minY = NukkitMath.floorDouble(this.source.position.y - explosionSize - 1).toDouble()
+        val maxY = NukkitMath.ceilDouble(this.source.position.y + explosionSize + 1).toDouble()
+        val minZ = NukkitMath.floorDouble(this.source.position.z - explosionSize - 1).toDouble()
+        val maxZ = NukkitMath.ceilDouble(this.source.position.z + explosionSize + 1).toDouble()
 
         val explosionBB: AxisAlignedBB = SimpleAxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ)
         val list = level.getNearbyEntities(explosionBB, if (what is Entity) what else null)
@@ -283,9 +283,9 @@ class Explosion protected constructor(private val source: Locator, size: Double,
 
             level.setBlock(
                 Vector3(
-                    block.position.south.toInt().toDouble(),
-                    block.position.up.toInt().toDouble(),
-                    block.position.west.toInt().toDouble()
+                    block.position.x.toInt().toDouble(),
+                    block.position.y.toInt().toDouble(),
+                    block.position.z.toInt().toDouble()
                 ),
                 block.layer, Block.get(BlockID.AIR)
             )
@@ -294,11 +294,11 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 continue
             }
 
-            val pos = Vector3(block.position.south, block.position.up, block.position.west)
+            val pos = Vector3(block.position.x, block.position.y, block.position.z)
 
             for (side in BlockFace.entries) {
                 val sideBlock = pos.getSide(side)
-                val index = Hash.hashBlock(sideBlock.south.toInt(), sideBlock.up.toInt(), sideBlock.west.toInt())
+                val index = Hash.hashBlock(sideBlock.x.toInt(), sideBlock.y.toInt(), sideBlock.z.toInt())
                 if (!affectedBlocks!!.contains(sideBlock) && !updateBlocks.contains(index)) {
                     var ev: BlockUpdateEvent = BlockUpdateEvent(level.getBlock(sideBlock))
                     level.server.pluginManager.callEvent(ev)
@@ -316,7 +316,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                     updateBlocks.add(index)
                 }
             }
-            send.add(Vector3(block.position.south - source.south, block.position.up - source.up, block.position.west - source.west))
+            send.add(Vector3(block.position.x - source.x, block.position.y - source.y, block.position.z - source.z))
         }
 
         if (fireIgnitions != null) {
@@ -330,17 +330,17 @@ class Explosion protected constructor(private val source: Locator, size: Double,
 
         val count: Int = smokePositions.size()
         val data = CompoundTag(Object2ObjectOpenHashMap(count, 0.999999f))
-            .putFloat("originX", this.source.position.south.toFloat())
-            .putFloat("originY", this.source.position.up.toFloat())
-            .putFloat("originZ", this.source.position.west.toFloat())
+            .putFloat("originX", this.source.position.x.toFloat())
+            .putFloat("originY", this.source.position.y.toFloat())
+            .putFloat("originZ", this.source.position.z.toFloat())
             .putFloat("radius", size.toFloat())
             .putInt("size", count)
         for (i in 0..<count) {
             val pos = smokePositions[i]
             val prefix = "pos$i"
-            data.putFloat(prefix + "x", pos.south.toFloat())
-            data.putFloat(prefix + "y", pos.up.toFloat())
-            data.putFloat(prefix + "z", pos.west.toFloat())
+            data.putFloat(prefix + "x", pos.x.toFloat())
+            data.putFloat(prefix + "y", pos.y.toFloat())
+            data.putFloat(prefix + "z", pos.z.toFloat())
         }
         level.addSound(this.source.position, Sound.RANDOM_EXPLODE)
         level.addLevelEvent(

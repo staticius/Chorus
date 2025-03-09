@@ -137,9 +137,9 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         namedTag!!.putByte(TAG_PICKUP, this.pickupMode)
         namedTag!!.putList(
             "CollisionPos", ListTag<DoubleTag>()
-                .add(DoubleTag(collisionPos!!.south))
-                .add(DoubleTag(collisionPos!!.up))
-                .add(DoubleTag(collisionPos!!.west))
+                .add(DoubleTag(collisionPos!!.x))
+                .add(DoubleTag(collisionPos!!.y))
+                .add(DoubleTag(collisionPos!!.z))
         )
         namedTag!!.putList(
             "StuckToBlockPos", ListTag<IntTag>()
@@ -209,9 +209,9 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
             if (this.canReturnToShooter()) {
                 val shooter: Entity? = this.shootingEntity
                 val vector3: Vector3 = Vector3(
-                    shooter!!.position.south - position.south,
-                    shooter.position.up + shooter.getEyeHeight() - position.up,
-                    shooter.position.west - position.west
+                    shooter!!.position.x - position.x,
+                    shooter.position.y + shooter.getEyeHeight() - position.y,
+                    shooter.position.z - position.z
                 )
                 val bVector: BVector3 = BVector3.fromPos(vector3)
                 this.setRotation(bVector.getYaw(), bVector.getPitch())
@@ -233,12 +233,12 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         pk.type = Registries.ENTITY.getEntityNetworkId(EntityID.Companion.THROWN_TRIDENT)
         pk.entityUniqueId = this.getId()
         pk.entityRuntimeId = this.getId()
-        pk.x = position.south.toFloat()
-        pk.y = position.up.toFloat()
-        pk.z = position.west.toFloat()
-        pk.speedX = motion.south.toFloat()
-        pk.speedY = motion.up.toFloat()
-        pk.speedZ = motion.west.toFloat()
+        pk.x = position.x.toFloat()
+        pk.y = position.y.toFloat()
+        pk.z = position.z.toFloat()
+        pk.speedX = motion.x.toFloat()
+        pk.speedY = motion.y.toFloat()
+        pk.speedZ = motion.z.toFloat()
         pk.yaw = rotation.yaw.toFloat()
         pk.pitch = rotation.pitch.toFloat()
         pk.entityData = this.entityDataMap

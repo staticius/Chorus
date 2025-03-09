@@ -36,9 +36,9 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
 
     override fun updateMovement() {
         //补充鸡的缓慢无伤落地特性
-        if (!this.onGround && motion.up < -0.08f) {
-            motion.up = -0.08
-            this.highestPosition = position.up
+        if (!this.onGround && motion.y < -0.08f) {
+            motion.y = -0.08
+            this.highestPosition = position.y
         }
         super.updateMovement()
     }

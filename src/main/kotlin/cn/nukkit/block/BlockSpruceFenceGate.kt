@@ -1,0 +1,19 @@
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
+
+class BlockSpruceFenceGate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFenceGate(blockstate) {
+    override val name: String
+        get() = "Spruce Fence Gate"
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.SPRUCE_FENCE_GATE,
+            CommonBlockProperties.IN_WALL_BIT,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OPEN_BIT
+        )
+            get() = Companion.field
+    }
+}

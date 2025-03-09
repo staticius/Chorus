@@ -56,9 +56,9 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             )
         }
         val bb = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0).getOffsetBoundingBox(
-            position.south + (pushDirection!!.xOffset * progress),
-            position.up + (pushDirection.yOffset * progress),
-            position.west + (pushDirection.zOffset * progress) //带动站在移动方块上的实体
+            position.x + (pushDirection!!.xOffset * progress),
+            position.y + (pushDirection.yOffset * progress),
+            position.z + (pushDirection.zOffset * progress) //带动站在移动方块上的实体
         ).addCoord(0.0, if (pushDirection.axis.isHorizontal) 0.25 else 0.0, 0.0)
         for (entity in level.getCollidingEntities(bb)) moveEntity(
             entity,

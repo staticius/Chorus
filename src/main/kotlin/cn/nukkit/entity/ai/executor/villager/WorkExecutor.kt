@@ -64,14 +64,14 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.Companion.SITE
                                     } else {
                                         if (entity.getMoveTarget() == null) {
                                             var horizontal = Vector2(
-                                                nearest.position.south - entity.position.south,
-                                                nearest.position.west - entity.position.west
+                                                nearest.position.x - entity.position.x,
+                                                nearest.position.z - entity.position.z
                                             )
                                             horizontal = horizontal.multiply(1 - 1 / horizontal.length())
                                             val target = Vector3(
-                                                entity.position.south + horizontal.x,
-                                                nearest.position.up,
-                                                entity.position.west + horizontal.y
+                                                entity.position.x + horizontal.x,
+                                                nearest.position.y,
+                                                entity.position.z + horizontal.y
                                             )
                                             setLookTarget(entity, target)
                                             setRouteTarget(entity, target)
@@ -98,9 +98,9 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.Companion.SITE
 
     fun setTarget(entity: EntityMob) {
         val site = entity.memoryStorage!!.get<Block>(CoreMemoryTypes.Companion.SITE_BLOCK)
-        var horizontal = Vector2(site!!.position.south - entity.position.south, site.position.west - entity.position.west)
+        var horizontal = Vector2(site!!.position.x - entity.position.x, site.position.z - entity.position.z)
         horizontal = horizontal.multiply(1 - 1 / horizontal.length())
-        val target = Vector3(entity.position.south + horizontal.x, site.position.up, entity.position.west + horizontal.y)
+        val target = Vector3(entity.position.x + horizontal.x, site.position.y, entity.position.z + horizontal.y)
         setLookTarget(entity, target)
         setRouteTarget(entity, target)
     }

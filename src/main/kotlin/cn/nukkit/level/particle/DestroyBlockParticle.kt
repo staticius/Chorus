@@ -10,7 +10,7 @@ import cn.nukkit.network.protocol.LevelEventPacket
  * @since 2015/11/21
  */
 class DestroyBlockParticle(pos: Vector3, block: Block) :
-    Particle(pos.south, pos.up, pos.west) {
+    Particle(pos.x, pos.y, pos.z) {
     protected val data: Int
 
     init {
@@ -20,9 +20,9 @@ class DestroyBlockParticle(pos: Vector3, block: Block) :
     override fun encode(): Array<DataPacket> {
         val pk = LevelEventPacket()
         pk.evid = LevelEventPacket.EVENT_PARTICLE_DESTROY_BLOCK
-        pk.x = south.toFloat()
-        pk.y = up.toFloat()
-        pk.z = west.toFloat()
+        pk.x = x.toFloat()
+        pk.y = y.toFloat()
+        pk.z = z.toFloat()
         pk.data = this.data
 
         return arrayOf(pk)

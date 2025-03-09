@@ -219,7 +219,7 @@ class LevelDBChunkSerializer private constructor() {
                                 Arrays.fill(
                                     palettes,
                                     BlockPalette(
-                                        BlockAir.PROPERTIES.defaultState,
+                                        BlockAir.properties.defaultState,
                                         ReferenceArrayList(16),
                                         BitArrayVersion.V2
                                     )
@@ -232,7 +232,7 @@ class LevelDBChunkSerializer private constructor() {
                                     byteBuf
                                 ) { hash: Int ->
                                     val blockState = Registries.BLOCKSTATE[hash]
-                                        ?: return@readFromStoragePersistent BlockUnknown.PROPERTIES.defaultState
+                                        ?: return@readFromStoragePersistent BlockUnknown.properties.defaultState
                                     blockState
                                 }
                                 layer++
@@ -249,7 +249,7 @@ class LevelDBChunkSerializer private constructor() {
                                 Arrays.fill(
                                     palettes,
                                     BlockPalette(
-                                        BlockAir.PROPERTIES.defaultState,
+                                        BlockAir.properties.defaultState,
                                         ReferenceArrayList(16),
                                         BitArrayVersion.V2
                                     )
@@ -262,7 +262,7 @@ class LevelDBChunkSerializer private constructor() {
                                     byteBuf
                                 ) { hash: Int ->
                                     val blockState = Registries.BLOCKSTATE[hash]
-                                        ?: return@readFromStoragePersistent BlockUnknown.PROPERTIES.defaultState
+                                        ?: return@readFromStoragePersistent BlockUnknown.properties.defaultState
                                     blockState
                                 }
                                 layer++

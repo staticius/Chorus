@@ -13,19 +13,19 @@ class SpaceMoveController : IController {
         if (entity.hasMoveDirection() && !entity.isShouldUpdateMoveDirection) {
             val direction = entity.moveDirectionEnd
             val speed = entity.movementSpeed
-            if (entity.motion.south * entity.motion.south + entity.motion.up * entity.motion.up + entity.motion.west * entity.motion.west > speed * speed * 0.4756) {
+            if (entity.motion.x * entity.motion.x + entity.motion.y * entity.motion.y + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 return false
             }
             val relativeVector = direction!!.clone().setComponents(
-                direction.south - entity.position.south,
-                direction.up - entity.position.up, direction.west - entity.position.west
+                direction.x - entity.position.x,
+                direction.y - entity.position.y, direction.z - entity.position.z
             )
             val xyzLength =
-                sqrt(relativeVector.south * relativeVector.south + relativeVector.up * relativeVector.up + relativeVector.west * relativeVector.west)
+                sqrt(relativeVector.x * relativeVector.x + relativeVector.y * relativeVector.y + relativeVector.z * relativeVector.z)
             val k = speed / xyzLength * 0.33
-            val dx = relativeVector.south * k
-            val dy = relativeVector.up * k
-            val dz = relativeVector.west * k
+            val dx = relativeVector.x * k
+            val dy = relativeVector.y * k
+            val dz = relativeVector.z * k
             entity.addTmpMoveMotion(Vector3(dx, dy, dz))
             entity.setDataFlag(EntityFlag.MOVING, true)
             if (xyzLength < speed) {

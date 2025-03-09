@@ -190,9 +190,9 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                     )
                     val pk = LevelEventPacket()
                     pk.evid = LevelEventPacket.EVENT_PARTICLE_SOUND_GUARDIAN_GHOST
-                    pk.x = position.south.toFloat()
-                    pk.y = position.up.toFloat()
-                    pk.z = position.west.toFloat()
+                    pk.x = position.x.toFloat()
+                    pk.y = position.y.toFloat()
+                    pk.z = position.z.toFloat()
                     p.dataPacket(pk)
                 }
             }

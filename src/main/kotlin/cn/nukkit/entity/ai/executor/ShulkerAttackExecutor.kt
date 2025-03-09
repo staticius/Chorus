@@ -30,9 +30,9 @@ class ShulkerAttackExecutor : IBehaviorExecutor {
             nextAttack = Utils.rand(20, 110)
             val bulletTransform = entity.transform.clone().add(
                 Vector3(
-                    target.position.south - entity.position.south,
-                    target.position.up - entity.position.up,
-                    target.position.west - entity.position.west
+                    target.position.x - entity.position.x,
+                    target.position.y - entity.position.y,
+                    target.position.z - entity.position.z
                 ).normalize()
             ).add(0.0, 0.5, 0.0)
             val nbt = CompoundTag()

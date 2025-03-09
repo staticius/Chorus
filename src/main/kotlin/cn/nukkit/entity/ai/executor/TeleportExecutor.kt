@@ -18,12 +18,12 @@ class TeleportExecutor : IBehaviorExecutor {
 
     private fun find(locator: Locator): Locator {
         val distance = maxDistance - minDistance
-        val dx = locator.position.south + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance
-        val dz = locator.position.west + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance
-        val pos = Vector3(floor(dx), (floor(locator.position.up + 0.1).toInt() + maxDistance).toDouble(), floor(dz))
+        val dx = locator.position.x + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance
+        val dz = locator.position.z + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance
+        val pos = Vector3(floor(dx), (floor(locator.position.y + 0.1).toInt() + maxDistance).toDouble(), floor(dz))
         for (y in min(
             locator.level.maxHeight.toDouble(),
-            pos.up.toInt().toDouble()
+            pos.y.toInt().toDouble()
         ) downTo locator.level.minHeight + 1) {
             val block = locator.level.getBlock(dx.toInt(), y, dz.toInt())
             if (block.isSolid) {

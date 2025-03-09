@@ -4,7 +4,6 @@ import cn.nukkit.Player
 import cn.nukkit.block.*
 import cn.nukkit.entity.*
 import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.entity.Entity.getLocator
 import cn.nukkit.entity.item.EntityElytraFirework
 import cn.nukkit.entity.item.EntityFireworksRocket
 import cn.nukkit.level.Level
@@ -110,9 +109,9 @@ class ItemFireworkRocket @JvmOverloads constructor(meta: Int = 0, count: Int = 1
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
-                    .add(FloatTag(pos.south + 0.5))
-                    .add(FloatTag(pos.up + 0.5))
-                    .add(FloatTag(pos.west + 0.5))
+                    .add(FloatTag(pos.x + 0.5))
+                    .add(FloatTag(pos.y + 0.5))
+                    .add(FloatTag(pos.z + 0.5))
             )
             .putList(
                 "Motion", ListTag<FloatTag>()
@@ -139,9 +138,9 @@ class ItemFireworkRocket @JvmOverloads constructor(meta: Int = 0, count: Int = 1
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
-                    .add(FloatTag(pos.south + 0.5))
-                    .add(FloatTag(pos.up + 0.5))
-                    .add(FloatTag(pos.west + 0.5))
+                    .add(FloatTag(pos.x + 0.5))
+                    .add(FloatTag(pos.y + 0.5))
+                    .add(FloatTag(pos.z + 0.5))
             )
             .putList(
                 "Motion", ListTag<FloatTag>()

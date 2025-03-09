@@ -30,23 +30,23 @@ class HoppingController(moveCooldown: Int) : WalkController() {
             //clone防止异步导致的NPE
             val direction = entity.moveDirectionEnd.clone()
             val speed = entity.movementSpeed
-            if (entity.motion.south * entity.motion.south + entity.motion.west * entity.motion.west > speed * speed * 0.4756) {
+            if (entity.motion.x * entity.motion.x + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 entity.setDataFlag(EntityFlag.MOVING, false)
                 return false
             }
             val relativeVector = direction.clone().setComponents(
-                direction.south - entity.position.south,
-                direction.up - entity.position.up, direction.west - entity.position.west
+                direction.x - entity.position.x,
+                direction.y - entity.position.y, direction.z - entity.position.z
             )
-            val xzLengthSquared = relativeVector.south * relativeVector.south + relativeVector.west * relativeVector.west
+            val xzLengthSquared = relativeVector.x * relativeVector.x + relativeVector.z * relativeVector.z
             if (abs(xzLengthSquared) < EntityPhysical.Companion.PRECISION) {
                 entity.setDataFlag(EntityFlag.MOVING, false)
                 return false
             }
-            val xzLength = sqrt(relativeVector.south * relativeVector.south + relativeVector.west * relativeVector.west)
+            val xzLength = sqrt(relativeVector.x * relativeVector.x + relativeVector.z * relativeVector.z)
             val k = speed / xzLength * 0.33
-            val dx = relativeVector.south * k
-            val dz = relativeVector.west * k
+            val dx = relativeVector.x * k
+            val dz = relativeVector.z * k
             var dy = 0.0
             if (entity.isOnGround) {
                 val diffY = entity.getScale().toDouble()

@@ -10,7 +10,7 @@ class DiveController : IController {
     override fun control(entity: EntityMob): Boolean {
         //add dive force
         if (entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.ENABLE_DIVE_FORCE))  //                                                                  抵消额外的浮力即可
-            entity.motion.up -= entity.gravity * (entity.floatingForceFactor - 1)
+            entity.motion.y -= entity.gravity * (entity.floatingForceFactor - 1)
         return true
     }
 }

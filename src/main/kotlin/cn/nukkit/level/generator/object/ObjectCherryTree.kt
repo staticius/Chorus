@@ -108,7 +108,7 @@ class ObjectCherryTree : TreeGenerator() {
             var tmpX = x - leftSideTrunkLength * xMultiplier
             var tmpY = y + leftSideTrunkStartY
             var tmpZ = z - leftSideTrunkLength * zMultiplier
-            level.setBlockStateAt(tmpX, tmpY, tmpZ, BlockAir.PROPERTIES.defaultState)
+            level.setBlockStateAt(tmpX, tmpY, tmpZ, BlockAir.properties.defaultState)
             tmpX += xMultiplier
             tmpY += 1
             tmpZ += zMultiplier
@@ -153,7 +153,7 @@ class ObjectCherryTree : TreeGenerator() {
             var tmpX = x + rightSideTrunkLength * xMultiplier
             var tmpY = y + rightSideTrunkStartY
             var tmpZ = z + rightSideTrunkLength * zMultiplier
-            level.setBlockStateAt(tmpX, tmpY, tmpZ, BlockAir.PROPERTIES.defaultState)
+            level.setBlockStateAt(tmpX, tmpY, tmpZ, BlockAir.properties.defaultState)
             tmpX -= xMultiplier
             tmpY += 1
             tmpZ -= zMultiplier

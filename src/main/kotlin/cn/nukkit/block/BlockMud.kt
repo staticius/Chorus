@@ -1,0 +1,26 @@
+package cn.nukkit.block
+
+import cn.nukkit.item.ItemTool
+
+class BlockMud : BlockSolid, Natural {
+    constructor() : super(Companion.properties.defaultState)
+
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Mud"
+
+    override val hardness: Double
+        get() = 0.5
+
+    override val resistance: Double
+        get() = 0.5
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MUD)
+            get() = Companion.field
+    }
+}

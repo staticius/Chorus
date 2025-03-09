@@ -81,14 +81,14 @@ abstract class LegacyTreeGenerator {
         get() {
             val pillarAxisValue: EnumPropertyValue = CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y)
             return when (type) {
-                WoodType.JUNGLE -> BlockJungleLog.PROPERTIES.getBlockState(pillarAxisValue)
-                WoodType.DARK_OAK -> BlockDarkOakLog.PROPERTIES.getBlockState(pillarAxisValue)
-                WoodType.SPRUCE -> BlockSpruceLog.PROPERTIES.getBlockState(pillarAxisValue)
-                WoodType.ACACIA -> BlockAcaciaLog.PROPERTIES.getBlockState(pillarAxisValue)
-                WoodType.BIRCH -> BlockBirchLog.PROPERTIES.getBlockState(pillarAxisValue)
-                WoodType.OAK -> BlockOakLog.PROPERTIES.getBlockState(pillarAxisValue)
-                WoodType.CHERRY -> BlockCherryLog.PROPERTIES.getBlockState(pillarAxisValue)
-                WoodType.PALE_OAK -> BlockPaleOakLog.PROPERTIES.getBlockState(pillarAxisValue)
+                WoodType.JUNGLE -> BlockJungleLog.properties.getBlockState(pillarAxisValue)
+                WoodType.DARK_OAK -> BlockDarkOakLog.properties.getBlockState(pillarAxisValue)
+                WoodType.SPRUCE -> BlockSpruceLog.properties.getBlockState(pillarAxisValue)
+                WoodType.ACACIA -> BlockAcaciaLog.properties.getBlockState(pillarAxisValue)
+                WoodType.BIRCH -> BlockBirchLog.properties.getBlockState(pillarAxisValue)
+                WoodType.OAK -> BlockOakLog.properties.getBlockState(pillarAxisValue)
+                WoodType.CHERRY -> BlockCherryLog.properties.getBlockState(pillarAxisValue)
+                WoodType.PALE_OAK -> BlockPaleOakLog.properties.getBlockState(pillarAxisValue)
             }
         }
 
@@ -96,35 +96,35 @@ abstract class LegacyTreeGenerator {
         get() {
             return when (type) {
                 WoodType.OAK -> {
-                    BlockOakLeaves.PROPERTIES.getDefaultState()
+                    BlockOakLeaves.properties.getDefaultState()
                 }
 
                 WoodType.BIRCH -> {
-                    BlockBirchLeaves.PROPERTIES.getDefaultState()
+                    BlockBirchLeaves.properties.getDefaultState()
                 }
 
                 WoodType.ACACIA -> {
-                    BlockAcaciaLeaves.PROPERTIES.getDefaultState()
+                    BlockAcaciaLeaves.properties.getDefaultState()
                 }
 
                 WoodType.JUNGLE -> {
-                    BlockJungleLeaves.PROPERTIES.getDefaultState()
+                    BlockJungleLeaves.properties.getDefaultState()
                 }
 
                 WoodType.SPRUCE -> {
-                    BlockSpruceLeaves.PROPERTIES.getDefaultState()
+                    BlockSpruceLeaves.properties.getDefaultState()
                 }
 
                 WoodType.DARK_OAK -> {
-                    BlockDarkOakLeaves.PROPERTIES.getDefaultState()
+                    BlockDarkOakLeaves.properties.getDefaultState()
                 }
 
                 WoodType.CHERRY -> {
-                    BlockCherryLeaves.PROPERTIES.getDefaultState()
+                    BlockCherryLeaves.properties.getDefaultState()
                 }
 
                 WoodType.PALE_OAK -> {
-                    BlockPaleOakLeaves.PROPERTIES.getDefaultState()
+                    BlockPaleOakLeaves.properties.getDefaultState()
                 }
 
                 else -> throw IllegalArgumentException()

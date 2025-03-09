@@ -154,9 +154,9 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
 
     fun updatePickupArea() {
         this.pickupArea = SimpleAxisAlignedBB(
-            position.south - 0.5,
-            position.up - 0.5,
-            position.west - 0.5, position.south + 1, position.up + 2.5, position.west + 1
+            position.x - 0.5,
+            position.y - 0.5,
+            position.z - 0.5, position.x + 1, position.y + 2.5, position.z + 1
         ).expand(0.25, 0.0, 0.25)
     }
 

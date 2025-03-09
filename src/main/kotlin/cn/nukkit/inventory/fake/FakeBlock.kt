@@ -1,7 +1,6 @@
 package cn.nukkit.inventory.fake
 
 import cn.nukkit.Player
-import cn.nukkit.entity.Entity.getLocator
 import cn.nukkit.math.Vector3
 
 /**
@@ -52,9 +51,9 @@ interface FakeBlock {
      */
     fun getOffset(player: Player): Vector3 {
         val offset = player.getDirectionVector()
-        offset.south *= -(1 + player.getWidth()).toDouble()
-        offset.up *= -(1 + player.getHeight()).toDouble()
-        offset.west *= -(1 + player.getWidth()).toDouble()
+        offset.x *= -(1 + player.getWidth()).toDouble()
+        offset.y *= -(1 + player.getHeight()).toDouble()
+        offset.z *= -(1 + player.getWidth()).toDouble()
         return player.getLocator().position.add(offset)
     }
 }

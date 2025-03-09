@@ -59,10 +59,10 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
 
         // A killer task
         if (this.level != null) {
-            if (position.up < level.getMinHeight() - 16) {
+            if (position.y < level.getMinHeight() - 16) {
                 kill()
             }
-        } else if (position.up < -16) {
+        } else if (position.y < -16) {
             kill()
         }
         // Movement code

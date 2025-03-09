@@ -457,15 +457,15 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
     protected fun calH(start: Vector3, target: Vector3): Int {
         //使用DIRECT_MOVE_COST和OBLIQUE_MOVE_COST计算代价
         //计算对角线距离
-        val obliqueCost = (abs(min(target.south - start.south, target.west - start.west)) * OBLIQUE_MOVE_COST).toInt()
+        val obliqueCost = (abs(min(target.x - start.x, target.z - start.z)) * OBLIQUE_MOVE_COST).toInt()
         //计算剩余直线距离
-        val directCost = ((abs(max(target.south - start.south, target.west - start.west)) - abs(
+        val directCost = ((abs(max(target.x - start.x, target.z - start.z)) - abs(
             min(
-                target.south - start.south,
-                target.west - start.west
+                target.x - start.x,
+                target.z - start.z
             )
         )) * DIRECT_MOVE_COST).toInt()
-        return obliqueCost + directCost + (abs(target.up - start.up) * DIRECT_MOVE_COST).toInt()
+        return obliqueCost + directCost + (abs(target.y - start.y) * DIRECT_MOVE_COST).toInt()
     }
 
     /**

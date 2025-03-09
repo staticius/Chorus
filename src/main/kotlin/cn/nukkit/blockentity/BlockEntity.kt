@@ -40,9 +40,9 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
         this.namedTag = nbt
         this.name = ""
         this.id = count++
-        position.south = namedTag.getInt("x").toDouble()
-        position.up = namedTag.getInt("y").toDouble()
-        position.west = namedTag.getInt("z").toDouble()
+        position.x = namedTag.getInt("x").toDouble()
+        position.y = namedTag.getInt("y").toDouble()
+        position.z = namedTag.getInt("z").toDouble()
         this.isMovable = namedTag.getBoolean("isMovable")
 
 

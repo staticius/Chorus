@@ -10,7 +10,7 @@ class ObjectPaleOakTree : TreeGenerator() {
      * The metadata value of the wood to use in tree generation.
      */
     private val PALE_OAK_LOG: BlockState =
-        BlockPaleOakLog.PROPERTIES.getBlockState<BlockFace.Axis, EnumPropertyType<BlockFace.Axis>>(
+        BlockPaleOakLog.properties.getBlockState<BlockFace.Axis, EnumPropertyType<BlockFace.Axis>>(
             CommonBlockProperties.PILLAR_AXIS,
             BlockFace.Axis.Y
         )
@@ -18,7 +18,7 @@ class ObjectPaleOakTree : TreeGenerator() {
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val PALE_OAK_LEAVES: BlockState = BlockPaleOakLeaves.PROPERTIES.getDefaultState()
+    private val PALE_OAK_LEAVES: BlockState = BlockPaleOakLeaves.properties.getDefaultState()
 
     /**
      * The metadata value of the leaves to use in tree generation.
@@ -190,14 +190,14 @@ class ObjectPaleOakTree : TreeGenerator() {
                         if (i == depth - 1) {
                             worldIn.setBlockStateAt(
                                 pos,
-                                BlockPaleHangingMoss.PROPERTIES.getBlockState<Boolean, BooleanPropertyType>(
+                                BlockPaleHangingMoss.properties.getBlockState<Boolean, BooleanPropertyType>(
                                     CommonBlockProperties.TIP,
                                     true
                                 )
                             )
                         } else worldIn.setBlockStateAt(
                             pos,
-                            BlockPaleHangingMoss.PROPERTIES.getBlockState<Boolean, BooleanPropertyType>(
+                            BlockPaleHangingMoss.properties.getBlockState<Boolean, BooleanPropertyType>(
                                 CommonBlockProperties.TIP,
                                 false
                             )

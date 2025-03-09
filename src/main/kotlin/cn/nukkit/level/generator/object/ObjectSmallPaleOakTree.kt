@@ -16,12 +16,12 @@ class ObjectSmallPaleOakTree(
      * The metadata value of the wood to use in tree generation.
      */
     private val metaWood: BlockState =
-        BlockPaleOakWood.PROPERTIES.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
+        BlockPaleOakWood.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
 
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val metaLeaves: BlockState = BlockPaleOakLeaves.PROPERTIES.getDefaultState()
+    private val metaLeaves: BlockState = BlockPaleOakLeaves.properties.getDefaultState()
 
     override fun generate(level: BlockManager, rand: RandomSourceProvider, vectorPosition: Vector3): Boolean {
         val position = BlockVector3(vectorPosition.floorX, vectorPosition.floorY, vectorPosition.floorZ)
@@ -103,14 +103,14 @@ class ObjectSmallPaleOakTree(
                                                     if (i == depth - 1) {
                                                         level.setBlockStateAt(
                                                             pos,
-                                                            BlockPaleHangingMoss.PROPERTIES.getBlockState<Boolean, BooleanPropertyType>(
+                                                            BlockPaleHangingMoss.properties.getBlockState<Boolean, BooleanPropertyType>(
                                                                 CommonBlockProperties.TIP,
                                                                 true
                                                             )
                                                         )
                                                     } else level.setBlockStateAt(
                                                         pos,
-                                                        BlockPaleHangingMoss.PROPERTIES.getBlockState<Boolean, BooleanPropertyType>(
+                                                        BlockPaleHangingMoss.properties.getBlockState<Boolean, BooleanPropertyType>(
                                                             CommonBlockProperties.TIP,
                                                             false
                                                         )

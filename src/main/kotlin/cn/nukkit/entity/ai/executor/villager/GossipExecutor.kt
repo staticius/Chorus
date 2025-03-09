@@ -45,9 +45,9 @@ class GossipExecutor : EntityControl, IBehaviorExecutor {
                                 ),
                                 item,
                                 Vector3(
-                                    entity1.position.south - entity.position.south,
-                                    entity1.position.up - entity.position.up,
-                                    entity1.position.west - entity.position.west
+                                    entity1.position.x - entity.position.x,
+                                    entity1.position.y - entity.position.y,
+                                    entity1.position.z - entity.position.z
                                 ).normalize().multiply(0.4)
                             )
                         }

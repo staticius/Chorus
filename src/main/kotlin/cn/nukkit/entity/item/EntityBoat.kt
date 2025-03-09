@@ -129,12 +129,12 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         addEntity.yaw = rotation.yaw.toFloat()
         addEntity.headYaw = rotation.yaw.toFloat()
         addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.south.toFloat()
-        addEntity.y = position.up.toFloat() + getBaseOffset()
-        addEntity.z = position.west.toFloat()
-        addEntity.speedX = motion.south.toFloat()
-        addEntity.speedY = motion.up.toFloat()
-        addEntity.speedZ = motion.west.toFloat()
+        addEntity.x = position.x.toFloat()
+        addEntity.y = position.y.toFloat() + getBaseOffset()
+        addEntity.z = position.z.toFloat()
+        addEntity.speedX = motion.x.toFloat()
+        addEntity.speedY = motion.y.toFloat()
+        addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
 
         addEntity.links = arrayOfNulls(passengers.size)
@@ -170,9 +170,9 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             hasUpdate = this.updateBoat(tickDiff) || hasUpdate
         }
 
-        return hasUpdate || !this.onGround || abs(motion.south) > 0.00001 || abs(
-            motion.up
-        ) > 0.00001 || abs(motion.west) > 0.00001
+        return hasUpdate || !this.onGround || abs(motion.x) > 0.00001 || abs(
+            motion.y
+        ) > 0.00001 || abs(motion.z) > 0.00001
     }
 
     private fun updateBoat(tickDiff: Int): Boolean {
@@ -183,11 +183,11 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
 
         // A killer task
         if (this.level != null) {
-            if (position.up < level.getMinHeight() - 16) {
+            if (position.y < level.getMinHeight() - 16) {
                 kill()
                 return false
             }
-        } else if (position.up < -16) {
+        } else if (position.y < -16) {
             kill()
             return false
         }
@@ -239,35 +239,35 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
     }
 
     private fun moveBoat(waterDiff: Double) {
-        checkObstruction(position.south, position.up, position.west)
-        move(motion.south, motion.up, motion.west)
+        checkObstruction(position.x, position.y, position.z)
+        move(motion.x, motion.y, motion.z)
 
         var friction: Double = (1 - this.getDrag()).toDouble()
 
-        if (this.onGround && (abs(motion.south) > 0.00001 || abs(
-                motion.west
+        if (this.onGround && (abs(motion.x) > 0.00001 || abs(
+                motion.z
             ) > 0.00001)
         ) {
             friction *= level!!.getBlock(position.add(0.0, -1.0, 0.0).floor()).getFrictionFactor()
         }
 
-        motion.south *= friction
+        motion.x *= friction
 
         if (!onGround || waterDiff > SINKING_DEPTH /* || sinking*/) {
-            motion.up =
-                if (waterDiff > 0.5) motion.up - this.getGravity() else (if (motion.up - SINKING_SPEED < -SINKING_MAX_SPEED) motion.up else motion.up - SINKING_SPEED)
+            motion.y =
+                if (waterDiff > 0.5) motion.y - this.getGravity() else (if (motion.y - SINKING_SPEED < -SINKING_MAX_SPEED) motion.y else motion.y - SINKING_SPEED)
         }
 
-        motion.west *= friction
+        motion.z *= friction
 
         val from: Transform = Transform(
-            prevPosition.south,
-            prevPosition.up, prevPosition.west, prevRotation.yaw, prevRotation.pitch,
+            prevPosition.x,
+            prevPosition.y, prevPosition.z, prevRotation.yaw, prevRotation.pitch,
             level!!
         )
         val to: Transform = Transform(
-            position.south,
-            position.up, position.west, rotation.yaw, rotation.pitch,
+            position.x,
+            position.y, position.z, rotation.yaw, rotation.pitch,
             level!!
         )
 
@@ -316,12 +316,12 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         }
 
         if (waterDiff < -SINKING_DEPTH / 1.7) {
-            motion.up = min(0.05 / 10, motion.up + 0.005)
+            motion.y = min(0.05 / 10, motion.y + 0.005)
             hasUpdated = true
         } else if (waterDiff < 0 || !sinking) {
-            motion.up = if (motion.up > (SINKING_MAX_SPEED / 2)) max(
-                motion.up - 0.02, (SINKING_MAX_SPEED / 2)
-            ) else motion.up + SINKING_SPEED
+            motion.y = if (motion.y > (SINKING_MAX_SPEED / 2)) max(
+                motion.y - 0.02, (SINKING_MAX_SPEED / 2)
+            ) else motion.y + SINKING_SPEED
             hasUpdated = true
         }
         return hasUpdated
@@ -494,8 +494,8 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
                 return
             }
 
-            var diffX: Double = entity.position.south - position.south
-            var diffZ: Double = entity.position.west - position.west
+            var diffX: Double = entity.position.x - position.x
+            var diffZ: Double = entity.position.z - position.z
 
             var direction: Double = NukkitMath.getDirection(diffX, diffZ)
 
@@ -514,8 +514,8 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
                 diffZ *= 1 + entityCollisionReduction
 
                 if (this.riding == null) {
-                    motion.south -= diffX
-                    motion.west -= diffZ
+                    motion.x -= diffX
+                    motion.z -= diffZ
                 }
             }
         }
@@ -568,7 +568,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
     }
 
     fun onInput(loc: Transform) {
-        this.move(loc.position.south - position.south, loc.position.up - position.up, loc.position.west - position.west)
+        this.move(loc.position.x - position.x, loc.position.y - position.y, loc.position.z - position.z)
         rotation.yaw = loc.rotation.yaw
         broadcastMovement(false)
     }

@@ -26,9 +26,9 @@ class StrafeExecutor : EntityControl, IBehaviorExecutor {
 
         if (entity.position.distance(player.position) <= 64) {
             val toPlayerVector = Vector3(
-                player.position.south - entity.position.south,
-                player.position.up - entity.position.up,
-                player.position.west - entity.position.west
+                player.position.x - entity.position.x,
+                player.position.y - entity.position.y,
+                player.position.z - entity.position.z
             ).normalize()
 
             val fireballTransform = entity.transform.add(toPlayerVector.multiply(5.0))

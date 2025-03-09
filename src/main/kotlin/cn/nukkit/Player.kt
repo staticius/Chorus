@@ -593,9 +593,9 @@ open class Player @UsedByReflection constructor(
                 val breakTick = ceil(miningTimeRequired * 20).toInt()
                 val pk = LevelEventPacket()
                 pk.evid = LevelEventPacket.EVENT_BLOCK_UPDATE_BREAK
-                pk.x = breakingBlock!!.position.south.toFloat()
-                pk.y = breakingBlock!!.position.up.toFloat()
-                pk.z = breakingBlock!!.position.west.toFloat()
+                pk.x = breakingBlock!!.position.x.toFloat()
+                pk.y = breakingBlock!!.position.y.toFloat()
+                pk.z = breakingBlock!!.position.z.toFloat()
                 pk.data = 65535 / breakTick
                 level!!.addChunkPacket(
                     breakingBlock!!.position.floorX shr 4,
@@ -683,9 +683,9 @@ open class Player @UsedByReflection constructor(
             if (breakTime > 0) {
                 val pk = LevelEventPacket()
                 pk.evid = LevelEventPacket.EVENT_BLOCK_START_BREAK
-                pk.x = pos.south.toFloat()
-                pk.y = pos.up.toFloat()
-                pk.z = pos.west.toFloat()
+                pk.x = pos.x.toFloat()
+                pk.y = pos.y.toFloat()
+                pk.z = pos.z.toFloat()
                 pk.data = 65535 / breakTime
                 level!!.addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, pk)
 
@@ -705,9 +705,9 @@ open class Player @UsedByReflection constructor(
         if (pos.distanceSquared(this.position) < 1000) { // same as with ACTION_START_BREAK
             val pk = LevelEventPacket()
             pk.evid = LevelEventPacket.EVENT_BLOCK_STOP_BREAK
-            pk.x = pos.south.toFloat()
-            pk.y = pos.up.toFloat()
-            pk.z = pos.west.toFloat()
+            pk.x = pos.x.toFloat()
+            pk.y = pos.y.toFloat()
+            pk.z = pos.z.toFloat()
             pk.data = 0
             level!!.addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, pk)
         }
@@ -773,9 +773,9 @@ open class Player @UsedByReflection constructor(
     private fun setDimension(dimension: Int) {
         val pk = ChangeDimensionPacket()
         pk.dimension = dimension
-        pk.x = position.south.toFloat()
-        pk.y = position.up.toFloat()
-        pk.z = position.west.toFloat()
+        pk.x = position.x.toFloat()
+        pk.y = position.y.toFloat()
+        pk.z = position.z.toFloat()
         pk.respawn = false
         pk.loadingScreenId = loadingScreenId++
 
@@ -815,9 +815,9 @@ open class Player @UsedByReflection constructor(
             Player.log.info(
                 "Player {} cannot find the saved spawnpoint, reset the spawnpoint to {} {} {} / {}",
                 this.getName(),
-                spawnPoint!!.position.south,
-                spawnPoint!!.position.up,
-                spawnPoint!!.position.west,
+                spawnPoint!!.position.x,
+                spawnPoint!!.position.y,
+                spawnPoint!!.position.z,
                 spawnPoint!!.level.getName()
             )
         }
@@ -1132,16 +1132,16 @@ open class Player @UsedByReflection constructor(
         }
 
         //update server-side position and rotation and aabb
-        val diffX = clientPos.x - position.south
-        val diffY = clientPos.y - position.up
-        val diffZ = clientPos.z - position.west
+        val diffX = clientPos.x - position.x
+        val diffY = clientPos.y - position.y
+        val diffZ = clientPos.z - position.z
         this.setRotation(clientPos.yaw, clientPos.pitch, clientPos.headYaw)
         this.fastMove(diffX, diffY, diffZ)
 
         //after check
-        val corrX = position.south - clientPos.x
-        val corrY = position.up - clientPos.y
-        val corrZ = position.west - clientPos.z
+        val corrX = position.x - clientPos.x
+        val corrY = position.y - clientPos.y
+        val corrZ = position.z - clientPos.z
         if (this.isCheckingMovement && (abs(corrX) > 0.5 || abs(corrY) > 0.5 || abs(corrZ) > 0.5) && this.riding == null && !this.hasEffect(
                 EffectType.LEVITATION
             ) && !this.hasEffect(EffectType.SLOW_FALLING) && !server!!.allowFlight
@@ -1170,15 +1170,15 @@ open class Player @UsedByReflection constructor(
 
         //update server-side position and rotation and aabb
         val last = Transform(
-            prevPosition.south,
-            prevPosition.up,
-            prevPosition.west, prevRotation.yaw, prevRotation.pitch, this.prevHeadYaw,
+            prevPosition.x,
+            prevPosition.y,
+            prevPosition.z, prevRotation.yaw, prevRotation.pitch, this.prevHeadYaw,
             level!!
         )
         val now = this.getTransform()
-        prevPosition.south = now.position.south
-        prevPosition.up = now.position.up
-        prevPosition.west = now.position.west
+        prevPosition.x = now.position.x
+        prevPosition.y = now.position.y
+        prevPosition.z = now.position.z
         prevRotation.yaw = now.rotation.yaw
         prevRotation.pitch = now.rotation.pitch
         this.prevHeadYaw = now.headYaw
@@ -1207,7 +1207,7 @@ open class Player @UsedByReflection constructor(
                     )
                     this.teleport(ev.to, null)
                 } else {
-                    if (this.gamemode != SPECTATOR && (last.position.south != now.position.south || last.position.up != now.position.up || last.position.west != now.position.west)) {
+                    if (this.gamemode != SPECTATOR && (last.position.x != now.position.x || last.position.y != now.position.y || last.position.z != now.position.z)) {
                         if (this.isOnGround() && this.isGliding()) {
                             level!!.vibrationManager.callVibrationEvent(
                                 VibrationEvent(
@@ -1244,15 +1244,15 @@ open class Player @UsedByReflection constructor(
         //update speed
         if (this.speed == null) {
             this.speed = Vector3(
-                last.position.south - now.position.south,
-                last.position.up - now.position.up,
-                last.position.west - now.position.west
+                last.position.x - now.position.x,
+                last.position.y - now.position.y,
+                last.position.z - now.position.z
             )
         } else {
             speed!!.setComponents(
-                last.position.south - now.position.south,
-                last.position.up - now.position.up,
-                last.position.west - now.position.west
+                last.position.x - now.position.x,
+                last.position.y - now.position.y,
+                last.position.z - now.position.z
             )
         }
 
@@ -1324,7 +1324,7 @@ open class Player @UsedByReflection constructor(
 
             //处理冰霜行者附魔
             val frostWalker = inventory!!.boots.getEnchantment(Enchantment.ID_FROST_WALKER)
-            if (frostWalker != null && frostWalker.level > 0 && !this.isSpectator && position.up >= 1 && position.up <= 255) {
+            if (frostWalker != null && frostWalker.level > 0 && !this.isSpectator && position.y >= 1 && position.y <= 255) {
                 val radius = 2 + frostWalker.level
                 for (coordX in position.floorX - radius..<position.floorX + radius + 1) {
                     for (coordZ in position.floorZ - radius..<position.floorZ + radius + 1) {
@@ -1381,9 +1381,9 @@ open class Player @UsedByReflection constructor(
     }
 
     fun revertClientMotion(originalPos: Transform) {
-        prevPosition.south = originalPos.x
-        prevPosition.up = originalPos.y
-        prevPosition.west = originalPos.z
+        prevPosition.x = originalPos.x
+        prevPosition.y = originalPos.y
+        prevPosition.z = originalPos.z
         prevRotation.yaw = originalPos.yaw
         prevRotation.pitch = originalPos.pitch
 
@@ -1465,9 +1465,9 @@ open class Player @UsedByReflection constructor(
             nbt.putString("Level", this.level!!.getName()!!)
             val spawnLocation = this.level!!.safeSpawn
             nbt.getList<FloatTag?>("Pos", FloatTag::class.java)
-                .add(FloatTag(spawnLocation.position.south))
-                .add(FloatTag(spawnLocation.position.up))
-                .add(FloatTag(spawnLocation.position.west))
+                .add(FloatTag(spawnLocation.position.x))
+                .add(FloatTag(spawnLocation.position.y))
+                .add(FloatTag(spawnLocation.position.z))
         } else {
             this.level = level
         }
@@ -1570,9 +1570,9 @@ open class Player @UsedByReflection constructor(
                 port.toString(),
                 getId().toString(),
                 this.level!!.getName(),
-                round(position.south, 4).toString(),
-                round(position.up, 4).toString(),
-                round(position.west, 4).toString()
+                round(position.x, 4).toString(),
+                round(position.y, 4).toString(),
+                round(position.z, 4).toString()
             )
         )
     }
@@ -1745,18 +1745,18 @@ open class Player @UsedByReflection constructor(
     }
 
     public override fun checkChunks() {
-        if (this.chunk == null || (chunk!!.x !== (position.south.toInt() shr 4) || chunk!!.z !== (position.west.toInt() shr 4))) {
+        if (this.chunk == null || (chunk!!.x !== (position.x.toInt() shr 4) || chunk!!.z !== (position.z.toInt() shr 4))) {
             if (this.chunk != null) {
                 chunk!!.removeEntity(this)
             }
             this.chunk = level!!.getChunk(
-                position.south.toInt() shr 4,
-                position.west.toInt() shr 4, true
+                position.x.toInt() shr 4,
+                position.z.toInt() shr 4, true
             )
 
             if (!this.justCreated) {
                 val newChunk =
-                    level!!.getChunkPlayers(position.south.toInt() shr 4, position.west.toInt() shr 4)
+                    level!!.getChunkPlayers(position.x.toInt() shr 4, position.z.toInt() shr 4)
                 newChunk.remove(this.loaderId)
 
                 //List<Player> reload = new ArrayList<>();
@@ -2053,7 +2053,7 @@ open class Player @UsedByReflection constructor(
             this.startAirTicks = 5
         }
         this.inAirTicks = 0
-        this.highestPosition = position.up
+        this.highestPosition = position.y
     }
 
     override val isOnline: Boolean
@@ -2269,9 +2269,9 @@ open class Player @UsedByReflection constructor(
          * @return the next position
          */
         get() = if (this.newPosition != null) Locator(
-            newPosition!!.south,
-            newPosition!!.up,
-            newPosition!!.west,
+            newPosition!!.x,
+            newPosition!!.y,
+            newPosition!!.z,
             level!!
         ) else getLocator()
 
@@ -2409,15 +2409,15 @@ open class Player @UsedByReflection constructor(
         Preconditions.checkNotNull(pos)
         Preconditions.checkNotNull(pos.level)
         this.spawnPoint = Locator(
-            pos.position.south, pos.position.up, pos.position.west,
+            pos.position.x, pos.position.y, pos.position.z,
             level!!
         )
         this.spawnPointType = spawnPointType
         val pk = SetSpawnPositionPacket()
         pk.spawnType = SetSpawnPositionPacket.TYPE_PLAYER_SPAWN
-        pk.x = spawnPoint!!.position.south.toInt()
-        pk.y = spawnPoint!!.position.up.toInt()
-        pk.z = spawnPoint!!.position.west.toInt()
+        pk.x = spawnPoint!!.position.x.toInt()
+        pk.y = spawnPoint!!.position.y.toInt()
+        pk.z = spawnPoint!!.position.z.toInt()
         pk.dimension = spawnPoint!!.level.dimension
         this.dataPacket(pk)
     }
@@ -2504,7 +2504,7 @@ open class Player @UsedByReflection constructor(
         this.sleeping = pos.clone()
         this.teleport(
             Transform(
-                pos.south + 0.5, pos.up + 0.5, pos.west + 0.5,
+                pos.x + 0.5, pos.y + 0.5, pos.z + 0.5,
                 rotation.yaw, rotation.pitch,
                 level!!
             ), null
@@ -2512,7 +2512,7 @@ open class Player @UsedByReflection constructor(
 
         this.setDataProperty(
             EntityDataTypes.BED_POSITION,
-            BlockVector3(pos.south.toInt(), pos.up.toInt(), pos.west.toInt())
+            BlockVector3(pos.x.toInt(), pos.y.toInt(), pos.z.toInt())
         )
         this.setPlayerFlag(PlayerFlag.SLEEP)
         this.setSpawn(fromObject(pos, level!!), SpawnPointType.BLOCK)
@@ -2730,9 +2730,9 @@ open class Player @UsedByReflection constructor(
 
     @ApiStatus.Internal
     fun fastMove(dx: Double, dy: Double, dz: Double): Boolean {
-        position.south += dx
-        position.up += dy
-        position.west += dz
+        position.x += dx
+        position.y += dy
+        position.z += dz
         this.recalculateBoundingBox(true)
 
         this.checkChunks()
@@ -2750,10 +2750,10 @@ open class Player @UsedByReflection constructor(
         val dx = this.getWidth() / 2
         val dz = this.getWidth() / 2
         return offsetBoundingBox.setBounds(
-            position.south - dx,
-            position.up,
-            position.west - dz,
-            position.south + dx, position.up + this.getHeight(), position.west + dz
+            position.x - dx,
+            position.y,
+            position.z - dz,
+            position.x + dx, position.y + this.getHeight(), position.z + dz
         )
     }
 
@@ -2775,18 +2775,18 @@ open class Player @UsedByReflection constructor(
     override fun setMotion(motion: Vector3): Boolean {
         if (super.setMotion(motion)) {
             if (this.chunk != null) {
-                this.addMotion(this.motion.south, this.motion.up, this.motion.west) //Send to others
+                this.addMotion(this.motion.x, this.motion.y, this.motion.z) //Send to others
                 val pk = SetEntityMotionPacket()
                 pk.eid = this.getId()
-                pk.motionX = motion.south.toFloat()
-                pk.motionY = motion.up.toFloat()
-                pk.motionZ = motion.west.toFloat()
+                pk.motionX = motion.x.toFloat()
+                pk.motionY = motion.y.toFloat()
+                pk.motionZ = motion.z.toFloat()
                 this.dataPacket(pk) //Send to self
             }
-            if (this.motion.up > 0) {
+            if (this.motion.y > 0) {
                 //todo: check this
                 this.startAirTicks =
-                    ((-(ln(this.getGravity() / (this.getGravity() + this.getDrag() * this.motion.up))) / this.getDrag()) * 2 + 5).toInt()
+                    ((-(ln(this.getGravity() / (this.getGravity() + this.getDrag() * this.motion.y))) / this.getDrag()) * 2 + 5).toInt()
             }
 
             return true
@@ -2887,7 +2887,7 @@ open class Player @UsedByReflection constructor(
         }
 
         if (this.spawned) {
-            if (motion.south != 0.0 || motion.up != 0.0 || motion.west != 0.0) {
+            if (motion.x != 0.0 || motion.y != 0.0 || motion.z != 0.0) {
                 this.setMotion(this.motion)
                 motion.setComponents(0.0, 0.0, 0.0)
             }
@@ -2925,7 +2925,7 @@ open class Player @UsedByReflection constructor(
                         this.startAirTicks = 5
                     }
                     this.inAirTicks = 0
-                    this.highestPosition = position.up
+                    this.highestPosition = position.y
                     if (this.isGliding()) {
                         this.setGliding(false)
                     }
@@ -2940,14 +2940,14 @@ open class Player @UsedByReflection constructor(
                             (-this.getGravity()) / (getDrag().toDouble()) - ((-this.getGravity()) / (getDrag().toDouble())) * exp(
                                 -(getDrag().toDouble()) * ((this.inAirTicks - this.startAirTicks).toDouble())
                             )
-                        val diff = (speed!!.up - expectedVelocity) * (speed!!.up - expectedVelocity)
+                        val diff = (speed!!.y - expectedVelocity) * (speed!!.y - expectedVelocity)
 
                         val block = level!!.getBlock(this.position)
                         val blockId = block!!.id
                         val ignore = blockId == Block.LADDER || blockId == Block.VINE || blockId == Block.WEB
                                 || blockId == Block.SCAFFOLDING // || (blockId == Block.SWEET_BERRY_BUSH && block.getDamage() > 0);
 
-                        if (!this.hasEffect(EffectType.JUMP_BOOST) && diff > 0.6 && expectedVelocity < speed!!.up && !ignore) {
+                        if (!this.hasEffect(EffectType.JUMP_BOOST) && diff > 0.6 && expectedVelocity < speed!!.y && !ignore) {
                             if (this.inAirTicks < 150) {
                                 val ev = PlayerInvalidMoveEvent(this, true)
                                 getServer().getPluginManager().callEvent(ev)
@@ -2968,13 +2968,13 @@ open class Player @UsedByReflection constructor(
                         }
                     }
 
-                    if (position.up > highestPosition) {
-                        this.highestPosition = position.up
+                    if (position.y > highestPosition) {
+                        this.highestPosition = position.y
                     }
 
                     // Wiki: 使用鞘翅滑翔时在垂直高度下降率低于每刻 0.5 格的情况下，摔落高度被重置为 1 格。
                     // Wiki: 玩家在较小的角度和足够低的速度上着陆不会受到坠落伤害。着陆时临界伤害角度为50°，伤害值等同于玩家从滑行的最高点直接摔落到着陆点受到的伤害。
-                    if (this.isGliding() && abs(speed!!.up) < 0.5 && rotation.pitch <= 40) {
+                    if (this.isGliding() && abs(speed!!.y) < 0.5 && rotation.pitch <= 40) {
                         this.resetFallDistance()
                     }
 
@@ -3151,8 +3151,8 @@ open class Player @UsedByReflection constructor(
         }
 
         val dV = this.getDirectionPlane()
-        val dot = dV.dot(Vector2(position.south, position.west))
-        val dot1 = dV.dot(Vector2(pos.south, pos.west))
+        val dot = dV.dot(Vector2(position.x, position.z))
+        val dot1 = dV.dot(Vector2(pos.x, pos.z))
         return (dot1 - dot) >= -maxDiff
     }
 
@@ -4052,9 +4052,9 @@ open class Player @UsedByReflection constructor(
 
             val pk = RespawnPacket()
             val pos = spawn.left()
-            pk.x = pos!!.position.south.toFloat()
-            pk.y = pos.position.up.toFloat()
-            pk.z = pos.position.west.toFloat()
+            pk.x = pos!!.position.x.toFloat()
+            pk.y = pos.position.y.toFloat()
+            pk.z = pos.position.z.toFloat()
             pk.respawnState = RespawnPacket.STATE_SEARCHING_FOR_SPAWN
             pk.runtimeEntityId = this.getId()
             this.dataPacket(pk)
@@ -4448,9 +4448,9 @@ open class Player @UsedByReflection constructor(
     ) {
         val pk = MovePlayerPacket()
         pk.eid = this.getId()
-        pk.x = pos.south.toFloat()
-        pk.y = (pos.up + this.getEyeHeight()).toFloat()
-        pk.z = pos.west.toFloat()
+        pk.x = pos.x.toFloat()
+        pk.y = (pos.y + this.getEyeHeight()).toFloat()
+        pk.z = pos.z.toFloat()
         pk.headYaw = yaw.toFloat()
         pk.pitch = pitch.toFloat()
         pk.yaw = yaw.toFloat()
@@ -5325,9 +5325,9 @@ open class Player @UsedByReflection constructor(
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag?>()
-                    .add(FloatTag(position.south))
-                    .add(FloatTag(position.up + this.getEyeHeight()))
-                    .add(FloatTag(position.west))
+                    .add(FloatTag(position.x))
+                    .add(FloatTag(position.y + this.getEyeHeight()))
+                    .add(FloatTag(position.z))
             )
             .putList(
                 "Motion", ListTag<FloatTag?>()

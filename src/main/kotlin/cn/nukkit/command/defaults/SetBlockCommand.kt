@@ -51,7 +51,7 @@ class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.de
         if (list.hasResult(3)) {
             oldBlockHandling = list.getResult(3)
         }
-        if (!sender.locator.level.isYInRange(locator!!.position.up.toInt())) {
+        if (!sender.locator.level.isYInRange(locator!!.position.y.toInt())) {
             log.addError("commands.setblock.outOfWorld").output()
             return 0
         }

@@ -10,9 +10,9 @@ class MinecartDispenseBehavior(protected val entityType: String) : DefaultDispen
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {
         val target = block.getSide(face)
         if (target is BlockRail) {
-            target.position.south += 0.5
-            target.position.up += 0.125
-            target.position.west += 0.5
+            target.position.x += 0.5
+            target.position.y += 0.125
+            target.position.z += 0.5
         } else return super.dispense(block, face, item)
         val minecart = Entity.createEntity(this.entityType, target)
         minecart?.spawnToAll()

@@ -10,7 +10,6 @@ import cn.nukkit.entity.Entity
 import cn.nukkit.entity.Entity.Companion.createEntity
 import cn.nukkit.entity.Entity.Companion.getDefaultNBT
 import cn.nukkit.entity.Entity.close
-import cn.nukkit.entity.Entity.getLocator
 import cn.nukkit.entity.Entity.scheduleUpdate
 import cn.nukkit.entity.Entity.spawnToAll
 import cn.nukkit.entity.Entity.teleport
@@ -35,7 +34,6 @@ import cn.nukkit.item.Item.Companion.get
 import cn.nukkit.item.Item.getBlock
 import cn.nukkit.item.ItemBucket.isWater
 import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.level.DimensionData
 import cn.nukkit.level.format.*
 import cn.nukkit.level.format.LevelConfig.AntiXrayMode
 import cn.nukkit.level.format.LevelConfig.GeneratorConfig
@@ -333,7 +331,7 @@ class Level(
         if (pos == null) {
             addLevelEvent(type, data, 0f, 0f, 0f)
         } else {
-            addLevelEvent(type, data, pos.south.toFloat(), pos.up.toFloat(), pos.west.toFloat())
+            addLevelEvent(type, data, pos.x.toFloat(), pos.y.toFloat(), pos.z.toFloat())
         }
     }
 
@@ -352,9 +350,9 @@ class Level(
     fun addLevelEvent(pos: Vector3, event: Int, data: Int = 0) {
         val pk = LevelEventPacket()
         pk.evid = event
-        pk.x = pos.south.toFloat()
-        pk.y = pos.up.toFloat()
-        pk.z = pos.west.toFloat()
+        pk.x = pos.x.toFloat()
+        pk.y = pos.y.toFloat()
+        pk.z = pos.z.toFloat()
         pk.data = data
 
         addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, pk)
@@ -412,9 +410,9 @@ class Level(
         pk.sound = type
         pk.extraData = data
         pk.entityIdentifier = identifier
-        pk.x = pos.south.toFloat()
-        pk.y = pos.up.toFloat()
-        pk.z = pos.west.toFloat()
+        pk.x = pos.x.toFloat()
+        pk.y = pos.y.toFloat()
+        pk.z = pos.z.toFloat()
         pk.isBabyMob = isBaby
         pk.isGlobal = isGlobal
 
@@ -436,7 +434,7 @@ class Level(
         if (players == null) {
             if (packets != null) {
                 for (packet in packets) {
-                    this.addChunkPacket(particle.south.toInt() shr 4, particle.west.toInt() shr 4, packet)
+                    this.addChunkPacket(particle.x.toInt() shr 4, particle.z.toInt() shr 4, packet)
                 }
             }
         } else {
@@ -955,11 +953,11 @@ class Level(
             }
 
             val b = this.getBlock(vector.floorX, vector.floorY, vector.floorZ)
-            if (b!!.properties != BlockTallGrass.PROPERTIES && b !is BlockFlowingWater) vector.up += 1.0
+            if (b!!.properties != BlockTallGrass.properties && b !is BlockFlowingWater) vector.y += 1.0
             val nbt = CompoundTag()
                 .putList(
-                    "Pos", ListTag<FloatTag>().add(FloatTag(vector.south))
-                        .add(FloatTag(vector.up)).add(FloatTag(vector.west))
+                    "Pos", ListTag<FloatTag>().add(FloatTag(vector.x))
+                        .add(FloatTag(vector.y)).add(FloatTag(vector.z))
                 )
                 .putList(
                     "Motion", ListTag<FloatTag>().add(FloatTag(0f))
@@ -996,11 +994,11 @@ class Level(
 
     fun adjustPosToNearbyEntity(pos: Vector3): Vector3 {
         var pos = pos
-        pos.up = getHighestBlockAt(pos.floorX, pos.floorZ).toDouble()
+        pos.y = getHighestBlockAt(pos.floorX, pos.floorZ).toDouble()
         val axisalignedbb: AxisAlignedBB = SimpleAxisAlignedBB(
-            pos.south,
-            pos.up,
-            pos.west,
+            pos.x,
+            pos.y,
+            pos.z,
             pos.getX(),
             (if (isOverWorld) 320 else 255).toDouble(),
             pos.getZ()
@@ -1277,7 +1275,7 @@ class Level(
         for (face in BlockFace.Plane.HORIZONTAL) {
             temporalVector.setComponentsAdding(v, face)
 
-            if (!this.isChunkLoaded(temporalVector.south.toInt() shr 4, temporalVector.west.toInt() shr 4)) {
+            if (!this.isChunkLoaded(temporalVector.x.toInt() shr 4, temporalVector.z.toInt() shr 4)) {
                 continue
             }
             var block1 = this.getBlock(temporalVector)
@@ -1723,15 +1721,15 @@ class Level(
     }
 
     fun getFullLight(pos: Vector3): Int {
-        val chunk = this.getChunk(pos.south.toInt() shr 4, pos.west.toInt() shr 4, false)
+        val chunk = this.getChunk(pos.x.toInt() shr 4, pos.z.toInt() shr 4, false)
         var level = 0
         if (chunk != null) {
-            level = chunk.getBlockSkyLight(pos.south.toInt() and 0x0f, ensureY(pos.up.toInt()), pos.west.toInt() and 0x0f)
+            level = chunk.getBlockSkyLight(pos.x.toInt() and 0x0f, ensureY(pos.y.toInt()), pos.z.toInt() and 0x0f)
             level -= this.skyLightSubtracted
             if (level < 15) {
                 level = Math.max(
                     chunk.getBlockLight(
-                        pos.south.toInt() and 0x0f, ensureY(pos.up.toInt()), pos.west.toInt() and 0x0f
+                        pos.x.toInt() and 0x0f, ensureY(pos.y.toInt()), pos.z.toInt() and 0x0f
                     ),
                     level
                 )
@@ -1880,7 +1878,7 @@ class Level(
     }
 
     fun getBlock(x: Int, y: Int, z: Int, layer: Int, load: Boolean): Block? {
-        var fullState = BlockAir.PROPERTIES.defaultState
+        var fullState = BlockAir.properties.defaultState
         if (isYInRange(y)) {
             val cx = x shr 4
             val cz = z shr 4
@@ -1906,8 +1904,8 @@ class Level(
     }
 
     fun updateAllLight(pos: Vector3) {
-        this.updateBlockSkyLight(pos.south.toInt(), pos.up.toInt(), pos.west.toInt())
-        this.addLightUpdate(pos.south.toInt(), pos.up.toInt(), pos.west.toInt())
+        this.updateBlockSkyLight(pos.x.toInt(), pos.y.toInt(), pos.z.toInt())
+        this.addLightUpdate(pos.x.toInt(), pos.y.toInt(), pos.z.toInt())
     }
 
     fun updateBlockSkyLight(x: Int, y: Int, z: Int) {
@@ -2177,16 +2175,16 @@ class Level(
             return false
         }
 
-        block.position.south = x.toDouble()
-        block.position.up = y.toDouble()
-        block.position.west = z.toDouble()
+        block.position.x = x.toDouble()
+        block.position.y = y.toDouble()
+        block.position.z = z.toDouble()
         block.level = this
         block.layer = layer
 
         val blockPrevious = statePrevious!!.toBlock()
-        blockPrevious.position.south = x.toDouble()
-        blockPrevious.position.up = y.toDouble()
-        blockPrevious.position.west = z.toDouble()
+        blockPrevious.position.x = x.toDouble()
+        blockPrevious.position.y = y.toDouble()
+        blockPrevious.position.z = z.toDouble()
         blockPrevious.level = this
         blockPrevious.layer = layer
 
@@ -2371,8 +2369,8 @@ class Level(
             )
 
                 .putList(
-                    "Motion", ListTag<FloatTag>().add(FloatTag(motion.south))
-                        .add(FloatTag(motion.up)).add(FloatTag(motion.west))
+                    "Motion", ListTag<FloatTag>().add(FloatTag(motion.x))
+                        .add(FloatTag(motion.y)).add(FloatTag(motion.z))
                 )
 
                 .putList(
@@ -2512,7 +2510,7 @@ class Level(
         }
 
         val above =
-            this.getBlock(Vector3(target.position.south, target.position.up + 1, target.position.west), 0)
+            this.getBlock(Vector3(target.position.x, target.position.y + 1, target.position.z), 0)
         if (above != null) {
             if (above.id == BlockID.FIRE) {
                 this.setBlock(above.position, Block.get(BlockID.AIR), true)
@@ -2521,7 +2519,7 @@ class Level(
 
         if (createParticles) {
             val players: MutableMap<Int, Player> = this.getChunkPlayers(
-                target.position.south.toInt() shr 4, target.position.west.toInt() shr 4
+                target.position.x.toInt() shr 4, target.position.z.toInt() shr 4
             )
             if (player != null && immediateDestroy) {
                 players.remove(player.loaderId)
@@ -2645,11 +2643,11 @@ class Level(
             }
         }
         //handle height limit
-        if (!isYInRange(block.position.up.toInt())) {
+        if (!isYInRange(block.position.y.toInt())) {
             return null
         }
         //handle height limit in nether
-        if (block.position.up > 127 && this.dimension == DIMENSION_NETHER) {
+        if (block.position.y > 127 && this.dimension == DIMENSION_NETHER) {
             return null
         }
 
@@ -2788,7 +2786,7 @@ class Level(
             }
             if (player != null) {
                 val diff: Vector3 = player.nextPosition.position.subtract(player.getLocator().position)
-                val aabb: AxisAlignedBB = player.getBoundingBox()!!.getOffsetBoundingBox(diff.south, diff.up, diff.west)
+                val aabb: AxisAlignedBB = player.getBoundingBox()!!.getOffsetBoundingBox(diff.x, diff.y, diff.z)
                 if (aabb.intersectsWith(hand.boundingBox.shrink(0.02, 0.02, 0.02))) {
                     ++realCount
                 }
@@ -2879,10 +2877,10 @@ class Level(
     fun isInSpawnRadius(vector3: Vector3): Boolean {
         val distance = server.spawnRadius
         if (distance > -1) {
-            val t = Vector2(vector3.south, vector3.west)
+            val t = Vector2(vector3.x, vector3.z)
             val s = Vector2(
-                spawnLocation.position.south,
-                spawnLocation.position.west
+                spawnLocation.position.x,
+                spawnLocation.position.z
             )
             return t.distance(s) <= distance
         }
@@ -3118,10 +3116,10 @@ class Level(
     }
 
     fun getBlockEntityIfLoaded(pos: Vector3): BlockEntity? {
-        val chunk = this.getChunkIfLoaded(pos.south.toInt() shr 4, pos.west.toInt() shr 4)
+        val chunk = this.getChunkIfLoaded(pos.x.toInt() shr 4, pos.z.toInt() shr 4)
 
         if (chunk != null) {
-            return chunk.getTile(pos.south.toInt() and 0x0f, ensureY(pos.up.toInt()), pos.west.toInt() and 0x0f)
+            return chunk.getTile(pos.x.toInt() and 0x0f, ensureY(pos.y.toInt()), pos.z.toInt() and 0x0f)
         }
 
         return null
@@ -3423,10 +3421,10 @@ class Level(
             var g1 = color.green
             var b1 = color.blue
             //在水下
-            if (block.position.up < 62) {
+            if (block.position.y < 62) {
                 //在海平面下
                 //海平面为62格。离海平面越远颜色越接近海洋颜色
-                val depth = 62 - block.position.up
+                val depth = 62 - block.position.y
                 if (depth > 96) return WATER_BLOCK_COLOR
                 b1 = WATER_BLOCK_COLOR.blue
                 var radio = (depth / 96.0)
@@ -4689,7 +4687,7 @@ class Level(
         stepSize: Double
     ): Boolean {
         val direction = Vector3(dstX - srcX, dstY - srcY, dstZ - srcZ)
-        if (direction.south == 0.0 && direction.up == 0.0 && direction.west == 0.0) {
+        if (direction.x == 0.0 && direction.y == 0.0 && direction.z == 0.0) {
             return false
         }
 
@@ -4698,9 +4696,9 @@ class Level(
 
         var t = 0.0
         while (t < length) {
-            val x = Math.round(srcX + normalizedDirection.south * t).toInt()
-            val y = Math.round(srcY + normalizedDirection.up * t).toInt()
-            val z = Math.round(srcZ + normalizedDirection.west * t).toInt()
+            val x = Math.round(srcX + normalizedDirection.x * t).toInt()
+            val y = Math.round(srcY + normalizedDirection.y * t).toInt()
+            val z = Math.round(srcZ + normalizedDirection.z * t).toInt()
 
             val block = getBlock(x, y, z)
             if (block != null && block.collisionBoundingBox != null) {
@@ -4745,7 +4743,7 @@ class Level(
                     totalBlocks++
                     val fromZ = Math.fma(z.toDouble(), diffZ, zOffset)
 
-                    if (this.isRayCollidingWithBlocks(source.south, source.up, source.west, fromX, fromY, fromZ, 0.3)) {
+                    if (this.isRayCollidingWithBlocks(source.x, source.y, source.z, fromX, fromY, fromZ, 0.3)) {
                         visibleBlocks++
                     }
                     z = (z.toDouble() + zInterval).toFloat()

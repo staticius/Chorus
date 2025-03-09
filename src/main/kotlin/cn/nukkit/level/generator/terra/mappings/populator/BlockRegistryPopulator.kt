@@ -79,7 +79,7 @@ object BlockRegistryPopulator {
                     MAP1[jeBlockState] = pnxBlockState
                     MAP2[pnxBlockState] = jeBlockState
                 }
-                val i = BlockFlowingLava.PROPERTIES.getBlockState(CommonBlockProperties.LIQUID_DEPTH.createValue(0))
+                val i = BlockFlowingLava.properties.getBlockState(CommonBlockProperties.LIQUID_DEPTH.createValue(0))
                 val jeBlockState = JeBlockState("minecraft:lava[level=0]")
                 MAP1[jeBlockState] = i
                 MAP2[i] = jeBlockState

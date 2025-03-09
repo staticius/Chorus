@@ -1,0 +1,110 @@
+package cn.nukkit.block
+
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
+
+class BlockChorusPlant : BlockTransparent {
+    constructor() : super(Companion.properties.defaultState)
+
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Chorus Plant"
+
+    override val hardness: Double
+        get() = 0.4
+
+    override val resistance: Double
+        get() = 0.4
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    private val isPositionValid: Boolean
+        get() {
+            // (a chorus plant with at least one other chorus plant horizontally adjacent) breaks unless (at least one of the vertically adjacent blocks is air)
+            // (a chorus plant) breaks unless (the block below is (chorus plant or end stone)) or (any horizontally adjacent block is a (chorus plant above (chorus plant or end stone_))
+            var horizontal = false
+            var horizontalSupported = false
+            val down = down()
+            for (face in BlockFace.Plane.HORIZONTAL) {
+                val side = getSide(face)
+                if (side!!.id == CHORUS_PLANT) {
+                    if (!horizontal) {
+                        if (up()!!.id != AIR && down!!.id != AIR) {
+                            return false
+                        }
+                        horizontal = true
+                    }
+
+                    val sideSupport = side.down()
+                    if (sideSupport!!.id == CHORUS_PLANT || sideSupport.id == END_STONE) {
+                        horizontalSupported = true
+                    }
+                }
+            }
+
+            if (horizontal && horizontalSupported) {
+                return true
+            }
+
+            return down!!.id == CHORUS_PLANT || down.id == END_STONE
+        }
+
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_NORMAL) {
+            if (!isPositionValid) {
+                level.scheduleUpdate(this, 1)
+                return type
+            }
+        } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
+            level.useBreakOn(this.position, null, null, true)
+            return type
+        }
+
+        return 0
+    }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isPositionValid) {
+            return false
+        }
+        return super.place(item, block, target, face, fx, fy, fz, player)
+    }
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (ThreadLocalRandom.current().nextBoolean()) arrayOf(
+            get(
+                ItemID.CHORUS_FRUIT,
+                0,
+                1
+            )
+        ) else Item.EMPTY_ARRAY
+    }
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
+    }
+
+    override fun sticksToPiston(): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHORUS_PLANT)
+            get() = Companion.field
+    }
+}

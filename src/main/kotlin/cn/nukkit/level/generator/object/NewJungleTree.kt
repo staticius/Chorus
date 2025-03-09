@@ -19,12 +19,12 @@ class NewJungleTree(
      * The metadata value of the wood to use in tree generation.
      */
     private val metaWood: BlockState =
-        BlockJungleLog.PROPERTIES.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
+        BlockJungleLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
 
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val metaLeaves: BlockState = BlockJungleLeaves.PROPERTIES.getDefaultState()
+    private val metaLeaves: BlockState = BlockJungleLeaves.properties.getDefaultState()
 
     override fun generate(level: BlockManager, rand: RandomSourceProvider, vectorPosition: Vector3): Boolean {
         val position = BlockVector3(vectorPosition.floorX, vectorPosition.floorY, vectorPosition.floorZ)
@@ -209,7 +209,7 @@ class NewJungleTree(
     }
 
     private fun placeCocoa(level: BlockManager, age: Int, pos: BlockVector3, side: BlockFace) {
-        val blockState: BlockState = BlockCocoa.PROPERTIES.getBlockState(
+        val blockState: BlockState = BlockCocoa.properties.getBlockState(
             CommonBlockProperties.AGE_3.createValue(age),
             CommonBlockProperties.DIRECTION.createValue(side.getHorizontalIndex())
         )
@@ -218,7 +218,7 @@ class NewJungleTree(
 
     private fun addVine(level: BlockManager, pos: BlockVector3, meta: Int) {
         val blockState: BlockState =
-            BlockVine.PROPERTIES.getBlockState<Int, IntPropertyType>(CommonBlockProperties.VINE_DIRECTION_BITS, meta)
+            BlockVine.properties.getBlockState<Int, IntPropertyType>(CommonBlockProperties.VINE_DIRECTION_BITS, meta)
         level.setBlockStateAt(pos, blockState)
     }
 

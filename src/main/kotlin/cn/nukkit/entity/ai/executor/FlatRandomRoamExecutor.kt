@@ -94,6 +94,6 @@ open class FlatRandomRoamExecutor @JvmOverloads constructor(
         val random = ThreadLocalRandom.current()
         val x = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.position.floorX
         val z = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.position.floorZ
-        return Vector3(x.toDouble(), entity.position.up, z.toDouble())
+        return Vector3(x.toDouble(), entity.position.y, z.toDouble())
     }
 }

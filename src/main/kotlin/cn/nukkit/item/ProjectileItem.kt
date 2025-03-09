@@ -3,7 +3,6 @@ package cn.nukkit.item
 import cn.nukkit.Player
 import cn.nukkit.entity.*
 import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.entity.Entity.getServer
 import cn.nukkit.entity.projectile.EntityProjectile
 import cn.nukkit.event.entity.ProjectileLaunchEvent
 import cn.nukkit.math.*
@@ -25,15 +24,15 @@ abstract class ProjectileItem(id: String, meta: Int, count: Int, name: String?) 
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
-                    .add(FloatTag(player.position.south))
-                    .add(FloatTag(player.position.up + player.getEyeHeight() - 0.30000000149011612))
-                    .add(FloatTag(player.position.west))
+                    .add(FloatTag(player.position.x))
+                    .add(FloatTag(player.position.y + player.getEyeHeight() - 0.30000000149011612))
+                    .add(FloatTag(player.position.z))
             )
             .putList(
                 "Motion", ListTag<FloatTag>()
-                    .add(FloatTag(directionVector.south))
-                    .add(FloatTag(directionVector.up))
-                    .add(FloatTag(directionVector.west))
+                    .add(FloatTag(directionVector.x))
+                    .add(FloatTag(directionVector.y))
+                    .add(FloatTag(directionVector.z))
             )
             .putList(
                 "Rotation", ListTag<FloatTag>()

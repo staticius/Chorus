@@ -1,0 +1,30 @@
+package cn.nukkit.block
+
+import cn.nukkit.item.ItemTool
+
+class BlockEmeraldBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Emerald Block"
+
+    override val hardness: Double
+        get() = 5.0
+
+    override val resistance: Double
+        get() = 30.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_IRON
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(EMERALD_BLOCK)
+            get() = Companion.field
+    }
+}

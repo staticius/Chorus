@@ -1,0 +1,15 @@
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
+
+class BlockDarkOakLog @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockLog(blockstate) {
+    override fun getStrippedState(): BlockState {
+        return BlockStrippedDarkOakLog.properties.defaultState
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(DARK_OAK_LOG, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
+    }
+}

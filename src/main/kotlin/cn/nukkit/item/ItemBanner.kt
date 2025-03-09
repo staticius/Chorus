@@ -13,7 +13,7 @@ import java.util.*
 class ItemBanner @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.BANNER, meta, count, "Banner") {
     override fun internalAdjust() {
-        block = BlockStandingBanner.PROPERTIES.getBlockState(
+        block = BlockStandingBanner.properties.getBlockState(
             CommonBlockProperties.GROUND_SIGN_DIRECTION.createValue(
                 damage
             )

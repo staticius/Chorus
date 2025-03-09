@@ -27,8 +27,8 @@ class ChunkTest {
     @Test
     fun testSetBlockState(levelDBProvider: LevelProvider) {
         val chunk = levelDBProvider.getChunk(0, 0)
-        chunk.setBlockState(0, 100, 0, BlockGoldOre.PROPERTIES.defaultState)
-        Assertions.assertEquals(BlockGoldOre.PROPERTIES.defaultState, chunk.getBlockState(0, 100, 0))
+        chunk.setBlockState(0, 100, 0, BlockGoldOre.properties.defaultState)
+        Assertions.assertEquals(BlockGoldOre.properties.defaultState, chunk.getBlockState(0, 100, 0))
     }
 
     @Test
@@ -131,7 +131,7 @@ class ChunkTest {
                         for (k in 0..15) {
                             for (l in 0..15) {
                                 for (j in unsafeChunk.dimensionData.minHeight..<unsafeChunk.dimensionData.maxHeight) {
-                                    unsafeChunk.setBlockState(k, j, l, BlockGoldOre.PROPERTIES.defaultState, 0)
+                                    unsafeChunk.setBlockState(k, j, l, BlockGoldOre.properties.defaultState, 0)
                                     unsafeChunk.setBiomeId(k, j, l, BiomeID.BIRCH_FOREST_MUTATED)
                                 }
                                 unsafeChunk.setHeightMap(k, l, 4)
@@ -147,7 +147,7 @@ class ChunkTest {
                         for (k in 0..15) {
                             for (l in 0..15) {
                                 for (j in unsafeChunk.dimensionData.minHeight..<unsafeChunk.dimensionData.maxHeight) {
-                                    unsafeChunk.setBlockState(k, j, l, BlockDiamondOre.PROPERTIES.defaultState, 0)
+                                    unsafeChunk.setBlockState(k, j, l, BlockDiamondOre.properties.defaultState, 0)
                                     unsafeChunk.setBiomeId(k, j, l, BiomeID.DEEP_COLD_OCEAN)
                                     unsafeChunk.setBlockSkyLight(k, j, l, 4)
                                 }

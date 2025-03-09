@@ -157,7 +157,7 @@ class UnsafeChunk(private val chunk: Chunk) {
      */
     fun getHighestBlockAt(x: Int, z: Int): Int {
         for (y in dimensionData.getMaxHeight() downTo dimensionData.getMinHeight()) {
-            if (getBlockState(x, y, z) !== BlockAir.PROPERTIES.getBlockState()) {
+            if (getBlockState(x, y, z) !== BlockAir.properties.getBlockState()) {
                 this.setHeightMap(x, z, y)
                 return y
             }

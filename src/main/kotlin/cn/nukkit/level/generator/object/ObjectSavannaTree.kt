@@ -9,7 +9,7 @@ class ObjectSavannaTree : TreeGenerator() {
      * The metadata value of the wood to use in tree generation.
      */
     private val TRUNK: BlockState =
-        BlockAcaciaWood.PROPERTIES.getBlockState<BlockFace.Axis, EnumPropertyType<BlockFace.Axis>>(
+        BlockAcaciaWood.properties.getBlockState<BlockFace.Axis, EnumPropertyType<BlockFace.Axis>>(
             CommonBlockProperties.PILLAR_AXIS,
             BlockFace.Axis.Y
         )
@@ -17,7 +17,7 @@ class ObjectSavannaTree : TreeGenerator() {
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val LEAF: BlockState = BlockAcaciaLeaves.PROPERTIES.getDefaultState()
+    private val LEAF: BlockState = BlockAcaciaLeaves.properties.getDefaultState()
 
     override fun generate(level: BlockManager, rand: RandomSourceProvider, position: Vector3): Boolean {
         val i: Int = rand.nextInt(3) + rand.nextInt(3) + 5
@@ -46,9 +46,9 @@ class ObjectSavannaTree : TreeGenerator() {
                             vector3.setComponents(l.toDouble(), j.toDouble(), i1.toDouble())
                             if (!this.canGrowInto(
                                     level.getBlockIdAt(
-                                        vector3.south.toInt(),
-                                        vector3.up.toInt(),
-                                        vector3.west.toInt()
+                                        vector3.x.toInt(),
+                                        vector3.y.toInt(),
+                                        vector3.z.toInt()
                                     )
                                 )
                             ) {

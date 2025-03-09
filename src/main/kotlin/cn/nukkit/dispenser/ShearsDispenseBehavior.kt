@@ -15,7 +15,7 @@ class ShearsDispenseBehavior : DefaultDispenseBehavior() {
             0.0, 0.0, 0.0,
             1.0, 1.0, 1.0
         )
-            .offset(target.position.south, target.position.up, target.position.west)
+            .offset(target.position.x, target.position.y, target.position.z)
         for (entity in block.level.getCollidingEntities(bb)) {
             if (entity !is EntityShearable) {
                 continue
