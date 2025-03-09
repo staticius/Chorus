@@ -1,6 +1,6 @@
 package org.chorus.registry
 
-import org.chorus.Nukkit
+import org.chorus.Chorus
 import org.chorus.entity.Entity
 import org.chorus.entity.EntityID
 import org.chorus.entity.custom.CustomEntity
@@ -28,7 +28,6 @@ import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.plugin.Plugin
 import org.chorus.registry.EntityRegistry.EntityDefinition
-import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
 import it.unimi.dsi.fastutil.ints.IntCollection
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
@@ -49,7 +48,7 @@ import kotlin.collections.MutableList
 import kotlin.collections.MutableMap
 import kotlin.collections.set
 
-@Slf4j
+
 class EntityRegistry : EntityID,
     IRegistry<EntityDefinition, Class<out Entity>?, Class<out Entity>> {
     override fun init() {
@@ -503,7 +502,7 @@ class EntityRegistry : EntityID,
 
     fun rebuildTag() {
         try {
-            Nukkit::class.java.module.getResourceAsStream("entity_identifiers.nbt").use { inputStream ->
+            Chorus::class.java.module.getResourceAsStream("entity_identifiers.nbt").use { inputStream ->
                 if (inputStream == null) {
                     throw AssertionError("Could not find entity_identifiers.nbt")
                 }

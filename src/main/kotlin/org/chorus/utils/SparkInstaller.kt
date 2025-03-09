@@ -6,7 +6,7 @@ import java.io.*
 import java.nio.file.Files
 import javax.annotation.Nonnull
 
-@Slf4j
+
 object SparkInstaller {
     @JvmStatic
     fun initSpark(@Nonnull server: Server): Boolean {

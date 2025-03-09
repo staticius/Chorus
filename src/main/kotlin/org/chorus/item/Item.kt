@@ -27,7 +27,7 @@ import java.util.*
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 abstract class Item : Cloneable, ItemID {
     var id: String
         protected set

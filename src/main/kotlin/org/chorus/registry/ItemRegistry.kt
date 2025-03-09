@@ -26,7 +26,7 @@ import kotlin.collections.set
 /**
  * @author Cool_Loong
  */
-@Slf4j
+
 class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
     val customItemDefinition: @UnmodifiableView MutableMap<String?, CustomItemDefinition?>
         get() = Collections.unmodifiableMap(CUSTOM_ITEM_DEFINITIONS)

@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j
  * @author CreeperFace
  * @since 11.4.2017
  */
-@Slf4j
+
 class BlockEntityMovingBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     var movingBlock: Block? = null
         protected set

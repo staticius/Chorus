@@ -27,7 +27,7 @@ import kotlin.math.min
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 object Utils {
     val EMPTY_INTEGERS: Array<Int?> = arrayOfNulls(0)
 

@@ -174,7 +174,7 @@ tasks.shadowJar {
     dependsOn("copyDependencies")
     manifest {
         attributes(
-            "Main-Class" to "cn.nukkit.JarStart"
+            "Main-Class" to "org.chorus.JarStart"
         )
     }
 

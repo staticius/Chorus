@@ -12,7 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.atomic.AtomicBoolean
 
 @RequiredArgsConstructor
-class NukkitConsole : SimpleTerminalConsole() {
+class ChorusConsole : SimpleTerminalConsole() {
     private val server: Server? = null
     private val consoleQueue: BlockingQueue<String> = LinkedBlockingQueue()
     private val executingCommands = AtomicBoolean(false)

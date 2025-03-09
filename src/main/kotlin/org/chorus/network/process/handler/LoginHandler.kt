@@ -22,7 +22,7 @@ import java.util.*
 import java.util.function.Consumer
 import java.util.regex.Pattern
 
-@Slf4j
+
 class LoginHandler(session: BedrockSession, private val consumer: Consumer<PlayerInfo>) :
     BedrockSessionPacketHandler(session) {
     @SneakyThrows

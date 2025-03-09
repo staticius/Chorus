@@ -14,7 +14,7 @@ import java.io.InputStreamReader
 import java.util.*
 import java.util.stream.Collectors
 
-@Slf4j
+
 class FormWindowDialog @JvmOverloads constructor(
     @JvmField var title: String?,
     @JvmField var content: String?,

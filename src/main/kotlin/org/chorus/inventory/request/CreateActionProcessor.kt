@@ -14,7 +14,7 @@ import java.util.*
  *
  * @author daoge_cmd
  */
-@Slf4j
+
 class CreateActionProcessor : ItemStackRequestActionProcessor<CreateAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CREATE

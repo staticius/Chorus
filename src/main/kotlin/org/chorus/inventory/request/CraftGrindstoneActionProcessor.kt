@@ -21,7 +21,7 @@ import kotlin.math.max
 /**
  * @author CoolLoong
  */
-@Slf4j
+
 class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrindstoneAction?> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_REPAIR_AND_DISENCHANT

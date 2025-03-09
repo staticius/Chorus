@@ -42,7 +42,7 @@ import kotlin.collections.HashMap
 import kotlin.collections.MutableMap
 import kotlin.collections.set
 
-@Slf4j
+
 class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     private val closed = AtomicBoolean()
     private val inbound: Queue<DataPacket> = PlatformDependent.newSpscQueue()

@@ -41,7 +41,7 @@ import kotlin.math.pow
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     Metadatable, AxisAlignedBB, BlockID {
     var blockState: BlockState? = null

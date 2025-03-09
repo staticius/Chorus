@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import org.chorus.Nukkit
+import org.chorus.Chorus
 import java.io.File
 
 object StartArgUtils {
@@ -18,7 +18,7 @@ object StartArgUtils {
     @JvmStatic
     val isShaded: Boolean
         get() {
-            val path = Nukkit::class.java.protectionDomain.codeSource.location.path
+            val path = Chorus::class.java.protectionDomain.codeSource.location.path
             val jarFile = File(path)
             if (jarFile.name.contains("shaded")) {
                 return true

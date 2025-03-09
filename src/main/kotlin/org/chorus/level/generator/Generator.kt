@@ -12,7 +12,7 @@ import java.util.function.Consumer
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 abstract class Generator(val dimensionData: DimensionData, val settings: Map<String?, Any>?) :
     BlockID {
     protected val start: GenerateStage

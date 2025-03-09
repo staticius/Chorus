@@ -10,7 +10,7 @@ import org.chorus.network.protocol.BookEditPacket
 import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: BookEditPacket) {
         val player = playerHandle.player

@@ -27,7 +27,7 @@ import kotlin.math.min
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 abstract class BaseInventory(
     override var holder: InventoryHolder?,
     override val type: InventoryType,

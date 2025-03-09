@@ -18,7 +18,7 @@ import java.util.List
  *
  * @author daoge_cmd
  */
-@Slf4j
+
 class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.DROP

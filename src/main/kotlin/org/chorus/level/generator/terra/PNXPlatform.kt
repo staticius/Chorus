@@ -23,7 +23,7 @@ import java.lang.reflect.AnnotatedType
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
-@Slf4j
+
 class PNXPlatform : AbstractPlatform() {
     override fun reload(): Boolean {
         terraConfig.load(this)

@@ -7,7 +7,7 @@ import java.lang.management.ThreadInfo
 import kotlin.concurrent.Volatile
 import kotlin.math.max
 
-@Slf4j
+
 class Watchdog(private val server: Server, private val time: Long) : Thread() {
     @JvmField
     @Volatile

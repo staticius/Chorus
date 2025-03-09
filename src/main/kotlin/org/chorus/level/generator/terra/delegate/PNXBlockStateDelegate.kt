@@ -6,7 +6,7 @@ import com.dfsek.terra.api.block.state.BlockState
 import com.dfsek.terra.api.block.state.properties.Property
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 @JvmRecord
 data class PNXBlockStateDelegate(val innerBlockState: cn.nukkit.block.BlockState) : BlockState {
     override fun matches(blockState: BlockState): Boolean {

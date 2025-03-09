@@ -12,11 +12,10 @@ import org.chorus.config.ServerProperties
 import org.chorus.config.ServerPropertiesKeys
 import org.chorus.config.ServerSettings
 import org.chorus.config.YamlSnakeYamlConfigurer
-import org.chorus.console.NukkitConsole
+import org.chorus.console.ChorusConsole
 import org.chorus.dispenser.DispenseBehaviorRegister
 import org.chorus.entity.*
-import org.chorus.entity.Attribute.getValue
-import org.chorus.entity.EntityHuman.getUniqueId
+import org.chorus.entity.Attribute
 import org.chorus.entity.data.Skin
 import org.chorus.entity.data.profession.Profession
 import org.chorus.entity.data.property.EntityProperty
@@ -29,13 +28,8 @@ import org.chorus.event.player.PlayerLoginEvent
 import org.chorus.event.server.QueryRegenerateEvent
 import org.chorus.event.server.ServerStartedEvent
 import org.chorus.event.server.ServerStopEvent
-import org.chorus.inventory.BaseInventory.size
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.item.enchantment.Enchantment.level
 import org.chorus.lang.BaseLang
-import org.chorus.lang.BaseLang.getLang
-import org.chorus.lang.BaseLang.name
-import org.chorus.lang.BaseLang.tr
 import org.chorus.lang.LangCode
 import org.chorus.lang.TextContainer
 import org.chorus.level.*
@@ -59,11 +53,8 @@ import org.chorus.metrics.NukkitMetrics
 import org.chorus.nbt.NBTIO.readCompressed
 import org.chorus.nbt.NBTIO.writeGZIPCompressed
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.nbt.tag.CompoundTag.contains
-import org.chorus.nbt.tag.CompoundTag.entrySet
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.Network
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.PlayerListPacket
@@ -72,7 +63,6 @@ import org.chorus.network.protocol.types.PlayerInfo
 import org.chorus.network.protocol.types.XboxLivePlayerInfo
 import org.chorus.network.rcon.RCON
 import org.chorus.permission.BanList
-import org.chorus.permission.BanList.entires
 import org.chorus.permission.DefaultPermissions.registerCorePermissions
 import org.chorus.plugin.*
 import org.chorus.plugin.service.NKServiceManager
@@ -93,11 +83,9 @@ import org.chorus.tags.BiomeTags
 import org.chorus.tags.BlockTags
 import org.chorus.tags.ItemTags
 import org.chorus.utils.*
-import org.chorus.utils.BlockIterator.hasNext
-import org.chorus.utils.BlockIterator.next
 import org.chorus.utils.JSONUtils.from
 import org.chorus.utils.JSONUtils.toPretty
-import org.chorus.utils.MainLogger.error
+import org.chorus.utils.MainLogger
 import org.chorus.utils.SparkInstaller.initSpark
 import org.chorus.utils.StartArgUtils.isShaded
 import org.chorus.utils.StartArgUtils.isValidStart
@@ -112,14 +100,14 @@ import eu.okaeri.configs.OkaeriConfig
 import it.unimi.dsi.fastutil.longs.LongArrayList
 import it.unimi.dsi.fastutil.longs.LongList
 import it.unimi.dsi.fastutil.longs.LongLists
-import lombok.extern.slf4j.Slf4j
 import org.apache.commons.io.FileUtils
-import org.apache.logging.log4j.Level
 import org.iq80.leveldb.CompressionType
 import org.iq80.leveldb.DB
 import org.iq80.leveldb.Options
 import org.iq80.leveldb.impl.Iq80DBFactory
 import org.jetbrains.annotations.ApiStatus
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileReader
 import java.io.IOException
@@ -144,77 +132,76 @@ import kotlin.math.min
 /**
  * Represents a server object, global singleton.
  *
- * is instantiated in [Nukkit] and later the instance object is obtained via [cn.nukkit.Server.getInstance].
+ * is instantiated in [Chorus] and later the instance object is obtained via [cn.nukkit.Server.getInstance].
  * The constructor method of [cn.nukkit.Server] performs a number of operations, including but not limited to initializing configuration files, creating threads, thread pools, start plugins, registering recipes, blocks, entities, items, etc.
  *
  * @author MagicDroidX
  * @author Box
  */
-@Slf4j
-class Server internal constructor(filePath: String, dataPath: String, pluginPath: String, predefinedLanguage: String?) {
-    // endregion
-    // region Ban, OP and whitelist - Ban，OP与白名单
-    val banByName: BanList
-        // endregion
-        get() {
-            return field
-        }
-    private val nameBans: BanList
-    val iPBans: Config
-        get() = this.nameBans
-    val ops: Config
-        get() = iPBans
+
+class Server internal constructor(val filePath: String, val dataPath: String, val pluginPath: String, predefinedLanguage: String?) {
+    lateinit var bannedPlayers: BanList
+        private set
+
+    lateinit var bannedIPs: BanList
+        private set
+
+    lateinit var operators: Config
+        private set
+
+    lateinit var whitelist: Config
+        private set
+
     private val isRunning = AtomicBoolean(true)
     private val busyingTime: LongList = LongLists.synchronize(LongArrayList(0))
     private var hasStopped = false
-    @JvmField
-    val pluginManager: PluginManager
-    val scheduler: ServerScheduler
+
+    private lateinit var pluginManager: PluginManager
+    private lateinit var scheduler: ServerScheduler
 
     /**
-     * @return 返回服务器经历过的tick数<br></br>Returns the number of ticks recorded by the server
-     */
-    /**
-     * 一个tick计数器,记录服务器已经经过的tick数
+     * A tick counter that records the number of ticks that have passed on the server
      */
     var tick: Int = 0
         private set
     var nextTick: Long = 0
         private set
-    private val tickAverage =
-        floatArrayOf(20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f, 20f)
-    private val useAverage =
-        floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+
+    private val tickAverage = RollingFloatAverage(20)
+    private val useAverage = RollingFloatAverage(20)
+
     private var maxTick = 20f
     private var maxUse = 0f
     private var sendUsageTicker = 0
-    private val console: NukkitConsole
-    private val consoleThread: ConsoleThread
+
+    private lateinit var console: ChorusConsole
+    private lateinit var consoleThread: ConsoleThread
 
     /**
-     * 负责地形生成，数据压缩等计算任务的FJP线程池<br></br>
-     *
-     *
      * FJP thread pool responsible for terrain generation, data compression and other computing tasks
      */
-    val computeThreadPool: ForkJoinPool
-    val commandMap: SimpleCommandMap
-    val resourcePackManager: ResourcePackManager
+    lateinit var computeThreadPool: ForkJoinPool
+        private set
 
-    /**
-     * 得到控制台发送者
-     *
-     *
-     * Get the console sender
-     *
-     * @return [ConsoleCommandSender]
-     */
-    //todo: use ticker to check console
-    val consoleSender: ConsoleCommandSender
-    val scoreboardManager: IScoreboardManager
-    val functionManager: FunctionManager
-    val tickingAreaManager: TickingAreaManager
-    private var maxPlayers: Int
+    lateinit var commandMap: SimpleCommandMap
+        private set
+
+    lateinit var resourcePackManager: ResourcePackManager
+        private set
+
+    lateinit var consoleSender: ConsoleCommandSender
+        private set
+
+    lateinit var scoreboardManager: IScoreboardManager
+        private set
+
+    lateinit var functionManager: FunctionManager
+        private set
+
+    lateinit var tickingAreaManager: TickingAreaManager
+        private set
+
+    private var maxPlayers: Int = 0
     private var autoSave = true
 
     /**
@@ -222,10 +209,16 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
     </P> */
     var checkLoginTime: Boolean = false
     private var rcon: RCON? = null
-    val entityMetadata: EntityMetadataStore
-    val playerMetadata: PlayerMetadataStore
-    val levelMetadata: LevelMetadataStore
-    val network: Network
+
+    lateinit var entityMetadata: EntityMetadataStore
+        private set
+    lateinit var playerMetadata: PlayerMetadataStore
+        private set
+    lateinit var levelMetadata: LevelMetadataStore
+        private set
+    lateinit var network: Network
+        private set
+
     private var serverAuthoritativeMovementMode = 0
     var getAllowFlight: Boolean? = null
     private var difficulty = Int.MAX_VALUE
@@ -246,75 +239,75 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
          */
         set(defaultGamemode) {
             field = defaultGamemode
-            network.pong!!.gameType(
-                getGamemodeString(
-                    defaultGamemode,
-                    true
-                )
-            ).update()
+            network.pong!!.gameType = getGamemodeString(defaultGamemode, true)
+            network.pong!!.update()
         }
     private var autoSaveTicker = 0
     private var autoSaveTicks = 6000
-    private val baseLang: BaseLang
-    var language: LangCode
-        get() = baseLang
 
-    /**
-     * @return 服务器UUID<br></br>server UUID
-     */
-    val languageCode: UUID
-        get() = language
+    lateinit var baseLang: BaseLang
+        private set
 
-    // endregion
-    val filePath: String
-    val dataPath: String
-    val pluginPath: String
+    lateinit var baseLangCode: LangCode
+        private set
+
+    lateinit var serverID: UUID
+        private set
+
     private val uniquePlayers: MutableSet<UUID> = HashSet()
-    val properties: ServerProperties
+
+    val properties: ServerProperties = ServerProperties(this.dataPath)
+
     private val players: MutableMap<InetSocketAddress?, Player> = ConcurrentHashMap()
     private val playerList: MutableMap<UUID, Player> = ConcurrentHashMap()
-    var queryInformation: QueryRegenerateEvent
+
+    lateinit var queryInformation: QueryRegenerateEvent
         private set
+
     private val positionTrackingService: PositionTrackingService? = null
 
     /**
      * @return 获得所有游戏世界<br></br>Get all the game world
      */
-    val levels: MutableMap<Int, cn.nukkit.level.Level> = object : HashMap<Int, cn.nukkit.level.Level?>() {
-        override fun put(key: Int, value: cn.nukkit.level.Level): cn.nukkit.level.Level? {
+    val levels: MutableMap<Int, Level> = object : HashMap<Int, Level>() {
+        override fun put(key: Int, value: Level): Level? {
             val result = super.put(key, value)
-            levelArray = values.toArray(cn.nukkit.level.Level.EMPTY_ARRAY)
+            levelArray = values.toTypedArray()
             return result
         }
 
-        override fun remove(key: Any, value: Any?): Boolean {
+        override fun remove(key: Int, value: Level): Boolean {
             val result = super.remove(key, value)
-            levelArray = values.toArray(cn.nukkit.level.Level.EMPTY_ARRAY)
+            levelArray = values.toTypedArray()
             return result
         }
 
-        override fun remove(key: Any): cn.nukkit.level.Level? {
+        override fun remove(key: Int): Level? {
             val result = super.remove(key)
-            levelArray = values.toArray(cn.nukkit.level.Level.EMPTY_ARRAY)
+            levelArray = values.toTypedArray()
             return result
         }
     }
-    private var levelArray: Array<cn.nukkit.level.Level>
+    private lateinit var levelArray: Array<Level>
     val serviceManager: ServiceManager = NKServiceManager()
-    private val currentThread: Thread
-    val launchTime: Long
-    @JvmField
-    val settings: ServerSettings
+
+    val thread: Thread = Thread.currentThread()
+    val launchTime: Long = System.currentTimeMillis()
+
+    lateinit var settings: ServerSettings
+        private set
     private var watchdog: Watchdog? = null
     private val playerDataDB: DB? = null
-    private var useTerra: Boolean
-    val freezableArrayManager: FreezableArrayManager
-    var enabledNetworkEncryption: Boolean
+
+    lateinit var freezableArrayManager: FreezableArrayManager
+        private set
+
+    val enabledNetworkEncryption: Boolean = properties.get(ServerPropertiesKeys.NETWORK_ENCRYPTION, true)
 
     /**default levels */
-    private var defaultLevel: cn.nukkit.level.Level? = null
-    private var defaultNether: cn.nukkit.level.Level? = null
-    private var defaultEnd: cn.nukkit.level.Level? = null
+    private var defaultLevel: Level? = null
+    private var defaultNether: Level? = null
+    private var defaultEnd: Level? = null
     private val allowNether: Boolean
     val isNetherAllowed: Boolean
         get() = this.allowNether
@@ -337,7 +330,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
         if (this.getDefaultLevel() == null) {
             var levelFolder = properties.get(ServerPropertiesKeys.LEVEL_NAME, "world")
             if (levelFolder == null || levelFolder.trim { it <= ' ' }.isEmpty()) {
-                Server.log.warn("level-name cannot be null, using default")
+                log.warn("level-name cannot be null, using default")
                 levelFolder = "world"
                 properties.get(ServerPropertiesKeys.LEVEL_NAME, levelFolder)
             }
@@ -399,10 +392,10 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
             properties.get(ServerPropertiesKeys.DIFFICULTY, 3.also { difficulty = it })
         }
 
-        nameBans.load()
-        banByName.load()
+        bannedIPs.load()
+        bannedPlayers.load()
         this.reloadWhitelist()
-        iPBans.reload()
+        operators.reload()
 
         for (entry in iPBans.entires.values) {
             try {
@@ -576,7 +569,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
         Server.log.info(
             language.tr(
                 "nukkit.server.startFinished",
-                ((System.currentTimeMillis() - Nukkit.START_TIME).toDouble() / 1000).toString()
+                ((System.currentTimeMillis() - Chorus.START_TIME).toDouble() / 1000).toString()
             )
         )
 
@@ -636,7 +629,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
                     val levelTime = System.currentTimeMillis()
                     //Ensures that the server won't try to tick a level without providers.
                     if (level.getProvider().level == null) {
-                        Server.log.warn("Tried to tick Level " + level.getName() + " without a provider!")
+                        log.warn("Tried to tick Level " + level.getName() + " without a provider!")
                         continue
                     }
                     level.doTick(currentTick)
@@ -782,17 +775,8 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
             this.maxUse = use
         }
 
-        System.arraycopy(
-            this.tickAverage, 1, this.tickAverage, 0,
-            tickAverage.size - 1
-        )
-        tickAverage[tickAverage.size - 1] = tick
-
-        System.arraycopy(
-            this.useAverage, 1, this.useAverage, 0,
-            useAverage.size - 1
-        )
-        useAverage[useAverage.size - 1] = use
+        tickAverage.add(tick)
+        useAverage.add(use)
 
         if ((this.nextTick - tickTime) < -1000) {
             this.nextTick = tickTime
@@ -806,12 +790,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
 
     val ticksPerSecondAverage: Float
         get() {
-            var sum = 0f
-            val count = tickAverage.size
-            for (aTickAverage in this.tickAverage) {
-                sum += aTickAverage
-            }
-            return round((sum / count).toDouble(), 2).toFloat()
+            return tickAverage.getAverage()
         }
 
     val tickUsage: Float
@@ -819,17 +798,12 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
 
     val tickUsageAverage: Float
         get() {
-            var sum = 0f
-            val count = useAverage.size
-            for (aUseAverage in this.useAverage) {
-                sum += aUseAverage
-            }
-            return (Math.round(sum / count * 100).toFloat()) / 100
+            return useAverage.getAverage()
         }
 
     // TODO: Fix title tick
     fun titleTick() {
-        if (!Nukkit.ANSI || !Nukkit.TITLE) {
+        if (!Chorus.ANSI || !Chorus.TITLE) {
             return
         }
 
@@ -842,7 +816,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
                 + " | " + this.gitCommit
                 + " | Online " + players.size + "/" + this.getMaxPlayers()
                 + " | Memory " + usage)
-        if (!Nukkit.shortTitle) {
+        if (!Chorus.shortTitle) {
             title += (" | U " + round((network.upload / 1024 * 1000), 2)
                     + " D " + round((network.download / 1024 * 1000), 2) + " kB/s")
         }
@@ -1044,7 +1018,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
      * @throws ServerException 服务器异常
      */
     fun silentExecuteCommand(sender: Player?, vararg commands: String) {
-        val revert = ArrayList<cn.nukkit.level.Level>()
+        val revert = ArrayList<Level>()
         val server = instance
         for (level in server!!.levels.values) {
             if (level.gameRules!!.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
@@ -1330,7 +1304,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
         val uuidBytes = playerDataDB!![nameBytes] ?: return Optional.empty()
 
         if (uuidBytes.size != 16) {
-            Server.log.warn("Invalid uuid in name lookup database detected! Removing")
+            log.warn("Invalid uuid in name lookup database detected! Removing")
             playerDataDB.delete(nameBytes)
             return Optional.empty()
         }
@@ -1426,7 +1400,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
     fun getOfflinePlayerData(name: String, create: Boolean): CompoundTag? {
         val uuid = lookupName(name)
         if (uuid.isEmpty) {
-            Server.log.warn("Invalid uuid in name lookup database detected! Removing")
+            log.warn("Invalid uuid in name lookup database detected! Removing")
             playerDataDB!!.delete(name.toByteArray(StandardCharsets.UTF_8))
             return null
         }
@@ -1436,7 +1410,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
     fun hasOfflinePlayerData(name: String): Boolean {
         val uuid = lookupName(name)
         if (uuid.isEmpty) {
-            Server.log.warn("Invalid uuid in name lookup database detected! Removing")
+            log.warn("Invalid uuid in name lookup database detected! Removing")
             playerDataDB!!.delete(name.toByteArray(StandardCharsets.UTF_8))
             return false
         }
@@ -1465,7 +1439,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
                 return readCompressed(bytes)
             }
         } catch (e: IOException) {
-            Server.log.warn(language.tr("nukkit.data.playerCorrupted", uuid), e)
+            log.warn(language.tr("nukkit.data.playerCorrupted", uuid), e)
         }
 
         if (create) {
@@ -1682,22 +1656,22 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
         get() = "PowerNukkitX"
 
     val nukkitVersion: String?
-        get() = Nukkit.VERSION
+        get() = Chorus.VERSION
 
     val bStatsNukkitVersion: String?
-        get() = Nukkit.VERSION
+        get() = Chorus.VERSION
 
     val gitCommit: String
-        get() = Nukkit.GIT_COMMIT
+        get() = Chorus.GIT_COMMIT
 
     val codename: String
-        get() = Nukkit.CODENAME
+        get() = Chorus.CODENAME
 
     val version: String
         get() = ProtocolInfo.MINECRAFT_VERSION
 
     val apiVersion: String
-        get() = Nukkit.API_VERSION
+        get() = Chorus.API_VERSION
 
     val logger: MainLogger
         get() = MainLogger.logger
@@ -1740,20 +1714,20 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
     /**
      * @return Get the default overworld
      */
-    fun getDefaultLevel(): cn.nukkit.level.Level? {
+    fun getDefaultLevel(): Level? {
         return defaultLevel
     }
 
     /**
      * Set default overworld
      */
-    fun setDefaultLevel(defaultLevel: cn.nukkit.level.Level?) {
+    fun setDefaultLevel(defaultLevel: Level?) {
         if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()!!) && defaultLevel != this.defaultLevel)) {
             this.defaultLevel = defaultLevel
         }
     }
 
-    var defaultNetherLevel: cn.nukkit.level.Level?
+    var defaultNetherLevel: Level?
         /**
          * @return Get the default nether
          */
@@ -1767,7 +1741,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
             }
         }
 
-    var defaultEndLevel: cn.nukkit.level.Level?
+    var defaultEndLevel: Level?
         /**
          * @return Get the default the_end level
          */
@@ -1785,9 +1759,6 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
     init {
         var predefinedLanguage = predefinedLanguage
         Preconditions.checkState(instance == null, "Already initialized!")
-        launchTime = System.currentTimeMillis()
-        currentThread =
-            Thread.currentThread() // Saves the current thread instance as a reference, used in Server#isPrimaryThread()
         instance = this
 
         this.filePath = filePath
@@ -1807,7 +1778,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
             File(commandDataPath).mkdirs()
         }
 
-        this.console = NukkitConsole(this)
+        this.console = ChorusConsole(this)
         this.consoleThread = ConsoleThread()
         consoleThread.start()
 
@@ -1840,7 +1811,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
                         if (conf != null) {
                             chooseLanguage = lang
                         } else if (predefinedLanguage != null) {
-                            Server.log.warn(
+                            log.warn(
                                 "No language found for predefined language: {}, please choose a valid language",
                                 predefinedLanguage
                             )
@@ -1876,16 +1847,15 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
             ).toInt(), ComputeThreadPoolThreadFactory(), null, false
         )
 
-        levelArray = cn.nukkit.level.Level.EMPTY_ARRAY
+        levelArray = Level.EMPTY_ARRAY
 
         val targetLevel = Level.getLevel(settings.debugSettings().level())
-        val currentLevel = Nukkit.getLogLevel()
+        val currentLevel = Chorus.getLogLevel()
         if (targetLevel != null && targetLevel.intLevel() > currentLevel!!.intLevel()) {
-            Nukkit.setLogLevel(targetLevel)
+            Chorus.setLogLevel(targetLevel)
         }
 
         Server.log.info("Loading {}...", TextFormat.GREEN.toString() + "server.properties" + TextFormat.RESET)
-        this.properties = ServerProperties(this.dataPath)
 
         val isShaded = isShaded
         if (!isValidStart || (JarStart.isUsingJavaJar() && !isShaded)) {
@@ -1930,8 +1900,6 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
                 "server-auth-with-rewind" -> 2
                 else -> throw IllegalArgumentException()
             }
-        this.enabledNetworkEncryption =
-            properties.get(ServerPropertiesKeys.NETWORK_ENCRYPTION, true)
         if (settings.baseSettings().waterdogpe()) {
             this.checkLoginTime = false
         }
@@ -1950,12 +1918,12 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
         this.entityMetadata = EntityMetadataStore()
         this.playerMetadata = PlayerMetadataStore()
         this.levelMetadata = LevelMetadataStore()
-        this.iPBans = Config(this.dataPath + "ops.txt", Config.ENUM)
-        this.ops = Config(this.dataPath + "white-list.txt", Config.ENUM)
-        this.banByName = BanList(this.dataPath + "banned-players.json")
-        banByName.load()
-        this.nameBans = BanList(this.dataPath + "banned-ips.json")
-        nameBans.load()
+        this.operators = Config(this.dataPath + "ops.txt", Config.ENUM)
+        this.whitelist = Config(this.dataPath + "white-list.txt", Config.ENUM)
+        this.bannedPlayers = BanList(this.dataPath + "banned-players.json")
+        bannedPlayers.load()
+        this.bannedIPs = BanList(this.dataPath + "banned-ips.json")
+        bannedIPs.load()
         this.maxPlayers = properties.get(ServerPropertiesKeys.MAX_PLAYERS, 20)
         this.setAutoSave(properties.get(ServerPropertiesKeys.AUTO_SAVE, true))
         if (properties.get(ServerPropertiesKeys.HARDCORE, false) && this.getDifficulty() < 3) {
@@ -2005,10 +1973,6 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
             DispenseBehaviorRegister.init()
         }
 
-        if (useTerra) { //load terra
-            val instance = PNXPlatform.instance
-        }
-
         freezableArrayManager = FreezableArrayManager(
             settings.freezeArraySettings().enable(),
             settings.freezeArraySettings().slots(),
@@ -2036,7 +2000,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
             System.exit(1)
         }
         this.resourcePackManager = ResourcePackManager(
-            ZippedResourcePackLoader(File(Nukkit.DATA_PATH, "resource_packs")),
+            ZippedResourcePackLoader(File(Chorus.DATA_PATH, "resource_packs")),
             JarPluginResourcePackLoader(File(this.pluginPath))
         )
         this.commandMap = SimpleCommandMap(this)
@@ -2048,7 +2012,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
         try {
             Server.log.debug("Loading position tracking service")
             this.positionTrackingService =
-                PositionTrackingService(File(Nukkit.DATA_PATH, "services/position_tracking_db"))
+                PositionTrackingService(File(Chorus.DATA_PATH, "services/position_tracking_db"))
         } catch (e: IOException) {
             Server.log.error("Failed to start the Position Tracking DB service!", e)
         }
@@ -2142,7 +2106,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
      * @param levelId 世界id<br></br>world id
      * @return level实例<br></br>level instance
      */
-    fun getLevel(levelId: Int): cn.nukkit.level.Level? {
+    fun getLevel(levelId: Int): Level? {
         if (levels.containsKey(levelId)) {
             return levels[levelId]
         }
@@ -2158,7 +2122,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
      * @param name 世界名<br></br>world name
      * @return level实例<br></br>level instance
      */
-    fun getLevelByName(name: String): cn.nukkit.level.Level? {
+    fun getLevelByName(name: String): Level? {
         var name = name
         if (!name.matches(levelDimPattern.toRegex())) {
             name = "$name Dim0"
@@ -2182,7 +2146,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
      * @return 卸载是否成功
      */
     @JvmOverloads
-    fun unloadLevel(level: cn.nukkit.level.Level, forceUnload: Boolean = false): Boolean {
+    fun unloadLevel(level: Level, forceUnload: Boolean = false): Boolean {
         check(!(level == this.getDefaultLevel() && !forceUnload)) { "The default level cannot be unloaded while running, please switch levels." }
 
         return level.unload(forceUnload)
@@ -2200,7 +2164,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
         val jpath = Path.of(path)
         path = jpath.toString()
         if (!jpath.toFile().exists()) {
-            Server.log.warn(language.tr("nukkit.level.notFound", levelFolderName))
+            log.warn(language.tr("nukkit.level.notFound", levelFolderName))
             return null
         }
 
@@ -2266,7 +2230,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
             if (this.isLevelLoaded(levelName)) {
                 return true
             }
-            val level: cn.nukkit.level.Level
+            val level: Level
             try {
                 if (provider == null) {
                     Server.log.error(language.tr("nukkit.level.loadError", levelFolderName, "the level does not exist"))
@@ -2329,13 +2293,13 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
         for (entry in levelConfig.generators().entrySet()) {
             val generatorConfig: GeneratorConfig = entry.getValue()
             val provider = getProviderByName(levelConfig.format())
-            val level: cn.nukkit.level.Level
+            val level: Level
             try {
                 provider.getMethod("generate", String::class.java, String::class.java, GeneratorConfig::class.java)
                     .invoke(null, path, name, generatorConfig)
                 val levelName = name + " Dim" + entry.getKey()
                 if (this.isLevelLoaded(levelName)) {
-                    Server.log.warn("level {} has already been loaded!", levelName)
+                    log.warn("level {} has already been loaded!", levelName)
                     continue
                 }
                 level = Level(this, levelName, path, levelConfig.generators().size(), provider, generatorConfig)
@@ -2619,7 +2583,7 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
     }
 
     fun isIgnoredPacket(clazz: Class<out DataPacket?>): Boolean {
-        return settings.debugSettings().ignoredPackets().contains(clazz.simpleName)
+        return settings.debugSettings.ignoredPackets.contains(clazz.simpleName)
     }
 
     fun getServerAuthoritativeMovement(): Int {
@@ -2642,11 +2606,11 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
      * false otherwise
      */
     fun isPrimaryThread(): Boolean {
-        return (Thread.currentThread() === currentThread)
+        return (Thread.currentThread() === thread)
     }
 
     fun getPrimaryThread(): Thread {
-        return currentThread
+        return thread
     }
 
     //todo NukkitConsole 会阻塞关不掉
@@ -2656,51 +2620,38 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
         }
     }
 
+    /**
+     * Creates a ForkJoinWorkerThread operating in the given pool.
+     *
+     * @param pool the pool this thread works in
+     * @throws NullPointerException if pool is null
+     */
     private class ComputeThread(pool: ForkJoinPool, threadCount: AtomicInteger) : ForkJoinWorkerThread(pool) {
-        /**
-         * Creates a ForkJoinWorkerThread operating in the given pool.
-         *
-         * @param pool the pool this thread works in
-         * @throws NullPointerException if pool is null
-         */
         init {
-            this.name = "ComputeThreadPool-thread-" + threadCount.getAndIncrement()
+            this.name = "ComputeThreadPool - Thread #" + threadCount.getAndIncrement()
         }
     }
 
     private class ComputeThreadPoolThreadFactory : ForkJoinWorkerThreadFactory {
-        override fun newThread(pool: ForkJoinPool): ForkJoinWorkerThread {
-            return AccessController.doPrivileged(PrivilegedAction<ForkJoinWorkerThread> {
-                ComputeThread(
-                    pool,
-                    threadCount
-                )
-            }, ACC)
-        }
-
         companion object {
             private val threadCount = AtomicInteger(0)
-            private val ACC = contextWithPermissions(
-                RuntimePermission("getClassLoader"),
-                RuntimePermission("setContextClassLoader")
-            )
-
-            fun contextWithPermissions(vararg perms: Permission?): AccessControlContext {
-                val permissions = Permissions()
-                for (perm in perms) permissions.add(perm)
-                return AccessControlContext(arrayOf(ProtectionDomain(null, permissions)))
-            }
         }
-    } // endregion
+
+        override fun newThread(pool: ForkJoinPool): ForkJoinWorkerThread {
+            return ComputeThread(pool, threadCount)
+        }
+    }
 
     companion object {
+        private val log: Logger by lazy { LoggerFactory.getLogger(Server::class.java) }
+
         const val BROADCAST_CHANNEL_ADMINISTRATIVE: String = "nukkit.broadcast.admin"
         const val BROADCAST_CHANNEL_USERS: String = "nukkit.broadcast.user"
 
         // endregion
         // region server singleton - Server 单例
         @JvmStatic
-        var instance: Server? = null
+        lateinit var instance: Server
             private set
 
         // endregion

@@ -34,7 +34,7 @@ import kotlin.collections.set
  *
  * CustomBlockDefinition is used to get the data of the item behavior_pack sent to the client. The methods provided in [CustomItemDefinition.SimpleBuilder] control the data sent to the client, if you need to control some of the server-side behavior, please override the methods in [Item][cn.nukkit.item.Item].
  */
-@Slf4j
+
 @JvmRecord
 data class CustomItemDefinition(@JvmField val identifier: String?, @JvmField val nbt: CompoundTag) : BlockID {
     val displayName: String?

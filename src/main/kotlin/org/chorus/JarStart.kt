@@ -24,7 +24,7 @@ object JarStart {
             return
         }
         isUsingJavaJar = true
-        Nukkit.main(args)
+        Chorus.main(args)
     }
 
     // Method to reset the state for testing

@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j
 import java.util.*
 import kotlin.math.ceil
 
-@Slf4j
+
 class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
     init {
         val infoPacket = ResourcePacksInfoPacket()

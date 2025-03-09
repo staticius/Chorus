@@ -6,7 +6,7 @@ import org.chorus.network.protocol.FilterTextPacket
 import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class FilterTextProcessor : DataPacketProcessor<FilterTextPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: FilterTextPacket) {
         val player = playerHandle.player

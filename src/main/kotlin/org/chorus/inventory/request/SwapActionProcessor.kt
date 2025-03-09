@@ -16,7 +16,7 @@ import java.util.List
  *
  * @author daoge_cmd
  */
-@Slf4j
+
 class SwapActionProcessor : ItemStackRequestActionProcessor<SwapAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.SWAP

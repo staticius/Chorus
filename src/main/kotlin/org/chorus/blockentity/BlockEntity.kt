@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j
 /**
  * @author MagicDroidX
  */
-@Slf4j
+
 abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.provider.level),
     BlockEntityID {
     @JvmField

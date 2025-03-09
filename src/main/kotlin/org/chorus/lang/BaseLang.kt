@@ -13,7 +13,7 @@ import java.util.regex.Pattern
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fallback: String = FALLBACK_LANGUAGE) {
     /**
      * The Lang name.

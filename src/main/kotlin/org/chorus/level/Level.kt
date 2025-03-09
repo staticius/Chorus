@@ -80,7 +80,7 @@ import kotlin.jvm.Synchronized
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class Level(
     server: Server,
     name: String,

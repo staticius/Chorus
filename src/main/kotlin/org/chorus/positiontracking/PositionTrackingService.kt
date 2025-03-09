@@ -35,7 +35,7 @@ import javax.annotation.ParametersAreNonnullByDefault
  * @author joserobjr
  */
 @ParametersAreNonnullByDefault
-@Slf4j
+
 class PositionTrackingService(folder: File) : Closeable {
     private val storage = TreeMap<Int, WeakReference<PositionTrackingStorage?>>(Comparator.reverseOrder())
     private val closed = AtomicBoolean(false)

@@ -30,7 +30,7 @@ import kotlin.math.min
 /**
  * @author Cool_Loong
  */
-@Slf4j
+
 class Chunk : IChunk {
     @Volatile
     override var x: Int

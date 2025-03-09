@@ -37,7 +37,7 @@ import kotlin.math.max
  *
  * @author daoge_cmd | Cool_Loong
  */
-@Slf4j
+
 class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAction> {
     fun checkTrade(recipeInput: CompoundTag, input: Item, subtract: Int): Boolean {
         val id = input.id

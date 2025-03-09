@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j
 /**
  * @author MagicDroidX
  */
-@Slf4j
+
 class TaskHandler(val plugin: Plugin?, val task: Runnable, val taskId: Int, val isAsynchronous: Boolean) {
     var delay: Int = 0
     var period: Int = 0

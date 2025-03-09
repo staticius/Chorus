@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j
  *
  * @author daoge_cmd | CoolLoong
  */
-@Slf4j
+
 class CraftResultDeprecatedActionProcessor : ItemStackRequestActionProcessor<CraftResultsDeprecatedAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED

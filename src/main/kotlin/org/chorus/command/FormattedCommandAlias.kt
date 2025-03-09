@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class FormattedCommandAlias : Command {
     private val formatStrings: Array<String>
 

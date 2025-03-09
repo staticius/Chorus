@@ -24,7 +24,7 @@ abstract class AsyncTask : Runnable {
         return this.result != null
     }
 
-    fun getFromThreadStore(identifier: String?): Any? {
+    fun getFromThreadStore(identifier: String): Any? {
         return if (this.isFinished) null else ThreadStore.store[identifier]
     }
 
@@ -40,8 +40,7 @@ abstract class AsyncTask : Runnable {
 
     abstract fun onRun()
 
-    fun onCompletion(server: Server?) {
-    }
+    abstract fun onCompletion(server: Server?)
 
     fun cleanObject() {
         this.result = null

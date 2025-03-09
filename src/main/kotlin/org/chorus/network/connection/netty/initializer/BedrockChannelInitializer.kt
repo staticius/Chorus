@@ -16,7 +16,7 @@ import io.netty.channel.*
 import lombok.extern.slf4j.Slf4j
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
 
-@Slf4j
+
 abstract class BedrockChannelInitializer<T : BedrockSession?> : ChannelInitializer<Channel>() {
     @Throws(Exception::class)
     override fun initChannel(channel: Channel) {

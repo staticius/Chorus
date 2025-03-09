@@ -31,7 +31,7 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
 
-@Slf4j
+
 class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
     val vanillaRecipeParser: VanillaRecipeParser = VanillaRecipeParser(this)
     private val recipeMaps = EnumMap<RecipeType, Int2ObjectArrayMap<Set<Recipe>>>(

@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * @author Cool_Loong
  */
-@Slf4j
+
 class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
     val itemPalette: ByteArray
         get() = Companion.itemPalette

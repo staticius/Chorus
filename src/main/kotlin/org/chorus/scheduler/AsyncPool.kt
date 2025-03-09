@@ -6,7 +6,7 @@ import java.util.concurrent.*
 /**
  * @author Nukkit Project Team
  */
-@Slf4j
+
 class AsyncPool(size: Int) :
     ThreadPoolExecutor(size, Int.MAX_VALUE, 60, TimeUnit.MILLISECONDS, SynchronousQueue<Runnable>()) {
     init {

@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j
 /**
  * @author CoolLoong
  */
-@Slf4j
+
 class CraftLoomActionProcessor : ItemStackRequestActionProcessor<CraftLoomAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_LOOM

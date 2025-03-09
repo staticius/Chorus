@@ -16,7 +16,7 @@ import java.io.IOException
  *
  * @author Tee7even
  */
-@Slf4j
+
 class RCON(server: Server, password: String, address: String, port: Int) {
     private val server: Server
     private var serverThread: RCONServer? = null

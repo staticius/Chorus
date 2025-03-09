@@ -11,7 +11,7 @@ import com.google.common.collect.Lists
 import lombok.extern.slf4j.Slf4j
 import java.util.List
 
-@Slf4j
+
 abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> : ItemStackRequestActionProcessor<T> {
     override fun handle(action: T, player: Player, context: ItemStackRequestContext): ActionResponse? {
         val sourceSlotType = action!!.source.container

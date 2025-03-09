@@ -54,7 +54,7 @@ import java.util.concurrent.ForkJoinPool
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.locks.LockSupport
 
-@Slf4j
+
 class GameMockExtension : MockitoExtension() {
     private var serverMockedStatic: MockedStatic<Server>? = null
 
@@ -222,7 +222,7 @@ class GameMockExtension : MockitoExtension() {
                 Mockito.`when`(server.scoreboardManager).thenReturn(null)
                 try {
                     val positionTrackingService =
-                        PositionTrackingService(File(Nukkit.DATA_PATH, "services/position_tracking_db"))
+                        PositionTrackingService(File(Chorus.DATA_PATH, "services/position_tracking_db"))
                     Mockito.`when`(server.positionTrackingService).thenReturn(positionTrackingService)
                 } catch (e: FileNotFoundException) {
                     throw RuntimeException(e)

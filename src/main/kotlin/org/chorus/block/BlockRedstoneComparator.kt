@@ -20,7 +20,7 @@ import kotlin.math.max
 /**
  * @author CreeperFace
  */
-@Slf4j
+
 abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneDiode(blockstate),
     BlockEntityHolder<BlockEntityComparator?> {
     override val blockEntityClass: Class<out Any>

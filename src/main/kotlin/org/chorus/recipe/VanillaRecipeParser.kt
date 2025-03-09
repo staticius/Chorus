@@ -29,7 +29,7 @@ import kotlin.collections.set
 import kotlin.collections.toTypedArray
 import kotlin.math.max
 
-@Slf4j
+
 class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
     fun parseAndRegisterRecipe(file: File) {
         try {

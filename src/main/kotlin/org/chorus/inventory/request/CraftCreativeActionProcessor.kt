@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j
  *
  * @author daoge_cmd | CoolLoong
  */
-@Slf4j
+
 class CraftCreativeActionProcessor : ItemStackRequestActionProcessor<CraftCreativeAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_CREATIVE

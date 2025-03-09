@@ -17,7 +17,7 @@ import java.util.regex.Pattern
 /**
  * @author MagicDroidX (Nukkit)
  */
-@Slf4j
+
 class Config {
     /**
      * Get root (main) config section of the Config

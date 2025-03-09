@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j
 import java.io.IOException
 import java.nio.ByteOrder
 
-@Slf4j
+
 open class Palette<V> {
     protected val palette: MutableList<V>
     protected var bitArray: BitArray?

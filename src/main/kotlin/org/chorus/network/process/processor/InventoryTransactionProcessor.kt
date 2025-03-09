@@ -36,7 +36,7 @@ import org.chorus.network.protocol.types.inventory.transaction.UseItemOnEntityDa
 import lombok.extern.slf4j.Slf4j
 import java.util.*
 
-@Slf4j
+
 class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPacket>() {
     var lastUsedItem: Item? = null
 

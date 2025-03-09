@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * @author Cool_Loong
  */
-@Slf4j
+
 class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
     override fun init() {
         if (isLoad.getAndSet(true)) return

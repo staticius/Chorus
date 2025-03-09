@@ -16,7 +16,7 @@ import java.io.File
 import java.io.IOException
 import javax.imageio.ImageIO
 
-@Slf4j
+
 class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.FILLED_MAP, meta, count, "Map") {
     // not very pretty but definitely better than before.

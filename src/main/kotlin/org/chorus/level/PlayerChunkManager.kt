@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j
 import org.jetbrains.annotations.ApiStatus
 import java.util.concurrent.*
 
-@Slf4j
+
 class PlayerChunkManager(private val player: Player) {
     private val chunkDistanceComparator: LongComparator = object : LongComparator {
         override fun compare(chunkHash1: Long, chunkHash2: Long): Int {

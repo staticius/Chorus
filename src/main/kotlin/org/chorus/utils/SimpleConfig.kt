@@ -11,7 +11,7 @@ import java.lang.reflect.ParameterizedType
  * SimpleConfig for Nukkit
  * added 11/02/2016 by fromgate
  */
-@Slf4j
+
 abstract class SimpleConfig(file: File) {
     private val configFile = file
 

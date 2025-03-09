@@ -17,7 +17,7 @@ import java.util.zip.ZipOutputStream
 /**
  * 此类描述了放在jar插件文件内assets/resource_pack目录的资源包相关文件
  */
-@Slf4j
+
 class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
     protected var jarPluginFile: File
     protected var zippedByteBuffer: ByteBuffer? = null

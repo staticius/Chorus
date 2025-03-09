@@ -20,7 +20,7 @@ import java.util.jar.JarFile
  *
  * Only support Java Plugin [PluginBase]
  */
-@Slf4j
+
 object PluginI18nManager {
     private val PLUGINS_MULTI_LANGUAGE = HashMap<String, PluginI18n>()
 

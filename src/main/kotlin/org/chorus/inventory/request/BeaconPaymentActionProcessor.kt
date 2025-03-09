@@ -7,7 +7,7 @@ import org.chorus.network.protocol.types.itemstack.request.action.BeaconPaymentA
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class BeaconPaymentActionProcessor : ItemStackRequestActionProcessor<BeaconPaymentAction> {
     override fun handle(
         action: BeaconPaymentAction,

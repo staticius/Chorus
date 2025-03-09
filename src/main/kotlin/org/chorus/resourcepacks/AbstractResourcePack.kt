@@ -4,7 +4,7 @@ import com.google.gson.JsonObject
 import lombok.extern.slf4j.Slf4j
 import java.util.*
 
-@Slf4j
+
 abstract class AbstractResourcePack : ResourcePack {
     protected var manifest: JsonObject? = null
     protected var id: UUID? = null

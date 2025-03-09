@@ -13,7 +13,7 @@ import org.chorus.network.protocol.RequestAbilityPacket
 import org.chorus.network.protocol.types.PlayerAbility
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: RequestAbilityPacket) {
         val player = playerHandle.player

@@ -11,7 +11,7 @@ import java.io.IOException
 /**
  * @author joserobjr
  */
-@Slf4j
+
 class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
     constructor() : super(Companion.properties.defaultState)
 

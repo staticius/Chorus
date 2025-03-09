@@ -14,7 +14,7 @@ import java.util.*
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class BanList(private val file: String) {
     private var list = LinkedHashMap<String?, BanEntry>()
 

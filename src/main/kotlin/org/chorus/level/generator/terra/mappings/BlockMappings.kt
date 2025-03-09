@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j
 
 @Builder
 @Data
-@Slf4j
+
 class BlockMappings {
     var mapping1: Object2ObjectOpenHashMap<JeBlockState, BlockState>? = null
     var mapping2: Object2ObjectOpenHashMap<BlockState, JeBlockState>? = null

@@ -17,7 +17,7 @@ import org.chorus.nbt.tag.CompoundTag
 import lombok.extern.slf4j.Slf4j
 import kotlin.math.floor
 
-@Slf4j
+
 abstract class BlockHangingSign(blockState: BlockState?) : BlockSignBase(blockState),
     BlockEntityHolder<BlockEntityHangingSign?> {
     override val blockEntityClass: Class<out BlockEntityHangingSign>

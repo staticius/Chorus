@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j
 import java.io.File
 import java.util.*
 
-@Slf4j
+
 class JarPluginResourcePackLoader(protected val jarPath: File) : ResourcePackLoader {
     override fun loadPacks(): List<ResourcePack> {
         val baseLang = Server.getInstance().language

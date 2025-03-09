@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-@Slf4j
+
 @ExtendWith(GameMockExtension::class)
 class RakNetInterfaceTest {
     @Test

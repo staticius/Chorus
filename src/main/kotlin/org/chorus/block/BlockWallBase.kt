@@ -19,7 +19,7 @@ import java.util.*
 import kotlin.collections.Map
 import kotlin.collections.set
 
-@Slf4j
+
 abstract class BlockWallBase(blockstate: BlockState?) : BlockTransparent(blockstate), BlockConnectable {
     override val isSolid: Boolean
         get() = false

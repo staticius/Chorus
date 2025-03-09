@@ -9,7 +9,7 @@ import org.cloudburstmc.netty.channel.raknet.RakReliability
 import org.cloudburstmc.netty.channel.raknet.packet.RakMessage
 
 @Sharable
-@Slf4j
+
 class FrameIdCodec(private val frameId: Int) : MessageToMessageCodec<RakMessage, BedrockBatchWrapper>() {
     @Throws(Exception::class)
     override fun encode(ctx: ChannelHandlerContext, msg: BedrockBatchWrapper, out: MutableList<Any>) {

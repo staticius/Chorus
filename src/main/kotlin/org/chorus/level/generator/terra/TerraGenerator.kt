@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j
 import java.util.*
 import java.util.function.Supplier
 
-@Slf4j
+
 class TerraGenerator(dimensionData: DimensionData, options: Map<String?, Any>) :
     Generator(dimensionData, options), GeneratorWrapper {
     val biomeProvider: BiomeProvider

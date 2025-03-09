@@ -16,7 +16,7 @@ import kotlin.math.max
 /**
  * @author Nukkit Project Team
  */
-@Slf4j
+
 class ServerScheduler {
     @get:ApiStatus.Internal
     val asyncTaskThreadPool: AsyncPool

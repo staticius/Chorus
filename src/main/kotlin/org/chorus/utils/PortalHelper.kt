@@ -12,7 +12,7 @@ import org.chorus.math.*
 import lombok.extern.slf4j.Slf4j
 import java.util.function.BiPredicate
 
-@Slf4j
+
 object PortalHelper : BlockID {
     fun spawnPortal(pos: Locator) {
         val lvl = pos.level //TODO: This will generate part of the time, seems to be only when the chunk is populated

@@ -17,7 +17,7 @@ import java.util.function.Consumer
 import kotlin.math.max
 import kotlin.math.min
 
-@Slf4j
+
 class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
     init {
         val server: Server = player.getServer()

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 open class ConsoleCommandSender : CommandSender {
     private val perm: PermissibleBase
 

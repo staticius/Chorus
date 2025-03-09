@@ -19,7 +19,7 @@ import java.util.function.Function
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 
-@Slf4j
+
 class NukkitMetrics private constructor(private val server: Server, start: Boolean) {
     private var enabled = false
     private var serverUUID: String? = null

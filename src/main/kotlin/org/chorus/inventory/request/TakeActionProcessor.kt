@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j
  *
  * @author daoge_cmd
  */
-@Slf4j
+
 class TakeActionProcessor : TransferItemActionProcessor<TakeAction>() {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.TAKE

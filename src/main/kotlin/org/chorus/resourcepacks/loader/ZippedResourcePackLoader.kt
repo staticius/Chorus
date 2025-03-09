@@ -7,7 +7,7 @@ import com.google.common.io.Files
 import lombok.extern.slf4j.Slf4j
 import java.io.File
 
-@Slf4j
+
 class ZippedResourcePackLoader(//资源包文件存放地址
     protected val path: File
 ) : ResourcePackLoader {

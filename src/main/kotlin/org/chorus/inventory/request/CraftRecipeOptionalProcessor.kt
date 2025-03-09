@@ -25,7 +25,7 @@ import kotlin.math.min
 /**
  * @author CoolLoong
  */
-@Slf4j
+
 class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipeOptionalAction> {
     override fun handle(
         action: CraftRecipeOptionalAction,

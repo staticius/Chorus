@@ -18,7 +18,7 @@ import javax.net.ssl.HttpsURLConnection
  *
  * Check out https://bStats.org/ to learn more about bStats!
  */
-@Slf4j
+
 class Metrics(// The name of the server software
     private val name: String?, // The uuid of the server
     private val serverUUID: String?, logFailedRequests: Boolean

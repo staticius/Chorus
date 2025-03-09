@@ -11,7 +11,7 @@ import com.dfsek.terra.api.entity.EntityType
 import com.dfsek.terra.api.handle.WorldHandle
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class PNXWorldHandle : WorldHandle {
     override fun createBlockState(s: String): BlockState {
         var s = s

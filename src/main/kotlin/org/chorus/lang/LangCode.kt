@@ -3,7 +3,7 @@ package org.chorus.lang
 import lombok.extern.slf4j.Slf4j
 
 
-@Slf4j
+
 enum class LangCode(private val string: String) {
     en_US("English (United States)"),
     en_GB("English (United Kingdom)"),

@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class FileWriteTask : AsyncTask {
     private val file: File
     private val contents: InputStream

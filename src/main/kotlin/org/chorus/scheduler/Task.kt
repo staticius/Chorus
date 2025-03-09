@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
-@Slf4j
+
 abstract class Task : Runnable {
     private var taskHandler: TaskHandler? = null
 

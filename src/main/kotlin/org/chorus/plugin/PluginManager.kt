@@ -36,7 +36,7 @@ import kotlin.require
 /**
  * @author MagicDroidX
  */
-@Slf4j
+
 open class PluginManager(private val server: Server, private val commandMap: SimpleCommandMap) {
     protected val plugins: MutableMap<String?, Plugin> = LinkedHashMap()
 

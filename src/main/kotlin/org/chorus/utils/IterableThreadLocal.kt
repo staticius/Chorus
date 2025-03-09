@@ -7,7 +7,7 @@ import java.lang.reflect.Method
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedDeque
 
-@Slf4j
+
 abstract class IterableThreadLocal<T> : ThreadLocal<T?>(), Iterable<T> {
     private val flag: ThreadLocal<T>? = null
     private val allValues = ConcurrentLinkedDeque<T>()

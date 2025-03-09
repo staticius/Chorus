@@ -12,7 +12,7 @@ import java.util.*
 /**
  * @author joserobjr
  */
-@Slf4j
+
 class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     override fun loadNBT() {
         super.loadNBT()

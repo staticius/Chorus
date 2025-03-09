@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBed?> {
     override fun getBlockEntityClass(): Class<out BlockEntityBed> {

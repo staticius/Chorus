@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class MethodEventExecutor(val method: Method?) : EventExecutor {
     @Throws(EventException::class)
     override fun execute(listener: Listener?, event: Event) {

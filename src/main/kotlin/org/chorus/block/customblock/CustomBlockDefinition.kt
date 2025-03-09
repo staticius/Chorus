@@ -26,7 +26,7 @@ import java.util.function.Consumer
  *
  * CustomBlockDefinition is used to get the data of the block behavior_pack sent to the client. The methods provided in [CustomBlockDefinition.Builder] control the data sent to the client, if you need to control some of the server-side behavior, please override the methods in [Block].
  */
-@Slf4j
+
 @JvmRecord
 data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?) {
     val runtimeId: Int

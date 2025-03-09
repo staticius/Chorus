@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j
  *
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 open class TextContainer(@JvmField var text: String) : Cloneable {
     /**
      * 等于[.getText]

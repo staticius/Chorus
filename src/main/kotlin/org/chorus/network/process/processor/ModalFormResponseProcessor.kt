@@ -21,7 +21,7 @@ import kotlin.Boolean
 import kotlin.Float
 import kotlin.Int
 
-@Slf4j
+
 class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: ModalFormResponsePacket) {
         val player = playerHandle.player

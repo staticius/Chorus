@@ -17,7 +17,7 @@ import java.util.List
  *
  * @author daoge_cmd
  */
-@Slf4j
+
 class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeAction> {
     override fun handle(action: ConsumeAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly

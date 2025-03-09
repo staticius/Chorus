@@ -36,7 +36,7 @@ import javax.crypto.SecretKey
  * A Bedrock peer that represents a single network connection to the remote peer.
  * It can hold one or more [BedrockSession]s.
  */
-@Slf4j
+
 class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSessionFactory) :
     ChannelInboundHandlerAdapter() {
     protected val sessions: Int2ObjectMap<BedrockSession> = Int2ObjectOpenHashMap()

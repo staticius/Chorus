@@ -7,7 +7,7 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.UUIDValidator
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class EmoteProcessor : DataPacketProcessor<EmotePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: EmotePacket) {
         if (!playerHandle.player.spawned) {

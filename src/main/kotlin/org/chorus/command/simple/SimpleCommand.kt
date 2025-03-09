@@ -9,7 +9,7 @@ import java.lang.reflect.Method
 /**
  * @author Tee7even
  */
-@Slf4j
+
 class SimpleCommand(
     private val `object`: Any,
     private val method: Method,

@@ -15,7 +15,7 @@ import java.util.*
 /**
  * @since 15-10-13
  */
-@Slf4j
+
 @Getter
 @Setter
 @ToString

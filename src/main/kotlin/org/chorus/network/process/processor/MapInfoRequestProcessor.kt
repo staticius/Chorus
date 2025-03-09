@@ -12,7 +12,7 @@ import org.chorus.plugin.InternalPlugin
 import org.chorus.scheduler.AsyncTask
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: MapInfoRequestPacket) {
         val player = playerHandle.player

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 object LevelProviderManager {
     internal val providers: MutableMap<String, Class<out LevelProvider>> = HashMap()
 

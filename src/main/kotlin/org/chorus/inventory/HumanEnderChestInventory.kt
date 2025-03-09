@@ -11,7 +11,7 @@ import org.chorus.network.protocol.ContainerOpenPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryType.CONTAINER, 27),
     BlockEntityInventoryNameable {
     private var enderChest: BlockEntityEnderChest? = null

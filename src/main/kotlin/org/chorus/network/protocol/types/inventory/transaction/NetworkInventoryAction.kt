@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j
  * @author CreeperFace
  */
 @ToString
-@Slf4j
+
 class NetworkInventoryAction {
     var inventorySource: InventorySource? = null
     var inventorySlot: Int = 0

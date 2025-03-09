@@ -20,7 +20,7 @@ import org.chorus.network.protocol.PlayerActionPacket
 import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: PlayerActionPacket) {
         val player = playerHandle.player

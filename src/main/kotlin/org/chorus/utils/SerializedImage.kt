@@ -9,7 +9,7 @@ import java.util.*
 
 @ToString(exclude = ["data"])
 @EqualsAndHashCode
-@Slf4j
+
 class SerializedImage(val width: Int, val height: Int, val data: ByteArray) {
     companion object {
         val EMPTY: SerializedImage = SerializedImage(0, 0, EmptyArrays.EMPTY_BYTES)

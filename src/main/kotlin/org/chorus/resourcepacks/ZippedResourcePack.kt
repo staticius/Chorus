@@ -15,7 +15,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipException
 import java.util.zip.ZipFile
 
-@Slf4j
+
 class ZippedResourcePack(file: File) : AbstractResourcePack() {
     protected var file: File
 

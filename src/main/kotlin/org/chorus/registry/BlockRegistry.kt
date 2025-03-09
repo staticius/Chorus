@@ -30,7 +30,7 @@ import kotlin.collections.setOf
 /**
  * @author Cool_Loong | Mcayear | KoshakMineDEV | WWMB | Draglis
  */
-@Slf4j
+
 class BlockRegistry : BlockID,
     IRegistry<String, Block?, Class<out Block?>> {
     override fun init() {

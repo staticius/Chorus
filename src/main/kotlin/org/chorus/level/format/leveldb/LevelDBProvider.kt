@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * @author CoolLoong (PNX Project)
  */
-@Slf4j
+
 class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
     private val lastChunk = ThreadLocal<WeakReference<IChunk?>>()
     protected val chunks: Long2ObjectNonBlockingMap<IChunk> = Long2ObjectNonBlockingMap()

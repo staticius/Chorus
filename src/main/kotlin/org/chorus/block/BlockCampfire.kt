@@ -31,7 +31,7 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityCampfire?> {
     override fun getBlockEntityType(): String {

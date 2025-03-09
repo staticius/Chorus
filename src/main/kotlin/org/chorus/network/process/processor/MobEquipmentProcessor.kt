@@ -11,7 +11,7 @@ import org.chorus.network.protocol.MobEquipmentPacket
 import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: MobEquipmentPacket) {
         val player = playerHandle.player

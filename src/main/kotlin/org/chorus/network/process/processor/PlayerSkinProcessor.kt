@@ -11,7 +11,7 @@ import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 import java.util.concurrent.TimeUnit
 
-@Slf4j
+
 class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: PlayerSkinPacket) {
         val player = playerHandle.player

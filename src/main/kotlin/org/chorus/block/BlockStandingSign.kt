@@ -14,7 +14,7 @@ import kotlin.math.floor
 /**
  * Alias post sign
  */
-@Slf4j
+
 open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockSignBase(blockstate), BlockEntityHolder<BlockEntitySign?> {
     protected open val standingSignId: String?

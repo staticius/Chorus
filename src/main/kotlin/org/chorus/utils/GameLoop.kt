@@ -15,7 +15,7 @@ import kotlin.math.min
  *
  * @author daoge_cmd
  */
-@Slf4j
+
 class GameLoop private constructor(
     onStart: Runnable,
     onTick: Consumer<GameLoop>,

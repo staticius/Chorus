@@ -13,7 +13,7 @@ import com.google.common.collect.Lists
 import lombok.extern.slf4j.Slf4j
 import java.util.List
 
-@Slf4j
+
 class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.MINE_BLOCK

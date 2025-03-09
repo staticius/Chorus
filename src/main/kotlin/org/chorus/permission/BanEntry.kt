@@ -10,7 +10,7 @@ import java.util.*
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class BanEntry(name: String) {
     @JvmField
     val name: String = name.lowercase()

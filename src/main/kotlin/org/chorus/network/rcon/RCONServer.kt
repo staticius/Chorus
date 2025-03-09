@@ -19,7 +19,7 @@ import kotlin.concurrent.Volatile
  *
  * @author Tee7even
  */
-@Slf4j
+
 class RCONServer(address: String, port: Int, password: String) : Thread() {
     @Volatile
     private var running: Boolean

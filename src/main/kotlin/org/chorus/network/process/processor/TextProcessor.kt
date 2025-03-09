@@ -8,7 +8,7 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.TextPacket
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 class TextProcessor : DataPacketProcessor<TextPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: TextPacket) {
         if (!playerHandle.player.spawned || !playerHandle.player.isAlive()) {

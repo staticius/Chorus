@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class Network @JvmOverloads constructor(
     val server: Server,
     nettyThreadNumber: Int = Runtime.getRuntime().availableProcessors(),

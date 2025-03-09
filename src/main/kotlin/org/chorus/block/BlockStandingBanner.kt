@@ -21,7 +21,7 @@ import org.chorus.utils.BlockColor.equals
 import lombok.extern.slf4j.Slf4j
 import kotlin.math.floor
 
-@Slf4j
+
 open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBanner?> {
     override val blockEntityType: String

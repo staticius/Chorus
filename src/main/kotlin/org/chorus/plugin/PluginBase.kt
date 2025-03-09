@@ -23,7 +23,7 @@ import java.io.InputStream
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
-@Slf4j
+
 abstract class PluginBase : Plugin {
     override var pluginLoader: PluginLoader? = null
         private set

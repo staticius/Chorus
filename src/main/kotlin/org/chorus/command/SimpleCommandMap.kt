@@ -29,7 +29,7 @@ import kotlin.collections.set
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class SimpleCommandMap(private val server: Server) : CommandMap {
     protected val knownCommands: MutableMap<String?, Command> = HashMap()
 

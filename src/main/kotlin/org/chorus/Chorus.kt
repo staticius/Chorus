@@ -1,7 +1,6 @@
 package org.chorus
 
 import org.chorus.nbt.stream.PGZIPOutputStream
-import org.chorus.utils.MainLogger.error
 import org.chorus.utils.Utils.dynamic
 import com.google.common.base.Preconditions
 import io.netty.util.ResourceLeakDetector
@@ -9,39 +8,35 @@ import io.netty.util.internal.logging.InternalLoggerFactory
 import io.netty.util.internal.logging.Log4J2LoggerFactory
 import joptsimple.OptionParser
 import joptsimple.OptionSpec
-import lombok.extern.slf4j.Slf4j
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.core.LoggerContext
+import org.chorus.scheduler.AsyncTask
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.*
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-/*
-* `_   _       _    _    _ _
-* | \ | |     | |  | |  (_) |
-* |  \| |_   _| | _| | ___| |_
-* | . ` | | | | |/ / |/ / | __|
-* | |\  | |_| |   <|   <| | |_
-* |_| \_|\__,_|_|\_\_|\_\_|\__|
-*/
 /**
- * Nukkit启动类，包含`main`函数。<br></br>
- * The launcher class of Nukkit, including the `main` function.
- *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @since Nukkit 1.0 | Nukkit API 1.0.0
+ *   _____  _
+ *  / ____|| |
+ * | |     | |__    ___   _ __  _   _  ___
+ * | |     | '_ \  / _ \ | '__|| | | |/ __|
+ * | |____ | | | || (_) || |   | |_| |\__ \
+ *  \_____||_| |_| \___/ |_|    \__,_||___/
  */
-@Slf4j
-object Nukkit {
+/**
+ * The launcher class of Chorus, including the `main` function.
+ */
+object Chorus {
     val GIT_INFO: Properties? = gitInfo
     val VERSION: String? = version
-    val CODENAME: String = dynamic("PowerNukkitX")
+    val CODENAME: String = dynamic("Chorus")
     val GIT_COMMIT: String = gitCommit
-    val API_VERSION: String = dynamic("2.0.0")
+    val API_VERSION: String = dynamic("0.0.1")
     val PATH: String = System.getProperty("user.dir") + "/"
     val DATA_PATH: String = System.getProperty("user.dir") + "/"
     val PLUGIN_PATH: String = DATA_PATH + "plugins"
@@ -73,11 +68,11 @@ object Nukkit {
                     disableSentry.set(value.lowercase().toBoolean())
                 }
             } catch (e: IOException) {
-                Nukkit.log.error("Failed to load server.properties to check disable-auto-bug-report.", e)
+                log.error("Failed to load server.properties to check disable-auto-bug-report.", e)
             }
         }
 
-        // Force IPv4 since Nukkit is not compatible with IPv6
+        // Force IPv4 since Chorus is not compatible with IPv6
         System.setProperty("java.net.preferIPv4Stack", "true")
         System.setProperty("log4j.skipJansi", "false")
         System.getProperties()
@@ -160,24 +155,24 @@ object Nukkit {
 
         try {
             if (TITLE) {
-                print(0x1b.toChar().toString() + "]0;PowerNukkitX is starting up..." + 0x07.toChar())
+                print(0x1b.toChar().toString() + "]0;Chorus is starting up..." + 0x07.toChar())
             }
             Server(PATH, DATA_PATH, PLUGIN_PATH, language)
         } catch (t: Throwable) {
-            Nukkit.log.error("", t)
+            log.error("", t)
         }
 
         if (TITLE) {
             print(0x1b.toChar().toString() + "]0;Stopping Server..." + 0x07.toChar())
         }
-        Nukkit.log.info("Stopping other threads")
+        log.info("Stopping other threads")
 
-        PGZIPOutputStream.getSharedThreadPool().shutdownNow()
+        PGZIPOutputStream.sharedThreadPool.shutdownNow()
         for (thread in Thread.getAllStackTraces().keys) {
             if (thread !is InterruptibleThread) {
                 continue
             }
-            Nukkit.log.debug("Stopping {} thread", thread.javaClass.simpleName)
+            log.debug("Stopping {} thread", thread.javaClass.simpleName)
             if (thread.isAlive) {
                 thread.interrupt()
             }
@@ -190,17 +185,19 @@ object Nukkit {
         Runtime.getRuntime().halt(0) // force exit
     }
 
+    private val log: Logger by lazy { LoggerFactory.getLogger(AsyncTask::class.java) }
+
     private fun requiresShortTitle(): Boolean {
-        //Shorter title for windows 8/2012
+        //Shorter title for Windows 8/2012
         val osName = System.getProperty("os.name").lowercase()
         return osName.contains("windows") && (osName.contains("windows 8") || osName.contains("2012"))
     }
 
     private val gitInfo: Properties?
         get() {
-            var gitFileStream: InputStream? = null
+            val gitFileStream: InputStream?
             try {
-                gitFileStream = Nukkit::class.java.module.getResourceAsStream("git.properties")
+                gitFileStream = Chorus::class.java.module.getResourceAsStream("git.properties")
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
@@ -218,14 +215,14 @@ object Nukkit {
 
     private val version: String?
         get() {
-            var resourceAsStream: InputStream? = null
+            val resourceAsStream: InputStream?
             try {
-                resourceAsStream = Nukkit::class.java.module.getResourceAsStream("git.properties")
+                resourceAsStream = Chorus::class.java.module.getResourceAsStream("git.properties")
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
             if (resourceAsStream == null) {
-                return "Unknown-PNX-SNAPSHOT"
+                return "Unknown-Chorus-SNAPSHOT"
             }
             val properties = Properties()
             try {
@@ -235,7 +232,7 @@ object Nukkit {
                             properties.load(buffered)
                             val line = properties.getProperty("git.build.version")
                             return if ("\${project.version}".equals(line, ignoreCase = true)) {
-                                "Unknown-PNX-SNAPSHOT"
+                                "Unknown-Chorus-SNAPSHOT"
                             } else {
                                 line
                             }
@@ -243,7 +240,7 @@ object Nukkit {
                     }
                 }
             } catch (e: IOException) {
-                return "Unknown-PNX-SNAPSHOT"
+                return "Unknown-Chorus-SNAPSHOT"
             }
         }
 
@@ -251,16 +248,14 @@ object Nukkit {
         get() {
             val version = StringBuilder()
             version.append("git-")
-            val commitId: String
-            if (GIT_INFO == null || (GIT_INFO.getProperty("git.commit.id.abbrev")
-                    .also { commitId = it }) == null
-            ) {
+            if (GIT_INFO == null) {
                 return version.append("null").toString()
             }
+            val commitId = GIT_INFO.getProperty("git.commit.id.abbrev")
             return version.append(commitId).toString()
         }
 
-    var logLevel: Level?
+    private var logLevel: Level?
         get() {
             val ctx =
                 LogManager.getContext(false) as LoggerContext

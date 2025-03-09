@@ -13,7 +13,7 @@ import java.util.*
 import java.util.regex.MatchResult
 import java.util.regex.Pattern
 
-@Slf4j
+
 class PluginI18n(private val plugin: PluginBase) {
     /**
      * Gets fallback language.

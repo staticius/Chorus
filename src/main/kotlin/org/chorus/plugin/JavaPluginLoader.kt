@@ -15,7 +15,7 @@ import java.util.regex.Pattern
 /**
  * @author Nukkit Team.
  */
-@Slf4j
+
 class JavaPluginLoader(private val server: Server) : PluginLoader {
     private val classes: MutableMap<String, Class<*>> = HashMap()
 

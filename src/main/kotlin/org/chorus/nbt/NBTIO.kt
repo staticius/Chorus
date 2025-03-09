@@ -28,7 +28,7 @@ import java.util.zip.GZIPInputStream
 /**
  * A Named Binary Tag library for Nukkit Project
  */
-@Slf4j
+
 object NBTIO {
     @JvmOverloads
     fun putItemHelper(item: Item, slot: Int? = null): CompoundTag {

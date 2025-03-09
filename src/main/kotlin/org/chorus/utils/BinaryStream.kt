@@ -17,7 +17,7 @@ import kotlin.math.min
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Slf4j
+
 class BinaryStream {
     var offset: Int
     private var buffer: ByteArray?

@@ -37,7 +37,7 @@ import kotlin.collections.MutableMap
 import kotlin.collections.indices
 import kotlin.collections.set
 
-@Slf4j
+
 class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: ItemStackRequestPacket) {
         val player = playerHandle.player

@@ -9,7 +9,7 @@ import java.io.File
 import java.util.*
 import java.util.function.Consumer
 
-@Slf4j
+
 class ResourcePackManager(private val loaders: MutableSet<ResourcePackLoader>) {
     var maxChunkSize: Int = 1024 * 32 // 32kb is default
 

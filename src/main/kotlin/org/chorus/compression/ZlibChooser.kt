@@ -6,7 +6,7 @@ import org.chorus.utils.*
 import cn.powernukkitx.libdeflate.Libdeflate
 import lombok.extern.slf4j.Slf4j
 
-@Slf4j
+
 object ZlibChooser {
     private val providers = arrayOfNulls<ZlibProvider>(4)
     var currentProvider: ZlibProvider?

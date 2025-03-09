@@ -143,7 +143,7 @@ import kotlin.math.*
  *
  * @author MagicDroidX &amp; Box (Nukkit Project)
  */
-@Slf4j
+
 open class Player @UsedByReflection constructor(
     /**
      * Get the network Session for the player
