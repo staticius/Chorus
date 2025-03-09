@@ -1,6 +1,6 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.block.BlockAir
+import org.chorus.block.BlockAir
 import com.dfsek.terra.api.block.BlockType
 import com.dfsek.terra.api.block.state.BlockState
 import com.dfsek.terra.api.block.state.properties.Property

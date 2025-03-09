@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemZombieHead
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.Item
+import org.chorus.item.ItemZombieHead
 
 class BlockZombieHead(blockState: BlockState?) : BlockHead(blockState) {
     override val name: String

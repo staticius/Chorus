@@ -1,9 +1,9 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Player
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.Player
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
 
 /**
  * 实体看向最近携带食物的玩家<br></br>

@@ -1,6 +1,6 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.ProtocolInfo
 
 class LevelSoundEventProcessorV1 : LevelSoundEventProcessor() {
     override val packetId: Int

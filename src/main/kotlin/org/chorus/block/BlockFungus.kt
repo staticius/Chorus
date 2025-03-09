@@ -1,11 +1,11 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.level.particle.BoneMealParticle
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.BlockFlowerPot.FlowerPotBlock
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.level.particle.BoneMealParticle
+import org.chorus.math.BlockFace
 
 abstract class BlockFungus(blockState: BlockState?) : BlockFlowable(blockState), FlowerPotBlock,
     Natural {

@@ -1,6 +1,6 @@
 package org.chorus.event.vehicle
 
-import cn.nukkit.entity.Entity
+import org.chorus.entity.Entity
 
 /**
  * Is called when an entity destroyed a vehicle

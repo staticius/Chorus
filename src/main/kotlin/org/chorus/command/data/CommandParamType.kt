@@ -1,6 +1,6 @@
 package org.chorus.command.data
 
-import cn.nukkit.network.protocol.AvailableCommandsPacket
+import org.chorus.network.protocol.AvailableCommandsPacket
 
 /**
  * @author CreeperFace

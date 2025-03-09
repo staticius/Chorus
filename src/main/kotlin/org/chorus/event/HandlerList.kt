@@ -1,7 +1,7 @@
 package org.chorus.event
 
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.plugin.RegisteredListener
+import org.chorus.plugin.Plugin
+import org.chorus.plugin.RegisteredListener
 import java.util.*
 import kotlin.concurrent.Volatile
 

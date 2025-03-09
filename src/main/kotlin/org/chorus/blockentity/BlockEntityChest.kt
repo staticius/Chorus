@@ -1,14 +1,14 @@
 package org.chorus.blockentity
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.inventory.BaseInventory
-import cn.nukkit.inventory.ChestInventory
-import cn.nukkit.inventory.ContainerInventory
-import cn.nukkit.inventory.DoubleChestInventory
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.inventory.BaseInventory
+import org.chorus.inventory.ChestInventory
+import org.chorus.inventory.ContainerInventory
+import org.chorus.inventory.DoubleChestInventory
+import org.chorus.level.format.IChunk
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
 import java.util.*
 import java.util.function.Consumer
 

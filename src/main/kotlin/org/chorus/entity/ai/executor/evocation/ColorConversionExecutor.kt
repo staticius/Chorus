@@ -1,14 +1,14 @@
 package org.chorus.entity.ai.executor.evocation
 
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.animal.EntitySheep
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
-import cn.nukkit.level.Sound
-import cn.nukkit.utils.BlockColor
-import cn.nukkit.utils.DyeColor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.animal.EntitySheep
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
+import org.chorus.level.Sound
+import org.chorus.utils.BlockColor
+import org.chorus.utils.DyeColor
 
 class ColorConversionExecutor : FangLineExecutor() {
     override fun execute(entity: EntityMob): Boolean {

@@ -1,17 +1,17 @@
 package org.chorus.entity.projectile
 
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.effect.*
-import cn.nukkit.entity.mob.monster.EntityWither
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityExplosionPrimeEvent
-import cn.nukkit.level.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.effect.*
+import org.chorus.entity.mob.monster.EntityWither
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityExplosionPrimeEvent
+import org.chorus.level.*
+import org.chorus.level.format.IChunk
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
 
 open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile(chunk, nbt), EntityExplosive {
     override fun getIdentifier(): String {

@@ -1,17 +1,17 @@
 package org.chorus.scoreboard.manager
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.entity.EntityLiving
-import cn.nukkit.event.scoreboard.ScoreboardObjectiveChangeEvent
-import cn.nukkit.network.protocol.UpdateSoftEnumPacket
-import cn.nukkit.scoreboard.IScoreboard
-import cn.nukkit.scoreboard.data.DisplaySlot
-import cn.nukkit.scoreboard.displayer.IScoreboardViewer
-import cn.nukkit.scoreboard.scorer.EntityScorer
-import cn.nukkit.scoreboard.scorer.PlayerScorer
-import cn.nukkit.scoreboard.storage.IScoreboardStorage
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.command.data.CommandEnum
+import org.chorus.entity.EntityLiving
+import org.chorus.event.scoreboard.ScoreboardObjectiveChangeEvent
+import org.chorus.network.protocol.UpdateSoftEnumPacket
+import org.chorus.scoreboard.IScoreboard
+import org.chorus.scoreboard.data.DisplaySlot
+import org.chorus.scoreboard.displayer.IScoreboardViewer
+import org.chorus.scoreboard.scorer.EntityScorer
+import org.chorus.scoreboard.scorer.PlayerScorer
+import org.chorus.scoreboard.storage.IScoreboardStorage
 import lombok.Getter
 import java.util.function.Consumer
 

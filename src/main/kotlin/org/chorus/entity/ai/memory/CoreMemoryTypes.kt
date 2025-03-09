@@ -1,21 +1,21 @@
 package org.chorus.entity.ai.memory
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.codec.BooleanMemoryCodec
-import cn.nukkit.entity.ai.memory.codec.NumberMemoryCodec
-import cn.nukkit.entity.ai.memory.codec.StringMemoryCodec
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.item.EntityItem
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
-import cn.nukkit.entity.mob.villagers.EntityVillagerV2
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.item.*
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.codec.BooleanMemoryCodec
+import org.chorus.entity.ai.memory.codec.NumberMemoryCodec
+import org.chorus.entity.ai.memory.codec.StringMemoryCodec
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.item.EntityItem
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
+import org.chorus.entity.mob.villagers.EntityVillagerV2
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.item.*
+import org.chorus.math.*
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 

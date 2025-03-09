@@ -1,9 +1,9 @@
 package org.chorus.event.player
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.event.entity.EntityEvent
+import org.chorus.entity.Entity
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.event.entity.EntityEvent
 
 class EntityFreezeEvent(human: Entity?) : EntityEvent(), Cancellable {
     init {

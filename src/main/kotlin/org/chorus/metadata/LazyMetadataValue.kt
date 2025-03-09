@@ -1,7 +1,7 @@
 package org.chorus.metadata
 
-import cn.nukkit.metadata.LazyMetadataValue.CacheStrategy
-import cn.nukkit.plugin.Plugin
+import org.chorus.metadata.LazyMetadataValue.CacheStrategy
+import org.chorus.plugin.Plugin
 import com.dfsek.terra.lib.commons.lang3.Validate
 import java.lang.ref.SoftReference
 import java.util.concurrent.Callable

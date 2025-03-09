@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemTool
+import org.chorus.item.ItemTool
 
 class BlockChiseledNetherBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     Block(blockstate) {

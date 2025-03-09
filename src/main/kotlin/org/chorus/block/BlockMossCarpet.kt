@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 open class BlockMossCarpet @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockCarpet(blockstate) {

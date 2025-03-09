@@ -1,15 +1,15 @@
 package org.chorus.level.particle
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.data.EntityDataMap
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.data.Skin
-import cn.nukkit.item.Item
-import cn.nukkit.level.*
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.protocol.*
-import cn.nukkit.utils.SerializedImage
+import org.chorus.entity.Entity
+import org.chorus.entity.data.EntityDataMap
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.data.Skin
+import org.chorus.item.Item
+import org.chorus.level.*
+import org.chorus.math.Vector3
+import org.chorus.network.protocol.*
+import org.chorus.utils.SerializedImage
 import com.google.common.base.Strings
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom

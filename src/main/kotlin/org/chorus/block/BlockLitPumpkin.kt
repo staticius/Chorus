@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.entity.mob.EntityIronGolem.Companion.checkAndSpawnGolem
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.entity.mob.EntityIronGolem.Companion.checkAndSpawnGolem
+import org.chorus.item.*
+import org.chorus.math.BlockFace
 
 class BlockLitPumpkin @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockPumpkin(blockstate) {

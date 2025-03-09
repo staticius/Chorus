@@ -1,6 +1,6 @@
 package org.chorus.network.query.packet
 
-import cn.nukkit.network.query.QueryPacket
+import org.chorus.network.query.QueryPacket
 import io.netty.buffer.ByteBuf
 
 class StatisticsPacket : QueryPacket {

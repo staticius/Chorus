@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types
 
-import cn.nukkit.command.data.CommandEnum
+import org.chorus.command.data.CommandEnum
 import lombok.Value
 
 /**

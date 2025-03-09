@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.BlockFace
-import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.math.BlockFace
+import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 class BlockRedstoneBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockSolid(blockstate), RedstoneComponent {

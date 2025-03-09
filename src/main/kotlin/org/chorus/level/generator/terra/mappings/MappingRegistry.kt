@@ -1,6 +1,6 @@
 package org.chorus.level.generator.terra.mappings
 
-import cn.nukkit.level.generator.terra.mappings.RegistryLoader
+import org.chorus.level.generator.terra.mappings.RegistryLoader
 import java.util.function.Consumer
 
 

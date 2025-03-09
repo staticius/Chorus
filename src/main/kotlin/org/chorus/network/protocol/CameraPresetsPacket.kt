@@ -1,11 +1,11 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.camera.data.CameraPreset
-import cn.nukkit.math.Vector2f
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.camera.aimassist.CameraAimAssist
-import cn.nukkit.network.protocol.types.camera.aimassist.CameraPresetAimAssist
-import cn.nukkit.utils.OptionalValue
+import org.chorus.camera.data.CameraPreset
+import org.chorus.math.Vector2f
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.camera.aimassist.CameraAimAssist
+import org.chorus.network.protocol.types.camera.aimassist.CameraPresetAimAssist
+import org.chorus.utils.OptionalValue
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.function.Consumer

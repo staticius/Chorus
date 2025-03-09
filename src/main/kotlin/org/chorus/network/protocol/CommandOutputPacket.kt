@@ -1,9 +1,9 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.CommandOriginData
-import cn.nukkit.network.protocol.types.CommandOutputMessage
-import cn.nukkit.network.protocol.types.CommandOutputType
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.CommandOriginData
+import org.chorus.network.protocol.types.CommandOutputMessage
+import org.chorus.network.protocol.types.CommandOutputType
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 

@@ -1,9 +1,9 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
 
 class WardenViolentAnimationExecutor(protected var duration: Int) : IBehaviorExecutor {
     protected var currentTick: Int = 0

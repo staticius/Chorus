@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.controller
 
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.Vector3
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.Vector3
 import kotlin.math.sqrt
 
 /**

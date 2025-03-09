@@ -1,7 +1,7 @@
 package org.chorus.plugin
 
-import cn.nukkit.utils.LogLevel
-import cn.nukkit.utils.Logger
+import org.chorus.utils.LogLevel
+import org.chorus.utils.Logger
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 

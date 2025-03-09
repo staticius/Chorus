@@ -1,13 +1,13 @@
 package org.chorus.entity.ai.route.posevaluator
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockFence
-import cn.nukkit.block.BlockFenceGate
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.Utils
+import org.chorus.block.Block
+import org.chorus.block.BlockFence
+import org.chorus.block.BlockFenceGate
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
+import org.chorus.utils.Utils
 
 /**
  * 用于标准陆地行走实体的方块评估器

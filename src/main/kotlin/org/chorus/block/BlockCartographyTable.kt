@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.inventory.*
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.inventory.*
+import org.chorus.item.*
+import org.chorus.math.BlockFace
 import java.util.function.Supplier
 
 class BlockCartographyTable @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

@@ -1,6 +1,6 @@
 package org.chorus.math
 
-import cn.nukkit.utils.random.RandomSourceProvider
+import org.chorus.utils.random.RandomSourceProvider
 import com.google.common.collect.Iterators
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom

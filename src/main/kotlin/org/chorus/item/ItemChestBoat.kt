@@ -1,15 +1,15 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.entity.item.EntityChestBoat
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.entity.item.EntityChestBoat
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
 
 open class ItemChestBoat : Item {
     //legacy chest boat , have aux

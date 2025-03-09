@@ -1,9 +1,9 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.entity.data.EntityDataMap
-import cn.nukkit.item.Item
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.utils.*
+import org.chorus.entity.data.EntityDataMap
+import org.chorus.item.Item
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.utils.*
 import lombok.*
 
 @Getter

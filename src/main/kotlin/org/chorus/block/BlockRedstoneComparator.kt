@@ -1,19 +1,19 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block.Companion.get
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
+import org.chorus.Player
+import org.chorus.block.Block.Companion.get
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.block.property.type.EnumPropertyType
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.item.*
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.nbt.tag.CompoundTag.putList
-import cn.nukkit.nbt.tag.Tag
-import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
-import cn.nukkit.utils.RedstoneComponent.updateAroundRedstone
+import org.chorus.blockentity.BlockEntity
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.nbt.tag.CompoundTag.putList
+import org.chorus.nbt.tag.Tag
+import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
+import org.chorus.utils.RedstoneComponent.updateAroundRedstone
 import lombok.extern.slf4j.Slf4j
 import kotlin.math.max
 

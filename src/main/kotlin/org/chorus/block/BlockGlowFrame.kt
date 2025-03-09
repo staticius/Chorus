@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.blockentity.BlockEntity
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.blockentity.BlockEntity
 
 class BlockGlowFrame @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFrame(blockstate) {

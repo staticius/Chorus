@@ -1,6 +1,6 @@
 package org.chorus.level.generator
 
-import cn.nukkit.Server
+import org.chorus.Server
 import com.google.common.base.Preconditions
 import java.util.concurrent.Executor
 

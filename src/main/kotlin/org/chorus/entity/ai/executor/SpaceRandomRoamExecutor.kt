@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.Vector3
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.Vector3
 import java.util.concurrent.ThreadLocalRandom
 
 /**

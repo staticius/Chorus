@@ -1,9 +1,9 @@
 package org.chorus.event.inventory
 
-import cn.nukkit.entity.projectile.abstract_arrow.EntityThrownTrident
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.inventory.Inventory
+import org.chorus.entity.projectile.abstract_arrow.EntityThrownTrident
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.inventory.Inventory
 
 class InventoryPickupTridentEvent(inventory: Inventory, val trident: EntityThrownTrident) :
     InventoryEvent(inventory), Cancellable {

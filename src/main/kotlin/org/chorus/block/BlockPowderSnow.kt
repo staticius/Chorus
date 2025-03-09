@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.projectile.EntitySmallFireball
-import cn.nukkit.item.*
-import cn.nukkit.level.Locator
-import cn.nukkit.math.*
+import org.chorus.entity.Entity
+import org.chorus.entity.projectile.EntitySmallFireball
+import org.chorus.item.*
+import org.chorus.level.Locator
+import org.chorus.math.*
 
 class BlockPowderSnow : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)

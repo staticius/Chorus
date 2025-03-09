@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.entity.EntityID
+import org.chorus.entity.EntityID
 
 class ItemWindCharge @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
     ProjectileItem(ItemID.Companion.WIND_CHARGE, 0, count, "Wind Charge") {

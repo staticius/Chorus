@@ -1,11 +1,11 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.player.PlayerHackDetectedEvent
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.RequestPermissionsPacket
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.player.PlayerHackDetectedEvent
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.RequestPermissionsPacket
 
 class RequestPermissionsProcessor : DataPacketProcessor<RequestPermissionsPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: RequestPermissionsPacket) {

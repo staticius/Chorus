@@ -1,11 +1,11 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemBlock
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
 
 abstract class BlockCoralWallFan(blockstate: BlockState?) : BlockCoralFan(blockstate) {
     override val name: String

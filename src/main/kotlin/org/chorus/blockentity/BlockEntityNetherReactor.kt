@@ -1,10 +1,10 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.block.property.enums.NetherReactorState
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.MathHelper
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.BlockID
+import org.chorus.block.property.enums.NetherReactorState
+import org.chorus.level.format.IChunk
+import org.chorus.math.MathHelper
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * This entity allows to manipulate the save state of a nether reactor core, but changing it

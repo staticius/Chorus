@@ -1,6 +1,6 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 import com.dfsek.terra.api.inventory.item.Enchantment
 import com.dfsek.terra.api.inventory.item.ItemMeta
 import kotlin.collections.HashMap

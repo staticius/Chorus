@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.level.Sound
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.level.Sound
+import org.chorus.math.BlockFace
 
 open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockState) {

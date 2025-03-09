@@ -1,7 +1,7 @@
 package org.chorus.form.window
 
-import cn.nukkit.Player
-import cn.nukkit.form.response.ModalResponse
+import org.chorus.Player
+import org.chorus.form.response.ModalResponse
 import lombok.AccessLevel
 import lombok.Getter
 import lombok.NoArgsConstructor

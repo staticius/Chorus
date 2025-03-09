@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.item.*
-import cn.nukkit.level.*
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.entity.Entity
+import org.chorus.event.Event.isCancelled
+import org.chorus.item.*
+import org.chorus.level.*
+import org.chorus.math.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 import kotlin.math.min

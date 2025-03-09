@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.effect.Effect.Companion.get
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.item.Item
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.entity.Entity
+import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.EffectType
+import org.chorus.item.Item
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
 
 class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockFlower(blockstate) {

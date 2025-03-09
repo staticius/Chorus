@@ -1,11 +1,11 @@
 package org.chorus.entity.ai.behaviorgroup
 
-import cn.nukkit.entity.ai.behavior.IBehavior
-import cn.nukkit.entity.ai.controller.IController
-import cn.nukkit.entity.ai.memory.IMemoryStorage
-import cn.nukkit.entity.ai.route.finder.IRouteFinder
-import cn.nukkit.entity.ai.sensor.ISensor
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.ai.behavior.IBehavior
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.memory.IMemoryStorage
+import org.chorus.entity.ai.route.finder.IRouteFinder
+import org.chorus.entity.ai.sensor.ISensor
+import org.chorus.entity.mob.EntityMob
 
 /**
  * 行为组是一个基本的、独立的AI单元<br></br>

@@ -1,6 +1,6 @@
 package org.chorus.item.enchantment.crossbow
 
-import cn.nukkit.item.enchantment.*
+import org.chorus.item.enchantment.*
 
 class EnchantmentCrossbowMultishot :
     EnchantmentCrossbow(Enchantment.Companion.ID_CROSSBOW_MULTISHOT, "crossbowMultishot", Rarity.RARE) {

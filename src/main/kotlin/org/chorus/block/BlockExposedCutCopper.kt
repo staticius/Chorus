@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.enums.OxidizationLevel
+import org.chorus.block.property.enums.OxidizationLevel
 
 open class BlockExposedCutCopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockCutCopper(blockstate) {

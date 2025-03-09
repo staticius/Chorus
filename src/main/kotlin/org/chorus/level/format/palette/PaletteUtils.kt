@@ -1,9 +1,9 @@
 package org.chorus.level.format.palette
 
-import cn.nukkit.nbt.stream.NBTInputStream
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.utils.*
+import org.chorus.nbt.stream.NBTInputStream
+import org.chorus.nbt.tag.*
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.utils.*
 import io.netty.buffer.ByteBuf
 import it.unimi.dsi.fastutil.Pair
 import java.io.IOException

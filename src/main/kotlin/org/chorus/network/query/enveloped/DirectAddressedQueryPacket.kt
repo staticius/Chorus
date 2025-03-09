@@ -1,6 +1,6 @@
 package org.chorus.network.query.enveloped
 
-import cn.nukkit.network.query.QueryPacket
+import org.chorus.network.query.QueryPacket
 import io.netty.channel.DefaultAddressedEnvelope
 import java.net.InetSocketAddress
 

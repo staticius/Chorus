@@ -1,6 +1,6 @@
 package org.chorus.lang
 
-import cn.nukkit.plugin.PluginBase
+import org.chorus.plugin.PluginBase
 import lombok.extern.slf4j.Slf4j
 import java.io.*
 import java.util.jar.JarFile

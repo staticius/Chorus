@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.level.Sound
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.level.Sound
 
 class BlockCrimsonFenceGate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFenceGate(blockstate) {

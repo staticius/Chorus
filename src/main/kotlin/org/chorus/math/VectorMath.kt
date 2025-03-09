@@ -1,6 +1,6 @@
 package org.chorus.math
 
-import cn.nukkit.math.BlockFace.AxisDirection
+import org.chorus.math.BlockFace.AxisDirection
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.math.*

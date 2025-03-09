@@ -1,8 +1,8 @@
 package org.chorus.event.server
 
-import cn.nukkit.command.CommandSender
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.command.CommandSender
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 /**
  * @author MagicDroidX (Nukkit Project)

@@ -1,7 +1,7 @@
 package org.chorus.registry
 
-import cn.nukkit.entity.effect.*
-import cn.nukkit.registry.RegisterException
+import org.chorus.entity.effect.*
+import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean

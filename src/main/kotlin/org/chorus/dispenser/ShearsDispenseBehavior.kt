@@ -1,10 +1,10 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.entity.EntityShearable
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.SimpleAxisAlignedBB
+import org.chorus.block.BlockDispenser
+import org.chorus.entity.EntityShearable
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
 
 class ShearsDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {

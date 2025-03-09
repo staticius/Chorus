@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
+import org.chorus.block.BlockFlowerPot.FlowerPotBlock
 
 class BlockCrimsonRoots @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockHanging(blockstate), FlowerPotBlock, Natural {

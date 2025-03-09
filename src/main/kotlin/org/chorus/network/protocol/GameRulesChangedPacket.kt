@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.level.GameRules
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.level.GameRules
+import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
 @Getter

@@ -1,14 +1,14 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.effect.Effect.Companion.get
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.entity.Entity
+import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.EffectType
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.math.BlockFace
 import kotlin.math.floor
 
 class BlockHayBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

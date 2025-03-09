@@ -1,8 +1,8 @@
 package org.chorus.event.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.event.Event
-import cn.nukkit.inventory.Inventory
+import org.chorus.Player
+import org.chorus.event.Event
+import org.chorus.inventory.Inventory
 
 /**
  * @author MagicDroidX (Nukkit Project)

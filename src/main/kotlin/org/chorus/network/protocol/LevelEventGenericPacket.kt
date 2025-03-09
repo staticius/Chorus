@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.nbt.NBTIO.writeValue
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.nbt.NBTIO.writeValue
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.handler.codec.EncoderException
 import lombok.*
 import java.io.IOException

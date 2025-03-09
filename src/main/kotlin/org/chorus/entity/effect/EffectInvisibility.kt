@@ -1,7 +1,7 @@
 package org.chorus.entity.effect
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityFlag
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityFlag
 import java.awt.Color
 
 class EffectInvisibility : Effect(EffectType.Companion.INVISIBILITY, "%potion.invisibility", Color(246, 246, 246)) {

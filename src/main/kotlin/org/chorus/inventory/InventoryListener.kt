@@ -1,6 +1,6 @@
 package org.chorus.inventory
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 
 interface InventoryListener {

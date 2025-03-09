@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.enchantment.Enchantment
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockGildedBlackstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

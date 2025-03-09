@@ -1,8 +1,8 @@
 package org.chorus.event.vehicle
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.entity.Entity
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 
 class VehicleCreateEvent(vehicle: Entity) : VehicleEvent(vehicle), Cancellable {

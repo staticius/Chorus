@@ -1,9 +1,9 @@
 package org.chorus.block.customblock.data
 
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.nbt.tag.Tag
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.Tag
 
 @JvmRecord
 data class SelectionBox(

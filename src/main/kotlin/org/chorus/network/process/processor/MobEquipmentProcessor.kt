@@ -1,14 +1,14 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.inventory.HumanInventory
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.enchantment.Enchantment.Companion.getEnchantments
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.MobEquipmentPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.entity.data.EntityFlag
+import org.chorus.inventory.HumanInventory
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.enchantment.Enchantment.Companion.getEnchantments
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.MobEquipmentPacket
+import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

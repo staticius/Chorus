@@ -1,10 +1,10 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.inventory.Inventory
-import cn.nukkit.item.Item
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.inventory.Inventory
+import org.chorus.item.Item
 import java.util.*
 
 class PlayerTransferItemEvent(

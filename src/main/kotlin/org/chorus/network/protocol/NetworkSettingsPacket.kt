@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.PacketCompressionAlgorithm
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.PacketCompressionAlgorithm
 import lombok.*
 
 @Getter

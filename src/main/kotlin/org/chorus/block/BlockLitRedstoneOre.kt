@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
+import org.chorus.item.*
 
 class BlockLitRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockRedstoneOre(blockstate), IBlockOreRedstoneGlowing {

@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.CompassRoseDirection.Companion.from
-import cn.nukkit.nbt.tag.CompoundTag.put
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.blockentity.BlockEntity
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.math.CompassRoseDirection.Companion.from
+import org.chorus.nbt.tag.CompoundTag.put
 import lombok.extern.slf4j.Slf4j
 import kotlin.math.floor
 

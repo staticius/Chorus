@@ -1,9 +1,9 @@
 package org.chorus.registry
 
-import cn.nukkit.nbt.NBTIO.readCompressed
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.IntTag
-import cn.nukkit.registry.RegisterException
+import org.chorus.nbt.NBTIO.readCompressed
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.IntTag
+import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicBoolean

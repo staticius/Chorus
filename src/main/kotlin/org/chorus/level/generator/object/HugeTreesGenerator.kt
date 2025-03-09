@@ -1,7 +1,7 @@
 package org.chorus.level.generator.`object`
 
-import cn.nukkit.block.*
-import cn.nukkit.math.Vector3
+import org.chorus.block.*
+import org.chorus.math.Vector3
 
 abstract class HugeTreesGenerator(
     /**

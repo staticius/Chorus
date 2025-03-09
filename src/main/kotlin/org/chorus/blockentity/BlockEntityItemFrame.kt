@@ -1,17 +1,17 @@
 package org.chorus.blockentity
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockFrame
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.item.EntityItem
-import cn.nukkit.event.block.ItemFrameUseEvent
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemBlock
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.LevelEventPacket
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.block.BlockFrame
+import org.chorus.block.BlockID
+import org.chorus.entity.item.EntityItem
+import org.chorus.event.block.ItemFrameUseEvent
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.LevelEventPacket
 import java.util.concurrent.ThreadLocalRandom
 
 /**

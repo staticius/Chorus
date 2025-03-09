@@ -1,6 +1,6 @@
 package org.chorus.level.generator.terra.mappings
 
-import cn.nukkit.block.BlockState
+import org.chorus.block.BlockState
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import lombok.Builder
 import lombok.Data

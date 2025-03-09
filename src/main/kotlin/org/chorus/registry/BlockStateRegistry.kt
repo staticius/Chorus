@@ -1,9 +1,9 @@
 package org.chorus.registry
 
-import cn.nukkit.Server
-import cn.nukkit.block.*
-import cn.nukkit.registry.RegisterException
-import cn.nukkit.utils.BlockColor
+import org.chorus.Server
+import org.chorus.block.*
+import org.chorus.registry.RegisterException
+import org.chorus.utils.BlockColor
 import com.google.gson.JsonParser
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.jetbrains.annotations.ApiStatus

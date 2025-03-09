@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.animal.EntityAnimal
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.animal.EntityAnimal
 
 class AnimalGrowExecutor : IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {

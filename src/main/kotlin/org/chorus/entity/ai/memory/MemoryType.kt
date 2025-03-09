@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.memory
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.codec.IMemoryCodec
-import cn.nukkit.utils.*
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.codec.IMemoryCodec
+import org.chorus.utils.*
 import lombok.Getter
 import java.util.function.Supplier
 

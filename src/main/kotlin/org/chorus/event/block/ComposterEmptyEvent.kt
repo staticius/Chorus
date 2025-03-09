@@ -1,11 +1,11 @@
 package org.chorus.event.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.item.Item
-import cn.nukkit.math.Vector3
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.item.Item
+import org.chorus.math.Vector3
 import kotlin.math.max
 import kotlin.math.min
 

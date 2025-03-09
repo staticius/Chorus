@@ -1,6 +1,6 @@
 package org.chorus.block.property.type
 
-import cn.nukkit.block.property.type.BlockPropertyType.BlockPropertyValue
+import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 
 /**
  * Allay Project 2023/3/19

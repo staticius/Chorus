@@ -1,6 +1,6 @@
 package org.chorus.block.property.type
 
-import cn.nukkit.block.property.type.IntPropertyType
+import org.chorus.block.property.type.IntPropertyType
 import lombok.Getter
 import lombok.ToString
 

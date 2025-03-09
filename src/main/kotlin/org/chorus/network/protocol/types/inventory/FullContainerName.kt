@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.inventory
 
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import lombok.Value
 
 @Value

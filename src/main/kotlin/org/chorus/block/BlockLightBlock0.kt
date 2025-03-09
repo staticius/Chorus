@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.math.AxisAlignedBB
+import org.chorus.math.AxisAlignedBB
 
 open class BlockLightBlock0 @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {

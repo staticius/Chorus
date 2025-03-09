@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.nbt.tag.ListTag.size
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.BlockChangeEntry
+import org.chorus.nbt.tag.ListTag.size
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.BlockChangeEntry
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 

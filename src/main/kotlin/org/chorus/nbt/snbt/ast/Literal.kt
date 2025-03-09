@@ -4,9 +4,9 @@
  */
 package org.chorus.nbt.snbt.ast
 
-import cn.nukkit.nbt.snbt.SNBTConstants
-import cn.nukkit.nbt.snbt.SNBTLexer
-import cn.nukkit.nbt.snbt.Token
+import org.chorus.nbt.snbt.SNBTConstants
+import org.chorus.nbt.snbt.SNBTLexer
+import org.chorus.nbt.snbt.Token
 
 class Literal(type: SNBTConstants.TokenType?, tokenSource: SNBTLexer?, beginOffset: Int, endOffset: Int) :
     Token(type, tokenSource, beginOffset, endOffset)

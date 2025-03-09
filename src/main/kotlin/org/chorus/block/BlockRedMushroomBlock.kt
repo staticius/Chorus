@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.Item
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.Item
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockRedMushroomBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :

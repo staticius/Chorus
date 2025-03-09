@@ -1,11 +1,11 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.blockentity.BlockEntitySpawnable
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.BlockEntityDataPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.blockentity.BlockEntitySpawnable
+import org.chorus.math.Vector3
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.BlockEntityDataPacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class BlockEntityDataProcessor : DataPacketProcessor<BlockEntityDataPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: BlockEntityDataPacket) {

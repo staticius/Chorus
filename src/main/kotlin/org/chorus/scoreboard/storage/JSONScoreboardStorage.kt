@@ -1,16 +1,16 @@
 package org.chorus.scoreboard.storage
 
-import cn.nukkit.scoreboard.IScoreboard
-import cn.nukkit.scoreboard.Scoreboard
-import cn.nukkit.scoreboard.ScoreboardLine
-import cn.nukkit.scoreboard.data.DisplaySlot
-import cn.nukkit.scoreboard.data.ScorerType
-import cn.nukkit.scoreboard.data.SortOrder
-import cn.nukkit.scoreboard.scorer.EntityScorer
-import cn.nukkit.scoreboard.scorer.FakeScorer
-import cn.nukkit.scoreboard.scorer.IScorer
-import cn.nukkit.scoreboard.scorer.PlayerScorer
-import cn.nukkit.utils.Config
+import org.chorus.scoreboard.IScoreboard
+import org.chorus.scoreboard.Scoreboard
+import org.chorus.scoreboard.ScoreboardLine
+import org.chorus.scoreboard.data.DisplaySlot
+import org.chorus.scoreboard.data.ScorerType
+import org.chorus.scoreboard.data.SortOrder
+import org.chorus.scoreboard.scorer.EntityScorer
+import org.chorus.scoreboard.scorer.FakeScorer
+import org.chorus.scoreboard.scorer.IScorer
+import org.chorus.scoreboard.scorer.PlayerScorer
+import org.chorus.utils.Config
 import lombok.Getter
 import java.io.IOException
 import java.nio.file.Files

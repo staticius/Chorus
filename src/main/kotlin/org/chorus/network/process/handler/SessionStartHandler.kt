@@ -1,13 +1,13 @@
 package org.chorus.network.process.handler
 
-import cn.nukkit.Server
-import cn.nukkit.network.connection.BedrockSession
-import cn.nukkit.network.process.SessionState
-import cn.nukkit.network.protocol.NetworkSettingsPacket
-import cn.nukkit.network.protocol.PlayStatusPacket
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.RequestNetworkSettingsPacket
-import cn.nukkit.network.protocol.types.PacketCompressionAlgorithm
+import org.chorus.Server
+import org.chorus.network.connection.BedrockSession
+import org.chorus.network.process.SessionState
+import org.chorus.network.protocol.NetworkSettingsPacket
+import org.chorus.network.protocol.PlayStatusPacket
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.RequestNetworkSettingsPacket
+import org.chorus.network.protocol.types.PacketCompressionAlgorithm
 
 class SessionStartHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
     override fun handle(pk: RequestNetworkSettingsPacket) {

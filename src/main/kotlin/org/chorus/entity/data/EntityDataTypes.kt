@@ -1,9 +1,9 @@
 package org.chorus.entity.data
 
-import cn.nukkit.block.Block
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.math.Vector3f
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.Block
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3f
+import org.chorus.nbt.tag.CompoundTag
 import java.util.*
 
 interface EntityDataTypes {

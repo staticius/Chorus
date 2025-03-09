@@ -1,6 +1,6 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.command.Command
+import org.chorus.command.Command
 
 /**
  * 代表原版命令的基类

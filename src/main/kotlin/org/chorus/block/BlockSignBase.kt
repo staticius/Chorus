@@ -1,25 +1,25 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.blockentity.BlockEntityBanner.dyeColor
-import cn.nukkit.blockentity.BlockEntitySign.getColor
-import cn.nukkit.blockentity.BlockEntitySign.isGlowing
-import cn.nukkit.blockentity.BlockEntitySign.isWaxed
-import cn.nukkit.blockentity.BlockEntitySign.setColor
-import cn.nukkit.blockentity.BlockEntitySign.setGlowing
-import cn.nukkit.blockentity.BlockEntitySpawnable.spawnTo
-import cn.nukkit.blockentity.BlockEntitySpawnable.spawnToAll
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.event.player.PlayerInteractEvent
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemDye.dyeColor
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.CompassRoseDirection.Companion.from
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.BlockColor.equals
-import cn.nukkit.utils.DyeColor.color
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.blockentity.BlockEntityBanner.dyeColor
+import org.chorus.blockentity.BlockEntitySign.getColor
+import org.chorus.blockentity.BlockEntitySign.isGlowing
+import org.chorus.blockentity.BlockEntitySign.isWaxed
+import org.chorus.blockentity.BlockEntitySign.setColor
+import org.chorus.blockentity.BlockEntitySign.setGlowing
+import org.chorus.blockentity.BlockEntitySpawnable.spawnTo
+import org.chorus.blockentity.BlockEntitySpawnable.spawnToAll
+import org.chorus.event.Event.isCancelled
+import org.chorus.event.player.PlayerInteractEvent
+import org.chorus.item.Item
+import org.chorus.item.ItemDye.dyeColor
+import org.chorus.item.ItemTool
+import org.chorus.math.BlockFace
+import org.chorus.math.CompassRoseDirection.Companion.from
+import org.chorus.math.Vector3
+import org.chorus.utils.BlockColor.equals
+import org.chorus.utils.DyeColor.color
 import java.util.*
 
 abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockState), Faceable {

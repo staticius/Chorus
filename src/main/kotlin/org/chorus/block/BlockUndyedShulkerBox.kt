@@ -5,18 +5,18 @@
  */
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntityShulkerBox
-import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.fromIndex
-import cn.nukkit.nbt.NBTIO.putItemHelper
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.nbt.tag.Tag
-import cn.nukkit.tags.BlockTags
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityShulkerBox
+import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
+import org.chorus.item.*
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.nbt.NBTIO.putItemHelper
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.Tag
+import org.chorus.tags.BlockTags
 import java.util.Set
 
 /**

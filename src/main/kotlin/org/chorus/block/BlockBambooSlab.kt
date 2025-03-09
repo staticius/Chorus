@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 class BlockBambooSlab(blockState: BlockState?) : BlockWoodenSlab(blockState, BAMBOO_DOUBLE_SLAB) {
     override fun getSlabName(): String {

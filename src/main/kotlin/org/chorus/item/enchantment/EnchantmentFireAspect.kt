@@ -1,9 +1,9 @@
 package org.chorus.item.enchantment
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.event.entity.EntityCombustByEntityEvent
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.event.entity.EntityCombustByEntityEvent
+import org.chorus.event.entity.EntityDamageByEntityEvent
 import kotlin.math.max
 
 /**

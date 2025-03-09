@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.utils.functional.*
+import org.chorus.utils.functional.*
 import java.util.*
 import java.util.function.*
 

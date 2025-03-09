@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.route
 
-import cn.nukkit.Server
-import cn.nukkit.entity.ai.route.finder.IRouteFinder
-import cn.nukkit.math.*
+import org.chorus.Server
+import org.chorus.entity.ai.route.finder.IRouteFinder
+import org.chorus.math.*
 import java.security.*
 import java.util.concurrent.ForkJoinPool
 import java.util.concurrent.ForkJoinPool.ForkJoinWorkerThreadFactory

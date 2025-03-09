@@ -1,15 +1,15 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.entity.*
-import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.event.entity.ProjectileLaunchEvent
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.network.protocol.LevelSoundEventPacketV2
+import org.chorus.Player
+import org.chorus.entity.*
+import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.event.entity.ProjectileLaunchEvent
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.network.protocol.LevelSoundEventPacketV2
 
 /**
  * @author CreeperFace

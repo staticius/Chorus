@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.Player
+import org.chorus.Player
 
 /**
  * @author Snake1999

@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.Nukkit
+import org.chorus.Nukkit
 import java.io.File
 
 object StartArgUtils {

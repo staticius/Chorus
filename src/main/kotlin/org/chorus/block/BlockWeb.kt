@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
+import org.chorus.entity.Entity
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 
 class BlockWeb @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate) {

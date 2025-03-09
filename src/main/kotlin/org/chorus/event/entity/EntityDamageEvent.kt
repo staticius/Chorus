@@ -1,10 +1,10 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.utils.EventException
+import org.chorus.entity.Entity
+import org.chorus.entity.effect.EffectType
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.utils.EventException
 import com.google.common.collect.ImmutableMap
 import java.util.*
 

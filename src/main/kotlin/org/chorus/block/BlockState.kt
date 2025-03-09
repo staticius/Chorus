@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.block.Block.Companion.get
-import cn.nukkit.block.property.type.BlockPropertyType.BlockPropertyValue.propertyType
-import cn.nukkit.item.Item
-import cn.nukkit.level.Locator
-import cn.nukkit.registry.Registries
+import org.chorus.block.Block.Companion.get
+import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue.propertyType
+import org.chorus.item.Item
+import org.chorus.level.Locator
+import org.chorus.registry.Registries
 import org.jetbrains.annotations.UnmodifiableView
 
 /**

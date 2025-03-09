@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.event.block.BlockFadeEvent
-import cn.nukkit.item.*
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.level.Level
+import org.chorus.event.block.BlockFadeEvent
+import org.chorus.item.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.level.Level
 
 /**
  * @author MagicDroidX (Nukkit Project)

@@ -1,9 +1,9 @@
 package org.chorus.network.process
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.network.process.processor.*
-import cn.nukkit.network.protocol.DataPacket
+import org.chorus.PlayerHandle
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.network.process.processor.*
+import org.chorus.network.protocol.DataPacket
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 
 /**

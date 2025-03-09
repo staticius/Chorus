@@ -1,9 +1,9 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.EntityWarden
-import cn.nukkit.level.Sound
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.EntityWarden
+import org.chorus.level.Sound
 
 class WardenSniffExecutor(//gt
     protected var duration: Int, protected var angerAddition: Int

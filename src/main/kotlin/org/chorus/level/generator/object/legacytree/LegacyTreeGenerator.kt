@@ -1,7 +1,7 @@
 package org.chorus.level.generator.`object`.legacytree
 
-import cn.nukkit.block.*
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.*
+import org.chorus.block.property.CommonBlockProperties
 
 abstract class LegacyTreeGenerator {
     open var treeHeight: Int = 7

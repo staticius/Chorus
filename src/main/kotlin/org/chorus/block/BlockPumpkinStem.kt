@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.item.ItemID
-import cn.nukkit.math.BlockFace
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.item.ItemID
+import org.chorus.math.BlockFace
 
 class BlockPumpkinStem @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockCropsStem(blockstate) {

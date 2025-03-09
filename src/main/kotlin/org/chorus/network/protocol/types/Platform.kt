@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types
 
-import cn.nukkit.entity.Entity.getId
+import org.chorus.entity.Entity.getId
 import lombok.*
 
 enum class Platform(@field:Getter override val name: String, @field:Getter private val id: Int) {

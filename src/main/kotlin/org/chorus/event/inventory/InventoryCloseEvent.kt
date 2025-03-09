@@ -1,8 +1,8 @@
 package org.chorus.event.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.event.HandlerList
-import cn.nukkit.inventory.Inventory
+import org.chorus.Player
+import org.chorus.event.HandlerList
+import org.chorus.inventory.Inventory
 
 /**
  * @author Box (Nukkit Project)

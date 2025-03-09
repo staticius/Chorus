@@ -1,7 +1,7 @@
 package org.chorus.math
 
-import cn.nukkit.api.DoNotModify
-import cn.nukkit.level.Transform
+import org.chorus.api.DoNotModify
+import org.chorus.level.Transform
 
 /**
  * 向量计算工具，同时整合了yaw和pitch与坐标空间的转换功能

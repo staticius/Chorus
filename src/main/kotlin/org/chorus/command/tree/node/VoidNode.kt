@@ -1,6 +1,6 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.command.tree.ParamList
+import org.chorus.command.tree.ParamList
 
 /**
  * 一个用来占位的空参数节点

@@ -1,7 +1,7 @@
 package org.chorus.level.generator.`object`
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.math.Vector3
+import org.chorus.block.BlockID
+import org.chorus.math.Vector3
 
 object ObjectNyliumVegetation {
     fun growVegetation(level: BlockManager, pos: Vector3, random: RandomSourceProvider) {

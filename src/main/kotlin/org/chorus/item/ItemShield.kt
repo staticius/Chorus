@@ -1,7 +1,7 @@
 package org.chorus.item
 
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.utils.DyeColor
+import org.chorus.nbt.tag.*
+import org.chorus.utils.DyeColor
 
 class ItemShield : ItemTool {
     @JvmOverloads

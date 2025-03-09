@@ -1,7 +1,7 @@
 package org.chorus.level.generator.stages
 
-import cn.nukkit.level.generator.ChunkGenerateContext
-import cn.nukkit.level.generator.GenerateStage
+import org.chorus.level.generator.ChunkGenerateContext
+import org.chorus.level.generator.GenerateStage
 
 class LightPopulationStage : GenerateStage() {
     override fun name(): String {

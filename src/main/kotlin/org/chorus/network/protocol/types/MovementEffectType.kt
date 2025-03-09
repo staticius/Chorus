@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types
 
-import cn.nukkit.entity.Entity.getId
+import org.chorus.entity.Entity.getId
 import lombok.*
 
 @Getter

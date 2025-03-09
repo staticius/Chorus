@@ -1,12 +1,12 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.block.BlockID
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.*
 import java.util.concurrent.*
 
 /**

@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 class BlockRepeatingCommandBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockCommandBlock(blockstate) {

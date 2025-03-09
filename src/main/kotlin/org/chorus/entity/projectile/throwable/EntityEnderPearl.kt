@@ -1,17 +1,17 @@
 package org.chorus.entity.projectile.throwable
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.mob.monster.EntityEndermite
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.player.PlayerTeleportEvent.TeleportCause
-import cn.nukkit.level.GameRule
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.network.protocol.LevelEventPacket
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.mob.monster.EntityEndermite
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
+import org.chorus.level.GameRule
+import org.chorus.level.format.IChunk
+import org.chorus.math.*
+import org.chorus.nbt.tag.*
+import org.chorus.network.protocol.LevelEventPacket
 import java.util.concurrent.*
 
 class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :

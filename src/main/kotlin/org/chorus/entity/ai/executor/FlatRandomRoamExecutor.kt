@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.block.*
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.*
+import org.chorus.block.*
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.*
 import java.util.concurrent.*
 
 open class FlatRandomRoamExecutor @JvmOverloads constructor(

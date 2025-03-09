@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.executor.villager
 
-import cn.nukkit.block.*
-import cn.nukkit.entity.ai.executor.EntityControl
-import cn.nukkit.entity.ai.executor.IBehaviorExecutor
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.block.*
+import org.chorus.entity.ai.executor.EntityControl
+import org.chorus.entity.ai.executor.IBehaviorExecutor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
 
 class DoorExecutor : EntityControl, IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {

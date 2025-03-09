@@ -1,18 +1,18 @@
 package org.chorus
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.Attribute.Companion.getAttribute
-import cn.nukkit.entity.Entity.equals
-import cn.nukkit.entity.Entity.getAttributes
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.entity.EntityRegainHealthEvent
-import cn.nukkit.event.player.PlayerFoodLevelChangeEvent
-import cn.nukkit.item.Item.equals
-import cn.nukkit.item.ItemFood
-import cn.nukkit.math.BlockVector3.equals
-import cn.nukkit.plugin.PluginManager.callEvent
+import org.chorus.entity.*
+import org.chorus.entity.Attribute.Companion.getAttribute
+import org.chorus.entity.Entity.equals
+import org.chorus.entity.Entity.getAttributes
+import org.chorus.entity.effect.EffectType
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.entity.EntityRegainHealthEvent
+import org.chorus.event.player.PlayerFoodLevelChangeEvent
+import org.chorus.item.Item.equals
+import org.chorus.item.ItemFood
+import org.chorus.math.BlockVector3.equals
+import org.chorus.plugin.PluginManager.callEvent
 import kotlin.math.max
 import kotlin.math.min
 

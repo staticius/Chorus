@@ -1,8 +1,8 @@
 package org.chorus.entity
 
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.BlockFace
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.level.format.IChunk
+import org.chorus.math.BlockFace
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author MagicDroidX (Nukkit Project)

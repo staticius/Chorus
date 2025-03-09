@@ -1,11 +1,11 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.level.*
-import cn.nukkit.math.*
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.mob.EntityMob
+import org.chorus.level.*
+import org.chorus.math.*
 import lombok.Getter
 import kotlin.math.cos
 import kotlin.math.sin

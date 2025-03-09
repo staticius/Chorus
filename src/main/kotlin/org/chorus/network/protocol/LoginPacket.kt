@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.entity.data.Skin
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.utils.*
+import org.chorus.entity.data.Skin
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.utils.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken

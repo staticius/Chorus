@@ -1,7 +1,7 @@
 package org.chorus.inventory
 
-import cn.nukkit.blockentity.BlockEntityFurnace
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.blockentity.BlockEntityFurnace
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class SmokerInventory(furnace: BlockEntityFurnace?) : SmeltingInventory(furnace, InventoryType.SMOKER, 3) {
     override fun init() {

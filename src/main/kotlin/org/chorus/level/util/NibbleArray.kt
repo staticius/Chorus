@@ -1,7 +1,7 @@
 package org.chorus.level.util
 
-import cn.nukkit.utils.collection.ByteArrayWrapper
-import cn.nukkit.utils.collection.FreezableArrayManager
+import org.chorus.utils.collection.ByteArrayWrapper
+import org.chorus.utils.collection.FreezableArrayManager
 import com.google.common.base.Preconditions
 import java.util.*
 

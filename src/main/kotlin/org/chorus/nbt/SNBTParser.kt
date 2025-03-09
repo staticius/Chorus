@@ -1,8 +1,8 @@
 package org.chorus.nbt
 
-import cn.nukkit.nbt.snbt.*
-import cn.nukkit.nbt.snbt.ast.*
-import cn.nukkit.nbt.tag.*
+import org.chorus.nbt.snbt.*
+import org.chorus.nbt.snbt.ast.*
+import org.chorus.nbt.tag.*
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Ints
 import java.io.*

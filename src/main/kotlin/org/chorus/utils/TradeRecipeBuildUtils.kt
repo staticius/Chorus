@@ -1,7 +1,7 @@
 package org.chorus.utils
 
-import cn.nukkit.item.Item
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.item.Item
+import org.chorus.nbt.tag.CompoundTag
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 

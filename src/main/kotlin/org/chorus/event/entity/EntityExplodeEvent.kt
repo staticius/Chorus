@@ -1,10 +1,10 @@
 package org.chorus.event.entity
 
-import cn.nukkit.block.Block
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.Locator
+import org.chorus.block.Block
+import org.chorus.entity.Entity
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.level.Locator
 
 /**
  * @author Angelic47 (Nukkit Project)

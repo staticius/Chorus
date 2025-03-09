@@ -1,15 +1,15 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.selector.args.impl.Type
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.entity.Entity
-import cn.nukkit.level.Locator
-import cn.nukkit.registry.Registries
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandEnum
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.selector.args.impl.Type
+import org.chorus.command.tree.ParamList
+import org.chorus.command.utils.CommandLogger
+import org.chorus.entity.Entity
+import org.chorus.level.Locator
+import org.chorus.registry.Registries
 
 class SummonCommand(name: String) : VanillaCommand(name, "commands.summon.description") {
     init {

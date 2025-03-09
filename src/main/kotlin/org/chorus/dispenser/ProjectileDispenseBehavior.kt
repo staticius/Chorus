@@ -1,13 +1,13 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.item.Item
-import cn.nukkit.level.Sound
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.BlockDispenser
+import org.chorus.entity.Entity
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.item.Item
+import org.chorus.level.Sound
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author CreeperFace

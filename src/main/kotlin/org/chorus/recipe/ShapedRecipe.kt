@@ -1,10 +1,10 @@
 package org.chorus.recipe
 
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.types.RecipeUnlockingRequirement
-import cn.nukkit.recipe.descriptor.DefaultDescriptor
-import cn.nukkit.recipe.descriptor.ItemDescriptor
-import cn.nukkit.registry.RecipeRegistry
+import org.chorus.item.Item
+import org.chorus.network.protocol.types.RecipeUnlockingRequirement
+import org.chorus.recipe.descriptor.DefaultDescriptor
+import org.chorus.recipe.descriptor.ItemDescriptor
+import org.chorus.registry.RecipeRegistry
 import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import io.netty.util.collection.CharObjectHashMap

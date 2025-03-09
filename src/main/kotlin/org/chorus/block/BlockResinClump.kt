@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.BlockFace
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.math.BlockFace
 
 class BlockResinClump @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockLichen(blockstate) {

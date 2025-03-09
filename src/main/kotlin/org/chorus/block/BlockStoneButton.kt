@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 
 open class BlockStoneButton @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockButton(blockstate) {

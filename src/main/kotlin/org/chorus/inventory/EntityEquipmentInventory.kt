@@ -1,9 +1,9 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.MobEquipmentPacket
+import org.chorus.Player
+import org.chorus.entity.Entity
+import org.chorus.item.Item
+import org.chorus.network.protocol.MobEquipmentPacket
 
 class EntityEquipmentInventory(holder: InventoryHolder) :
     BaseInventory(holder, InventoryType.INVENTORY, 9 + 27) {

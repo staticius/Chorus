@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.inventory.creative
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 import lombok.AllArgsConstructor
 import lombok.Getter
 import lombok.ToString

@@ -1,8 +1,8 @@
 package org.chorus.network.protocol.types.itemstack.request
 
-import cn.nukkit.network.protocol.ItemStackRequestPacket
-import cn.nukkit.network.protocol.PlayerAuthInputPacket
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestAction
+import org.chorus.network.protocol.ItemStackRequestPacket
+import org.chorus.network.protocol.PlayerAuthInputPacket
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestAction
 import lombok.RequiredArgsConstructor
 import lombok.Value
 

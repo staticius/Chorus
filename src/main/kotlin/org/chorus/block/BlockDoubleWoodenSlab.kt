@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 
 abstract class BlockDoubleWoodenSlab(blockstate: BlockState?) : BlockDoubleSlabBase(blockstate) {
     override val name: String

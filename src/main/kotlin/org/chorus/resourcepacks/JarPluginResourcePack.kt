@@ -1,6 +1,6 @@
 package org.chorus.resourcepacks
 
-import cn.nukkit.Server
+import org.chorus.Server
 import com.google.gson.JsonParser
 import lombok.extern.slf4j.Slf4j
 import java.io.ByteArrayOutputStream

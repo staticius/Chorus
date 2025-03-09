@@ -1,9 +1,9 @@
 package org.chorus.permission
 
-import cn.nukkit.Server
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.utils.PluginException
-import cn.nukkit.utils.ServerException
+import org.chorus.Server
+import org.chorus.plugin.Plugin
+import org.chorus.utils.PluginException
+import org.chorus.utils.ServerException
 
 /**
  * @author MagicDroidX (Nukkit Project)

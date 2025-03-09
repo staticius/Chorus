@@ -1,6 +1,6 @@
 package org.chorus.entity
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 /**
  * 实体可通过喂食食物被治疗

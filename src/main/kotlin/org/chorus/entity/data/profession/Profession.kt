@@ -1,8 +1,8 @@
 package org.chorus.entity.data.profession
 
-import cn.nukkit.level.Sound
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.level.Sound
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
 
 abstract class Profession(
     private val index: Int,

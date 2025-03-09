@@ -1,9 +1,9 @@
 package org.chorus.entity.effect
 
-import cn.nukkit.Server
-import cn.nukkit.entity.*
-import cn.nukkit.event.potion.PotionApplyEvent
-import cn.nukkit.registry.Registries
+import org.chorus.Server
+import org.chorus.entity.*
+import org.chorus.event.potion.PotionApplyEvent
+import org.chorus.registry.Registries
 
 /**
  * @author MEFRREEX

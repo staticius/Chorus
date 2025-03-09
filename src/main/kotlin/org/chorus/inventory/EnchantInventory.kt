@@ -1,13 +1,13 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntityEnchantTable
-import cn.nukkit.blockentity.BlockEntityNameable
-import cn.nukkit.event.player.PlayerEnchantOptionsRequestEvent
-import cn.nukkit.item.Item
-import cn.nukkit.item.enchantment.EnchantmentHelper
-import cn.nukkit.network.protocol.PlayerEnchantOptionsPacket
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntityEnchantTable
+import org.chorus.blockentity.BlockEntityNameable
+import org.chorus.event.player.PlayerEnchantOptionsRequestEvent
+import org.chorus.item.Item
+import org.chorus.item.enchantment.EnchantmentHelper
+import org.chorus.network.protocol.PlayerEnchantOptionsPacket
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import com.google.common.collect.BiMap
 
 /**

@@ -1,7 +1,7 @@
 package org.chorus.tags
 
-import cn.nukkit.registry.BiomeRegistry.BiomeDefinition
-import cn.nukkit.registry.Registries
+import org.chorus.registry.BiomeRegistry.BiomeDefinition
+import org.chorus.registry.Registries
 import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.objects.Object2ObjectFunction
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap

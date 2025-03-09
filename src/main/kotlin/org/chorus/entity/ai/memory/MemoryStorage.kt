@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.memory
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 import lombok.Getter
 import java.util.concurrent.ConcurrentHashMap
 

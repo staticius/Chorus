@@ -1,6 +1,6 @@
 package org.chorus.network.connection.netty
 
-import cn.nukkit.network.protocol.DataPacket
+import org.chorus.network.protocol.DataPacket
 import io.netty.buffer.ByteBuf
 import io.netty.util.AbstractReferenceCounted
 import io.netty.util.ReferenceCountUtil

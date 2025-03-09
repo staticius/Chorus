@@ -1,9 +1,9 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.entity.effect.Effect.Companion.get
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.EffectType
+import org.chorus.math.*
 
 class ItemEnchantedGoldenApple : ItemFood(ItemID.Companion.ENCHANTED_GOLDEN_APPLE) {
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {

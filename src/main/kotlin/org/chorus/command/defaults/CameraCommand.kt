@@ -1,17 +1,17 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.Player
-import cn.nukkit.camera.data.CameraPreset.Companion.getPreset
-import cn.nukkit.camera.data.Time
-import cn.nukkit.camera.instruction.impl.ClearInstruction.get
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.tree.node.*
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.level.Locator
+import org.chorus.Player
+import org.chorus.camera.data.CameraPreset.Companion.getPreset
+import org.chorus.camera.data.Time
+import org.chorus.camera.instruction.impl.ClearInstruction.get
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandEnum
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.tree.ParamList
+import org.chorus.command.tree.node.*
+import org.chorus.command.utils.CommandLogger
+import org.chorus.level.Locator
 import java.awt.Color
 import java.util.*
 

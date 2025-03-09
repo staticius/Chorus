@@ -1,7 +1,7 @@
 package org.chorus.entity.effect
 
-import cn.nukkit.entity.*
-import cn.nukkit.registry.Registries
+import org.chorus.entity.*
+import org.chorus.registry.Registries
 import java.awt.Color
 
 abstract class Effect @JvmOverloads constructor(

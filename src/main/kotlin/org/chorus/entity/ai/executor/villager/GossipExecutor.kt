@@ -1,16 +1,16 @@
 package org.chorus.entity.ai.executor.villager
 
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.executor.EntityControl
-import cn.nukkit.entity.ai.executor.IBehaviorExecutor
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.villagers.EntityVillagerV2
-import cn.nukkit.item.*
-import cn.nukkit.math.*
-import cn.nukkit.utils.*
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.ai.executor.EntityControl
+import org.chorus.entity.ai.executor.IBehaviorExecutor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.villagers.EntityVillagerV2
+import org.chorus.item.*
+import org.chorus.math.*
+import org.chorus.utils.*
 import lombok.RequiredArgsConstructor
 import java.util.*
 

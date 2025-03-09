@@ -1,8 +1,8 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 class PlayerFoodLevelChangeEvent(player: Player?, foodLevel: Int, foodSaturationLevel: Float) :
     PlayerEvent(), Cancellable {

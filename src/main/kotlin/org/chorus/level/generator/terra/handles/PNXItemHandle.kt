@@ -1,9 +1,9 @@
 package org.chorus.level.generator.terra.handles
 
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.enchantment.Enchantment.Companion.registeredEnchantments
-import cn.nukkit.level.generator.terra.PNXAdapter
-import cn.nukkit.level.generator.terra.delegate.PNXEnchantmentDelegate
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.enchantment.Enchantment.Companion.registeredEnchantments
+import org.chorus.level.generator.terra.PNXAdapter
+import org.chorus.level.generator.terra.delegate.PNXEnchantmentDelegate
 import com.dfsek.terra.api.handle.ItemHandle
 import com.dfsek.terra.api.inventory.Item
 import com.dfsek.terra.api.inventory.item.Enchantment

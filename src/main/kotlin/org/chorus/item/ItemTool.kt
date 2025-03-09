@@ -1,12 +1,12 @@
 package org.chorus.item
 
-import cn.nukkit.Server
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.event.item.ItemWearEvent
-import cn.nukkit.item.enchantment.*
-import cn.nukkit.nbt.tag.ByteTag
-import cn.nukkit.utils.*
+import org.chorus.Server
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.event.item.ItemWearEvent
+import org.chorus.item.enchantment.*
+import org.chorus.nbt.tag.ByteTag
+import org.chorus.utils.*
 import java.util.*
 
 /**

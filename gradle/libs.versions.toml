@@ -43,7 +43,6 @@ disruptor = "4.0.0"
 
 [libraries]
 libdeflate = { module = "cn.powernukkitx:libdeflate-java", version.ref = "cn-powernukkitx-libdeflate-java" }
-terra = { module = "com.github.PowerNukkitX:Terra-Binary", version.ref = "cn-powernukkitx-terra-binary" }
 fastreflection = { module = "com.github.AllayMC:fast-reflection", version.ref = "fastreflection" }
 oshi = { module = "com.github.oshi:oshi-core", version.ref = "com-github-oshi-oshi-core" }
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "com-google-code-findbugs-jsr305" }
@@ -59,7 +58,6 @@ leveldb = { group = "com.hivemc.leveldb", name = "leveldb", version.ref = "level
 leveldb-api = { group = "com.hivemc.leveldb", name = "leveldb-api", version.ref = "leveldb" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "org-jetbrains-annotations" }
 asm = { module = "org.ow2.asm:asm", version.ref = "org-ow2-asm-asm" }
-lombok = { module = "org.projectlombok:lombok", version.ref = "org-projectlombok-lombok" }
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "org-yaml-snakeyaml" }
 stateless4j = { module = "com.github.stateless4j:stateless4j", version.ref = "com-github-stateless4j" }
 # Command-line parser

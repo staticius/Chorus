@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.controller
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import java.util.*

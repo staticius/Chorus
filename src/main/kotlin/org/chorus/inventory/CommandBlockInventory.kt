@@ -1,14 +1,14 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntityCommandBlock
-import cn.nukkit.blockentity.BlockEntityNameable
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.inventory.InventoryOpenEvent
-import cn.nukkit.item.*
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.protocol.ContainerClosePacket
-import cn.nukkit.network.protocol.ContainerOpenPacket
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntityCommandBlock
+import org.chorus.blockentity.BlockEntityNameable
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.inventory.InventoryOpenEvent
+import org.chorus.item.*
+import org.chorus.math.Vector3
+import org.chorus.network.protocol.ContainerClosePacket
+import org.chorus.network.protocol.ContainerOpenPacket
 
 //implement the command block's ui
 class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inventory,

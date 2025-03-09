@@ -1,13 +1,13 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.player.PlayerServerSettingsRequestEvent
-import cn.nukkit.form.window.Form
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.ServerSettingsRequestPacket
-import cn.nukkit.network.protocol.ServerSettingsResponsePacket
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.player.PlayerServerSettingsRequestEvent
+import org.chorus.form.window.Form
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.ServerSettingsRequestPacket
+import org.chorus.network.protocol.ServerSettingsResponsePacket
 
 class ServerSettingsRequestProcessor : DataPacketProcessor<ServerSettingsRequestPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: ServerSettingsRequestPacket) {

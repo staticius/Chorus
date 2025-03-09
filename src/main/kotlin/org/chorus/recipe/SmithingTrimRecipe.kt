@@ -1,6 +1,6 @@
 package org.chorus.recipe
 
-import cn.nukkit.recipe.descriptor.ItemDescriptor
+import org.chorus.recipe.descriptor.ItemDescriptor
 
 /**
  * The type Smithing recipe for trim equipment.

@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.effect.*
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.EntityZoglin
-import cn.nukkit.level.Sound
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.effect.*
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityZoglin
+import org.chorus.level.Sound
 
 class HoglinTransformExecutor : EntityControl, IBehaviorExecutor {
     protected var tick: Int = 0

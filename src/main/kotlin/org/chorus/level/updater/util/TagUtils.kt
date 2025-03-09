@@ -1,6 +1,6 @@
 package org.chorus.level.updater.util
 
-import cn.nukkit.nbt.tag.*
+import org.chorus.nbt.tag.*
 
 object TagUtils {
     fun toMutable(immutable: Tag): Any {

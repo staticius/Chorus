@@ -1,11 +1,11 @@
 package org.chorus.entity.ai.route.finder.impl
 
-import cn.nukkit.entity.ai.route.data.Node
-import cn.nukkit.entity.ai.route.posevaluator.IPosEvaluator
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.level.Level
-import cn.nukkit.math.Vector3
-import cn.nukkit.math.VectorMath
+import org.chorus.entity.ai.route.data.Node
+import org.chorus.entity.ai.route.posevaluator.IPosEvaluator
+import org.chorus.entity.mob.EntityMob
+import org.chorus.level.Level
+import org.chorus.math.Vector3
+import org.chorus.math.VectorMath
 import kotlin.math.abs
 
 /**

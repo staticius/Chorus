@@ -1,6 +1,6 @@
 package org.chorus.inventory
 
-import cn.nukkit.recipe.Input
+import org.chorus.recipe.Input
 
 interface InputInventory {
     val input: Input

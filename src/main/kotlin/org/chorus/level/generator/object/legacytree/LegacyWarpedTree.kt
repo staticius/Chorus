@@ -1,8 +1,8 @@
 package org.chorus.level.generator.`object`.legacytree
 
-import cn.nukkit.block.BlockState
-import cn.nukkit.block.BlockWarpedStem
-import cn.nukkit.block.BlockWarpedWartBlock
+import org.chorus.block.BlockState
+import org.chorus.block.BlockWarpedStem
+import org.chorus.block.BlockWarpedWartBlock
 
 class LegacyWarpedTree : LegacyNetherTree() {
     override val trunkBlockState: BlockState

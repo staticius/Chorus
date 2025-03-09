@@ -1,12 +1,12 @@
 package org.chorus.level.format
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockAir
-import cn.nukkit.block.BlockState
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.entity.Entity
-import cn.nukkit.level.DimensionData
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.Block
+import org.chorus.block.BlockAir
+import org.chorus.block.BlockState
+import org.chorus.blockentity.BlockEntity
+import org.chorus.entity.Entity
+import org.chorus.level.DimensionData
+import org.chorus.nbt.tag.CompoundTag
 import org.jetbrains.annotations.ApiStatus
 
 class UnsafeChunk(private val chunk: Chunk) {

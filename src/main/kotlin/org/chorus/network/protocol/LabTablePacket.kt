@@ -1,9 +1,9 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.LabTableReactionType
-import cn.nukkit.network.protocol.types.LabTableType
+import org.chorus.math.BlockVector3
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.LabTableReactionType
+import org.chorus.network.protocol.types.LabTableType
 import lombok.*
 
 @Getter

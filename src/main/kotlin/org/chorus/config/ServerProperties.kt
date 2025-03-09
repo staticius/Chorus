@@ -1,7 +1,7 @@
 package org.chorus.config
 
-import cn.nukkit.utils.Config
-import cn.nukkit.utils.ConfigSection
+import org.chorus.utils.Config
+import org.chorus.utils.ConfigSection
 import java.io.File
 
 class ServerProperties(dataPath: String) {

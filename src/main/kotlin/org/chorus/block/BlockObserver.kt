@@ -1,17 +1,17 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.event.block.BlockRedstoneEvent
-import cn.nukkit.event.redstone.RedstoneUpdateEvent
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.utils.Faceable
-import cn.nukkit.utils.RedstoneComponent
-import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.event.block.BlockRedstoneEvent
+import org.chorus.event.redstone.RedstoneUpdateEvent
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.utils.Faceable
+import org.chorus.utils.RedstoneComponent
+import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 import kotlin.math.abs
 
 /**

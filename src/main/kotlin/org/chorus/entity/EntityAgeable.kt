@@ -1,6 +1,6 @@
 package org.chorus.entity
 
-import cn.nukkit.entity.data.EntityFlag
+import org.chorus.entity.data.EntityFlag
 
 /**
  * @author MagicDroidX (Nukkit Project)

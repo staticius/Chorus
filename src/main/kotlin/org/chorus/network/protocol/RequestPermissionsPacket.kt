@@ -1,11 +1,11 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.entity.Entity.getId
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.PlayerAbility
-import cn.nukkit.network.protocol.types.PlayerPermission
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.entity.Entity.getId
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.PlayerAbility
+import org.chorus.network.protocol.types.PlayerPermission
 import lombok.*
 
 @Getter

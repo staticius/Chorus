@@ -1,6 +1,6 @@
 package org.chorus.level.generator.`object`.legacytree
 
-import cn.nukkit.block.*
+import org.chorus.block.*
 
 abstract class LegacyNetherTree @JvmOverloads constructor(
     treeHeight: Int = RandomSourceProvider.create().nextInt(9) + 4

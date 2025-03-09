@@ -1,15 +1,15 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.WoodType.name
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntitySpawnable.spawnTo
-import cn.nukkit.blockentity.BlockEntityStructBlock.getInventory
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.BlockColor.equals
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.WoodType.name
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntitySpawnable.spawnTo
+import org.chorus.blockentity.BlockEntityStructBlock.getInventory
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.utils.BlockColor.equals
 
 class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockSolid(blockstate), BlockEntityHolder<BlockEntityStructBlock?> {

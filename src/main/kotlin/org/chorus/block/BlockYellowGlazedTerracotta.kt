@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 class BlockYellowGlazedTerracotta @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockGlazedTerracotta(blockstate) {

@@ -1,10 +1,10 @@
 package org.chorus.entity.mob.monster
 
-import cn.nukkit.entity.EntityCanAttack
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.EntityCanAttack
+import org.chorus.entity.mob.EntityMob
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.max
 
 /**

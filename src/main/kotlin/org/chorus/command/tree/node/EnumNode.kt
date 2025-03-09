@@ -1,8 +1,8 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.tree.ParamList
+import org.chorus.command.data.CommandEnum
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.tree.ParamList
 import com.google.common.collect.Sets
 
 /**

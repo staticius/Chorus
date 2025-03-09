@@ -1,8 +1,8 @@
 package org.chorus
 
-import cn.nukkit.command.SimpleCommandMap
-import cn.nukkit.event.Event
-import cn.nukkit.plugin.PluginManager
+import org.chorus.command.SimpleCommandMap
+import org.chorus.event.Event
+import org.chorus.plugin.PluginManager
 import com.google.common.base.Preconditions
 
 class TestPluginManager(server: Server?, commandMap: SimpleCommandMap?) :

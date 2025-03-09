@@ -1,9 +1,9 @@
 package org.chorus.event.player
 
-import cn.nukkit.AdventureSettings
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.AdventureSettings
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 class PlayerGameModeChangeEvent(player: Player?, newGameMode: Int, newAdventureSettings: AdventureSettings) :
     PlayerEvent(), Cancellable {

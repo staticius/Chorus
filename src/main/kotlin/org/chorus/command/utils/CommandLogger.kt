@@ -1,18 +1,18 @@
 package org.chorus.command.utils
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.blockentity.ICommandBlock
-import cn.nukkit.command.*
-import cn.nukkit.lang.CommandOutputContainer
-import cn.nukkit.lang.PluginI18nManager
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.level.GameRule
-import cn.nukkit.network.protocol.types.CommandOutputMessage
-import cn.nukkit.plugin.InternalPlugin
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.plugin.PluginBase
-import cn.nukkit.utils.TextFormat
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.blockentity.ICommandBlock
+import org.chorus.command.*
+import org.chorus.lang.CommandOutputContainer
+import org.chorus.lang.PluginI18nManager
+import org.chorus.lang.TranslationContainer
+import org.chorus.level.GameRule
+import org.chorus.network.protocol.types.CommandOutputMessage
+import org.chorus.plugin.InternalPlugin
+import org.chorus.plugin.Plugin
+import org.chorus.plugin.PluginBase
+import org.chorus.utils.TextFormat
 import java.util.*
 import kotlin.math.max
 

@@ -1,9 +1,9 @@
 package org.chorus.utils
 
-import cn.nukkit.block.Block
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
+import org.chorus.block.Block
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.sqrt

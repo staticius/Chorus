@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.math.BlockFace
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockFace
 
 class BlockStickyPiston @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockPistonBase(blockstate) {

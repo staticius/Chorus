@@ -1,6 +1,6 @@
 package org.chorus.registry
 
-import cn.nukkit.utils.exception.FormativeException
+import org.chorus.utils.exception.FormativeException
 
 class RegisterException : FormativeException {
     constructor(msg: String?) : super(msg)

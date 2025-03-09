@@ -1,7 +1,7 @@
 package org.chorus.block.property.type
 
-import cn.nukkit.block.property.type.BlockPropertyType.BlockPropertyValue
-import cn.nukkit.utils.Utils.computeRequiredBits
+import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
+import org.chorus.utils.Utils.computeRequiredBits
 import lombok.Getter
 import java.util.stream.IntStream
 

@@ -1,17 +1,17 @@
 package org.chorus.entity.item
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.monster.EntityEnderDragon
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.level.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.monster.EntityEnderDragon
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.level.*
+import org.chorus.level.format.IChunk
+import org.chorus.math.BlockVector3
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author PetteriM1

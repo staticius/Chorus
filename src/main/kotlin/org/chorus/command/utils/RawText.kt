@@ -1,15 +1,15 @@
 package org.chorus.command.utils
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.selector.EntitySelectorAPI
-import cn.nukkit.entity.Entity
-import cn.nukkit.scoreboard.scorer.EntityScorer
-import cn.nukkit.scoreboard.scorer.FakeScorer
-import cn.nukkit.scoreboard.scorer.IScorer
-import cn.nukkit.scoreboard.scorer.PlayerScorer
-import cn.nukkit.utils.JSONUtils
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.command.CommandSender
+import org.chorus.command.selector.EntitySelectorAPI
+import org.chorus.entity.Entity
+import org.chorus.scoreboard.scorer.EntityScorer
+import org.chorus.scoreboard.scorer.FakeScorer
+import org.chorus.scoreboard.scorer.IScorer
+import org.chorus.scoreboard.scorer.PlayerScorer
+import org.chorus.utils.JSONUtils
 import com.google.gson.annotations.SerializedName
 import lombok.Getter
 import lombok.Setter

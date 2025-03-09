@@ -1,9 +1,9 @@
 package org.chorus.recipe
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemID
-import cn.nukkit.registry.Registries
+import org.chorus.block.BlockID
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.registry.Registries
 import lombok.SneakyThrows
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll

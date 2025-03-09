@@ -1,10 +1,10 @@
 package org.chorus.item.enchantment.damage
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.effect.Effect.Companion.get
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.item.enchantment.*
+import org.chorus.entity.*
+import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.EffectType
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.item.enchantment.*
 import java.util.concurrent.ThreadLocalRandom
 
 /**

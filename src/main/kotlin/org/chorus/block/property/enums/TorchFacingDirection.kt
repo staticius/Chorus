@@ -1,6 +1,6 @@
 package org.chorus.block.property.enums
 
-import cn.nukkit.math.BlockFace
+import org.chorus.math.BlockFace
 import lombok.RequiredArgsConstructor
 
 /**

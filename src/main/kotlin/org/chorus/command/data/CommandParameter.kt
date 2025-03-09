@@ -1,6 +1,6 @@
 package org.chorus.command.data
 
-import cn.nukkit.command.tree.node.IParamNode
+import org.chorus.command.tree.node.IParamNode
 import com.google.common.collect.Lists
 import java.util.*
 

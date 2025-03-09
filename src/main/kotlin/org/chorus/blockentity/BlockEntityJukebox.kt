@@ -1,13 +1,13 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.Block
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemMusicDisc
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.PlaySoundPacket
-import cn.nukkit.network.protocol.StopSoundPacket
+import org.chorus.block.Block
+import org.chorus.item.Item
+import org.chorus.item.ItemMusicDisc
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.PlaySoundPacket
+import org.chorus.network.protocol.StopSoundPacket
 import java.util.*
 
 /**

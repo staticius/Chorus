@@ -1,6 +1,6 @@
 package org.chorus.item.customitem
 
-import cn.nukkit.item.ItemArmor
+import org.chorus.item.ItemArmor
 
 /**
  * @author lt_name

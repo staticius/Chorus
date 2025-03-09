@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.utils.DyeColor
+import org.chorus.utils.DyeColor
 
 class ItemBoneMeal : ItemDye(ItemID.Companion.BONE_MEAL) {
     override val isFertilizer: Boolean

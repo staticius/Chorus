@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.enums.PrismarineBlockType
-import cn.nukkit.item.*
+import org.chorus.block.property.enums.PrismarineBlockType
+import org.chorus.item.*
 
 open class BlockPrismarine : BlockSolid {
     constructor() : super(Companion.properties.defaultState)

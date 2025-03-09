@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.nbt.tag.ListTag.add
+import org.chorus.nbt.tag.ListTag.add
 import lombok.NoArgsConstructor
 import kotlin.math.min
 

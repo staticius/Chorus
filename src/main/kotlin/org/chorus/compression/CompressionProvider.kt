@@ -1,6 +1,6 @@
 package org.chorus.compression
 
-import cn.nukkit.network.protocol.types.PacketCompressionAlgorithm
+import org.chorus.network.protocol.types.PacketCompressionAlgorithm
 import org.xerial.snappy.Snappy
 import java.io.IOException
 

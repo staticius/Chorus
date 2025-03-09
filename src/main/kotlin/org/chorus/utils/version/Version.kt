@@ -16,7 +16,7 @@
  */
 package org.chorus.utils.version
 
-import cn.nukkit.nbt.tag.ListTag.add
+import org.chorus.nbt.tag.ListTag.add
 import java.io.Serializable
 import java.util.*
 import javax.annotation.Nonnull

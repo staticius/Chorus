@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.evaluator
 
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.IVector3
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.IVector3
 
 class DistanceEvaluator @JvmOverloads constructor(
     private val type: MemoryType<out IVector3?>?,

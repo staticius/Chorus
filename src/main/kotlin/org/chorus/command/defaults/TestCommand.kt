@@ -1,7 +1,7 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.command.Command
-import cn.nukkit.command.data.CommandData
+import org.chorus.command.Command
+import org.chorus.command.data.CommandData
 
 /**
  * 测试命令基类

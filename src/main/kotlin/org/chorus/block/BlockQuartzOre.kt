@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemQuartz
-import cn.nukkit.item.ItemTool
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.utils.random.NukkitRandom
+import org.chorus.item.Item
+import org.chorus.item.ItemQuartz
+import org.chorus.item.ItemTool
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.utils.random.NukkitRandom
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockQuartzOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :

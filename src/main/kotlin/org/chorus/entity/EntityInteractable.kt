@@ -1,6 +1,6 @@
 package org.chorus.entity
 
-import cn.nukkit.Player
+import org.chorus.Player
 
 
 /**

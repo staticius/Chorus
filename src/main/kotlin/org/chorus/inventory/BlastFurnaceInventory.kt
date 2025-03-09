@@ -1,7 +1,7 @@
 package org.chorus.inventory
 
-import cn.nukkit.blockentity.BlockEntityFurnace
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.blockentity.BlockEntityFurnace
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class BlastFurnaceInventory(furnace: BlockEntityFurnace?) : SmeltingInventory(furnace, InventoryType.BLAST_FURNACE, 3) {
     override fun init() {

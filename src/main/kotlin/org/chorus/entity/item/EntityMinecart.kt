@@ -1,12 +1,12 @@
 package org.chorus.entity.item
 
-import cn.nukkit.Player
-import cn.nukkit.entity.*
-import cn.nukkit.event.entity.EntityDamageByBlockEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.utils.MinecartType
+import org.chorus.Player
+import org.chorus.entity.*
+import org.chorus.event.entity.EntityDamageByBlockEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.MinecartType
 
 /**
  * @author Snake1999

@@ -1,13 +1,13 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.event.entity.EntityDeathEvent
-import cn.nukkit.item.Item
-import cn.nukkit.lang.TextContainer
-import cn.nukkit.lang.TranslationContainer
+import org.chorus.Player
+import org.chorus.entity.Entity
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.event.entity.EntityDeathEvent
+import org.chorus.item.Item
+import org.chorus.lang.TextContainer
+import org.chorus.lang.TranslationContainer
 
 class PlayerDeathEvent(player: Player?, drops: Array<Item>?, @JvmField var deathMessage: TextContainer, @JvmField var experience: Int) :
     EntityDeathEvent(player, drops), Cancellable {

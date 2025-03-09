@@ -17,19 +17,19 @@
  */
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.event.block.BlockExplosionPrimeEvent.isBlockBreaking
-import cn.nukkit.event.block.BlockExplosionPrimeEvent.isIncendiary
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Explosion.explodeA
-import cn.nukkit.level.Explosion.explodeB
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.utils.TextFormat
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.BlockExplosionPrimeEvent.isBlockBreaking
+import org.chorus.event.block.BlockExplosionPrimeEvent.isIncendiary
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.level.Explosion.explodeA
+import org.chorus.level.Explosion.explodeB
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.utils.TextFormat
 
 /**
  * @author joserobjr

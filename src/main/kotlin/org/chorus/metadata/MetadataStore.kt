@@ -1,8 +1,8 @@
 package org.chorus.metadata
 
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.utils.PluginException
-import cn.nukkit.utils.ServerException
+import org.chorus.plugin.Plugin
+import org.chorus.utils.PluginException
+import org.chorus.utils.ServerException
 import java.util.*
 
 /**

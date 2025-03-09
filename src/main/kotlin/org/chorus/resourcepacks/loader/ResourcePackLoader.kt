@@ -1,6 +1,6 @@
 package org.chorus.resourcepacks.loader
 
-import cn.nukkit.resourcepacks.ResourcePack
+import org.chorus.resourcepacks.ResourcePack
 
 /**
  * 描述一个资源包加载器

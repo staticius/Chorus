@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 class BlockColoredTorchBp @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     Block(blockstate) {

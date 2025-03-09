@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.block.Block.name
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.WoodType.name
-import cn.nukkit.registry.Registries
-import cn.nukkit.utils.DyeColor.name
+import org.chorus.block.Block.name
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.WoodType.name
+import org.chorus.registry.Registries
+import org.chorus.utils.DyeColor.name
 
 /**
  * @author MagicDroidX (Nukkit Project)

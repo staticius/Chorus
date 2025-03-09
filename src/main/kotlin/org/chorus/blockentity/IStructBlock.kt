@@ -1,6 +1,6 @@
 package org.chorus.blockentity
 
-import cn.nukkit.inventory.InventoryHolder
+import org.chorus.inventory.InventoryHolder
 
 interface IStructBlock : InventoryHolder {
     companion object {

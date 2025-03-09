@@ -1,6 +1,6 @@
 package org.chorus.math
 
-import cn.nukkit.utils.random.NukkitRandom
+import org.chorus.utils.random.NukkitRandom
 import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.max

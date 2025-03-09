@@ -1,11 +1,11 @@
 package org.chorus.camera.instruction.impl
 
-import cn.nukkit.camera.data.CameraPreset
-import cn.nukkit.camera.data.Ease
-import cn.nukkit.camera.instruction.CameraInstruction
-import cn.nukkit.math.Vector2f
-import cn.nukkit.math.Vector3f
-import cn.nukkit.utils.OptionalValue
+import org.chorus.camera.data.CameraPreset
+import org.chorus.camera.data.Ease
+import org.chorus.camera.instruction.CameraInstruction
+import org.chorus.math.Vector2f
+import org.chorus.math.Vector3f
+import org.chorus.utils.OptionalValue
 import lombok.Builder
 import lombok.Getter
 

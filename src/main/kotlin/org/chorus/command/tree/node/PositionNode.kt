@@ -1,8 +1,8 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.level.Locator
-import cn.nukkit.math.BVector3
-import cn.nukkit.math.Vector3
+import org.chorus.level.Locator
+import org.chorus.math.BVector3
+import org.chorus.math.Vector3
 import java.util.regex.Pattern
 
 /**

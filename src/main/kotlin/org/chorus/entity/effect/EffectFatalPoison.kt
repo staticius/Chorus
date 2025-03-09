@@ -1,8 +1,8 @@
 package org.chorus.entity.effect
 
-import cn.nukkit.entity.*
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.entity.*
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import java.awt.Color
 
 class EffectFatalPoison :

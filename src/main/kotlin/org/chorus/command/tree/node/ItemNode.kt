@@ -1,6 +1,6 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 /**
  * 解析对应参数为[Item]值

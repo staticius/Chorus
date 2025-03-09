@@ -1,11 +1,11 @@
 package org.chorus.blockentity
 
-import cn.nukkit.command.CommandSender
-import cn.nukkit.inventory.InventoryHolder
-import cn.nukkit.level.Level
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.nbt.tag.StringTag
-import cn.nukkit.plugin.InternalPlugin
+import org.chorus.command.CommandSender
+import org.chorus.inventory.InventoryHolder
+import org.chorus.level.Level
+import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.StringTag
+import org.chorus.plugin.InternalPlugin
 
 interface ICommandBlock : CommandSender, InventoryHolder {
     override fun getName(): String

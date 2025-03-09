@@ -1,10 +1,10 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.Player
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.network.protocol.types.itemstack.request.action.CraftCreativeAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import cn.nukkit.registry.Registries
+import org.chorus.Player
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.network.protocol.types.itemstack.request.action.CraftCreativeAction
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.registry.Registries
 import lombok.extern.slf4j.Slf4j
 
 /**

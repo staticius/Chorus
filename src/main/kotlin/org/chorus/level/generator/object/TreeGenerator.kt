@@ -1,7 +1,7 @@
 package org.chorus.level.generator.`object`
 
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.math.Vector3
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
 import java.util.*
 
 abstract class TreeGenerator : ObjectGenerator() {

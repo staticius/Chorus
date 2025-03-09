@@ -1,11 +1,11 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
-import cn.nukkit.utils.random.NukkitRandom
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.item.*
+import org.chorus.math.BlockFace
+import org.chorus.utils.random.NukkitRandom
 import java.util.*
 
 abstract class BlockLichen(blockState: BlockState?) : BlockTransparent(blockState) {

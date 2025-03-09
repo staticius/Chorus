@@ -1,6 +1,6 @@
 package org.chorus.permission
 
-import cn.nukkit.Server
+import org.chorus.Server
 
 /**
  * @author MagicDroidX (Nukkit Project)

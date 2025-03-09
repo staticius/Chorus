@@ -1,6 +1,6 @@
 package org.chorus.utils.collection.nb
 
-import cn.nukkit.api.NonComputationAtomic
+import org.chorus.api.NonComputationAtomic
 import it.unimi.dsi.fastutil.longs.AbstractLongSet
 import it.unimi.dsi.fastutil.longs.LongIterator
 import it.unimi.dsi.fastutil.longs.LongSet

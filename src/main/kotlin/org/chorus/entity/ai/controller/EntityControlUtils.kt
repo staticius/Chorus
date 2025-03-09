@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.controller
 
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.memory.IMemoryStorage
-import cn.nukkit.math.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.memory.IMemoryStorage
+import org.chorus.math.*
 
 /**
  * 一些通用的实体运动控制方法

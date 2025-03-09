@@ -1,13 +1,13 @@
 package org.chorus.level
 
-import cn.nukkit.GameMockExtension
-import cn.nukkit.Server
-import cn.nukkit.TestPlayer
-import cn.nukkit.TestUtils
-import cn.nukkit.level.format.LevelConfig
-import cn.nukkit.level.format.LevelConfig.GeneratorConfig
-import cn.nukkit.level.format.leveldb.LevelDBProvider
-import cn.nukkit.level.generator.terra.PNXPlatform
+import org.chorus.GameMockExtension
+import org.chorus.Server
+import org.chorus.TestPlayer
+import org.chorus.TestUtils
+import org.chorus.level.format.LevelConfig
+import org.chorus.level.format.LevelConfig.GeneratorConfig
+import org.chorus.level.format.leveldb.LevelDBProvider
+import org.chorus.level.generator.terra.PNXPlatform
 import lombok.SneakyThrows
 import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.AfterAll

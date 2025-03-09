@@ -1,7 +1,7 @@
 package org.chorus.event.item
 
-import cn.nukkit.event.Event
-import cn.nukkit.item.Item
+import org.chorus.event.Event
+import org.chorus.item.Item
 
 /**
  * @author MagicDroidX (Nukkit Project)

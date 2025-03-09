@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Server
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.network.protocol.EntityEventPacket
+import org.chorus.Server
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.network.protocol.EntityEventPacket
 import java.util.concurrent.*
 
 class BreezeJumpExecutor : EntityControl, IBehaviorExecutor {

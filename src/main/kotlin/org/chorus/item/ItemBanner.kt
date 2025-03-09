@@ -1,10 +1,10 @@
 package org.chorus.item
 
-import cn.nukkit.block.BlockStandingBanner
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.types.BannerPattern
-import cn.nukkit.utils.DyeColor
+import org.chorus.block.BlockStandingBanner
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.types.BannerPattern
+import org.chorus.utils.DyeColor
 import java.util.*
 
 /**

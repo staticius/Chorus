@@ -1,6 +1,6 @@
 package org.chorus.command.selector.args.impl
 
-import cn.nukkit.command.CommandSender
+import org.chorus.command.CommandSender
 
 /**
  * args like dx,dy,dz.

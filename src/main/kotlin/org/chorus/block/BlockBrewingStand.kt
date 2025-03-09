@@ -1,15 +1,15 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.blockentity.*
-import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.nbt.tag.StringTag
-import cn.nukkit.nbt.tag.Tag
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.blockentity.*
+import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
+import org.chorus.item.*
+import org.chorus.math.BlockFace
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.StringTag
+import org.chorus.nbt.tag.Tag
 
 class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBrewingStand?> {

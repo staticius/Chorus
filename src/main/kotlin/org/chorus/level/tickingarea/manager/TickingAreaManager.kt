@@ -1,6 +1,6 @@
 package org.chorus.level.tickingarea.manager
 
-import cn.nukkit.level.*
+import org.chorus.level.*
 
 abstract class TickingAreaManager(storage: TickingAreaStorage) {
     protected var storage: TickingAreaStorage = storage

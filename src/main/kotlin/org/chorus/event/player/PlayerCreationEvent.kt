@@ -1,8 +1,8 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.Event
-import cn.nukkit.event.HandlerList
+import org.chorus.Player
+import org.chorus.event.Event
+import org.chorus.event.HandlerList
 
 /**
  * @author MagicDroidX (Nukkit Project)

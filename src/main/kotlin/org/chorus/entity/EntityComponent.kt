@@ -1,6 +1,6 @@
 package org.chorus.entity
 
-import cn.nukkit.entity.ai.memory.IMemoryStorage
+import org.chorus.entity.ai.memory.IMemoryStorage
 
 /**
  * 继承了此接口的接口为一个实体组件<br></br>

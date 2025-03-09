@@ -1,10 +1,10 @@
 package org.chorus.event.inventory
 
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.inventory.Inventory
-import cn.nukkit.inventory.InventoryHolder
-import cn.nukkit.item.Item
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.inventory.Inventory
+import org.chorus.inventory.InventoryHolder
+import org.chorus.item.Item
 
 /**
  * @author CreeperFace

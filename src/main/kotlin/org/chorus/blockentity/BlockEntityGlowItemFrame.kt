@@ -1,11 +1,11 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.ItemBlock
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.item.ItemBlock
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
 
 class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityItemFrame(chunk, nbt) {
     override var name: String

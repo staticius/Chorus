@@ -1,6 +1,6 @@
 package org.chorus.registry
 
-import cn.nukkit.registry.RegisterException
+import org.chorus.registry.RegisterException
 import me.sunlan.fastreflection.FastMemberLoader
 import org.jetbrains.annotations.ApiStatus
 

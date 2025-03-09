@@ -1,6 +1,6 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.util.internal.EmptyArrays
 import lombok.*
 import java.util.function.Function

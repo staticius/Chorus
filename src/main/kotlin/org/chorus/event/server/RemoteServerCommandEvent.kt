@@ -1,7 +1,7 @@
 package org.chorus.event.server
 
-import cn.nukkit.command.CommandSender
-import cn.nukkit.event.HandlerList
+import org.chorus.command.CommandSender
+import org.chorus.event.HandlerList
 
 /**
  * Called when an RCON command is executed.

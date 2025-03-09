@@ -1,11 +1,11 @@
 package org.chorus.event.block
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockAir
-import cn.nukkit.block.BlockTurtleEgg
-import cn.nukkit.block.property.enums.TurtleEggCount
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.block.Block
+import org.chorus.block.BlockAir
+import org.chorus.block.BlockTurtleEgg
+import org.chorus.block.property.enums.TurtleEggCount
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 class TurtleEggHatchEvent(turtleEgg: BlockTurtleEgg, @JvmField var eggsHatching: Int, @JvmField var newState: Block) :
     BlockEvent(turtleEgg), Cancellable {

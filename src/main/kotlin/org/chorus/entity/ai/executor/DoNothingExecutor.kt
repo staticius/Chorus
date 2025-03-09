@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 
 class DoNothingExecutor : IBehaviorExecutor {
     override fun execute(entity: EntityMob?): Boolean {

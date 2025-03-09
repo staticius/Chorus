@@ -1,6 +1,6 @@
 package org.chorus.entity.effect
 
-import cn.nukkit.entity.*
+import org.chorus.entity.*
 import java.awt.Color
 
 class EffectSpeed :

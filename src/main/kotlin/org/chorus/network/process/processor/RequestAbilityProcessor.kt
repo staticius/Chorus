@@ -1,16 +1,16 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.AdventureSettings
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.event.player.PlayerIllegalFlightEvent
-import cn.nukkit.event.player.PlayerKickEvent
-import cn.nukkit.event.player.PlayerToggleFlightEvent
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.RequestAbilityPacket
-import cn.nukkit.network.protocol.types.PlayerAbility
+import org.chorus.AdventureSettings
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getServer
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.event.player.PlayerIllegalFlightEvent
+import org.chorus.event.player.PlayerKickEvent
+import org.chorus.event.player.PlayerToggleFlightEvent
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.RequestAbilityPacket
+import org.chorus.network.protocol.types.PlayerAbility
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

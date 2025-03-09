@@ -1,10 +1,10 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.itemstack.response.ItemStackResponse
-import cn.nukkit.network.protocol.types.itemstack.response.ItemStackResponseContainer
-import cn.nukkit.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import cn.nukkit.network.protocol.types.itemstack.response.ItemStackResponseStatus
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.itemstack.response.ItemStackResponse
+import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
+import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
+import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseStatus
 import lombok.*
 
 @Getter

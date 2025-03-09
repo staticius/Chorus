@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
+import org.chorus.item.*
 
 open class BlockPackedIce @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockIce(blockstate) {

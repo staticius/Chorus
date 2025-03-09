@@ -1,12 +1,12 @@
 package org.chorus.event.server
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.event.HandlerList
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.utils.Binary
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.event.HandlerList
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.plugin.Plugin
+import org.chorus.utils.Binary
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufAllocator
 import java.nio.charset.StandardCharsets

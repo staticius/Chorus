@@ -1,11 +1,11 @@
 package org.chorus.dispenser
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.item.EntityChestBoat
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemChestBoat
-import cn.nukkit.level.Level
-import cn.nukkit.math.Vector3
+import org.chorus.entity.Entity
+import org.chorus.entity.item.EntityChestBoat
+import org.chorus.item.Item
+import org.chorus.item.ItemChestBoat
+import org.chorus.level.Level
+import org.chorus.math.Vector3
 
 class ChestBoatDispenseBehavior : BoatDispenseBehavior() {
     override fun spawnBoatEntity(level: Level, pos: Vector3, item: Item) {

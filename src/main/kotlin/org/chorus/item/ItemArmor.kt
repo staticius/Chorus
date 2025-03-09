@@ -1,12 +1,12 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.event.item.ItemWearEvent
-import cn.nukkit.level.Sound
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.ByteTag
-import cn.nukkit.utils.*
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.event.item.ItemWearEvent
+import org.chorus.level.Sound
+import org.chorus.math.*
+import org.chorus.nbt.tag.ByteTag
+import org.chorus.utils.*
 
 /**
  * @author MagicDroidX (Nukkit Project)

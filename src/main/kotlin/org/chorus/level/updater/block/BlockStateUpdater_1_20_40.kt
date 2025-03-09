@@ -1,9 +1,9 @@
 package org.chorus.level.updater.block
 
-import cn.nukkit.level.updater.Updater
-import cn.nukkit.level.updater.util.OrderedUpdater
-import cn.nukkit.level.updater.util.tagupdater.CompoundTagEditHelper
-import cn.nukkit.level.updater.util.tagupdater.CompoundTagUpdaterContext
+import org.chorus.level.updater.Updater
+import org.chorus.level.updater.util.OrderedUpdater
+import org.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
+import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
 
 class BlockStateUpdater_1_20_40 : Updater {
     override fun registerUpdaters(ctx: CompoundTagUpdaterContext) {

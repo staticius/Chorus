@@ -1,10 +1,10 @@
 package org.chorus.network.process.handler
 
-import cn.nukkit.network.connection.BedrockSession
-import cn.nukkit.network.process.SessionState
-import cn.nukkit.network.protocol.*
-import cn.nukkit.network.protocol.ResourcePackStackPacket.ExperimentData
-import cn.nukkit.utils.version.Version
+import org.chorus.network.connection.BedrockSession
+import org.chorus.network.process.SessionState
+import org.chorus.network.protocol.*
+import org.chorus.network.protocol.ResourcePackStackPacket.ExperimentData
+import org.chorus.utils.version.Version
 import lombok.extern.slf4j.Slf4j
 import java.util.*
 import kotlin.math.ceil

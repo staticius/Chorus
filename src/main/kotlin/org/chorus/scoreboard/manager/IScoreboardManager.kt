@@ -1,11 +1,11 @@
 package org.chorus.scoreboard.manager
 
-import cn.nukkit.Player
-import cn.nukkit.entity.EntityLiving
-import cn.nukkit.scoreboard.IScoreboard
-import cn.nukkit.scoreboard.data.DisplaySlot
-import cn.nukkit.scoreboard.displayer.IScoreboardViewer
-import cn.nukkit.scoreboard.storage.IScoreboardStorage
+import org.chorus.Player
+import org.chorus.entity.EntityLiving
+import org.chorus.scoreboard.IScoreboard
+import org.chorus.scoreboard.data.DisplaySlot
+import org.chorus.scoreboard.displayer.IScoreboardViewer
+import org.chorus.scoreboard.storage.IScoreboardStorage
 
 /**
  * 管理，储存一批计分板 <br></br>

@@ -1,11 +1,11 @@
 package org.chorus.command.data
 
-import cn.nukkit.Server
-import cn.nukkit.camera.data.CameraPreset.Companion.presets
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.network.protocol.UpdateSoftEnumPacket
-import cn.nukkit.registry.Registries
-import cn.nukkit.utils.Identifier
+import org.chorus.Server
+import org.chorus.camera.data.CameraPreset.Companion.presets
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.network.protocol.UpdateSoftEnumPacket
+import org.chorus.registry.Registries
+import org.chorus.utils.Identifier
 import com.google.common.collect.ImmutableList
 import java.util.*
 import java.util.function.Supplier

@@ -1,10 +1,10 @@
 package org.chorus.event.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntityLectern
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.item.Item
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntityLectern
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.item.Item
 
 class LecternPlaceBookEvent(val player: Player, val lectern: BlockEntityLectern, private var book: Item) :
     BlockEvent(lectern.block), Cancellable {

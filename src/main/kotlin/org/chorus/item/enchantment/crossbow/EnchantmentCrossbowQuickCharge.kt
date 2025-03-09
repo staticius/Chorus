@@ -1,6 +1,6 @@
 package org.chorus.item.enchantment.crossbow
 
-import cn.nukkit.item.enchantment.*
+import org.chorus.item.enchantment.*
 
 class EnchantmentCrossbowQuickCharge :
     EnchantmentCrossbow(Enchantment.Companion.ID_CROSSBOW_QUICK_CHARGE, "crossbowQuickCharge", Rarity.UNCOMMON) {

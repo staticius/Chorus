@@ -1,9 +1,9 @@
 package org.chorus.event.scoreboard
 
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.Event
-import cn.nukkit.event.HandlerList
-import cn.nukkit.scoreboard.IScoreboard
+import org.chorus.event.Cancellable
+import org.chorus.event.Event
+import org.chorus.event.HandlerList
+import org.chorus.scoreboard.IScoreboard
 import lombok.Getter
 
 /**

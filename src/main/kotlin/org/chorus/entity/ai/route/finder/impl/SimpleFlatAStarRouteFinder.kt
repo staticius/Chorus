@@ -1,16 +1,16 @@
 package org.chorus.entity.ai.route.finder.impl
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.block.*
-import cn.nukkit.entity.ai.EntityAI
-import cn.nukkit.entity.ai.route.data.Node
-import cn.nukkit.entity.ai.route.finder.SimpleRouteFinder
-import cn.nukkit.entity.ai.route.posevaluator.IPosEvaluator
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.level.*
-import cn.nukkit.level.particle.BlockForceFieldParticle
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.block.*
+import org.chorus.entity.ai.EntityAI
+import org.chorus.entity.ai.route.data.Node
+import org.chorus.entity.ai.route.finder.SimpleRouteFinder
+import org.chorus.entity.ai.route.posevaluator.IPosEvaluator
+import org.chorus.entity.mob.EntityMob
+import org.chorus.level.*
+import org.chorus.level.particle.BlockForceFieldParticle
+import org.chorus.math.*
 import lombok.Getter
 import lombok.Setter
 import java.util.*

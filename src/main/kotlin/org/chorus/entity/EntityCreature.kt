@@ -1,10 +1,10 @@
 package org.chorus.entity
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.level.format.IChunk
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * 实体生物

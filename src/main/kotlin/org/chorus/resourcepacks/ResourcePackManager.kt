@@ -1,8 +1,8 @@
 package org.chorus.resourcepacks
 
-import cn.nukkit.Server
-import cn.nukkit.resourcepacks.loader.ResourcePackLoader
-import cn.nukkit.resourcepacks.loader.ZippedResourcePackLoader
+import org.chorus.Server
+import org.chorus.resourcepacks.loader.ResourcePackLoader
+import org.chorus.resourcepacks.loader.ZippedResourcePackLoader
 import com.google.common.collect.Sets
 import lombok.extern.slf4j.Slf4j
 import java.io.File

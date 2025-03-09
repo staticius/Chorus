@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.evaluator
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 import lombok.AllArgsConstructor
 
 @AllArgsConstructor

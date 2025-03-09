@@ -1,12 +1,12 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.tree.node.IPStringNode
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.event.player.PlayerKickEvent
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.tree.ParamList
+import org.chorus.command.tree.node.IPStringNode
+import org.chorus.command.utils.CommandLogger
+import org.chorus.event.player.PlayerKickEvent
 import java.io.File
 import java.io.UncheckedIOException
 import java.net.UnknownHostException

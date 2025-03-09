@@ -1,11 +1,11 @@
 package org.chorus.event.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.Event
-import cn.nukkit.event.HandlerList
-import cn.nukkit.item.Item
-import cn.nukkit.recipe.Recipe
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.Event
+import org.chorus.event.HandlerList
+import org.chorus.item.Item
+import org.chorus.recipe.Recipe
 
 class CraftItemEvent(val player: Player, input: Array<Item>, recipe: Recipe, count: Int) :
     Event(), Cancellable {

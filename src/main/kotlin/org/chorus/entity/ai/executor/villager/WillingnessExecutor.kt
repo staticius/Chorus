@@ -1,11 +1,11 @@
 package org.chorus.entity.ai.executor.villager
 
-import cn.nukkit.entity.ai.executor.EntityControl
-import cn.nukkit.entity.ai.executor.IBehaviorExecutor
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.villagers.EntityVillagerV2
-import cn.nukkit.item.ItemFood
+import org.chorus.entity.ai.executor.EntityControl
+import org.chorus.entity.ai.executor.IBehaviorExecutor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.villagers.EntityVillagerV2
+import org.chorus.item.ItemFood
 
 class WillingnessExecutor : EntityControl, IBehaviorExecutor {
     override fun execute(entity: EntityMob?): Boolean {

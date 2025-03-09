@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.level.particle.BoneMealParticle
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.level.particle.BoneMealParticle
+import org.chorus.math.*
 
 /**
  * @author CoolLoong

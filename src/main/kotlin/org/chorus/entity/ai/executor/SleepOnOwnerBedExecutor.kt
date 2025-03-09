@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.EntityOwnable
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.EntityOwnable
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
 
 /**
  * 使有主人的生物在主人睡觉时睡到主人床上<br></br>

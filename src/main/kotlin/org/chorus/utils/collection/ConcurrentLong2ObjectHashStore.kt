@@ -1,7 +1,7 @@
 package org.chorus.utils.collection
 
-import cn.nukkit.entity.data.EntityDataMap.size
-import cn.nukkit.nbt.tag.ListTag.size
+import org.chorus.entity.data.EntityDataMap.size
+import org.chorus.nbt.tag.ListTag.size
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock

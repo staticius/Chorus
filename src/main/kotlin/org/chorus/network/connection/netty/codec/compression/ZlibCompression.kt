@@ -1,8 +1,8 @@
 package org.chorus.network.connection.netty.codec.compression
 
-import cn.nukkit.compression.CompressionProvider
-import cn.nukkit.network.protocol.types.*
-import cn.nukkit.utils.*
+import org.chorus.compression.CompressionProvider
+import org.chorus.network.protocol.types.*
+import org.chorus.utils.*
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import lombok.*

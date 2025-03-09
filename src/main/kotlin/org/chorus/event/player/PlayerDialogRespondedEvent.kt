@@ -1,9 +1,9 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.dialog.response.FormResponseDialog
-import cn.nukkit.dialog.window.FormWindowDialog
-import cn.nukkit.event.HandlerList
+import org.chorus.Player
+import org.chorus.dialog.response.FormResponseDialog
+import org.chorus.dialog.window.FormWindowDialog
+import org.chorus.event.HandlerList
 
 class PlayerDialogRespondedEvent(player: Player?, var dialog: FormWindowDialog, var response: FormResponseDialog) :
     PlayerEvent() {

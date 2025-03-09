@@ -1,7 +1,7 @@
 package org.chorus.scoreboard.storage
 
-import cn.nukkit.scoreboard.IScoreboard
-import cn.nukkit.scoreboard.data.DisplaySlot
+import org.chorus.scoreboard.IScoreboard
+import org.chorus.scoreboard.data.DisplaySlot
 
 /**
  * 计分板存储器接口

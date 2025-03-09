@@ -1,8 +1,8 @@
 package org.chorus.utils
 
-import cn.nukkit.nbt.NBTIO.read
-import cn.nukkit.nbt.NBTIO.write
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.nbt.NBTIO.read
+import org.chorus.nbt.NBTIO.write
+import org.chorus.nbt.tag.CompoundTag
 import io.netty.util.internal.EmptyArrays
 import lombok.SneakyThrows
 import lombok.extern.slf4j.Slf4j

@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.math.MathHelper
+import org.chorus.math.MathHelper
 import java.util.*
 
 enum class DyeColor @JvmOverloads constructor(

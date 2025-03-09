@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.math.VectorMath.calculateFace
-import cn.nukkit.utils.LevelException
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.VectorMath.calculateFace
+import org.chorus.utils.LevelException
 
 /**
  * @author xtypr

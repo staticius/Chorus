@@ -1,6 +1,6 @@
 package org.chorus.level.generator.`object`.legacytree
 
-import cn.nukkit.block.*
+import org.chorus.block.*
 
 class LegacyDarkOakTree(private val leafStartHeightMultiplier: Float, private val baseLeafRadius: Int) :
     LegacyTreeGenerator() {

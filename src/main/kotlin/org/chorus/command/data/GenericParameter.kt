@@ -1,8 +1,8 @@
 package org.chorus.command.data
 
-import cn.nukkit.command.data.GenericParameter.CommandParameterSupplier
-import cn.nukkit.command.tree.node.ChainedCommandNode
-import cn.nukkit.command.tree.node.ItemNode
+import org.chorus.command.data.GenericParameter.CommandParameterSupplier
+import org.chorus.command.tree.node.ChainedCommandNode
+import org.chorus.command.tree.node.ItemNode
 
 interface GenericParameter {
     fun interface CommandParameterSupplier<T> {

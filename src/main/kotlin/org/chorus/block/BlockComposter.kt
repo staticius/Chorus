@@ -1,16 +1,16 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.event.block.ComposterEmptyEvent.getDrop
-import cn.nukkit.event.block.ComposterEmptyEvent.getNewLevel
-import cn.nukkit.event.block.ComposterFillEvent.isSuccess
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.math.BlockFace
-import cn.nukkit.registry.Registries
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.ComposterEmptyEvent.getDrop
+import org.chorus.event.block.ComposterEmptyEvent.getNewLevel
+import org.chorus.event.block.ComposterFillEvent.isSuccess
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.math.BlockFace
+import org.chorus.registry.Registries
 import it.unimi.dsi.fastutil.objects.Object2IntMap
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import java.util.*

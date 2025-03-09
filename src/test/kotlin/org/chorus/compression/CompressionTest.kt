@@ -1,6 +1,6 @@
 package org.chorus.compression
 
-import cn.nukkit.*
+import org.chorus.*
 import org.apache.commons.lang3.reflect.FieldUtils
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith

@@ -1,15 +1,15 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.camera.data.Ease
-import cn.nukkit.camera.data.Time
-import cn.nukkit.camera.instruction.CameraInstruction
-import cn.nukkit.camera.instruction.impl.ClearInstruction
-import cn.nukkit.camera.instruction.impl.FadeInstruction
-import cn.nukkit.camera.instruction.impl.SetInstruction
-import cn.nukkit.camera.instruction.impl.TargetInstruction
-import cn.nukkit.entity.Entity.getId
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.utils.OptionalBoolean
+import org.chorus.camera.data.Ease
+import org.chorus.camera.data.Time
+import org.chorus.camera.instruction.CameraInstruction
+import org.chorus.camera.instruction.impl.ClearInstruction
+import org.chorus.camera.instruction.impl.FadeInstruction
+import org.chorus.camera.instruction.impl.SetInstruction
+import org.chorus.camera.instruction.impl.TargetInstruction
+import org.chorus.entity.Entity.getId
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.utils.OptionalBoolean
 import lombok.*
 import java.awt.Color
 import java.util.function.Consumer

@@ -1,6 +1,6 @@
 package org.chorus.level
 
-import cn.nukkit.level.format.IChunk
+import org.chorus.level.format.IChunk
 
 /**
  * @author MagicDroidX (Nukkit Project)

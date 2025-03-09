@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 class BlockSpruceDoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockWoodenDoor(blockstate) {

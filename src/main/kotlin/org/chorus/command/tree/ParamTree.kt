@@ -1,13 +1,13 @@
 package org.chorus.command.tree
 
-import cn.nukkit.command.*
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.tree.node.*
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.lang.CommandOutputContainer
-import cn.nukkit.plugin.InternalPlugin
+import org.chorus.command.*
+import org.chorus.command.data.CommandEnum
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.tree.node.*
+import org.chorus.command.utils.CommandLogger
+import org.chorus.lang.CommandOutputContainer
+import org.chorus.plugin.InternalPlugin
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.Map

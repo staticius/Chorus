@@ -1,15 +1,15 @@
 package org.chorus.entity.projectile
 
-import cn.nukkit.block.Block
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.entity.ProjectileHitEvent
-import cn.nukkit.level.MovingObjectPosition
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BVector3
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.Block
+import org.chorus.entity.Entity
+import org.chorus.event.entity.ProjectileHitEvent
+import org.chorus.level.MovingObjectPosition
+import org.chorus.level.format.IChunk
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BVector3
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
 import java.util.*
 import java.util.function.ToDoubleFunction
 import kotlin.math.abs

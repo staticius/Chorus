@@ -1,10 +1,10 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.inventory.SpecialWindowId
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.PlayerHotbarPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.inventory.SpecialWindowId
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.PlayerHotbarPacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class PlayerHotbarProcessor : DataPacketProcessor<PlayerHotbarPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: PlayerHotbarPacket) {

@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.entity.EntityID
+import org.chorus.entity.EntityID
 
 class ItemExperienceBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ProjectileItem(ItemID.Companion.EXPERIENCE_BOTTLE, meta, count, "Bottle o' Enchanting") {

@@ -1,9 +1,9 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.nbt.NBTIO.read
-import cn.nukkit.nbt.NBTIO.write
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.nbt.NBTIO.read
+import org.chorus.nbt.NBTIO.write
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.buffer.ByteBufInputStream
 import lombok.*
 import java.io.IOException

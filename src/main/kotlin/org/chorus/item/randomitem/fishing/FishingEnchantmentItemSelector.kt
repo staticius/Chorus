@@ -1,10 +1,10 @@
 package org.chorus.item.randomitem.fishing
 
-import cn.nukkit.entity.effect.Effect.Companion.get
-import cn.nukkit.entity.effect.PotionType.Companion.get
-import cn.nukkit.item.*
-import cn.nukkit.item.enchantment.*
-import cn.nukkit.item.randomitem.*
+import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.PotionType.Companion.get
+import org.chorus.item.*
+import org.chorus.item.enchantment.*
+import org.chorus.item.randomitem.*
 
 class FishingEnchantmentItemSelector : EnchantmentItemSelector {
     constructor(id: String?, parent: Selector?) : this(id, 0, parent)

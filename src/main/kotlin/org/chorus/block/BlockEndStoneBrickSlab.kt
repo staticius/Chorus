@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.ItemTool
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.ItemTool
 
 class BlockEndStoneBrickSlab(blockState: BlockState?) : BlockSlab(blockState, END_STONE_BRICK_DOUBLE_SLAB) {
     override fun getSlabName(): String {

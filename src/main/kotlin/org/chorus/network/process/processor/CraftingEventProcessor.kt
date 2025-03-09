@@ -1,9 +1,9 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.CraftingEventPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.CraftingEventPacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class CraftingEventProcessor : DataPacketProcessor<CraftingEventPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: CraftingEventPacket) {

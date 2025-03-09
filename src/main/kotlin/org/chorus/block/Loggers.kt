@@ -17,7 +17,7 @@
  */
 package org.chorus.block
 
-import cn.nukkit.block.BlockEntityHolder
+import org.chorus.block.BlockEntityHolder
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 

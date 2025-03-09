@@ -1,9 +1,9 @@
 package org.chorus.blockentity
 
-import cn.nukkit.Server
-import cn.nukkit.block.BlockID
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.Server
+import org.chorus.block.BlockID
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 import it.unimi.dsi.fastutil.ints.IntList
 import lombok.extern.slf4j.Slf4j
 import java.io.IOException

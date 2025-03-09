@@ -1,7 +1,7 @@
 package org.chorus.level.generator
 
-import cn.nukkit.level.Level
-import cn.nukkit.level.format.IChunk
+import org.chorus.level.Level
+import org.chorus.level.format.IChunk
 import lombok.Getter
 
 @Getter

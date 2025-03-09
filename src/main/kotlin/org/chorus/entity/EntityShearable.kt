@@ -1,6 +1,6 @@
 package org.chorus.entity
 
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.memory.CoreMemoryTypes
 
 /**
  * 实体可剪切

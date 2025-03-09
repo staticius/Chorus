@@ -1,8 +1,8 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.entity.mob.villagers.EntityVillagerV2
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.entity.mob.villagers.EntityVillagerV2
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class TradeInventory(holder: EntityVillagerV2?) : BaseInventory(holder, InventoryType.TRADE, 3) {
     override var holder: EntityVillagerV2

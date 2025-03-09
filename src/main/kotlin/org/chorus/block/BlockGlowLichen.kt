@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.item.*
+import org.chorus.math.BlockFace
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.List

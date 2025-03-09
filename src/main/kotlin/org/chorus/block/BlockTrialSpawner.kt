@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 class BlockTrialSpawner(blockstate: BlockState?) : Block(blockstate) {
     companion object {

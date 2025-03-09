@@ -1,8 +1,8 @@
 package org.chorus.entity
 
-import cn.nukkit.entity.effect.*
-import cn.nukkit.inventory.EntityInventoryHolder
-import cn.nukkit.level.*
+import org.chorus.entity.effect.*
+import org.chorus.inventory.EntityInventoryHolder
+import org.chorus.level.*
 
 /**
  * 这个接口代表亡灵类的怪物实体

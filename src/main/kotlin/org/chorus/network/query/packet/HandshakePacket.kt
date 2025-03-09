@@ -1,7 +1,7 @@
 package org.chorus.network.query.packet
 
-import cn.nukkit.network.query.QueryPacket
-import cn.nukkit.network.query.QueryUtil
+import org.chorus.network.query.QueryPacket
+import org.chorus.network.query.QueryUtil
 import io.netty.buffer.ByteBuf
 
 class HandshakePacket : QueryPacket {

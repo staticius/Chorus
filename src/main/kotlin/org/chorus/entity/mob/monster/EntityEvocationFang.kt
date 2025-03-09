@@ -1,17 +1,17 @@
 package org.chorus.entity.mob.monster
 
-import cn.nukkit.Player
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityIllager
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.EntityEventPacket
-import cn.nukkit.network.protocol.LevelSoundEventPacketV2
+import org.chorus.Player
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager
+import org.chorus.entity.mob.monster.humanoid_monster.EntityIllager
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.EntityEventPacket
+import org.chorus.network.protocol.LevelSoundEventPacketV2
 import lombok.Getter
 import lombok.Setter
 

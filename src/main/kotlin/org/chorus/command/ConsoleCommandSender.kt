@@ -1,11 +1,11 @@
 package org.chorus.command
 
-import cn.nukkit.Server
-import cn.nukkit.lang.CommandOutputContainer
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.level.GameRule
-import cn.nukkit.permission.Permission
-import cn.nukkit.plugin.Plugin
+import org.chorus.Server
+import org.chorus.lang.CommandOutputContainer
+import org.chorus.lang.TranslationContainer
+import org.chorus.level.GameRule
+import org.chorus.permission.Permission
+import org.chorus.plugin.Plugin
 import lombok.extern.slf4j.Slf4j
 
 /**

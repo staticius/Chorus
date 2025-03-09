@@ -1,6 +1,6 @@
 package org.chorus.metrics
 
-import cn.nukkit.utils.MainLogger
+import org.chorus.utils.MainLogger
 import io.netty.util.internal.EmptyArrays
 import lombok.extern.slf4j.Slf4j
 import org.jose4j.json.internal.json_simple.JSONArray

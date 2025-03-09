@@ -1,11 +1,11 @@
 package org.chorus.entity.data.profession
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.Item
-import cn.nukkit.level.Sound
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.TradeRecipeBuildUtils
+import org.chorus.block.BlockID
+import org.chorus.item.Item
+import org.chorus.level.Sound
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.TradeRecipeBuildUtils
 import java.util.*
 
 class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farmer", Sound.BLOCK_COMPOSTER_FILL) {

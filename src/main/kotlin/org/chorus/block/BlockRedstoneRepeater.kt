@@ -1,14 +1,14 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block.Companion.get
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.Player
+import org.chorus.block.Block.Companion.get
+import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.EnumPropertyType
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.item.Item
+import org.chorus.item.Item.Companion.get
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 
 abstract class BlockRedstoneRepeater(blockState: BlockState?) : BlockRedstoneDiode(blockState) {
     override fun onActivate(

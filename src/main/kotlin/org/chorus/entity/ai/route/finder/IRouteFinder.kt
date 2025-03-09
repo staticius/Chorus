@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.route.finder
 
-import cn.nukkit.entity.ai.route.data.Node
-import cn.nukkit.math.*
+import org.chorus.entity.ai.route.data.Node
+import org.chorus.math.*
 
 /**
  * 此接口抽象了一个寻路器

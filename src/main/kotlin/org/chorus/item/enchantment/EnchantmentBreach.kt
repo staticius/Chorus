@@ -1,7 +1,7 @@
 package org.chorus.item.enchantment
 
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageModifier
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageModifier
 
 class EnchantmentBreach : Enchantment(Enchantment.Companion.ID_BREACH, "breach", Rarity.RARE, EnchantmentType.MACE) {
     override fun getMinEnchantAbility(level: Int): Int {

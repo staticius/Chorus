@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.DoublePlantType
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.DoublePlantType
 
 class BlockLilac : BlockDoublePlant {
     constructor() : super(Companion.properties.defaultState)

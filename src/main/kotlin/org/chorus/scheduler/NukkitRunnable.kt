@@ -1,7 +1,7 @@
 package org.chorus.scheduler
 
-import cn.nukkit.Server
-import cn.nukkit.plugin.Plugin
+import org.chorus.Server
+import org.chorus.plugin.Plugin
 
 /**
  * This class is provided as an easy way to handle scheduling tasks.

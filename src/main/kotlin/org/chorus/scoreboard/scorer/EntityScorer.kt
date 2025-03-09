@@ -1,10 +1,10 @@
 package org.chorus.scoreboard.scorer
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.network.protocol.SetScorePacket.ScoreInfo
-import cn.nukkit.scoreboard.IScoreboard
-import cn.nukkit.scoreboard.IScoreboardLine
-import cn.nukkit.scoreboard.data.ScorerType
+import org.chorus.entity.Entity
+import org.chorus.network.protocol.SetScorePacket.ScoreInfo
+import org.chorus.scoreboard.IScoreboard
+import org.chorus.scoreboard.IScoreboardLine
+import org.chorus.scoreboard.data.ScorerType
 import lombok.Getter
 import java.util.*
 

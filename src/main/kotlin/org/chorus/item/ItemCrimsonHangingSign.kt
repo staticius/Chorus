@@ -1,5 +1,5 @@
 package org.chorus.item
 
-import cn.nukkit.block.BlockID
+import org.chorus.block.BlockID
 
 class ItemCrimsonHangingSign : ItemHangingSign(BlockID.CRIMSON_HANGING_SIGN)

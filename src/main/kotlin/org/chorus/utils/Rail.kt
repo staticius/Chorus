@@ -1,7 +1,7 @@
 package org.chorus.utils
 
-import cn.nukkit.block.Block
-import cn.nukkit.math.BlockFace
+import org.chorus.block.Block
+import org.chorus.math.BlockFace
 import java.util.*
 import java.util.stream.Stream
 

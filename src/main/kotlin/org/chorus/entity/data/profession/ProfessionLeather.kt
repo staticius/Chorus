@@ -1,12 +1,12 @@
 package org.chorus.entity.data.profession
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.DyeColor
-import cn.nukkit.utils.TradeRecipeBuildUtils
+import org.chorus.block.BlockID
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.DyeColor
+import org.chorus.utils.TradeRecipeBuildUtils
 import java.util.*
 
 class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leather", Sound.BUCKET_FILL_WATER) {

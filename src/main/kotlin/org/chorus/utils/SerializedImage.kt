@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.entity.data.Skin
+import org.chorus.entity.data.Skin
 import io.netty.util.internal.EmptyArrays
 import lombok.EqualsAndHashCode
 import lombok.ToString

@@ -1,7 +1,7 @@
 package org.chorus.block.customblock.data
 
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * supports rotation, scaling, and translation. The component can be added to the whole block and/or to individual block permutations. Transformed geometries still have the same restrictions that non-transformed geometries have such as a maximum size of 30/16 units.

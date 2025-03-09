@@ -1,8 +1,8 @@
 package org.chorus.item.enchantment.protection
 
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.item.enchantment.*
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.item.enchantment.*
 
 /**
  * @author MagicDroidX (Nukkit Project)

@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.utils.DyeColor
+import org.chorus.utils.DyeColor
 
 class ItemLightGrayDye : ItemDye(ItemID.Companion.LIGHT_GRAY_DYE) {
     override val dyeColor: DyeColor

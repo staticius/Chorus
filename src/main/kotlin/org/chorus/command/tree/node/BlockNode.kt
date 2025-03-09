@@ -1,8 +1,8 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.block.Block
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.registry.Registries
+import org.chorus.block.Block
+import org.chorus.command.data.CommandEnum
+import org.chorus.registry.Registries
 
 /**
  * 解析对应参数为[Block]值

@@ -1,6 +1,6 @@
 package org.chorus.utils.collection
 
-import cn.nukkit.utils.collection.AutoFreezable.FreezeStatus
+import org.chorus.utils.collection.AutoFreezable.FreezeStatus
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.max
 import kotlin.math.min

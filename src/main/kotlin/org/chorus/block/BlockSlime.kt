@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.math.BlockFace
+import org.chorus.math.BlockFace
 
 /**
  * @author Pub4Game

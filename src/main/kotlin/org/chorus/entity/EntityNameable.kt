@@ -1,8 +1,8 @@
 package org.chorus.entity
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.math.Vector3
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.math.Vector3
 
 /**
  * An entity which can be named by name tags.

@@ -1,13 +1,13 @@
 package org.chorus.command
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.entity.Entity
-import cn.nukkit.lang.CommandOutputContainer
-import cn.nukkit.level.Locator
-import cn.nukkit.level.Transform
-import cn.nukkit.permission.Permission
-import cn.nukkit.plugin.Plugin
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.entity.Entity
+import org.chorus.lang.CommandOutputContainer
+import org.chorus.level.Locator
+import org.chorus.level.Transform
+import org.chorus.permission.Permission
+import org.chorus.plugin.Plugin
 
 class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
     protected var perm: PermissibleBase = PermissibleBase(this)

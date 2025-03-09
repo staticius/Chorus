@@ -1,11 +1,11 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockGrindstone
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.inventory.InventoryCloseEvent
-import cn.nukkit.item.*
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.block.BlockGrindstone
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.inventory.InventoryCloseEvent
+import org.chorus.item.*
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import com.google.common.collect.BiMap
 
 class GrindstoneInventory(blockGrindstone: BlockGrindstone?) :

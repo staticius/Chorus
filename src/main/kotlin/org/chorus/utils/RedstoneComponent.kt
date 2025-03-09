@@ -1,8 +1,8 @@
 package org.chorus.utils
 
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.math.BlockFace
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.math.BlockFace
 import com.google.common.collect.Sets
 
 /**

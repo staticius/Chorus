@@ -1,7 +1,7 @@
 package org.chorus.utils.functional
 
-import cn.nukkit.math.IntIncrementSupplier
-import cn.nukkit.math.NukkitMath.floorFloat
+import org.chorus.math.IntIncrementSupplier
+import org.chorus.math.NukkitMath.floorFloat
 import com.google.common.base.Preconditions
 
 fun interface BlockPositionConsumer {

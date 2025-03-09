@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.*
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.utils.random.NukkitRandom
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.utils.random.NukkitRandom
 
 class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockAmethystBud(blockState) {

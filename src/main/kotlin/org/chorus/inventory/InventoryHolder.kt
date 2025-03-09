@@ -1,7 +1,7 @@
 package org.chorus.inventory
 
-import cn.nukkit.level.Level
-import cn.nukkit.math.Vector3
+import org.chorus.level.Level
+import org.chorus.math.Vector3
 
 interface InventoryHolder {
     @JvmField

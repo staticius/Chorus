@@ -1,13 +1,13 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.EntityLiving
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemSpawnEgg
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.BlockFace
+import org.chorus.block.BlockDispenser
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityLiving
+import org.chorus.item.Item
+import org.chorus.item.ItemSpawnEgg
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.BlockFace
 
 class SpawnEggDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {

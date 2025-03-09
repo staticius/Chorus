@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
+import org.chorus.item.*
 
 class BlockTintedGlass @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockGlass(blockstate) {

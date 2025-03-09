@@ -1,10 +1,10 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.EmotePacket
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.utils.UUIDValidator
+import org.chorus.PlayerHandle
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.EmotePacket
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.utils.UUIDValidator
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.utils.DyeColor
+import org.chorus.utils.DyeColor
 
 class ItemLapisLazuli : ItemDye(ItemID.Companion.LAPIS_LAZULI) {
     override val dyeColor: DyeColor

@@ -1,16 +1,16 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockAir
-import cn.nukkit.block.BlockCampfire
-import cn.nukkit.block.BlockID
-import cn.nukkit.event.inventory.CampfireSmeltEvent
-import cn.nukkit.inventory.CampfireInventory
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemBlock
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.recipe.CampfireRecipe
+import org.chorus.block.BlockAir
+import org.chorus.block.BlockCampfire
+import org.chorus.block.BlockID
+import org.chorus.event.inventory.CampfireSmeltEvent
+import org.chorus.inventory.CampfireInventory
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.recipe.CampfireRecipe
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),

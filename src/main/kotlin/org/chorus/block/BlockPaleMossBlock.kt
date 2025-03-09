@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
-import cn.nukkit.level.Locator
+import org.chorus.item.*
+import org.chorus.level.Locator
 import java.util.*
 import kotlin.math.abs
 

@@ -1,9 +1,9 @@
 package org.chorus.item.enchantment
 
-import cn.nukkit.entity.*
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.item.*
+import org.chorus.entity.*
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.item.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 

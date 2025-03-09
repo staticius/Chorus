@@ -1,8 +1,8 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.item.enchantment.Enchantment
+import org.chorus.entity.Entity
+import org.chorus.entity.effect.EffectType
+import org.chorus.item.enchantment.Enchantment
 
 /**
  * @author MagicDroidX (Nukkit Project)

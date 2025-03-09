@@ -1,6 +1,6 @@
 package org.chorus.recipe.descriptor
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 class InvalidDescriptor private constructor() : ItemDescriptor {
     override var count: Int = 0

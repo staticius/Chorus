@@ -1,8 +1,8 @@
 package org.chorus.level.generator.stages
 
-import cn.nukkit.level.format.ChunkState
-import cn.nukkit.level.generator.ChunkGenerateContext
-import cn.nukkit.level.generator.GenerateStage
+import org.chorus.level.format.ChunkState
+import org.chorus.level.generator.ChunkGenerateContext
+import org.chorus.level.generator.GenerateStage
 import java.util.concurrent.Executor
 
 class FinishedStage : GenerateStage() {

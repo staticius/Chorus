@@ -1,7 +1,7 @@
 package org.chorus.event.entity
 
-import cn.nukkit.block.Block
-import cn.nukkit.entity.Entity
+import org.chorus.block.Block
+import org.chorus.entity.Entity
 
 /**
  * @author Box (Nukkit Project)

@@ -1,6 +1,6 @@
 package org.chorus.level.format
 
-import cn.nukkit.level.DimensionData
+import org.chorus.level.DimensionData
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor

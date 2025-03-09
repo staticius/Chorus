@@ -1,9 +1,9 @@
 package org.chorus.event.block
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.property.enums.BigDripleafTilt
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.block.Block
+import org.chorus.block.property.enums.BigDripleafTilt
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 class BigDripleafTiltChangeEvent(block: Block, val oldTilt: BigDripleafTilt, var newTilt: BigDripleafTilt) :
     BlockEvent(block), Cancellable {

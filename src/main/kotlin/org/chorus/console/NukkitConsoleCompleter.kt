@@ -1,7 +1,7 @@
 package org.chorus.console
 
-import cn.nukkit.Player
-import cn.nukkit.Server
+import org.chorus.Player
+import org.chorus.Server
 import lombok.RequiredArgsConstructor
 import org.jline.reader.Candidate
 import org.jline.reader.Completer

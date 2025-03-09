@@ -1,12 +1,12 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.blockentity.BlockEntityStructBlock
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.StructureBlockUpdatePacket
+import org.chorus.PlayerHandle
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.blockentity.BlockEntityStructBlock
+import org.chorus.math.Vector3
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.StructureBlockUpdatePacket
 
 class StructureBlockUpdateProcessor : DataPacketProcessor<StructureBlockUpdatePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: StructureBlockUpdatePacket) {

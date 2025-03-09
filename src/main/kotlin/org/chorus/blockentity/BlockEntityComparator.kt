@@ -1,8 +1,8 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockRedstoneComparator
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.BlockRedstoneComparator
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author CreeperFace

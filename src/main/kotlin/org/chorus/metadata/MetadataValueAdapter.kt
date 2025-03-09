@@ -1,7 +1,7 @@
 package org.chorus.metadata
 
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.utils.NumberConversions
+import org.chorus.plugin.Plugin
+import org.chorus.utils.NumberConversions
 
 /**
  * Optional base class for facilitating MetadataValue implementations.

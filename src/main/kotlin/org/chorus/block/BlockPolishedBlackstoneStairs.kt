@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 open class BlockPolishedBlackstoneStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockBlackstoneStairs(blockstate) {

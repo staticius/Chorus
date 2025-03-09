@@ -1,6 +1,6 @@
 package org.chorus.network.query
 
-import cn.nukkit.event.server.QueryRegenerateEvent
+import org.chorus.event.server.QueryRegenerateEvent
 import java.net.InetSocketAddress
 
 fun interface QueryEventListener {

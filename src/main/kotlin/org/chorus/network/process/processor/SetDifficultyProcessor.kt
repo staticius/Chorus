@@ -1,13 +1,13 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.Server
-import cn.nukkit.command.Command
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.SetDifficultyPacket
+import org.chorus.PlayerHandle
+import org.chorus.Server
+import org.chorus.command.Command
+import org.chorus.entity.Entity.getServer
+import org.chorus.lang.TranslationContainer
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.SetDifficultyPacket
 
 class SetDifficultyProcessor : DataPacketProcessor<SetDifficultyPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: SetDifficultyPacket) {

@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.inventory.SpecialWindowId
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.inventory.SpecialWindowId
+import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
 @ToString

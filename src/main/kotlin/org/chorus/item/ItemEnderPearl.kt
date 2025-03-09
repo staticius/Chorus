@@ -1,8 +1,8 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.entity.*
-import cn.nukkit.entity.projectile.throwable.EntityEnderPearl
+import org.chorus.Player
+import org.chorus.entity.*
+import org.chorus.entity.projectile.throwable.EntityEnderPearl
 
 class ItemEnderPearl @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
     ProjectileItem(ItemID.Companion.ENDER_PEARL, 0, count, "Ender Pearl") {

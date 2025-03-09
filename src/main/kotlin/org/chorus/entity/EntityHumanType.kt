@@ -1,20 +1,20 @@
 package org.chorus.entity
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.entity.EntityDamageEvent.DamageModifier
-import cn.nukkit.inventory.*
-import cn.nukkit.item.*
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.level.Sound
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.NukkitMath
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.utils.*
+import org.chorus.Player
+import org.chorus.block.BlockID
+import org.chorus.entity.mob.EntityMob
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.entity.EntityDamageEvent.DamageModifier
+import org.chorus.inventory.*
+import org.chorus.item.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.level.Sound
+import org.chorus.level.format.IChunk
+import org.chorus.math.NukkitMath
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.*
 import java.util.concurrent.*
 import java.util.function.Predicate
 

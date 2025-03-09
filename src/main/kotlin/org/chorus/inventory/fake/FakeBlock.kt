@@ -1,7 +1,7 @@
 package org.chorus.inventory.fake
 
-import cn.nukkit.Player
-import cn.nukkit.math.Vector3
+import org.chorus.Player
+import org.chorus.math.Vector3
 
 /**
  * 假方块API，通过发送数据包欺骗客户端在指定位置存在某方块及其方块实体

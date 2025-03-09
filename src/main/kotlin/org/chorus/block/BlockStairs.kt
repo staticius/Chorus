@@ -1,15 +1,15 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block.Companion.get
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.math.AxisAlignedBB.intersectsWith
-import cn.nukkit.math.BlockFace
-import cn.nukkit.registry.BiomeRegistry.get
-import cn.nukkit.registry.BlockRegistry.get
+import org.chorus.Player
+import org.chorus.block.Block.Companion.get
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.item.Item
+import org.chorus.item.Item.Companion.get
+import org.chorus.math.AxisAlignedBB.intersectsWith
+import org.chorus.math.BlockFace
+import org.chorus.registry.BiomeRegistry.get
+import org.chorus.registry.BlockRegistry.get
 
 /**
  * @author MagicDroidX (Nukkit Project)

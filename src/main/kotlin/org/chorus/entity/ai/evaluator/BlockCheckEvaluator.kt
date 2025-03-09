@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.evaluator
 
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.Vector3
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.Vector3
 
 class BlockCheckEvaluator(protected var blockId: String, protected var offsetVec: Vector3) : IBehaviorEvaluator {
     override fun evaluate(entity: EntityMob): Boolean {

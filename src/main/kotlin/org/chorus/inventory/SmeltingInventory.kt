@@ -1,8 +1,8 @@
 package org.chorus.inventory
 
-import cn.nukkit.blockentity.BlockEntity.scheduleUpdate
-import cn.nukkit.blockentity.BlockEntityFurnace
-import cn.nukkit.item.*
+import org.chorus.blockentity.BlockEntity.scheduleUpdate
+import org.chorus.blockentity.BlockEntityFurnace
+import org.chorus.item.*
 
 abstract class SmeltingInventory(holder: InventoryHolder?, type: InventoryType, size: Int) :
     ContainerInventory(holder, type, size) {

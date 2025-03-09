@@ -1,6 +1,6 @@
 package org.chorus.utils.exception
 
-import cn.nukkit.utils.ServerException
+import org.chorus.utils.ServerException
 
 class CustomBlockStateRegisterException : ServerException {
     constructor(message: String?) : super(message)

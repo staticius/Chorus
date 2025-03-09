@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.event.block.BlockFadeEvent
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
+import org.chorus.event.block.BlockFadeEvent
+import org.chorus.item.Item
+import org.chorus.level.Level
 
 interface IBlockOreRedstoneGlowing {
     val unlitBlock: Block

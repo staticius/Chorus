@@ -1,7 +1,7 @@
 package org.chorus.entity
 
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.utils.DyeColor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.utils.DyeColor
 import java.util.concurrent.*
 
 interface EntityColor : EntityComponent {

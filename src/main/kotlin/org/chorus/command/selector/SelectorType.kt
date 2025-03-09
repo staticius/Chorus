@@ -1,6 +1,6 @@
 package org.chorus.command.selector
 
-import cn.nukkit.command.exceptions.SelectorSyntaxException
+import org.chorus.command.exceptions.SelectorSyntaxException
 import lombok.Getter
 
 /**

@@ -1,17 +1,17 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block.Companion.get
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Locator
-import cn.nukkit.math.BlockFace
-import cn.nukkit.registry.BiomeRegistry.get
-import cn.nukkit.registry.BlockRegistry.get
-import cn.nukkit.utils.random.NukkitRandom.nextInt
+import org.chorus.Player
+import org.chorus.block.Block.Companion.get
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.item.Item
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemTool
+import org.chorus.level.Locator
+import org.chorus.math.BlockFace
+import org.chorus.registry.BiomeRegistry.get
+import org.chorus.registry.BlockRegistry.get
+import org.chorus.utils.random.NukkitRandom.nextInt
 
 class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate), Faceable {

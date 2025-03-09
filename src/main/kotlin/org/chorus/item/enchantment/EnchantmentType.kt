@@ -1,7 +1,7 @@
 package org.chorus.item.enchantment
 
-import cn.nukkit.block.BlockCarvedPumpkin
-import cn.nukkit.item.*
+import org.chorus.block.BlockCarvedPumpkin
+import org.chorus.item.*
 
 /**
  * @author MagicDroidX (Nukkit Project)

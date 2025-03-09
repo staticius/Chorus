@@ -1,14 +1,14 @@
 package org.chorus.block
 
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntity.Companion.createBlockEntity
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.utils.LevelException
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntity.Companion.createBlockEntity
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.level.format.IChunk
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.LevelException
 
 interface BlockEntityHolder<E : BlockEntity?> {
     val blockEntity: E?

@@ -1,6 +1,6 @@
 package org.chorus.event
 
-import cn.nukkit.utils.EventException
+import org.chorus.utils.EventException
 
 /**
  * 描述服务器中可能发生的事情的类。<br></br>

@@ -1,7 +1,7 @@
 package org.chorus.item
 
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
 import com.google.common.base.Preconditions
 
 abstract class ItemBookWritable : Item {

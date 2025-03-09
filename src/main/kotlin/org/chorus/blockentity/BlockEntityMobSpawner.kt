@@ -1,19 +1,19 @@
 package org.chorus.blockentity
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockFlowable
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.mob.animal.EntityAnimal
-import cn.nukkit.entity.mob.monster.EntityMonster
-import cn.nukkit.event.entity.CreatureSpawnEvent
-import cn.nukkit.level.GameRule
-import cn.nukkit.level.Locator
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.Utils
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.block.BlockFlowable
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity
+import org.chorus.entity.mob.animal.EntityAnimal
+import org.chorus.entity.mob.monster.EntityMonster
+import org.chorus.event.entity.CreatureSpawnEvent
+import org.chorus.level.GameRule
+import org.chorus.level.Locator
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.Utils
 
 class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     private var delay: Short = 0

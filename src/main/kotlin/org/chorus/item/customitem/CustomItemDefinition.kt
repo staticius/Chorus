@@ -1,14 +1,14 @@
 package org.chorus.item.customitem
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.*
-import cn.nukkit.item.customitem.data.CreativeCategory
-import cn.nukkit.item.customitem.data.CreativeGroup
-import cn.nukkit.item.customitem.data.DigProperty
-import cn.nukkit.item.customitem.data.RenderOffsets
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.tags.ItemTags
-import cn.nukkit.utils.*
+import org.chorus.block.BlockID
+import org.chorus.item.*
+import org.chorus.item.customitem.data.CreativeCategory
+import org.chorus.item.customitem.data.CreativeGroup
+import org.chorus.item.customitem.data.DigProperty
+import org.chorus.item.customitem.data.RenderOffsets
+import org.chorus.nbt.tag.*
+import org.chorus.tags.ItemTags
+import org.chorus.utils.*
 import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap

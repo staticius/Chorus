@@ -1,6 +1,6 @@
 package org.chorus.item.customitem
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 /**
  * 继承这个类实现自定义物品,重写[Item]中的方法控制方块属性

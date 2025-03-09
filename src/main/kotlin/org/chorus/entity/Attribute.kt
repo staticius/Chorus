@@ -1,7 +1,7 @@
 package org.chorus.entity
 
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.utils.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.*
 
 
 /**

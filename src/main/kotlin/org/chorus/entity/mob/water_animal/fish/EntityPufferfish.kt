@@ -1,9 +1,9 @@
 package org.chorus.entity.mob.water_animal.fish
 
-import cn.nukkit.entity.EntityID
-import cn.nukkit.entity.EntitySwimmable
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntitySwimmable
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author PetteriM1

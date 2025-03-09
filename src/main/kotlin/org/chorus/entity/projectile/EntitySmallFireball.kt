@@ -1,19 +1,19 @@
 package org.chorus.entity.projectile
 
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.event.block.BlockIgniteEvent
-import cn.nukkit.event.entity.EntityCombustByEntityEvent
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.entity.ProjectileHitEvent
-import cn.nukkit.level.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.event.block.BlockIgniteEvent
+import org.chorus.event.entity.EntityCombustByEntityEvent
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.entity.ProjectileHitEvent
+import org.chorus.level.*
+import org.chorus.level.format.IChunk
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
 
 open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile(chunk, nbt) {
     override fun getIdentifier(): String {

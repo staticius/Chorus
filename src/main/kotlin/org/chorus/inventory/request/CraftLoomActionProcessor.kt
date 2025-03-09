@@ -1,13 +1,13 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.Player
-import cn.nukkit.inventory.LoomInventory
-import cn.nukkit.item.*
-import cn.nukkit.network.protocol.types.BannerPattern
-import cn.nukkit.network.protocol.types.BannerPatternType
-import cn.nukkit.network.protocol.types.itemstack.request.action.CraftLoomAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import cn.nukkit.utils.DyeColor
+import org.chorus.Player
+import org.chorus.inventory.LoomInventory
+import org.chorus.item.*
+import org.chorus.network.protocol.types.BannerPattern
+import org.chorus.network.protocol.types.BannerPatternType
+import org.chorus.network.protocol.types.itemstack.request.action.CraftLoomAction
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.utils.DyeColor
 import lombok.extern.slf4j.Slf4j
 
 /**

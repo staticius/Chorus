@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.CommonPropertyMap
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.item.*
-import cn.nukkit.level.particle.BoneMealParticle
-import cn.nukkit.math.BlockFace
-import cn.nukkit.tags.BlockTags
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonPropertyMap
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.item.*
+import org.chorus.level.particle.BoneMealParticle
+import org.chorus.math.BlockFace
+import org.chorus.tags.BlockTags
 
 /**
  * PowerNukkitX Project 2023/7/15

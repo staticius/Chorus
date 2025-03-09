@@ -1,11 +1,11 @@
 package org.chorus.utils
 
-import cn.nukkit.entity.data.EntityDataFormat
-import cn.nukkit.entity.data.EntityDataMap
-import cn.nukkit.math.*
-import cn.nukkit.math.NukkitMath.round
-import cn.nukkit.nbt.NBTIO.write
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.data.EntityDataFormat
+import org.chorus.entity.data.EntityDataMap
+import org.chorus.math.*
+import org.chorus.math.NukkitMath.round
+import org.chorus.nbt.NBTIO.write
+import org.chorus.nbt.tag.CompoundTag
 import java.io.*
 import java.nio.ByteBuffer
 import java.nio.ByteOrder

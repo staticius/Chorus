@@ -1,11 +1,11 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.player.PlayerDuplicatedLoginEvent
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.LoginPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.player.PlayerDuplicatedLoginEvent
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.LoginPacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class LoginProcessor : DataPacketProcessor<LoginPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: LoginPacket) {

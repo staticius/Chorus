@@ -1,13 +1,13 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.InventoryContentPacket
-import cn.nukkit.network.protocol.InventorySlotPacket
-import cn.nukkit.network.protocol.MobArmorEquipmentPacket
-import cn.nukkit.network.protocol.types.inventory.FullContainerName
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.entity.Entity
+import org.chorus.item.Item
+import org.chorus.network.protocol.InventoryContentPacket
+import org.chorus.network.protocol.InventorySlotPacket
+import org.chorus.network.protocol.MobArmorEquipmentPacket
+import org.chorus.network.protocol.types.inventory.FullContainerName
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, InventoryType.ARMOR, 4) {
     val entity: Entity = holder as Entity

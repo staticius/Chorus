@@ -1,14 +1,14 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.Player
-import cn.nukkit.inventory.SpecialWindowId
-import cn.nukkit.network.protocol.InventorySlotPacket
-import cn.nukkit.network.protocol.types.inventory.FullContainerName
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import cn.nukkit.network.protocol.types.itemstack.request.action.MineBlockAction
-import cn.nukkit.network.protocol.types.itemstack.response.ItemStackResponseContainer
-import cn.nukkit.network.protocol.types.itemstack.response.ItemStackResponseSlot
+import org.chorus.Player
+import org.chorus.inventory.SpecialWindowId
+import org.chorus.network.protocol.InventorySlotPacket
+import org.chorus.network.protocol.types.inventory.FullContainerName
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.network.protocol.types.itemstack.request.action.MineBlockAction
+import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
+import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import com.google.common.collect.Lists
 import lombok.extern.slf4j.Slf4j
 import java.util.List

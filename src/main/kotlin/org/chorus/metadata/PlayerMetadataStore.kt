@@ -1,6 +1,6 @@
 package org.chorus.metadata
 
-import cn.nukkit.IPlayer
+import org.chorus.IPlayer
 
 /**
  * @author MagicDroidX (Nukkit Project)

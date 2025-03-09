@@ -1,9 +1,9 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.entity.Attribute.getName
-import cn.nukkit.nbt.tag.ListTag.size
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.resourcepacks.ResourcePack
+import org.chorus.entity.Attribute.getName
+import org.chorus.nbt.tag.ListTag.size
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.resourcepacks.ResourcePack
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 

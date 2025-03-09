@@ -1,14 +1,14 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockAir
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemBlock
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.IntTag
-import cn.nukkit.utils.RedstoneComponent
+import org.chorus.block.BlockAir
+import org.chorus.block.BlockID
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.IntTag
+import org.chorus.utils.RedstoneComponent
 import kotlin.math.min
 
 class BlockEntityLectern(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {

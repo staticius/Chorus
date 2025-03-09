@@ -1,7 +1,7 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.HandlerList
+import org.chorus.Player
+import org.chorus.event.HandlerList
 
 class PlayerJumpEvent(player: Player?) : PlayerEvent() {
     init {

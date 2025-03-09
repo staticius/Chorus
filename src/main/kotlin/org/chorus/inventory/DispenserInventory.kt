@@ -1,7 +1,7 @@
 package org.chorus.inventory
 
-import cn.nukkit.blockentity.BlockEntityDispenser
-import cn.nukkit.blockentity.BlockEntityNameable
+import org.chorus.blockentity.BlockEntityDispenser
+import org.chorus.blockentity.BlockEntityNameable
 
 
 class DispenserInventory(blockEntity: BlockEntityDispenser?) :

@@ -1,14 +1,14 @@
 package org.chorus.level.generator.terra
 
-import cn.nukkit.Server
-import cn.nukkit.level.*
-import cn.nukkit.level.format.*
-import cn.nukkit.level.generator.ChunkGenerateContext
-import cn.nukkit.level.generator.GenerateStage
-import cn.nukkit.level.generator.Generator
-import cn.nukkit.level.generator.terra.delegate.PNXProtoChunk
-import cn.nukkit.level.generator.terra.delegate.PNXProtoWorld
-import cn.nukkit.level.generator.terra.delegate.PNXServerWorld
+import org.chorus.Server
+import org.chorus.level.*
+import org.chorus.level.format.*
+import org.chorus.level.generator.ChunkGenerateContext
+import org.chorus.level.generator.GenerateStage
+import org.chorus.level.generator.Generator
+import org.chorus.level.generator.terra.delegate.PNXProtoChunk
+import org.chorus.level.generator.terra.delegate.PNXProtoWorld
+import org.chorus.level.generator.terra.delegate.PNXServerWorld
 import com.dfsek.terra.api.config.ConfigPack
 import com.dfsek.terra.api.world.biome.generation.BiomeProvider
 import com.dfsek.terra.api.world.chunk.generation.ChunkGenerator

@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.controller
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 import java.util.concurrent.ThreadLocalRandom
 
 /**

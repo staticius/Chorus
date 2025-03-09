@@ -1,10 +1,10 @@
 package org.chorus.entity.mob.animal
 
-import cn.nukkit.entity.EntityFlyable
-import cn.nukkit.entity.EntityID
-import cn.nukkit.item.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.EntityFlyable
+import org.chorus.entity.EntityID
+import org.chorus.item.*
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author PikyCZ

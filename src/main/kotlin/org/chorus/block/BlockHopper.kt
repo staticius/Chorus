@@ -1,28 +1,28 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.Server.Companion.instance
-import cn.nukkit.block.BlockComposter.isFull
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntityHopper
-import cn.nukkit.entity.item.EntityItem
-import cn.nukkit.event.inventory.InventoryMoveItemEvent
-import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
-import cn.nukkit.inventory.InventoryHolder
-import cn.nukkit.inventory.RecipeInventoryHolder
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.math.*
-import cn.nukkit.math.BlockFace.Companion.fromIndex
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.Faceable
-import cn.nukkit.utils.RedstoneComponent
+import org.chorus.Player
+import org.chorus.Server.Companion.instance
+import org.chorus.block.BlockComposter.isFull
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityHopper
+import org.chorus.entity.item.EntityItem
+import org.chorus.event.inventory.InventoryMoveItemEvent
+import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
+import org.chorus.inventory.InventoryHolder
+import org.chorus.inventory.RecipeInventoryHolder
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.math.*
+import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.Faceable
+import org.chorus.utils.RedstoneComponent
 
 /**
  * @author CreeperFace

@@ -1,15 +1,15 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.effect.*
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.EntityMonster
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.item.*
-import cn.nukkit.plugin.InternalPlugin
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.effect.*
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.EntityMonster
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.item.*
+import org.chorus.plugin.InternalPlugin
 import java.util.*
 import java.util.function.Consumer
 

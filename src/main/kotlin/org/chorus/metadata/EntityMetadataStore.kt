@@ -1,6 +1,6 @@
 package org.chorus.metadata
 
-import cn.nukkit.entity.Entity
+import org.chorus.entity.Entity
 
 /**
  * @author MagicDroidX (Nukkit Project)

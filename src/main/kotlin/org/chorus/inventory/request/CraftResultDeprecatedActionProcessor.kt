@@ -1,10 +1,10 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.Player
-import cn.nukkit.network.protocol.types.itemstack.request.action.CraftResultsDeprecatedAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import cn.nukkit.recipe.Recipe
-import cn.nukkit.recipe.RecipeType
+import org.chorus.Player
+import org.chorus.network.protocol.types.itemstack.request.action.CraftResultsDeprecatedAction
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.recipe.Recipe
+import org.chorus.recipe.RecipeType
 import lombok.extern.slf4j.Slf4j
 
 

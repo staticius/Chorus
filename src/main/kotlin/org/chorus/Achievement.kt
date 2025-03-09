@@ -1,10 +1,10 @@
 package org.chorus
 
-import cn.nukkit.config.ServerProperties.get
-import cn.nukkit.config.ServerPropertiesKeys
-import cn.nukkit.lang.BaseLang.tr
-import cn.nukkit.nbt.tag.ListTag.get
-import cn.nukkit.utils.*
+import org.chorus.config.ServerProperties.get
+import org.chorus.config.ServerPropertiesKeys
+import org.chorus.lang.BaseLang.tr
+import org.chorus.nbt.tag.ListTag.get
+import org.chorus.utils.*
 
 /**
  * @author CreeperFace

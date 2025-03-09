@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntitySculkSensor.calPower
-import cn.nukkit.blockentity.BlockEntitySculkSensor.comparatorPower
-import cn.nukkit.blockentity.BlockEntitySculkSensor.power
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.utils.RedstoneComponent.updateAroundRedstone
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntitySculkSensor.calPower
+import org.chorus.blockentity.BlockEntitySculkSensor.comparatorPower
+import org.chorus.blockentity.BlockEntitySculkSensor.power
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.utils.RedstoneComponent.updateAroundRedstone
 
 /**
  * @author LT_Name

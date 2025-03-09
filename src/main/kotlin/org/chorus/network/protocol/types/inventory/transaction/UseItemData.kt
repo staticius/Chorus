@@ -1,10 +1,10 @@
 package org.chorus.network.protocol.types.inventory.transaction
 
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.math.Vector3
-import cn.nukkit.math.Vector3f
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
+import org.chorus.math.Vector3f
 import lombok.ToString
 
 /**

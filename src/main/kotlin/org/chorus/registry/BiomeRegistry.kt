@@ -1,9 +1,9 @@
 package org.chorus.registry
 
-import cn.nukkit.nbt.NBTIO.readTreeMapCompoundTag
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.registry.BiomeRegistry.BiomeDefinition
-import cn.nukkit.registry.RegisterException
+import org.chorus.nbt.NBTIO.readTreeMapCompoundTag
+import org.chorus.nbt.tag.*
+import org.chorus.registry.BiomeRegistry.BiomeDefinition
+import org.chorus.registry.RegisterException
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap

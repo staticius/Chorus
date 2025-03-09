@@ -1,8 +1,8 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.Player
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.Player
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestAction
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 
 interface ItemStackRequestActionProcessor<T : ItemStackRequestAction?> {
     val type: ItemStackRequestActionType

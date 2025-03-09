@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
 
 /**
  * @author xtypr

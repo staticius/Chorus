@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.block.*
+import org.chorus.block.*
 
 /**
  * @author MagicDroidX (Nukkit Project)

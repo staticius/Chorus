@@ -1,11 +1,11 @@
 package org.chorus.entity.projectile.throwable
 
-import cn.nukkit.entity.*
-import cn.nukkit.level.Sound
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.particle.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.LevelSoundEventPacket
+import org.chorus.entity.*
+import org.chorus.level.Sound
+import org.chorus.level.format.IChunk
+import org.chorus.level.particle.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.LevelSoundEventPacket
 import java.util.concurrent.*
 
 /**

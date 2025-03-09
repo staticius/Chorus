@@ -1,11 +1,11 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.block.BlockUndyedShulkerBox
-import cn.nukkit.item.Item
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.BlockFace
+import org.chorus.block.BlockDispenser
+import org.chorus.block.BlockUndyedShulkerBox
+import org.chorus.item.Item
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.BlockFace
 
 class ShulkerBoxDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {

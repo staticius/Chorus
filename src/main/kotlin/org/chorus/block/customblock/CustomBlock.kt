@@ -1,8 +1,8 @@
 package org.chorus.block.customblock
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.item.Item
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.item.Item
 import kotlin.math.min
 
 /**

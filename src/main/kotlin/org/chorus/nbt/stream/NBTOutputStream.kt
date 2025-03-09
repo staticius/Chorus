@@ -1,7 +1,7 @@
 package org.chorus.nbt.stream
 
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.utils.VarInt
+import org.chorus.nbt.tag.*
+import org.chorus.utils.VarInt
 import java.io.*
 import java.nio.ByteOrder
 import java.nio.charset.*

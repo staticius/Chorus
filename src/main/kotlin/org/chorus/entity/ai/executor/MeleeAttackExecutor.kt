@@ -1,20 +1,20 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.effect.*
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.entity.EntityDamageEvent.DamageModifier
-import cn.nukkit.inventory.EntityInventoryHolder
-import cn.nukkit.item.*
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.math.*
-import cn.nukkit.network.protocol.EntityEventPacket
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.effect.*
+import org.chorus.entity.mob.EntityMob
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.entity.EntityDamageEvent.DamageModifier
+import org.chorus.inventory.EntityInventoryHolder
+import org.chorus.item.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.math.*
+import org.chorus.network.protocol.EntityEventPacket
 import java.util.*
 
 /**

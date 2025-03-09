@@ -1,6 +1,6 @@
 package org.chorus.metadata
 
-import cn.nukkit.level.Level
+import org.chorus.level.Level
 
 /**
  * @author MagicDroidX (Nukkit Project)

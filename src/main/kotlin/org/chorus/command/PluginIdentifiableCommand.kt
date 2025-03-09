@@ -1,6 +1,6 @@
 package org.chorus.command
 
-import cn.nukkit.plugin.Plugin
+import org.chorus.plugin.Plugin
 
 /**
  * @author MagicDroidX (Nukkit Project)

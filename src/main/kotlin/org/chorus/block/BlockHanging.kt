@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.tags.BlockTags
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.tags.BlockTags
 
 abstract class BlockHanging(blockState: BlockState?) : BlockFlowable(blockState) {
     override fun onUpdate(type: Int): Int {

@@ -1,15 +1,15 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.Player
-import cn.nukkit.camera.instruction.impl.ClearInstruction.get
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.tree.node.PlayersNode
-import cn.nukkit.command.tree.node.RemainStringNode
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.item.Item
+import org.chorus.Player
+import org.chorus.camera.instruction.impl.ClearInstruction.get
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.tree.ParamList
+import org.chorus.command.tree.node.PlayersNode
+import org.chorus.command.tree.node.RemainStringNode
+import org.chorus.command.utils.CommandLogger
+import org.chorus.item.Item
 import java.util.stream.Collectors
 import kotlin.math.min
 

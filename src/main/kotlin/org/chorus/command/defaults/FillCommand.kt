@@ -1,18 +1,18 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockState
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.level.Locator
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.NukkitMath
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.utils.Utils
+import org.chorus.block.Block
+import org.chorus.block.BlockState
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandEnum
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.tree.ParamList
+import org.chorus.command.utils.CommandLogger
+import org.chorus.level.Locator
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.NukkitMath
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.utils.Utils
 import kotlin.math.max
 import kotlin.math.min
 

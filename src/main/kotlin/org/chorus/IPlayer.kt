@@ -1,7 +1,7 @@
 package org.chorus
 
-import cn.nukkit.metadata.Metadatable
-import cn.nukkit.permission.ServerOperator
+import org.chorus.metadata.Metadatable
+import org.chorus.permission.ServerOperator
 import java.util.*
 
 /**

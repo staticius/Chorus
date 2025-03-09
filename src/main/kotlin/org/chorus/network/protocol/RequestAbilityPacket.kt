@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.AbilityType
-import cn.nukkit.network.protocol.types.PlayerAbility
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.AbilityType
+import org.chorus.network.protocol.types.PlayerAbility
 import lombok.*
 
 @Getter

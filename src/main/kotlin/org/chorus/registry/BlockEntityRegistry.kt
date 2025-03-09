@@ -1,7 +1,7 @@
 package org.chorus.registry
 
-import cn.nukkit.blockentity.*
-import cn.nukkit.registry.RegisterException
+import org.chorus.blockentity.*
+import org.chorus.registry.RegisterException
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import java.util.concurrent.atomic.AtomicBoolean

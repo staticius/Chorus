@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.block.Block
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.IVector3
-import cn.nukkit.math.Vector3
+import org.chorus.block.Block
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.IVector3
+import org.chorus.math.Vector3
 import java.util.concurrent.ThreadLocalRandom
 
 open class NearbyFlatRandomRoamExecutor @JvmOverloads constructor(

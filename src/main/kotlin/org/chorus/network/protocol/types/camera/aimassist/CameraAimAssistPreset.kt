@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.camera.aimassist
 
-import cn.nukkit.utils.OptionalValue
+import org.chorus.utils.OptionalValue
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.Data

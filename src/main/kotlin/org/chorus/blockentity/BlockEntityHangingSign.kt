@@ -1,7 +1,7 @@
 package org.chorus.blockentity
 
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 class BlockEntityHangingSign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySign(chunk, nbt) {
     override var name: String

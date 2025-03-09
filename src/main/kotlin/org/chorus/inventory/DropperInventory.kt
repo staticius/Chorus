@@ -1,7 +1,7 @@
 package org.chorus.inventory
 
-import cn.nukkit.blockentity.BlockEntityDropper
-import cn.nukkit.blockentity.BlockEntityNameable
+import org.chorus.blockentity.BlockEntityDropper
+import org.chorus.blockentity.BlockEntityNameable
 
 
 class DropperInventory(blockEntity: BlockEntityDropper?) : EjectableInventory(blockEntity, InventoryType.DROPPER, 9) {

@@ -1,6 +1,6 @@
 package org.chorus.network.connection.netty.codec.encryption
 
-import cn.nukkit.network.connection.netty.BedrockBatchWrapper
+import org.chorus.network.connection.netty.BedrockBatchWrapper
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.CorruptedFrameException
 import io.netty.handler.codec.MessageToMessageDecoder

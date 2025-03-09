@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.CodeBuilderCategoryType
-import cn.nukkit.network.protocol.types.CodeBuilderOperationType
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.CodeBuilderCategoryType
+import org.chorus.network.protocol.types.CodeBuilderOperationType
 import lombok.*
 
 //EDU exclusive

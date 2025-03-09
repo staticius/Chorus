@@ -1,12 +1,12 @@
 package org.chorus.scheduler
 
-import cn.nukkit.block.Block
-import cn.nukkit.level.Level
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.NukkitMath.floorDouble
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.BlockUpdateEntry
-import cn.nukkit.utils.collection.nb.Long2ObjectNonBlockingMap
+import org.chorus.block.Block
+import org.chorus.level.Level
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.NukkitMath.floorDouble
+import org.chorus.math.Vector3
+import org.chorus.utils.BlockUpdateEntry
+import org.chorus.utils.collection.nb.Long2ObjectNonBlockingMap
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.max

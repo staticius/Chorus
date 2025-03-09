@@ -1,9 +1,9 @@
 package org.chorus.level
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.math.Vector3
-import cn.nukkit.registry.Registries
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.math.Vector3
+import org.chorus.registry.Registries
 import it.unimi.dsi.fastutil.ints.*
 import java.util.List
 

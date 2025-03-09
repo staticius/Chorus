@@ -1,6 +1,6 @@
 package org.chorus.camera.data
 
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author daoge_cmd

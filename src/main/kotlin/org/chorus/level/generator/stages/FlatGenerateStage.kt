@@ -1,10 +1,10 @@
 package org.chorus.level.generator.stages
 
-import cn.nukkit.block.*
-import cn.nukkit.level.biome.BiomeID
-import cn.nukkit.level.format.*
-import cn.nukkit.level.generator.ChunkGenerateContext
-import cn.nukkit.level.generator.GenerateStage
+import org.chorus.block.*
+import org.chorus.level.biome.BiomeID
+import org.chorus.level.format.*
+import org.chorus.level.generator.ChunkGenerateContext
+import org.chorus.level.generator.GenerateStage
 
 class FlatGenerateStage : GenerateStage() {
     override fun name(): String {

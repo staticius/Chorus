@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.ItemTool
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.ItemTool
 
 class BlockPolishedTuffSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSlab(blockstate, BlockID.POLISHED_TUFF_DOUBLE_SLAB) {

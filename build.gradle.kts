@@ -50,7 +50,6 @@ dependencies {
     implementation(libs.disruptor)
     implementation(libs.oshi)
     implementation(libs.fastreflection)
-    implementation(libs.terra)
     implementation(libs.bundles.compress)
     implementation(libs.bundles.terminal)
     implementation(libs.graalvm.polyglot)
@@ -61,10 +60,6 @@ dependencies {
     testImplementation(libs.commonsio)
     testImplementation(libs.commonslang3)
 
-    compileOnly(libs.lombok)
-    annotationProcessor(libs.lombok)
-    testCompileOnly(libs.lombok)
-    testAnnotationProcessor(libs.lombok)
     implementation(kotlin("stdlib-jdk8"))
 }
 

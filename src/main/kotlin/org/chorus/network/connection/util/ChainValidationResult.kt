@@ -1,6 +1,6 @@
 package org.chorus.network.connection.util
 
-import cn.nukkit.utils.JSONUtils
+import org.chorus.utils.JSONUtils
 import com.google.gson.reflect.TypeToken
 import java.security.NoSuchAlgorithmException
 import java.security.PublicKey

@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.WoodType
-import cn.nukkit.item.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.WoodType
+import org.chorus.item.*
 
 class BlockCherryLeaves @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockLeaves(blockState) {

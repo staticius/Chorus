@@ -1,14 +1,14 @@
 package org.chorus.block
 
-import cn.nukkit.AdventureSettings
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.effect.Effect.Companion.get
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.level.Sound
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.SimpleAxisAlignedBB
+import org.chorus.AdventureSettings
+import org.chorus.Player
+import org.chorus.entity.Entity
+import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.EffectType
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.level.Sound
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.SimpleAxisAlignedBB
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.floor

@@ -1,16 +1,16 @@
 package org.chorus.recipe
 
-import cn.nukkit.entity.effect.PotionType
-import cn.nukkit.entity.effect.PotionType.Companion.get
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.ItemPotion.Companion.fromPotion
-import cn.nukkit.recipe.descriptor.DefaultDescriptor
-import cn.nukkit.recipe.descriptor.ItemDescriptor
-import cn.nukkit.recipe.descriptor.ItemTagDescriptor
-import cn.nukkit.registry.RecipeRegistry
-import cn.nukkit.registry.Registries
-import cn.nukkit.utils.JSONUtils
+import org.chorus.entity.effect.PotionType
+import org.chorus.entity.effect.PotionType.Companion.get
+import org.chorus.item.Item
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemPotion.Companion.fromPotion
+import org.chorus.recipe.descriptor.DefaultDescriptor
+import org.chorus.recipe.descriptor.ItemDescriptor
+import org.chorus.recipe.descriptor.ItemTagDescriptor
+import org.chorus.registry.RecipeRegistry
+import org.chorus.registry.Registries
+import org.chorus.utils.JSONUtils
 import com.google.gson.reflect.TypeToken
 import lombok.extern.slf4j.Slf4j
 import java.io.*

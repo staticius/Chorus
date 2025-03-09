@@ -1,12 +1,12 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.Server
-import cn.nukkit.level.Transform.Companion.fromObject
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.MovePlayerPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.Server
+import org.chorus.level.Transform.Companion.fromObject
+import org.chorus.math.Vector3
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.MovePlayerPacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class MovePlayerProcessor : DataPacketProcessor<MovePlayerPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: MovePlayerPacket) {

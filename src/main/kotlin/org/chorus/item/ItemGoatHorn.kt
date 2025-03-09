@@ -1,8 +1,8 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.level.Sound
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.level.Sound
+import org.chorus.math.*
 
 class ItemGoatHorn(aux: Int, count: Int) : Item(ItemID.Companion.GOAT_HORN) {
     protected var coolDownTick: Int = 140

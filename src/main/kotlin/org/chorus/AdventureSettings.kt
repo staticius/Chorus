@@ -1,11 +1,11 @@
 package org.chorus
 
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.IntTag
-import cn.nukkit.network.protocol.RequestPermissionsPacket
-import cn.nukkit.network.protocol.UpdateAbilitiesPacket
-import cn.nukkit.network.protocol.UpdateAdventureSettingsPacket
-import cn.nukkit.network.protocol.types.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.IntTag
+import org.chorus.network.protocol.RequestPermissionsPacket
+import org.chorus.network.protocol.UpdateAbilitiesPacket
+import org.chorus.network.protocol.UpdateAdventureSettingsPacket
+import org.chorus.network.protocol.types.*
 import lombok.Getter
 import lombok.Setter
 import java.util.*

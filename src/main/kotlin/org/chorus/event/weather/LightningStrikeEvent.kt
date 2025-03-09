@@ -1,10 +1,10 @@
 package org.chorus.event.weather
 
-import cn.nukkit.entity.weather.EntityLightningStrike
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.event.level.WeatherEvent
-import cn.nukkit.level.Level
+import org.chorus.entity.weather.EntityLightningStrike
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.event.level.WeatherEvent
+import org.chorus.level.Level
 
 /**
  * @author funcraft (Nukkit Project)

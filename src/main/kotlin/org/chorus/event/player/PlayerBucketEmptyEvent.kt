@@ -1,10 +1,10 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.event.HandlerList
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.event.HandlerList
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
 
 class PlayerBucketEmptyEvent(
     who: Player?,

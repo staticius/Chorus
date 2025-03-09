@@ -1,7 +1,7 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.generator.terra.PNXAdapter
+import org.chorus.level.format.IChunk
+import org.chorus.level.generator.terra.PNXAdapter
 import com.dfsek.terra.api.block.state.BlockState
 import com.dfsek.terra.api.world.ServerWorld
 import com.dfsek.terra.api.world.chunk.Chunk

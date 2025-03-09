@@ -1,6 +1,6 @@
 package org.chorus.block.customblock.data
 
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * 用于将方块的face(面)映射到实际的材质实例,并且设置渲染方法和参数

@@ -1,10 +1,10 @@
 package org.chorus.utils
 
-import cn.nukkit.block.Block
-import cn.nukkit.level.Level
-import cn.nukkit.math.*
-import cn.nukkit.math.NukkitMath.ceilDouble
-import cn.nukkit.math.NukkitMath.floorDouble
+import org.chorus.block.Block
+import org.chorus.level.Level
+import org.chorus.math.*
+import org.chorus.math.NukkitMath.ceilDouble
+import org.chorus.math.NukkitMath.floorDouble
 import io.netty.buffer.ByteBuf
 import lombok.extern.slf4j.Slf4j
 import java.io.*

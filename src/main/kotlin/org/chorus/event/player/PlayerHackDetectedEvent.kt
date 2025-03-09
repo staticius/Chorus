@@ -1,7 +1,7 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.HandlerList
+import org.chorus.Player
+import org.chorus.event.HandlerList
 
 class PlayerHackDetectedEvent(player: Player?, type: HackType) : PlayerEvent() {
     var isKick: Boolean = true

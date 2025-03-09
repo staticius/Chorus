@@ -1,6 +1,6 @@
 package org.chorus.lang
 
-import cn.nukkit.network.protocol.types.CommandOutputMessage
+import org.chorus.network.protocol.types.CommandOutputMessage
 
 /**
  * [CommandOutputPacket][cn.nukkit.network.protocol.CommandOutputPacket] 负载消息的容器，支持同时发送多条消息

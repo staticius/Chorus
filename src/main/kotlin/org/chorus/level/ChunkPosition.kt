@@ -1,7 +1,7 @@
 package org.chorus.level
 
-import cn.nukkit.math.MathHelper
-import cn.nukkit.math.Vector3
+import org.chorus.math.MathHelper
+import org.chorus.math.Vector3
 
 /**
  * @author Adam Matthew (Nukkit Project)

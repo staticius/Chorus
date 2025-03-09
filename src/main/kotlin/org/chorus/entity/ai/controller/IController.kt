@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.controller
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 
 /**
  * 控制器是用来控制实体的行为的，比如移动、跳跃、攻击等等的具体实现。<br></br>

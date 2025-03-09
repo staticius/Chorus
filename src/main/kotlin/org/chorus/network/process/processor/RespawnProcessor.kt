@@ -1,12 +1,12 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getX
-import cn.nukkit.entity.Entity.getY
-import cn.nukkit.entity.Entity.getZ
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.RespawnPacket
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getX
+import org.chorus.entity.Entity.getY
+import org.chorus.entity.Entity.getZ
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.RespawnPacket
 
 class RespawnProcessor : DataPacketProcessor<RespawnPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: RespawnPacket) {

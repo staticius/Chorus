@@ -1,9 +1,9 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.NukkitMath
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.BlockID
+import org.chorus.level.format.IChunk
+import org.chorus.math.NukkitMath
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author joserobjr

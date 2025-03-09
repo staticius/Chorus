@@ -1,9 +1,9 @@
 package org.chorus.recipe
 
-import cn.nukkit.inventory.InventoryType
-import cn.nukkit.item.Item
-import cn.nukkit.recipe.descriptor.DefaultDescriptor
-import cn.nukkit.registry.RecipeRegistry
+import org.chorus.inventory.InventoryType
+import org.chorus.item.Item
+import org.chorus.recipe.descriptor.DefaultDescriptor
+import org.chorus.registry.RecipeRegistry
 import java.util.List
 
 class RepairRecipe(val inventoryType: InventoryType, result: Item, ingredients: Collection<Item>) :

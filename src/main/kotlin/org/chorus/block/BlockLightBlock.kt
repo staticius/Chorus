@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.math.AxisAlignedBB
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.math.AxisAlignedBB
 
 class BlockLightBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {

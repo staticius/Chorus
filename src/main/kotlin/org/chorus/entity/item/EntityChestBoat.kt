@@ -1,18 +1,18 @@
 package org.chorus.entity.item
 
-import cn.nukkit.Player
-import cn.nukkit.entity.EntityID
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.inventory.*
-import cn.nukkit.item.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.*
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.network.protocol.AddEntityPacket
-import cn.nukkit.network.protocol.DataPacket
-import cn.nukkit.network.protocol.types.EntityLink
+import org.chorus.Player
+import org.chorus.entity.EntityID
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.inventory.*
+import org.chorus.item.*
+import org.chorus.level.format.IChunk
+import org.chorus.math.*
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.network.protocol.AddEntityPacket
+import org.chorus.network.protocol.DataPacket
+import org.chorus.network.protocol.types.EntityLink
 
 class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt), InventoryHolder {
     override fun getIdentifier(): String {

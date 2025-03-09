@@ -1,6 +1,6 @@
 package org.chorus.metadata
 
-import cn.nukkit.plugin.Plugin
+import org.chorus.plugin.Plugin
 
 /**
  * A FixedMetadataValue is a special case metadata item that contains the same

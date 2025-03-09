@@ -1,11 +1,11 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.level.*
-import cn.nukkit.level.generator.terra.PNXAdapter
-import cn.nukkit.level.generator.terra.TerraGenerator
-import cn.nukkit.math.BlockVector3
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.level.*
+import org.chorus.level.generator.terra.PNXAdapter
+import org.chorus.level.generator.terra.TerraGenerator
+import org.chorus.math.BlockVector3
 import com.dfsek.terra.api.block.entity.BlockEntity
 import com.dfsek.terra.api.block.state.BlockState
 import com.dfsek.terra.api.config.ConfigPack

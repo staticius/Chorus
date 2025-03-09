@@ -1,9 +1,9 @@
 package org.chorus.event.block
 
-import cn.nukkit.block.Block
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.block.Block
+import org.chorus.entity.Entity
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 class FarmLandDecayEvent(val entity: Entity?, farm: Block) : BlockEvent(farm), Cancellable {
     companion object {

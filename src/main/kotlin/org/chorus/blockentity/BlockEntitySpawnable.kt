@@ -1,9 +1,9 @@
 package org.chorus.blockentity
 
-import cn.nukkit.Player
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.BlockEntityDataPacket
+import org.chorus.Player
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.BlockEntityDataPacket
 
 /**
  * @author MagicDroidX (Nukkit Project)

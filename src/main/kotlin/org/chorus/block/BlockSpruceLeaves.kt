@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.WoodType
-import cn.nukkit.item.Item
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.WoodType
+import org.chorus.item.Item
 
 class BlockSpruceLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
     override val type: WoodType

@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.enums.OxidizationLevel
-import cn.nukkit.event.block.BlockFadeEvent
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.level.particle.ScrapeParticle
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.enums.OxidizationLevel
+import org.chorus.event.block.BlockFadeEvent
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.level.particle.ScrapeParticle
+import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 /**

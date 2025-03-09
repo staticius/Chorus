@@ -1,8 +1,8 @@
 package org.chorus.dialog.handler
 
-import cn.nukkit.Player
-import cn.nukkit.dialog.handler.FormDialogHandler
-import cn.nukkit.dialog.response.FormResponseDialog
+import org.chorus.Player
+import org.chorus.dialog.handler.FormDialogHandler
+import org.chorus.dialog.response.FormResponseDialog
 import java.util.function.Consumer
 import kotlin.invoke
 

@@ -1,12 +1,12 @@
 package org.chorus.event.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.Event
-import cn.nukkit.event.HandlerList
-import cn.nukkit.inventory.request.ActionResponse
-import cn.nukkit.inventory.request.ItemStackRequestContext
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestAction
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.Event
+import org.chorus.event.HandlerList
+import org.chorus.inventory.request.ActionResponse
+import org.chorus.inventory.request.ItemStackRequestContext
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestAction
 
 class ItemStackRequestActionEvent(
     @JvmField val player: Player,

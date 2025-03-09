@@ -1,10 +1,10 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.SettingsCommandPacket
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getServer
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.SettingsCommandPacket
 
 class SettingsCommandProcessor : DataPacketProcessor<SettingsCommandPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: SettingsCommandPacket) {

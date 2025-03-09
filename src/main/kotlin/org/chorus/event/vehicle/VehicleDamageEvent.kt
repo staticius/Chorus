@@ -1,8 +1,8 @@
 package org.chorus.event.vehicle
 
-import cn.nukkit.entity.item.EntityVehicle
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.entity.item.EntityVehicle
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 /**
  * Is called when an entity takes damage

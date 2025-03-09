@@ -1,6 +1,6 @@
 package org.chorus.network.connection.netty.codec.packet
 
-import cn.nukkit.network.connection.netty.BedrockPacketWrapper
+import org.chorus.network.connection.netty.BedrockPacketWrapper
 import io.netty.buffer.ByteBuf
 
 class BedrockPacketCodec_v2 : BedrockPacketCodec() {

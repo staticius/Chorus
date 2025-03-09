@@ -1,8 +1,8 @@
 package org.chorus.entity.projectile
 
-import cn.nukkit.entity.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.*
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 class EntityBreezeWindCharge @JvmOverloads constructor(
     chunk: IChunk?,

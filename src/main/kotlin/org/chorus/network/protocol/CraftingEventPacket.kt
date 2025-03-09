@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.item.Item
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.item.Item
+import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 import java.util.*
 import java.util.function.Function

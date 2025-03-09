@@ -1,13 +1,13 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.Player
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.level.Locator
+import org.chorus.Player
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandEnum
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.tree.ParamList
+import org.chorus.command.utils.CommandLogger
+import org.chorus.level.Locator
 import kotlin.collections.ArrayList
 import kotlin.collections.Map
 import kotlin.collections.MutableList

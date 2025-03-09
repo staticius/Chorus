@@ -1,7 +1,7 @@
 package org.chorus.level.util
 
-import cn.nukkit.level.DimensionData
-import cn.nukkit.level.DimensionEnum
+import org.chorus.level.DimensionData
+import org.chorus.level.DimensionEnum
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

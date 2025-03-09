@@ -1,7 +1,7 @@
 package org.chorus.registry
 
-import cn.nukkit.network.protocol.*
-import cn.nukkit.registry.RegisterException
+import org.chorus.network.protocol.*
+import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import me.sunlan.fastreflection.FastConstructor
 import java.util.concurrent.atomic.AtomicBoolean

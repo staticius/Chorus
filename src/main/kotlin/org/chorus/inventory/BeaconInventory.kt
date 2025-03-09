@@ -1,10 +1,10 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntityBeacon
-import cn.nukkit.blockentity.BlockEntityNameable
-import cn.nukkit.network.protocol.ContainerOpenPacket
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntityBeacon
+import org.chorus.blockentity.BlockEntityNameable
+import org.chorus.network.protocol.ContainerOpenPacket
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 /**
  * @author Rover656

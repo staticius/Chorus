@@ -1,7 +1,7 @@
 package org.chorus.entity.effect
 
-import cn.nukkit.Player
-import cn.nukkit.entity.*
+import org.chorus.Player
+import org.chorus.entity.*
 import java.awt.Color
 
 class EffectHunger :

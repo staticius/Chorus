@@ -1,6 +1,6 @@
 package org.chorus.level.generator.`object`.legacytree
 
-import cn.nukkit.block.*
+import org.chorus.block.*
 
 /**
  * @author DaPorkchop_ (Nukkit Project)

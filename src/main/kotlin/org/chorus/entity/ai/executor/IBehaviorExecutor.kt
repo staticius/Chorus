@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 
 /**
  * 行为执行器<br></br>

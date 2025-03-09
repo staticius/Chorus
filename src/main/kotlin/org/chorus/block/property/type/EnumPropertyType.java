@@ -1,7 +1,7 @@
 package org.chorus.block.property.type;
 
 
-import cn.nukkit.utils.Utils;
+import org.chorus.utils.Utils;
 
 import java.util.Arrays;
 import java.util.EnumMap;

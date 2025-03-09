@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.math.BlockFace
+import org.chorus.math.BlockFace
 
 interface Faceable {
     var blockFace: BlockFace?

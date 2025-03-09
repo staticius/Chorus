@@ -1,17 +1,17 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Server
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.entity.projectile.EntitySmallFireball
-import cn.nukkit.event.entity.ProjectileLaunchEvent
-import cn.nukkit.level.Sound
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.Server
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.entity.projectile.EntitySmallFireball
+import org.chorus.event.entity.ProjectileLaunchEvent
+import org.chorus.level.Sound
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
 import kotlin.math.cos
 import kotlin.math.sin
 

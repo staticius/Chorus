@@ -1,6 +1,6 @@
 package org.chorus.network.connection.netty.codec.encryption
 
-import cn.nukkit.network.connection.netty.BedrockBatchWrapper
+import org.chorus.network.connection.netty.BedrockBatchWrapper
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufAllocator
 import io.netty.channel.ChannelHandlerContext

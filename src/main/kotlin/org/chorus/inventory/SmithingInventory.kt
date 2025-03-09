@@ -17,10 +17,10 @@
  */
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockSmithingTable
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.block.BlockSmithingTable
+import org.chorus.item.Item
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 /**
  * @author joserobjr | CoolLoong

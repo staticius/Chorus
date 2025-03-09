@@ -1,12 +1,12 @@
 package org.chorus.registry
 
-import cn.nukkit.block.*
-import cn.nukkit.block.customblock.CustomBlock
-import cn.nukkit.block.customblock.CustomBlockDefinition
-import cn.nukkit.item.ItemBlock
-import cn.nukkit.level.Level
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.registry.ItemRuntimeIdRegistry.RuntimeEntry
+import org.chorus.block.*
+import org.chorus.block.customblock.CustomBlock
+import org.chorus.block.customblock.CustomBlockDefinition
+import org.chorus.item.ItemBlock
+import org.chorus.level.Level
+import org.chorus.plugin.Plugin
+import org.chorus.registry.ItemRuntimeIdRegistry.RuntimeEntry
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import lombok.extern.slf4j.Slf4j
 import me.sunlan.fastreflection.FastConstructor

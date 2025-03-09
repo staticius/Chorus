@@ -1,9 +1,9 @@
 package org.chorus.item.customitem
 
-import cn.nukkit.item.ItemEnchantedBook
-import cn.nukkit.item.customitem.data.CreativeCategory
-import cn.nukkit.item.enchantment.*
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.item.ItemEnchantedBook
+import org.chorus.item.customitem.data.CreativeCategory
+import org.chorus.item.enchantment.*
+import org.chorus.nbt.tag.CompoundTag
 import java.util.function.Consumer
 
 abstract class ItemCustomBookEnchanted(id: String) : ItemEnchantedBook(id), CustomItem {

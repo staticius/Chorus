@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.ItemTool
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.ItemTool
 
 open class BlockPolishedBlackstoneWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {

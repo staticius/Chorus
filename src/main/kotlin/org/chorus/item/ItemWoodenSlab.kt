@@ -1,8 +1,8 @@
 package org.chorus.item
 
-import cn.nukkit.block.*
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.MinecraftVerticalHalf
+import org.chorus.block.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.MinecraftVerticalHalf
 
 class ItemWoodenSlab @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.WOODEN_SLAB, meta, count) {

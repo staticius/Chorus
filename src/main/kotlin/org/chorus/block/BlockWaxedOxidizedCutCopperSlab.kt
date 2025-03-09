@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 class BlockWaxedOxidizedCutCopperSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockOxidizedCutCopperSlab(blockstate, BlockID.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB) {

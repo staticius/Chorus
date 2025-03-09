@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types.inventory.transaction
 
-import cn.nukkit.item.Item
-import cn.nukkit.math.Vector3
+import org.chorus.item.Item
+import org.chorus.math.Vector3
 import lombok.ToString
 
 /**

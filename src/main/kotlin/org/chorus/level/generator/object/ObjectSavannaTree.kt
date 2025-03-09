@@ -1,8 +1,8 @@
 package org.chorus.level.generator.`object`
 
-import cn.nukkit.block.*
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.math.Vector3
+import org.chorus.block.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.Vector3
 
 class ObjectSavannaTree : TreeGenerator() {
     /**

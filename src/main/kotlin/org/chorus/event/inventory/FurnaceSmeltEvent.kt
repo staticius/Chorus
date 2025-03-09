@@ -1,10 +1,10 @@
 package org.chorus.event.inventory
 
-import cn.nukkit.blockentity.BlockEntityFurnace
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.event.block.BlockEvent
-import cn.nukkit.item.Item
+import org.chorus.blockentity.BlockEntityFurnace
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.event.block.BlockEvent
+import org.chorus.item.Item
 
 /**
  * @author MagicDroidX (Nukkit Project)

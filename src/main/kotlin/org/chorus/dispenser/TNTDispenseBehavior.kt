@@ -1,10 +1,10 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.item.EntityTnt
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
+import org.chorus.block.BlockDispenser
+import org.chorus.entity.Entity
+import org.chorus.entity.item.EntityTnt
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
 
 class TNTDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {

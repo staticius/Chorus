@@ -1,5 +1,5 @@
 package org.chorus.item
 
-import cn.nukkit.block.BlockSand
+import org.chorus.block.BlockSand
 
 class ItemSand : ItemBlock(BlockSand())

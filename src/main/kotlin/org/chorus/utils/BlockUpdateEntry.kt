@@ -1,7 +1,7 @@
 package org.chorus.utils
 
-import cn.nukkit.block.Block
-import cn.nukkit.math.Vector3
+import org.chorus.block.Block
+import org.chorus.math.Vector3
 import java.util.concurrent.atomic.AtomicLong
 
 /**

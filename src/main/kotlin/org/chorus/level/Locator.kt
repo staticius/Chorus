@@ -1,9 +1,9 @@
 package org.chorus.level
 
-import cn.nukkit.block.*
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.Vector3
+import org.chorus.block.*
+import org.chorus.blockentity.BlockEntity
+import org.chorus.level.format.IChunk
+import org.chorus.math.Vector3
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

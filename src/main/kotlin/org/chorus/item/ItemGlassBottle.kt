@@ -1,14 +1,14 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.item.EntityAreaEffectCloud
-import cn.nukkit.level.Level
-import cn.nukkit.level.Sound
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.item.EntityAreaEffectCloud
+import org.chorus.level.Level
+import org.chorus.level.Sound
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.BlockFace
 import java.util.*
 
 

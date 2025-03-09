@@ -1,20 +1,20 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.Server.Companion.instance
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.entity.item.EntityTnt
-import cn.nukkit.event.block.BlockIgniteEvent
-import cn.nukkit.event.entity.EntityCombustByBlockEvent
-import cn.nukkit.event.entity.EntityDamageByBlockEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.item.*
-import cn.nukkit.level.GameRule
-import cn.nukkit.level.Level
-import cn.nukkit.math.*
-import cn.nukkit.math.BlockFace.Companion.fromIndex
+import org.chorus.Player
+import org.chorus.Server.Companion.instance
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.entity.Entity
+import org.chorus.entity.effect.EffectType
+import org.chorus.entity.item.EntityTnt
+import org.chorus.event.block.BlockIgniteEvent
+import org.chorus.event.entity.EntityCombustByBlockEvent
+import org.chorus.event.entity.EntityDamageByBlockEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.item.*
+import org.chorus.level.GameRule
+import org.chorus.level.Level
+import org.chorus.math.*
+import org.chorus.math.BlockFace.Companion.fromIndex
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 

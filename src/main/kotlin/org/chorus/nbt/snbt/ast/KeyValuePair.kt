@@ -4,7 +4,7 @@
  */
 package org.chorus.nbt.snbt.ast
 
-import cn.nukkit.nbt.snbt.BaseNode
+import org.chorus.nbt.snbt.BaseNode
 
 class KeyValuePair : BaseNode()
 

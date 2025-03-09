@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 class BlockWarpedHyphae @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockStem(blockstate) {

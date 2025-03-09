@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.level.*
-import cn.nukkit.math.BlockFace
+import org.chorus.event.Event.isCancelled
+import org.chorus.level.*
+import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 open class BlockBubbleCoral @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

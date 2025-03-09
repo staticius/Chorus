@@ -1,7 +1,7 @@
 package org.chorus.recipe.descriptor
 
-import cn.nukkit.item.Item
-import cn.nukkit.tags.ItemTags
+import org.chorus.item.Item
+import org.chorus.tags.ItemTags
 
 class ItemTagDescriptor(@JvmField val itemTag: String, override val count: Int) : ItemDescriptor {
     override val type: ItemDescriptorType

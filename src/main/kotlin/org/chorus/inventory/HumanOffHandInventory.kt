@@ -1,14 +1,14 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity.getId
-import cn.nukkit.entity.IHuman
-import cn.nukkit.entity.IHuman.getEntity
-import cn.nukkit.item.*
-import cn.nukkit.network.protocol.InventoryContentPacket
-import cn.nukkit.network.protocol.MobEquipmentPacket
-import cn.nukkit.network.protocol.types.inventory.FullContainerName
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.entity.Entity.getId
+import org.chorus.entity.IHuman
+import org.chorus.entity.IHuman.getEntity
+import org.chorus.item.*
+import org.chorus.network.protocol.InventoryContentPacket
+import org.chorus.network.protocol.MobEquipmentPacket
+import org.chorus.network.protocol.types.inventory.FullContainerName
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class HumanOffHandInventory(holder: IHuman?) : BaseInventory(holder, InventoryType.INVENTORY, 1) {
     override fun init() {

@@ -1,7 +1,7 @@
 package org.chorus.event.vehicle
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Event
+import org.chorus.entity.Entity
+import org.chorus.event.Event
 
 /**
  * @author larryTheCoder (Nukkit Project)

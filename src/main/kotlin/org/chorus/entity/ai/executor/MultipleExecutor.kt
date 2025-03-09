@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 import lombok.extern.slf4j.Slf4j
 import java.util.concurrent.*
 

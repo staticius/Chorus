@@ -1,8 +1,8 @@
 package org.chorus.item
 
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.registry.CreativeItemRegistry
-import cn.nukkit.registry.Registries
+import org.chorus.nbt.NBTIO
+import org.chorus.registry.CreativeItemRegistry
+import org.chorus.registry.Registries
 import com.google.gson.Gson
 import io.netty.util.internal.EmptyArrays
 import org.junit.jupiter.api.Assertions

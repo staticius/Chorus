@@ -1,6 +1,6 @@
 package org.chorus.inventory
 
-import cn.nukkit.entity.item.EntityHopperMinecart
+import org.chorus.entity.item.EntityHopperMinecart
 
 
 class MinecartHopperInventory(minecart: EntityHopperMinecart?) :

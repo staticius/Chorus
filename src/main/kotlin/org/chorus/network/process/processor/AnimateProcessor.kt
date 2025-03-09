@@ -1,14 +1,14 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.Server
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.entity.item.EntityBoat
-import cn.nukkit.entity.item.EntityBoat.onPaddle
-import cn.nukkit.event.player.PlayerAnimationEvent
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.AnimatePacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.Server
+import org.chorus.entity.Entity.getServer
+import org.chorus.entity.item.EntityBoat
+import org.chorus.entity.item.EntityBoat.onPaddle
+import org.chorus.event.player.PlayerAnimationEvent
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.AnimatePacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class AnimateProcessor : DataPacketProcessor<AnimatePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: AnimatePacket) {

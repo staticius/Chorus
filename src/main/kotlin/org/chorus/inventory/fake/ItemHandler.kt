@@ -1,7 +1,7 @@
 package org.chorus.inventory.fake
 
-import cn.nukkit.event.inventory.ItemStackRequestActionEvent
-import cn.nukkit.item.Item
+import org.chorus.event.inventory.ItemStackRequestActionEvent
+import org.chorus.item.Item
 
 fun interface ItemHandler {
     fun handle(

@@ -1,10 +1,10 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.camera.instruction.impl.ClearInstruction.get
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.math.NukkitMath
-import cn.nukkit.utils.TextFormat
+import org.chorus.camera.instruction.impl.ClearInstruction.get
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandParameter
+import org.chorus.math.NukkitMath
+import org.chorus.utils.TextFormat
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import oshi.SystemInfo
 import java.io.File

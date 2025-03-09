@@ -1,8 +1,8 @@
 package org.chorus
 
-import cn.nukkit.nbt.stream.PGZIPOutputStream
-import cn.nukkit.utils.MainLogger.error
-import cn.nukkit.utils.Utils.dynamic
+import org.chorus.nbt.stream.PGZIPOutputStream
+import org.chorus.utils.MainLogger.error
+import org.chorus.utils.Utils.dynamic
 import com.google.common.base.Preconditions
 import io.netty.util.ResourceLeakDetector
 import io.netty.util.internal.logging.InternalLoggerFactory

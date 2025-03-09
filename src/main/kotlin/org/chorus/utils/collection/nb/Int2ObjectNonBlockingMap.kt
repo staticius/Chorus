@@ -1,6 +1,6 @@
 package org.chorus.utils.collection.nb
 
-import cn.nukkit.api.NonComputationAtomic
+import org.chorus.api.NonComputationAtomic
 import it.unimi.dsi.fastutil.ints.AbstractIntSet
 import it.unimi.dsi.fastutil.ints.IntIterator
 import java.io.*

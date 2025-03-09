@@ -1,6 +1,6 @@
 package org.chorus.inventory
 
-import cn.nukkit.block.Block
+import org.chorus.block.Block
 import java.util.function.Supplier
 
 interface BlockInventoryHolder : InventoryHolder {

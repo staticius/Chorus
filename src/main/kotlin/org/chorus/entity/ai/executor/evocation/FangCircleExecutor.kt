@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.executor.evocation
 
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
-import cn.nukkit.level.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
+import org.chorus.level.*
 import kotlin.math.cos
 import kotlin.math.sin
 

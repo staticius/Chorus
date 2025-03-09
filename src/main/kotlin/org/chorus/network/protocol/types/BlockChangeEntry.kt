@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types
 
-import cn.nukkit.math.BlockVector3
+import org.chorus.math.BlockVector3
 
 @JvmRecord
 data class BlockChangeEntry(

@@ -1,6 +1,6 @@
 package org.chorus.item.enchantment
 
-import cn.nukkit.item.*
+import org.chorus.item.*
 import java.util.*
 
 /**

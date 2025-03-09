@@ -1,16 +1,16 @@
 package org.chorus.entity.item
 
-import cn.nukkit.Player
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.vehicle.VehicleDamageByEntityEvent
-import cn.nukkit.event.vehicle.VehicleDamageEvent
-import cn.nukkit.event.vehicle.VehicleDestroyByEntityEvent
-import cn.nukkit.event.vehicle.VehicleDestroyEvent
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.Player
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.vehicle.VehicleDamageByEntityEvent
+import org.chorus.event.vehicle.VehicleDamageEvent
+import org.chorus.event.vehicle.VehicleDestroyByEntityEvent
+import org.chorus.event.vehicle.VehicleDestroyEvent
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author MagicDroidX (Nukkit Project)

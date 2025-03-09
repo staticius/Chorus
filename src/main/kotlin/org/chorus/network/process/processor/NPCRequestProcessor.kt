@@ -1,18 +1,18 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.dialog.response.FormResponseDialog
-import cn.nukkit.dialog.window.FormWindowDialog
-import cn.nukkit.entity.Entity.equals
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.entity.mob.EntityNPC
-import cn.nukkit.entity.mob.EntityNPC.getDialog
-import cn.nukkit.event.player.PlayerDialogRespondedEvent
-import cn.nukkit.item.Item.equals
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.NPCDialoguePacket
-import cn.nukkit.network.protocol.NPCRequestPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.dialog.response.FormResponseDialog
+import org.chorus.dialog.window.FormWindowDialog
+import org.chorus.entity.Entity.equals
+import org.chorus.entity.Entity.getServer
+import org.chorus.entity.mob.EntityNPC
+import org.chorus.entity.mob.EntityNPC.getDialog
+import org.chorus.event.player.PlayerDialogRespondedEvent
+import org.chorus.item.Item.equals
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.NPCDialoguePacket
+import org.chorus.network.protocol.NPCRequestPacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: NPCRequestPacket) {

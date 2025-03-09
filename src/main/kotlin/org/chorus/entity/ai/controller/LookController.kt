@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.controller
 
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.BVector3
-import cn.nukkit.math.Vector3
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.BVector3
+import org.chorus.math.Vector3
 
 /**
  * 处理实体Pitch/Yaw/HeadYaw

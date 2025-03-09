@@ -1,14 +1,14 @@
 package org.chorus.inventory.fake
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockStructureBlock
-import cn.nukkit.blockentity.*
-import cn.nukkit.entity.Entity.getLocator
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.BlockEntityDataPacket
-import cn.nukkit.network.protocol.UpdateBlockPacket
+import org.chorus.Player
+import org.chorus.block.BlockStructureBlock
+import org.chorus.blockentity.*
+import org.chorus.entity.Entity.getLocator
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.BlockEntityDataPacket
+import org.chorus.network.protocol.UpdateBlockPacket
 import java.util.function.Consumer
 
 class FakeStructBlock : SingleFakeBlock(BlockStructureBlock(), BlockEntity.STRUCTURE_BLOCK) {

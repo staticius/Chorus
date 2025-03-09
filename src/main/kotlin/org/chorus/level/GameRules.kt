@@ -1,8 +1,8 @@
 package org.chorus.level
 
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.level.GameRule
-import cn.nukkit.nbt.tag.*
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.level.GameRule
+import org.chorus.nbt.tag.*
 import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
 import java.util.*

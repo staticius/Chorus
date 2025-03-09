@@ -1,18 +1,18 @@
 package org.chorus.entity.item
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.entity.EntityExplosionPrimeEvent
-import cn.nukkit.level.Explosion
-import cn.nukkit.level.GameRule
-import cn.nukkit.level.Sound
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.entity.EntityExplosionPrimeEvent
+import org.chorus.level.Explosion
+import org.chorus.level.GameRule
+import org.chorus.level.Sound
+import org.chorus.level.format.IChunk
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.abs
 
 /**

@@ -1,11 +1,11 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.Item
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 

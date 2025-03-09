@@ -1,11 +1,11 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.Entity.Companion.getDefaultNBT
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.Event
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.Locator
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.Entity.Companion.getDefaultNBT
+import org.chorus.event.Cancellable
+import org.chorus.event.Event
+import org.chorus.event.HandlerList
+import org.chorus.level.Locator
+import org.chorus.nbt.tag.CompoundTag
 
 class CreatureSpawnEvent : Event, Cancellable {
     val reason: SpawnReason

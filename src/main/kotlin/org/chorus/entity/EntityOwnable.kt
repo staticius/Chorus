@@ -1,7 +1,7 @@
 package org.chorus.entity
 
-import cn.nukkit.Player
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
+import org.chorus.Player
+import org.chorus.entity.ai.memory.CoreMemoryTypes
 
 /**
  * 实现这个接口的实体可以被驯服

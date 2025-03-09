@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemTool
+import org.chorus.item.ItemTool
 
 class BlockWarpedPlanks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockPlanks(blockstate) {

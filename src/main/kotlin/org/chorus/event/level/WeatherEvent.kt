@@ -1,7 +1,7 @@
 package org.chorus.event.level
 
-import cn.nukkit.event.Event
-import cn.nukkit.level.Level
+import org.chorus.event.Event
+import org.chorus.level.Level
 
 /**
  * @author funcraft (Nukkit Project)

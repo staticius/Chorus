@@ -1,6 +1,6 @@
 package org.chorus.entity.data.property
 
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author Peng_Lx

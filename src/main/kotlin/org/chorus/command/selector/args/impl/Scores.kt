@@ -1,14 +1,14 @@
 package org.chorus.command.selector.args.impl
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.exceptions.SelectorSyntaxException
-import cn.nukkit.entity.Entity
-import cn.nukkit.level.Transform
-import cn.nukkit.scoreboard.scorer.EntityScorer
-import cn.nukkit.scoreboard.scorer.PlayerScorer
-import cn.nukkit.utils.StringUtils
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.command.CommandSender
+import org.chorus.command.exceptions.SelectorSyntaxException
+import org.chorus.entity.Entity
+import org.chorus.level.Transform
+import org.chorus.scoreboard.scorer.EntityScorer
+import org.chorus.scoreboard.scorer.PlayerScorer
+import org.chorus.utils.StringUtils
 import java.util.function.Predicate
 
 class Scores : CachedSimpleSelectorArgument() {

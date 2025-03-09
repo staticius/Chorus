@@ -1,7 +1,7 @@
 package org.chorus.block.property
 
-import cn.nukkit.block.property.enums.MinecraftCardinalDirection
-import cn.nukkit.math.BlockFace
+import org.chorus.block.property.enums.MinecraftCardinalDirection
+import org.chorus.math.BlockFace
 import com.google.common.collect.ImmutableBiMap
 
 object CommonPropertyMap {

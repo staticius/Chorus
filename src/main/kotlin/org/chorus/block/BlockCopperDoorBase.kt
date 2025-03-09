@@ -1,11 +1,11 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block.onActivate
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3.equals
-import cn.nukkit.registry.Registries
+import org.chorus.Player
+import org.chorus.block.Block.onActivate
+import org.chorus.item.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3.equals
+import org.chorus.registry.Registries
 
 abstract class BlockCopperDoorBase(blockState: BlockState?) : BlockDoor(blockState), Oxidizable,
     Waxable {

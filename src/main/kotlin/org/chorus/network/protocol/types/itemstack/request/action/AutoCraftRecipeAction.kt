@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-import cn.nukkit.recipe.descriptor.ItemDescriptor
+import org.chorus.recipe.descriptor.ItemDescriptor
 import lombok.Value
 
 /**

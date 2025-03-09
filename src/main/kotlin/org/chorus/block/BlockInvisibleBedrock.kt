@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
+import org.chorus.Player
+import org.chorus.item.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 
 class BlockInvisibleBedrock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockstate) {

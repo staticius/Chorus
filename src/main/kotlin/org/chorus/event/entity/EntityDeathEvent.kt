@@ -1,8 +1,8 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.EntityLiving
-import cn.nukkit.event.HandlerList
-import cn.nukkit.item.Item
+import org.chorus.entity.EntityLiving
+import org.chorus.event.HandlerList
+import org.chorus.item.Item
 
 /**
  * @author MagicDroidX (Nukkit Project)

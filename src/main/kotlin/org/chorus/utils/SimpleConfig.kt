@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.plugin.Plugin
+import org.chorus.plugin.Plugin
 import lombok.extern.slf4j.Slf4j
 import java.io.*
 import java.lang.reflect.Field

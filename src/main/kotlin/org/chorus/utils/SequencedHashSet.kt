@@ -1,7 +1,7 @@
 package org.chorus.utils
 
-import cn.nukkit.entity.data.EntityDataMap.size
-import cn.nukkit.nbt.tag.ListTag.size
+import org.chorus.entity.data.EntityDataMap.size
+import org.chorus.nbt.tag.ListTag.size
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap

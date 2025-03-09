@@ -1,13 +1,13 @@
 package org.chorus.level.generator.`object`
 
-import cn.nukkit.Server
-import cn.nukkit.block.*
-import cn.nukkit.level.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.format.UnsafeChunk
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.Server
+import org.chorus.block.*
+import org.chorus.level.*
+import org.chorus.level.format.IChunk
+import org.chorus.level.format.UnsafeChunk
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
+import org.chorus.network.protocol.ProtocolInfo
 import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import java.util.function.Consumer

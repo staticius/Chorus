@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types
 
-import cn.nukkit.entity.data.Skin
-import cn.nukkit.utils.ClientChainData
+import org.chorus.entity.data.Skin
+import org.chorus.utils.ClientChainData
 import lombok.AllArgsConstructor
 import lombok.Getter
 import java.util.*

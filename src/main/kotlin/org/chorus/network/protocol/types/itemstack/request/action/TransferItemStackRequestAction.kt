@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-import cn.nukkit.network.protocol.types.itemstack.request.ItemStackRequestSlotData
+import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
 
 
 /**

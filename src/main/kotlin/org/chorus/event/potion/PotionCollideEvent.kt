@@ -1,9 +1,9 @@
 package org.chorus.event.potion
 
-import cn.nukkit.entity.effect.PotionType
-import cn.nukkit.entity.projectile.throwable.EntitySplashPotion
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.entity.effect.PotionType
+import org.chorus.entity.projectile.throwable.EntitySplashPotion
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 /**
  * @author Snake1999

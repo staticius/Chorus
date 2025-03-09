@@ -1,6 +1,6 @@
 package org.chorus.item.enchantment.bow
 
-import cn.nukkit.item.enchantment.*
+import org.chorus.item.enchantment.*
 
 /**
  * @author MagicDroidX (Nukkit Project)

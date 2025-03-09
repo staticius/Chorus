@@ -1,8 +1,8 @@
 package org.chorus.console
 
-import cn.nukkit.Server
-import cn.nukkit.event.server.ServerCommandEvent
-import cn.nukkit.plugin.InternalPlugin
+import org.chorus.Server
+import org.chorus.event.server.ServerCommandEvent
+import org.chorus.plugin.InternalPlugin
 import lombok.RequiredArgsConstructor
 import net.minecrell.terminalconsole.SimpleTerminalConsole
 import org.jline.reader.LineReader

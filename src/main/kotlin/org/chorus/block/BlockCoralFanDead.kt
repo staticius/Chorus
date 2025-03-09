@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.level.Level
+import org.chorus.level.Level
 
 abstract class BlockCoralFanDead(blockstate: BlockState?) : BlockCoralFan(blockstate) {
     override val name: String

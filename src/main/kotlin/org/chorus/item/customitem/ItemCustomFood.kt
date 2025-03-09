@@ -1,6 +1,6 @@
 package org.chorus.item.customitem
 
-import cn.nukkit.item.ItemFood
+import org.chorus.item.ItemFood
 
 /**
  * @author lt_name

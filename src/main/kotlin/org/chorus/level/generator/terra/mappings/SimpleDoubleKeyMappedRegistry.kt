@@ -1,6 +1,6 @@
 package org.chorus.level.generator.terra.mappings
 
-import cn.nukkit.level.generator.terra.mappings.DoubleKeyMappedRegistry.MapPair
+import org.chorus.level.generator.terra.mappings.DoubleKeyMappedRegistry.MapPair
 
 /**
  * Allay Project 2023/10/27

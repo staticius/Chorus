@@ -1,9 +1,9 @@
 package org.chorus.item.enchantment.protection
 
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemElytra
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.item.enchantment.EnchantmentType
+import org.chorus.item.Item
+import org.chorus.item.ItemElytra
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.item.enchantment.EnchantmentType
 
 /**
  * @author MagicDroidX (Nukkit Project)

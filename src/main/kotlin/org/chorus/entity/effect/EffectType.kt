@@ -1,6 +1,6 @@
 package org.chorus.entity.effect
 
-import cn.nukkit.registry.Registries
+import org.chorus.registry.Registries
 
 /**
  * @author MEFRREEX

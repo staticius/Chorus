@@ -1,12 +1,12 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.EntityID
-import cn.nukkit.item.ItemID
-import cn.nukkit.level.Sound
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.registry.Registries
+import org.chorus.block.BlockID
+import org.chorus.entity.EntityID
+import org.chorus.item.ItemID
+import org.chorus.level.Sound
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.registry.Registries
 import java.util.regex.Pattern
 
 /**

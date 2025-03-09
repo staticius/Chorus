@@ -1,11 +1,11 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.Player
-import cn.nukkit.inventory.CraftingTableInventory
-import cn.nukkit.inventory.Inventory
-import cn.nukkit.inventory.InventoryHolder
-import cn.nukkit.inventory.fake.FakeInventory
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.inventory.CraftingTableInventory
+import org.chorus.inventory.Inventory
+import org.chorus.inventory.InventoryHolder
+import org.chorus.inventory.fake.FakeInventory
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import lombok.experimental.UtilityClass
 import lombok.extern.slf4j.Slf4j
 

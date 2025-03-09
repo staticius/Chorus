@@ -1,6 +1,6 @@
 package org.chorus.recipe
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 /**
  * craft input,Upper left is origin point (0,0)

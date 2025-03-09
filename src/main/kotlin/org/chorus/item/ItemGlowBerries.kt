@@ -1,11 +1,11 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.level.Level
-import cn.nukkit.level.Sound
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.level.Level
+import org.chorus.level.Sound
+import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 /**

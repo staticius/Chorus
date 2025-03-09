@@ -1,9 +1,9 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.entity.Entity
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 class ProjectileLaunchEvent(entity: EntityProjectile?, var shooter: Entity) : EntityEvent(), Cancellable {
     init {

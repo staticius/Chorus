@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.block.*
+import org.chorus.block.*
 
 class ItemWool @JvmOverloads constructor(aux: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.WOOL, aux, count) {

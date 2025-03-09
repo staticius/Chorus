@@ -1,6 +1,6 @@
 package org.chorus.recipe.descriptor
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 class MolangDescriptor(val tagExpression: String, val molangVersion: Int, override val count: Int) : ItemDescriptor {
     override val type: ItemDescriptorType

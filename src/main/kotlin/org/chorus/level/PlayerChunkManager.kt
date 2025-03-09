@@ -1,11 +1,11 @@
 package org.chorus.level
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity.despawnFrom
-import cn.nukkit.entity.Entity.getLocator
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.BlockVector3
+import org.chorus.Player
+import org.chorus.entity.Entity.despawnFrom
+import org.chorus.entity.Entity.getLocator
+import org.chorus.entity.Entity.getServer
+import org.chorus.level.format.IChunk
+import org.chorus.math.BlockVector3
 import com.google.common.collect.Sets
 import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap

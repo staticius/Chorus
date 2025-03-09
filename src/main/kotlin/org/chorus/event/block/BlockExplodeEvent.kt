@@ -17,10 +17,10 @@
  */
 package org.chorus.event.block
 
-import cn.nukkit.block.Block
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.Locator
+import org.chorus.block.Block
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.level.Locator
 
 /**
  * @author joserobjr

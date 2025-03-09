@@ -1,7 +1,7 @@
 package org.chorus.item
 
-import cn.nukkit.block.*
-import cn.nukkit.utils.DyeColor
+import org.chorus.block.*
+import org.chorus.utils.DyeColor
 
 class ItemCocoaBeans : ItemDye(ItemID.Companion.COCOA_BEANS) {
     init {

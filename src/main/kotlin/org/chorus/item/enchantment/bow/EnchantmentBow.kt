@@ -1,10 +1,10 @@
 package org.chorus.item.enchantment.bow
 
-import cn.nukkit.entity.EntityLiving
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.item.ItemBow
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.item.enchantment.EnchantmentType
+import org.chorus.entity.EntityLiving
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.item.ItemBow
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.item.enchantment.EnchantmentType
 
 /**
  * @author MagicDroidX (Nukkit Project)

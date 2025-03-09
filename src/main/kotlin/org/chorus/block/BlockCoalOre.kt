@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemID
-import cn.nukkit.item.ItemTool
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import java.util.concurrent.ThreadLocalRandom
 
 open class BlockCoalOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

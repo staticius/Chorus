@@ -1,8 +1,8 @@
 package org.chorus.plugin
 
-import cn.nukkit.event.Event
-import cn.nukkit.event.Listener
-import cn.nukkit.utils.EventException
+import org.chorus.event.Event
+import org.chorus.event.Listener
+import org.chorus.utils.EventException
 import lombok.extern.slf4j.Slf4j
 import org.objectweb.asm.*
 import java.lang.ref.WeakReference

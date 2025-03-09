@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.block.*
+import org.chorus.block.*
 
 /**
  * 注意做好sign和standing_sign方块的映射关系，物品通过this.block指定，方块通过toItem指定

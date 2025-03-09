@@ -1,9 +1,9 @@
 package org.chorus.level.generator
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.level.DimensionData
-import cn.nukkit.level.Level
-import cn.nukkit.level.format.IChunk
+import org.chorus.block.BlockID
+import org.chorus.level.DimensionData
+import org.chorus.level.Level
+import org.chorus.level.format.IChunk
 import com.google.common.base.Preconditions
 import lombok.extern.slf4j.Slf4j
 import java.util.concurrent.CompletableFuture

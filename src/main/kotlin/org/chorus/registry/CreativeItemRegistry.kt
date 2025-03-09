@@ -1,13 +1,13 @@
 package org.chorus.registry
 
-import cn.nukkit.item.*
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.Item.equals
-import cn.nukkit.nbt.NBTIO.read
-import cn.nukkit.network.protocol.types.inventory.creative.CreativeItemCategory
-import cn.nukkit.network.protocol.types.inventory.creative.CreativeItemData
-import cn.nukkit.network.protocol.types.inventory.creative.CreativeItemGroup
-import cn.nukkit.registry.RegisterException
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.Item.equals
+import org.chorus.nbt.NBTIO.read
+import org.chorus.network.protocol.types.inventory.creative.CreativeItemCategory
+import org.chorus.network.protocol.types.inventory.creative.CreativeItemData
+import org.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
+import org.chorus.registry.RegisterException
 import com.google.gson.Gson
 import io.netty.util.internal.EmptyArrays
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap

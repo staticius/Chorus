@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.route.data
 
-import cn.nukkit.math.*
+import org.chorus.math.*
 import lombok.Getter
 import lombok.Setter
 import java.util.*

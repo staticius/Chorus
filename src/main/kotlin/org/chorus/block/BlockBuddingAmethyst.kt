@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
-import cn.nukkit.level.*
-import cn.nukkit.math.BlockFace.Companion.fromIndex
-import cn.nukkit.utils.random.NukkitRandom.nextInt
+import org.chorus.item.*
+import org.chorus.level.*
+import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.utils.random.NukkitRandom.nextInt
 
 class BlockBuddingAmethyst : BlockSolid {
     constructor() : super(Companion.properties.defaultState)

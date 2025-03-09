@@ -1,13 +1,13 @@
 package org.chorus.utils
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Attribute
-import cn.nukkit.entity.Attribute.Companion.getAttribute
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.EntityID
-import cn.nukkit.entity.data.EntityDataMap
-import cn.nukkit.network.protocol.*
-import cn.nukkit.registry.Registries
+import org.chorus.Player
+import org.chorus.entity.Attribute
+import org.chorus.entity.Attribute.Companion.getAttribute
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.data.EntityDataMap
+import org.chorus.network.protocol.*
+import org.chorus.registry.Registries
 import java.util.concurrent.ThreadLocalRandom
 
 /**

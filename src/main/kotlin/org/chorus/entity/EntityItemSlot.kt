@@ -1,8 +1,8 @@
 package org.chorus.entity
 
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.nbt.tag.StringTag
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.StringTag
 import java.util.function.Function
 
 class EntityItemSlot {

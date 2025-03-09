@@ -1,9 +1,9 @@
 package org.chorus.level.updater.item
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.level.updater.Updater
-import cn.nukkit.level.updater.util.tagupdater.CompoundTagEditHelper
-import cn.nukkit.level.updater.util.tagupdater.CompoundTagUpdaterContext
+import org.chorus.block.BlockID
+import org.chorus.level.updater.Updater
+import org.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
+import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
 import java.util.function.Function
 import kotlin.collections.Map
 import kotlin.collections.get

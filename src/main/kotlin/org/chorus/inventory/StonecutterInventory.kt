@@ -1,10 +1,10 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockStonecutterBlock
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
-import cn.nukkit.recipe.Input
+import org.chorus.Player
+import org.chorus.block.BlockStonecutterBlock
+import org.chorus.item.Item
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.recipe.Input
 
 class StonecutterInventory(blockStonecutterBlock: BlockStonecutterBlock?) :
     ContainerInventory(blockStonecutterBlock, InventoryType.STONECUTTER, 3), CraftTypeInventory, InputInventory {

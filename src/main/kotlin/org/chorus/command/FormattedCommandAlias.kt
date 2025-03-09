@@ -1,8 +1,8 @@
 package org.chorus.command
 
-import cn.nukkit.Server
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.utils.TextFormat
+import org.chorus.Server
+import org.chorus.lang.TranslationContainer
+import org.chorus.utils.TextFormat
 import io.netty.util.internal.EmptyArrays
 import lombok.extern.slf4j.Slf4j
 

@@ -1,9 +1,9 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.SetLocalPlayerAsInitializedPacket
+import org.chorus.PlayerHandle
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.SetLocalPlayerAsInitializedPacket
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

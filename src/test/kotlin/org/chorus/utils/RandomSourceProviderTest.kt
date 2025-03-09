@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.utils.random.RandomSourceProvider
+import org.chorus.utils.random.RandomSourceProvider
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test

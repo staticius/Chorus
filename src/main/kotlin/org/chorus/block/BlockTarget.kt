@@ -1,17 +1,17 @@
 package org.chorus.block
 
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntityTarget
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.projectile.EntitySmallFireball
-import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow
-import cn.nukkit.entity.projectile.abstract_arrow.EntityThrownTrident
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.math.*
-import cn.nukkit.math.NukkitMath.ceilDouble
-import cn.nukkit.utils.RedstoneComponent
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityTarget
+import org.chorus.entity.Entity
+import org.chorus.entity.projectile.EntitySmallFireball
+import org.chorus.entity.projectile.abstract_arrow.EntityArrow
+import org.chorus.entity.projectile.abstract_arrow.EntityThrownTrident
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.math.*
+import org.chorus.math.NukkitMath.ceilDouble
+import org.chorus.utils.RedstoneComponent
 import java.util.*
 
 /**

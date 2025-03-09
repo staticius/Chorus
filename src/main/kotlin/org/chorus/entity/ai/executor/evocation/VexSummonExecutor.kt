@@ -1,18 +1,18 @@
 package org.chorus.entity.ai.executor.evocation
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.EntityVex
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
-import cn.nukkit.level.Sound
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.BlockColor
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.EntityVex
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
+import org.chorus.level.Sound
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.BlockColor
 import java.util.concurrent.*
 
 class VexSummonExecutor : FangLineExecutor() {

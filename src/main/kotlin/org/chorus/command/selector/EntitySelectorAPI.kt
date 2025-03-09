@@ -1,14 +1,14 @@
 package org.chorus.command.selector
 
-import cn.nukkit.Player
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.exceptions.SelectorSyntaxException
-import cn.nukkit.command.selector.args.impl.C
-import cn.nukkit.command.selector.args.impl.Name
-import cn.nukkit.command.selector.args.impl.Tag
-import cn.nukkit.command.selector.args.impl.Type
-import cn.nukkit.entity.Entity
-import cn.nukkit.utils.StringUtils
+import org.chorus.Player
+import org.chorus.command.CommandSender
+import org.chorus.command.exceptions.SelectorSyntaxException
+import org.chorus.command.selector.args.impl.C
+import org.chorus.command.selector.args.impl.Name
+import org.chorus.command.selector.args.impl.Tag
+import org.chorus.command.selector.args.impl.Type
+import org.chorus.entity.Entity
+import org.chorus.utils.StringUtils
 import com.github.benmanes.caffeine.cache.Cache
 import com.google.common.collect.Lists
 import com.google.common.collect.Maps

@@ -1,10 +1,10 @@
 package org.chorus.plugin
 
-import cn.nukkit.Server
-import cn.nukkit.command.*
-import cn.nukkit.utils.Config
-import cn.nukkit.utils.ConfigSection
-import cn.nukkit.utils.Utils
+import org.chorus.Server
+import org.chorus.command.*
+import org.chorus.utils.Config
+import org.chorus.utils.ConfigSection
+import org.chorus.utils.Utils
 import com.google.common.base.Preconditions
 import lombok.extern.slf4j.Slf4j
 import org.yaml.snakeyaml.DumperOptions

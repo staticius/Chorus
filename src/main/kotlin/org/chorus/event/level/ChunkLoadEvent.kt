@@ -1,7 +1,7 @@
 package org.chorus.event.level
 
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.format.IChunk
+import org.chorus.event.HandlerList
+import org.chorus.level.format.IChunk
 
 /**
  * @author MagicDroidX (Nukkit Project)

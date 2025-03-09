@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.network.protocol.types.BannerPatternType
+import org.chorus.network.protocol.types.BannerPatternType
 import org.jetbrains.annotations.ApiStatus
 
 open class ItemBannerPattern : Item {

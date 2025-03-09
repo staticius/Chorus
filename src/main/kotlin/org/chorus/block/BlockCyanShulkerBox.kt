@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
+import org.chorus.item.*
 import java.util.Set
 
 class BlockCyanShulkerBox @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

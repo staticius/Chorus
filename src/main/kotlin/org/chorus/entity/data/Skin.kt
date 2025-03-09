@@ -1,7 +1,7 @@
 package org.chorus.entity.data
 
-import cn.nukkit.nbt.stream.FastByteArrayOutputStream
-import cn.nukkit.utils.*
+import org.chorus.nbt.stream.FastByteArrayOutputStream
+import org.chorus.utils.*
 import com.google.common.base.Preconditions
 import lombok.EqualsAndHashCode
 import lombok.ToString

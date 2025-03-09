@@ -1,9 +1,9 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.math.Vector3
+import org.chorus.entity.Entity
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.math.Vector3
 
 /**
  * @author MagicDroidX (Nukkit Project)

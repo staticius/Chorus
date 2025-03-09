@@ -1,14 +1,14 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.entity.Entity.Companion.getDefaultNBT
-import cn.nukkit.entity.mob.EntityArmorStand
-import cn.nukkit.level.Level
-import cn.nukkit.level.Sound
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.entity.Entity.Companion.getDefaultNBT
+import org.chorus.entity.mob.EntityArmorStand
+import org.chorus.level.Level
+import org.chorus.level.Sound
+import org.chorus.math.*
 
 class ItemArmorStand : Item(ItemID.Companion.ARMOR_STAND) {
     override fun canBeActivated(): Boolean {

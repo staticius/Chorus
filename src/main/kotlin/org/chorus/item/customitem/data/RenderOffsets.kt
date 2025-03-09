@@ -1,9 +1,9 @@
 package org.chorus.item.customitem.data
 
-import cn.nukkit.math.Vector3f
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.math.Vector3f
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
 
 /**
  * RenderOffsets是设置 render_offsets 项目组件。可以设置参数来偏移物品的在不同视角下的呈现方式。

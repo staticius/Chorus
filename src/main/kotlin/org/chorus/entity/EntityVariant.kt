@@ -1,7 +1,7 @@
 package org.chorus.entity
 
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.utils.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.utils.*
 
 /**
  * 实现这个接口的实体拥有变种属性

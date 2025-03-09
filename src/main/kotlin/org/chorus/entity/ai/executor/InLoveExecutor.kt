@@ -1,9 +1,9 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Server
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.network.protocol.EntityEventPacket
+import org.chorus.Server
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.network.protocol.EntityEventPacket
 
 class InLoveExecutor(protected var duration: Int) : IBehaviorExecutor {
     protected var currentTick: Int = 0

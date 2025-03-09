@@ -1,22 +1,22 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Event
-import cn.nukkit.event.block.BlockRedstoneEvent
-import cn.nukkit.event.entity.EntityInteractEvent
-import cn.nukkit.event.player.PlayerInteractEvent
-import cn.nukkit.item.*
-import cn.nukkit.item.ItemTool.Companion.getBestTool
-import cn.nukkit.level.Level
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.network.protocol.LevelSoundEventPacket
-import cn.nukkit.utils.RedstoneComponent
-import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.entity.Entity
+import org.chorus.event.Event
+import org.chorus.event.block.BlockRedstoneEvent
+import org.chorus.event.entity.EntityInteractEvent
+import org.chorus.event.player.PlayerInteractEvent
+import org.chorus.item.*
+import org.chorus.item.ItemTool.Companion.getBestTool
+import org.chorus.level.Level
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.network.protocol.LevelSoundEventPacket
+import org.chorus.utils.RedstoneComponent
+import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 /**
  * @author Snake1999

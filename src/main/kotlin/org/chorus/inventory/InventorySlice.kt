@@ -1,8 +1,8 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import com.google.common.collect.BiMap
 import kotlin.math.max
 import kotlin.math.min

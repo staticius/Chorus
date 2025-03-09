@@ -1,9 +1,9 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.entity.data.Skin
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.Player
+import org.chorus.entity.data.Skin
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 /**
  * @author KCodeYT (Nukkit Project)

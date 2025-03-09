@@ -1,8 +1,8 @@
 package org.chorus.lang
 
-import cn.nukkit.GameMockExtension
-import cn.nukkit.Server
-import cn.nukkit.plugin.PluginBase
+import org.chorus.GameMockExtension
+import org.chorus.Server
+import org.chorus.plugin.PluginBase
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll

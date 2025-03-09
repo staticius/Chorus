@@ -1,6 +1,6 @@
 package org.chorus
 
-import cn.nukkit.event.Event
+import org.chorus.event.Event
 import com.google.common.base.Preconditions
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type

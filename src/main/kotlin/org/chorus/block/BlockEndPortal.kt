@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.*
-import cn.nukkit.item.*
-import cn.nukkit.level.Locator
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
+import org.chorus.Player
+import org.chorus.blockentity.*
+import org.chorus.item.*
+import org.chorus.level.Locator
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 
 class BlockEndPortal @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockState), BlockEntityHolder<BlockEntityEndPortal> {

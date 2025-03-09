@@ -1,7 +1,7 @@
 package org.chorus.level.format
 
-import cn.nukkit.level.DimensionData
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.level.DimensionData
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * Allay Project 12/16/2023

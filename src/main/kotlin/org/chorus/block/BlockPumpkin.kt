@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.CommonPropertyMap
-import cn.nukkit.entity.mob.EntitySnowGolem.Companion.checkAndSpawnGolem
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
-import cn.nukkit.utils.Faceable
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonPropertyMap
+import org.chorus.entity.mob.EntitySnowGolem.Companion.checkAndSpawnGolem
+import org.chorus.item.*
+import org.chorus.math.BlockFace
+import org.chorus.utils.Faceable
 
 open class BlockPumpkin : BlockSolid, Faceable, Natural {
     constructor() : super(Companion.properties.defaultState)

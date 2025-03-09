@@ -1,6 +1,6 @@
 package org.chorus.recipe.descriptor
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 interface ItemDescriptor : Cloneable {
     val type: ItemDescriptorType

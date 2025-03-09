@@ -1,8 +1,8 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.command.CommandSender
-import cn.nukkit.math.NukkitMath
-import cn.nukkit.utils.TextFormat
+import org.chorus.command.CommandSender
+import org.chorus.math.NukkitMath
+import org.chorus.utils.TextFormat
 
 /**
  * @author xtypr

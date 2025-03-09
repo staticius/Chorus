@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.math.Vector3.equals
+import org.chorus.math.Vector3.equals
 
 open class BlockCutCopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockCopperBase(blockstate) {

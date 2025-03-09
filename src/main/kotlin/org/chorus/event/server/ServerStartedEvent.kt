@@ -1,6 +1,6 @@
 package org.chorus.event.server
 
-import cn.nukkit.event.HandlerList
+import org.chorus.event.HandlerList
 
 /**
  * 服务器启动完毕后会触发，注意reload也会触发

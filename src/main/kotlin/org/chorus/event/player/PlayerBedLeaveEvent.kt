@@ -1,8 +1,8 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.event.HandlerList
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.event.HandlerList
 
 class PlayerBedLeaveEvent(player: Player?, bed: Block) : PlayerEvent() {
     val bed: Block

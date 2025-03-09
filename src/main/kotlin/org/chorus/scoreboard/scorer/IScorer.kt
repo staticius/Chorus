@@ -1,9 +1,9 @@
 package org.chorus.scoreboard.scorer
 
-import cn.nukkit.network.protocol.SetScorePacket.ScoreInfo
-import cn.nukkit.scoreboard.IScoreboard
-import cn.nukkit.scoreboard.IScoreboardLine
-import cn.nukkit.scoreboard.data.ScorerType
+import org.chorus.network.protocol.SetScorePacket.ScoreInfo
+import org.chorus.scoreboard.IScoreboard
+import org.chorus.scoreboard.IScoreboardLine
+import org.chorus.scoreboard.data.ScorerType
 
 /**
  * 计分板追踪对象

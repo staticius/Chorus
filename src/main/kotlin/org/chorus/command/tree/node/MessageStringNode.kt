@@ -1,7 +1,7 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.command.exceptions.SelectorSyntaxException
-import cn.nukkit.command.selector.EntitySelectorAPI
+import org.chorus.command.exceptions.SelectorSyntaxException
+import org.chorus.command.selector.EntitySelectorAPI
 import java.util.*
 import java.util.regex.MatchResult
 import java.util.regex.Matcher

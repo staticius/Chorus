@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.nbt.stream.FastByteArrayOutputStream
+import org.chorus.nbt.stream.FastByteArrayOutputStream
 
 object ThreadCache {
     fun clean() {

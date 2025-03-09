@@ -1,8 +1,8 @@
 package org.chorus.registry
 
-import cn.nukkit.block.*
-import cn.nukkit.item.*
-import cn.nukkit.registry.RegisterException
+import org.chorus.block.*
+import org.chorus.item.*
+import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 

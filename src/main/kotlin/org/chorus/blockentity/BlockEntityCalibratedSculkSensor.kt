@@ -1,12 +1,12 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockCalibratedSculkSensor
-import cn.nukkit.block.BlockID
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationListener
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.BlockCalibratedSculkSensor
+import org.chorus.block.BlockID
+import org.chorus.level.format.IChunk
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationListener
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.floor
 import kotlin.math.max
 

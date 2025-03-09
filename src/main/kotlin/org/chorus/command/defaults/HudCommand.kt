@@ -1,15 +1,15 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.Player
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.tree.node.PlayersNode
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.network.protocol.SetHudPacket
-import cn.nukkit.network.protocol.types.hud.HudElement
-import cn.nukkit.network.protocol.types.hud.HudVisibility
+import org.chorus.Player
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.tree.ParamList
+import org.chorus.command.tree.node.PlayersNode
+import org.chorus.command.utils.CommandLogger
+import org.chorus.network.protocol.SetHudPacket
+import org.chorus.network.protocol.types.hud.HudElement
+import org.chorus.network.protocol.types.hud.HudVisibility
 
 class HudCommand(name: String) : VanillaCommand(name, "commands.hud.description", "%commands.hud.usage") {
     init {

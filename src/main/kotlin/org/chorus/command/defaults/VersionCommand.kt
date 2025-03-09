@@ -1,12 +1,12 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.Server
-import cn.nukkit.command.*
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.utils.TextFormat
+import org.chorus.Server
+import org.chorus.command.*
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.lang.TranslationContainer
+import org.chorus.plugin.Plugin
+import org.chorus.utils.TextFormat
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import java.net.URI

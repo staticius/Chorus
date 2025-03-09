@@ -1,14 +1,14 @@
 package org.chorus.utils
 
-import cn.nukkit.Server
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockID
-import cn.nukkit.block.BlockState
-import cn.nukkit.level.DimensionData
-import cn.nukkit.level.DimensionEnum
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.math.*
+import org.chorus.Server
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.block.BlockState
+import org.chorus.level.DimensionData
+import org.chorus.level.DimensionEnum
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.math.*
 import lombok.extern.slf4j.Slf4j
 import java.util.function.BiPredicate
 

@@ -1,7 +1,7 @@
 package org.chorus.recipe
 
-import cn.nukkit.item.Item
-import cn.nukkit.registry.RecipeRegistry
+import org.chorus.item.Item
+import org.chorus.registry.RecipeRegistry
 import java.util.List
 
 

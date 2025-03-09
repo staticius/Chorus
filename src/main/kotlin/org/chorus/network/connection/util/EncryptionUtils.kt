@@ -1,6 +1,6 @@
 package org.chorus.network.connection.util
 
-import cn.nukkit.utils.JSONUtils
+import org.chorus.utils.JSONUtils
 import lombok.experimental.UtilityClass
 import org.jose4j.json.JsonUtil
 import org.jose4j.jwa.AlgorithmConstraints

@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.block.Block
+import org.chorus.block.Block
 
 abstract class ItemHangingSign(id: String) : Item(id) {
     init {

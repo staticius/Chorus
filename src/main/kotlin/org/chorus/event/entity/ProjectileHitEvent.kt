@@ -1,9 +1,9 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.MovingObjectPosition
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.level.MovingObjectPosition
 
 /**
  * @author MagicDroidX (Nukkit Project)

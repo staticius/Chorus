@@ -1,18 +1,18 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Server
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.entity.EntityDamageEvent.DamageModifier
-import cn.nukkit.level.Sound
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.LevelEventGenericPacket
-import cn.nukkit.network.protocol.LevelEventPacket
+import org.chorus.Server
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.entity.EntityDamageEvent.DamageModifier
+import org.chorus.level.Sound
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.LevelEventGenericPacket
+import org.chorus.network.protocol.LevelEventPacket
 import java.util.*
 
 class WardenRangedAttackExecutor(protected var chargingTime: Int, protected var totalRunningTime: Int) :

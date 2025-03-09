@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.controller
 
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
 
 /**
  * 为飞行生物提供升力的运动控制器

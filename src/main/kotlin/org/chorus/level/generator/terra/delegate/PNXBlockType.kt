@@ -1,7 +1,7 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.block.BlockFlowingWater
-import cn.nukkit.level.generator.terra.PNXAdapter
+import org.chorus.block.BlockFlowingWater
+import org.chorus.level.generator.terra.PNXAdapter
 import com.dfsek.terra.api.block.BlockType
 import com.dfsek.terra.api.block.state.BlockState
 

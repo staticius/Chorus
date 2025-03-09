@@ -1,6 +1,6 @@
 package org.chorus.recipe.descriptor
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 
 class DefaultDescriptor(@JvmField val item: Item) : ItemDescriptor {
     override val type: ItemDescriptorType

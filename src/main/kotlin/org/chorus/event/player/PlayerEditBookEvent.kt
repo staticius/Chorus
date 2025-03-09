@@ -1,10 +1,10 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.BookEditPacket
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.item.Item
+import org.chorus.network.protocol.BookEditPacket
 
 class PlayerEditBookEvent(player: Player?, oldBook: Item, newBook: Item, action: BookEditPacket.Action) :
     PlayerEvent(), Cancellable {

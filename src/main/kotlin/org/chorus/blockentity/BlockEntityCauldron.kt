@@ -1,12 +1,12 @@
 package org.chorus.blockentity
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockCauldron
-import cn.nukkit.block.BlockID
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.BlockColor
+import org.chorus.Player
+import org.chorus.block.BlockCauldron
+import org.chorus.block.BlockID
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.BlockColor
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import lombok.RequiredArgsConstructor

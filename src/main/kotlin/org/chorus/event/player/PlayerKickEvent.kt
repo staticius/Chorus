@@ -1,9 +1,9 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.lang.TextContainer
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.lang.TextContainer
 
 class PlayerKickEvent(player: Player?, reason: Reason, reasonString: String?, quitMessage: TextContainer?) :
     PlayerEvent(), Cancellable {

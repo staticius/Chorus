@@ -1,6 +1,6 @@
 package org.chorus.nbt.tag
 
-import cn.nukkit.utils.Binary
+import org.chorus.utils.Binary
 
 class ByteArrayTag : Tag {
     var data: ByteArray?

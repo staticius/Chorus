@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.sensor
 
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.mob.EntityMob
 
 class RouteUnreachableTimeSensor(protected var type: MemoryType<Int?>) : ISensor {
     override fun sense(entity: EntityMob) {

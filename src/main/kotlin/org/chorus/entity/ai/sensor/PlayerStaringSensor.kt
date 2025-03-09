@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.sensor
 
-import cn.nukkit.Player
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.Player
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
 import lombok.Getter
 import kotlin.math.abs
 

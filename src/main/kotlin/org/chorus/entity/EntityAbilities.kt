@@ -1,6 +1,6 @@
 package org.chorus.entity
 
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.CompoundTag
 
 class EntityAbilities {
     var attackMobs: Boolean = false

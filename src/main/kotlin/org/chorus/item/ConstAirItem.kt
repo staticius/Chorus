@@ -1,8 +1,8 @@
 package org.chorus.item
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockAir
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.Block
+import org.chorus.block.BlockAir
+import org.chorus.nbt.tag.CompoundTag
 
 class ConstAirItem : Item("minecraft:air") {
     init {

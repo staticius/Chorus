@@ -1,8 +1,8 @@
 package org.chorus.block.customblock.data
 
-import cn.nukkit.math.Vector3
-import cn.nukkit.math.Vector3f
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.math.Vector3
+import org.chorus.math.Vector3f
+import org.chorus.nbt.tag.CompoundTag
 import lombok.Builder
 import lombok.Getter
 import kotlin.math.min

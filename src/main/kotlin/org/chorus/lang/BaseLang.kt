@@ -1,6 +1,6 @@
 package org.chorus.lang
 
-import cn.nukkit.utils.JSONUtils
+import org.chorus.utils.JSONUtils
 import com.google.gson.reflect.TypeToken
 import io.netty.util.internal.EmptyArrays
 import lombok.extern.slf4j.Slf4j

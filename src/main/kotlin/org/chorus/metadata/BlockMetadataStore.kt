@@ -1,8 +1,8 @@
 package org.chorus.metadata
 
-import cn.nukkit.block.Block
-import cn.nukkit.level.Level
-import cn.nukkit.plugin.Plugin
+import org.chorus.block.Block
+import org.chorus.level.Level
+import org.chorus.plugin.Plugin
 import java.util.*
 
 /**

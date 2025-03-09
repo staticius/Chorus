@@ -1,8 +1,8 @@
 package org.chorus.event.level
 
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.Level
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.level.Level
 
 /**
  * @author funcraft (Nukkit Project)

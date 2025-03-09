@@ -1,6 +1,6 @@
 package org.chorus.item.enchantment.loot
 
-import cn.nukkit.item.enchantment.*
+import org.chorus.item.enchantment.*
 
 /**
  * @author MagicDroidX (Nukkit Project)

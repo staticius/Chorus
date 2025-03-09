@@ -1,9 +1,9 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
-import cn.nukkit.recipe.Input
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.recipe.Input
 import java.util.List
 
 class CraftingGridInventory(holder: Player?) : BaseInventory(holder, InventoryType.INVENTORY, 4),

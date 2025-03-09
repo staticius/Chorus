@@ -1,9 +1,9 @@
 package org.chorus.entity.projectile.throwable
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.Entity
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 abstract class EntityThrowable @JvmOverloads constructor(
     chunk: IChunk?,

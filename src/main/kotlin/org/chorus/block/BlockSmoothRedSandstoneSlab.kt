@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.ItemTool
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.ItemTool
 
 class BlockSmoothRedSandstoneSlab(blockState: BlockState?) :
     BlockSlab(blockState, BlockID.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB) {

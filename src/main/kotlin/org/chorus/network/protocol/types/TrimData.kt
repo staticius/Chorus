@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types
 
-import cn.nukkit.utils.JSONUtils
+import org.chorus.utils.JSONUtils
 import com.google.gson.JsonObject
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*

@@ -1,7 +1,7 @@
 package org.chorus.camera.instruction.impl
 
-import cn.nukkit.camera.data.Time
-import cn.nukkit.camera.instruction.CameraInstruction
+import org.chorus.camera.data.Time
+import org.chorus.camera.instruction.CameraInstruction
 import lombok.Builder
 import lombok.Getter
 import java.awt.Color

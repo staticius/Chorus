@@ -1,11 +1,11 @@
 package org.chorus.blockentity
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockStandingSign
-import cn.nukkit.event.block.SignChangeEvent
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.utils.*
+import org.chorus.Player
+import org.chorus.block.BlockStandingSign
+import org.chorus.event.block.SignChangeEvent
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.*
 import kotlin.math.min
 
 /**

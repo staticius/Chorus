@@ -1,16 +1,16 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.inventory.CraftItemEvent
-import cn.nukkit.item.*
-import cn.nukkit.network.protocol.types.itemstack.request.action.AutoCraftRecipeAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.ConsumeAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import cn.nukkit.recipe.descriptor.DefaultDescriptor
-import cn.nukkit.recipe.descriptor.ItemDescriptor
-import cn.nukkit.recipe.descriptor.ItemTagDescriptor
-import cn.nukkit.registry.Registries
+import org.chorus.Player
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.inventory.CraftItemEvent
+import org.chorus.item.*
+import org.chorus.network.protocol.types.itemstack.request.action.AutoCraftRecipeAction
+import org.chorus.network.protocol.types.itemstack.request.action.ConsumeAction
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.recipe.descriptor.DefaultDescriptor
+import org.chorus.recipe.descriptor.ItemDescriptor
+import org.chorus.recipe.descriptor.ItemTagDescriptor
+import org.chorus.registry.Registries
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

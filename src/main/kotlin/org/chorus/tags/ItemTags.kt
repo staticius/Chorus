@@ -1,7 +1,7 @@
 package org.chorus.tags
 
-import cn.nukkit.Server
-import cn.nukkit.utils.JSONUtils
+import org.chorus.Server
+import org.chorus.utils.JSONUtils
 import com.google.gson.reflect.TypeToken
 import it.unimi.dsi.fastutil.objects.Object2ObjectFunction
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap

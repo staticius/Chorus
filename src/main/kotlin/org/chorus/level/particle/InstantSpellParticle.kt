@@ -1,7 +1,7 @@
 package org.chorus.level.particle
 
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.BlockColor
+import org.chorus.math.Vector3
+import org.chorus.utils.BlockColor
 
 /**
  * @author xtypr

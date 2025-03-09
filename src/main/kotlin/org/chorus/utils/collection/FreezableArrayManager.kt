@@ -1,7 +1,7 @@
 package org.chorus.utils.collection
 
-import cn.nukkit.Server
-import cn.nukkit.utils.collection.AutoFreezable.FreezeStatus
+import org.chorus.Server
+import org.chorus.utils.collection.AutoFreezable.FreezeStatus
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger

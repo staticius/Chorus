@@ -1,8 +1,8 @@
 package org.chorus.dialog.response
 
-import cn.nukkit.dialog.element.ElementDialogButton
-import cn.nukkit.dialog.window.FormWindowDialog
-import cn.nukkit.network.protocol.NPCRequestPacket
+import org.chorus.dialog.element.ElementDialogButton
+import org.chorus.dialog.window.FormWindowDialog
+import org.chorus.network.protocol.NPCRequestPacket
 import lombok.Getter
 
 @Getter

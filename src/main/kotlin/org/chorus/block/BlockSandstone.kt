@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemTool
+import org.chorus.item.ItemTool
 
 open class BlockSandstone @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
     BlockSolid(state) {

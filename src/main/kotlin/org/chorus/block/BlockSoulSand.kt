@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.block.Block.waterloggingLevel
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Level
+import org.chorus.block.Block.waterloggingLevel
+import org.chorus.entity.Entity
+import org.chorus.event.Event.isCancelled
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
 
 /**
  * @author Pub4Game

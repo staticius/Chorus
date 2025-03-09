@@ -1,12 +1,12 @@
 package org.chorus.scoreboard
 
-import cn.nukkit.Server
-import cn.nukkit.event.scoreboard.ScoreboardLineChangeEvent
-import cn.nukkit.scoreboard.data.DisplaySlot
-import cn.nukkit.scoreboard.data.SortOrder
-import cn.nukkit.scoreboard.displayer.IScoreboardViewer
-import cn.nukkit.scoreboard.scorer.FakeScorer
-import cn.nukkit.scoreboard.scorer.IScorer
+import org.chorus.Server
+import org.chorus.event.scoreboard.ScoreboardLineChangeEvent
+import org.chorus.scoreboard.data.DisplaySlot
+import org.chorus.scoreboard.data.SortOrder
+import org.chorus.scoreboard.displayer.IScoreboardViewer
+import org.chorus.scoreboard.scorer.FakeScorer
+import org.chorus.scoreboard.scorer.IScorer
 import lombok.Getter
 import lombok.Setter
 import java.util.concurrent.atomic.AtomicInteger

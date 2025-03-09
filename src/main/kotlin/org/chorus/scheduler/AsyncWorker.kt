@@ -1,6 +1,6 @@
 package org.chorus.scheduler
 
-import cn.nukkit.InterruptibleThread
+import org.chorus.InterruptibleThread
 import java.util.*
 
 /**

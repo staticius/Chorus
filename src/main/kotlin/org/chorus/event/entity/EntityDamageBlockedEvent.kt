@@ -1,9 +1,9 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.entity.Entity
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
 
 class EntityDamageBlockedEvent(entity: Entity?, damage: EntityDamageEvent, knockBack: Boolean, animation: Boolean) :
     EntityEvent(), Cancellable {

@@ -1,6 +1,6 @@
 package org.chorus.block.customblock.data
 
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.CompoundTag
 import com.google.common.base.Preconditions
 
 class Geometry(name: String) : NBTData {

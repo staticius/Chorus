@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.block.BlockID
+import org.chorus.block.BlockID
 
 
 class ItemAcaciaHangingSign : ItemHangingSign(BlockID.ACACIA_HANGING_SIGN)

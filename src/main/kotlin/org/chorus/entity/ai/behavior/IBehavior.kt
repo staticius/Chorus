@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.behavior
 
-import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup
-import cn.nukkit.entity.ai.evaluator.IBehaviorEvaluator
-import cn.nukkit.entity.ai.executor.IBehaviorExecutor
+import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
+import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
+import org.chorus.entity.ai.executor.IBehaviorExecutor
 
 /**
  * 此接口抽象了一个行为对象，作为行为组[IBehaviorGroup]的组成部分.

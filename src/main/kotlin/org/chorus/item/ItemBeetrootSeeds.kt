@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.block.*
+import org.chorus.block.*
 
 class ItemBeetrootSeeds : Item(ItemID.Companion.BEETROOT_SEEDS) {
     init {

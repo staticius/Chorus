@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.memory.codec
 
-import cn.nukkit.nbt.tag.*
+import org.chorus.nbt.tag.*
 import java.util.function.BiConsumer
 import java.util.function.Function
 

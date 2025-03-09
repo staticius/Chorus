@@ -1,9 +1,9 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.*
 
 /**
  * @author Snake1999

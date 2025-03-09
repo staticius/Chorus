@@ -1,13 +1,13 @@
 package org.chorus.entity.data.profession
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemID
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.level.Sound
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.TradeRecipeBuildUtils
+import org.chorus.block.BlockID
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.level.Sound
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.TradeRecipeBuildUtils
 import java.util.*
 
 class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fisherman", Sound.BLOCK_BARREL_OPEN) {

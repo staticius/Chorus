@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
+import org.chorus.item.*
 
 /**
  * @author Angelic47 (Nukkit Project)

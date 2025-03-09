@@ -1,8 +1,8 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.entity.effect.Effect.Companion.get
-import cn.nukkit.entity.effect.EffectType
+import org.chorus.Player
+import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.EffectType
 
 class ItemSuspiciousStew @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemFood(ItemID.Companion.SUSPICIOUS_STEW, meta, count, "Suspicious Stew") {

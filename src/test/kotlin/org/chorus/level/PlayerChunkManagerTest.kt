@@ -1,8 +1,8 @@
 package org.chorus.level
 
-import cn.nukkit.GameMockExtension
-import cn.nukkit.TestPlayer
-import cn.nukkit.math.Vector3
+import org.chorus.GameMockExtension
+import org.chorus.TestPlayer
+import org.chorus.math.Vector3
 import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue
 import it.unimi.dsi.fastutil.longs.LongComparator
 import org.apache.commons.lang3.reflect.FieldUtils

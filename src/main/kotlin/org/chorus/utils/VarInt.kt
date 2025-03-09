@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.math.Vector3.equals
+import org.chorus.math.Vector3.equals
 import java.io.*
 
 

@@ -1,25 +1,25 @@
 package org.chorus.block
 
-import cn.nukkit.AdventureSettings
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.CommonPropertyMap
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.event.block.BlockRedstoneEvent
-import cn.nukkit.event.block.DoorToggleEvent
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.level.Sound
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.AxisDirection
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.utils.Faceable
-import cn.nukkit.utils.RedstoneComponent
+import org.chorus.AdventureSettings
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonPropertyMap
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.event.block.BlockRedstoneEvent
+import org.chorus.event.block.DoorToggleEvent
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.level.Sound
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.AxisDirection
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.utils.Faceable
+import org.chorus.utils.RedstoneComponent
 import com.google.common.collect.Sets
 
 /**

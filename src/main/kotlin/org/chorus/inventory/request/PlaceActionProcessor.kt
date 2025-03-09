@@ -1,7 +1,7 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import cn.nukkit.network.protocol.types.itemstack.request.action.PlaceAction
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.network.protocol.types.itemstack.request.action.PlaceAction
 
 
 /**

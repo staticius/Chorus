@@ -1,13 +1,13 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockUndyedShulkerBox
-import cn.nukkit.inventory.BaseInventory
-import cn.nukkit.inventory.ShulkerBoxInventory
-import cn.nukkit.item.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.block.BlockUndyedShulkerBox
+import org.chorus.inventory.BaseInventory
+import org.chorus.inventory.ShulkerBoxInventory
+import org.chorus.item.*
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
 
 /**
  * @author PetteriM1

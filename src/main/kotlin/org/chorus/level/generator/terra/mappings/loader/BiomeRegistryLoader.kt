@@ -24,8 +24,8 @@
  */
 package org.chorus.level.generator.terra.mappings.loader
 
-import cn.nukkit.level.generator.terra.mappings.RegistryLoader
-import cn.nukkit.utils.JSONUtils
+import org.chorus.level.generator.terra.mappings.RegistryLoader
+import org.chorus.utils.JSONUtils
 import com.google.common.collect.HashBiMap
 import com.google.gson.reflect.TypeToken
 import java.io.*

@@ -1,6 +1,6 @@
 package org.chorus.event.level
 
-import cn.nukkit.event.HandlerList
+import org.chorus.event.HandlerList
 
 class VibrationOccurEvent(vibrationEvent: cn.nukkit.level.vibration.VibrationEvent) : VibrationEvent(vibrationEvent) {
     companion object {

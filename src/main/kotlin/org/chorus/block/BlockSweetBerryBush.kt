@@ -1,15 +1,15 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.Server.Companion.instance
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.level.particle.BoneMealParticle
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.MathHelper.clamp
+import org.chorus.Player
+import org.chorus.Server.Companion.instance
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.entity.Entity
+import org.chorus.event.Event.isCancelled
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.level.particle.BoneMealParticle
+import org.chorus.math.BlockFace
+import org.chorus.math.MathHelper.clamp
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :

@@ -1,17 +1,17 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.CommonPropertyMap
-import cn.nukkit.blockentity.*
-import cn.nukkit.item.*
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.StringTag
-import cn.nukkit.nbt.tag.Tag
-import cn.nukkit.utils.Faceable
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonPropertyMap
+import org.chorus.blockentity.*
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.StringTag
+import org.chorus.nbt.tag.Tag
+import org.chorus.utils.Faceable
 
 class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityEnderChest?> {

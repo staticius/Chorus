@@ -1,12 +1,12 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntityShulkerBox
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.network.protocol.BlockEventPacket
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
-import cn.nukkit.tags.BlockTags
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntityShulkerBox
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.network.protocol.BlockEventPacket
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.tags.BlockTags
 
 /**
  * @author PetteriM1

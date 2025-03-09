@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.behavior
 
-import cn.nukkit.entity.ai.evaluator.IBehaviorEvaluator
-import cn.nukkit.entity.ai.executor.IBehaviorExecutor
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
+import org.chorus.entity.ai.executor.IBehaviorExecutor
+import org.chorus.entity.mob.EntityMob
 import lombok.Getter
 
 /**

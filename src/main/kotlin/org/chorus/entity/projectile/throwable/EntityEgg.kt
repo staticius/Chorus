@@ -1,10 +1,10 @@
 package org.chorus.entity.projectile.throwable
 
-import cn.nukkit.entity.*
-import cn.nukkit.item.ItemEgg
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.particle.ItemBreakParticle
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.*
+import org.chorus.item.ItemEgg
+import org.chorus.level.format.IChunk
+import org.chorus.level.particle.ItemBreakParticle
+import org.chorus.nbt.tag.CompoundTag
 import java.util.concurrent.*
 
 /**

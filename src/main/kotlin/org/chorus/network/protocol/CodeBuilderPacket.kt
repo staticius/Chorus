@@ -1,6 +1,6 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
 //EDU exclusive

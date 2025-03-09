@@ -1,8 +1,8 @@
 package org.chorus
 
-import cn.nukkit.metadata.MetadataValue
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.plugin.Plugin
+import org.chorus.metadata.MetadataValue
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.plugin.Plugin
 import java.util.*
 
 /**

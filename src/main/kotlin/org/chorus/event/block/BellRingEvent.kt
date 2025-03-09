@@ -1,9 +1,9 @@
 package org.chorus.event.block
 
-import cn.nukkit.block.BlockBell
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.block.BlockBell
+import org.chorus.entity.Entity
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 class BellRingEvent(bell: BlockBell, val cause: RingCause, val entity: Entity) : BlockEvent(bell), Cancellable {
     override fun getBlock(): BlockBell? {

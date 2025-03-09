@@ -1,6 +1,6 @@
 package org.chorus.item.customitem.data
 
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.CompoundTag
 
 class DigProperty {
     var states: CompoundTag

@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.utils.random.NukkitRandom.nextInt
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.utils.random.NukkitRandom.nextInt
 
 /**
  * @author MagicDroidX (Nukkit Project)

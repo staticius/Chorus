@@ -1,7 +1,7 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.network.protocol.types.itemstack.request.ItemStackRequest
-import cn.nukkit.network.protocol.types.itemstack.response.ItemStackResponseContainer
+import org.chorus.network.protocol.types.itemstack.request.ItemStackRequest
+import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import lombok.Getter
 import lombok.Setter
 

@@ -1,7 +1,7 @@
 package org.chorus.item.enchantment.damage
 
-import cn.nukkit.entity.*
-import cn.nukkit.item.enchantment.*
+import org.chorus.entity.*
+import org.chorus.item.enchantment.*
 
 /**
  * @author MagicDroidX (Nukkit Project)

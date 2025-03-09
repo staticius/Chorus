@@ -1,13 +1,13 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.event.block.BlockIgniteEvent
-import cn.nukkit.level.Level
-import cn.nukkit.level.Sound
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.event.block.BlockIgniteEvent
+import org.chorus.level.Level
+import org.chorus.level.Sound
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 class ItemFlintAndSteel @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :

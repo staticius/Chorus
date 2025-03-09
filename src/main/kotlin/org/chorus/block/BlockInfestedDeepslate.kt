@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.*
 
 class BlockInfestedDeepslate @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockState) {

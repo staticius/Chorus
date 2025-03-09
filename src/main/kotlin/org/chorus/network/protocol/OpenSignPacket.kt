@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.math.BlockVector3
+import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)

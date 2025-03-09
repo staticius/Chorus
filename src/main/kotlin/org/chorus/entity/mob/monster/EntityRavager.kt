@@ -1,23 +1,23 @@
 package org.chorus.entity.mob.monster
 
-import cn.nukkit.Player
-import cn.nukkit.entity.EntityID
-import cn.nukkit.entity.EntityWalkable
-import cn.nukkit.entity.ai.behavior.Behavior
-import cn.nukkit.entity.ai.behavior.IBehavior
-import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup
-import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup
-import cn.nukkit.entity.ai.controller.*
-import cn.nukkit.entity.ai.evaluator.EntityCheckEvaluator
-import cn.nukkit.entity.ai.executor.FlatRandomRoamExecutor
-import cn.nukkit.entity.ai.executor.MeleeAttackExecutor
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
-import cn.nukkit.entity.ai.route.posevaluator.WalkingPosEvaluator
-import cn.nukkit.entity.ai.sensor.ISensor
-import cn.nukkit.entity.ai.sensor.NearestPlayerSensor
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.Player
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
+import org.chorus.entity.ai.behavior.Behavior
+import org.chorus.entity.ai.behavior.IBehavior
+import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
+import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
+import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
+import org.chorus.entity.ai.executor.FlatRandomRoamExecutor
+import org.chorus.entity.ai.executor.MeleeAttackExecutor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
+import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
+import org.chorus.entity.ai.sensor.ISensor
+import org.chorus.entity.ai.sensor.NearestPlayerSensor
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 import java.util.Set
 
 class EntityRavager(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {

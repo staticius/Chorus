@@ -1,6 +1,6 @@
 package org.chorus.level.generator.terra.mappings
 
-import cn.nukkit.entity.data.EntityDataMap.put
+import org.chorus.entity.data.EntityDataMap.put
 import java.util.*
 import java.util.function.Function
 

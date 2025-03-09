@@ -1,12 +1,12 @@
 package org.chorus.item.randomitem
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.effect.Effect.Companion.get
-import cn.nukkit.entity.effect.PotionType.Companion.get
-import cn.nukkit.item.*
-import cn.nukkit.item.enchantment.*
-import cn.nukkit.item.randomitem.fishing.FishingEnchantmentItemSelector
-import cn.nukkit.math.NukkitMath
+import org.chorus.block.BlockID
+import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.PotionType.Companion.get
+import org.chorus.item.*
+import org.chorus.item.enchantment.*
+import org.chorus.item.randomitem.fishing.FishingEnchantmentItemSelector
+import org.chorus.math.NukkitMath
 
 /**
  * @author Snake1999

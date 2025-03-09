@@ -1,21 +1,21 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block.Companion.get
-import cn.nukkit.block.BlockLever.Companion.isSupportValid
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.Player
+import org.chorus.block.Block.Companion.get
+import org.chorus.block.BlockLever.Companion.isSupportValid
+import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.EnumPropertyType
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.level.Level
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.Faceable
-import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
-import cn.nukkit.utils.RedstoneComponent.updateAllAroundRedstone
-import cn.nukkit.utils.RedstoneComponent.updateAroundRedstone
+import org.chorus.event.Event.isCancelled
+import org.chorus.item.Item
+import org.chorus.item.Item.Companion.get
+import org.chorus.level.Level
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.utils.Faceable
+import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
+import org.chorus.utils.RedstoneComponent.updateAllAroundRedstone
+import org.chorus.utils.RedstoneComponent.updateAroundRedstone
 import kotlin.math.max
 
 /**

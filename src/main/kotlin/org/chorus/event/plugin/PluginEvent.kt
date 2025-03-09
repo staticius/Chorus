@@ -1,8 +1,8 @@
 package org.chorus.event.plugin
 
-import cn.nukkit.event.Event
-import cn.nukkit.event.HandlerList
-import cn.nukkit.plugin.Plugin
+import org.chorus.event.Event
+import org.chorus.event.HandlerList
+import org.chorus.plugin.Plugin
 
 /**
  * @author MagicDroidX (Nukkit Project)

@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockLever.Companion.isSupportValid
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.TorchFacingDirection
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.utils.Faceable
+import org.chorus.Player
+import org.chorus.block.BlockLever.Companion.isSupportValid
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.TorchFacingDirection
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.utils.Faceable
 
 /**
  * @author xtypr

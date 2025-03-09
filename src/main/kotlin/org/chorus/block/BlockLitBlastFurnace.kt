@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.blockentity.*
-import cn.nukkit.item.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.blockentity.*
+import org.chorus.item.*
 
 open class BlockLitBlastFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockLitFurnace(blockstate) {

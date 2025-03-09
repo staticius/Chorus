@@ -1,6 +1,6 @@
 package org.chorus.inventory
 
-import cn.nukkit.blockentity.BlockEntityNameable
+import org.chorus.blockentity.BlockEntityNameable
 
 interface BlockEntityInventoryNameable : InventoryNameable {
     val blockEntityInventoryHolder: BlockEntityNameable?

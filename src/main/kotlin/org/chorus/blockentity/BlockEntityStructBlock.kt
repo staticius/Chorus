@@ -1,16 +1,16 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.block.property.enums.StructureBlockType
-import cn.nukkit.inventory.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.StructureBlockUpdatePacket
-import cn.nukkit.network.protocol.types.StructureAnimationMode
-import cn.nukkit.network.protocol.types.StructureMirror
-import cn.nukkit.network.protocol.types.StructureRedstoneSaveMode
-import cn.nukkit.network.protocol.types.StructureRotation
+import org.chorus.block.BlockID
+import org.chorus.block.property.enums.StructureBlockType
+import org.chorus.inventory.*
+import org.chorus.level.format.IChunk
+import org.chorus.math.BlockVector3
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.StructureBlockUpdatePacket
+import org.chorus.network.protocol.types.StructureAnimationMode
+import org.chorus.network.protocol.types.StructureMirror
+import org.chorus.network.protocol.types.StructureRedstoneSaveMode
+import org.chorus.network.protocol.types.StructureRotation
 import com.google.common.base.Strings
 
 class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt), IStructBlock,

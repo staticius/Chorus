@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.entity.mob.monster.EntityWither.Companion.checkAndSpawnWither
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.entity.mob.monster.EntityWither.Companion.checkAndSpawnWither
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
 
 class BlockWitherSkeletonSkull(blockState: BlockState?) : BlockHead(blockState) {
     override val name: String

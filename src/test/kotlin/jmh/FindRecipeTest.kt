@@ -1,9 +1,9 @@
 package jmh
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemID
-import cn.nukkit.registry.Registries
+import org.chorus.block.BlockID
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.registry.Registries
 import org.openjdk.jmh.annotations.*
 import org.openjdk.jmh.infra.Blackhole
 import org.openjdk.jmh.runner.Runner

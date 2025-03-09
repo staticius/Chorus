@@ -1,14 +1,14 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.CommonPropertyMap
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.Faceable
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonPropertyMap
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.utils.Faceable
 
 /**
  * @author Pub4Game

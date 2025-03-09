@@ -1,7 +1,7 @@
 package org.chorus.command.function
 
-import cn.nukkit.Server
-import cn.nukkit.command.CommandSender
+import org.chorus.Server
+import org.chorus.command.CommandSender
 import lombok.Getter
 import java.nio.file.Files
 import java.nio.file.Path

@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.item.*
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
+import org.chorus.event.Event.isCancelled
+import org.chorus.item.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 abstract class BlockCoralBlock(blockstate: BlockState?) : BlockSolid(blockstate) {

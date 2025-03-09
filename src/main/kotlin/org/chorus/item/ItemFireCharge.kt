@@ -1,11 +1,11 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.event.block.BlockIgniteEvent
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.network.protocol.LevelEventPacket
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.event.block.BlockIgniteEvent
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.network.protocol.LevelEventPacket
 import java.util.concurrent.ThreadLocalRandom
 
 /**

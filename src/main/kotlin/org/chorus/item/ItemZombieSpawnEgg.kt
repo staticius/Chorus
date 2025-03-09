@@ -1,7 +1,7 @@
 package org.chorus.item
 
-import cn.nukkit.entity.EntityID
-import cn.nukkit.registry.Registries
+import org.chorus.entity.EntityID
+import org.chorus.registry.Registries
 
 class ItemZombieSpawnEgg : ItemSpawnEgg(ItemID.Companion.ZOMBIE_SPAWN_EGG) {
     override val entityNetworkId: Int

@@ -1,11 +1,11 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.InventorySlotPacket
-import cn.nukkit.network.protocol.types.inventory.FullContainerName
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.item.Item
+import org.chorus.network.protocol.InventorySlotPacket
+import org.chorus.network.protocol.types.inventory.FullContainerName
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 /**
  * @author CreeperFace

@@ -1,21 +1,21 @@
 package org.chorus.entity.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityExplosionPrimeEvent
-import cn.nukkit.item.*
-import cn.nukkit.level.Explosion
-import cn.nukkit.level.GameRule
-import cn.nukkit.level.Sound
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.types.EntityLink
-import cn.nukkit.utils.MinecartType
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityExplosionPrimeEvent
+import org.chorus.item.*
+import org.chorus.level.Explosion
+import org.chorus.level.GameRule
+import org.chorus.level.Sound
+import org.chorus.level.format.IChunk
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.types.EntityLink
+import org.chorus.utils.MinecartType
 import java.util.concurrent.*
 import kotlin.math.sqrt
 

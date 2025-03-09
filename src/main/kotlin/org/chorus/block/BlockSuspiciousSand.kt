@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.event.player.PlayerInteractEvent
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag.putBoolean
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.event.player.PlayerInteractEvent
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag.putBoolean
 
 class BlockSuspiciousSand @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockFallable(blockstate) {

@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.math.VectorMath.calculateFace
+import org.chorus.item.ItemTool
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.VectorMath.calculateFace
 
 /**
  * @author xtypr

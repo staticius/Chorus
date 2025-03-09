@@ -1,8 +1,8 @@
 package org.chorus.network.process
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.network.protocol.DataPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.network.protocol.DataPacket
+import org.chorus.network.protocol.ProtocolInfo
 
 /**
  * A DataPacketProcessor is used to handle a specific type of DataPacket. <br></br>

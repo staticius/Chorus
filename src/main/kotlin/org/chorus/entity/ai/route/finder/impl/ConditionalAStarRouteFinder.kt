@@ -1,9 +1,9 @@
 package org.chorus.entity.ai.route.finder.impl
 
-import cn.nukkit.entity.ai.route.data.Node
-import cn.nukkit.entity.ai.route.finder.IRouteFinder
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.Vector3
+import org.chorus.entity.ai.route.data.Node
+import org.chorus.entity.ai.route.finder.IRouteFinder
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.Vector3
 import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import java.util.*

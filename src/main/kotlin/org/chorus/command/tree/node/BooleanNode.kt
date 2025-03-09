@@ -1,6 +1,6 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.command.data.CommandEnum
+import org.chorus.command.data.CommandEnum
 import com.google.common.collect.Sets
 
 /**

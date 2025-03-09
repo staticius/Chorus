@@ -1,6 +1,6 @@
 package org.chorus.level.format.bitarray
 
-import cn.nukkit.math.NukkitMath
+import org.chorus.math.NukkitMath
 
 /**
  * Allay Project 2023/4/14

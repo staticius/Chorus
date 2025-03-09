@@ -1,6 +1,6 @@
 package org.chorus.plugin.service
 
-import cn.nukkit.plugin.Plugin
+import org.chorus.plugin.Plugin
 
 /**
  * @since 16-11-20

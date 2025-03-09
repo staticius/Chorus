@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types.camera.aimassist
 
-import cn.nukkit.math.Vector2f
-import cn.nukkit.utils.OptionalValue
+import org.chorus.math.Vector2f
+import org.chorus.utils.OptionalValue
 import lombok.Data
 
 @Data

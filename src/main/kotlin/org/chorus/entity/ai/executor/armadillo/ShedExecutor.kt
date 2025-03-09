@@ -1,12 +1,12 @@
 package org.chorus.entity.ai.executor.armadillo
 
-import cn.nukkit.entity.ai.executor.EntityControl
-import cn.nukkit.entity.ai.executor.IBehaviorExecutor
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.utils.*
+import org.chorus.entity.ai.executor.EntityControl
+import org.chorus.entity.ai.executor.IBehaviorExecutor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.utils.*
 
 class ShedExecutor : EntityControl, IBehaviorExecutor {
     override fun execute(entity: EntityMob?): Boolean {

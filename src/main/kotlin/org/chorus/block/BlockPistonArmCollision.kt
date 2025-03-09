@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.fromIndex
-import cn.nukkit.utils.Faceable
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.utils.Faceable
 
 /**
  * Alias piston head

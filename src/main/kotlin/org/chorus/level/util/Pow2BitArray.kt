@@ -1,6 +1,6 @@
 package org.chorus.level.util
 
-import cn.nukkit.math.MathHelper
+import org.chorus.math.MathHelper
 import com.google.common.base.Preconditions
 
 class Pow2BitArray internal constructor(

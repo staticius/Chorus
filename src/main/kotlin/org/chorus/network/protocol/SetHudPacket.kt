@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.hud.HudElement
-import cn.nukkit.network.protocol.types.hud.HudVisibility
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.hud.HudElement
+import org.chorus.network.protocol.types.hud.HudVisibility
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import lombok.*
 

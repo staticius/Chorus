@@ -1,13 +1,13 @@
 package org.chorus.entity.mob
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.monster.EntityCreeper
-import cn.nukkit.entity.mob.monster.EntityMonster
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.monster.EntityCreeper
+import org.chorus.entity.mob.monster.EntityMonster
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 abstract class EntityGolem(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityWalkable, EntityCanAttack {
     override fun attack(source: EntityDamageEvent): Boolean {

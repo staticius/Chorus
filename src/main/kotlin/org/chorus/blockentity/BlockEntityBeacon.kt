@@ -1,14 +1,14 @@
 package org.chorus.blockentity
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.effect.Effect
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.inventory.BeaconInventory
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
+import org.chorus.inventory.BeaconInventory
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author Rover656

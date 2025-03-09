@@ -1,24 +1,24 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.blockentity.*
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.event.block.BlockExplosionPrimeEvent
-import cn.nukkit.item.*
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.level.*
-import cn.nukkit.level.Transform.Companion.fromObject
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.types.SpawnPointType
-import cn.nukkit.utils.DyeColor
-import cn.nukkit.utils.Faceable
-import cn.nukkit.utils.TextFormat
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.blockentity.*
+import org.chorus.entity.effect.EffectType
+import org.chorus.event.block.BlockExplosionPrimeEvent
+import org.chorus.item.*
+import org.chorus.lang.TranslationContainer
+import org.chorus.level.*
+import org.chorus.level.Transform.Companion.fromObject
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.types.SpawnPointType
+import org.chorus.utils.DyeColor
+import org.chorus.utils.Faceable
+import org.chorus.utils.TextFormat
 import lombok.extern.slf4j.Slf4j
 
 /**

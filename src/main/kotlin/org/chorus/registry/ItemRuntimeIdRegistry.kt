@@ -1,7 +1,7 @@
 package org.chorus.registry
 
-import cn.nukkit.registry.RegisterException
-import cn.nukkit.utils.BinaryStream
+import org.chorus.registry.RegisterException
+import org.chorus.utils.BinaryStream
 import com.google.gson.JsonParser
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap

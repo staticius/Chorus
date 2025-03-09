@@ -1,7 +1,7 @@
 package org.chorus.nbt.stream
 
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.utils.LittleEndianByteBufInputStream
+import org.chorus.nbt.tag.*
+import org.chorus.utils.LittleEndianByteBufInputStream
 import java.io.DataInput
 import java.io.IOException
 import kotlin.collections.ArrayList

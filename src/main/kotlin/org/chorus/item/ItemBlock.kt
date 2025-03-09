@@ -1,7 +1,7 @@
 package org.chorus.item
 
-import cn.nukkit.block.Block
-import cn.nukkit.registry.Registries
+import org.chorus.block.Block
+import org.chorus.registry.Registries
 
 /**
  * @author MagicDroidX (Nukkit Project)

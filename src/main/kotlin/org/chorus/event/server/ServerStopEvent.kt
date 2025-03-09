@@ -1,6 +1,6 @@
 package org.chorus.event.server
 
-import cn.nukkit.event.HandlerList
+import org.chorus.event.HandlerList
 
 /**
  * @author NycuRO (NukkitX Project)

@@ -1,12 +1,12 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.entity.Entity
-import cn.nukkit.math.*
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.tree.ParamList
+import org.chorus.command.utils.CommandLogger
+import org.chorus.entity.Entity
+import org.chorus.math.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.floor
 

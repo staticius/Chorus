@@ -1,8 +1,8 @@
 package org.chorus.scoreboard.displayer
 
-import cn.nukkit.scoreboard.IScoreboard
-import cn.nukkit.scoreboard.IScoreboardLine
-import cn.nukkit.scoreboard.data.DisplaySlot
+import org.chorus.scoreboard.IScoreboard
+import org.chorus.scoreboard.IScoreboardLine
+import org.chorus.scoreboard.data.DisplaySlot
 
 /**
  * 计分板观察者 (eg: Player)

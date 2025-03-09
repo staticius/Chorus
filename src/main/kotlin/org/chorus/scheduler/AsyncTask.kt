@@ -1,15 +1,12 @@
 package org.chorus.scheduler
 
-import cn.nukkit.Server
-import cn.nukkit.utils.ThreadStore
-import lombok.extern.slf4j.Slf4j
+import org.chorus.Server
+import org.chorus.utils.ThreadStore
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
-/**
- * @author Nukkit Project Team
- */
-@Slf4j
 abstract class AsyncTask : Runnable {
     var result: Any? = null
     var taskId: Int = 0
@@ -31,7 +28,7 @@ abstract class AsyncTask : Runnable {
         return if (this.isFinished) null else ThreadStore.store[identifier]
     }
 
-    fun saveToThreadStore(identifier: String?, value: Any?) {
+    fun saveToThreadStore(identifier: String, value: Any?) {
         if (!this.isFinished) {
             if (value == null) {
                 ThreadStore.store.remove(identifier)
@@ -53,15 +50,17 @@ abstract class AsyncTask : Runnable {
     }
 
     companion object {
+        private val log: Logger by lazy { LoggerFactory.getLogger(AsyncTask::class.java) }
+
         val FINISHED_LIST: Queue<AsyncTask> = ConcurrentLinkedQueue()
 
         fun collectTask() {
             while (!FINISHED_LIST.isEmpty()) {
                 val task = FINISHED_LIST.poll()
                 try {
-                    task.onCompletion(Server.getInstance())
+                    task.onCompletion(Server.instance)
                 } catch (e: Exception) {
-                    AsyncTask.log.error("Exception while async task {} invoking onCompletion", task.taskId, e)
+                    log.error("Exception while async task {} invoking onCompletion", task.taskId, e)
                 }
             }
         }

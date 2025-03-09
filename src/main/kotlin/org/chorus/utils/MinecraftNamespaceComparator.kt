@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 import java.nio.charset.StandardCharsets
 
 object MinecraftNamespaceComparator {

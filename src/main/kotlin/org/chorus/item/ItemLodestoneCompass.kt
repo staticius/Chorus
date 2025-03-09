@@ -1,8 +1,8 @@
 package org.chorus.item
 
-import cn.nukkit.Server
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.positiontracking.NamedPosition
+import org.chorus.Server
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.positiontracking.NamedPosition
 import java.io.IOException
 
 class ItemLodestoneCompass @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :

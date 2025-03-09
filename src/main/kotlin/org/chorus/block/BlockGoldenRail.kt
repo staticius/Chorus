@@ -1,16 +1,16 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.level.Level
-import cn.nukkit.math.*
-import cn.nukkit.utils.OptionalBoolean
-import cn.nukkit.utils.Rail
-import cn.nukkit.utils.Rail.Orientation.Companion.byMetadata
-import cn.nukkit.utils.Rail.isRailBlock
-import cn.nukkit.utils.RedstoneComponent
-import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.level.Level
+import org.chorus.math.*
+import org.chorus.utils.OptionalBoolean
+import org.chorus.utils.Rail
+import org.chorus.utils.Rail.Orientation.Companion.byMetadata
+import org.chorus.utils.Rail.isRailBlock
+import org.chorus.utils.RedstoneComponent
+import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockRail(blockstate), RedstoneComponent {

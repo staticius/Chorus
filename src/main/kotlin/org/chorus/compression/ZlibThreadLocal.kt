@@ -1,6 +1,6 @@
 package org.chorus.compression
 
-import cn.nukkit.utils.ThreadCache
+import org.chorus.utils.ThreadCache
 import java.io.IOException
 import java.util.function.Supplier
 import java.util.zip.DataFormatException

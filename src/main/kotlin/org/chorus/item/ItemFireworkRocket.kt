@@ -1,18 +1,18 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.entity.item.EntityElytraFirework
-import cn.nukkit.entity.item.EntityFireworksRocket
-import cn.nukkit.level.Level
-import cn.nukkit.math.*
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.DyeColor
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.entity.item.EntityElytraFirework
+import org.chorus.entity.item.EntityFireworksRocket
+import org.chorus.level.Level
+import org.chorus.math.*
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.DyeColor
 import kotlin.math.cos
 import kotlin.math.sin
 

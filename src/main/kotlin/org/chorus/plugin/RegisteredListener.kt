@@ -1,7 +1,7 @@
 package org.chorus.plugin
 
-import cn.nukkit.event.*
-import cn.nukkit.utils.EventException
+import org.chorus.event.*
+import org.chorus.utils.EventException
 
 /**
  * @author MagicDroidX (Nukkit Project)

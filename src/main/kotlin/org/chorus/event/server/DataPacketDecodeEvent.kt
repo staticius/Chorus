@@ -1,9 +1,9 @@
 package org.chorus.event.server
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.network.connection.netty.BedrockPacketWrapper
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.network.connection.netty.BedrockPacketWrapper
 
 /**
  * @author MagicDroidX (Nukkit Project)

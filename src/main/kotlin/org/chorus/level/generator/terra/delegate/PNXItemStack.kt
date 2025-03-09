@@ -1,6 +1,6 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.item.Item
+import org.chorus.item.Item
 import com.dfsek.terra.api.inventory.ItemStack
 import com.dfsek.terra.api.inventory.item.Damageable
 import com.dfsek.terra.api.inventory.item.ItemMeta

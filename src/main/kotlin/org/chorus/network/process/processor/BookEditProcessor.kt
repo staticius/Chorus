@@ -1,13 +1,13 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.player.PlayerEditBookEvent
-import cn.nukkit.item.*
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.BookEditPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.player.PlayerEditBookEvent
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.BookEditPacket
+import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

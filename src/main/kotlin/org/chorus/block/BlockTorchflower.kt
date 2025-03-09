@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.item.*
+import org.chorus.math.BlockFace
 
 class BlockTorchflower @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockFlower(blockstate) {

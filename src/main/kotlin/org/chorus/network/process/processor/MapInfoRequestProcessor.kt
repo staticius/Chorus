@@ -1,15 +1,15 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.blockentity.BlockEntityItemFrame
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.player.PlayerMapInfoRequestEvent
-import cn.nukkit.item.*
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.MapInfoRequestPacket
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.plugin.InternalPlugin
-import cn.nukkit.scheduler.AsyncTask
+import org.chorus.PlayerHandle
+import org.chorus.blockentity.BlockEntityItemFrame
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.player.PlayerMapInfoRequestEvent
+import org.chorus.item.*
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.MapInfoRequestPacket
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.plugin.InternalPlugin
+import org.chorus.scheduler.AsyncTask
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

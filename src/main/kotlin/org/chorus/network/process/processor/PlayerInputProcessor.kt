@@ -1,11 +1,11 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.item.EntityMinecartAbstract
-import cn.nukkit.entity.item.EntityMinecartAbstract.setCurrentSpeed
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.PlayerInputPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.entity.item.EntityMinecartAbstract
+import org.chorus.entity.item.EntityMinecartAbstract.setCurrentSpeed
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.PlayerInputPacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class PlayerInputProcessor : DataPacketProcessor<PlayerInputPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: PlayerInputPacket) {

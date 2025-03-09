@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonBlockProperties
 
 class BlockSpruceLog @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockLog(blockstate) {

@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.evaluator
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.Entity
+import org.chorus.entity.mob.EntityMob
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 

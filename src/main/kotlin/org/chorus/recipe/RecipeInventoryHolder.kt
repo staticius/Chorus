@@ -1,7 +1,7 @@
 package org.chorus.recipe
 
-import cn.nukkit.inventory.Inventory
-import cn.nukkit.inventory.InventoryHolder
+import org.chorus.inventory.Inventory
+import org.chorus.inventory.InventoryHolder
 
 /**
  * 标注此物品栏拥有者的物品栏作为合成用途，常见于机器，如熔炉等。

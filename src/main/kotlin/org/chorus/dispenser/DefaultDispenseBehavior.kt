@@ -1,14 +1,14 @@
 package org.chorus.dispenser
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.block.BlockID
-import cn.nukkit.inventory.EntityInventoryHolder
-import cn.nukkit.item.Item
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.math.Vector3
+import org.chorus.Player
+import org.chorus.block.BlockDispenser
+import org.chorus.block.BlockID
+import org.chorus.inventory.EntityInventoryHolder
+import org.chorus.item.Item
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 

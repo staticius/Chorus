@@ -1,8 +1,8 @@
 package org.chorus.entity.data.property
 
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.network.protocol.SyncEntityPropertyPacket
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.*
+import org.chorus.network.protocol.SyncEntityPropertyPacket
 import java.io.IOException
 import java.util.function.Consumer
 import java.util.function.IntFunction

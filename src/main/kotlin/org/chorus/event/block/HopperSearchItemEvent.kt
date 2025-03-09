@@ -1,9 +1,9 @@
 package org.chorus.event.block
 
-import cn.nukkit.block.BlockHopper.IHopper
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.Event
-import cn.nukkit.event.HandlerList
+import org.chorus.block.BlockHopper.IHopper
+import org.chorus.event.Cancellable
+import org.chorus.event.Event
+import org.chorus.event.HandlerList
 
 class HopperSearchItemEvent(val hopper: IHopper, val isMinecart: Boolean) : Event(), Cancellable {
     companion object {

@@ -1,8 +1,8 @@
 package org.chorus.network.protocol.types.inventory.transaction
 
-import cn.nukkit.item.Item
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.InventoryTransactionPacket
+import org.chorus.item.Item
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.InventoryTransactionPacket
 import lombok.*
 import lombok.extern.slf4j.Slf4j
 

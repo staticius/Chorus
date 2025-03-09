@@ -1,7 +1,7 @@
 package org.chorus.recipe
 
-import cn.nukkit.item.Item
-import cn.nukkit.recipe.descriptor.ItemDescriptor
+import org.chorus.item.Item
+import org.chorus.recipe.descriptor.ItemDescriptor
 
 /**
  * @author MagicDroidX (Nukkit Project)

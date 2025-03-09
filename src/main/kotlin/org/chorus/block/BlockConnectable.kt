@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3.add
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3.add
 
 interface BlockConnectable {
     fun getSideAtLayer(layer: Int, face: BlockFace?): Block?

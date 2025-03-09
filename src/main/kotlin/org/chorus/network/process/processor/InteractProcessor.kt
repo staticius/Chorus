@@ -1,22 +1,22 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.entity.EntityRideable
-import cn.nukkit.entity.custom.CustomEntity
-import cn.nukkit.entity.item.EntityChestBoat
-import cn.nukkit.entity.item.EntityItem
-import cn.nukkit.entity.item.EntityXpOrb
-import cn.nukkit.entity.mob.animal.EntityHorse
-import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow
-import cn.nukkit.event.player.PlayerHackDetectedEvent
-import cn.nukkit.event.player.PlayerKickEvent
-import cn.nukkit.event.player.PlayerMouseOverEntityEvent
-import cn.nukkit.lang.BaseLang.tr
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.InteractPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getServer
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.entity.EntityRideable
+import org.chorus.entity.custom.CustomEntity
+import org.chorus.entity.item.EntityChestBoat
+import org.chorus.entity.item.EntityItem
+import org.chorus.entity.item.EntityXpOrb
+import org.chorus.entity.mob.animal.EntityHorse
+import org.chorus.entity.projectile.abstract_arrow.EntityArrow
+import org.chorus.event.player.PlayerHackDetectedEvent
+import org.chorus.event.player.PlayerKickEvent
+import org.chorus.event.player.PlayerMouseOverEntityEvent
+import org.chorus.lang.BaseLang.tr
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.InteractPacket
+import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

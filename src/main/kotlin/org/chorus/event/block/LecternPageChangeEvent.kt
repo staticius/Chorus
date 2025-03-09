@@ -1,9 +1,9 @@
 package org.chorus.event.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntityLectern
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntityLectern
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 class LecternPageChangeEvent(val player: Player, val lectern: BlockEntityLectern, @JvmField var newRawPage: Int) : BlockEvent(
     lectern.block

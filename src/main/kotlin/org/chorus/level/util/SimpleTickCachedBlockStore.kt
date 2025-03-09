@@ -1,8 +1,8 @@
 package org.chorus.level.util
 
-import cn.nukkit.block.*
-import cn.nukkit.level.*
-import cn.nukkit.level.util.TickCachedBlockStore.CachedBlockComputer
+import org.chorus.block.*
+import org.chorus.level.*
+import org.chorus.level.util.TickCachedBlockStore.CachedBlockComputer
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.set
 

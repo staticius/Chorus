@@ -1,6 +1,6 @@
 package org.chorus.inventory
 
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
 abstract class EjectableInventory(holder: InventoryHolder?, type: InventoryType, size: Int) :

@@ -1,13 +1,13 @@
 package org.chorus.entity.data.profession
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.Item
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.level.Sound
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.DyeColor
-import cn.nukkit.utils.TradeRecipeBuildUtils
+import org.chorus.block.BlockID
+import org.chorus.item.Item
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.level.Sound
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.DyeColor
+import org.chorus.utils.TradeRecipeBuildUtils
 import java.util.*
 
 class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd", Sound.BLOCK_LOOM_USE) {

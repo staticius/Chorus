@@ -17,11 +17,11 @@
  */
 package org.chorus.event.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.inventory.SmithingInventory
-import cn.nukkit.item.Item
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.inventory.SmithingInventory
+import org.chorus.item.Item
 
 /**
  * @author joserobjr

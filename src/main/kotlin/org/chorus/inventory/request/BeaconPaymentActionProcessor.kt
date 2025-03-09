@@ -1,10 +1,10 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntityBeacon
-import cn.nukkit.inventory.BeaconInventory
-import cn.nukkit.network.protocol.types.itemstack.request.action.BeaconPaymentAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntityBeacon
+import org.chorus.inventory.BeaconInventory
+import org.chorus.network.protocol.types.itemstack.request.action.BeaconPaymentAction
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

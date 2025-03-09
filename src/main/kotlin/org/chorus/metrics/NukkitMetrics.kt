@@ -1,12 +1,12 @@
 package org.chorus.metrics
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.config.ServerPropertiesKeys
-import cn.nukkit.metrics.Metrics.*
-import cn.nukkit.utils.Config
-import cn.nukkit.utils.LoginChainData
-import cn.nukkit.utils.NukkitCollectors
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.config.ServerPropertiesKeys
+import org.chorus.metrics.Metrics.*
+import org.chorus.utils.Config
+import org.chorus.utils.LoginChainData
+import org.chorus.utils.NukkitCollectors
 import lombok.extern.slf4j.Slf4j
 import java.io.BufferedWriter
 import java.io.File

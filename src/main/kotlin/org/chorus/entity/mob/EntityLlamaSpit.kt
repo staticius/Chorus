@@ -1,10 +1,10 @@
 package org.chorus.entity.mob
 
-import cn.nukkit.entity.EntityID
-import cn.nukkit.entity.EntityWalkable
-import cn.nukkit.entity.mob.animal.EntityAnimal
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
+import org.chorus.entity.mob.animal.EntityAnimal
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author PikyCZ

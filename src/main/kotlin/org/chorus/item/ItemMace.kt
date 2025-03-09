@@ -1,7 +1,7 @@
 package org.chorus.item
 
-import cn.nukkit.entity.*
-import cn.nukkit.math.NukkitMath
+import org.chorus.entity.*
+import org.chorus.math.NukkitMath
 
 class ItemMace : ItemTool(ItemID.Companion.MACE) {
     override val maxDurability: Int

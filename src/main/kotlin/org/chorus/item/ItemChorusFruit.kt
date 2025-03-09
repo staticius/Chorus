@@ -1,11 +1,11 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockLiquid
-import cn.nukkit.event.player.PlayerTeleportEvent
-import cn.nukkit.math.*
-import cn.nukkit.network.protocol.LevelSoundEventPacket
-import cn.nukkit.utils.random.NukkitRandom
+import org.chorus.Player
+import org.chorus.block.BlockLiquid
+import org.chorus.event.player.PlayerTeleportEvent
+import org.chorus.math.*
+import org.chorus.network.protocol.LevelSoundEventPacket
+import org.chorus.utils.random.NukkitRandom
 
 /**
  * @author Leonidius20

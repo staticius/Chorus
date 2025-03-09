@@ -1,8 +1,8 @@
 package org.chorus.scheduler
 
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.utils.PluginException
-import cn.nukkit.utils.Utils
+import org.chorus.plugin.Plugin
+import org.chorus.utils.PluginException
+import org.chorus.utils.Utils
 import lombok.extern.slf4j.Slf4j
 import org.jetbrains.annotations.ApiStatus
 import java.util.*

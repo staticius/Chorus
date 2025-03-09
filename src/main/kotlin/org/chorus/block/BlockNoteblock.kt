@@ -1,19 +1,19 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockEntityHolder.blockEntity
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntityMusic.changePitch
-import cn.nukkit.blockentity.BlockEntityMusic.isPowered
-import cn.nukkit.blockentity.BlockEntityMusic.pitch
-import cn.nukkit.event.player.PlayerInteractEvent
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Level
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag.getByte
+import org.chorus.Player
+import org.chorus.block.BlockEntityHolder.blockEntity
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityMusic.changePitch
+import org.chorus.blockentity.BlockEntityMusic.isPowered
+import org.chorus.blockentity.BlockEntityMusic.pitch
+import org.chorus.event.player.PlayerInteractEvent
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag.getByte
 
 /**
  * @author Snake1999

@@ -1,9 +1,9 @@
 package org.chorus.form.window
 
-import cn.nukkit.Player
-import cn.nukkit.form.element.simple.ButtonImage
-import cn.nukkit.form.element.simple.ElementButton
-import cn.nukkit.form.response.SimpleResponse
+import org.chorus.Player
+import org.chorus.form.element.simple.ButtonImage
+import org.chorus.form.element.simple.ElementButton
+import org.chorus.form.response.SimpleResponse
 import com.google.gson.JsonArray
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import lombok.*

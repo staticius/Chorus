@@ -1,13 +1,13 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Server
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.animal.EntitySheep
-import cn.nukkit.level.GameRule
-import cn.nukkit.level.particle.DestroyBlockParticle
-import cn.nukkit.network.protocol.EntityEventPacket
+import org.chorus.Server
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.animal.EntitySheep
+import org.chorus.level.GameRule
+import org.chorus.level.particle.DestroyBlockParticle
+import org.chorus.network.protocol.EntityEventPacket
 
 class EatGrassExecutor(protected var duration: Int) : IBehaviorExecutor {
     protected var currentTick: Int = 0

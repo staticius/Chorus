@@ -1,23 +1,23 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.entity.EntityID
-import cn.nukkit.entity.EntityVariant
-import cn.nukkit.event.player.PlayerBucketEmptyEvent
-import cn.nukkit.event.player.PlayerBucketFillEvent
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.level.Sound
-import cn.nukkit.level.particle.ExplodeParticle
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.*
-import cn.nukkit.network.protocol.LevelSoundEventPacket
-import cn.nukkit.network.protocol.UpdateBlockPacket
-import cn.nukkit.utils.*
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.entity.Entity.getServer
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityVariant
+import org.chorus.event.player.PlayerBucketEmptyEvent
+import org.chorus.event.player.PlayerBucketFillEvent
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.level.Sound
+import org.chorus.level.particle.ExplodeParticle
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.*
+import org.chorus.network.protocol.LevelSoundEventPacket
+import org.chorus.network.protocol.UpdateBlockPacket
+import org.chorus.utils.*
 
 /**
  * @author MagicDroidX (Nukkit Project)

@@ -1,11 +1,11 @@
 package org.chorus.player
 
-import cn.nukkit.GameMockExtension
-import cn.nukkit.TestPlayer
-import cn.nukkit.TestUtils
-import cn.nukkit.level.Level
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.protocol.MovePlayerPacket
+import org.chorus.GameMockExtension
+import org.chorus.TestPlayer
+import org.chorus.TestUtils
+import org.chorus.level.Level
+import org.chorus.math.Vector3
+import org.chorus.network.protocol.MovePlayerPacket
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers

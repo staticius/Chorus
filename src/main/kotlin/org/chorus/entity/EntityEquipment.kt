@@ -1,10 +1,10 @@
 package org.chorus.entity
 
-import cn.nukkit.Player
-import cn.nukkit.inventory.*
-import cn.nukkit.item.*
-import cn.nukkit.network.protocol.MobArmorEquipmentPacket
-import cn.nukkit.network.protocol.MobEquipmentPacket
+import org.chorus.Player
+import org.chorus.inventory.*
+import org.chorus.item.*
+import org.chorus.network.protocol.MobArmorEquipmentPacket
+import org.chorus.network.protocol.MobEquipmentPacket
 
 class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, InventoryType.INVENTORY, 6) {
     private val entity: Entity

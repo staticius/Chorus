@@ -1,10 +1,10 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.command.*
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.utils.TextFormat
+import org.chorus.command.*
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.lang.TranslationContainer
+import org.chorus.utils.TextFormat
 import kotlin.collections.MutableMap
 import kotlin.collections.set
 import kotlin.math.min

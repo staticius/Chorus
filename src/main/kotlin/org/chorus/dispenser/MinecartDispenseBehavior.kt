@@ -1,10 +1,10 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.block.BlockRail
-import cn.nukkit.entity.Entity
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
+import org.chorus.block.BlockDispenser
+import org.chorus.block.BlockRail
+import org.chorus.entity.Entity
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
 
 class MinecartDispenseBehavior(protected val entityType: String) : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {

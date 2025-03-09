@@ -1,14 +1,14 @@
 package org.chorus.level.generator.terra
 
-import cn.nukkit.Server
-import cn.nukkit.block.*
-import cn.nukkit.level.generator.terra.delegate.PNXBiomeDelegate
-import cn.nukkit.level.generator.terra.handles.PNXItemHandle
-import cn.nukkit.level.generator.terra.handles.PNXWorldHandle
-import cn.nukkit.level.generator.terra.mappings.MappingRegistries
-import cn.nukkit.plugin.InternalPlugin
-import cn.nukkit.registry.RegisterException
-import cn.nukkit.registry.Registries
+import org.chorus.Server
+import org.chorus.block.*
+import org.chorus.level.generator.terra.delegate.PNXBiomeDelegate
+import org.chorus.level.generator.terra.handles.PNXItemHandle
+import org.chorus.level.generator.terra.handles.PNXWorldHandle
+import org.chorus.level.generator.terra.mappings.MappingRegistries
+import org.chorus.plugin.InternalPlugin
+import org.chorus.registry.RegisterException
+import org.chorus.registry.Registries
 import com.dfsek.tectonic.api.TypeRegistry
 import com.dfsek.tectonic.api.depth.DepthTracker
 import com.dfsek.tectonic.api.loader.ConfigLoader

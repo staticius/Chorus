@@ -1,6 +1,6 @@
 package org.chorus.item.customitem.data
 
-import cn.nukkit.math.Vector3f
+import org.chorus.math.Vector3f
 
 /**
  * Offset代表RenderOffsets中的偏移量对象

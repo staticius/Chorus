@@ -1,12 +1,12 @@
 package org.chorus.command
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.entity.Entity
-import cn.nukkit.lang.CommandOutputContainer
-import cn.nukkit.level.Locator
-import cn.nukkit.level.Transform
-import cn.nukkit.permission.Permissible
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.entity.Entity
+import org.chorus.lang.CommandOutputContainer
+import org.chorus.level.Locator
+import org.chorus.level.Transform
+import org.chorus.permission.Permissible
 
 /**
  * 能发送命令的对象.<br></br>

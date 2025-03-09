@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.enums.OxidizationLevel
+import org.chorus.block.property.enums.OxidizationLevel
 
 class BlockOxidizedChiseledCopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockChiseledCopperBase(blockstate) {

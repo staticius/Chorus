@@ -1,15 +1,15 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.Server.Companion.instance
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.random.NukkitRandom.nextInt
+import org.chorus.Player
+import org.chorus.Server.Companion.instance
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.event.Event.isCancelled
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.utils.random.NukkitRandom.nextInt
 
 /**
  * @author Pub4Game

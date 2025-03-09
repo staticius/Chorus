@@ -1,11 +1,11 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.entity.Entity
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.entity.Entity
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
 
 open class BlockFlowingWater @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockLiquid(blockstate) {

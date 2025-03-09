@@ -1,10 +1,10 @@
 package org.chorus.event.block
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockPistonBase
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.math.BlockFace
+import org.chorus.block.Block
+import org.chorus.block.BlockPistonBase
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.math.BlockFace
 
 class BlockPistonEvent(
     piston: BlockPistonBase,

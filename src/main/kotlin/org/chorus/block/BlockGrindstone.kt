@@ -1,18 +1,18 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.Attachment
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.inventory.BlockInventoryHolder
-import cn.nukkit.inventory.Inventory
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.utils.Faceable
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.Attachment
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.inventory.BlockInventoryHolder
+import org.chorus.inventory.Inventory
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.utils.Faceable
 import java.util.function.Supplier
 
 class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

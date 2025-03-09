@@ -1,13 +1,13 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.block.BlockLectern
-import cn.nukkit.blockentity.BlockEntityLectern
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.block.LecternPageChangeEvent
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.LecternUpdatePacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.block.BlockLectern
+import org.chorus.blockentity.BlockEntityLectern
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.block.LecternPageChangeEvent
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.LecternUpdatePacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class LecternUpdateProcessor : DataPacketProcessor<LecternUpdatePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: LecternUpdatePacket) {

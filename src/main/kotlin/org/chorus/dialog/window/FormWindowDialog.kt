@@ -1,10 +1,10 @@
 package org.chorus.dialog.window
 
-import cn.nukkit.Player
-import cn.nukkit.dialog.element.ElementDialogButton
-import cn.nukkit.dialog.handler.FormDialogHandler
-import cn.nukkit.entity.Entity
-import cn.nukkit.utils.JSONUtils
+import org.chorus.Player
+import org.chorus.dialog.element.ElementDialogButton
+import org.chorus.dialog.handler.FormDialogHandler
+import org.chorus.entity.Entity
+import org.chorus.utils.JSONUtils
 import com.google.common.reflect.TypeToken
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.extern.slf4j.Slf4j

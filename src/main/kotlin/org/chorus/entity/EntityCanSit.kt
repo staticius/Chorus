@@ -1,7 +1,7 @@
 package org.chorus.entity
 
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.data.EntityFlag
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.data.EntityFlag
 
 /**
  * 可坐下实体接口

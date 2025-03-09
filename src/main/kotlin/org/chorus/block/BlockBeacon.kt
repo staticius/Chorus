@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.*
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.blockentity.*
+import org.chorus.item.*
+import org.chorus.math.BlockFace
 
 /**
  * @author Angelic47 (Nukkit Project)

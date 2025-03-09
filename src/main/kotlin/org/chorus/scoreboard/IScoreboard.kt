@@ -1,9 +1,9 @@
 package org.chorus.scoreboard
 
-import cn.nukkit.scoreboard.data.DisplaySlot
-import cn.nukkit.scoreboard.data.SortOrder
-import cn.nukkit.scoreboard.displayer.IScoreboardViewer
-import cn.nukkit.scoreboard.scorer.IScorer
+import org.chorus.scoreboard.data.DisplaySlot
+import org.chorus.scoreboard.data.SortOrder
+import org.chorus.scoreboard.displayer.IScoreboardViewer
+import org.chorus.scoreboard.scorer.IScorer
 
 /**
  * 计分板对象

@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.*
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.item.*
+import org.chorus.math.*
 
 class BlockDeny : BlockSolid {
     constructor() : super(Companion.properties.defaultState)

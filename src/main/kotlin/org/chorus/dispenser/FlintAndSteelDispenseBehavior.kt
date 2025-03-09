@@ -1,12 +1,12 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.level.Sound
-import cn.nukkit.math.BlockFace
+import org.chorus.block.Block
+import org.chorus.block.BlockDispenser
+import org.chorus.block.BlockID
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.level.Sound
+import org.chorus.math.BlockFace
 
 class FlintAndSteelDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {

@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.math.Vector3
+import org.chorus.math.Vector3
 
 object Hash {
     fun hashBlock(x: Int, y: Int, z: Int): Long {

@@ -1,8 +1,8 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.block.Block
-import cn.nukkit.block.BlockState
-import cn.nukkit.block.property.type.BlockPropertyType
+import org.chorus.block.Block
+import org.chorus.block.BlockState
+import org.chorus.block.property.type.BlockPropertyType
 
 /**
  * Parse the corresponding parameter to the value of [BlockState],Must be defined one after [BlockNode]

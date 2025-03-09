@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.EntityLiving
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.*
+import org.chorus.entity.EntityLiving
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.*
 import lombok.Getter
 
 @Getter

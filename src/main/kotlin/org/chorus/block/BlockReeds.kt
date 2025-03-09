@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.Server.Companion.instance
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.Server.Companion.instance
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.event.Event.isCancelled
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
 
 class BlockReeds @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate) {

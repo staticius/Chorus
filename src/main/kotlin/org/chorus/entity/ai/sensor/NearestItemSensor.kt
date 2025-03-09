@@ -1,9 +1,9 @@
 package org.chorus.entity.ai.sensor
 
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.item.EntityItem
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.item.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.item.EntityItem
+import org.chorus.entity.mob.EntityMob
+import org.chorus.item.*
 import lombok.Getter
 
 //存储最近的玩家的Memory

@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.math.BlockFace
+import org.chorus.math.BlockFace
 
 class BlockSmoothBasalt @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
     BlockBasalt(blockState) {

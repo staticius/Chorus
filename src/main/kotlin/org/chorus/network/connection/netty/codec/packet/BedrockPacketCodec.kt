@@ -1,8 +1,8 @@
 package org.chorus.network.connection.netty.codec.packet
 
-import cn.nukkit.network.connection.netty.BedrockPacketWrapper
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.registry.Registries
+import org.chorus.network.connection.netty.BedrockPacketWrapper
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.registry.Registries
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageCodec

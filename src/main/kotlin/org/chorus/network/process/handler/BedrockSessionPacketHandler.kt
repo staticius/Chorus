@@ -1,10 +1,10 @@
 package org.chorus.network.process.handler
 
-import cn.nukkit.Player
-import cn.nukkit.PlayerHandle
-import cn.nukkit.network.connection.BedrockSession
-import cn.nukkit.network.protocol.DisconnectPacket
-import cn.nukkit.network.protocol.PacketHandler
+import org.chorus.Player
+import org.chorus.PlayerHandle
+import org.chorus.network.connection.BedrockSession
+import org.chorus.network.protocol.DisconnectPacket
+import org.chorus.network.protocol.PacketHandler
 
 open class BedrockSessionPacketHandler(protected val session: BedrockSession) : PacketHandler {
     protected val player: Player? = session.player

@@ -1,15 +1,15 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.inventory.BlockInventoryHolder
-import cn.nukkit.inventory.Inventory
-import cn.nukkit.inventory.LoomInventory
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.horizontals
-import cn.nukkit.utils.Faceable
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.inventory.BlockInventoryHolder
+import org.chorus.inventory.Inventory
+import org.chorus.inventory.LoomInventory
+import org.chorus.item.*
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.horizontals
+import org.chorus.utils.Faceable
 import java.util.function.Supplier
 
 /**

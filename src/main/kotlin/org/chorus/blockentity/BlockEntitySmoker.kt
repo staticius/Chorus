@@ -1,12 +1,12 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.*
-import cn.nukkit.inventory.SmeltingInventory
-import cn.nukkit.inventory.SmokerInventory
-import cn.nukkit.item.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.recipe.SmeltingRecipe
+import org.chorus.block.*
+import org.chorus.inventory.SmeltingInventory
+import org.chorus.inventory.SmokerInventory
+import org.chorus.item.*
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.recipe.SmeltingRecipe
 
 class BlockEntitySmoker(chunk: IChunk, nbt: CompoundTag) : BlockEntityFurnace(chunk, nbt) {
     override val furnaceName: String

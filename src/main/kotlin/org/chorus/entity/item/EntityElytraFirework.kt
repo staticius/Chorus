@@ -1,10 +1,10 @@
 package org.chorus.entity.item
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.EntityEventPacket
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.EntityEventPacket
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.atan2

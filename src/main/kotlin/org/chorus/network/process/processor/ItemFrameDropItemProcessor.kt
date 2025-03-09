@@ -1,11 +1,11 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.blockentity.BlockEntityItemFrame
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ItemFrameDropItemPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.blockentity.BlockEntityItemFrame
+import org.chorus.math.Vector3
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ItemFrameDropItemPacket
+import org.chorus.network.protocol.ProtocolInfo
 
 class ItemFrameDropItemProcessor : DataPacketProcessor<ItemFrameDropItemPacket>() {
     // PowerNukkit Note: This packed is not being sent anymore since 1.16.210

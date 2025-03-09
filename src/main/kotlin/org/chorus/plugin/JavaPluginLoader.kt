@@ -1,10 +1,10 @@
 package org.chorus.plugin
 
-import cn.nukkit.Server
-import cn.nukkit.event.plugin.PluginDisableEvent
-import cn.nukkit.event.plugin.PluginEnableEvent
-import cn.nukkit.utils.PluginException
-import cn.nukkit.utils.Utils
+import org.chorus.Server
+import org.chorus.event.plugin.PluginDisableEvent
+import org.chorus.event.plugin.PluginEnableEvent
+import org.chorus.utils.PluginException
+import org.chorus.utils.Utils
 import lombok.Getter
 import lombok.extern.slf4j.Slf4j
 import java.io.File

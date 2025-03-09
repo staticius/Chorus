@@ -1,13 +1,13 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.block.BlockFlowingWater
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.item.EntityBoat
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
+import org.chorus.block.BlockDispenser
+import org.chorus.block.BlockFlowingWater
+import org.chorus.entity.Entity
+import org.chorus.entity.item.EntityBoat
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 
 open class BoatDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {

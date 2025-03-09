@@ -1,8 +1,8 @@
 package org.chorus.plugin
 
-import cn.nukkit.Server
-import cn.nukkit.command.CommandExecutor
-import cn.nukkit.utils.Config
+import org.chorus.Server
+import org.chorus.command.CommandExecutor
+import org.chorus.utils.Config
 import java.io.File
 import java.io.InputStream
 

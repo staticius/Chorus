@@ -1,12 +1,12 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.command.data.*
-import cn.nukkit.command.data.CommandEnum.getValues
-import cn.nukkit.entity.Attribute.getName
-import cn.nukkit.nbt.tag.ListTag.size
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.CommandEnumConstraintData
-import cn.nukkit.utils.*
+import org.chorus.command.data.*
+import org.chorus.command.data.CommandEnum.getValues
+import org.chorus.entity.Attribute.getName
+import org.chorus.nbt.tag.ListTag.size
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.CommandEnumConstraintData
+import org.chorus.utils.*
 import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet

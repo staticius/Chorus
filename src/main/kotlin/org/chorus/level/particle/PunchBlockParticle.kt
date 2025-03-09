@@ -1,9 +1,9 @@
 package org.chorus.level.particle
 
-import cn.nukkit.block.Block
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.protocol.DataPacket
-import cn.nukkit.network.protocol.LevelEventPacket
+import org.chorus.block.Block
+import org.chorus.math.Vector3
+import org.chorus.network.protocol.DataPacket
+import org.chorus.network.protocol.LevelEventPacket
 
 class PunchBlockParticle(pos: Vector3, block: Block) :
     Particle(pos.x, pos.y, pos.z) {

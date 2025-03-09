@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.evaluator
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 
 /**
  * 全部行为评估通过才执行的一个评估器.

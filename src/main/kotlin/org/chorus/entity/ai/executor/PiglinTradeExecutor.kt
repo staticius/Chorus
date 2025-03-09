@@ -1,15 +1,15 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.block.*
-import cn.nukkit.entity.EntityEquipment
-import cn.nukkit.entity.EntityLiving
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.effect.*
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.EntityMonster
-import cn.nukkit.item.*
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.level.Sound
+import org.chorus.block.*
+import org.chorus.entity.EntityEquipment
+import org.chorus.entity.EntityLiving
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.effect.*
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.EntityMonster
+import org.chorus.item.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.level.Sound
 import java.util.concurrent.*
 
 class PiglinTradeExecutor : EntityControl, IBehaviorExecutor {

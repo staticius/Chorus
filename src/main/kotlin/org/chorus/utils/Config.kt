@@ -1,8 +1,8 @@
 package org.chorus.utils
 
-import cn.nukkit.Server
-import cn.nukkit.plugin.InternalPlugin
-import cn.nukkit.scheduler.FileWriteTask
+import org.chorus.Server
+import org.chorus.plugin.InternalPlugin
+import org.chorus.scheduler.FileWriteTask
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken

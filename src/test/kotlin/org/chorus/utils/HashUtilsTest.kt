@@ -1,7 +1,7 @@
 package org.chorus.utils
 
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.TreeMapCompoundTag
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.TreeMapCompoundTag
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

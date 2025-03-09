@@ -1,6 +1,6 @@
 package org.chorus.command.simple
 
-import cn.nukkit.command.data.CommandParamType
+import org.chorus.command.data.CommandParamType
 
 /**
  * @author nilsbrychzy

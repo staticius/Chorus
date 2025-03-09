@@ -1,11 +1,11 @@
 package org.chorus.entity.projectile.throwable
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.effect.*
-import cn.nukkit.entity.item.EntityAreaEffectCloud
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.*
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.effect.*
+import org.chorus.entity.item.EntityAreaEffectCloud
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.*
 
 class EntityLingeringPotion : EntitySplashPotion {
     override fun getIdentifier(): String {

@@ -1,10 +1,10 @@
 package org.chorus.form.window
 
-import cn.nukkit.Player
-import cn.nukkit.form.element.custom.ElementCustom
-import cn.nukkit.form.response.CustomResponse
-import cn.nukkit.form.response.ElementResponse
-import cn.nukkit.utils.JSONUtils
+import org.chorus.Player
+import org.chorus.form.element.custom.ElementCustom
+import org.chorus.form.response.CustomResponse
+import org.chorus.form.response.ElementResponse
+import org.chorus.utils.JSONUtils
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken

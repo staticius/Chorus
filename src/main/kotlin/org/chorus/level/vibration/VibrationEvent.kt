@@ -1,6 +1,6 @@
 package org.chorus.level.vibration
 
-import cn.nukkit.math.Vector3
+import org.chorus.math.Vector3
 
 //nothing
 /**

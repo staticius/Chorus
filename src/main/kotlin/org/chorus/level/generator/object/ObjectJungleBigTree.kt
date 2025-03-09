@@ -1,10 +1,10 @@
 package org.chorus.level.generator.`object`
 
-import cn.nukkit.block.*
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.math.MathHelper
-import cn.nukkit.math.Vector3
+import org.chorus.block.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockVector3
+import org.chorus.math.MathHelper
+import org.chorus.math.Vector3
 
 class ObjectJungleBigTree(
     baseHeightIn: Int,

@@ -1,13 +1,13 @@
 package org.chorus.entity.ai.executor.villager
 
-import cn.nukkit.Server
-import cn.nukkit.block.BlockBed
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.executor.EntityBreedingExecutor
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.villagers.EntityVillagerV2
-import cn.nukkit.network.protocol.EntityEventPacket
+import org.chorus.Server
+import org.chorus.block.BlockBed
+import org.chorus.entity.*
+import org.chorus.entity.ai.executor.EntityBreedingExecutor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.villagers.EntityVillagerV2
+import org.chorus.network.protocol.EntityEventPacket
 import java.util.*
 
 class VillagerBreedingExecutor(entityClass: Class<*>, findingRangeSquared: Int, duration: Int, moveSpeed: Float) :

@@ -1,9 +1,9 @@
 package org.chorus.level.format
 
-import cn.nukkit.level.DimensionData
-import cn.nukkit.level.GameRules
-import cn.nukkit.level.Level
-import cn.nukkit.math.Vector3
+import org.chorus.level.DimensionData
+import org.chorus.level.GameRules
+import org.chorus.level.Level
+import org.chorus.math.Vector3
 import it.unimi.dsi.fastutil.Pair
 
 /**

@@ -1,18 +1,18 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.effect.EffectType
-import cn.nukkit.event.block.BlockFormEvent
-import cn.nukkit.event.entity.EntityDamageByBlockEvent
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.level.GameRule
-import cn.nukkit.level.Level
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.entity.Entity
+import org.chorus.entity.effect.EffectType
+import org.chorus.event.block.BlockFormEvent
+import org.chorus.event.entity.EntityDamageByBlockEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.level.GameRule
+import org.chorus.level.Level
 
 class BlockMagma : BlockSolid {
     constructor() : super(Companion.properties.defaultState)

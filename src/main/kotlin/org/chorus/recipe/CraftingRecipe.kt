@@ -1,6 +1,6 @@
 package org.chorus.recipe
 
-import cn.nukkit.network.protocol.types.RecipeUnlockingRequirement
+import org.chorus.network.protocol.types.RecipeUnlockingRequirement
 import java.util.*
 
 /**

@@ -1,9 +1,9 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.item.Item
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.inventory.FullContainerName
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.item.Item
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.inventory.FullContainerName
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import lombok.*
 
 @Getter

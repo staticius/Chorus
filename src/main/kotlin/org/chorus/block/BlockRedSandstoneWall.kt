@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemBlock
-import cn.nukkit.item.ItemTool
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 
 class BlockRedSandstoneWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockWallBase(blockstate) {

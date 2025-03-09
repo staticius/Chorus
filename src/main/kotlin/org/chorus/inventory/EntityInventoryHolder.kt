@@ -1,7 +1,7 @@
 package org.chorus.inventory
 
-import cn.nukkit.entity.EntityEquipment
-import cn.nukkit.item.Item
+import org.chorus.entity.EntityEquipment
+import org.chorus.item.Item
 
 
 interface EntityInventoryHolder : InventoryHolder {

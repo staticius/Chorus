@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.TrimMaterial
-import cn.nukkit.network.protocol.types.TrimPattern
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.TrimMaterial
+import org.chorus.network.protocol.types.TrimPattern
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.function.Consumer

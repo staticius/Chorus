@@ -1,11 +1,11 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.event.redstone.RedstoneUpdateEvent
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.utils.RedstoneComponent
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.event.redstone.RedstoneUpdateEvent
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.utils.RedstoneComponent
 
 class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockTorch(blockstate), RedstoneComponent {

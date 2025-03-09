@@ -1,5 +1,5 @@
 package org.chorus.form.element.custom
 
-import cn.nukkit.form.element.Element
+import org.chorus.form.element.Element
 
 abstract class ElementCustom : Element()

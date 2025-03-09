@@ -1,10 +1,10 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.event.player.PlayerTeleportEvent
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.ShowCreditsPacket
+import org.chorus.PlayerHandle
+import org.chorus.event.player.PlayerTeleportEvent
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.ShowCreditsPacket
 
 class ShowCreditsProcessor : DataPacketProcessor<ShowCreditsPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: ShowCreditsPacket) {

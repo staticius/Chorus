@@ -1,9 +1,9 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.Locator
-import cn.nukkit.network.protocol.types.SpawnPointType
+import org.chorus.Player
+import org.chorus.event.HandlerList
+import org.chorus.level.Locator
+import org.chorus.network.protocol.types.SpawnPointType
 import it.unimi.dsi.fastutil.Pair
 
 class PlayerRespawnEvent(player: Player?, position: Pair<Locator, SpawnPointType>) :

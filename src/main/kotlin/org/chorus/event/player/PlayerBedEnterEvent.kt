@@ -1,9 +1,9 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
 
 class PlayerBedEnterEvent(player: Player?, bed: Block) : PlayerEvent(), Cancellable {
     val bed: Block

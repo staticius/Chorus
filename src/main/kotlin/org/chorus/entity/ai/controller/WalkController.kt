@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.controller
 
-import cn.nukkit.block.*
-import cn.nukkit.entity.EntityPhysical
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.*
+import org.chorus.block.*
+import org.chorus.entity.EntityPhysical
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.*
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.sqrt

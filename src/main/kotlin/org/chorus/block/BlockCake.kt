@@ -1,14 +1,14 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.BlockFace
-import cn.nukkit.network.protocol.LevelSoundEventPacket
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.BlockFace
+import org.chorus.network.protocol.LevelSoundEventPacket
 
 /**
  * @author Nukkit Project Team

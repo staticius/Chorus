@@ -1,13 +1,13 @@
 package org.chorus.level.format.palette
 
-import cn.nukkit.block.*
-import cn.nukkit.level.*
-import cn.nukkit.level.format.ChunkSection
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.format.bitarray.BitArrayVersion
-import cn.nukkit.registry.Registries
-import cn.nukkit.utils.ByteBufVarInt
-import cn.nukkit.utils.random.NukkitRandom
+import org.chorus.block.*
+import org.chorus.level.*
+import org.chorus.level.format.ChunkSection
+import org.chorus.level.format.IChunk
+import org.chorus.level.format.bitarray.BitArrayVersion
+import org.chorus.registry.Registries
+import org.chorus.utils.ByteBufVarInt
+import org.chorus.utils.random.NukkitRandom
 import io.netty.buffer.ByteBuf
 import it.unimi.dsi.fastutil.ints.IntSet
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList

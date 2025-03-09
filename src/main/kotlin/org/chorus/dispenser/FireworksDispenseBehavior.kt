@@ -1,11 +1,11 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.item.EntityFireworksRocket
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
-import cn.nukkit.nbt.NBTIO
+import org.chorus.block.BlockDispenser
+import org.chorus.entity.Entity
+import org.chorus.entity.item.EntityFireworksRocket
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
+import org.chorus.nbt.NBTIO
 
 class FireworksDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {

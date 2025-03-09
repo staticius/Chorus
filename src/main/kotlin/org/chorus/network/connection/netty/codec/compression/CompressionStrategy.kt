@@ -1,7 +1,7 @@
 package org.chorus.network.connection.netty.codec.compression
 
-import cn.nukkit.network.connection.netty.BedrockBatchWrapper
-import cn.nukkit.network.protocol.types.CompressionAlgorithm
+import org.chorus.network.connection.netty.BedrockBatchWrapper
+import org.chorus.network.protocol.types.CompressionAlgorithm
 
 
 interface CompressionStrategy {

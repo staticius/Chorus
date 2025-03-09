@@ -1,15 +1,15 @@
 package org.chorus.camera.data
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.api.DoNotModify
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.math.Vector2f
-import cn.nukkit.math.Vector3f
-import cn.nukkit.network.protocol.UpdateSoftEnumPacket
-import cn.nukkit.network.protocol.types.camera.CameraAudioListener
-import cn.nukkit.network.protocol.types.camera.aimassist.CameraPresetAimAssist
-import cn.nukkit.utils.OptionalValue
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.api.DoNotModify
+import org.chorus.command.data.CommandEnum
+import org.chorus.math.Vector2f
+import org.chorus.math.Vector3f
+import org.chorus.network.protocol.UpdateSoftEnumPacket
+import org.chorus.network.protocol.types.camera.CameraAudioListener
+import org.chorus.network.protocol.types.camera.aimassist.CameraPresetAimAssist
+import org.chorus.utils.OptionalValue
 import lombok.Builder
 import lombok.Getter
 import java.util.*

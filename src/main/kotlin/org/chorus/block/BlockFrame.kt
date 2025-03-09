@@ -1,22 +1,22 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntityItemFrame
-import cn.nukkit.event.block.ItemFrameUseEvent
-import cn.nukkit.event.player.PlayerInteractEvent
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.level.Sound
-import cn.nukkit.math.*
-import cn.nukkit.math.BlockFace.AxisDirection
-import cn.nukkit.math.BlockFace.Companion.fromIndex
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.LevelEventPacket
-import cn.nukkit.utils.Faceable
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityItemFrame
+import org.chorus.event.block.ItemFrameUseEvent
+import org.chorus.event.player.PlayerInteractEvent
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.level.Sound
+import org.chorus.math.*
+import org.chorus.math.BlockFace.AxisDirection
+import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.LevelEventPacket
+import org.chorus.utils.Faceable
 import java.util.concurrent.ThreadLocalRandom
 
 open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

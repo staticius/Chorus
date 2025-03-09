@@ -1,13 +1,13 @@
 package org.chorus.entity
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.player.EntityFreezeEvent
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.player.EntityFreezeEvent
+import org.chorus.level.format.IChunk
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger

@@ -1,9 +1,9 @@
 package org.chorus.entity.ai.sensor
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.utils.*
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.mob.EntityMob
+import org.chorus.utils.*
 import java.util.*
 import java.util.function.Function
 

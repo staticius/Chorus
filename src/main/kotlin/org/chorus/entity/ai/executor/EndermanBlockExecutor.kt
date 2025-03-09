@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.block.*
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.EntityEnderman
-import cn.nukkit.item.*
+import org.chorus.block.*
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.EntityEnderman
+import org.chorus.item.*
 import java.util.*
 
 class EndermanBlockExecutor : IBehaviorExecutor {

@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.entity.effect.PotionType
+import org.chorus.entity.effect.PotionType
 
 /**
  * @author MagicDroidX (Nukkit Project)

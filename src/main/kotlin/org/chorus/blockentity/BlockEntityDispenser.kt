@@ -1,9 +1,9 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.inventory.DispenserInventory
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.block.BlockID
+import org.chorus.inventory.DispenserInventory
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 class BlockEntityDispenser(chunk: IChunk, nbt: CompoundTag) : BlockEntityEjectable(chunk, nbt) {
     override fun createInventory(): DispenserInventory {

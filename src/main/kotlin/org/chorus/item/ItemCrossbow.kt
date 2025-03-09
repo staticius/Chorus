@@ -1,17 +1,17 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.entity.item.EntityCrossbowFirework
-import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow
-import cn.nukkit.event.entity.EntityShootCrossbowEvent
-import cn.nukkit.event.entity.ProjectileLaunchEvent
-import cn.nukkit.inventory.Inventory
-import cn.nukkit.item.enchantment.*
-import cn.nukkit.level.Sound
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.utils.*
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.entity.item.EntityCrossbowFirework
+import org.chorus.entity.projectile.abstract_arrow.EntityArrow
+import org.chorus.event.entity.EntityShootCrossbowEvent
+import org.chorus.event.entity.ProjectileLaunchEvent
+import org.chorus.inventory.Inventory
+import org.chorus.item.enchantment.*
+import org.chorus.level.Sound
+import org.chorus.math.*
+import org.chorus.nbt.tag.*
+import org.chorus.utils.*
 import kotlin.math.cos
 import kotlin.math.sin
 

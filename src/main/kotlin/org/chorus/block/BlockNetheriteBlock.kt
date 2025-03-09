@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemTool
+import org.chorus.item.ItemTool
 
 class BlockNetheriteBlock : BlockSolid {
     constructor() : super(Companion.properties.defaultState)

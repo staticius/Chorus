@@ -1,11 +1,11 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.Server
-import cn.nukkit.config.ServerPropertiesKeys
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.TextPacket
+import org.chorus.PlayerHandle
+import org.chorus.Server
+import org.chorus.config.ServerPropertiesKeys
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.TextPacket
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

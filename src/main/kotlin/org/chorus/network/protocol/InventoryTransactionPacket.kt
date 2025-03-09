@@ -1,11 +1,11 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.nbt.tag.ListTag.size
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.LegacySetItemSlotData
-import cn.nukkit.network.protocol.types.inventory.transaction.*
-import cn.nukkit.network.protocol.types.inventory.transaction.UseItemData.PredictedResult
-import cn.nukkit.network.protocol.types.inventory.transaction.UseItemData.TriggerType
+import org.chorus.nbt.tag.ListTag.size
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.LegacySetItemSlotData
+import org.chorus.network.protocol.types.inventory.transaction.*
+import org.chorus.network.protocol.types.inventory.transaction.UseItemData.PredictedResult
+import org.chorus.network.protocol.types.inventory.transaction.UseItemData.TriggerType
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.*

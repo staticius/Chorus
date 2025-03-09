@@ -1,12 +1,12 @@
 package org.chorus.network
 
-import cn.nukkit.GameMockExtension
-import cn.nukkit.network.connection.netty.initializer.BedrockChannelInitializer
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.RequestNetworkSettingsPacket
-import cn.nukkit.registry.Registries
-import cn.nukkit.utils.ByteBufVarInt
+import org.chorus.GameMockExtension
+import org.chorus.network.connection.netty.initializer.BedrockChannelInitializer
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.RequestNetworkSettingsPacket
+import org.chorus.registry.Registries
+import org.chorus.utils.ByteBufVarInt
 import io.netty.bootstrap.Bootstrap
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.buffer.Unpooled

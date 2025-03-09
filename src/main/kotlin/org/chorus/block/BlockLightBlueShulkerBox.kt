@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.tags.BlockTags
+import org.chorus.tags.BlockTags
 import java.util.Set
 
 class BlockLightBlueShulkerBox @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

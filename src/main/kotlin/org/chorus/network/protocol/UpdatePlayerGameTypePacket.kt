@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.inventory.InventoryType.Companion.from
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.GameType
+import org.chorus.inventory.InventoryType.Companion.from
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.GameType
 import lombok.*
 
 @Getter

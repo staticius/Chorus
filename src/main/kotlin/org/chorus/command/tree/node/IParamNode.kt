@@ -1,10 +1,10 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.lang.CommandOutputContainer
-import cn.nukkit.network.protocol.types.CommandOutputMessage
+import org.chorus.command.data.CommandEnum
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.tree.ParamList
+import org.chorus.lang.CommandOutputContainer
+import org.chorus.network.protocol.types.CommandOutputMessage
 import kotlin.math.max
 
 /**

@@ -1,15 +1,15 @@
 package org.chorus.inventory.request
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.inventory.GrindstoneEvent
-import cn.nukkit.inventory.GrindstoneInventory
-import cn.nukkit.item.*
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.math.NukkitMath
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.types.itemstack.request.action.CraftGrindstoneAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.Player
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.inventory.GrindstoneEvent
+import org.chorus.inventory.GrindstoneInventory
+import org.chorus.item.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.math.NukkitMath
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.types.itemstack.request.action.CraftGrindstoneAction
+import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
 import lombok.extern.slf4j.Slf4j

@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemTool
+import org.chorus.item.ItemTool
 
 abstract class BlockWoodenSlab : BlockSlab {
     constructor(blockState: BlockState?, doubleSlab: BlockState?) : super(blockState, doubleSlab)

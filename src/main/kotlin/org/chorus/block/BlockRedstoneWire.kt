@@ -1,18 +1,18 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
-import cn.nukkit.math.Vector3.add
-import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
-import cn.nukkit.utils.RedstoneComponent.updateAllAroundRedstone
-import cn.nukkit.utils.RedstoneComponent.updateAroundRedstone
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.event.Event.isCancelled
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
+import org.chorus.math.Vector3.add
+import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
+import org.chorus.utils.RedstoneComponent.updateAllAroundRedstone
+import org.chorus.utils.RedstoneComponent.updateAroundRedstone
 import kotlin.math.max
 
 /**

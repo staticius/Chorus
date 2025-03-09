@@ -1,10 +1,10 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntity.scheduleUpdate
-import cn.nukkit.blockentity.BlockEntityCampfire
-import cn.nukkit.blockentity.BlockEntitySpawnable.spawnToAll
-import cn.nukkit.item.*
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntity.scheduleUpdate
+import org.chorus.blockentity.BlockEntityCampfire
+import org.chorus.blockentity.BlockEntitySpawnable.spawnToAll
+import org.chorus.item.*
 
 
 class CampfireInventory(campfire: BlockEntityCampfire?) : ContainerInventory(campfire, InventoryType.NONE, 4) {

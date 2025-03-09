@@ -1,11 +1,11 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockBarrel
-import cn.nukkit.blockentity.BlockEntityBarrel
-import cn.nukkit.blockentity.BlockEntityNameable
-import cn.nukkit.level.Sound
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.block.BlockBarrel
+import org.chorus.blockentity.BlockEntityBarrel
+import org.chorus.blockentity.BlockEntityNameable
+import org.chorus.level.Sound
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class BarrelInventory(barrel: BlockEntityBarrel?) : ContainerInventory(barrel, InventoryType.CONTAINER, 27),
     BlockEntityInventoryNameable {

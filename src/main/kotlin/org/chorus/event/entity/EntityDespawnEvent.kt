@@ -1,13 +1,13 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.EntityCreature
-import cn.nukkit.entity.EntityHuman
-import cn.nukkit.entity.item.EntityItem
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.Locator
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityCreature
+import org.chorus.entity.EntityHuman
+import org.chorus.entity.item.EntityItem
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.level.Locator
 
 /**
  * @author MagicDroidX (Nukkit Project)

@@ -1,6 +1,6 @@
 package org.chorus.level.tickingarea
 
-import cn.nukkit.Server
+import org.chorus.Server
 import java.util.concurrent.ThreadLocalRandom
 
 class TickingArea(name: String, levelName: String, vararg chunks: ChunkPos) {

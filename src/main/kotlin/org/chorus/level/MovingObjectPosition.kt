@@ -1,7 +1,7 @@
 package org.chorus.level
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.math.Vector3
+import org.chorus.entity.Entity
+import org.chorus.math.Vector3
 
 /**
  * @author MagicDroidX (Nukkit Project)

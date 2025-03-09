@@ -1,21 +1,21 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.entity.Entity.getId
-import cn.nukkit.entity.Entity.setDataFlag
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.animal.EntityHorse
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.network.protocol.ContainerClosePacket
-import cn.nukkit.network.protocol.LevelSoundEventPacket
-import cn.nukkit.network.protocol.MobArmorEquipmentPacket
-import cn.nukkit.network.protocol.UpdateEquipmentPacket
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.entity.Entity.getId
+import org.chorus.entity.Entity.setDataFlag
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.animal.EntityHorse
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.network.protocol.ContainerClosePacket
+import org.chorus.network.protocol.LevelSoundEventPacket
+import org.chorus.network.protocol.MobArmorEquipmentPacket
+import org.chorus.network.protocol.UpdateEquipmentPacket
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import java.io.IOException
 import java.util.List
 

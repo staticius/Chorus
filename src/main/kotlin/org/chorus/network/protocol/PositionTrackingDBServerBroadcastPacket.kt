@@ -1,13 +1,13 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.math.*
-import cn.nukkit.nbt.NBTIO.readNetworkCompressed
-import cn.nukkit.nbt.NBTIO.writeNetwork
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.IntTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.nbt.tag.Tag
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.math.*
+import org.chorus.nbt.NBTIO.readNetworkCompressed
+import org.chorus.nbt.NBTIO.writeNetwork
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.IntTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.Tag
+import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.buffer.ByteBufInputStream
 import io.netty.handler.codec.EncoderException
 import lombok.*

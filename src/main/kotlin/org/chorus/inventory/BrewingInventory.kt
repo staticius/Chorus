@@ -1,11 +1,11 @@
 package org.chorus.inventory
 
-import cn.nukkit.blockentity.BlockEntity.scheduleUpdate
-import cn.nukkit.blockentity.BlockEntityBrewingStand
-import cn.nukkit.blockentity.BlockEntityBrewingStand.updateBlock
-import cn.nukkit.blockentity.BlockEntityNameable
-import cn.nukkit.item.*
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.blockentity.BlockEntity.scheduleUpdate
+import org.chorus.blockentity.BlockEntityBrewingStand
+import org.chorus.blockentity.BlockEntityBrewingStand.updateBlock
+import org.chorus.blockentity.BlockEntityNameable
+import org.chorus.item.*
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.jetbrains.annotations.Range
 
 class BrewingInventory(brewingStand: BlockEntityBrewingStand?) :

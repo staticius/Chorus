@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.event.redstone.RedstoneUpdateEvent
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
+import org.chorus.event.redstone.RedstoneUpdateEvent
+import org.chorus.item.*
+import org.chorus.level.Level
 
 class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockRedstoneLamp(blockstate) {

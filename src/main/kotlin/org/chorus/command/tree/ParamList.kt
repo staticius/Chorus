@@ -1,8 +1,8 @@
 package org.chorus.command.tree
 
-import cn.nukkit.command.tree.node.IParamNode
-import cn.nukkit.lang.CommandOutputContainer
-import cn.nukkit.network.protocol.types.CommandOutputMessage
+import org.chorus.command.tree.node.IParamNode
+import org.chorus.lang.CommandOutputContainer
+import org.chorus.network.protocol.types.CommandOutputMessage
 import org.jetbrains.annotations.ApiStatus
 
 class ParamList(@get:ApiStatus.Internal val paramTree: ParamTree) : ArrayList<IParamNode<*>?>() {

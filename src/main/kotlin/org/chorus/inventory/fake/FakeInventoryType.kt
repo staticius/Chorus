@@ -1,8 +1,8 @@
 package org.chorus.inventory.fake
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.blockentity.*
-import cn.nukkit.inventory.InventoryType
+import org.chorus.block.BlockID
+import org.chorus.blockentity.*
+import org.chorus.inventory.InventoryType
 
 enum class FakeInventoryType(val inventoryType: InventoryType, val fakeBlock: FakeBlock, val size: Int) {
     CHEST(InventoryType.CONTAINER, SingleFakeBlock(BlockID.CHEST, BlockEntity.CHEST), 27),

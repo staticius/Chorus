@@ -1,9 +1,9 @@
 package org.chorus.utils
 
-import cn.nukkit.Server
-import cn.nukkit.network.connection.util.EncryptionUtils.mojangPublicKey
-import cn.nukkit.network.connection.util.EncryptionUtils.oldMojangPublicKey
-import cn.nukkit.network.protocol.LoginPacket
+import org.chorus.Server
+import org.chorus.network.connection.util.EncryptionUtils.mojangPublicKey
+import org.chorus.network.connection.util.EncryptionUtils.oldMojangPublicKey
+import org.chorus.network.protocol.LoginPacket
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import org.jose4j.jws.JsonWebSignature

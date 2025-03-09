@@ -1,6 +1,6 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.item.enchantment.Enchantment
+import org.chorus.item.enchantment.Enchantment
 import com.dfsek.terra.api.inventory.ItemStack
 
 @JvmRecord

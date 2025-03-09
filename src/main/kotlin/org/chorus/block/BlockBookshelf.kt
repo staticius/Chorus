@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
-import cn.nukkit.item.Item.Companion.get
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
 
 /**
  * @author Nukkit Project Team

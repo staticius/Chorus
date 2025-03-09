@@ -1,12 +1,12 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.animal.EntityHorse
-import cn.nukkit.network.protocol.EntityEventPacket
-import cn.nukkit.utils.*
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.animal.EntityHorse
+import org.chorus.network.protocol.EntityEventPacket
+import org.chorus.utils.*
 import com.google.common.base.Preconditions
 
 /**

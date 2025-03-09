@@ -1,6 +1,6 @@
 package org.chorus.item.enchantment.trident
 
-import cn.nukkit.item.enchantment.*
+import org.chorus.item.enchantment.*
 
 class EnchantmentTridentRiptide :
     EnchantmentTrident(Enchantment.Companion.ID_TRIDENT_RIPTIDE, "tridentRiptide", Rarity.RARE) {

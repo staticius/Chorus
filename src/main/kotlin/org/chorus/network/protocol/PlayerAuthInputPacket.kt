@@ -1,11 +1,11 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.inventory.InventoryType.Companion.from
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.ListTag.size
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.*
-import cn.nukkit.network.protocol.types.itemstack.request.ItemStackRequest
+import org.chorus.inventory.InventoryType.Companion.from
+import org.chorus.math.*
+import org.chorus.nbt.tag.ListTag.size
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.*
+import org.chorus.network.protocol.types.itemstack.request.ItemStackRequest
 import lombok.*
 import java.util.*
 

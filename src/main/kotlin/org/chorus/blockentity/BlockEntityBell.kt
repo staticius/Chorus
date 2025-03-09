@@ -1,12 +1,12 @@
 package org.chorus.blockentity
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.level.Sound
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.ByteTag
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.IntTag
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.level.Sound
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.ByteTag
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.IntTag
 
 class BlockEntityBell(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     private var ringing = false

@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.evaluator
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 import java.util.Set
 
 class RandomSoundEvaluator @JvmOverloads constructor(ticks: Int = 20, probability: Int = 10) :

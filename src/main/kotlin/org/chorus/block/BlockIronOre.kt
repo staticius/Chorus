@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemID
-import cn.nukkit.item.ItemTool
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 
 open class BlockIronOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockOre(blockstate) {

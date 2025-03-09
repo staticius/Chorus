@@ -1,8 +1,8 @@
 package org.chorus.item
 
-import cn.nukkit.block.BlockBed
-import cn.nukkit.block.BlockID
-import cn.nukkit.utils.DyeColor
+import org.chorus.block.BlockBed
+import org.chorus.block.BlockID
+import org.chorus.utils.DyeColor
 
 /**
  * @author MagicDroidX (Nukkit Project)

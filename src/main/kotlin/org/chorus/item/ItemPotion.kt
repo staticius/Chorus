@@ -1,12 +1,12 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.entity.effect.PotionType
-import cn.nukkit.event.player.PlayerItemConsumeEvent
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.*
+import org.chorus.Player
+import org.chorus.entity.Entity.getServer
+import org.chorus.entity.effect.PotionType
+import org.chorus.event.player.PlayerItemConsumeEvent
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.*
 
 class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.POTION, meta, count, "Potion") {

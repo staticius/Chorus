@@ -1,8 +1,8 @@
 package org.chorus.entity.mob.animal
 
-import cn.nukkit.entity.EntityID
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.EntityID
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 class EntityTraderLlama(chunk: IChunk?, nbt: CompoundTag) : EntityLlama(chunk, nbt) {
     override fun getIdentifier(): String {

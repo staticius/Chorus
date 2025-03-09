@@ -1,11 +1,11 @@
 package org.chorus.item.enchantment
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.effect.PotionType.equals
-import cn.nukkit.item.*
-import cn.nukkit.level.Locator
-import cn.nukkit.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
-import cn.nukkit.utils.random.NukkitRandom
+import org.chorus.block.BlockID
+import org.chorus.entity.effect.PotionType.equals
+import org.chorus.item.*
+import org.chorus.level.Locator
+import org.chorus.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
+import org.chorus.utils.random.NukkitRandom
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Collectors
 import kotlin.math.abs

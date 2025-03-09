@@ -1,8 +1,8 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.command.data.CommandEnum
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.tree.ParamList
+import org.chorus.command.data.CommandEnum
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.tree.ParamList
 
 /**
  * 一个通用的命令节点抽象类实现，插件想实现自己的命令参数节点应该继承这个类实现。

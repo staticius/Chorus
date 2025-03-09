@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import cn.nukkit.utils.exception.FormativeRuntimeException
+import org.chorus.utils.exception.FormativeRuntimeException
 import com.dfsek.terra.lib.commons.lang3.BooleanUtils
 import com.dfsek.terra.lib.commons.lang3.StringUtils
 import com.dfsek.terra.lib.commons.lang3.math.NumberUtils

@@ -1,7 +1,7 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.setCount
+import org.chorus.item.Item
+import org.chorus.item.Item.setCount
 import com.dfsek.terra.api.inventory.ItemStack
 
 @JvmRecord

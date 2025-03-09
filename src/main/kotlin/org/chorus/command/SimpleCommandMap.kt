@@ -1,15 +1,15 @@
 package org.chorus.command
 
-import cn.nukkit.Server
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.defaults.*
-import cn.nukkit.command.simple.*
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.lang.CommandOutputContainer
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.plugin.InternalPlugin
-import cn.nukkit.utils.TextFormat
-import cn.nukkit.utils.Utils
+import org.chorus.Server
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.defaults.*
+import org.chorus.command.simple.*
+import org.chorus.command.utils.CommandLogger
+import org.chorus.lang.CommandOutputContainer
+import org.chorus.lang.TranslationContainer
+import org.chorus.plugin.InternalPlugin
+import org.chorus.utils.TextFormat
+import org.chorus.utils.Utils
 import io.netty.util.internal.EmptyArrays
 import lombok.extern.slf4j.Slf4j
 import java.util.*

@@ -1,8 +1,8 @@
 package org.chorus.level.tickingarea.storage
 
-import cn.nukkit.Server
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.utils.JSONUtils
+import org.chorus.Server
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.utils.JSONUtils
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import com.google.gson.reflect.TypeToken

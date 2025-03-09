@@ -1,10 +1,10 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.event.player.PlayerTeleportEvent.TeleportCause
-import cn.nukkit.level.Transform
+import org.chorus.entity.Entity
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
+import org.chorus.level.Transform
 
 /**
  * @author MagicDroidX (Nukkit Project)

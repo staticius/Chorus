@@ -1,10 +1,10 @@
 package org.chorus.recipe
 
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.clone
-import cn.nukkit.network.protocol.types.RecipeUnlockingRequirement
-import cn.nukkit.recipe.descriptor.DefaultDescriptor
-import cn.nukkit.registry.RecipeRegistry
+import org.chorus.item.Item
+import org.chorus.item.Item.clone
+import org.chorus.network.protocol.types.RecipeUnlockingRequirement
+import org.chorus.recipe.descriptor.DefaultDescriptor
+import org.chorus.registry.RecipeRegistry
 import java.util.*
 import java.util.List
 

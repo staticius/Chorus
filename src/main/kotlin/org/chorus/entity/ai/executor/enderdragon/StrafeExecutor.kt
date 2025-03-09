@@ -1,15 +1,15 @@
 package org.chorus.entity.ai.executor.enderdragon
 
-import cn.nukkit.Player
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.executor.EntityControl
-import cn.nukkit.entity.ai.executor.IBehaviorExecutor
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.Player
+import org.chorus.entity.*
+import org.chorus.entity.ai.executor.EntityControl
+import org.chorus.entity.ai.executor.IBehaviorExecutor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
 import kotlin.math.cos
 import kotlin.math.sin
 

@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.math.BlockFace
 
 abstract class BlockLog(blockState: BlockState?) : BlockSolid(blockState), IBlockWood {
     abstract override fun getStrippedState(): BlockState

@@ -1,13 +1,13 @@
 package org.chorus.entity.item
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.effect.*
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.effect.*
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
 import java.awt.Color
 
 class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {

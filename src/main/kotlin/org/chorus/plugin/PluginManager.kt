@@ -1,15 +1,15 @@
 package org.chorus.plugin
 
-import cn.nukkit.Server
-import cn.nukkit.command.PluginCommand
-import cn.nukkit.command.SimpleCommandMap
-import cn.nukkit.event.*
-import cn.nukkit.event.HandlerList.Companion.unregisterAll
-import cn.nukkit.level.Level
-import cn.nukkit.permission.Permissible
-import cn.nukkit.permission.Permission
-import cn.nukkit.utils.PluginException
-import cn.nukkit.utils.Utils
+import org.chorus.Server
+import org.chorus.command.PluginCommand
+import org.chorus.command.SimpleCommandMap
+import org.chorus.event.*
+import org.chorus.event.HandlerList.Companion.unregisterAll
+import org.chorus.level.Level
+import org.chorus.permission.Permissible
+import org.chorus.permission.Permission
+import org.chorus.utils.PluginException
+import org.chorus.utils.Utils
 import io.netty.util.internal.EmptyArrays
 import lombok.Getter
 import lombok.extern.slf4j.Slf4j

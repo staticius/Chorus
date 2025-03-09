@@ -1,9 +1,9 @@
 package org.chorus.command
 
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.utils.CommandLogger
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.plugin.Plugin
+import org.chorus.command.tree.ParamList
+import org.chorus.command.utils.CommandLogger
+import org.chorus.lang.TranslationContainer
+import org.chorus.plugin.Plugin
 
 /**
  * @author MagicDroidX (Nukkit Project)

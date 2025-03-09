@@ -1,12 +1,12 @@
 package org.chorus.inventory
 
-import cn.nukkit.AdventureSettings
-import cn.nukkit.Player
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.NukkitMath
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.protocol.ContainerOpenPacket
+import org.chorus.AdventureSettings
+import org.chorus.Player
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.NukkitMath
+import org.chorus.math.Vector3
+import org.chorus.network.protocol.ContainerOpenPacket
 import kotlin.math.min
 
 abstract class ContainerInventory(holder: InventoryHolder?, type: InventoryType, size: Int) :

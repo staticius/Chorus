@@ -1,6 +1,6 @@
 package org.chorus.math
 
-import cn.nukkit.level.MovingObjectPosition
+import org.chorus.level.MovingObjectPosition
 
 interface AxisAlignedBB : Cloneable {
     fun setBounds(minX: Double, minY: Double, minZ: Double, maxX: Double, maxY: Double, maxZ: Double): AxisAlignedBB {

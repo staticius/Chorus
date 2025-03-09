@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.block.*
+import org.chorus.block.*
 
 class ItemTorchflowerSeeds @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.TORCHFLOWER_SEEDS, meta, count, "Torchflower Seeds") {

@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemTool
+import org.chorus.item.ItemTool
 
 class BlockMud : BlockSolid, Natural {
     constructor() : super(Companion.properties.defaultState)

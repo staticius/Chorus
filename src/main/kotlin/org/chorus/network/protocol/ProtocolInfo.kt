@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.utils.SemVersion
-import cn.nukkit.utils.Utils
+import org.chorus.utils.SemVersion
+import org.chorus.utils.Utils
 
 /**
  * @author MagicDroidX &amp; iNevet (Nukkit Project)

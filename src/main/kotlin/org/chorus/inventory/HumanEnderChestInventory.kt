@@ -1,14 +1,14 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntityEnderChest
-import cn.nukkit.blockentity.BlockEntityNameable
-import cn.nukkit.entity.IHuman
-import cn.nukkit.level.Sound
-import cn.nukkit.network.protocol.BlockEventPacket
-import cn.nukkit.network.protocol.ContainerClosePacket
-import cn.nukkit.network.protocol.ContainerOpenPacket
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntityEnderChest
+import org.chorus.blockentity.BlockEntityNameable
+import org.chorus.entity.IHuman
+import org.chorus.level.Sound
+import org.chorus.network.protocol.BlockEventPacket
+import org.chorus.network.protocol.ContainerClosePacket
+import org.chorus.network.protocol.ContainerOpenPacket
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import lombok.extern.slf4j.Slf4j
 
 @Slf4j

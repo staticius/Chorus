@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.behavior
 
-import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
+import org.chorus.entity.mob.EntityMob
 import lombok.Getter
 import lombok.Setter
 import java.util.concurrent.*

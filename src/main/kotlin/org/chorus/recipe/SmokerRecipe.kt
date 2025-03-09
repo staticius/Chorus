@@ -1,8 +1,8 @@
 package org.chorus.recipe
 
-import cn.nukkit.item.Item
-import cn.nukkit.recipe.descriptor.DefaultDescriptor
-import cn.nukkit.registry.RecipeRegistry
+import org.chorus.item.Item
+import org.chorus.recipe.descriptor.DefaultDescriptor
+import org.chorus.registry.RecipeRegistry
 import java.util.List
 
 class SmokerRecipe(recipeId: String?, result: Item, ingredient: Item) :

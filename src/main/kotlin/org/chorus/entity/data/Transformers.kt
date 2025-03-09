@@ -1,6 +1,6 @@
 package org.chorus.entity.data
 
-import cn.nukkit.block.Block
+import org.chorus.block.Block
 import java.util.*
 import java.util.function.Function
 

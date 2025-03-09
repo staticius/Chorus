@@ -1,11 +1,11 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.Server
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.command.tree.ParamList
-import cn.nukkit.command.utils.CommandLogger
+import org.chorus.Server
+import org.chorus.command.CommandSender
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.command.tree.ParamList
+import org.chorus.command.utils.CommandLogger
 
 class SetMaxPlayersCommand(name: String) : VanillaCommand(name, "commands.setmaxplayers.description") {
     init {

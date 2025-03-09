@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.scoreboard.data.ScorerType
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.scoreboard.data.ScorerType
 import lombok.*
 
 @Getter

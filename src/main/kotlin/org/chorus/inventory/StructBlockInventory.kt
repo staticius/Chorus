@@ -1,13 +1,13 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntityStructBlock
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.inventory.InventoryCloseEvent
-import cn.nukkit.event.inventory.InventoryOpenEvent
-import cn.nukkit.item.*
-import cn.nukkit.network.protocol.ContainerClosePacket
-import cn.nukkit.network.protocol.ContainerOpenPacket
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntityStructBlock
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.inventory.InventoryCloseEvent
+import org.chorus.event.inventory.InventoryOpenEvent
+import org.chorus.item.*
+import org.chorus.network.protocol.ContainerClosePacket
+import org.chorus.network.protocol.ContainerOpenPacket
 
 class StructBlockInventory(override val holder: BlockEntityStructBlock) : Inventory {
     override val viewers: MutableSet<Player> = HashSet()

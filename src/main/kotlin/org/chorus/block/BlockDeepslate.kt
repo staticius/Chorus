@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.*
 
 class BlockDeepslate : BlockSolid {
     constructor() : super(Companion.properties.defaultState)

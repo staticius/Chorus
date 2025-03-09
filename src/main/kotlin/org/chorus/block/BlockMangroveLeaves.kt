@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.WoodType
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemID
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.WoodType
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockMangroveLeaves : BlockLeaves {

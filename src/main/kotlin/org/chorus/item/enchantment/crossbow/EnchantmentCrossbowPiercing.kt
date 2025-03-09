@@ -1,6 +1,6 @@
 package org.chorus.item.enchantment.crossbow
 
-import cn.nukkit.item.enchantment.*
+import org.chorus.item.enchantment.*
 
 class EnchantmentCrossbowPiercing :
     EnchantmentCrossbow(Enchantment.Companion.ID_CROSSBOW_PIERCING, "crossbowPiercing", Rarity.COMMON) {

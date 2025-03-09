@@ -1,11 +1,11 @@
 package org.chorus.level.generator.terra.handles
 
-import cn.nukkit.block.BlockAir
-import cn.nukkit.level.generator.terra.PNXAdapter
-import cn.nukkit.level.generator.terra.delegate.PNXBlockStateDelegate
-import cn.nukkit.level.generator.terra.delegate.PNXEntityType
-import cn.nukkit.level.generator.terra.mappings.JeBlockState
-import cn.nukkit.level.generator.terra.mappings.MappingRegistries
+import org.chorus.block.BlockAir
+import org.chorus.level.generator.terra.PNXAdapter
+import org.chorus.level.generator.terra.delegate.PNXBlockStateDelegate
+import org.chorus.level.generator.terra.delegate.PNXEntityType
+import org.chorus.level.generator.terra.mappings.JeBlockState
+import org.chorus.level.generator.terra.mappings.MappingRegistries
 import com.dfsek.terra.api.block.state.BlockState
 import com.dfsek.terra.api.entity.EntityType
 import com.dfsek.terra.api.handle.WorldHandle

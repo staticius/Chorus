@@ -1,10 +1,10 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.entity.Attribute.getValue
-import cn.nukkit.nbt.tag.ListTag.get
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.camera.aimassist.*
-import cn.nukkit.utils.OptionalValue
+import org.chorus.entity.Attribute.getValue
+import org.chorus.nbt.tag.ListTag.get
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.camera.aimassist.*
+import org.chorus.utils.OptionalValue
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.List

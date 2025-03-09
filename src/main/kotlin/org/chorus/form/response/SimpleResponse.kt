@@ -1,6 +1,6 @@
 package org.chorus.form.response
 
-import cn.nukkit.form.element.simple.ElementButton
+import org.chorus.form.element.simple.ElementButton
 import lombok.AllArgsConstructor
 import lombok.Getter
 import lombok.NoArgsConstructor

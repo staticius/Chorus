@@ -1,10 +1,10 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.inventory.EnchantInventory
-import cn.nukkit.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.inventory.EnchantInventory
+import org.chorus.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
 
 class PlayerEnchantOptionsRequestEvent(player: Player?, table: EnchantInventory, options: List<EnchantOptionData>) :
     PlayerEvent(), Cancellable {

@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.block.Block.name
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.math.Vector3.equals
+import org.chorus.block.Block.name
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.Vector3.equals
 
 open class BlockCutCopperSlab : BlockSlabCopperBase {
     @JvmOverloads

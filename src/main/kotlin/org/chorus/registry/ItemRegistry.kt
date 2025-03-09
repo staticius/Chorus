@@ -1,14 +1,14 @@
 package org.chorus.registry
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.*
-import cn.nukkit.item.customitem.CustomItem
-import cn.nukkit.item.customitem.CustomItemDefinition
-import cn.nukkit.nbt.NBTIO.readCompressed
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.plugin.Plugin
-import cn.nukkit.registry.ItemRuntimeIdRegistry.RuntimeEntry
-import cn.nukkit.registry.RegisterException
+import org.chorus.block.BlockID
+import org.chorus.item.*
+import org.chorus.item.customitem.CustomItem
+import org.chorus.item.customitem.CustomItemDefinition
+import org.chorus.nbt.NBTIO.readCompressed
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.plugin.Plugin
+import org.chorus.registry.ItemRuntimeIdRegistry.RuntimeEntry
+import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import lombok.Getter

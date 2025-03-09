@@ -1,7 +1,7 @@
 package org.chorus.form.window
 
-import cn.nukkit.Player
-import cn.nukkit.form.response.Response
+import org.chorus.Player
+import org.chorus.form.response.Response
 import com.google.gson.JsonObject
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectArraySet

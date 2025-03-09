@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.item.Item
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.utils.RedstoneComponent.updateAllAroundRedstone
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.event.Event.isCancelled
+import org.chorus.item.Item
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.utils.RedstoneComponent.updateAllAroundRedstone
 
 /**
  * @author Angelic47 (Nukkit Project)

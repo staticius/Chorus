@@ -1,26 +1,26 @@
 package org.chorus.entity
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.block.*
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.effect.*
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.entity.weather.EntityWeather
-import cn.nukkit.event.entity.*
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.item.*
-import cn.nukkit.level.GameRule
-import cn.nukkit.level.Sound
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.network.protocol.AnimatePacket
-import cn.nukkit.network.protocol.EntityEventPacket
-import cn.nukkit.scoreboard.manager.IScoreboardManager
-import cn.nukkit.utils.TickCachedBlockIterator
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.block.*
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.effect.*
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.entity.weather.EntityWeather
+import org.chorus.event.entity.*
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.item.*
+import org.chorus.level.GameRule
+import org.chorus.level.Sound
+import org.chorus.level.format.IChunk
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.network.protocol.AnimatePacket
+import org.chorus.network.protocol.EntityEventPacket
+import org.chorus.scoreboard.manager.IScoreboardManager
+import org.chorus.utils.TickCachedBlockIterator
 import java.util.*
 
 abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt), EntityDamageable {

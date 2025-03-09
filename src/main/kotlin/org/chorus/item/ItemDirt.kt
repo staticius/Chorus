@@ -1,5 +1,5 @@
 package org.chorus.item
 
-import cn.nukkit.block.BlockDirt
+import org.chorus.block.BlockDirt
 
 class ItemDirt : ItemBlock(BlockDirt())

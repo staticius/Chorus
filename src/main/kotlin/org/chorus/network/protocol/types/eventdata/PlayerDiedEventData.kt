@@ -1,8 +1,8 @@
 package org.chorus.network.protocol.types.eventdata
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.EventData
-import cn.nukkit.network.protocol.types.EventDataType
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.EventData
+import org.chorus.network.protocol.types.EventDataType
 import lombok.Value
 
 /**

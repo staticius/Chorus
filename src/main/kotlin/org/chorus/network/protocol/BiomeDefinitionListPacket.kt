@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.registry.Registries
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.registry.Registries
 import lombok.*
 
 @Getter

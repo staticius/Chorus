@@ -1,6 +1,6 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.Server
+import org.chorus.Server
 
 /**
  * 将全部剩余的参数以空格为分隔符合并，解析为[String]值

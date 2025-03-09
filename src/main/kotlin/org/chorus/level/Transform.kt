@@ -1,7 +1,7 @@
 package org.chorus.level
 
-import cn.nukkit.math.Vector3
-import cn.nukkit.math.Rotator2
+import org.chorus.math.Vector3
+import org.chorus.math.Rotator2
 
 /**
  * @author MagicDroidX (Nukkit Project)

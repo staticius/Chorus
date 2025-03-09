@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.tags.BlockTags
-import cn.nukkit.utils.DyeColor
+import org.chorus.tags.BlockTags
+import org.chorus.utils.DyeColor
 import java.util.Set
 
 class BlockLightGrayWool @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

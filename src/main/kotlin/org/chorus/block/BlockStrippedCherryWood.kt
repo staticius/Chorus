@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.WoodType
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.WoodType
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
 
 class BlockStrippedCherryWood @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockWoodStripped(blockstate) {

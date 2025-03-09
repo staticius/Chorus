@@ -1,6 +1,6 @@
 package org.chorus.dialog.element
 
-import cn.nukkit.dialog.window.Dialog
+import org.chorus.dialog.window.Dialog
 
 class ElementDialogButton @JvmOverloads constructor(// json 格式需要，勿改
     var name: String, var text: String, nextDialog: Dialog? = null, mode: Mode = Mode.BUTTON_MODE, type: Int = 1

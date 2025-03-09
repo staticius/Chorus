@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.memory
 
-import cn.nukkit.entity.Entity
+import org.chorus.entity.Entity
 
 /**
  * 记忆存储器

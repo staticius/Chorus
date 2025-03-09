@@ -1,10 +1,10 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.block.property.enums.StructureBlockType
-import cn.nukkit.inventory.InventoryType.Companion.from
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.*
+import org.chorus.block.property.enums.StructureBlockType
+import org.chorus.inventory.InventoryType.Companion.from
+import org.chorus.math.BlockVector3
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.*
 import lombok.*
 
 @Getter

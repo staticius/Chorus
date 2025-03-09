@@ -1,26 +1,26 @@
 package org.chorus.entity.mob.animal
 
-import cn.nukkit.entity.EntityID
-import cn.nukkit.entity.EntityWalkable
-import cn.nukkit.entity.ai.behavior.Behavior
-import cn.nukkit.entity.ai.behavior.IBehavior
-import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup
-import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup
-import cn.nukkit.entity.ai.controller.*
-import cn.nukkit.entity.ai.evaluator.IBehaviorEvaluator
-import cn.nukkit.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator
-import cn.nukkit.entity.ai.evaluator.PassByTimeEvaluator
-import cn.nukkit.entity.ai.evaluator.ProbabilityEvaluator
-import cn.nukkit.entity.ai.executor.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
-import cn.nukkit.entity.ai.route.posevaluator.WalkingPosEvaluator
-import cn.nukkit.entity.ai.sensor.ISensor
-import cn.nukkit.entity.ai.sensor.NearestFeedingPlayerSensor
-import cn.nukkit.entity.ai.sensor.NearestPlayerSensor
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
+import org.chorus.entity.ai.behavior.Behavior
+import org.chorus.entity.ai.behavior.IBehavior
+import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
+import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
+import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
+import org.chorus.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator
+import org.chorus.entity.ai.evaluator.PassByTimeEvaluator
+import org.chorus.entity.ai.evaluator.ProbabilityEvaluator
+import org.chorus.entity.ai.executor.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
+import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
+import org.chorus.entity.ai.sensor.ISensor
+import org.chorus.entity.ai.sensor.NearestFeedingPlayerSensor
+import org.chorus.entity.ai.sensor.NearestPlayerSensor
+import org.chorus.entity.mob.EntityMob
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 import java.util.Set
 
 class EntityGoat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {

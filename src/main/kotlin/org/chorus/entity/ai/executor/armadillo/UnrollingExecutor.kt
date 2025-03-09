@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.executor.armadillo
 
-import cn.nukkit.entity.ai.executor.EntityControl
-import cn.nukkit.entity.ai.executor.IBehaviorExecutor
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.animal.EntityArmadillo
-import cn.nukkit.entity.mob.animal.EntityArmadillo.RollState
+import org.chorus.entity.ai.executor.EntityControl
+import org.chorus.entity.ai.executor.IBehaviorExecutor
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.animal.EntityArmadillo
+import org.chorus.entity.mob.animal.EntityArmadillo.RollState
 
 class UnrollingExecutor : EntityControl, IBehaviorExecutor {
     protected var tick: Int = 0

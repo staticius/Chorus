@@ -1,6 +1,6 @@
 package org.chorus.event.server
 
-import cn.nukkit.event.Event
+import org.chorus.event.Event
 
 /**
  * @author MagicDroidX (Nukkit Project)

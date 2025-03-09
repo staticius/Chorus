@@ -1,13 +1,13 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.level.Level
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.ClientboundMapItemDataPacket
-import cn.nukkit.plugin.InternalPlugin
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.entity.Entity.getServer
+import org.chorus.level.Level
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.ClientboundMapItemDataPacket
+import org.chorus.plugin.InternalPlugin
 import lombok.extern.slf4j.Slf4j
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream

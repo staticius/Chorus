@@ -1,25 +1,25 @@
 package org.chorus.blockentity
 
-import cn.nukkit.block.BlockBrewingStand
-import cn.nukkit.block.BlockID
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.event.inventory.BrewEvent
-import cn.nukkit.event.inventory.StartBrewEvent
-import cn.nukkit.inventory.BrewingInventory
-import cn.nukkit.inventory.Inventory
-import cn.nukkit.inventory.InventorySlice
-import cn.nukkit.inventory.RecipeInventoryHolder
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemID
-import cn.nukkit.level.Sound
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.network.protocol.ContainerSetDataPacket
-import cn.nukkit.recipe.ContainerRecipe
-import cn.nukkit.recipe.MixRecipe
-import cn.nukkit.registry.Registries
+import org.chorus.block.BlockBrewingStand
+import org.chorus.block.BlockID
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.event.inventory.BrewEvent
+import org.chorus.event.inventory.StartBrewEvent
+import org.chorus.inventory.BrewingInventory
+import org.chorus.inventory.Inventory
+import org.chorus.inventory.InventorySlice
+import org.chorus.inventory.RecipeInventoryHolder
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.level.Sound
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.network.protocol.ContainerSetDataPacket
+import org.chorus.recipe.ContainerRecipe
+import org.chorus.recipe.MixRecipe
+import org.chorus.registry.Registries
 
 class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     RecipeInventoryHolder,

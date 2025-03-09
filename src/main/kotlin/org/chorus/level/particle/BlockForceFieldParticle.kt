@@ -1,8 +1,8 @@
 package org.chorus.level.particle
 
-import cn.nukkit.math.Vector3
-import cn.nukkit.network.protocol.DataPacket
-import cn.nukkit.network.protocol.LevelEventPacket
+import org.chorus.math.Vector3
+import org.chorus.network.protocol.DataPacket
+import org.chorus.network.protocol.LevelEventPacket
 
 class BlockForceFieldParticle @JvmOverloads constructor(pos: Vector3, scale: Int = 0) :
     GenericParticle(pos, Particle.Companion.TYPE_BLOCK_FORCE_FIELD) {

@@ -1,7 +1,7 @@
 package org.chorus.level.generator.terra.mappings
 
-import cn.nukkit.level.generator.terra.mappings.loader.BiomeRegistryLoader
-import cn.nukkit.level.generator.terra.mappings.populator.BlockRegistryPopulator
+import org.chorus.level.generator.terra.mappings.loader.BiomeRegistryLoader
+import org.chorus.level.generator.terra.mappings.populator.BlockRegistryPopulator
 import com.google.common.collect.HashBiMap
 import java.util.function.Supplier
 

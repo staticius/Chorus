@@ -1,10 +1,10 @@
 package org.chorus.level
 
-import cn.nukkit.GameMockExtension
-import cn.nukkit.level.format.LevelProvider
-import cn.nukkit.level.generator.Flat
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.GameLoop
+import org.chorus.GameMockExtension
+import org.chorus.level.format.LevelProvider
+import org.chorus.level.generator.Flat
+import org.chorus.math.Vector3
+import org.chorus.utils.GameLoop
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

@@ -1,16 +1,16 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.EntityMonster
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.network.protocol.EntityEventPacket
-import cn.nukkit.network.protocol.LevelSoundEventPacketV2
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.entity.*
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.EntityMonster
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.network.protocol.EntityEventPacket
+import org.chorus.network.protocol.LevelSoundEventPacketV2
 
 class GuardianAttackExecutor(
     protected var memory: MemoryType<out Entity?>,

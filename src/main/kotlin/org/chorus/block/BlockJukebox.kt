@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntityJukebox
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityJukebox
+import org.chorus.item.*
+import org.chorus.math.BlockFace
 
 /**
  * @author CreeperFace

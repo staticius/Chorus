@@ -1,6 +1,6 @@
 package org.chorus.network.connection.netty.codec.compression
 
-import cn.nukkit.network.protocol.types.*
+import org.chorus.network.protocol.types.*
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 

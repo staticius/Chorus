@@ -1,9 +1,9 @@
 package org.chorus.entity.projectile.abstract_arrow
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.projectile.SlenderProjectile
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.Entity
+import org.chorus.entity.projectile.SlenderProjectile
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 abstract class EntityAbstractArrow @JvmOverloads constructor(
     chunk: IChunk?,

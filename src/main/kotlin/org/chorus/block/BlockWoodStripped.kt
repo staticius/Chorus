@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
 
 abstract class BlockWoodStripped(blockstate: BlockState?) : BlockWood(blockstate) {
     override fun getStrippedState(): BlockState {

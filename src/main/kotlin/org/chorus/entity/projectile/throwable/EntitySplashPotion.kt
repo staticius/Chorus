@@ -1,17 +1,17 @@
 package org.chorus.entity.projectile.throwable
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.effect.*
-import cn.nukkit.entity.mob.monster.EntityBlaze
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.potion.PotionCollideEvent
-import cn.nukkit.level.Sound
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.particle.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.utils.BlockColor
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.effect.*
+import org.chorus.entity.mob.monster.EntityBlaze
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.potion.PotionCollideEvent
+import org.chorus.level.Sound
+import org.chorus.level.format.IChunk
+import org.chorus.level.particle.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.BlockColor
 import java.awt.Color
 import kotlin.math.sqrt
 

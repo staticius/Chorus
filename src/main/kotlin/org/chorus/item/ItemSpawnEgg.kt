@@ -1,18 +1,18 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.event.entity.CreatureSpawnEvent
-import cn.nukkit.event.entity.CreatureSpawnEvent.SpawnReason
-import cn.nukkit.level.Level
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.BlockFace
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.registry.Registries
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.event.entity.CreatureSpawnEvent
+import org.chorus.event.entity.CreatureSpawnEvent.SpawnReason
+import org.chorus.level.Level
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.BlockFace
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.registry.Registries
 import java.util.*
 
 /**

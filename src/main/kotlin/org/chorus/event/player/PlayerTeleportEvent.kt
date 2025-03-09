@@ -1,11 +1,11 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.Level
-import cn.nukkit.level.Transform
-import cn.nukkit.math.Vector3
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.level.Level
+import org.chorus.level.Transform
+import org.chorus.math.Vector3
 
 class PlayerTeleportEvent private constructor(player: Player) : PlayerEvent(), Cancellable {
     var cause: TeleportCause? = null

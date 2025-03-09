@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.block.Block.name
-import cn.nukkit.block.property.enums.WoodType.name
-import cn.nukkit.item.ItemTool
-import cn.nukkit.utils.DyeColor.name
+import org.chorus.block.Block.name
+import org.chorus.block.property.enums.WoodType.name
+import org.chorus.item.ItemTool
+import org.chorus.utils.DyeColor.name
 
 abstract class BlockWool(blockstate: BlockState?) : BlockSolid(blockstate) {
     override val name: String

@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.ItemID
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntity
+import org.chorus.item.Item
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
+import org.chorus.math.BlockFace
 
 /**
  * @author good777LUCKY

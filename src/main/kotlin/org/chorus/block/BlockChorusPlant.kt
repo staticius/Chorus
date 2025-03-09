@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.*
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockChorusPlant : BlockTransparent {

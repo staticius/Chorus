@@ -1,9 +1,9 @@
 package org.chorus.positiontracking
 
-import cn.nukkit.level.Level
-import cn.nukkit.level.Locator
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 
 /**
  * @author joserobjr

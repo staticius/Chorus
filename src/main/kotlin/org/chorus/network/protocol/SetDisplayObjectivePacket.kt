@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.scoreboard.data.DisplaySlot
-import cn.nukkit.scoreboard.data.SortOrder
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.scoreboard.data.DisplaySlot
+import org.chorus.scoreboard.data.SortOrder
 import lombok.*
 
 @Getter

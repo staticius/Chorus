@@ -1,10 +1,10 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.nbt.tag.ListTag.get
-import cn.nukkit.network.connection.util.HandleByteBuf
-import cn.nukkit.network.protocol.types.inventory.InventoryLayout
-import cn.nukkit.network.protocol.types.inventory.InventoryTabLeft
-import cn.nukkit.network.protocol.types.inventory.InventoryTabRight
+import org.chorus.nbt.tag.ListTag.get
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.inventory.InventoryLayout
+import org.chorus.network.protocol.types.inventory.InventoryTabLeft
+import org.chorus.network.protocol.types.inventory.InventoryTabRight
 import lombok.*
 
 @Getter

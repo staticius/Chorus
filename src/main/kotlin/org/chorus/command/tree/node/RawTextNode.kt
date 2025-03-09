@@ -1,7 +1,7 @@
 package org.chorus.command.tree.node
 
 import org.chorus.command.utils.RawText
-import cn.nukkit.network.protocol.types.CommandOutputMessage
+import org.chorus.network.protocol.types.CommandOutputMessage
 import com.google.gson.JsonSyntaxException
 
 /**

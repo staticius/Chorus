@@ -1,21 +1,21 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntitySkull
-import cn.nukkit.event.redstone.RedstoneUpdateEvent
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Level
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.fromIndex
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.utils.Faceable
-import cn.nukkit.utils.RedstoneComponent
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntitySkull
+import org.chorus.event.redstone.RedstoneUpdateEvent
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.Faceable
+import org.chorus.utils.RedstoneComponent
 import kotlin.math.floor
 
 abstract class BlockHead(blockState: BlockState?) : BlockTransparent(blockState), RedstoneComponent,

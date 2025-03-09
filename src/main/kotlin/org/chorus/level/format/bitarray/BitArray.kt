@@ -1,6 +1,6 @@
 package org.chorus.level.format.bitarray
 
-import cn.nukkit.utils.ByteBufVarInt
+import org.chorus.utils.ByteBufVarInt
 import io.netty.buffer.ByteBuf
 
 /**

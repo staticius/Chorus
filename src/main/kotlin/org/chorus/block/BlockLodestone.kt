@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.*
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.blockentity.*
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.math.BlockFace
 import lombok.extern.slf4j.Slf4j
 import java.io.IOException
 

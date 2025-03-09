@@ -1,13 +1,13 @@
 package org.chorus.level.vibration
 
-import cn.nukkit.Server
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.Event.isCancelled
-import cn.nukkit.level.*
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.LevelEventPacket
-import cn.nukkit.plugin.InternalPlugin
+import org.chorus.Server
+import org.chorus.entity.Entity
+import org.chorus.event.Event.isCancelled
+import org.chorus.level.*
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.LevelEventPacket
+import org.chorus.plugin.InternalPlugin
 import java.util.function.Predicate
 
 class SimpleVibrationManager(protected var level: Level) : VibrationManager {

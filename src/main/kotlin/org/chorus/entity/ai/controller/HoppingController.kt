@@ -1,13 +1,13 @@
 package org.chorus.entity.ai.controller
 
-import cn.nukkit.entity.EntityPhysical
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.animal.EntityRabbit
-import cn.nukkit.entity.mob.monster.EntitySlime
-import cn.nukkit.level.Sound
-import cn.nukkit.math.*
+import org.chorus.entity.EntityPhysical
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.animal.EntityRabbit
+import org.chorus.entity.mob.monster.EntitySlime
+import org.chorus.level.Sound
+import org.chorus.math.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 

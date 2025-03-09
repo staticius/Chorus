@@ -1,19 +1,19 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.evaluator.*
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.EntityShulker
-import cn.nukkit.entity.projectile.EntityShulkerBullet
-import cn.nukkit.level.Sound
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.utils.*
+import org.chorus.entity.*
+import org.chorus.entity.ai.evaluator.*
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityShulker
+import org.chorus.entity.projectile.EntityShulkerBullet
+import org.chorus.level.Sound
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.utils.*
 import lombok.RequiredArgsConstructor
 
 @RequiredArgsConstructor

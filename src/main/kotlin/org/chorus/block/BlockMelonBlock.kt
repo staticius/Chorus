@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.item.enchantment.Enchantment
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.item.enchantment.Enchantment
 import java.util.*
 import kotlin.math.min
 

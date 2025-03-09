@@ -1,7 +1,7 @@
 package org.chorus.level.format.leveldb
 
-import cn.nukkit.nbt.tag.*
-import cn.nukkit.registry.Registries
+import org.chorus.nbt.tag.*
+import org.chorus.registry.Registries
 
 object BDSEntityTranslator {
     fun translate(from: CompoundTag): CompoundTag? {

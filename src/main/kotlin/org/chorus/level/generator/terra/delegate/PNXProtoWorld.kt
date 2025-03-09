@@ -1,7 +1,7 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.level.Locator
+import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.level.Locator
 import com.dfsek.terra.api.block.entity.BlockEntity
 import com.dfsek.terra.api.block.state.BlockState
 import com.dfsek.terra.api.config.ConfigPack

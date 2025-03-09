@@ -1,11 +1,11 @@
 package org.chorus.command.defaults
 
-import cn.nukkit.Server
-import cn.nukkit.command.*
-import cn.nukkit.command.data.CommandParamType
-import cn.nukkit.command.data.CommandParameter
-import cn.nukkit.scheduler.Task
-import cn.nukkit.utils.TextFormat
+import org.chorus.Server
+import org.chorus.command.*
+import org.chorus.command.data.CommandParamType
+import org.chorus.command.data.CommandParameter
+import org.chorus.scheduler.Task
+import org.chorus.utils.TextFormat
 
 class TpsCommand(name: String) : Command(name, "get server tps"), CoreCommand {
     init {

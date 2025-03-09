@@ -1,8 +1,8 @@
 package org.chorus.event.vehicle
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.event.HandlerList
-import cn.nukkit.level.Transform
+import org.chorus.entity.Entity
+import org.chorus.event.HandlerList
+import org.chorus.level.Transform
 
 class VehicleMoveEvent(vehicle: Entity, val from: Transform, val to: Transform) :
     VehicleEvent(vehicle) {

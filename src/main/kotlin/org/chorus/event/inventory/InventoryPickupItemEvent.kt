@@ -1,9 +1,9 @@
 package org.chorus.event.inventory
 
-import cn.nukkit.entity.item.EntityItem
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.inventory.Inventory
+import org.chorus.entity.item.EntityItem
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.inventory.Inventory
 
 /**
  * @author MagicDroidX (Nukkit Project)

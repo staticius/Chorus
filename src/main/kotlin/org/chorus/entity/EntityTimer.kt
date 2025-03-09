@@ -1,6 +1,6 @@
 package org.chorus.entity
 
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.CompoundTag
 
 class EntityTimer {
     var timeStamp: Long = 0L

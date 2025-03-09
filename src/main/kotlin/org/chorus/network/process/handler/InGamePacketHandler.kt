@@ -1,8 +1,8 @@
 package org.chorus.network.process.handler
 
-import cn.nukkit.network.connection.BedrockSession
-import cn.nukkit.network.process.DataPacketManager
-import cn.nukkit.network.protocol.DataPacket
+import org.chorus.network.connection.BedrockSession
+import org.chorus.network.process.DataPacketManager
+import org.chorus.network.protocol.DataPacket
 
 class InGamePacketHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
     val manager: DataPacketManager = DataPacketManager()

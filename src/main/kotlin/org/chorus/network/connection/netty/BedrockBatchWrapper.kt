@@ -1,8 +1,8 @@
 package org.chorus.network.connection.netty
 
-import cn.nukkit.network.connection.util.BatchFlag
-import cn.nukkit.network.protocol.DataPacket
-import cn.nukkit.network.protocol.types.*
+import org.chorus.network.connection.util.BatchFlag
+import org.chorus.network.protocol.DataPacket
+import org.chorus.network.protocol.types.*
 import io.netty.buffer.ByteBuf
 import io.netty.util.AbstractReferenceCounted
 import io.netty.util.ReferenceCountUtil

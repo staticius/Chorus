@@ -1,7 +1,7 @@
 package org.chorus.entity.effect
 
-import cn.nukkit.entity.*
-import cn.nukkit.event.entity.EntityRegainHealthEvent
+import org.chorus.entity.*
+import org.chorus.event.entity.EntityRegainHealthEvent
 import java.awt.Color
 import kotlin.math.min
 

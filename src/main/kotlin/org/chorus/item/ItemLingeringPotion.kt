@@ -1,7 +1,7 @@
 package org.chorus.item
 
-import cn.nukkit.entity.effect.PotionType
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.effect.PotionType
+import org.chorus.nbt.tag.CompoundTag
 
 class ItemLingeringPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ProjectileItem(ItemID.Companion.LINGERING_POTION, meta, count, "Lingering Potion") {

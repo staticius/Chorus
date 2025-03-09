@@ -1,13 +1,13 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.event.player.PlayerItemConsumeEvent
-import cn.nukkit.level.Sound
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.*
-import cn.nukkit.network.protocol.CompletedUsingItemPacket
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.event.player.PlayerItemConsumeEvent
+import org.chorus.level.Sound
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.*
+import org.chorus.network.protocol.CompletedUsingItemPacket
 
 class ItemMilkBucket : ItemBucket(ItemID.Companion.MILK_BUCKET) {
     override var damage: Int

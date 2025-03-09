@@ -1,6 +1,6 @@
 package org.chorus.item.enchantment.trident
 
-import cn.nukkit.item.enchantment.*
+import org.chorus.item.enchantment.*
 
 class EnchantmentTridentChanneling :
     EnchantmentTrident(Enchantment.Companion.ID_TRIDENT_CHANNELING, "tridentChanneling", Rarity.VERY_RARE) {

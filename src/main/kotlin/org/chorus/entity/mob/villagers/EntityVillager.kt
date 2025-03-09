@@ -1,15 +1,15 @@
 package org.chorus.entity.mob.villagers
 
-import cn.nukkit.entity.EntityID
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityDrowned
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityZombie
-import cn.nukkit.entity.mob.monster.humanoid_monster.EntityZombieVillager
-import cn.nukkit.entity.projectile.abstract_arrow.EntityThrownTrident
-import cn.nukkit.event.entity.EntityDamageByEntityEvent
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.EntityID
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.humanoid_monster.EntityDrowned
+import org.chorus.entity.mob.monster.humanoid_monster.EntityZombie
+import org.chorus.entity.mob.monster.humanoid_monster.EntityZombieVillager
+import org.chorus.entity.projectile.abstract_arrow.EntityThrownTrident
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author Pub4Game

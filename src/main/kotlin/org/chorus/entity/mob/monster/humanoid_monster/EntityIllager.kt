@@ -1,9 +1,9 @@
 package org.chorus.entity.mob.monster.humanoid_monster
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.mob.villagers.EntityVillager
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.*
+import org.chorus.entity.mob.villagers.EntityVillager
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author PikyCZ

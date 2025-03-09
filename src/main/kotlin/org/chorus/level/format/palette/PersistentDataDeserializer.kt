@@ -1,6 +1,6 @@
 package org.chorus.level.format.palette
 
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * Allay Project 2023/4/14

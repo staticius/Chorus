@@ -1,19 +1,19 @@
 package org.chorus.inventory.fake
 
-import cn.nukkit.Player
-import cn.nukkit.entity.EntityHumanType.getInventory
-import cn.nukkit.event.inventory.ItemStackRequestActionEvent
-import cn.nukkit.inventory.*
-import cn.nukkit.item.*
-import cn.nukkit.network.protocol.ContainerClosePacket
-import cn.nukkit.network.protocol.ContainerOpenPacket
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
-import cn.nukkit.network.protocol.types.itemstack.request.ItemStackRequestSlotData
-import cn.nukkit.network.protocol.types.itemstack.request.action.DropAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.SwapAction
-import cn.nukkit.network.protocol.types.itemstack.request.action.TransferItemStackRequestAction
-import cn.nukkit.plugin.InternalPlugin
-import cn.nukkit.recipe.*
+import org.chorus.Player
+import org.chorus.entity.EntityHumanType.getInventory
+import org.chorus.event.inventory.ItemStackRequestActionEvent
+import org.chorus.inventory.*
+import org.chorus.item.*
+import org.chorus.network.protocol.ContainerClosePacket
+import org.chorus.network.protocol.ContainerOpenPacket
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
+import org.chorus.network.protocol.types.itemstack.request.action.DropAction
+import org.chorus.network.protocol.types.itemstack.request.action.SwapAction
+import org.chorus.network.protocol.types.itemstack.request.action.TransferItemStackRequestAction
+import org.chorus.plugin.InternalPlugin
+import org.chorus.recipe.*
 import org.jetbrains.annotations.ApiStatus
 import java.util.List
 

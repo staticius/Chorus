@@ -1,10 +1,10 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.blockentity.*
-import cn.nukkit.dispenser.DispenseBehavior
-import cn.nukkit.dispenser.DropperDispenseBehavior
-import cn.nukkit.item.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.blockentity.*
+import org.chorus.dispenser.DispenseBehavior
+import org.chorus.dispenser.DropperDispenseBehavior
+import org.chorus.item.*
 
 class BlockDropper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockDispenser(blockstate) {

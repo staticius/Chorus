@@ -1,12 +1,12 @@
 package org.chorus.level
 
-import cn.nukkit.GameMockExtension
-import cn.nukkit.TestPlayer
-import cn.nukkit.TestUtils
-import cn.nukkit.block.*
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
+import org.chorus.GameMockExtension
+import org.chorus.TestPlayer
+import org.chorus.TestUtils
+import org.chorus.block.*
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

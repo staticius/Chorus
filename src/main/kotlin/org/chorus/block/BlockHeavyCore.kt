@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.AxisAlignedBB
+import org.chorus.item.ItemTool
+import org.chorus.math.AxisAlignedBB
 
 class BlockHeavyCore : BlockFlowable {
     constructor() : super(Companion.properties.defaultState)

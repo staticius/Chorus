@@ -1,8 +1,8 @@
 package org.chorus.compression
 
-import cn.nukkit.Server
-import cn.nukkit.lang.BaseLang
-import cn.nukkit.utils.*
+import org.chorus.Server
+import org.chorus.lang.BaseLang
+import org.chorus.utils.*
 import cn.powernukkitx.libdeflate.Libdeflate
 import lombok.extern.slf4j.Slf4j
 

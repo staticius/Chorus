@@ -1,11 +1,11 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.item.EntityFallingBlock
-import cn.nukkit.item.*
-import cn.nukkit.level.Locator
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.entity.Entity
+import org.chorus.entity.item.EntityFallingBlock
+import org.chorus.item.*
+import org.chorus.level.Locator
+import org.chorus.math.BlockFace
 
 class BlockFrogSpawn : BlockFlowable {
     constructor() : super(Companion.properties.defaultState)

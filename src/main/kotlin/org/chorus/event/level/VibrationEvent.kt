@@ -1,7 +1,7 @@
 package org.chorus.event.level
 
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.Event
-import cn.nukkit.level.vibration.VibrationEvent
+import org.chorus.event.Cancellable
+import org.chorus.event.Event
+import org.chorus.level.vibration.VibrationEvent
 
 abstract class VibrationEvent(var vibrationEvent: VibrationEvent) : Event(), Cancellable

@@ -1,8 +1,8 @@
 package org.chorus.scoreboard
 
-import cn.nukkit.Server
-import cn.nukkit.event.scoreboard.ScoreboardLineChangeEvent
-import cn.nukkit.scoreboard.scorer.IScorer
+import org.chorus.Server
+import org.chorus.event.scoreboard.ScoreboardLineChangeEvent
+import org.chorus.scoreboard.scorer.IScorer
 import lombok.Getter
 
 @Getter

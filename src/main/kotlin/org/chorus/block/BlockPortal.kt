@@ -1,11 +1,11 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.item.*
-import cn.nukkit.math.*
-import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
-import cn.nukkit.utils.Faceable
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.item.*
+import org.chorus.math.*
+import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.utils.Faceable
 
 /**
  * Alias NetherPortal

@@ -1,7 +1,7 @@
 package org.chorus.plugin
 
-import cn.nukkit.permission.Permission
-import cn.nukkit.utils.PluginException
+import org.chorus.permission.Permission
+import org.chorus.utils.PluginException
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
 

@@ -1,20 +1,20 @@
 package org.chorus.entity
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.block.*
-import cn.nukkit.entity.data.*
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.player.EntityFreezeEvent
-import cn.nukkit.item.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.AddPlayerPacket
-import cn.nukkit.network.protocol.MovePlayerPacket
-import cn.nukkit.network.protocol.RemoveEntityPacket
-import cn.nukkit.network.protocol.SetEntityLinkPacket
-import cn.nukkit.network.protocol.types.EntityLink
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.block.*
+import org.chorus.entity.data.*
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.player.EntityFreezeEvent
+import org.chorus.item.*
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.AddPlayerPacket
+import org.chorus.network.protocol.MovePlayerPacket
+import org.chorus.network.protocol.RemoveEntityPacket
+import org.chorus.network.protocol.SetEntityLinkPacket
+import org.chorus.network.protocol.types.EntityLink
 import java.util.*
 import java.util.function.Predicate
 

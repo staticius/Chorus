@@ -1,8 +1,8 @@
 package org.chorus.item
 
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.utils.BlockColor
-import cn.nukkit.utils.DyeColor
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.BlockColor
+import org.chorus.utils.DyeColor
 
 /**
  * @author fromgate

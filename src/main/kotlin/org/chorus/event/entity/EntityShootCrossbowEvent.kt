@@ -1,11 +1,11 @@
 package org.chorus.event.entity
 
-import cn.nukkit.entity.Entity
-import cn.nukkit.entity.EntityLiving
-import cn.nukkit.entity.projectile.EntityProjectile
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.item.Item
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityLiving
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.item.Item
 
 /**
  * @author GoodLucky777, Superice666

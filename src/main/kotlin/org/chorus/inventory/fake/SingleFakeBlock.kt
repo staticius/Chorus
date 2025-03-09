@@ -1,12 +1,12 @@
 package org.chorus.inventory.fake
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.blockentity.BlockEntity.Companion.getDefaultCompound
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.BlockEntityDataPacket
-import cn.nukkit.network.protocol.UpdateBlockPacket
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.blockentity.BlockEntity.Companion.getDefaultCompound
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.BlockEntityDataPacket
+import org.chorus.network.protocol.UpdateBlockPacket
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import java.util.function.Consumer
 

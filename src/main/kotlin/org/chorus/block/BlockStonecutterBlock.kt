@@ -1,18 +1,18 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block.Companion.get
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.inventory.BlockInventoryHolder
-import cn.nukkit.inventory.Inventory
-import cn.nukkit.item.Item
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.item.ItemBlock
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
-import cn.nukkit.registry.BiomeRegistry.get
-import cn.nukkit.registry.BlockRegistry.get
+import org.chorus.Player
+import org.chorus.block.Block.Companion.get
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.inventory.BlockInventoryHolder
+import org.chorus.inventory.Inventory
+import org.chorus.item.Item
+import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.registry.BiomeRegistry.get
+import org.chorus.registry.BlockRegistry.get
 import java.util.function.Supplier
 
 class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :

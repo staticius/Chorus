@@ -1,8 +1,8 @@
 package org.chorus.level.generator.`object`
 
-import cn.nukkit.block.*
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.math.Vector3
+import org.chorus.block.*
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
 
 class ObjectCherryTree : TreeGenerator() {
     protected var LOG_Y_AXIS: BlockState

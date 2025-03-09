@@ -1,13 +1,13 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.entity.EntityHuman.setSkin
-import cn.nukkit.event.player.PlayerChangeSkinEvent
-import cn.nukkit.event.player.PlayerServerSettingsRequestEvent.getSettings
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.PlayerSkinPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getServer
+import org.chorus.entity.EntityHuman.setSkin
+import org.chorus.event.player.PlayerChangeSkinEvent
+import org.chorus.event.player.PlayerServerSettingsRequestEvent.getSettings
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.PlayerSkinPacket
+import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 import java.util.concurrent.TimeUnit
 

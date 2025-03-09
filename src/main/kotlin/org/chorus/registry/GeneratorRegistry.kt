@@ -1,8 +1,8 @@
 package org.chorus.registry
 
-import cn.nukkit.level.generator.Flat
-import cn.nukkit.level.generator.Generator
-import cn.nukkit.registry.RegisterException
+import org.chorus.level.generator.Flat
+import org.chorus.level.generator.Generator
+import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 

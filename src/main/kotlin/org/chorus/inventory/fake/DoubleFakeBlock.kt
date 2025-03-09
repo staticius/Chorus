@@ -1,9 +1,9 @@
 package org.chorus.inventory.fake
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.math.Vector3
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
 import com.google.common.collect.Lists
 
 class DoubleFakeBlock : SingleFakeBlock {

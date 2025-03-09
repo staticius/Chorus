@@ -1,19 +1,19 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.blockentity.*
-import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
-import cn.nukkit.item.*
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.BlockFace.Companion.fromIndex
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
-import cn.nukkit.nbt.tag.StringTag
-import cn.nukkit.nbt.tag.Tag
-import cn.nukkit.utils.Faceable
+import org.chorus.Player
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.blockentity.*
+import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
+import org.chorus.item.*
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.StringTag
+import org.chorus.nbt.tag.Tag
+import org.chorus.utils.Faceable
 import kotlin.math.abs
 
 class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :

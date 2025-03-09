@@ -1,18 +1,18 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.config.ServerProperties.get
-import cn.nukkit.entity.Entity.isAlive
-import cn.nukkit.entity.Entity.move
-import cn.nukkit.entity.Entity.setDataFlag
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.animal.EntityHorse
-import cn.nukkit.entity.mob.animal.EntityHorse.getClientMaxJumpHeight
-import cn.nukkit.entity.mob.animal.EntityHorse.getJumping
-import cn.nukkit.item.Item.Companion.get
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.ProtocolInfo
-import cn.nukkit.network.protocol.RiderJumpPacket
+import org.chorus.PlayerHandle
+import org.chorus.config.ServerProperties.get
+import org.chorus.entity.Entity.isAlive
+import org.chorus.entity.Entity.move
+import org.chorus.entity.Entity.setDataFlag
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.animal.EntityHorse
+import org.chorus.entity.mob.animal.EntityHorse.getClientMaxJumpHeight
+import org.chorus.entity.mob.animal.EntityHorse.getJumping
+import org.chorus.item.Item.Companion.get
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.RiderJumpPacket
 import kotlin.math.max
 
 class RiderJumpProcessor : DataPacketProcessor<RiderJumpPacket>() {

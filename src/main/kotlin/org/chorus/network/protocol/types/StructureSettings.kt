@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types
 
-import cn.nukkit.math.BlockVector3
-import cn.nukkit.math.Vector3f
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3f
 import lombok.AllArgsConstructor
 import lombok.Value
 

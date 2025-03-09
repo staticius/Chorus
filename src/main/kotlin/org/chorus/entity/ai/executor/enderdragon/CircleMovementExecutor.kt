@@ -1,15 +1,15 @@
 package org.chorus.entity.ai.executor.enderdragon
 
-import cn.nukkit.entity.*
-import cn.nukkit.entity.ai.executor.EntityControl
-import cn.nukkit.entity.ai.executor.IBehaviorExecutor
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.item.EntityEnderCrystal
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.EntityEnderDragon
-import cn.nukkit.math.*
-import cn.nukkit.utils.*
+import org.chorus.entity.*
+import org.chorus.entity.ai.executor.EntityControl
+import org.chorus.entity.ai.executor.IBehaviorExecutor
+import org.chorus.entity.ai.memory.CoreMemoryTypes
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.item.EntityEnderCrystal
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.EntityEnderDragon
+import org.chorus.math.*
+import org.chorus.utils.*
 import lombok.Getter
 import java.util.*
 import kotlin.math.cos

@@ -1,6 +1,6 @@
 package org.chorus.permission
 
-import cn.nukkit.utils.Utils
+import org.chorus.utils.Utils
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken

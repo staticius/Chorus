@@ -1,11 +1,11 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.*
-import cn.nukkit.item.*
-import cn.nukkit.level.Sound
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.BlockFace
+import org.chorus.block.*
+import org.chorus.item.*
+import org.chorus.level.Sound
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.BlockFace
 
 /**
  * @author CreeperFace

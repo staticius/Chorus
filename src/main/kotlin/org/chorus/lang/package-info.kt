@@ -6,21 +6,21 @@
  */
 package org.chorus.lang
 
-import cn.nukkit.lang.BaseLang
+import org.chorus.lang.BaseLang
 import java.util.HashMap
 import java.io.IOException
 import java.io.FileNotFoundException
 import java.io.FileInputStream
 import java.io.BufferedReader
-import cn.nukkit.utils.JSONUtils
-import cn.nukkit.lang.TextContainer
-import cn.nukkit.lang.TranslationContainer
-import cn.nukkit.lang.LangCode
-import cn.nukkit.plugin.PluginBase
-import cn.nukkit.lang.PluginI18n
-import cn.nukkit.lang.PluginI18nManager
+import org.chorus.utils.JSONUtils
+import org.chorus.lang.TextContainer
+import org.chorus.lang.TranslationContainer
+import org.chorus.lang.LangCode
+import org.chorus.plugin.PluginBase
+import org.chorus.lang.PluginI18n
+import org.chorus.lang.PluginI18nManager
 import java.util.jar.JarFile
 import java.util.Enumeration
-import cn.nukkit.network.protocol.types.CommandOutputMessage
-import cn.nukkit.lang.CommandOutputContainer
+import org.chorus.network.protocol.types.CommandOutputMessage
+import org.chorus.lang.CommandOutputContainer
 

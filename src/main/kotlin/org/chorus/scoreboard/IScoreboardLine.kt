@@ -1,7 +1,7 @@
 package org.chorus.scoreboard
 
-import cn.nukkit.network.protocol.SetScorePacket.ScoreInfo
-import cn.nukkit.scoreboard.scorer.IScorer
+import org.chorus.network.protocol.SetScorePacket.ScoreInfo
+import org.chorus.scoreboard.scorer.IScorer
 
 /**
  * 计分板上的单个行 <br></br>

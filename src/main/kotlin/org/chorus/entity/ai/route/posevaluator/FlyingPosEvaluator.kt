@@ -1,10 +1,10 @@
 package org.chorus.entity.ai.route.posevaluator
 
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.AxisAlignedBB
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.Utils
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
+import org.chorus.utils.Utils
 
 open class FlyingPosEvaluator : IPosEvaluator {
     override fun evalPos(entity: EntityMob, vec: Vector3): Boolean {

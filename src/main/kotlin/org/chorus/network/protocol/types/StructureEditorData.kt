@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types
 
-import cn.nukkit.block.property.enums.StructureBlockType
+import org.chorus.block.property.enums.StructureBlockType
 import lombok.Value
 
 @Value

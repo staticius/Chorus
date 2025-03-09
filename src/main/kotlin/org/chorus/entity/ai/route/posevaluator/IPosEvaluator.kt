@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.route.posevaluator
 
-import cn.nukkit.block.Block
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.Vector3
+import org.chorus.block.Block
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.Vector3
 
 /**
  * 坐标评估器用于寻路器评估坐标 <br></br>

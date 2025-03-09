@@ -1,6 +1,6 @@
 package org.chorus.scheduler
 
-import cn.nukkit.plugin.Plugin
+import org.chorus.plugin.Plugin
 
 
 /**

@@ -1,10 +1,10 @@
 package org.chorus.command.selector.args.impl
 
-import cn.nukkit.Player
-import cn.nukkit.command.CommandSender
-import cn.nukkit.command.exceptions.SelectorSyntaxException
-import cn.nukkit.entity.Entity
-import cn.nukkit.level.Transform
+import org.chorus.Player
+import org.chorus.command.CommandSender
+import org.chorus.command.exceptions.SelectorSyntaxException
+import org.chorus.entity.Entity
+import org.chorus.level.Transform
 import java.util.function.Predicate
 
 class LM : CachedSimpleSelectorArgument() {

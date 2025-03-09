@@ -1,8 +1,8 @@
 package org.chorus.level.generator
 
-import cn.nukkit.Server
-import cn.nukkit.level.DimensionData
-import cn.nukkit.registry.Registries
+import org.chorus.Server
+import org.chorus.level.DimensionData
+import org.chorus.registry.Registries
 
 /**
  * @author MagicDroidX (Nukkit Project)

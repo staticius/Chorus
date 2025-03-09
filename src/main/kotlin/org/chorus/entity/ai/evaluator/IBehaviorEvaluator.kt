@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.evaluator
 
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityMob
 
 /**
  * 此接口抽象了一个行为评估器 <br></br> 决定是否激活与其绑定的执行器

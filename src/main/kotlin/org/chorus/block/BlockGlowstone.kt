@@ -1,8 +1,8 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
-import cn.nukkit.item.enchantment.Enchantment
-import cn.nukkit.math.MathHelper.clamp
+import org.chorus.item.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.math.MathHelper.clamp
 import java.util.*
 
 /**

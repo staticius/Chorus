@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.sensor
 
-import cn.nukkit.entity.ai.memory.IMemoryStorage
-import cn.nukkit.entity.mob.EntityMob
+import org.chorus.entity.ai.memory.IMemoryStorage
+import org.chorus.entity.mob.EntityMob
 
 /**
  * 此接口抽象了一个传感器 <br></br>

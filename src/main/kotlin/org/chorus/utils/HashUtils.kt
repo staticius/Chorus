@@ -1,10 +1,10 @@
 package org.chorus.utils
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.block.property.type.BlockPropertyType
-import cn.nukkit.block.property.type.BlockPropertyType.BlockPropertyValue
-import cn.nukkit.nbt.NBTIO.write
-import cn.nukkit.nbt.tag.*
+import org.chorus.block.BlockID
+import org.chorus.block.property.type.BlockPropertyType
+import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
+import org.chorus.nbt.NBTIO.write
+import org.chorus.nbt.tag.*
 import lombok.SneakyThrows
 import lombok.experimental.UtilityClass
 import java.nio.ByteOrder

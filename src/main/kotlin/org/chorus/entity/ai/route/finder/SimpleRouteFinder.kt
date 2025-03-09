@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.route.finder
 
-import cn.nukkit.entity.ai.route.data.Node
-import cn.nukkit.entity.ai.route.posevaluator.IPosEvaluator
+import org.chorus.entity.ai.route.data.Node
+import org.chorus.entity.ai.route.posevaluator.IPosEvaluator
 import lombok.Getter
 
 /**

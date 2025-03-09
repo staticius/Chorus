@@ -1,12 +1,12 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.Entity.getServer
-import cn.nukkit.event.player.PlayerCommandPreprocessEvent
-import cn.nukkit.event.player.PlayerHackDetectedEvent
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.CommandRequestPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.entity.Entity.getServer
+import org.chorus.event.player.PlayerCommandPreprocessEvent
+import org.chorus.event.player.PlayerHackDetectedEvent
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.CommandRequestPacket
+import org.chorus.network.protocol.ProtocolInfo
 import com.google.common.util.concurrent.RateLimiter
 import java.util.concurrent.TimeUnit
 

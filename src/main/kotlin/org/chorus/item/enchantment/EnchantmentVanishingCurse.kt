@@ -1,7 +1,7 @@
 package org.chorus.item.enchantment
 
-import cn.nukkit.block.BlockID
-import cn.nukkit.item.*
+import org.chorus.block.BlockID
+import org.chorus.item.*
 
 class EnchantmentVanishingCurse : Enchantment(
     Enchantment.Companion.ID_VANISHING_CURSE,

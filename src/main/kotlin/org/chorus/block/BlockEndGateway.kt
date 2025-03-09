@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.*
-import cn.nukkit.entity.Entity
-import cn.nukkit.item.*
-import cn.nukkit.level.Level
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3
+import org.chorus.Player
+import org.chorus.blockentity.*
+import org.chorus.entity.Entity
+import org.chorus.item.*
+import org.chorus.level.Level
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 
 /**
  * @author PikyCZ

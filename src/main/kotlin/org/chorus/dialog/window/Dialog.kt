@@ -1,6 +1,6 @@
 package org.chorus.dialog.window
 
-import cn.nukkit.Player
+import org.chorus.Player
 
 interface Dialog {
     fun send(player: Player)

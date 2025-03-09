@@ -1,10 +1,10 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockLoom
-import cn.nukkit.item.Item
-import cn.nukkit.network.protocol.ContainerOpenPacket
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.Player
+import org.chorus.block.BlockLoom
+import org.chorus.item.Item
+import org.chorus.network.protocol.ContainerOpenPacket
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class LoomInventory(blockLoom: BlockLoom?) : BaseInventory(blockLoom, InventoryType.LOOM, 3) {
     override fun init() {

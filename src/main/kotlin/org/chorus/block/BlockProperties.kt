@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.block.BlockStateImpl
-import cn.nukkit.block.property.type.BlockPropertyType
-import cn.nukkit.block.property.type.BlockPropertyType.BlockPropertyValue
-import cn.nukkit.tags.BlockTags.register
-import cn.nukkit.utils.HashUtils
-import cn.nukkit.utils.HashUtils.computeBlockStateHash
-import cn.nukkit.utils.Identifier.Companion.assertValid
+import org.chorus.block.BlockStateImpl
+import org.chorus.block.property.type.BlockPropertyType
+import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
+import org.chorus.tags.BlockTags.register
+import org.chorus.utils.HashUtils
+import org.chorus.utils.HashUtils.computeBlockStateHash
+import org.chorus.utils.Identifier.Companion.assertValid
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.Sets
 import it.unimi.dsi.fastutil.Pair

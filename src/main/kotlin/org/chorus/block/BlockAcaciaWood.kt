@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.enums.WoodType
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.WoodType
 
 class BlockAcaciaWood(blockstate: BlockState?) : BlockWood(blockstate) {
     override fun getWoodType(): WoodType {

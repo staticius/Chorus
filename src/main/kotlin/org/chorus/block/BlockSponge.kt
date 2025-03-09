@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemBlock
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Locator.x
-import cn.nukkit.level.Locator.y
-import cn.nukkit.level.Locator.z
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
+import org.chorus.level.Locator.x
+import org.chorus.level.Locator.y
+import org.chorus.level.Locator.z
+import org.chorus.math.BlockFace
 import java.util.*
 
 class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :

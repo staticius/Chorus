@@ -1,16 +1,16 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntityMobSpawner.spawnEntityType
-import cn.nukkit.blockentity.BlockEntitySpawnable.spawnToAll
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemSpawnEgg.entityNetworkId
-import cn.nukkit.item.ItemTool
-import cn.nukkit.math.BlockFace
-import cn.nukkit.nbt.tag.CompoundTag.putInt
-import cn.nukkit.nbt.tag.CompoundTag.putString
-import cn.nukkit.registry.Registries
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityMobSpawner.spawnEntityType
+import org.chorus.blockentity.BlockEntitySpawnable.spawnToAll
+import org.chorus.item.Item
+import org.chorus.item.ItemSpawnEgg.entityNetworkId
+import org.chorus.item.ItemTool
+import org.chorus.math.BlockFace
+import org.chorus.nbt.tag.CompoundTag.putInt
+import org.chorus.nbt.tag.CompoundTag.putString
+import org.chorus.registry.Registries
 
 class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockState) {

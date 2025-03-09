@@ -1,8 +1,8 @@
 package org.chorus.event.redstone
 
-import cn.nukkit.block.Block
-import cn.nukkit.event.HandlerList
-import cn.nukkit.event.block.BlockUpdateEvent
+import org.chorus.block.Block
+import org.chorus.event.HandlerList
+import org.chorus.event.block.BlockUpdateEvent
 
 /**
  * @author Angelic47 (Nukkit Project)

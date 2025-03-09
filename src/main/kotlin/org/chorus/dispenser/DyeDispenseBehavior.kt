@@ -1,8 +1,8 @@
 package org.chorus.dispenser
 
-import cn.nukkit.block.BlockDispenser
-import cn.nukkit.item.Item
-import cn.nukkit.math.BlockFace
+import org.chorus.block.BlockDispenser
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
 
 class DyeDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {

@@ -1,10 +1,10 @@
 package org.chorus.network.process.processor
 
-import cn.nukkit.PlayerHandle
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.network.process.DataPacketProcessor
-import cn.nukkit.network.protocol.PacketViolationWarningPacket
-import cn.nukkit.network.protocol.ProtocolInfo
+import org.chorus.PlayerHandle
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.network.process.DataPacketProcessor
+import org.chorus.network.protocol.PacketViolationWarningPacket
+import org.chorus.network.protocol.ProtocolInfo
 import lombok.extern.slf4j.Slf4j
 import java.lang.reflect.Field
 import java.util.*

@@ -1,11 +1,11 @@
 package org.chorus.entity.mob.monster.humanoid_monster
 
-import cn.nukkit.entity.EntityCanAttack
-import cn.nukkit.entity.mob.monster.EntityMonster
-import cn.nukkit.item.Item
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.entity.EntityCanAttack
+import org.chorus.entity.mob.monster.EntityMonster
+import org.chorus.item.Item
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
 
 /**
  * @author MagicDroidX (Nukkit Project)

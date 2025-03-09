@@ -1,9 +1,9 @@
 package org.chorus.command.tree.node
 
-import cn.nukkit.Server
-import cn.nukkit.command.exceptions.SelectorSyntaxException
-import cn.nukkit.command.selector.EntitySelectorAPI
-import cn.nukkit.entity.Entity
+import org.chorus.Server
+import org.chorus.command.exceptions.SelectorSyntaxException
+import org.chorus.command.selector.EntitySelectorAPI
+import org.chorus.entity.Entity
 import com.google.common.collect.Lists
 
 /**

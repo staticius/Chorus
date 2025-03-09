@@ -1,7 +1,7 @@
 package org.chorus.event.potion
 
-import cn.nukkit.entity.effect.PotionType
-import cn.nukkit.event.Event
+import org.chorus.entity.effect.PotionType
+import org.chorus.event.Event
 
 /**
  * @author Snake1999

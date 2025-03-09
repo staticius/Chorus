@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.math.IVector3
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.mob.EntityMob
+import org.chorus.math.IVector3
 
 class LookAtTargetExecutor(//指示执行器应该从哪个Memory获取目标位置
     protected var memory: MemoryType<out IVector3?>, protected var duration: Int

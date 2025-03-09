@@ -1,18 +1,18 @@
 package org.chorus.item
 
-import cn.nukkit.Player
-import cn.nukkit.block.*
-import cn.nukkit.entity.*
-import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.entity.item.EntityPainting
-import cn.nukkit.entity.item.EntityPainting.Motive
-import cn.nukkit.level.Level
-import cn.nukkit.level.vibration.VibrationEvent
-import cn.nukkit.level.vibration.VibrationType
-import cn.nukkit.math.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.FloatTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.Player
+import org.chorus.block.*
+import org.chorus.entity.*
+import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.entity.item.EntityPainting
+import org.chorus.entity.item.EntityPainting.Motive
+import org.chorus.level.Level
+import org.chorus.level.vibration.VibrationEvent
+import org.chorus.level.vibration.VibrationType
+import org.chorus.math.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
 import java.util.concurrent.ThreadLocalRandom
 
 /**

@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import cn.nukkit.network.protocol.types.BannerPatternType
+import org.chorus.network.protocol.types.BannerPatternType
 
 class ItemPiglinBannerPattern : ItemBannerPattern(ItemID.Companion.PIGLIN_BANNER_PATTERN) {
     override val patternType: BannerPatternType?

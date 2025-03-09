@@ -6,18 +6,18 @@
  */
 package org.chorus.permission
 
-import cn.nukkit.permission.BanEntry
+import org.chorus.permission.BanEntry
 import java.util.LinkedList
 import java.util.TreeMap
 import java.io.IOException
-import cn.nukkit.permission.BanList
+import org.chorus.permission.BanList
 import java.io.ByteArrayInputStream
 import java.util.HashMap
-import cn.nukkit.permission.Permissible
-import cn.nukkit.permission.ServerOperator
-import cn.nukkit.permission.PermissionAttachment
-import cn.nukkit.permission.PermissionAttachmentInfo
+import org.chorus.permission.Permissible
+import org.chorus.permission.ServerOperator
+import org.chorus.permission.PermissionAttachment
+import org.chorus.permission.PermissionAttachmentInfo
 import java.util.HashSet
-import cn.nukkit.permission.PermissionRemovedExecutor
-import cn.nukkit.permission.DefaultPermissions
+import org.chorus.permission.PermissionRemovedExecutor
+import org.chorus.permission.DefaultPermissions
 

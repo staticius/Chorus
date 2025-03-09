@@ -1,7 +1,7 @@
 package org.chorus.command.selector
 
-import cn.nukkit.Server
-import cn.nukkit.command.exceptions.SelectorSyntaxException
+import org.chorus.Server
+import org.chorus.command.exceptions.SelectorSyntaxException
 
 /**
  * 一些有关目标选择器解析的常用静态函数

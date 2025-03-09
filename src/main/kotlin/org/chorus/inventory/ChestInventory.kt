@@ -1,16 +1,16 @@
 package org.chorus.inventory
 
-import cn.nukkit.Player
-import cn.nukkit.block.BlockTrappedChest
-import cn.nukkit.blockentity.BlockEntity.block
-import cn.nukkit.blockentity.BlockEntityChest
-import cn.nukkit.blockentity.BlockEntityNameable
-import cn.nukkit.event.redstone.RedstoneUpdateEvent
-import cn.nukkit.level.Sound
-import cn.nukkit.network.protocol.BlockEventPacket
-import cn.nukkit.network.protocol.types.itemstack.ContainerSlotType
-import cn.nukkit.utils.LevelException
-import cn.nukkit.utils.RedstoneComponent
+import org.chorus.Player
+import org.chorus.block.BlockTrappedChest
+import org.chorus.blockentity.BlockEntity.block
+import org.chorus.blockentity.BlockEntityChest
+import org.chorus.blockentity.BlockEntityNameable
+import org.chorus.event.redstone.RedstoneUpdateEvent
+import org.chorus.level.Sound
+import org.chorus.network.protocol.BlockEventPacket
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus.utils.LevelException
+import org.chorus.utils.RedstoneComponent
 
 /**
  * @author MagicDroidX (Nukkit Project)

@@ -1,6 +1,6 @@
 package org.chorus.form.element.simple
 
-import cn.nukkit.form.element.Element
+import org.chorus.form.element.Element
 import com.google.gson.JsonObject
 import lombok.AllArgsConstructor
 import lombok.Getter

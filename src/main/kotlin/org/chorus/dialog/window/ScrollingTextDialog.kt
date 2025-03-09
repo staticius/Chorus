@@ -1,8 +1,8 @@
 package org.chorus.dialog.window
 
-import cn.nukkit.Player
-import cn.nukkit.Server
-import cn.nukkit.scheduler.Task
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.scheduler.Task
 
 class ScrollingTextDialog @JvmOverloads constructor(
     var player: Player,

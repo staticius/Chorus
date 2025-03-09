@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types.itemstack.response
 
-import cn.nukkit.network.protocol.ItemStackResponsePacket
-import cn.nukkit.network.protocol.types.itemstack.request.ItemStackRequest
+import org.chorus.network.protocol.ItemStackResponsePacket
+import org.chorus.network.protocol.types.itemstack.request.ItemStackRequest
 import lombok.Data
 
 /**

@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.blockentity.BlockEntity
-import cn.nukkit.blockentity.BlockEntity.scheduleUpdate
-import cn.nukkit.item.*
-import cn.nukkit.level.Level.scheduleUpdate
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.Vector3.equals
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.Player
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntity.scheduleUpdate
+import org.chorus.item.*
+import org.chorus.level.Level.scheduleUpdate
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3.equals
+import org.chorus.nbt.tag.CompoundTag
 
 class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit?> {
     constructor() : super(Companion.properties.defaultState)

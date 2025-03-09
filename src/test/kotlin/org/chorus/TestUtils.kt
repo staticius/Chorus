@@ -1,8 +1,8 @@
 package org.chorus
 
-import cn.nukkit.level.PlayerChunkManager
-import cn.nukkit.math.Vector3
-import cn.nukkit.utils.GameLoop
+import org.chorus.level.PlayerChunkManager
+import org.chorus.math.Vector3
+import org.chorus.utils.GameLoop
 import java.lang.reflect.InvocationTargetException
 
 object TestUtils {

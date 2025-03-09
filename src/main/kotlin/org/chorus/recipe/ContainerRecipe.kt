@@ -1,8 +1,8 @@
 package org.chorus.recipe
 
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemPotion
-import cn.nukkit.registry.RecipeRegistry
+import org.chorus.item.Item
+import org.chorus.item.ItemPotion
+import org.chorus.registry.RecipeRegistry
 import java.util.List
 
 class ContainerRecipe(recipeId: String?, input: Item, ingredient: Item, output: Item) :

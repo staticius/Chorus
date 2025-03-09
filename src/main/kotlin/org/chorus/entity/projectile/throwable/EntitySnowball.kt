@@ -1,13 +1,13 @@
 package org.chorus.entity.projectile.throwable
 
-import cn.nukkit.Server
-import cn.nukkit.entity.*
-import cn.nukkit.entity.mob.monster.EntityBlaze
-import cn.nukkit.level.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.level.particle.*
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.DataPacket
+import org.chorus.Server
+import org.chorus.entity.*
+import org.chorus.entity.mob.monster.EntityBlaze
+import org.chorus.level.*
+import org.chorus.level.format.IChunk
+import org.chorus.level.particle.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.DataPacket
 import java.util.concurrent.*
 
 /**

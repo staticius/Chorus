@@ -1,18 +1,18 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BooleanPropertyType
-import cn.nukkit.block.property.type.IntPropertyType
-import cn.nukkit.entity.item.EntityMinecartAbstract
-import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
-import cn.nukkit.inventory.InventoryHolder
-import cn.nukkit.math.BlockFace
-import cn.nukkit.math.SimpleAxisAlignedBB
-import cn.nukkit.utils.OptionalBoolean
-import cn.nukkit.utils.Rail
-import cn.nukkit.utils.Rail.Orientation.Companion.byMetadata
-import cn.nukkit.utils.RedstoneComponent
-import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.entity.item.EntityMinecartAbstract
+import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
+import org.chorus.inventory.InventoryHolder
+import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.utils.OptionalBoolean
+import org.chorus.utils.Rail
+import org.chorus.utils.Rail.Orientation.Companion.byMetadata
+import org.chorus.utils.RedstoneComponent
+import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockRail(blockstate), RedstoneComponent {

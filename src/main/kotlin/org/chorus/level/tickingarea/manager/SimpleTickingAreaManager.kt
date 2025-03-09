@@ -1,7 +1,7 @@
 package org.chorus.level.tickingarea.manager
 
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.level.*
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.level.*
 import java.util.function.Predicate
 import kotlin.collections.HashSet
 import kotlin.collections.MutableMap

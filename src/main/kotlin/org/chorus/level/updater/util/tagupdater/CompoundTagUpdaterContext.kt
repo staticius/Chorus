@@ -1,7 +1,7 @@
 package org.chorus.level.updater.util.tagupdater
 
-import cn.nukkit.level.updater.util.TagUtils
-import cn.nukkit.nbt.tag.CompoundTag
+import org.chorus.level.updater.util.TagUtils
+import org.chorus.nbt.tag.CompoundTag
 import kotlin.collections.ArrayList
 import kotlin.collections.Map
 import kotlin.collections.MutableList

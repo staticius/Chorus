@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.item.*
+import org.chorus.item.*
 
 class BlockInfestedChiseledStoneBricks @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockState) {

@@ -1,12 +1,12 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemID
-import cn.nukkit.level.Locator
-import cn.nukkit.level.particle.WaxOffParticle
-import cn.nukkit.level.particle.WaxOnParticle
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.level.Locator
+import org.chorus.level.particle.WaxOffParticle
+import org.chorus.level.particle.WaxOnParticle
+import org.chorus.math.BlockFace
 
 /**
  * @author joserobjr

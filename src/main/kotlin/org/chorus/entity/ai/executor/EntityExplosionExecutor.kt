@@ -1,16 +1,16 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.Server
-import cn.nukkit.entity.ai.memory.MemoryType
-import cn.nukkit.entity.data.EntityDataTypes
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.monster.EntityCreeper
-import cn.nukkit.event.entity.EntityExplosionPrimeEvent
-import cn.nukkit.level.Explosion
-import cn.nukkit.level.GameRule
-import cn.nukkit.level.Sound
-import cn.nukkit.level.particle.HugeExplodeSeedParticle
+import org.chorus.Server
+import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.monster.EntityCreeper
+import org.chorus.event.entity.EntityExplosionPrimeEvent
+import org.chorus.level.Explosion
+import org.chorus.level.GameRule
+import org.chorus.level.Sound
+import org.chorus.level.particle.HugeExplodeSeedParticle
 
 class EntityExplosionExecutor @JvmOverloads constructor(
     protected var explodeTime: Int,

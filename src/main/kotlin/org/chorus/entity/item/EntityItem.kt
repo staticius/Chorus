@@ -1,20 +1,20 @@
 package org.chorus.entity.item
 
-import cn.nukkit.Server
-import cn.nukkit.block.BlockID
-import cn.nukkit.entity.*
-import cn.nukkit.entity.data.EntityFlag
-import cn.nukkit.event.entity.EntityDamageEvent
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
-import cn.nukkit.event.entity.ItemDespawnEvent
-import cn.nukkit.event.entity.ItemSpawnEvent
-import cn.nukkit.item.*
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.NBTIO
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.network.protocol.AddItemEntityPacket
-import cn.nukkit.network.protocol.DataPacket
-import cn.nukkit.network.protocol.EntityEventPacket
+import org.chorus.Server
+import org.chorus.block.BlockID
+import org.chorus.entity.*
+import org.chorus.entity.data.EntityFlag
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityDamageEvent.DamageCause
+import org.chorus.event.entity.ItemDespawnEvent
+import org.chorus.event.entity.ItemSpawnEvent
+import org.chorus.item.*
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.NBTIO
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.AddItemEntityPacket
+import org.chorus.network.protocol.DataPacket
+import org.chorus.network.protocol.EntityEventPacket
 import kotlin.math.abs
 
 /**

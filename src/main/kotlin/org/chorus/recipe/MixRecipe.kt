@@ -1,7 +1,7 @@
 package org.chorus.recipe
 
-import cn.nukkit.item.Item
-import cn.nukkit.recipe.descriptor.DefaultDescriptor
+import org.chorus.item.Item
+import org.chorus.recipe.descriptor.DefaultDescriptor
 
 abstract class MixRecipe(recipeId: String?, input: Item, ingredient: Item, output: Item?) :
     BaseRecipe(recipeId!!) {

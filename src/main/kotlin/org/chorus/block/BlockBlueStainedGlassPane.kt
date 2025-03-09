@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.utils.DyeColor
+import org.chorus.utils.DyeColor
 
 class BlockBlueStainedGlassPane @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockGlassPaneStained(blockstate) {

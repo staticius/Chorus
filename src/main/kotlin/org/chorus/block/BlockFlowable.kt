@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import cn.nukkit.math.AxisAlignedBB
+import org.chorus.math.AxisAlignedBB
 
 /**
  * @author MagicDroidX (Nukkit Project)

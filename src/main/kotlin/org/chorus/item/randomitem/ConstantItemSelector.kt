@@ -1,8 +1,8 @@
 package org.chorus.item.randomitem
 
-import cn.nukkit.entity.effect.Effect.Companion.get
-import cn.nukkit.entity.effect.PotionType.Companion.get
-import cn.nukkit.item.*
+import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.PotionType.Companion.get
+import org.chorus.item.*
 
 /**
  * @author Snake1999

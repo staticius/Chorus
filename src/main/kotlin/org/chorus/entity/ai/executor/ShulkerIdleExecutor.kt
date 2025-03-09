@@ -1,9 +1,9 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.entity.mob.EntityShulker
-import cn.nukkit.level.Sound
-import cn.nukkit.utils.Utils
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.mob.EntityShulker
+import org.chorus.level.Sound
+import org.chorus.utils.Utils
 
 class ShulkerIdleExecutor : IBehaviorExecutor {
     private var stayTicks = 0

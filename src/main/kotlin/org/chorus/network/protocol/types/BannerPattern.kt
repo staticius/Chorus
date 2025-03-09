@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types
 
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.utils.DyeColor
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.DyeColor
 
 @JvmRecord
 data class BannerPattern(val type: BannerPatternType?, val color: DyeColor) {

@@ -1,8 +1,8 @@
 package org.chorus.item.customitem
 
-import cn.nukkit.item.ItemTool
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.registry.Registries
+import org.chorus.item.ItemTool
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.registry.Registries
 
 /**
  * @author lt_name

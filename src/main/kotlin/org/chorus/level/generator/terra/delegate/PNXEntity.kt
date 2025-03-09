@@ -1,6 +1,6 @@
 package org.chorus.level.generator.terra.delegate
 
-import cn.nukkit.entity.Entity
+import org.chorus.entity.Entity
 import com.dfsek.terra.api.util.vector.Vector3
 import com.dfsek.terra.api.world.ServerWorld
 

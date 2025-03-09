@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.executor
 
-import cn.nukkit.entity.mob.EntityMob
-import cn.nukkit.level.Sound
+import org.chorus.entity.mob.EntityMob
+import org.chorus.level.Sound
 import lombok.AllArgsConstructor
 import java.util.concurrent.ThreadLocalRandom
 

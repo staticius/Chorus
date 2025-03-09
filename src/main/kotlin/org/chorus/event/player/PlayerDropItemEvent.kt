@@ -1,9 +1,9 @@
 package org.chorus.event.player
 
-import cn.nukkit.Player
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.item.Item
+import org.chorus.Player
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.item.Item
 
 class PlayerDropItemEvent(player: Player?, drop: Item) : PlayerEvent(), Cancellable {
     val item: Item

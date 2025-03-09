@@ -1,9 +1,9 @@
 package org.chorus.compression
 
-import cn.nukkit.Server
-import cn.nukkit.utils.CleanerHandle
-import cn.nukkit.utils.PNXLibDeflater
-import cn.nukkit.utils.PNXLibInflater
+import org.chorus.Server
+import org.chorus.utils.CleanerHandle
+import org.chorus.utils.PNXLibDeflater
+import org.chorus.utils.PNXLibInflater
 import cn.powernukkitx.libdeflate.CompressionType
 import java.io.IOException
 import java.nio.ByteBuffer

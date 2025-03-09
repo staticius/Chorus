@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
-import cn.nukkit.entity.Attribute
-import cn.nukkit.network.connection.util.HandleByteBuf
+import org.chorus.entity.Attribute
+import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
 @Getter

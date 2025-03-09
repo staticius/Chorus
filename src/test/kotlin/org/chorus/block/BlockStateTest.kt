@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import cn.nukkit.block.property.CommonBlockProperties
-import cn.nukkit.block.property.type.BlockPropertyType.BlockPropertyValue
-import cn.nukkit.registry.BlockRegistry
-import cn.nukkit.registry.Registries
+import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
+import org.chorus.registry.BlockRegistry
+import org.chorus.registry.Registries
 import com.google.gson.JsonParser
 import lombok.SneakyThrows
 import org.junit.jupiter.api.Assertions

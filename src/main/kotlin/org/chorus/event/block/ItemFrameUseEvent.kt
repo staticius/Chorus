@@ -1,11 +1,11 @@
 package org.chorus.event.block
 
-import cn.nukkit.Player
-import cn.nukkit.block.Block
-import cn.nukkit.blockentity.BlockEntityItemFrame
-import cn.nukkit.event.Cancellable
-import cn.nukkit.event.HandlerList
-import cn.nukkit.item.Item
+import org.chorus.Player
+import org.chorus.block.Block
+import org.chorus.blockentity.BlockEntityItemFrame
+import org.chorus.event.Cancellable
+import org.chorus.event.HandlerList
+import org.chorus.item.Item
 
 /**
  * 物品展示框被使用的事件，会在放置物品，旋转物品，掉落物品时调用

@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import cn.nukkit.Player
-import cn.nukkit.item.Item
-import cn.nukkit.item.ItemTool
-import cn.nukkit.level.Level
-import cn.nukkit.level.generator.`object`.BlockManager.applySubChunkUpdate
-import cn.nukkit.level.generator.`object`.ObjectNyliumVegetation.growVegetation
-import cn.nukkit.level.particle.BoneMealParticle
-import cn.nukkit.math.BlockFace
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
+import org.chorus.level.generator.`object`.BlockManager.applySubChunkUpdate
+import org.chorus.level.generator.`object`.ObjectNyliumVegetation.growVegetation
+import org.chorus.level.particle.BoneMealParticle
+import org.chorus.math.BlockFace
 
 abstract class BlockNylium(blockState: BlockState?) : BlockSolid(blockState), Natural {
     override val toolType: Int

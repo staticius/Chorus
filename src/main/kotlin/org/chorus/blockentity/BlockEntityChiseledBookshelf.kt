@@ -1,11 +1,11 @@
 package org.chorus.blockentity
 
-import cn.nukkit.api.DoNotModify
-import cn.nukkit.block.BlockChiseledBookshelf
-import cn.nukkit.item.Item
-import cn.nukkit.level.format.IChunk
-import cn.nukkit.nbt.tag.CompoundTag
-import cn.nukkit.nbt.tag.ListTag
+import org.chorus.api.DoNotModify
+import org.chorus.block.BlockChiseledBookshelf
+import org.chorus.item.Item
+import org.chorus.level.format.IChunk
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
 import com.google.common.base.Preconditions
 import kotlin.math.pow
 
