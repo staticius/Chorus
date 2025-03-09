@@ -4,6 +4,7 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.Entity
 import org.chorus.lang.CommandOutputContainer
+import org.chorus.lang.TextContainer
 import org.chorus.level.Locator
 import org.chorus.level.Transform
 import org.chorus.permission.Permissible

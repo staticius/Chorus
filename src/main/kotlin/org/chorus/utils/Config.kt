@@ -7,6 +7,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import lombok.extern.slf4j.Slf4j
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
 import java.io.*
@@ -224,7 +226,7 @@ class Config {
 
     private fun save0(async: Boolean, content: StringBuilder) {
         if (async) {
-            Server.getInstance().scheduler.scheduleAsyncTask(
+            Server.instance.scheduler.scheduleAsyncTask(
                 InternalPlugin.INSTANCE, FileWriteTask(
                     file!!, content.toString()
                 )
@@ -238,11 +240,11 @@ class Config {
         }
     }
 
-    fun set(key: String, value: Any?) {
+    operator fun set(key: String, value: Any?) {
         rootSection[key] = value
     }
 
-    fun get(key: String?): Any? {
+    operator fun get(key: String?): Any? {
         return this.get<Any?>(key, null)
     }
 
@@ -515,11 +517,10 @@ class Config {
         }
     }
 
-    val keys: Set<String?>?
-        get() {
-            if (this.isCorrect) return rootSection.getKeys()
-            return HashSet()
-        }
+    fun getKeys(): Set<String?> {
+        if (this.isCorrect) return rootSection.getKeys()
+        return HashSet()
+    }
 
     fun getKeys(child: Boolean): Set<String?> {
         if (this.isCorrect) return rootSection.getKeys(child)
@@ -527,6 +528,8 @@ class Config {
     }
 
     companion object {
+        private val log: Logger by lazy { LoggerFactory.getLogger(Config::class.java) }
+
         const val DETECT: Int = -1 //Detect by file extension
         const val PROPERTIES: Int = 0 // .properties
         const val CNF: Int = PROPERTIES // .cnf

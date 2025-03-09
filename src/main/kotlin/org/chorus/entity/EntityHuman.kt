@@ -156,7 +156,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             if (this is Player) server.updatePlayerListData(
                 this.getUniqueId(),
                 this.getId(), this.getDisplayName(),
-                this.skin, this.loginChainData.xUID, arrayOf(player)
+                this.skin, this.loginChainData.XUID, arrayOf(player)
             )
             else server!!.updatePlayerListData(
                 this.getUniqueId(),

@@ -27,11 +27,9 @@ interface LoginChainData {
 
     val guiScale: Int
 
-    @JvmField
     val languageCode: String?
 
-    @JvmField
-    val xUID: String?
+    val XUID: String?
 
     val isXboxAuthed: Boolean
 

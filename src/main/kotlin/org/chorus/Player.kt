@@ -9,7 +9,6 @@ import org.chorus.blockentity.BlockEntitySign
 import org.chorus.blockentity.BlockEntitySpawnable
 import org.chorus.camera.data.CameraPreset.Companion.presets
 import org.chorus.command.CommandSender
-import org.chorus.command.utils.RawText
 import org.chorus.config.ServerProperties.get
 import org.chorus.config.ServerPropertiesKeys
 import org.chorus.dialog.window.FormWindowDialog
@@ -122,7 +121,6 @@ import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap
-import lombok.extern.slf4j.Slf4j
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
@@ -2199,7 +2197,7 @@ open class Player @UsedByReflection constructor(
             server!!.updatePlayerListData(
                 getUniqueId()!!, this.getId(), this.getDisplayName(),
                 getSkin()!!,
-                loginChainData.xUID
+                loginChainData.XUID
             )
         }
     }

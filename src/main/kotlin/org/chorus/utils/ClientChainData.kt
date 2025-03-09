@@ -34,7 +34,7 @@ import java.util.*
  * ===============
  */
 class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData {
-    override val xUID: String?
+    override val XUID: String?
         get() {
             return if (this.isWaterdog) {
                 waterdogXUID
