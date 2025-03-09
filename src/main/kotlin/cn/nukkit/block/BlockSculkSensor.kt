@@ -1,117 +1,90 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntitySculkSensor;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import static cn.nukkit.block.property.CommonBlockProperties.SCULK_SENSOR_PHASE;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntitySculkSensor.calPower
+import cn.nukkit.blockentity.BlockEntitySculkSensor.comparatorPower
+import cn.nukkit.blockentity.BlockEntitySculkSensor.power
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.RedstoneComponent.updateAroundRedstone
 
 /**
  * @author LT_Name
  */
-public class BlockSculkSensor extends BlockFlowable implements BlockEntityHolder<BlockEntitySculkSensor>, RedstoneComponent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SCULK_SENSOR, SCULK_SENSOR_PHASE);
+class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockstate), BlockEntityHolder<BlockEntitySculkSensor?>, RedstoneComponent {
+    override val name: String
+        get() = "Sculk Sensor"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val blockEntityClass: Class<out Any>
+        get() = BlockEntitySculkSensor::class.java
+
+    override val blockEntityType: String
+        get() = BlockEntity.SCULK_SENSOR
+
+    override val isPowerSource: Boolean
+        get() = true
+
+    override fun getStrongPower(side: BlockFace?): Int {
+        return super.getStrongPower(side)
     }
 
-    public BlockSculkSensor() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSculkSensor(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Sculk Sensor";
-    }
-
-    @Override
-    @NotNull public Class<? extends BlockEntitySculkSensor> getBlockEntityClass() {
-        return BlockEntitySculkSensor.class;
-    }
-
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.SCULK_SENSOR;
-    }
-
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
-
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return super.getStrongPower(side);
-    }
-
-    @Override
-    public int getWeakPower(BlockFace face) {
-        var blockEntity = this.getOrCreateBlockEntity();
-        if (this.getSide(face.getOpposite()) instanceof BlockRedstoneComparator) {
-            return blockEntity.getComparatorPower();
+    override fun getWeakPower(face: BlockFace): Int {
+        val blockEntity: BlockEntitySculkSensor? = this.orCreateBlockEntity
+        return if (getSide(face.getOpposite()!!) is BlockRedstoneComparator) {
+            blockEntity.comparatorPower
         } else {
-            return blockEntity.getPower();
+            blockEntity.power
         }
     }
 
-    @Override
-    public int onUpdate(int type) {
-        getOrCreateBlockEntity();
+    override fun onUpdate(type: Int): Int {
+        orCreateBlockEntity
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (level.server.settings.levelSettings().enableRedstone()) {
-                this.getBlockEntity().calPower();
-                this.setPhase(0);
-                updateAroundRedstone();
+                blockEntity.calPower()
+                this.setPhase(0)
+                updateAroundRedstone()
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    public void setPhase(int phase) {
-        if (phase == 1) this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.POWER_ON_SCULK_SENSOR);
-        else this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.POWER_OFF_SCULK_SENSOR);
-        this.setPropertyValue(SCULK_SENSOR_PHASE, phase);
-        this.level.setBlock(this.position, this, true, false);
+    fun setPhase(phase: Int) {
+        if (phase == 1) level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.POWER_ON_SCULK_SENSOR)
+        else level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.POWER_OFF_SCULK_SENSOR)
+        this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.SCULK_SENSOR_PHASE, phase)
+        level.setBlock(this.position, this, true, false)
     }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return false;
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return false;
+    override fun breaksWhenMoved(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return this;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SCULK_SENSOR, CommonBlockProperties.SCULK_SENSOR_PHASE)
+            get() = Companion.field
     }
 }

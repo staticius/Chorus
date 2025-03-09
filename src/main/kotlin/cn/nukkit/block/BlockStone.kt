@@ -1,62 +1,39 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.enums.StoneType;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class BlockStone extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STONE);
+class BlockStone @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockState) {
+    override val hardness: Double
+        get() = 1.5
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 6.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockStone() {
-        this(PROPERTIES.getDefaultState());
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    public BlockStone(BlockState blockState) {
-        super(blockState);
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(get(BlockID.COBBLESTONE).toItem())
     }
 
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[] {Block.get(COBBLESTONE).toItem()};
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.STONE)
+            get() = Companion.field
     }
 }

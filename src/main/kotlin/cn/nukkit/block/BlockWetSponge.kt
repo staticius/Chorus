@@ -1,74 +1,55 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.CloudParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.network.protocol.LevelEventPacket;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockWetSponge @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(state) {
+    override val hardness: Double
+        get() = 0.6
 
-public class BlockWetSponge extends BlockSolid {
+    override val resistance: Double
+        get() = 3.0
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(WET_SPONGE);
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val name: String
+        get() = "Wet Sponge"
 
-    public BlockWetSponge() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (level.dimension != Level.DIMENSION_NETHER) return true
 
-    public BlockWetSponge(BlockState state) {
-        super(state);
-    }
+        level.setBlock(block.position, BlockSponge(), true, true)
+        level.addLevelEvent(block.position.add(0.5, 0.875, 0.5)!!, LevelEventPacket.EVENT_CAULDRON_EXPLODE)
+        val random = ThreadLocalRandom.current()
 
-    @Override
-    public double getHardness() {
-        return 0.6;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HOE;
-    }
-
-    @Override
-    public String getName() {
-        return "Wet Sponge";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (level.getDimension() != Level.DIMENSION_NETHER)
-            return true;
-
-        level.setBlock(block.position, new BlockSponge(), true, true);
-        this.level.addLevelEvent(block.position.add(0.5, 0.875, 0.5), LevelEventPacket.EVENT_CAULDRON_EXPLODE);
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-
-        for (int i = 0; i < 8; ++i) {
-            level.addParticle(new CloudParticle(block.position.add(random.nextDouble(), 1, random.nextDouble())));
+        for (i in 0..7) {
+            level.addParticle(CloudParticle(block.position.add(random.nextDouble(), 1.0, random.nextDouble())))
         }
 
-        return true;
+        return true
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockWetSponge());
+    override fun toItem(): Item? {
+        return ItemBlock(BlockWetSponge())
     }
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WET_SPONGE)
+            get() = Companion.field
+    }
 }

@@ -1,64 +1,39 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
 
-public class BlockWarpedDoubleSlab extends BlockDoubleSlabBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+class BlockWarpedDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockDoubleSlabBase(blockstate) {
+    override val slabName: String
+        get() = "Warped"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun isCorrectTool(item: Item): Boolean {
+        return true
     }
 
-    public BlockWarpedDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 2.0
 
-    public BlockWarpedDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val resistance: Double
+        get() = 3.0
 
-    @Override
-    public String getSlabName() {
-        return "Warped";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    protected boolean isCorrectTool(Item item) {
-        return true;
-    }
+    override val burnChance: Int
+        get() = 0
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
+    override val burnAbility: Int
+        get() = 0
 
-    @Override
-    public double getResistance() {
-        return 3;
-    }
+    override val singleSlab: BlockState
+        get() = BlockWarpedSlab.Companion.PROPERTIES.getDefaultState()
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.WARPED_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
-
-    @Override
-    public int getBurnChance() {
-        return 0;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 0;
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockWarpedSlab.PROPERTIES.getDefaultState();
-    }
-
 }

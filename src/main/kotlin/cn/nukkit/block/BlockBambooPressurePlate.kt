@@ -1,22 +1,14 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
 
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+class BlockBambooPressurePlate(blockState: BlockState?) : BlockWoodenPressurePlate(blockState) {
+    override val name: String
+        get() = "Bamboo Pressure Plate"
 
-public class BlockBambooPressurePlate extends BlockWoodenPressurePlate {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL);
-
-    public BlockBambooPressurePlate(BlockState blockState) {
-        super(blockState);
-    }
-
-    public String getName() {
-        return "Bamboo Pressure Plate";
-    }
-
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BAMBOO_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
+            get() = Companion.field
     }
 }

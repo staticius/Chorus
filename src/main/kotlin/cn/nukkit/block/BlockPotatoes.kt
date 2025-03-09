@@ -1,65 +1,54 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.enchantment.Enchantment;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.enchantment.Enchantment
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.min
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockPotatoes @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCrops(blockstate) {
+    override val name: String
+        get() = "Potato Block"
 
-public class BlockPotatoes  extends BlockCrops {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POTATOES, CommonBlockProperties.GROWTH);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return Item.get(ItemID.POTATO)
     }
 
-    public BlockPotatoes() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPotatoes(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Potato Block";
-    }
-
-    @Override
-    public Item toItem() {
-        return Item.get(ItemID.POTATO);
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (!isFullyGrown()) {
-            return new Item[]{
-                    Item.get(ItemID.POTATO)
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (!isFullyGrown) {
+            return arrayOf(
+                Item.get(ItemID.POTATO)
+            )
         }
 
-        int drops = 2;
-        int attempts = 3 + Math.min(0, item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING));
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        for (int i = 0; i < attempts; i++) {
+        var drops = 2
+        val attempts = (3 + min(
+            0.0,
+            item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING).toDouble()
+        )).toInt()
+        val random = ThreadLocalRandom.current()
+        for (i in 0..<attempts) {
             if (random.nextInt(7) < 4) { // 4/7, 0.57142857142857142857142857142857
-                drops++;
+                drops++
             }
         }
 
-        if (random.nextInt(5) < 1) { // 1/5, 0.2
-            return new Item[]{
-                    Item.get(ItemID.POTATO,0, drops),
-                    Item.get(ItemID.POISONOUS_POTATO)
-            };
+        return if (random.nextInt(5) < 1) { // 1/5, 0.2
+            arrayOf(
+                get(ItemID.POTATO, 0, drops),
+                Item.get(ItemID.POISONOUS_POTATO)
+            )
         } else {
-            return new Item[]{
-                    Item.get(ItemID.POTATO, 0, drops)
-            };
+            arrayOf(
+                get(ItemID.POTATO, 0, drops)
+            )
         }
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.POTATOES, CommonBlockProperties.GROWTH)
+            get() = Companion.field
     }
 }

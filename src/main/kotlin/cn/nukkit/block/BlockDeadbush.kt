@@ -1,90 +1,79 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemStick;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.tags.BlockTags;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Random;
+import cn.nukkit.Player
+import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.tags.BlockTags
+import java.util.*
 
 /**
  * @author xtypr
  * @since 2015/12/2
  */
-public class BlockDeadbush extends BlockFlowable implements BlockFlowerPot.FlowerPotBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DEADBUSH);
+class BlockDeadbush @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockState), FlowerPotBlock {
+    override val name: String
+        get() = "Dead Bush"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun canBeReplaced(): Boolean {
+        return true
     }
 
-    public BlockDeadbush() {
-        this(PROPERTIES.getDefaultState());
-    }
 
-    public BlockDeadbush(BlockState blockState) {
-        // Dead bushes can't have meta. Also stops the server from throwing an exception with the block palette.
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Dead Bush";
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-    
-    @Override
-    public boolean canBeReplaced() {
-        return true;
-    }
-
-    
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (isSupportValid()) {
-            this.level.setBlock(block.position, this, true, true);
-            return true;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (isSupportValid) {
+            level.setBlock(block.position, this, true, true)
+            return true
         }
-        return false;
-    }
-    
-    private boolean isSupportValid() {
-        Block down = down();
-        if(down instanceof BlockHardenedClay)  return true;
-        return down.is(BlockTags.DIRT) || down.is(BlockTags.SAND);
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    private val isSupportValid: Boolean
+        get() {
+            val down = down()
+            if (down is BlockHardenedClay) return true
+            return down!!.`is`(BlockTags.DIRT) || down.`is`(BlockTags.SAND)
+        }
+
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isSupportValid()) {
-                this.level.useBreakOn(this.position);
+            if (!isSupportValid) {
+                level.useBreakOn(this.position)
 
-                return Level.BLOCK_UPDATE_NORMAL;
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isShears()) {
-            return new Item[]{
-                    toItem()
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isShears) {
+            arrayOf(
+                toItem()
+            )
         } else {
-            return new Item[]{
-                    new ItemStick(0, new Random().nextInt(3))
-            };
+            arrayOf(
+                ItemStick(0, Random().nextInt(3))
+            )
         }
     }
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(DEADBUSH)
+            get() = Companion.field
+    }
 }

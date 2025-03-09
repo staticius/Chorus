@@ -1,42 +1,31 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockBlackstoneWall extends BlockWallBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BLACKSTONE_WALL, CommonBlockProperties.WALL_CONNECTION_TYPE_EAST, CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH, CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH, CommonBlockProperties.WALL_CONNECTION_TYPE_WEST, CommonBlockProperties.WALL_POST_BIT);
+class BlockBlackstoneWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWallBase(blockstate) {
+    override val name: String
+        get() = "Blackstone Wall"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 6.0
 
-    public BlockBlackstoneWall() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 1.5
 
-    public BlockBlackstoneWall(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public String getName() {
-        return "Blackstone Wall";
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BLACKSTONE_WALL,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
+            CommonBlockProperties.WALL_POST_BIT
+        )
+            get() = Companion.field
     }
 }

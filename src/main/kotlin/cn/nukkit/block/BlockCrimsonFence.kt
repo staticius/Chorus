@@ -1,35 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockCrimsonFence @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFence(blockstate) {
+    override val name: String
+        get() = "Crimson Fence"
 
-public class BlockCrimsonFence extends BlockFence {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRIMSON_FENCE);
+    override val burnChance: Int
+        get() = 0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val burnAbility: Int
+        get() = 0
 
-    public BlockCrimsonFence() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCrimsonFence(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Crimson Fence";
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 0;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 0;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CRIMSON_FENCE)
+            get() = Companion.field
     }
 }

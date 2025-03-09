@@ -1,44 +1,28 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
+import cn.nukkit.item.ItemTool
 
 /**
  * @author LoboMetalurgico
  * @since 08/06/2021
  */
-public abstract class BlockRaw extends BlockSolid {
+abstract class BlockRaw(blockstate: BlockState?) : BlockSolid(blockstate) {
+    override val hardness: Double
+        get() = 5.0
 
-    public BlockRaw(BlockState blockstate) {
-        super(blockstate);
+    override val resistance: Double
+        get() = 6.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_STONE
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return 5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_STONE;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean isLavaResistant() {
-        return true;
-    }
+    override val isLavaResistant: Boolean
+        get() = true
 }

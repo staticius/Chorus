@@ -1,46 +1,31 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
 
 /**
  * @author xtypr
  * @since 2015/11/25
  */
-public abstract class BlockStairsWood extends BlockStairs {
-    public BlockStairsWood(BlockState blockState) {
-        super(blockState);
-    }
+abstract class BlockStairsWood(blockState: BlockState?) : BlockStairs(blockState) {
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
+    override val hardness: Double
+        get() = 2.0
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
+    override val resistance: Double
+        get() = 3.0
 
-    @Override
-    public double getResistance() {
-        return 3;
-    }
+    override val burnChance: Int
+        get() = 5
 
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-         return new Item[]{
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
             toItem()
-            };
+        )
     }
 }

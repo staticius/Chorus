@@ -75,9 +75,9 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
     protected fun generatePickupArea(): SimpleAxisAlignedBB {
         return SimpleAxisAlignedBB(
-            position.south,
-            position.up,
-            position.west, position.south + 1, position.up + 2, position.west + 1
+            position.x,
+            position.y,
+            position.z, position.x + 1, position.y + 2, position.z + 1
         )
     }
 

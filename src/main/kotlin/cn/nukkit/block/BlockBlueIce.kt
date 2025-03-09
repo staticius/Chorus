@@ -1,50 +1,32 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
 
-import org.jetbrains.annotations.NotNull;
+class BlockBlueIce : BlockPackedIce {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockBlueIce extends BlockPackedIce {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BLUE_ICE);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockBlueIce() {
-        super(PROPERTIES.getDefaultState());
+    override val name: String
+        get() = "Blue Ice"
+
+    override fun getFrictionFactor(): Double {
+        return 0.989
     }
 
-    public BlockBlueIce(BlockState blockState) {
-        super(blockState);
-    }
+    override val hardness: Double
+        get() = 2.8
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-    @Override
-    public String getName() {
-        return "Blue Ice";
-    }
-    
-    @Override
-    public double getFrictionFactor() {
-        return 0.989;
-    }
-    
-    @Override
-    public double getHardness() {
-        return 2.8;
-    }
+    override val resistance: Double
+        get() = 14.0
 
-    @Override
-    public double getResistance() {
-        return 14;
-    }
+    override val isTransparent: Boolean
+        get() = false
 
-    @Override
-    public boolean isTransparent() {
-        return false;
-    }
+    override val lightLevel: Int
+        get() = 4
 
-    @Override
-    public int getLightLevel() {
-        return 4;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BLUE_ICE)
+            get() = Companion.field
     }
 }

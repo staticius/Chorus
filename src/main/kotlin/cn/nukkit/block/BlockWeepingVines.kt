@@ -1,48 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.math.BlockFace
 
-import static cn.nukkit.block.property.CommonBlockProperties.WEEPING_VINES_AGE;
+class BlockWeepingVines @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockVinesNether(blockstate) {
+    override val name: String
+        get() = "Weeping Vines"
 
-public class BlockWeepingVines extends BlockVinesNether {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WEEPING_VINES, WEEPING_VINES_AGE);
+    override val growthDirection: BlockFace
+        get() = BlockFace.DOWN
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override var vineAge: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.WEEPING_VINES_AGE)
+        set(vineAge) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.WEEPING_VINES_AGE, vineAge)
+        }
 
-    public BlockWeepingVines() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val maxVineAge: Int
+        get() = CommonBlockProperties.WEEPING_VINES_AGE.getMax()
 
-    public BlockWeepingVines(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Weeping Vines";
-    }
-
-    @Override
-    @NotNull public BlockFace getGrowthDirection() {
-        return BlockFace.DOWN;
-    }
-
-    @Override
-    public int getVineAge() {
-        return getPropertyValue(WEEPING_VINES_AGE);
-    }
-
-    @Override
-    public void setVineAge(int vineAge) {
-        setPropertyValue(WEEPING_VINES_AGE, vineAge);
-    }
-
-    @Override
-    public int getMaxVineAge() {
-        return WEEPING_VINES_AGE.getMax();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.WEEPING_VINES, CommonBlockProperties.WEEPING_VINES_AGE)
+            get() = Companion.field
     }
 }

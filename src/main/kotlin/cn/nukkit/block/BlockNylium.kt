@@ -1,98 +1,82 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.generator.object.BlockManager;
-import cn.nukkit.level.generator.object.ObjectNyliumVegetation;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.level.generator.`object`.BlockManager.applySubChunkUpdate
+import cn.nukkit.level.generator.`object`.ObjectNyliumVegetation.growVegetation
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
 
-import javax.annotation.Nullable;
+abstract class BlockNylium(blockState: BlockState?) : BlockSolid(blockState), Natural {
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-
-public abstract class BlockNylium extends BlockSolid implements Natural {
-    public BlockNylium(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int onUpdate(int type) {
-        if (type == Level.BLOCK_UPDATE_RANDOM && !up().isTransparent()) {
-            level.setBlock(this.position, Block.get(NETHERRACK), false);
-            return type;
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_RANDOM && !up()!!.isTransparent) {
+            level.setBlock(this.position, get(BlockID.NETHERRACK), false)
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        Block up = up();
-        if (item.isNull() || !item.isFertilizer() || !up.isAir()) {
-            return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        val up = up()
+        if (item.isNull || !item.isFertilizer || !up!!.isAir) {
+            return false
         }
 
-        if (player != null && !player.isCreative()) {
-            item.count--;
+        if (player != null && !player.isCreative) {
+            item.count--
         }
 
-        grow();
+        grow()
 
-        level.addParticle(new BoneMealParticle(up.position));
+        level.addParticle(BoneMealParticle(up!!.position))
 
-        return true;
+        return true
     }
 
-    public boolean grow() {
-        BlockManager blockManager = new BlockManager(this.level);
-        ObjectNyliumVegetation.growVegetation(blockManager, this.position, new NukkitRandom());
-        blockManager.applySubChunkUpdate();
-        return true;
+    fun grow(): Boolean {
+        val blockManager: BlockManager = BlockManager(this.level)
+        ObjectNyliumVegetation.growVegetation(blockManager, this.position, NukkitRandom())
+        blockManager.applySubChunkUpdate()
+        return true
     }
 
-    @Override
-    public double getResistance() {
-        return 0.4;
-    }
+    override val resistance: Double
+        get() = 0.4
 
-    @Override
-    public double getHardness() {
-        return 0.4;
-    }
+    override val hardness: Double
+        get() = 0.4
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() >= ItemTool.TIER_WOODEN) {
-            return new Item[]{Item.get(NETHERRACK)};
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (item.isPickaxe && item.tier >= ItemTool.TIER_WOODEN) {
+            return arrayOf(Item.get(BlockID.NETHERRACK))
         }
-        return Item.EMPTY_ARRAY;
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
-    }
+    override val isFertilizable: Boolean
+        get() = true
 }

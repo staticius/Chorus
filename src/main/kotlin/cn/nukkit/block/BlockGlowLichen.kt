@@ -1,137 +1,141 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.*;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
+import kotlin.collections.set
+import kotlin.collections.toTypedArray
 
 /**
  * @author Gabriel8579
  * @since 2021-06-13
  */
+class BlockGlowLichen : BlockLichen {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockGlowLichen extends BlockLichen {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GLOW_LICHEN, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val name: String
+        get() = "Glow Lichen"
 
-    public BlockGlowLichen() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockGlowLichen(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Glow Lichen";
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (!item.isFertilizer()) {
-            return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (!item.isFertilizer) {
+            return false
         }
 
-        Map<Block, BlockFace> candidates = getCandidates();
+        val candidates = candidates
 
-        item.decrement(1);
+        item.decrement(1)
 
         if (candidates.isEmpty()) {
-            return true;
+            return true
         }
 
-        Set<Block> keySet = candidates.keySet();
-        List<Block> keyList = new ArrayList<>(keySet);
+        val keySet = candidates.keys
+        val keyList: List<Block?> = ArrayList(keySet)
 
-        int rand = RANDOM.nextInt(0, candidates.size() - 1);
+        val rand = RANDOM.nextInt(0, candidates.size - 1)
 
-        Block random = keyList.get(rand);
-        Block newLichen;
+        val random = keyList[rand]
 
-        if (random.getId().equals(BlockID.GLOW_LICHEN)) {
-            newLichen = random;
+        val newLichen = if (random!!.id == GLOW_LICHEN) {
+            random
         } else {
-            newLichen = Block.get(GLOW_LICHEN);
+            get(GLOW_LICHEN)
         }
 
-        newLichen.setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, newLichen.getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) | (0b000001 << candidates.get(random).getDUSWNEIndex()));
+        newLichen.setPropertyValue<Int, IntPropertyType>(
+            CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
+            newLichen.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) or (1 shl candidates[random]!!.dUSWNEIndex)
+        )
 
-        level.setBlock(random.position, newLichen, true, true);
+        level.setBlock(random.position, newLichen, true, true)
 
-        return true;
+        return true
     }
 
-    private @NotNull Map<Block, BlockFace> getCandidates() {
-        Map<Block, BlockFace> candidates = new HashMap<>();
-        for (BlockFace side : BlockFace.values()) {
-            Block support = this.getSide(side);
+    private val candidates: Map<Block?, BlockFace>
+        get() {
+            val candidates: MutableMap<Block?, BlockFace> =
+                HashMap()
+            for (side in BlockFace.entries) {
+                val support = this.getSide(side)
 
-            if (isGrowthToSide(side)) {
-                BlockFace[] supportSides = side.getEdges().toArray(new BlockFace[0]);
+                if (isGrowthToSide(side)) {
+                    val supportSides = side.edges.toTypedArray<BlockFace>()
 
-                for (BlockFace supportSide : supportSides) {
-                    Block supportNeighbor = support.getSide(supportSide);
+                    for (supportSide in supportSides) {
+                        val supportNeighbor = support!!.getSide(supportSide)
 
-                    if (!isSupportNeighborAdded(candidates, supportSide.getOpposite(), supportNeighbor)) {
-                        continue;
+                        if (!isSupportNeighborAdded(candidates, supportSide.getOpposite()!!, supportNeighbor!!)) {
+                            continue
+                        }
+
+                        val supportNeighborOppositeSide =
+                            supportNeighbor.getSide(side.getOpposite()!!)
+                        if (shouldAddSupportNeighborOppositeSide(side, supportNeighborOppositeSide!!)) {
+                            candidates[supportNeighborOppositeSide] = side
+                        }
                     }
-
-                    Block supportNeighborOppositeSide = supportNeighbor.getSide(side.getOpposite());
-                    if (shouldAddSupportNeighborOppositeSide(side, supportNeighborOppositeSide)) {
-                        candidates.put(supportNeighborOppositeSide, side);
+                } else {
+                    if (support!!.isSolid) {
+                        candidates[this] = side
                     }
-
-                }
-
-            } else {
-                if (support.isSolid()) {
-                    candidates.put(this, side);
                 }
             }
+            return candidates
         }
-        return candidates;
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
+    override val lightLevel: Int
+        get() = 7
 
-    @Override
-    public int getLightLevel() {
-        return 7;
-    }
-
-    private boolean isSupportNeighborAdded(@NotNull Map<Block, BlockFace> candidates, @NotNull BlockFace side, @NotNull Block supportNeighbor) {
+    private fun isSupportNeighborAdded(
+        candidates: MutableMap<Block?, BlockFace>,
+        side: BlockFace,
+        supportNeighbor: Block
+    ): Boolean {
         // Air is a valid candidate!
-        if (supportNeighbor.getId().equals(BlockID.AIR)) {
-            candidates.put(supportNeighbor, side);
+        if (supportNeighbor.id == AIR) {
+            candidates[supportNeighbor] = side
         }
 
         // Other non-solid blocks isn't a valid candidates
-        return supportNeighbor.isSolid(side);
+        return supportNeighbor.isSolid(side)
     }
 
-    private boolean shouldAddSupportNeighborOppositeSide(@NotNull BlockFace side, @NotNull Block supportNeighborOppositeSide) {
-        if (supportNeighborOppositeSide.getId().equals(BlockID.AIR) || supportNeighborOppositeSide.getId().equals(BlockID.GLOW_LICHEN)) {
-            return !supportNeighborOppositeSide.getId().equals(BlockID.GLOW_LICHEN) ||
-                    (!((BlockGlowLichen) supportNeighborOppositeSide).isGrowthToSide(side) &&
-                            !supportNeighborOppositeSide.getSide(side).getId().equals(BlockID.AIR));
+    private fun shouldAddSupportNeighborOppositeSide(side: BlockFace, supportNeighborOppositeSide: Block): Boolean {
+        if (supportNeighborOppositeSide.id == AIR || supportNeighborOppositeSide.id == GLOW_LICHEN) {
+            return supportNeighborOppositeSide.id != GLOW_LICHEN ||
+                    (!(supportNeighborOppositeSide as BlockGlowLichen).isGrowthToSide(side) && supportNeighborOppositeSide.getSide(
+                        side
+                    )!!.id != AIR)
         }
-        return false;
+        return false
     }
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    override val isFertilizable: Boolean
+        get() = true
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(GLOW_LICHEN, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
+            get() = Companion.field
     }
 }

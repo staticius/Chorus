@@ -16,10 +16,6 @@ import cn.nukkit.console.NukkitConsole
 import cn.nukkit.dispenser.DispenseBehaviorRegister
 import cn.nukkit.entity.*
 import cn.nukkit.entity.Attribute.getValue
-import cn.nukkit.entity.Entity.equals
-import cn.nukkit.entity.Entity.getName
-import cn.nukkit.entity.EntityHuman.getName
-import cn.nukkit.entity.EntityHuman.getSkin
 import cn.nukkit.entity.EntityHuman.getUniqueId
 import cn.nukkit.entity.data.Skin
 import cn.nukkit.entity.data.profession.Profession
@@ -34,7 +30,6 @@ import cn.nukkit.event.server.QueryRegenerateEvent
 import cn.nukkit.event.server.ServerStartedEvent
 import cn.nukkit.event.server.ServerStopEvent
 import cn.nukkit.inventory.BaseInventory.size
-import cn.nukkit.item.Item.equals
 import cn.nukkit.item.enchantment.Enchantment
 import cn.nukkit.item.enchantment.Enchantment.level
 import cn.nukkit.lang.BaseLang
@@ -44,7 +39,6 @@ import cn.nukkit.lang.BaseLang.tr
 import cn.nukkit.lang.LangCode
 import cn.nukkit.lang.TextContainer
 import cn.nukkit.level.*
-import cn.nukkit.level.Level.getName
 import cn.nukkit.level.format.LevelConfig
 import cn.nukkit.level.format.LevelConfig.GeneratorConfig
 import cn.nukkit.level.format.LevelProviderManager.addProvider
@@ -57,7 +51,6 @@ import cn.nukkit.level.tickingarea.manager.SimpleTickingAreaManager
 import cn.nukkit.level.tickingarea.manager.TickingAreaManager
 import cn.nukkit.level.tickingarea.storage.JSONTickingAreaStorage
 import cn.nukkit.level.updater.block.BlockStateUpdaterBase
-import cn.nukkit.math.BlockVector3.equals
 import cn.nukkit.math.NukkitMath.round
 import cn.nukkit.metadata.EntityMetadataStore
 import cn.nukkit.metadata.LevelMetadataStore
@@ -102,7 +95,6 @@ import cn.nukkit.tags.ItemTags
 import cn.nukkit.utils.*
 import cn.nukkit.utils.BlockIterator.hasNext
 import cn.nukkit.utils.BlockIterator.next
-import cn.nukkit.utils.DummyBossBar.Builder.length
 import cn.nukkit.utils.JSONUtils.from
 import cn.nukkit.utils.JSONUtils.toPretty
 import cn.nukkit.utils.MainLogger.error
@@ -1486,9 +1478,9 @@ class Server internal constructor(filePath: String, dataPath: String, pluginPath
                 .putLong("lastPlayed", System.currentTimeMillis() / 1000)
                 .putList(
                     "Pos", ListTag<FloatTag?>()
-                        .add(FloatTag(spawn.position.south))
-                        .add(FloatTag(spawn.position.up))
-                        .add(FloatTag(spawn.position.west))
+                        .add(FloatTag(spawn.position.x))
+                        .add(FloatTag(spawn.position.y))
+                        .add(FloatTag(spawn.position.z))
                 )
                 .putString("Level", getDefaultLevel()!!.getName()!!)
                 .putList("Inventory", ListTag())

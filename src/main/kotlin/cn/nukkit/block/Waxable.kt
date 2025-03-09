@@ -1,48 +1,44 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.particle.WaxOffParticle;
-import cn.nukkit.level.particle.WaxOnParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemID
+import cn.nukkit.level.Locator
+import cn.nukkit.level.particle.WaxOffParticle
+import cn.nukkit.level.particle.WaxOnParticle
+import cn.nukkit.math.BlockFace
 
 /**
  * @author joserobjr
  * @since 2021-06-14
  */
-public interface Waxable {
+interface Waxable {
+    val locator: Locator
 
-    @NotNull Locator getLocator();
-
-    default boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        boolean waxed = isWaxed();
-        if ((item.getId() != ItemID.HONEYCOMB || waxed) && (!item.isAxe() || !waxed)) {
-            return false;
+    fun onActivate(item: Item, player: Player?, blockFace: BlockFace?, fx: Float, fy: Float, fz: Float): Boolean {
+        var waxed = isWaxed
+        if ((item.id !== ItemID.HONEYCOMB || waxed) && (!item.isAxe || !waxed)) {
+            return false
         }
 
-        waxed = !waxed;
+        waxed = !waxed
         if (!setWaxed(waxed)) {
-            return false;
+            return false
         }
 
-        Locator location = this instanceof Block ? (Locator) this : getLocator();
-        if (player == null || !player.isCreative()) {
+        val location = if (this is Block) this else locator
+        if (player == null || !player.isCreative) {
             if (waxed) {
-                item.count--;
+                item.count--
             } else {
-                item.useOn(this instanceof Block? (Block) this : location.getLevelBlock());
+                item.useOn((if (this is Block) this else location.levelBlock)!!)
             }
         }
-        location.level.addParticle(waxed? new WaxOnParticle(location.position) : new WaxOffParticle(location.position));
-        return true;
+        location.level.addParticle(if (waxed) WaxOnParticle(location.position) else WaxOffParticle(location.position))
+        return true
     }
 
-    boolean isWaxed();
+    val isWaxed: Boolean
 
-    boolean setWaxed(boolean waxed);
+    fun setWaxed(waxed: Boolean): Boolean
 }

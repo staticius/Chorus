@@ -1,77 +1,81 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.type.BlockPropertyType;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Locator;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.CompoundTagView;
-import cn.nukkit.registry.Registries;
-import org.jetbrains.annotations.Unmodifiable;
-import org.jetbrains.annotations.UnmodifiableView;
-
-import java.util.List;
+import cn.nukkit.block.Block.Companion.get
+import cn.nukkit.block.property.type.BlockPropertyType.BlockPropertyValue.propertyType
+import cn.nukkit.item.Item
+import cn.nukkit.level.Locator
+import cn.nukkit.registry.Registries
+import org.jetbrains.annotations.UnmodifiableView
 
 /**
  * Allay Project 2023/4/29
  *
  * @author daoge_cmd
  */
-@Unmodifiable
-public interface BlockState {
-    static BlockState makeUnknownBlockState(int hash, CompoundTag blockTag) {
-        return BlockStateImpl.makeUnknownBlockState(hash, blockTag);
+interface BlockState {
+    @JvmField
+    val identifier: String
+
+    fun blockStateHash(): Int
+
+    fun specialValue(): Short
+
+    fun unsignedBlockStateHash(): Long
+
+    @JvmField
+    val blockPropertyValues: @UnmodifiableView MutableList<Any?>?
+
+    val blockStateTag: @UnmodifiableView CompoundTagView?
+
+    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> getPropertyValue(p: PROPERTY): DATATYPE
+
+    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> setPropertyValue(
+        properties: BlockProperties,
+        property: PROPERTY,
+        value: DATATYPE
+    ): BlockState?
+
+    fun setPropertyValue(properties: BlockProperties, propertyValue: BlockPropertyValue<*, *, *>?): BlockState?
+
+    fun setPropertyValues(properties: BlockProperties, vararg values: BlockPropertyValue<*, *, *>?): BlockState?
+
+    val isDefaultState: Boolean
+        get() = Registries.BLOCK.getBlockProperties(identifier)
+            .getDefaultState() === this
+
+    fun toBlock(): Block {
+        return get(this)
     }
 
-    static short computeSpecialValue(BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-        byte specialValueBits = 0;
-        for (var value : propertyValues) specialValueBits += value.getPropertyType().getBitSize();
-        return computeSpecialValue(specialValueBits, propertyValues);
+    fun toBlock(locator: Locator): Block {
+        return get(this, locator)
     }
 
-    static short computeSpecialValue(byte specialValueBits, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-        short specialValue = 0;
-        for (var value : propertyValues) {
-            specialValue |= (short) (((short) value.getIndex()) << (specialValueBits - value.getPropertyType().getBitSize()));
-            specialValueBits -= value.getPropertyType().getBitSize();
+    fun toItem(): Item? {
+        return toBlock().toItem()
+    }
+
+    companion object {
+        fun makeUnknownBlockState(hash: Int, blockTag: CompoundTag?): BlockState {
+            return BlockStateImpl.Companion.makeUnknownBlockState(hash, blockTag)
         }
-        return specialValue;
-    }
 
-    String getIdentifier();
+        fun computeSpecialValue(propertyValues: Array<BlockPropertyValue<*, *, *>>): Short {
+            var specialValueBits: Byte = 0
+            for (value in propertyValues) specialValueBits += value.propertyType.bitSize
+            return computeSpecialValue(specialValueBits, propertyValues)
+        }
 
-    int blockStateHash();
-
-    short specialValue();
-
-    long unsignedBlockStateHash();
-
-    @UnmodifiableView
-    List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> getBlockPropertyValues();
-
-    @UnmodifiableView
-    CompoundTagView getBlockStateTag();
-
-    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getPropertyValue(PROPERTY p);
-
-    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setPropertyValue(BlockProperties properties, PROPERTY property, DATATYPE value);
-
-    BlockState setPropertyValue(BlockProperties properties, BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
-
-    BlockState setPropertyValues(BlockProperties properties, BlockPropertyType.BlockPropertyValue<?, ?, ?>... values);
-
-    default boolean isDefaultState() {
-        return Registries.BLOCK.getBlockProperties(getIdentifier()).getDefaultState() == this;
-    }
-
-    default Block toBlock() {
-        return Block.get(this);
-    }
-
-    default Block toBlock(Locator locator) {
-        return Block.get(this, locator);
-    }
-
-    default Item toItem() {
-        return toBlock().toItem();
+        fun computeSpecialValue(specialValueBits: Byte, propertyValues: Array<BlockPropertyValue<*, *, *>>): Short {
+            var specialValueBits = specialValueBits
+            var specialValue: Short = 0
+            for (value in propertyValues) {
+                specialValue =
+                    (specialValue.toInt() or ((value.index as Short) shl (specialValueBits - value.propertyType.bitSize)).toShort()
+                        .toInt()).toShort()
+                specialValueBits -= value.propertyType.bitSize
+            }
+            return specialValue
+        }
     }
 }

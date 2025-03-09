@@ -1,44 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.utils.DyeColor;
+import cn.nukkit.block.Block.name
+import cn.nukkit.block.property.enums.WoodType.name
+import cn.nukkit.item.ItemTool
+import cn.nukkit.utils.DyeColor.name
 
-public abstract class BlockWool extends BlockSolid {
-    public BlockWool(BlockState blockstate) {
-        super(blockstate);
-    }
+abstract class BlockWool(blockstate: BlockState?) : BlockSolid(blockstate) {
+    override val name: String
+        get() = dyeColor.name + " Wool"
 
-    @Override
-    public String getName() {
-        return getDyeColor().getName() + " Wool";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHEARS
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHEARS;
-    }
+    override val hardness: Double
+        get() = 0.8
 
-    @Override
-    public double getHardness() {
-        return 0.8;
-    }
+    override val resistance: Double
+        get() = 0.8
 
-    @Override
-    public double getResistance() {
-        return 0.8;
-    }
+    override val burnChance: Int
+        get() = 30
 
-    @Override
-    public int getBurnChance() {
-        return 30;
-    }
+    override val burnAbility: Int
+        get() = 60
 
-    @Override
-    public int getBurnAbility() {
-        return 60;
-    }
-
-    public DyeColor getDyeColor() {
-        return DyeColor.WHITE;
-    }
+    open val dyeColor: DyeColor
+        get() = DyeColor.WHITE
 }

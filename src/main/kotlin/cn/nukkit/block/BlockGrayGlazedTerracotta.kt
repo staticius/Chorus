@@ -1,21 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockGrayGlazedTerracotta extends BlockGlazedTerracotta {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GRAY_GLAZED_TERRACOTTA, CommonBlockProperties.FACING_DIRECTION);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockGrayGlazedTerracotta() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockGrayGlazedTerracotta(BlockState blockstate) {
-        super(blockstate);
+class BlockGrayGlazedTerracotta @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockGlazedTerracotta(blockstate) {
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(GRAY_GLAZED_TERRACOTTA, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

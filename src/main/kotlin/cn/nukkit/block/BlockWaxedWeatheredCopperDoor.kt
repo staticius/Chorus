@@ -1,32 +1,25 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockWaxedWeatheredCopperDoor extends BlockCopperDoorBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WAXED_WEATHERED_COPPER_DOOR, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonBlockProperties.OPEN_BIT, CommonBlockProperties.UPPER_BLOCK_BIT, CommonBlockProperties.DOOR_HINGE_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockWaxedWeatheredCopperDoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockCopperDoorBase(blockstate) {
+    override fun getOxidizationLevel(): OxidizationLevel {
+        return OxidizationLevel.WEATHERED
     }
 
-    public BlockWaxedWeatheredCopperDoor() {
-        this(PROPERTIES.getDefaultState());
+    override fun isWaxed(): Boolean {
+        return true
     }
 
-    public BlockWaxedWeatheredCopperDoor(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public @NotNull OxidizationLevel getOxidizationLevel() {
-        return OxidizationLevel.WEATHERED;
-    }
-
-    @Override
-    public boolean isWaxed() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.WAXED_WEATHERED_COPPER_DOOR,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OPEN_BIT,
+            CommonBlockProperties.UPPER_BLOCK_BIT,
+            CommonBlockProperties.DOOR_HINGE_BIT
+        )
+            get() = Companion.field
     }
 }

@@ -74,7 +74,7 @@ class MovingObjectPosition {
             objectPosition.blockX = x
             objectPosition.blockY = y
             objectPosition.blockZ = z
-            objectPosition.hitVector = Vector3(hitVector.south, hitVector.up, hitVector.west)
+            objectPosition.hitVector = Vector3(hitVector.x, hitVector.y, hitVector.z)
             objectPosition.faceHit = face
             return objectPosition
         }
@@ -84,7 +84,7 @@ class MovingObjectPosition {
             val objectPosition = MovingObjectPosition()
             objectPosition.typeOfHit = 1
             objectPosition.entityHit = entity
-            objectPosition.hitVector = Vector3(entity.position.south, entity.position.up, entity.position.west)
+            objectPosition.hitVector = Vector3(entity.position.x, entity.position.y, entity.position.z)
             return objectPosition
         }
     }

@@ -1,116 +1,89 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntityPistonArm;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.utils.Faceable
 
 /**
  * Alias piston head
  */
-public class BlockPistonArmCollision extends BlockTransparent implements Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PISTON_ARM_COLLISION, CommonBlockProperties.FACING_DIRECTION);
+open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), Faceable {
+    override val name: String
+        get() = "Piston Head"
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 1.5
+
+    override val hardness: Double
+        get() = 1.5
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    public BlockPistonArmCollision() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override fun onBreak(item: Item?): Boolean {
+        level.setBlock(this.position, get(BlockID.AIR), true, true)
+        val side = getSide(blockFace!!.getOpposite()!!)
 
-    public BlockPistonArmCollision(BlockState blockstate) {
-        super(blockstate);
-    }
+        if (side is BlockPistonBase && side.blockFace == this.blockFace) {
+            side.onBreak(item)
 
-    @Override
-    public String getName() {
-        return "Piston Head";
-    }
-
-    @Override
-    public double getResistance() {
-        return 1.5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
-    }
-
-    @Override
-    public boolean onBreak(Item item) {
-        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
-        Block side = getSide(getBlockFace().getOpposite());
-
-        if (side instanceof BlockPistonBase piston && piston.getBlockFace() == this.getBlockFace()) {
-            piston.onBreak(item);
-
-            BlockEntityPistonArm entity = piston.getBlockEntity();
-            if (entity != null) entity.close();
+            val entity = side.blockEntity
+            entity?.close()
         }
-        return true;
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!(getSide(getBlockFace().getOpposite()) instanceof BlockPistonBase)) {
-                level.setBlock(this.position, new BlockAir(), true, false);
+            if (getSide(blockFace!!.getOpposite()!!) !is BlockPistonBase) {
+                level.setBlock(this.position, BlockAir(), true, false)
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    public BlockFace getFacing() {
-        return getBlockFace();
+    val facing: BlockFace?
+        get() = blockFace
+
+    override var blockFace: BlockFace?
+        get() {
+            val face =
+                fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+            return if (face!!.horizontalIndex >= 0) face.getOpposite() else face
+        }
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
+
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        var face = BlockFace.fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION));
-        return face.horizontalIndex >= 0 ? face.getOpposite() : face;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index);
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBePushed() {
-        return false;
+    override fun toItem(): Item? {
+        return ItemBlock(get(BlockID.AIR))
     }
 
-    @Override
-    public boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.AIR));
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.PISTON_ARM_COLLISION, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

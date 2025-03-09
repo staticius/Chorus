@@ -1,48 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
+class BlockShroomlight : BlockTransparent {
+    constructor() : super(Companion.properties.getDefaultState())
 
-public class BlockShroomlight extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SHROOMLIGHT);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val name: String
+        get() = "Shroomlight"
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
+
+    override val resistance: Double
+        get() = 1.0
+
+    override val hardness: Double
+        get() = 1.0
+
+    override val lightLevel: Int
+        get() = 15
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SHROOMLIGHT)
+            get() = Companion.field
     }
-
-    public BlockShroomlight() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockShroomlight(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Shroomlight";
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HOE;
-    }
-
-    @Override
-    public double getResistance() {
-        return 1;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 15;
-    }
-
 }

@@ -1,51 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
+class BlockBambooPlanks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Bamboo Planks"
 
-public class BlockBambooPlanks extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_PLANKS);
+    override val hardness: Double
+        get() = 2.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 15.0
 
-    public BlockBambooPlanks() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val burnChance: Int
+        get() = 5
 
-    public BlockBambooPlanks(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    public String getName() {
-        return "Bamboo Planks";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 15;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BAMBOO_PLANKS)
+            get() = Companion.field
     }
 }

@@ -1,32 +1,20 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.OxidizationLevel
 
-public class BlockOxidizedCopperBulb extends BlockCopperBulbBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(OXIDIZED_COPPER_BULB, CommonBlockProperties.LIT, CommonBlockProperties.POWERED_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockOxidizedCopperBulb @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCopperBulbBase(blockstate) {
+    override fun getOxidizationLevel(): OxidizationLevel {
+        return OxidizationLevel.OXIDIZED
     }
 
-    public BlockOxidizedCopperBulb() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val lightLevel: Int
+        get() = if (lit) 4 else 0
 
-    public BlockOxidizedCopperBulb(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public @NotNull OxidizationLevel getOxidizationLevel() {
-        return OxidizationLevel.OXIDIZED;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return getLit() ? 4 : 0;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.OXIDIZED_COPPER_BULB, CommonBlockProperties.LIT, CommonBlockProperties.POWERED_BIT)
+            get() = Companion.field
     }
 }

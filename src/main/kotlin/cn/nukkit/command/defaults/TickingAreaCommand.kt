@@ -84,8 +84,8 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
                 manager.addTickingArea(area)
                 log.addSuccess(
                     "commands.tickingarea-add-bounds.success",
-                    from.position.south.toInt().toString() + "," + from.position.up.toInt() + "," + from.position.west.toInt(),
-                    to.position.south.toInt().toString() + "," + to.position.up.toInt() + "," + to.position.west.toInt()
+                    from.position.x.toInt().toString() + "," + from.position.y.toInt() + "," + from.position.z.toInt(),
+                    to.position.x.toInt().toString() + "," + to.position.y.toInt() + "," + to.position.z.toInt()
                 ).output()
                 return 1
             }
@@ -114,8 +114,8 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
                 manager.addTickingArea(area)
                 log.addSuccess(
                     "commands.tickingarea-add-circle.success",
-                    center.position.south.toInt()
-                        .toString() + "," + center.position.up.toInt() + "," + center.position.west.toInt(),
+                    center.position.x.toInt()
+                        .toString() + "," + center.position.y.toInt() + "," + center.position.z.toInt(),
                     radius.toString()
                 ).output()
                 return 1
@@ -126,9 +126,9 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
                 if (manager.getTickingAreaByPos(pos) == null) {
                     log.addSuccess(
                         "commands.tickingarea-remove.failure",
-                        pos!!.position.south.toInt().toString(),
-                        pos.position.up.toInt().toString(),
-                        pos.position.west.toInt().toString()
+                        pos!!.position.x.toInt().toString(),
+                        pos.position.y.toInt().toString(),
+                        pos.position.z.toInt().toString()
                     ).output()
                     return 0
                 }

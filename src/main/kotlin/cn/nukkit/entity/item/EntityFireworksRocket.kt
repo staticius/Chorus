@@ -40,9 +40,9 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
         val rand: Random = ThreadLocalRandom.current()
         this.lifetime = 30 + rand.nextInt(12)
 
-        motion.south = rand.nextGaussian() * 0.001
-        motion.west = rand.nextGaussian() * 0.001
-        motion.up = 0.05
+        motion.x = rand.nextGaussian() * 0.001
+        motion.z = rand.nextGaussian() * 0.001
+        motion.y = 0.05
 
         if (nbt.contains("FireworkItem")) {
             firework = NBTIO.getItemHelper(nbt.getCompound("FireworkItem"))
@@ -94,12 +94,12 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
         var hasUpdate: Boolean = this.entityBaseTick(tickDiff)
 
         if (this.isAlive()) {
-            motion.south *= 1.15
-            motion.west *= 1.15
-            motion.up += 0.04
+            motion.x *= 1.15
+            motion.z *= 1.15
+            motion.y += 0.04
             val locator: Locator = getLocator()
             val motion: Vector3 = getMotion()
-            this.move(this.motion.south, this.motion.up, this.motion.west)
+            this.move(this.motion.x, this.motion.y, this.motion.z)
 
             if (this.isCollided && !this.hadCollision) { //collide with block
                 this.hadCollision = true
@@ -114,10 +114,10 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
             this.updateMovement()
 
 
-            val f: Float = sqrt(this.motion.south * this.motion.south + this.motion.west * this.motion.west).toFloat()
-            rotation.yaw = (atan2(this.motion.south, this.motion.west) * (180.0 / Math.PI)).toFloat().toDouble()
+            val f: Float = sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z).toFloat()
+            rotation.yaw = (atan2(this.motion.x, this.motion.z) * (180.0 / Math.PI)).toFloat().toDouble()
 
-            rotation.pitch = (atan2(this.motion.up, f.toDouble()) * (180.0 / Math.PI)).toFloat().toDouble()
+            rotation.pitch = (atan2(this.motion.y, f.toDouble()) * (180.0 / Math.PI)).toFloat().toDouble()
 
 
             if (this.fireworkAge == 0) {
@@ -142,9 +142,9 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
             }
         }
 
-        return hasUpdate || !this.onGround || abs(motion.south) > 0.00001 || abs(
-            motion.up
-        ) > 0.00001 || abs(motion.west) > 0.00001
+        return hasUpdate || !this.onGround || abs(motion.x) > 0.00001 || abs(
+            motion.y
+        ) > 0.00001 || abs(motion.z) > 0.00001
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {

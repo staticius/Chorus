@@ -1,132 +1,103 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityEndPortal;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.blockentity.*
+import cn.nukkit.item.*
+import cn.nukkit.level.Locator
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
 
-import javax.annotation.Nullable;
+class BlockEndPortal @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockState), BlockEntityHolder<BlockEntityEndPortal> {
+    override val name: String
+        get() = "End Portal Block"
 
-public class BlockEndPortal extends BlockFlowable implements BlockEntityHolder<BlockEntityEndPortal> {
+    override val blockEntityClass: Class<out E>
+        get() = BlockEntityEndPortal::class.java
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(END_PORTAL);
+    override val blockEntityType: String
+        get() = BlockEntity.END_PORTAL
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        return BlockEntityHolder.Companion.setBlockAndCreateEntity<BlockEntityEndPortal?, BlockEndPortal>(this) != null
     }
 
-    public BlockEndPortal() {
-        this(PROPERTIES.getDefaultState());
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    public BlockEndPortal(BlockState blockState) {
-        super(blockState);
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return player != null && player.isCreative
     }
 
-    @Override
-    public String getName() {
-        return "End Portal Block";
+    override val hardness: Double
+        get() = -1.0
+
+    override val resistance: Double
+        get() = 18000000.0
+
+    override val lightLevel: Int
+        get() = 15
+
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    @Override
-    @NotNull public Class<? extends BlockEntityEndPortal> getBlockEntityClass() {
-        return BlockEntityEndPortal.class;
+    override val collisionBoundingBox: AxisAlignedBB
+        get() = this
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.END_PORTAL;
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        return BlockEntityHolder.setBlockAndCreateEntity(this) != null;
+    override fun toItem(): Item? {
+        return ItemBlock(get(AIR))
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return false;
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return player != null && player.isCreative();
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return -1;
-    }
+    override var maxY: Double
+        get() = y + (12.0 / 16.0)
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    @Override
-    public double getResistance() {
-        return 18000000;
-    }
+    companion object {
+        val properties: BlockProperties = BlockProperties(END_PORTAL)
+            get() = Companion.field
 
-    @Override
-    public int getLightLevel() {
-        return 15;
-    }
+        fun spawnObsidianPlatform(locator: Locator) {
+            val level = locator.level
+            val x = locator.position.floorX
+            val y = locator.position.floorY
+            val z = locator.position.floorZ
 
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.AIR));
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public double getMaxY() {
-        return getY() + (12.0 / 16.0);
-    }
-
-    public static void spawnObsidianPlatform(Locator locator) {
-        Level level = locator.level;
-        int x = locator.position.getFloorX();
-        int y = locator.position.getFloorY();
-        int z = locator.position.getFloorZ();
-
-        for (int blockX = x - 2; blockX <= x + 2; blockX++) {
-            for (int blockZ = z - 2; blockZ <= z + 2; blockZ++) {
-                level.setBlockStateAt(blockX, y - 1, blockZ, PROPERTIES.getDefaultState());
-                for (int blockY = y; blockY <= y + 3; blockY++) {
-                    level.setBlockStateAt(blockX, blockY, blockZ, BlockAir.PROPERTIES.getDefaultState());
+            for (blockX in x - 2..x + 2) {
+                for (blockZ in z - 2..z + 2) {
+                    level.setBlockStateAt(blockX, y - 1, blockZ, properties.defaultState)
+                    for (blockY in y..y + 3) {
+                        level.setBlockStateAt(blockX, blockY, blockZ, BlockAir.properties.defaultState)
+                    }
                 }
             }
         }

@@ -12,11 +12,11 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
     Vector3(x, y, z), NamedPosition {
     constructor(level: Level, x: Double, y: Double, z: Double) : this(level.getName()!!, x, y, z)
 
-    constructor(level: Level, v: Vector3) : this(level, v.south, v.up, v.west)
+    constructor(level: Level, v: Vector3) : this(level, v.x, v.y, v.z)
 
-    constructor(levelName: String, v: Vector3) : this(levelName, v.south, v.up, v.west)
+    constructor(levelName: String, v: Vector3) : this(levelName, v.x, v.y, v.z)
 
-    constructor(pos: Locator) : this(pos.level, pos.position.south, pos.position.up, pos.position.west)
+    constructor(pos: Locator) : this(pos.level, pos.position.x, pos.position.y, pos.position.z)
 
     constructor(pos: NamedPosition) : this(pos.levelName, pos.x, pos.y, pos.z)
 
@@ -29,11 +29,11 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
     }
 
     override fun add(x: Double, y: Double, z: Double): PositionTracking? {
-        return PositionTracking(levelName, this.south + x, this.up + y, this.west + z)
+        return PositionTracking(levelName, this.x + x, this.y + y, this.z + z)
     }
 
     override fun add(v: Vector3): PositionTracking? {
-        return PositionTracking(levelName, south + v.south, up + v.up, west + v.west)
+        return PositionTracking(levelName, x + v.x, y + v.y, z + v.z)
     }
 
     override fun subtract(x: Double): PositionTracking? {
@@ -49,29 +49,29 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
     }
 
     override fun subtract(v: Vector3): PositionTracking? {
-        return add(-v.south, -v.up, -v.west)
+        return add(-v.x, -v.y, -v.z)
     }
 
     override fun multiply(number: Double): PositionTracking? {
-        return PositionTracking(levelName, south * number, up * number, west * number)
+        return PositionTracking(levelName, x * number, y * number, z * number)
     }
 
     override fun divide(number: Double): PositionTracking {
-        return PositionTracking(levelName, south * number, up * number, west * number)
+        return PositionTracking(levelName, x * number, y * number, z * number)
     }
 
     override fun ceil(): PositionTracking? {
-        return PositionTracking(levelName, kotlin.math.ceil(south), kotlin.math.ceil(up), kotlin.math.ceil(west))
+        return PositionTracking(levelName, kotlin.math.ceil(x), kotlin.math.ceil(y), kotlin.math.ceil(z))
     }
 
     override fun floor(): PositionTracking? {
-        return PositionTracking(levelName, kotlin.math.floor(south), kotlin.math.floor(up), kotlin.math.floor(west))
+        return PositionTracking(levelName, kotlin.math.floor(x), kotlin.math.floor(y), kotlin.math.floor(z))
     }
 
     override fun round(): PositionTracking? {
         return PositionTracking(
-            levelName, Math.round(this.south).toDouble(), Math.round(this.up).toDouble(), Math.round(
-                this.west
+            levelName, Math.round(this.x).toDouble(), Math.round(this.y).toDouble(), Math.round(
+                this.z
             ).toDouble()
         )
     }
@@ -79,9 +79,9 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
     override fun abs(): PositionTracking? {
         return PositionTracking(
             levelName,
-            kotlin.math.abs(this.south),
-            kotlin.math.abs(this.up),
-            kotlin.math.abs(this.west)
+            kotlin.math.abs(this.x),
+            kotlin.math.abs(this.y),
+            kotlin.math.abs(this.z)
         )
     }
 
@@ -92,9 +92,9 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
     override fun getSide(face: BlockFace, step: Int): PositionTracking? {
         return PositionTracking(
             levelName,
-            south + face.xOffset * step,
-            up + face.yOffset * step,
-            west + face.zOffset * step
+            x + face.xOffset * step,
+            y + face.yOffset * step,
+            z + face.zOffset * step
         )
     }
 

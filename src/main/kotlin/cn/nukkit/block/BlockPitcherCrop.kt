@@ -1,29 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
-
-import static cn.nukkit.block.property.CommonBlockProperties.UPPER_BLOCK_BIT;
+import cn.nukkit.block.property.CommonBlockProperties
 
 //todo complete
-public class BlockPitcherCrop extends BlockCrops {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PITCHER_CROP, CommonBlockProperties.GROWTH, UPPER_BLOCK_BIT);
+class BlockPitcherCrop @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCrops(blockstate) {
+    override val name: String
+        get() = "Pitcher Crop"
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockPitcherCrop() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPitcherCrop(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public String getName() {
-        return "Pitcher Crop";
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.PITCHER_CROP, CommonBlockProperties.GROWTH, CommonBlockProperties.UPPER_BLOCK_BIT)
+            get() = Companion.field
     }
 }

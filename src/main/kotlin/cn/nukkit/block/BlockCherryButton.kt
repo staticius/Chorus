@@ -1,26 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockCherryButton extends BlockWoodenButton {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHERRY_BUTTON, CommonBlockProperties.BUTTON_PRESSED_BIT, CommonBlockProperties.FACING_DIRECTION);
+class BlockCherryButton @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWoodenButton(blockstate) {
+    override val name: String
+        get() = "Cherry Button"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockCherryButton() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCherryButton(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Cherry Button";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            CHERRY_BUTTON,
+            CommonBlockProperties.BUTTON_PRESSED_BIT,
+            CommonBlockProperties.FACING_DIRECTION
+        )
+            get() = Companion.field
     }
 }

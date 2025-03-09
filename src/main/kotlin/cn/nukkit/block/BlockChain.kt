@@ -1,99 +1,89 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
 
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+class BlockChain : BlockTransparent {
+    constructor() : super(Companion.properties.defaultState)
 
-import javax.annotation.Nullable;
+    constructor(blockState: BlockState?) : super(blockState)
 
+    override val name: String
+        get() = "Chain"
 
-public class BlockChain extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHAIN, CommonBlockProperties.PILLAR_AXIS);
+    var pillarAxis: BlockFace.Axis?
+        get() = getPropertyValue(
+            CommonBlockProperties.PILLAR_AXIS
+        )
+        set(axis) {
+            setPropertyValue(
+                CommonBlockProperties.PILLAR_AXIS,
+                axis
+            )
+        }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        pillarAxis = face.axis
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    public BlockChain() {
-        super(PROPERTIES.getDefaultState());
+    override val hardness: Double
+        get() = 5.0
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override val resistance: Double
+        get() = 6.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override var minX: Double
+        get() = position.x + 7 / 16.0
+        set(minX) {
+            super.minX = minX
+        }
+
+    override var maxX: Double
+        get() = position.x + 9 / 16.0
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var minZ: Double
+        get() = position.z + 7 / 16.0
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxZ: Double
+        get() = position.z + 9 / 16.0
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockChain(BlockState blockState) {
-        super(blockState);
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHAIN, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
-
-    @Override
-    public String getName() {
-        return "Chain";
-    }
-
-    public BlockFace.Axis getPillarAxis() {
-        return getPropertyValue(CommonBlockProperties.PILLAR_AXIS);
-    }
-
-    public void setPillarAxis(BlockFace.Axis axis) {
-        setPropertyValue(CommonBlockProperties.PILLAR_AXIS, axis);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        setPillarAxis(face.getAxis());
-        return super.place(item, block, target, face, fx, fy, fz, player);
-    }
-
-    @Override
-    public double getHardness() {
-        return 5;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public double getMinX() {
-        return this.position.south + 7/16.0;
-    }
-
-    @Override
-    public double getMaxX() {
-        return this.position.south + 9/16.0;
-    }
-
-    @Override
-    public double getMinZ() {
-        return this.position.west + 7/16.0;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 9/16.0;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-    
 }

@@ -1,48 +1,34 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
 
-public class BlockStoneButton extends BlockButton {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STONE_BUTTON, CommonBlockProperties.BUTTON_PRESSED_BIT, CommonBlockProperties.FACING_DIRECTION);
+open class BlockStoneButton @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockButton(blockstate) {
+    override val name: String
+        get() = "Stone Button"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockStoneButton() {
-        this(PROPERTIES.getDefaultState());
+    override fun getDrops(item: Item): Array<Item?>? {
+        return super.getDrops(item)
     }
 
-    public BlockStoneButton(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Stone Button";
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return super.getDrops(item);
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.STONE_BUTTON,
+            CommonBlockProperties.BUTTON_PRESSED_BIT,
+            CommonBlockProperties.FACING_DIRECTION
+        )
+            get() = Companion.field
     }
 }

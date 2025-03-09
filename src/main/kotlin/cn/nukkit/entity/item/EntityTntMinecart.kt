@@ -50,8 +50,8 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
 
     override fun onUpdate(currentTick: Int): Boolean {
         // 记录最大高度，用于计算坠落伤害
-        if (!this.onGround && position.up > highestPosition) {
-            this.highestPosition = position.up
+        if (!this.onGround && position.y > highestPosition) {
+            this.highestPosition = position.y
         }
         if (fuse < 80) {
             val tickDiff: Int = currentTick - lastUpdate
@@ -78,7 +78,7 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
 
     override fun updateFallState(onGround: Boolean) {
         if (onGround) {
-            fallDistance = (this.highestPosition - position.up).toFloat()
+            fallDistance = (this.highestPosition - position.y).toFloat()
 
             if (fallDistance > 4) {
                 if (level!!.gameRules.getBoolean(GameRule.TNT_EXPLODES)) {

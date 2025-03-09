@@ -1,345 +1,337 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.CrackedState;
-import cn.nukkit.block.property.enums.TurtleEggCount;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityID;
-import cn.nukkit.entity.EntityLiving;
-import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.monster.EntityGhast;
-import cn.nukkit.entity.mob.monster.EntityPhantom;
-import cn.nukkit.entity.mob.EntityBat;
-import cn.nukkit.entity.mob.animal.EntityChicken;
-import cn.nukkit.entity.mob.animal.EntityTurtle;
-import cn.nukkit.event.Event;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.event.block.BlockPlaceEvent;
-import cn.nukkit.event.block.TurtleEggHatchEvent;
-import cn.nukkit.event.entity.CreatureSpawnEvent;
-import cn.nukkit.event.entity.EntityInteractEvent;
-import cn.nukkit.event.player.PlayerInteractEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.*;
-import cn.nukkit.network.protocol.LevelSoundEventPacket;
-import cn.nukkit.registry.Registries;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.CrackedState
+import cn.nukkit.block.property.enums.TurtleEggCount
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.Entity.Companion.createEntity
+import cn.nukkit.entity.EntityID
+import cn.nukkit.entity.EntityLiving
+import cn.nukkit.entity.data.EntityFlag
+import cn.nukkit.entity.mob.EntityBat
+import cn.nukkit.entity.mob.animal.EntityChicken
+import cn.nukkit.entity.mob.animal.EntityTurtle
+import cn.nukkit.entity.mob.monster.EntityGhast
+import cn.nukkit.entity.mob.monster.EntityPhantom
+import cn.nukkit.event.Event
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.event.block.BlockPlaceEvent
+import cn.nukkit.event.block.TurtleEggHatchEvent
+import cn.nukkit.event.entity.CreatureSpawnEvent
+import cn.nukkit.event.entity.EntityInteractEvent
+import cn.nukkit.event.player.PlayerInteractEvent
+import cn.nukkit.item.*
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
+import cn.nukkit.level.Sound
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.network.protocol.LevelSoundEventPacket
+import cn.nukkit.registry.Registries
+import java.util.concurrent.ThreadLocalRandom
 
-import javax.annotation.Nullable;
-import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
+class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockstate) {
+    override val name: String
+        get() = "Turtle Egg"
 
-import static cn.nukkit.block.property.CommonBlockProperties.CRACKED_STATE;
-import static cn.nukkit.block.property.CommonBlockProperties.TURTLE_EGG_COUNT;
-import static cn.nukkit.block.property.enums.TurtleEggCount.FOUR_EGG;
-
-
-public class BlockTurtleEgg extends BlockFlowable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TURTLE_EGG, CRACKED_STATE, TURTLE_EGG_COUNT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockTurtleEgg() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockTurtleEgg(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Turtle Egg";
-    }
-
-    public CrackedState getCracks() {
-        return getPropertyValue(CRACKED_STATE);
-    }
-
-    public void setCracks(@Nullable CrackedState cracks) {
-        setPropertyValue(CRACKED_STATE, cracks);
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 2.5;
-    }
-
-    public TurtleEggCount getEggCount() {
-        return getPropertyValue(TURTLE_EGG_COUNT);
-    }
-
-    public void setEggCount(TurtleEggCount eggCount) {
-        setPropertyValue(TURTLE_EGG_COUNT, eggCount);
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.getBlock() != null && Objects.equals(item.getBlockId(), TURTLE_EGG) && (player == null || !player.isSneaking())) {
-            TurtleEggCount eggCount = getEggCount();
-            if (eggCount == FOUR_EGG) {
-                return false;
-            }
-            BlockTurtleEgg newState = new BlockTurtleEgg();
-            newState.setEggCount(eggCount.next());
-            BlockPlaceEvent placeEvent = new BlockPlaceEvent(
-                    player,
-                    newState,
-                    this,
-                    down(),
-                    item
-            );
-            if (placeEvent.isCancelled()) {
-                return false;
-            }
-            if (!this.level.setBlock(this.position, placeEvent.getBlock(), true, true)) {
-                return false;
-            }
-            Block placeBlock = placeEvent.getBlock();
-            this.level.addLevelSoundEvent(this.position,
-                    LevelSoundEventPacket.SOUND_PLACE,
-                    placeBlock.getRuntimeId());
-            item.setCount(item.getCount() - 1);
-
-            if (down().getId().equals(SAND)) {
-                this.level.addParticle(new BoneMealParticle(this.position));
-            }
-
-            return true;
+    var cracks: CrackedState?
+        get() = getPropertyValue(CommonBlockProperties.CRACKED_STATE)
+        set(cracks) {
+            setPropertyValue(
+                CommonBlockProperties.CRACKED_STATE,
+                cracks
+            )
         }
 
-        return false;
+    override val hardness: Double
+        get() = 0.5
+
+    override val resistance: Double
+        get() = 2.5
+
+    var eggCount: TurtleEggCount?
+        get() = getPropertyValue(CommonBlockProperties.TURTLE_EGG_COUNT)
+        set(eggCount) {
+            setPropertyValue(
+                CommonBlockProperties.TURTLE_EGG_COUNT,
+                eggCount
+            )
+        }
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.getBlock() != null && item.blockId == BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
+            val eggCount = eggCount!!
+            if (eggCount == TurtleEggCount.FOUR_EGG) {
+                return false
+            }
+            val newState = BlockTurtleEgg()
+            newState.eggCount = eggCount.next()
+            val placeEvent = BlockPlaceEvent(
+                player!!,
+                newState,
+                this,
+                down()!!,
+                item
+            )
+            if (placeEvent.isCancelled) {
+                return false
+            }
+            if (!level.setBlock(this.position, placeEvent.getBlock()!!, true, true)) {
+                return false
+            }
+            val placeBlock = placeEvent.getBlock()
+            level.addLevelSoundEvent(
+                this.position,
+                LevelSoundEventPacket.SOUND_PLACE,
+                placeBlock!!.runtimeId
+            )
+            item.setCount(item.getCount() - 1)
+
+            if (down()!!.id == BlockID.SAND) {
+                level.addParticle(BoneMealParticle(this.position))
+            }
+
+            return true
+        }
+
+        return false
     }
 
-    @Override
-    public double getMinX() {
-        return this.position.south + (3.0 / 16);
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    @Override
-    public double getMinZ() {
-        return this.position.west + (3.0 / 16);
+    override var minX: Double
+        get() = position.x + (3.0 / 16)
+        set(minX) {
+            super.minX = minX
+        }
+
+    override var minZ: Double
+        get() = position.z + (3.0 / 16)
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x + (12.0 / 16)
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxZ: Double
+        get() = position.z + (12.0 / 16)
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override var maxY: Double
+        get() = position.y + (7.0 / 16)
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public double getMaxX() {
-        return this.position.south + (12.0 / 16);
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + (12.0 / 16);
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + (7.0 / 16);
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateCollisionBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (down().getId().equals(BlockID.SAND)) {
-                float celestialAngle = level.calculateCelestialAngle(level.getTime(), 1);
-                ThreadLocalRandom random = ThreadLocalRandom.current();
+            if (down()!!.id == BlockID.SAND) {
+                val celestialAngle = level.calculateCelestialAngle(level.getTime(), 1f)
+                val random = ThreadLocalRandom.current()
                 if (0.70 > celestialAngle && celestialAngle > 0.65 || random.nextInt(500) == 0) {
-                    CrackedState crackState = getCracks();
+                    val crackState = cracks!!
                     if (crackState != CrackedState.MAX_CRACKED) {
-                        BlockTurtleEgg newState = clone();
-                        newState.setCracks(crackState.next());
-                        BlockGrowEvent event = new BlockGrowEvent(this, newState);
-                        this.level.server.pluginManager.callEvent(event);
-                        if (!event.isCancelled()) {
-                            level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK, 0.7f, 0.9f + random.nextFloat() * 0.2f);
-                            this.level.setBlock(this.position, event.newState, true, true);
+                        val newState = clone()
+                        newState.cracks = crackState.next()
+                        val event = BlockGrowEvent(this, newState)
+                        level.server.pluginManager.callEvent(event)
+                        if (!event.isCancelled) {
+                            level.addSound(
+                                this.position,
+                                Sound.BLOCK_TURTLE_EGG_CRACK,
+                                0.7f,
+                                0.9f + random.nextFloat() * 0.2f
+                            )
+                            level.setBlock(this.position, event.newState!!, true, true)
                         }
                     } else {
-                        hatch();
+                        hatch()
                     }
                 }
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    public void hatch() {
-        hatch(getEggCount());
-    }
-
-    public void hatch(TurtleEggCount eggs) {
-        hatch(eggs, new BlockAir());
-    }
-
-    public void hatch(TurtleEggCount eggs, Block newState) {
-        TurtleEggHatchEvent turtleEggHatchEvent = new TurtleEggHatchEvent(this, eggs.ordinal() + 1, newState);
+    @JvmOverloads
+    fun hatch(eggs: TurtleEggCount = eggCount!!, newState: Block = BlockAir()) {
+        val turtleEggHatchEvent = TurtleEggHatchEvent(this, eggs.ordinal + 1, newState)
         //TODO Cancelled by default because EntityTurtle doesn't have AI yet, remove it when AI is added
-        turtleEggHatchEvent.setCancelled(true);
-        this.level.server.pluginManager.callEvent(turtleEggHatchEvent);
-        int eggsHatching = turtleEggHatchEvent.eggsHatching;
-        if (!turtleEggHatchEvent.isCancelled()) {
-            level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK);
+        turtleEggHatchEvent.isCancelled = true
+        level.server.pluginManager.callEvent(turtleEggHatchEvent)
+        val eggsHatching = turtleEggHatchEvent.eggsHatching
+        if (!turtleEggHatchEvent.isCancelled) {
+            level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK)
 
-            boolean hasFailure = false;
-            for (int i = 0; i < eggsHatching; i++) {
+            var hasFailure = false
+            for (i in 0..<eggsHatching) {
+                level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK)
 
-                this.level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK);
+                val creatureSpawnEvent = CreatureSpawnEvent(
+                    Registries.ENTITY.getEntityNetworkId(EntityID.TURTLE),
+                    add(
+                        0.3 + i * 0.2,
+                        0.0,
+                        0.3
+                    ),
+                    CreatureSpawnEvent.SpawnReason.TURTLE_EGG
+                )
+                level.server.pluginManager.callEvent(creatureSpawnEvent)
 
-                CreatureSpawnEvent creatureSpawnEvent = new CreatureSpawnEvent(
-                        Registries.ENTITY.getEntityNetworkId(EntityID.TURTLE),
-                        add(0.3 + i * 0.2,
-                                0,
-                                0.3
-                        ),
-                        CreatureSpawnEvent.SpawnReason.TURTLE_EGG);
-                this.level.server.pluginManager.callEvent(creatureSpawnEvent);
-
-                if (!creatureSpawnEvent.isCancelled()) {
-                    EntityTurtle turtle = (EntityTurtle) Entity.createEntity(
-                            creatureSpawnEvent.entityNetworkId,
-                            creatureSpawnEvent.getPosition());
+                if (!creatureSpawnEvent.isCancelled) {
+                    val turtle = createEntity(
+                        creatureSpawnEvent.entityNetworkId,
+                        creatureSpawnEvent.position
+                    ) as EntityTurtle?
                     if (turtle != null) {
-                        turtle.setBreedingAge(-24000);
-                        turtle.setHomePos(this.position.clone());
-                        turtle.setDataFlag(EntityFlag.BABY, true);
-                        turtle.setScale(0.16f);
-                        turtle.spawnToAll();
-                        continue;
+                        turtle.setBreedingAge(-24000)
+                        turtle.setHomePos(position.clone())
+                        turtle.setDataFlag(EntityFlag.BABY, true)
+                        turtle.setScale(0.16f)
+                        turtle.spawnToAll()
+                        continue
                     }
                 }
 
-                if (turtleEggHatchEvent.isRecalculateOnFailure()) {
-                    turtleEggHatchEvent.eggsHatching = turtleEggHatchEvent.eggsHatching - 1;
-                    hasFailure = true;
+                if (turtleEggHatchEvent.isRecalculateOnFailure) {
+                    turtleEggHatchEvent.eggsHatching = turtleEggHatchEvent.eggsHatching - 1
+                    hasFailure = true
                 }
             }
 
             if (hasFailure) {
-                turtleEggHatchEvent.recalculateNewState();
+                turtleEggHatchEvent.recalculateNewState()
             }
 
-            this.level.setBlock(this.position, turtleEggHatchEvent.newState, true, true);
+            level.setBlock(this.position, turtleEggHatchEvent.newState, true, true)
         }
     }
 
-    @Override
-    public void onEntityCollide(Entity entity) {
-        if (entity instanceof EntityLiving
-                && !(entity instanceof EntityChicken)
-                && !(entity instanceof EntityBat)
-                && !(entity instanceof EntityGhast)
-                && !(entity instanceof EntityPhantom)
-                && entity.getY() >= this.getMaxY()) {
-            Event ev;
-
-            if (entity instanceof Player) {
-                ev = new PlayerInteractEvent((Player) entity, null, this.position, null, PlayerInteractEvent.Action.PHYSICAL);
+    override fun onEntityCollide(entity: Entity?) {
+        if (entity is EntityLiving
+            && (entity !is EntityChicken) && (entity !is EntityBat) && (entity !is EntityGhast) && (entity !is EntityPhantom) && entity.getY() >= this.maxY
+        ) {
+            val ev: Event = if (entity is Player) {
+                PlayerInteractEvent(
+                    entity,
+                    null,
+                    position,
+                    null,
+                    PlayerInteractEvent.Action.PHYSICAL
+                )
             } else {
-                ev = new EntityInteractEvent(entity, this);
+                EntityInteractEvent(entity, this)
             }
 
-            ev.setCancelled(ThreadLocalRandom.current().nextInt(200) > 0);
-            this.level.server.pluginManager.callEvent(ev);
-            if (!ev.isCancelled()) {
-                this.level.useBreakOn(this.position, null, null, true);
+            ev.isCancelled = ThreadLocalRandom.current().nextInt(200) > 0
+            level.server.pluginManager.callEvent(ev)
+            if (!ev.isCancelled) {
+                level.useBreakOn(this.position, null, null, true)
             }
         }
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockTurtleEgg());
+    override fun toItem(): Item? {
+        return ItemBlock(BlockTurtleEgg())
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        TurtleEggCount eggCount = getEggCount();
+    override fun onBreak(item: Item): Boolean {
+        val eggCount = eggCount!!
         if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) == null) {
-            this.level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK);
+            level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK)
         }
         if (eggCount == TurtleEggCount.ONE_EGG) {
-            return super.onBreak(item);
+            return super.onBreak(item)
         } else {
-            setEggCount(eggCount.before());
-            return this.level.setBlock(this.position, this, true, true);
+            this.eggCount = eggCount.before()
+            return level.setBlock(this.position, this, true, true)
         }
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (!isValidSupport(block.down(1, 0))) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isValidSupport(block.down(1, 0)!!)) {
+            return false
         }
 
-        if (this.level.setBlock(this.position, this, true, true)) {
-            if (down().getId().equals(BlockID.SAND)) {
-                this.level.addParticle(new BoneMealParticle(this.position));
+        if (level.setBlock(this.position, this, true, true)) {
+            if (down()!!.id == BlockID.SAND) {
+                level.addParticle(BoneMealParticle(this.position))
             }
-            return true;
+            return true
         } else {
-            return false;
+            return false
         }
     }
 
-    public boolean isValidSupport(Block support) {
-        return support.isSolid(BlockFace.UP) || support instanceof BlockWallBase;
+    fun isValidSupport(support: Block): Boolean {
+        return support.isSolid(BlockFace.UP) || support is BlockWallBase
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return false;
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
+    override fun clone(): BlockTurtleEgg {
+        return super.clone() as BlockTurtleEgg
     }
 
-    @Override
-    public BlockTurtleEgg clone() {
-        return (BlockTurtleEgg) super.clone();
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.TURTLE_EGG,
+            CommonBlockProperties.CRACKED_STATE,
+            CommonBlockProperties.TURTLE_EGG_COUNT
+        )
+            get() = Companion.field
     }
 }

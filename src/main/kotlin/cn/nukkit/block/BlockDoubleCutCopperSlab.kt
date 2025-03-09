@@ -1,62 +1,46 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.OxidizationLevel
 
-import javax.annotation.Nullable;
-import java.util.Locale;
-
-public class BlockDoubleCutCopperSlab extends BlockDoubleSlabCopperBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DOUBLE_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockDoubleCutCopperSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockDoubleCutCopperSlab(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getSlabName() {
-        StringBuilder sb = new StringBuilder(30);
-        if (isWaxed()) {
-            sb.append("Waxed ");
+open class BlockDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDoubleSlabCopperBase(blockstate) {
+    override val slabName: String
+        get() {
+            val sb = StringBuilder(30)
+            if (isWaxed) {
+                sb.append("Waxed ")
+            }
+            val oxidizationLevel = oxidizationLevel
+            if (OxidizationLevel.UNAFFECTED != oxidizationLevel) {
+                val name = oxidizationLevel.name
+                sb.append(name[0]).append(name.substring(1).lowercase()).append(' ')
+            }
+            return sb.append("Cut Copper").toString()
         }
-        OxidizationLevel oxidizationLevel = getOxidizationLevel();
-        if (!OxidizationLevel.UNAFFECTED.equals(oxidizationLevel)) {
-            String name = oxidizationLevel.name();
-            sb.append(name.charAt(0)).append(name.substring(1).toLowerCase(Locale.ENGLISH)).append(' ');
-        }
-        return sb.append("Cut Copper").toString();
-    }
 
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockCutCopperSlab.PROPERTIES.getDefaultState();
-    }
+    override val singleSlab: BlockState?
+        get() = BlockCutCopperSlab.properties.defaultState
 
-    @Override
-    protected String getCopperId(boolean waxed, @Nullable OxidizationLevel oxidizationLevel) {
+    override fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {
-            return getId();
+            return id
         }
-        return switch (oxidizationLevel) {
-            case UNAFFECTED -> waxed ? WAXED_DOUBLE_CUT_COPPER_SLAB : DOUBLE_CUT_COPPER_SLAB;
-            case EXPOSED -> waxed ? WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB : EXPOSED_DOUBLE_CUT_COPPER_SLAB;
-            case WEATHERED -> waxed ? WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB : WEATHERED_DOUBLE_CUT_COPPER_SLAB;
-            case OXIDIZED -> waxed ? WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB : OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
-        };
+        return when (oxidizationLevel) {
+            OxidizationLevel.UNAFFECTED -> if (waxed) WAXED_DOUBLE_CUT_COPPER_SLAB else DOUBLE_CUT_COPPER_SLAB
+            OxidizationLevel.EXPOSED -> if (waxed) WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB else EXPOSED_DOUBLE_CUT_COPPER_SLAB
+            OxidizationLevel.WEATHERED -> if (waxed) WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB else WEATHERED_DOUBLE_CUT_COPPER_SLAB
+            OxidizationLevel.OXIDIZED -> if (waxed) WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB else OXIDIZED_DOUBLE_CUT_COPPER_SLAB
+        }
     }
 
-    @Override
-    @NotNull public OxidizationLevel getOxidizationLevel() {
-        return OxidizationLevel.UNAFFECTED;
+    override fun getOxidizationLevel(): OxidizationLevel {
+        return OxidizationLevel.UNAFFECTED
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(DOUBLE_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

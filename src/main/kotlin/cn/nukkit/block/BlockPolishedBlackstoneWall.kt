@@ -1,52 +1,38 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockPolishedBlackstoneWall extends BlockWallBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_BLACKSTONE_WALL, CommonBlockProperties.WALL_CONNECTION_TYPE_EAST, CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH, CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH, CommonBlockProperties.WALL_CONNECTION_TYPE_WEST, CommonBlockProperties.WALL_POST_BIT);
+open class BlockPolishedBlackstoneWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWallBase(blockstate) {
+    override val name: String
+        get() = "Polished Blackstone Wall"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockPolishedBlackstoneWall() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    public BlockPolishedBlackstoneWall(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public String getName() {
-        return "Polished Blackstone Wall";
-    }
+    override val hardness: Double
+        get() = 1.5
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override val resistance: Double
+        get() = 6.0
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6.0;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.POLISHED_BLACKSTONE_WALL,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
+            CommonBlockProperties.WALL_POST_BIT
+        )
+            get() = Companion.field
     }
 }

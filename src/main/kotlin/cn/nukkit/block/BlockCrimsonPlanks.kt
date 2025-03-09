@@ -1,31 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockCrimsonPlanks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockPlanks(blockstate) {
+    override val name: String
+        get() = "Crimson Planks"
 
-public class BlockCrimsonPlanks extends BlockPlanks {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRIMSON_PLANKS);
+    override val resistance: Double
+        get() = 3.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CRIMSON_PLANKS)
+            get() = Companion.field
     }
-
-    public BlockCrimsonPlanks() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCrimsonPlanks(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Crimson Planks";
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
 }

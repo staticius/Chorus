@@ -1,26 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockWaxedOxidizedCutCopperStairs extends BlockOxidizedCutCopperStairs {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WAXED_OXIDIZED_CUT_COPPER_STAIRS, CommonBlockProperties.UPSIDE_DOWN_BIT, CommonBlockProperties.WEIRDO_DIRECTION);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockWaxedOxidizedCutCopperStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockOxidizedCutCopperStairs(blockstate) {
+    override fun isWaxed(): Boolean {
+        return true
     }
 
-    public BlockWaxedOxidizedCutCopperStairs() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWaxedOxidizedCutCopperStairs(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean isWaxed() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.WAXED_OXIDIZED_CUT_COPPER_STAIRS,
+            CommonBlockProperties.UPSIDE_DOWN_BIT,
+            CommonBlockProperties.WEIRDO_DIRECTION
+        )
+            get() = Companion.field
     }
 }

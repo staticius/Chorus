@@ -1,87 +1,63 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.enums.PrismarineBlockType;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.enums.PrismarineBlockType
+import cn.nukkit.item.*
 
-import static cn.nukkit.block.property.CommonBlockProperties.PRISMARINE_BLOCK_TYPE;
+open class BlockPrismarine : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
+    constructor(blockState: BlockState?) : super(blockState)
 
-public class BlockPrismarine extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PRISMARINE);
+    override val hardness: Double
+        get() = 1.5
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 30.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val name: String
+        get() = when (prismarineBlockType) {
+            PrismarineBlockType.DEFAULT -> "Prismarine"
+            PrismarineBlockType.DARK -> "Dark Prismarine"
+            PrismarineBlockType.BRICKS -> "Prismarine Bricks"
+        }
+
+    var prismarineBlockType: PrismarineBlockType
+        get() = when (this) {
+            -> PrismarineBlockType.BRICKS
+            -> PrismarineBlockType.DARK
+            else -> PrismarineBlockType.DEFAULT
+        }
+        set(prismarineBlockType) {
+            this.blockState = when (prismarineBlockType) {
+                PrismarineBlockType.BRICKS -> BlockPrismarineBricks.Companion.PROPERTIES.getDefaultState()
+                PrismarineBlockType.DARK -> BlockDarkPrismarine.properties.defaultState
+                PrismarineBlockType.DEFAULT -> Companion.properties.defaultState
+            }
+        }
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockPrismarine() {
-        super(PROPERTIES.getDefaultState());
+    override fun toItem(): Item? {
+        return when (this.prismarineBlockType) {
+            PrismarineBlockType.BRICKS -> ItemBlock(
+                BlockPrismarineBricks.Companion.PROPERTIES.getDefaultState().toBlock()
+            )
+
+            PrismarineBlockType.DARK -> ItemBlock(BlockDarkPrismarine.properties.defaultState.toBlock())
+            PrismarineBlockType.DEFAULT -> ItemBlock(properties.defaultState.toBlock())
+        }
     }
 
-    public BlockPrismarine(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 30;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public String getName() {
-        return switch (getPrismarineBlockType()) {
-            case DEFAULT -> "Prismarine";
-            case DARK -> "Dark Prismarine";
-            case BRICKS -> "Prismarine Bricks";
-        };
-    }
-
-    public void setPrismarineBlockType(PrismarineBlockType prismarineBlockType) {
-        this.blockstate = switch (prismarineBlockType) {
-            case BRICKS -> BlockPrismarineBricks.PROPERTIES.getDefaultState();
-            case DARK -> BlockDarkPrismarine.PROPERTIES.getDefaultState();
-            case DEFAULT -> PROPERTIES.getDefaultState();
-        };
-    }
-
-    public PrismarineBlockType getPrismarineBlockType() {
-        return switch (this) {
-            case BlockPrismarineBricks ignored -> PrismarineBlockType.BRICKS;
-            case BlockDarkPrismarine ignored -> PrismarineBlockType.DARK;
-            default -> PrismarineBlockType.DEFAULT;
-        };
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public Item toItem() {
-        return switch (this.getPrismarineBlockType()) {
-            case BRICKS -> new ItemBlock(BlockPrismarineBricks.PROPERTIES.getDefaultState().toBlock());
-            case DARK -> new ItemBlock(BlockDarkPrismarine.PROPERTIES.getDefaultState().toBlock());
-            case DEFAULT -> new ItemBlock(this.getProperties().getDefaultState().toBlock());
-        };
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PRISMARINE)
+            get() = Companion.field
     }
 }

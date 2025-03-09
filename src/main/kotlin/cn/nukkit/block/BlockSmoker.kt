@@ -1,32 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
 
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+class BlockSmoker @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockLitSmoker(blockstate) {
+    override val name: String
+        get() = "Smoker"
 
-public class BlockSmoker extends BlockLitSmoker {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SMOKER, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
+    override val lightLevel: Int
+        get() = 0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockSmoker() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSmoker(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Smoker";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 0;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SMOKER, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

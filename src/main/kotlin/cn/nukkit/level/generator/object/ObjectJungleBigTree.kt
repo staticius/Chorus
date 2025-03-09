@@ -45,8 +45,8 @@ class ObjectJungleBigTree(
             for (i2 in 0..<height) {
                 val blockpos = position.up(i2)
 
-                if (this.canGrowInto(level.getBlockIdAt(blockpos.south.toInt(), blockpos.up.toInt(), blockpos.west.toInt()))) {
-                    level.setBlockStateAt(blockpos.south.toInt(), blockpos.up.toInt(), blockpos.west.toInt(), this.woodMetadata)
+                if (this.canGrowInto(level.getBlockIdAt(blockpos.x.toInt(), blockpos.y.toInt(), blockpos.z.toInt()))) {
+                    level.setBlockStateAt(blockpos.x.toInt(), blockpos.y.toInt(), blockpos.z.toInt(), this.woodMetadata)
                     if (i2 > 0) {
                         this.placeVine(level, rand, blockpos.west(), 8)
                         this.placeVine(level, rand, blockpos.north(), 1)
@@ -58,16 +58,16 @@ class ObjectJungleBigTree(
 
                     if (this.canGrowInto(
                             level.getBlockIdAt(
-                                blockpos1.south.toInt(),
-                                blockpos1.up.toInt(),
-                                blockpos1.west.toInt()
+                                blockpos1.x.toInt(),
+                                blockpos1.y.toInt(),
+                                blockpos1.z.toInt()
                             )
                         )
                     ) {
                         level.setBlockStateAt(
-                            blockpos1.south.toInt(),
-                            blockpos1.up.toInt(),
-                            blockpos1.west.toInt(),
+                            blockpos1.x.toInt(),
+                            blockpos1.y.toInt(),
+                            blockpos1.z.toInt(),
                             this.woodMetadata
                         )
 
@@ -81,16 +81,16 @@ class ObjectJungleBigTree(
 
                     if (this.canGrowInto(
                             level.getBlockIdAt(
-                                blockpos2.south.toInt(),
-                                blockpos2.up.toInt(),
-                                blockpos2.west.toInt()
+                                blockpos2.x.toInt(),
+                                blockpos2.y.toInt(),
+                                blockpos2.z.toInt()
                             )
                         )
                     ) {
                         level.setBlockStateAt(
-                            blockpos2.south.toInt(),
-                            blockpos2.up.toInt(),
-                            blockpos2.west.toInt(),
+                            blockpos2.x.toInt(),
+                            blockpos2.y.toInt(),
+                            blockpos2.z.toInt(),
                             this.woodMetadata
                         )
 
@@ -104,16 +104,16 @@ class ObjectJungleBigTree(
 
                     if (this.canGrowInto(
                             level.getBlockIdAt(
-                                blockpos3.south.toInt(),
-                                blockpos3.up.toInt(),
-                                blockpos3.west.toInt()
+                                blockpos3.x.toInt(),
+                                blockpos3.y.toInt(),
+                                blockpos3.z.toInt()
                             )
                         )
                     ) {
                         level.setBlockStateAt(
-                            blockpos3.south.toInt(),
-                            blockpos3.up.toInt(),
-                            blockpos3.west.toInt(),
+                            blockpos3.x.toInt(),
+                            blockpos3.y.toInt(),
+                            blockpos3.z.toInt(),
                             this.woodMetadata
                         )
 
@@ -130,8 +130,8 @@ class ObjectJungleBigTree(
     }
 
     private fun placeVine(level: BlockManager, random: RandomSourceProvider, pos: Vector3, meta: Int) {
-        if (random.nextInt(3) > 0 && level.getBlockIdAt(pos.south.toInt(), pos.up.toInt(), pos.west.toInt()) == AIR) {
-            val block: BlockState = BlockVine.PROPERTIES.getBlockState<Int, IntPropertyType>(
+        if (random.nextInt(3) > 0 && level.getBlockIdAt(pos.x.toInt(), pos.y.toInt(), pos.z.toInt()) == AIR) {
+            val block: BlockState = BlockVine.properties.getBlockState<Int, IntPropertyType>(
                 CommonBlockProperties.VINE_DIRECTION_BITS,
                 meta
             )

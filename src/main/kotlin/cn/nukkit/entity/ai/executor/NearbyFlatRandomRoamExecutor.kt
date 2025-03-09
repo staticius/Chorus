@@ -69,6 +69,6 @@ open class NearbyFlatRandomRoamExecutor @JvmOverloads constructor(
         val random = ThreadLocalRandom.current()
         val x = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.floorX
         val z = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.floorZ
-        return Vector3(x.toDouble(), entity.up, z.toDouble())
+        return Vector3(x.toDouble(), entity.y, z.toDouble())
     }
 }

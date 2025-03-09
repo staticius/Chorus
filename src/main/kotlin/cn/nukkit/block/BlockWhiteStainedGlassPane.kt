@@ -1,26 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.utils.DyeColor;
-import org.jetbrains.annotations.NotNull;
+class BlockWhiteStainedGlassPane @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockGlassPaneStained(blockstate) {
+    override val dyeColor: DyeColor
+        get() = DyeColor.WHITE
 
-public class BlockWhiteStainedGlassPane extends BlockGlassPaneStained {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WHITE_STAINED_GLASS_PANE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockWhiteStainedGlassPane() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWhiteStainedGlassPane(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public DyeColor getDyeColor() {
-        return DyeColor.WHITE;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WHITE_STAINED_GLASS_PANE)
+            get() = Companion.field
     }
 }

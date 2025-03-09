@@ -1,154 +1,146 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.level.StructureGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.generator.object.BlockManager;
-import cn.nukkit.level.generator.object.ObjectAzaleaTree;
-import cn.nukkit.level.generator.object.ObjectGenerator;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.random.RandomSourceProvider;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.ThreadLocalRandom;
+import cn.nukkit.Player
+import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.event.level.StructureGrowEvent.blockList
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.generator.`object`.BlockManager.blocks
+import cn.nukkit.level.generator.`object`.ObjectGenerator.generate
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.utils.random.RandomSourceProvider.Companion.create
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * @author LoboMetalurgico
  * @since 13/06/2021
  */
-public class BlockAzalea extends BlockSolid implements BlockFlowerPot.FlowerPotBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(AZALEA);
+open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), FlowerPotBlock {
+    override val name: String
+        get() = "Azalea"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    public BlockAzalea() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 0.0
 
-    public BlockAzalea(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val resistance: Double
+        get() = 0.0
 
-    @Override
-    public String getName() {
-        return "Azalea";
-    }
+    override val isFertilizable: Boolean
+        get() = true
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-
-    @Override
-    public boolean isFertilizable() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) { // BoneMeal
-            if (player != null && !player.isCreative()) {
-                item.count--;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) { // BoneMeal
+            if (player != null && !player.isCreative) {
+                item.count--
             }
 
-            this.level.addParticle(new BoneMealParticle(this.position));
+            level.addParticle(BoneMealParticle(this.position))
             if (ThreadLocalRandom.current().nextInt(4) == 0) {
-                this.grow();
-                return true;
+                this.grow()
+                return true
             }
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
-        double chance = ThreadLocalRandom.current().nextDouble(1);
-        boolean aged = chance > 0.8;
+    override fun onUpdate(type: Int): Int {
+        val chance = ThreadLocalRandom.current().nextDouble(1.0)
+        val aged = chance > 0.8
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!BlockFlower.isSupportValid(down())) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
-            if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && level.getFullLight(this.position.add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
+            if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && level.getFullLight(
+                    position.add(0.0, 1.0, 0.0)!!
+                ) >= BlockCrops.minimumLightLevel
+            ) {
                 if (aged) {
-                    this.grow();
+                    this.grow()
                 } else {
-                    this.level.setBlock(this.position, this, true);
-                    return Level.BLOCK_UPDATE_RANDOM;
+                    level.setBlock(this.position, this, true)
+                    return Level.BLOCK_UPDATE_RANDOM
                 }
             } else {
-                return Level.BLOCK_UPDATE_RANDOM;
+                return Level.BLOCK_UPDATE_RANDOM
             }
         }
-        return Level.BLOCK_UPDATE_NORMAL;
+        return Level.BLOCK_UPDATE_NORMAL
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (BlockFlower.isSupportValid(down())) {
-            this.level.setBlock(block.position, this, true, true);
-            return true;
+            level.setBlock(block.position, this, true, true)
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{toItem()};
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(toItem())
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public boolean isSameType(Vector3 pos) {
-        Block block = this.level.getBlock(pos);
-        return block.getId().equals(this.getId()) && block.getProperties() == this.getProperties();
+    fun isSameType(pos: Vector3): Boolean {
+        val block = level.getBlock(pos)
+        return block!!.id == this.id && block.properties === this.properties
     }
 
-    private void grow() {
-        ObjectGenerator generator;
-        Vector3 vector3;
+    private fun grow() {
+        val generator: ObjectGenerator
 
-        generator = new ObjectAzaleaTree();
-        vector3 = this.position.add(0, 0, 0);
+        generator = ObjectAzaleaTree()
+        val vector3 = position.add(0.0, 0.0, 0.0)
 
-        BlockManager chunkManager = new BlockManager(this.level);
-        boolean success = generator.generate(chunkManager, RandomSourceProvider.create(), vector3);
-        StructureGrowEvent ev = new StructureGrowEvent(this, chunkManager.getBlocks());
-        this.level.server.pluginManager.callEvent(ev);
-        if (ev.isCancelled() || !success) {
-            return;
+        val chunkManager: BlockManager = BlockManager(this.level)
+        val success: Boolean = generator.generate(chunkManager, RandomSourceProvider.create(), vector3)
+        val ev: StructureGrowEvent = StructureGrowEvent(this, chunkManager.blocks)
+        level.server.pluginManager.callEvent(ev)
+        if (ev.isCancelled || !success) {
+            return
         }
 
-        for (Block block : ev.getBlockList()) {
-            this.level.setBlock(block.position, block);
+        for (block in ev.blockList) {
+            level.setBlock(block.position, block)
         }
 
-        this.level.setBlock(this.position, Block.get(OAK_LOG));
+        level.setBlock(this.position, get(OAK_LOG))
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(AZALEA)
+            get() = Companion.field
     }
 }

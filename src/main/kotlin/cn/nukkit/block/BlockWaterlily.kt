@@ -1,105 +1,102 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
 
 /**
  * @author xtypr
  * @since 2015/12/1
  */
-public class BlockWaterlily extends BlockFlowable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WATERLILY);
+class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockstate) {
+    override val name: String
+        get() = "Lily Pad"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override var minX: Double
+        get() = position.x + 0.0625
+        set(minX) {
+            super.minX = minX
+        }
+
+    override var minZ: Double
+        get() = position.z + 0.0625
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x + 0.9375
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxY: Double
+        get() = position.y + 0.015625
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override var maxZ: Double
+        get() = position.z + 0.9375
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    public BlockWaterlily() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWaterlily(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Lily Pad";
-    }
-
-    @Override
-    public double getMinX() {
-        return this.position.south + 0.0625;
-    }
-
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.0625;
-    }
-
-    @Override
-    public double getMaxX() {
-        return this.position.south + 0.9375;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.015625;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 0.9375;
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (target instanceof BlockFlowingWater || target.getLevelBlockAtLayer(1) instanceof BlockFlowingWater) {
-            Block up = target.up();
-            if (up.isAir()) {
-                this.level.setBlock(up.position, this, true, true);
-                return true;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (target is BlockFlowingWater || target.getLevelBlockAtLayer(1) is BlockFlowingWater) {
+            val up = target.up()
+            if (up!!.isAir) {
+                level.setBlock(up.position, this, true, true)
+                return true
             }
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            Block down = this.down();
-            if (!(down instanceof BlockFlowingWater) && !(down.getLevelBlockAtLayer(1) instanceof BlockFlowingWater)
-                    && !(down instanceof BlockFrostedIce) && !(down.getLevelBlockAtLayer(1) instanceof BlockFrostedIce)) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+            val down = this.down()
+            if ((down !is BlockFlowingWater) && (down!!.getLevelBlockAtLayer(1) !is BlockFlowingWater) && (down !is BlockFrostedIce) && (down!!.getLevelBlockAtLayer(
+                    1
+                ) !is BlockFrostedIce)
+            ) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return false;
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
+    override fun canBeFlowedInto(): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WATERLILY)
+            get() = Companion.field
     }
 }

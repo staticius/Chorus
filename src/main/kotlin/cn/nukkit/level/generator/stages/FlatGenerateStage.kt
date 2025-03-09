@@ -33,8 +33,8 @@ class FlatGenerateStage : GenerateStage() {
     companion object {
         const val NAME: String = "flat_generate"
 
-        val bedrock: BlockState = BlockBedrock.PROPERTIES.getDefaultState()
-        val grass: BlockState = BlockGrassBlock.PROPERTIES.getDefaultState()
-        val dirt: BlockState = BlockDirt.PROPERTIES.getDefaultState()
+        val bedrock: BlockState = BlockBedrock.properties.getDefaultState()
+        val grass: BlockState = BlockGrassBlock.properties.getDefaultState()
+        val dirt: BlockState = BlockDirt.properties.getDefaultState()
     }
 }

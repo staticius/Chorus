@@ -1,68 +1,41 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
 /**
  * @author xtypr
  * @since 2015/12/6
  */
-public class BlockIronBars extends BlockThin {
+class BlockIronBars @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockThin(blockstate) {
+    override val name: String
+        get() = "Iron Bars"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(IRON_BARS);
+    override val hardness: Double
+        get() = 5.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override val resistance: Double
+        get() = 10.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    public BlockIronBars() {
-        this(PROPERTIES.getDefaultState());
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockIronBars(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Iron Bars";
-    }
-
-    @Override
-    public double getHardness() {
-        return 5;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 10;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.Companion.IRON_BARS)
+            get() = Companion.field
     }
 }

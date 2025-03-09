@@ -1,83 +1,70 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.utils.Faceable
 
-public class BlockLightningRod extends BlockTransparent implements Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIGHTNING_ROD, CommonBlockProperties.FACING_DIRECTION);
+class BlockLightningRod : BlockTransparent, Faceable {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockLightningRod() {
-        super(PROPERTIES.getDefaultState());
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "LightningRod"
+
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    public BlockLightningRod(BlockState blockState) {
-        super(blockState);
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun canBeFlowedInto(): Boolean {
+        return true
     }
 
-    @Override
-    public String getName() {
-        return "LightningRod";
+    override val hardness: Double
+        get() = 3.0
+
+    override val resistance: Double
+        get() = 6.0
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        this.blockFace = face
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            this.setPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.FACING_DIRECTION,
+                face!!.index
+            )
+        }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return true;
-    }
-
-    @Override
-    public double getHardness() {
-        return 3;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        this.setBlockFace(face);
-        this.level.setBlock(block.position, this, true, true);
-        return true;
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index);
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LIGHTNING_ROD, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

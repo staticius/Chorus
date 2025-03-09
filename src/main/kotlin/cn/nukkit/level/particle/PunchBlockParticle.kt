@@ -6,7 +6,7 @@ import cn.nukkit.network.protocol.DataPacket
 import cn.nukkit.network.protocol.LevelEventPacket
 
 class PunchBlockParticle(pos: Vector3, block: Block) :
-    Particle(pos.south, pos.up, pos.west) {
+    Particle(pos.x, pos.y, pos.z) {
     protected val data: Int
 
     init {
@@ -16,9 +16,9 @@ class PunchBlockParticle(pos: Vector3, block: Block) :
     override fun encode(): Array<DataPacket> {
         val pk = LevelEventPacket()
         pk.evid = LevelEventPacket.EVENT_PARTICLE_CRACK_BLOCK
-        pk.x = south.toFloat()
-        pk.y = up.toFloat()
-        pk.z = west.toFloat()
+        pk.x = x.toFloat()
+        pk.y = y.toFloat()
+        pk.z = z.toFloat()
         pk.data = this.data
 
         return arrayOf(pk)

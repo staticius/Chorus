@@ -1,71 +1,58 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.level.Sound
+import cn.nukkit.math.BlockFace
 
-public class BlockIronTrapdoor extends BlockTrapdoor {
-    public static final BlockProperties PROPERTIES = new BlockProperties(IRON_TRAPDOOR, CommonBlockProperties.DIRECTION, CommonBlockProperties.OPEN_BIT, CommonBlockProperties.UPSIDE_DOWN_BIT);
+class BlockIronTrapdoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTrapdoor(blockstate) {
+    override val name: String
+        get() = "Iron Trapdoor"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 5.0
+
+    override val resistance: Double
+        get() = 25.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return false
     }
 
-    public BlockIronTrapdoor() {
-        this(PROPERTIES.getDefaultState());
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockIronTrapdoor(BlockState blockstate) {
-        super(blockstate);
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun playOpenSound() {
+        level.addSound(this.position, Sound.OPEN_IRON_TRAPDOOR)
     }
 
-    @Override
-    public String getName() {
-        return "Iron Trapdoor";
+    override fun playCloseSound() {
+        level.addSound(this.position, Sound.CLOSE_IRON_TRAPDOOR)
     }
 
-    @Override
-    public double getHardness() {
-        return 5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 25;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return false;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public void playOpenSound() {
-        level.addSound(this.position, Sound.OPEN_IRON_TRAPDOOR);
-    }
-
-    @Override
-    public void playCloseSound() {
-        level.addSound(this.position, Sound.CLOSE_IRON_TRAPDOOR);
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.Companion.IRON_TRAPDOOR,
+            CommonBlockProperties.DIRECTION,
+            CommonBlockProperties.OPEN_BIT,
+            CommonBlockProperties.UPSIDE_DOWN_BIT
+        )
+            get() = Companion.field
     }
 }

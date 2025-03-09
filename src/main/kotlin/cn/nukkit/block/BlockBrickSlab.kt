@@ -1,45 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.StoneSlabType;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockBrickSlab extends BlockSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    public BlockBrickSlab(BlockState blockState) {
-        super(blockState, BRICK_DOUBLE_SLAB);
+class BlockBrickSlab(blockState: BlockState?) : BlockSlab(blockState, BRICK_DOUBLE_SLAB) {
+    override fun getSlabName(): String {
+        return "Brick"
     }
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public String getSlabName() {
-        return "Brick";
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return this.id == slab.id
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return this.getId().equals(slab.getId());
+    companion object {
+        val properties: BlockProperties = BlockProperties(BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

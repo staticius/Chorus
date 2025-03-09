@@ -1,81 +1,67 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemSnowball;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
 
-public class BlockSnow extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SNOW);
+class BlockSnow : BlockSolid {
+    constructor() : super(Companion.properties.getDefaultState())
 
-    public BlockSnow() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockSnow(BlockState blockState) {
-        super(blockState);
-    }
+    override val name: String
+        get() = "Snow"
 
-    @Override
-    public String getName() {
-        return "Snow";
-    }
+    override val hardness: Double
+        get() = 0.6
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 1.0
 
-    @Override
-    public double getHardness() {
-        return 0.6;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
 
-    @Override
-    public double getResistance() {
-        return 1;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isShovel() && item.getTier() >= ItemTool.TIER_WOODEN) {
-            return new Item[]{
-                    new ItemSnowball(0, 4)
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isShovel && item.tier >= ItemTool.TIER_WOODEN) {
+            arrayOf<Item?>(
+                ItemSnowball(0, 4)
+            )
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isShovel()) {
-            item.useOn(this);
-            this.level.useBreakOn(this.position, item.clone().clearNamedTag(), null, true);
-            return true;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isShovel) {
+            item.useOn(this)
+            level.useBreakOn(this.position, item.clone().clearNamedTag(), null, true)
+            return true
         }
-        return false;
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SNOW)
+            get() = Companion.field
     }
 }

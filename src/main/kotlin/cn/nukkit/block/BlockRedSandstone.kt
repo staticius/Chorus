@@ -1,26 +1,13 @@
-package cn.nukkit.block;
-
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+package cn.nukkit.block
 
 /**
  * @author CreeperFace
  * @since 26. 11. 2016
  */
-public class BlockRedSandstone extends BlockSandstone {
-    public static final BlockProperties PROPERTIES = new BlockProperties(RED_SANDSTONE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockRedSandstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSandstone(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.RED_SANDSTONE)
+            get() = Companion.field
     }
-
-    public BlockRedSandstone() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRedSandstone(BlockState blockstate) {
-        super(blockstate);
-    }
-
 }

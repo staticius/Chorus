@@ -1,285 +1,281 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.block.property.enums.MinecraftCardinalDirection;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityChest;
-import cn.nukkit.inventory.ContainerInventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.StringTag;
-import cn.nukkit.nbt.tag.Tag;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
+import cn.nukkit.Player
+import cn.nukkit.block.Block.Companion.get
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.CommonPropertyMap
+import cn.nukkit.block.property.enums.MinecraftCardinalDirection
+import cn.nukkit.block.property.type.BaseBlockPropertyType.getValidValues
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityCampfire.getInventory
+import cn.nukkit.blockentity.BlockEntityChest.getInventory
+import cn.nukkit.blockentity.BlockEntityChest.isPaired
+import cn.nukkit.blockentity.BlockEntityChest.pairWith
+import cn.nukkit.blockentity.BlockEntityChest.unpair
+import cn.nukkit.blockentity.BlockEntityCommandBlock.getInventory
+import cn.nukkit.entity.EntityHumanType.getInventory
+import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.Item.namedTag
+import cn.nukkit.level.Locator
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.math.Vector3.equals
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.CompoundTag.contains
+import cn.nukkit.nbt.tag.CompoundTag.get
+import cn.nukkit.nbt.tag.CompoundTag.getString
+import cn.nukkit.nbt.tag.Tag
+import cn.nukkit.registry.BlockRegistry.get
+import cn.nukkit.registry.BlockState2ItemMetaRegistry.get
+import cn.nukkit.utils.Faceable
 
 /**
  * @author Angelic47 (Nukkit Project)
  */
-
-public class BlockChest extends BlockTransparent implements Faceable, BlockEntityHolder<BlockEntityChest> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityChest?> {
+    override fun getBlockEntityClass(): Class<out BlockEntityChest> {
+        return BlockEntityChest::class.java
     }
 
-    public BlockChest() {
-        this(PROPERTIES.getDefaultState());
+    override fun getBlockEntityType(): String {
+        return BlockEntity.CHEST
     }
 
-    public BlockChest(BlockState blockstate) {
-        super(blockstate);
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityChest> getBlockEntityClass() {
-        return BlockEntityChest.class;
-    }
+    override val name: String
+        get() = "Chest"
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.CHEST;
-    }
+    override val hardness: Double
+        get() = 2.5
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public String getName() {
-        return "Chest";
-    }
+    override val resistance: Double
+        get() = 12.5
 
-    @Override
-    public double getHardness() {
-        return 2.5;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
+    override var minX: Double
+        get() = position.x + 0.0625
+        set(minX) {
+            super.minX = minX
+        }
 
-    @Override
-    public double getResistance() {
-        return 12.5;
-    }
+    override var minY: Double
+        get() = position.y
+        set(minY) {
+            super.minY = minY
+        }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
+    override var minZ: Double
+        get() = position.z + 0.0625
+        set(minZ) {
+            super.minZ = minZ
+        }
 
-    @Override
-    public double getMinX() {
-        return this.position.south + 0.0625;
-    }
+    override var maxX: Double
+        get() = position.x + 0.9375
+        set(maxX) {
+            super.maxX = maxX
+        }
 
-    @Override
-    public double getMinY() {
-        return this.position.up;
-    }
+    override var maxY: Double
+        get() = position.y + 0.9475
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.0625;
-    }
+    override var maxZ: Double
+        get() = position.z + 0.9375
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
 
-    @Override
-    public double getMaxX() {
-        return this.position.south + 0.9375;
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        blockFace = if (player != null) fromHorizontalIndex(
+            player.getDirection()!!.getOpposite()!!.horizontalIndex
+        ) else BlockFace.SOUTH
 
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.9475;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 0.9375;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        setBlockFace(player != null ? BlockFace.fromHorizontalIndex(player.getDirection().getOpposite().horizontalIndex) : BlockFace.SOUTH);
-
-        CompoundTag nbt = new CompoundTag().putList("Items", new ListTag<>());
+        val nbt = CompoundTag().putList("Items", ListTag<Tag>())
 
         if (item.hasCustomName()) {
-            nbt.putString("CustomName", item.getCustomName());
+            nbt!!.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            Map<String, Tag> customData = item.getCustomBlockData().getTags();
-            for (Map.Entry<String, Tag> tag : customData.entrySet()) {
-                nbt.put(tag.getKey(), tag.getValue());
+            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            for ((key, value) in customData) {
+                nbt!!.put(key, value)
             }
         }
 
-        BlockEntityChest blockEntity = BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt);
-        if (blockEntity == null) {
-            return false;
-        }
+        val blockEntity: BlockEntityChest =
+            BlockEntityHolder.setBlockAndCreateEntity<BlockEntityChest, BlockChest>(this, true, true, nbt)
+                ?: return false
 
-        tryPair();
+        tryPair()
 
-        return true;
+        return true
     }
 
     /**
      * 尝试与旁边箱子连接
-     * <p>
+     *
+     *
      * Try to pair with a chest next to it
      *
-     * @return 是否连接成功 <br> Whether pairing was successful
+     * @return 是否连接成功 <br></br> Whether pairing was successful
      */
-    protected boolean tryPair() {
-        BlockEntityChest blockEntity = getBlockEntity();
-        if (blockEntity == null)
-            return false;
+    protected fun tryPair(): Boolean {
+        val blockEntity: BlockEntityChest = blockEntity ?: return false
 
-        BlockEntityChest chest = findPair();
-        if (chest == null)
-            return false;
+        val chest: BlockEntityChest = findPair() ?: return false
 
-        chest.pairWith(blockEntity);
-        blockEntity.pairWith(chest);
-        return true;
+        chest.pairWith(blockEntity)
+        blockEntity.pairWith(chest)
+        return true
     }
 
     /**
      * 寻找附近的可配对箱子
-     * <p>
+     *
+     *
      * Search for nearby chest to pair with
      *
-     * @return 找到的可配对箱子。若没找到，则为null <br> Chest to pair with. Null if none have been found
+     * @return 找到的可配对箱子。若没找到，则为null <br></br> Chest to pair with. Null if none have been found
      */
-    protected @Nullable BlockEntityChest findPair() {
-        List<MinecraftCardinalDirection> universe = CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION.getValidValues();
-        BlockFace thisFace = getBlockFace();
-        for (var face : universe) {
-            Block side = this.getSide(CommonPropertyMap.CARDINAL_BLOCKFACE.get(face));
-            if (side instanceof BlockChest chest) {
-                BlockFace pairFace = chest.getBlockFace();
+    protected fun findPair(): BlockEntityChest? {
+        val universe: List<MinecraftCardinalDirection> =
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION.getValidValues()
+        val thisFace = blockFace
+        for (face in universe) {
+            val side = this.getSide(CommonPropertyMap.CARDINAL_BLOCKFACE[face]!!)
+            if (side is BlockChest) {
+                val pairFace = side.blockFace
                 if (thisFace == pairFace) {
-                    return chest.getBlockEntity();
+                    return side.blockEntity
                 }
             }
         }
-        return null;
+        return null
     }
 
-    @Override
-    public boolean cloneTo(Locator pos) {
-        if (!super.cloneTo(pos)) return false;
+    override fun cloneTo(pos: Locator): Boolean {
+        if (!super.cloneTo(pos)) return false
         else {
-            var blockEntity = this.getBlockEntity();
-            if (blockEntity != null && blockEntity.isPaired())
-                ((BlockChest) pos.getLevelBlock()).tryPair();
-            return true;
+            val blockEntity: BlockEntityChest? = this.blockEntity
+            if (blockEntity != null && blockEntity.isPaired) (pos.levelBlock as BlockChest).tryPair()
+            return true
         }
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        BlockEntityChest chest = getBlockEntity();
+    override fun onBreak(item: Item?): Boolean {
+        val chest: BlockEntityChest? = blockEntity
         if (chest != null) {
-            chest.unpair();
+            chest.unpair()
         }
-        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
+        level.setBlock(this.position, get(AIR), true, true)
 
-        return true;
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(isNotActivate(player)) return false;
-        Item itemInHand = player.getInventory().getItemInHand();
-        if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull())) return false;
+    override fun onActivate(
+        item: Item,
+        player: Player,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
+        val itemInHand = player.getInventory().itemInHand
+        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) return false
 
-        Block top = up();
-        if (!top.isTransparent()) {
-            return false;
-        }
-
-        BlockEntityChest chest = getOrCreateBlockEntity();
-        if (chest.namedTag.contains("Lock") && chest.namedTag.get("Lock") instanceof StringTag
-                && !chest.namedTag.getString("Lock").equals(item.getCustomName())) {
-            return false;
-        }
-
-        player.addWindow(chest.getInventory());
-        return true;
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride() {
-        BlockEntityChest blockEntity = getBlockEntity();
-
-        if (blockEntity != null) {
-            return ContainerInventory.calculateRedstone(blockEntity.getInventory());
+        val top = up()
+        if (!top!!.isTransparent) {
+            return false
         }
 
-        return super.getComparatorInputOverride();
+        val chest: BlockEntityChest = getOrCreateBlockEntity()
+        if (chest.namedTag.contains("Lock") && chest.namedTag.get("Lock") is StringTag
+            && (chest.namedTag.getString("Lock") != item.customName)
+        ) {
+            return false
+        }
+
+        player.addWindow(chest.getInventory())
+        return true
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(this.getPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION));
+    override val comparatorInputOverride: Int
+        get() {
+            val blockEntity: BlockEntityChest? = blockEntity
+
+            if (blockEntity != null) {
+                return calculateRedstone(blockEntity.getInventory())
+            }
+
+            return super.comparatorInputOverride
+        }
+
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        this.setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face));
+    override var blockFace: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]
+        set(face) {
+            this.setPropertyValue(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+            )
+        }
+
+    override fun canBePushed(): Boolean {
+        return canMove()
     }
 
-    @Override
-    public boolean canBePushed() {
-        return canMove();
-    }
-
-    @Override
-    public boolean canBePulled() {
-        return canMove();
+    override fun canBePulled(): Boolean {
+        return canMove()
     }
 
     /**
      * TODO: Double chests cannot be moved
      */
-    protected boolean canMove() {
-        var blockEntity = this.getBlockEntity();
-        return blockEntity == null || !blockEntity.isPaired();
+    protected fun canMove(): Boolean {
+        val blockEntity: BlockEntityChest? = this.blockEntity
+        return blockEntity == null || !blockEntity.isPaired
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{new ItemBlock(PROPERTIES.getDefaultState().toBlock(), 0)};
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(ItemBlock(Companion.properties.defaultState.toBlock(), 0))
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

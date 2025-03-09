@@ -1,67 +1,63 @@
-package cn.nukkit.block.customblock.data;
+package cn.nukkit.block.customblock.data
 
-import cn.nukkit.nbt.tag.CompoundTag;
-import com.google.common.base.Preconditions;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.nbt.tag.CompoundTag
+import com.google.common.base.Preconditions
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+class Geometry(name: String) : NBTData {
+    private val geometryName: String
+    private var culling = ""
+    private val boneVisibilities: MutableMap<String, String> = LinkedHashMap()
 
-
-public class Geometry implements NBTData {
-    private final String geometryName;
-    private String culling = "";
-    private final Map<String, String> boneVisibilities = new LinkedHashMap<>();
-
-    public Geometry(@NotNull String name) {
-        Preconditions.checkNotNull(name);
-        Preconditions.checkArgument(!name.isBlank());
-        this.geometryName = name;
+    init {
+        Preconditions.checkNotNull(name)
+        Preconditions.checkArgument(!name.isBlank())
+        this.geometryName = name
     }
 
     /**
      * 控制模型对应骨骼是否显示
-     * <p>
+     *
+     *
      * Control the visibility that the bone of geometry
      */
-    public Geometry boneVisibility(@NotNull String boneName, boolean isVisibility) {
-        Preconditions.checkNotNull(boneName);
-        Preconditions.checkArgument(!boneName.isBlank());
-        this.boneVisibilities.put(boneName, isVisibility ? "true" : "false");
-        return this;
+    fun boneVisibility(boneName: String, isVisibility: Boolean): Geometry {
+        Preconditions.checkNotNull(boneName)
+        Preconditions.checkArgument(!boneName.isBlank())
+        boneVisibilities[boneName] = if (isVisibility) "true" else "false"
+        return this
     }
 
     /**
      * 控制模型对应骨骼是否显示
-     * <p>
+     *
+     *
      * Control the visibility that the bone of geometry
      */
-    public Geometry boneVisibility(@NotNull String boneName, String condition) {
-        Preconditions.checkNotNull(boneName);
-        Preconditions.checkArgument(!boneName.isBlank());
-        this.boneVisibilities.put(boneName, condition);
-        return this;
+    fun boneVisibility(boneName: String, condition: String): Geometry {
+        Preconditions.checkNotNull(boneName)
+        Preconditions.checkArgument(!boneName.isBlank())
+        boneVisibilities[boneName] = condition
+        return this
     }
 
-    public Geometry culling(@NotNull String cullingName) {
-        Preconditions.checkNotNull(cullingName);
-        this.culling = cullingName;
-        return this;
+    fun culling(cullingName: String): Geometry {
+        Preconditions.checkNotNull(cullingName)
+        this.culling = cullingName
+        return this
     }
 
-    @Override
-    public CompoundTag toCompoundTag() {
-        var boneVisibility = new CompoundTag();
-        for (var entry : boneVisibilities.entrySet()) {
-            boneVisibility.putString(entry.getKey(), entry.getValue());
+    override fun toCompoundTag(): CompoundTag {
+        val boneVisibility = CompoundTag()
+        for ((key, value) in boneVisibilities) {
+            boneVisibility.putString(key, value)
         }
-        CompoundTag compoundTag = new CompoundTag()
-                .putString("identifier", geometryName)
-                .putByte("legacyBlockLightAbsorption", 0)
-                .putByte("legacyTopRotation", 0);
+        val compoundTag = CompoundTag()
+            .putString("identifier", geometryName)
+            .putByte("legacyBlockLightAbsorption", 0)
+            .putByte("legacyTopRotation", 0)
         if (!boneVisibilities.isEmpty()) {
-            compoundTag.putCompound("bone_visibility", boneVisibility);
+            compoundTag.putCompound("bone_visibility", boneVisibility)
         }
-        return compoundTag;
+        return compoundTag
     }
 }

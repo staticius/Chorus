@@ -117,13 +117,13 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             }
 
             // Entity variables
-            prevPosition.south = position.south
-            prevPosition.up = position.up
-            prevPosition.west = position.west
-            motion.up -= 0.03999999910593033
-            val dx: Int = MathHelper.floor(position.south)
-            var dy: Int = MathHelper.floor(position.up)
-            val dz: Int = MathHelper.floor(position.west)
+            prevPosition.x = position.x
+            prevPosition.y = position.y
+            prevPosition.z = position.z
+            motion.y -= 0.03999999910593033
+            val dx: Int = MathHelper.floor(position.x)
+            var dy: Int = MathHelper.floor(position.y)
+            val dz: Int = MathHelper.floor(position.z)
 
             // Some hack to check rails
             if (Rail.isRailBlock(level!!.getBlockIdAt(dx, dy - 1, dz))) {
@@ -152,8 +152,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
 
             // Minecart head
             rotation.pitch = 0.0
-            val diffX: Double = prevPosition.south - position.south
-            val diffZ: Double = prevPosition.west - position.west
+            val diffX: Double = prevPosition.x - position.x
+            val diffZ: Double = prevPosition.z - position.z
             var yawToChange: Double = rotation.yaw
             if (diffX * diffX + diffZ * diffZ > 0.001) {
                 yawToChange = (atan2(diffZ, diffX) * 180 / Math.PI)
@@ -168,14 +168,14 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             setRotation(yawToChange, rotation.pitch)
 
             val from: Transform = Transform(
-                prevPosition.south,
-                prevPosition.up, prevPosition.west, prevRotation.yaw,
+                prevPosition.x,
+                prevPosition.y, prevPosition.z, prevRotation.yaw,
                 prevRotation.pitch,
                 level!!
             )
             val to: Transform = Transform(
-                position.south,
-                position.up, position.west, rotation.yaw, rotation.pitch,
+                position.x,
+                position.y, position.z, rotation.yaw, rotation.pitch,
                 level!!
             )
 
@@ -211,17 +211,17 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             //通常情况下，矿车的数量远远少于漏斗，所以说此举能大福提高性能
             if (this is InventoryHolder) {
                 val pickupArea: SimpleAxisAlignedBB = SimpleAxisAlignedBB(
-                    position.south,
-                    position.up - 1,
-                    position.west, position.south + 1, position.up, position.west + 1
+                    position.x,
+                    position.y - 1,
+                    position.z, position.x + 1, position.y, position.z + 1
                 )
                 checkPickupHopper(pickupArea, holder)
                 //漏斗矿车会自行拉取物品!
                 if (this !is EntityHopperMinecart) {
                     val pushArea: SimpleAxisAlignedBB = SimpleAxisAlignedBB(
-                        position.south,
-                        position.up,
-                        position.west, position.south + 1, position.up + 2, position.west + 1
+                        position.x,
+                        position.y,
+                        position.z, position.x + 1, position.y + 2, position.z + 1
                     )
                     checkPushHopper(pushArea, holder)
                 }
@@ -294,7 +294,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
     override fun applyEntityCollision(entity: Entity) {
         if (entity !== riding && !(entity is Player && entity.isSpectator())) {
             if (entity is EntityLiving
-                && (entity !is EntityHuman) && motion.south * motion.south + motion.west * motion.west > 0.01 && passengers.isEmpty()
+                && (entity !is EntityHuman) && motion.x * motion.x + motion.z * motion.z > 0.01 && passengers.isEmpty()
                 && entity.riding == null && displayBlock == null
             ) {
                 if (riding == null && devs) {
@@ -302,8 +302,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                 }
             }
 
-            var motiveX: Double = entity.position.south - position.south
-            var motiveZ: Double = entity.position.west - position.west
+            var motiveX: Double = entity.position.x - position.x
+            var motiveZ: Double = entity.position.z - position.z
             var square: Double = motiveX * motiveX + motiveZ * motiveZ
 
             if (square >= 9.999999747378752E-5) {
@@ -325,8 +325,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                 motiveX *= 0.5
                 motiveZ *= 0.5
                 if (entity is EntityMinecartAbstract) {
-                    val desinityX: Double = entity.position.south - position.south
-                    val desinityZ: Double = entity.position.west - position.west
+                    val desinityX: Double = entity.position.x - position.x
+                    val desinityZ: Double = entity.position.z - position.z
                     val vector: Vector3 = Vector3(desinityX, 0.0, desinityZ).normalize()
                     val vec: Vector3 = Vector3(
                         MathHelper.cos(rotation.yaw.toFloat() * 0.017453292f).toDouble(), 0.0, MathHelper.sin(
@@ -339,38 +339,38 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                         return
                     }
 
-                    var motX: Double = entity.motion.south + motion.south
-                    var motZ: Double = entity.motion.west + motion.west
+                    var motX: Double = entity.motion.x + motion.x
+                    var motZ: Double = entity.motion.z + motion.z
 
                     if (entity.getType().getId() == 2 && getType().getId() != 2) {
-                        motion.south *= 0.20000000298023224
-                        motion.west *= 0.20000000298023224
-                        motion.south += entity.motion.south - motiveX
-                        motion.west += entity.motion.west - motiveZ
-                        entity.motion.south *= 0.949999988079071
-                        entity.motion.west *= 0.949999988079071
+                        motion.x *= 0.20000000298023224
+                        motion.z *= 0.20000000298023224
+                        motion.x += entity.motion.x - motiveX
+                        motion.z += entity.motion.z - motiveZ
+                        entity.motion.x *= 0.949999988079071
+                        entity.motion.z *= 0.949999988079071
                     } else if (entity.getType().getId() != 2 && getType().getId() == 2) {
-                        entity.motion.south *= 0.20000000298023224
-                        entity.motion.west *= 0.20000000298023224
-                        motion.south += entity.motion.south + motiveX
-                        motion.west += entity.motion.west + motiveZ
-                        motion.south *= 0.949999988079071
-                        motion.west *= 0.949999988079071
+                        entity.motion.x *= 0.20000000298023224
+                        entity.motion.z *= 0.20000000298023224
+                        motion.x += entity.motion.x + motiveX
+                        motion.z += entity.motion.z + motiveZ
+                        motion.x *= 0.949999988079071
+                        motion.z *= 0.949999988079071
                     } else {
                         motX /= 2.0
                         motZ /= 2.0
-                        motion.south *= 0.20000000298023224
-                        motion.west *= 0.20000000298023224
-                        motion.south += motX - motiveX
-                        motion.west += motZ - motiveZ
-                        entity.motion.south *= 0.20000000298023224
-                        entity.motion.west *= 0.20000000298023224
-                        entity.motion.south += motX + motiveX
-                        entity.motion.west += motZ + motiveZ
+                        motion.x *= 0.20000000298023224
+                        motion.z *= 0.20000000298023224
+                        motion.x += motX - motiveX
+                        motion.z += motZ - motiveZ
+                        entity.motion.x *= 0.20000000298023224
+                        entity.motion.z *= 0.20000000298023224
+                        entity.motion.x += motX + motiveX
+                        entity.motion.z += motZ + motiveZ
                     }
                 } else {
-                    motion.south -= motiveX
-                    motion.west -= motiveZ
+                    motion.x -= motiveX
+                    motion.z -= motiveZ
                 }
             }
         }
@@ -462,8 +462,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
     }
 
     private fun setFalling() {
-        motion.south = NukkitMath.clamp(motion.south, -getMaxSpeed(), getMaxSpeed())
-        motion.west = NukkitMath.clamp(motion.west, -getMaxSpeed(), getMaxSpeed())
+        motion.x = NukkitMath.clamp(motion.x, -getMaxSpeed(), getMaxSpeed())
+        motion.z = NukkitMath.clamp(motion.z, -getMaxSpeed(), getMaxSpeed())
 
         if (!hasUpdated) {
             for (linked: Entity in passengers) {
@@ -475,27 +475,27 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         }
 
         if (onGround) {
-            motion.south *= derailedX
-            motion.up *= derailedY
-            motion.west *= derailedZ
+            motion.x *= derailedX
+            motion.y *= derailedY
+            motion.z *= derailedZ
         }
 
-        move(motion.south, motion.up, motion.west)
+        move(motion.x, motion.y, motion.z)
         if (!onGround) {
-            motion.south *= flyingX
-            motion.up *= flyingY
-            motion.west *= flyingZ
+            motion.x *= flyingX
+            motion.y *= flyingY
+            motion.z *= flyingZ
         }
     }
 
     private fun processMovement(dx: Int, dy: Int, dz: Int, block: BlockRail) {
         fallDistance = 0.0f
         val vector: Vector3? = getNextRail(
-            position.south,
-            position.up, position.west
+            position.x,
+            position.y, position.z
         )
 
-        position.up = dy.toDouble()
+        position.y = dy.toDouble()
         var isPowered: Boolean = false
         var isSlowed: Boolean = false
 
@@ -506,23 +506,23 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
 
         when (Rail.Orientation.byMetadata(block.getRealMeta())) {
             Rail.Orientation.ASCENDING_NORTH -> {
-                motion.south -= 0.0078125
-                position.up += 1.0
+                motion.x -= 0.0078125
+                position.y += 1.0
             }
 
             Rail.Orientation.ASCENDING_SOUTH -> {
-                motion.south += 0.0078125
-                position.up += 1.0
+                motion.x += 0.0078125
+                position.y += 1.0
             }
 
             Rail.Orientation.ASCENDING_EAST -> {
-                motion.west += 0.0078125
-                position.up += 1.0
+                motion.z += 0.0078125
+                position.y += 1.0
             }
 
             Rail.Orientation.ASCENDING_WEST -> {
-                motion.west -= 0.0078125
-                position.up += 1.0
+                motion.z -= 0.0078125
+                position.y += 1.0
             }
         }
 
@@ -530,21 +530,21 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         var facing1: Double = (facing.get(1).get(0) - facing.get(0).get(0)).toDouble()
         var facing2: Double = (facing.get(1).get(2) - facing.get(0).get(2)).toDouble()
         val speedOnTurns: Double = sqrt(facing1 * facing1 + facing2 * facing2)
-        val realFacing: Double = motion.south * facing1 + motion.west * facing2
+        val realFacing: Double = motion.x * facing1 + motion.z * facing2
 
         if (realFacing < 0) {
             facing1 = -facing1
             facing2 = -facing2
         }
 
-        var squareOfFame: Double = sqrt(motion.south * motion.south + motion.west * motion.west)
+        var squareOfFame: Double = sqrt(motion.x * motion.x + motion.z * motion.z)
 
         if (squareOfFame > 2) {
             squareOfFame = 2.0
         }
 
-        motion.south = squareOfFame * facing1 / speedOnTurns
-        motion.west = squareOfFame * facing2 / speedOnTurns
+        motion.x = squareOfFame * facing1 / speedOnTurns
+        motion.z = squareOfFame * facing2 / speedOnTurns
         var expectedSpeed: Double
         var playerYawNeg: Double // PlayerYawNegative
         var playerYawPos: Double // PlayerYawPositive
@@ -558,10 +558,10 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                 // This is a trajectory (Angle of elevation)
                 playerYawNeg = -sin(linked.rotation.yaw * Math.PI / 180.0f)
                 playerYawPos = cos(linked.rotation.yaw * Math.PI / 180.0f)
-                motion = this.motion.south * this.motion.south + this.motion.west * this.motion.west
+                motion = this.motion.x * this.motion.x + this.motion.z * this.motion.z
                 if (motion < 0.01) {
-                    this.motion.south += playerYawNeg * 0.1
-                    this.motion.west += playerYawPos * 0.1
+                    this.motion.x += playerYawNeg * 0.1
+                    this.motion.z += playerYawPos * 0.1
 
                     isSlowed = false
                 }
@@ -570,15 +570,15 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
 
         //http://minecraft.wiki/w/Powered_Rail#Rail
         if (isSlowed) {
-            expectedSpeed = sqrt(this.motion.south * this.motion.south + this.motion.west * this.motion.west)
+            expectedSpeed = sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z)
             if (expectedSpeed < 0.03) {
-                this.motion.south *= 0.0
-                this.motion.up *= 0.0
-                this.motion.west *= 0.0
+                this.motion.x *= 0.0
+                this.motion.y *= 0.0
+                this.motion.z *= 0.0
             } else {
-                this.motion.south *= 0.5
-                this.motion.up *= 0.0
-                this.motion.west *= 0.5
+                this.motion.x *= 0.5
+                this.motion.y *= 0.0
+                this.motion.z *= 0.5
             }
         }
 
@@ -593,23 +593,23 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         var motZ: Double
 
         if (facing1 == 0.0) {
-            position.south = dx.toDouble() + 0.5
-            expectedSpeed = position.west - dz.toDouble()
+            position.x = dx.toDouble() + 0.5
+            expectedSpeed = position.z - dz.toDouble()
         } else if (facing2 == 0.0) {
-            position.west = dz.toDouble() + 0.5
-            expectedSpeed = position.south - dx.toDouble()
+            position.z = dz.toDouble() + 0.5
+            expectedSpeed = position.x - dx.toDouble()
         } else {
-            motX = position.south - playerYawNeg
-            motZ = position.west - playerYawPos
+            motX = position.x - playerYawNeg
+            motZ = position.z - playerYawPos
             expectedSpeed = (motX * facing1 + motZ * facing2) * 2
         }
 
-        position.south = playerYawNeg + facing1 * expectedSpeed
-        position.west = playerYawPos + facing2 * expectedSpeed
+        position.x = playerYawNeg + facing1 * expectedSpeed
+        position.z = playerYawPos + facing2 * expectedSpeed
         setPosition(position.clone()) // Hehe, my minstake :3
 
-        motX = this.motion.south
-        motZ = this.motion.west
+        motX = this.motion.x
+        motZ = this.motion.z
         if (!passengers.isEmpty()) {
             motX *= 0.75
             motZ *= 0.75
@@ -618,79 +618,79 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         motZ = NukkitMath.clamp(motZ, -getMaxSpeed(), getMaxSpeed())
 
         move(motX, 0.0, motZ)
-        if (facing.get(0).get(1) != 0 && MathHelper.floor(position.south) - dx == facing.get(0).get(0) && MathHelper.floor(
-                position.west
+        if (facing.get(0).get(1) != 0 && MathHelper.floor(position.x) - dx == facing.get(0).get(0) && MathHelper.floor(
+                position.z
             ) - dz == facing.get(0).get(2)
         ) {
             setPosition(
                 Vector3(
-                    position.south,
-                    position.up + facing.get(0).get(1).toDouble(), position.west
+                    position.x,
+                    position.y + facing.get(0).get(1).toDouble(), position.z
                 )
             )
-        } else if (facing.get(1).get(1) != 0 && MathHelper.floor(position.south) - dx == facing.get(1)
+        } else if (facing.get(1).get(1) != 0 && MathHelper.floor(position.x) - dx == facing.get(1)
                 .get(0) && MathHelper.floor(
-                position.west
+                position.z
             ) - dz == facing.get(1).get(2)
         ) {
             setPosition(
                 Vector3(
-                    position.south,
-                    position.up + facing.get(1).get(1).toDouble(), position.west
+                    position.x,
+                    position.y + facing.get(1).get(1).toDouble(), position.z
                 )
             )
         }
 
         applyDrag()
         val vector1: Vector3? = getNextRail(
-            position.south,
-            position.up, position.west
+            position.x,
+            position.y, position.z
         )
 
         if (vector1 != null && vector != null) {
-            val d14: Double = (vector.up - vector1.up) * 0.05
+            val d14: Double = (vector.y - vector1.y) * 0.05
 
-            squareOfFame = sqrt(this.motion.south * this.motion.south + this.motion.west * this.motion.west)
+            squareOfFame = sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z)
             if (squareOfFame > 0) {
-                this.motion.south = this.motion.south / squareOfFame * (squareOfFame + d14)
-                this.motion.west = this.motion.west / squareOfFame * (squareOfFame + d14)
+                this.motion.x = this.motion.x / squareOfFame * (squareOfFame + d14)
+                this.motion.z = this.motion.z / squareOfFame * (squareOfFame + d14)
             }
 
-            setPosition(Vector3(position.south, vector1.up, position.west))
+            setPosition(Vector3(position.x, vector1.y, position.z))
         }
 
-        val floorX: Int = MathHelper.floor(position.south)
-        val floorZ: Int = MathHelper.floor(position.west)
+        val floorX: Int = MathHelper.floor(position.x)
+        val floorZ: Int = MathHelper.floor(position.z)
 
         if (floorX != dx || floorZ != dz) {
-            squareOfFame = sqrt(this.motion.south * this.motion.south + this.motion.west * this.motion.west)
-            this.motion.south = squareOfFame * (floorX - dx).toDouble()
-            this.motion.west = squareOfFame * (floorZ - dz).toDouble()
+            squareOfFame = sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z)
+            this.motion.x = squareOfFame * (floorX - dx).toDouble()
+            this.motion.z = squareOfFame * (floorZ - dz).toDouble()
         }
 
         if (isPowered) {
-            val newMovie: Double = sqrt(this.motion.south * this.motion.south + this.motion.west * this.motion.west)
+            val newMovie: Double = sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z)
 
             if (newMovie > 0.01) {
                 val nextMovie: Double = 0.06
 
-                this.motion.south += this.motion.south / newMovie * nextMovie
-                this.motion.west += this.motion.west / newMovie * nextMovie
+                this.motion.x += this.motion.x / newMovie * nextMovie
+                this.motion.z += this.motion.z / newMovie * nextMovie
             } else if (block.getOrientation() == Rail.Orientation.STRAIGHT_NORTH_SOUTH) {
                 if (level!!.getBlock(Vector3((dx - 1).toDouble(), dy.toDouble(), dz.toDouble())).isNormalBlock()) {
-                    this.motion.south = 0.02
+                    this.motion.x = 0.02
                 } else if (level!!.getBlock(Vector3((dx + 1).toDouble(), dy.toDouble(), dz.toDouble()))
                         .isNormalBlock()
                 ) {
-                    this.motion.south = -0.02
+                    this.motion.x = -0.02
                 }
             } else if (block.getOrientation() == Rail.Orientation.STRAIGHT_EAST_WEST) {
                 if (level!!.getBlock(Vector3(dx.toDouble(), dy.toDouble(), (dz - 1).toDouble())).isNormalBlock()) {
-                    this.motion.west = 0.02
+                    this.motion.z = 0.02
                 } else if (level!!.getBlock(Vector3(dx.toDouble(), dy.toDouble(), (dz + 1).toDouble()))
                         .isNormalBlock()
                 ) {
-                    this.motion.west = -0.02
+                    this.motion.z = -0.02
                 }
             }
         }
@@ -698,13 +698,13 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
 
     private fun applyDrag() {
         if (!passengers.isEmpty() || !slowWhenEmpty) {
-            motion.south *= 0.996999979019165
-            motion.up *= 0.0
-            motion.west *= 0.996999979019165
+            motion.x *= 0.996999979019165
+            motion.y *= 0.0
+            motion.z *= 0.996999979019165
         } else {
-            motion.south *= 0.9599999785423279
-            motion.up *= 0.0
-            motion.west *= 0.9599999785423279
+            motion.x *= 0.9599999785423279
+            motion.y *= 0.0
+            motion.z *= 0.9599999785423279
         }
     }
 

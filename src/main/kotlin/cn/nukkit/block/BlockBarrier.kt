@@ -1,65 +1,41 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.math.*
 
 /**
  * @author Pub4Game
  * @since 03.01.2016
  */
+class BlockBarrier @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockState) {
+    override val name: String
+        get() = "Barrier"
 
-public class BlockBarrier extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BARRIER);
+    override val waterloggingLevel: Int
+        get() = 1
 
-    public BlockBarrier() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    public BlockBarrier(BlockState blockState) {
-        super(blockState);
+    override val hardness: Double
+        get() = -1.0
+
+    override val resistance: Double
+        get() = 18000000.0
+
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return player != null && player.isCreative
     }
 
-    @Override
-    public String getName() {
-        return "Barrier";
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    @Override
-    public double getHardness() {
-        return -1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 18000000;
-    }
-
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return player != null && player.isCreative();
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BARRIER)
+            get() = Companion.field
     }
 }

@@ -1,37 +1,28 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.level.Sound;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.level.Sound
 
-public class BlockCherryTrapdoor extends BlockTrapdoor {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHERRY_TRAPDOOR, CommonBlockProperties.DIRECTION, CommonBlockProperties.OPEN_BIT, CommonBlockProperties.UPSIDE_DOWN_BIT);
+class BlockCherryTrapdoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTrapdoor(blockstate) {
+    override val name: String
+        get() = "Cherry Trapdoor"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun playOpenSound() {
+        level.addSound(this.position, Sound.OPEN_CHERRY_WOOD_TRAPDOOR)
     }
 
-    public BlockCherryTrapdoor() {
-        this(PROPERTIES.getDefaultState());
+    override fun playCloseSound() {
+        level.addSound(this.position, Sound.CLOSE_CHERRY_WOOD_TRAPDOOR)
     }
 
-    public BlockCherryTrapdoor(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Cherry Trapdoor";
-    }
-
-    @Override
-    public void playOpenSound() {
-        level.addSound(this.position, Sound.OPEN_CHERRY_WOOD_TRAPDOOR);
-    }
-
-    @Override
-    public void playCloseSound() {
-        level.addSound(this.position, Sound.CLOSE_CHERRY_WOOD_TRAPDOOR);
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            CHERRY_TRAPDOOR,
+            CommonBlockProperties.DIRECTION,
+            CommonBlockProperties.OPEN_BIT,
+            CommonBlockProperties.UPSIDE_DOWN_BIT
+        )
+            get() = Companion.field
     }
 }

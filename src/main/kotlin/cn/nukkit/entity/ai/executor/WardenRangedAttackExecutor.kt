@@ -107,7 +107,7 @@ class WardenRangedAttackExecutor(protected var chargingTime: Int, protected var 
 
     protected fun sendAttackParticle(entity: EntityMob, from: Vector3, to: Vector3) {
         val length = from.distance(to)
-        val relativeVector = Vector3(to.south - from.south, to.up - from.up, to.west - from.west)
+        val relativeVector = Vector3(to.x - from.x, to.y - from.y, to.z - from.z)
         var i = 1
         while (i <= (length + 4)) {
             val pk = LevelEventGenericPacket()

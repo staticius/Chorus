@@ -1,58 +1,47 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.enchantment.Enchantment;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.enchantment.Enchantment
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.min
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockCarrots @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCrops(blockstate) {
+    override val name: String
+        get() = "Carrot Block"
 
-public class BlockCarrots extends BlockCrops {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CARROTS, CommonBlockProperties.GROWTH);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockCarrots() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCarrots(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Carrot Block";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (!isFullyGrown()) {
-            return new Item[]{
-                    Item.get(ItemID.CARROT)
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (!isFullyGrown) {
+            return arrayOf(
+                Item.get(ItemID.CARROT)
+            )
         }
 
-        int drops = 2;
-        int attempts = 3 + Math.min(0, item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING));
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        for (int i = 0; i < attempts; i++) {
+        var drops = 2
+        val attempts = (3 + min(
+            0.0,
+            item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING).toDouble()
+        )).toInt()
+        val random = ThreadLocalRandom.current()
+        for (i in 0..<attempts) {
             if (random.nextInt(7) < 4) { // 4/7, 0.57142857142857142857142857142857
-                drops++;
+                drops++
             }
         }
 
-        return new Item[]{
-                Item.get(ItemID.CARROT, 0, drops)
-        };
+        return arrayOf(
+            get(ItemID.CARROT, 0, drops)
+        )
     }
 
-    @Override
-    public Item toItem() {
-        return Item.get(ItemID.CARROT);
+    override fun toItem(): Item? {
+        return Item.get(ItemID.CARROT)
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(CARROTS, CommonBlockProperties.GROWTH)
+            get() = Companion.field
     }
 }

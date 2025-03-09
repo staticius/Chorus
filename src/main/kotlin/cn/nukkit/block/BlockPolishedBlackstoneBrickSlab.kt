@@ -1,49 +1,31 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockPolishedBlackstoneBrickSlab extends BlockSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_BLACKSTONE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockPolishedBlackstoneBrickSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSlab(blockstate, BlockID.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB) {
+    override fun getSlabName(): String {
+        return "Polished Blackstone"
     }
 
-    public BlockPolishedBlackstoneBrickSlab() {
-        this(PROPERTIES.getDefaultState());
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return id == slab.id
     }
 
-    public BlockPolishedBlackstoneBrickSlab(BlockState blockstate) {
-        super(blockstate, POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB);
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public String getSlabName() {
-        return "Polished Blackstone";
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return getId().equals(slab.getId());
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.POLISHED_BLACKSTONE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
 }

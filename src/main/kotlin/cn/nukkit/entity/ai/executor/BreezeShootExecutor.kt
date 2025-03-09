@@ -117,7 +117,7 @@ class BreezeShootExecutor(
         val fireballTransform = entity.transform
         val directionVector =
             entity.directionVector.multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
-        fireballTransform.setY(entity.position.up + entity.eyeHeight + directionVector.getY())
+        fireballTransform.setY(entity.position.y + entity.eyeHeight + directionVector.getY())
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()

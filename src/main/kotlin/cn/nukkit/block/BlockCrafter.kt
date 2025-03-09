@@ -1,21 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockCrafter extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRAFTER, CommonBlockProperties.CRAFTING, CommonBlockProperties.ORIENTATION, CommonBlockProperties.TRIGGERED_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockCrafter() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCrafter(BlockState blockstate) {
-        super(blockstate);
+class BlockCrafter @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    Block(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.CRAFTER,
+            CommonBlockProperties.CRAFTING,
+            CommonBlockProperties.ORIENTATION,
+            CommonBlockProperties.TRIGGERED_BIT
+        )
+            get() = Companion.field
     }
 }

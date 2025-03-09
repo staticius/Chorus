@@ -54,9 +54,9 @@ abstract class HugeTreesGenerator(
                         val blockPos = leavesPos.add(k.toDouble(), i.toDouble(), l.toDouble())
                         if (leavesPos.getY() + i < 0 || leavesPos.getY() + i >= 256 || !this.canGrowInto(
                                 worldIn.getBlockIdAt(
-                                    blockPos.south.toInt(),
-                                    blockPos.up.toInt(),
-                                    blockPos.west.toInt()
+                                    blockPos.x.toInt(),
+                                    blockPos.y.toInt(),
+                                    blockPos.z.toInt()
                                 )
                             )
                         ) {
@@ -80,7 +80,7 @@ abstract class HugeTreesGenerator(
      */
     private fun ensureDirtsUnderneath(pos: Vector3, worldIn: BlockManager): Boolean {
         val blockpos = pos.down()
-        val block = worldIn.getBlockIdAt(blockpos.south.toInt(), blockpos.up.toInt(), blockpos.west.toInt())
+        val block = worldIn.getBlockIdAt(blockpos.x.toInt(), blockpos.y.toInt(), blockpos.z.toInt())
 
         if ((block == GRASS_BLOCK || block == DIRT) && pos.getY() >= 2) {
             this.setDirtAt(worldIn, blockpos)
@@ -119,7 +119,7 @@ abstract class HugeTreesGenerator(
 
                 if (j * j + k * k <= i || l * l + i1 * i1 <= i || j * j + i1 * i1 <= i || l * l + k * k <= i) {
                     val blockpos = layerCenter.add(j.toDouble(), 0.0, k.toDouble())
-                    val block = worldIn.getBlockAt(blockpos.south.toInt(), blockpos.up.toInt(), blockpos.west.toInt())
+                    val block = worldIn.getBlockAt(blockpos.x.toInt(), blockpos.y.toInt(), blockpos.z.toInt())
 
                     if (block!!.isAir || block is BlockLeaves) {
                         worldIn.setBlockStateAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ, this.leavesMetadata)
@@ -139,7 +139,7 @@ abstract class HugeTreesGenerator(
             for (k in -width..width) {
                 if (j * j + k * k <= i) {
                     val blockpos = layerCenter.add(j.toDouble(), 0.0, k.toDouble())
-                    val block = worldIn.getBlockAt(blockpos.south.toInt(), blockpos.up.toInt(), blockpos.west.toInt())
+                    val block = worldIn.getBlockAt(blockpos.x.toInt(), blockpos.y.toInt(), blockpos.z.toInt())
                     if (block!!.isAir || block is BlockLeaves) {
                         worldIn.setBlockStateAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ, this.leavesMetadata)
                     }

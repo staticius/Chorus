@@ -1,80 +1,72 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
 
 /**
  * @author xtypr
  * @since 2015/11/24
  */
-public abstract class BlockCarpet extends BlockFlowable {
-    public BlockCarpet(BlockState blockState) {
-        super(blockState);
+abstract class BlockCarpet(blockState: BlockState?) : BlockFlowable(blockState) {
+    override val hardness: Double
+        get() = 0.1
+
+    override val resistance: Double
+        get() = 0.5
+
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return 0.1;
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    public double getResistance() {
-        return 0.5;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return false;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.0625;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Block down = this.down();
-        if (!down.isAir()) {
-            this.level.setBlock(block.position, this, true, true);
-            return true;
+    override var maxY: Double
+        get() = position.y + 0.0625
+        set(maxY) {
+            super.maxY = maxY
         }
-        return false;
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val down = this.down()
+        if (!down!!.isAir) {
+            level.setBlock(block.position, this, true, true)
+            return true
+        }
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (this.down().isAir()) {
-                this.level.useBreakOn(this.position);
+            if (down()!!.isAir) {
+                level.useBreakOn(this.position)
 
-                return Level.BLOCK_UPDATE_NORMAL;
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
-        return 0;
+        return 0
     }
 }

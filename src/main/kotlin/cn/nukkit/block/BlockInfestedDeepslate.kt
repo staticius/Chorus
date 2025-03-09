@@ -1,49 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-public class BlockInfestedDeepslate extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(INFESTED_DEEPSLATE, CommonBlockProperties.PILLAR_AXIS);
+class BlockInfestedDeepslate @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockState) {
+    override val name: String
+        get() = "Infested Deepslate"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 1.5
+
+    override val resistance: Double
+        get() = 0.75
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    public BlockInfestedDeepslate() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    public BlockInfestedDeepslate(BlockState blockState) {
-        super(blockState);
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.Companion.INFESTED_DEEPSLATE, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
-
-    @Override
-    public String getName() {
-        return "Infested Deepslate";
-    }
-    
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-    
-    @Override
-    public double getResistance() {
-        return 0.75;
-    }
-    
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
 }

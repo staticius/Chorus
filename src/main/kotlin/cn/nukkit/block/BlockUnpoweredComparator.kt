@@ -1,31 +1,22 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockUnpoweredComparator  extends BlockRedstoneComparator {
-    public static final BlockProperties PROPERTIES = new BlockProperties(UNPOWERED_COMPARATOR, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonBlockProperties.OUTPUT_LIT_BIT, CommonBlockProperties.OUTPUT_SUBTRACT_BIT);
+class BlockUnpoweredComparator @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockRedstoneComparator(blockstate) {
+    override val name: String
+        get() = "Comparator Block Unpowered"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val unpowered: BlockRedstoneComparator
+        get() = this
 
-    public BlockUnpoweredComparator() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockUnpoweredComparator(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Comparator Block Unpowered";
-    }
-
-    @Override
-    public BlockRedstoneComparator getUnpowered() {
-        return this;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.UNPOWERED_COMPARATOR,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OUTPUT_LIT_BIT,
+            CommonBlockProperties.OUTPUT_SUBTRACT_BIT
+        )
+            get() = Companion.field
     }
 }

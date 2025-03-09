@@ -1,44 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
+class BlockWarpedWartBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Warped Wart Block"
 
-public class BlockWarpedWartBlock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_WART_BLOCK);
+    override val toolType: Int
+        // TODO Fix it in https://github.com/PowerNukkit/PowerNukkit/pull/370, the same for BlockNetherWartBlock
+        get() = ItemTool.TYPE_HANDS_ONLY //TODO Correct type is hoe
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 1.0
+
+    override val hardness: Double
+        get() = 1.0
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WARPED_WART_BLOCK)
+            get() = Companion.field
     }
-
-    public BlockWarpedWartBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWarpedWartBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Warped Wart Block";
-    }
-
-    // TODO Fix it in https://github.com/PowerNukkit/PowerNukkit/pull/370, the same for BlockNetherWartBlock
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HANDS_ONLY; //TODO Correct type is hoe
-    }
-
-    @Override
-    public double getResistance() {
-        return 1;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1;
-    }
-
 }

@@ -1,26 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockStickyPistonArmCollision extends BlockPistonArmCollision {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STICKY_PISTON_ARM_COLLISION, CommonBlockProperties.FACING_DIRECTION);
+class BlockStickyPistonArmCollision @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockPistonArmCollision(blockstate) {
+    override val name: String
+        get() = "Sticky Piston Head"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockStickyPistonArmCollision() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockStickyPistonArmCollision(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Sticky Piston Head";
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STICKY_PISTON_ARM_COLLISION, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

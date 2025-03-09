@@ -1,78 +1,55 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.inventory.BlockInventoryHolder;
-import cn.nukkit.inventory.CartographyTableInventory;
-import cn.nukkit.inventory.Inventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.inventory.*
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import java.util.function.Supplier
 
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
+class BlockCartographyTable @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), BlockInventoryHolder {
+    override val name: String
+        get() = "Cartography Table"
 
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-public class BlockCartographyTable extends BlockSolid implements BlockInventoryHolder {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CARTOGRAPHY_TABLE);
+    override val resistance: Double
+        get() = 12.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 2.5
+
+    override val burnChance: Int
+        get() = 5
+
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    public BlockCartographyTable() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockCartographyTable(BlockState blockstate) {
-        super(blockstate);
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
+        player!!.addWindow(inventory!!)
+        return true
     }
 
-    @Override
-    public String getName() {
-        return "Cartography Table";
+    override fun blockInventorySupplier(): Supplier<Inventory?> {
+        return Supplier { CartographyTableInventory(this) }
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public double getResistance() {
-        return 12.5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 2.5;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
-    }
-    
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(isNotActivate(player)) return false;
-        player.addWindow(getInventory());
-        return true;
-    }
-
-    @Override
-    public Supplier<Inventory> blockInventorySupplier() {
-        return () -> new CartographyTableInventory(this);
+    companion object {
+        val properties: BlockProperties = BlockProperties(CARTOGRAPHY_TABLE)
+            get() = Companion.field
     }
 }

@@ -1,230 +1,215 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-
-import static cn.nukkit.block.property.CommonBlockProperties.*;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.CommonPropertyMap
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.level.Sound
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.utils.Faceable
 
 /**
  * @author Pub4Game
  * @since 26.12.2015
  */
-public class BlockEndPortalFrame extends BlockTransparent implements Faceable {
+class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), Faceable {
+    override val resistance: Double
+        get() = 3600000.0
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(END_PORTAL_FRAME,
-            MINECRAFT_CARDINAL_DIRECTION,
-            END_PORTAL_EYE_BIT);
+    override val hardness: Double
+        get() = -1.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val lightLevel: Int
+        get() = 1
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override val name: String
+        get() = "End Portal Frame"
+
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return player != null && player.isCreative
     }
 
-    public BlockEndPortalFrame() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockEndPortalFrame(BlockState blockstate) {
-        super(blockstate);
-    }
-    
-    @Override
-    public double getResistance() {
-        return 3600000;
-    }
-
-    @Override
-    public double getHardness() {
-        return -1;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 1;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public String getName() {
-        return "End Portal Frame";
-    }
-
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return player != null && player.isCreative();
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + (this.isEndPortalEye() ? 1 : 0.8125);
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public  boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride() {
-        return this.isEndPortalEye() ? 15 : 0;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (!this.isEndPortalEye() && player != null && item.getId().equals(Item.ENDER_EYE)) {
-            this.setEndPortalEye(true);
-            this.level.setBlock(this.position, this, true, true);
-            this.level.addSound(this.position, Sound.BLOCK_END_PORTAL_FRAME_FILL);
-            this.createPortal();
-            return true;
+    override var maxY: Double
+        get() = position.y + (if (this.isEndPortalEye) 1.0 else 0.8125)
+        set(maxY) {
+            super.maxY = maxY
         }
-        return false;
+
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    public void createPortal() {
-        Vector3 centerSpot = this.searchCenter(new ArrayList<>());
+    override fun canBePulled(): Boolean {
+        return false
+    }
+
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
+    }
+
+    override val comparatorInputOverride: Int
+        get() = if (this.isEndPortalEye) 15 else 0
+
+    override fun canBeActivated(): Boolean {
+        return true
+    }
+
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (!this.isEndPortalEye && player != null && item.id == Item.ENDER_EYE) {
+            this.isEndPortalEye = true
+            level.setBlock(this.position, this, true, true)
+            level.addSound(this.position, Sound.BLOCK_END_PORTAL_FRAME_FILL)
+            this.createPortal()
+            return true
+        }
+        return false
+    }
+
+    fun createPortal() {
+        val centerSpot = this.searchCenter(ArrayList())
         if (centerSpot != null) {
-            for (int x = -2; x <= 2; x++) {
-                for (int z = -2; z <= 2; z++) {
-                    if ((x == -2 || x == 2) && (z == -2 || z == 2))
-                        continue;
+            for (x in -2..2) {
+                for (z in -2..2) {
+                    if ((x == -2 || x == 2) && (z == -2 || z == 2)) continue
                     if (x == -2 || x == 2 || z == -2 || z == 2) {
-                        if (!this.checkFrame(this.level.getBlock(centerSpot.add(x, 0, z)), x, z)) {
-                            return;
+                        if (!this.checkFrame(
+                                level.getBlock(centerSpot.add(x.toDouble(), 0.0, z.toDouble())!!)!!,
+                                x,
+                                z
+                            )
+                        ) {
+                            return
                         }
                     }
                 }
             }
 
-            for (int x = -1; x <= 1; x++) {
-                for (int z = -1; z <= 1; z++) {
-                    Vector3 vector3 = centerSpot.add(x, 0, z);
-                    if (!this.level.getBlock(vector3).isAir()) {
-                        this.level.useBreakOn(vector3);
+            for (x in -1..1) {
+                for (z in -1..1) {
+                    val vector3 = centerSpot.add(x.toDouble(), 0.0, z.toDouble())
+                    if (!level.getBlock(vector3!!)!!.isAir) {
+                        level.useBreakOn(vector3)
                     }
-                    this.level.setBlock(vector3, Block.get(Block.END_PORTAL));
+                    level.setBlock(vector3, get(Block.END_PORTAL))
                 }
             }
         }
     }
 
-    private Vector3 searchCenter(List<Block> visited) {
-        for (int x = -2; x <= 2; x++) {
-            if (x == 0)
-                continue;
-            Block block = this.level.getBlock(this.position.add(x, 0, 0));
-            Block iBlock = this.level.getBlock(this.position.add(x * 2, 0, 0));
-            if (this.checkFrame(block) && !visited.contains(block)) {
-                visited.add(block);
-                if ((x == -1 || x == 1) && this.checkFrame(iBlock))
-                    return ((BlockEndPortalFrame) block).searchCenter(visited);
-                for (int z = -4; z <= 4; z++) {
-                    if (z == 0)
-                        continue;
-                    block = this.level.getBlock(this.position.add(x, 0, z));
-                    if (this.checkFrame(block)) {
-                        return this.position.add((double) x / 2, 0, (double) z / 2);
+    private fun searchCenter(visited: MutableList<Block?>): Vector3? {
+        for (x in -2..2) {
+            if (x == 0) continue
+            var block = level.getBlock(position.add(x.toDouble(), 0.0, 0.0)!!)
+            val iBlock = level.getBlock(position.add((x * 2).toDouble(), 0.0, 0.0)!!)
+            if (this.checkFrame(block!!) && !visited.contains(block)) {
+                visited.add(block)
+                if ((x == -1 || x == 1) && this.checkFrame(iBlock!!)) return (block as BlockEndPortalFrame).searchCenter(
+                    visited
+                )
+                for (z in -4..4) {
+                    if (z == 0) continue
+                    block = level.getBlock(position.add(x.toDouble(), 0.0, z.toDouble())!!)
+                    if (this.checkFrame(block!!)) {
+                        return position.add(x.toDouble() / 2, 0.0, z.toDouble() / 2)
                     }
                 }
             }
         }
-        for (int z = -2; z <= 2; z++) {
-            if (z == 0)
-                continue;
-            Block block = this.level.getBlock(this.position.add(0, 0, z));
-            Block iBlock = this.level.getBlock(this.position.add(0, 0, z * 2));
-            if (this.checkFrame(block) && !visited.contains(block)) {
-                visited.add(block);
-                if ((z == -1 || z == 1) && this.checkFrame(iBlock))
-                    return ((BlockEndPortalFrame) block).searchCenter(visited);
-                for (int x = -4; x <= 4; x++) {
-                    if (x == 0)
-                        continue;
-                    block = this.level.getBlock(this.position.add(x, 0, z));
-                    if (this.checkFrame(block)) {
-                        return this.position.add((double) x / 2, 0, (double) z / 2);
+        for (z in -2..2) {
+            if (z == 0) continue
+            var block = level.getBlock(position.add(0.0, 0.0, z.toDouble())!!)
+            val iBlock = level.getBlock(position.add(0.0, 0.0, (z * 2).toDouble())!!)
+            if (this.checkFrame(block!!) && !visited.contains(block)) {
+                visited.add(block)
+                if ((z == -1 || z == 1) && this.checkFrame(iBlock!!)) return (block as BlockEndPortalFrame).searchCenter(
+                    visited
+                )
+                for (x in -4..4) {
+                    if (x == 0) continue
+                    block = level.getBlock(position.add(x.toDouble(), 0.0, z.toDouble())!!)
+                    if (this.checkFrame(block!!)) {
+                        return position.add(x.toDouble() / 2, 0.0, z.toDouble() / 2)
                     }
                 }
             }
         }
-        return null;
+        return null
     }
 
-    private boolean checkFrame(Block block) {
-        return block.getId().equals(this.getId()) && ((BlockEndPortalFrame) block).isEndPortalEye();
+    private fun checkFrame(block: Block): Boolean {
+        return block.id == this.id && (block as BlockEndPortalFrame).isEndPortalEye
     }
 
-    private boolean checkFrame(Block block, int x, int z) {
-        return block.getId().equals(this.getId()) && (block.blockstate.specialValue() - 4) == (x == -2 ? 3 : x == 2 ? 1 : z == -2 ? 0 : z == 2 ? 2 : -1);
+    private fun checkFrame(block: Block, x: Int, z: Int): Boolean {
+        return block.id == this.id && (block.blockState!!.specialValue() - 4) == (if (x == -2) 3 else if (x == 2) 1 else if (z == -2) 0 else if (z == 2) 2 else -1)
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(this.getPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION));
-    }
+    override var blockFace: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]
+        set(face) {
+            this.setPropertyValue(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+            )
+        }
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        this.setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face));
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (player == null) {
-            setBlockFace(BlockFace.SOUTH);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        blockFace = if (player == null) {
+            BlockFace.SOUTH
         } else {
-            setBlockFace(player.getDirection().getOpposite());
+            player.getDirection()!!.getOpposite()
         }
-        this.level.setBlock(block.position, this, true);
-        return true;
+        level.setBlock(block.position, this, true)
+        return true
     }
 
-    public boolean isEndPortalEye() {
-        return getPropertyValue(END_PORTAL_EYE_BIT);
-    }
+    var isEndPortalEye: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.END_PORTAL_EYE_BIT)
+        set(endPortalEye) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.END_PORTAL_EYE_BIT,
+                endPortalEye
+            )
+        }
 
-    public void setEndPortalEye(boolean endPortalEye) {
-        setPropertyValue(END_PORTAL_EYE_BIT, endPortalEye);
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            END_PORTAL_FRAME,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.END_PORTAL_EYE_BIT
+        )
+            get() = Companion.field
     }
 }

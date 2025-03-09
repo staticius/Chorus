@@ -1,127 +1,119 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.SpongeType;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.CloudParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.network.protocol.LevelEventPacket;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemBlock
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Locator.x
+import cn.nukkit.level.Locator.y
+import cn.nukkit.level.Locator.z
+import cn.nukkit.math.BlockFace
+import java.util.*
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.concurrent.ThreadLocalRandom;
+class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(state) {
+    override val hardness: Double
+        get() = 0.6
 
-import static cn.nukkit.block.property.CommonBlockProperties.SPONGE_TYPE;
-import static cn.nukkit.block.property.enums.SpongeType.DRY;
-import static cn.nukkit.block.property.enums.SpongeType.WET;
+    override val resistance: Double
+        get() = 3.0
 
-public class BlockSponge extends BlockSolid {
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(SPONGE);
+    override val name: String
+        get() = "Sponge"
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if ((block is BlockFlowingWater || block.levelBlockAround.stream()
+                .anyMatch { b: Block? -> b is BlockFlowingWater }) && performWaterAbsorb(block)
+        ) {
+            level.setBlock(block.position, BlockWetSponge(), true, true)
 
-    public BlockSponge() {
-        this(PROPERTIES.getDefaultState());
-    }
+            val packet: LevelEventPacket = LevelEventPacket()
+            packet.evid = LevelEventPacket.EVENT_PARTICLE_DESTROY_BLOCK
+            packet.x = block.x.toFloat() + 0.5f
+            packet.y = block.y.toFloat() + 1f
+            packet.z = block.z.toFloat() + 0.5f
+            packet.data = get(BlockID.FLOWING_WATER).blockState!!.blockStateHash()
 
-    public BlockSponge(BlockState state) {
-        super(state);
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.6;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HOE;
-    }
-
-    @Override
-    public String getName() {
-        return "Sponge";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if ((block instanceof BlockFlowingWater || block.getLevelBlockAround().stream().anyMatch(b -> b instanceof BlockFlowingWater)) && performWaterAbsorb(block)) {
-            level.setBlock(block.position, new BlockWetSponge(), true, true);
-
-            LevelEventPacket packet = new LevelEventPacket();
-            packet.evid = LevelEventPacket.EVENT_PARTICLE_DESTROY_BLOCK;
-            packet.x = (float) block.getX() + 0.5f;
-            packet.y = (float) block.getY() + 1f;
-            packet.z = (float) block.getZ() + 0.5f;
-            packet.data = Block.get(BlockID.FLOWING_WATER).blockstate.blockStateHash();
-
-            for (int i = 0; i < 4; i++) {
-                level.addChunkPacket(this.position.getChunkX(), this.position.getChunkZ(), packet);
+            for (i in 0..3) {
+                level.addChunkPacket(position.chunkX, position.chunkZ, packet)
             }
 
-            return true;
+            return true
         }
 
-        return super.place(item, block, target, face, fx, fy, fz, player);
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockSponge());
+    override fun toItem(): Item? {
+        return ItemBlock(BlockSponge())
     }
 
-    private boolean performWaterAbsorb(Block block) {
-        Queue<Entry> entries = new ArrayDeque<>();
+    private fun performWaterAbsorb(block: Block): Boolean {
+        val entries: Queue<Entry> = ArrayDeque()
 
-        entries.add(new Entry(block, 0));
+        entries.add(Entry(block, 0))
 
-        Entry entry;
-        int waterRemoved = 0;
-        while (waterRemoved < 64 && (entry = entries.poll()) != null) {
-            for (BlockFace face : BlockFace.values()) {
-                Block layer0 = entry.block.getSideAtLayer(0, face);
-                Block layer1 = layer0.getLevelBlockAtLayer(1);
+        var entry: Entry
+        var waterRemoved = 0
+        while (waterRemoved < 64 && (entries.poll().also { entry = it }) != null) {
+            for (face in BlockFace.entries) {
+                val layer0 = entry.block.getSideAtLayer(0, face)
+                val layer1 = layer0!!.getLevelBlockAtLayer(1)
 
-                if (layer0 instanceof BlockFlowingWater) {
-                    this.level.setBlockStateAt(layer0.position.getFloorX(), layer0.position.getFloorY(), layer0.position.getFloorZ(), BlockAir.PROPERTIES.getDefaultState());
-                    this.level.updateAround(layer0.position);
-                    waterRemoved++;
+                if (layer0 is BlockFlowingWater) {
+                    level.setBlockStateAt(
+                        layer0.position.floorX,
+                        layer0.position.floorY,
+                        layer0.position.floorZ,
+                        BlockAir.properties.getDefaultState()
+                    )
+                    level.updateAround(layer0.position)
+                    waterRemoved++
                     if (entry.distance < 6) {
-                        entries.add(new Entry(layer0, entry.distance + 1));
+                        entries.add(Entry(layer0, entry.distance + 1))
                     }
-                } else if (layer1 instanceof BlockFlowingWater) {
-                    if (BlockID.KELP.equals(layer0.getId()) ||
-                            BlockID.SEAGRASS.equals(layer0.getId()) ||
-                            BlockID.SEA_PICKLE.equals(layer0.getId()) || layer0 instanceof BlockCoralFan) {
-                        layer0.level.useBreakOn(layer0.position);
+                } else if (layer1 is BlockFlowingWater) {
+                    if (BlockID.KELP == layer0.id ||
+                        BlockID.SEAGRASS == layer0.id ||
+                        BlockID.SEA_PICKLE == layer0.id || layer0 is BlockCoralFan
+                    ) {
+                        layer0.level.useBreakOn(layer0.position)
                     }
-                    this.level.setBlockStateAt(layer1.position.getFloorX(), layer1.position.getFloorY(), layer1.position.getFloorZ(), 1, BlockAir.PROPERTIES.getDefaultState());
-                    this.level.updateAround(layer1.position);
-                    waterRemoved++;
+                    level.setBlockStateAt(
+                        layer1.position.floorX,
+                        layer1.position.floorY,
+                        layer1.position.floorZ,
+                        1,
+                        BlockAir.properties.getDefaultState()
+                    )
+                    level.updateAround(layer1.position)
+                    waterRemoved++
                     if (entry.distance < 6) {
-                        entries.add(new Entry(layer1, entry.distance + 1));
+                        entries.add(Entry(layer1, entry.distance + 1))
                     }
                 }
             }
         }
 
-        return waterRemoved > 0;
+        return waterRemoved > 0
     }
 
-    private record Entry(Block block, int distance) {
+    @JvmRecord
+    private data class Entry(val block: Block, val distance: Int)
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SPONGE)
+            get() = Companion.field
     }
 }

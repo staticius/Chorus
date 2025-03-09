@@ -1,170 +1,166 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.utils.Faceable
 
 /**
  * @author xtypr
  * @since 2015/12/8
  */
-public class BlockLadder extends BlockTransparent implements Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LADDER, CommonBlockProperties.FACING_DIRECTION);
+class BlockLadder @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), Faceable {
+    override val name: String
+        get() = "Ladder"
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    public BlockLadder() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBeClimbed(): Boolean {
+        return true
     }
 
-    public BlockLadder(BlockState blockstate) {
-        super(blockstate);
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Ladder";
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
-    }
+    override val hardness: Double
+        get() = 0.4
 
-    @Override
-    public boolean canBeClimbed() {
-        return true;
-    }
+    override val resistance: Double
+        get() = 2.0
 
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
+    private var offMinX = 0.0
+    private var offMinZ = 0.0
+    private var offMaxX = 0.0
+    private var offMaxZ = 0.0
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.4;
-    }
-
-    @Override
-    public double getResistance() {
-        return 2;
-    }
-
-    private double offMinX;
-    private double offMinZ;
-    private double offMaxX;
-    private double offMaxZ;
-
-    private void calculateOffsets() {
-        double f = 0.1875;
-        switch (this.getBlockFace()) {
-            case NORTH -> {
-                this.offMinX = 0;
-                this.offMinZ = 0;
-                this.offMaxX = 1;
-                this.offMaxZ = f;
+    private fun calculateOffsets() {
+        val f = 0.1875
+        when (this.blockFace) {
+            BlockFace.NORTH -> {
+                this.offMinX = 0.0
+                this.offMinZ = 0.0
+                this.offMaxX = 1.0
+                this.offMaxZ = f
             }
-            case SOUTH -> {
-                this.offMinX = 0;
-                this.offMinZ = 1 - f;
-                this.offMaxX = 1;
-                this.offMaxZ = 1;
+
+            BlockFace.SOUTH -> {
+                this.offMinX = 0.0
+                this.offMinZ = 1 - f
+                this.offMaxX = 1.0
+                this.offMaxZ = 1.0
             }
-            case WEST -> {
-                this.offMinX = 0;
-                this.offMinZ = 0;
-                this.offMaxX = f;
-                this.offMaxZ = 1;
+
+            BlockFace.WEST -> {
+                this.offMinX = 0.0
+                this.offMinZ = 0.0
+                this.offMaxX = f
+                this.offMaxZ = 1.0
             }
-            case EAST -> {
-                this.offMinX = 1 - f;
-                this.offMinZ = 0;
-                this.offMaxX = 1;
-                this.offMaxZ = 1;
+
+            BlockFace.EAST -> {
+                this.offMinX = 1 - f
+                this.offMinZ = 0.0
+                this.offMaxX = 1.0
+                this.offMaxZ = 1.0
             }
-            default -> {
-                this.offMinX = 0;
-                this.offMinZ = 1;
-                this.offMaxX = 1;
-                this.offMaxZ = 1;
+
+            else -> {
+                this.offMinX = 0.0
+                this.offMinZ = 1.0
+                this.offMaxX = 1.0
+                this.offMaxZ = 1.0
             }
         }
     }
 
-    @Override
-    public double getMinX() {
-        calculateOffsets();
-        return this.position.south + offMinX;
-    }
+    override var minX: Double
+        get() {
+            calculateOffsets()
+            return position.x + offMinX
+        }
+        set(minX) {
+            super.minX = minX
+        }
 
-    @Override
-    public double getMinZ() {
-        calculateOffsets();
-        return this.position.west + offMinZ;
-    }
+    override var minZ: Double
+        get() {
+            calculateOffsets()
+            return position.z + offMinZ
+        }
+        set(minZ) {
+            super.minZ = minZ
+        }
 
-    @Override
-    public double getMaxX() {
-        calculateOffsets();
-        return this.position.south + offMaxX;
-    }
+    override var maxX: Double
+        get() {
+            calculateOffsets()
+            return position.x + offMaxX
+        }
+        set(maxX) {
+            super.maxX = maxX
+        }
 
-    @Override
-    public double getMaxZ() {
-        calculateOffsets();
-        return this.position.west + offMaxZ;
-    }
+    override var maxZ: Double
+        get() {
+            calculateOffsets()
+            return position.z + offMaxZ
+        }
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (target instanceof BlockLadder) {
-            var opposite = face.getOpposite();
-            var oppositeB = this.level.getBlock(target.position.add(face.unitVector));
-            var targetBlock = this.level.getBlock(target.position.add(face.unitVector.multiply(2)));
-            if (isSupportValid(targetBlock, opposite)) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (target is BlockLadder) {
+            val opposite = face.getOpposite()
+            val oppositeB = level.getBlock(target.position.add(face.unitVector)!!)
+            val targetBlock = level.getBlock(target.position.add(face.unitVector.multiply(2.0)!!)!!)
+            if (isSupportValid(targetBlock!!, opposite)) {
                 //不设置damage是因为level#useItemOn中有逻辑设置
-                this.level.setBlock(oppositeB.position, this, true, false);
-                return true;
+                level.setBlock(oppositeB!!.position, this, true, false)
+                return true
             }
         }
         if (face.horizontalIndex == -1 || !isSupportValid(target, face)) {
-            return false;
+            return false
         }
         //不设置damage是因为level#useItemOn中有逻辑设置
-        this.level.setBlock(block.position, this, true, true);
-        return true;
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    private boolean isSupportValid(Block support, BlockFace face) {
-        if (support instanceof BlockGlassStained || support instanceof BlockBlackStainedGlassPane
-                || support instanceof BlockLeaves
-        ) return false;
-        if (support.getId().equals(BlockID.BEACON)) return false;
-        return BlockLever.isSupportValid(support, face);
+    private fun isSupportValid(support: Block, face: BlockFace?): Boolean {
+        if (support is BlockGlassStained || support is BlockBlackStainedGlassPane
+            || support is BlockLeaves
+        ) return false
+        if (support.id == BlockID.BEACON) return false
+        return BlockLever.Companion.isSupportValid(support, face!!)
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         //debug
         /*for (double x = getMinX(); x <= getMaxX(); x += 0.2) {
             for (double y = getMinY(); y <= getMaxY(); y += 0.2) {
@@ -174,45 +170,42 @@ public class BlockLadder extends BlockTransparent implements Faceable {
             }
         }*/
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            BlockFace face = getBlockFace();
-            if (!isSupportValid(this.getSide(face), face.getOpposite())) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+            val face = blockFace
+            if (!isSupportValid(getSide(face!!)!!, face.getOpposite())) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
+            get(BlockID.LADDER, 0, 1)
+        )
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                Item.get(LADDER, 0, 1)
-        };
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+            .getOpposite()
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            calculateOffsets()
+        }
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION)).getOpposite();
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index);
-        calculateOffsets();
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    @Override
-    public boolean sticksToPiston() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LADDER, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

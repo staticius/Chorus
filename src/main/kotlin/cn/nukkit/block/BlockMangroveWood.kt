@@ -1,35 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.WoodType;
-import cn.nukkit.registry.Registries;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
 
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
+class BlockMangroveWood @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWood(blockstate) {
+    override val name: String
+        get() = "Mangrove Wood"
 
-public class BlockMangroveWood extends BlockWood {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MANGROVE_WOOD, CommonBlockProperties.PILLAR_AXIS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getWoodType(): WoodType {
+        throw UnsupportedOperationException()
     }
 
-    public BlockMangroveWood() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMangroveWood(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Mangrove Wood";
-    }
-
-    @Override
-    public WoodType getWoodType() {
-        throw new UnsupportedOperationException();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MANGROVE_WOOD, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

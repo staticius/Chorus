@@ -1,35 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+open class BlockPolishedBlackstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockBlackstone(blockstate) {
+    override val name: String
+        get() = "Polished Blackstone"
 
-public class BlockPolishedBlackstone extends BlockBlackstone {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_BLACKSTONE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockPolishedBlackstone() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 1.5
 
-    public BlockPolishedBlackstone(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Polished Blackstone";
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.POLISHED_BLACKSTONE)
+            get() = Companion.field
     }
 }

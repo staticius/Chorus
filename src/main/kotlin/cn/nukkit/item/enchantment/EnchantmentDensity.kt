@@ -23,7 +23,7 @@ class EnchantmentDensity : Enchantment(Enchantment.Companion.ID_DENSITY, "densit
     }
 
     override fun getDamageBonus(target: Entity, damager: Entity): Double {
-        val height = damager.highestPosition - damager.position.up
+        val height = damager.highestPosition - damager.position.y
         if (height >= 1.5f) {
             return height * 0.5f * getLevel()
         }

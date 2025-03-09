@@ -1,28 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
 
 
-import org.jetbrains.annotations.NotNull;
+class BlockPolishedBasalt @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockBasalt(blockstate) {
+    override val name: String
+        get() = "Polished Basalt"
 
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
-
-public class BlockPolishedBasalt extends BlockBasalt {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_BASALT, PILLAR_AXIS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockPolishedBasalt() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPolishedBasalt(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Polished Basalt";
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.POLISHED_BASALT, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

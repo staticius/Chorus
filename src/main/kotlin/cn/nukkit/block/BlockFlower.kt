@@ -1,92 +1,102 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.tags.BlockTags;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.ThreadLocalRandom;
+import cn.nukkit.Player
+import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import cn.nukkit.tags.BlockTags
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * The default is red flower, but there are other flower variants
  */
-public abstract class BlockFlower extends BlockFlowable implements BlockFlowerPot.FlowerPotBlock, Natural {
-    public BlockFlower(BlockState blockstate) {
-        super(blockstate);
+abstract class BlockFlower(blockstate: BlockState?) : BlockFlowable(blockstate), FlowerPotBlock,
+    Natural {
+    open fun canPlantOn(block: Block): Boolean {
+        return isSupportValid(block)
     }
 
-    public static boolean isSupportValid(Block block) {
-        return block.is(BlockTags.DIRT);
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val down = this.down()
+        if (canPlantOn(down!!)) {
+            level.setBlock(block.position, this, true)
 
-    public boolean canPlantOn(Block block) {
-        return isSupportValid(block);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Block down = this.down();
-        if (canPlantOn(down)) {
-            this.level.setBlock(block.position, this, true);
-
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!canPlantOn(down())) {
-                this.level.useBreakOn(this.position);
+            if (!canPlantOn(down()!!)) {
+                level.useBreakOn(this.position)
 
-                return Level.BLOCK_UPDATE_NORMAL;
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) { //Bone meal
-            if (player != null && (player.gamemode & 0x01) == 0) {
-                item.count--;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) { //Bone meal
+            if (player != null && (player.gamemode and 0x01) == 0) {
+                item.count--
             }
 
-            this.level.addParticle(new BoneMealParticle(this.position));
+            level.addParticle(BoneMealParticle(this.position))
 
-            for (int i = 0; i < 8; i++) {
-                Vector3 vec = this.position.add(
-                        ThreadLocalRandom.current().nextInt(-3, 4),
-                        ThreadLocalRandom.current().nextInt(-1, 2),
-                        ThreadLocalRandom.current().nextInt(-3, 4));
+            for (i in 0..7) {
+                val vec = position.add(
+                    ThreadLocalRandom.current().nextInt(-3, 4).toDouble(),
+                    ThreadLocalRandom.current().nextInt(-1, 2).toDouble(),
+                    ThreadLocalRandom.current().nextInt(-3, 4).toDouble()
+                )
 
-                if (level.getBlock(vec).getId().equals(AIR) && level.getBlock(vec.down()).getId().equals(GRASS_BLOCK) && vec.getY() >= level.getDimensionData().minHeight && vec.getY() < level.getDimensionData().maxHeight) {
+                if (level.getBlock(vec!!)!!.id == AIR && level.getBlock(vec.down()!!)!!.id == GRASS_BLOCK && vec.y >= level.dimensionData.minHeight && vec.y < level.dimensionData.maxHeight) {
                     if (ThreadLocalRandom.current().nextInt(10) == 0) {
-                        this.level.setBlock(vec, this.getUncommonFlower(), true);
+                        level.setBlock(vec, this.uncommonFlower, true)
                     } else {
-                        this.level.setBlock(vec, this, true);
+                        level.setBlock(vec, this, true)
                     }
                 }
             }
 
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
-    public Block getUncommonFlower() {
-        return get(DANDELION);
+    open val uncommonFlower: Block
+        get() = get(DANDELION)
+
+    companion object {
+        @JvmStatic
+        fun isSupportValid(block: Block): Boolean {
+            return block.`is`(BlockTags.DIRT)
+        }
     }
 }

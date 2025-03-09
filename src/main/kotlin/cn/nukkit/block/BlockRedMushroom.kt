@@ -1,36 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.level.generator.object.ObjectBigMushroom;
-import org.jetbrains.annotations.NotNull;
+class BlockRedMushroom @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockMushroom(blockstate) {
+    override val name: String
+        get() = "Red Mushroom"
 
-public class BlockRedMushroom extends BlockMushroom {
-    public static final BlockProperties PROPERTIES = new BlockProperties(RED_MUSHROOM);
+    override val lightLevel: Int
+        get() = 1
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val type: MushroomType
+        get() = ObjectBigMushroom.MushroomType.RED
 
-    public BlockRedMushroom() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRedMushroom(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Red Mushroom";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 1;
-    }
-
-    @Override
-    protected ObjectBigMushroom.MushroomType getType() {
-        return ObjectBigMushroom.MushroomType.RED;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.RED_MUSHROOM)
+            get() = Companion.field
     }
 }

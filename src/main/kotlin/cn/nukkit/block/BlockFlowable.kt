@@ -1,52 +1,37 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.math.AxisAlignedBB;
+import cn.nukkit.math.AxisAlignedBB
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public abstract class BlockFlowable extends BlockTransparent {
-    public BlockFlowable(BlockState blockState) {
-        super(blockState);
+abstract class BlockFlowable(blockState: BlockState?) : BlockTransparent(blockState) {
+    override fun canBeFlowedInto(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return true;
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return true;
+    override val hardness: Double
+        get() = 0.0
+
+    override val resistance: Double
+        get() = 0.0
+
+    override val isSolid: Boolean
+        get() = false
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public double getHardness() {
-        return 0;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    @Override
-    public boolean sticksToPiston() {
-        return false;
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return null;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return null
     }
 }

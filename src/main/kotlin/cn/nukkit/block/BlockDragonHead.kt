@@ -1,38 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemDragonHead;
-import cn.nukkit.item.ItemZombieHead;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-public class BlockDragonHead extends BlockHead {
+class BlockDragonHead(blockState: BlockState?) : BlockHead(blockState) {
+    override val name: String
+        get() = "Dragon Head"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(DRAGON_HEAD, CommonBlockProperties.FACING_DIRECTION);
-
-    public BlockDragonHead(BlockState blockState) {
-        super(blockState);
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
+            this.toItem()
+        )
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemDragonHead()
     }
 
-    @Override
-    public String getName() {
-        return "Dragon Head";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                this.toItem()
-        };
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemDragonHead();
+    companion object {
+        val properties: BlockProperties = BlockProperties(DRAGON_HEAD, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

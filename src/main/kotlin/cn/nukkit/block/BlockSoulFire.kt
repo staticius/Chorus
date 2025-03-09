@@ -1,40 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.level.Level;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.level.Level
 
-import static cn.nukkit.block.property.CommonBlockProperties.AGE_16;
+class BlockSoulFire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFire(blockstate) {
+    override val name: String
+        get() = "Soul Fire Block"
 
-public class BlockSoulFire extends BlockFire {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SOUL_FIRE, AGE_16);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockSoulFire() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSoulFire(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Soul Fire Block";
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            String downId = down().getId();
-            if (!downId.equals(Block.SOUL_SAND) && !downId.equals(Block.SOUL_SOIL)) {
-                this.level.setBlock(this.position, Block.get(FIRE).setPropertyValue(AGE_16, this.getAge()));
+            val downId = down()!!.id
+            if (downId != Block.SOUL_SAND && downId != Block.SOUL_SOIL) {
+                level.setBlock(
+                    this.position, get(BlockID.FIRE).setPropertyValue<Int, IntPropertyType>(
+                        CommonBlockProperties.AGE_16, this.age
+                    )
+                )
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SOUL_FIRE, CommonBlockProperties.AGE_16)
+            get() = Companion.field
     }
 }

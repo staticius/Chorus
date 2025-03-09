@@ -3,212 +3,179 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityShulkerBox;
-import cn.nukkit.inventory.ContainerInventory;
-import cn.nukkit.inventory.ShulkerBoxInventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.NBTIO;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.Tag;
-import cn.nukkit.tags.BlockTags;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.Set;
+import cn.nukkit.Player
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityShulkerBox
+import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.nbt.NBTIO.putItemHelper
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.nbt.tag.Tag
+import cn.nukkit.tags.BlockTags
+import java.util.Set
 
 /**
  * @author Reece Mackie
  */
+open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blockState),
+    BlockEntityHolder<BlockEntityShulkerBox?> {
+    override val blockEntityClass: Class<out BlockEntityShulkerBox>
+        get() = BlockEntityShulkerBox::class.java
 
-public class BlockUndyedShulkerBox extends BlockTransparent implements BlockEntityHolder<BlockEntityShulkerBox> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(UNDYED_SHULKER_BOX, Set.of(BlockTags.PNX_SHULKERBOX));
+    override val blockEntityType: String
+        get() = BlockEntity.SHULKER_BOX
 
-    public BlockUndyedShulkerBox(BlockState blockState) {
-        super(blockState);
+    override val hardness: Double
+        get() = 2.0
+
+    override val resistance: Double
+        get() = 10.0
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityShulkerBox> getBlockEntityClass() {
-        return BlockEntityShulkerBox.class;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.SHULKER_BOX;
-    }
+    open val shulkerBox: Item
+        get() = ItemBlock(this)
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
+    override fun toItem(): Item? {
+        val item = shulkerBox
 
-    @Override
-    public double getResistance() {
-        return 10;
-    }
+        if (this.level == null) return item
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
+        val tile = blockEntity ?: return item
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+        val inv = tile.realInventory
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    public Item getShulkerBox() {
-        return new ItemBlock(this);
-    }
-
-    @Override
-    public Item toItem() {
-        Item item = getShulkerBox();
-
-        if (this.level == null) return item;
-
-        BlockEntityShulkerBox tile = getBlockEntity();
-
-        if (tile == null) {
-            return item;
-        }
-
-        ShulkerBoxInventory inv = tile.getRealInventory();
-
-        if (!inv.isEmpty()) {
-            CompoundTag nbt = item.getNamedTag();
+        if (!inv!!.isEmpty) {
+            var nbt = item.namedTag
             if (nbt == null) {
-                nbt = new CompoundTag();
+                nbt = CompoundTag()
             }
 
-            ListTag<CompoundTag> items = new ListTag<>();
+            val items = ListTag<CompoundTag>()
 
-            for (int it = 0; it < inv.getSize(); it++) {
-                if (!inv.getItem(it).isNull()) {
-                    CompoundTag d = NBTIO.putItemHelper(inv.getItem(it), it);
-                    items.add(d);
+            for (it in 0..<inv.size) {
+                if (!inv.getItem(it).isNull) {
+                    val d = putItemHelper(inv.getItem(it), it)
+                    items.add(d)
                 }
             }
 
-            nbt.put("Items", items);
+            nbt.put("Items", items)
 
-            item.setCompoundTag(nbt);
+            item.setCompoundTag(nbt)
         }
 
         if (tile.hasName()) {
-            item.setCustomName(tile.getName());
+            item.setCustomName(tile.name)
         }
 
-        return item;
+        return item
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        CompoundTag nbt = new CompoundTag().putByte("facing", face.index);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val nbt = CompoundTag().putByte("facing", face.index)
 
         if (item.hasCustomName()) {
-            nbt.putString("CustomName", item.getCustomName());
+            nbt.putString("CustomName", item.customName)
         }
 
-        CompoundTag t = item.getNamedTag();
+        val t = item.namedTag
 
         // This code gets executed when the player has broken the shulker box and placed it back (©Kevims 2020)
         if (t != null && t.contains("Items")) {
-            nbt.putList("Items", t.getList("Items"));
+            nbt.putList("Items", t.getList("Items"))
         }
 
         // This code gets executed when the player has copied the shulker box in creative mode (©Kevims 2020)
         if (item.hasCustomBlockData()) {
-            Map<String, Tag> customData = item.getCustomBlockData().getTags();
-            for (Map.Entry<String, Tag> tag : customData.entrySet()) {
-                nbt.put(tag.getKey(), tag.getValue());
+            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            for ((key, value) in customData) {
+                nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;
+        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player == null) {
-            return false;
+            return false
         }
 
-        BlockEntityShulkerBox box = getOrCreateBlockEntity();
-        Block block = this.getSide(BlockFace.fromIndex(box.namedTag.getByte("facing")));
-        if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid) && !(block instanceof BlockFlowable)) {
-            return false;
+        val box = orCreateBlockEntity!!
+        val block = this.getSide(fromIndex(box.namedTag.getByte("facing").toInt())!!)
+        if ((block !is BlockAir) && (block !is BlockLiquid) && (block !is BlockFlowable)) {
+            return false
         }
 
-        player.addWindow(box.getInventory());
-        return true;
+        player.addWindow(box.getInventory())
+        return true
     }
 
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public int getComparatorInputOverride() {
-        BlockEntityShulkerBox be = getBlockEntity();
+    override val comparatorInputOverride: Int
+        get() {
+            val be = blockEntity ?: return 0
 
-        if (be == null) {
-            return 0;
+            return calculateRedstone(be.getInventory())
         }
 
-        return ContainerInventory.calculateRedstone(be.getInventory());
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean sticksToPiston() {
-        return false;
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
+    override val itemMaxStackSize: Int
+        get() = 1
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    public int getItemMaxStackSize() {
-        return 1;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.UNDYED_SHULKER_BOX, Set.of(BlockTags.PNX_SHULKERBOX))
+            get() = Companion.field
     }
 }

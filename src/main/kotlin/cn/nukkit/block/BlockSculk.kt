@@ -1,78 +1,52 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.item.enchantment.Enchantment
 
+class BlockSculk @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Sculk"
 
-public class BlockSculk extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SCULK);
+    override val hardness: Double
+        get() = 0.2
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 0.2
 
-    public BlockSculk() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
 
-    public BlockSculk(BlockState blockstate) {
-        super(blockstate);
-    }
-    @Override
-    public String getName() {
-        return "Sculk";
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public double getHardness() {
-        return 0.2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.2;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HOE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public double calculateBreakTime(@NotNull Item item, @Nullable Player player) {
-        if (canHarvest(item)) {
-            return super.calculateBreakTime(item, player);
+    override fun calculateBreakTime(item: Item, player: Player?): Double {
+        return if (canHarvest(item)) {
+            super.calculateBreakTime(item, player)
         } else {
-            return 1;
+            1.0
         }
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null) {
-            return super.getDrops(item);
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null) {
+            super.getDrops(item)
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public int getDropExp() {
-        return 1;
+    override val dropExp: Int
+        get() = 1
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SCULK)
+            get() = Companion.field
     }
 }

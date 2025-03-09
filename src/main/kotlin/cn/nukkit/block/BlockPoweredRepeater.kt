@@ -1,43 +1,34 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockPoweredRepeater extends BlockRedstoneRepeater {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POWERED_REPEATER, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonBlockProperties.REPEATER_DELAY);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockPoweredRepeater @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockRedstoneRepeater(blockstate) {
+    init {
+        isPowered = true
     }
 
-    public BlockPoweredRepeater() {
-        this(PROPERTIES.getDefaultState());
+    override val name: String
+        get() = "Powered Repeater"
+
+    public override fun getPowered(): Block {
+        return this
     }
 
-    public BlockPoweredRepeater(BlockState blockstate) {
-        super(blockstate);
-        isPowered = true;
+    public override fun getUnpowered(): Block {
+        val blockUnpoweredRepeater = BlockUnpoweredRepeater()
+        return blockUnpoweredRepeater.setPropertyValues(blockState!!.blockPropertyValues)
     }
 
-    @Override
-    public String getName() {
-        return "Powered Repeater";
-    }
+    override val lightLevel: Int
+        get() = 7
 
-    @Override
-    public Block getPowered() {
-        return this;
-    }
-
-    @Override
-    public Block getUnpowered() {
-        BlockUnpoweredRepeater blockUnpoweredRepeater = new BlockUnpoweredRepeater();
-        return blockUnpoweredRepeater.setPropertyValues(blockstate.getBlockPropertyValues());
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 7;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.POWERED_REPEATER,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.REPEATER_DELAY
+        )
+            get() = Companion.field
     }
 }

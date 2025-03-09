@@ -1,92 +1,71 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.event.block.BlockFadeEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.*
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
+abstract class BlockCoralBlock(blockstate: BlockState?) : BlockSolid(blockstate) {
+    open val isDead: Boolean
+        get() = false
 
-import static cn.nukkit.block.property.CommonBlockProperties.CORAL_COLOR;
-
-
-public abstract class BlockCoralBlock extends BlockSolid {
-    public BlockCoralBlock(BlockState blockstate) {
-        super(blockstate);
+    open fun toDead(): BlockCoralBlock {
+        return this
     }
 
-    public boolean isDead() {
-        return false;
+    override val hardness: Double
+        get() = 1.5
+
+    override val resistance: Double
+        get() = 6.0
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockCoralBlock toDead() {
-        return this;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6.0;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isDead()) {
-                this.level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40));
+            if (!isDead) {
+                level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40))
             }
-            return type;
+            return type
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (!isDead()) {
-                for (BlockFace face : BlockFace.values()) {
-                    if (getSideAtLayer(0, face) instanceof BlockFlowingWater || getSideAtLayer(1, face) instanceof BlockFlowingWater
-                            || getSideAtLayer(0, face) instanceof BlockFrostedIce || getSideAtLayer(1, face) instanceof BlockFrostedIce) {
-                        return type;
+            if (!isDead) {
+                for (face in BlockFace.entries) {
+                    if (getSideAtLayer(0, face) is BlockFlowingWater || getSideAtLayer(1, face) is BlockFlowingWater
+                        || getSideAtLayer(0, face) is BlockFrostedIce || getSideAtLayer(1, face) is BlockFrostedIce
+                    ) {
+                        return type
                     }
                 }
-                BlockFadeEvent event = new BlockFadeEvent(this, toDead());
-                if (!event.isCancelled()) {
-                    this.level.setBlock(this.position, event.newState, true, true);
+                val event: BlockFadeEvent = BlockFadeEvent(this, toDead())
+                if (!event.isCancelled) {
+                    level.setBlock(this.position, event.newState, true, true)
                 }
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() >= ItemTool.TIER_WOODEN) {
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isPickaxe && item.tier >= ItemTool.TIER_WOODEN) {
             if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null) {
-                return new Item[]{toItem()};
+                arrayOf(toItem())
             } else {
-                return new Item[]{toDead().toItem()};
+                arrayOf(toDead().toItem())
             }
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this);
+    override fun toItem(): Item? {
+        return ItemBlock(this)
     }
-
 }

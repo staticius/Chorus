@@ -1,87 +1,65 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.entity.Entity;
-import cn.nukkit.event.block.BlockFormEvent;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.Block.waterloggingLevel
+import cn.nukkit.entity.Entity
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
 
 /**
  * @author Pub4Game
  * @since 27.12.2015
  */
-public class BlockSoulSand extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SOUL_SAND);
+class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Soul Sand"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 0.5
+
+    override val resistance: Double
+        get() = 2.5
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
+
+    override var maxY: Double
+        get() = position.y + 1
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    public BlockSoulSand() {
-        this(PROPERTIES.getDefaultState());
+    override val isSoulSpeedCompatible: Boolean
+        get() = true
+
+    override fun onEntityCollide(entity: Entity) {
+        entity.motion.x *= 0.4
+        entity.motion.z *= 0.4
     }
 
-    public BlockSoulSand(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Soul Sand";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 2.5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 1;
-    }
-
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
-    }
-
-    @Override
-    public boolean isSoulSpeedCompatible() {
-        return true;
-    }
-
-    @Override
-    public void onEntityCollide(Entity entity) {
-        entity.motion.south *= 0.4d;
-        entity.motion.west *= 0.4d;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            Block up = up();
-            if (up instanceof BlockFlowingWater w && (w.getLiquidDepth() == 0 || w.getLiquidDepth() == 8)) {
-                BlockFormEvent event = new BlockFormEvent(up, new BlockBubbleColumn());
-                if (!event.isCancelled()) {
-                    if (event.newState.getWaterloggingLevel() > 0) {
-                        this.level.setBlock(up.position, 1, new BlockFlowingWater(), true, false);
+            val up = up()
+            if (up is BlockFlowingWater && (up.liquidDepth == 0 || up.liquidDepth == 8)) {
+                val event: BlockFormEvent = BlockFormEvent(up, BlockBubbleColumn())
+                if (!event.isCancelled) {
+                    if (event.newState.waterloggingLevel > 0) {
+                        level.setBlock(up.position, 1, BlockFlowingWater(), true, false)
                     }
-                    this.level.setBlock(up.position, 0, event.newState, true, true);
+                    level.setBlock(up.position, 0, event.newState, true, true)
                 }
             }
         }
-        return 0;
+        return 0
     }
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SOUL_SAND)
+            get() = Companion.field
+    }
 }

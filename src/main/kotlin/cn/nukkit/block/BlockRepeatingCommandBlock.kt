@@ -1,26 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockRepeatingCommandBlock extends BlockCommandBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(REPEATING_COMMAND_BLOCK, CommonBlockProperties.CONDITIONAL_BIT, CommonBlockProperties.FACING_DIRECTION);
+class BlockRepeatingCommandBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockCommandBlock(blockstate) {
+    override val name: String
+        get() = "Repeating Command Block"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockRepeatingCommandBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRepeatingCommandBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Repeating Command Block";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.REPEATING_COMMAND_BLOCK,
+            CommonBlockProperties.CONDITIONAL_BIT,
+            CommonBlockProperties.FACING_DIRECTION
+        )
+            get() = Companion.field
     }
 }

@@ -1,133 +1,129 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.MinecraftVerticalHalf;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.registry.Registries;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
+import cn.nukkit.registry.Registries
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public abstract class BlockSlab extends BlockTransparent {
-    protected final BlockState doubleSlab;
+abstract class BlockSlab : BlockTransparent {
+    protected val doubleSlab: BlockState?
 
-    public BlockSlab(BlockState blockState, BlockState doubleSlab) {
-        super(blockState);
-        this.doubleSlab = doubleSlab;
+    constructor(blockState: BlockState?, doubleSlab: BlockState?) : super(blockState) {
+        this.doubleSlab = doubleSlab
     }
 
-    public BlockSlab(BlockState blockState, String doubleSlab) {
-        super(blockState);
-        this.doubleSlab = Registries.BLOCK.get(doubleSlab).getBlockState();
+    constructor(blockState: BlockState?, doubleSlab: String) : super(blockState) {
+        this.doubleSlab = Registries.BLOCK.get(doubleSlab)!!.blockState
     }
 
-    public abstract String getSlabName();
+    @JvmField
+    abstract val slabName: String
 
-    public abstract boolean canHarvestWithHand();
+    abstract override fun canHarvestWithHand(): Boolean
 
-    public abstract int getToolTier();
+    abstract override val toolTier: Int
 
-    public abstract int getToolType();
+    abstract override val toolType: Int
 
-    @Override
-    public String getName() {
-        return (isOnTop() ? "Upper " : "") + getSlabName() + " Slab";
+    override val name: String
+        get() = (if (isOnTop) "Upper " else "") + slabName + " Slab"
+
+    override var minY: Double
+        get() = if (isOnTop) position.y + 0.5 else position.y
+        set(minY) {
+            super.minY = minY
+        }
+
+    override var maxY: Double
+        get() = if (isOnTop) position.y + 1 else position.y + 0.5
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override val hardness: Double
+        get() = 2.0
+
+    override val resistance: Double
+        get() = (if (toolType == ItemTool.TYPE_PICKAXE) 6 else 3).toDouble()
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    var isOnTop: Boolean
+        get() = getPropertyValue<MinecraftVerticalHalf, EnumPropertyType<MinecraftVerticalHalf>>(CommonBlockProperties.MINECRAFT_VERTICAL_HALF) == MinecraftVerticalHalf.TOP
+        set(top) {
+            setPropertyValue<MinecraftVerticalHalf, EnumPropertyType<MinecraftVerticalHalf>>(
+                CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
+                if (top) MinecraftVerticalHalf.TOP else MinecraftVerticalHalf.BOTTOM
+            )
+        }
+
+    abstract fun isSameType(slab: BlockSlab): Boolean
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return side == BlockFace.UP && isOnTop || side == BlockFace.DOWN && !isOnTop
     }
 
-    @Override
-    public double getMinY() {
-        return isOnTop() ? this.position.up + 0.5 : this.position.up;
-    }
-
-    @Override
-    public double getMaxY() {
-        return isOnTop() ? this.position.up + 1 : this.position.up + 0.5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return getToolType() == ItemTool.TYPE_PICKAXE ? 6 : 3;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    public boolean isOnTop() {
-        return getPropertyValue(CommonBlockProperties.MINECRAFT_VERTICAL_HALF) == MinecraftVerticalHalf.TOP;
-    }
-
-    public void setOnTop(boolean top) {
-        setPropertyValue(CommonBlockProperties.MINECRAFT_VERTICAL_HALF, top ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM);
-    }
-
-    public abstract boolean isSameType(BlockSlab slab);
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return side == BlockFace.UP && isOnTop() || side == BlockFace.DOWN && !isOnTop();
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        setOnTop(false);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        isOnTop = false
         if (face == BlockFace.DOWN) {
-            if (target instanceof BlockSlab slab && slab.isOnTop() && isSameType((BlockSlab) target)) {
+            if (target is BlockSlab && target.isOnTop && isSameType(target)) {
+                level.setBlock(target.position, get(doubleSlab), true)
 
-                this.level.setBlock(target.position, Block.get(doubleSlab), true);
+                return true
+            } else if (block is BlockSlab && isSameType(block)) {
+                level.setBlock(block.position, get(doubleSlab), true)
 
-                return true;
-            } else if (block instanceof BlockSlab && isSameType((BlockSlab) block)) {
-                this.level.setBlock(block.position, Block.get(doubleSlab), true);
-
-                return true;
+                return true
             } else {
-                setOnTop(true);
+                isOnTop = true
             }
         } else if (face == BlockFace.UP) {
-            if (target instanceof BlockSlab slab && !slab.isOnTop() && isSameType((BlockSlab) target)) {
-                this.level.setBlock(target.position, Block.get(doubleSlab), true);
+            if (target is BlockSlab && !target.isOnTop && isSameType(target)) {
+                level.setBlock(target.position, get(doubleSlab), true)
 
-                return true;
-            } else if (block instanceof BlockSlab && isSameType((BlockSlab) block)) {
-                this.level.setBlock(block.position, Block.get(doubleSlab), true);
+                return true
+            } else if (block is BlockSlab && isSameType(block)) {
+                level.setBlock(block.position, get(doubleSlab), true)
 
-                return true;
+                return true
             }
             //TODO: check for collision
         } else {
-            if (block instanceof BlockSlab) {
-                if (isSameType((BlockSlab) block)) {
-                    this.level.setBlock(block.position, Block.get(doubleSlab), true);
+            if (block is BlockSlab) {
+                if (isSameType(block)) {
+                    level.setBlock(block.position, get(doubleSlab), true)
 
-                    return true;
+                    return true
                 }
 
-                return false;
+                return false
             } else {
                 if (fy > 0.5) {
-                    setOnTop(true);
+                    isOnTop = true
                 }
             }
         }
 
-        if (block instanceof BlockSlab && !isSameType((BlockSlab) block)) {
-            return false;
+        if (block is BlockSlab && !isSameType(block)) {
+            return false
         }
-        this.level.setBlock(block.position, this, true, true);
+        level.setBlock(block.position, this, true, true)
 
-        return true;
+        return true
     }
 }

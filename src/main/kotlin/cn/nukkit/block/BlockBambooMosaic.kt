@@ -1,45 +1,25 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
 
-import org.jetbrains.annotations.NotNull;
+class BlockBambooMosaic @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Bamboo Mosaic"
 
-public class BlockBambooMosaic extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_MOSAIC);
+    override val hardness: Double
+        get() = 2.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 15.0
 
-    public BlockBambooMosaic() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    public BlockBambooMosaic(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val burnChance: Int
+        get() = 5
 
-    public String getName() {
-        return "Bamboo Mosaic";
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 15;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BAMBOO_MOSAIC)
+            get() = Companion.field
     }
 }

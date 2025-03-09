@@ -1,37 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.WoodType;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
 
-public class BlockStrippedCherryLog extends BlockWoodStripped {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STRIPPED_CHERRY_LOG, CommonBlockProperties.PILLAR_AXIS);
+class BlockStrippedCherryLog @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockWoodStripped(blockstate) {
+    override val name: String
+        get() = "Stripped Cherry Log"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getStrippedState(): BlockState {
+        return BlockStrippedAcaciaLog.Companion.PROPERTIES.getDefaultState()
     }
 
-    public BlockStrippedCherryLog() {
-        this(PROPERTIES.getDefaultState());
+    override fun getWoodType(): WoodType {
+        throw UnsupportedOperationException()
     }
 
-    public BlockStrippedCherryLog(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Stripped Cherry Log";
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return BlockStrippedAcaciaLog.PROPERTIES.getDefaultState();
-    }
-
-    @Override
-    public WoodType getWoodType() {
-        throw new UnsupportedOperationException();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STRIPPED_CHERRY_LOG, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

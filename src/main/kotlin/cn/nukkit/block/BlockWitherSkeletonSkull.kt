@@ -1,50 +1,45 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.mob.monster.EntityWither;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemWitherSkeletonSkull;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.entity.mob.monster.EntityWither.Companion.checkAndSpawnWither
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
-public class BlockWitherSkeletonSkull extends BlockHead {
+class BlockWitherSkeletonSkull(blockState: BlockState?) : BlockHead(blockState) {
+    override val name: String
+        get() = "Wither Skeleton Skull"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(WITHER_SKELETON_SKULL, CommonBlockProperties.FACING_DIRECTION);
-
-    public BlockWitherSkeletonSkull(BlockState blockState) {
-        super(blockState);
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
+            this.toItem()
+        )
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public String getName() {
-        return "Wither Skeleton Skull";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                this.toItem()
-        };
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if(super.place(item, block, target, face, fx, fy, fz, player)) {
-            EntityWither.checkAndSpawnWither(this);
-            return true;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (super.place(item, block, target, face, fx, fy, fz, player)) {
+            EntityWither.checkAndSpawnWither(this)
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemWitherSkeletonSkull();
+    override fun toItem(): Item? {
+        return ItemWitherSkeletonSkull()
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.WITHER_SKELETON_SKULL, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

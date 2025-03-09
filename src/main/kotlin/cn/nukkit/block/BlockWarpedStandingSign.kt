@@ -1,33 +1,20 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemWarpedSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
 
-public class BlockWarpedStandingSign extends BlockStandingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION);
+class BlockWarpedStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockStandingSign(blockstate) {
+    override val wallSignId: String
+        get() = BlockWarpedWallSign.Companion.PROPERTIES.getIdentifier()
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemWarpedSign()
     }
 
-    public BlockWarpedStandingSign() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWarpedStandingSign(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getWallSignId() {
-        return BlockWarpedWallSign.PROPERTIES.getIdentifier();
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemWarpedSign();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.WARPED_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+            get() = Companion.field
     }
 }

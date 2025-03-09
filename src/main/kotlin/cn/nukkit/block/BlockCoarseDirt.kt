@@ -1,21 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockCoarseDirt extends BlockDirt {
-    public static final BlockProperties PROPERTIES = new BlockProperties(COARSE_DIRT);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockCoarseDirt() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCoarseDirt(BlockState blockstate) {
-        super(blockstate);
+class BlockCoarseDirt @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDirt(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(COARSE_DIRT)
+            get() = Companion.field
     }
 }

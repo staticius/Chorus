@@ -1,38 +1,22 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
+class BlockEndStoneBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDoubleSlabBase(blockstate) {
+    override val slabName: String
+        get() = "End Stone Brick"
 
-public class BlockEndStoneBrickDoubleSlab extends BlockDoubleSlabBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(END_STONE_BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+    override val singleSlab: BlockState
+        get() = BlockEndStoneBrickSlab.Companion.PROPERTIES.getDefaultState()
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    public BlockEndStoneBrickDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockEndStoneBrickDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getSlabName() {
-        return "End Stone Brick";
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockEndStoneBrickSlab.PROPERTIES.getDefaultState();
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(END_STONE_BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

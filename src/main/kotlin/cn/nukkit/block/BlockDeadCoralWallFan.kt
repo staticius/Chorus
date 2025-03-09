@@ -1,50 +1,43 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemBlock
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
 
-import static cn.nukkit.block.property.CommonBlockProperties.CORAL_DIRECTION;
+abstract class BlockDeadCoralWallFan(blockstate: BlockState?) : BlockCoralFanDead(blockstate) {
+    override val name: String
+        get() = "Dead " + super.name + " Wall Fan"
 
-public abstract class BlockDeadCoralWallFan extends BlockCoralFanDead {
-
-    public BlockDeadCoralWallFan(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Dead " + super.getName() + " Wall Fan";
-    }
-
-    @Override
-    public int onUpdate(int type) {
-        if (type == Level.BLOCK_UPDATE_RANDOM) {
-            return type;
+    override fun onUpdate(type: Int): Int {
+        return if (type == Level.BLOCK_UPDATE_RANDOM) {
+            type
         } else {
-            return super.onUpdate(type);
+            super.onUpdate(type)
         }
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        int face = getPropertyValue(CORAL_DIRECTION);
-        return switch (face) {
-            case 0 -> BlockFace.WEST;
-            case 1 -> BlockFace.EAST;
-            case 2 -> BlockFace.NORTH;
-            default -> BlockFace.SOUTH;
-        };
-    }
+    override var blockFace: BlockFace
+        get() {
+            val face =
+                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_DIRECTION)
+            return when (face) {
+                0 -> BlockFace.WEST
+                1 -> BlockFace.EAST
+                2 -> BlockFace.NORTH
+                else -> BlockFace.SOUTH
+            }
+        }
+        set(blockFace) {
+            super.blockFace = blockFace
+        }
 
-    @Override
-    public BlockFace getRootsFace() {
-        return getBlockFace().getOpposite();
-    }
+    override val rootsFace: BlockFace?
+        get() = blockFace.getOpposite()
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(isDead() ? getDeadCoralFan() : this);
+    override fun toItem(): Item? {
+        return ItemBlock(if (isDead) deadCoralFan else this)
     }
 }

@@ -1,30 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
+import cn.nukkit.item.ItemTool
 
-public abstract class BlockMushroomBlock extends BlockSolid {
+abstract class BlockMushroomBlock(blockState: BlockState?) : BlockSolid(blockState) {
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    public BlockMushroomBlock(BlockState blockState) {
-        super(blockState);
-    }
+    override val hardness: Double
+        get() = 0.2
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
+    override val resistance: Double
+        get() = 0.2
 
-    @Override
-    public double getHardness() {
-        return 0.2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.2;
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 }

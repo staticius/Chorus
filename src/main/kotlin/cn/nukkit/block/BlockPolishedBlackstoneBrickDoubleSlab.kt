@@ -1,36 +1,23 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockPolishedBlackstoneBrickDoubleSlab extends BlockPolishedBlackstoneDoubleSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+class BlockPolishedBlackstoneBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockPolishedBlackstoneDoubleSlab(blockstate) {
+    override val slabName: String
+        get() = "Polished Blackstone Brick"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val hardness: Double
+        get() = 2.0
 
-    public BlockPolishedBlackstoneBrickDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val singleSlab: BlockState?
+        get() = BlockPolishedBlackstoneBrickSlab.Companion.PROPERTIES.getDefaultState()
 
-    public BlockPolishedBlackstoneBrickDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getSlabName() {
-        return "Polished Blackstone Brick";
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockPolishedBlackstoneBrickSlab.PROPERTIES.getDefaultState();
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB,
+            CommonBlockProperties.MINECRAFT_VERTICAL_HALF
+        )
+            get() = Companion.field
     }
 }

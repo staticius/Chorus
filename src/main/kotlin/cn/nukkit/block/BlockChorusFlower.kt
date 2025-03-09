@@ -1,248 +1,229 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow;
-import cn.nukkit.entity.projectile.EntitySmallFireball;
-import cn.nukkit.entity.projectile.throwable.EntitySnowball;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.projectile.EntitySmallFireball
+import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.Locator
+import cn.nukkit.level.Sound
+import cn.nukkit.math.*
+import java.util.concurrent.ThreadLocalRandom
 
-import javax.annotation.Nullable;
-import java.util.concurrent.ThreadLocalRandom;
+class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate) {
+    override val name: String
+        get() = "Chorus Flower"
 
-import static cn.nukkit.block.property.CommonBlockProperties.AGE_6;
+    override val hardness: Double
+        get() = 0.4
 
-public class BlockChorusFlower extends BlockTransparent {
+    override val resistance: Double
+        get() = 0.4
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHORUS_FLOWER, AGE_6);
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockChorusFlower() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockChorusFlower(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Chorus Flower";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.4;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.4;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    private boolean isPositionValid() {
-        // Chorus flowers must be above end stone or chorus plant, or be above air and horizontally adjacent to exactly one chorus plant.
-        // If these conditions are not met, the block breaks without dropping anything.
-        Block down = down();
-        if (down.getId().equals(CHORUS_PLANT) || down.getId().equals(END_STONE)) {
-            return true;
-        }
-        if (!down.isAir()) {
-            return false;
-        }
-        boolean foundPlant = false;
-        for (BlockFace face : BlockFace.Plane.HORIZONTAL) {
-            Block side = getSide(face);
-            if (side.getId().equals(CHORUS_PLANT)) {
-                if (foundPlant) {
-                    return false;
-                }
-                foundPlant = true;
+    private val isPositionValid: Boolean
+        get() {
+            // Chorus flowers must be above end stone or chorus plant, or be above air and horizontally adjacent to exactly one chorus plant.
+            // If these conditions are not met, the block breaks without dropping anything.
+            val down = down()
+            if (down!!.id == CHORUS_PLANT || down.id == END_STONE) {
+                return true
             }
+            if (!down.isAir) {
+                return false
+            }
+            var foundPlant = false
+            for (face in BlockFace.Plane.HORIZONTAL) {
+                val side = getSide(face)
+                if (side!!.id == CHORUS_PLANT) {
+                    if (foundPlant) {
+                        return false
+                    }
+                    foundPlant = true
+                }
+            }
+
+            return foundPlant
         }
 
-        return foundPlant;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isPositionValid()) {
-                this.level.scheduleUpdate(this, 1);
-                return type;
+            if (!isPositionValid) {
+                level.scheduleUpdate(this, 1)
+                return type
             }
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            this.level.useBreakOn(this.position, null, null, true);
-            return type;
+            level.useBreakOn(this.position, null, null, true)
+            return type
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             // Check limit
-            if (this.up().isAir() && this.up().getY() <= level.getMaxHeight()) {
-                if (!isFullyAged()) {
-                    boolean growUp = false; // Grow upward?
-                    boolean ground = false; // Is on the ground directly?
-                    if (this.down().isAir() || this.down().getId().equals(END_STONE)) {
-                        growUp = true;
-                    } else if (this.down().getId().equals(CHORUS_PLANT)) {
-                        int height = 1;
-                        for (int y = 2; y < 6; y++) {
-                            if (this.down(y).getId().equals(CHORUS_PLANT)) {
-                                height++;
+            if (up()!!.isAir && up()!!.y <= level.maxHeight) {
+                if (!isFullyAged) {
+                    var growUp = false // Grow upward?
+                    var ground = false // Is on the ground directly?
+                    if (down()!!.isAir || down()!!.id == END_STONE) {
+                        growUp = true
+                    } else if (down()!!.id == CHORUS_PLANT) {
+                        var height = 1
+                        for (y in 2..5) {
+                            if (down(y)!!.id == CHORUS_PLANT) {
+                                height++
                             } else {
-                                if (this.down(y).getId().equals(END_STONE)) {
-                                    ground = true;
+                                if (down(y)!!.id == END_STONE) {
+                                    ground = true
                                 }
-                                break;
+                                break
                             }
                         }
-                        
-                        if (height < 2 || height <= ThreadLocalRandom.current().nextInt(ground ? 5 : 4)) {
-                            growUp = true;
+
+                        if (height < 2 || height <= ThreadLocalRandom.current().nextInt(if (ground) 5 else 4)) {
+                            growUp = true
                         }
                     }
-                    
+
+
                     // Grow Upward
-                    if (growUp && this.up(2).isAir() && isHorizontalAir(this.up())) {
-                        BlockChorusFlower block = (BlockChorusFlower) this.clone();
-                        block.position.up = this.position.up + 1;
-                        BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                        Server.getInstance().pluginManager.callEvent(ev);
-                        
-                        if (!ev.isCancelled()) {
-                            this.level.setBlock(this.position, Block.get(CHORUS_PLANT));
-                            this.level.setBlock(block.position, ev.newState);
-                            this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW);
+                    if (growUp && up(2)!!.isAir && isHorizontalAir(up()!!)) {
+                        val block = clone() as BlockChorusFlower
+                        block.position.y = position.y + 1
+                        val ev = BlockGrowEvent(this, block)
+                        instance!!.pluginManager.callEvent(ev)
+
+                        if (!ev.isCancelled) {
+                            level.setBlock(this.position, get(CHORUS_PLANT))
+                            level.setBlock(block.position, ev.newState!!)
+                            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_CHORUSFLOWER_GROW)
                         } else {
-                            return Level.BLOCK_UPDATE_RANDOM;
+                            return Level.BLOCK_UPDATE_RANDOM
                         }
-                    // Grow Horizontally
-                    } else if (!isFullyAged()) {
-                        for (int i = 0; i < ThreadLocalRandom.current().nextInt(ground ? 5 : 4); i++) {
-                            BlockFace face = BlockFace.Plane.HORIZONTAL.random();
-                            Block check = this.getSide(face);
-                            if (check.isAir() && check.down().isAir() && isHorizontalAirExcept(check, face.getOpposite())) {
-                                BlockChorusFlower block = (BlockChorusFlower) this.clone();
-                                block.position.south = check.position.south;
-                                block.position.up = check.position.up;
-                                block.position.west = check.position.west;
-                                block.setAge(getAge() + 1);
-                                BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                                Server.getInstance().pluginManager.callEvent(ev);
-                                
-                                if (!ev.isCancelled()) {
-                                    this.level.setBlock(this.position, Block.get(CHORUS_PLANT));
-                                    this.level.setBlock(block.position, ev.newState);
-                                    this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW);
+                        // Grow Horizontally
+                    } else if (!isFullyAged) {
+                        for (i in 0..<ThreadLocalRandom.current().nextInt(if (ground) 5 else 4)) {
+                            val face = BlockFace.Plane.HORIZONTAL.random()
+                            val check = this.getSide(face)
+                            if (check!!.isAir && check.down()!!.isAir && isHorizontalAirExcept(
+                                    check,
+                                    face.getOpposite()
+                                )
+                            ) {
+                                val block = clone() as BlockChorusFlower
+                                block.position.x = check.position.x
+                                block.position.y = check.position.y
+                                block.position.z = check.position.z
+                                block.age = age + 1
+                                val ev = BlockGrowEvent(this, block)
+                                instance!!.pluginManager.callEvent(ev)
+
+                                if (!ev.isCancelled) {
+                                    level.setBlock(this.position, get(CHORUS_PLANT))
+                                    level.setBlock(block.position, ev.newState!!)
+                                    level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_CHORUSFLOWER_GROW)
                                 } else {
-                                    return Level.BLOCK_UPDATE_RANDOM;
+                                    return Level.BLOCK_UPDATE_RANDOM
                                 }
                             }
                         }
-                    // Death
+                        // Death
                     } else {
-                        BlockChorusFlower block = (BlockChorusFlower) this.clone();
-                        block.setAge(getMaxAge());
-                        BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                        Server.getInstance().pluginManager.callEvent(ev);
-                        
-                        if (!ev.isCancelled()) {
-                            this.level.setBlock(block.position, ev.newState);
-                            this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_DEATH);
+                        val block = clone() as BlockChorusFlower
+                        block.age = maxAge
+                        val ev = BlockGrowEvent(this, block)
+                        instance!!.pluginManager.callEvent(ev)
+
+                        if (!ev.isCancelled) {
+                            level.setBlock(block.position, ev.newState!!)
+                            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_CHORUSFLOWER_DEATH)
                         } else {
-                            return Level.BLOCK_UPDATE_RANDOM;
+                            return Level.BLOCK_UPDATE_RANDOM
                         }
                     }
                 }
             } else {
-                return Level.BLOCK_UPDATE_RANDOM;
+                return Level.BLOCK_UPDATE_RANDOM
             }
         }
-        
-        return 0;
+
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (!isPositionValid()) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isPositionValid) {
+            return false
         }
-        return super.place(item, block, target, face, fx, fy, fz, player);
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{ this.toItem() };
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(this.toItem())
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public  boolean sticksToPiston() {
-        return false;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
-        if (projectile instanceof EntityArrow || projectile instanceof EntitySnowball || projectile instanceof EntitySmallFireball) {
-            this.level.useBreakOn(this.position);
-            return true;
+    override fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
+        if (projectile is EntityArrow || projectile is EntitySnowball || projectile is EntitySmallFireball) {
+            level.useBreakOn(this.position)
+            return true
         }
-        return super.onProjectileHit(projectile, locator, motion);
+        return super.onProjectileHit(projectile, locator, motion)
     }
 
-    public int getMaxAge() {
-        return AGE_6.getMax();
-    }
+    val maxAge: Int
+        get() = CommonBlockProperties.AGE_6.getMax()
 
-    public int getAge() {
-        return getPropertyValue(AGE_6);
-    }
+    var age: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_6)
+        set(age) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_6, age)
+        }
 
-    public void setAge(int age) {
-        setPropertyValue(AGE_6, age);
-    }
+    val isFullyAged: Boolean
+        get() = age >= maxAge
 
-    public boolean isFullyAged() {
-        return getAge() >= getMaxAge();
-    }
-
-    private boolean isHorizontalAir(Block block) {
-        for (BlockFace face : BlockFace.Plane.HORIZONTAL) {
-            if (!block.getSide(face).isAir()) {
-                return false;
+    private fun isHorizontalAir(block: Block): Boolean {
+        for (face in BlockFace.Plane.HORIZONTAL) {
+            if (!block.getSide(face)!!.isAir) {
+                return false
             }
         }
-        return true;
+        return true
     }
 
-    private boolean isHorizontalAirExcept(Block block, BlockFace except) {
-        for (BlockFace face : BlockFace.Plane.HORIZONTAL) {
+    private fun isHorizontalAirExcept(block: Block, except: BlockFace?): Boolean {
+        for (face in BlockFace.Plane.HORIZONTAL) {
             if (face != except) {
-                if (!block.getSide(face).isAir()) {
-                    return false;
+                if (!block.getSide(face)!!.isAir) {
+                    return false
                 }
             }
         }
-        return true;
+        return true
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHORUS_FLOWER, CommonBlockProperties.AGE_6)
+            get() = Companion.field
     }
 }

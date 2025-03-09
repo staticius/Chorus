@@ -1,90 +1,64 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemQuartz;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemQuartz
+import cn.nukkit.item.ItemTool
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.utils.random.NukkitRandom
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockQuartzOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Quartz Ore"
 
-public class BlockQuartzOre extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(QUARTZ_ORE);
+    override val hardness: Double
+        get() = 3.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 5.0
 
-    public BlockQuartzOre() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    public BlockQuartzOre(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public String getName() {
-        return "Quartz Ore";
-    }
-
-    @Override
-    public double getHardness() {
-        return 3;
-    }
-
-    @Override
-    public double getResistance() {
-        return 5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() >= getToolTier()) {
-            int count = 1;
-            Enchantment fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING);
-            if (fortune != null && fortune.getLevel() >= 1) {
-                int i = ThreadLocalRandom.current().nextInt(fortune.getLevel() + 2) - 1;
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (item.isPickaxe && item.tier >= toolTier) {
+            var count = 1
+            val fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
+            if (fortune != null && fortune.level >= 1) {
+                var i = ThreadLocalRandom.current().nextInt(fortune.level + 2) - 1
 
                 if (i < 0) {
-                    i = 0;
+                    i = 0
                 }
 
-                count = i + 1;
+                count = i + 1
             }
 
-            return new Item[]{
-                    new ItemQuartz(0, count)
-            };
+            return arrayOf(
+                ItemQuartz(0, count)
+            )
         } else {
-            return Item.EMPTY_ARRAY;
+            return Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public int getDropExp() {
-        return new NukkitRandom().nextInt(1, 5);
+    override val dropExp: Int
+        get() = NukkitRandom().nextInt(1, 5)
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.QUARTZ_ORE)
+            get() = Companion.field
     }
 }

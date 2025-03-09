@@ -1,126 +1,127 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.ThreadLocalRandom;
-
-import static cn.nukkit.block.property.CommonBlockProperties.GROWTH;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.min
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public abstract class BlockCrops extends BlockFlowable {
-    public static final int MINIMUM_LIGHT_LEVEL = 9;
+abstract class BlockCrops(blockState: BlockState?) : BlockFlowable(blockState) {
+    val maxGrowth: Int
+        get() = CommonBlockProperties.GROWTH.getMax()
 
-    public BlockCrops(BlockState blockState) {
-        super(blockState);
-    }
-
-    public int getMinimumLightLevel() {
-        return MINIMUM_LIGHT_LEVEL;
-    }
-
-    public int getMaxGrowth() {
-        return GROWTH.getMax();
-    }
-
-    public int getGrowth() {
-        return getPropertyValue(GROWTH);
-    }
-
-    public void setGrowth(int growth) {
-        setPropertyValue(GROWTH, growth);
-    }
-
-    public boolean isFullyGrown() {
-        return getGrowth() >= getMaxGrowth();
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (block.down().getId().equals(FARMLAND)) {
-            this.level.setBlock(block.position, this, true, true);
-            return true;
+    var growth: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH)
+        set(growth) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH, growth)
         }
-        return false;
+
+    val isFullyGrown: Boolean
+        get() = growth >= maxGrowth
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        //Bone meal
-        if (item.isFertilizer()) {
-            int max = getMaxGrowth();
-            int growth = getGrowth();
-            if (growth < max) {
-                BlockCrops block = (BlockCrops) this.clone();
-                growth += ThreadLocalRandom.current().nextInt(3) + 2;
-                block.setGrowth(Math.min(growth, max));
-                BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                Server.getInstance().pluginManager.callEvent(ev);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (block.down()!!.id == FARMLAND) {
+            level.setBlock(block.position, this, true, true)
+            return true
+        }
+        return false
+    }
 
-                if (ev.isCancelled()) {
-                    return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        //Bone meal
+        if (item.isFertilizer) {
+            val max = maxGrowth
+            var growth = growth
+            if (growth < max) {
+                val block = clone() as BlockCrops
+                growth += ThreadLocalRandom.current().nextInt(3) + 2
+                block.growth = min(growth.toDouble(), max.toDouble()).toInt()
+                val ev = BlockGrowEvent(this, block)
+                instance!!.pluginManager.callEvent(ev)
+
+                if (ev.isCancelled) {
+                    return false
                 }
 
-                this.level.setBlock(this.position, ev.newState, false, true);
-                this.level.addParticle(new BoneMealParticle(this.position));
+                level.setBlock(this.position, ev.newState!!, false, true)
+                level.addParticle(BoneMealParticle(this.position))
 
-                if (player != null && !player.isCreative()) {
-                    item.count--;
+                if (player != null && !player.isCreative) {
+                    item.count--
                 }
             }
 
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!this.down().getId().equals(FARMLAND)) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+            if (down()!!.id != FARMLAND) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (ThreadLocalRandom.current().nextInt(2) == 1 && level.getFullLight(this.position) >= getMinimumLightLevel()) {
-                int growth = getGrowth();
-                if (growth < getMaxGrowth()) {
-                    BlockCrops block = (BlockCrops) this.clone();
-                    block.setGrowth(growth + 1);
-                    BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                    Server.getInstance().pluginManager.callEvent(ev);
+            if (ThreadLocalRandom.current()
+                    .nextInt(2) == 1 && level.getFullLight(this.position) >= this.minimumLightLevel
+            ) {
+                val growth = growth
+                if (growth < maxGrowth) {
+                    val block = clone() as BlockCrops
+                    block.growth = growth + 1
+                    val ev = BlockGrowEvent(this, block)
+                    instance!!.pluginManager.callEvent(ev)
 
-                    if (!ev.isCancelled()) {
-                        this.level.setBlock(this.position, ev.newState, false, true);
+                    if (!ev.isCancelled) {
+                        level.setBlock(this.position, ev.newState!!, false, true)
                     } else {
-                        return Level.BLOCK_UPDATE_RANDOM;
+                        return Level.BLOCK_UPDATE_RANDOM
                     }
                 }
             } else {
-                return Level.BLOCK_UPDATE_RANDOM;
+                return Level.BLOCK_UPDATE_RANDOM
             }
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
-    }
+    override val isFertilizable: Boolean
+        get() = true
 
+    companion object {
+        val minimumLightLevel: Int = 9
+            get() = Companion.field
+    }
 }

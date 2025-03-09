@@ -83,8 +83,8 @@ class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTa
             LevelEventPacket.EVENT_SOUND_TELEPORT_ENDERPEARL
         )
         val destination: Vector3 = Vector3(
-            NukkitMath.floorDouble(position.south) + 0.5,
-            position.up + 1, NukkitMath.floorDouble(position.west) + 0.5
+            NukkitMath.floorDouble(position.x) + 0.5,
+            position.y + 1, NukkitMath.floorDouble(position.z) + 0.5
         )
         shootingEntity!!.teleport(destination, TeleportCause.ENDER_PEARL)
         if (((shootingEntity as Player).gamemode and 0x01) == 0) {

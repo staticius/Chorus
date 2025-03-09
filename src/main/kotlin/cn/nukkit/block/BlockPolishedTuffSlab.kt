@@ -1,62 +1,40 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockPolishedTuffSlab extends BlockSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_TUFF_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockPolishedTuffSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSlab(blockstate, BlockID.POLISHED_TUFF_DOUBLE_SLAB) {
+    override fun getSlabName(): String {
+        return "Polished Tuff"
     }
 
-    public BlockPolishedTuffSlab() {
-        this(PROPERTIES.getDefaultState());
+    override val name: String
+        get() = "Polished Tuff Slab"
+
+    override val resistance: Double
+        get() = 6.0
+
+    override val hardness: Double
+        get() = 1.5
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockPolishedTuffSlab(BlockState blockstate) {
-        super(blockstate, POLISHED_TUFF_DOUBLE_SLAB);
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return id == slab.id
     }
 
-    @Override
-    public String getSlabName() {
-        return "Polished Tuff";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public String getName() {
-        return "Polished Tuff Slab";
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return getId().equals(slab.getId());
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.POLISHED_TUFF_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

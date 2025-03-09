@@ -1,25 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockCrackedDeepslateTiles @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDeepslateTiles(blockstate) {
+    override val name: String
+        get() = "Cracked Deepslate Tiles"
 
-public class BlockCrackedDeepslateTiles extends BlockDeepslateTiles {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRACKED_DEEPSLATE_TILES);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockCrackedDeepslateTiles() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCrackedDeepslateTiles(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Cracked Deepslate Tiles";
+    companion object {
+        val properties: BlockProperties = BlockProperties(CRACKED_DEEPSLATE_TILES)
+            get() = Companion.field
     }
 }

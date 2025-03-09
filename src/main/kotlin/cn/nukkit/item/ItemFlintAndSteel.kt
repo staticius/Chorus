@@ -41,9 +41,9 @@ class ItemFlintAndSteel @JvmOverloads constructor(meta: Int = 0, count: Int = 1)
             }
 
             val fire = Block.get(BlockID.FIRE) as BlockFire
-            fire.position.south = block.position.south
-            fire.position.up = block.position.up
-            fire.position.west = block.position.west
+            fire.position.x = block.position.x
+            fire.position.y = block.position.y
+            fire.position.z = block.position.z
             fire.level = level
 
             if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {

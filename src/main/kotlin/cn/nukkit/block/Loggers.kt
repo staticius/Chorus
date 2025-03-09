@@ -15,18 +15,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package cn.nukkit.block
 
-package cn.nukkit.block;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import cn.nukkit.block.BlockEntityHolder
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 /**
  * @author joserobjr
  * @since 2021-01-15
  */
-final class Loggers {
-    private Loggers(){ throw new UnsupportedOperationException(); }
+internal class Loggers private constructor() {
+    init {
+        throw UnsupportedOperationException()
+    }
 
-    static final Logger logBlocKEntityHolder = LogManager.getLogger(BlockEntityHolder.class);
+    companion object {
+        val logBlocKEntityHolder: Logger = LogManager.getLogger(
+            BlockEntityHolder::class.java
+        )
+    }
 }

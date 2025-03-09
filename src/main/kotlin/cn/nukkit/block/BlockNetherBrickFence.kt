@@ -1,61 +1,36 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockNetherBrickFence extends BlockFence {
-    public static final BlockProperties PROPERTIES = new BlockProperties(NETHER_BRICK_FENCE);
+class BlockNetherBrickFence @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFence(blockstate) {
+    override val name: String
+        get() = "Nether Brick Fence"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val hardness: Double
+        get() = 2.0
+
+    override val resistance: Double
+        get() = 6.0
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockNetherBrickFence() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val burnChance: Int
+        get() = 0
 
-    public BlockNetherBrickFence(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val burnAbility: Int
+        get() = 0
 
-    @Override
-    public String getName() {
-        return "Nether Brick Fence";
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 0;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 0;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.NETHER_BRICK_FENCE)
+            get() = Companion.field
     }
 }

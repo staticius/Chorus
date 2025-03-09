@@ -1,38 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-
-public class BlockAndesiteDoubleSlab extends BlockDoubleSlabBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(ANDESITE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockAndesiteDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDoubleSlabBase(blockstate) {
+    override fun getSlabName(): String {
+        return "Andesite"
     }
 
-    public BlockAndesiteDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
+    override fun getSingleSlab(): BlockState {
+        return BlockAndesiteSlab.Companion.PROPERTIES.getDefaultState()
     }
 
-    public BlockAndesiteDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public String getSlabName() {
-        return "Andesite";
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockAndesiteSlab.PROPERTIES.getDefaultState();
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(ANDESITE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

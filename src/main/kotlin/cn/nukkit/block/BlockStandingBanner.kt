@@ -1,216 +1,191 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityBanner;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.CompassRoseDirection;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.IntTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.Tag;
-import cn.nukkit.utils.DyeColor;
-import cn.nukkit.utils.Faceable;
-import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.GROUND_SIGN_DIRECTION;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntity.Companion.getDefaultCompound
+import cn.nukkit.blockentity.BlockEntityBanner.baseColor
+import cn.nukkit.blockentity.BlockEntityBanner.dyeColor
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.namedTag
+import cn.nukkit.item.ItemDye.dyeColor
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.CompassRoseDirection.Companion.from
+import cn.nukkit.nbt.tag.CompoundTag.getInt
+import cn.nukkit.nbt.tag.CompoundTag.getList
+import cn.nukkit.nbt.tag.CompoundTag.put
+import cn.nukkit.nbt.tag.ListTag.size
+import cn.nukkit.utils.BlockColor.equals
+import lombok.extern.slf4j.Slf4j
+import kotlin.math.floor
 
 @Slf4j
-public class BlockStandingBanner extends BlockTransparent implements Faceable, BlockEntityHolder<BlockEntityBanner> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STANDING_BANNER, GROUND_SIGN_DIRECTION);
+open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBanner?> {
+    override val blockEntityType: String
+        get() = BlockEntity.BANNER
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val blockEntityClass: Class<out Any>
+        get() = BlockEntityBanner::class.java
+
+    override val hardness: Double
+        get() = 1.0
+
+    override val resistance: Double
+        get() = 5.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override val name: String
+        get() = "Banner"
+
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return null
     }
 
-    public BlockStandingBanner() {
-        this(PROPERTIES.getDefaultState());
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    public BlockStandingBanner(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.BANNER;
-    }
-
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityBanner> getBlockEntityClass() {
-        return BlockEntityBanner.class;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public String getName() {
-        return "Banner";
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return null;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return true;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (face == BlockFace.DOWN) {
-            return false;
+            return false
         }
 
-        Block layer0 = level.getBlock(this.position, 0);
-        Block layer1 = level.getBlock(this.position, 1);
+        val layer0 = level.getBlock(this.position, 0)
+        val layer1 = level.getBlock(this.position, 1)
 
         if (face == BlockFace.UP) {
-            CompassRoseDirection direction = CompassRoseDirection.from(
-                    (int) Math.floor((((player != null ? player.rotation.yaw : 0) + 180) * 16 / 360) + 0.5) & 0x0f
-            );
-            setDirection(direction);
-            if (!this.level.setBlock(block.position, this, true)) {
-                return false;
+            val direction: CompassRoseDirection = CompassRoseDirection.from(
+                floor((((player?.rotation?.yaw ?: 0.0) + 180) * 16 / 360) + 0.5).toInt() and 0x0f
+            )
+            this.direction = direction
+            if (!level.setBlock(block.position, this, true)) {
+                return false
             }
         } else {
-            BlockStandingBanner wall = (BlockStandingBanner) Block.get(BlockID.WALL_BANNER);
-            wall.setBlockFace(face);
-            if (!this.level.setBlock(block.position, wall, true)) {
-                return false;
+            val wall = get(BlockID.WALL_BANNER) as BlockStandingBanner
+            wall.blockFace = face
+            if (!level.setBlock(block.position, wall, true)) {
+                return false
             }
         }
 
-        CompoundTag nbt = BlockEntity.getDefaultCompound(this.position, BlockEntity.BANNER)
-                .putInt("Base", item.getDamage() & 0xf);
+        val nbt: CompoundTag? = getDefaultCompound(this.position, BlockEntity.BANNER)
+            .putInt("Base", item.damage and 0xf)
 
-        Tag type = item.getNamedTagEntry("Type");
-        if (type instanceof IntTag) {
-            nbt.put("Type", type);
+        val type = item.getNamedTagEntry("Type")
+        if (type is IntTag) {
+            nbt.put("Type", type)
         }
-        Tag patterns = item.getNamedTagEntry("Patterns");
-        if (patterns instanceof ListTag) {
-            nbt.put("Patterns", patterns);
+        val patterns = item.getNamedTagEntry("Patterns")
+        if (patterns is ListTag<*>) {
+            nbt.put("Patterns", patterns)
         }
 
         try {
-            createBlockEntity(nbt);
-            return true;
-        } catch (Exception e) {
-            log.error("Failed to create the block entity {} at {}", getBlockEntityType(), getLocator(), e);
-            level.setBlock(layer0.position, 0, layer0, true);
-            level.setBlock(layer0.position, 1, layer1, true);
-            return false;
+            createBlockEntity(nbt)
+            return true
+        } catch (e: Exception) {
+            BlockStandingBanner.log.error("Failed to create the block entity {} at {}", blockEntityType, locator, e)
+            level.setBlock(layer0!!.position, 0, layer0, true)
+            level.setBlock(layer0.position, 1, layer1!!, true)
+            return false
         }
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (this.down().getId() == BlockID.AIR) {
-                this.level.useBreakOn(this.position);
+            if (down()!!.id === BlockID.AIR) {
+                level.useBreakOn(this.position)
 
-                return Level.BLOCK_UPDATE_NORMAL;
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public @NotNull String getItemId() {
-        return ItemID.BANNER;
-    }
+    override val itemId: String
+        get() = ItemID.BANNER
 
-    @Override
-    public Item toItem() {
-        BlockEntityBanner banner = getBlockEntity();
-        Item item = Item.get(ItemID.BANNER);
+    override fun toItem(): Item? {
+        val banner: BlockEntityBanner? = blockEntity
+        val item = Item.get(ItemID.BANNER)
         if (banner != null) {
-            item.setDamage(banner.getBaseColor() & 0xf);
-            int type = banner.namedTag.getInt("Type");
+            item.damage = banner.baseColor and 0xf
+            val type: Int = banner.namedTag.getInt("Type")
             if (type > 0) {
-                item.setNamedTag((item.hasCompoundTag() ? item.getNamedTag() : new CompoundTag())
-                        .putInt("Type", type));
+                item.setNamedTag(
+                    (if (item.hasCompoundTag()) item.namedTag else CompoundTag())
+                        .putInt("Type", type)
+                )
             }
-            ListTag<CompoundTag> patterns = banner.namedTag.getList("Patterns", CompoundTag.class);
+            val patterns: ListTag<CompoundTag?> =
+                banner.namedTag.getList<CompoundTag>("Patterns", CompoundTag::class.java)
             if (patterns.size() > 0) {
-                item.setNamedTag((item.hasCompoundTag() ? item.getNamedTag() : new CompoundTag())
-                        .putList("Patterns", patterns));
+                item.setNamedTag(
+                    (if (item.hasCompoundTag()) item.namedTag else CompoundTag())
+                        .putList("Patterns", patterns)
+                )
             }
         }
-        return item;
+        return item
     }
 
-    public CompassRoseDirection getDirection() {
-        return CompassRoseDirection.from(getPropertyValue(GROUND_SIGN_DIRECTION));
-    }
-
-    public void setDirection(CompassRoseDirection direction) {
-        setPropertyValue(GROUND_SIGN_DIRECTION, direction.index);
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return getDirection().closestBlockFace;
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setDirection(face.getCompassRoseDirection());
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    public DyeColor getDyeColor() {
-        if (this.level != null) {
-            BlockEntityBanner blockEntity = getBlockEntity();
-
-            if (blockEntity != null) {
-                return blockEntity.getDyeColor();
-            }
+    open var direction: CompassRoseDirection
+        get() = CompassRoseDirection.from(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROUND_SIGN_DIRECTION))
+        set(direction) {
+            setPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.GROUND_SIGN_DIRECTION,
+                direction.index
+            )
         }
 
-        return DyeColor.WHITE;
+    var blockFace: BlockFace?
+        get() = direction.closestBlockFace
+        set(face) {
+            direction = face!!.compassRoseDirection
+        }
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean isSolid() {
-        return false;
+    val dyeColor: DyeColor
+        get() {
+            if (this.level != null) {
+                val blockEntity: BlockEntityBanner? = blockEntity
+
+                if (blockEntity != null) {
+                    return blockEntity.dyeColor
+                }
+            }
+
+            return DyeColor.WHITE
+        }
+
+    override val isSolid: Boolean
+        get() = false
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STANDING_BANNER, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+            get() = Companion.field
     }
 }

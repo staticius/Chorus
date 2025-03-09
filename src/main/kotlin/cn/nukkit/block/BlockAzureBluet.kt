@@ -1,21 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockAzureBluet : BlockFlower {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockAzureBluet extends BlockFlower {
-     public static final BlockProperties PROPERTIES = new BlockProperties(AZURE_BLUET);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-     @Override
-     @NotNull
-     public BlockProperties getProperties() {
-        return PROPERTIES;
-     }
-
-    public BlockAzureBluet() {
-        super(PROPERTIES.getDefaultState());
+    companion object {
+        val properties: BlockProperties = BlockProperties(AZURE_BLUET)
+            get() = Companion.field
     }
-
-     public BlockAzureBluet(BlockState blockstate) {
-         super(blockstate);
-     }
 }

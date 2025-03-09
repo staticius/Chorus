@@ -1,21 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockCornflower : BlockFlower {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockCornflower extends BlockFlower {
-     public static final BlockProperties PROPERTIES = new BlockProperties(CORNFLOWER);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-     @Override
-     @NotNull
-     public BlockProperties getProperties() {
-        return PROPERTIES;
-     }
-
-    public BlockCornflower() {
-        super(PROPERTIES.getDefaultState());
+    companion object {
+        val properties: BlockProperties = BlockProperties(CORNFLOWER)
+            get() = Companion.field
     }
-
-     public BlockCornflower(BlockState blockstate) {
-         super(blockstate);
-     }
 }

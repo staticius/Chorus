@@ -1,53 +1,32 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.item.ItemID
+import cn.nukkit.item.ItemTool
 
-public class BlockCopperOre extends BlockOre {
-    public static final BlockProperties PROPERTIES = new BlockProperties(COPPER_ORE);
+open class BlockCopperOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockOre(blockstate) {
+    override val name: String
+        get() = "Copper Ore"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolTier: Int
+        get() = ItemTool.TIER_STONE
+
+    override fun getRawMaterial(): String? {
+        return ItemID.RAW_COPPER
     }
 
-    public BlockCopperOre() {
-        this(PROPERTIES.getDefaultState());
+    override fun getDropMultiplier(): Float {
+        return 3f
     }
 
-    public BlockCopperOre(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val hardness: Double
+        get() = 3.0
 
-    @Override
-    public String getName() {
-        return "Copper Ore";
-    }
+    override val resistance: Double
+        get() = 3.0
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_STONE;
-    }
-
-    @Override
-    protected @Nullable String getRawMaterial() {
-        return ItemID.RAW_COPPER;
-    }
-
-    @Override
-    protected float getDropMultiplier() {
-        return 3;
-    }
-
-    @Override
-    public double getHardness() {
-        return 3;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
+    companion object {
+        val properties: BlockProperties = BlockProperties(COPPER_ORE)
+            get() = Companion.field
     }
 }

@@ -10,7 +10,7 @@ import cn.nukkit.network.protocol.LevelEventPacket
  * @since 2015/11/21
  */
 class ItemBreakParticle(pos: Vector3, item: Item) :
-    Particle(pos.south, pos.up, pos.west) {
+    Particle(pos.x, pos.y, pos.z) {
     private val data: Int
 
     init {
@@ -20,9 +20,9 @@ class ItemBreakParticle(pos: Vector3, item: Item) :
     override fun encode(): Array<DataPacket> {
         val packet = LevelEventPacket()
         packet.evid = (LevelEventPacket.EVENT_ADD_PARTICLE_MASK or Particle.Companion.TYPE_ICON_CRACK).toShort().toInt()
-        packet.x = south.toFloat()
-        packet.y = up.toFloat()
-        packet.z = west.toFloat()
+        packet.x = x.toFloat()
+        packet.y = y.toFloat()
+        packet.z = z.toFloat()
         packet.data = this.data
         return arrayOf(packet)
     }

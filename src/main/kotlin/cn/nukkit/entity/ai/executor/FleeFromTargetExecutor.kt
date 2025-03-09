@@ -28,9 +28,9 @@ open class FleeFromTargetExecutor @JvmOverloads constructor(//指示执行器应
         val target = entity.behaviorGroup!!.memoryStorage!![memory].getVector3()
         val moveTarget = target.add(
             Vector3(
-                entity.position.south - target.x,
-                entity.position.up - target.y,
-                entity.position.west - target.z
+                entity.position.x - target.x,
+                entity.position.y - target.y,
+                entity.position.z - target.z
             ).normalize().multiply(minDistance.toDouble())
         )
 

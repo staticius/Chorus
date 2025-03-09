@@ -1,272 +1,269 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityFlowerPot;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.tag.CompoundTag;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityFlowerPot
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.nbt.tag.CompoundTag
 
 /**
  * @author Nukkit Project Team
  */
-public class BlockFlowerPot extends BlockFlowable implements BlockEntityHolder<BlockEntityFlowerPot> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(FLOWER_POT, CommonBlockProperties.UPDATE_BIT);
+class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockFlowerPot() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    public BlockFlowerPot(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val name: String
+        get() = "Flower Pot"
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
+    override val blockEntityClass: Class<out BlockEntityFlowerPot>
+        get() = BlockEntityFlowerPot::class.java
 
-    @Override
-    public String getName() {
-        return "Flower Pot";
-    }
+    override val blockEntityType: String
+        get() = BlockEntity.FLOWER_POT
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityFlowerPot> getBlockEntityClass() {
-        return BlockEntityFlowerPot.class;
-    }
-
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.FLOWER_POT;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!BlockLever.isSupportValid(down(), BlockFace.UP)) {
-                level.useBreakOn(this.position);
-                return type;
+                level.useBreakOn(this.position)
+                return type
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (!BlockLever.isSupportValid(down(), BlockFace.UP)) {
-            return false;
+            return false
         }
 
-        CompoundTag nbt = new CompoundTag();
+        val nbt = CompoundTag()
         if (item.hasCustomBlockData()) {
-            for (var e : item.getCustomBlockData().getEntrySet()) {
-                nbt.put(e.getKey(), e.getValue());
+            for ((key, value) in item.customBlockData!!.entrySet) {
+                nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;
+        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
     }
 
-    @NotNull
-    public Item getFlower() {
-        BlockEntityFlowerPot blockEntity = getBlockEntity();
-        if (blockEntity == null || !blockEntity.namedTag.containsCompound("PlantBlock")) {
-            return Item.AIR;
-        }
-        var plantBlockTag = blockEntity.namedTag.getCompound("PlantBlock");
-        // TODO: Vanilla uses a Block NBT, not an Item
-        var id = plantBlockTag.getString("itemId");
-        var meta = plantBlockTag.getInt("itemMeta");
-        return Item.get(id, meta);
-    }
-
-    public boolean setFlower(@Nullable Item item) {
-        if (item == null || item.isNull()) {
-            removeFlower();
-            return true;
+    val flower: Item
+        get() {
+            val blockEntity = blockEntity
+            if (blockEntity == null || !blockEntity.namedTag.containsCompound("PlantBlock")) {
+                return Item.AIR
+            }
+            val plantBlockTag = blockEntity.namedTag.getCompound("PlantBlock")
+            // TODO: Vanilla uses a Block NBT, not an Item
+            val id = plantBlockTag!!.getString("itemId")
+            val meta = plantBlockTag.getInt("itemMeta")
+            return get(id!!, meta)
         }
 
-        if (item.getBlock() instanceof FlowerPotBlock potBlock && potBlock.isPotBlockState()) {
-            BlockEntityFlowerPot blockEntity = getOrCreateBlockEntity();
-            blockEntity.namedTag.putCompound("PlantBlock", potBlock.getPlantBlockTag());
-
-            setPropertyValue(CommonBlockProperties.UPDATE_BIT, true);
-            level.setBlock(this.position, this, true);
-            blockEntity.spawnToAll();
-            return true;
+    fun setFlower(item: Item?): Boolean {
+        if (item == null || item.isNull) {
+            removeFlower()
+            return true
         }
 
-        return false;
+        if (item.getBlock() is FlowerPotBlock && potBlock.isPotBlockState()) {
+            val blockEntity = orCreateBlockEntity!!
+            blockEntity.namedTag.putCompound("PlantBlock", potBlock.getPlantBlockTag())
+
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT, true)
+            level.setBlock(this.position, this, true)
+            blockEntity.spawnToAll()
+            return true
+        }
+
+        return false
     }
 
-    public void removeFlower() {
-        BlockEntityFlowerPot blockEntity = getOrCreateBlockEntity();
-        blockEntity.namedTag.remove("PlantBlock");
+    fun removeFlower() {
+        val blockEntity = orCreateBlockEntity!!
+        blockEntity.namedTag.remove("PlantBlock")
 
-        setPropertyValue(CommonBlockProperties.UPDATE_BIT, false);
-        level.setBlock(this.position, this, true);
-        blockEntity.spawnToAll();
+        setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT, false)
+        level.setBlock(this.position, this, true)
+        blockEntity.spawnToAll()
     }
 
-    public boolean hasFlower() {
-        var blockEntity = getBlockEntity();
-        if (blockEntity == null) return false;
-        return blockEntity.namedTag.containsCompound("PlantBlock");
+    fun hasFlower(): Boolean {
+        val blockEntity = blockEntity ?: return false
+        return blockEntity.namedTag.containsCompound("PlantBlock")
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (getPropertyValue(CommonBlockProperties.UPDATE_BIT)) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT)) {
             if (player == null) {
-                return false;
+                return false
             }
 
-            if (!item.isNull())
-                return false;
+            if (!item.isNull) return false
 
             if (hasFlower()) {
-                var flower = getFlower();
-                removeFlower();
-                player.giveItem(flower);
-                return true;
+                val flower = flower
+                removeFlower()
+                player.giveItem(flower)
+                return true
             }
         }
 
-        if (item.isNull()) {
-            return false;
+        if (item.isNull) {
+            return false
         }
 
-        getOrCreateBlockEntity();
+        orCreateBlockEntity
         if (hasFlower()) {
-            return false;
+            return false
         }
 
         if (!setFlower(item)) {
-            return false;
+            return false
         }
 
-        if (player == null || !player.isCreative()) {
-            item.count--;
+        if (player == null || !player.isCreative) {
+            item.count--
         }
-        return true;
+        return true
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        boolean dropInside = false;
-        String insideID = "minecraft:air";
-        int insideMeta = 0;
-        BlockEntityFlowerPot blockEntity = getBlockEntity();
+    override fun getDrops(item: Item): Array<Item?>? {
+        var dropInside = false
+        var insideID: String? = "minecraft:air"
+        var insideMeta = 0
+        val blockEntity = blockEntity
         if (blockEntity != null) {
-            dropInside = true;
-            insideID = blockEntity.namedTag.getCompound("PlantBlock").getString("itemId");
-            insideMeta = blockEntity.namedTag.getCompound("PlantBlock").getInt("itemMeta");
+            dropInside = true
+            insideID = blockEntity.namedTag.getCompound("PlantBlock")!!.getString("itemId")
+            insideMeta = blockEntity.namedTag.getCompound("PlantBlock")!!.getInt("itemMeta")
         }
-        if (dropInside) {
-            return new Item[]{
-                    toItem(),
-                    Item.get(insideID, insideMeta)
-            };
+        return if (dropInside) {
+            arrayOf(
+                toItem(),
+                get(insideID!!, insideMeta)
+            )
         } else {
-            return new Item[]{
-                    toItem()
-            };
+            arrayOf(
+                toItem()
+            )
         }
     }
 
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return this;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public double getMinX() {
-        return this.position.south + 0.3125;
-    }
+    override var minX: Double
+        get() = position.x + 0.3125
+        set(minX) {
+            super.minX = minX
+        }
 
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.3125;
-    }
+    override var minZ: Double
+        get() = position.z + 0.3125
+        set(minZ) {
+            super.minZ = minZ
+        }
 
-    @Override
-    public double getMaxX() {
-        return this.position.south + 0.6875;
-    }
+    override var maxX: Double
+        get() = position.x + 0.6875
+        set(maxX) {
+            super.maxX = maxX
+        }
 
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.375;
-    }
+    override var maxY: Double
+        get() = position.y + 0.375
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 0.6875;
-    }
+    override var maxZ: Double
+        get() = position.z + 0.6875
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
 
-    @Override
-    public boolean canPassThrough() {
-        return false;
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
     /**
      * 实现了此接口的方块可以放入花盆中
      */
-    public interface FlowerPotBlock {
+    interface FlowerPotBlock {
+        val plantBlockTag: CompoundTag?
+            /**
+             * 获取方块在花盆NBT中的标签
+             *
+             *
+             * 形如以下形式：
+             *
+             *
+             * `"PlantBlock": {
+             * "name": "minecraft:red_flower",
+             * "states": {
+             * "flower_type": "poppy"
+             * },
+             * "version": 17959425i
+             * "itemId": xxx,
+             * "itemMeta": xxx
+             * }
+            ` *
+             *
+             * 请注意，必须在这个tag中包含键"itemId"与"itemMeta"。服务端将通过读取这两个参数快速重建Item对象，而不是通过stateId重建。这太慢了
+             *
+             * @return 方块在花盆NBT中的标签
+             */
+            get() {
+                val block = this as Block
+                val tag = block.blockState!!.blockStateTag.copy()
+                val item = block.toItem()
+                return tag.putString("itemId", item!!.id)
+                    .putInt("itemMeta", item.damage) //only exist in PNX
+            }
 
-        /**
-         * 获取方块在花盆NBT中的标签<p/>
-         * 形如以下形式：<p/>
-         * {@code
-         * "PlantBlock": {
-         * "name": "minecraft:red_flower",
-         * "states": {
-         * "flower_type": "poppy"
-         * },
-         * "version": 17959425i
-         * "itemId": xxx,
-         * "itemMeta": xxx
-         * }
-         * }<p/>
-         * 请注意，必须在这个tag中包含键"itemId"与"itemMeta"。服务端将通过读取这两个参数快速重建Item对象，而不是通过stateId重建。这太慢了
-         *
-         * @return 方块在花盆NBT中的标签
-         */
-        default CompoundTag getPlantBlockTag() {
-            var block = (Block) this;
-            var tag = block.getBlockState().getBlockStateTag().copy();
-            var item = block.toItem();
-            return tag.putString("itemId", item.getId())
-                    .putInt("itemMeta", item.getDamage()); //only exist in PNX
-        }
+        val isPotBlockState: Boolean
+            /**
+             * 对于高草丛来说，只有状态为"fern"的方块才能放入花盆中
+             *
+             * @return 是否是可作为花盆方块的状态
+             */
+            get() = true
+    }
 
-        /**
-         * 对于高草丛来说，只有状态为"fern"的方块才能放入花盆中
-         *
-         * @return 是否是可作为花盆方块的状态
-         */
-        default boolean isPotBlockState() {
-            return true;
-        }
+    companion object {
+        val properties: BlockProperties = BlockProperties(FLOWER_POT, CommonBlockProperties.UPDATE_BIT)
+            get() = Companion.field
     }
 }

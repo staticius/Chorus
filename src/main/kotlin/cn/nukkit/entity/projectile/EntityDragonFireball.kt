@@ -56,9 +56,9 @@ class EntityDragonFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile
             getLocator().getChunk(),
             CompoundTag().putList(
                 "Pos", ListTag<Tag>()
-                    .add(FloatTag(position.south))
-                    .add(FloatTag(position.up))
-                    .add(FloatTag(position.west))
+                    .add(FloatTag(position.x))
+                    .add(FloatTag(position.y))
+                    .add(FloatTag(position.z))
             )
                 .putList(
                     "Rotation", ListTag<Tag>()

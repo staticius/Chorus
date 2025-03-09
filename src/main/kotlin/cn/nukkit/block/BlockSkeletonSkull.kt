@@ -1,38 +1,25 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemDragonHead;
-import cn.nukkit.item.ItemSkeletonSkull;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
 
-public class BlockSkeletonSkull extends BlockHead {
+class BlockSkeletonSkull(blockState: BlockState?) : BlockHead(blockState) {
+    override val name: String
+        get() = "Skeleton Skull"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(SKELETON_SKULL, CommonBlockProperties.FACING_DIRECTION);
-
-    public BlockSkeletonSkull(BlockState blockState) {
-        super(blockState);
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
+            this.toItem()
+        )
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemSkeletonSkull()
     }
 
-    @Override
-    public String getName() {
-        return "Skeleton Skull";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                this.toItem()
-        };
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemSkeletonSkull();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SKELETON_SKULL, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

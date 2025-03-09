@@ -1,133 +1,125 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.min
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockCrops(blockstate) {
+    override val name: String
+        get() = "Torchflower Crop"
 
-public class BlockTorchflowerCrop extends BlockCrops {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TORCHFLOWER_CROP, CommonBlockProperties.GROWTH);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return Item.get(ItemID.TORCHFLOWER_SEEDS)
     }
 
-    public BlockTorchflowerCrop() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val itemId: String
+        get() = ItemID.TORCHFLOWER_SEEDS
 
-    public BlockTorchflowerCrop(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public String getName() {
-        return "Torchflower Crop";
-    }
-
-    @Override
-    public Item toItem() {
-        return Item.get(ItemID.TORCHFLOWER_SEEDS);
-    }
-
-    @Override
-    @NotNull public String getItemId() {
-        return ItemID.TORCHFLOWER_SEEDS;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         //Bone meal
-        if (item.isFertilizer()) {
-            int max = getMaxGrowth();
-            int growth = getGrowth();
+        if (item.isFertilizer) {
+            val max = maxGrowth
+            var growth = growth
 
             if (growth == 1) {
-                BlockTorchflower block = new BlockTorchflower();
-                BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                Server.getInstance().pluginManager.callEvent(ev);
+                val block = BlockTorchflower()
+                val ev = BlockGrowEvent(this, block)
+                instance!!.pluginManager.callEvent(ev)
 
 
-                this.level.setBlock(this.position, ev.newState, false, true);
-                this.level.addParticle(new BoneMealParticle(this.position));
+                level.setBlock(this.position, ev.newState!!, false, true)
+                level.addParticle(BoneMealParticle(this.position))
 
-                if (player != null && !player.isCreative()) {
-                    item.count--;
+                if (player != null && !player.isCreative) {
+                    item.count--
                 }
-                return true;
+                return true
             }
             if (growth < max) {
-                BlockTorchflowerCrop block = (BlockTorchflowerCrop) this.clone();
-                growth += 1;
-                block.setGrowth(Math.min(growth, max));
-                BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                Server.getInstance().pluginManager.callEvent(ev);
+                val block = clone() as BlockTorchflowerCrop
+                growth += 1
+                block.growth = min(growth.toDouble(), max.toDouble()).toInt()
+                val ev = BlockGrowEvent(this, block)
+                instance!!.pluginManager.callEvent(ev)
 
-                if (ev.isCancelled()) {
-                    return false;
+                if (ev.isCancelled) {
+                    return false
                 }
 
-                this.level.setBlock(this.position, ev.newState, false, true);
-                this.level.addParticle(new BoneMealParticle(this.position));
+                level.setBlock(this.position, ev.newState!!, false, true)
+                level.addParticle(BoneMealParticle(this.position))
 
-                if (player != null && !player.isCreative()) {
-                    item.count--;
+                if (player != null && !player.isCreative) {
+                    item.count--
                 }
             }
 
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!this.down().getId().equals(FARMLAND)) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+            if (down()!!.id != BlockID.FARMLAND) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (ThreadLocalRandom.current().nextInt(2) == 1 && level.getFullLight(this.position) >= getMinimumLightLevel()) {
-                int growth = getGrowth();
+            if (ThreadLocalRandom.current()
+                    .nextInt(2) == 1 && level.getFullLight(this.position) >= getMinimumLightLevel()
+            ) {
+                val growth = growth
                 if (growth == 1) {
-                    BlockTorchflower block = new BlockTorchflower();
-                    BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                    Server.getInstance().pluginManager.callEvent(ev);
+                    val block = BlockTorchflower()
+                    val ev = BlockGrowEvent(this, block)
+                    instance!!.pluginManager.callEvent(ev)
 
-                    if (ev.isCancelled()) {
-                        return 0;
+                    if (ev.isCancelled) {
+                        return 0
                     } else {
-                        this.level.setBlock(this.position, ev.newState, false, true);
-                        return Level.BLOCK_UPDATE_RANDOM;
+                        level.setBlock(this.position, ev.newState!!, false, true)
+                        return Level.BLOCK_UPDATE_RANDOM
                     }
                 }
-                if (growth < getMaxGrowth()) {
-                    BlockTorchflowerCrop block = (BlockTorchflowerCrop) this.clone();
-                    block.setGrowth(growth + 1);
-                    BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                    Server.getInstance().pluginManager.callEvent(ev);
+                if (growth < maxGrowth) {
+                    val block = clone() as BlockTorchflowerCrop
+                    block.growth = growth + 1
+                    val ev = BlockGrowEvent(this, block)
+                    instance!!.pluginManager.callEvent(ev)
 
-                    if (!ev.isCancelled()) {
-                        this.level.setBlock(this.position, ev.newState, false, true);
+                    if (!ev.isCancelled) {
+                        level.setBlock(this.position, ev.newState!!, false, true)
                     } else {
-                        return Level.BLOCK_UPDATE_RANDOM;
+                        return Level.BLOCK_UPDATE_RANDOM
                     }
                 }
             } else {
-                return Level.BLOCK_UPDATE_RANDOM;
+                return Level.BLOCK_UPDATE_RANDOM
             }
         }
 
-        return 0;
+        return 0
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.TORCHFLOWER_CROP, CommonBlockProperties.GROWTH)
+            get() = Companion.field
     }
 }

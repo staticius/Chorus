@@ -1,95 +1,90 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityChiseledBookshelf;
-import cn.nukkit.event.player.PlayerInteractEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBook;
-import cn.nukkit.item.ItemBookWritable;
-import cn.nukkit.item.ItemEnchantedBook;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector2;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.Tag;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityChiseledBookshelf.booksStoredBit
+import cn.nukkit.blockentity.BlockEntityChiseledBookshelf.hasBook
+import cn.nukkit.blockentity.BlockEntityChiseledBookshelf.items
+import cn.nukkit.blockentity.BlockEntityChiseledBookshelf.removeBook
+import cn.nukkit.blockentity.BlockEntityChiseledBookshelf.setBook
+import cn.nukkit.event.player.PlayerInteractEvent
+import cn.nukkit.item.*
+import cn.nukkit.math.*
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.math.Vector3.equals
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.Tag
+import cn.nukkit.utils.Faceable
 
-import java.util.Map;
+class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockBookshelf(blockstate), BlockEntityHolder<BlockEntityChiseledBookshelf?>, Faceable {
+    override val name: String
+        get() = "Chiseled Bookshelf"
 
-import static cn.nukkit.block.property.CommonBlockProperties.BOOKS_STORED;
-
-
-public class BlockChiseledBookshelf extends BlockBookshelf implements BlockEntityHolder<BlockEntityChiseledBookshelf>, Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHISELED_BOOKSHELF, BOOKS_STORED, CommonBlockProperties.DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockChiseledBookshelf() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockChiseledBookshelf(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public String getName() {
-        return "Chiseled Bookshelf";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        BlockEntityChiseledBookshelf blockEntity = this.getBlockEntity();
+    override fun getDrops(item: Item): Array<Item?>? {
+        val blockEntity: BlockEntityChiseledBookshelf? = this.blockEntity
         if (blockEntity != null) {
-            return blockEntity.getItems();
+            return blockEntity.items
         }
-        return Item.EMPTY_ARRAY;
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (player != null) {
-            setBlockFace(player.getHorizontalFacing().getOpposite());
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        blockFace = if (player != null) {
+            player.getHorizontalFacing().getOpposite()
         } else {
-            setBlockFace(BlockFace.SOUTH);
+            BlockFace.SOUTH
         }
-        CompoundTag nbt = new CompoundTag();
+        val nbt = CompoundTag()
         if (item.hasCustomName()) {
-            nbt.putString("CustomName", item.getCustomName());
+            nbt.putString("CustomName", item.customName)
         }
         if (item.hasCustomBlockData()) {
-            Map<String, Tag> customData = item.getCustomBlockData().getTags();
-            for (Map.Entry<String, Tag> tag : customData.entrySet()) {
-                nbt.put(tag.getKey(), tag.getValue());
+            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            for ((key, value): Map.Entry<String?, Tag?> in customData) {
+                nbt.put(key, value)
             }
         }
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;
+        return BlockEntityHolder.setBlockAndCreateEntity<BlockEntityChiseledBookshelf?, BlockChiseledBookshelf>(
+            this,
+            true,
+            true,
+            nbt
+        ) != null
     }
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityChiseledBookshelf> getBlockEntityClass() {
-        return BlockEntityChiseledBookshelf.class;
+    override fun getBlockEntityClass(): Class<out BlockEntityChiseledBookshelf> {
+        return BlockEntityChiseledBookshelf::class.java
     }
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.CHISELED_BOOKSHELF;
+    override fun getBlockEntityType(): String {
+        return BlockEntity.CHISELED_BOOKSHELF
     }
 
-    @Override
-    public void onTouch(@NotNull Vector3 vector, @NotNull Item item, @NotNull BlockFace face, float fx, float fy, float fz, @Nullable Player player, PlayerInteractEvent.@NotNull Action action) {
-        if(action== PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK){
-            BlockFace blockFace = getBlockFace();
-            assert player != null;
+    override fun onTouch(
+        vector: Vector3,
+        item: Item,
+        face: BlockFace,
+        fx: Float,
+        fy: Float,
+        fz: Float,
+        player: Player?,
+        action: PlayerInteractEvent.Action
+    ) {
+        if (action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            val blockFace = blockFace
+            checkNotNull(player)
             if (player.getHorizontalFacing().getOpposite() == blockFace) {
                 /*
                  * south z==1  The lower left corner is the origin
@@ -97,52 +92,57 @@ public class BlockChiseledBookshelf extends BlockBookshelf implements BlockEntit
                  * west  x==0  The lower left corner is the origin
                  * north z==0  The lower right corner is the origin
                  */
-                Vector2 clickPos = switch (blockFace) {
-                    case NORTH -> new Vector2(1 - fx, fy);
-                    case SOUTH -> new Vector2(fx, fy);
-                    case WEST -> new Vector2(fz, fy);
-                    case EAST -> new Vector2(1 - fz, fy);
-                    default -> throw new IllegalArgumentException(blockFace.toString());
-                };
-                int index = getRegion(clickPos);
-                BlockEntityChiseledBookshelf blockEntity = this.getBlockEntity();
+                val clickPos = when (blockFace) {
+                    BlockFace.NORTH -> Vector2((1 - fx).toDouble(), fy.toDouble())
+                    BlockFace.SOUTH -> Vector2(fx.toDouble(), fy.toDouble())
+                    BlockFace.WEST -> Vector2(fz.toDouble(), fy.toDouble())
+                    BlockFace.EAST -> Vector2((1 - fz).toDouble(), fy.toDouble())
+                    else -> throw IllegalArgumentException(blockFace.toString())
+                }
+                val index = getRegion(clickPos)
+                val blockEntity: BlockEntityChiseledBookshelf? = this.blockEntity
                 if (blockEntity != null) {
                     if (blockEntity.hasBook(index)) {
-                        Item book = blockEntity.removeBook(index);
-                        player.getInventory().addItem(book);
-                    } else if (item instanceof ItemBook || item instanceof ItemEnchantedBook || item instanceof ItemBookWritable) {
-                        Item itemClone = item.clone();
-                        if (!player.isCreative()) {
-                            itemClone.setCount(itemClone.getCount() - 1);
-                            player.getInventory().setItemInHand(itemClone);
+                        val book: Item = blockEntity.removeBook(index)
+                        player.getInventory().addItem(book)
+                    } else if (item is ItemBook || item is ItemEnchantedBook || item is ItemBookWritable) {
+                        val itemClone: Item = item.clone()
+                        if (!player.isCreative) {
+                            itemClone.setCount(itemClone.getCount() - 1)
+                            player.getInventory().setItemInHand(itemClone)
                         }
-                        itemClone.setCount(1);
-                        blockEntity.setBook(itemClone, index);
+                        itemClone.setCount(1)
+                        blockEntity.setBook(itemClone, index)
                     }
-                    this.setPropertyValue(BOOKS_STORED, blockEntity.getBooksStoredBit());
-                    this.level.setBlock(this.position, this, true);
+                    this.setPropertyValue<Int, IntPropertyType>(
+                        CommonBlockProperties.BOOKS_STORED,
+                        blockEntity.booksStoredBit
+                    )
+                    level.setBlock(this.position, this, true)
                 }
             }
         }
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.DIRECTION, face.horizontalIndex);
-    }
-
-    private int getRegion(Vector2 clickPos) {
-        if (clickPos.x - 0.333333 < 0) {
-            return clickPos.y - 0.5 < 0 ? 3 : 0;
-        } else if (clickPos.x - 0.666666 < 0) {
-            return clickPos.y - 0.5 < 0 ? 4 : 1;
-        } else {
-            return clickPos.y - 0.5 < 0 ? 5 : 2;
+    override var blockFace: BlockFace?
+        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face!!.horizontalIndex)
         }
+
+    private fun getRegion(clickPos: Vector2): Int {
+        return if (clickPos.x - 0.333333 < 0) {
+            if (clickPos.y - 0.5 < 0) 3 else 0
+        } else if (clickPos.x - 0.666666 < 0) {
+            if (clickPos.y - 0.5 < 0) 4 else 1
+        } else {
+            if (clickPos.y - 0.5 < 0) 5 else 2
+        }
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(CHISELED_BOOKSHELF, CommonBlockProperties.BOOKS_STORED, CommonBlockProperties.DIRECTION)
+            get() = Companion.field
     }
 }

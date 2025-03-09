@@ -1,139 +1,128 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityCalibratedSculkSensor;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.CommonPropertyMap
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityCalibratedSculkSensor
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.Sound
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.utils.RedstoneComponent
 
-import javax.annotation.Nullable;
+class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockstate), BlockEntityHolder<BlockEntityCalibratedSculkSensor?>, RedstoneComponent {
+    override val name: String
+        get() = "Calibrated Sculk Sensor"
 
-import static cn.nukkit.block.property.CommonBlockProperties.SCULK_SENSOR_PHASE;
-
-public class BlockCalibratedSculkSensor extends BlockFlowable implements BlockEntityHolder<BlockEntityCalibratedSculkSensor>, RedstoneComponent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CALIBRATED_SCULK_SENSOR, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonBlockProperties.SCULK_SENSOR_PHASE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getBlockEntityClass(): Class<out BlockEntityCalibratedSculkSensor> {
+        return BlockEntityCalibratedSculkSensor::class.java
     }
 
-    public BlockCalibratedSculkSensor() {
-        this(PROPERTIES.getDefaultState());
+    override val isPowerSource: Boolean
+        get() = true
+
+    override fun getBlockEntityType(): String {
+        return BlockEntity.CALIBRATED_SCULK_SENSOR
     }
 
-    public BlockCalibratedSculkSensor(BlockState blockstate) {
-        super(blockstate);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        blockFace =
+            if (player != null) fromHorizontalIndex(player.getDirection()!!.horizontalIndex) else BlockFace.SOUTH
+
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    public String getName() {
-        return "Calibrated Sculk Sensor";
-    }
-
-    public void setBlockFace(BlockFace face) {
-        int horizontalIndex = face.horizontalIndex;
-        if (horizontalIndex > -1) {
-            this.setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                    CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(BlockFace.fromHorizontalIndex(horizontalIndex)));
+    var blockFace: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]
+        set(face) {
+            val horizontalIndex = face!!.horizontalIndex
+            if (horizontalIndex > -1) {
+                this.setPropertyValue(
+                    CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                    CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[fromHorizontalIndex(horizontalIndex)]
+                )
+            }
         }
+
+    override fun getStrongPower(side: BlockFace?): Int {
+        return super.getStrongPower(side)
     }
 
-    @Override
-    @NotNull public Class<? extends BlockEntityCalibratedSculkSensor> getBlockEntityClass() {
-        return BlockEntityCalibratedSculkSensor.class;
-    }
-
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
-
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.CALIBRATED_SCULK_SENSOR;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        setBlockFace(player != null ? BlockFace.fromHorizontalIndex(player.getDirection().horizontalIndex) : BlockFace.SOUTH);
-
-        this.level.setBlock(block.position, this, true, true);
-        return true;
-    }
-
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(getPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION));
-    }
-
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return super.getStrongPower(side);
-    }
-
-    @Override
-    public int getWeakPower(BlockFace face) {
-        var blockEntity = this.getOrCreateBlockEntity();
-        if (this.getSide(face.getOpposite()) instanceof BlockRedstoneComparator) {
-            return blockEntity.getComparatorPower();
+    override fun getWeakPower(face: BlockFace): Int {
+        val blockEntity = this.getOrCreateBlockEntity()
+        return if (getSide(face.getOpposite()!!) is BlockRedstoneComparator) {
+            blockEntity.comparatorPower
         } else {
-            return blockEntity.getPower();
+            blockEntity.power
         }
     }
 
-    @Override
-    public int onUpdate(int type) {
-        getOrCreateBlockEntity();
+    override fun onUpdate(type: Int): Int {
+        getOrCreateBlockEntity()
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (level.server.settings.levelSettings().enableRedstone()) {
-                this.getBlockEntity().calPower();
-                this.setPhase(0);
-                updateAroundRedstone();
+                this.blockEntity!!.calPower()
+                this.setPhase(0)
+                updateAroundRedstone()
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    public void setPhase(int phase) {
-        if (phase == 1) this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.POWER_ON_SCULK_SENSOR);
-        else this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.POWER_OFF_SCULK_SENSOR);
-        this.setPropertyValue(SCULK_SENSOR_PHASE, phase);
-        this.level.setBlock(this.position, this, true, false);
+    fun setPhase(phase: Int) {
+        if (phase == 1) level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.POWER_ON_SCULK_SENSOR)
+        else level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.POWER_OFF_SCULK_SENSOR)
+        this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.SCULK_SENSOR_PHASE, phase)
+        level.setBlock(this.position, this, true, false)
     }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return false;
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return false;
+    override fun breaksWhenMoved(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return this;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            CALIBRATED_SCULK_SENSOR,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.SCULK_SENSOR_PHASE
+        )
+            get() = Companion.field
     }
 }

@@ -1,441 +1,422 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.Attachment;
-import cn.nukkit.block.property.enums.WallConnectionType;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.utils.Faceable;
-import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.EnumMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import static cn.nukkit.block.property.CommonBlockProperties.WALL_CONNECTION_TYPE_EAST;
-import static cn.nukkit.block.property.CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH;
-import static cn.nukkit.block.property.CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH;
-import static cn.nukkit.block.property.CommonBlockProperties.WALL_CONNECTION_TYPE_WEST;
-import static cn.nukkit.block.property.CommonBlockProperties.WALL_POST_BIT;
-import static cn.nukkit.math.VectorMath.calculateAxis;
-import static cn.nukkit.math.VectorMath.calculateFace;
-
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.Attachment
+import cn.nukkit.block.property.enums.WallConnectionType
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.SimpleAxisAlignedBB
+import cn.nukkit.math.VectorMath.calculateAxis
+import cn.nukkit.math.VectorMath.calculateFace
+import cn.nukkit.utils.Faceable
+import lombok.extern.slf4j.Slf4j
+import java.util.*
+import kotlin.collections.Map
+import kotlin.collections.set
 
 @Slf4j
-public abstract class BlockWallBase extends BlockTransparent implements BlockConnectable {
-    private static final double MIN_POST_BB = 5.0 / 16;
-    private static final double MAX_POST_BB = 11.0 / 16;
+abstract class BlockWallBase(blockstate: BlockState?) : BlockTransparent(blockstate), BlockConnectable {
+    override val isSolid: Boolean
+        get() = false
 
-    public BlockWallBase(BlockState blockstate) {
-        super(blockstate);
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
+    override val hardness: Double
+        get() = 2.0
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
+    override val resistance: Double
+        get() = 30.0
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public double getResistance() {
-        return 30;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    private boolean shouldBeTall(Block above, BlockFace face) {
-        return switch (above.getId()) {
-            case AIR, SKULL -> false;
-
-            // If the bell is standing and follow the path, make it tall
-            case BELL -> {
-                BlockBell bell = (BlockBell) above;
-                yield bell.getAttachment() == Attachment.STANDING
-                        && bell.getBlockFace().getAxis() != face.getAxis();
+    private fun shouldBeTall(above: Block, face: BlockFace): Boolean {
+        return when (above.id) {
+            BlockID.AIR, BlockID.SKULL -> false
+            BlockID.BELL -> {
+                val bell = above as BlockBell
+                bell.attachment == Attachment.STANDING
+                        && bell.blockFace!!.axis != face.axis
             }
-            default -> {
-                if (above instanceof BlockWallBase) {
-                    yield ((BlockWallBase) above).getConnectionType(face) != WallConnectionType.NONE;
-                } else if (above instanceof BlockConnectable) {
-                    yield ((BlockConnectable) above).isConnected(face);
-                } else if (above instanceof BlockPressurePlateBase || above instanceof BlockStairs) {
-                    yield true;
+
+            else -> {
+                if (above is BlockWallBase) {
+                    above.getConnectionType(face) != WallConnectionType.NONE
+                } else if (above is BlockConnectable) {
+                    (above as BlockConnectable).isConnected(face)
+                } else if (above is BlockPressurePlateBase || above is BlockStairs) {
+                    true
                 }
-                yield above.isSolid() && !above.isTransparent() || shouldBeTallBasedOnBoundingBox(above, face);
+                above.isSolid && !above.isTransparent || shouldBeTallBasedOnBoundingBox(above, face)
             }
-        };
+        }
     }
 
-    private boolean shouldBeTallBasedOnBoundingBox(Block above, BlockFace face) {
-        AxisAlignedBB boundingBox = above.getBoundingBox();
-        if (boundingBox == null) {
-            return false;
+    private fun shouldBeTallBasedOnBoundingBox(above: Block, face: BlockFace): Boolean {
+        var boundingBox = above.boundingBox ?: return false
+        boundingBox = boundingBox.getOffsetBoundingBox(-above.position.x, -above.position.y, -above.position.z)
+        if (boundingBox.minY > 0) {
+            return false
         }
-        boundingBox = boundingBox.getOffsetBoundingBox(-above.position.south, -above.position.up, -above.position.west);
-        if (boundingBox.getMinY() > 0) {
-            return false;
-        }
-        int offset = face.getXOffset();
+        var offset = face.xOffset
         if (offset < 0) {
-            return boundingBox.getMinX() < MIN_POST_BB
-                    && boundingBox.getMinZ() < MIN_POST_BB && MAX_POST_BB < boundingBox.getMaxZ();
+            return boundingBox.minX < MIN_POST_BB && boundingBox.minZ < MIN_POST_BB && MAX_POST_BB < boundingBox.maxZ
         } else if (offset > 0) {
-            return MAX_POST_BB < boundingBox.getMaxX()
-                    && MAX_POST_BB < boundingBox.getMaxZ() && boundingBox.getMinZ() < MAX_POST_BB;
+            return MAX_POST_BB < boundingBox.maxX && MAX_POST_BB < boundingBox.maxZ && boundingBox.minZ < MAX_POST_BB
         } else {
-            offset = face.getZOffset();
+            offset = face.zOffset
             if (offset < 0) {
-                return boundingBox.getMinZ() < MIN_POST_BB
-                        && boundingBox.getMinX() < MIN_POST_BB && MIN_POST_BB < boundingBox.getMaxX();
+                return boundingBox.minZ < MIN_POST_BB && boundingBox.minX < MIN_POST_BB && MIN_POST_BB < boundingBox.maxX
             } else if (offset > 0) {
-                return MAX_POST_BB < boundingBox.getMaxZ()
-                        && MAX_POST_BB < boundingBox.getMaxX() && boundingBox.getMinX() < MAX_POST_BB;
+                return MAX_POST_BB < boundingBox.maxZ && MAX_POST_BB < boundingBox.maxX && boundingBox.minX < MAX_POST_BB
             }
         }
-        return false;
+        return false
     }
 
-    public boolean autoConfigureState() {
-        final short previousMeta = blockstate.specialValue();
+    fun autoConfigureState(): Boolean {
+        val previousMeta = blockState!!.specialValue()
 
-        setWallPost(true);
+        isWallPost = true
 
-        Block above = up(1, 0);
+        val above = up(1, 0)
 
-        for (BlockFace blockFace : BlockFace.Plane.HORIZONTAL) {
-            Block side = getSideAtLayer(0, blockFace);
+        for (blockFace in BlockFace.Plane.HORIZONTAL) {
+            val side = getSideAtLayer(0, blockFace)
             if (canConnect(side)) {
                 try {
-                    connect(blockFace, above, false);
-                } catch (RuntimeException e) {
-                    log.error("Failed to connect the block {} at {} to {} which is {} at {}",
-                            this, getLocator(), blockFace, side, side.getLocator(), e);
-                    throw e;
+                    connect(blockFace, above!!, false)
+                } catch (e: RuntimeException) {
+                    BlockWallBase.log.error(
+                        "Failed to connect the block {} at {} to {} which is {} at {}",
+                        this, locator, blockFace, side, side!!.locator, e
+                    )
+                    throw e
                 }
             } else {
-                disconnect(blockFace);
+                disconnect(blockFace)
             }
         }
 
-        recheckPostConditions(above);
-        return blockstate.specialValue() != previousMeta;
+        recheckPostConditions(above!!)
+        return blockState!!.specialValue() != previousMeta
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (autoConfigureState()) {
-                level.setBlock(this.position, this, true);
+                level.setBlock(this.position, this, true)
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        autoConfigureState();
-        return super.place(item, block, target, face, fx, fy, fz, player);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        autoConfigureState()
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    public boolean isWallPost() {
-        return getPropertyValue(WALL_POST_BIT);
-    }
-
-    public void setWallPost(boolean wallPost) {
-        setPropertyValue(WALL_POST_BIT, wallPost);
-    }
-
-    public void clearConnections() {
-        setPropertyValue(WALL_CONNECTION_TYPE_EAST, WallConnectionType.NONE);
-        setPropertyValue(WALL_CONNECTION_TYPE_WEST, WallConnectionType.NONE);
-        setPropertyValue(WALL_CONNECTION_TYPE_NORTH, WallConnectionType.NONE);
-        setPropertyValue(WALL_CONNECTION_TYPE_SOUTH, WallConnectionType.NONE);
-    }
-
-    public Map<BlockFace, WallConnectionType> getWallConnections() {
-        EnumMap<BlockFace, WallConnectionType> connections = new EnumMap<>(BlockFace.class);
-        for (BlockFace blockFace : BlockFace.Plane.HORIZONTAL) {
-            WallConnectionType connectionType = getConnectionType(blockFace);
-            if (connectionType != WallConnectionType.NONE) {
-                connections.put(blockFace, connectionType);
-            }
+    var isWallPost: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.WALL_POST_BIT)
+        set(wallPost) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.WALL_POST_BIT,
+                wallPost
+            )
         }
-        return connections;
+
+    fun clearConnections() {
+        setPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_EAST, WallConnectionType.NONE)
+        setPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_WEST, WallConnectionType.NONE)
+        setPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH, WallConnectionType.NONE)
+        setPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH, WallConnectionType.NONE)
     }
 
-    public WallConnectionType getConnectionType(BlockFace blockFace) {
-        return switch (blockFace) {
-            case NORTH -> getPropertyValue(WALL_CONNECTION_TYPE_NORTH);
-            case SOUTH -> getPropertyValue(WALL_CONNECTION_TYPE_SOUTH);
-            case WEST -> getPropertyValue(WALL_CONNECTION_TYPE_WEST);
-            case EAST -> getPropertyValue(WALL_CONNECTION_TYPE_EAST);
-            default -> WallConnectionType.NONE;
-        };
+    val wallConnections: Map<BlockFace, WallConnectionType>
+        get() {
+            val connections =
+                EnumMap<BlockFace, WallConnectionType>(
+                    BlockFace::class.java
+                )
+            for (blockFace in BlockFace.Plane.HORIZONTAL) {
+                val connectionType = getConnectionType(blockFace)
+                if (connectionType != WallConnectionType.NONE) {
+                    connections[blockFace] = connectionType
+                }
+            }
+            return connections
+        }
+
+    fun getConnectionType(blockFace: BlockFace): WallConnectionType {
+        return when (blockFace) {
+            BlockFace.NORTH -> getPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH)
+            BlockFace.SOUTH -> getPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH)
+            BlockFace.WEST -> getPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_WEST)
+            BlockFace.EAST -> getPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_EAST)
+            else -> WallConnectionType.NONE
+        }
     }
 
-    public boolean setConnection(BlockFace blockFace, WallConnectionType type) {
-        return switch (blockFace) {
-            case NORTH -> {
-                setPropertyValue(WALL_CONNECTION_TYPE_NORTH, type);
-                yield true;
+    fun setConnection(blockFace: BlockFace, type: WallConnectionType?): Boolean {
+        return when (blockFace) {
+            BlockFace.NORTH -> {
+                setPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH, type)
+                true
             }
-            case SOUTH -> {
-                setPropertyValue(WALL_CONNECTION_TYPE_SOUTH, type);
-                yield true;
+
+            BlockFace.SOUTH -> {
+                setPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH, type)
+                true
             }
-            case WEST -> {
-                setPropertyValue(WALL_CONNECTION_TYPE_WEST, type);
-                yield true;
+
+            BlockFace.WEST -> {
+                setPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_WEST, type)
+                true
             }
-            case EAST -> {
-                setPropertyValue(WALL_CONNECTION_TYPE_EAST, type);
-                yield true;
+
+            BlockFace.EAST -> {
+                setPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_EAST, type)
+                true
             }
-            default -> false;
-        };
+
+            else -> false
+        }
     }
 
     /**
      * @return true if it should be a post
      */
-    public void autoUpdatePostFlag() {
-        setWallPost(recheckPostConditions(up(1, 0)));
+    fun autoUpdatePostFlag() {
+        isWallPost = recheckPostConditions(up(1, 0)!!)
     }
 
-    public boolean hasConnections() {
-        return getPropertyValue(WALL_CONNECTION_TYPE_EAST) != WallConnectionType.NONE
-                || getPropertyValue(WALL_CONNECTION_TYPE_WEST) != WallConnectionType.NONE
-                || getPropertyValue(WALL_CONNECTION_TYPE_NORTH) != WallConnectionType.NONE
-                || getPropertyValue(WALL_CONNECTION_TYPE_SOUTH) != WallConnectionType.NONE;
+    fun hasConnections(): Boolean {
+        return getPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_EAST) != WallConnectionType.NONE || getPropertyValue(
+            CommonBlockProperties.WALL_CONNECTION_TYPE_WEST
+        ) != WallConnectionType.NONE || getPropertyValue(
+            CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH
+        ) != WallConnectionType.NONE || getPropertyValue(
+            CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH
+        ) != WallConnectionType.NONE
     }
 
-    private boolean recheckPostConditions(Block above) {
+    private fun recheckPostConditions(above: Block): Boolean {
         // If nothing is connected, it should be a post
         if (!hasConnections()) {
-            return true;
+            return true
         }
 
         // If it's not straight, it should be a post
-        Map<BlockFace, WallConnectionType> connections = getWallConnections();
-        if (connections.size() != 2) {
-            return true;
+        val connections = wallConnections
+        if (connections.size != 2) {
+            return true
         }
 
-        Iterator<Map.Entry<BlockFace, WallConnectionType>> iterator = connections.entrySet().iterator();
-        Map.Entry<BlockFace, WallConnectionType> entryA = iterator.next();
-        Map.Entry<BlockFace, WallConnectionType> entryB = iterator.next();
-        if (entryA.getValue() != entryB.getValue() || entryA.getKey().getOpposite() != entryB.getKey()) {
-            return true;
+        val iterator = connections.entries.iterator()
+        val entryA = iterator.next()
+        val entryB = iterator.next()
+        if (entryA.value != entryB.value || entryA.key.getOpposite() != entryB.key) {
+            return true
         }
 
-        BlockFace.Axis axis = entryA.getKey().getAxis();
+        val axis = entryA.key.axis
 
-        switch (above.getId()) {
-            // These special blocks forces walls to become a post
-            case FLOWER_POT, SKULL, CONDUIT, STANDING_BANNER, TURTLE_EGG -> {
-                return true;
+        when (above.id) {
+            BlockID.FLOWER_POT, BlockID.SKULL, BlockID.CONDUIT, BlockID.STANDING_BANNER, BlockID.TURTLE_EGG -> {
+                return true
             }
 
-            // End rods make it become a post if it's placed on the wall
-            case END_ROD -> {
-                if (((Faceable) above).getBlockFace() == BlockFace.UP) {
-                    return true;
+            BlockID.END_ROD -> {
+                if ((above as Faceable).blockFace == BlockFace.UP) {
+                    return true
                 }
             }
 
-            // If the bell is standing and don't follow the path, make it a post
-            case BELL -> {
-                BlockBell bell = (BlockBell) above;
-                if (bell.getAttachment() == Attachment.STANDING
-                        && bell.getBlockFace().getAxis() == axis) {
-                    return true;
+            BlockID.BELL -> {
+                val bell = above as BlockBell
+                if (bell.attachment == Attachment.STANDING
+                    && bell.blockFace!!.axis == axis
+                ) {
+                    return true
                 }
             }
-            default -> {
-                if (above instanceof BlockWallBase) {
+
+            else -> {
+                if (above is BlockWallBase) {
                     // If the wall above is a post, it should also be a post
 
-                    if (((BlockWallBase) above).isWallPost()) {
-                        return true;
+                    if (above.isWallPost) {
+                        return true
                     }
-
-                } else if (above instanceof BlockLantern) {
+                } else if (above is BlockLantern) {
                     // Lanterns makes this become a post if they are not hanging
 
-                    if (!((BlockLantern) above).isHanging()) {
-                        return true;
+                    if (!above.isHanging) {
+                        return true
                     }
-
-                } else if (above.getId().equals(LEVER) || above instanceof BlockTorch || above instanceof BlockButton) {
+                } else if (above.id == BlockID.LEVER || above is BlockTorch || above is BlockButton) {
                     // These blocks make this become a post if they are placed down (facing up)
 
-                    if (((Faceable) above).getBlockFace() == BlockFace.UP) {
-                        return true;
+                    if ((above as Faceable).blockFace == BlockFace.UP) {
+                        return true
                     }
-
-                } else if (above instanceof BlockFenceGate) {
+                } else if (above is BlockFenceGate) {
                     // If the gate don't follow the path, make it a post
 
-                    if (((Faceable) above).getBlockFace().getAxis() == axis) {
-                        return true;
+                    if ((above as Faceable).blockFace!!.axis == axis) {
+                        return true
                     }
-
-                } else if (above instanceof BlockConnectable) {
+                } else if (above is BlockConnectable) {
                     // If the connectable block above don't share 2 equal connections, then this should be a post
 
-                    int shared = 0;
-                    for (BlockFace connection : ((BlockConnectable) above).getConnections()) {
+                    var shared = 0
+                    for (connection in (above as BlockConnectable).connections) {
                         if (connections.containsKey(connection) && ++shared == 2) {
-                            break;
+                            break
                         }
                     }
 
                     if (shared < 2) {
-                        return true;
+                        return true
                     }
-
                 }
             }
         }
 
         // Sign posts always makes the wall become a post
-        return above instanceof BlockStandingSign;
+        return above is BlockStandingSign
     }
 
-    public boolean isSameHeightStraight() {
-        Map<BlockFace, WallConnectionType> connections = getWallConnections();
-        if (connections.size() != 2) {
-            return false;
+    val isSameHeightStraight: Boolean
+        get() {
+            val connections = wallConnections
+            if (connections.size != 2) {
+                return false
+            }
+
+            val iterator =
+                connections.entries.iterator()
+            val a = iterator.next()
+            val b = iterator.next()
+            return a.value == b.value && a.key.getOpposite() == b.key
         }
 
-        Iterator<Map.Entry<BlockFace, WallConnectionType>> iterator = connections.entrySet().iterator();
-        Map.Entry<BlockFace, WallConnectionType> a = iterator.next();
-        Map.Entry<BlockFace, WallConnectionType> b = iterator.next();
-        return a.getValue() == b.getValue() && a.getKey().getOpposite() == b.getKey();
-    }
-
-    public boolean connect(BlockFace blockFace) {
-        return connect(blockFace, true);
-    }
-
-    public boolean connect(BlockFace blockFace, boolean recheckPost) {
+    @JvmOverloads
+    fun connect(blockFace: BlockFace, recheckPost: Boolean = true): Boolean {
         if (blockFace.horizontalIndex < 0) {
-            return false;
+            return false
         }
 
-        Block above = getSideAtLayer(0, BlockFace.UP);
-        return connect(blockFace, above, recheckPost);
+        val above = getSideAtLayer(0, BlockFace.UP)
+        return connect(blockFace, above!!, recheckPost)
     }
 
-    private boolean connect(BlockFace blockFace, Block above, boolean recheckPost) {
-        WallConnectionType type = shouldBeTall(above, blockFace) ? WallConnectionType.TALL : WallConnectionType.SHORT;
+    private fun connect(blockFace: BlockFace, above: Block, recheckPost: Boolean): Boolean {
+        val type = if (shouldBeTall(above, blockFace)) WallConnectionType.TALL else WallConnectionType.SHORT
         if (setConnection(blockFace, type)) {
             if (recheckPost) {
-                recheckPostConditions(above);
+                recheckPostConditions(above)
             }
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    public boolean disconnect(BlockFace blockFace) {
+    fun disconnect(blockFace: BlockFace): Boolean {
         if (blockFace.horizontalIndex < 0) {
-            return false;
+            return false
         }
 
         if (setConnection(blockFace, WallConnectionType.NONE)) {
-            autoUpdatePostFlag();
-            return true;
+            autoUpdatePostFlag()
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        val north = this.canConnect(this.getSide(BlockFace.NORTH))
+        val south = this.canConnect(this.getSide(BlockFace.SOUTH))
+        val west = this.canConnect(this.getSide(BlockFace.WEST))
+        val east = this.canConnect(this.getSide(BlockFace.EAST))
 
-        boolean north = this.canConnect(this.getSide(BlockFace.NORTH));
-        boolean south = this.canConnect(this.getSide(BlockFace.SOUTH));
-        boolean west = this.canConnect(this.getSide(BlockFace.WEST));
-        boolean east = this.canConnect(this.getSide(BlockFace.EAST));
-
-        double n = north ? 0 : 0.25;
-        double s = south ? 1 : 0.75;
-        double w = west ? 0 : 0.25;
-        double e = east ? 1 : 0.75;
+        var n = if (north) 0.0 else 0.25
+        var s = if (south) 1.0 else 0.75
+        var w = if (west) 0.0 else 0.25
+        var e = if (east) 1.0 else 0.75
 
         if (north && south && !west && !east) {
-            w = 0.3125;
-            e = 0.6875;
+            w = 0.3125
+            e = 0.6875
         } else if (!north && !south && west && east) {
-            n = 0.3125;
-            s = 0.6875;
+            n = 0.3125
+            s = 0.6875
         }
 
-        return new SimpleAxisAlignedBB(
-                this.position.south + w,
-                this.position.up,
-                this.position.west + n,
-                this.position.south + e,
-                this.position.up + 1.5,
-                this.position.west + s
-        );
+        return SimpleAxisAlignedBB(
+            position.x + w,
+            position.y,
+            position.z + n,
+            position.x + e,
+            position.y + 1.5,
+            position.z + s
+        )
     }
 
-    @Override
-    public boolean canConnect(Block block) {
-        switch (block.getId()) {
-            case GLASS_PANE, IRON_BARS, GLASS -> {
-                return true;
+    override fun canConnect(block: Block): Boolean {
+        when (block.id) {
+            BlockID.GLASS_PANE, BlockID.IRON_BARS, BlockID.GLASS -> {
+                return true
             }
-            default -> {
-                if (block instanceof BlockGlassStained || block instanceof BlockGlassPaneStained || block instanceof BlockWallBase) {
-                    return true;
+
+            else -> {
+                if (block is BlockGlassStained || block is BlockGlassPaneStained || block is BlockWallBase) {
+                    return true
                 }
-                if (block instanceof BlockFenceGate fenceGate) {
-                    return fenceGate.getBlockFace().getAxis() != calculateAxis(this.position, block.position);
+                if (block is BlockFenceGate) {
+                    return block.blockFace!!.axis != calculateAxis(this.position, block.position)
                 }
-                if (block instanceof BlockStairs) {
-                    return ((BlockStairs) block).getBlockFace().getOpposite() == calculateFace(this.position, block.position);
+                if (block is BlockStairs) {
+                    return block.blockFace!!.getOpposite() == calculateFace(this.position, block.position)
                 }
-                if (block instanceof BlockTrapdoor trapdoor) {
-                    return trapdoor.isOpen() && trapdoor.getBlockFace() == calculateFace(this.position, trapdoor.position);
+                if (block is BlockTrapdoor) {
+                    return block.isOpen && block.blockFace == calculateFace(this.position, block.position)
                 }
-                return block.isSolid() && !block.isTransparent();
+                return block.isSolid && !block.isTransparent
             }
         }
     }
 
-    @Override
-    public boolean isConnected(BlockFace face) {
-        return getConnectionType(face) != WallConnectionType.NONE;
+    override fun isConnected(face: BlockFace): Boolean {
+        return getConnectionType(face) != WallConnectionType.NONE
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        private const val MIN_POST_BB = 5.0 / 16
+        private const val MAX_POST_BB = 11.0 / 16
     }
 }

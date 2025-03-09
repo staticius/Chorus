@@ -1,65 +1,48 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.event.redstone.RedstoneUpdateEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.event.redstone.RedstoneUpdateEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
 
-public class BlockLitRedstoneLamp extends BlockRedstoneLamp {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIT_REDSTONE_LAMP);
+class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockRedstoneLamp(blockstate) {
+    override val name: String
+        get() = "Lit Redstone Lamp"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val lightLevel: Int
+        get() = 15
+
+    override fun toItem(): Item? {
+        return ItemBlock(get(BlockID.REDSTONE_LAMP))
     }
 
-    public BlockLitRedstoneLamp() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockLitRedstoneLamp(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Lit Redstone Lamp";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 15;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.REDSTONE_LAMP));
-    }
-
-    @Override
-    public int onUpdate(int type) {
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return 0;
+    override fun onUpdate(type: Int): Int {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return 0
         }
 
-        if ((type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) && !this.isGettingPower()) {
-            this.level.scheduleUpdate(this, 4);
-            return 1;
+        if ((type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) && !this.isGettingPower) {
+            level.scheduleUpdate(this, 4)
+            return 1
         }
 
-        if (type == Level.BLOCK_UPDATE_SCHEDULED && !this.isGettingPower()) {
+        if (type == Level.BLOCK_UPDATE_SCHEDULED && !this.isGettingPower) {
             // Redstone event
-            RedstoneUpdateEvent ev = new RedstoneUpdateEvent(this);
-            this.level.server.pluginManager.callEvent(ev);
-            if (ev.isCancelled()) {
-                return 0;
+            val ev = RedstoneUpdateEvent(this)
+            level.server.pluginManager.callEvent(ev)
+            if (ev.isCancelled) {
+                return 0
             }
 
-            this.level.updateComparatorOutputLevelSelective(this.position, true);
+            level.updateComparatorOutputLevelSelective(this.position, true)
 
-            this.level.setBlock(this.position, Block.get(BlockID.REDSTONE_LAMP), false, false);
+            level.setBlock(this.position, get(BlockID.REDSTONE_LAMP), false, false)
         }
-        return 0;
+        return 0
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LIT_REDSTONE_LAMP)
+            get() = Companion.field
     }
 }

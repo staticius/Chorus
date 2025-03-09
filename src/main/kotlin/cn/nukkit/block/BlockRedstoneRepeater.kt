@@ -1,76 +1,87 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemRepeater;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.Block.Companion.get
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.EnumPropertyType
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
 
-import static cn.nukkit.block.property.CommonBlockProperties.REPEATER_DELAY;
-
-
-public abstract class BlockRedstoneRepeater extends BlockRedstoneDiode {
-    public BlockRedstoneRepeater(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(isNotActivate(player)) return false;
-        int repeaterDelay = getPropertyValue(REPEATER_DELAY);
+abstract class BlockRedstoneRepeater(blockState: BlockState?) : BlockRedstoneDiode(blockState) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
+        val repeaterDelay = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REPEATER_DELAY)
         if (repeaterDelay == 3) {
-            setPropertyValue(REPEATER_DELAY, 0);
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REPEATER_DELAY, 0)
         } else {
-            setPropertyValue(REPEATER_DELAY, repeaterDelay + 1);
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REPEATER_DELAY, repeaterDelay + 1)
         }
 
-        this.level.setBlock(this.position, this, true, true);
-        return true;
+        level.setBlock(this.position, this, true, true)
+        return true
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (!isSupportValid(down())) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isSupportValid(down()!!)) {
+            return false
         }
-        BlockFace blockFace = player != null ? BlockFace.fromHorizontalIndex(player.getDirection().getOpposite().horizontalIndex) : BlockFace.SOUTH;
-        setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(blockFace));
-        if (!this.level.setBlock(block.position, this, true, true)) {
-            return false;
+        val blockFace = if (player != null) fromHorizontalIndex(
+            player.getDirection()!!
+                .getOpposite()!!.horizontalIndex
+        ) else BlockFace.SOUTH
+        setPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(blockFace)
+        )
+        if (!level.setBlock(block.position, this, true, true)) {
+            return false
         }
 
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
+        if (level.server.settings.levelSettings().enableRedstone()) {
             if (shouldBePowered()) {
-                this.level.scheduleUpdate(this, 1);
+                level.scheduleUpdate(this, 1)
             }
         }
-        return true;
+        return true
     }
 
-    @Override
-    public BlockFace getFacing() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(getPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION));
+    override val facing: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
+            getPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+            )
+        )
+
+    override fun isAlternateInput(block: Block): Boolean {
+        return BlockRedstoneDiode.Companion.isDiode(block)
     }
 
-    @Override
-    protected boolean isAlternateInput(Block block) {
-        return isDiode(block);
+    override fun toItem(): Item? {
+        return ItemRepeater()
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemRepeater();
-    }
+    override val delay: Int
+        get() = (1 + getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REPEATER_DELAY)) * 2
 
-    @Override
-    protected int getDelay() {
-        return (1 + getPropertyValue(REPEATER_DELAY)) * 2;
-    }
-
-    @Override
-    public boolean isLocked() {
-        return this.getPowerOnSides() > 0;
-    }
+    override val isLocked: Boolean
+        get() = this.powerOnSides > 0
 }

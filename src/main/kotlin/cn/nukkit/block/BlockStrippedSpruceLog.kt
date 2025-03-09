@@ -1,33 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.WoodType;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
 
-public class BlockStrippedSpruceLog extends BlockWoodStripped {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STRIPPED_SPRUCE_LOG, CommonBlockProperties.PILLAR_AXIS);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockStrippedSpruceLog @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockWoodStripped(blockstate) {
+    override fun getStrippedState(): BlockState {
+        return BlockStrippedAcaciaLog.Companion.PROPERTIES.getDefaultState()
     }
 
-    public BlockStrippedSpruceLog() {
-        this(PROPERTIES.getDefaultState());
+    override fun getWoodType(): WoodType {
+        return WoodType.SPRUCE
     }
 
-    public BlockStrippedSpruceLog(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return BlockStrippedAcaciaLog.PROPERTIES.getDefaultState();
-    }
-
-    @Override
-    public WoodType getWoodType() {
-        return WoodType.SPRUCE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STRIPPED_SPRUCE_LOG, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

@@ -1,78 +1,67 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
 
-public class BlockAllow extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(ALLOW);
+class BlockAllow : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockAllow() {
-        super(PROPERTIES.getDefaultState());
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val hardness: Double
+        get() = -1.0
+
+    override val resistance: Double
+        get() = 18000000.0
+
+    override val name: String
+        get() = "Allow"
+
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    public BlockAllow(BlockState blockState) {
-        super(blockState);
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return -1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 18000000;
-    }
-
-    @Override
-    public String getName() {
-        return "Allow";
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (player != null && (!player.isCreative() || !player.isOp())) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (player != null && (!player.isCreative || !player.isOp)) {
+            return false
         }
 
-        return super.place(item, block, target, face, fx, fy, fz, player);
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        if (player != null && (!player.isCreative() || !player.isOp())) {
-            return false;
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        if (player != null && (!player.isCreative || !player.isOp)) {
+            return false
         }
 
-        return super.isBreakable(vector, layer, face, item, player);
+        return super.isBreakable(vector, layer, face, item, player)
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(ALLOW)
+            get() = Companion.field
     }
 }

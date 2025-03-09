@@ -1,21 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockLilyOfTheValley : BlockFlower {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockLilyOfTheValley extends BlockFlower {
-     public static final BlockProperties PROPERTIES = new BlockProperties(LILY_OF_THE_VALLEY);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-     @Override
-     @NotNull
-     public BlockProperties getProperties() {
-        return PROPERTIES;
-     }
-
-    public BlockLilyOfTheValley() {
-        super(PROPERTIES.getDefaultState());
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LILY_OF_THE_VALLEY)
+            get() = Companion.field
     }
-
-     public BlockLilyOfTheValley(BlockState blockstate) {
-         super(blockstate);
-     }
 }

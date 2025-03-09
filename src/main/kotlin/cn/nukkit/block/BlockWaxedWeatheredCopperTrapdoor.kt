@@ -1,21 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockWaxedWeatheredCopperTrapdoor extends BlockCopperTrapdoor {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WAXED_WEATHERED_COPPER_TRAPDOOR, CommonBlockProperties.DIRECTION, CommonBlockProperties.OPEN_BIT, CommonBlockProperties.UPSIDE_DOWN_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockWaxedWeatheredCopperTrapdoor() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWaxedWeatheredCopperTrapdoor(BlockState blockstate) {
-        super(blockstate);
+class BlockWaxedWeatheredCopperTrapdoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockCopperTrapdoor(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.WAXED_WEATHERED_COPPER_TRAPDOOR,
+            CommonBlockProperties.DIRECTION,
+            CommonBlockProperties.OPEN_BIT,
+            CommonBlockProperties.UPSIDE_DOWN_BIT
+        )
+            get() = Companion.field
     }
 }

@@ -1,38 +1,22 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockMudBrickDoubleSlab extends BlockDoubleSlabBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MUD_BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+class BlockMudBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDoubleSlabBase(blockstate) {
+    override val slabName: String
+        get() = "Double Mud Brick"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val singleSlab: BlockState
+        get() = BlockMudBrickSlab.Companion.PROPERTIES.getDefaultState()
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.MUD_BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
-
-    public BlockMudBrickDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMudBrickDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getSlabName() {
-        return "Double Mud Brick";
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockMudBrickSlab.PROPERTIES.getDefaultState();
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
 }

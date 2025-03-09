@@ -1,25 +1,14 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
 
-public class BlockCrimsonRoots extends BlockHanging implements BlockFlowerPot.FlowerPotBlock, Natural {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRIMSON_ROOTS);
+class BlockCrimsonRoots @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockHanging(blockstate), FlowerPotBlock, Natural {
+    override val name: String
+        get() = "Crimson Roots"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockCrimsonRoots() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCrimsonRoots(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Crimson Roots";
+    companion object {
+        val properties: BlockProperties = BlockProperties(CRIMSON_ROOTS)
+            get() = Companion.field
     }
 }

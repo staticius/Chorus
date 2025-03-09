@@ -1,70 +1,54 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.WoodType;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
-public class BlockStrippedCherryWood extends BlockWoodStripped {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STRIPPED_CHERRY_WOOD, CommonBlockProperties.PILLAR_AXIS);
+class BlockStrippedCherryWood @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockWoodStripped(blockstate) {
+    override val name: String
+        get() = "Stripped Cherry Wood"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 2.0
+
+    override val resistance: Double
+        get() = 10.0
+
+    override val burnChance: Int
+        get() = 5
+
+    override val burnAbility: Int
+        get() = 5
+
+    override fun getStrippedState(): BlockState {
+        return blockState!!
     }
 
-    public BlockStrippedCherryWood() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBeActivated(): Boolean {
+        return false
     }
 
-    public BlockStrippedCherryWood(BlockState blockstate) {
-        super(blockstate);
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Stripped Cherry Wood";
+    override fun getWoodType(): WoodType {
+        throw UnsupportedOperationException()
     }
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 10;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 5;
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return getBlockState();
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return false;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return false;
-    }
-
-    @Override
-    public WoodType getWoodType() {
-        throw new UnsupportedOperationException();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STRIPPED_CHERRY_WOOD, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

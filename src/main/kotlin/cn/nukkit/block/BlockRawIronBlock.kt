@@ -1,25 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockRawIronBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    Block(blockstate) {
+    override val name: String
+        get() = "Block of Raw Iron"
 
-public class BlockRawIronBlock extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties(RAW_IRON_BLOCK);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockRawIronBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRawIronBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Block of Raw Iron";
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.RAW_IRON_BLOCK)
+            get() = Companion.field
     }
 }

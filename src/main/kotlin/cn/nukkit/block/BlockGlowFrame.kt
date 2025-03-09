@@ -1,32 +1,23 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.blockentity.BlockEntity
 
-public class BlockGlowFrame extends BlockFrame {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GLOW_FRAME, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.ITEM_FRAME_MAP_BIT, CommonBlockProperties.ITEM_FRAME_PHOTO_BIT);
+class BlockGlowFrame @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFrame(blockstate) {
+    override val name: String
+        get() = "Glow Item Frame"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val blockEntityType: String
+        get() = BlockEntity.GLOW_ITEM_FRAME
 
-    public BlockGlowFrame() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockGlowFrame(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Glow Item Frame";
-    }
-
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.GLOW_ITEM_FRAME;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            GLOW_FRAME,
+            CommonBlockProperties.FACING_DIRECTION,
+            CommonBlockProperties.ITEM_FRAME_MAP_BIT,
+            CommonBlockProperties.ITEM_FRAME_PHOTO_BIT
+        )
+            get() = Companion.field
     }
 }

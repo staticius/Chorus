@@ -1,63 +1,39 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockTuffBrickSlab extends BlockSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TUFF_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+class BlockTuffBrickSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSlab(blockstate, BlockID.TUFF_BRICK_DOUBLE_SLAB) {
+    override val slabName: String
+        get() = "Tuff Brick"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val name: String
+        get() = "Tuff Brick Slab"
+
+    override val resistance: Double
+        get() = 6.0
+
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return id == slab.id
     }
 
-    public BlockTuffBrickSlab() {
-        this(PROPERTIES.getDefaultState());
+    override val hardness: Double
+        get() = 1.5
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockTuffBrickSlab(BlockState blockstate) {
-        super(blockstate, TUFF_BRICK_DOUBLE_SLAB);
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.TUFF_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
-
-    @Override
-    public String getSlabName() {
-        return "Tuff Brick";
-    }
-
-    @Override
-    public String getName() {
-        return "Tuff Brick Slab";
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return getId().equals(slab.getId());
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
 }

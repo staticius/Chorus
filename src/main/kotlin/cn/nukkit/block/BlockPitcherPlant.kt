@@ -1,32 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.DoublePlantType;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.DoublePlantType
 
 //todo complete
-public class BlockPitcherPlant extends BlockDoublePlant {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PITCHER_PLANT, CommonBlockProperties.UPPER_BLOCK_BIT);
+class BlockPitcherPlant @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDoublePlant(blockstate) {
+    override val doublePlantType: DoublePlantType
+        get() = DoublePlantType.PITCHER_PLANT
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val name: String
+        get() = "Pitcher Plant"
 
-    public BlockPitcherPlant() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPitcherPlant(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public @NotNull DoublePlantType getDoublePlantType() {
-        return DoublePlantType.PITCHER_PLANT;
-    }
-
-    public String getName() {
-        return "Pitcher Plant";
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PITCHER_PLANT, CommonBlockProperties.UPPER_BLOCK_BIT)
+            get() = Companion.field
     }
 }

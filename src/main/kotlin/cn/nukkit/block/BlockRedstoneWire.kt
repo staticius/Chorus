@@ -1,347 +1,341 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.block.BlockRedstoneEvent;
-import cn.nukkit.event.redstone.RedstoneUpdateEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemRedstone;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.BlockFace.Plane;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.EnumSet;
-import java.util.Objects;
-
-import static cn.nukkit.block.property.CommonBlockProperties.REDSTONE_SIGNAL;
-
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.level.Locator
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.math.Vector3.add
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+import cn.nukkit.utils.RedstoneComponent.updateAllAroundRedstone
+import cn.nukkit.utils.RedstoneComponent.updateAroundRedstone
+import kotlin.math.max
 
 /**
  * @author Angelic47 (Nukkit Project)
  */
-public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(REDSTONE_WIRE, REDSTONE_SIGNAL);
+class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockState), RedstoneComponent {
+    override val name: String
+        get() = "Redstone Wire"
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockRedstoneWire() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRedstoneWire(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Redstone Wire";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (!canBePlacedOn(block.down())) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!canBePlacedOn(block.down()!!)) {
+            return false
         }
 
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
-            this.level.setBlock(block.position, this, true);
+        if (level.server.settings.levelSettings().enableRedstone()) {
+            level.setBlock(block.position, this, true)
 
-            this.updateSurroundingRedstone(true);
+            this.updateSurroundingRedstone(true)
 
-            Locator pos = this.getLocator();
+            val pos = this.locator
 
-            for (BlockFace blockFace : Plane.VERTICAL) {
-                RedstoneComponent.updateAroundRedstone(pos.getSide(blockFace), blockFace.getOpposite());
+            for (blockFace in BlockFace.Plane.VERTICAL) {
+                RedstoneComponent.updateAroundRedstone(pos.getSide(blockFace), blockFace.getOpposite())
             }
 
-            for (BlockFace blockFace : Plane.VERTICAL) {
-                this.updateAround(pos.getSide(blockFace), blockFace.getOpposite());
+            for (blockFace in BlockFace.Plane.VERTICAL) {
+                this.updateAround(pos.getSide(blockFace)!!, blockFace.getOpposite())
             }
 
-            for (BlockFace blockFace : Plane.HORIZONTAL) {
-                Locator p = pos.getSide(blockFace);
+            for (blockFace in BlockFace.Plane.HORIZONTAL) {
+                val p = pos.getSide(blockFace)
 
-                if (this.level.getBlock(p.position).isNormalBlock()) {
-                    this.updateAround(p.getSide(BlockFace.UP), BlockFace.DOWN);
+                if (level.getBlock(p!!.position)!!.isNormalBlock) {
+                    this.updateAround(p.getSide(BlockFace.UP)!!, BlockFace.DOWN)
                 } else {
-                    this.updateAround(p.getSide(BlockFace.DOWN), BlockFace.UP);
+                    this.updateAround(p.getSide(BlockFace.DOWN)!!, BlockFace.UP)
                 }
             }
         } else {
-            this.level.setBlock(block.position, this, true, true);
+            level.setBlock(block.position, this, true, true)
         }
-        return true;
+        return true
     }
 
     //Update the neighbor's block of the pos location as well as the neighbor's neighbor's block
-    private void updateAround(Locator pos, BlockFace face) {
-        if (this.level.getBlock(pos.position).getId().equals(Block.REDSTONE_WIRE)) {
-            updateAroundRedstone(face);
+    private fun updateAround(pos: Locator, face: BlockFace?) {
+        if (level.getBlock(pos.position)!!.id == Block.REDSTONE_WIRE) {
+            updateAroundRedstone(face)
 
-            for (BlockFace side : BlockFace.values()) {
-                RedstoneComponent.updateAroundRedstone(pos.getSide(side), side.getOpposite());
+            for (side in BlockFace.entries) {
+                RedstoneComponent.updateAroundRedstone(pos.getSide(side), side.getOpposite())
             }
         }
     }
 
-    private void updateSurroundingRedstone(boolean force) {
-        Vector3 pos = this.position;
+    private fun updateSurroundingRedstone(force: Boolean) {
+        val pos = this.position
 
-        int meta = this.getRedStoneSignal();
-        int maxStrength = meta;
-        int power = this.getIndirectPower();
+        val meta = this.redStoneSignal
+        var maxStrength = meta
+        val power = this.indirectPower
 
         if (power > 0 && power > maxStrength - 1) {
-            maxStrength = power;
+            maxStrength = power
         }
 
-        int strength = 0;
+        var strength = 0
 
-        for (BlockFace face : Plane.HORIZONTAL) {
-            Vector3 v = pos.getSide(face);
+        for (face in BlockFace.Plane.HORIZONTAL) {
+            val v = pos.getSide(face)
 
-            if (v.getX() == this.getX() && v.getZ() == this.getZ()) {
-                continue;
+            if (v!!.x == this.x && v.z == this.z) {
+                continue
             }
 
-            strength = this.getMaxCurrentStrength(v, strength);
+            strength = this.getMaxCurrentStrength(v, strength)
 
-            if (this.getMaxCurrentStrength(v.up(), strength) > strength && !this.level.getBlock(pos.up()).isNormalBlock()) {
-                strength = this.getMaxCurrentStrength(v.up(), strength);
+            if (this.getMaxCurrentStrength(v.up()!!, strength) > strength && !level.getBlock(
+                    pos.up()!!
+                )!!.isNormalBlock
+            ) {
+                strength = this.getMaxCurrentStrength(v.up()!!, strength)
             }
-            if (this.getMaxCurrentStrength(v.down(), strength) > strength && !this.level.getBlock(v).isNormalBlock()) {
-                strength = this.getMaxCurrentStrength(v.down(), strength);
+            if (this.getMaxCurrentStrength(v.down()!!, strength) > strength && !level.getBlock(
+                    v
+                )!!.isNormalBlock
+            ) {
+                strength = this.getMaxCurrentStrength(v.down()!!, strength)
             }
         }
 
         if (strength > maxStrength) {
-            maxStrength = strength - 1;
+            maxStrength = strength - 1
         } else if (maxStrength > 0) {
-            --maxStrength;
+            --maxStrength
         } else {
-            maxStrength = 0;
+            maxStrength = 0
         }
 
         if (power > maxStrength - 1) {
-            maxStrength = power;
+            maxStrength = power
         } else if (power < maxStrength && strength <= maxStrength) {
-            maxStrength = Math.max(power, strength - 1);
+            maxStrength = max(power.toDouble(), (strength - 1).toDouble()).toInt()
         }
 
         if (meta != maxStrength) {
-            this.level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, meta, maxStrength));
+            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, meta, maxStrength))
 
-            this.setRedStoneSignal(maxStrength);
-            this.level.setBlock(this.position, this, false, true);
+            this.redStoneSignal = maxStrength
+            level.setBlock(this.position, this, false, true)
 
-            updateAllAroundRedstone();
+            updateAllAroundRedstone()
         } else if (force) {
-            for (BlockFace face : BlockFace.values()) {
-                RedstoneComponent.updateAroundRedstone(getSide(face), face.getOpposite());
+            for (face in BlockFace.entries) {
+                RedstoneComponent.updateAroundRedstone(getSide(face), face.getOpposite())
             }
         }
     }
 
-    private int getMaxCurrentStrength(Vector3 pos, int maxStrength) {
-        if (!Objects.equals(this.level.getBlockIdAt(pos.getFloorX(), pos.getFloorY(), pos.getFloorZ()), this.getId())) {
-            return maxStrength;
+    private fun getMaxCurrentStrength(pos: Vector3, maxStrength: Int): Int {
+        if (level.getBlockIdAt(pos.floorX, pos.floorY, pos.floorZ) != this.id) {
+            return maxStrength
         } else {
-            int strength = this.level.getBlockStateAt(pos.getFloorX(), pos.getFloorY(), pos.getFloorZ()).getPropertyValue(REDSTONE_SIGNAL);
-            return Math.max(strength, maxStrength);
+            val strength = level.getBlockStateAt(pos.floorX, pos.floorY, pos.floorZ)!!.getPropertyValue(
+                CommonBlockProperties.REDSTONE_SIGNAL
+            )
+            return max(strength.toDouble(), maxStrength.toDouble()).toInt()
         }
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        Block air = Block.get(BlockID.AIR);
-        this.level.setBlock(this.position, air, true, true);
+    override fun onBreak(item: Item?): Boolean {
+        val air = get(BlockID.AIR)
+        level.setBlock(this.position, air, true, true)
 
-        Locator pos = this.getLocator();
+        val pos = this.locator
 
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
-            this.updateSurroundingRedstone(false);
-            this.level.setBlock(this.position, air, true, true);
+        if (level.server.settings.levelSettings().enableRedstone()) {
+            this.updateSurroundingRedstone(false)
+            level.setBlock(this.position, air, true, true)
 
-            for (BlockFace blockFace : BlockFace.values()) {
-                RedstoneComponent.updateAroundRedstone(pos.getSide(blockFace));
+            for (blockFace in BlockFace.entries) {
+                RedstoneComponent.updateAroundRedstone(pos.getSide(blockFace))
             }
 
-            for (BlockFace blockFace : Plane.HORIZONTAL) {
-                Locator p = pos.getSide(blockFace);
+            for (blockFace in BlockFace.Plane.HORIZONTAL) {
+                val p = pos.getSide(blockFace)
 
-                if (this.level.getBlock(p.position).isNormalBlock()) {
-                    this.updateAround(p.getSide(BlockFace.UP), BlockFace.DOWN);
+                if (level.getBlock(p!!.position)!!.isNormalBlock) {
+                    this.updateAround(p.getSide(BlockFace.UP)!!, BlockFace.DOWN)
                 } else {
-                    this.updateAround(p.getSide(BlockFace.DOWN), BlockFace.UP);
+                    this.updateAround(p.getSide(BlockFace.DOWN)!!, BlockFace.UP)
                 }
             }
         }
-        return true;
+        return true
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemRedstone();
+    override fun toItem(): Item? {
+        return ItemRedstone()
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type != Level.BLOCK_UPDATE_NORMAL && type != Level.BLOCK_UPDATE_REDSTONE) {
-            return 0;
+            return 0
         }
 
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return 0;
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return 0
         }
 
         // Redstone event
-        RedstoneUpdateEvent ev = new RedstoneUpdateEvent(this);
-        level.server.pluginManager.callEvent(ev);
-        if (ev.isCancelled()) {
-            return 0;
+        val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+        level.server.pluginManager.callEvent(ev)
+        if (ev.isCancelled) {
+            return 0
         }
 
-        if (type == Level.BLOCK_UPDATE_NORMAL && !this.canBePlacedOn(this.down())) {
-            this.level.useBreakOn(this.position);
-            return Level.BLOCK_UPDATE_NORMAL;
+        if (type == Level.BLOCK_UPDATE_NORMAL && !this.canBePlacedOn(down()!!)) {
+            level.useBreakOn(this.position)
+            return Level.BLOCK_UPDATE_NORMAL
         }
 
-        this.updateSurroundingRedstone(false);
+        this.updateSurroundingRedstone(false)
 
-        return Level.BLOCK_UPDATE_NORMAL;
+        return Level.BLOCK_UPDATE_NORMAL
     }
 
-    public boolean canBePlacedOn(Block support) {
-        return support.isSolid(BlockFace.UP);
+    fun canBePlacedOn(support: Block): Boolean {
+        return support.isSolid(BlockFace.UP)
     }
 
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return this.isPowerSource() ? getWeakPower(side) : 0;
+    override fun getStrongPower(side: BlockFace): Int {
+        return if (this.isPowerSource) getWeakPower(side) else 0
     }
 
-    @Override
-    public int getWeakPower(BlockFace side) {
-        if (!this.isPowerSource()) {
-            return 0;
+    override fun getWeakPower(side: BlockFace): Int {
+        if (!this.isPowerSource) {
+            return 0
         } else {
-            int power = this.getRedStoneSignal();
+            val power = this.redStoneSignal
 
             if (power == 0) {
-                return 0;
+                return 0
             } else if (side == BlockFace.UP) {
-                return power;
+                return power
             } else {
-                EnumSet<BlockFace> faces = EnumSet.noneOf(BlockFace.class);
+                val faces: EnumSet<BlockFace> = EnumSet.noneOf<BlockFace>(BlockFace::class.java)
 
-                for (BlockFace face : Plane.HORIZONTAL) {
+                for (face in BlockFace.Plane.HORIZONTAL) {
                     if (this.isPowerSourceAt(face)) {
-                        faces.add(face);
+                        faces.add(face)
                     }
                 }
 
-                if (side.getAxis().isHorizontal() && faces.isEmpty()) {
-                    return power;
+                return if (side.axis!!.isHorizontal && faces.isEmpty()) {
+                    power
                 } else if (faces.contains(side) && !faces.contains(side.rotateYCCW()) && !faces.contains(side.rotateY())) {
-                    return power;
+                    power
                 } else {
-                    return 0;
+                    0
                 }
             }
         }
     }
 
-    private boolean isPowerSourceAt(BlockFace side) {
-        Vector3 pos = this.position;
-        Vector3 v = pos.getSide(side);
-        Block block = this.level.getBlock(v);
-        boolean flag = block.isNormalBlock();
-        boolean flag1 = this.level.getBlock(pos.up()).isNormalBlock();
-        return !flag1 && flag && canConnectUpwardsTo(this.level, v.up()) || (canConnectTo(block, side) || !flag && canConnectUpwardsTo(this.level, block.down().position));
+    private fun isPowerSourceAt(side: BlockFace): Boolean {
+        val pos = this.position
+        val v = pos.getSide(side)
+        val block = level.getBlock(v!!)
+        val flag = block!!.isNormalBlock
+        val flag1 = level.getBlock(pos.up()!!)!!.isNormalBlock
+        return !flag1 && flag && canConnectUpwardsTo(this.level, v.up()!!) || (canConnectTo(
+            block, side
+        ) || !flag && canConnectUpwardsTo(this.level, block.down()!!.position))
     }
 
-    protected static boolean canConnectUpwardsTo(Level level, Vector3 pos) {
-        return canConnectTo(level.getBlock(pos), null);
-    }
+    override val isPowerSource: Boolean
+        /** */
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REDSTONE_SIGNAL) > 0
 
-    protected static boolean canConnectTo(Block block, BlockFace side) {
-        if (block.getId().equals(Block.REDSTONE_WIRE)) {
-            return true;
-        } else if (BlockRedstoneDiode.isDiode(block)) {
-            BlockFace face = ((BlockRedstoneDiode) block).getFacing();
-            return face == side || face.getOpposite() == side;
-        } else {
-            return block.isPowerSource() && side != null;
+    var redStoneSignal: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REDSTONE_SIGNAL)
+        set(signal) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REDSTONE_SIGNAL, signal)
         }
-    }
-    ///
 
-    @Override
-    public boolean isPowerSource() {
-        return getPropertyValue(REDSTONE_SIGNAL) > 0;
-    }
+    private val indirectPower: Int
+        get() {
+            var power = 0
+            val pos = this.position
 
-    public int getRedStoneSignal() {
-        return getPropertyValue(REDSTONE_SIGNAL);
-    }
+            for (face in BlockFace.entries) {
+                val blockPower = this.getIndirectPower(pos.getSide(face)!!, face)
 
-    public void setRedStoneSignal(int signal) {
-        setPropertyValue(REDSTONE_SIGNAL, signal);
-    }
+                if (blockPower >= 15) {
+                    return 15
+                }
 
-    private int getIndirectPower() {
-        int power = 0;
-        Vector3 pos = this.position;
-
-        for (BlockFace face : BlockFace.values()) {
-            int blockPower = this.getIndirectPower(pos.getSide(face), face);
-
-            if (blockPower >= 15) {
-                return 15;
+                if (blockPower > power) {
+                    power = blockPower
+                }
             }
 
-            if (blockPower > power) {
-                power = blockPower;
-            }
+            return power
         }
 
-        return power;
-    }
-
-    private int getIndirectPower(Vector3 pos, BlockFace face) {
-        Block block = this.level.getBlock(pos);
-        if (block.getId().equals(Block.REDSTONE_WIRE)) {
-            return 0;
+    private fun getIndirectPower(pos: Vector3, face: BlockFace): Int {
+        val block = level.getBlock(pos)
+        if (block!!.id == Block.REDSTONE_WIRE) {
+            return 0
         }
-        return block.isNormalBlock() ? getStrongPower(pos) : block.getWeakPower(face);
+        return if (block.isNormalBlock) getStrongPower(pos) else block.getWeakPower(face)
     }
 
-    private int getStrongPower(Vector3 pos) {
-        int i = 0;
-        for (BlockFace face : BlockFace.values()) {
-            i = Math.max(i, getStrongPower(pos.getSide(face), face));
+    private fun getStrongPower(pos: Vector3): Int {
+        var i = 0
+        for (face in BlockFace.entries) {
+            i = max(i.toDouble(), getStrongPower(pos.getSide(face)!!, face).toDouble()).toInt()
 
             if (i >= 15) {
-                return i;
+                return i
             }
         }
-        return i;
+        return i
     }
 
-    private int getStrongPower(Vector3 pos, BlockFace direction) {
-        Block block = this.level.getBlock(pos);
+    private fun getStrongPower(pos: Vector3, direction: BlockFace): Int {
+        val block = level.getBlock(pos)
 
-        if (block.getId().equals(Block.REDSTONE_WIRE)) {
-            return 0;
+        if (block!!.id == Block.REDSTONE_WIRE) {
+            return 0
         }
 
-        return block.getStrongPower(direction);
+        return block.getStrongPower(direction)
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_WIRE, CommonBlockProperties.REDSTONE_SIGNAL)
+            get() = Companion.field
+
+        protected fun canConnectUpwardsTo(level: Level, pos: Vector3): Boolean {
+            return canConnectTo(level.getBlock(pos)!!, null)
+        }
+
+        protected fun canConnectTo(block: Block, side: BlockFace?): Boolean {
+            if (block.id == Block.REDSTONE_WIRE) {
+                return true
+            } else if (BlockRedstoneDiode.Companion.isDiode(block)) {
+                val face = (block as BlockRedstoneDiode).facing
+                return face == side || face!!.getOpposite() == side
+            } else {
+                return block.isPowerSource && side != null
+            }
+        }
     }
 }

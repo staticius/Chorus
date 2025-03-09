@@ -1,38 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-
-public class BlockCutSandstoneDoubleSlab extends BlockDoubleSlabBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CUT_SANDSTONE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockCutSandstoneDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDoubleSlabBase(blockstate) {
+    override fun getSlabName(): String {
+        return "Cut Sandstone"
     }
 
-    public BlockCutSandstoneDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
+    override fun getSingleSlab(): BlockState {
+        return BlockCutSandstoneSlab.Companion.PROPERTIES.getDefaultState()
     }
 
-    public BlockCutSandstoneDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public String getSlabName() {
-        return "Cut Sandstone";
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockCutSandstoneSlab.PROPERTIES.getDefaultState();
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(CUT_SANDSTONE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

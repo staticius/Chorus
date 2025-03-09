@@ -1,6 +1,5 @@
 package cn.nukkit.command.defaults
 
-import cn.nukkit.camera.instruction.impl.ClearInstruction.get
 import cn.nukkit.command.CommandSender
 import cn.nukkit.command.data.CommandEnum
 import cn.nukkit.command.data.CommandParamType
@@ -46,7 +45,7 @@ class SummonCommand(name: String) : VanillaCommand(name, "commands.summon.descri
         if (list.hasResult(1)) {
             pos = list.getResult(1)
         }
-        if (!pos!!.level.isYInRange(pos.position.up.toInt()) || !pos.chunk.isLoaded) {
+        if (!pos!!.level.isYInRange(pos.position.y.toInt()) || !pos.chunk.isLoaded) {
             log.addError("commands.summon.outOfWorld").output()
             return 0
         }

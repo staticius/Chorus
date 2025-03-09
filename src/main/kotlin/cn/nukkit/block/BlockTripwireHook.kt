@@ -1,296 +1,297 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.block.BlockRedstoneEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.vibration.VibrationEvent;
-import cn.nukkit.level.vibration.VibrationType;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.network.protocol.LevelSoundEventPacket;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.ATTACHED_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.POWERED_BIT;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.block.BlockRedstoneEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.*
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.network.protocol.LevelSoundEventPacket
+import cn.nukkit.utils.RedstoneComponent
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 /**
  * @author CreeperFace
  */
+class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+    BlockTransparent(state), RedstoneComponent {
+    override val name: String
+        get() = "Tripwire Hook"
 
-public class BlockTripwireHook extends BlockTransparent implements RedstoneComponent {
-    /** Includes 40 tripwire and both tripwire hooks */
-    public static final int MAX_TRIPWIRE_CIRCUIT_LENGTH = 42;
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(TRIPWIRE_HOOK,
-            DIRECTION, ATTACHED_BIT, POWERED_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockTripwireHook() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockTripwireHook(BlockState state) {
-        super(state);
-    }
-
-    @Override
-    public String getName() {
-        return "Tripwire Hook";
-    }
-
-    @Override
-    public int onUpdate(int type) {
-        switch(type) {
-            case Level.BLOCK_UPDATE_NORMAL -> {
-                var supportBlock = this.getSide(this.getFacing().getOpposite());
-                if (!supportBlock.isNormalBlock() && !(supportBlock instanceof BlockGlass)) {
-                    this.level.useBreakOn(this.position);
+    override fun onUpdate(type: Int): Int {
+        when (type) {
+            Level.BLOCK_UPDATE_NORMAL -> {
+                val supportBlock = this.getSide(facing!!.getOpposite()!!)
+                if (!supportBlock!!.isNormalBlock && supportBlock !is BlockGlass) {
+                    level.useBreakOn(this.position)
                 }
-                return type;
+                return type
             }
-            case Level.BLOCK_UPDATE_SCHEDULED -> {
-                this.updateLine(false, true);
-                return type;
+
+            Level.BLOCK_UPDATE_SCHEDULED -> {
+                this.updateLine(false, true)
+                return type
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        var supportBlock = this.getSide(face.getOpposite());
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val supportBlock = this.getSide(face.getOpposite()!!)
         if (face == BlockFace.DOWN || face == BlockFace.UP ||
-                (!supportBlock.isNormalBlock() && !(supportBlock instanceof BlockGlass))) {
-            return false;
+            (!supportBlock!!.isNormalBlock && supportBlock !is BlockGlass)
+        ) {
+            return false
         }
 
-        if (face.getAxis().isHorizontal()) {
-            this.setFace(face);
+        if (face.axis!!.isHorizontal) {
+            this.setFace(face)
         }
 
-        this.level.setBlock(this.position, this);
+        level.setBlock(this.position, this)
 
         if (player != null) {
-            this.updateLine(false, false);
+            this.updateLine(false, false)
         }
-        return true;
+        return true
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        super.onBreak(item);
-        boolean attached = isAttached();
-        boolean powered = isPowered();
+    override fun onBreak(item: Item?): Boolean {
+        super.onBreak(item)
+        val attached = isAttached
+        val powered = isPowered
 
         if (attached || powered) {
-            this.updateLine(true, false);
+            this.updateLine(true, false)
         }
 
         if (powered) {
-            updateAroundRedstone();
-            RedstoneComponent.updateAroundRedstone(this.getSide(getFacing().getOpposite()));
+            updateAroundRedstone()
+            updateAroundRedstone(getSide(facing!!.getOpposite()!!)!!)
         }
 
-        return true;
+        return true
     }
 
-    public void updateLine(boolean isHookBroken, boolean doUpdateAroundHook,
-                           int eventDistance, BlockTripWire eventBlock) {
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return;
+    @JvmOverloads
+    fun updateLine(
+        isHookBroken: Boolean, doUpdateAroundHook: Boolean,
+        eventDistance: Int = -1, eventBlock: BlockTripWire? = null
+    ) {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return
         }
 
-        BlockFace facing = this.getFacing();
-        Locator locator = this.getLocator();
-        boolean wasConnected = this.isAttached();
-        boolean wasPowered = this.isPowered();
+        val facing = this.facing
+        val locator = this.locator
+        val wasConnected = this.isAttached
+        val wasPowered = this.isPowered
 
-        boolean isConnected = !isHookBroken;
-        boolean isPowered = false;
+        var isConnected = !isHookBroken
+        var isPowered = false
 
-        int pairedHookDistance = -1;
-        BlockTripWire[] line = new BlockTripWire[MAX_TRIPWIRE_CIRCUIT_LENGTH];
+        var pairedHookDistance = -1
+        val line = arrayOfNulls<BlockTripWire>(MAX_TRIPWIRE_CIRCUIT_LENGTH)
         //Skip the starting hook in potential circuit
-        for (int steps = 1; steps < MAX_TRIPWIRE_CIRCUIT_LENGTH; ++steps) {
-            Block b = this.level.getBlock(locator.getSide(facing, steps).position);
+        for (steps in 1..<MAX_TRIPWIRE_CIRCUIT_LENGTH) {
+            var b = level.getBlock(locator.getSide(facing, steps)!!.position)
 
-            if (b instanceof BlockTripwireHook hook) {
-                if (hook.getFacing() == facing.getOpposite()) {
-                    pairedHookDistance = steps;
+            if (b is BlockTripwireHook) {
+                if (b.facing == facing!!.getOpposite()) {
+                    pairedHookDistance = steps
                 }
-                break;
+                break
             }
 
             if (steps == eventDistance && eventBlock != null) {
-                b = eventBlock;
+                b = eventBlock
             }
 
-            if (!(b instanceof BlockTripWire tripwire)) {
-                line[steps] = null;
-                isConnected = false;
-                continue;
+            if (b !is BlockTripWire) {
+                line[steps] = null
+                isConnected = false
+                continue
             }
 
-            boolean notDisarmed = !tripwire.isDisarmed();
-            isPowered |= notDisarmed && tripwire.isPowered();
+            val notDisarmed = !b.isDisarmed
+            isPowered = isPowered or (notDisarmed && b.isPowered)
 
             if (steps == eventDistance) {
-                this.level.scheduleUpdate(this, 10);
-                isConnected &= notDisarmed;
+                level.scheduleUpdate(this, 10)
+                isConnected = isConnected and notDisarmed
             }
-            line[steps] = tripwire;
+            line[steps] = b
         }
 
-        boolean foundPairedHook = pairedHookDistance > 1;
-        isConnected &= foundPairedHook;
-        isPowered &= isConnected;
+        val foundPairedHook = pairedHookDistance > 1
+        isConnected = isConnected and foundPairedHook
+        isPowered = isPowered and isConnected
 
-        BlockTripwireHook updatedHook = (BlockTripwireHook) Block.get(BlockID.TRIPWIRE_HOOK);
-        updatedHook.setLevel(this.level);
-        updatedHook.setAttached(isConnected);
-        updatedHook.setPowered(isPowered);
+        val updatedHook = get(BlockID.TRIPWIRE_HOOK) as BlockTripwireHook
+        updatedHook.setLevel(this.level)
+        updatedHook.isAttached = isConnected
+        updatedHook.isPowered = isPowered
 
         if (foundPairedHook) {
-            Locator pairedPos = locator.getSide(facing, pairedHookDistance);
-            BlockFace pairedFace = facing.getOpposite();
-            updatedHook.setFace(pairedFace);
-            this.level.setBlock(pairedPos.position, updatedHook, true, true);
-            RedstoneComponent.updateAroundRedstone(pairedPos);
-            RedstoneComponent.updateAroundRedstone(pairedPos.getSide(pairedFace.getOpposite()));
-            this.addSound(pairedPos.position, isConnected, isPowered, wasConnected, wasPowered);
+            val pairedPos = locator.getSide(facing, pairedHookDistance)
+            val pairedFace = facing!!.getOpposite()
+            updatedHook.setFace(pairedFace!!)
+            level.setBlock(pairedPos!!.position, updatedHook, true, true)
+            updateAroundRedstone(pairedPos)
+            updateAroundRedstone(pairedPos.getSide(pairedFace.getOpposite())!!)
+            this.addSound(pairedPos.position, isConnected, isPowered, wasConnected, wasPowered)
         }
 
-        this.addSound(locator.position, isConnected, isPowered, wasConnected, wasPowered);
+        this.addSound(locator.position, isConnected, isPowered, wasConnected, wasPowered)
 
         if (!isHookBroken) {
-            updatedHook.setFace(facing);
-            this.level.setBlock(locator.position, updatedHook, true, true);
+            updatedHook.setFace(facing!!)
+            level.setBlock(locator.position, updatedHook, true, true)
 
             if (doUpdateAroundHook) {
-                updateAroundRedstone();
-                RedstoneComponent.updateAroundRedstone(locator.getSide(facing.getOpposite()));
+                updateAroundRedstone()
+                updateAroundRedstone(locator.getSide(facing.getOpposite())!!)
             }
         }
 
-        if (wasConnected == isConnected) { return; }
-        for (int steps = 1; steps < pairedHookDistance; steps++) {
-            BlockTripWire wire = line[steps];
-            if(wire == null) { continue; }
-            Vector3 vc = locator.position.getSide(facing, steps);
-            wire.setAttached(isConnected);
-            this.level.setBlock(vc, wire, true, true);
+        if (wasConnected == isConnected) {
+            return
+        }
+        for (steps in 1..<pairedHookDistance) {
+            val wire = line[steps] ?: continue
+            val vc = locator.position.getSide(facing!!, steps)
+            wire.isAttached = isConnected
+            level.setBlock(vc!!, wire, true, true)
         }
     }
 
-    public void updateLine(boolean isHookBroken, boolean doUpdateAroundHook) {
-        this.updateLine(isHookBroken, doUpdateAroundHook, -1, null);
-    }
-
-    private void addSound(Vector3 pos, boolean canConnect, boolean nextPowered, boolean attached, boolean powered) {
+    private fun addSound(pos: Vector3, canConnect: Boolean, nextPowered: Boolean, attached: Boolean, powered: Boolean) {
         if (nextPowered && !powered) {
-            this.level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_POWER_ON);
-            this.level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, 0, 15));
+            level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_POWER_ON)
+            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
         } else if (!nextPowered && powered) {
-            this.level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_POWER_OFF);
-            this.level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, 15, 0));
+            level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_POWER_OFF)
+            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
         } else if (canConnect && !attached) {
-            this.level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_ATTACH);
+            level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_ATTACH)
         } else if (!canConnect && attached) {
-            this.level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_DETACH);
+            level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_DETACH)
         }
     }
 
-    public BlockFace getFacing() {
-        return BlockFace.fromHorizontalIndex(this.getDirection());
+    val facing: BlockFace?
+        get() = fromHorizontalIndex(this.direction)
+
+    val direction: Int
+        get() = this.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)
+
+    var isAttached: Boolean
+        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.ATTACHED_BIT)
+        set(isAttached) {
+            if (field == isAttached) {
+                return
+            }
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.ATTACHED_BIT,
+                isAttached
+            )
+            val pos = this.add(0.5, 0.5, 0.5)
+            val vibrationType =
+                if (isAttached) VibrationType.BLOCK_ATTACH else VibrationType.BLOCK_DETACH
+            level.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    this,
+                    pos.position,
+                    vibrationType
+                )
+            )
+        }
+
+    var isPowered: Boolean
+        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT)
+        set(isPowered) {
+            if (field == isPowered) {
+                return
+            }
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.POWERED_BIT,
+                isPowered
+            )
+            val pos = this.add(0.5, 0.5, 0.5)
+            val vibrationType =
+                if (isPowered) VibrationType.BLOCK_ACTIVATE else VibrationType.BLOCK_DEACTIVATE
+            level.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    this,
+                    pos.position,
+                    vibrationType
+                )
+            )
+        }
+
+    fun setFace(face: BlockFace) {
+        val direction = face.horizontalIndex
+        if (this.direction == direction) {
+            return
+        }
+        this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, direction)
     }
 
-    public int getDirection() {
-        return this.getPropertyValue(DIRECTION);
+    override val isPowerSource: Boolean
+        get() = true
+
+    override fun getWeakPower(face: BlockFace?): Int {
+        return if (isPowered) 15 else 0
     }
 
-    public boolean isAttached() {
-        return this.getPropertyValue(ATTACHED_BIT);
+    override fun getStrongPower(side: BlockFace?): Int {
+        return if (!isPowered) 0 else if (facing == side) 15 else 0
     }
 
-    public boolean isPowered() {
-        return this.getPropertyValue(POWERED_BIT);
+    override val waterloggingLevel: Int
+        get() = 2
+
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    public void setPowered(boolean isPowered) {
-        if (this.isPowered() == isPowered) { return; }
-        this.setPropertyValue(POWERED_BIT, isPowered);
-        var pos = this.add(0.5, 0.5, 0.5);
-        VibrationType vibrationType = (isPowered) ? VibrationType.BLOCK_ACTIVATE : VibrationType.BLOCK_DEACTIVATE;
-        this.level.vibrationManager.callVibrationEvent(new VibrationEvent(this, pos.position, vibrationType));
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    public void setAttached(boolean isAttached) {
-        if (this.isAttached() == isAttached) { return; }
-        this.setPropertyValue(ATTACHED_BIT, isAttached);
-        var pos = this.add(0.5, 0.5, 0.5);
-        VibrationType vibrationType = (isAttached) ? VibrationType.BLOCK_ATTACH : VibrationType.BLOCK_DETACH;
-        this.level.vibrationManager.callVibrationEvent(new VibrationEvent(this, pos.position, vibrationType));
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    public void setFace(BlockFace face) {
-        int direction = face.horizontalIndex;
-        if(this.getDirection() == direction) { return; }
-        this.setPropertyValue(DIRECTION, direction);
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
+    companion object {
+        /** Includes 40 tripwire and both tripwire hooks  */
+        const val MAX_TRIPWIRE_CIRCUIT_LENGTH: Int = 42
 
-    @Override
-    public int getWeakPower(BlockFace face) {
-        return isPowered() ? 15 : 0;
-    }
-
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return !isPowered() ? 0 : getFacing() == side ? 15 : 0;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return false;
+        val properties: BlockProperties = BlockProperties(
+            BlockID.TRIPWIRE_HOOK,
+            CommonBlockProperties.DIRECTION, CommonBlockProperties.ATTACHED_BIT, CommonBlockProperties.POWERED_BIT
+        )
+            get() = Companion.field
     }
 }

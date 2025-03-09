@@ -61,7 +61,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
     }
 
     open fun getResultDamage(): Int {
-        return NukkitMath.ceilDouble(sqrt(motion.south * motion.south + motion.up * motion.up + motion.west * motion.west) * getDamage())
+        return NukkitMath.ceilDouble(sqrt(motion.x * motion.x + motion.y * motion.y + motion.z * motion.z) * getDamage())
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
@@ -135,9 +135,9 @@ abstract class EntityProjectile @JvmOverloads constructor(
     }
 
     protected open fun updateMotion() {
-        motion.up -= getGravity().toDouble()
-        motion.south *= (1 - this.getDrag()).toDouble()
-        motion.west *= (1 - this.getDrag()).toDouble()
+        motion.y -= getGravity().toDouble()
+        motion.x *= (1 - this.getDrag()).toDouble()
+        motion.z *= (1 - this.getDrag()).toDouble()
     }
 
     /**
@@ -179,13 +179,13 @@ abstract class EntityProjectile @JvmOverloads constructor(
             }
 
             val moveVector: Vector3 = Vector3(
-                position.south + motion.south,
-                position.up + motion.up, position.west + motion.west
+                position.x + motion.x,
+                position.y + motion.y, position.z + motion.z
             )
 
             val list: Array<Entity> = level!!.getCollidingEntities(
                 getBoundingBox()!!
-                    .addCoord(motion.south, motion.up, motion.west).expand(1.0, 1.0, 1.0), this
+                    .addCoord(motion.x, motion.y, motion.z).expand(1.0, 1.0, 1.0), this
             )
 
             var nearDistance: Double = Int.MAX_VALUE.toDouble()
@@ -227,14 +227,14 @@ abstract class EntityProjectile @JvmOverloads constructor(
 
             val locator: Locator = getLocator()
             val motion: Vector3 = getMotion()
-            this.move(this.motion.south, this.motion.up, this.motion.west)
+            this.move(this.motion.x, this.motion.y, this.motion.z)
 
             if (this.isCollided && !this.hadCollision) { //collide with block
                 this.hadCollision = true
 
-                this.motion.south = 0.0
-                this.motion.up = 0.0
-                this.motion.west = 0.0
+                this.motion.x = 0.0
+                this.motion.y = 0.0
+                this.motion.z = 0.0
 
                 server!!.pluginManager.callEvent(
                     ProjectileHitEvent(
@@ -251,8 +251,8 @@ abstract class EntityProjectile @JvmOverloads constructor(
                 this.hadCollision = false
             }
 
-            if (!this.hadCollision || abs(this.motion.south) > 0.00001 || abs(this.motion.up) > 0.00001 || abs(
-                    this.motion.west
+            if (!this.hadCollision || abs(this.motion.x) > 0.00001 || abs(this.motion.y) > 0.00001 || abs(
+                    this.motion.z
                 ) > 0.00001
             ) {
                 updateRotation()
@@ -266,17 +266,17 @@ abstract class EntityProjectile @JvmOverloads constructor(
     }
 
     fun updateRotation() {
-        val f: Double = sqrt((motion.south * motion.south) + (motion.west * motion.west))
-        rotation.yaw = atan2(motion.south, motion.west) * 180 / Math.PI
-        rotation.pitch = atan2(motion.up, f) * 180 / Math.PI
+        val f: Double = sqrt((motion.x * motion.x) + (motion.z * motion.z))
+        rotation.yaw = atan2(motion.x, motion.z) * 180 / Math.PI
+        rotation.pitch = atan2(motion.y, f) * 180 / Math.PI
     }
 
     fun inaccurate(modifier: Float) {
         val rand: Random = ThreadLocalRandom.current()
 
-        motion.south += rand.nextGaussian() * 0.007499999832361937 * modifier
-        motion.up += rand.nextGaussian() * 0.007499999832361937 * modifier
-        motion.west += rand.nextGaussian() * 0.007499999832361937 * modifier
+        motion.x += rand.nextGaussian() * 0.007499999832361937 * modifier
+        motion.y += rand.nextGaussian() * 0.007499999832361937 * modifier
+        motion.z += rand.nextGaussian() * 0.007499999832361937 * modifier
     }
 
     protected open fun onCollideWithBlock(locator: Locator, motion: Vector3) {

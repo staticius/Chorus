@@ -1,50 +1,34 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.level.Sound;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.level.Sound
 
-import static cn.nukkit.block.property.CommonBlockProperties.IN_WALL_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.OPEN_BIT;
+class BlockWarpedFenceGate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFenceGate(blockstate) {
+    override val name: String
+        get() = "Warped Fence Gate"
 
-public class BlockWarpedFenceGate extends BlockFenceGate {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_FENCE_GATE,  IN_WALL_BIT, MINECRAFT_CARDINAL_DIRECTION, OPEN_BIT);
+    override val burnChance: Int
+        get() = 0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val burnAbility: Int
+        get() = 0
+
+    override fun playOpenSound() {
+        level.addSound(this.position, Sound.OPEN_NETHER_WOOD_FENCE_GATE)
     }
 
-    public BlockWarpedFenceGate() {
-        this(PROPERTIES.getDefaultState());
+    override fun playCloseSound() {
+        level.addSound(this.position, Sound.CLOSE_NETHER_WOOD_FENCE_GATE)
     }
 
-    public BlockWarpedFenceGate(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Warped Fence Gate";
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 0;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 0;
-    }
-
-    @Override
-    public void playOpenSound() {
-        level.addSound(this.position, Sound.OPEN_NETHER_WOOD_FENCE_GATE);
-    }
-
-    @Override
-    public void playCloseSound() {
-        level.addSound(this.position, Sound.CLOSE_NETHER_WOOD_FENCE_GATE);
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.WARPED_FENCE_GATE,
+            CommonBlockProperties.IN_WALL_BIT,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OPEN_BIT
+        )
+            get() = Companion.field
     }
 }

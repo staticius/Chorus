@@ -1,87 +1,68 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-import javax.annotation.Nullable;
+class BlockRedstoneBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockstate), RedstoneComponent {
+    override val resistance: Double
+        get() = 10.0
 
-public class BlockRedstoneBlock extends BlockSolid implements RedstoneComponent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(REDSTONE_BLOCK);
+    override val hardness: Double
+        get() = 5.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    public BlockRedstoneBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Redstone Block"
 
-    public BlockRedstoneBlock(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public double getResistance() {
-        return 10;
-    }
-
-    @Override
-    public double getHardness() {
-        return 5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public String getName() {
-        return "Redstone Block";
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (super.place(item, block, target, face, fx, fy, fz, player)) {
-            updateAroundRedstone();
+            updateAroundRedstone()
 
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public boolean onBreak(Item item) {
+    override fun onBreak(item: Item?): Boolean {
         if (!super.onBreak(item)) {
-            return false;
+            return false
         }
 
-        updateAroundRedstone();
-        return true;
+        updateAroundRedstone()
+        return true
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
+    override val isPowerSource: Boolean
+        get() = true
+
+    override fun getWeakPower(face: BlockFace?): Int {
+        return 15
     }
 
-    @Override
-    public int getWeakPower(BlockFace face) {
-        return 15;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_BLOCK)
+            get() = Companion.field
     }
 }

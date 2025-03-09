@@ -1,75 +1,51 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.CompassRoseDirection;
-import org.jetbrains.annotations.NotNull;
-
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.math.CompassRoseDirection
 
 /**
  * @author Pub4Game
  * @since 26.12.2015
  */
-public class BlockWallSign extends BlockStandingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WALL_SIGN, FACING_DIRECTION);
+open class BlockWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockStandingSign(blockState) {
+    override val wallSignId: String
+        get() = id
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val standingSignId: String?
+        get() = BlockID.STANDING_SIGN
 
-    public BlockWallSign() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Wall Sign"
 
-    public BlockWallSign(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getWallSignId() {
-        return getId();
-    }
-
-    @Override
-    public String getStandingSignId() {
-        return STANDING_SIGN;
-    }
-
-    @Override
-    public String getName() {
-        return "Wall Sign";
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (this.getSide(getBlockFace().getOpposite()).isAir()) {
-                this.level.useBreakOn(this.position);
+            if (getSide(blockFace!!.getOpposite()!!)!!.isAir) {
+                level.useBreakOn(this.position)
             }
-            return Level.BLOCK_UPDATE_NORMAL;
+            return Level.BLOCK_UPDATE_NORMAL
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(FACING_DIRECTION, face.index);
-    }
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(FACING_DIRECTION));
-    }
+    override var signDirection: CompassRoseDirection?
+        get() = blockFace!!.compassRoseDirection
+        set(direction) {
+            blockFace = direction!!.closestBlockFace
+        }
 
-    @Override
-    public void setSignDirection(CompassRoseDirection direction) {
-        setBlockFace(direction.closestBlockFace);
-    }
-
-    @Override
-    public CompassRoseDirection getSignDirection() {
-        return getBlockFace().getCompassRoseDirection();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

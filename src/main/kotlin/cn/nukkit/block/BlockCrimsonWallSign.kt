@@ -1,40 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemCrimsonSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
-
-
-public class BlockCrimsonWallSign extends BlockWallSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRIMSON_WALL_SIGN, FACING_DIRECTION);
-
-    public BlockCrimsonWallSign() {
-        this(PROPERTIES.getDefaultState());
+class BlockCrimsonWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockWallSign(blockState) {
+    override fun getWallSignId(): String {
+        return CRIMSON_WALL_SIGN
     }
 
-    public BlockCrimsonWallSign(BlockState blockState) {
-        super(blockState);
+    override fun getStandingSignId(): String {
+        return CRIMSON_STANDING_SIGN
     }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemCrimsonSign()
     }
 
-    @Override
-    public String getWallSignId() {
-        return CRIMSON_WALL_SIGN;
-    }
-
-    @Override
-    public String getStandingSignId() {
-        return CRIMSON_STANDING_SIGN;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemCrimsonSign();
+    companion object {
+        val properties: BlockProperties = BlockProperties(CRIMSON_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

@@ -1,33 +1,20 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemSpruceSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
 
-public class BlockSpruceStandingSign extends BlockStandingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SPRUCE_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION);
+class BlockSpruceStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockStandingSign(blockstate) {
+    override val wallSignId: String
+        get() = BlockSpruceWallSign.Companion.PROPERTIES.getIdentifier()
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemSpruceSign()
     }
 
-    public BlockSpruceStandingSign() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSpruceStandingSign(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getWallSignId() {
-        return BlockSpruceWallSign.PROPERTIES.getIdentifier();
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemSpruceSign();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SPRUCE_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+            get() = Companion.field
     }
 }

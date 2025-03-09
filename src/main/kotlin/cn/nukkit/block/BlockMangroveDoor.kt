@@ -1,26 +1,20 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockMangroveDoor extends BlockWoodenDoor {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MANGROVE_DOOR, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonBlockProperties.OPEN_BIT, CommonBlockProperties.UPPER_BLOCK_BIT, CommonBlockProperties.DOOR_HINGE_BIT);
+class BlockMangroveDoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWoodenDoor(blockstate) {
+    override val name: String
+        get() = "Mangrove Door Block"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockMangroveDoor() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMangroveDoor(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Mangrove Door Block";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.MANGROVE_DOOR,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OPEN_BIT,
+            CommonBlockProperties.UPPER_BLOCK_BIT,
+            CommonBlockProperties.DOOR_HINGE_BIT
+        )
+            get() = Companion.field
     }
 }

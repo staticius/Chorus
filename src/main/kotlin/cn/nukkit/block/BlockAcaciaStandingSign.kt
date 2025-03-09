@@ -1,38 +1,25 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemAcaciaSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-public class BlockAcaciaStandingSign extends BlockStandingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(ACACIA_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockAcaciaStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockStandingSign(blockstate) {
+    override fun getStandingSignId(): String {
+        return Companion.properties.identifier
     }
 
-    public BlockAcaciaStandingSign() {
-        this(PROPERTIES.getDefaultState());
+    override fun getWallSignId(): String {
+        return BlockAcaciaWallSign.Companion.PROPERTIES.getIdentifier()
     }
 
-    public BlockAcaciaStandingSign(BlockState blockstate) {
-        super(blockstate);
+    override fun toItem(): Item? {
+        return ItemAcaciaSign()
     }
 
-    @Override
-    protected String getStandingSignId() {
-        return PROPERTIES.getIdentifier();
-    }
-
-    @Override
-    public String getWallSignId() {
-        return BlockAcaciaWallSign.PROPERTIES.getIdentifier();
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemAcaciaSign();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(ACACIA_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+            get() = Companion.field
     }
 }

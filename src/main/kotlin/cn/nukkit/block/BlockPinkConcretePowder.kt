@@ -1,25 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockPinkConcretePowder @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockConcretePowder(blockstate) {
+    override val concrete: BlockConcrete
+        get() = BlockPinkConcrete()
 
-public class BlockPinkConcretePowder extends BlockConcretePowder {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PINK_CONCRETE_POWDER);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockPinkConcretePowder() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPinkConcretePowder(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public BlockConcrete getConcrete() {
-        return new BlockPinkConcrete();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PINK_CONCRETE_POWDER)
+            get() = Companion.field
     }
 }

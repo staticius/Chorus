@@ -86,9 +86,9 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
             onCollideWithBlock(locator, motion, collisionBlock)
         if (!affect && getLocator().getLevelBlock().getId() === BlockID.AIR) {
             val fire: BlockFire = Block.get(BlockID.FIRE) as BlockFire
-            fire.position.south = position.south
-            fire.position.up = position.up
-            fire.position.west = position.west
+            fire.position.x = position.x
+            fire.position.y = position.y
+            fire.position.z = position.z
             fire.level = level!!
 
             if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {

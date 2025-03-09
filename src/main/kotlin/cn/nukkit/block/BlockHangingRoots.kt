@@ -1,33 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
-public class BlockHangingRoots extends BlockHanging {
-    public static final BlockProperties PROPERTIES = new BlockProperties(HANGING_ROOTS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockHangingRoots @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockHanging(blockstate) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        return isSupportValid && super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    public BlockHangingRoots() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val isSupportValid: Boolean
+        get() = up()!!.isSolid
 
-    public BlockHangingRoots(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        return isSupportValid() && super.place(item, block, target, face, fx, fy, fz, player);
-    }
-
-    @Override
-    protected boolean isSupportValid() {
-        return this.up().isSolid();
+    companion object {
+        val properties: BlockProperties = BlockProperties(HANGING_ROOTS)
+            get() = Companion.field
     }
 }

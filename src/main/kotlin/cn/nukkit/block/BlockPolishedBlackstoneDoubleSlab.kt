@@ -1,52 +1,32 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockPolishedBlackstoneDoubleSlab extends BlockDoubleSlabBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_BLACKSTONE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+open class BlockPolishedBlackstoneDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDoubleSlabBase(blockstate) {
+    override val slabName: String
+        get() = "Polished Blackstone"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockPolishedBlackstoneDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    public BlockPolishedBlackstoneDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val hardness: Double
+        get() = 2.0
 
-    @Override
-    public String getSlabName() {
-        return "Polished Blackstone";
-    }
+    override val resistance: Double
+        get() = 6.0
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override val singleSlab: BlockState?
+        get() = BlockPolishedBlackstoneSlab.Companion.PROPERTIES.getDefaultState()
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6.0;
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockPolishedBlackstoneSlab.PROPERTIES.getDefaultState();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.POLISHED_BLACKSTONE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

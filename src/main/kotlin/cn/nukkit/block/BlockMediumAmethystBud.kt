@@ -1,32 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
 
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+class BlockMediumAmethystBud @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockAmethystBud(blockState) {
+    override val namePrefix: String
+        get() = "Medium"
 
-public class BlockMediumAmethystBud extends BlockAmethystBud {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MEDIUM_AMETHYST_BUD, CommonBlockProperties.MINECRAFT_BLOCK_FACE);
+    override val lightLevel: Int
+        get() = 2
 
-    public BlockMediumAmethystBud() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMediumAmethystBud(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    protected String getNamePrefix() {
-        return "Medium";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 2;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.MEDIUM_AMETHYST_BUD, CommonBlockProperties.MINECRAFT_BLOCK_FACE)
+            get() = Companion.field
     }
 }

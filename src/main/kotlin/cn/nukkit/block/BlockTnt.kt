@@ -1,158 +1,143 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow;
-import cn.nukkit.entity.projectile.EntitySmallFireball;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.vibration.VibrationEvent;
-import cn.nukkit.level.vibration.VibrationType;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.FloatTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.utils.RedstoneComponent;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.Entity.Companion.createEntity
+import cn.nukkit.entity.projectile.EntitySmallFireball
+import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow
+import cn.nukkit.item.*
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
+import cn.nukkit.level.Locator
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.*
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.FloatTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.utils.RedstoneComponent
+import cn.nukkit.utils.random.NukkitRandom
+import kotlin.math.cos
+import kotlin.math.sin
 
-import javax.annotation.Nullable;
+class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(state), RedstoneComponent, Natural {
+    override val name: String
+        get() = "TNT"
 
-import static cn.nukkit.block.property.CommonBlockProperties.EXPLODE_BIT;
+    override val hardness: Double
+        get() = 0.0
 
-public class BlockTnt extends BlockSolid implements RedstoneComponent, Natural {
+    override val resistance: Double
+        get() = 0.0
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(TNT, EXPLODE_BIT);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockTnt() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val burnChance: Int
+        get() = 15
 
-    public BlockTnt(BlockState state) {
-        super(state);
-    }
+    override val burnAbility: Int
+        get() = 100
 
-    @Override
-    public String getName() {
-        return "TNT";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 15;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 100;
-    }
-
-    public void prime() {
-        this.prime(80);
-    }
-
-    public void prime(int fuse) {
-        prime(fuse, null);
-    }
-
-    public void prime(int fuse, Entity source) {
-        this.level.setBlock(this.position, Block.get(BlockID.AIR), true);
-        double mot = (new NukkitRandom()).nextFloat() * Math.PI * 2;
-        CompoundTag nbt = new CompoundTag()
-                .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(this.position.south + 0.5))
-                        .add(new FloatTag(this.position.up))
-                        .add(new FloatTag(this.position.west + 0.5)))
-                .putList("Motion", new ListTag<FloatTag>()
-                        .add(new FloatTag(-Math.sin(mot) * 0.02))
-                        .add(new FloatTag(0.2))
-                        .add(new FloatTag(-Math.cos(mot) * 0.02)))
-                .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag(0))
-                        .add(new FloatTag(0)))
-                .putShort("Fuse", fuse);
-        Entity tnt = Entity.createEntity(Entity.TNT,
-                this.level.getChunk(this.position.getFloorX() >> 4, this.position.getFloorZ() >> 4),
-                nbt, source
-        );
+    @JvmOverloads
+    fun prime(fuse: Int = 80, source: Entity? = null) {
+        level.setBlock(this.position, get(BlockID.AIR), true)
+        val mot = (NukkitRandom()).nextFloat() * Math.PI * 2
+        val nbt = CompoundTag()
+            .putList(
+                "Pos", ListTag<FloatTag?>()
+                    .add(FloatTag(position.x + 0.5))
+                    .add(FloatTag(position.y))
+                    .add(FloatTag(position.z + 0.5))
+            )
+            .putList(
+                "Motion", ListTag<FloatTag?>()
+                    .add(FloatTag(-sin(mot) * 0.02))
+                    .add(FloatTag(0.2))
+                    .add(FloatTag(-cos(mot) * 0.02))
+            )
+            .putList(
+                "Rotation", ListTag<FloatTag?>()
+                    .add(FloatTag(0f))
+                    .add(FloatTag(0f))
+            )
+            .putShort("Fuse", fuse)
+        val tnt: Entity = createEntity(
+            Entity.TNT,
+            level.getChunk(position.floorX shr 4, position.floorZ shr 4),
+            nbt, source
+        )
         if (tnt == null) {
-            return;
+            return
         }
-        tnt.spawnToAll();
-        this.level.vibrationManager.callVibrationEvent(new VibrationEvent(
-                source != null ? source : this, this.position.add(0.5, 0.5, 0.5), VibrationType.PRIME_FUSE));
+        tnt.spawnToAll()
+        level.vibrationManager.callVibrationEvent(
+            VibrationEvent(
+                source ?: this,
+                position.add(0.5, 0.5, 0.5)!!, VibrationType.PRIME_FUSE
+            )
+        )
     }
 
-    @Override
-    public int onUpdate(int type) {
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return 0;
+    override fun onUpdate(type: Int): Int {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return 0
         }
 
-        if ((type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) && this.isGettingPower()) {
-            this.prime();
+        if ((type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) && this.isGettingPower) {
+            this.prime()
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        switch (item.getId()) {
-            case Item.FLINT_AND_STEEL -> {
-                item.useOn(this);
-                this.prime(80, player);
-                return true;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        when (item.id) {
+            Item.FLINT_AND_STEEL -> {
+                item.useOn(this)
+                this.prime(80, player)
+                return true
             }
-            case Item.FIRE_CHARGE -> {
-                if (player != null && !player.isCreative()) {
-                    item.count--;
+
+            Item.FIRE_CHARGE -> {
+                if (player != null && !player.isCreative) {
+                    item.count--
                 }
-                this.prime(80, player);
-                return true;
+                this.prime(80, player)
+                return true
             }
         }
         if (item.hasEnchantment(Enchantment.ID_FIRE_ASPECT) && item.applyEnchantments()) {
-            item.useOn(this);
-            this.prime(80, player);
-            return true;
+            item.useOn(this)
+            this.prime(80, player)
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
+    override fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
         //TODO: Wither skull, ghast fireball
-        if (projectile instanceof EntitySmallFireball ||
-                (projectile.isOnFire() && projectile instanceof EntityArrow)) {
-            prime(80, projectile);
-            return true;
+        if (projectile is EntitySmallFireball ||
+            (projectile.isOnFire() && projectile is EntityArrow)
+        ) {
+            prime(80, projectile)
+            return true
         }
-        return false;
+        return false
     }
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.TNT, CommonBlockProperties.EXPLODE_BIT)
+            get() = Companion.field
+    }
 }

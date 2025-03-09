@@ -1,295 +1,273 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.entity.EntityLiving;
-import cn.nukkit.event.block.BlockFadeEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.network.protocol.UpdateBlockPacket;
-import cn.nukkit.plugin.InternalPlugin;
-import cn.nukkit.registry.BiomeRegistry;
-import cn.nukkit.registry.Registries;
-import cn.nukkit.tags.BiomeTags;
-import com.google.common.base.Preconditions;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static cn.nukkit.block.property.CommonBlockProperties.COVERED_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.HEIGHT;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.registry.Registries
+import com.google.common.base.Preconditions
+import java.util.*
+import java.util.stream.Stream
+import kotlin.math.min
 
 /**
  * @author xtypr, joserobjr
  * @since 2015/12/6
  */
+class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFallable(blockstate) {
+    override val name: String
+        get() = "Top Snow"
 
-public class BlockSnowLayer extends BlockFallable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SNOW_LAYER, COVERED_BIT, HEIGHT);
+    var snowHeight: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT)
+        set(snowHeight) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT, snowHeight)
+        }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    var isCovered: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.COVERED_BIT)
+        set(covered) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.COVERED_BIT, covered)
+        }
 
-    public BlockSnowLayer() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override var maxY: Double
+        get() = position.y + (min(16.0, (snowHeight + 1).toDouble()) * 2) / 16.0
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    public BlockSnowLayer(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Top Snow";
-    }
-
-    public int getSnowHeight() {
-        return getPropertyValue(HEIGHT);
-    }
-
-    public void setSnowHeight(int snowHeight) {
-        setPropertyValue(HEIGHT, snowHeight);
-    }
-
-    public boolean isCovered() {
-        return getPropertyValue(COVERED_BIT);
-    }
-
-    public void setCovered(boolean covered) {
-        setPropertyValue(COVERED_BIT, covered);
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + (Math.min(16, getSnowHeight() + 1) * 2) / 16.0;
-    }
-
-    @Override
-    protected @Nullable AxisAlignedBB recalculateBoundingBox() {
-        int snowHeight = getSnowHeight();
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        val snowHeight = snowHeight
         if (snowHeight < 3) {
-            return null;
+            return null
         }
-        if (snowHeight == 3 || snowHeight == HEIGHT.getMax()) {
-            return this;
+        if (snowHeight == 3 || snowHeight == CommonBlockProperties.HEIGHT.getMax()) {
+            return this
         }
-        return new SimpleAxisAlignedBB(this.position.south, this.position.up, this.position.west, this.position.south + 1, this.position.up + 8 / 16.0, this.position.west + 1);
+        return SimpleAxisAlignedBB(
+            position.x,
+            position.y,
+            position.z, position.x + 1, position.y + 8 / 16.0, position.z + 1
+        )
     }
 
-    @Override
-    protected AxisAlignedBB recalculateCollisionBoundingBox() {
-        return this;
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public double getHardness() {
-        return 0.2;
+    override val hardness: Double
+        get() = 0.2
+
+    override val resistance: Double
+        get() = 0.1
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
+
+    override fun canBeReplaced(): Boolean {
+        return snowHeight < CommonBlockProperties.HEIGHT.getMax()
     }
 
-    @Override
-    public double getResistance() {
-        return 0.1;
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val increment = Stream.of<Block>(target, block)
+            .filter { b: Block -> b.id == BlockID.SNOW_LAYER }
+            .map<BlockSnowLayer> { obj: Block? -> BlockSnowLayer::class.java.cast(obj) }
+            .filter { b: BlockSnowLayer -> b.snowHeight < CommonBlockProperties.HEIGHT.getMax() }
+            .findFirst()
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    @Override
-    public boolean canBeReplaced() {
-        return getSnowHeight() < HEIGHT.getMax();
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Optional<BlockSnowLayer> increment = Stream.of(target, block)
-                .filter(b -> b.getId().equals(SNOW_LAYER)).map(BlockSnowLayer.class::cast)
-                .filter(b -> b.getSnowHeight() < HEIGHT.getMax())
-                .findFirst();
-
-        if (increment.isPresent()) {
-            BlockSnowLayer other = increment.get();
-            if (Arrays.stream(level.getCollidingEntities(new SimpleAxisAlignedBB(
-                    other.position.south, other.position.up, other.position.west,
-                    other.position.south + 1, other.position.up + 1, other.position.west + 1
-            ))).anyMatch(e -> e instanceof EntityLiving)) {
-                return false;
+        if (increment.isPresent) {
+            val other = increment.get()
+            if (Arrays.stream<Entity?>(
+                    level.getCollidingEntities(
+                        SimpleAxisAlignedBB(
+                            other.position.x, other.position.y, other.position.z,
+                            other.position.x + 1, other.position.y + 1, other.position.z + 1
+                        )
+                    )
+                ).anyMatch { e: Entity? -> e is EntityLiving }
+            ) {
+                return false
             }
-            other.setSnowHeight(other.getSnowHeight() + 1);
-            return level.setBlock(other.position, other, true);
+            other.snowHeight = other.snowHeight + 1
+            return level.setBlock(other.position, other, true)
         }
 
-        Block down = down();
-        if (!down.isSolid()) {
-            return false;
+        val down = down()
+        if (!down!!.isSolid) {
+            return false
         }
 
-        switch (down.getId()) {
-            case BARRIER, STRUCTURE_VOID -> {
-                return false;
+        when (down.id) {
+            BlockID.BARRIER, BlockID.STRUCTURE_VOID -> {
+                return false
             }
-            case GRASS_BLOCK -> setCovered(true);
-            case TALL_GRASS -> {
+
+            BlockID.GRASS_BLOCK -> isCovered = true
+            BlockID.TALL_GRASS -> {
                 if (!level.setBlock(this.position, 0, this, true)) {
-                    return false;
+                    return false
                 }
-                level.setBlock(block.position, 1, block, true, false);
-                return true;
+                level.setBlock(block.position, 1, block, true, false)
+                return true
             }
-            default -> {
-            }
+
+            else -> {}
         }
 
-        return this.level.setBlock(block.position, this, true);
+        return level.setBlock(block.position, this, true)
     }
 
-    @Override
-    public boolean onBreak(Item item) {
+    override fun onBreak(item: Item?): Boolean {
         if (layer != 0) {
-            return super.onBreak(item);
+            return super.onBreak(item)
         }
-        return this.level.setBlock(this.position, 0, getLevelBlockAtLayer(1), true, true);
+        return level.setBlock(this.position, 0, getLevelBlockAtLayer(1)!!, true, true)
     }
 
-    @Override
-    public void afterRemoval(Block newBlock, boolean update) {
-        if (layer != 0 || newBlock.getId().equals(getId())) {
-            return;
+    override fun afterRemoval(newBlock: Block, update: Boolean) {
+        if (layer != 0 || newBlock.id == id) {
+            return
         }
 
-        Block layer1 = getLevelBlockAtLayer(1);
-        if (!layer1.getId().equals(TALL_GRASS)) {
-            return;
+        val layer1 = getLevelBlockAtLayer(1)
+        if (layer1!!.id != BlockID.TALL_GRASS) {
+            return
         }
 
         // Clear the layer1 block and do a small hack as workaround a vanilla client rendering bug
-        Level level = level;
-        level.setBlock(this.position, 0, layer1, true, false);
-        level.setBlock(this.position, 1, get(AIR), true, false);
-        level.setBlock(this.position, 0, newBlock, true, false);
-        level.getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> {
-            Player[] target = level.getChunkPlayers(this.position.getChunkX(), this.position.getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
-            Vector3[] blocks = {this.position};
-            level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false);
-            level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false);
-        }, 10);
+        var level = level
+        level.setBlock(this.position, 0, layer1, true, false)
+        level.setBlock(this.position, 1, get(BlockID.AIR), true, false)
+        level.setBlock(this.position, 0, newBlock, true, false)
+        level.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
+            val target =
+                level.getChunkPlayers(position.chunkX, position.chunkZ).values.toArray<Player>(Player.EMPTY_ARRAY)
+            val blocks = arrayOf<Vector3?>(this.position)
+            level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false)
+            level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false)
+        }, 10)
 
-        Player[] target = level.getChunkPlayers(this.position.getChunkX(), this.position.getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
-        Vector3[] blocks = {this.position};
-        level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false);
-        level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false);
+        val target = level.getChunkPlayers(position.chunkX, position.chunkZ).values.toArray<Player>(Player.EMPTY_ARRAY)
+        val blocks = arrayOf<Vector3?>(this.position)
+        level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false)
+        level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false)
     }
 
-    @Override
-    public int onUpdate(int type) {
-        super.onUpdate(type);
+    override fun onUpdate(type: Int): Int {
+        super.onUpdate(type)
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            BiomeRegistry.BiomeDefinition biomeDefinition = Registries.BIOME.get(level.getBiomeId(getFloorX(), this.position.getFloorY(), getFloorZ()));
-            if (biomeDefinition.tags.contains(BiomeTags.WARM) || this.level.getBlockLightAt(getFloorX(), getFloorY(), getFloorZ()) >= 10) {
-                melt();
-                return Level.BLOCK_UPDATE_RANDOM;
+            val biomeDefinition: BiomeDefinition? = Registries.BIOME.get(
+                level.getBiomeId(
+                    floorX,
+                    position.floorY, floorZ
+                )
+            )
+            if (biomeDefinition.tags.contains(BiomeTags.WARM) || level.getBlockLightAt(floorX, floorY, floorZ) >= 10) {
+                melt()
+                return Level.BLOCK_UPDATE_RANDOM
             }
         } else if (type == Level.BLOCK_UPDATE_NORMAL) {
-            boolean covered = down().getId().equals(GRASS_BLOCK);
-            if (isCovered() != covered) {
-                setCovered(covered);
-                level.setBlock(this.position, this, true);
-                return type;
+            val covered = down()!!.id == BlockID.GRASS_BLOCK
+            if (isCovered != covered) {
+                isCovered = covered
+                level.setBlock(this.position, this, true)
+                return type
             }
         }
-        return 0;
+        return 0
     }
 
-    public boolean melt() {
-        return melt(2);
-    }
-
-    public boolean melt(int layers) {
-        Preconditions.checkArgument(layers > 0, "Layers must be positive, got {}", layers);
-        Block toMelt = this;
-        while (toMelt.getPropertyValue(HEIGHT) == HEIGHT.getMax()) {
-            Block up = toMelt.up();
-            if (!up.getId().equals(SNOW_LAYER)) {
-                break;
+    @JvmOverloads
+    fun melt(layers: Int = 2): Boolean {
+        Preconditions.checkArgument(layers > 0, "Layers must be positive, got {}", layers)
+        var toMelt: Block = this
+        while (toMelt.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT) === CommonBlockProperties.HEIGHT.getMax()) {
+            val up = toMelt.up()
+            if (up!!.id != BlockID.SNOW_LAYER) {
+                break
             }
 
-            toMelt = up;
+            toMelt = up
         }
 
-        int snowHeight = toMelt.getPropertyValue(HEIGHT) - layers;
-        Block newState = snowHeight < 0 ? get(AIR) : Block.get(getBlockState().setPropertyValue(PROPERTIES, HEIGHT, snowHeight));
-        BlockFadeEvent event = new BlockFadeEvent(toMelt, newState);
-        level.server.pluginManager.callEvent(event);
-        if (event.isCancelled()) {
-            return false;
+        val snowHeight = toMelt.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT) - layers
+        val newState = if (snowHeight < 0) get(BlockID.AIR) else get(
+            blockState!!.setPropertyValue(Companion.properties, CommonBlockProperties.HEIGHT, snowHeight)
+        )
+        val event: BlockFadeEvent = BlockFadeEvent(toMelt, newState)
+        level.server.pluginManager.callEvent(event)
+        if (event.isCancelled) {
+            return false
         }
 
-        return level.setBlock(toMelt.position, event.newState, true);
+        return level.setBlock(toMelt.position, event.newState, true)
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (!item.isShovel() || item.getTier() < ItemTool.TIER_WOODEN) {
-            return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (!item.isShovel || item.tier < ItemTool.TIER_WOODEN) {
+            return Item.EMPTY_ARRAY
         }
 
-        int amount = switch (getSnowHeight()) {
-            case 0, 1, 2 -> 1;
-            case 3, 4 -> 2;
-            case 5, 6 -> 3;
-            default -> 4;
-        };
-        return new Item[]{Item.get(ItemID.SNOWBALL, 0, amount)};
+        val amount = when (snowHeight) {
+            0, 1, 2 -> 1
+            3, 4 -> 2
+            5, 6 -> 3
+            else -> 4
+        }
+        return arrayOf<Item?>(get(ItemID.SNOWBALL, 0, amount))
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isTransparent() {
-        return true;
+    override val isTransparent: Boolean
+        get() = true
+
+    override fun canBeFlowedInto(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return true;
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean sticksToPiston() {
-        return false;
+    override fun canPassThrough(): Boolean {
+        return snowHeight < 3
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return getSnowHeight() < 3;
+    override fun isSolid(side: BlockFace): Boolean {
+        return side == BlockFace.UP && snowHeight == CommonBlockProperties.HEIGHT.getMax()
     }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return side == BlockFace.UP && getSnowHeight() == HEIGHT.getMax();
+    override fun toFallingItem(): Item? {
+        return Item.get(ItemID.SNOWBALL)
     }
 
-    @Override
-    public Item toFallingItem() {
-        return Item.get(ItemID.SNOWBALL);
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SNOW_LAYER, CommonBlockProperties.COVERED_BIT, CommonBlockProperties.HEIGHT)
+            get() = Companion.field
     }
 }

@@ -1,41 +1,26 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockMud extends BlockSolid implements Natural {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MUD);
+class BlockMud : BlockSolid, Natural {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockMud() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockMud(BlockState blockState) {
-        super(blockState);
-    }
+    override val name: String
+        get() = "Mud"
 
-    @Override
-    public String getName() {
-        return "Mud";
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 0.5
 
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
 
-    @Override
-    public double getResistance() {
-        return 0.5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MUD)
+            get() = Companion.field
     }
 }

@@ -1,163 +1,190 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.ParticleEffect;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Locator
+import cn.nukkit.math.BlockFace
+import java.util.*
+import kotlin.math.abs
 
-import javax.annotation.Nullable;
-import java.util.Random;
+open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), Natural {
+    override val name: String
+        get() = "Moss"
 
-public class BlockMossBlock extends BlockSolid implements Natural {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MOSS_BLOCK);
+    override val hardness: Double
+        get() = 0.1
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 2.5
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockMossBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMossBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Moss";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 2.5;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer() && blockFace == BlockFace.UP) {
-            convertToMoss(this);
-            populateRegion(this);
-            this.level.addParticleEffect(this.position.add(0.5, 1.5, 0.5), ParticleEffect.CROP_GROWTH_AREA);
-            item.count--;
-            return true;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer && blockFace == BlockFace.UP) {
+            convertToMoss(this)
+            populateRegion(this)
+            level.addParticleEffect(position.add(0.5, 1.5, 0.5)!!, ParticleEffect.CROP_GROWTH_AREA)
+            item.count--
+            return true
         }
-        return false;
+        return false
     }
 
-    public boolean canConvertToMoss(Block block) {
-        String id = block.getId();
-        return id.equals(BlockID.GRASS_BLOCK) ||
-                id.equals(BlockID.DIRT) ||
-                id.equals(BlockID.DIRT_WITH_ROOTS) ||
-                id.equals(BlockID.STONE) ||
-                id.equals(BlockID.MYCELIUM) ||
-                id.equals(BlockID.DEEPSLATE) ||
-                id.equals(BlockID.TUFF);
-
+    fun canConvertToMoss(block: Block): Boolean {
+        val id = block.id
+        return id == BlockID.GRASS_BLOCK ||
+                id == BlockID.DIRT ||
+                id == BlockID.DIRT_WITH_ROOTS ||
+                id == BlockID.STONE ||
+                id == BlockID.MYCELIUM ||
+                id == BlockID.DEEPSLATE ||
+                id == BlockID.TUFF
     }
 
-    public boolean canBePopulated(Locator pos) {
-        return pos.add(0, -1, 0).getLevelBlock().isSolid() && !pos.add(0, -1, 0).getLevelBlock().getId().equals(BlockID.MOSS_CARPET) && pos.getLevelBlock().getId() == BlockID.AIR;
+    fun canBePopulated(pos: Locator): Boolean {
+        return pos.add(0.0, -1.0, 0.0).levelBlock!!.isSolid && (pos.add(
+            0.0,
+            -1.0,
+            0.0
+        ).levelBlock!!.id != BlockID.MOSS_CARPET) && pos.levelBlock!!.id === BlockID.AIR
     }
 
-    public boolean canBePopulated2BlockAir(Locator pos) {
-        return pos.add(0, -1, 0).getLevelBlock().isSolid() && !pos.add(0, -1, 0).getLevelBlock().getId().equals(BlockID.MOSS_CARPET) && pos.getLevelBlock().getId() == BlockID.AIR && pos.add(0, 1, 0).getLevelBlock().getId() == BlockID.AIR;
+    fun canBePopulated2BlockAir(pos: Locator): Boolean {
+        return pos.add(0.0, -1.0, 0.0).levelBlock!!.isSolid && (pos.add(
+            0.0,
+            -1.0,
+            0.0
+        ).levelBlock!!.id != BlockID.MOSS_CARPET) && pos.levelBlock!!.id === BlockID.AIR && pos.add(
+            0.0,
+            1.0,
+            0.0
+        ).levelBlock!!.id === BlockID.AIR
     }
 
-    public void convertToMoss(Locator pos) {
-        Random random = new Random();
-        for (double x = pos.position.south - 3; x <= pos.position.south + 3; x++) {
-            for (double z = pos.position.west - 3; z <= pos.position.west + 3; z++) {
-                for (double y = pos.position.up + 5; y >= pos.position.up - 5; y--) {
-                    if (canConvertToMoss(pos.level.getBlock(new Locator(x, y, z, pos.level).position)) && (random.nextDouble() < 0.6 || Math.abs(x - pos.position.south) < 3 && Math.abs(z - pos.position.west) < 3)) {
-                        pos.level.setBlock(new Locator(x, y, z, pos.level).position, Block.get(BlockID.MOSS_BLOCK));
-                        break;
+    open fun convertToMoss(pos: Locator) {
+        val random = Random()
+        var x = pos.position.x - 3
+        while (x <= pos.position.x + 3) {
+            var z = pos.position.z - 3
+            while (z <= pos.position.z + 3) {
+                var y = pos.position.y + 5
+                while (y >= pos.position.y - 5) {
+                    if (canConvertToMoss(
+                            pos.level.getBlock(
+                                Locator(
+                                    x,
+                                    y,
+                                    z,
+                                    pos.level
+                                ).position
+                            )!!
+                        ) && (random.nextDouble() < 0.6 || abs(x - pos.position.x) < 3 && abs(z - pos.position.z) < 3)
+                    ) {
+                        pos.level.setBlock(Locator(x, y, z, pos.level).position, get(BlockID.MOSS_BLOCK))
+                        break
                     }
+                    y--
                 }
+                z++
             }
+            x++
         }
     }
 
-    public void populateRegion(Locator pos) {
-        Random random = new Random();
-        for (double x = pos.position.south - 3; x <= pos.position.south + 3; x++) {
-            for (double z = pos.position.west - 3; z <= pos.position.west + 3; z++) {
-                for (double y = pos.position.up + 5; y >= pos.position.up - 5; y--) {
-                    if (canBePopulated(new Locator(x, y, z, pos.level))) {
-                        if (!canGrowPlant(new Locator(x, y, z, pos.level)))
-                            break;
-                        double randomDouble = random.nextDouble();
+    open fun populateRegion(pos: Locator) {
+        val random = Random()
+        var x = pos.position.x - 3
+        while (x <= pos.position.x + 3) {
+            var z = pos.position.z - 3
+            while (z <= pos.position.z + 3) {
+                var y = pos.position.y + 5
+                while (y >= pos.position.y - 5) {
+                    if (canBePopulated(Locator(x, y, z, pos.level))) {
+                        if (!canGrowPlant(Locator(x, y, z, pos.level))) break
+                        val randomDouble = random.nextDouble()
                         if (randomDouble >= 0 && randomDouble < 0.3125) {
-                            pos.level.setBlock(new Locator(x, y, z, pos.level).position, Block.get(BlockID.TALL_GRASS), true, true);
+                            pos.level.setBlock(
+                                Locator(x, y, z, pos.level).position,
+                                get(BlockID.TALL_GRASS),
+                                true,
+                                true
+                            )
                         }
                         if (randomDouble >= 0.3125 && randomDouble < 0.46875) {
-                            pos.level.setBlock(new Locator(x, y, z, pos.level).position, Block.get(BlockID.MOSS_CARPET), true, true);
+                            pos.level.setBlock(
+                                Locator(x, y, z, pos.level).position,
+                                get(BlockID.MOSS_CARPET),
+                                true,
+                                true
+                            )
                         }
                         if (randomDouble >= 0.46875 && randomDouble < 0.53125) {
-                            if (canBePopulated2BlockAir(new Locator(x, y, z, pos.level))) {
-                                BlockLargeFern rootBlock = new BlockLargeFern();
-                                rootBlock.setTopHalf(false);
-                                pos.level.setBlock(new Locator(x, y, z, pos.level).position, rootBlock, true, true);
-                                BlockLargeFern topBlock = new BlockLargeFern();
-                                topBlock.setTopHalf(true);
-                                pos.level.setBlock(new Locator(x, y + 1, z, pos.level).position, topBlock, true, true);
+                            if (canBePopulated2BlockAir(Locator(x, y, z, pos.level))) {
+                                val rootBlock = BlockLargeFern()
+                                rootBlock.isTopHalf = false
+                                pos.level.setBlock(Locator(x, y, z, pos.level).position, rootBlock, true, true)
+                                val topBlock = BlockLargeFern()
+                                topBlock.isTopHalf = true
+                                pos.level.setBlock(Locator(x, y + 1, z, pos.level).position, topBlock, true, true)
                             } else {
-                                BlockTallGrass block = new BlockTallGrass();
-                                pos.level.setBlock(new Locator(x, y, z, pos.level).position, block, true, true);
+                                val block = BlockTallGrass()
+                                pos.level.setBlock(Locator(x, y, z, pos.level).position, block, true, true)
                             }
                         }
                         if (randomDouble >= 0.53125 && randomDouble < 0.575) {
-                            pos.level.setBlock(new Locator(x, y, z, pos.level).position, Block.get(BlockID.AZALEA), true, true);
+                            pos.level.setBlock(Locator(x, y, z, pos.level).position, get(BlockID.AZALEA), true, true)
                         }
                         if (randomDouble >= 0.575 && randomDouble < 0.6) {
-                            pos.level.setBlock(new Locator(x, y, z, pos.level).position, Block.get(BlockID.FLOWERING_AZALEA), true, true);
+                            pos.level.setBlock(
+                                Locator(x, y, z, pos.level).position,
+                                get(BlockID.FLOWERING_AZALEA),
+                                true,
+                                true
+                            )
                         }
                         if (randomDouble >= 0.6 && randomDouble < 1) {
-                            pos.level.setBlock(new Locator(x, y, z, pos.level).position, Block.get(BlockID.AIR), true, true);
+                            pos.level.setBlock(Locator(x, y, z, pos.level).position, get(BlockID.AIR), true, true)
                         }
-                        break;
+                        break
                     }
+                    y--
                 }
+                z++
             }
+            x++
         }
     }
 
-    public boolean canGrowPlant(Locator pos) {
-        return switch (pos.add(0, -1, 0).getLevelBlock().getId()) {
-            case GRASS_BLOCK, DIRT, PODZOL, FARMLAND, MYCELIUM, DIRT_WITH_ROOTS, MOSS_BLOCK, PALE_MOSS_BLOCK -> true;
-            default -> false;
-        };
+    fun canGrowPlant(pos: Locator): Boolean {
+        return when (pos.add(0.0, -1.0, 0.0).levelBlock!!.id) {
+            BlockID.GRASS_BLOCK, BlockID.DIRT, BlockID.PODZOL, BlockID.FARMLAND, BlockID.MYCELIUM, BlockID.DIRT_WITH_ROOTS, BlockID.MOSS_BLOCK, BlockID.PALE_MOSS_BLOCK -> true
+            else -> false
+        }
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HOE;
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf<Item?>(ItemBlock(get(BlockID.MOSS_BLOCK)))
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{new ItemBlock(Block.get(BlockID.MOSS_BLOCK))};
-    }
+    override val isFertilizable: Boolean
+        get() = true
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MOSS_BLOCK)
+            get() = Companion.field
     }
 }

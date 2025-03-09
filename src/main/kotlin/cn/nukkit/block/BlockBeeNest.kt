@@ -1,47 +1,27 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockBeeNest extends BlockBeehive {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BEE_NEST, CommonBlockProperties.DIRECTION, CommonBlockProperties.HONEY_LEVEL);
+class BlockBeeNest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockBeehive(blockstate) {
+    override val name: String
+        get() = "Bee Nest"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val burnChance: Int
+        get() = 30
 
-    public BlockBeeNest() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val burnAbility: Int
+        get() = 60
 
-    public BlockBeeNest(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val hardness: Double
+        get() = 0.3
 
-    @Override
-    public String getName() {
-        return "Bee Nest";
-    }
+    override val resistance: Double
+        get() = 1.5
 
-    @Override
-    public int getBurnChance() {
-        return 30;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 60;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.3;
-    }
-
-    @Override
-    public double getResistance() {
-        return 1.5;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BEE_NEST, CommonBlockProperties.DIRECTION, CommonBlockProperties.HONEY_LEVEL)
+            get() = Companion.field
     }
 }

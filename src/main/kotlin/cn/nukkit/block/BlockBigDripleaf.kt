@@ -1,337 +1,296 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.block.property.enums.BigDripleafTilt;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.projectile.EntityProjectile;
-import cn.nukkit.event.block.BigDripleafTiltChangeEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.Sound;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.CommonPropertyMap
+import cn.nukkit.block.property.enums.BigDripleafTilt
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.projectile.EntityProjectile
+import cn.nukkit.event.block.BigDripleafTiltChangeEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.*
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.*
+import cn.nukkit.utils.Faceable
+import kotlin.math.ceil
 
-import javax.annotation.Nullable;
+class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockState), Faceable {
+    override val name: String
+        get() = "Big Dripleaf"
 
-import java.util.Objects;
+    override var blockFace: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]
+        set(face) {
+            setPropertyValue(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+            )
+        }
 
-import static cn.nukkit.block.property.CommonBlockProperties.*;
-public class BlockBigDripleaf extends BlockFlowable implements Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BIG_DRIPLEAF, BIG_DRIPLEAF_HEAD, BIG_DRIPLEAF_TILT, MINECRAFT_CARDINAL_DIRECTION);
+    var isHead: Boolean
+        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.BIG_DRIPLEAF_HEAD)
+        set(isHead) {
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.BIG_DRIPLEAF_HEAD,
+                isHead
+            )
+        }
 
-    public BlockBigDripleaf() {
-        this(PROPERTIES.getDefaultState());
+    val tilt: BigDripleafTilt
+        get() = this.getPropertyValue(
+            CommonBlockProperties.BIG_DRIPLEAF_TILT
+        )
+
+    fun setTilt(tilt: BigDripleafTilt): Boolean {
+        val event = BigDripleafTiltChangeEvent(
+            this,
+            this.tilt, tilt
+        )
+        instance!!.pluginManager.callEvent(event)
+        if (event.isCancelled) return false
+        this.setPropertyValue(CommonBlockProperties.BIG_DRIPLEAF_TILT, tilt)
+        return true
     }
 
-    public BlockBigDripleaf(BlockState blockState) {
-        super(blockState);
+    override val waterloggingLevel: Int
+        get() = 2
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_NONE
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public String getName() {
-        return "Big Dripleaf";
-    }
+    override val hardness: Double
+        get() = 0.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 0.0
 
-    @Override
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(getPropertyValue(MINECRAFT_CARDINAL_DIRECTION));
-    }
+    override val burnChance: Int
+        get() = 15
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face));
-    }
+    override val burnAbility: Int
+        get() = 100
 
-    public boolean isHead() {
-        return this.getPropertyValue(BIG_DRIPLEAF_HEAD);
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val below = block.down()
+        val id = below!!.id
+        if (!isValidSupportBlock(id)) return false
 
-    public void setHead(boolean isHead) {
-        this.setPropertyValue(BIG_DRIPLEAF_HEAD, isHead);
-    }
-
-    public BigDripleafTilt getTilt() {
-        return this.getPropertyValue(BIG_DRIPLEAF_TILT);
-    }
-
-    public boolean setTilt(BigDripleafTilt tilt) {
-        BigDripleafTiltChangeEvent event = new BigDripleafTiltChangeEvent(this, this.getTilt(), tilt);
-        Server.getInstance().pluginManager.callEvent(event);
-        if (event.isCancelled()) return false;
-        this.setPropertyValue(BIG_DRIPLEAF_TILT, tilt);
-        return true;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_NONE;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 15;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 100;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        Block below = block.down();
-        String id = below.getId();
-        if (!isValidSupportBlock(id))
-            return false;
-
-        if (id.equals(BIG_DRIPLEAF)) {
-            var b = new BlockBigDripleaf();
-            var bf = ((BlockBigDripleaf) below).getBlockFace();
-            b.setBlockFace(bf);
-            b.setHead(false);
-            level.setBlock(below.position, b, true, false);
-            setBlockFace(bf);
+        if (id == BIG_DRIPLEAF) {
+            val b = BlockBigDripleaf()
+            val bf = (below as BlockBigDripleaf).blockFace
+            b.blockFace = bf
+            b.isHead = false
+            level.setBlock(below.position, b, true, false)
+            blockFace = bf
         } else {
-            setBlockFace(player != null ? player.getHorizontalFacing().getOpposite() : BlockFace.SOUTH);
+            blockFace = if (player != null) player.getHorizontalFacing().getOpposite() else BlockFace.SOUTH
         }
-        setHead(true);
+        isHead = true
 
-        if (block instanceof BlockFlowingWater)
-            level.setBlock(this.position, 1, block, true, false);
-        return super.place(item, block, target, face, fx, fy, fz, player);
+        if (block is BlockFlowingWater) level.setBlock(this.position, 1, block, true, false)
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @org.jetbrains.annotations.Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) {
-            Block head = this;
-            Block up;
-            while ((up = head.up()).getId() == BIG_DRIPLEAF)
-                head = up;
-            if (head.position.getFloorY() + 1 > level.getMaxHeight())
-                return false;
-            Block above = head.up();
-            if (!above.isAir() && !(above instanceof BlockFlowingWater))
-                return false;
-            if (player != null && !player.isCreative())
-                item.count--;
-            level.addParticle(new BoneMealParticle(this.position));
-            var aboveDownBlock = new BlockBigDripleaf();
-            aboveDownBlock.setBlockFace(this.getBlockFace());
-            level.setBlock(above.position.getSideVec(BlockFace.DOWN), aboveDownBlock, true, false);
-            if (above instanceof BlockFlowingWater)
-                level.setBlock(above.position, 1, above, true, false);
-            var aboveBock = new BlockBigDripleaf();
-            aboveBock.setBlockFace(this.getBlockFace());
-            aboveBock.setHead(true);
-            level.setBlock(above.position, aboveBock, true);
-            return true;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) {
+            var head: Block = this
+            var up: Block?
+            while ((head.up().also { up = it })!!.id === BIG_DRIPLEAF) head = up!!
+            if (head.position.floorY + 1 > level.maxHeight) return false
+            val above = head.up()
+            if (!above!!.isAir && above !is BlockFlowingWater) return false
+            if (player != null && !player.isCreative) item.count--
+            level.addParticle(BoneMealParticle(this.position))
+            val aboveDownBlock = BlockBigDripleaf()
+            aboveDownBlock.blockFace = this.blockFace
+            level.setBlock(above.position.getSideVec(BlockFace.DOWN), aboveDownBlock, true, false)
+            if (above is BlockFlowingWater) level.setBlock(above.position, 1, above, true, false)
+            val aboveBock = BlockBigDripleaf()
+            aboveBock.blockFace = this.blockFace
+            aboveBock.isHead = true
+            level.setBlock(above.position, aboveBock, true)
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            level.scheduleUpdate(this, 1);
-            return Level.BLOCK_UPDATE_NORMAL;
+            level.scheduleUpdate(this, 1)
+            return Level.BLOCK_UPDATE_NORMAL
         }
 
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (!canSurvive()) {
-                level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
 
-            if (!isHead()) {
-                if (up().getId().equals(BIG_DRIPLEAF)) {
-                    return 0;
+            if (!isHead) {
+                if (up()!!.id == BIG_DRIPLEAF) {
+                    return 0
                 }
 
-                level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
 
-            var tilt = getTilt();
+            val tilt = tilt
             if (tilt == BigDripleafTilt.NONE) {
-                return 0;
+                return 0
             }
 
             if (level.isBlockPowered(this.position)) {
-                setTilt(BigDripleafTilt.NONE);
-                level.setBlock(this.position, this, true, false);
-                return Level.BLOCK_UPDATE_SCHEDULED;
+                setTilt(BigDripleafTilt.NONE)
+                level.setBlock(this.position, this, true, false)
+                return Level.BLOCK_UPDATE_SCHEDULED
             }
 
-            switch (tilt) {
-                case UNSTABLE -> setTiltAndScheduleTick(BigDripleafTilt.PARTIAL_TILT);
-                case PARTIAL_TILT -> setTiltAndScheduleTick(BigDripleafTilt.FULL_TILT);
-                case FULL_TILT -> {
-                    level.addSound(this.position, Sound.TILT_UP_BIG_DRIPLEAF);
-                    setTilt(BigDripleafTilt.NONE);
-                    level.setBlock(this.position, this, true, false);
+            when (tilt) {
+                BigDripleafTilt.UNSTABLE -> setTiltAndScheduleTick(BigDripleafTilt.PARTIAL_TILT)
+                BigDripleafTilt.PARTIAL_TILT -> setTiltAndScheduleTick(BigDripleafTilt.FULL_TILT)
+                BigDripleafTilt.FULL_TILT -> {
+                    level.addSound(this.position, Sound.TILT_UP_BIG_DRIPLEAF)
+                    setTilt(BigDripleafTilt.NONE)
+                    level.setBlock(this.position, this, true, false)
                 }
             }
-            return Level.BLOCK_UPDATE_SCHEDULED;
+            return Level.BLOCK_UPDATE_SCHEDULED
         }
 
         if (type == Level.BLOCK_UPDATE_REDSTONE) {
-            if (!isHead())
-                return 0;
-            var tilt = getTilt();
-            if (tilt == BigDripleafTilt.NONE)
-                return 0;
-            if (!level.isBlockPowered(this.position))
-                return 0;
-            if (tilt != BigDripleafTilt.UNSTABLE)
-                level.addSound(this.position, Sound.TILT_UP_BIG_DRIPLEAF);
-            setTilt(BigDripleafTilt.NONE);
-            level.setBlock(this.position, this, true, false);
+            if (!isHead) return 0
+            val tilt = tilt
+            if (tilt == BigDripleafTilt.NONE) return 0
+            if (!level.isBlockPowered(this.position)) return 0
+            if (tilt != BigDripleafTilt.UNSTABLE) level.addSound(this.position, Sound.TILT_UP_BIG_DRIPLEAF)
+            setTilt(BigDripleafTilt.NONE)
+            level.setBlock(this.position, this, true, false)
 
-            level.cancelSheduledUpdate(this.position, this);
-            return Level.BLOCK_UPDATE_SCHEDULED;
+            level.cancelSheduledUpdate(this.position, this)
+            return Level.BLOCK_UPDATE_SCHEDULED
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    @Override
-    public void onEntityCollide(Entity entity) {
-        if (!isHead() || getTilt() != BigDripleafTilt.NONE || entity instanceof EntityProjectile) return;
-        setTiltAndScheduleTick(BigDripleafTilt.UNSTABLE);
+    override fun onEntityCollide(entity: Entity?) {
+        if (!isHead || tilt != BigDripleafTilt.NONE || entity is EntityProjectile) return
+        setTiltAndScheduleTick(BigDripleafTilt.UNSTABLE)
     }
 
-    @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
-        setTiltAndScheduleTick(BigDripleafTilt.FULL_TILT);
-        return true;
+    override fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
+        setTiltAndScheduleTick(BigDripleafTilt.FULL_TILT)
+        return true
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return !isHead() || getTilt() == BigDripleafTilt.FULL_TILT;
+    override fun canPassThrough(): Boolean {
+        return !isHead || tilt == BigDripleafTilt.FULL_TILT
     }
 
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        if (!isHead()) {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return if (!isHead) {
             //杆没有碰撞箱
-//            var face = this.getBlockFace().getOpposite();
-            return /*new SimpleAxisAlignedBB(
-                    0.3125,
-                    0,
-                    0.3125,
-                    0.6875,
-                    1,
-                    0.6875)
-                    .offset(
-                            this.x + face.getXOffset() * 0.1875,
-                            this.y,
-                            this.z + face.getZOffset() * 0.1875
-                    );*/null;
+            //            var face = this.getBlockFace().getOpposite();
+            null
         } else {
-            return new SimpleAxisAlignedBB(
-                    this.position.south,
-                    this.position.up + 0.6875,
-                    this.position.west,
-                    this.position.south + 1,
-                    this.position.up + (getTilt() == BigDripleafTilt.PARTIAL_TILT ? 0.8125 : 0.9375),
-                    this.position.west + 1
-            );
+            SimpleAxisAlignedBB(
+                position.x,
+                position.y + 0.6875,
+                position.z,
+                position.x + 1,
+                position.y + (if (tilt == BigDripleafTilt.PARTIAL_TILT) 0.8125 else 0.9375),
+                position.z + 1
+            )
         }
     }
 
-    @Override
-    protected AxisAlignedBB recalculateCollisionBoundingBox() {
-        var bb = getBoundingBox();
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+        val bb = boundingBox
         //使方块碰撞检测箱的maxY向上取整，使当实体站在方块上面的时候可以触发碰撞
-        if (isHead())
-            bb.setMaxY(Math.ceil(bb.getMaxY()));
-        return bb;
+        if (isHead) bb!!.maxY = ceil(bb.maxY)
+        return bb
     }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    private boolean canSurvive() {
-        return isValidSupportBlock(down().getId());
+    private fun canSurvive(): Boolean {
+        return isValidSupportBlock(down()!!.id)
     }
 
-    private boolean isValidSupportBlock(String id) {
-        return Objects.equals(id, BIG_DRIPLEAF) ||
-                Objects.equals(id, GRASS_BLOCK) ||
-                Objects.equals(id, DIRT) ||
-                Objects.equals(id, MYCELIUM) ||
-                Objects.equals(id, PODZOL) ||
-                Objects.equals(id, FARMLAND) ||
-                Objects.equals(id, DIRT_WITH_ROOTS) ||
-                Objects.equals(id, MOSS_BLOCK) ||
-                Objects.equals(id, CLAY);
+    private fun isValidSupportBlock(id: String): Boolean {
+        return id == BIG_DRIPLEAF ||
+                id == GRASS_BLOCK ||
+                id == DIRT ||
+                id == MYCELIUM ||
+                id == PODZOL ||
+                id == FARMLAND ||
+                id == DIRT_WITH_ROOTS ||
+                id == MOSS_BLOCK ||
+                id == CLAY
     }
 
-    private boolean setTiltAndScheduleTick(BigDripleafTilt tilt) {
-        if (!setTilt(tilt))
-            return false;
-        level.setBlock(this.position, this, true, false);
+    private fun setTiltAndScheduleTick(tilt: BigDripleafTilt): Boolean {
+        if (!setTilt(tilt)) return false
+        level.setBlock(this.position, this, true, false)
 
-        switch (tilt) {
-            case NONE -> level.scheduleUpdate(this, 1);
-            case UNSTABLE -> {
-                level.scheduleUpdate(this, 15);
-                return true;
+        when (tilt) {
+            BigDripleafTilt.NONE -> level.scheduleUpdate(this, 1)
+            BigDripleafTilt.UNSTABLE -> {
+                level.scheduleUpdate(this, 15)
+                return true
             }
-            case PARTIAL_TILT -> level.scheduleUpdate(this, 15);
-            case FULL_TILT -> level.scheduleUpdate(this, 100);
+
+            BigDripleafTilt.PARTIAL_TILT -> level.scheduleUpdate(this, 15)
+            BigDripleafTilt.FULL_TILT -> level.scheduleUpdate(this, 100)
         }
 
-        level.addSound(this.position, Sound.TILT_DOWN_BIG_DRIPLEAF);
-        return true;
+        level.addSound(this.position, Sound.TILT_DOWN_BIG_DRIPLEAF)
+        return true
     }
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    override val isFertilizable: Boolean
+        get() = true
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BIG_DRIPLEAF,
+            CommonBlockProperties.BIG_DRIPLEAF_HEAD,
+            CommonBlockProperties.BIG_DRIPLEAF_TILT,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )
+            get() = Companion.field
     }
 }

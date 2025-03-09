@@ -1,52 +1,32 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockTuffBrickDoubleSlab extends BlockDoubleSlabBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TUFF_BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+class BlockTuffBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockDoubleSlabBase(blockstate) {
+    override val name: String
+        get() = "Tuff Brick Double Slab"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockTuffBrickDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val slabName: String
+        get() = "Tuff Brick"
 
-    public BlockTuffBrickDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val singleSlab: BlockState
+        get() = BlockTuffBrickSlab.Companion.PROPERTIES.getDefaultState()
 
-    @Override
-    public String getName() {
-        return "Tuff Brick Double Slab";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public String getSlabName() {
-        return "Tuff Brick";
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockTuffBrickSlab.PROPERTIES.getDefaultState();
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.TUFF_BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

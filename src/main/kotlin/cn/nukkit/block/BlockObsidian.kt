@@ -1,89 +1,67 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
 
 /**
  * @author xtypr
  * @since 2015/12/2
  */
-public class BlockObsidian extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(OBSIDIAN);
+class BlockObsidian : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockObsidian() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockObsidian(BlockState blockState) {
-        super(blockState);
-    }
+    override val name: String
+        get() = "Obsidian"
 
-    @Override
-    public String getName() {
-        return "Obsidian";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_DIAMOND
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override val hardness: Double
+        get() = 35.0 //TODO Should be 50 but the break time calculation is broken
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_DIAMOND;
-    }
+    override val resistance: Double
+        get() = 6000.0
 
-    @Override
-    public double getHardness() {
-        return 35; //TODO Should be 50 but the break time calculation is broken
-    }
-
-    @Override
-    public double getResistance() {
-        return 6000;
-    }
-
-    @Override
-    public boolean onBreak(Item item) {
+    override fun onBreak(item: Item?): Boolean {
         //destroy the nether portal
-        Block[] nearby = new Block[]{
-                this.up(), this.down(),
-                this.north(), south(),
-                this.west(), this.east(),
-        };
-        for (Block aNearby : nearby) {
-            if (aNearby != null && aNearby.getId().equals(PORTAL)) {
-                aNearby.onBreak(item);
+        val nearby = arrayOf(
+            this.up(), this.down(),
+            this.north(), south(),
+            this.west(), this.east(),
+        )
+        for (aNearby in nearby) {
+            if (aNearby != null && aNearby.id == BlockID.PORTAL) {
+                aNearby.onBreak(item)
             }
         }
-        return super.onBreak(item);
+        return super.onBreak(item)
     }
 
-    @Override
-    public void afterRemoval(Block newBlock, boolean update) {
+    override fun afterRemoval(newBlock: Block?, update: Boolean) {
         if (update) {
-            onBreak(Item.AIR);
+            onBreak(Item.AIR)
         }
     }
 
-    @Override
-    public boolean canBePushed() {
-        return false;
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public  boolean canBePulled() {
-        return false;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.OBSIDIAN)
+            get() = Companion.field
     }
 }

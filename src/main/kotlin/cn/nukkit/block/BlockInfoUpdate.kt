@@ -1,26 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockInfoUpdate : Block {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockInfoUpdate extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties(INFO_UPDATE);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockInfoUpdate() {
-        super(PROPERTIES.getDefaultState());
+    override val name: String
+        get() = "Info Update Block"
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.Companion.INFO_UPDATE)
+            get() = Companion.field
     }
-
-    public BlockInfoUpdate(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Info Update Block";
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
 }

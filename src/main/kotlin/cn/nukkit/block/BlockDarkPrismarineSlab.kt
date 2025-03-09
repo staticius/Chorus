@@ -1,43 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockDarkPrismarineSlab extends BlockSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DARK_PRISMARINE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    public BlockDarkPrismarineSlab(BlockState blockState) {
-        super(blockState, DARK_PRISMARINE_DOUBLE_SLAB);
+class BlockDarkPrismarineSlab(blockState: BlockState?) : BlockSlab(blockState, DARK_PRISMARINE_DOUBLE_SLAB) {
+    override fun getSlabName(): String {
+        return "Dark Prismarine Slab"
     }
 
-    @Override
-    public String getSlabName() {
-        return "Dark Prismarine Slab";
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return slab.id == this.id
     }
 
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return slab.getId().equals(this.getId());
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(DARK_PRISMARINE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

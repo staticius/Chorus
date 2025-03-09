@@ -1,356 +1,374 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityBed;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.event.block.BlockExplosionPrimeEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBed;
-import cn.nukkit.lang.TranslationContainer;
-import cn.nukkit.level.Explosion;
-import cn.nukkit.level.GameRule;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.network.protocol.types.SpawnPointType;
-import cn.nukkit.utils.DyeColor;
-import cn.nukkit.utils.Faceable;
-import cn.nukkit.utils.TextFormat;
-import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.HEAD_PIECE_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.OCCUPIED_BIT;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.*
+import cn.nukkit.entity.effect.EffectType
+import cn.nukkit.event.block.BlockExplosionPrimeEvent
+import cn.nukkit.item.*
+import cn.nukkit.lang.TranslationContainer
+import cn.nukkit.level.*
+import cn.nukkit.level.Transform.Companion.fromObject
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.math.SimpleAxisAlignedBB
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.network.protocol.types.SpawnPointType
+import cn.nukkit.utils.DyeColor
+import cn.nukkit.utils.Faceable
+import cn.nukkit.utils.TextFormat
+import lombok.extern.slf4j.Slf4j
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-
 @Slf4j
-public class BlockBed extends BlockTransparent implements Faceable, BlockEntityHolder<BlockEntityBed> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BED, DIRECTION, HEAD_PIECE_BIT, OCCUPIED_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBed?> {
+    override fun getBlockEntityClass(): Class<out BlockEntityBed> {
+        return BlockEntityBed::class.java
     }
 
-    public BlockBed() {
-        this(PROPERTIES.getDefaultState());
+    override fun getBlockEntityType(): String {
+        return BlockEntity.BED
     }
 
-    public BlockBed(BlockState blockstate) {
-        super(blockstate);
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    @NotNull public Class<? extends BlockEntityBed> getBlockEntityClass() {
-        return BlockEntityBed.class;
-    }
+    override val resistance: Double
+        get() = 1.0
 
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.BED;
-    }
+    override val hardness: Double
+        get() = 0.2
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
+    override val name: String
+        get() = dyeColor.name + " Bed Block"
 
-    @Override
-    public double getResistance() {
-        return 1;
-    }
+    override var maxY: Double
+        get() = position.y + 0.5625
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    @Override
-    public double getHardness() {
-        return 0.2;
-    }
-
-    @Override
-    public String getName() {
-        return this.getDyeColor().getName() + " Bed Block";
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.5625;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(isNotActivate(player)) return false;
-        BlockFace dir = getBlockFace();
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
+        val dir = blockFace
 
-        boolean shouldExplode = this.level.getDimension() != Level.DIMENSION_OVERWORLD;
-        boolean willExplode = shouldExplode && this.level.gameRules.getBoolean(GameRule.TNT_EXPLODES);
+        val shouldExplode = level.dimension != Level.DIMENSION_OVERWORLD
+        val willExplode = shouldExplode && level.gameRules!!.getBoolean(GameRule.TNT_EXPLODES)
 
-        Block head;
-        if (isHeadPiece()) {
-            head = this;
+        val head: Block?
+        if (isHeadPiece) {
+            head = this
         } else {
-            head = getSide(dir);
-            if (head.getId() != getId() || !((BlockBed) head).isHeadPiece() || !((BlockBed) head).getBlockFace().equals(dir)) {
+            head = getSide(dir!!)
+            if (head!!.id !== id || !(head as BlockBed).isHeadPiece || (head.blockFace != dir)) {
                 if (player != null && !willExplode) {
-                    player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.bed.notValid"));
+                    player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.bed.notValid"))
                 }
 
                 if (!shouldExplode) {
-                    return true;
+                    return true
                 }
             }
         }
 
-        BlockFace footPart = dir.getOpposite();
+        val footPart = dir!!.getOpposite()
 
         if (shouldExplode) {
             if (!willExplode) {
-                return true;
+                return true
             }
 
-            BlockExplosionPrimeEvent event = new BlockExplosionPrimeEvent(this, player, 5);
-            event.setIncendiary(true);
-            if (event.isCancelled()) {
-                return true;
+            val event = BlockExplosionPrimeEvent(this, player, 5.0)
+            event.isIncendiary = true
+            if (event.isCancelled) {
+                return true
             }
 
-            level.setBlock(this.position, get(AIR), false, false);
-            onBreak(Item.AIR);
-            level.updateAround(this.position);
+            level.setBlock(this.position, get(AIR), false, false)
+            onBreak(Item.AIR)
+            level.updateAround(this.position)
 
-            Explosion explosion = new Explosion(this, event.force, this);
-            explosion.fireChance = event.fireChance;
-            if (event.isBlockBreaking()) {
-                explosion.explodeA();
+            val explosion = Explosion(this, event.force, this)
+            explosion.fireChance = event.fireChance
+            if (event.isBlockBreaking) {
+                explosion.explodeA()
             }
-            explosion.explodeB();
-            return true;
+            explosion.explodeB()
+            return true
         }
 
-        if (player == null || !player.hasEffect(EffectType.CONDUIT_POWER) && getLevelBlockAtLayer(1) instanceof BlockFlowingWater) {
-            return true;
+        if (player == null || !player.hasEffect(EffectType.CONDUIT_POWER) && getLevelBlockAtLayer(1) is BlockFlowingWater) {
+            return true
         }
 
-        AxisAlignedBB accessArea = new SimpleAxisAlignedBB(head.position.south - 2, head.position.up - 5.5, head.position.west - 2, head.position.south + 3, head.position.up + 2.5, head.position.west + 3)
-                .addCoord(footPart.getXOffset(), 0, footPart.getZOffset());
+        val accessArea = SimpleAxisAlignedBB(
+            head!!.position.x - 2,
+            head.position.y - 5.5,
+            head.position.z - 2,
+            head.position.x + 3,
+            head.position.y + 2.5,
+            head.position.z + 3
+        )
+            .addCoord(footPart!!.xOffset.toDouble(), 0.0, footPart.zOffset.toDouble())
 
         if (!accessArea.isVectorInside(player.position)) {
-            player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.bed.tooFar"));
-            return true;
+            player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.bed.tooFar"))
+            return true
         }
 
-        Transform spawn = Transform.fromObject(this.position.add(0.5, 0.5, 0.5), player.level, player.rotation.yaw, player.rotation.pitch);
-        if (!player.getSpawn().equals(spawn)) {
-            player.setSpawn(this, SpawnPointType.BLOCK);
+        val spawn = fromObject(
+            position.add(0.5, 0.5, 0.5)!!,
+            player.level!!, player.rotation.yaw, player.rotation.pitch
+        )
+        if (player.spawn != spawn) {
+            player.setSpawn(this, SpawnPointType.BLOCK)
         }
-        player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.bed.respawnSet"));
+        player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.bed.respawnSet"))
 
-        int time = this.level.getTime() % Level.TIME_FULL;
+        val time = level.getTime() % Level.TIME_FULL
 
-        boolean isNight = (time >= Level.TIME_NIGHT && time < Level.TIME_SUNRISE);
+        val isNight = (time >= Level.TIME_NIGHT && time < Level.TIME_SUNRISE)
 
         if (!isNight) {
-            player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.bed.noSleep"));
-            return true;
+            player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.bed.noSleep"))
+            return true
         }
 
-        if (!player.isCreative()) {
-            AxisAlignedBB checkMonsterArea = new SimpleAxisAlignedBB(head.position.south - 8, head.position.up - 6.5, head.position.west - 8, head.position.south + 9, head.position.up + 5.5, head.position.west + 9)
-                    .addCoord(footPart.getXOffset(), 0, footPart.getZOffset());
+        if (!player.isCreative) {
+            val checkMonsterArea = SimpleAxisAlignedBB(
+                head.position.x - 8,
+                head.position.y - 6.5,
+                head.position.z - 8,
+                head.position.x + 9,
+                head.position.y + 5.5,
+                head.position.z + 9
+            )
+                .addCoord(footPart.xOffset.toDouble(), 0.0, footPart.zOffset.toDouble())
 
-            for (Entity entity : this.level.getCollidingEntities(checkMonsterArea)) {
+            for (entity in level.getCollidingEntities(checkMonsterArea)) {
                 if (!entity.isClosed() && entity.isPreventingSleep(player)) {
-                    player.sendTranslation(TextFormat.GRAY + "%tile.bed.notSafe");
-                    return true;
+                    player.sendTranslation(TextFormat.GRAY.toString() + "%tile.bed.notSafe")
+                    return true
                 }
                 // TODO: Check Chicken Jockey, Spider Jockey
             }
         }
 
         if (!player.sleepOn(head.position)) {
-            player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.bed.occupied"));
+            player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.bed.occupied"))
         }
 
-        return true;
+        return true
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        Block down = this.down();
-        if (!(BlockLever.isSupportValid(down, BlockFace.UP) || down instanceof BlockCauldron)) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val down = this.down()
+        if (!(BlockLever.isSupportValid(down, BlockFace.UP) || down is BlockCauldron)) {
+            return false
         }
 
-        BlockFace direction = player == null ? BlockFace.NORTH : player.getDirection();
-        Block next = this.getSide(direction);
-        Block downNext = next.down();
+        val direction = if (player == null) BlockFace.NORTH else player.getDirection()
+        val next = this.getSide(direction!!)
+        val downNext = next!!.down()
 
-        if (!next.canBeReplaced() || !(BlockLever.isSupportValid(downNext, BlockFace.UP) || downNext instanceof BlockCauldron)) {
-            return false;
+        if (!next.canBeReplaced() || !(BlockLever.isSupportValid(
+                downNext,
+                BlockFace.UP
+            ) || downNext is BlockCauldron)
+        ) {
+            return false
         }
 
-        Block thisLayer0 = level.getBlock(this.position, 0);
-        Block thisLayer1 = level.getBlock(this.position, 1);
-        Block nextLayer0 = level.getBlock(next.position, 0);
-        Block nextLayer1 = level.getBlock(next.position, 1);
+        val thisLayer0 = level.getBlock(this.position, 0)
+        val thisLayer1 = level.getBlock(this.position, 1)
+        val nextLayer0 = level.getBlock(next.position, 0)
+        val nextLayer1 = level.getBlock(next.position, 1)
 
-        setBlockFace(direction);
+        blockFace = direction
 
-        level.setBlock(block.position, this, true, true);
-        if (next instanceof BlockLiquid && ((BlockLiquid) next).usesWaterLogging()) {
-            level.setBlock(next.position, 1, next, true, false);
+        level.setBlock(block.position, this, true, true)
+        if (next is BlockLiquid && next.usesWaterLogging()) {
+            level.setBlock(next.position, 1, next, true, false)
         }
 
-        BlockBed head = (BlockBed) clone();
-        head.setHeadPiece(true);
-        level.setBlock(next.position, head, true, true);
+        val head = clone() as BlockBed
+        head.isHeadPiece = true
+        level.setBlock(next.position, head, true, true)
 
-        BlockEntityBed thisBed = null;
+        var thisBed: BlockEntityBed? = null
         try {
-            thisBed = createBlockEntity(new CompoundTag().putByte("color", item.getDamage()));
-            BlockEntityHolder<?> nextBlock = (BlockEntityHolder<?>) next.getLevelBlock();
-            nextBlock.createBlockEntity(new CompoundTag().putByte("color", item.getDamage()));
-        } catch (Exception e) {
-            log.warn("Failed to create the block entity {} at {} and {}", getBlockEntityType(), getLocator(), next.getLocator(), e);
-            if (thisBed != null) {
-                thisBed.close();
-            }
-            level.setBlock(thisLayer0.position, 0, thisLayer0, true);
-            level.setBlock(thisLayer1.position, 1, thisLayer1, true);
-            level.setBlock(nextLayer0.position, 0, nextLayer0, true);
-            level.setBlock(nextLayer1.position, 1, nextLayer1, true);
-            return false;
+            thisBed = createBlockEntity(CompoundTag().putByte("color", item.damage))
+            val nextBlock = next.levelBlock as BlockEntityHolder<*>?
+            nextBlock!!.createBlockEntity(CompoundTag().putByte("color", item.damage))
+        } catch (e: Exception) {
+            BlockBed.log.warn(
+                "Failed to create the block entity {} at {} and {}",
+                blockEntityType, locator, next.locator, e
+            )
+            thisBed?.close()
+            level.setBlock(thisLayer0!!.position, 0, thisLayer0, true)
+            level.setBlock(thisLayer1!!.position, 1, thisLayer1, true)
+            level.setBlock(nextLayer0!!.position, 0, nextLayer0, true)
+            level.setBlock(nextLayer1!!.position, 1, nextLayer1, true)
+            return false
         }
-        return true;
+        return true
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        BlockFace direction = getBlockFace();
-        if (isHeadPiece()) { //This is the Top part of bed
-            Block other = getSide(direction.getOpposite());
-            if (other.getId().equals(getId()) && !((BlockBed) other).isHeadPiece() && direction.equals(((BlockBed) other).getBlockFace())) {
-                level.setBlock(other.position, Block.get(BlockID.AIR), true, true);
+    override fun onBreak(item: Item?): Boolean {
+        val direction = blockFace
+        if (isHeadPiece) { //This is the Top part of bed
+            val other = getSide(direction!!.getOpposite()!!)
+            if (other!!.id == id && !(other as BlockBed).isHeadPiece && direction == other.blockFace) {
+                level.setBlock(other.position, get(AIR), true, true)
             }
         } else { //Bottom Part of Bed
-            Block other = getSide(direction);
-            if (other.getId().equals(getId()) && ((BlockBed) other).isHeadPiece() && direction.equals(((BlockBed) other).getBlockFace())) {
-                level.setBlock(other.position, Block.get(BlockID.AIR), true, true);
+            val other = getSide(direction!!)
+            if (other!!.id == id && (other as BlockBed).isHeadPiece && direction == other.blockFace) {
+                level.setBlock(other.position, get(AIR), true, true)
             }
         }
 
-        level.setBlock(this.position, Block.get(BlockID.AIR), true, false); // Do not update both parts to prevent duplication bug if there is two fallable blocks top of the bed
+        level.setBlock(
+            this.position,
+            get(AIR),
+            true,
+            false
+        ) // Do not update both parts to prevent duplication bug if there is two fallable blocks top of the bed
 
-        return true;
+        return true
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBed(this.getDyeColor().getWoolData());
+    override fun toItem(): Item? {
+        return ItemBed(dyeColor.woolData)
     }
 
-    public DyeColor getDyeColor() {
-        if (this.level != null) {
-            BlockEntityBed blockEntity = getBlockEntity();
+    val dyeColor: DyeColor
+        get() {
+            if (this.level != null) {
+                val blockEntity = blockEntity
 
-            if (blockEntity != null) {
-                return blockEntity.getDyeColor();
+                if (blockEntity != null) {
+                    return blockEntity.dyeColor
+                }
             }
+
+            return DyeColor.WHITE
         }
 
-        return DyeColor.WHITE;
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromHorizontalIndex(getPropertyValue(DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(DIRECTION, face.horizontalIndex);
-    }
-
-    public boolean isHeadPiece() {
-        return getPropertyValue(HEAD_PIECE_BIT);
-    }
-
-    public void setHeadPiece(boolean headPiece) {
-        setPropertyValue(HEAD_PIECE_BIT, headPiece);
-    }
-
-    public boolean isOccupied() {
-        return getPropertyValue(OCCUPIED_BIT);
-    }
-
-    public void setOccupied(boolean occupied) {
-        setPropertyValue(OCCUPIED_BIT, occupied);
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    @Override
-    public boolean sticksToPiston() {
-        return false;
-    }
-
-    public boolean isBedValid() {
-        BlockFace dir = getBlockFace();
-        Block head;
-        Block foot;
-        if (isHeadPiece()) {
-            head = this;
-            foot = getSide(dir.getOpposite());
-        } else {
-            head = getSide(dir);
-            foot = this;
+    override var blockFace: BlockFace?
+        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.DIRECTION,
+                face!!.horizontalIndex
+            )
         }
 
-        return head.getId().equals(foot.getId())
-                && ((BlockBed) head).isHeadPiece() && ((BlockBed) head).getBlockFace().equals(dir)
-                && !((BlockBed) foot).isHeadPiece() && ((BlockBed) foot).getBlockFace().equals(dir);
+    var isHeadPiece: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HEAD_PIECE_BIT)
+        set(headPiece) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.HEAD_PIECE_BIT,
+                headPiece
+            )
+        }
+
+    var isOccupied: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OCCUPIED_BIT)
+        set(occupied) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.OCCUPIED_BIT,
+                occupied
+            )
+        }
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    public @Nullable BlockBed getHeadPart() {
-        if (isHeadPiece()) {
-            return this;
-        }
-        BlockFace dir = getBlockFace();
-        Block head = getSide(dir);
-        if (head.getId().equals(getId()) && ((BlockBed) head).isHeadPiece() && ((BlockBed) head).getBlockFace().equals(dir)) {
-            return (BlockBed) head;
-        }
-        return null;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    public @Nullable BlockBed getFootPart() {
-        if (!isHeadPiece()) {
-            return this;
+    val isBedValid: Boolean
+        get() {
+            val dir = blockFace
+            val head: Block?
+            val foot: Block?
+            if (isHeadPiece) {
+                head = this
+                foot = getSide(dir!!.getOpposite()!!)
+            } else {
+                head = getSide(dir!!)
+                foot = this
+            }
+
+            return head!!.id == foot!!.id
+                    && (head as BlockBed).isHeadPiece && head.blockFace == dir
+                    && !(foot as BlockBed).isHeadPiece && foot.blockFace == dir
         }
 
-        BlockFace dir = getBlockFace();
-        Block foot = getSide(dir.getOpposite());
-        if (foot.getId().equals(getId()) && !((BlockBed) foot).isHeadPiece() && ((BlockBed) foot).getBlockFace().equals(dir)) {
-            return (BlockBed) foot;
+    val headPart: BlockBed?
+        get() {
+            if (isHeadPiece) {
+                return this
+            }
+            val dir = blockFace
+            val head = getSide(dir!!)
+            if (head!!.id == id && (head as BlockBed).isHeadPiece && head.blockFace == dir) {
+                return head
+            }
+            return null
         }
-        return null;
+
+    val footPart: BlockBed?
+        get() {
+            if (!isHeadPiece) {
+                return this
+            }
+
+            val dir = blockFace
+            val foot = getSide(dir!!.getOpposite()!!)
+            if (foot!!.id == id && !(foot as BlockBed).isHeadPiece && foot.blockFace == dir) {
+                return foot
+            }
+            return null
+        }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BED,
+            CommonBlockProperties.DIRECTION,
+            CommonBlockProperties.HEAD_PIECE_BIT,
+            CommonBlockProperties.OCCUPIED_BIT
+        )
+            get() = Companion.field
     }
 }

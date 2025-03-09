@@ -72,7 +72,7 @@ class LevelStorageTest {
     @SneakyThrows
     fun testWriteChunk() {
         val chunk = levelDBProvider!!.getChunk(0, 0)
-        chunk.setBlockState(0, 50, 0, BlockOakLog.PROPERTIES.defaultState)
+        chunk.setBlockState(0, 50, 0, BlockOakLog.properties.defaultState)
         levelDBProvider!!.saveChunk(0, 0, chunk)
         chunk.x = 1
         chunk.z = 1
@@ -94,7 +94,7 @@ class LevelStorageTest {
     fun testSaveAndReadChunk() {
         val chunk = levelDBProvider!!.getChunk(0, 0)
         Assertions.assertEquals("minecraft:stone", chunk.getBlockState(9, 68, 1).identifier)
-        chunk.setBlockState(9, 68, 1, BlockWoodenButton.PROPERTIES.defaultState)
+        chunk.setBlockState(9, 68, 1, BlockWoodenButton.properties.defaultState)
         levelDBProvider!!.saveChunk(0, 0, chunk)
         val newChunk = levelDBProvider!!.getChunk(0, 0)
         Assertions.assertNotNull(newChunk)
@@ -126,7 +126,7 @@ class LevelStorageTest {
                 val chunk = newProvider.getChunk(i, j, true)
                 for (x in 0..15) {
                     for (z in 0..15) {
-                        chunk.setBlockState(x, 1, z, BlockOakLog.PROPERTIES.defaultState)
+                        chunk.setBlockState(x, 1, z, BlockOakLog.properties.defaultState)
                     }
                 }
             }

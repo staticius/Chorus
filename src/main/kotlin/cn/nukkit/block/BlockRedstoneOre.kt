@@ -1,86 +1,61 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemRedstone;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Level;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.ItemTool
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 
-import javax.annotation.Nullable;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+open class BlockRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockOre(blockstate) {
+    override val toolTier: Int
+        get() = ItemTool.TIER_IRON
 
-public class BlockRedstoneOre extends BlockOre {
-    public static final BlockProperties PROPERTIES = new BlockProperties(REDSTONE_ORE);
+    override val name: String
+        get() = "Redstone Ore"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (item.isPickaxe && item.tier >= toolTier) {
+            var count = Random().nextInt(2) + 4
 
-    public BlockRedstoneOre() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRedstoneOre(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_IRON;
-    }
-
-    @Override
-    public String getName() {
-        return "Redstone Ore";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() >= getToolTier()) {
-            int count = new Random().nextInt(2) + 4;
-
-            Enchantment fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING);
-            if (fortune != null && fortune.getLevel() >= 1) {
-                count += new Random().nextInt(fortune.getLevel() + 1);
+            val fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
+            if (fortune != null && fortune.level >= 1) {
+                count += Random().nextInt(fortune.level + 1)
             }
 
-            return new Item[]{
-                    Item.get(Item.REDSTONE, 0, count)
-            };
+            return arrayOf<Item?>(
+                get(Item.REDSTONE, 0, count)
+            )
         } else {
-            return Item.EMPTY_ARRAY;
+            return Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_TOUCH) { //type == Level.BLOCK_UPDATE_NORMAL ||
-            this.level.setBlock(this.position, getLitBlock(), true, true);
-            return Level.BLOCK_UPDATE_WEAK;
+            level.setBlock(this.position, litBlock, true, true)
+            return Level.BLOCK_UPDATE_WEAK
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    protected @Nullable String getRawMaterial() {
-        return ItemID.REDSTONE;
-    }
+    override val rawMaterial: String?
+        get() = ItemID.REDSTONE
 
-    public Block getLitBlock() {
-        return new BlockLitRedstoneOre();
-    }
+    open val litBlock: Block
+        get() = BlockLitRedstoneOre()
 
-    public Block getUnlitBlock() {
-        return new BlockRedstoneOre();
-    }
+    open val unlitBlock: Block
+        get() = BlockRedstoneOre()
 
-    @Override
-    public int getDropExp() {
-        return ThreadLocalRandom.current().nextInt(1, 6);
+    override val dropExp: Int
+        get() = ThreadLocalRandom.current().nextInt(1, 6)
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_ORE)
+            get() = Companion.field
     }
 }

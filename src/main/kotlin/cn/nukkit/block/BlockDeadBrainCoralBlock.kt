@@ -1,26 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockDeadBrainCoralBlock : BlockCoralBlock {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockDeadBrainCoralBlock extends BlockCoralBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DEAD_BRAIN_CORAL_BLOCK);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val isDead: Boolean
+        get() = true
 
-    public BlockDeadBrainCoralBlock() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockDeadBrainCoralBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean isDead() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(DEAD_BRAIN_CORAL_BLOCK)
+            get() = Companion.field
     }
 }

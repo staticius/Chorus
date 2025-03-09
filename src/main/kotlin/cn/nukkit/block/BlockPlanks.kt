@@ -1,38 +1,23 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
+import cn.nukkit.item.ItemTool
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public abstract class BlockPlanks extends BlockSolid {
+abstract class BlockPlanks(blockState: BlockState?) : BlockSolid(blockState) {
+    override val hardness: Double
+        get() = 2.0
 
-    public BlockPlanks(BlockState blockState) {
-        super(blockState);
-    }
+    override val resistance: Double
+        get() = 15.0
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
+    override val burnChance: Int
+        get() = 5
 
-    @Override
-    public double getResistance() {
-        return 15;
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 }

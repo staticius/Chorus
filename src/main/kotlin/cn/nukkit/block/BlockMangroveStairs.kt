@@ -1,26 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockMangroveStairs extends BlockStairsWood {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MANGROVE_STAIRS, CommonBlockProperties.UPSIDE_DOWN_BIT, CommonBlockProperties.WEIRDO_DIRECTION);
+class BlockMangroveStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockStairsWood(blockstate) {
+    override val name: String
+        get() = "Mangrove Wood Stairs"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockMangroveStairs() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMangroveStairs(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Mangrove Wood Stairs";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.MANGROVE_STAIRS,
+            CommonBlockProperties.UPSIDE_DOWN_BIT,
+            CommonBlockProperties.WEIRDO_DIRECTION
+        )
+            get() = Companion.field
     }
 }

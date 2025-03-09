@@ -1,51 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockSoulSoil extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SOUL_SOIL);
+class BlockSoulSoil @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Soul Soil"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 1.0
+
+    override val resistance: Double
+        get() = 1.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
+
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    public BlockSoulSoil() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val isSoulSpeedCompatible: Boolean
+        get() = true
 
-    public BlockSoulSoil(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Soul Soil";
-    }
-
-    @Override
-    public double getHardness() {
-        return 1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 1;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
-    }
-
-    @Override
-    public boolean isSoulSpeedCompatible() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SOUL_SOIL)
+            get() = Companion.field
     }
 }

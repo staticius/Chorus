@@ -1,20 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockDarkOakPlanks extends BlockPlanks {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DARK_OAK_PLANKS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockDarkOakPlanks() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockDarkOakPlanks(BlockState blockstate) {
-        super(blockstate);
+class BlockDarkOakPlanks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockPlanks(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(DARK_OAK_PLANKS)
+            get() = Companion.field
     }
 }

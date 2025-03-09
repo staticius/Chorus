@@ -1,119 +1,125 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.level.StructureGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.generator.object.BlockManager;
-import cn.nukkit.level.generator.object.ObjectMangroveTree;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.Block.isAir
+import cn.nukkit.block.BlockFlower.Companion.isSupportValid
+import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.event.level.StructureGrowEvent.blockList
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.level.generator.`object`.BlockManager.applySubChunkUpdate
+import cn.nukkit.level.generator.`object`.BlockManager.blocks
+import cn.nukkit.level.generator.`object`.ObjectBigMushroom.generate
+import cn.nukkit.level.generator.`object`.ObjectMangroveTree.generate
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockstate), FlowerPotBlock {
+    override val name: String
+        get() = "Mangrove Propaugle"
 
-import static cn.nukkit.block.property.CommonBlockProperties.HANGING;
-import static cn.nukkit.block.property.CommonBlockProperties.PROPAGULE_STAGE;
-
-public class BlockMangrovePropagule extends BlockFlowable implements BlockFlowerPot.FlowerPotBlock {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(MANGROVE_PROPAGULE, HANGING, PROPAGULE_STAGE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockMangrovePropagule() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMangrovePropagule(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Mangrove Propaugle";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         //todo: 实现红树树苗放置逻辑
-        if (BlockFlower.isSupportValid(down())) {
-            this.level.setBlock(block.position, this, true, true);
-            return true;
+        if (isSupportValid(down()!!)) {
+            level.setBlock(block.position, this, true, true)
+            return true
         }
 
-        return false;
+        return false
     }
 
-    public boolean isHanging() {
-        return getPropertyValue(HANGING);
+    val isHanging: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING)
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) { // BoneMeal
-            if (player != null && !player.isCreative()) {
-                item.count--;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) { // BoneMeal
+            if (player != null && !player.isCreative) {
+                item.count--
             }
 
-            this.level.addParticle(new BoneMealParticle(this.position));
+            level.addParticle(BoneMealParticle(this.position))
             if (ThreadLocalRandom.current().nextFloat() >= 0.45) {
-                return true;
+                return true
             }
 
-            this.grow();
+            this.grow()
 
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!BlockFlower.isSupportValid(down())) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+            if (!isSupportValid(down()!!)) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
-            this.grow();
+            this.grow()
         }
-        return Level.BLOCK_UPDATE_NORMAL;
+        return Level.BLOCK_UPDATE_NORMAL
     }
 
-    protected void grow() {
-        BlockManager chunkManager = new BlockManager(this.level);
-        Vector3 vector3 = new Vector3(this.position.south, this.position.up - 1, this.position.west);
-        var objectMangroveTree = new ObjectMangroveTree();
-        objectMangroveTree.generate(chunkManager, new NukkitRandom(), this.position);
-        StructureGrowEvent ev = new StructureGrowEvent(this, chunkManager.getBlocks());
-        this.level.server.pluginManager.callEvent(ev);
-        if (ev.isCancelled()) {
-            return;
+    protected fun grow() {
+        val chunkManager: BlockManager = BlockManager(this.level)
+        val vector3 = Vector3(
+            position.x, position.y - 1,
+            position.z
+        )
+        val objectMangroveTree: ObjectMangroveTree = ObjectMangroveTree()
+        objectMangroveTree.generate(chunkManager, NukkitRandom(), this.position)
+        val ev: StructureGrowEvent = StructureGrowEvent(this, chunkManager.blocks)
+        level.server.pluginManager.callEvent(ev)
+        if (ev.isCancelled) {
+            return
         }
-        chunkManager.applySubChunkUpdate(ev.getBlockList());
-        this.level.setBlock(this.position, Block.get(BlockID.AIR));
-        if (this.level.getBlock(vector3).getId().equals(BlockID.DIRT_WITH_ROOTS)) {
-            this.level.setBlock(vector3, Block.get(BlockID.DIRT));
+        chunkManager.applySubChunkUpdate(ev.blockList)
+        level.setBlock(this.position, get(BlockID.AIR))
+        if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
+            level.setBlock(vector3, get(BlockID.DIRT))
         }
-        for (Block block : ev.getBlockList()) {
-            if (block.isAir()) continue;
-            this.level.setBlock(block.position, block);
+        for (block in ev.blockList) {
+            if (block.isAir) continue
+            level.setBlock(block.position, block)
         }
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.MANGROVE_PROPAGULE,
+            CommonBlockProperties.HANGING,
+            CommonBlockProperties.PROPAGULE_STAGE
+        )
+            get() = Companion.field
     }
 }

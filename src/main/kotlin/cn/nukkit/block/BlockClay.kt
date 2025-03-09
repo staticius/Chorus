@@ -1,60 +1,41 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemClayBall;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
 /**
  * @author Nukkit Project Team
  */
-public class BlockClay extends BlockSolid implements Natural {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CLAY);
+class BlockClay : BlockSolid, Natural {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockClay() {
-        super(PROPERTIES.getDefaultState());
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val hardness: Double
+        get() = 0.6
+
+    override val resistance: Double
+        get() = 3.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
+
+    override val name: String
+        get() = "Clay Block"
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        val clayBall: Item = ItemClayBall()
+        clayBall.setCount(4)
+        return arrayOf(
+            clayBall
+        )
     }
 
-    public BlockClay(BlockState blockState) {
-        super(blockState);
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public double getHardness() {
-        return 0.6;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    @Override
-    public String getName() {
-        return "Clay Block";
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        Item clayBall = new ItemClayBall();
-        clayBall.setCount(4);
-        return new Item[]{
-                clayBall
-        };
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CLAY)
+            get() = Companion.field
     }
 }

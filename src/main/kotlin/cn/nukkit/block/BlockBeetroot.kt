@@ -1,62 +1,50 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBeetrootSeeds;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.enchantment.Enchantment;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.ThreadLocalRandom;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.enchantment.Enchantment
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.min
 
 /**
  * @author xtypr
  * @since 2015/11/22
  */
-public class BlockBeetroot extends BlockCrops {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BEETROOT, CommonBlockProperties.GROWTH);
+class BlockBeetroot @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCrops(blockstate) {
+    override val name: String
+        get() = "Beetroot Block"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemBeetrootSeeds()
     }
 
-    public BlockBeetroot() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockBeetroot(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Beetroot Block";
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBeetrootSeeds();
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (!isFullyGrown()) {
-            return new Item[]{Item.get(ItemID.BEETROOT_SEEDS)};
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (!isFullyGrown) {
+            return arrayOf(Item.get(ItemID.BEETROOT_SEEDS))
         }
-        
-        int seeds = 1;
-        int attempts = 3 + Math.min(0, item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING));
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        for (int i = 0; i < attempts; i++) {
+
+        var seeds = 1
+        val attempts = (3 + min(
+            0.0,
+            item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING).toDouble()
+        )).toInt()
+        val random = ThreadLocalRandom.current()
+        for (i in 0..<attempts) {
             if (random.nextInt(7) < 4) { // 4/7, 0.57142857142857142857142857142857
-                seeds++;
+                seeds++
             }
         }
 
-        return new Item[]{
-                Item.get(BlockID.BEETROOT),
-                Item.get(ItemID.BEETROOT_SEEDS, 0, seeds)
-        };
+        return arrayOf(
+            Item.get(BEETROOT),
+            get(ItemID.BEETROOT_SEEDS, 0, seeds)
+        )
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BEETROOT, CommonBlockProperties.GROWTH)
+            get() = Companion.field
     }
 }

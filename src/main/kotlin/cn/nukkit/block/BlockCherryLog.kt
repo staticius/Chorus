@@ -1,53 +1,34 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
+class BlockCherryLog : BlockLog {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockCherryLog extends BlockLog {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHERRY_LOG, CommonBlockProperties.PILLAR_AXIS);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 2.0
+
+    override val resistance: Double
+        get() = 10.0
+
+    override val burnChance: Int
+        get() = 5
+
+    override val burnAbility: Int
+        get() = 5
+
+    override val name: String
+        get() = "Cherry log"
+
+    override fun getStrippedState(): BlockState {
+        return BlockStrippedCherryLog.properties.defaultState
     }
 
-    public BlockCherryLog() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCherryLog(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 10;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 5;
-    }
-
-    @Override
-    public String getName() {
-        return "Cherry log";
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return BlockStrippedCherryLog.PROPERTIES.getDefaultState();
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHERRY_LOG, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }
 

@@ -1,60 +1,38 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
 
-public class BlockWarpedSlab extends BlockSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+class BlockWarpedSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSlab(blockstate, BlockID.WARPED_DOUBLE_SLAB) {
+    override val slabName: String
+        get() = "Warped"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    public BlockWarpedSlab() {
-        this(PROPERTIES.getDefaultState());
+    override val toolTier: Int
+        get() = 0
+
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return id == slab.id
     }
 
-    public BlockWarpedSlab(BlockState blockstate) {
-        super(blockstate, WARPED_DOUBLE_SLAB);
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override val resistance: Double
+        get() = 3.0
+
+    override fun toItem(): Item? {
+        return ItemBlock(this)
     }
 
-    @Override
-    public String getSlabName() {
-        return "Warped";
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.WARPED_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
-    }
-
-    @Override
-    public int getToolTier() {
-        return 0;
-    }
-
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return getId().equals(slab.getId());
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this);
-    }
-
 }

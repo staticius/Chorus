@@ -1,76 +1,66 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.item.EntityFallingBlock;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.item.EntityFallingBlock
+import cn.nukkit.item.*
+import cn.nukkit.level.Locator
+import cn.nukkit.math.BlockFace
 
-public class BlockFrogSpawn extends BlockFlowable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(FROG_SPAWN);
+class BlockFrogSpawn : BlockFlowable {
+    constructor() : super(Companion.properties.defaultState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockFrogSpawn() {
-        super(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Frog Spawn"
 
-    public BlockFrogSpawn(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Frog Spawn";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (supportable(block)){
-            if (block.getId().equals(Block.AIR))
-                return super.place(item, block, target, face, fx, fy, fz, player);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (supportable(block)) {
+            if (block.id == Block.AIR) return super.place(item, block, target, face, fx, fy, fz, player)
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
-        if (!supportable(this)) this.onBreak(null);
-        return super.onUpdate(type);
+    override fun onUpdate(type: Int): Int {
+        if (!supportable(this)) this.onBreak(null)
+        return super.onUpdate(type)
     }
 
-    @Override
-    public void onEntityCollide(Entity entity) {
-        if (entity instanceof EntityFallingBlock)
-            this.onBreak(null);
+    override fun onEntityCollide(entity: Entity?) {
+        if (entity is EntityFallingBlock) this.onBreak(null)
     }
 
-    public boolean supportable(Locator pos){
-        Block under = pos.getSide(BlockFace.DOWN).getLevelBlock();
-        return under.getId() == FLOWING_WATER
-                || under.getId() == WATER
-                || under.getLevelBlockAtLayer(1).getId() == FLOWING_WATER
-                || under.getLevelBlockAtLayer(1).getId() == WATER;
+    fun supportable(pos: Locator): Boolean {
+        val under = pos.getSide(BlockFace.DOWN)!!.levelBlock
+        return under!!.id === FLOWING_WATER || under!!.id === WATER || under!!.getLevelBlockAtLayer(1)!!.id === FLOWING_WATER || under!!.getLevelBlockAtLayer(
+            1
+        )!!.id === WATER
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public boolean canBePushed() {
-        return false;
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBePulled() {
-        return false;
+    override fun canBePulled(): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(FROG_SPAWN)
+            get() = Companion.field
     }
 }

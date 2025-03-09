@@ -1,20 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockCamera extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CAMERA);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockCamera() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCamera(BlockState blockstate) {
-        super(blockstate);
+class BlockCamera @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    Block(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.CAMERA)
+            get() = Companion.field
     }
 }

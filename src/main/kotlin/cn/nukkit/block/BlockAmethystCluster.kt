@@ -1,80 +1,66 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.utils.random.NukkitRandom
 
-public class BlockAmethystCluster extends BlockAmethystBud {
-    public static final BlockProperties PROPERTIES = new BlockProperties(AMETHYST_CLUSTER, CommonBlockProperties.MINECRAFT_BLOCK_FACE);
+class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockAmethystBud(blockState) {
+    override val namePrefix: String
+        get() = "Cluster"
 
-    public BlockAmethystCluster() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val lightLevel: Int
+        get() = 5
 
-    public BlockAmethystCluster(BlockState blockState) {
-        super(blockState);
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (item.isPickaxe) {
+            val fortuneLvl = item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING)
+            when (fortuneLvl) {
+                1 -> return if (RANDOM.nextInt(3) == 0) {
+                    arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
+                } else {
+                    arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
+                }
 
-    private static final NukkitRandom RANDOM = new NukkitRandom();
-
-    @Override
-    protected String getNamePrefix() {
-        return "Cluster";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 5;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if(item.isPickaxe()){
-            final int fortuneLvl = item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING);
-            switch (fortuneLvl) {
-                case 1:
-                    if (RANDOM.nextInt(3) == 0) {
-                        return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 8)};
-                    } else {
-                        return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 4)};
-                    }
-                case 2:
-                    final int bound = RANDOM.nextInt(4);
-                    if (bound == 0) {
-                        return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 12)};
+                2 -> {
+                    val bound = RANDOM.nextInt(4)
+                    return if (bound == 0) {
+                        arrayOf(get(ItemID.AMETHYST_SHARD, 0, 12))
                     } else if (bound == 1) {
-                        return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 8)};
-                    } else  {
-                        return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 4)};
+                        arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
+                    } else {
+                        arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
                     }
-                case 3:
-                    final int bound2 = RANDOM.nextInt(5);
+                }
+
+                3 -> {
+                    val bound2 = RANDOM.nextInt(5)
                     if (bound2 == 0) {
-                        return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 16)};
+                        return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 16))
                     } else if (bound2 == 1) {
-                        return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 12)};
+                        return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 12))
                     } else if (bound2 == 2) {
-                        return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 8)};
+                        return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
                     }
-                default:
-                    return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 4)};
+                    return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
+                }
+
+                else -> return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
             }
         } else {
-            return new Item[]{Item.get(ItemID.AMETHYST_SHARD, 0, 2)};
+            return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 2))
         }
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(AMETHYST_CLUSTER, CommonBlockProperties.MINECRAFT_BLOCK_FACE)
+            get() = Companion.field
+
+        private val RANDOM = NukkitRandom()
     }
 }

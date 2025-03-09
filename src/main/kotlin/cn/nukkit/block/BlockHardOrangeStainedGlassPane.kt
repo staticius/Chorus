@@ -1,18 +1,8 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
-
-public class BlockHardOrangeStainedGlassPane extends Block {
-     public static final BlockProperties PROPERTIES = new BlockProperties(HARD_ORANGE_STAINED_GLASS_PANE);
-
-     @Override
-     @NotNull
-     public BlockProperties getProperties() {
-        return PROPERTIES;
-     }
-
-     public BlockHardOrangeStainedGlassPane(BlockState blockstate) {
-         super(blockstate);
-     }
+class BlockHardOrangeStainedGlassPane(blockstate: BlockState?) : Block(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.HARD_ORANGE_STAINED_GLASS_PANE)
+            get() = Companion.field
+    }
 }

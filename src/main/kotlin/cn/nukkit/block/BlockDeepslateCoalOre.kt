@@ -1,30 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockDeepslateCoalOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCoalOre(blockstate) {
+    override val name: String
+        get() = "Deeplsate Coal Ore"
 
-public class BlockDeepslateCoalOre extends BlockCoalOre {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DEEPSLATE_COAL_ORE);
+    override val hardness: Double
+        get() = 4.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockDeepslateCoalOre() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockDeepslateCoalOre(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Deeplsate Coal Ore";
-    }
-
-    @Override
-    public double getHardness() {
-        return 4.5;
+    companion object {
+        val properties: BlockProperties = BlockProperties(DEEPSLATE_COAL_ORE)
+            get() = Companion.field
     }
 }

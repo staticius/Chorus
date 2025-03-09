@@ -1,117 +1,109 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityConduit;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.tag.CompoundTag;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntity.scheduleUpdate
+import cn.nukkit.item.*
+import cn.nukkit.level.Level.scheduleUpdate
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3.equals
+import cn.nukkit.nbt.tag.CompoundTag
 
-import javax.annotation.Nullable;
-import java.util.Objects;
+class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit?> {
+    constructor() : super(Companion.properties.defaultState)
 
+    constructor(blockState: BlockState?) : super(blockState)
 
-public class BlockConduit extends BlockTransparent implements BlockEntityHolder<BlockEntityConduit> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CONDUIT);
+    override val name: String
+        get() = "Conduit"
 
-    public BlockConduit() {
-        super(PROPERTIES.getDefaultState());
+    override fun getBlockEntityClass(): Class<out BlockEntityConduit> {
+        return BlockEntityConduit::class.java
     }
 
-    public BlockConduit(BlockState blockState) {
-        super(blockState);
+    override fun getBlockEntityType(): String {
+        return BlockEntity.CONDUIT
     }
 
-    @Override
-    public String getName() {
-        return "Conduit";
-    }
+    override val waterloggingLevel: Int
+        get() = 2
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val hardness: Double
+        get() = 3.0
 
-    @Override
-    @NotNull public Class<? extends BlockEntityConduit> getBlockEntityClass() {
-        return BlockEntityConduit.class;
-    }
+    override val resistance: Double
+        get() = 15.0
 
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.CONDUIT;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
-    }
-
-    @Override
-    public double getHardness() {
-        return 3;
-    }
-
-    @Override
-    public double getResistance() {
-        return 15;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (item.isBlock() && Objects.equals(item.getBlockId(), CONDUIT) && target.getId().equals(CONDUIT)) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (item.isBlock() && item.blockId == CONDUIT && target.id == CONDUIT) {
+            return false
         }
 
-        BlockEntityConduit conduit = BlockEntityHolder.setBlockAndCreateEntity(this, true, true,
-                new CompoundTag().putBoolean("IsMovable", true));
+        val conduit: BlockEntityConduit = BlockEntityHolder.setBlockAndCreateEntity<BlockEntityConduit, BlockConduit>(
+            this, true, true,
+            CompoundTag().putBoolean("IsMovable", true)
+        )
         if (conduit != null) {
-            conduit.scheduleUpdate();
-            return true;
+            conduit.scheduleUpdate()
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public int getLightLevel() {
-        return 15;
-    }
+    override val lightLevel: Int
+        get() = 15
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public double getMinX() {
-        return this.position.south + (5.0/16);
-    }
+    override var minX: Double
+        get() = position.x + (5.0 / 16)
+        set(minX) {
+            super.minX = minX
+        }
 
-    @Override
-    public double getMinY() {
-        return this.position.up + (5.0/16);
-    }
+    override var minY: Double
+        get() = position.y + (5.0 / 16)
+        set(minY) {
+            super.minY = minY
+        }
 
-    @Override
-    public double getMinZ() {
-        return this.position.west + (5.0/16);
-    }
+    override var minZ: Double
+        get() = position.z + (5.0 / 16)
+        set(minZ) {
+            super.minZ = minZ
+        }
 
-    @Override
-    public double getMaxX() {
-        return this.position.south + (11.0/16);
-    }
+    override var maxX: Double
+        get() = position.x + (11.0 / 16)
+        set(maxX) {
+            super.maxX = maxX
+        }
 
-    @Override
-    public double getMaxY() {
-        return this.position.up + (11.0/16);
-    }
+    override var maxY: Double
+        get() = position.y + (11.0 / 16)
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    @Override
-    public double getMaxZ() {
-        return this.position.west + (11.0/16);
+    override var maxZ: Double
+        get() = position.z + (11.0 / 16)
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(CONDUIT)
+            get() = Companion.field
     }
 }

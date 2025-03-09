@@ -15,188 +15,162 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package cn.nukkit.block
 
-package cn.nukkit.block;
-
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.event.block.BlockExplosionPrimeEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.lang.TranslationContainer;
-import cn.nukkit.level.Explosion;
-import cn.nukkit.level.GameRule;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.network.protocol.types.SpawnPointType;
-import cn.nukkit.utils.TextFormat;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.Objects;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.event.block.BlockExplosionPrimeEvent.isBlockBreaking
+import cn.nukkit.event.block.BlockExplosionPrimeEvent.isIncendiary
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Explosion.explodeA
+import cn.nukkit.level.Explosion.explodeB
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.TextFormat
 
 /**
  * @author joserobjr
  * @since 2020-10-06
  */
+class BlockRespawnAnchor : Block {
+    constructor() : super(Companion.properties.getDefaultState())
 
-public class BlockRespawnAnchor extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties(RESPAWN_ANCHOR, CommonBlockProperties.RESPAWN_ANCHOR_CHARGE);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val name: String
+        get() = "Respawn Anchor"
 
-    public BlockRespawnAnchor() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRespawnAnchor(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Respawn Anchor";
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        int charge = getCharge();
-        if (item.getBlockId().equals(BlockID.GLOWSTONE) && charge < CommonBlockProperties.RESPAWN_ANCHOR_CHARGE.getMax()) {
-            if (player == null || !player.isCreative()) {
-                item.count--;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        val charge = charge
+        if (item.blockId == BlockID.GLOWSTONE && charge < CommonBlockProperties.RESPAWN_ANCHOR_CHARGE.getMax()) {
+            if (player == null || !player.isCreative) {
+                item.count--
             }
 
-            setCharge(charge + 1);
-            level.setBlock(this.position, this);
-            level.addSound(this.position, Sound.RESPAWN_ANCHOR_CHARGE);
-            return true;
+            this.charge = charge + 1
+            level.setBlock(this.position, this)
+            level.addSound(this.position, Sound.RESPAWN_ANCHOR_CHARGE)
+            return true
         }
 
         if (player == null) {
-            return false;
+            return false
         }
 
-        if (charge > 0) {
-            return attemptToSetSpawn(player);
+        return if (charge > 0) {
+            attemptToSetSpawn(player)
         } else {
-            return false;
+            false
         }
     }
 
-    protected boolean attemptToSetSpawn(@NotNull Player player) {
-        if (this.level.getDimension() != Level.DIMENSION_NETHER) {
-            if (this.level.gameRules.getBoolean(GameRule.TNT_EXPLODES)) {
-                explode(player);
+    protected fun attemptToSetSpawn(player: Player): Boolean {
+        if (level.dimension != Level.DIMENSION_NETHER) {
+            if (level.gameRules!!.getBoolean(GameRule.TNT_EXPLODES)) {
+                explode(player)
             }
-            return true;
+            return true
         }
 
-        if (Objects.equals(player.getSpawn().left(), this)) {
-            return false;
+        if (player.spawn.left() == this) {
+            return false
         }
-        player.setSpawn(this, SpawnPointType.BLOCK);
-        level.addSound(this.position, Sound.RESPAWN_ANCHOR_SET_SPAWN);
-        player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.respawn_anchor.respawnSet"));
-        return true;
+        player.setSpawn(this, SpawnPointType.BLOCK)
+        level.addSound(this.position, Sound.RESPAWN_ANCHOR_SET_SPAWN)
+        player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.respawn_anchor.respawnSet"))
+        return true
     }
 
-    public void explode(Player player) {
-        BlockExplosionPrimeEvent event = new BlockExplosionPrimeEvent(this, player, 5);
-        event.setIncendiary(true);
-        if (event.isCancelled()) {
-            return;
+    fun explode(player: Player?) {
+        val event: BlockExplosionPrimeEvent = BlockExplosionPrimeEvent(this, player, 5.0)
+        event.isIncendiary = true
+        if (event.isCancelled) {
+            return
         }
 
-        level.setBlock(this.position, get(AIR));
-        Explosion explosion = new Explosion(this, event.force, this);
-        explosion.fireChance = event.fireChance;
-        if (event.isBlockBreaking()) {
-            explosion.explodeA();
+        level.setBlock(this.position, get(BlockID.AIR))
+        val explosion: Explosion = Explosion(this, event.force, this)
+        explosion.fireChance = event.fireChance
+        if (event.isBlockBreaking) {
+            explosion.explodeA()
         }
-        explosion.explodeB();
+        explosion.explodeB()
     }
 
-    public int getCharge() {
-        return getPropertyValue(CommonBlockProperties.RESPAWN_ANCHOR_CHARGE);
-    }
+    var charge: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RESPAWN_ANCHOR_CHARGE)
+        set(charge) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RESPAWN_ANCHOR_CHARGE, charge)
+        }
 
-    public void setCharge(int charge) {
-        setPropertyValue(CommonBlockProperties.RESPAWN_ANCHOR_CHARGE, charge);
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_DIAMOND
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_DIAMOND;
-    }
+    override val resistance: Double
+        get() = 1200.0
 
-    @Override
-    public double getResistance() {
-        return 1200;
-    }
+    override val hardness: Double
+        get() = 50.0
 
-    @Override
-    public double getHardness() {
-        return 50;
-    }
+    override val lightLevel: Int
+        get() = when (charge) {
+            0 -> 0
+            1 -> 3
+            2 -> 7
+            else -> 15
+        }
 
-    @Override
-    public int getLightLevel() {
-        return switch (getCharge()) {
-            case 0 -> 0;
-            case 1 -> 3;
-            case 2 -> 7;
-            default -> 15;
-        };
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            level.addSound(this.position, Sound.RESPAWN_ANCHOR_DEPLETE);
-            return type;
+            level.addSound(this.position, Sound.RESPAWN_ANCHOR_DEPLETE)
+            return type
         }
-        return super.onUpdate(type);
+        return super.onUpdate(type)
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBePushed() {
-        return false;
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBePulled() {
-        return false;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
+    override fun getDrops(item: Item): Array<Item?>? {
         if (canHarvest(item)) {
-            return new Item[]{Item.get(getId())};
+            return arrayOf(Item.get(id))
         }
-        return Item.EMPTY_ARRAY;
+        return Item.EMPTY_ARRAY
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.RESPAWN_ANCHOR, CommonBlockProperties.RESPAWN_ANCHOR_CHARGE)
+            get() = Companion.field
     }
 }

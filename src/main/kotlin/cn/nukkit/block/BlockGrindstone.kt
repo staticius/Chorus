@@ -1,223 +1,209 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.Attachment;
-import cn.nukkit.inventory.BlockInventoryHolder;
-import cn.nukkit.inventory.GrindstoneInventory;
-import cn.nukkit.inventory.Inventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.Attachment
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.inventory.BlockInventoryHolder
+import cn.nukkit.inventory.Inventory
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.math.SimpleAxisAlignedBB
+import cn.nukkit.utils.Faceable
+import java.util.function.Supplier
 
-import java.util.function.Supplier;
+class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), Faceable, BlockInventoryHolder {
+    override val name: String
+        get() = "Grindstone"
 
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-public class BlockGrindstone extends BlockTransparent implements Faceable, BlockInventoryHolder {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GRINDSTONE, CommonBlockProperties.ATTACHMENT, CommonBlockProperties.DIRECTION);
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockGrindstone() {
-        this(PROPERTIES.getDefaultState());
+    override fun toItem(): Item? {
+        return ItemBlock(BlockGrindstone())
     }
 
-    public BlockGrindstone(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public String getName() {
-        return "Grindstone";
-    }
+    override val hardness: Double
+        get() = 2.0
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override val resistance: Double
+        get() = 6.0
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockGrindstone());
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        if (face.horizontalIndex == -1) {
-            return;
+    override var blockFace: BlockFace?
+        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
+        set(face) {
+            if (face!!.horizontalIndex == -1) {
+                return
+            }
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face.horizontalIndex)
         }
-        setPropertyValue(CommonBlockProperties.DIRECTION, face.horizontalIndex);
-    }
 
-    public Attachment getAttachmentType() {
-        return getPropertyValue(CommonBlockProperties.ATTACHMENT);
-    }
+    var attachmentType: Attachment?
+        get() = getPropertyValue(
+            CommonBlockProperties.ATTACHMENT
+        )
+        set(attachmentType) {
+            setPropertyValue(
+                CommonBlockProperties.ATTACHMENT,
+                attachmentType
+            )
+        }
 
-    public void setAttachmentType(Attachment attachmentType) {
-        setPropertyValue(CommonBlockProperties.ATTACHMENT, attachmentType);
-    }
-
-    private boolean isConnectedTo(BlockFace connectedFace, Attachment attachmentType, BlockFace blockFace) {
-        BlockFace.Axis faceAxis = connectedFace.getAxis();
-        switch (attachmentType) {
-            case STANDING -> {
+    private fun isConnectedTo(connectedFace: BlockFace, attachmentType: Attachment, blockFace: BlockFace): Boolean {
+        val faceAxis = connectedFace.axis
+        return when (attachmentType) {
+            Attachment.STANDING -> {
                 if (faceAxis == BlockFace.Axis.Y) {
-                    return connectedFace == BlockFace.DOWN;
+                    connectedFace == BlockFace.DOWN
                 } else {
-                    return false;
+                    false
                 }
             }
-            case HANGING -> {
-                return connectedFace == BlockFace.UP;
+
+            Attachment.HANGING -> {
+                connectedFace == BlockFace.UP
             }
-            case SIDE, MULTIPLE -> {
-                return connectedFace == blockFace.getOpposite();
+
+            Attachment.SIDE, Attachment.MULTIPLE -> {
+                connectedFace == blockFace.getOpposite()
             }
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!checkSupport()) {
-                this.level.useBreakOn(this.position, Item.get(Item.DIAMOND_PICKAXE));
+                level.useBreakOn(this.position, Item.get(Item.DIAMOND_PICKAXE))
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (!block.isAir() && block.canBeReplaced()) {
-            face = BlockFace.UP;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player
+    ): Boolean {
+        var face = face
+        if (!block.isAir && block.canBeReplaced()) {
+            face = BlockFace.UP
         }
-        switch (face) {
-            case UP -> {
-                setAttachmentType(Attachment.STANDING);
-                setBlockFace(player.getDirection().getOpposite());
+        when (face) {
+            BlockFace.UP -> {
+                attachmentType = Attachment.STANDING
+                blockFace = player.getDirection()!!.getOpposite()
             }
-            case DOWN -> {
-                setAttachmentType(Attachment.HANGING);
-                setBlockFace(player.getDirection().getOpposite());
+
+            BlockFace.DOWN -> {
+                attachmentType = Attachment.HANGING
+                blockFace = player.getDirection()!!.getOpposite()
             }
-            default -> {
-                setBlockFace(face);
-                setAttachmentType(Attachment.SIDE);
+
+            else -> {
+                blockFace = face
+                attachmentType = Attachment.SIDE
             }
         }
         if (!checkSupport()) {
-            return false;
+            return false
         }
-        this.level.setBlock(this.position, this, true, true);
-        return true;
+        level.setBlock(this.position, this, true, true)
+        return true
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean checkSupport() {
-        return switch (getAttachmentType()) {
-            case STANDING -> checkSupport(down());
-            case HANGING -> checkSupport(up());
-            case SIDE -> checkSupport(getSide(getBlockFace().getOpposite()));
-            default -> false;
-        };
+    private fun checkSupport(): Boolean {
+        return when (attachmentType) {
+            Attachment.STANDING -> checkSupport(down()!!)
+            Attachment.HANGING -> checkSupport(up()!!)
+            Attachment.SIDE -> checkSupport(getSide(blockFace!!.getOpposite()!!)!!)
+            else -> false
+        }
     }
 
-    private boolean checkSupport(Block support) {
-        String id = support.getId();
-        return !id.equals(AIR) && !id.equals(BUBBLE_COLUMN) && !(support instanceof BlockLiquid);
+    private fun checkSupport(support: Block): Boolean {
+        val id = support.id
+        return (id != AIR) && (id != BUBBLE_COLUMN) && (support !is BlockLiquid)
     }
 
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        Attachment attachmentType = getAttachmentType();
-        BlockFace blockFace = getBlockFace();
-        boolean south = this.isConnectedTo(BlockFace.SOUTH, attachmentType, blockFace);
-        boolean north = this.isConnectedTo(BlockFace.NORTH, attachmentType, blockFace);
-        boolean west = this.isConnectedTo(BlockFace.WEST, attachmentType, blockFace);
-        boolean east = this.isConnectedTo(BlockFace.EAST, attachmentType, blockFace);
-        boolean up = this.isConnectedTo(BlockFace.UP, attachmentType, blockFace);
-        boolean down = this.isConnectedTo(BlockFace.DOWN, attachmentType, blockFace);
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        val attachmentType = attachmentType!!
+        val blockFace = blockFace
+        val south = this.isConnectedTo(BlockFace.SOUTH, attachmentType, blockFace!!)
+        val north = this.isConnectedTo(BlockFace.NORTH, attachmentType, blockFace)
+        val west = this.isConnectedTo(BlockFace.WEST, attachmentType, blockFace)
+        val east = this.isConnectedTo(BlockFace.EAST, attachmentType, blockFace)
+        val up = this.isConnectedTo(BlockFace.UP, attachmentType, blockFace)
+        val down = this.isConnectedTo(BlockFace.DOWN, attachmentType, blockFace)
 
-        double pixels = (2.0 / 16);
+        val pixels = (2.0 / 16)
 
-        double n = north ? 0 : pixels;
-        double s = south ? 1 : 1 - pixels;
-        double w = west ? 0 : pixels;
-        double e = east ? 1 : 1 - pixels;
-        double d = down ? 0 : pixels;
-        double u = up ? 1 : 1 - pixels;
+        val n = if (north) 0.0 else pixels
+        val s = if (south) 1.0 else 1 - pixels
+        val w = if (west) 0.0 else pixels
+        val e = if (east) 1.0 else 1 - pixels
+        val d = if (down) 0.0 else pixels
+        val u = if (up) 1.0 else 1 - pixels
 
-        return new SimpleAxisAlignedBB(
-                this.position.south + w,
-                this.position.up + d,
-                this.position.west + n,
-                this.position.south + e,
-                this.position.up + u,
-                this.position.west + s
-        );
+        return SimpleAxisAlignedBB(
+            position.x + w,
+            position.y + d,
+            position.z + n,
+            position.x + e,
+            position.y + u,
+            position.z + s
+        )
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player != null) {
-            Item itemInHand = player.getInventory().getItemInHand();
-            if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull())) {
-                return false;
+            val itemInHand = player.getInventory().itemInHand
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+                return false
             }
-            player.addWindow(getInventory());
+            player.addWindow(inventory!!)
         }
-        return true;
+        return true
     }
 
-    @Override
-    public Supplier<Inventory> blockInventorySupplier() {
-        return () -> new GrindstoneInventory(this);
+    override fun blockInventorySupplier(): Supplier<Inventory?> {
+        return Supplier<Inventory?> { GrindstoneInventory(this) }
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(GRINDSTONE, CommonBlockProperties.ATTACHMENT, CommonBlockProperties.DIRECTION)
+            get() = Companion.field
     }
 }

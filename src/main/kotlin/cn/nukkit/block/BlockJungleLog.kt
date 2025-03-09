@@ -1,26 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockJungleLog extends BlockLog {
-    public static final BlockProperties PROPERTIES = new BlockProperties(JUNGLE_LOG, CommonBlockProperties.PILLAR_AXIS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockJungleLog @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockLog(blockstate) {
+    override fun getStrippedState(): BlockState {
+        return BlockStrippedJungleLog.properties.defaultState
     }
 
-    public BlockJungleLog() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockJungleLog(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return BlockStrippedJungleLog.PROPERTIES.getDefaultState();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.Companion.JUNGLE_LOG, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

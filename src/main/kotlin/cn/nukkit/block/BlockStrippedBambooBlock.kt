@@ -1,72 +1,54 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.WoodType;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
+class BlockStrippedBambooBlock @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockWoodStripped(blockState) {
+    override val name: String
+        get() = "Stripped Bamboo Block"
 
-
-public class BlockStrippedBambooBlock extends BlockWoodStripped {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STRIPPED_BAMBOO_BLOCK, PILLAR_AXIS);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getWoodType(): WoodType {
+        throw UnsupportedOperationException()
     }
 
-    public BlockStrippedBambooBlock() {
-        this(PROPERTIES.getDefaultState());
+    override fun getStrippedState(): BlockState {
+        return blockState!!
     }
 
-    public BlockStrippedBambooBlock(BlockState blockState) {
-        super(blockState);
+    override fun canBeActivated(): Boolean {
+        return false
     }
 
-    public String getName() {
-        return "Stripped Bamboo Block";
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return false
     }
 
-    @Override
-    public WoodType getWoodType() {
-        throw new UnsupportedOperationException();
-    }
+    override val hardness: Double
+        get() = 2.0
 
-    @Override
-    public BlockState getStrippedState() {
-        return getBlockState();
-    }
+    override val resistance: Double
+        get() = 15.0
 
-    @Override
-    public boolean canBeActivated() {
-        return false;
-    }
+    override val burnChance: Int
+        get() = 5
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return false;
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 15;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STRIPPED_BAMBOO_BLOCK, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

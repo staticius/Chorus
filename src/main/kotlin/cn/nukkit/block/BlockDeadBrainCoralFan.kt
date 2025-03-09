@@ -1,26 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockDeadBrainCoralFan extends BlockCoralFanDead {
-     public static final BlockProperties PROPERTIES = new BlockProperties(DEAD_BRAIN_CORAL_FAN, CommonBlockProperties.CORAL_FAN_DIRECTION);
+class BlockDeadBrainCoralFan : BlockCoralFanDead {
+    constructor() : super(Companion.properties.defaultState)
 
-     @Override
-     @NotNull
-     public BlockProperties getProperties() {
-        return PROPERTIES;
-     }
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    public BlockDeadBrainCoralFan() {
-        super(PROPERTIES.getDefaultState());
-    }
+    val wallFanId: String
+        get() = DEAD_BRAIN_CORAL_WALL_FAN
 
-     public BlockDeadBrainCoralFan(BlockState blockstate) {
-         super(blockstate);
-     }
-
-    public String getWallFanId() {
-        return DEAD_BRAIN_CORAL_WALL_FAN;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(DEAD_BRAIN_CORAL_FAN, CommonBlockProperties.CORAL_FAN_DIRECTION)
+            get() = Companion.field
     }
 }

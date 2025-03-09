@@ -1,35 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockPackedMud : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockPackedMud extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PACKED_MUD);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val name: String
+        get() = "Packed Mud"
 
-    public BlockPackedMud() {
-        super(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 1.0
 
-    public BlockPackedMud(BlockState blockState) {
-        super(blockState);
-    }
+    override val resistance: Double
+        get() = 3.0
 
-    @Override
-    public String getName() {
-        return "Packed Mud";
-    }
-
-    @Override
-    public double getHardness() {
-        return 1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PACKED_MUD)
+            get() = Companion.field
     }
 }

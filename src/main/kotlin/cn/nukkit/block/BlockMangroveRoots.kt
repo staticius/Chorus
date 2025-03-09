@@ -1,53 +1,44 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
+class BlockMangroveRoots : BlockTransparent {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockMangroveRoots extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MANGROVE_ROOTS);
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Mangrove Roots"
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override val hardness: Double
+        get() = 0.7
+
+    override val resistance: Double
+        get() = 0.7
+
+    override val burnChance: Int
+        get() = 5
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        return level.setBlock(this.position, this)
     }
 
-    public BlockMangroveRoots() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMangroveRoots(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Mangrove Roots";
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.7;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.7;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        return level.setBlock(this.position, this);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MANGROVE_ROOTS)
+            get() = Companion.field
     }
 }

@@ -1,28 +1,26 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
-public abstract class BlockStemStripped extends BlockStem {
-
-    public BlockStemStripped(BlockState blockstate) {
-        super(blockstate);
+abstract class BlockStemStripped(blockstate: BlockState?) : BlockStem(blockstate) {
+    override fun getStrippedState(): BlockState {
+        return blockState!!
     }
 
-    @Override
-    public BlockState getStrippedState() {
-        return getBlockState();
+    override fun canBeActivated(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return false;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return false
     }
 }

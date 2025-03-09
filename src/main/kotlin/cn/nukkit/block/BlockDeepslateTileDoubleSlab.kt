@@ -1,57 +1,35 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockDeepslateTileDoubleSlab extends BlockDoubleSlabBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DEEPSLATE_TILE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+class BlockDeepslateTileDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDoubleSlabBase(blockstate) {
+    override val slabName: String
+        get() = "Deepslate Tile"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 3.5
+
+    override val resistance: Double
+        get() = 6.0
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockDeepslateTileDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    public BlockDeepslateTileDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public String getSlabName() {
-        return "Deepslate Tile";
-    }
+    override val singleSlab: BlockState?
+        get() = BlockDeepslateTileSlab.Companion.PROPERTIES.getDefaultState()
 
-    @Override
-    public double getHardness() {
-        return 3.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockDeepslateTileSlab.PROPERTIES.getDefaultState();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(DEEPSLATE_TILE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

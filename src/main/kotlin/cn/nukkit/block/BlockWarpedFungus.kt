@@ -1,61 +1,49 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.level.StructureGrowEvent;
-import cn.nukkit.level.generator.object.BlockManager;
-import cn.nukkit.level.generator.object.legacytree.LegacyWarpedTree;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.event.level.StructureGrowEvent.blockList
+import cn.nukkit.level.generator.`object`.BlockManager.applySubChunkUpdate
+import cn.nukkit.level.generator.`object`.BlockManager.blocks
+import cn.nukkit.level.generator.`object`.legacytree.LegacyNetherTree.placeObject
 
-import javax.annotation.Nullable;
+class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFungus(blockstate) {
+    private val feature: LegacyWarpedTree = LegacyWarpedTree()
 
-public class BlockWarpedFungus extends BlockFungus {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_FUNGUS);
+    override val name: String
+        get() = "Warped Fungus"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockWarpedFungus() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWarpedFungus(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    private final LegacyWarpedTree feature = new LegacyWarpedTree();
-
-    @Override
-    public String getName() {
-        return "Warped Fungus";
-    }
-
-    @Override
-    protected boolean canGrowOn(Block support) {
-        if (support.getId().equals(WARPED_NYLIUM)) {
-            for (int i = 1; i <= this.feature.getTreeHeight(); i++) {
-                if (!this.up(i).isAir()) {
-                    return false;
+    override fun canGrowOn(support: Block): Boolean {
+        if (support.id == BlockID.WARPED_NYLIUM) {
+            for (i in 1..feature.getTreeHeight()) {
+                if (!up(i)!!.isAir) {
+                    return false
                 }
             }
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public boolean grow(@Nullable Player cause) {
-        NukkitRandom nukkitRandom = new NukkitRandom();
-        BlockManager blockManager = new BlockManager(this.level);
-        this.feature.placeObject(blockManager, this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ(), nukkitRandom);
-        StructureGrowEvent ev = new StructureGrowEvent(this, blockManager.getBlocks());
-        this.level.server.pluginManager.callEvent(ev);
-        if (ev.isCancelled()) {
-            return false;
+    override fun grow(cause: Player?): Boolean {
+        val nukkitRandom: NukkitRandom = NukkitRandom()
+        val blockManager: BlockManager = BlockManager(this.level)
+        feature.placeObject(
+            blockManager,
+            position.floorX, position.floorY, position.floorZ, nukkitRandom
+        )
+        val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
+        level.server.pluginManager.callEvent(ev)
+        if (ev.isCancelled) {
+            return false
         }
-        blockManager.applySubChunkUpdate(ev.getBlockList());
-        return true;
+        blockManager.applySubChunkUpdate(ev.blockList)
+        return true
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WARPED_FUNGUS)
+            get() = Companion.field
     }
 }

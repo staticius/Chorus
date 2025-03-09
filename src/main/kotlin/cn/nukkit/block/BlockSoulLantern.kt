@@ -1,34 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
 
 
-import org.jetbrains.annotations.NotNull;
+class BlockSoulLantern @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockLantern(blockstate) {
+    override val name: String
+        get() = "Soul Lantern"
 
-import static cn.nukkit.block.property.CommonBlockProperties.HANGING;
+    override val lightLevel: Int
+        get() = 10
 
-public class BlockSoulLantern extends BlockLantern {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SOUL_LANTERN, HANGING);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SOUL_LANTERN, CommonBlockProperties.HANGING)
+            get() = Companion.field
     }
-
-    public BlockSoulLantern() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSoulLantern(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Soul Lantern";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 10;
-    }
-
 }

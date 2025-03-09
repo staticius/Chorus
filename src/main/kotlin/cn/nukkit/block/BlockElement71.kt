@@ -1,20 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockElement71 extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties("minecraft:element_71");
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockElement71() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockElement71(BlockState blockstate) {
-        super(blockstate);
+class BlockElement71 @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    Block(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties("minecraft:element_71")
+            get() = Companion.field
     }
 }

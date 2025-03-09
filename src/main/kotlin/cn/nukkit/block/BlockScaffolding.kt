@@ -1,242 +1,217 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.item.EntityFallingBlock;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.nbt.tag.CompoundTag;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemBlock
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.nbt.tag.CompoundTag.putBoolean
 
-import static cn.nukkit.block.property.CommonBlockProperties.*;
+class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFallable(blockstate) {
+    override val name: String
+        get() = "Scaffolding"
 
-public class BlockScaffolding extends BlockFallable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SCAFFOLDING, STABILITY, STABILITY_CHECK);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockScaffolding() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockScaffolding(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Scaffolding";
-    }
-
-    public int getStability() {
-        return getPropertyValue(STABILITY);
-    }
-
-    public void setStability(int stability) {
-        setPropertyValue(STABILITY, stability);
-    }
-
-    public boolean getStabilityCheck() {
-        return getPropertyValue(STABILITY_CHECK);
-    }
-
-    public void setStabilityCheck(boolean check) {
-        setPropertyValue(STABILITY_CHECK, check);
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockScaffolding());
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (block instanceof BlockFlowingLava) {
-            return false;
+    var stability: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.STABILITY)
+        set(stability) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.STABILITY, stability)
         }
 
-        Block down = down();
-        if (!target.getId().equals(SCAFFOLDING) && !down.getId().equals(SCAFFOLDING) && !down.isAir() && !down.isSolid()) {
-            boolean scaffoldOnSide = false;
-            for (int i = 0; i < 4; i++) {
-                BlockFace sideFace = BlockFace.fromHorizontalIndex(i);
+    var stabilityCheck: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.STABILITY_CHECK)
+        set(check) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.STABILITY_CHECK,
+                check
+            )
+        }
+
+    override fun toItem(): Item? {
+        return ItemBlock(BlockScaffolding())
+    }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (block is BlockFlowingLava) {
+            return false
+        }
+
+        val down = down()
+        if ((target.id != BlockID.SCAFFOLDING) && (down!!.id != BlockID.SCAFFOLDING) && !down.isAir && !down.isSolid) {
+            var scaffoldOnSide = false
+            for (i in 0..3) {
+                val sideFace = fromHorizontalIndex(i)
                 if (sideFace != face) {
-                    Block side = getSide(sideFace);
-                    if (side.getId().equals(SCAFFOLDING)) {
-                        scaffoldOnSide = true;
-                        break;
+                    val side = getSide(sideFace!!)
+                    if (side!!.id == BlockID.SCAFFOLDING) {
+                        scaffoldOnSide = true
+                        break
                     }
                 }
             }
             if (!scaffoldOnSide) {
-                return false;
+                return false
             }
         }
 
-        setStabilityCheck(true);
-        this.level.setBlock(this.position, this, true, true);
-        return true;
+        stabilityCheck = true
+        level.setBlock(this.position, this, true, true)
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            Block down = down();
-            if (down.isSolid()) {
-                if (!isDefaultState()) {
-                    setPropertyValues(STABILITY.createValue(0), STABILITY_CHECK.createValue(false));
-                    this.level.setBlock(this.position, this, true, true);
+            val down = down()
+            if (down!!.isSolid) {
+                if (!isDefaultState) {
+                    setPropertyValues(
+                        CommonBlockProperties.STABILITY.createValue(0),
+                        CommonBlockProperties.STABILITY_CHECK.createValue(false)
+                    )
+                    level.setBlock(this.position, this, true, true)
                 }
-                return type;
+                return type
             }
 
-            int stability = 7;
-            for (BlockFace face : BlockFace.values()) {
+            var stability = 7
+            for (face in BlockFace.entries) {
                 if (face == BlockFace.UP) {
-                    continue;
+                    continue
                 }
 
-                Block otherBlock = getSide(face);
-                if (otherBlock.getId().equals(SCAFFOLDING)) {
-                    BlockScaffolding other = (BlockScaffolding) otherBlock;
-                    int otherStability = other.getStability();
+                val otherBlock = getSide(face)
+                if (otherBlock!!.id == BlockID.SCAFFOLDING) {
+                    val other = otherBlock as BlockScaffolding
+                    val otherStability = other.stability
                     if (otherStability < stability) {
-                        if (face == BlockFace.DOWN) {
-                            stability = otherStability;
+                        stability = if (face == BlockFace.DOWN) {
+                            otherStability
                         } else {
-                            stability = otherStability + 1;
+                            otherStability + 1
                         }
                     }
                 }
             }
 
             if (stability >= 7) {
-                if (getStabilityCheck()) {
-                    super.onUpdate(type);
+                if (stabilityCheck) {
+                    super.onUpdate(type)
                 } else {
-                    this.level.scheduleUpdate(this, 0);
+                    level.scheduleUpdate(this, 0)
                 }
-                return type;
+                return type
             }
 
-            setStabilityCheck(false);
-            setStability(stability);
-            this.level.setBlock(this.position, this, true, true);
-            return type;
+            stabilityCheck = false
+            this.stability = stability
+            level.setBlock(this.position, this, true, true)
+            return type
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            this.level.useBreakOn(this.position);
-            return type;
+            level.useBreakOn(this.position)
+            return type
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    protected EntityFallingBlock createFallingEntity(CompoundTag customNbt) {
-        setPropertyValues(STABILITY.createValue(0), STABILITY_CHECK.createValue(false));
-        customNbt.putBoolean("BreakOnLava", true);
-        return super.createFallingEntity(customNbt);
+    override fun createFallingEntity(customNbt: CompoundTag): EntityFallingBlock? {
+        setPropertyValues(
+            CommonBlockProperties.STABILITY.createValue(0),
+            CommonBlockProperties.STABILITY_CHECK.createValue(false)
+        )
+        customNbt.putBoolean("BreakOnLava", true)
+        return super.createFallingEntity(customNbt)
     }
 
-    @Override
-    public double getHardness() {
-        return 0.5;
+    override val hardness: Double
+        get() = 0.5
+
+    override val resistance: Double
+        get() = 0.0
+
+    override val burnChance: Int
+        get() = 60
+
+    override val burnAbility: Int
+        get() = 60
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public double getResistance() {
-        return 0;
+    override fun canBeClimbed(): Boolean {
+        return true
     }
 
-    @Override
-    public int getBurnChance() {
-        return 60;
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    @Override
-    public int getBurnAbility() {
-        return 60;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return SimpleAxisAlignedBB(
+            position.x,
+            position.y + (2.0 / 16),
+            position.z, position.x + 1, position.y + 1, position.z + 1
+        )
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    override fun onEntityCollide(entity: Entity) {
+        entity.resetFallDistance()
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeClimbed() {
-        return true;
+    override val boundingBox: AxisAlignedBB
+        get() = this
+
+    override val collisionBoundingBox: AxisAlignedBB
+        get() = this
+
+    override var minY: Double
+        get() = position.y + (14.0 / 16)
+        set(minY) {
+            super.minY = minY
+        }
+
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return new SimpleAxisAlignedBB(this.position.south, this.position.up + (2.0 / 16), this.position.west, this.position.south + 1, this.position.up + 1, this.position.west + 1);
+    override val isTransparent: Boolean
+        get() = true
+
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return side == BlockFace.UP
     }
 
-    @Override
-    public void onEntityCollide(Entity entity) {
-        entity.resetFallDistance();
-    }
-
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public double getMinY() {
-        return this.position.up + (14.0 / 16);
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateCollisionBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return false;
-    }
-
-    @Override
-    public boolean isTransparent() {
-        return true;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return side == BlockFace.UP;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SCAFFOLDING, CommonBlockProperties.STABILITY, CommonBlockProperties.STABILITY_CHECK)
+            get() = Companion.field
     }
 }

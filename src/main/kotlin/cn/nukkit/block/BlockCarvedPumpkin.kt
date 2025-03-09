@@ -1,49 +1,49 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.mob.EntityIronGolem;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.entity.mob.EntityIronGolem.Companion.checkAndSpawnGolem
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
 
+class BlockCarvedPumpkin @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockPumpkin(blockstate) {
+    override val name: String
+        get() = "Carved Pumpkin"
 
-public class BlockCarvedPumpkin extends BlockPumpkin {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CARVED_PUMPKIN, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBeActivated(): Boolean {
+        return false
     }
 
-    public BlockCarvedPumpkin() {
-        this(PROPERTIES.getDefaultState());
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return false
     }
 
-    public BlockCarvedPumpkin(BlockState blockstate) {
-        super(blockstate);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!super.place(item, block, target, face, fx, fy, fz, player)) return false
+        checkAndSpawnGolem(this, player)
+        return true
     }
 
-    @Override
-    public String getName() {
-        return "Carved Pumpkin";
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return false;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return false;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if(!super.place(item, block, target, face, fx, fy, fz, player)) return false;
-        EntityIronGolem.checkAndSpawnGolem(this, player);
-        return true;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(CARVED_PUMPKIN, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

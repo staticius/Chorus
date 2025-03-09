@@ -1,126 +1,114 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.inventory.BlockInventoryHolder;
-import cn.nukkit.inventory.Inventory;
-import cn.nukkit.inventory.StonecutterInventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.Block.Companion.get
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.inventory.BlockInventoryHolder
+import cn.nukkit.inventory.Inventory
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.ItemBlock
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.registry.BiomeRegistry.get
+import cn.nukkit.registry.BlockRegistry.get
+import java.util.function.Supplier
 
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
+class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockTransparent(blockstate), Faceable, BlockInventoryHolder {
+    override val name: String
+        get() = "Stonecutter"
 
-public class BlockStonecutterBlock extends BlockTransparent implements Faceable, BlockInventoryHolder {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(STONECUTTER_BLOCK, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockStonecutterBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockStonecutterBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Stonecutter";
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        int horizontalIndex = face.horizontalIndex;
-        if (horizontalIndex > -1) {
-            this.setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                    CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(BlockFace.fromHorizontalIndex(horizontalIndex)));
+    var blockFace: BlockFace
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
+            getPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+            )
+        )
+        set(face) {
+            val horizontalIndex = face.horizontalIndex
+            if (horizontalIndex > -1) {
+                this.setPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+                    CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                    CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(fromHorizontalIndex(horizontalIndex))
+                )
+            }
         }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        blockFace =
+            if (player != null) fromHorizontalIndex(player.getDirection()!!.horizontalIndex)!! else BlockFace.SOUTH
+
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(getPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION));
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        setBlockFace(player != null ? BlockFace.fromHorizontalIndex(player.getDirection().horizontalIndex) : BlockFace.SOUTH);
-
-        this.level.setBlock(block.position, this, true, true);
-        return true;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        player?.addWindow(inventory!!)
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override val hardness: Double
+        get() = 3.5
+
+    override val resistance: Double
+        get() = 17.5
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (player != null) {
-            player.addWindow(getInventory());
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(toItem())
+    }
+
+    override fun toItem(): Item? {
+        return ItemBlock(BlockStonecutterBlock())
+    }
+
+    override var maxY: Double
+        get() = position.y + 9 / 16.0
+        set(maxY) {
+            super.maxY = maxY
         }
-        return true;
+
+    override fun blockInventorySupplier(): Supplier<Inventory?> {
+        return Supplier<Inventory?> { StonecutterInventory(this) }
     }
 
-    @Override
-    public double getHardness() {
-        return 3.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 17.5;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{toItem()};
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockStonecutterBlock());
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 9 / 16.0;
-    }
-
-    @Override
-    public Supplier<Inventory> blockInventorySupplier() {
-        return () -> new StonecutterInventory(this);
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STONECUTTER_BLOCK, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

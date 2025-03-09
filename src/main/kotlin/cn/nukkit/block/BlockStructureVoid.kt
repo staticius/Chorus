@@ -1,78 +1,50 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.StructureVoidType;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.*;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
 
 /**
  * @author good777LUCKY
  */
-public class BlockStructureVoid extends BlockSolid {
+class BlockStructureVoid @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Structure Void"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(STRUCTURE_VOID);
+    override val hardness: Double
+        get() = 0.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 0.0
 
-    public BlockStructureVoid() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockStructureVoid(BlockState blockstate) {
-        super(blockstate);
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    @Override
-    public String getName() {
-        return "Structure Void";
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-    
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-    
-    @Override
-    public boolean canPassThrough() {
-        return true;
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return false;
+    override fun canBePushed(): Boolean {
+        return false
     }
-    
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+
+    override fun canBePulled(): Boolean {
+        return false
     }
-    
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-    
-    @Override
-    public  boolean canBePulled() {
-        return false;
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.STRUCTURE_VOID)
+            get() = Companion.field
     }
 }

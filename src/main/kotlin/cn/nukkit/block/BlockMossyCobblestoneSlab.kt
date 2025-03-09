@@ -1,43 +1,31 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockMossyCobblestoneSlab extends BlockSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MOSSY_COBBLESTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    public BlockMossyCobblestoneSlab(BlockState blockState) {
-        super(blockState, MOSSY_COBBLESTONE_DOUBLE_SLAB);
+class BlockMossyCobblestoneSlab(blockState: BlockState?) :
+    BlockSlab(blockState, BlockID.MOSSY_COBBLESTONE_DOUBLE_SLAB) {
+    override fun getSlabName(): String {
+        return "Mossy Cobblestone"
     }
 
-    @Override
-    public String getSlabName() {
-        return "Mossy Cobblestone";
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.MOSSY_COBBLESTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

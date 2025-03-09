@@ -1,47 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockHoneycombBlock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(HONEYCOMB_BLOCK);
+class BlockHoneycombBlock : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockHoneycombBlock() {
-        super(PROPERTIES.getDefaultState());
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val hardness: Double
+        get() = 0.6
+
+    override val resistance: Double
+        get() = 0.6
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_HANDS_ONLY
+
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    public BlockHoneycombBlock(BlockState blockState) {
-        super(blockState);
-    }
+    override val name: String
+        get() = "Honeycomb Block"
 
-    @Override
-    public double getHardness() {
-        return 0.6;
+    companion object {
+        val properties: BlockProperties = BlockProperties(HONEYCOMB_BLOCK)
+            get() = Companion.field
     }
-
-    @Override
-    public double getResistance() {
-        return 0.6;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HANDS_ONLY;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return "Honeycomb Block";
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
 }

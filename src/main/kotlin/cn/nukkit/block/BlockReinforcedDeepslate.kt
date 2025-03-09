@@ -1,31 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
 
-import org.jetbrains.annotations.NotNull;
+class BlockReinforcedDeepslate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "ReinForced DeepSlate"
 
-public class BlockReinforcedDeepslate extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(REINFORCED_DEEPSLATE);
+    override val resistance: Double
+        get() = 1200.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockReinforcedDeepslate() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockReinforcedDeepslate(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "ReinForced DeepSlate";
-    }
-
-    @Override
-    public double getResistance() {
-        return 1200.0;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.REINFORCED_DEEPSLATE)
+            get() = Companion.field
     }
 }

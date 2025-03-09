@@ -1,81 +1,64 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.utils.LevelException;
-
-import static cn.nukkit.math.VectorMath.calculateFace;
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.SimpleAxisAlignedBB
+import cn.nukkit.math.VectorMath.calculateFace
+import cn.nukkit.utils.LevelException
 
 /**
  * @author xtypr
  * @since 2015/12/6
  * @apiNote Implements BlockConnectable only in PowerNukkit
  */
+abstract class BlockThin(blockState: BlockState?) : BlockTransparent(blockState), BlockConnectable {
+    override val isSolid: Boolean
+        get() = false
 
-public abstract class BlockThin extends BlockTransparent implements BlockConnectable {
-
-    public BlockThin(BlockState blockState) {
-        super(blockState);
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        final double offNW = 7.0 / 16.0;
-        final double offSE = 9.0 / 16.0;
-        final double onNW = 0.0;
-        final double onSE = 1.0;
-        double w = offNW;
-        double e = offSE;
-        double n = offNW;
-        double s = offSE;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        val offNW = 7.0 / 16.0
+        val offSE = 9.0 / 16.0
+        val onNW = 0.0
+        val onSE = 1.0
+        var w = offNW
+        var e = offSE
+        var n = offNW
+        var s = offSE
         try {
-            boolean north = this.canConnect(this.north());
-            boolean south = this.canConnect(this.south());
-            boolean west = this.canConnect(this.west());
-            boolean east = this.canConnect(this.east());
-            w = west ? onNW : offNW;
-            e = east ? onSE : offSE;
-            n = north ? onNW : offNW;
-            s = south ? onSE : offSE;
-        } catch (LevelException ignore) {
+            val north = this.canConnect(this.north())
+            val south = this.canConnect(this.south())
+            val west = this.canConnect(this.west())
+            val east = this.canConnect(this.east())
+            w = if (west) onNW else offNW
+            e = if (east) onSE else offSE
+            n = if (north) onNW else offNW
+            s = if (south) onSE else offSE
+        } catch (ignore: LevelException) {
             //null sucks
         }
-        return new SimpleAxisAlignedBB(
-                this.position.south + w,
-                this.position.up,
-                this.position.west + n,
-                this.position.south + e,
-                this.position.up + 1,
-                this.position.west + s
-        );
+        return SimpleAxisAlignedBB(
+            position.x + w,
+            position.y,
+            position.z + n,
+            position.x + e,
+            position.y + 1,
+            position.z + s
+        )
     }
 
-    @Override
-    public boolean canConnect(Block block) {
-        return switch (block.getId()) {
-            case GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLUE_STAINED_GLASS_PANE, BROWN_STAINED_GLASS_PANE,
-                    CYAN_STAINED_GLASS_PANE, GRAY_STAINED_GLASS_PANE, GREEN_STAINED_GLASS_PANE,
-                    LIGHT_BLUE_STAINED_GLASS_PANE, LIGHT_GRAY_STAINED_GLASS_PANE, LIME_STAINED_GLASS_PANE,
-                    MAGENTA_STAINED_GLASS_PANE, ORANGE_STAINED_GLASS_PANE, PINK_STAINED_GLASS_PANE, PURPLE_STAINED_GLASS_PANE,
-                    RED_STAINED_GLASS_PANE, WHITE_STAINED_GLASS_PANE, YELLOW_STAINED_GLASS_PANE, IRON_BARS, COBBLESTONE_WALL, COBBLED_DEEPSLATE_WALL ->
-                    true;
-            default -> {
-                if (block instanceof BlockTrapdoor trapdoor) {
-                    yield trapdoor.isOpen() && trapdoor.getBlockFace() == calculateFace(this.position, trapdoor.position);
+    override fun canConnect(block: Block): Boolean {
+        return when (block.id) {
+            BlockID.GLASS_PANE, BlockID.BLACK_STAINED_GLASS_PANE, BlockID.BLUE_STAINED_GLASS_PANE, BlockID.BROWN_STAINED_GLASS_PANE, BlockID.CYAN_STAINED_GLASS_PANE, BlockID.GRAY_STAINED_GLASS_PANE, BlockID.GREEN_STAINED_GLASS_PANE, BlockID.LIGHT_BLUE_STAINED_GLASS_PANE, BlockID.LIGHT_GRAY_STAINED_GLASS_PANE, BlockID.LIME_STAINED_GLASS_PANE, BlockID.MAGENTA_STAINED_GLASS_PANE, BlockID.ORANGE_STAINED_GLASS_PANE, BlockID.PINK_STAINED_GLASS_PANE, BlockID.PURPLE_STAINED_GLASS_PANE, BlockID.RED_STAINED_GLASS_PANE, BlockID.WHITE_STAINED_GLASS_PANE, BlockID.YELLOW_STAINED_GLASS_PANE, BlockID.IRON_BARS, BlockID.COBBLESTONE_WALL, BlockID.COBBLED_DEEPSLATE_WALL -> true
+            else -> {
+                if (block is BlockTrapdoor) {
+                    block.isOpen && block.blockFace == calculateFace(this.position, block.position)
                 }
-                yield block.isSolid();
+                block.isSolid
             }
-        };
+        }
     }
 }

@@ -1,27 +1,22 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.OxidizationLevel
 
-public class BlockOxidizedCopperDoor extends BlockCopperDoorBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(OXIDIZED_COPPER_DOOR, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonBlockProperties.OPEN_BIT, CommonBlockProperties.UPPER_BLOCK_BIT, CommonBlockProperties.DOOR_HINGE_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockOxidizedCopperDoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCopperDoorBase(blockstate) {
+    override fun getOxidizationLevel(): OxidizationLevel {
+        return OxidizationLevel.OXIDIZED
     }
 
-    public BlockOxidizedCopperDoor() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockOxidizedCopperDoor(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public @NotNull OxidizationLevel getOxidizationLevel() {
-        return OxidizationLevel.OXIDIZED;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.OXIDIZED_COPPER_DOOR,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OPEN_BIT,
+            CommonBlockProperties.UPPER_BLOCK_BIT,
+            CommonBlockProperties.DOOR_HINGE_BIT
+        )
+            get() = Companion.field
     }
 }

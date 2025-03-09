@@ -1,215 +1,213 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.AdventureSettings;
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.LeverDirection;
-import cn.nukkit.event.block.BlockRedstoneEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.level.vibration.VibrationEvent;
-import cn.nukkit.level.vibration.VibrationType;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.LEVER_DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.OPEN_BIT;
+import cn.nukkit.AdventureSettings
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.LeverDirection
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.event.block.BlockRedstoneEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.Sound
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.Faceable
+import cn.nukkit.utils.RedstoneComponent
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 /**
  * @author Nukkit Project Team
  */
+class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockstate), RedstoneComponent, Faceable {
+    override val name: String
+        get() = "Lever"
 
-public class BlockLever extends BlockFlowable implements RedstoneComponent, Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LEVER, LEVER_DIRECTION, OPEN_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockLever() {
-        this(PROPERTIES.getDefaultState());
+    override val hardness: Double
+        get() = 0.5
+
+    override val resistance: Double
+        get() = 2.5
+
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    public BlockLever(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Lever";
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.5d;
-    }
-
-    @Override
-    public double getResistance() {
-        return 2.5d;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
-    }
-
-    public boolean isPowerOn() {
-        return getPropertyValue(OPEN_BIT);
-    }
-
-    public void setPowerOn(boolean powerOn) {
-        setPropertyValue(OPEN_BIT, powerOn);
-    }
-
-    public LeverDirection getLeverOrientation() {
-        return getPropertyValue(LEVER_DIRECTION);
-    }
-
-    public void setLeverOrientation(@Nullable LeverDirection value) {
-        setPropertyValue(LEVER_DIRECTION, value);
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(player != null) {
-            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED))
-                return false;
-            if(isNotActivate(player)) return false;
+    var isPowerOn: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT)
+        set(powerOn) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, powerOn)
         }
-        this.level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, isPowerOn() ? 15 : 0, isPowerOn() ? 0 : 15));
-        setPowerOn(!isPowerOn());
-        var pos = this.add(0.5, 0.5, 0.5);
-        this.level.vibrationManager.callVibrationEvent(new VibrationEvent(player != null ? player : this, pos.position, isPowerOn() ? VibrationType.BLOCK_ACTIVATE : VibrationType.BLOCK_DEACTIVATE));
-        this.level.setBlock(this.position, this, false, true);
-        this.level.addSound(this.position, Sound.RANDOM_CLICK, 0.8f, isPowerOn() ? 0.58f : 0.5f);
 
-        LeverDirection orientation = getLeverOrientation();
-        BlockFace face = orientation.getFacing();
-
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
-            updateAroundRedstone();
-            RedstoneComponent.updateAroundRedstone(getSide(face.getOpposite()), face);
+    var leverOrientation: LeverDirection?
+        get() = getPropertyValue(CommonBlockProperties.LEVER_DIRECTION)
+        set(value) {
+            setPropertyValue(
+                CommonBlockProperties.LEVER_DIRECTION,
+                value
+            )
         }
-        return true;
+
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (player != null) {
+            if (!player.getAdventureSettings()!!.get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+            if (isNotActivate(player)) return false
+        }
+        level.server.pluginManager.callEvent(
+            BlockRedstoneEvent(
+                this,
+                if (isPowerOn) 15 else 0,
+                if (isPowerOn) 0 else 15
+            )
+        )
+        isPowerOn = !isPowerOn
+        val pos = this.add(0.5, 0.5, 0.5)
+        level.vibrationManager.callVibrationEvent(
+            VibrationEvent(
+                player
+                    ?: this,
+                pos.position,
+                if (isPowerOn) VibrationType.BLOCK_ACTIVATE else VibrationType.BLOCK_DEACTIVATE
+            )
+        )
+        level.setBlock(this.position, this, false, true)
+        level.addSound(this.position, Sound.RANDOM_CLICK, 0.8f, if (isPowerOn) 0.58f else 0.5f)
+
+        val orientation = leverOrientation!!
+        val face = orientation.facing
+
+        if (level.server.settings.levelSettings().enableRedstone()) {
+            updateAroundRedstone()
+            updateAroundRedstone(getSide(face.getOpposite()!!)!!, face)
+        }
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            BlockFace blockFace = getLeverOrientation().getFacing().getOpposite();
-            Block side = this.getSide(blockFace);
-            if (!isSupportValid(side, blockFace.getOpposite())) {
-                this.level.useBreakOn(this.position);
+            val blockFace = leverOrientation!!.facing.getOpposite()
+            val side = this.getSide(blockFace!!)
+            if (!isSupportValid(side!!, blockFace.getOpposite()!!)) {
+                level.useBreakOn(this.position)
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player
+    ): Boolean {
+        var target = target
+        var face = face
         if (target.canBeReplaced()) {
-            target = target.down();
-            face = BlockFace.UP;
+            target = target.down()!!
+            face = BlockFace.UP
         }
 
         if (!isSupportValid(target, face)) {
-            return false;
+            return false
         }
-        setLeverOrientation(LeverDirection.forFacings(face, player.getHorizontalFacing()));
-        return this.level.setBlock(block.position, this, true, true);
+        leverOrientation = LeverDirection.forFacings(face, player.getHorizontalFacing())
+        return level.setBlock(block.position, this, true, true)
     }
 
-    /**
-     * Check if the given block and its block face is a valid support for a lever
-     *
-     * @param support The block that the lever is being placed against
-     * @param face    The face that the torch will be touching the block
-     * @return If the support and face combinations can hold the lever
-     */
-    public static boolean isSupportValid(Block support, BlockFace face) {
-        switch (support.getId()) {
-            case FARMLAND, GRASS_PATH -> {
-                return true;
-            }
-            default -> {
-            }
-        }
+    override fun onBreak(item: Item?): Boolean {
+        level.setBlock(this.position, get(BlockID.AIR), true, true)
 
-        if (face == BlockFace.DOWN) {
-            return support.isSolid(BlockFace.DOWN) && (support.isFullBlock() || !support.isTransparent());
-        }
-
-        if (support.isSolid(face)) {
-            return true;
-        }
-
-        if (support instanceof BlockWallBase || support instanceof BlockFence) {
-            return face == BlockFace.UP;
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean onBreak(Item item) {
-        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
-
-        if (isPowerOn()) {
-            BlockFace face = getLeverOrientation().getFacing();
-            this.level.updateAround(this.position.getSide(face.getOpposite()));
+        if (isPowerOn) {
+            val face = leverOrientation!!.facing
+            level.updateAround(position.getSide(face.getOpposite()!!)!!)
 
             if (level.server.settings.levelSettings().enableRedstone()) {
-                updateAroundRedstone();
-                RedstoneComponent.updateAroundRedstone(getSide(face.getOpposite()), face);
+                updateAroundRedstone()
+                updateAroundRedstone(getSide(face.getOpposite()!!)!!, face)
             }
         }
-        return true;
+        return true
     }
 
-    @Override
-    public int getWeakPower(BlockFace side) {
-        return isPowerOn() ? 15 : 0;
+    override fun getWeakPower(side: BlockFace?): Int {
+        return if (isPowerOn) 15 else 0
     }
 
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return !isPowerOn() ? 0 : getLeverOrientation().getFacing() == side ? 15 : 0;
+    override fun getStrongPower(side: BlockFace?): Int {
+        return if (!isPowerOn) 0 else if (leverOrientation!!.facing == side) 15 else 0
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
+    override val isPowerSource: Boolean
+        get() = true
+
+    override val waterloggingLevel: Int
+        get() = 2
+
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
+    override var blockFace: BlockFace
+        get() = leverOrientation!!.facing
+        set(blockFace) {
+            super.blockFace = blockFace
+        }
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.LEVER, CommonBlockProperties.LEVER_DIRECTION, CommonBlockProperties.OPEN_BIT)
+            get() = Companion.field
 
-    @Override
-    public BlockFace getBlockFace() {
-        return getLeverOrientation().getFacing();
-    }
+        /**
+         * Check if the given block and its block face is a valid support for a lever
+         *
+         * @param support The block that the lever is being placed against
+         * @param face    The face that the torch will be touching the block
+         * @return If the support and face combinations can hold the lever
+         */
+        @JvmStatic
+        fun isSupportValid(support: Block, face: BlockFace): Boolean {
+            when (support.id) {
+                BlockID.FARMLAND, BlockID.GRASS_PATH -> {
+                    return true
+                }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+                else -> {}
+            }
+
+            if (face == BlockFace.DOWN) {
+                return support.isSolid(BlockFace.DOWN) && (support.isFullBlock || !support.isTransparent)
+            }
+
+            if (support.isSolid(face)) {
+                return true
+            }
+
+            if (support is BlockWallBase || support is BlockFence) {
+                return face == BlockFace.UP
+            }
+
+            return false
+        }
     }
 }

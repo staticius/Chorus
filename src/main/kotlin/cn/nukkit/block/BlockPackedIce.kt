@@ -1,68 +1,43 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
-public class BlockPackedIce extends BlockIce {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PACKED_ICE);
+open class BlockPackedIce @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockIce(blockstate) {
+    override val name: String
+        get() = "Packed Ice"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun onUpdate(type: Int): Int {
+        return 0 //not being melted
     }
 
-    public BlockPackedIce() {
-        this(PROPERTIES.getDefaultState());
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    public BlockPackedIce(BlockState blockstate) {
-        super(blockstate);
+    override fun onBreak(item: Item): Boolean {
+        level.setBlock(this.position, get(BlockID.AIR), true) //no water
+        return true
     }
 
-    @Override
-    public String getName() {
-        return "Packed Ice";
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override val isTransparent: Boolean
+        get() = false
 
-    @Override
-    public int onUpdate(int type) {
-        return 0; //not being melted
-    }
+    override val burnChance: Int
+        get() = 0
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
-    }
+    override val lightFilter: Int
+        get() = 15
 
-    @Override
-    public boolean onBreak(Item item) {
-        this.level.setBlock(this.position, Block.get(BlockID.AIR), true); //no water
-        return true;
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
-    }
-
-    @Override
-    public boolean isTransparent() {
-        return false;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 0;
-    }
-
-    @Override
-    public int getLightFilter() {
-        return 15;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PACKED_ICE)
+            get() = Companion.field
     }
 }

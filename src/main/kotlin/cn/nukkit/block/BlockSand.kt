@@ -1,51 +1,35 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
+open class BlockSand : BlockFallable, Natural {
+    constructor() : super(Companion.properties.getDefaultState())
 
-public class BlockSand extends BlockFallable implements Natural {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SAND);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    public BlockSand() {
-        super(PROPERTIES.getDefaultState());
-    }
+    override val resistance: Double
+        get() = 0.5
 
-    public BlockSand(BlockState blockState) {
-        super(blockState);
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
 
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    @Override
-    public String getName() {
-        if (this instanceof BlockRedSand) {
-            return "Red Sand";
-        } else {
-            return "Sand";
+    override val name: String
+        get() {
+            return if (this is BlockRedSand) {
+                "Red Sand"
+            } else {
+                "Sand"
+            }
         }
-    }
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SAND)
+            get() = Companion.field
+    }
 }

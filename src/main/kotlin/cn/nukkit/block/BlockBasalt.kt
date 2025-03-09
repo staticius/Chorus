@@ -1,68 +1,55 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
 
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
+open class BlockBasalt @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Basalt"
 
-public class BlockBasalt extends BlockSolid {
+    override val hardness: Double
+        get() = 1.25
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(BASALT,PILLAR_AXIS);
+    override val resistance: Double
+        get() = 4.2
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    open var pillarAxis: BlockFace.Axis?
+        get() = getPropertyValue(
+            CommonBlockProperties.PILLAR_AXIS
+        )
+        set(axis) {
+            setPropertyValue(
+                CommonBlockProperties.PILLAR_AXIS,
+                axis
+            )
+        }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        pillarAxis = face.axis
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    public BlockBasalt() {
-        this(PROPERTIES.getDefaultState());
+    companion object {
+        val properties: BlockProperties = BlockProperties(BASALT, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
-
-    public BlockBasalt(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Basalt";
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.25;
-    }
-
-    @Override
-    public double getResistance() {
-        return 4.2;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    public BlockFace.Axis getPillarAxis() {
-        return getPropertyValue(PILLAR_AXIS);
-    }
-
-    public void setPillarAxis(BlockFace.Axis axis) {
-        setPropertyValue(PILLAR_AXIS, axis);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        setPillarAxis(face.getAxis());
-        level.setBlock(block.position, this, true, true);
-        return true;
-    }
-
 }

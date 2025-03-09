@@ -57,9 +57,9 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
         }
         if ((getLinkedCreaking() == null || !getLinkedCreaking().isAlive()) && isBlockEntityValid && heart!!.isActive && (!level.isDay || level.isRaining || level.isThundering)) {
             val pos = Locator(
-                position.south + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
-                position.up,
-                position.west + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
+                position.x + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
+                position.y,
+                position.z + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
                 this.level
             )
 
@@ -73,7 +73,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
                             continue@height
                         }
                     }
-                    pos.position.up = i
+                    pos.position.y = i
                     break
                 }
                 i++

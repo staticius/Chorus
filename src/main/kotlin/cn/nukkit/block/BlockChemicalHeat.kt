@@ -1,20 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockChemicalHeat extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHEMICAL_HEAT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockChemicalHeat() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockChemicalHeat(BlockState blockstate) {
-        super(blockstate);
+class BlockChemicalHeat @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    Block(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.CHEMICAL_HEAT)
+            get() = Companion.field
     }
 }

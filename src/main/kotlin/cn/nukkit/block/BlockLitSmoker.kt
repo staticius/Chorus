@@ -1,45 +1,27 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntitySmoker;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.blockentity.*
+import cn.nukkit.item.*
 
-public class BlockLitSmoker extends BlockLitFurnace {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIT_SMOKER, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
+open class BlockLitSmoker @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockLitFurnace(blockstate) {
+    override val name: String
+        get() = "Burning Smoker"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val blockEntityType: String
+        get() = BlockEntity.SMOKER
+
+    override val blockEntityClass: Class<out BlockEntityFurnace>
+        get() = BlockEntitySmoker::class.java
+
+    override fun toItem(): Item? {
+        return ItemBlock(BlockSmoker())
     }
 
-    public BlockLitSmoker() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockLitSmoker(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Burning Smoker";
-    }
-
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.SMOKER;
-    }
-
-    @Override
-    @NotNull public Class<? extends BlockEntitySmoker> getBlockEntityClass() {
-        return BlockEntitySmoker.class;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockSmoker());
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.LIT_SMOKER, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

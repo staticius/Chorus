@@ -1,53 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
+class BlockFletchingTable @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Fletching Table"
 
-public class BlockFletchingTable extends BlockSolid {
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(FLETCHING_TABLE);
+    override val resistance: Double
+        get() = 12.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 2.5
+
+    override val burnChance: Int
+        get() = 5
+
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    public BlockFletchingTable() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockFletchingTable(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Fletching Table";
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public double getResistance() {
-        return 12.5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 2.5;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(FLETCHING_TABLE)
+            get() = Companion.field
     }
 }

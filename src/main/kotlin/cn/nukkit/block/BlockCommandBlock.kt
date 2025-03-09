@@ -1,147 +1,151 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityCommandBlock;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.CONDITIONAL_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityCampfire.getInventory
+import cn.nukkit.blockentity.BlockEntityChest.getInventory
+import cn.nukkit.blockentity.BlockEntityCommandBlock.getInventory
+import cn.nukkit.blockentity.BlockEntityCommandBlock.isPowered
+import cn.nukkit.blockentity.BlockEntityCommandBlock.successCount
+import cn.nukkit.blockentity.BlockEntitySpawnable.spawnTo
+import cn.nukkit.blockentity.ICommandBlock.setPowered
+import cn.nukkit.blockentity.ICommandBlock.trigger
+import cn.nukkit.entity.EntityHumanType.getInventory
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.*
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.math.Vector3.equals
+import cn.nukkit.utils.Faceable
+import kotlin.math.abs
+import kotlin.math.min
 
 //special thanks to wode
-public class BlockCommandBlock extends BlockSolid implements Faceable, BlockEntityHolder<BlockEntityCommandBlock> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(COMMAND_BLOCK, CONDITIONAL_BIT, FACING_DIRECTION);
+open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityCommandBlock?> {
+    override val resistance: Double
+        get() = 6000000.0
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    public BlockCommandBlock() {
-        this(PROPERTIES.getDefaultState());
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockCommandBlock(BlockState blockstate) {
-        super(blockstate);
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return player != null && player.isCreative
     }
 
-    @Override
-    public double getResistance() {
-        return 6000000;
-    }
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
 
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return player != null && player.isCreative();
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(FACING_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(FACING_DIRECTION, face.index);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (player != null) {
-            if (!player.isCreative())
-                return false;
-            if (Math.abs(player.position.getFloorX() - this.position.south) < 2 && Math.abs(player.position.getFloorZ() - this.position.west) < 2) {
-                double y = player.position.up + player.getEyeHeight();
-                if (y - this.position.up > 2) {
-                    this.setBlockFace(BlockFace.UP);
-                } else if (this.position.up - y > 0) {
-                    this.setBlockFace(BlockFace.DOWN);
+            if (!player.isCreative) return false
+            if (abs(player.position.floorX - position.x) < 2 && abs(player.position.floorZ - position.z) < 2) {
+                val y = player.position.y + player.getEyeHeight()
+                if (y - position.y > 2) {
+                    this.blockFace = BlockFace.UP
+                } else if (position.y - y > 0) {
+                    this.blockFace = BlockFace.DOWN
                 } else {
-                    this.setBlockFace(player.getHorizontalFacing().getOpposite());
+                    this.blockFace = player.getHorizontalFacing().getOpposite()
                 }
             } else {
-                this.setBlockFace(player.getHorizontalFacing().getOpposite());
+                this.blockFace = player.getHorizontalFacing().getOpposite()
             }
         } else {
-            this.setBlockFace(BlockFace.DOWN);
+            this.blockFace = BlockFace.DOWN
         }
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true) != null;
+        return BlockEntityHolder.setBlockAndCreateEntity<BlockEntityCommandBlock?, BlockCommandBlock>(
+            this,
+            true,
+            true
+        ) != null
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player != null) {
-            Item itemInHand = player.getInventory().getItemInHand();
-            if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull()) || !Server.getInstance().settings.gameplaySettings().enableCommandBlocks()) {
-                return false;
+            val itemInHand = player.getInventory().itemInHand
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull) || !instance!!.settings.gameplaySettings()
+                    .enableCommandBlocks()
+            ) {
+                return false
             }
-            BlockEntityCommandBlock tile = this.getOrCreateBlockEntity();
-            tile.spawnTo(player);
-            player.addWindow(tile.getInventory());
+            val tile: BlockEntityCommandBlock = this.getOrCreateBlockEntity()
+            tile.spawnTo(player)
+            player.addWindow(tile.getInventory())
         }
-        return true;
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            BlockEntityCommandBlock tile = this.getBlockEntity();
-            if (tile == null)
-                return super.onUpdate(type);
-            if (this.isGettingPower()) {
-                if (!tile.isPowered()) {
-                    tile.setPowered();
-                    tile.trigger();
+            val tile: BlockEntityCommandBlock = this.blockEntity ?: return super.onUpdate(type)
+            if (this.isGettingPower) {
+                if (!tile.isPowered) {
+                    tile.setPowered()
+                    tile.trigger()
                 }
             } else {
-                tile.setPowered(false);
+                tile.isPowered = false
             }
         }
-        return super.onUpdate(type);
+        return super.onUpdate(type)
     }
 
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public int getComparatorInputOverride() {
-        return Math.min(this.getOrCreateBlockEntity().getSuccessCount(), 0xf);
+    override val comparatorInputOverride: Int
+        get() = min(
+            getOrCreateBlockEntity().successCount.toDouble(),
+            TODO("Could not convert double literal '0xf' to Kotlin")
+        ).toInt()
+
+    override fun getBlockEntityClass(): Class<out BlockEntityCommandBlock> {
+        return BlockEntityCommandBlock::class.java
     }
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityCommandBlock> getBlockEntityClass() {
-        return BlockEntityCommandBlock.class;
+    override fun getBlockEntityType(): String {
+        return BlockEntity.COMMAND_BLOCK
     }
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.COMMAND_BLOCK;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            COMMAND_BLOCK,
+            CommonBlockProperties.CONDITIONAL_BIT,
+            CommonBlockProperties.FACING_DIRECTION
+        )
+            get() = Companion.field
     }
 }

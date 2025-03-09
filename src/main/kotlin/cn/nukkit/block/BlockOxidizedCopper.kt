@@ -1,31 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.enums.OxidizationLevel
 
-public class BlockOxidizedCopper extends BlockCopperBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(OXIDIZED_COPPER);
+open class BlockOxidizedCopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCopperBlock(blockstate) {
+    override val name: String
+        get() = "Oxidized Copper"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getOxidizationLevel(): OxidizationLevel {
+        return OxidizationLevel.OXIDIZED
     }
 
-    public BlockOxidizedCopper() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockOxidizedCopper(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Oxidized Copper";
-    }
-
-    @Override
-    @NotNull public OxidizationLevel getOxidizationLevel() {
-        return OxidizationLevel.OXIDIZED;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.OXIDIZED_COPPER)
+            get() = Companion.field
     }
 }

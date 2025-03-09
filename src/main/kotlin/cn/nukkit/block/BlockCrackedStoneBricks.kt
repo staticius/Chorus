@@ -1,23 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockCrackedStoneBricks extends BlockStoneBricks {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRACKED_STONE_BRICKS);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockCrackedStoneBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockStoneBricks(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(CRACKED_STONE_BRICKS)
+            get() = Companion.field
     }
-
-    public BlockCrackedStoneBricks() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCrackedStoneBricks(BlockState blockstate) {
-        super(blockstate);
-    }
-
 }

@@ -4,7 +4,6 @@ import cn.nukkit.Player
 import cn.nukkit.Server
 import cn.nukkit.entity.*
 import cn.nukkit.entity.Entity.Companion.createEntity
-import cn.nukkit.entity.Entity.getTransform
 import cn.nukkit.entity.projectile.EntityProjectile
 import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow
 import cn.nukkit.event.entity.EntityShootBowEvent
@@ -67,7 +66,7 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         var arrowTransform: Transform = player.getTransform()
         val directionVector = player.getDirectionVector().multiply(1.1)
         arrowTransform = arrowTransform.add(directionVector.getX(), 0.0, directionVector.getZ())
-        arrowTransform.setY(player.position.up + player.getEyeHeight() + directionVector.getY())
+        arrowTransform.setY(player.position.y + player.getEyeHeight() + directionVector.getY())
 
         val itemArrow =
             (if (offhandOptional.isPresent) offhandOptional.get().value else if (inventoryOptional.isPresent) inventoryOptional.get().value else ItemArrow()) as ItemArrow
@@ -76,9 +75,9 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
-                    .add(FloatTag(arrowTransform.position.south))
-                    .add(FloatTag(arrowTransform.position.up))
-                    .add(FloatTag(arrowTransform.position.west))
+                    .add(FloatTag(arrowTransform.position.x))
+                    .add(FloatTag(arrowTransform.position.y))
+                    .add(FloatTag(arrowTransform.position.z))
             )
             .putList(
                 "Motion", ListTag<FloatTag>()

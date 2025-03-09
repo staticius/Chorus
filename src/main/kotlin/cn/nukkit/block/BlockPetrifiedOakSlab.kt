@@ -1,45 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.StoneSlabType;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockPetrifiedOakSlab extends BlockSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PETRIFIED_OAK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    public BlockPetrifiedOakSlab(BlockState blockState) {
-        super(blockState, PETRIFIED_OAK_DOUBLE_SLAB);
+class BlockPetrifiedOakSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID.PETRIFIED_OAK_DOUBLE_SLAB) {
+    override fun getSlabName(): String {
+        return "Petrified Oak"
     }
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return slab.id == this.id
     }
 
-    @Override
-    public String getSlabName() {
-        return "Petrified Oak";
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return slab.getId().equals(this.getId());
-    }
+    override val toolTier: Int
+        get() = ItemTool.TYPE_NONE
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TYPE_NONE;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.PETRIFIED_OAK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

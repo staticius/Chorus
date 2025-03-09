@@ -1,226 +1,224 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityComparator;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemComparator;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.network.protocol.LevelEventPacket;
-import cn.nukkit.utils.RedstoneComponent;
-import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-
-import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.OUTPUT_LIT_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.OUTPUT_SUBTRACT_BIT;
+import cn.nukkit.Player
+import cn.nukkit.block.Block.Companion.get
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.block.property.type.EnumPropertyType
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.nbt.tag.CompoundTag.putList
+import cn.nukkit.nbt.tag.Tag
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+import cn.nukkit.utils.RedstoneComponent.updateAroundRedstone
+import lombok.extern.slf4j.Slf4j
+import kotlin.math.max
 
 /**
  * @author CreeperFace
  */
-
-
 @Slf4j
-public abstract class BlockRedstoneComparator extends BlockRedstoneDiode implements BlockEntityHolder<BlockEntityComparator> {
-    public BlockRedstoneComparator(BlockState blockstate) {
-        super(blockstate);
+abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneDiode(blockstate),
+    BlockEntityHolder<BlockEntityComparator?> {
+    override val blockEntityClass: Class<out Any>
+        get() = BlockEntityComparator::class.java
+
+    override val blockEntityType: String
+        get() = BlockEntity.COMPARATOR
+
+    override val delay: Int
+        get() = 2
+
+    override val facing: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
+            getPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+            )
+        )
+
+    var mode: Mode
+        get() = if (getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OUTPUT_SUBTRACT_BIT)) Mode.SUBTRACT else Mode.COMPARE
+        set(mode) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.OUTPUT_SUBTRACT_BIT,
+                mode == Mode.SUBTRACT
+            )
+        }
+
+    override val unpowered: Block
+        get() = get(BlockID.UNPOWERED_COMPARATOR)
+            .setPropertyValues(blockState!!.blockPropertyValues) as BlockRedstoneComparator
+
+    public override fun getPowered(): BlockRedstoneComparator {
+        return get(BlockID.POWERED_COMPARATOR).setPropertyValues(blockState!!.blockPropertyValues) as BlockRedstoneComparator
     }
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityComparator> getBlockEntityClass() {
-        return BlockEntityComparator.class;
-    }
+    override val redstoneSignal: Int
+        get() {
+            val comparator: BlockEntityComparator? = blockEntity
+            return if (comparator == null) 0 else comparator.outputSignal
+        }
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.COMPARATOR;
-    }
-
-    @Override
-    protected int getDelay() {
-        return 2;
-    }
-
-    @Override
-    public BlockFace getFacing() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(getPropertyValue(MINECRAFT_CARDINAL_DIRECTION));
-    }
-
-    public Mode getMode() {
-        return getPropertyValue(OUTPUT_SUBTRACT_BIT) ? Mode.SUBTRACT : Mode.COMPARE;
-    }
-
-    public void setMode(Mode mode) {
-        setPropertyValue(OUTPUT_SUBTRACT_BIT, mode == Mode.SUBTRACT);
-    }
-
-    @Override
-    public BlockRedstoneComparator getUnpowered() {
-        return (BlockRedstoneComparator) Block.get(BlockID.UNPOWERED_COMPARATOR).setPropertyValues(blockstate.getBlockPropertyValues());
-    }
-
-    @Override
-    public BlockRedstoneComparator getPowered() {
-        return (BlockRedstoneComparator) Block.get(BlockID.POWERED_COMPARATOR).setPropertyValues(blockstate.getBlockPropertyValues());
-    }
-
-    @Override
-    protected int getRedstoneSignal() {
-        BlockEntityComparator comparator = getBlockEntity();
-        return comparator == null ? 0 : comparator.outputSignal;
-    }
-
-    @Override
-    public void updateState() {
-        if (!this.level.isBlockTickPending(this.position, this)) {
-            int output = this.calculateOutput();
-            int power = getRedstoneSignal();
+    override fun updateState() {
+        if (!level.isBlockTickPending(this.position, this)) {
+            val output = this.calculateOutput()
+            val power = redstoneSignal
 
             if (output != power || this.isPowered() != this.shouldBePowered()) {
-                this.level.scheduleUpdate(this, this.position, 2);
+                level.scheduleUpdate(this, this.position, 2)
             }
         }
     }
 
-    @Override
-    protected int calculateInputStrength() {
-        int power = super.calculateInputStrength();
-        BlockFace face = getFacing();
-        Block block = this.getSide(face);
+    override fun calculateInputStrength(): Int {
+        var power = super.calculateInputStrength()
+        val face = facing
+        var block = this.getSide(face!!)
 
-        if (block.hasComparatorInputOverride()) {
-            power = block.getComparatorInputOverride();
-        } else if (power < 15 && block.isNormalBlock()) {
-            block = block.getSide(face);
+        if (block!!.hasComparatorInputOverride()) {
+            power = block.comparatorInputOverride
+        } else if (power < 15 && block.isNormalBlock) {
+            block = block.getSide(face)
 
-            if (block.hasComparatorInputOverride()) {
-                power = block.getComparatorInputOverride();
+            if (block!!.hasComparatorInputOverride()) {
+                power = block.comparatorInputOverride
             }
         }
 
-        return power;
+        return power
     }
 
-    @Override
-    protected boolean shouldBePowered() {
-        int input = this.calculateInputStrength();
+    override fun shouldBePowered(): Boolean {
+        val input = this.calculateInputStrength()
 
         if (input >= 15) {
-            return true;
+            return true
         } else if (input == 0) {
-            return false;
+            return false
         } else {
-            int sidePower = this.getPowerOnSides();
-            return sidePower == 0 || input >= sidePower;
+            val sidePower = this.powerOnSides
+            return sidePower == 0 || input >= sidePower
         }
     }
 
-    private int calculateOutput() {
-        return getMode() == Mode.SUBTRACT ? Math.max(this.calculateInputStrength() - this.getPowerOnSides(), 0) : this.calculateInputStrength();
+    private fun calculateOutput(): Int {
+        return if (mode == Mode.SUBTRACT) max(
+            (this.calculateInputStrength() - this.powerOnSides).toDouble(),
+            0.0
+        ).toInt() else this.calculateInputStrength()
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(isNotActivate(player)) return false;
-        if (getMode() == Mode.SUBTRACT) {
-            setMode(Mode.COMPARE);
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
+        if (mode == Mode.SUBTRACT) {
+            mode = Mode.COMPARE
         } else {
-            setMode(Mode.SUBTRACT);
+            mode = Mode.SUBTRACT
         }
 
-        this.level.addLevelEvent(this.position.add(0.5, 0.5, 0.5), LevelEventPacket.EVENT_ACTIVATE_BLOCK, this.getMode() == Mode.SUBTRACT ? 500 : 550);
-        this.level.setBlock(this.position, this, true, false);
-        this.level.updateComparatorOutputLevelSelective(this.position, true);
+        level.addLevelEvent(
+            position.add(0.5, 0.5, 0.5)!!,
+            LevelEventPacket.EVENT_ACTIVATE_BLOCK,
+            if (this.mode == Mode.SUBTRACT) 500 else 550
+        )
+        level.setBlock(this.position, this, true, false)
+        level.updateComparatorOutputLevelSelective(this.position, true)
+
         //bug?
-
-        this.onChange();
-        return true;
+        this.onChange()
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            this.onChange();
-            return type;
+            this.onChange()
+            return type
         }
 
-        return super.onUpdate(type);
+        return super.onUpdate(type)
     }
 
-    private void onChange() {
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return;
+    private fun onChange() {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return
         }
 
-        int output = this.calculateOutput();
+        val output = this.calculateOutput()
         // We can't use getOrCreateBlockEntity(), because the update method is called on block place,
         // before the "real" BlockEntity is set. That means, if we'd use the other method here,
         // it would create two BlockEntities.
-        BlockEntityComparator blockEntityComparator = getBlockEntity();
-        if (blockEntityComparator == null)
-            return;
+        val blockEntityComparator: BlockEntityComparator = blockEntity ?: return
 
-        int currentOutput = blockEntityComparator.outputSignal;
-        blockEntityComparator.outputSignal = output;
+        val currentOutput: Int = blockEntityComparator.outputSignal
+        blockEntityComparator.outputSignal = output
 
-        if (currentOutput != output || getMode() == Mode.COMPARE) {
-            boolean shouldBePowered = this.shouldBePowered();
-            boolean isPowered = this.isPowered();
+        if (currentOutput != output || mode == Mode.COMPARE) {
+            val shouldBePowered = this.shouldBePowered()
+            val isPowered = this.isPowered()
 
             if (isPowered && !shouldBePowered) {
-                this.level.setBlock(this.position, getUnpowered(), true, false);
-                this.level.updateComparatorOutputLevelSelective(this.position, true);
+                level.setBlock(this.position, unpowered, true, false)
+                level.updateComparatorOutputLevelSelective(this.position, true)
             } else if (!isPowered && shouldBePowered) {
-                this.level.setBlock(this.position, getPowered(), true, false);
-                this.level.updateComparatorOutputLevelSelective(this.position, true);
+                level.setBlock(this.position, powered, true, false)
+                level.updateComparatorOutputLevelSelective(this.position, true)
             }
 
-            Block side = this.getSide(getFacing().getOpposite());
-            side.onUpdate(Level.BLOCK_UPDATE_REDSTONE);
-            RedstoneComponent.updateAroundRedstone(side);
+            val side = this.getSide(facing!!.getOpposite()!!)
+            side!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+            RedstoneComponent.updateAroundRedstone(side)
         }
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Block layer0 = level.getBlock(this.position, 0);
-        Block layer1 = level.getBlock(this.position, 1);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val layer0 = level.getBlock(this.position, 0)
+        val layer1 = level.getBlock(this.position, 1)
         if (!super.place(item, block, target, face, fx, fy, fz, player)) {
-            return false;
+            return false
         }
 
         try {
-            createBlockEntity(new CompoundTag().putList("Items", new ListTag<>()));
-        } catch (Exception e) {
-            log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), getLocator(), e);
-            level.setBlock(layer0.position, 0, layer0, true);
-            level.setBlock(layer1.position, 1, layer1, true);
-            return false;
+            createBlockEntity(CompoundTag().putList("Items", ListTag<Tag>()))
+        } catch (e: Exception) {
+            BlockRedstoneComparator.log.warn("Failed to create the block entity {} at {}", blockEntityType, locator, e)
+            level.setBlock(layer0!!.position, 0, layer0, true)
+            level.setBlock(layer1!!.position, 1, layer1, true)
+            return false
         }
 
-        onUpdate(Level.BLOCK_UPDATE_REDSTONE);
-        return true;
+        onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+        return true
     }
 
-    @Override
-    public boolean isPowered() {
-        return this.isPowered || getPropertyValue(OUTPUT_LIT_BIT);
+    override fun isPowered(): Boolean {
+        return this.isPowered || getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OUTPUT_LIT_BIT)
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemComparator();
+    override fun toItem(): Item? {
+        return ItemComparator()
     }
 
-    public enum Mode {
+    enum class Mode {
         COMPARE,
         SUBTRACT
     }
-
 }

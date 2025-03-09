@@ -1,167 +1,147 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityBarrel;
-import cn.nukkit.inventory.ContainerInventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.StringTag;
-import cn.nukkit.nbt.tag.Tag;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.*
+import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.nbt.tag.StringTag
+import cn.nukkit.nbt.tag.Tag
+import cn.nukkit.utils.Faceable
+import kotlin.math.abs
 
-import java.util.Map;
+class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockState), Faceable, BlockEntityHolder<BlockEntityBarrel?> {
+    override val name: String
+        get() = "Barrel"
 
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.OPEN_BIT;
-
-
-public class BlockBarrel extends BlockSolid implements Faceable, BlockEntityHolder<BlockEntityBarrel> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BARREL, FACING_DIRECTION, OPEN_BIT);
-
-    public BlockBarrel() {
-        this(PROPERTIES.getDefaultState());
+    override fun getBlockEntityType(): String {
+        return BlockEntity.BARREL
     }
 
-    public BlockBarrel(BlockState blockState) {
-        super(blockState);
+    override fun getBlockEntityClass(): Class<out BlockEntityBarrel> {
+        return BlockEntityBarrel::class.java
     }
 
-    @Override
-    public String getName() {
-        return "Barrel";
-    }
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.BARREL;
-    }
-
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityBarrel> getBlockEntityClass() {
-        return BlockEntityBarrel.class;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (player == null) {
-            setBlockFace(BlockFace.UP);
+            blockFace = BlockFace.UP
         } else {
-            if (Math.abs(player.position.south - this.position.south) < 2 && Math.abs(player.position.west - this.position.west) < 2) {
-                double y = player.position.up + player.getEyeHeight();
+            if (abs(player.position.x - position.x) < 2 && abs(player.position.z - position.z) < 2) {
+                val y = player.position.y + player.getEyeHeight()
 
-                if (y - this.position.up > 2) {
-                    setBlockFace(BlockFace.UP);
-                } else if (this.position.up - y > 0) {
-                    setBlockFace(BlockFace.DOWN);
+                blockFace = if (y - position.y > 2) {
+                    BlockFace.UP
+                } else if (position.y - y > 0) {
+                    BlockFace.DOWN
                 } else {
-                    setBlockFace(player.getHorizontalFacing().getOpposite());
+                    player.getHorizontalFacing().getOpposite()
                 }
             } else {
-                setBlockFace(player.getHorizontalFacing().getOpposite());
+                blockFace = player.getHorizontalFacing().getOpposite()
             }
         }
 
-        CompoundTag nbt = new CompoundTag().putList("Items", new ListTag<>());
+        val nbt = CompoundTag().putList("Items", ListTag())
 
         if (item.hasCustomName()) {
-            nbt.putString("CustomName", item.getCustomName());
+            nbt!!.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            Map<String, Tag> customData = item.getCustomBlockData().getTags();
-            for (Map.Entry<String, Tag> tag : customData.entrySet()) {
-                nbt.put(tag.getKey(), tag.getValue());
+            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            for ((key, value) in customData) {
+                nbt!!.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;
+        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(isNotActivate(player)) return false;
+    override fun onActivate(
+        item: Item,
+        player: Player,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
 
-        BlockEntityBarrel barrel = getOrCreateBlockEntity();
+        val barrel = getOrCreateBlockEntity()
 
-        if (barrel.namedTag.contains("Lock") && barrel.namedTag.get("Lock") instanceof StringTag
-                && !barrel.namedTag.getString("Lock").equals(item.getCustomName())) {
-            return false;
+        if (barrel.namedTag.contains("Lock") && barrel.namedTag.get("Lock") is StringTag
+            && (barrel.namedTag.getString("Lock") != item.customName)
+        ) {
+            return false
         }
 
-        player.addWindow(barrel.getInventory());
-        return true;
+        player.addWindow(barrel.getInventory())
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public double getHardness() {
-        return 2.5;
+    override val hardness: Double
+        get() = 2.5
+
+    override val resistance: Double
+        get() = 12.5
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override fun toItem(): Item? {
+        return ItemBlock(BlockBarrel())
     }
 
-    @Override
-    public double getResistance() {
-        return 12.5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockBarrel());
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(FACING_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(FACING_DIRECTION, face.index);
-    }
-
-    public boolean isOpen() {
-        return getPropertyValue(OPEN_BIT);
-    }
-
-    public void setOpen(boolean open) {
-        setPropertyValue(OPEN_BIT, open);
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride() {
-        BlockEntityBarrel blockEntity = getBlockEntity();
-
-        if (blockEntity != null) {
-            return ContainerInventory.calculateRedstone(blockEntity.getInventory());
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
         }
 
-        return super.getComparatorInputOverride();
+    var isOpen: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT)
+        set(open) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
+        }
+
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
+    }
+
+    override val comparatorInputOverride: Int
+        get() {
+            val blockEntity = blockEntity
+
+            if (blockEntity != null) {
+                return calculateRedstone(blockEntity.getInventory())
+            }
+
+            return super.comparatorInputOverride
+        }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BARREL, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.OPEN_BIT)
+            get() = Companion.field
     }
 }

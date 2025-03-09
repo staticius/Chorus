@@ -8,7 +8,7 @@ class ItemMace : ItemTool(ItemID.Companion.MACE) {
         get() = 501
 
     override fun getAttackDamage(entity: Entity): Int {
-        val height = NukkitMath.floorDouble(entity.highestPosition - entity.position.up)
+        val height = NukkitMath.floorDouble(entity.highestPosition - entity.position.y)
         if (height < 1.5f) return 6
         var damage = 0
         for (i in 0..height) {

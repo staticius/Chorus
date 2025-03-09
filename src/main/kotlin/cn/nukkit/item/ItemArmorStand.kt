@@ -40,12 +40,12 @@ class ItemArmorStand : Item(ItemID.Companion.ARMOR_STAND) {
 
         for (collidingEntity in level.getCollidingEntities(
             SimpleAxisAlignedBB(
-                block.position.south,
-                block.position.up,
-                block.position.west,
-                block.position.south + 1,
-                block.position.up + 1,
-                block.position.west + 1
+                block.position.x,
+                block.position.y,
+                block.position.z,
+                block.position.x + 1,
+                block.position.y + 1,
+                block.position.z + 1
             )
         )) {
             if (collidingEntity is EntityArmorStand) {

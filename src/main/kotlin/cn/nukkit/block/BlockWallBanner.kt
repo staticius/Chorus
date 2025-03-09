@@ -1,66 +1,44 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.CompassRoseDirection;
-import org.jetbrains.annotations.NotNull;
-
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.math.CompassRoseDirection
 
 /**
  * @author PetteriM1
  */
+class BlockWallBanner @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockStandingBanner(blockstate) {
+    override val name: String
+        get() = "Wall Banner"
 
-public class BlockWallBanner extends BlockStandingBanner {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WALL_BANNER, FACING_DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockWallBanner() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWallBanner(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Wall Banner";
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (this.getSide(getBlockFace().getOpposite()).isAir()) {
-                this.level.useBreakOn(this.position);
+            if (getSide(blockFace!!.getOpposite()!!)!!.isAir) {
+                level.useBreakOn(this.position)
             }
-            return Level.BLOCK_UPDATE_NORMAL;
+            return Level.BLOCK_UPDATE_NORMAL
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(FACING_DIRECTION, face.index);
-    }
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(FACING_DIRECTION));
-    }
+    override var direction: CompassRoseDirection?
+        get() = blockFace!!.compassRoseDirection
+        set(direction) {
+            blockFace = direction!!.closestBlockFace
+        }
 
-    @Override
-    public void setDirection(CompassRoseDirection direction) {
-        setBlockFace(direction.closestBlockFace);
-    }
-
-    @Override
-    public CompassRoseDirection getDirection() {
-        return getBlockFace().getCompassRoseDirection();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WALL_BANNER, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

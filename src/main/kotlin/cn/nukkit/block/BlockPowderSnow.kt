@@ -1,76 +1,53 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.projectile.EntitySmallFireball;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.projectile.EntitySmallFireball
+import cn.nukkit.item.*
+import cn.nukkit.level.Locator
+import cn.nukkit.math.*
 
+class BlockPowderSnow : BlockTransparent {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockPowderSnow extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POWDER_SNOW);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockPowderSnow() {
-        super(PROPERTIES.getDefaultState());
+    override val name: String
+        get() = "Powder Snow"
+
+    override val hardness: Double
+        get() = 0.25
+
+    override val resistance: Double
+        get() = 0.1
+
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    public BlockPowderSnow(BlockState blockState) {
-        super(blockState);
+    override val isTransparent: Boolean
+        get() = true
+
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    @Override
-    public String getName() {
-        return "Powder Snow";
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public double getHardness() {
-        return 0.25;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.1;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    public boolean isTransparent() {
-        return true;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return true;
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
-    }
-
-    @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
-        if (projectile instanceof EntitySmallFireball) {
-            this.level.useBreakOn(this.position);
-            return true;
+    override fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
+        if (projectile is EntitySmallFireball) {
+            level.useBreakOn(this.position)
+            return true
         }
-        return false;
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.POWDER_SNOW)
+            get() = Companion.field
     }
 }

@@ -1,48 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-
-public class BlockBambooMosaicDoubleSlab extends BlockDoubleSlabBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_MOSAIC_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockBambooMosaicDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDoubleSlabBase(blockstate) {
+    override fun getSlabName(): String {
+        return "Bamboo Mosaic"
     }
 
-    public BlockBambooMosaicDoubleSlab() {
-        this(PROPERTIES.getDefaultState());
+    override fun getSingleSlab(): BlockState {
+        return BlockBambooMosaicSlab.Companion.PROPERTIES.getDefaultState()
     }
 
-    public BlockBambooMosaicDoubleSlab(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val burnChance: Int
+        get() = 5
 
-    @Override
-    public String getSlabName() {
-        return "Bamboo Mosaic";
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockBambooMosaicSlab.PROPERTIES.getDefaultState();
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BAMBOO_MOSAIC_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

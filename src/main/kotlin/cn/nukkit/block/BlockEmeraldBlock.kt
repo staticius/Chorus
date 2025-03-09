@@ -1,52 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockEmeraldBlock extends BlockSolid {
-    
-    public static final BlockProperties PROPERTIES = new BlockProperties(EMERALD_BLOCK);
+class BlockEmeraldBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Emerald Block"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 5.0
+
+    override val resistance: Double
+        get() = 30.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_IRON
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockEmeraldBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockEmeraldBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Emerald Block";
-    }
-
-    @Override
-    public double getHardness() {
-        return 5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 30;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_IRON;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(EMERALD_BLOCK)
+            get() = Companion.field
     }
 }

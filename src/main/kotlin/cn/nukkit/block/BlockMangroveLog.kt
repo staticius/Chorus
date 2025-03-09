@@ -1,32 +1,21 @@
-    package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
+class BlockMangroveLog : BlockLog {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockMangroveLog extends BlockLog {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MANGROVE_LOG, CommonBlockProperties.PILLAR_AXIS);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val name: String
+        get() = "Mangrove Log"
+
+    override fun getStrippedState(): BlockState {
+        return BlockStrippedMangroveLog.properties.defaultState
     }
 
-    public BlockMangroveLog() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMangroveLog(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Mangrove Log";
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return BlockStrippedMangroveLog.PROPERTIES.getDefaultState();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MANGROVE_LOG, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

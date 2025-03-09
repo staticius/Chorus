@@ -1,16 +1,11 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.utils.DyeColor;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.utils.DyeColor
 
 /**
  * @author CreeperFace
  * @since 7.8.2017
  */
-public abstract class BlockGlassStained extends BlockGlass {
-    public BlockGlassStained(BlockState blockState) {
-        super(blockState);
-    }
-
-    @NotNull public abstract DyeColor getDyeColor();
+abstract class BlockGlassStained(blockState: BlockState?) : BlockGlass(blockState) {
+    abstract val dyeColor: DyeColor
 }

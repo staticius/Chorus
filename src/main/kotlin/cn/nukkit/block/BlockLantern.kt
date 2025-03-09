@@ -1,177 +1,163 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.item.ItemTool.Companion.getBestTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
 
-import static cn.nukkit.block.property.CommonBlockProperties.HANGING;
+open class BlockLantern @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockstate) {
+    override val name: String
+        get() = "Lantern"
 
-
-public class BlockLantern extends BlockFlowable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LANTERN, HANGING);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockLantern() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockLantern(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Lantern";
-    }
-
-    private boolean isBlockAboveValid() {
-        Block support = up();
-        switch (support.getId()) {
-            case CHAIN, IRON_BARS, HOPPER -> {
-                return true;
-            }
-            default -> {
-                if (support instanceof BlockWallBase || support instanceof BlockFence) {
-                    return true;
+    private val isBlockAboveValid: Boolean
+        get() {
+            val support = up()
+            when (support!!.id) {
+                BlockID.CHAIN, BlockID.IRON_BARS, BlockID.HOPPER -> {
+                    return true
                 }
-                if (support instanceof BlockSlab && !((BlockSlab) support).isOnTop()) {
-                    return true;
+
+                else -> {
+                    if (support is BlockWallBase || support is BlockFence) {
+                        return true
+                    }
+                    if (support is BlockSlab && !support.isOnTop) {
+                        return true
+                    }
+                    if (support is BlockStairs && !support.isUpsideDown) {
+                        return true
+                    }
+                    return BlockLever.Companion.isSupportValid(support, BlockFace.DOWN)
                 }
-                if (support instanceof BlockStairs && !((BlockStairs) support).isUpsideDown()) {
-                    return true;
-                }
-                return BlockLever.isSupportValid(support, BlockFace.DOWN);
             }
         }
-    }
 
-    private boolean isBlockUnderValid() {
-        Block support = down();
-        if (support.getId().equals(HOPPER)) {
-            return true;
-        }
-        if (support instanceof BlockWallBase || support instanceof BlockFence) {
-            return true;
-        }
-        return BlockLever.isSupportValid(support, BlockFace.UP);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        boolean hanging = face != BlockFace.UP && isBlockAboveValid() && (!isBlockUnderValid() || face == BlockFace.DOWN);
-        if (!isBlockUnderValid() && !hanging) {
-            return false;
+    private val isBlockUnderValid: Boolean
+        get() {
+            val support = down()
+            if (support!!.id == BlockID.HOPPER) {
+                return true
+            }
+            if (support is BlockWallBase || support is BlockFence) {
+                return true
+            }
+            return BlockLever.Companion.isSupportValid(support, BlockFace.UP)
         }
 
-        setHanging(hanging);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val hanging = face != BlockFace.UP && isBlockAboveValid && (!isBlockUnderValid || face == BlockFace.DOWN)
+        if (!isBlockUnderValid && !hanging) {
+            return false
+        }
 
-        this.level.setBlock(this.position, this, true, true);
-        return true;
+        isHanging = hanging
+
+        level.setBlock(this.position, this, true, true)
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isHanging()) {
-                if (!isBlockUnderValid()) {
-                    level.useBreakOn(this.position, ItemTool.getBestTool(getToolType()));
+            if (!isHanging) {
+                if (!isBlockUnderValid) {
+                    level.useBreakOn(this.position, getBestTool(toolType))
                 }
-            } else if (!isBlockAboveValid()) {
-                level.useBreakOn(this.position, ItemTool.getBestTool(getToolType()));
+            } else if (!isBlockAboveValid) {
+                level.useBreakOn(this.position, getBestTool(toolType))
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public int getLightLevel() {
-        return 15;
+    override val lightLevel: Int
+        get() = 15
+
+    override val resistance: Double
+        get() = 3.5
+
+    override val hardness: Double
+        get() = 3.5
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public double getResistance() {
-        return 3.5;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override var minX: Double
+        get() = position.x + (5.0 / 16)
+        set(minX) {
+            super.minX = minX
+        }
+
+    override var minY: Double
+        get() = position.y + (if (!isHanging) 0.0 else 1.0 / 16)
+        set(minY) {
+            super.minY = minY
+        }
+
+    override var minZ: Double
+        get() = position.z + (5.0 / 16)
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x + (11.0 / 16)
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxY: Double
+        get() = position.y + (if (!isHanging) 7.0 / 16 else 8.0 / 16)
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override var maxZ: Double
+        get() = position.z + (11.0 / 16)
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return 3.5;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    var isHanging: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING)
+        set(hanging) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING, hanging)
+        }
 
-    @Override
-    public double getMinX() {
-        return this.position.south + (5.0 / 16);
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public double getMinY() {
-        return this.position.up + (!isHanging() ? 0 : 1. / 16);
-    }
-
-    @Override
-    public double getMinZ() {
-        return this.position.west + (5.0 / 16);
-    }
-
-    @Override
-    public double getMaxX() {
-        return this.position.south + (11.0 / 16);
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + (!isHanging() ? 7.0 / 16 : 8.0 / 16);
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + (11.0 / 16);
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return false;
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    public boolean isHanging() {
-        return getPropertyValue(HANGING);
-    }
-
-    public void setHanging(boolean hanging) {
-        setPropertyValue(HANGING, hanging);
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LANTERN, CommonBlockProperties.HANGING)
+            get() = Companion.field
     }
 }

@@ -1,27 +1,14 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
-public class BlockOchreFroglight extends BlockFroglight {
+class BlockOchreFroglight @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockFroglight(blockState) {
+    override val name: String
+        get() = "Ochre Froglight"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(OCHRE_FROGLIGHT, PILLAR_AXIS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockOchreFroglight() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockOchreFroglight(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Ochre Froglight";
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.OCHRE_FROGLIGHT, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

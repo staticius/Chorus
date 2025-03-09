@@ -1,25 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockDeadTubeCoral @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTubeCoral(blockstate) {
+    override val isDead: Boolean
+        get() = true
 
-public class BlockDeadTubeCoral extends BlockTubeCoral {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DEAD_TUBE_CORAL);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockDeadTubeCoral() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockDeadTubeCoral(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean isDead() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(DEAD_TUBE_CORAL)
+            get() = Companion.field
     }
 }

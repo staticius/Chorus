@@ -1,50 +1,40 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
 
-public class BlockResinClump extends BlockLichen {
-    public static final BlockProperties PROPERTIES = new BlockProperties(RESIN_CLUMP, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockResinClump @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockLichen(blockstate) {
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    public BlockResinClump() {
-        this(PROPERTIES.getDefaultState());
+    override val toolType: Int
+        get() = ItemTool.TYPE_NONE
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        val drop = toItem()
+        drop!!.setCount(growthSides.size)
+        return arrayOf(drop)
     }
 
-    public BlockResinClump(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_NONE;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        Item drop = toItem();
-        drop.setCount(getGrowthSides().length);
-        return new Item[]{drop};
-    }
-
-    @Override
-    public void witherAtSide(BlockFace side) {
+    override fun witherAtSide(side: BlockFace) {
         if (isGrowthToSide(side)) {
-            setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) ^ (0b000001 << side.getDUSWNEIndex()));
-            level.setBlock(this.position, this, true, true);
-            this.level.dropItem(this.position, toItem());
+            setPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
+                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) xor (1 shl side.dUSWNEIndex)
+            )
+            level.setBlock(this.position, this, true, true)
+            level.dropItem(this.position, toItem()!!)
         }
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.RESIN_CLUMP, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
+            get() = Companion.field
     }
 }

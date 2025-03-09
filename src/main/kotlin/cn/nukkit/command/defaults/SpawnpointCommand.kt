@@ -51,11 +51,11 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
                 if (level != null) {
                     val locator = list.getResult<Locator>(1)
                     if (level.isOverWorld) {
-                        if (locator!!.position.up < -64) locator.position.up = -64.0
-                        if (locator.position.up > 320) locator.position.up = 320.0
+                        if (locator!!.position.y < -64) locator.position.y = -64.0
+                        if (locator.position.y > 320) locator.position.y = 320.0
                     } else {
-                        if (locator!!.position.up < 0) locator.position.up = 0.0
-                        if (locator.position.up > 255) locator.position.up = 255.0
+                        if (locator!!.position.y < 0) locator.position.y = 0.0
+                        if (locator.position.y > 255) locator.position.y = 255.0
                     }
                     for (player in players) {
                         player.setSpawn(locator, SpawnPointType.PLAYER)
@@ -65,9 +65,9 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
                         players.stream().map { obj: Player -> obj.name }.collect(
                             Collectors.joining(" ")
                         ),
-                        round2.format(locator.position.south),
-                        round2.format(locator.position.up),
-                        round2.format(locator.position.west)
+                        round2.format(locator.position.x),
+                        round2.format(locator.position.y),
+                        round2.format(locator.position.z)
                     ).successCount(players.size).output(true)
                     return players.size
                 }
@@ -80,9 +80,9 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
             players[0].setSpawn(pos, SpawnPointType.PLAYER)
             log.addSuccess(
                 "commands.spawnpoint.success.single", sender.name,
-                round2.format(pos.position.south),
-                round2.format(pos.position.up),
-                round2.format(pos.position.west)
+                round2.format(pos.position.x),
+                round2.format(pos.position.y),
+                round2.format(pos.position.z)
             ).output(true)
             return 1
         } else {

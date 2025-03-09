@@ -1,75 +1,53 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.INFINIBURN_BIT;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.math.*
 
 /**
  * @author Angelic47 (Nukkit Project)
  * @apiNote Extends BlockSolidMeta instead of BlockSolid only in PowerNukkit
  */
+class BlockBedrock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    var burnIndefinitely: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.INFINIBURN_BIT)
+        set(infiniburn) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.INFINIBURN_BIT,
+                infiniburn
+            )
+        }
 
-public class BlockBedrock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BEDROCK, INFINIBURN_BIT);
+    override val hardness: Double
+        get() = -1.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 18000000.0
+
+    override val name: String
+        get() = "Bedrock"
+
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return player != null && player.isCreative
     }
 
-    public BlockBedrock() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    public BlockBedrock(BlockState blockstate) {
-        super(blockstate);
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    public boolean getBurnIndefinitely() {
-        return getPropertyValue(INFINIBURN_BIT);
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public void setBurnIndefinitely(boolean infiniburn) {
-        setPropertyValue(INFINIBURN_BIT, infiniburn);
-    }
-
-    @Override
-    public double getHardness() {
-        return -1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 18000000;
-    }
-
-    @Override
-    public String getName() {
-        return "Bedrock";
-    }
-
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return player != null && player.isCreative();
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BEDROCK, CommonBlockProperties.INFINIBURN_BIT)
+            get() = Companion.field
     }
 }

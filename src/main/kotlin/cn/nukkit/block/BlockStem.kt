@@ -1,18 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-public abstract class BlockStem extends BlockLog {
+abstract class BlockStem(blockstate: BlockState?) : BlockLog(blockstate) {
+    override val hardness: Double
+        get() = 2.0
 
-    public BlockStem(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 2;
-    }
+    override val resistance: Double
+        get() = 2.0
 }

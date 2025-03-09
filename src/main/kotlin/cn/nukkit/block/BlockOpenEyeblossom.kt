@@ -1,22 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockOpenEyeblossom : BlockClosedEyeblossom {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockOpenEyeblossom extends BlockClosedEyeblossom {
-    public static final BlockProperties PROPERTIES = new BlockProperties(OPEN_EYEBLOSSOM);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.OPEN_EYEBLOSSOM)
+            get() = Companion.field
     }
-
-    public BlockOpenEyeblossom() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockOpenEyeblossom(BlockState blockstate) {
-        super(blockstate);
-    }
-
 }

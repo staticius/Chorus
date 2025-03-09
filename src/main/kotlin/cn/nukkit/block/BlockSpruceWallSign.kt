@@ -1,45 +1,28 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemSpruceSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
 
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
+class BlockSpruceWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockWallSign(blockState) {
+    override val name: String
+        get() = "Spruce Wall Sign"
 
-
-public class BlockSpruceWallSign extends BlockWallSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SPRUCE_WALL_SIGN, FACING_DIRECTION);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getWallSignId(): String {
+        return BlockID.SPRUCE_WALL_SIGN
     }
 
-    public BlockSpruceWallSign() {
-        this(PROPERTIES.getDefaultState());
+    override fun getStandingSignId(): String {
+        return BlockID.SPRUCE_STANDING_SIGN
     }
 
-    public BlockSpruceWallSign(BlockState blockState) {
-        super(blockState);
+    override fun toItem(): Item? {
+        return ItemSpruceSign()
     }
 
-    @Override
-    public String getName() {
-        return "Spruce Wall Sign";
-    }
-
-    @Override
-    public String getWallSignId() {
-        return SPRUCE_WALL_SIGN;
-    }
-
-    @Override
-    public String getStandingSignId() {
-        return SPRUCE_STANDING_SIGN;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemSpruceSign();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SPRUCE_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

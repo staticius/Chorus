@@ -1,74 +1,63 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.utils.Faceable
 
 /**
  * @author CreeperFace
  * @since 2.6.2017
  */
-public abstract class BlockGlazedTerracotta extends BlockSolid implements Faceable {
-    public BlockGlazedTerracotta(BlockState blockState) {
-        super(blockState);
+abstract class BlockGlazedTerracotta(blockState: BlockState?) : BlockSolid(blockState), Faceable {
+    override val resistance: Double
+        get() = 7.0
+
+    override val hardness: Double
+        get() = 1.4
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val faces = intArrayOf(2, 5, 3, 4)
+        this.blockFace = fromIndex(faces[if (player != null) player.getDirection()!!.horizontalIndex else 0])
+        return level.setBlock(block.position, this, true, true)
     }
 
-    @Override
-    public double getResistance() {
-        return 7;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return 1.4;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        int[] faces = {2, 5, 3, 4};
-        this.setBlockFace(BlockFace.fromIndex(faces[player != null ? player.getDirection().horizontalIndex : 0]));
-        return this.level.setBlock(block.position, this, true, true);
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(FACING_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(FACING_DIRECTION, face.index);
-    }
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
 
     //带釉陶瓦可以被推动但不能被收回
     //see: https://zh.minecraft.wiki/w/%E5%B8%A6%E9%87%89%E9%99%B6%E7%93%A6
-    @Override
-    public boolean canBePushed() {
-        return true;
+    override fun canBePushed(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBePulled() {
-        return false;
+    override fun canBePulled(): Boolean {
+        return false
     }
 }

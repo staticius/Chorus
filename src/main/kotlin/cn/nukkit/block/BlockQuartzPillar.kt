@@ -1,42 +1,40 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
-
-public class BlockQuartzPillar extends BlockQuartzBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(QUARTZ_PILLAR, CommonBlockProperties.PILLAR_AXIS);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockQuartzPillar @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockQuartzBlock(blockstate) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        this.pillarAxis = face.axis
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    public BlockQuartzPillar() {
-        this(PROPERTIES.getDefaultState());
-    }
+    var pillarAxis: BlockFace.Axis?
+        get() = getPropertyValue(
+            CommonBlockProperties.PILLAR_AXIS
+        )
+        set(axis) {
+            setPropertyValue(
+                CommonBlockProperties.PILLAR_AXIS,
+                axis
+            )
+        }
 
-    public BlockQuartzPillar(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        this.setPillarAxis(face.getAxis());
-        this.level.setBlock(block.position, this, true, true);
-        return true;
-    }
-
-    public BlockFace.Axis getPillarAxis() {
-        return getPropertyValue(PILLAR_AXIS);
-    }
-
-    public void setPillarAxis(BlockFace.Axis axis) {
-        setPropertyValue(PILLAR_AXIS, axis);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.QUARTZ_PILLAR, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

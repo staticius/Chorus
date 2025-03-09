@@ -1,52 +1,38 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockPolishedTuffWall extends BlockWallBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_TUFF_WALL, CommonBlockProperties.WALL_CONNECTION_TYPE_EAST, CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH, CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH, CommonBlockProperties.WALL_CONNECTION_TYPE_WEST, CommonBlockProperties.WALL_POST_BIT);
+class BlockPolishedTuffWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWallBase(blockstate) {
+    override val name: String
+        get() = "Polished Tuff Wall"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 6.0
+
+    override val hardness: Double
+        get() = 1.5
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockPolishedTuffWall() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPolishedTuffWall(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Polished Tuff Wall";
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.POLISHED_TUFF_WALL,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
+            CommonBlockProperties.WALL_POST_BIT
+        )
+            get() = Companion.field
     }
 }

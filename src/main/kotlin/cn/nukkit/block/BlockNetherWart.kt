@@ -1,103 +1,91 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Random;
-
-import static cn.nukkit.block.property.CommonBlockProperties.AGE_4;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import java.util.*
 
 /**
  * @author Leonidius20
  * @since 22.03.17
  */
-public class BlockNetherWart extends BlockFlowable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(NETHER_WART, AGE_4);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockNetherWart() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockNetherWart(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Block down = this.down();
-        if (down.getId().equals(SOUL_SAND)) {
-            this.level.setBlock(block.position, this, true, true);
-            return true;
+class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockstate) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val down = this.down()
+        if (down!!.id == BlockID.SOUL_SAND) {
+            level.setBlock(block.position, this, true, true)
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!this.down().getId().equals(SOUL_SAND)) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+            if (down()!!.id != BlockID.SOUL_SAND) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (new Random().nextInt(10) == 1) {
-                if (this.getAge() < 0x03) {
-                    BlockNetherWart block = (BlockNetherWart) this.clone();
-                    block.setAge(block.getAge() + 1);
-                    BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                    Server.getInstance().pluginManager.callEvent(ev);
+            if (Random().nextInt(10) == 1) {
+                if (this.age < 0x03) {
+                    val block = clone() as BlockNetherWart
+                    block.age = block.age + 1
+                    val ev: BlockGrowEvent = BlockGrowEvent(this, block)
+                    instance!!.pluginManager.callEvent(ev)
 
-                    if (!ev.isCancelled()) {
-                        this.level.setBlock(this.position, ev.newState, true, true);
+                    if (!ev.isCancelled) {
+                        level.setBlock(this.position, ev.newState, true, true)
                     } else {
-                        return Level.BLOCK_UPDATE_RANDOM;
+                        return Level.BLOCK_UPDATE_RANDOM
                     }
                 }
             } else {
-                return Level.BLOCK_UPDATE_RANDOM;
+                return Level.BLOCK_UPDATE_RANDOM
             }
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public String getName() {
-        return "Nether Wart Block";
-    }
+    override val name: String
+        get() = "Nether Wart Block"
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (this.getAge() == 0x03) {
-            this.setAge(0);
-            return new Item[]{
-                    new ItemBlock(this, 0, 2 + (int) (Math.random() * ((4 - 2) + 1)))
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (this.age == 0x03) {
+            this.age = 0
+            return arrayOf<Item?>(
+                ItemBlock(this, 0, 2 + (Math.random() * ((4 - 2) + 1)).toInt())
+            )
         } else {
-            return new Item[]{
-                    toItem()
-            };
+            return arrayOf(
+                toItem()
+            )
         }
     }
 
-    public int getAge() {
-        return getPropertyValue(AGE_4);
-    }
+    var age: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_4)
+        set(age) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_4, age)
+        }
 
-    public void setAge(int age) {
-        setPropertyValue(AGE_4, age);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.NETHER_WART, CommonBlockProperties.AGE_4)
+            get() = Companion.field
     }
 }
 

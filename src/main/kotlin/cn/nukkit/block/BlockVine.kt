@@ -1,373 +1,363 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.event.block.BlockSpreadEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.event.block.BlockSpreadEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.random
+import cn.nukkit.math.SimpleAxisAlignedBB
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * @author Pub4Game
  * @since 15.01.2016
  */
-public class BlockVine extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(VINE, CommonBlockProperties.VINE_DIRECTION_BITS);
+class BlockVine @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockTransparent(blockstate) {
+    override val name: String
+        get() = "Vines"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 0.2
+
+    override val resistance: Double
+        get() = 1.0
+
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    public BlockVine() {
-        this(PROPERTIES.getDefaultState());
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    public BlockVine(BlockState blockstate) {
-        super(blockstate);
+    override fun canBeReplaced(): Boolean {
+        return true
     }
 
-    @Override
-    public String getName() {
-        return "Vines";
+    override fun canBeClimbed(): Boolean {
+        return true
     }
 
-    @Override
-    public double getHardness() {
-        return 0.2;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun canBeFlowedInto(): Boolean {
+        return true
     }
 
-    @Override
-    public double getResistance() {
-        return 1;
+    override fun onEntityCollide(entity: Entity) {
+        entity.resetFallDistance()
+        entity.onGround = true
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return true;
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
-    }
-
-    @Override
-    public boolean canBeReplaced() {
-        return true;
-    }
-
-    @Override
-    public boolean canBeClimbed() {
-        return true;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return true;
-    }
-
-    @Override
-    public void onEntityCollide(Entity entity) {
-        entity.resetFallDistance();
-        entity.onGround = true;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        double f1 = 1;
-        double f2 = 1;
-        double f3 = 1;
-        double f4 = 0;
-        double f5 = 0;
-        double f6 = 0;
-        boolean flag = this.blockstate.specialValue() > 0;
-        if ((this.blockstate.specialValue() & 0x02) > 0) {
-            f4 = Math.max(f4, 0.0625);
-            f1 = 0;
-            f2 = 0;
-            f5 = 1;
-            f3 = 0;
-            f6 = 1;
-            flag = true;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        var f1 = 1.0
+        var f2 = 1.0
+        var f3 = 1.0
+        var f4 = 0.0
+        var f5 = 0.0
+        var f6 = 0.0
+        var flag = blockState!!.specialValue() > 0
+        if ((blockState!!.specialValue().toInt() and 0x02) > 0) {
+            f4 = max(f4, 0.0625)
+            f1 = 0.0
+            f2 = 0.0
+            f5 = 1.0
+            f3 = 0.0
+            f6 = 1.0
+            flag = true
         }
-        if ((this.blockstate.specialValue() & 0x08) > 0) {
-            f1 = Math.min(f1, 0.9375);
-            f4 = 1;
-            f2 = 0;
-            f5 = 1;
-            f3 = 0;
-            f6 = 1;
-            flag = true;
+        if ((blockState!!.specialValue().toInt() and 0x08) > 0) {
+            f1 = min(f1, 0.9375)
+            f4 = 1.0
+            f2 = 0.0
+            f5 = 1.0
+            f3 = 0.0
+            f6 = 1.0
+            flag = true
         }
-        if ((this.blockstate.specialValue() & 0x01) > 0) {
-            f3 = Math.min(f3, 0.9375);
-            f6 = 1;
-            f1 = 0;
-            f4 = 1;
-            f2 = 0;
-            f5 = 1;
-            flag = true;
+        if ((blockState!!.specialValue().toInt() and 0x01) > 0) {
+            f3 = min(f3, 0.9375)
+            f6 = 1.0
+            f1 = 0.0
+            f4 = 1.0
+            f2 = 0.0
+            f5 = 1.0
+            flag = true
         }
-        if (!flag && this.up().isSolid()) {
-            f2 = Math.min(f2, 0.9375);
-            f5 = 1;
-            f1 = 0;
-            f4 = 1;
-            f3 = 0;
-            f6 = 1;
+        if (!flag && up()!!.isSolid) {
+            f2 = min(f2, 0.9375)
+            f5 = 1.0
+            f1 = 0.0
+            f4 = 1.0
+            f3 = 0.0
+            f6 = 1.0
         }
-        return new SimpleAxisAlignedBB(
-                this.position.south + f1,
-                this.position.up + f2,
-                this.position.west + f3,
-                this.position.south + f4,
-                this.position.up + f5,
-                this.position.west + f6
-        );
+        return SimpleAxisAlignedBB(
+            position.x + f1,
+            position.y + f2,
+            position.z + f3,
+            position.x + f4,
+            position.y + f5,
+            position.z + f6
+        )
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (!block.getId().equals(VINE) && target.isSolid() && face.horizontalIndex != -1) {
-            this.setPropertyValue(CommonBlockProperties.VINE_DIRECTION_BITS, getMetaFromFace(face.getOpposite()));
-            this.level.setBlock(block.position, this, true, true);
-            return true;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if ((block.id != BlockID.VINE) && target.isSolid && face.horizontalIndex != -1) {
+            this.setPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.VINE_DIRECTION_BITS, getMetaFromFace(
+                    face.getOpposite()!!
+                )
+            )
+            level.setBlock(block.position, this, true, true)
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isShears()) {
-            return new Item[]{
-                    toItem()
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isShears) {
+            arrayOf(
+                toItem()
+            )
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            Block up = this.up();
-            Set<BlockFace> upFaces = up instanceof BlockVine ? ((BlockVine) up).getFaces() : null;
-            Set<BlockFace> faces = this.getFaces();
-            for (BlockFace face : BlockFace.Plane.HORIZONTAL) {
-                if (!this.getSide(face).isSolid() && (upFaces == null || !upFaces.contains(face))) {
-                    faces.remove(face);
+            val up = this.up()
+            val upFaces: Set<BlockFace>? = if (up is BlockVine) up.faces else null
+            val faces = this.faces
+            for (face in BlockFace.Plane.HORIZONTAL) {
+                if (!getSide(face)!!.isSolid && (upFaces == null || !upFaces.contains(face))) {
+                    faces.remove(face)
                 }
             }
-            if (faces.isEmpty() && !up.isSolid()) {
-                this.level.useBreakOn(this.position, null, null, true);
-                return Level.BLOCK_UPDATE_NORMAL;
+            if (faces.isEmpty() && !up!!.isSolid) {
+                level.useBreakOn(this.position, null, null, true)
+                return Level.BLOCK_UPDATE_NORMAL
             }
-            int meta = getMetaFromFaces(faces);
-            if (meta != this.blockstate.specialValue()) {
-                this.level.setBlock(this.position, Block.get(VINE).setPropertyValue(CommonBlockProperties.VINE_DIRECTION_BITS, meta), true);
-                return Level.BLOCK_UPDATE_NORMAL;
+            val meta = getMetaFromFaces(faces)
+            if (meta != blockState!!.specialValue().toInt()) {
+                level.setBlock(
+                    this.position,
+                    get(BlockID.VINE).setPropertyValue<Int, IntPropertyType>(
+                        CommonBlockProperties.VINE_DIRECTION_BITS,
+                        meta
+                    ),
+                    true
+                )
+                return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            Random random = ThreadLocalRandom.current();
+            val random: Random = ThreadLocalRandom.current()
             if (random.nextInt(4) == 0) {
-                BlockFace face = BlockFace.random(random);
-                Block block = this.getSide(face);
-                int faceMeta = getMetaFromFace(face);
-                int meta = this.blockstate.specialValue();
+                val face = random(random)
+                val block = this.getSide(face!!)
+                val faceMeta = getMetaFromFace(face)
+                var meta = blockState!!.specialValue().toInt()
 
-                if (this.position.up < 255 && face == BlockFace.UP && block.isAir()) {
+                if (position.y < 255 && face == BlockFace.UP && block!!.isAir) {
                     if (this.canSpread()) {
-                        for (BlockFace horizontalFace : BlockFace.Plane.HORIZONTAL) {
-                            if (random.nextBoolean() || !this.getSide(horizontalFace).getSide(face).isSolid()) {
-                                meta &= ~getMetaFromFace(horizontalFace);
+                        for (horizontalFace in BlockFace.Plane.HORIZONTAL) {
+                            if (random.nextBoolean() || !getSide(horizontalFace)!!.getSide(face)!!.isSolid) {
+                                meta = meta and getMetaFromFace(horizontalFace).inv()
                             }
                         }
-                        putVineOnHorizontalFace(block, meta, this);
+                        putVineOnHorizontalFace(block, meta, this)
                     }
-                } else if (face.horizontalIndex != -1 && (meta & faceMeta) != faceMeta) {
+                } else if (face.horizontalIndex != -1 && (meta and faceMeta) != faceMeta) {
                     if (this.canSpread()) {
-                        if (block.isAir()) {
-                            BlockFace cwFace = face.rotateY();
-                            BlockFace ccwFace = face.rotateYCCW();
-                            Block cwBlock = block.getSide(cwFace);
-                            Block ccwBlock = block.getSide(ccwFace);
-                            int cwMeta = getMetaFromFace(cwFace);
-                            int ccwMeta = getMetaFromFace(ccwFace);
-                            boolean onCw = (meta & cwMeta) == cwMeta;
-                            boolean onCcw = (meta & ccwMeta) == ccwMeta;
+                        if (block!!.isAir) {
+                            val cwFace = face.rotateY()
+                            val ccwFace = face.rotateYCCW()
+                            val cwBlock = block.getSide(cwFace)
+                            val ccwBlock = block.getSide(ccwFace)
+                            val cwMeta = getMetaFromFace(cwFace)
+                            val ccwMeta = getMetaFromFace(ccwFace)
+                            val onCw = (meta and cwMeta) == cwMeta
+                            val onCcw = (meta and ccwMeta) == ccwMeta
 
-                            if (onCw && cwBlock.isSolid()) {
-                                putVine(block, getMetaFromFace(cwFace), this);
-                            } else if (onCcw && ccwBlock.isSolid()) {
-                                putVine(block, getMetaFromFace(ccwFace), this);
-                            } else if (onCw && cwBlock.isAir() && this.getSide(cwFace).isSolid()) {
-                                putVine(cwBlock, getMetaFromFace(face.getOpposite()), this);
-                            } else if (onCcw && ccwBlock.isAir() && this.getSide(ccwFace).isSolid()) {
-                                putVine(ccwBlock, getMetaFromFace(face.getOpposite()), this);
-                            } else if (block.up().isSolid()) {
-                                putVine(block, 0, this);
+                            if (onCw && cwBlock!!.isSolid) {
+                                putVine(block, getMetaFromFace(cwFace), this)
+                            } else if (onCcw && ccwBlock!!.isSolid) {
+                                putVine(block, getMetaFromFace(ccwFace), this)
+                            } else if (onCw && cwBlock!!.isAir && getSide(cwFace)!!.isSolid) {
+                                putVine(cwBlock, getMetaFromFace(face.getOpposite()!!), this)
+                            } else if (onCcw && ccwBlock!!.isAir && getSide(ccwFace)!!.isSolid) {
+                                putVine(ccwBlock, getMetaFromFace(face.getOpposite()!!), this)
+                            } else if (block.up()!!.isSolid) {
+                                putVine(block, 0, this)
                             }
-                        } else if (!block.isTransparent()) {
-                            meta |= getMetaFromFace(face);
-                            putVine(this, meta, null);
+                        } else if (!block.isTransparent) {
+                            meta = meta or getMetaFromFace(face)
+                            putVine(this, meta, null)
                         }
                     }
-                } else if (this.position.up > 0) {
-                    Block below = this.down();
-                    String id = below.getId();
-                    if (id.equals(AIR) || id.equals(VINE)) {
-                        for (BlockFace horizontalFace : BlockFace.Plane.HORIZONTAL) {
+                } else if (position.y > 0) {
+                    val below = this.down()
+                    val id = below!!.id
+                    if (id == BlockID.AIR || id == BlockID.VINE) {
+                        for (horizontalFace in BlockFace.Plane.HORIZONTAL) {
                             if (random.nextBoolean()) {
-                                meta &= ~getMetaFromFace(horizontalFace);
+                                meta = meta and getMetaFromFace(horizontalFace).inv()
                             }
                         }
-                        putVineOnHorizontalFace(below, below.blockstate.specialValue() | meta, id.equals(AIR) ? this : null);
+                        putVineOnHorizontalFace(
+                            below,
+                            below.blockState!!.specialValue().toInt() or meta,
+                            if (id == BlockID.AIR) this else null
+                        )
                     }
                 }
-                return Level.BLOCK_UPDATE_RANDOM;
+                return Level.BLOCK_UPDATE_RANDOM
             }
         }
-        return 0;
+        return 0
     }
 
-    private boolean canSpread() {
-        int blockX = this.position.getFloorX();
-        int blockY = this.position.getFloorY();
-        int blockZ = this.position.getFloorZ();
+    private fun canSpread(): Boolean {
+        val blockX = position.floorX
+        val blockY = position.floorY
+        val blockZ = position.floorZ
 
-        int count = 0;
-        for (int x = blockX - 4; x <= blockX + 4; x++) {
-            for (int z = blockZ - 4; z <= blockZ + 4; z++) {
-                for (int y = blockY - 1; y <= blockY + 1; y++) {
-                    if (this.level.getBlock(x, y, z).getId().equals(VINE)) {
-                        if (++count >= 5) return false;
+        var count = 0
+        for (x in blockX - 4..blockX + 4) {
+            for (z in blockZ - 4..blockZ + 4) {
+                for (y in blockY - 1..blockY + 1) {
+                    if (level.getBlock(x, y, z)!!.id == BlockID.VINE) {
+                        if (++count >= 5) return false
                     }
                 }
             }
         }
-        return true;
+        return true
     }
 
-    private void putVine(Block block, int meta, Block source) {
-        if (block.getId().equals(VINE) && block.blockstate.specialValue() == meta) return;
-        Block vine = get(VINE).setPropertyValue(CommonBlockProperties.VINE_DIRECTION_BITS, meta);
-        BlockGrowEvent event;
-        if (source != null) {
-            event = new BlockSpreadEvent(block, source, vine);
+    private fun putVine(block: Block, meta: Int, source: Block?) {
+        if (block.id == BlockID.VINE && block.blockState!!.specialValue().toInt() == meta) return
+        val vine =
+            get(BlockID.VINE).setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.VINE_DIRECTION_BITS, meta)
+        val event = if (source != null) {
+            BlockSpreadEvent(block, source, vine)
         } else {
-            event = new BlockGrowEvent(block, vine);
+            BlockGrowEvent(block, vine)
         }
-        this.level.server.pluginManager.callEvent(event);
-        if (!event.isCancelled()) {
-            this.level.setBlock(block.position, vine, true);
+        level.server.pluginManager.callEvent(event)
+        if (!event.isCancelled) {
+            level.setBlock(block.position, vine, true)
         }
     }
 
-    private void putVineOnHorizontalFace(Block block, int meta, Block source) {
-        if (block.getId().equals(VINE) && block.blockstate.specialValue() == meta) return;
-        boolean isOnHorizontalFace = false;
-        for (BlockFace face : BlockFace.Plane.HORIZONTAL) {
-            int faceMeta = getMetaFromFace(face);
-            if ((meta & faceMeta) == faceMeta) {
-                isOnHorizontalFace = true;
-                break;
+    private fun putVineOnHorizontalFace(block: Block, meta: Int, source: Block?) {
+        if (block.id == BlockID.VINE && block.blockState!!.specialValue().toInt() == meta) return
+        var isOnHorizontalFace = false
+        for (face in BlockFace.Plane.HORIZONTAL) {
+            val faceMeta = getMetaFromFace(face)
+            if ((meta and faceMeta) == faceMeta) {
+                isOnHorizontalFace = true
+                break
             }
         }
         if (isOnHorizontalFace) {
-            putVine(block, meta, source);
+            putVine(block, meta, source)
         }
     }
 
-    private Set<BlockFace> getFaces() {
-        Set<BlockFace> faces = EnumSet.noneOf(BlockFace.class);
+    private val faces: MutableSet<BlockFace>
+        get() {
+            val faces: MutableSet<BlockFace> = EnumSet.noneOf(BlockFace::class.java)
 
-        int meta = this.blockstate.specialValue();
-        if ((meta & 1) > 0) {
-            faces.add(BlockFace.SOUTH);
+            val meta = blockState!!.specialValue().toInt()
+            if ((meta and 1) > 0) {
+                faces.add(BlockFace.SOUTH)
+            }
+            if ((meta and 2) > 0) {
+                faces.add(BlockFace.WEST)
+            }
+            if ((meta and 4) > 0) {
+                faces.add(BlockFace.NORTH)
+            }
+            if ((meta and 8) > 0) {
+                faces.add(BlockFace.EAST)
+            }
+
+            return faces
         }
-        if ((meta & 2) > 0) {
-            faces.add(BlockFace.WEST);
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
+    }
+
+    override fun sticksToPiston(): Boolean {
+        return false
+    }
+
+    override fun canSilkTouch(): Boolean {
+        return true
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.VINE, CommonBlockProperties.VINE_DIRECTION_BITS)
+            get() = Companion.field
+
+        fun getMetaFromFaces(faces: Set<BlockFace>): Int {
+            var meta = 0
+            for (face in faces) {
+                meta = meta or getMetaFromFace(face)
+            }
+            return meta
         }
-        if ((meta & 4) > 0) {
-            faces.add(BlockFace.NORTH);
+
+        fun getMetaFromFace(face: BlockFace): Int {
+            return when (face) {
+                BlockFace.WEST -> 0x02
+                BlockFace.NORTH -> 0x04
+                BlockFace.EAST -> 0x08
+                else -> {
+                    0x01
+                    0x02
+                    0x04
+                    0x08
+                }
+            }
         }
-        if ((meta & 8) > 0) {
-            faces.add(BlockFace.EAST);
-        }
-
-        return faces;
-    }
-
-    public static int getMetaFromFaces(Set<BlockFace> faces) {
-        int meta = 0;
-        for (BlockFace face : faces) {
-            meta |= getMetaFromFace(face);
-
-        }
-        return meta;
-    }
-
-    public static int getMetaFromFace(BlockFace face) {
-        return switch (face) {
-            default -> 0x01;
-            case WEST -> 0x02;
-            case NORTH -> 0x04;
-            case EAST -> 0x08;
-        };
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    @Override
-    public boolean sticksToPiston() {
-        return false;
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
     }
 }

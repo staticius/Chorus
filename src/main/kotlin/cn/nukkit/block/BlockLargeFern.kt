@@ -1,28 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.DoublePlantType;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.DoublePlantType
 
-public class BlockLargeFern extends BlockDoublePlant {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LARGE_FERN, CommonBlockProperties.UPPER_BLOCK_BIT);
+class BlockLargeFern : BlockDoublePlant {
+    constructor() : super(Companion.properties.defaultState)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    public BlockLargeFern() {
-        super(PROPERTIES.getDefaultState());
-    }
+    override val doublePlantType: DoublePlantType
+        get() = DoublePlantType.FERN
 
-    public BlockLargeFern(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public @NotNull DoublePlantType getDoublePlantType() {
-        return DoublePlantType.FERN;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LARGE_FERN, CommonBlockProperties.UPPER_BLOCK_BIT)
+            get() = Companion.field
     }
 }

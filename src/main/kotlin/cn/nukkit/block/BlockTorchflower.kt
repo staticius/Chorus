@@ -1,34 +1,27 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
 
-
-public class BlockTorchflower extends BlockFlower {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TORCHFLOWER);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockTorchflower @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlower(blockstate) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return false
     }
 
-    public BlockTorchflower() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Torchflower"
 
-    public BlockTorchflower(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return false;
-    }
-
-    public String getName() {
-        return "Torchflower";
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.TORCHFLOWER)
+            get() = Companion.field
     }
 }

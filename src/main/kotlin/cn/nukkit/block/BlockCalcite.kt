@@ -1,52 +1,33 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockCalcite extends BlockSolid {
+class BlockCalcite : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(CALCITE);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockCalcite() {
-        super(PROPERTIES.getDefaultState());
+    override val name: String
+        get() = "Calcite"
+
+    override val hardness: Double
+        get() = 0.75
+
+    override val resistance: Double
+        get() = 0.75
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockCalcite(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public String getName() {
-        return "Calcite";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.75;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.75;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CALCITE)
+            get() = Companion.field
     }
 }

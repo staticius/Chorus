@@ -1,37 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.level.Sound;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.level.Sound
 
-public class BlockCherryDoor extends BlockWoodenDoor {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHERRY_DOOR, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonBlockProperties.OPEN_BIT, CommonBlockProperties.UPPER_BLOCK_BIT, CommonBlockProperties.DOOR_HINGE_BIT);
+class BlockCherryDoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWoodenDoor(blockstate) {
+    override val name: String
+        get() = "Cherry Door Block"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun playOpenSound() {
+        level.addSound(this.position, Sound.OPEN_CHERRY_WOOD_DOOR)
     }
 
-    public BlockCherryDoor() {
-        this(PROPERTIES.getDefaultState());
+    override fun playCloseSound() {
+        level.addSound(this.position, Sound.CLOSE_CHERRY_WOOD_DOOR)
     }
 
-    public BlockCherryDoor(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Cherry Door Block";
-    }
-
-    @Override
-    public void playOpenSound() {
-        level.addSound(this.position, Sound.OPEN_CHERRY_WOOD_DOOR);
-    }
-
-    @Override
-    public void playCloseSound() {
-        level.addSound(this.position, Sound.CLOSE_CHERRY_WOOD_DOOR);
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            CHERRY_DOOR,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OPEN_BIT,
+            CommonBlockProperties.UPPER_BLOCK_BIT,
+            CommonBlockProperties.DOOR_HINGE_BIT
+        )
+            get() = Companion.field
     }
 }

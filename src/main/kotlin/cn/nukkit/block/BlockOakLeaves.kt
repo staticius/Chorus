@@ -1,30 +1,20 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.WoodType;
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
+import cn.nukkit.item.Item
 
-public class BlockOakLeaves extends BlockLeaves {
-     public static final BlockProperties PROPERTIES = new BlockProperties(OAK_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT);
+class BlockOakLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
+    override val type: WoodType
+        get() = WoodType.OAK
 
-     @Override
-     @NotNull
-     public BlockProperties getProperties() {
-        return PROPERTIES;
-     }
-
-     public BlockOakLeaves(BlockState blockstate) {
-         super(blockstate);
-     }
-
-    @Override
-    public WoodType getType() {
-        return WoodType.OAK;
+    override fun toSapling(): Item {
+        return Item.get(BlockID.OAK_SAPLING)
     }
 
-    @Override
-    public Item toSapling() {
-        return Item.get(OAK_SAPLING);
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.OAK_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
+            get() = Companion.field
     }
 }

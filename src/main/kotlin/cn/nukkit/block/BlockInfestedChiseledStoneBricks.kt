@@ -1,50 +1,27 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
-public class BlockInfestedChiseledStoneBricks extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(INFESTED_CHISELED_STONE_BRICKS);
+class BlockInfestedChiseledStoneBricks @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockState) {
+    override val name: String
+        get() = "Infested Chiseled Stone Bricks"
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 0.75
+
+    override val resistance: Double
+        get() = 0.75
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    public BlockInfestedChiseledStoneBricks() {
-        this(PROPERTIES.getDefaultState());
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.Companion.INFESTED_CHISELED_STONE_BRICKS)
+            get() = Companion.field
     }
-
-    public BlockInfestedChiseledStoneBricks(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Infested Chiseled Stone Bricks";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.75;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.75;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
-    }
-
 }

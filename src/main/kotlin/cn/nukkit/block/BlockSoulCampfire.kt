@@ -1,45 +1,32 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.event.entity.EntityDamageByBlockEvent;
-import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.entity.Entity
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
 
-public class BlockSoulCampfire extends BlockCampfire {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SOUL_CAMPFIRE, CommonBlockProperties.EXTINGUISHED, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
+class BlockSoulCampfire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockCampfire(blockstate) {
+    override val name: String
+        get() = "Soul Campfire"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val lightLevel: Int
+        get() = if (isExtinguished) 0 else 10
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(get(BlockID.SOUL_SOIL, 0, 1))
     }
 
-    public BlockSoulCampfire() {
-        this(PROPERTIES.getDefaultState());
+    override fun getDamageEvent(entity: Entity): EntityDamageEvent? {
+        return EntityDamageByBlockEvent(this, entity, EntityDamageEvent.DamageCause.FIRE, 2f)
     }
 
-    public BlockSoulCampfire(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Soul Campfire";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return isExtinguished() ? 0 : 10;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{Item.get(BlockID.SOUL_SOIL, 0, 1)};
-    }
-
-    @Override
-    protected EntityDamageEvent getDamageEvent(Entity entity) {
-        return new EntityDamageByBlockEvent(this, entity, EntityDamageEvent.DamageCause.FIRE, 2);
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.SOUL_CAMPFIRE,
+            CommonBlockProperties.EXTINGUISHED,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )
+            get() = Companion.field
     }
 }

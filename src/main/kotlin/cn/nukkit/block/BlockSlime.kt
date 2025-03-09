@@ -1,60 +1,41 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.math.BlockFace
 
 /**
  * @author Pub4Game
  * @since 21.02.2016
  */
-public class BlockSlime extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SLIME);
+class BlockSlime : BlockTransparent {
+    constructor() : super(Companion.properties.getDefaultState())
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val hardness: Double
+        get() = 0.0
+
+    override val name: String
+        get() = "Slime Block"
+
+    override val resistance: Double
+        get() = 0.0
+
+    override val lightFilter: Int
+        get() = 1
+
+    override fun canSticksBlock(): Boolean {
+        return true
     }
 
-    public BlockSlime() {
-        super(PROPERTIES.getDefaultState());
+    override val isSolid: Boolean
+        get() = true
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return true
     }
 
-    public BlockSlime(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public String getName() {
-        return "Slime Block";
-    }
-
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-
-    @Override
-    public int getLightFilter() {
-        return 1;
-    }
-
-    @Override
-    public boolean canSticksBlock() {
-        return true;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return true;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SLIME)
+            get() = Companion.field
     }
 }

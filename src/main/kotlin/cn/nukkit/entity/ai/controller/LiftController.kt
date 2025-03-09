@@ -9,7 +9,7 @@ import cn.nukkit.entity.mob.EntityMob
 class LiftController : IController {
     override fun control(entity: EntityMob): Boolean {
         //add lift force
-        if (entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.ENABLE_LIFT_FORCE)) entity.motion.up += entity.gravity.toDouble()
+        if (entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.ENABLE_LIFT_FORCE)) entity.motion.y += entity.gravity.toDouble()
         return true
     }
 }

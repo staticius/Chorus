@@ -204,7 +204,7 @@ open class Palette<V> {
     ) {
         val p = PaletteUtils.fastReadBlockHash(input, byteBuf) //depend on LinkCompoundTag
 
-        val unknownState = BlockUnknown.PROPERTIES.defaultState as V
+        val unknownState = BlockUnknown.properties.defaultState as V
 
         if (p == null) {
             palette.add(unknownState)

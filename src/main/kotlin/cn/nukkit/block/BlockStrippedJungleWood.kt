@@ -1,24 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.WoodType;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
 
-public class BlockStrippedJungleWood extends BlockWoodStripped {
-     public static final BlockProperties PROPERTIES = new BlockProperties(STRIPPED_JUNGLE_WOOD, CommonBlockProperties.PILLAR_AXIS);
+class BlockStrippedJungleWood(blockstate: BlockState?) : BlockWoodStripped(blockstate) {
+    override fun getWoodType(): WoodType {
+        return WoodType.JUNGLE
+    }
 
-     @Override
-     @NotNull
-     public BlockProperties getProperties() {
-        return PROPERTIES;
-     }
-
-     public BlockStrippedJungleWood(BlockState blockstate) {
-         super(blockstate);
-     }
-
-    @Override
-    public WoodType getWoodType() {
-        return WoodType.JUNGLE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STRIPPED_JUNGLE_WOOD, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

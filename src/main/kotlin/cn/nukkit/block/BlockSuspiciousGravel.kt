@@ -1,69 +1,61 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.item.EntityFallingBlock;
-import cn.nukkit.event.player.PlayerInteractEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.nbt.tag.CompoundTag;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.event.player.PlayerInteractEvent
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.nbt.tag.CompoundTag.putBoolean
 
-public class BlockSuspiciousGravel extends BlockFallable {
+class BlockSuspiciousGravel @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFallable(blockstate) {
+    override val name: String
+        get() = "Suspicious Gravel"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(SUSPICIOUS_GRAVEL, CommonBlockProperties.HANGING, CommonBlockProperties.BRUSHED_PROGRESS);
+    override val hardness: Double
+        get() = 0.25
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 1.25
+
+    override fun createFallingEntity(customNbt: CompoundTag): EntityFallingBlock? {
+        customNbt.putBoolean("BreakOnGround", true)
+        return super.createFallingEntity(customNbt)
     }
 
-    public BlockSuspiciousGravel() {
-        this(PROPERTIES.getDefaultState());
-    }
-    public BlockSuspiciousGravel(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public String getName() {
-        return "Suspicious Gravel";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.25;
-    }
-
-    @Override
-    public double getResistance() {
-        return 1.25;
-    }
-
-    @Override
-    protected EntityFallingBlock createFallingEntity(CompoundTag customNbt) {
-        customNbt.putBoolean("BreakOnGround", true);
-        return super.createFallingEntity(customNbt);
-    }
-
-    @Override
-    public void onTouch(@NotNull Vector3 vector, @NotNull Item item, @NotNull BlockFace face, float fx, float fy, float fz, @Nullable Player player, PlayerInteractEvent.@NotNull Action action) {
-        int progress = getPropertyValue(CommonBlockProperties.BRUSHED_PROGRESS);
-        if(progress < 3) {
-            setPropertyValue(CommonBlockProperties.BRUSHED_PROGRESS, progress+1);
-            level.addSound(this.position, Sound.HIT_SUSPICIOUS_GRAVEL);
-            level.setBlock(this.position, this);
+    override fun onTouch(
+        vector: Vector3,
+        item: Item,
+        face: BlockFace,
+        fx: Float,
+        fy: Float,
+        fz: Float,
+        player: Player?,
+        action: PlayerInteractEvent.Action
+    ) {
+        val progress = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BRUSHED_PROGRESS)
+        if (progress < 3) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BRUSHED_PROGRESS, progress + 1)
+            level.addSound(this.position, Sound.HIT_SUSPICIOUS_GRAVEL)
+            level.setBlock(this.position, this)
         } else {
-            level.setBlock(this.position, BlockGravel.PROPERTIES.getDefaultState().toBlock());
-            level.addSound(this.position, Sound.BREAK_SUSPICIOUS_GRAVEL);
+            level.setBlock(this.position, BlockGravel.properties.getDefaultState().toBlock())
+            level.addSound(this.position, Sound.BREAK_SUSPICIOUS_GRAVEL)
         }
-        super.onTouch(vector, item, face, fx, fy, fz, player, action);
+        super.onTouch(vector, item, face, fx, fy, fz, player, action)
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{Item.AIR};
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(Item.AIR)
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.SUSPICIOUS_GRAVEL,
+            CommonBlockProperties.HANGING,
+            CommonBlockProperties.BRUSHED_PROGRESS
+        )
+            get() = Companion.field
     }
 }

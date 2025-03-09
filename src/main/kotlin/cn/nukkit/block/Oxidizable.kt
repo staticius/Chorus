@@ -1,119 +1,119 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import cn.nukkit.event.block.BlockFadeEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.particle.ScrapeParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.concurrent.ThreadLocalRandom;
+import cn.nukkit.Player
+import cn.nukkit.block.property.enums.OxidizationLevel
+import cn.nukkit.event.block.BlockFadeEvent
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.level.Locator
+import cn.nukkit.level.particle.ScrapeParticle
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * @author joserobjr
  * @since 2021-06-14
  */
-public interface Oxidizable {
+interface Oxidizable {
+    val locator: Locator
 
-    @NotNull Locator getLocator();
-
-    default int onUpdate(int type) {
+    fun onUpdate(type: Int): Int {
         if (type != Level.BLOCK_UPDATE_RANDOM) {
-            return 0;
+            return 0
         }
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        if (!(random.nextFloat() < 64F / 1125F)) {
-            return 0;
+        val random = ThreadLocalRandom.current()
+        if (!(random.nextFloat() < 64f / 1125f)) {
+            return 0
         }
 
-        int oxiLvl = getOxidizationLevel().ordinal();
-        if (oxiLvl == OxidizationLevel.OXIDIZED.ordinal()) {
-            return 0;
+        val oxiLvl = oxidizationLevel.ordinal
+        if (oxiLvl == OxidizationLevel.OXIDIZED.ordinal) {
+            return 0
         }
 
         // Just to make sure we don't accidentally degrade a waxed block.
-        if ((this instanceof Waxable) && ((Waxable) this).isWaxed()) {
-            return 0;
+        if ((this is Waxable) && (this as Waxable).isWaxed) {
+            return 0
         }
 
-        Block block = this instanceof Block? (Block) this : getLocator().getLevelBlock();
-        Locator mutableLocator = block.getLocator();
+        val block = if (this is Block) this else locator.levelBlock
+        val mutableLocator = block!!.locator
 
-        int odds = 0;
-        int cons = 0;
+        var odds = 0
+        var cons = 0
 
-        for (int x = -4; x <= 4; x++) {
-            for (int y = -4; y <= 4; y++) {
-                for (int z = -4; z <= 4; z++) {
-                    if (x == 0 && y == 0 && z == 0){
-                        continue;
+        for (x in -4..4) {
+            for (y in -4..4) {
+                for (z in -4..4) {
+                    if (x == 0 && y == 0 && z == 0) {
+                        continue
                     }
-                    mutableLocator.position.setComponents(block.position.south + x, block.position.up + y, block.position.west + z);
+                    mutableLocator.position.setComponents(
+                        block.position.x + x,
+                        block.position.y + y,
+                        block.position.z + z
+                    )
                     if (block.position.distanceManhattan(mutableLocator.position) > 4) {
-                        continue ;
+                        continue
                     }
-                    Block relative = mutableLocator.getLevelBlock();
-                    if (!(relative instanceof Oxidizable)) {
-                        continue;
+                    val relative = mutableLocator.levelBlock
+                    if (relative !is Oxidizable) {
+                        continue
                     }
-                    int relOxiLvl = ((Oxidizable) relative).getOxidizationLevel().ordinal();
+                    val relOxiLvl = (relative as Oxidizable).oxidizationLevel.ordinal
                     if (relOxiLvl < oxiLvl) {
-                        return type;
+                        return type
                     }
 
                     if (relOxiLvl > oxiLvl) {
-                        cons++;
+                        cons++
                     } else {
-                        odds++;
+                        odds++
                     }
                 }
             }
         }
 
-        float chance = (float)(cons + 1) / (float)(cons + odds + 1);
-        float multiplier = oxiLvl == 0? 0.75F : 1.0F;
-        chance = chance * chance * multiplier;
+        var chance = (cons + 1).toFloat() / (cons + odds + 1).toFloat()
+        val multiplier = if (oxiLvl == 0) 0.75f else 1.0f
+        chance = chance * chance * multiplier
         if (random.nextFloat() < chance) {
-            Block nextBlock = getBlockWithOxidizationLevel(OxidizationLevel.values()[oxiLvl + 1]);
-            BlockFadeEvent event = new BlockFadeEvent(block, nextBlock);
-            block.level.server.pluginManager.callEvent(event);
-            if (!event.isCancelled()) {
-                block.level.setBlock(block.position, event.newState);
+            val nextBlock = getBlockWithOxidizationLevel(OxidizationLevel.entries[oxiLvl + 1])
+            val event = BlockFadeEvent(block, nextBlock)
+            block.level.server.pluginManager.callEvent(event)
+            if (!event.isCancelled) {
+                block.level.setBlock(block.position, event.newState)
             }
         }
-        return type;
+        return type
     }
 
-    default boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (!item.isAxe()) {
-            return false;
+    fun onActivate(item: Item, player: Player?, blockFace: BlockFace?, fx: Float, fy: Float, fz: Float): Boolean {
+        if (!item.isAxe) {
+            return false
         }
 
-        OxidizationLevel oxidizationLevel = getOxidizationLevel();
-        if (OxidizationLevel.UNAFFECTED.equals(oxidizationLevel)) {
-            return false;
+        var oxidizationLevel = oxidizationLevel
+        if (OxidizationLevel.UNAFFECTED == oxidizationLevel) {
+            return false
         }
 
-        oxidizationLevel = OxidizationLevel.values()[oxidizationLevel.ordinal() - 1];
+        oxidizationLevel = OxidizationLevel.entries[oxidizationLevel.ordinal - 1]
         if (!setOxidizationLevel(oxidizationLevel)) {
-            return false;
+            return false
         }
 
-        Locator location = this instanceof Block? (Locator) this : getLocator();
-        if (player == null || !player.isCreative()) {
-            item.useOn(this instanceof Block? (Block) this : location.getLevelBlock());
+        val location = if (this is Block) this else locator
+        if (player == null || !player.isCreative) {
+            item.useOn((if (this is Block) this else location.levelBlock)!!)
         }
-        location.level.addParticle(new ScrapeParticle(location.position));
-        return true;
+        location.level.addParticle(ScrapeParticle(location.position))
+        return true
     }
 
-    @NotNull OxidizationLevel getOxidizationLevel();
+    val oxidizationLevel: OxidizationLevel
 
-    boolean setOxidizationLevel(@NotNull OxidizationLevel oxidizationLevel);
+    fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean
 
-    Block getBlockWithOxidizationLevel(@NotNull OxidizationLevel oxidizationLevel);
+    fun getBlockWithOxidizationLevel(oxidizationLevel: OxidizationLevel): Block
 }

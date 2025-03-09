@@ -1,23 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockJungleSlab extends BlockWoodenSlab {
-     public static final BlockProperties PROPERTIES = new BlockProperties(JUNGLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+class BlockJungleSlab(blockstate: BlockState?) : BlockWoodenSlab(blockstate, BlockID.Companion.JUNGLE_DOUBLE_SLAB) {
+    override fun getSlabName(): String {
+        return "Jungle"
+    }
 
-     @Override
-     @NotNull
-     public BlockProperties getProperties() {
-        return PROPERTIES;
-     }
-
-     public BlockJungleSlab(BlockState blockstate) {
-         super(blockstate,JUNGLE_DOUBLE_SLAB);
-     }
-
-    @Override
-    public String getSlabName() {
-        return "Jungle";
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.Companion.JUNGLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

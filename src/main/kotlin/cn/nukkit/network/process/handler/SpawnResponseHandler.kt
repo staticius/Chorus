@@ -2,7 +2,6 @@ package cn.nukkit.network.process.handler
 
 import cn.nukkit.Player
 import cn.nukkit.Server
-import cn.nukkit.entity.Entity.getServer
 import cn.nukkit.entity.data.property.EntityProperty.Companion.getPacketCache
 import cn.nukkit.entity.data.property.EntityProperty.Companion.getPlayerPropertyCache
 import cn.nukkit.nbt.tag.CompoundTag
@@ -123,10 +122,10 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         startPk.entityRuntimeId = player.getId()
         startPk.playerGamemode = Player.toNetworkGamemode(player.gamemode)
 
-        startPk.x = player.position.south.toFloat()
+        startPk.x = player.position.x.toFloat()
         startPk.y =
-            (if (player.isOnGround()) player.position.up + player.getEyeHeight() else player.position.up).toFloat() //防止在地上生成容易陷进地里
-        startPk.z = player.position.west.toFloat()
+            (if (player.isOnGround()) player.position.y + player.getEyeHeight() else player.position.y).toFloat() //防止在地上生成容易陷进地里
+        startPk.z = player.position.z.toFloat()
         startPk.yaw = player.rotation.yaw.toFloat()
         startPk.pitch = player.rotation.pitch.toFloat()
         startPk.seed = -1L

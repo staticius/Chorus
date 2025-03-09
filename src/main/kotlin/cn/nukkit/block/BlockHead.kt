@@ -1,150 +1,132 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntitySkull;
-import cn.nukkit.event.redstone.RedstoneUpdateEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.utils.Faceable;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntitySkull
+import cn.nukkit.event.redstone.RedstoneUpdateEvent
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.math.SimpleAxisAlignedBB
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.utils.Faceable
+import cn.nukkit.utils.RedstoneComponent
+import kotlin.math.floor
 
-import javax.annotation.Nullable;
+abstract class BlockHead(blockState: BlockState?) : BlockTransparent(blockState), RedstoneComponent,
+    BlockEntityHolder<BlockEntitySkull?>, Faceable {
+    override val blockEntityType: String
+        get() = BlockEntity.SKULL
 
-public abstract class BlockHead extends BlockTransparent implements RedstoneComponent, BlockEntityHolder<BlockEntitySkull>, Faceable {
+    override val blockEntityClass: Class<out BlockEntitySkull>
+        get() = BlockEntitySkull::class.java
 
-    public BlockHead(BlockState blockState) {
-        super(blockState);
+    override val hardness: Double
+        get() = 1.0
+
+    override val resistance: Double
+        get() = 5.0
+
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.SKULL;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun canBeFlowedInto(): Boolean {
+        return true
     }
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntitySkull> getBlockEntityClass() {
-        return BlockEntitySkull.class;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 5;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return true;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (face == BlockFace.DOWN) {
-            return false;
+            return false
         }
 
-        if (player == null)
-            return false;
+        if (player == null) return false
 
-        setBlockFace(face);
-        CompoundTag nbt = new CompoundTag()
-                .putByte("SkullType", item.getDamage())
-                .putByte("Rot", (int) Math.floor((player.rotation.yaw * 16 / 360) + 0.5) & 0x0f);
+        blockFace = face
+        val nbt = CompoundTag()
+            .putByte("SkullType", item.damage)
+            .putByte("Rot", floor((player.rotation.yaw * 16 / 360) + 0.5).toInt() and 0x0f)
         if (item.hasCustomBlockData()) {
-            for (var e : item.getCustomBlockData().getEntrySet()) {
-                nbt.put(e.getKey(), e.getValue());
+            for ((key, value) in item.customBlockData!!.entrySet) {
+                nbt.put(key, value)
             }
         }
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;
+        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
         // TODO: 2016/2/3 SPAWN WITHER
     }
 
-    @Override
-    public int onUpdate(int type) {
-        if ((type != Level.BLOCK_UPDATE_REDSTONE && type != Level.BLOCK_UPDATE_NORMAL) || !level.server.settings.levelSettings().enableRedstone()) {
-            return 0;
+    override fun onUpdate(type: Int): Int {
+        if ((type != Level.BLOCK_UPDATE_REDSTONE && type != Level.BLOCK_UPDATE_NORMAL) || !level.server.settings.levelSettings()
+                .enableRedstone()
+        ) {
+            return 0
         }
 
-        BlockEntitySkull entity = getBlockEntity();
-        if (entity == null || entity.namedTag.getByte("SkullType") != 5) {
-            return 0;
+        val entity = blockEntity
+        if (entity == null || entity.namedTag.getByte("SkullType").toInt() != 5) {
+            return 0
         }
 
-        RedstoneUpdateEvent ev = new RedstoneUpdateEvent(this);
-        level.server.pluginManager.callEvent(ev);
-        if (ev.isCancelled()) {
-            return 0;
+        val ev = RedstoneUpdateEvent(this)
+        level.server.pluginManager.callEvent(ev)
+        if (ev.isCancelled) {
+            return 0
         }
 
-        entity.setMouthMoving(this.isGettingPower());
-        return Level.BLOCK_UPDATE_REDSTONE;
+        entity.setMouthMoving(this.isGettingPower)
+        return Level.BLOCK_UPDATE_REDSTONE
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean sticksToPiston() {
-        return false;
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
+
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        val bb: AxisAlignedBB = SimpleAxisAlignedBB(
+            position.x + 0.25,
+            position.y,
+            position.z + 0.25,
+            position.x + 1 - 0.25, position.y + 0.5, position.z + 1 - 0.25
+        )
+        return when (this.blockFace) {
+            BlockFace.NORTH -> bb.offset(0.0, 0.25, 0.25)
+            BlockFace.SOUTH -> bb.offset(0.0, 0.25, -0.25)
+            BlockFace.WEST -> bb.offset(0.25, 0.25, 0.0)
+            BlockFace.EAST -> bb.offset(-0.25, 0.25, 0.0)
+            else -> bb
+        }
     }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index);
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        AxisAlignedBB bb = new SimpleAxisAlignedBB(this.position.south + 0.25, this.position.up, this.position.west + 0.25, this.position.south + 1 - 0.25, this.position.up + 0.5, this.position.west + 1 - 0.25);
-        return switch (this.getBlockFace()) {
-            case NORTH -> bb.offset(0, 0.25, 0.25);
-            case SOUTH -> bb.offset(0, 0.25, -0.25);
-            case WEST -> bb.offset(0.25, 0.25, 0);
-            case EAST -> bb.offset(-0.25, 0.25, 0);
-            default -> bb;
-        };
-    }
-
-
 }

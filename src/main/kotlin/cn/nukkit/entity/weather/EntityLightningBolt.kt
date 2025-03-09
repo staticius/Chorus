@@ -108,15 +108,15 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                 val cleanOxidizationAround: Supplier<Vector3?> =
                     Supplier<Vector3?> {
                         for (attempt in 0..9) {
-                            randomPos.south = directionPos.south + (random.nextInt(3) - 1)
-                            randomPos.up = directionPos.up + (random.nextInt(3) - 1)
-                            randomPos.west = directionPos.west + (random.nextInt(3) - 1)
+                            randomPos.x = directionPos.x + (random.nextInt(3) - 1)
+                            randomPos.y = directionPos.y + (random.nextInt(3) - 1)
+                            randomPos.z = directionPos.z + (random.nextInt(3) - 1)
                             val possibility: Block = level!!.getBlock(randomPos)
                             if (isVulnerableOxidizable(possibility)) {
                                 val nextPos: Vector3 = randomPos.clone()
                                 changes.compute(Locator(nextPos, level!!)) { k: Locator?, v: OxidizationLevel? ->
                                     val nextLevel: Int =
-                                        if (v == null) (possibility as Oxidizable).getOxidizationLevel().ordinal - 1 else v.ordinal - 1
+                                        if (v == null) (possibility as Oxidizable).oxidizationLevel.ordinal - 1 else v.ordinal - 1
                                     OxidizationLevel.entries.get(max(0.0, nextLevel.toDouble()).toInt())
                                 }
                                 return@Supplier nextPos
@@ -214,7 +214,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
 
     companion object {
         private fun isVulnerableOxidizable(block: Block): Boolean {
-            return block is Oxidizable && (block !is Waxable || !(block as Waxable).isWaxed())
+            return block is Oxidizable && (block !is Waxable || !(block as Waxable).isWaxed)
         }
     }
 }

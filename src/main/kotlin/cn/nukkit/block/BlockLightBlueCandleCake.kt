@@ -1,26 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockLightBlueCandleCake extends BlockCandleCake {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIGHT_BLUE_CANDLE_CAKE, CommonBlockProperties.LIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockLightBlueCandleCake @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCandleCake(blockstate) {
+    override fun toCandleForm(): BlockCandle {
+        return BlockLightBlueCandle()
     }
 
-    public BlockLightBlueCandleCake() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockLightBlueCandleCake(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public BlockCandle toCandleForm() {
-        return new BlockLightBlueCandle();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LIGHT_BLUE_CANDLE_CAKE, CommonBlockProperties.LIT)
+            get() = Companion.field
     }
 }

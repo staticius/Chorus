@@ -1,50 +1,34 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
 /**
  * @author Angelic47 (Nukkit Project)
  */
-public class BlockGlass extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GLASS);
+open class BlockGlass : BlockTransparent {
+    constructor() : super(Companion.properties.defaultState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Glass"
+
+    override val resistance: Double
+        get() = 0.3
+
+    override val hardness: Double
+        get() = 0.3
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    public BlockGlass() {
-        super(PROPERTIES.getDefaultState());
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    public BlockGlass(BlockState blockState) {
-        super(blockState);
+    companion object {
+        val properties: BlockProperties = BlockProperties(GLASS)
+            get() = Companion.field
     }
-
-    @Override
-    public String getName() {
-        return "Glass";
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.3;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.3;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
-    }
-
 }

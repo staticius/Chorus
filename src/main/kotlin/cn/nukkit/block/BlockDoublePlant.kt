@@ -1,172 +1,171 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.DoublePlantType;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.tags.BlockTags;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.DoublePlantType
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemBlock
+import cn.nukkit.item.ItemID
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import cn.nukkit.tags.BlockTags
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
+abstract class BlockDoublePlant(blockstate: BlockState?) : BlockFlowable(blockstate) {
+    abstract val doublePlantType: DoublePlantType
 
-import static cn.nukkit.block.property.CommonBlockProperties.DOUBLE_PLANT_TYPE;
-import static cn.nukkit.block.property.CommonBlockProperties.UPPER_BLOCK_BIT;
+    var isTopHalf: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPPER_BLOCK_BIT)
+        set(topHalf) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.UPPER_BLOCK_BIT,
+                topHalf
+            )
+        }
 
-public abstract class BlockDoublePlant extends BlockFlowable {
-    public BlockDoublePlant(BlockState blockstate) {
-        super(blockstate);
+    override fun toItem(): Item? {
+        val aux = doublePlantType.ordinal
+        return ItemBlock(this, aux)
     }
 
-    @NotNull
-    public abstract DoublePlantType getDoublePlantType();
+    override val name: String
+        /*@Override
+            public boolean canBeReplaced() {
+                return getDoublePlantType() == DoublePlantType.GRASS || getDoublePlantType() == DoublePlantType.FERN;
+            }*/
+        get() = doublePlantType.name
 
-    public boolean isTopHalf() {
-        return getPropertyValue(UPPER_BLOCK_BIT);
-    }
-
-    public void setTopHalf(boolean topHalf) {
-        setPropertyValue(UPPER_BLOCK_BIT, topHalf);
-    }
-
-    @Override
-    public Item toItem() {
-        int aux = getDoublePlantType().ordinal();
-        return new ItemBlock(this, aux);
-    }
-
-    /*@Override
-    public boolean canBeReplaced() {
-        return getDoublePlantType() == DoublePlantType.GRASS || getDoublePlantType() == DoublePlantType.FERN;
-    }*/
-
-    @Override
-    public String getName() {
-        return getDoublePlantType().name();
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (isTopHalf()) {
+            if (isTopHalf) {
                 // Top
-                if (!(this.down() instanceof BlockDoublePlant)) {
-                    this.level.setBlock(this.position, Block.get(BlockID.AIR), false, true);
-                    return Level.BLOCK_UPDATE_NORMAL;
+                if (down() !is BlockDoublePlant) {
+                    level.setBlock(this.position, get(AIR), false, true)
+                    return Level.BLOCK_UPDATE_NORMAL
                 }
             } else {
                 // Bottom
-                if (!isSupportValid(down())) {
-                    this.level.setBlock(this.position, Block.get(BlockID.AIR), false, true);
-                    return Level.BLOCK_UPDATE_NORMAL;
+                if (!isSupportValid(down()!!)) {
+                    level.setBlock(this.position, get(AIR), false, true)
+                    return Level.BLOCK_UPDATE_NORMAL
                 }
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Block up = up();
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val up = up()
 
-        if (up.isAir() && isSupportValid(down())) {
-            setTopHalf(false);
-            this.level.setBlock(block.position, this, true, false); // If we update the bottom half, it will drop the item because there isn't a flower block above
+        if (up!!.isAir && isSupportValid(down()!!)) {
+            isTopHalf = false
+            level.setBlock(
+                block.position,
+                this,
+                true,
+                false
+            ) // If we update the bottom half, it will drop the item because there isn't a flower block above
 
-            setTopHalf(true);
-            this.level.setBlock(up.position, this, true, true);
-            this.level.updateAround(this.position);
-            return true;
+            isTopHalf = true
+            level.setBlock(up.position, this, true, true)
+            level.updateAround(this.position)
+            return true
         }
 
-        return false;
+        return false
     }
 
-    private boolean isSupportValid(Block support) {
-        if(support instanceof BlockDoublePlant plant) {
-            return !plant.isTopHalf();
+    private fun isSupportValid(support: Block): Boolean {
+        if (support is BlockDoublePlant) {
+            return !support.isTopHalf
         }
-        return support.is(BlockTags.DIRT);
+        return support.`is`(BlockTags.DIRT)
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        Block down = down();
+    override fun onBreak(item: Item?): Boolean {
+        val down = down()
 
-        if (isTopHalf()) { // Top half
-            this.level.useBreakOn(down.position);
+        if (isTopHalf) { // Top half
+            level.useBreakOn(down!!.position)
         } else {
-            this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
+            level.setBlock(this.position, get(AIR), true, true)
         }
 
-        return true;
+        return true
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (isTopHalf()) {
-            return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (isTopHalf) {
+            return Item.EMPTY_ARRAY
         }
 
-        if (getDoublePlantType() == DoublePlantType.GRASS || getDoublePlantType() == DoublePlantType.FERN) {
-            boolean dropSeeds = ThreadLocalRandom.current().nextInt(10) == 0;
-            if (item.isShears()) {
+        if (doublePlantType == DoublePlantType.GRASS || doublePlantType == DoublePlantType.FERN) {
+            val dropSeeds = ThreadLocalRandom.current().nextInt(10) == 0
+            if (item.isShears) {
                 //todo enchantment
-                if (dropSeeds) {
-                    return new Item[]{
-                            Item.get(ItemID.WHEAT_SEEDS),
-                            toItem()
-                    };
+                return if (dropSeeds) {
+                    arrayOf(
+                        Item.get(ItemID.WHEAT_SEEDS),
+                        toItem()
+                    )
                 } else {
-                    return new Item[]{
-                            toItem()
-                    };
+                    arrayOf(
+                        toItem()
+                    )
                 }
             }
-            if (dropSeeds) {
-                return new Item[]{
-                        Item.get(ItemID.WHEAT_SEEDS)
-                };
+            return if (dropSeeds) {
+                arrayOf(
+                    Item.get(ItemID.WHEAT_SEEDS)
+                )
             } else {
-                return Item.EMPTY_ARRAY;
+                Item.EMPTY_ARRAY
             }
         }
 
-        return new Item[]{toItem()};
+        return arrayOf(toItem())
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) { //Bone meal
-            switch (getDoublePlantType()) {
-                case SUNFLOWER:
-                case SYRINGA:
-                case ROSE:
-                case PAEONIA:
-                    if (player != null && (player.gamemode & 0x01) == 0) {
-                        item.count--;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) { //Bone meal
+            when (doublePlantType) {
+                DoublePlantType.SUNFLOWER, DoublePlantType.SYRINGA, DoublePlantType.ROSE, DoublePlantType.PAEONIA -> {
+                    if (player != null && (player.gamemode and 0x01) == 0) {
+                        item.count--
                     }
-                    this.level.addParticle(new BoneMealParticle(this.position));
-                    this.level.dropItem(this.position, this.toItem());
+                    level.addParticle(BoneMealParticle(this.position))
+                    level.dropItem(this.position, toItem()!!)
+                }
             }
 
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
-    }
+    override val isFertilizable: Boolean
+        get() = true
 }

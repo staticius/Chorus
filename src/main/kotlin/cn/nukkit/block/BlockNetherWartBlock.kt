@@ -1,43 +1,23 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
+class BlockNetherWartBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Nether Wart Block"
 
-public class BlockNetherWartBlock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(NETHER_WART_BLOCK);
+    override val resistance: Double
+        get() = 5.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 1.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.NETHER_WART_BLOCK)
+            get() = Companion.field
     }
-
-    public BlockNetherWartBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockNetherWartBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Nether Wart Block";
-    }
-
-    @Override
-    public double getResistance() {
-        return 5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HOE;
-    }
-
 }

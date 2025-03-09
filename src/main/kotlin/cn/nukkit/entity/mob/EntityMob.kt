@@ -325,16 +325,16 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     override fun moveDelta() {
         val pk = MoveEntityDeltaPacket()
         pk.runtimeEntityId = this.getId()
-        if (prevPosition.south != position.south) {
-            pk.x = position.south.toFloat()
+        if (prevPosition.x != position.x) {
+            pk.x = position.x.toFloat()
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_X.toInt()).toShort()
         }
-        if (prevPosition.up != position.up) {
-            pk.y = position.up.toFloat()
+        if (prevPosition.y != position.y) {
+            pk.y = position.y.toFloat()
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_Y.toInt()).toShort()
         }
-        if (prevPosition.west != position.west) {
-            pk.z = position.west.toFloat()
+        if (prevPosition.z != position.z) {
+            pk.z = position.z.toFloat()
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_Z.toInt()).toShort()
         }
         if (prevRotation.pitch != rotation.pitch) {

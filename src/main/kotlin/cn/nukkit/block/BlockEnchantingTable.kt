@@ -1,145 +1,125 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityEnchantTable;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.StringTag;
-import cn.nukkit.nbt.tag.Tag;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.Map;
+import cn.nukkit.Player
+import cn.nukkit.blockentity.*
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.StringTag
+import cn.nukkit.nbt.tag.Tag
 
 /**
  * @author CreeperFace
  * @since 2015/11/22
  */
+class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), BlockEntityHolder<BlockEntityEnchantTable> {
+    override val name: String
+        get() = "Enchanting Table"
 
-public class BlockEnchantingTable extends BlockTransparent implements BlockEntityHolder<BlockEntityEnchantTable> {
+    override val blockEntityType: String
+        get() = BlockEntity.ENCHANT_TABLE
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(ENCHANTING_TABLE);
+    override val blockEntityClass: Class<out E>
+        get() = BlockEntityEnchantTable::class.java
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val hardness: Double
+        get() = 5.0
+
+    override val resistance: Double
+        get() = 6000.0
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override val lightLevel: Int
+        get() = 7
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockEnchantingTable() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override var maxY: Double
+        get() = y + 12 / 16.0
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    public BlockEnchantingTable(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public String getName() {
-        return "Enchanting Table";
-    }
-
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.ENCHANT_TABLE;
-    }
-
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityEnchantTable> getBlockEntityClass() {
-        return BlockEntityEnchantTable.class;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public double getHardness() {
-        return 5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6000;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 7;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public double getMaxY() {
-        return getY() + 12 / 16.0;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        CompoundTag nbt = new CompoundTag();
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val nbt = CompoundTag()
 
         if (item.hasCustomName()) {
-            nbt.putString("CustomName", item.getCustomName());
+            nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            Map<String, Tag> customData = item.getCustomBlockData().getTags();
-            for (Map.Entry<String, Tag> tag : customData.entrySet()) {
-                nbt.put(tag.getKey(), tag.getValue());
+            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            for ((key, value) in customData) {
+                nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;
+        return BlockEntityHolder.Companion.setBlockAndCreateEntity<BlockEntityEnchantTable?, BlockEnchantingTable>(
+            this,
+            true,
+            true,
+            nbt
+        ) != null
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player == null) {
-            return true;
+            return true
         }
-        Item itemInHand = player.getInventory().getItemInHand();
-        if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull())) {
-            return false;
-        }
-
-        BlockEntityEnchantTable enchantTable = getOrCreateBlockEntity();
-        if (enchantTable.namedTag.contains("Lock") && enchantTable.namedTag.get("Lock") instanceof StringTag
-                && !enchantTable.namedTag.getString("Lock").equals(item.getCustomName())) {
-            return false;
+        val itemInHand = player.getInventory().itemInHand
+        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+            return false
         }
 
-        player.addWindow(enchantTable.getInventory());
+        val enchantTable = getOrCreateBlockEntity()
+        if (enchantTable.namedTag.contains("Lock") && enchantTable.namedTag.get("Lock") is StringTag
+            && (enchantTable.namedTag.getString("Lock") != item.customName)
+        ) {
+            return false
+        }
 
-        return true;
+        player.addWindow(enchantTable.getInventory())
+
+        return true
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(ENCHANTING_TABLE)
+            get() = Companion.field
     }
 }

@@ -1,34 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION;
+class BlockBlastFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockLitBlastFurnace(blockstate) {
+    override val name: String
+        get() = "Blast Furnace"
 
-public class BlockBlastFurnace extends BlockLitBlastFurnace {
+    override val lightLevel: Int
+        get() = 0
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(BLAST_FURNACE, MINECRAFT_CARDINAL_DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockBlastFurnace() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockBlastFurnace(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Blast Furnace";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 0;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BLAST_FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

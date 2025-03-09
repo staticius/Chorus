@@ -1,84 +1,61 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.enchantment.Enchantment
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockGildedBlackstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Gilded Blackstone"
 
-public class BlockGildedBlackstone extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GILDED_BLACKSTONE);
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockGildedBlackstone() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockGildedBlackstone(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Gilded Blackstone";
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (!item.isPickaxe() || item.getTier() < ItemTool.TIER_WOODEN) {
-            return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (!item.isPickaxe || item.tier < ItemTool.TIER_WOODEN) {
+            return Item.EMPTY_ARRAY
         }
 
-        int dropOdds;
-        int fortune = 0;
-        Enchantment enchantment = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING);
+        val dropOdds: Int
+        var fortune = 0
+        val enchantment = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
         if (enchantment != null) {
-            fortune = enchantment.getLevel();
+            fortune = enchantment.level
         }
 
-        dropOdds = switch (fortune) {
-            case 0 -> 10;
-            case 1 -> 7;
-            case 2 -> 4;
-            default -> 1;
-        };
+        dropOdds = when (fortune) {
+            0 -> 10
+            1 -> 7
+            2 -> 4
+            else -> 1
+        }
 
-        ThreadLocalRandom random = ThreadLocalRandom.current();
+        val random = ThreadLocalRandom.current()
         if (dropOdds > 1 && random.nextInt(dropOdds) != 0) {
-            return new Item[] { toItem() };
+            return arrayOf(toItem())
         }
 
-        return new Item[] { Item.get(ItemID.GOLD_NUGGET, 0, random.nextInt(2, 6)) };
+        return arrayOf(get(ItemID.GOLD_NUGGET, 0, random.nextInt(2, 6)))
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
+    override val hardness: Double
+        get() = 1.5
 
-    @Override
-    public double getResistance() {
-        return 6;
+    override val resistance: Double
+        get() = 6.0
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(GILDED_BLACKSTONE)
+            get() = Companion.field
     }
 }

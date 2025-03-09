@@ -1,55 +1,31 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
+class BlockPurpurBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Purpur"
 
-public class BlockPurpurBlock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PURPUR_BLOCK, PILLAR_AXIS);
+    override val hardness: Double
+        get() = 1.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 30.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun toItem(): Item? {
+        return ItemBlock(properties.defaultState.toBlock())
     }
 
-    public BlockPurpurBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPurpurBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Purpur";
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 30;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this.getProperties().getDefaultState().toBlock());
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PURPUR_BLOCK, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

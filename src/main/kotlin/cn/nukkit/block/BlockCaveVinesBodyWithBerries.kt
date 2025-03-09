@@ -1,46 +1,26 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-import static cn.nukkit.block.property.CommonBlockProperties.GROWING_PLANT_AGE;
+class BlockCaveVinesBodyWithBerries @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCaveVines(blockstate) {
+    override val name: String
+        get() = "Cave Vines Body With Berries"
 
+    override val isTransparent: Boolean
+        get() = true
 
-public class BlockCaveVinesBodyWithBerries extends BlockCaveVines {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CAVE_VINES_BODY_WITH_BERRIES, GROWING_PLANT_AGE);
+    override val lightLevel: Int
+        get() = 14
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(Item.get(ItemID.GLOW_BERRIES))
     }
 
-    public BlockCaveVinesBodyWithBerries() {
-        this(PROPERTIES.getDefaultState());
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(CAVE_VINES_BODY_WITH_BERRIES, CommonBlockProperties.GROWING_PLANT_AGE)
+            get() = Companion.field
     }
-
-    public BlockCaveVinesBodyWithBerries(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Cave Vines Body With Berries";
-    }
-
-    @Override
-    public boolean isTransparent() {
-        return true;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 14;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{Item.get(ItemID.GLOW_BERRIES)};
-    }
-
 }

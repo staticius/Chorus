@@ -51,8 +51,8 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
                     for (i in 0..15) {
                         if (exitPortal!!.y <= 16 || exitPortal!!.y > 128) {
                             this.exitPortal = Vector3(
-                                position.south + shift, 0.0,
-                                position.west + shift
+                                position.x + shift, 0.0,
+                                position.z + shift
                             ).normalize().multiply((0x500 + (i * 0xF)).toDouble()).asBlockVector3()
                             this.exitPortal = this.safeExitPortal
                         } else break@shift
@@ -232,6 +232,6 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
         // Default value
         private val defaultExitPortal = BlockVector3(0, 0, 0)
 
-        private val STATE_BEDROCK: BlockState = BlockBedrock.PROPERTIES.defaultState
+        private val STATE_BEDROCK: BlockState = BlockBedrock.properties.defaultState
     }
 }

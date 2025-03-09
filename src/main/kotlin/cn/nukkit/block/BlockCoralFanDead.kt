@@ -1,38 +1,26 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.level.Level;
+import cn.nukkit.level.Level
 
+abstract class BlockCoralFanDead(blockstate: BlockState?) : BlockCoralFan(blockstate) {
+    override val name: String
+        get() = "Dead " + super.name
 
-public abstract class BlockCoralFanDead extends BlockCoralFan {
-    public BlockCoralFanDead(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val isDead: Boolean
+        get() = true
 
-    @Override
-    public String getName() {
-        return "Dead " + super.getName();
-    }
-
-    @Override
-    public boolean isDead() {
-        return true;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!getSide(getRootsFace()).isSolid()) {
-                this.level.useBreakOn(this.position);
+            if (!getSide(rootsFace)!!.isSolid) {
+                level.useBreakOn(this.position)
             }
-            return type;
+            return type
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            return super.onUpdate(type);
+            return super.onUpdate(type)
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public Block getDeadCoralFan() {
-        return this;
-    }
+    override val deadCoralFan: Block
+        get() = this
 }

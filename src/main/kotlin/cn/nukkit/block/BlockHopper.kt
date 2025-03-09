@@ -1,307 +1,279 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityHopper;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.item.EntityItem;
-import cn.nukkit.event.inventory.InventoryMoveItemEvent;
-import cn.nukkit.inventory.ContainerInventory;
-import cn.nukkit.inventory.Inventory;
-import cn.nukkit.inventory.InventoryHolder;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.utils.Faceable;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.TOGGLE_BIT;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.BlockComposter.isFull
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityHopper
+import cn.nukkit.entity.item.EntityItem
+import cn.nukkit.event.inventory.InventoryMoveItemEvent
+import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
+import cn.nukkit.inventory.InventoryHolder
+import cn.nukkit.inventory.RecipeInventoryHolder
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.level.Locator
+import cn.nukkit.math.*
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.utils.Faceable
+import cn.nukkit.utils.RedstoneComponent
 
 /**
  * @author CreeperFace
  */
-public class BlockHopper extends BlockTransparent implements RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityHopper> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(HOPPER, CommonBlockProperties.FACING_DIRECTION, TOGGLE_BIT);
+class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityHopper?> {
+    override val blockEntityClass: Class<out BlockEntityHopper>
+        get() = BlockEntityHopper::class.java
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val blockEntityType: String
+        get() = BlockEntity.HOPPER
 
-    public BlockHopper() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Hopper Block"
 
-    public BlockHopper(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val hardness: Double
+        get() = 3.0
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityHopper> getBlockEntityClass() {
-        return BlockEntityHopper.class;
-    }
+    override val resistance: Double
+        get() = 24.0
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.HOPPER;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public String getName() {
-        return "Hopper Block";
-    }
-
-    @Override
-    public double getHardness() {
-        return 3;
-    }
-
-    @Override
-    public double getResistance() {
-        return 24;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        BlockFace facing = face.getOpposite();
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        var facing = face.getOpposite()
 
         if (facing == BlockFace.UP) {
-            facing = BlockFace.DOWN;
+            facing = BlockFace.DOWN
         }
 
-        setBlockFace(facing);
+        blockFace = facing
 
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
-            boolean powered = this.isGettingPower();
+        if (level.server.settings.levelSettings().enableRedstone()) {
+            val powered = this.isGettingPower
 
-            if (powered == this.isEnabled()) {
-                this.setEnabled(!powered);
+            if (powered == this.isEnabled) {
+                this.isEnabled = !powered
             }
         }
 
-        CompoundTag nbt = new CompoundTag().putList("Items", new ListTag<>());
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;
+        val nbt = CompoundTag().putList("Items", ListTag())
+        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(isNotActivate(player)) return false;
+    override fun onActivate(
+        item: Item,
+        player: Player,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
 
-        BlockEntityHopper blockEntity = getOrCreateBlockEntity();
+        val blockEntity = orCreateBlockEntity!!
 
-        return player.addWindow(blockEntity.getInventory()) != -1;
+        return player.addWindow(blockEntity.getInventory()) != -1
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public int getComparatorInputOverride() {
-        BlockEntityHopper blockEntity = getBlockEntity();
+    override val comparatorInputOverride: Int
+        get() {
+            val blockEntity = blockEntity
 
-        if (blockEntity != null) {
-            return ContainerInventory.calculateRedstone(blockEntity.getInventory());
+            if (blockEntity != null) {
+                return calculateRedstone(blockEntity.getInventory())
+            }
+
+            return super.comparatorInputOverride
         }
 
-        return super.getComparatorInputOverride();
-    }
+    var isEnabled: Boolean
+        get() = !getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.TOGGLE_BIT)
+        set(enabled) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.TOGGLE_BIT, !enabled)
+        }
 
-    public boolean isEnabled() {
-        return !getPropertyValue(TOGGLE_BIT);
-    }
-
-    public void setEnabled(boolean enabled) {
-        setPropertyValue(TOGGLE_BIT, !enabled);
-    }
-
-    @Override
-    public int onUpdate(int type) {
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return 0;
+    override fun onUpdate(type: Int): Int {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return 0
         }
 
         if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            boolean disabled = this.level.isBlockPowered(this.position);
+            val disabled = level.isBlockPowered(this.position)
 
-            if (disabled == this.isEnabled()) {
-                this.setEnabled(!disabled);
-                this.level.setBlock(this.position, this, false, true);
-                BlockEntityHopper be = getBlockEntity();
+            if (disabled == this.isEnabled) {
+                this.isEnabled = !disabled
+                level.setBlock(this.position, this, false, true)
+                val be = blockEntity
                 if (be != null) {
-                    be.setDisabled(disabled);
+                    be.isDisabled = disabled
                     if (!disabled) {
-                        be.scheduleUpdate();
+                        be.scheduleUpdate()
                     }
                 }
             }
 
-            return type;
+            return type
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return side == BlockFace.UP
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    interface IHopper {
+        fun getLocator(): Locator?
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index);
-    }
+        fun pullItems(hopperHolder: InventoryHolder, hopperPos: Locator): Boolean {
+            val hopperInv: Unit = hopperHolder.inventory
 
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION));
-    }
+            if (hopperInv.isFull) return false
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return side == BlockFace.UP;
-    }
+            val blockSide = hopperPos.getSide(BlockFace.UP)!!.tickCachedLevelBlock
+            val blockEntity =
+                hopperPos.level.getBlockEntity(Vector3().setComponentsAdding(hopperPos.position, BlockFace.UP))
 
-    public interface IHopper {
-        Locator getLocator();
+            if (blockEntity is InventoryHolder) {
+                val inv = if (blockEntity is RecipeInventoryHolder) holder.productView else blockEntity.inventory!!
 
-        default boolean pullItems(InventoryHolder hopperHolder, Locator hopperPos) {
-            var hopperInv = hopperHolder.inventory;
+                for (i in 0..<inv.size) {
+                    val item = inv.getItem(i)
 
-            if (hopperInv.isFull)
-                return false;
+                    if (!item.isNull) {
+                        val itemToAdd: Item = item.clone()
+                        itemToAdd.count = 1
 
-            Block blockSide = hopperPos.getSide(BlockFace.UP).getTickCachedLevelBlock();
-            BlockEntity blockEntity = hopperPos.level.getBlockEntity(new Vector3().setComponentsAdding(hopperPos.position, BlockFace.UP));
+                        if (!hopperInv.canAddItem(itemToAdd)) continue
 
-            if (blockEntity instanceof InventoryHolder holder) {
-                Inventory inv = holder instanceof cn.nukkit.inventory.RecipeInventoryHolder recipeInventoryHolder ? recipeInventoryHolder.productView : holder.inventory;
+                        val ev = InventoryMoveItemEvent(
+                            inv,
+                            hopperInv,
+                            hopperHolder,
+                            itemToAdd,
+                            InventoryMoveItemEvent.Action.SLOT_CHANGE
+                        )
+                        instance!!.pluginManager.callEvent(ev)
 
-                for (int i = 0; i < inv.size; i++) {
-                    Item item = inv.getItem(i);
+                        if (ev.isCancelled) continue
 
-                    if (!item.isNull()) {
-                        Item itemToAdd = item.clone();
-                        itemToAdd.count = 1;
+                        val items: Array<Item> = hopperInv.addItem(itemToAdd)
 
-                        if (!hopperInv.canAddItem(itemToAdd))
-                            continue;
+                        if (items.size >= 1) continue
 
-                        InventoryMoveItemEvent ev = new InventoryMoveItemEvent(inv, hopperInv, hopperHolder, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE);
-                        Server.getInstance().pluginManager.callEvent(ev);
+                        item.count--
 
-                        if (ev.isCancelled())
-                            continue;
-
-                        Item[] items = hopperInv.addItem(itemToAdd);
-
-                        if (items.length >= 1)
-                            continue;
-
-                        item.count--;
-
-                        inv.setItem(i, item);
-                        return true;
+                        inv.setItem(i, item)
+                        return true
                     }
                 }
-            } else if (blockSide instanceof BlockComposter blockComposter) {
-                if (blockComposter.isFull()) {
+            } else if (blockSide is BlockComposter) {
+                if (blockSide.isFull) {
                     //检查是否能输入
-                    if (!hopperInv.canAddItem(blockComposter.getOutPutItem()))
-                        return false;
+                    if (!hopperInv.canAddItem(blockSide.outPutItem)) return false
 
                     //Will call BlockComposterEmptyEvent
-                    var item = blockComposter.empty();
+                    val item = blockSide.empty()
 
-                    if (item == null || item.isNull())
-                        return false;
+                    if (item == null || item.isNull) return false
 
-                    Item itemToAdd = item.clone();
-                    itemToAdd.count = 1;
+                    val itemToAdd: Item = item.clone()
+                    itemToAdd.count = 1
 
-                    Item[] items = hopperInv.addItem(itemToAdd);
+                    val items: Array<Item> = hopperInv.addItem(itemToAdd)
 
-                    return items.length < 1;
+                    return items.size < 1
                 }
             }
-            return false;
+            return false
         }
 
-        default boolean pickupItems(InventoryHolder hopperHolder, Locator hopperPos, AxisAlignedBB pickupArea) {
-            var hopperInv = hopperHolder.inventory;
+        fun pickupItems(hopperHolder: InventoryHolder, hopperPos: Locator, pickupArea: AxisAlignedBB): Boolean {
+            val hopperInv: Unit = hopperHolder.inventory
 
-            if (hopperInv.isFull)
-                return false;
+            if (hopperInv.isFull) return false
 
-            boolean pickedUpItem = false;
+            var pickedUpItem = false
 
-            for (Entity entity : hopperPos.level.getCollidingEntities(pickupArea)) {
-                if (entity.isClosed() || !(entity instanceof EntityItem itemEntity))
-                    continue;
+            for (entity in hopperPos.level.getCollidingEntities(pickupArea)) {
+                if (entity.isClosed() || entity !is EntityItem) continue
 
-                Item item = itemEntity.getItem();
+                val item = entity.getItem()
 
-                if (item.isNull() || !hopperInv.canAddItem(item))
-                    continue;
+                if (item!!.isNull || !hopperInv.canAddItem(item)) continue
 
-                int originalCount = item.getCount();
+                val originalCount = item.getCount()
 
-                InventoryMoveItemEvent ev = new InventoryMoveItemEvent(null, hopperInv, hopperHolder, item, InventoryMoveItemEvent.Action.PICKUP);
-                Server.getInstance().pluginManager.callEvent(ev);
+                val ev = InventoryMoveItemEvent(
+                    null, hopperInv, hopperHolder,
+                    item, InventoryMoveItemEvent.Action.PICKUP
+                )
+                instance!!.pluginManager.callEvent(ev)
 
-                if (ev.isCancelled())
-                    continue;
+                if (ev.isCancelled) continue
 
-                Item[] items = hopperInv.addItem(item);
+                val items: Array<Item> = hopperInv.addItem(item)
 
-                if (items.length == 0) {
-                    entity.close();
-                    pickedUpItem = true;
-                    continue;
+                if (items.size == 0) {
+                    entity.close()
+                    pickedUpItem = true
+                    continue
                 }
 
                 if (items[0].getCount() != originalCount) {
-                    pickedUpItem = true;
-                    item.setCount(items[0].getCount());
+                    pickedUpItem = true
+                    item.setCount(items[0].getCount())
                 }
             }
 
-            return pickedUpItem;
+            return pickedUpItem
         }
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(HOPPER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TOGGLE_BIT)
+            get() = Companion.field
     }
 }

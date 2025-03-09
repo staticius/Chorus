@@ -1,26 +1,13 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import org.jetbrains.annotations.NotNull;
-
-public class BlockWeatheredCopperGrate extends BlockCopperGrateBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WEATHERED_COPPER_GRATE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockWeatheredCopperGrate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockCopperGrateBase(blockstate) {
+    override fun getOxidizationLevel(): OxidizationLevel {
+        return OxidizationLevel.WEATHERED
     }
 
-    public BlockWeatheredCopperGrate() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWeatheredCopperGrate(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    @NotNull public OxidizationLevel getOxidizationLevel() {
-        return OxidizationLevel.WEATHERED;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WEATHERED_COPPER_GRATE)
+            get() = Companion.field
     }
 }

@@ -1,37 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockUnpoweredRepeater extends BlockRedstoneRepeater {
-    public static final BlockProperties PROPERTIES = new BlockProperties(UNPOWERED_REPEATER, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonBlockProperties.REPEATER_DELAY);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockUnpoweredRepeater @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockRedstoneRepeater(blockstate) {
+    init {
+        this.isPowered = false
     }
 
-    public BlockUnpoweredRepeater() {
-        this(PROPERTIES.getDefaultState());
+    override val name: String
+        get() = "Unpowered Repeater"
+
+    public override fun getPowered(): Block {
+        return BlockPoweredRepeater().setPropertyValues(blockState!!.blockPropertyValues)
     }
 
-    public BlockUnpoweredRepeater(BlockState blockstate) {
-        super(blockstate);
-        this.isPowered = false;
-    }
+    override val unpowered: Block
+        get() = this
 
-    @Override
-    public String getName() {
-        return "Unpowered Repeater";
-    }
-
-    @Override
-    public Block getPowered() {
-        return new BlockPoweredRepeater().setPropertyValues(blockstate.getBlockPropertyValues());
-    }
-
-    @Override
-    public Block getUnpowered() {
-        return this;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.UNPOWERED_REPEATER,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.REPEATER_DELAY
+        )
+            get() = Companion.field
     }
 }

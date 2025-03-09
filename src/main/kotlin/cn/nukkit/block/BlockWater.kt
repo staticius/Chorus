@@ -1,42 +1,42 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
 /**
  * Alias still water
  */
-public class BlockWater extends BlockFlowingWater {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WATER, CommonBlockProperties.LIQUID_DEPTH);
-
-    public BlockWater() {
-        this(PROPERTIES.getDefaultState());
+class BlockWater @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowingWater(blockstate) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        return level.setBlock(this.position, this, true, false)
     }
 
-    public BlockWater(BlockState blockstate) {
-        super(blockstate);
+    override val name: String
+        get() = "Still Water"
+
+    override fun getLiquidWithNewDepth(depth: Int): BlockLiquid {
+        return BlockWater(
+            blockState!!.setPropertyValue(
+                Companion.properties,
+                CommonBlockProperties.LIQUID_DEPTH.createValue(depth)
+            )
+        )
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        return this.level.setBlock(this.position, this, true, false);
-    }
-
-    @Override
-    public String getName() {
-        return "Still Water";
-    }
-
-    @Override
-    public BlockLiquid getLiquidWithNewDepth(int depth) {
-        return new BlockWater(this.blockstate.setPropertyValue(PROPERTIES, CommonBlockProperties.LIQUID_DEPTH.createValue(depth)));
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WATER, CommonBlockProperties.LIQUID_DEPTH)
+            get() = Companion.field
     }
 }

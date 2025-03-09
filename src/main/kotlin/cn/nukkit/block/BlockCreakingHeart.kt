@@ -1,142 +1,135 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.CreakingHeartState;
-import cn.nukkit.blockentity.BlockEntityCreakingHeart;
-import cn.nukkit.blockentity.BlockEntityID;
-import cn.nukkit.entity.mob.monster.EntityCreaking;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.EnumPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.math.*
+import cn.nukkit.math.Vector3.distance
+import cn.nukkit.math.Vector3.equals
+import cn.nukkit.utils.RedstoneComponent
 
-public class BlockCreakingHeart extends BlockSolid implements RedstoneComponent, BlockEntityHolder<BlockEntityCreakingHeart> {
+class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), RedstoneComponent, BlockEntityHolder<BlockEntityCreakingHeart?> {
+    override val hardness: Double
+        get() = 10.0
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(CREAKING_HEART, CommonBlockProperties.NATURAL, CommonBlockProperties.CREAKING_HEART_STATE, CommonBlockProperties.PILLAR_AXIS);
+    override val resistance: Double
+        get() = 10.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    public BlockCreakingHeart() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCreakingHeart(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public double getHardness() {
-        return 10;
-    }
-
-    @Override
-    public double getResistance() {
-        return 10;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if(BlockEntityHolder.setBlockAndCreateEntity(this, true, true) != null) {
-            this.setPillarAxis(face.getAxis());
-            testAxis();
-            return true;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (BlockEntityHolder.setBlockAndCreateEntity<BlockEntityCreakingHeart?, BlockCreakingHeart>(
+                this,
+                true,
+                true
+            ) != null
+        ) {
+            this.pillarAxis = face.axis
+            testAxis()
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public void onNeighborChange(@NotNull BlockFace side) {
-        testAxis();
-        super.onNeighborChange(side);
+    override fun onNeighborChange(side: BlockFace) {
+        testAxis()
+        super.onNeighborChange(side)
     }
 
-    protected void testAxis() {
-        if(getBlockEntity().getLinkedCreaking() == null) {
-            CreakingHeartState state = CreakingHeartState.DORMANT;
-            for (BlockFace face : BlockFace.values()) {
-                if (getPillarAxis().test(face)) {
-                    Block block = getSide(face);
-                    if (block instanceof BlockPaleOakLog log) {
-                        if (log.getPillarAxis() != getPillarAxis()) state = CreakingHeartState.UPROOTED;
-                    } else state = CreakingHeartState.UPROOTED;
+    protected fun testAxis() {
+        if (blockEntity.getLinkedCreaking() == null) {
+            var state: CreakingHeartState = CreakingHeartState.DORMANT
+            for (face in BlockFace.entries) {
+                if (pillarAxis!!.test(face)) {
+                    val block = getSide(face)
+                    if (block is BlockPaleOakLog) {
+                        if (block.pillarAxis != pillarAxis) state = CreakingHeartState.UPROOTED
+                    } else state = CreakingHeartState.UPROOTED
                 }
             }
 
-            if (state != getState()) {
-                setPropertyValue(CommonBlockProperties.CREAKING_HEART_STATE, state);
-                level.setBlock(this.position, this);
+            if (state != this.state) {
+                setPropertyValue<CreakingHeartState, EnumPropertyType<CreakingHeartState>>(
+                    CommonBlockProperties.CREAKING_HEART_STATE,
+                    state
+                )
+                level.setBlock(this.position, this)
             }
         }
     }
 
-    public CreakingHeartState getState() {
-        return getPropertyValue(CommonBlockProperties.CREAKING_HEART_STATE);
+    val state: CreakingHeartState
+        get() = getPropertyValue<CreakingHeartState, EnumPropertyType<CreakingHeartState>>(CommonBlockProperties.CREAKING_HEART_STATE)
+
+    val isActive: Boolean
+        get() = getPropertyValue<CreakingHeartState, EnumPropertyType<CreakingHeartState>>(CommonBlockProperties.CREAKING_HEART_STATE) != CreakingHeartState.UPROOTED
+
+    var pillarAxis: BlockFace.Axis?
+        get() = getPropertyValue(
+            CommonBlockProperties.PILLAR_AXIS
+        )
+        set(axis) {
+            setPropertyValue(
+                CommonBlockProperties.PILLAR_AXIS,
+                axis
+            )
+        }
+
+    override val lightLevel: Int
+        get() = if (isActive) 15 else 0
+
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    public boolean isActive() {
-        return getPropertyValue(CommonBlockProperties.CREAKING_HEART_STATE) != CreakingHeartState.UPROOTED;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    public BlockFace.Axis getPillarAxis() {
-        return getPropertyValue(CommonBlockProperties.PILLAR_AXIS);
+    override fun getBlockEntityClass(): Class<out BlockEntityCreakingHeart> {
+        return BlockEntityCreakingHeart::class.java
     }
 
-    public void setPillarAxis(BlockFace.Axis axis) {
-        setPropertyValue(CommonBlockProperties.PILLAR_AXIS, axis);
+    override fun getBlockEntityType(): String {
+        return BlockEntityID.CREAKING_HEART
     }
 
-    @Override
-    public int getLightLevel() {
-        return isActive() ? 15 : 0;
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBePushed() {
-        return false;
+    override val comparatorInputOverride: Int
+        get() {
+            val entityCreakingHeart: BlockEntityCreakingHeart = getOrCreateBlockEntity()
+            val creaking: EntityCreaking = entityCreakingHeart.getLinkedCreaking()
+            return if (creaking != null) {
+                (15 - ((creaking.position.distance(this.position) / 32) * 15)).toInt()
+            } else 0
+        }
+
+    override fun isSilkTouch(vector: Vector3?, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public @NotNull Class<? extends BlockEntityCreakingHeart> getBlockEntityClass() {
-        return BlockEntityCreakingHeart.class;
-    }
-
-    @Override
-    public @NotNull String getBlockEntityType() {
-        return BlockEntityID.CREAKING_HEART;
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride() {
-        BlockEntityCreakingHeart entityCreakingHeart = getOrCreateBlockEntity();
-        EntityCreaking creaking = entityCreakingHeart.getLinkedCreaking();
-        if(creaking != null) {
-            return (int) (15 - ((creaking.position.distance(this.position) / 32) * 15));
-        } else return 0;
-    }
-
-    @Override
-    public boolean isSilkTouch(Vector3 vector, int layer, BlockFace face, Item item, Player player) {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            CREAKING_HEART,
+            CommonBlockProperties.NATURAL,
+            CommonBlockProperties.CREAKING_HEART_STATE,
+            CommonBlockProperties.PILLAR_AXIS
+        )
+            get() = Companion.field
     }
 }

@@ -1,30 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+open class BlockHornCoral @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCoral(blockstate) {
+    override val isDead: Boolean
+        get() = false
 
-public class BlockHornCoral extends BlockCoral {
-    public static final BlockProperties PROPERTIES = new BlockProperties(HORN_CORAL);
+    override val deadCoral: Block
+        get() = BlockDeadHornCoral()
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockHornCoral() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockHornCoral(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean isDead() {
-        return false;
-    }
-
-    @Override
-    public Block getDeadCoral() {
-        return new BlockDeadHornCoral();
+    companion object {
+        val properties: BlockProperties = BlockProperties(HORN_CORAL)
+            get() = Companion.field
     }
 }

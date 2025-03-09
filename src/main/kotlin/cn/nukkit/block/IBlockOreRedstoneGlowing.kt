@@ -1,32 +1,31 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.event.block.BlockFadeEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
+import cn.nukkit.event.block.BlockFadeEvent
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
 
-public interface IBlockOreRedstoneGlowing{
+interface IBlockOreRedstoneGlowing {
+    val unlitBlock: Block
 
-    Block getUnlitBlock();
+    val litBlock: Block?
 
-    Block getLitBlock();
+    val level: Level
 
-    Level getLevel();
-
-    default Item toItem() {
-        return getUnlitBlock().toItem();
+    fun toItem(): Item? {
+        return unlitBlock.toItem()
     }
 
-    default int onUpdate(Block block, int type) {
+    fun onUpdate(block: Block, type: Int): Int {
         if (type == Level.BLOCK_UPDATE_SCHEDULED || type == Level.BLOCK_UPDATE_RANDOM) {
-            Level level = getLevel();
-            BlockFadeEvent event = new BlockFadeEvent(block, getUnlitBlock());
-            level.server.pluginManager.callEvent(event);
-            if (!event.isCancelled()) {
-                level.setBlock(block.position, event.newState, true, true);
+            val level = level
+            val event = BlockFadeEvent(block, unlitBlock)
+            level.server.pluginManager.callEvent(event)
+            if (!event.isCancelled) {
+                level.setBlock(block.position, event.newState, true, true)
             }
 
-            return Level.BLOCK_UPDATE_WEAK;
+            return Level.BLOCK_UPDATE_WEAK
         }
-        return 0;
+        return 0
     }
 }

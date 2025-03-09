@@ -1,26 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockTubeCoralBlock : BlockCoralBlock {
+    constructor() : super(Companion.properties.getDefaultState())
 
-public class BlockTubeCoralBlock extends BlockCoralBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TUBE_CORAL_BLOCK);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toDead(): BlockCoralBlock {
+        return BlockDeadTubeCoralBlock()
     }
 
-    public BlockTubeCoralBlock() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockTubeCoralBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public BlockCoralBlock toDead() {
-        return new BlockDeadTubeCoralBlock();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.TUBE_CORAL_BLOCK)
+            get() = Companion.field
     }
 }

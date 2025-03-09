@@ -1,48 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.enums.WoodType;
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
+import cn.nukkit.item.*
 
-import static cn.nukkit.block.property.CommonBlockProperties.PERSISTENT_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.UPDATE_BIT;
+open class BlockAzaleaLeaves @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockLeaves(blockState) {
+    override val name: String
+        get() = "Azalea Leaves"
 
-public class BlockAzaleaLeaves extends BlockLeaves {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(AZALEA_LEAVES, PERSISTENT_BIT, UPDATE_BIT);
-
-    public BlockAzaleaLeaves() {
-        this(PROPERTIES.getDefaultState());
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockAzaleaLeaves(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Azalea Leaves";
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean canHarvest(Item item) {
-        return item.isShears();
-    }
-
-    @Override
-    @NotNull public  BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvest(item: Item): Boolean {
+        return item.isShears
     }
 
     /*这里写木质类型为OAK只是为了获取凋落物时的概率正确，并不代表真的就是橡木*/
-    @Override
-    public WoodType getType() {
-        return WoodType.OAK;
+    override fun getType(): WoodType {
+        return WoodType.OAK
     }
 
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(AZALEA_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
+            get() = Companion.field
+    }
 }

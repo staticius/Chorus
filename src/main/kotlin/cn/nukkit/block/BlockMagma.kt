@@ -1,108 +1,94 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.event.block.BlockFormEvent;
-import cn.nukkit.event.entity.EntityDamageByBlockEvent;
-import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.GameRule;
-import cn.nukkit.level.Level;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.effect.EffectType
+import cn.nukkit.event.block.BlockFormEvent
+import cn.nukkit.event.entity.EntityDamageByBlockEvent
+import cn.nukkit.event.entity.EntityDamageEvent
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.GameRule
+import cn.nukkit.level.Level
 
-public class BlockMagma extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MAGMA);
+class BlockMagma : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockMagma() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockMagma(BlockState blockState) {
-        super(blockState);
-    }
+    override val name: String
+        get() = "Magma Block"
 
-    @Override
-    public String getName() {
-        return "Magma Block";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override val resistance: Double
+        get() = 30.0
 
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
+    override val lightLevel: Int
+        get() = 3
 
-    @Override
-    public double getResistance() {
-        return 30;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 3;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() >= ItemTool.TIER_WOODEN) {
-            return new Item[]{
-                    toItem()
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isPickaxe && item.tier >= ItemTool.TIER_WOODEN) {
+            arrayOf(
+                toItem()
+            )
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public void onEntityCollide(Entity entity) {
+    override fun onEntityCollide(entity: Entity) {
         if (entity.hasEffect(EffectType.FIRE_RESISTANCE)) {
-            return;
+            return
         }
 
-        if (entity instanceof Player p) {
-            if (p.getInventory().getBoots().getEnchantment(Enchantment.ID_FROST_WALKER) != null
-                    || p.isCreative() || p.isSpectator() || p.isSneaking() || !p.level.gameRules.getBoolean(GameRule.FIRE_DAMAGE)) {
-                return;
+        if (entity is Player) {
+            if (entity.getInventory().boots.getEnchantment(Enchantment.ID_FROST_WALKER) != null || entity.isCreative || entity.isSpectator || entity.isSneaking() || !entity.level!!.gameRules!!.getBoolean(
+                    GameRule.FIRE_DAMAGE
+                )
+            ) {
+                return
             }
         }
 
-        entity.attack(new EntityDamageByBlockEvent(this, entity, EntityDamageEvent.DamageCause.HOT_FLOOR, 1));
+        entity.attack(EntityDamageByBlockEvent(this, entity, EntityDamageEvent.DamageCause.HOT_FLOOR, 1f))
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            Block up = up();
-            if (up instanceof BlockFlowingWater blockFlowingWater && (blockFlowingWater.getLiquidDepth() == 0 || blockFlowingWater.getLiquidDepth() == 8)) {
-                BlockFormEvent event = new BlockFormEvent(up, new BlockBubbleColumn().setPropertyValue(CommonBlockProperties.DRAG_DOWN, true));
-                if (!event.isCancelled()) {
-                    if (event.newState.getWaterloggingLevel() > 0) {
-                        this.level.setBlock(up.position, 1, new BlockFlowingWater(), true, false);
+            val up = up()
+            if (up is BlockFlowingWater && (up.liquidDepth == 0 || up.liquidDepth == 8)) {
+                val event = BlockFormEvent(
+                    up,
+                    BlockBubbleColumn().setPropertyValue<Boolean, BooleanPropertyType>(
+                        CommonBlockProperties.DRAG_DOWN,
+                        true
+                    )
+                )
+                if (!event.isCancelled) {
+                    if (event.newState!!.waterloggingLevel > 0) {
+                        level.setBlock(up.position, 1, BlockFlowingWater(), true, false)
                     }
-                    this.level.setBlock(up.position, 0, event.newState, true, true);
+                    level.setBlock(up.position, 0, event.newState, true, true)
                 }
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MAGMA)
+            get() = Companion.field
+    }
 }

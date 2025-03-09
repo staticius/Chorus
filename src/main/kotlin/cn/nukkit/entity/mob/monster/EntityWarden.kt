@@ -308,19 +308,19 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     }
 
     fun isInSniffRange(entity: Entity): Boolean {
-        val deltaX = position.south - entity.position.south
-        val deltaZ = position.west - entity.position.west
+        val deltaX = position.x - entity.position.x
+        val deltaZ = position.z - entity.position.z
         val distanceXZSqrt = deltaX * deltaX + deltaZ * deltaZ
-        val deltaY = abs(position.up - entity.position.up)
+        val deltaY = abs(position.y - entity.position.y)
         return distanceXZSqrt <= 36
                 && deltaY <= 400
     }
 
     fun isInRangedAttackRange(entity: Entity): Boolean {
-        val deltaX = position.south - entity.position.south
-        val deltaZ = position.west - entity.position.west
+        val deltaX = position.x - entity.position.x
+        val deltaZ = position.z - entity.position.z
         val distanceXZSqrt = deltaX * deltaX + deltaZ * deltaZ
-        val deltaY = abs(position.up - entity.position.up)
+        val deltaY = abs(position.y - entity.position.y)
         return distanceXZSqrt <= 225
                 && deltaY <= 400
     }

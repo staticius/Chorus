@@ -1,36 +1,22 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
-public class BlockTintedGlass extends BlockGlass {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TINTED_GLASS);
+class BlockTintedGlass @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockGlass(blockstate) {
+    override val name: String
+        get() = "Tinted Glass"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(toItem())
     }
 
-    public BlockTintedGlass() {
-        this(PROPERTIES.getDefaultState());
+    override fun canSilkTouch(): Boolean {
+        return false
     }
 
-    public BlockTintedGlass(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Tinted Glass";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[] { toItem() };
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.TINTED_GLASS)
+            get() = Companion.field
     }
 }

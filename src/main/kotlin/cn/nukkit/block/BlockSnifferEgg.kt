@@ -1,37 +1,38 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.CrackedState;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
 //todo complete
-public class BlockSnifferEgg extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SNIFFER_EGG, CommonBlockProperties.CRACKED_STATE);
+class BlockSnifferEgg : BlockTransparent {
+    constructor() : super(Companion.properties.getDefaultState())
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    constructor(blockstate: BlockState?) : super(blockstate)
+
+    override val name: String
+        get() = "Sniffer Egg"
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        this.setPropertyValue<CrackedState, EnumPropertyType<CrackedState>>(
+            CommonBlockProperties.CRACKED_STATE,
+            CrackedState.NO_CRACKS
+        )
+        return level.setBlock(this.position, this)
     }
 
-    public BlockSnifferEgg() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSnifferEgg(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public String getName() {
-        return "Sniffer Egg";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        this.setPropertyValue(CommonBlockProperties.CRACKED_STATE, CrackedState.NO_CRACKS);
-        return this.level.setBlock(this.position, this);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SNIFFER_EGG, CommonBlockProperties.CRACKED_STATE)
+            get() = Companion.field
     }
 }

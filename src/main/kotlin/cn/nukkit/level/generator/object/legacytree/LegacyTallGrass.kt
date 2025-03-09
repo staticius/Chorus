@@ -6,20 +6,20 @@ import cn.nukkit.math.Vector3
 object LegacyTallGrass {
     private val places = arrayOf<BlockState>(
         //total 106
-        BlockShortGrass.PROPERTIES.getDefaultState(),  //50
-        BlockTallGrass.PROPERTIES.getDefaultState(),  // 30
-        BlockDandelion.PROPERTIES.getDefaultState(),  // 10
-        BlockPoppy.PROPERTIES.getDefaultState(),  // 10
-        BlockAzureBluet.PROPERTIES.getDefaultState(),  // 5
-        BlockOxeyeDaisy.PROPERTIES.getDefaultState(),  // 5
-        BlockAllium.PROPERTIES.getDefaultState(),  // 2
-        BlockCornflower.PROPERTIES.getDefaultState(),  // 2
-        BlockBlueOrchid.PROPERTIES.getDefaultState(),  // 2
-        BlockLilyOfTheValley.PROPERTIES.getDefaultState(),  // 2
-        BlockRedTulip.PROPERTIES.getDefaultState(),  // 2
-        BlockOrangeTulip.PROPERTIES.getDefaultState(),  // 2
-        BlockPinkTulip.PROPERTIES.getDefaultState(),  // 2
-        BlockWhiteTulip.PROPERTIES.getDefaultState(),  // 2
+        BlockShortGrass.properties.getDefaultState(),  //50
+        BlockTallGrass.properties.getDefaultState(),  // 30
+        BlockDandelion.properties.getDefaultState(),  // 10
+        BlockPoppy.properties.getDefaultState(),  // 10
+        BlockAzureBluet.properties.getDefaultState(),  // 5
+        BlockOxeyeDaisy.properties.getDefaultState(),  // 5
+        BlockAllium.properties.getDefaultState(),  // 2
+        BlockCornflower.properties.getDefaultState(),  // 2
+        BlockBlueOrchid.properties.getDefaultState(),  // 2
+        BlockLilyOfTheValley.properties.getDefaultState(),  // 2
+        BlockRedTulip.properties.getDefaultState(),  // 2
+        BlockOrangeTulip.properties.getDefaultState(),  // 2
+        BlockPinkTulip.properties.getDefaultState(),  // 2
+        BlockWhiteTulip.properties.getDefaultState(),  // 2
     )
 
     fun growGrass(level: BlockManager, pos: Vector3, random: RandomSourceProvider) {

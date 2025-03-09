@@ -1,33 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.OxidizationLevel
 
-public class BlockOxidizedCutCopperSlab extends BlockCutCopperSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(OXIDIZED_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+open class BlockOxidizedCutCopperSlab : BlockCutCopperSlab {
+    @JvmOverloads
+    constructor(blockstate: BlockState? = Companion.properties.defaultState) : super(
+        blockstate,
+        BlockID.OXIDIZED_DOUBLE_CUT_COPPER_SLAB
+    )
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    protected constructor(blockstate: BlockState?, doubleSlabId: String?) : super(blockstate, doubleSlabId)
+
+    override fun getOxidizationLevel(): OxidizationLevel {
+        return OxidizationLevel.OXIDIZED
     }
 
-    public BlockOxidizedCutCopperSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockOxidizedCutCopperSlab(BlockState blockstate) {
-        super(blockstate, OXIDIZED_DOUBLE_CUT_COPPER_SLAB);
-    }
-
-    protected BlockOxidizedCutCopperSlab(BlockState blockstate, String doubleSlabId) {
-        super(blockstate, doubleSlabId);
-    }
-
-    @Override
-    @NotNull
-    public OxidizationLevel getOxidizationLevel() {
-        return OxidizationLevel.OXIDIZED;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.OXIDIZED_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

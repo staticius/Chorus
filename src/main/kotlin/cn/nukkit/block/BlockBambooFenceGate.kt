@@ -1,39 +1,28 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.level.Sound;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.level.Sound
 
-import static cn.nukkit.block.property.CommonBlockProperties.IN_WALL_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.OPEN_BIT;
+class BlockBambooFenceGate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFenceGate(blockstate) {
+    override val name: String
+        get() = "Bamboo Fence Gate"
 
-public class BlockBambooFenceGate extends BlockFenceGate {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_FENCE_GATE,  IN_WALL_BIT, MINECRAFT_CARDINAL_DIRECTION, OPEN_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun playOpenSound() {
+        level.addSound(this.position, Sound.OPEN_BAMBOO_WOOD_FENCE_GATE)
     }
 
-    public BlockBambooFenceGate() {
-        this(PROPERTIES.getDefaultState());
+    override fun playCloseSound() {
+        level.addSound(this.position, Sound.CLOSE_BAMBOO_WOOD_FENCE_GATE)
     }
 
-    public BlockBambooFenceGate(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public String getName() {
-        return "Bamboo Fence Gate";
-    }
-
-    @Override
-    public void playOpenSound() {
-        level.addSound(this.position, Sound.OPEN_BAMBOO_WOOD_FENCE_GATE);
-    }
-
-    @Override
-    public void playCloseSound() {
-        level.addSound(this.position, Sound.CLOSE_BAMBOO_WOOD_FENCE_GATE);
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BAMBOO_FENCE_GATE,
+            CommonBlockProperties.IN_WALL_BIT,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OPEN_BIT
+        )
+            get() = Companion.field
     }
 }

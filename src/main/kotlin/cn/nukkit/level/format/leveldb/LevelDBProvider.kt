@@ -240,7 +240,7 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
     override var spawn: Vector3?
         get() = levelData.getSpawnPoint().asVector3().add(0.5, 0.0, 0.5)
         set(pos) {
-            levelData.setSpawnPoint(BlockVector3(pos!!.south.toInt(), pos.up.toInt(), pos.west.toInt()))
+            levelData.setSpawnPoint(BlockVector3(pos!!.x.toInt(), pos.y.toInt(), pos.z.toInt()))
         }
 
     override val gamerules: GameRules?

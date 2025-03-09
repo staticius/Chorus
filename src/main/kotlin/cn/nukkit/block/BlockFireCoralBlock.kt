@@ -1,26 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockFireCoralBlock : BlockCoralBlock {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockFireCoralBlock extends BlockCoralBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(FIRE_CORAL_BLOCK);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toDead(): BlockCoralBlock {
+        return BlockDeadFireCoralBlock()
     }
 
-    public BlockFireCoralBlock() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockFireCoralBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public BlockCoralBlock toDead() {
-        return new BlockDeadFireCoralBlock();
+    companion object {
+        val properties: BlockProperties = BlockProperties(FIRE_CORAL_BLOCK)
+            get() = Companion.field
     }
 }

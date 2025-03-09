@@ -1,31 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockPolishedBlackstoneBrickWall extends BlockPolishedBlackstoneWall {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_BLACKSTONE_BRICK_WALL, CommonBlockProperties.WALL_CONNECTION_TYPE_EAST, CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH, CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH, CommonBlockProperties.WALL_CONNECTION_TYPE_WEST, CommonBlockProperties.WALL_POST_BIT);
+class BlockPolishedBlackstoneBrickWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockPolishedBlackstoneWall(blockstate) {
+    override val name: String
+        get() = "Polished Blackstone Brick Wall"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val hardness: Double
+        get() = 1.5
 
-    public BlockPolishedBlackstoneBrickWall() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPolishedBlackstoneBrickWall(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Polished Blackstone Brick Wall";
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.POLISHED_BLACKSTONE_BRICK_WALL,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
+            CommonBlockProperties.WALL_POST_BIT
+        )
+            get() = Companion.field
     }
 }

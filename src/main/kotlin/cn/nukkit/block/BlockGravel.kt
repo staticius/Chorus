@@ -1,86 +1,70 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.utils.random.NukkitRandom.nextInt
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class BlockGravel extends BlockFallable implements Natural {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GRAVEL);
+class BlockGravel : BlockFallable, Natural {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockGravel() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockGravel(BlockState blockState) {
-        super(blockState);
-    }
+    override val hardness: Double
+        get() = 0.6
 
-    @Override
-    public double getHardness() {
-        return 0.6;
-    }
+    override val resistance: Double
+        get() = 3.0
 
-    @Override
-    public double getResistance() {
-        return 3;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
+    override val name: String
+        get() = "Gravel"
 
-    @Override
-    public String getName() {
-        return "Gravel";
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        Enchantment enchantment = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING);
-        int fortune = 0;
+    override fun getDrops(item: Item): Array<Item?>? {
+        val enchantment = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
+        var fortune = 0
         if (enchantment != null) {
-            fortune = enchantment.getLevel();
+            fortune = enchantment.level
         }
 
-        NukkitRandom nukkitRandom = new NukkitRandom();
-        switch (fortune) {
-            case 0 -> {
+        val nukkitRandom: NukkitRandom = NukkitRandom()
+        when (fortune) {
+            0 -> {
                 if (nukkitRandom.nextInt(0, 9) == 0) {
-                    return new Item[]{Item.get(ItemID.FLINT, 0, 1)};
+                    return arrayOf(get(ItemID.FLINT, 0, 1))
+                }
+            }
 
-                }
-            }
-            case 1 -> {
+            1 -> {
                 if (nukkitRandom.nextInt(0, 6) == 0) {
-                    return new Item[]{Item.get(ItemID.FLINT, 0, 1)};
+                    return arrayOf(get(ItemID.FLINT, 0, 1))
                 }
             }
-            case 2 -> {
+
+            2 -> {
                 if (nukkitRandom.nextInt(0, 3) == 0) {
-                    return new Item[]{Item.get(ItemID.FLINT, 0, 1)};
+                    return arrayOf(get(ItemID.FLINT, 0, 1))
                 }
             }
-            default -> {
-                return new Item[]{Item.get(ItemID.FLINT, 0, 1)};
+
+            else -> {
+                return arrayOf(get(ItemID.FLINT, 0, 1))
             }
         }
-        return new Item[]{ toItem() };
+        return arrayOf(toItem())
     }
-    
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+
+    override fun canSilkTouch(): Boolean {
+        return true
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(GRAVEL)
+            get() = Companion.field
     }
 }

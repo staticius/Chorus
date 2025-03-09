@@ -1,56 +1,33 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockDripstoneBlock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DRIPSTONE_BLOCK);
+class BlockDripstoneBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Dripstone Block"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 1.5
+
+    override val resistance: Double
+        get() = 1.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockDripstoneBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val isLavaResistant: Boolean
+        get() = true
 
-    public BlockDripstoneBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Dripstone Block";
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 1;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean isLavaResistant() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(DRIPSTONE_BLOCK)
+            get() = Companion.field
     }
 }

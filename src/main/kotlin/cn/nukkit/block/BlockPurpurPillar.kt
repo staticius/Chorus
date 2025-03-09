@@ -1,75 +1,59 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
 
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
+class BlockPurpurPillar @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Purpur Pillar"
 
-public class BlockPurpurPillar extends BlockSolid {
+    override val hardness: Double
+        get() = 1.5
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(PURPUR_PILLAR, PILLAR_AXIS);
+    override val resistance: Double
+        get() = 30.0
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        this.pillarAxis = face.axis
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    public BlockPurpurPillar() {
-        this(PROPERTIES.getDefaultState());
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    var pillarAxis: BlockFace.Axis?
+        get() = getPropertyValue(
+            CommonBlockProperties.PILLAR_AXIS
+        )
+        set(axis) {
+            setPropertyValue(
+                CommonBlockProperties.PILLAR_AXIS,
+                axis
+            )
+        }
+
+    override fun toItem(): Item? {
+        return ItemBlock(properties.defaultState.toBlock())
     }
 
-    public BlockPurpurPillar(BlockState blockstate) {
-        super(blockstate);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PURPUR_PILLAR, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
-
-    @Override
-    public String getName() {
-        return "Purpur Pillar";
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 30;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        this.setPillarAxis(face.getAxis());
-        this.level.setBlock(block.position, this, true, true);
-        return true;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    public BlockFace.Axis getPillarAxis() {
-        return getPropertyValue(PILLAR_AXIS);
-    }
-
-    public void setPillarAxis(BlockFace.Axis axis) {
-        setPropertyValue(PILLAR_AXIS, axis);
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this.getProperties().getDefaultState().toBlock());
-    }
-
 }

@@ -89,9 +89,9 @@ class ObjectAzaleaTree : TreeGenerator() {
 
     companion object {
         private val OAK_LOG: BlockState =
-            BlockOakLog.PROPERTIES.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
-        private val DIRT_WITH_ROOTS: BlockState = BlockDirtWithRoots.PROPERTIES.getDefaultState()
-        private val AZALEA_LEAVES_FLOWERED: BlockState = BlockAzaleaLeavesFlowered.PROPERTIES.getDefaultState()
-        private val AZALEA_LEAVES: BlockState = BlockAzaleaLeaves.PROPERTIES.getDefaultState()
+            BlockOakLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
+        private val DIRT_WITH_ROOTS: BlockState = BlockDirtWithRoots.properties.getDefaultState()
+        private val AZALEA_LEAVES_FLOWERED: BlockState = BlockAzaleaLeavesFlowered.properties.getDefaultState()
+        private val AZALEA_LEAVES: BlockState = BlockAzaleaLeaves.properties.getDefaultState()
     }
 }

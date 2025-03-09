@@ -1,72 +1,48 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.math.AxisAlignedBB;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.math.AxisAlignedBB
 
-public class BlockLightBlock extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIGHT_BLOCK_0, CommonBlockProperties.BLOCK_LIGHT_LEVEL);
+class BlockLightBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate) {
+    override val name: String
+        get() = "Light Block"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val lightLevel: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BLOCK_LIGHT_LEVEL)
+
+    override val boundingBox: AxisAlignedBB?
+        get() = null
+
+    override val waterloggingLevel: Int
+        get() = 2
+
+    override fun canBeFlowedInto(): Boolean {
+        return true
     }
 
-    public BlockLightBlock() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBeReplaced(): Boolean {
+        return true
     }
 
-    public BlockLightBlock(BlockState blockstate) {
-        super(blockstate);
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Light Block";
+    override val hardness: Double
+        get() = 0.0
+
+    override val resistance: Double
+        get() = 0.0
+
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    @Override
-    public int getLightLevel() {
-        return getPropertyValue(CommonBlockProperties.BLOCK_LIGHT_LEVEL);
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox() {
-        return null;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return true;
-    }
-
-    @Override
-    public boolean canBeReplaced() {
-        return true;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return true;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.LIGHT_BLOCK_0, CommonBlockProperties.BLOCK_LIGHT_LEVEL)
+            get() = Companion.field
     }
 }

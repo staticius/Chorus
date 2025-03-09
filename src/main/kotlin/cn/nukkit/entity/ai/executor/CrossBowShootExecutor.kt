@@ -141,9 +141,9 @@ class CrossBowShootExecutor(
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
-                    .add(FloatTag(entity.position.south))
-                    .add(FloatTag(entity.position.up + entity.currentHeight / 2 + 0.2f))
-                    .add(FloatTag(entity.position.west))
+                    .add(FloatTag(entity.position.x))
+                    .add(FloatTag(entity.position.y + entity.currentHeight / 2 + 0.2f))
+                    .add(FloatTag(entity.position.z))
             )
             .putList(
                 "Motion", ListTag<FloatTag>()

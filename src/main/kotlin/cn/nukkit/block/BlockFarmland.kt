@@ -1,150 +1,141 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.event.block.FarmLandDecayEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.block.FarmLandDecayEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.*
 
-public class BlockFarmland extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(FARMLAND, CommonBlockProperties.MOISTURIZED_AMOUNT);
+class BlockFarmland @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate) {
+    override val name: String
+        get() = "Farmland"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 3.0
 
-    public BlockFarmland() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 0.6
 
-    public BlockFarmland(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
 
-    @Override
-    public String getName() {
-        return "Farmland";
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.6;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 1;
-    }
-
-    @Override
-    public int onUpdate(int type) {
-        if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (this.up().isSolid()) {
-                var farmEvent = new FarmLandDecayEvent(null, this);
-                this.level.server.pluginManager.callEvent(farmEvent);
-                if (farmEvent.isCancelled()) return 0;
-
-                this.level.setBlock(this.position, Block.get(BlockID.DIRT), false, true);
-
-                return type;
-            }
-        } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            Vector3 v = new Vector3();
-            if (this.level.getBlock(v.setComponents(this.position.south, this.position.up + 1, this.position.west)) instanceof BlockCrops) {
-                return 0;
-            }
-
-            boolean found = false;
-
-            if (this.level.isRaining()) {
-                found = true;
-            } else {
-                end:
-                for (int x = (int) this.position.south - 4; x <= this.position.south + 4; x++) {
-                    for (int z = (int) this.position.west - 4; z <= this.position.west + 4; z++) {
-                        for (int y = (int) this.position.up; y <= this.position.up + 1; y++) {
-                            if (z == this.position.west && x == this.position.south && y == this.position.up) {
-                                continue;
-                            }
-
-                            v.setComponents(x, y, z);
-                            String block = this.level.getBlockIdAt(v.getFloorX(), v.getFloorY(), v.getFloorZ());
-
-                            if (block.equals(FLOWING_WATER) || block.equals(WATER) || block.equals(FROSTED_ICE)) {
-                                found = true;
-                                break end;
-                            } else {
-                                block = this.level.getBlockIdAt(v.getFloorX(), v.getFloorY(), v.getFloorZ(), 1);
-                                if (block.equals(FLOWING_WATER) || block.equals(WATER) || block.equals(FROSTED_ICE)) {
-                                    found = true;
-                                    break end;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            Block block = this.level.getBlock(v.setComponents(this.position.south, this.position.up - 1, this.position.west));
-            if (found || block instanceof BlockFlowingWater || block instanceof BlockFrostedIce) {
-                if (getMoistureAmount() < 7) {
-                    setMoistureAmount(7);
-                    this.level.setBlock(this.position, this, false, getMoistureAmount() == 0);
-                }
-                return Level.BLOCK_UPDATE_RANDOM;
-            }
-
-            if (getMoistureAmount() > 0) {
-                this.setMoistureAmount(getMoistureAmount() - 1);
-                this.level.setBlock(this.position, this, false, getMoistureAmount() == 1);
-            } else {
-                var farmEvent = new FarmLandDecayEvent(null, this);
-                this.level.server.pluginManager.callEvent(farmEvent);
-                if (farmEvent.isCancelled()) return 0;
-                this.level.setBlock(this.position, Block.get(Block.DIRT), false, true);
-            }
-
-            return Level.BLOCK_UPDATE_RANDOM;
+    override var maxY: Double
+        get() = position.y + 1
+        set(maxY) {
+            super.maxY = maxY
         }
 
-        return 0;
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_NORMAL) {
+            if (up()!!.isSolid) {
+                val farmEvent = FarmLandDecayEvent(null, this)
+                level.server.pluginManager.callEvent(farmEvent)
+                if (farmEvent.isCancelled) return 0
+
+                level.setBlock(this.position, get(DIRT), false, true)
+
+                return type
+            }
+        } else if (type == Level.BLOCK_UPDATE_RANDOM) {
+            val v = Vector3()
+            if (level.getBlock(
+                    v.setComponents(
+                        position.x,
+                        position.y + 1, position.z
+                    )!!
+                ) is BlockCrops
+            ) {
+                return 0
+            }
+
+            var found = false
+
+            if (level.isRaining) {
+                found = true
+            } else {
+                var x = position.x.toInt() - 4
+                end@ while (x <= position.x + 4) {
+                    var z = position.z.toInt() - 4
+                    while (z <= position.z + 4) {
+                        var y = position.y.toInt()
+                        while (y <= position.y + 1) {
+                            if (z.toDouble() == position.z && x.toDouble() == position.x && y.toDouble() == position.y) {
+                                y++
+                                continue
+                            }
+
+                            v.setComponents(x.toDouble(), y.toDouble(), z.toDouble())
+                            var block = level.getBlockIdAt(v.floorX, v.floorY, v.floorZ)
+
+                            if (block == FLOWING_WATER || block == WATER || block == FROSTED_ICE) {
+                                found = true
+                                break@end
+                            } else {
+                                block = level.getBlockIdAt(v.floorX, v.floorY, v.floorZ, 1)
+                                if (block == FLOWING_WATER || block == WATER || block == FROSTED_ICE) {
+                                    found = true
+                                    break@end
+                                }
+                            }
+                            y++
+                        }
+                        z++
+                    }
+                    x++
+                }
+            }
+
+            val block = level.getBlock(
+                v.setComponents(
+                    position.x,
+                    position.y - 1, position.z
+                )!!
+            )
+            if (found || block is BlockFlowingWater || block is BlockFrostedIce) {
+                if (moistureAmount < 7) {
+                    moistureAmount = 7
+                    level.setBlock(this.position, this, false, moistureAmount == 0)
+                }
+                return Level.BLOCK_UPDATE_RANDOM
+            }
+
+            if (moistureAmount > 0) {
+                this.moistureAmount = this.moistureAmount - 1
+                level.setBlock(this.position, this, false, moistureAmount == 1)
+            } else {
+                val farmEvent = FarmLandDecayEvent(null, this)
+                level.server.pluginManager.callEvent(farmEvent)
+                if (farmEvent.isCancelled) return 0
+                level.setBlock(this.position, get(Block.DIRT), false, true)
+            }
+
+            return Level.BLOCK_UPDATE_RANDOM
+        }
+
+        return 0
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.DIRT));
+    override fun toItem(): Item? {
+        return ItemBlock(get(DIRT))
     }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return true;
+    override fun isSolid(side: BlockFace): Boolean {
+        return true
     }
 
-    @Override
-    public boolean isTransparent() {
-        return true;
-    }
+    override val isTransparent: Boolean
+        get() = true
 
-    public int getMoistureAmount() {
-        return getPropertyValue(CommonBlockProperties.MOISTURIZED_AMOUNT);
-    }
+    var moistureAmount: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MOISTURIZED_AMOUNT)
+        set(value) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MOISTURIZED_AMOUNT, value)
+        }
 
-    public void setMoistureAmount(int value) {
-        setPropertyValue(CommonBlockProperties.MOISTURIZED_AMOUNT, value);
+    companion object {
+        val properties: BlockProperties = BlockProperties(FARMLAND, CommonBlockProperties.MOISTURIZED_AMOUNT)
+            get() = Companion.field
     }
 }

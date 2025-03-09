@@ -1,30 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemShulkerBox;
-import cn.nukkit.tags.BlockTags;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
+import java.util.Set
 
-import java.util.Set;
-
-public class BlockCyanShulkerBox extends BlockUndyedShulkerBox {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CYAN_SHULKER_BOX, Set.of(BlockTags.PNX_SHULKERBOX));
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockCyanShulkerBox @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockUndyedShulkerBox(blockstate) {
+    override fun getShulkerBox(): Item {
+        return ItemShulkerBox(9)
     }
 
-    public BlockCyanShulkerBox() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCyanShulkerBox(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public Item getShulkerBox() {
-        return new ItemShulkerBox(9);
+    companion object {
+        val properties: BlockProperties = BlockProperties(CYAN_SHULKER_BOX, Set.of<String>(BlockTags.PNX_SHULKERBOX))
+            get() = Companion.field
     }
 }

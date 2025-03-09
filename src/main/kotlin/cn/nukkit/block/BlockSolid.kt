@@ -1,24 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.math.BlockFace;
+import cn.nukkit.math.BlockFace
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public abstract class BlockSolid extends Block {
+abstract class BlockSolid(blockState: BlockState?) : Block(blockState) {
+    override val isSolid: Boolean
+        get() = true
 
-    public BlockSolid(BlockState blockState) {
-        super(blockState);
+    override fun isSolid(side: BlockFace): Boolean {
+        return true
     }
-
-    @Override
-    public boolean isSolid() {
-        return true;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return true;
-    }
-
 }

@@ -1,168 +1,164 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.vibration.VibrationEvent;
-import cn.nukkit.level.vibration.VibrationType;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.network.protocol.LevelSoundEventPacket;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.BITE_COUNTER;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.BlockFace
+import cn.nukkit.network.protocol.LevelSoundEventPacket
 
 /**
  * @author Nukkit Project Team
  */
-public class BlockCake extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CAKE, BITE_COUNTER);
+class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockState) {
+    override val name: String
+        get() = "Cake Block"
 
-    public BlockCake(BlockState blockState) {
-        super(blockState);
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockCake() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    @Override
-    public String getName() {
-        return "Cake Block";
-    }
+    override val resistance: Double
+        get() = 0.5
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.5;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public double getMinX() {
-        return this.position.south + (1 + getBiteCount() * 2) / 16;
-    }
-
-    @Override
-    public double getMinY() {
-        return this.position.up;
-    }
-
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.0625;
-    }
-
-    @Override
-    public double getMaxX() {
-        return this.position.south - 0.0625 + 1;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.5;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west - 0.0625 + 1;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (!down().isAir()) {
-            level.setBlock(block.position, this, true, true);
-
-            return true;
+    override var minX: Double
+        get() = position.x + (1 + biteCount * 2) / 16
+        set(minX) {
+            super.minX = minX
         }
-        return false;
+
+    override var minY: Double
+        get() = position.y
+        set(minY) {
+            super.minY = minY
+        }
+
+    override var minZ: Double
+        get() = position.z + 0.0625
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x - 0.0625 + 1
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxY: Double
+        get() = position.y + 0.5
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override var maxZ: Double
+        get() = position.z - 0.0625 + 1
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!down()!!.isAir) {
+            level.setBlock(block.position, this, true, true)
+
+            return true
+        }
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down().isAir()) {
-                level.setBlock(this.position, Block.get(BlockID.AIR), true);
+            if (down()!!.isAir) {
+                level.setBlock(this.position, get(AIR), true)
 
-                return Level.BLOCK_UPDATE_NORMAL;
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(isNotActivate(player)) return false;
-        if (item.getBlock() instanceof BlockCandle && this.getBiteCount() == 0) {
-            return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
+        if (item.getBlock() is BlockCandle && this.biteCount == 0) {
+            return false
         }
-        int damage = getBiteCount();
-        if (player != null && (player.foodData.isHungry() || player.isCreative() || player.getServer().getDifficulty() == 0)) {
-            if (damage < BITE_COUNTER.getMax()) setBiteCount(damage + 1);
-            if (damage >= BITE_COUNTER.getMax()) {
-                level.setBlock(this.position, Block.get(BlockID.AIR), true);
+        val damage = biteCount
+        if (player != null && (player.foodData!!.isHungry || player.isCreative || player.getServer()!!
+                .getDifficulty() == 0)
+        ) {
+            if (damage < CommonBlockProperties.BITE_COUNTER.getMax()) biteCount = damage + 1
+            if (damage >= CommonBlockProperties.BITE_COUNTER.getMax()) {
+                level.setBlock(this.position, get(AIR), true)
             } else {
-                player.foodData.addFood(2, 0.4F);
-                level.setBlock(this.position, this, true);
+                player.foodData!!.addFood(2, 0.4f)
+                level.setBlock(this.position, this, true)
             }
-            this.level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_BURP );
-            this.level.vibrationManager.callVibrationEvent(new VibrationEvent(player, this.position.add(0.5, 0.5, 0.5), VibrationType.EAT));
-            return true;
+            level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_BURP)
+            level.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    player,
+                    position.add(0.5, 0.5, 0.5)!!, VibrationType.EAT
+                )
+            )
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int getComparatorInputOverride() {
-        return (7 - this.getBiteCount()) * 2;
+    override val comparatorInputOverride: Int
+        get() = (7 - this.biteCount) * 2
+
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean sticksToPiston() {
-        return false;
-    }
+    var biteCount: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BITE_COUNTER)
+        set(count) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BITE_COUNTER, count)
+        }
 
-    public int getBiteCount() {
-        return getPropertyValue(BITE_COUNTER);
-    }
-
-    public void setBiteCount(int count) {
-        setPropertyValue(BITE_COUNTER, count);
+    companion object {
+        val properties: BlockProperties = BlockProperties(CAKE, CommonBlockProperties.BITE_COUNTER)
+            get() = Companion.field
     }
 }

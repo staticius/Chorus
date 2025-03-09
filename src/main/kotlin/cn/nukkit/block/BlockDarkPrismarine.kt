@@ -1,22 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockDarkPrismarine : BlockPrismarine {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockDarkPrismarine extends BlockPrismarine {
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(DARK_PRISMARINE);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockDarkPrismarine() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockDarkPrismarine(BlockState blockState) {
-        super(blockState);
+    companion object {
+        val properties: BlockProperties = BlockProperties(DARK_PRISMARINE)
+            get() = Companion.field
     }
 }

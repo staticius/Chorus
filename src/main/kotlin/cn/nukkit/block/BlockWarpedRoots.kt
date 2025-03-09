@@ -1,25 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockWarpedRoots @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockHanging(blockstate), FlowerPotBlock, Natural {
+    override val name: String
+        get() = "Warped Roots"
 
-public class BlockWarpedRoots extends BlockHanging implements BlockFlowerPot.FlowerPotBlock, Natural {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_ROOTS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockWarpedRoots() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWarpedRoots(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Warped Roots";
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WARPED_ROOTS)
+            get() = Companion.field
     }
 }

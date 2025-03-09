@@ -1,170 +1,157 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.random.NukkitRandom
+import java.util.*
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Stream;
+abstract class BlockLichen(blockState: BlockState?) : BlockTransparent(blockState) {
+    val growthSides: Array<BlockFace>
+        get() {
+            val returns =
+                Arrays.stream(BlockFace.entries.toTypedArray()).filter { side: BlockFace -> this.isGrowthToSide(side) }
+            return returns.toArray<BlockFace> { _Dummy_.__Array__() }
+        }
 
-
-public abstract class BlockLichen extends BlockTransparent {
-    public static final NukkitRandom RANDOM = new NukkitRandom();
-
-    public BlockLichen(BlockState blockState) {
-        super(blockState);
-    }
-
-    public BlockFace[] getGrowthSides() {
-        Stream<BlockFace> returns = Arrays.stream(BlockFace.values()).filter(this::isGrowthToSide);
-        return returns.toArray(BlockFace[]::new);
-    }
-
-    public void witherAtSide(BlockFace side) {
+    open fun witherAtSide(side: BlockFace) {
         if (isGrowthToSide(side)) {
-            setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) ^ (0b000001 << side.getDUSWNEIndex()));
-            level.setBlock(this.position, this, true, true);
+            setPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
+                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) xor (1 shl side.dUSWNEIndex)
+            )
+            level.setBlock(this.position, this, true, true)
         }
     }
 
-    public boolean isGrowthToSide(@NotNull BlockFace side) {
-        return ((getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) >> side.getDUSWNEIndex()) & 0x1) > 0;
+    fun isGrowthToSide(side: BlockFace): Boolean {
+        return ((getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) shr side.dUSWNEIndex) and 0x1) > 0
     }
 
-    public void growToSide(BlockFace side) {
+    fun growToSide(side: BlockFace) {
         if (!isGrowthToSide(side)) {
-            setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) | (0b000001 << side.getDUSWNEIndex()));
-            level.setBlock(this.position, this, true, true);
+            setPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
+                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) or (1 shl side.dUSWNEIndex)
+            )
+            level.setBlock(this.position, this, true, true)
         }
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-
-        if (!target.isSolid() && target instanceof BlockLichen) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!target.isSolid && target is BlockLichen) {
+            return false
         }
 
-        int currentMeta = 0;
-        if (block instanceof BlockLichen) {
-            currentMeta = block.getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS);
+        var currentMeta = 0
+        if (block is BlockLichen) {
+            currentMeta = block.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
         }
 
-        setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, currentMeta | (0b000001 << face.getOpposite().getDUSWNEIndex()));
+        setPropertyValue<Int, IntPropertyType>(
+            CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
+            currentMeta or (1 shl face.getOpposite()!!.dUSWNEIndex)
+        )
 
-        if (getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) == currentMeta) {
-            BlockFace[] sides = BlockFace.values();
-            Stream<BlockFace> faceStream = Arrays.stream(sides).filter(side ->
-                    block.getSide(side).isSolid(side) && !isGrowthToSide(side)
-            );
-            Optional<BlockFace> optionalFace = faceStream.findFirst();
-            if (optionalFace.isPresent()) {
-                growToSide(optionalFace.get());
-                return true;
+        if (getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) == currentMeta) {
+            val sides = BlockFace.entries.toTypedArray()
+            val faceStream = Arrays.stream(sides).filter { side: BlockFace ->
+                block.getSide(side)!!
+                    .isSolid(side) && !isGrowthToSide(side)
+            }
+            val optionalFace = faceStream.findFirst()
+            if (optionalFace.isPresent) {
+                growToSide(optionalFace.get())
+                return true
             }
 
-            return false;
+            return false
         }
 
-        level.setBlock(block.position, this, true, true);
-        return true;
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
-        for (BlockFace side : BlockFace.values()) {
-            final Block support = this.getSide(side);
-            if (isGrowthToSide(side) && support != null && !support.isSolid()) {
-                this.witherAtSide(side);
+    override fun onUpdate(type: Int): Int {
+        for (side in BlockFace.entries) {
+            val support = this.getSide(side)
+            if (isGrowthToSide(side) && support != null && !support.isSolid) {
+                this.witherAtSide(side)
             }
         }
-        return super.onUpdate(type);
+        return super.onUpdate(type)
     }
 
-    @Override
-    public double getHardness() {
-        return 0.2;
+    override val hardness: Double
+        get() = 0.2
+
+    override val resistance: Double
+        get() = 1.0
+
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    @Override
-    public double getResistance() {
-        return 1;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return true;
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvest(item: Item): Boolean {
+        return item.isAxe || item.isShears
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
+    override fun canBeReplaced(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canHarvest(Item item) {
-        return item.isAxe() || item.isShears();
+    override fun canBeFlowedInto(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public boolean sticksToPiston() {
-        return false;
+    override fun toItem(): Item? {
+        return ItemBlock(properties.defaultState.toBlock())
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    @Override
-    public boolean canBeReplaced() {
-        return true;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return true;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this.getProperties().getDefaultState().toBlock());
+    companion object {
+        val RANDOM: NukkitRandom = NukkitRandom()
     }
 }

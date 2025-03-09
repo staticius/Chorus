@@ -1,31 +1,17 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockRawGoldBlock extends BlockRaw {
-    public static final BlockProperties PROPERTIES = new BlockProperties(RAW_GOLD_BLOCK);
+class BlockRawGoldBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockRaw(blockstate) {
+    override val name: String
+        get() = "Block of Raw Gold"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_IRON
 
-    public BlockRawGoldBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRawGoldBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Block of Raw Gold";
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_IRON;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.RAW_GOLD_BLOCK)
+            get() = Companion.field
     }
 }

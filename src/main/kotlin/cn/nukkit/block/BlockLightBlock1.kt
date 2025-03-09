@@ -1,26 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockLightBlock1 @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockLightBlock0(blockstate) {
+    override val lightLevel: Int
+        get() = 1
 
-public class BlockLightBlock1 extends BlockLightBlock0 {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIGHT_BLOCK_1);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LIGHT_BLOCK_1)
+            get() = Companion.field
     }
-
-    public BlockLightBlock1() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockLightBlock1(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 1;
-    }
-
 }

@@ -1,38 +1,32 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.enums.WoodType;
-import cn.nukkit.registry.Registries;
-
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
+import cn.nukkit.block.Block.name
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType.name
+import cn.nukkit.registry.Registries
+import cn.nukkit.utils.DyeColor.name
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
+abstract class BlockWood(blockstate: BlockState?) : BlockLog(blockstate) {
+    abstract val woodType: WoodType
 
-public abstract class BlockWood extends BlockLog {
-    public BlockWood(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val name: String
+        get() = woodType.name + " Wood"
 
-    public abstract WoodType getWoodType();
-
-    @Override
-    public String getName() {
-        return getWoodType().getName() + " Wood";
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        String strippedId = switch (getWoodType()) {
-            case OAK -> STRIPPED_OAK_WOOD;
-            case SPRUCE -> STRIPPED_SPRUCE_WOOD;
-            case BIRCH -> STRIPPED_BIRCH_WOOD;
-            case JUNGLE -> STRIPPED_JUNGLE_WOOD;
-            case ACACIA -> STRIPPED_ACACIA_WOOD;
-            case DARK_OAK -> STRIPPED_DARK_OAK_WOOD;
-            case PALE_OAK -> STRIPPED_PALE_OAK_WOOD;
-            case CHERRY -> STRIPPED_CHERRY_WOOD;
-        };
-        return Registries.BLOCK.getBlockProperties(strippedId).getBlockState(PILLAR_AXIS, getPillarAxis());
+    override fun getStrippedState(): BlockState {
+        val strippedId = when (woodType) {
+            WoodType.OAK -> BlockID.STRIPPED_OAK_WOOD
+            WoodType.SPRUCE -> BlockID.STRIPPED_SPRUCE_WOOD
+            WoodType.BIRCH -> BlockID.STRIPPED_BIRCH_WOOD
+            WoodType.JUNGLE -> BlockID.STRIPPED_JUNGLE_WOOD
+            WoodType.ACACIA -> BlockID.STRIPPED_ACACIA_WOOD
+            WoodType.DARK_OAK -> BlockID.STRIPPED_DARK_OAK_WOOD
+            WoodType.PALE_OAK -> BlockID.STRIPPED_PALE_OAK_WOOD
+            WoodType.CHERRY -> BlockID.STRIPPED_CHERRY_WOOD
+        }
+        return Registries.BLOCK.getBlockProperties(strippedId)
+            .getBlockState(CommonBlockProperties.PILLAR_AXIS, pillarAxis)
     }
 }

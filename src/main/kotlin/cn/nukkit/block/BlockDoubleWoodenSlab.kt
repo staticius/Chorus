@@ -1,29 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
 
-public abstract class BlockDoubleWoodenSlab extends BlockDoubleSlabBase {
-    public BlockDoubleWoodenSlab(BlockState blockstate) {
-        super(blockstate);
-    }
-    @Override
-    public String getName() {
-        return "Double " + getSlabName() + " Wood Slab";
-    }
+abstract class BlockDoubleWoodenSlab(blockstate: BlockState?) : BlockDoubleSlabBase(blockstate) {
+    override val name: String
+        get() = "Double $slabName Wood Slab"
 
-    @Override
-    public double getResistance() {
-        return 15;
-    }
+    override val resistance: Double
+        get() = 15.0
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    protected boolean isCorrectTool(Item item) {
-        return true;
+    override fun isCorrectTool(item: Item): Boolean {
+        return true
     }
 }

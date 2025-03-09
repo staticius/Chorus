@@ -1,233 +1,205 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.block.ComposterEmptyEvent;
-import cn.nukkit.event.block.ComposterFillEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemBoneMeal;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.registry.Registries;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.event.block.ComposterEmptyEvent.getDrop
+import cn.nukkit.event.block.ComposterEmptyEvent.getNewLevel
+import cn.nukkit.event.block.ComposterFillEvent.isSuccess
+import cn.nukkit.item.*
+import cn.nukkit.level.Sound
+import cn.nukkit.math.BlockFace
+import cn.nukkit.registry.Registries
+import it.unimi.dsi.fastutil.objects.Object2IntMap
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
+import java.util.*
 
-import javax.annotation.Nullable;
-import java.util.Random;
+class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Composter"
 
-import static cn.nukkit.block.property.CommonBlockProperties.COMPOSTER_FILL_LEVEL;
+    override val hardness: Double
+        get() = 0.6
 
+    override val resistance: Double
+        get() = 0.6
 
-public class BlockComposter extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(COMPOSTER, COMPOSTER_FILL_LEVEL);
-    private static final Object2IntMap<String> compostableItems = new Object2IntOpenHashMap<>();
-    private static final Object2IntMap<BlockState> compostableBlocks = new Object2IntOpenHashMap<>();
-    public static final Item OUTPUT_ITEM = new ItemBoneMeal();
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    public static void init() {
-        registerDefaults();
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public static boolean isNotActivate(Player player) {
-        if (player == null) {
-            return false;
-        }
-        return Block.isNotActivate(player);
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    public BlockComposter() {
-        this(PROPERTIES.getDefaultState());
+    override val comparatorInputOverride: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL)
+
+    fun incrementLevel(): Boolean {
+        val fillLevel = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL) + 1
+        setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, fillLevel)
+        level.setBlock(this.position, this, true, true)
+        return fillLevel == 8
     }
 
-    public BlockComposter(BlockState blockstate) {
-        super(blockstate);
-    }
+    val isFull: Boolean
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL) == 8
 
-    @Override
-    public String getName() {
-        return "Composter";
-    }
+    val isEmpty: Boolean
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL) == 0
 
-    @Override
-    public double getHardness() {
-        return 0.6;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.6;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride() {
-        return getPropertyValue(COMPOSTER_FILL_LEVEL);
-    }
-
-    public boolean incrementLevel() {
-        int fillLevel = getPropertyValue(COMPOSTER_FILL_LEVEL) + 1;
-        setPropertyValue(COMPOSTER_FILL_LEVEL, fillLevel);
-        this.level.setBlock(this.position, this, true, true);
-        return fillLevel == 8;
-    }
-
-    public boolean isFull() {
-        return getPropertyValue(COMPOSTER_FILL_LEVEL) == 8;
-    }
-
-    public boolean isEmpty() {
-        return getPropertyValue(COMPOSTER_FILL_LEVEL) == 0;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (isNotActivate(player)) return false;
-        if (item.isNull()) {
-            return false;
+    override fun onActivate(
+        item: Item,
+        player: Player,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
+        if (item.isNull) {
+            return false
         }
 
-        if (isFull()) {
-            ComposterEmptyEvent event = new ComposterEmptyEvent(this, player, item, Item.get(ItemID.BONE_MEAL), 0);
-            this.level.server.pluginManager.callEvent(event);
-            if (!event.isCancelled()) {
-                setPropertyValue(COMPOSTER_FILL_LEVEL, event.getNewLevel());
-                this.level.setBlock(this.position, this, true, true);
-                this.level.dropItem(this.position.add(0.5, 0.85, 0.5), event.getDrop(), event.motion, false, 10);
-                this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_EMPTY);
+        if (isFull) {
+            val event: ComposterEmptyEvent = ComposterEmptyEvent(this, player, item, Item.get(ItemID.BONE_MEAL), 0)
+            level.server.pluginManager.callEvent(event)
+            if (!event.isCancelled) {
+                setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
+                level.setBlock(this.position, this, true, true)
+                level.dropItem(position.add(0.5, 0.85, 0.5)!!, event.getDrop(), event.motion, false, 10)
+                level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_EMPTY)
             }
-            return true;
+            return true
         }
 
-        int chance = getChance(item);
+        val chance = getChance(item)
         if (chance <= 0) {
-            return false;
+            return false
         }
 
-        boolean success = new Random().nextInt(100) < chance;
-        ComposterFillEvent event = new ComposterFillEvent(this, player, item, chance, success);
-        this.level.server.pluginManager.callEvent(event);
+        val success = Random().nextInt(100) < chance
+        val event: ComposterFillEvent = ComposterFillEvent(this, player, item, chance, success)
+        level.server.pluginManager.callEvent(event)
 
-        if (event.isCancelled()) {
-            return true;
+        if (event.isCancelled) {
+            return true
         }
 
-        if (player != null && !player.isCreative()) {
-            item.setCount(item.getCount() - 1);
+        if (player != null && !player.isCreative) {
+            item.setCount(item.getCount() - 1)
         }
 
-        if (event.isSuccess()) {
+        if (event.isSuccess) {
             if (incrementLevel()) {
-                level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_READY);
+                level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_READY)
             } else {
-                level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_FILL_SUCCESS);
+                level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_FILL_SUCCESS)
             }
         } else {
-            level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_FILL);
+            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_FILL)
         }
 
-        return true;
+        return true
     }
 
-    public Item empty() {
-        return empty(null, null);
+    fun empty(): Item? {
+        return empty(null, null)
     }
 
-    public Item empty(@Nullable Item item, @Nullable Player player) {
-        ComposterEmptyEvent event = new ComposterEmptyEvent(this, player, item, new ItemBoneMeal(), 0);
-        this.level.server.pluginManager.callEvent(event);
-        if (!event.isCancelled()) {
-            setPropertyValue(COMPOSTER_FILL_LEVEL, event.getNewLevel());
-            this.level.setBlock(this.position, this, true, true);
+    fun empty(item: Item?, player: Player?): Item? {
+        val event: ComposterEmptyEvent = ComposterEmptyEvent(this, player, item, ItemBoneMeal(), 0)
+        level.server.pluginManager.callEvent(event)
+        if (!event.isCancelled) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
+            level.setBlock(this.position, this, true, true)
             if (item != null) {
-                this.level.dropItem(this.position.add(0.5, 0.85, 0.5), event.getDrop(), event.motion, false, 10);
+                level.dropItem(position.add(0.5, 0.85, 0.5)!!, event.getDrop(), event.motion, false, 10)
             }
-            this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_EMPTY);
-            return event.getDrop();
+            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_EMPTY)
+            return event.getDrop()
         }
-        return null;
+        return null
     }
 
-    public Item getOutPutItem() {
-        return OUTPUT_ITEM.clone();
-    }
+    val outPutItem: Item
+        get() = OUTPUT_ITEM.clone()
 
-    public static void registerItem(int chance, @NotNull String itemId) {
-        compostableItems.put(itemId, chance);
-    }
+    companion object {
+        val properties: BlockProperties = BlockProperties(COMPOSTER, CommonBlockProperties.COMPOSTER_FILL_LEVEL)
+            get() = Companion.field
+        private val compostableItems: Object2IntMap<String> = Object2IntOpenHashMap()
+        private val compostableBlocks: Object2IntMap<BlockState?> = Object2IntOpenHashMap()
+        val OUTPUT_ITEM: Item = ItemBoneMeal()
 
-    public static void registerItems(int chance, @NotNull String... itemId) {
-        for (String minecraftItemID : itemId) {
-            registerItem(chance, minecraftItemID);
+        fun init() {
+            registerDefaults()
         }
-    }
 
-    public static void registerBlocks(int chance, String... blockIds) {
-        for (String blockId : blockIds) {
-            registerBlock(chance, blockId, 0);
+        fun isNotActivate(player: Player?): Boolean {
+            if (player == null) {
+                return false
+            }
+            return Block.isNotActivate(player)
         }
-    }
 
-    public static void registerBlock(int chance, String blockId) {
-        BlockState blockState = Registries.BLOCK.get(blockId).getBlockState();
-        compostableBlocks.put(blockState, chance);
-    }
-
-    public static void registerBlock(int chance, String blockId, int meta) {
-        int i = Registries.BLOCKSTATE_ITEMMETA.get(blockId, meta);
-        BlockState blockState;
-        if (i == 0) {
-            Block block = Registries.BLOCK.get(blockId);
-            blockState = block.getProperties().getDefaultState();
-        } else {
-            blockState = Registries.BLOCKSTATE.get(i);
+        fun registerItem(chance: Int, itemId: String) {
+            compostableItems.put(itemId, chance)
         }
-        compostableBlocks.put(blockState, chance);
-    }
 
-    public static int getChance(Item item) {
-        if (item instanceof ItemBlock) {
-            return compostableBlocks.getInt(item.getBlockUnsafe().getBlockState());
-        } else {
-            return compostableItems.getInt(item.getId());
+        fun registerItems(chance: Int, vararg itemId: String) {
+            for (minecraftItemID in itemId) {
+                registerItem(chance, minecraftItemID)
+            }
         }
-    }
 
-    private static void registerDefaults() {
-        registerItems(30,
-                BlockID.KELP,
+        fun registerBlocks(chance: Int, vararg blockIds: String) {
+            for (blockId in blockIds) {
+                registerBlock(chance, blockId, 0)
+            }
+        }
+
+        fun registerBlock(chance: Int, blockId: String) {
+            val blockState = Registries.BLOCK.get(blockId)!!.blockState
+            compostableBlocks.put(blockState, chance)
+        }
+
+        fun registerBlock(chance: Int, blockId: String, meta: Int) {
+            val i = Registries.BLOCKSTATE_ITEMMETA.get(blockId, meta)
+            val blockState: BlockState
+            if (i == 0) {
+                val block = Registries.BLOCK.get(blockId)
+                blockState = block!!.properties.defaultState
+            } else {
+                blockState = Registries.BLOCKSTATE.get(i)
+            }
+            compostableBlocks.put(blockState, chance)
+        }
+
+        fun getChance(item: Item): Int {
+            return if (item is ItemBlock) {
+                compostableBlocks.getInt(item.blockUnsafe!!.blockState)
+            } else {
+                compostableItems.getInt(item.id)
+            }
+        }
+
+        private fun registerDefaults() {
+            registerItems(
+                30,
+                KELP,
                 ItemID.BEETROOT_SEEDS,
                 ItemID.DRIED_KELP,
                 ItemID.MELON_SEEDS,
@@ -237,13 +209,14 @@ public class BlockComposter extends BlockSolid {
                 ItemID.GLOW_BERRIES,
                 ItemID.PITCHER_POD,
                 ItemID.TORCHFLOWER_SEEDS
-        );
-        registerItems(50, ItemID.MELON_SLICE, ItemID.SUGAR_CANE);
-        registerItems(65, ItemID.APPLE, BlockID.BEETROOT, ItemID.CARROT, ItemID.COCOA_BEANS, ItemID.POTATO);
-        registerItems(85, ItemID.BAKED_POTATO, ItemID.BREAD, ItemID.COOKIE);
-        registerItems(100, ItemID.PUMPKIN_PIE);
+            )
+            registerItems(50, ItemID.MELON_SLICE, ItemID.SUGAR_CANE)
+            registerItems(65, ItemID.APPLE, BEETROOT, ItemID.CARROT, ItemID.COCOA_BEANS, ItemID.POTATO)
+            registerItems(85, ItemID.BAKED_POTATO, ItemID.BREAD, ItemID.COOKIE)
+            registerItems(100, ItemID.PUMPKIN_PIE)
 
-        registerBlocks(30,
+            registerBlocks(
+                30,
                 GRASS_BLOCK,
                 PINK_PETALS,
                 OAK_LEAVES,
@@ -270,10 +243,14 @@ public class BlockComposter extends BlockSolid {
                 SHORT_GRASS,
                 SWEET_BERRY_BUSH,
                 MOSS_CARPET, HANGING_ROOTS,
-                SMALL_DRIPLEAF_BLOCK);
-        registerBlocks(50, GLOW_LICHEN, CACTUS, DRIED_KELP_BLOCK, VINE, NETHER_SPROUTS,
-                TWISTING_VINES, WEEPING_VINES, TALL_GRASS);
-        registerBlocks(65,
+                SMALL_DRIPLEAF_BLOCK
+            )
+            registerBlocks(
+                50, GLOW_LICHEN, CACTUS, DRIED_KELP_BLOCK, VINE, NETHER_SPROUTS,
+                TWISTING_VINES, WEEPING_VINES, TALL_GRASS
+            )
+            registerBlocks(
+                65,
                 LARGE_FERN,
                 FERN,
                 WITHER_ROSE,
@@ -311,8 +288,19 @@ public class BlockComposter extends BlockSolid {
                 LILY_OF_THE_VALLEY,
                 CLOSED_EYEBLOSSOM,
                 OPEN_EYEBLOSSOM
-        );
-        registerBlocks(85, HAY_BLOCK, BROWN_MUSHROOM_BLOCK, RED_MUSHROOM_BLOCK, FLOWERING_AZALEA, NETHER_WART_BLOCK, PITCHER_PLANT, TORCHFLOWER, WARPED_WART_BLOCK);
-        registerBlocks(100, CAKE);
+            )
+            registerBlocks(
+                85,
+                HAY_BLOCK,
+                BROWN_MUSHROOM_BLOCK,
+                RED_MUSHROOM_BLOCK,
+                FLOWERING_AZALEA,
+                NETHER_WART_BLOCK,
+                PITCHER_PLANT,
+                TORCHFLOWER,
+                WARPED_WART_BLOCK
+            )
+            registerBlocks(100, CAKE)
+        }
     }
 }

@@ -1,74 +1,69 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
 
 /**
  * @author CreeperFace
  * @since 2.6.2017
  */
+abstract class BlockConcretePowder(blockState: BlockState?) : BlockFallable(blockState) {
+    override val resistance: Double
+        get() = 2.5
 
-public abstract class BlockConcretePowder extends BlockFallable {
-    public BlockConcretePowder(BlockState blockState) {
-        super(blockState);
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    @Override
-    public double getResistance() {
-        return 2.5;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
 
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
+    abstract val concrete: BlockConcrete
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    public abstract BlockConcrete getConcrete();
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            super.onUpdate(Level.BLOCK_UPDATE_NORMAL);
+            super.onUpdate(Level.BLOCK_UPDATE_NORMAL)
 
-            for (int side = 1; side <= 5; side++) {
-                Block block = this.getSide(BlockFace.fromIndex(side));
-                if (block.getId().equals(Block.FLOWING_WATER) || block.getId().equals(Block.WATER)) {
-                    this.level.setBlock(this.position, getConcrete(), true, true);
+            for (side in 1..5) {
+                val block = this.getSide(fromIndex(side)!!)
+                if (block!!.id == Block.FLOWING_WATER || block.id == Block.WATER) {
+                    level.setBlock(this.position, concrete, true, true)
                 }
             }
 
-            return Level.BLOCK_UPDATE_NORMAL;
+            return Level.BLOCK_UPDATE_NORMAL
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block b, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        boolean concrete = false;
+    override fun place(
+        item: Item,
+        b: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        var concrete = false
 
-        for (int side = 1; side <= 5; side++) {
-            Block block = this.getSide(BlockFace.fromIndex(side));
-            if (block.getId().equals(Block.FLOWING_WATER) || block.getId().equals(Block.WATER)) {
-                concrete = true;
-                break;
+        for (side in 1..5) {
+            val block = this.getSide(fromIndex(side)!!)
+            if (block!!.id == Block.FLOWING_WATER || block.id == Block.WATER) {
+                concrete = true
+                break
             }
         }
 
         if (concrete) {
-            this.level.setBlock(this.position, getConcrete(), true, true);
+            level.setBlock(this.position, this.concrete, true, true)
         } else {
-            this.level.setBlock(this.position, this, true, true);
+            level.setBlock(this.position, this, true, true)
         }
 
-        return true;
+        return true
     }
 }

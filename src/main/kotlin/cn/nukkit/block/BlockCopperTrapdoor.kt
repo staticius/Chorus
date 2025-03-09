@@ -1,26 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockCopperTrapdoor extends BlockTrapdoor {
-    public static final BlockProperties PROPERTIES = new BlockProperties(COPPER_TRAPDOOR, CommonBlockProperties.DIRECTION, CommonBlockProperties.OPEN_BIT, CommonBlockProperties.UPSIDE_DOWN_BIT);
+open class BlockCopperTrapdoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTrapdoor(blockstate) {
+    override val name: String
+        get() = "Copper Trapdoor"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockCopperTrapdoor() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCopperTrapdoor(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Copper Trapdoor";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            COPPER_TRAPDOOR,
+            CommonBlockProperties.DIRECTION,
+            CommonBlockProperties.OPEN_BIT,
+            CommonBlockProperties.UPSIDE_DOWN_BIT
+        )
+            get() = Companion.field
     }
 }

@@ -1,33 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemMangroveSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
 
-public class BlockMangroveStandingSign extends BlockStandingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MANGROVE_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockMangroveStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockStandingSign(blockstate) {
+    override fun getWallSignId(): String {
+        return BlockMangroveWallSign.Companion.PROPERTIES.getIdentifier()
     }
 
-    public BlockMangroveStandingSign() {
-        this(PROPERTIES.getDefaultState());
+    override fun toItem(): Item? {
+        return ItemMangroveSign()
     }
 
-    public BlockMangroveStandingSign(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getWallSignId() {
-        return BlockMangroveWallSign.PROPERTIES.getIdentifier();
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemMangroveSign();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.MANGROVE_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+            get() = Companion.field
     }
 }

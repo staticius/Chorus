@@ -1,40 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemCherrySign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
-
-
-public class BlockCherryWallSign extends BlockWallSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHERRY_WALL_SIGN, FACING_DIRECTION);
-
-    public BlockCherryWallSign() {
-        this(PROPERTIES.getDefaultState());
+class BlockCherryWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockWallSign(blockState) {
+    override fun getWallSignId(): String {
+        return CHERRY_WALL_SIGN
     }
 
-    public BlockCherryWallSign(BlockState blockState) {
-        super(blockState);
+    override fun getStandingSignId(): String {
+        return CHERRY_STANDING_SIGN
     }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemCherrySign()
     }
 
-    @Override
-    public String getWallSignId() {
-        return CHERRY_WALL_SIGN;
-    }
-
-    @Override
-    public String getStandingSignId() {
-        return CHERRY_STANDING_SIGN;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemCherrySign();
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHERRY_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

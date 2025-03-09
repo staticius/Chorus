@@ -1,63 +1,42 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.enchantment.Enchantment;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.enchantment.Enchantment
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.min
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockSeaLantern @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockTransparent(blockstate) {
+    override val name: String
+        get() = "Sea Lantern"
 
-public class BlockSeaLantern extends BlockTransparent {
+    override val resistance: Double
+        get() = 1.5
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(SEA_LANTERN);
+    override val hardness: Double
+        get() = 0.3
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val lightLevel: Int
+        get() = 15
 
-    public BlockSeaLantern() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSeaLantern(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Sea Lantern";
-    }
-
-    @Override
-    public double getResistance() {
-        return 1.5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.3;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 15;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        Enchantment fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING);
-        int fortuneLevel = fortune != null ? fortune.getLevel() : 0;
+    override fun getDrops(item: Item): Array<Item?>? {
+        val fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
+        val fortuneLevel = fortune?.level ?: 0
         // it drops 2–3 prismarine crystals
         // Each level of Fortune increases the maximum number of prismarine crystals dropped. 
         // The amount is capped at 5, so Fortune III simply increases the chance of getting 5 crystals.
-        int count = Math.min(5, 2 + ThreadLocalRandom.current().nextInt(1 + fortuneLevel));
+        val count = min(5.0, (2 + ThreadLocalRandom.current().nextInt(1 + fortuneLevel)).toDouble()).toInt()
 
-        return new Item[]{Item.get(ItemID.PRISMARINE_CRYSTALS, 0, count)};
+        return arrayOf<Item?>(get(ItemID.PRISMARINE_CRYSTALS, 0, count))
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SEA_LANTERN)
+            get() = Companion.field
     }
 }

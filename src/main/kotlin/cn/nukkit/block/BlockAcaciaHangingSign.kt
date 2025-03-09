@@ -1,25 +1,23 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-import static cn.nukkit.block.property.CommonBlockProperties.*;
+class BlockAcaciaHangingSign : BlockHangingSign {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockAcaciaHangingSign extends BlockHangingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(ACACIA_HANGING_SIGN, ATTACHED_BIT, FACING_DIRECTION, GROUND_SIGN_DIRECTION, HANGING);
-    public BlockAcaciaHangingSign() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    public BlockAcaciaHangingSign(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val name: String
+        get() = "Acacia Hanging Sign"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public String getName() {
-        return "Acacia Hanging Sign";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            ACACIA_HANGING_SIGN,
+            CommonBlockProperties.ATTACHED_BIT,
+            CommonBlockProperties.FACING_DIRECTION,
+            CommonBlockProperties.GROUND_SIGN_DIRECTION,
+            CommonBlockProperties.HANGING
+        )
+            get() = Companion.field
     }
 }

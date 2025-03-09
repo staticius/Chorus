@@ -1,73 +1,56 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityMovingBlock;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
 
-import javax.annotation.Nullable;
+class BlockMovingBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), BlockEntityHolder<BlockEntityMovingBlock?> {
+    override val name: String
+        get() = "MovingBlock"
 
-public class BlockMovingBlock extends BlockTransparent implements BlockEntityHolder<BlockEntityMovingBlock> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MOVING_BLOCK);
+    override val blockEntityType: String
+        get() = BlockEntity.MOVING_BLOCK
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val blockEntityClass: Class<out Any>
+        get() = BlockEntityMovingBlock::class.java
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        return false
     }
 
-    public BlockMovingBlock() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    public BlockMovingBlock(BlockState blockstate) {
-        super(blockstate);
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "MovingBlock";
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return false
     }
 
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.MOVING_BLOCK;
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    @Override
-    @NotNull public Class<? extends BlockEntityMovingBlock> getBlockEntityClass() {
-        return BlockEntityMovingBlock.class;
-    }
+    override val isSolid: Boolean
+        get() = false
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        return false;
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public  boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return false;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return true;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MOVING_BLOCK)
+            get() = Companion.field
     }
 }

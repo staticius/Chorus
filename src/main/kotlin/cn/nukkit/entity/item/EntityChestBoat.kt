@@ -53,12 +53,12 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
         addEntity.yaw = rotation.yaw.toFloat()
         addEntity.headYaw = rotation.yaw.toFloat()
         addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.south.toFloat()
-        addEntity.y = position.up.toFloat() + getBaseOffset()
-        addEntity.z = position.west.toFloat()
-        addEntity.speedX = motion.south.toFloat()
-        addEntity.speedY = motion.up.toFloat()
-        addEntity.speedZ = motion.west.toFloat()
+        addEntity.x = position.x.toFloat()
+        addEntity.y = position.y.toFloat() + getBaseOffset()
+        addEntity.z = position.z.toFloat()
+        addEntity.speedX = motion.x.toFloat()
+        addEntity.speedY = motion.y.toFloat()
+        addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
 
         addEntity.links = arrayOfNulls(passengers.size)

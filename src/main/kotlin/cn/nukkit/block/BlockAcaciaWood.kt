@@ -1,24 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.WoodType;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
 
-public class BlockAcaciaWood extends BlockWood {
-     public static final BlockProperties PROPERTIES = new BlockProperties(ACACIA_WOOD, CommonBlockProperties.PILLAR_AXIS);
+class BlockAcaciaWood(blockstate: BlockState?) : BlockWood(blockstate) {
+    override fun getWoodType(): WoodType {
+        return WoodType.ACACIA
+    }
 
-     @Override
-     @NotNull
-     public BlockProperties getProperties() {
-        return PROPERTIES;
-     }
-
-     public BlockAcaciaWood(BlockState blockstate) {
-         super(blockstate);
-     }
-
-    @Override
-    public WoodType getWoodType() {
-        return WoodType.ACACIA;
+    companion object {
+        val properties: BlockProperties = BlockProperties(ACACIA_WOOD, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

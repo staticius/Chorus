@@ -17,9 +17,9 @@ class FluctuateController : IController {
                 lastTickInWater = false
                 if (entity.hasWaterAt(0f)) {
                     if (ThreadLocalRandom.current().nextInt(0, 4) == 3) { // 1/3
-                        entity.motion.up += entity.floatingHeight * 0.8
+                        entity.motion.y += entity.floatingHeight * 0.8
                     } else {
-                        entity.motion.up += entity.floatingHeight * 0.6
+                        entity.motion.y += entity.floatingHeight * 0.6
                     }
                 }
             }

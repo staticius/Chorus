@@ -78,22 +78,22 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
             ).multiply(0.5)
 
             if (face!!.getAxis() == BlockFace.Axis.Z) {
-                size.west = 0.5
+                size.z = 0.5
             } else {
-                size.south = 0.5
+                size.x = 0.5
             }
 
-            this.width = size.south.toFloat()
-            this.length = size.west.toFloat()
-            this.height = size.up.toFloat()
+            this.width = size.x.toFloat()
+            this.length = size.z.toFloat()
+            this.height = size.y.toFloat()
 
             this.boundingBox = SimpleAxisAlignedBB(
-                position.south - size.south,
-                position.up - size.up,
-                position.west - size.west,
-                position.south + size.south,
-                position.up + size.up,
-                position.west + size.west
+                position.x - size.x,
+                position.y - size.y,
+                position.z - size.z,
+                position.x + size.x,
+                position.y + size.y,
+                position.z + size.z
             )
         } else {
             this.width = 0f
@@ -108,9 +108,9 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
         val addPainting: AddPaintingPacket = AddPaintingPacket()
         addPainting.entityUniqueId = this.getId()
         addPainting.entityRuntimeId = this.getId()
-        addPainting.x = position.south.toFloat()
-        addPainting.y = position.up.toFloat()
-        addPainting.z = position.west.toFloat()
+        addPainting.x = position.x.toFloat()
+        addPainting.y = position.y.toFloat()
+        addPainting.z = position.z.toFloat()
         addPainting.direction = getDirection()!!.horizontalIndex
         addPainting.title = namedTag!!.getString("Motive")
         return addPainting

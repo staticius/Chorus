@@ -1,196 +1,202 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.OptionalBoolean;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.concurrent.ThreadLocalRandom;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.entity.Entity
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.item.Item
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
+import cn.nukkit.level.Locator
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.OptionalBoolean
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.min
 
 /**
  * Implements the main logic of all nether vines.
  * @author joserobjr
  */
-public abstract class BlockVinesNether extends BlockTransparent {
-    /**
-     * Creates a nether vine from a meta compatible with {@link #getProperties()}.
-     */
-    public BlockVinesNether(BlockState blockstate) {
-        super(blockstate);
-    }
-
+abstract class BlockVinesNether
+/**
+ * Creates a nether vine from a meta compatible with [.getProperties].
+ */
+    (blockstate: BlockState?) : BlockTransparent(blockstate) {
     /**
      * The direction that the vine will grow, vertical direction is expected but future implementations
      * may also add horizontal directions.
      * @return Normally, up or down.
      */
-    @NotNull public abstract BlockFace getGrowthDirection();
+    abstract val growthDirection: BlockFace
 
     /**
      * The current age of this block.
      */
-    public abstract int getVineAge();
-
-    public abstract void setVineAge(int vineAge);
+    abstract var vineAge: Int
 
     /**
      * The maximum accepted age of this block.
      * @return Positive, inclusive value.
      */
-    public abstract int getMaxVineAge();
+    abstract val maxVineAge: Int
 
     /**
-     * Changes the current vine age to a random new random age. 
-     * 
+     * Changes the current vine age to a random new random age.
+     *
      * @param pseudorandom If the the randomization should be pseudorandom.
      */
-    public void randomizeVineAge(boolean pseudorandom) {
+    fun randomizeVineAge(pseudorandom: Boolean) {
         if (pseudorandom) {
-            setVineAge(ThreadLocalRandom.current().nextInt(getMaxVineAge()));
-            return;
+            vineAge = ThreadLocalRandom.current().nextInt(maxVineAge)
+            return
         }
-        
-        double chance = 1.0D;
-        int age;
 
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        for(age = 0; random.nextDouble() < chance; ++age) {
-            chance *= 0.826D;
+        var chance = 1.0
+
+        val random = ThreadLocalRandom.current()
+        var age = 0
+        while (random.nextDouble() < chance) {
+            chance *= 0.826
+            ++age
         }
-        
-        setVineAge(age);
+
+        vineAge = age
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        Block support = getSide(getGrowthDirection().getOpposite());
-        if (!isSupportValid(support)) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val support = getSide(growthDirection.getOpposite()!!)
+        if (!isSupportValid(support!!)) {
+            return false
         }
 
-        if (support.getId().equals(getId())) {
-            setVineAge(Math.min(getMaxVineAge(), ((BlockVinesNether) support).getVineAge() + 1));
+        if (support.id == id) {
+            vineAge =
+                min(maxVineAge.toDouble(), ((support as BlockVinesNether).vineAge + 1).toDouble())
+                    .toInt()
         } else {
-            randomizeVineAge(true);
+            randomizeVineAge(true)
         }
-        
-        return super.place(item, block, target, face, fx, fy, fz, player);
+
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    @Override
-    public int onUpdate(int type) {
-        switch (type) {
-            case Level.BLOCK_UPDATE_RANDOM -> {
-                int maxVineAge = getMaxVineAge();
-                if (getVineAge() < maxVineAge && ThreadLocalRandom.current().nextInt(10) == 0
-                        && findVineAge(true).orElse(maxVineAge) < maxVineAge) {
-                    grow();
+    override fun onUpdate(type: Int): Int {
+        when (type) {
+            Level.BLOCK_UPDATE_RANDOM -> {
+                val maxVineAge = maxVineAge
+                if (vineAge < maxVineAge && ThreadLocalRandom.current().nextInt(10) == 0 && findVineAge(true).orElse(
+                        maxVineAge
+                    ) < maxVineAge
+                ) {
+                    grow()
                 }
-                return Level.BLOCK_UPDATE_RANDOM;
+                return Level.BLOCK_UPDATE_RANDOM
             }
-            case Level.BLOCK_UPDATE_SCHEDULED -> {
-                level.useBreakOn(this.position, null, null, true);
-                return Level.BLOCK_UPDATE_SCHEDULED;
+
+            Level.BLOCK_UPDATE_SCHEDULED -> {
+                level.useBreakOn(this.position, null, null, true)
+                return Level.BLOCK_UPDATE_SCHEDULED
             }
-            case Level.BLOCK_UPDATE_NORMAL -> {
-                if (!isSupportValid()) {
-                    level.scheduleUpdate(this, 1);
+
+            Level.BLOCK_UPDATE_NORMAL -> {
+                if (!isSupportValid) {
+                    level.scheduleUpdate(this, 1)
                 }
-                return Level.BLOCK_UPDATE_NORMAL;
+                return Level.BLOCK_UPDATE_NORMAL
             }
-            default -> {
-                return 0;
+
+            else -> {
+                return 0
             }
         }
     }
 
     /**
-     * Grow a single vine if possible. Calls {@link BlockGrowEvent} passing the positioned new state and the source block.
+     * Grow a single vine if possible. Calls [BlockGrowEvent] passing the positioned new state and the source block.
      * @return If the vine grew successfully.
      */
-    public boolean grow() {
-        Block pos = getSide(getGrowthDirection());
-        if (!pos.isAir() || pos.position.up < 0 || 255 < pos.position.up) {
-            return false;
+    fun grow(): Boolean {
+        val pos = getSide(growthDirection)
+        if (!pos!!.isAir || pos.position.y < 0 || 255 < pos.position.y) {
+            return false
         }
 
-        BlockVinesNether growing = clone();
-        growing.position.south = pos.position.south;
-        growing.position.up = pos.position.up;
-        growing.position.west = pos.position.west;
-        growing.setVineAge(Math.min(getVineAge() + 1, getMaxVineAge()));
+        val growing = clone()
+        growing.position.x = pos.position.x
+        growing.position.y = pos.position.y
+        growing.position.z = pos.position.z
+        growing.vineAge = min((vineAge + 1).toDouble(), maxVineAge.toDouble()).toInt()
 
-        BlockGrowEvent ev = new BlockGrowEvent(this, growing);
-        Server.getInstance().pluginManager.callEvent(ev);
+        val ev = BlockGrowEvent(this, growing)
+        instance!!.pluginManager.callEvent(ev)
 
-        if (ev.isCancelled()) {
-            return false;
+        if (ev.isCancelled) {
+            return false
         }
 
         if (level.setBlock(pos.position, growing)) {
-            increaseRootAge();
-            return true;
+            increaseRootAge()
+            return true
         }
-        return false;
+        return false
     }
 
     /**
-     * Grow a random amount of vines. 
-     * Calls {@link BlockGrowEvent} passing the positioned new state and the source block for each new vine being added
+     * Grow a random amount of vines.
+     * Calls [BlockGrowEvent] passing the positioned new state and the source block for each new vine being added
      * to the world, if one of the events gets cancelled the growth gets interrupted.
-     * @return How many vines grew 
+     * @return How many vines grew
      */
-    public int growMultiple() {
-        BlockFace growthDirection = getGrowthDirection();
-        int age = getVineAge() + 1;
-        int maxAge = getMaxVineAge();
-        BlockVinesNether growing = clone();
-        growing.randomizeVineAge(false);
-        int blocksToGrow = growing.getVineAge();
+    fun growMultiple(): Int {
+        val growthDirection = growthDirection
+        var age = vineAge + 1
+        val maxAge = maxVineAge
+        val growing = clone()
+        growing.randomizeVineAge(false)
+        val blocksToGrow = growing.vineAge
 
-        int grew = 0;
-        for (int distance = 1; distance <= blocksToGrow; distance++) {
-            Block pos = getSide(growthDirection, distance);
-            if (!pos.isAir() || pos.position.up < 0 || 255 < pos.position.up) {
-                break;
+        var grew = 0
+        for (distance in 1..blocksToGrow) {
+            val pos = getSide(growthDirection, distance)
+            if (!pos!!.isAir || pos.position.y < 0 || 255 < pos.position.y) {
+                break
             }
 
-            growing.setVineAge(Math.min(age++, maxAge));
-            growing.position.south = pos.position.south;
-            growing.position.up = pos.position.up;
-            growing.position.west = pos.position.west;
+            growing.vineAge = min((age++).toDouble(), maxAge.toDouble()).toInt()
+            growing.position.x = pos.position.x
+            growing.position.y = pos.position.y
+            growing.position.z = pos.position.z
 
-            BlockGrowEvent ev = new BlockGrowEvent(this, growing.clone());
-            Server.getInstance().pluginManager.callEvent(ev);
+            val ev = BlockGrowEvent(this, growing.clone())
+            instance!!.pluginManager.callEvent(ev)
 
-            if (ev.isCancelled()) {
-                break;
+            if (ev.isCancelled) {
+                break
             }
 
-            if (!level.setBlock(pos.position, ev.newState)) {
-                break;
+            if (!level.setBlock(pos.position, ev.newState!!)) {
+                break
             }
 
-            grew++;
+            grew++
         }
-        
+
         if (grew > 0) {
-            increaseRootAge();
+            increaseRootAge()
         }
 
-        return grew;
+        return grew
     }
 
     /**
@@ -198,23 +204,27 @@ public abstract class BlockVinesNether extends BlockTransparent {
      * @param base True to get the age of the base (oldest block), false to get the age of the head (newest block)
      * @return Empty if the target could not be reached. The age of the target if it was found.
      */
-    @NotNull public OptionalInt findVineAge(boolean base) {
+    fun findVineAge(base: Boolean): OptionalInt {
         return findVineBlock(base)
-                .map(vine-> OptionalInt.of(vine.getVineAge()))
-                .orElse(OptionalInt.empty());
+            .map { vine: BlockVinesNether ->
+                OptionalInt.of(
+                    vine.vineAge
+                )
+            }
+            .orElse(OptionalInt.empty())
     }
 
     /**
      * Attempt to find the root or the head of the vine transversing the growth direction for up to 256 blocks.
      * @param base True to find the base (oldest block), false to find the head (newest block)
-     * @return Empty if the target could not be reached or the block there isn't an instance of {@link BlockVinesNether}.
-     *          The positioned block of the target if it was found.
+     * @return Empty if the target could not be reached or the block there isn't an instance of [BlockVinesNether].
+     * The positioned block of the target if it was found.
      */
-    @NotNull public Optional<BlockVinesNether> findVineBlock(boolean base) {
+    fun findVineBlock(base: Boolean): Optional<BlockVinesNether> {
         return findVine(base)
-                .map(Locator::getLevelBlock)
-                .filter(BlockVinesNether.class::isInstance)
-                .map(BlockVinesNether.class::cast);
+            .map(Locator::levelBlock)
+            .filter { obj: Block? -> BlockVinesNether::class.java.isInstance(obj) }
+            .map { obj: Block? -> BlockVinesNether::class.java.cast(obj) }
     }
 
     /**
@@ -222,69 +232,73 @@ public abstract class BlockVinesNether extends BlockTransparent {
      * @param base True to find the base (oldest block), false to find the head (newest block)
      * @return Empty if the target could not be reached. The position of the target if it was found.
      */
-    @NotNull public Optional<Locator> findVine(boolean base) {
-        BlockFace supportFace = getGrowthDirection();
+    fun findVine(base: Boolean): Optional<Locator> {
+        var supportFace: BlockFace? = growthDirection
         if (base) {
-            supportFace = supportFace.getOpposite();
+            supportFace = supportFace!!.getOpposite()
         }
-        Locator result = getLocator();
-        String id = getId();
-        int limit = 256;
-        while (--limit > 0){
-            Locator next = result.getSide(supportFace);
-            if (Objects.equals(next.getLevelBlockState().getIdentifier(), id)) {
-                result = next;
+        var result = locator
+        val id = id
+        var limit = 256
+        while (--limit > 0) {
+            val next = result.getSide(supportFace)
+            if (next!!.levelBlockState.identifier == id) {
+                result = next
             } else {
-                break;
+                break
             }
         }
-        
-        return limit == -1 ? Optional.empty() : Optional.of(result);
+
+        return if (limit == -1) Optional.empty() else Optional.of(result)
     }
 
     /**
      * Attempts to increase the age of the base of the nether vine.
-     * @return <ul>
-     *     <li>{@code EMPTY} if the base could not be reached or have an invalid instance type
-     *     <li>{@code TRUE} if the base was changed successfully
-     *     <li>{@code FALSE} if the base was already in the max age or the block change was refused 
-     *     </ul>
+     * @return
+     *  * `EMPTY` if the base could not be reached or have an invalid instance type
+     *  * `TRUE` if the base was changed successfully
+     *  * `FALSE` if the base was already in the max age or the block change was refused
+     *
      */
-    @NotNull public OptionalBoolean increaseRootAge() {
-        Block base = findVine(true).map(Locator::getLevelBlock).orElse(null);
-        if (!(base instanceof BlockVinesNether baseVine)) {
-            return OptionalBoolean.EMPTY;
-        }
+    fun increaseRootAge(): OptionalBoolean {
+        val base = findVine(true).map(Locator::levelBlock)
+            .orElse(null) as? BlockVinesNether
+            ?: return OptionalBoolean.EMPTY
 
-        int vineAge = baseVine.getVineAge();
-        if (vineAge < baseVine.getMaxVineAge()) {
-            baseVine.setVineAge(vineAge + 1);
-            if (level.setBlock(baseVine.position, baseVine)) {
-                return OptionalBoolean.TRUE;
+        val vineAge = base.vineAge
+        if (vineAge < base.maxVineAge) {
+            base.vineAge = vineAge + 1
+            if (level.setBlock(base.position, base)) {
+                return OptionalBoolean.TRUE
             }
         }
-        
-        return OptionalBoolean.FALSE;
+
+        return OptionalBoolean.FALSE
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (!item.isFertilizer()) {
-            return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (!item.isFertilizer) {
+            return false
         }
 
-        level.addParticle(new BoneMealParticle(this.position));
-        findVineBlock(false).ifPresent(BlockVinesNether::growMultiple);
+        level.addParticle(BoneMealParticle(this.position))
+        findVineBlock(false).ifPresent { obj: BlockVinesNether -> obj.growMultiple() }
 
-        if (player != null && !player.isCreative()) {
-            item.count--;
+        if (player != null && !player.isCreative) {
+            item.count--
         }
-        
-        return true;
+
+        return true
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
+    override fun getDrops(item: Item): Array<Item?>? {
         // They have a 33% (3/9) chance to drop a single weeping vine when broken, 
         // increased to 55% (5/9) with Fortune I, 
         // 77% (7/9) with Fortune II, 
@@ -292,118 +306,107 @@ public abstract class BlockVinesNether extends BlockTransparent {
         // 
         // They always drop a single weeping vine when broken with shears or a tool enchanted with Silk Touch.
 
-        int enchantmentLevel;
-        if (item.isShears() || (enchantmentLevel = item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING)) >= 3) {
-            return new Item[]{ toItem() };
+        val enchantmentLevel: Int
+        if (item.isShears || (item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING)
+                .also { enchantmentLevel = it }) >= 3
+        ) {
+            return arrayOf(toItem())
         }
-        
-        int chance = 3 + enchantmentLevel * 2;
+
+        val chance = 3 + enchantmentLevel * 2
         if (ThreadLocalRandom.current().nextInt(9) < chance) {
-            return new Item[]{ toItem() };
+            return arrayOf(toItem())
         }
-        
-        return Item.EMPTY_ARRAY;
+
+        return Item.EMPTY_ARRAY
     }
 
-    protected boolean isSupportValid(@NotNull Block support) {
-        return support.getId().equals(getId()) || !support.isTransparent();
+    protected fun isSupportValid(support: Block): Boolean {
+        return support.id == id || !support.isTransparent
     }
 
-    public boolean isSupportValid() {
-        return isSupportValid(getSide(getGrowthDirection().getOpposite()));
+    val isSupportValid: Boolean
+        get() = isSupportValid(getSide(growthDirection.getOpposite()!!)!!)
+
+    override fun onEntityCollide(entity: Entity) {
+        entity.resetFallDistance()
     }
 
-    @Override
-    public void onEntityCollide(Entity entity) {
-        entity.resetFallDistance();
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
+    override val hardness: Double
+        get() = 0.0
+
+    override val resistance: Double
+        get() = 0.0
+
+    override fun canBeClimbed(): Boolean {
+        return true
     }
 
-    @Override
-    public double getHardness() {
-        return 0;
+    override fun canBeFlowedInto(): Boolean {
+        return true
     }
 
-    @Override
-    public double getResistance() {
-        return 0;
+    override val isSolid: Boolean
+        get() = false
+
+    override var minX: Double
+        get() = position.x + (4 / 16.0)
+        set(minX) {
+            super.minX = minX
+        }
+
+    override var minZ: Double
+        get() = position.z + (4 / 16.0)
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x + (12 / 16.0)
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxZ: Double
+        get() = position.z + (12 / 16.0)
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override var maxY: Double
+        get() = position.y + (15 / 16.0)
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeClimbed() {
-        return true;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return true;
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean isSolid() {
-        return false;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public double getMinX() {
-        return this.position.south + (4/16.0);
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public double getMinZ() {
-        return this.position.west + (4/16.0);
+    override fun clone(): BlockVinesNether {
+        return super.clone() as BlockVinesNether
     }
 
-    @Override
-    public double getMaxX() {
-        return this.position.south + (12/16.0);
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + (12/16.0);
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + (15/16.0);
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return true;
-    }
-
-    @Override
-    public  boolean sticksToPiston() {
-        return false;
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
-    }
-    @Override
-    public BlockVinesNether clone() {
-        return (BlockVinesNether) super.clone();
-    }
-
-    @Override
-    public boolean isFertilizable() {
-        return true;
-    }
+    override val isFertilizable: Boolean
+        get() = true
 }

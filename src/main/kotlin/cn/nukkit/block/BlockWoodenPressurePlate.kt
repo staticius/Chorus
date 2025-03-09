@@ -1,59 +1,42 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.AxisAlignedBB;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockWoodenPressurePlate extends BlockPressurePlateBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WOODEN_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+open class BlockWoodenPressurePlate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockPressurePlateBase(blockstate) {
+    init {
+        this.onPitch = 0.8f
+        this.offPitch = 0.7f
     }
 
-    public BlockWoodenPressurePlate() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Oak Pressure Plate"
 
-    public BlockWoodenPressurePlate(BlockState blockstate) {
-        super(blockstate);
-        this.onPitch = 0.8f;
-        this.offPitch = 0.7f;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    public String getName() {
-        return "Oak Pressure Plate";
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
+    override val resistance: Double
+        get() = 0.5
 
-    @Override
-    public double getHardness() {
-        return 0.5D;
-    }
+    override fun computeRedstoneStrength(): Int {
+        val bb = collisionBoundingBox
 
-    @Override
-    public double getResistance() {
-        return 0.5D;
-    }
-
-    @Override
-    protected int computeRedstoneStrength() {
-        AxisAlignedBB bb = getCollisionBoundingBox();
-
-        for (Entity entity : this.level.getCollidingEntities(bb)) {
+        for (entity in level.getCollidingEntities(bb!!)) {
             if (entity.doesTriggerPressurePlate()) {
-                return 15;
+                return 15
             }
         }
 
-        return 0;
+        return 0
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.WOODEN_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
+            get() = Companion.field
     }
 }

@@ -315,7 +315,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val chainCommand = list.getResult<String>(2)
                 val source = sender.transform
                 val bv =
-                    BVector3.fromPos(pos!!.south - source.position.south, pos.up - source.position.up, pos.west - source.position.west)
+                    BVector3.fromPos(pos!!.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z)
                 source.setPitch(bv.pitch)
                 source.setYaw(bv.yaw)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), source)
@@ -334,9 +334,9 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 for (target in targets) {
                     val source = sender.transform
                     val bv = BVector3.fromPos(
-                        target.position.south - source.position.south,
-                        target.position.up + (if (anchorAtEyes) target.eyeHeight else 0f) - source.position.up,
-                        target.position.west - source.position.west
+                        target.position.x - source.position.x,
+                        target.position.y + (if (anchorAtEyes) target.eyeHeight else 0f) - source.position.y,
+                        target.position.z - source.position.z
                     )
                     source.setPitch(bv.pitch)
                     source.setYaw(bv.yaw)
@@ -382,9 +382,9 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val transform = sender.transform
                 for (c in axes!!.toCharArray()) {
                     when (c) {
-                        'x' -> transform.position.south = transform.position.floorX.toDouble()
-                        'y' -> transform.position.up = transform.position.floorY.toDouble()
-                        'z' -> transform.position.west = transform.position.floorZ.toDouble()
+                        'x' -> transform.position.x = transform.position.floorX.toDouble()
+                        'y' -> transform.position.y = transform.position.floorY.toDouble()
+                        'z' -> transform.position.z = transform.position.floorZ.toDouble()
                     }
                 }
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)

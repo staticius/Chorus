@@ -1,54 +1,33 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockCrimsonSlab extends BlockSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRIMSON_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockCrimsonSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSlab(blockstate, CRIMSON_DOUBLE_SLAB) {
+    override fun getSlabName(): String {
+        return "Crimson"
     }
 
-    public BlockCrimsonSlab() {
-        this(PROPERTIES.getDefaultState());
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return id == slab.id
     }
 
-    public BlockCrimsonSlab(BlockState blockstate) {
-        super(blockstate, CRIMSON_DOUBLE_SLAB);
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public String getSlabName() {
-        return "Crimson";
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return getId().equals(slab.getId());
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override val hardness: Double
+        get() = 3.5
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CRIMSON_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public double getHardness(){
-        return 3.5;
-    }
-
 }

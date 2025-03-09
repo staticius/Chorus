@@ -1,108 +1,98 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.utils.Faceable
 
 /**
  * http://minecraft.wiki/w/End_Rod
  *
  * @author PikyCZ
  */
-public class BlockEndRod extends BlockTransparent implements Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(END_ROD, CommonBlockProperties.FACING_DIRECTION);
+class BlockEndRod @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockState), Faceable {
+    override val name: String
+        get() = "End Rod"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 0.0
+
+    override val resistance: Double
+        get() = 0.0
+
+    override val lightLevel: Int
+        get() = 14
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override var minX: Double
+        get() = position.x + 0.4
+        set(minX) {
+            super.minX = minX
+        }
+
+    override var minZ: Double
+        get() = position.z + 0.4
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x + 0.6
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxZ: Double
+        get() = position.z + 0.6
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override val waterloggingLevel: Int
+        get() = 2
+
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    public BlockEndRod() {
-        this(PROPERTIES.getDefaultState());
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val faces = intArrayOf(0, 1, 3, 2, 5, 4)
+        setPropertyValue<Int, IntPropertyType>(
+            CommonBlockProperties.FACING_DIRECTION,
+            faces[if (player != null) face.index else 0]
+        )
+        level.setBlock(block.position, this, true, true)
+
+        return true
     }
 
-    public BlockEndRod(BlockState blockState) {
-        super(blockState);
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    @Override
-    public String getName() {
-        return "End Rod";
-    }
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION) and 0x07)
+        set(blockFace) {
+            super.blockFace = blockFace
+        }
 
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 14;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public double getMinX() {
-        return this.position.south + 0.4;
-    }
-
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.4;
-    }
-
-    @Override
-    public double getMaxX() {
-        return this.position.south + 0.6;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 0.6;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        int[] faces = {0, 1, 3, 2, 5, 4};
-        setPropertyValue(CommonBlockProperties.FACING_DIRECTION, faces[player != null ? face.index : 0]);
-        this.level.setBlock(block.position, this, true, true);
-
-        return true;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION) & 0x07);
+    companion object {
+        val properties: BlockProperties = BlockProperties(END_ROD, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

@@ -1,37 +1,25 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class BlockUnknown extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties(UNKNOWN);
-
-    public BlockUnknown() {
-        this(PROPERTIES.getDefaultState());
+class BlockUnknown @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    Block(null) {
+    init {
+        this.blockState = blockstate
     }
 
-    public BlockUnknown(BlockState blockstate) {
-        super(null);
-        this.blockstate = blockstate;
+    override val name: String
+        get() = "Unknown"
+
+    override fun toItem(): Item? {
+        return ItemBlock(this.clone())
     }
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public String getName() {
-        return "Unknown";
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this.clone());
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.UNKNOWN)
+            get() = Companion.field
     }
 }

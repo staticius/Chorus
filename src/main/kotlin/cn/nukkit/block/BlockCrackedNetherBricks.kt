@@ -1,51 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockCrackedNetherBricks extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRACKED_NETHER_BRICKS);
+class BlockCrackedNetherBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Cracked Nether Bricks"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override val hardness: Double
+        get() = 2.0
+
+    override val resistance: Double
+        get() = 6.0
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockCrackedNetherBricks() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCrackedNetherBricks(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Cracked Nether Bricks";
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CRACKED_NETHER_BRICKS)
+            get() = Companion.field
     }
 }

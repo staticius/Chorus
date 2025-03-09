@@ -1,35 +1,26 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.math.BlockFace
 
 /**
  * @author CreeperFace
  */
-public class BlockPiston extends BlockPistonBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PISTON, CommonBlockProperties.FACING_DIRECTION);
+class BlockPiston @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockPistonBase(blockstate) {
+    override val name: String
+        get() = "Piston"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    public override fun createHead(blockFace: BlockFace): Block {
+        return BlockPistonArmCollision().setPropertyValue<Int, IntPropertyType>(
+            CommonBlockProperties.FACING_DIRECTION,
+            blockFace.index
+        )
     }
 
-    public BlockPiston() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPiston(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Piston";
-    }
-
-    @Override
-    public Block createHead(BlockFace blockFace) {
-        return new BlockPistonArmCollision().setPropertyValue(CommonBlockProperties.FACING_DIRECTION, blockFace.index);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PISTON, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

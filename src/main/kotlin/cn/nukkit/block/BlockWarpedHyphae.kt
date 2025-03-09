@@ -1,26 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockWarpedHyphae extends BlockStem {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_HYPHAE, CommonBlockProperties.PILLAR_AXIS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockWarpedHyphae @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockStem(blockstate) {
+    override fun getStrippedState(): BlockState {
+        return BlockStrippedAcaciaLog.properties.getDefaultState()
     }
 
-    public BlockWarpedHyphae() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWarpedHyphae(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return BlockStrippedAcaciaLog.PROPERTIES.getDefaultState();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WARPED_HYPHAE, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

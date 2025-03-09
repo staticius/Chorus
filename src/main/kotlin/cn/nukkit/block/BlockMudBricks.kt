@@ -1,46 +1,26 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockMudBricks extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MUD_BRICKS);
+class BlockMudBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    Block(blockstate) {
+    override val name: String
+        get() = "Mud Bricks"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val hardness: Double
+        get() = 3.0
 
-    public BlockMudBricks() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val resistance: Double
+        get() = 1.5
 
-    public BlockMudBricks(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public String getName() {
-        return "Mud Bricks";
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public double getHardness() {
-        return 3;
-    }
-
-    @Override
-    public double getResistance() {
-        return 1.5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MUD_BRICKS)
+            get() = Companion.field
     }
 }

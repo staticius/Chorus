@@ -1,20 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockClientRequestPlaceholderBlock extends Block {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CLIENT_REQUEST_PLACEHOLDER_BLOCK);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockClientRequestPlaceholderBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockClientRequestPlaceholderBlock(BlockState blockstate) {
-        super(blockstate);
+class BlockClientRequestPlaceholderBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    Block(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.CLIENT_REQUEST_PLACEHOLDER_BLOCK)
+            get() = Companion.field
     }
 }

@@ -103,22 +103,22 @@ class EntityTnt @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, pro
         val hasUpdate: Boolean = entityBaseTick(tickDiff)
 
         if (isAlive()) {
-            motion.up -= getGravity().toDouble()
+            motion.y -= getGravity().toDouble()
 
-            move(motion.south, motion.up, motion.west)
+            move(motion.x, motion.y, motion.z)
 
             val friction: Float = 1 - getDrag()
 
-            motion.south *= friction.toDouble()
-            motion.up *= friction.toDouble()
-            motion.west *= friction.toDouble()
+            motion.x *= friction.toDouble()
+            motion.y *= friction.toDouble()
+            motion.z *= friction.toDouble()
 
             updateMovement()
 
             if (onGround) {
-                motion.up *= -0.5
-                motion.south *= 0.7
-                motion.west *= 0.7
+                motion.y *= -0.5
+                motion.x *= 0.7
+                motion.z *= 0.7
             }
 
             fuse -= tickDiff
@@ -131,9 +131,9 @@ class EntityTnt @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, pro
             }
         }
 
-        return hasUpdate || fuse >= 0 || abs(motion.south) > 0.00001 || abs(
-            motion.up
-        ) > 0.00001 || abs(motion.west) > 0.00001
+        return hasUpdate || fuse >= 0 || abs(motion.x) > 0.00001 || abs(
+            motion.y
+        ) > 0.00001 || abs(motion.z) > 0.00001
     }
 
     override fun explode() {

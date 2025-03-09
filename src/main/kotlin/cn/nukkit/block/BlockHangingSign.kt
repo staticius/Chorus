@@ -1,141 +1,138 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityHangingSign;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.CompassRoseDirection;
-import cn.nukkit.nbt.tag.CompoundTag;
-import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityHangingSign
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.math.CompassRoseDirection
+import cn.nukkit.math.CompassRoseDirection.Companion.from
+import cn.nukkit.nbt.tag.CompoundTag
+import lombok.extern.slf4j.Slf4j
+import kotlin.math.floor
 
 @Slf4j
-public abstract class BlockHangingSign extends BlockSignBase implements BlockEntityHolder<BlockEntityHangingSign> {
-    public BlockHangingSign(BlockState blockState) {
-        super(blockState);
-    }
+abstract class BlockHangingSign(blockState: BlockState?) : BlockSignBase(blockState),
+    BlockEntityHolder<BlockEntityHangingSign?> {
+    override val blockEntityClass: Class<out BlockEntityHangingSign>
+        get() = BlockEntityHangingSign::class.java
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityHangingSign> getBlockEntityClass() {
-        return BlockEntityHangingSign.class;
-    }
+    override val blockEntityType: String
+        get() = BlockEntity.HANGING_SIGN
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.HANGING_SIGN;
-    }
+    override val boundingBox: AxisAlignedBB?
+        get() = null //01 23 45
 
-    @Override
-    public AxisAlignedBB getBoundingBox() {
-        return null;//01 23 45
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (isHanging()) {
-                if (up().isAir()) {
-                    level.useBreakOn(this.position);
-                    return Level.BLOCK_UPDATE_NORMAL;
+            if (isHanging) {
+                if (up()!!.isAir) {
+                    level.useBreakOn(this.position)
+                    return Level.BLOCK_UPDATE_NORMAL
                 }
             } else {
                 if (checkGroundBlock() == null) {
-                    level.useBreakOn(this.position);
-                    return Level.BLOCK_UPDATE_NORMAL;
+                    level.useBreakOn(this.position)
+                    return Level.BLOCK_UPDATE_NORMAL
                 }
             }
         }
-        return 0;
+        return 0
     }
 
-    public boolean isHanging() {
-        return getPropertyValue(CommonBlockProperties.HANGING);
-    }
+    val isHanging: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING)
 
-    public boolean isAttached() {
-        return getPropertyValue(CommonBlockProperties.ATTACHED_BIT);
-    }
+    val isAttached: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.ATTACHED_BIT)
 
-    @Override
-    public CompassRoseDirection getSignDirection() {
-        if (isHanging() && isAttached()) {
-            return CompassRoseDirection.from(getPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION));
+    override fun getSignDirection(): CompassRoseDirection? {
+        return if (isHanging && isAttached) {
+            from(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROUND_SIGN_DIRECTION))
         } else {
-            return BlockFace.fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION)).getCompassRoseDirection();
+            fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))!!.compassRoseDirection
         }
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (player != null && !player.isSneaking() && target instanceof BlockSignBase) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        var face = face
+        if (player != null && !player.isSneaking() && target is BlockSignBase) {
+            return false
         }
         if (face == BlockFace.UP) {
-            BlockFace blockFace = checkGroundBlock();
-            if (blockFace == null) {
-                return false;
-            }
-            face = blockFace;
+            val blockFace = checkGroundBlock() ?: return false
+            face = blockFace
         }
-        if (target instanceof BlockHangingSign && face != BlockFace.DOWN) {
-            return false;
+        if (target is BlockHangingSign && face != BlockFace.DOWN) {
+            return false
         }
 
-        Block layer0 = level.getBlock(this.position, 0);
-        Block layer1 = level.getBlock(this.position, 1);
+        val layer0 = level.getBlock(this.position, 0)
+        val layer1 = level.getBlock(this.position, 1)
 
-        CompoundTag nbt = new CompoundTag();
+        val nbt = CompoundTag()
 
         if (face == BlockFace.DOWN) {
-            this.setPropertyValue(CommonBlockProperties.HANGING, true);
-            CompassRoseDirection direction = CompassRoseDirection.from(
-                    (int) Math.floor((((player != null ? player.rotation.yaw : 0) + 180) * 16 / 360) + 0.5) & 0x0f
-            );
-            if ((player != null && player.isSneaking()) || target instanceof BlockThin || target instanceof BlockChain || target instanceof BlockHangingSign) {
-                this.setPropertyValue(CommonBlockProperties.ATTACHED_BIT, true);
-                this.setPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION, direction.index);
-                level.setBlock(block.position, this, true);
+            this.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING, true)
+            val direction = from(
+                floor((((player?.rotation?.yaw ?: 0.0) + 180) * 16 / 360) + 0.5).toInt() and 0x0f
+            )
+            if ((player != null && player.isSneaking()) || target is BlockThin || target is BlockChain || target is BlockHangingSign) {
+                this.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.ATTACHED_BIT, true)
+                this.setPropertyValue<Int, IntPropertyType>(
+                    CommonBlockProperties.GROUND_SIGN_DIRECTION,
+                    direction.index
+                )
+                level.setBlock(block.position, this, true)
             } else {
-                this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, direction.closestBlockFace.index);
-                level.setBlock(block.position, this, true);
+                this.setPropertyValue<Int, IntPropertyType>(
+                    CommonBlockProperties.FACING_DIRECTION,
+                    direction.closestBlockFace.index
+                )
+                level.setBlock(block.position, this, true)
             }
         } else {
-            this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.rotateY().index);
-            level.setBlock(block.position, this, true);
+            this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.rotateY().index)
+            level.setBlock(block.position, this, true)
         }
         if (item.hasCustomBlockData()) {
-            for (var e : item.getCustomBlockData().getEntrySet()) {
-                nbt.put(e.getKey(), e.getValue());
+            for ((key, value) in item.customBlockData!!.entrySet) {
+                nbt.put(key, value)
             }
         }
 
         try {
-            createBlockEntity(nbt);
-            if (player != null) {
-                player.openSignEditor(this.position, true);
-            }
-            return true;
-        } catch (Exception e) {
-            log.warn("Failed to create block entity {} at {}", getBlockEntityType(), getLocator(), e);
-            level.setBlock(layer0.position, 0, layer0, true);
-            level.setBlock(layer1.position, 0, layer1, true);
-            return false;
+            createBlockEntity(nbt)
+            player?.openSignEditor(this.position, true)
+            return true
+        } catch (e: Exception) {
+            BlockHangingSign.log.warn("Failed to create block entity {} at {}", blockEntityType, locator, e)
+            level.setBlock(layer0!!.position, 0, layer0, true)
+            level.setBlock(layer1!!.position, 0, layer1, true)
+            return false
         }
     }
 
-    private @Nullable BlockFace checkGroundBlock() {
-        if (getSide(BlockFace.NORTH, 1).canBePlaced()) return BlockFace.NORTH;
-        if (getSide(BlockFace.SOUTH, 1).canBePlaced()) return BlockFace.SOUTH;
-        if (getSide(BlockFace.WEST, 1).canBePlaced()) return BlockFace.WEST;
-        if (getSide(BlockFace.EAST, 1).canBePlaced()) return BlockFace.EAST;
-        return null;
+    private fun checkGroundBlock(): BlockFace? {
+        if (getSide(BlockFace.NORTH, 1)!!.canBePlaced()) return BlockFace.NORTH
+        if (getSide(BlockFace.SOUTH, 1)!!.canBePlaced()) return BlockFace.SOUTH
+        if (getSide(BlockFace.WEST, 1)!!.canBePlaced()) return BlockFace.WEST
+        if (getSide(BlockFace.EAST, 1)!!.canBePlaced()) return BlockFace.EAST
+        return null
     }
 }

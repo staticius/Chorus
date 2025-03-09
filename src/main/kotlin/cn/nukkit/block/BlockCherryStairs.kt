@@ -1,46 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockCherryStairs extends BlockStairsWood {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHERRY_STAIRS, CommonBlockProperties.UPSIDE_DOWN_BIT, CommonBlockProperties.WEIRDO_DIRECTION);
+class BlockCherryStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockStairsWood(blockstate) {
+    override val name: String
+        get() = "Cherry Wood Stairs"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val hardness: Double
+        get() = 2.0
 
-    public BlockCherryStairs() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val resistance: Double
+        get() = 3.0
 
-    public BlockCherryStairs(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val burnChance: Int
+        get() = 5
 
-    @Override
-    public String getName() {
-        return "Cherry Wood Stairs";
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            CHERRY_STAIRS,
+            CommonBlockProperties.UPSIDE_DOWN_BIT,
+            CommonBlockProperties.WEIRDO_DIRECTION
+        )
+            get() = Companion.field
     }
 }

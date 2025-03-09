@@ -1,131 +1,106 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityEndGateway;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.blockentity.*
+import cn.nukkit.entity.Entity
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
 
 /**
  * @author PikyCZ
  */
-public class BlockEndGateway extends BlockSolid implements BlockEntityHolder<BlockEntityEndGateway> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(END_GATEWAY);
+class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
+    constructor() : super(Companion.properties.defaultState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "End Gateway"
+
+    override val blockEntityClass: Class<out E>
+        get() = BlockEntityEndGateway::class.java
+
+    override val blockEntityType: String
+        get() = BlockEntity.END_GATEWAY
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        return BlockEntityHolder.Companion.setBlockAndCreateEntity<BlockEntityEndGateway?, BlockEndGateway>(this) != null
     }
 
-    public BlockEndGateway() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockEndGateway(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "End Gateway";
-    }
-
-    @Override
-    @NotNull public Class<? extends BlockEntityEndGateway> getBlockEntityClass() {
-        return BlockEntityEndGateway.class;
-    }
-
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.END_GATEWAY;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        return BlockEntityHolder.setBlockAndCreateEntity(this) != null;
-    }
-    
-    @Override
-    public boolean canPassThrough() {
+    override fun canPassThrough(): Boolean {
         if (this.level == null) {
-            return false;
+            return false
         }
-        
-        if (this.level.getDimension() != Level.DIMENSION_THE_END) {
-            return false;
+
+        return if (level.dimension != Level.DIMENSION_THE_END) {
+            false
         } else {
-            return !getOrCreateBlockEntity().isTeleportCooldown();
+            !getOrCreateBlockEntity().isTeleportCooldown()
         }
     }
 
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return false;
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return -1;
+    override val hardness: Double
+        get() = -1.0
+
+    override val resistance: Double
+        get() = 3600000.0
+
+    override val lightLevel: Int
+        get() = 15
+
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    @Override
-    public double getResistance() {
-        return 3600000;
+    override fun toItem(): Item? {
+        return ItemBlock(get(AIR))
     }
 
-    @Override
-    public int getLightLevel() {
-        return 15;
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.AIR));
-    }
-    
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-    
-    @Override
-    public boolean canBePulled() {
-        return false;
-    }
-    
-    @Override
-    public void onEntityCollide(Entity entity) {
+    override fun onEntityCollide(entity: Entity?) {
         if (this.level == null) {
-            return;
+            return
         }
-        
-        if (this.level.getDimension() != Level.DIMENSION_THE_END) {
-            return;
+
+        if (level.dimension != Level.DIMENSION_THE_END) {
+            return
         }
-        
+
         if (entity == null) {
-            return;
+            return
         }
-        
-        BlockEntityEndGateway endGateway = getOrCreateBlockEntity();
-        if (endGateway == null) {
-            return;
-        }
-        
+
+        val endGateway = getOrCreateBlockEntity() ?: return
+
         if (!endGateway.isTeleportCooldown()) {
-            endGateway.teleportEntity(entity);
+            endGateway.teleportEntity(entity)
         }
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(END_GATEWAY)
+            get() = Companion.field
     }
 }

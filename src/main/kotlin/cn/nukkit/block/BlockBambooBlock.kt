@@ -1,42 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-import static cn.nukkit.block.property.CommonBlockProperties.*;
+class BlockBambooBlock @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockLog(blockState) {
+    override val name: String
+        get() = "Bamboo Block"
 
-public class BlockBambooBlock extends BlockLog {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_BLOCK, PILLAR_AXIS);
+    override val resistance: Double
+        get() = 15.0
 
-    public BlockBambooBlock() {
-        this(PROPERTIES.getDefaultState());
+    override val burnAbility: Int
+        get() = 20
+
+    override fun getStrippedState(): BlockState {
+        return BlockStrippedBambooBlock.properties.defaultState
     }
 
-    public BlockBambooBlock(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    @NotNull public  BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public String getName() {
-        return "Bamboo Block";
-    }
-
-    @Override
-    public double getResistance() {
-        return 15;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return BlockStrippedBambooBlock.PROPERTIES.getDefaultState();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BAMBOO_BLOCK, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

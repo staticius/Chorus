@@ -1,66 +1,53 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.NukkitMath;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.NukkitMath.ceilFloat
+import kotlin.math.max
+import kotlin.math.min
 
-public class BlockHeavyWeightedPressurePlate extends BlockPressurePlateBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(HEAVY_WEIGHTED_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockHeavyWeightedPressurePlate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockPressurePlateBase(blockstate) {
+    init {
+        this.onPitch = 0.90000004f
+        this.offPitch = 0.75f
     }
 
-    public BlockHeavyWeightedPressurePlate() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Weighted Pressure Plate (Heavy)"
 
-    public BlockHeavyWeightedPressurePlate(BlockState blockstate) {
-        super(blockstate);
-        this.onPitch = 0.90000004f;
-        this.offPitch = 0.75f;
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    @Override
-    public String getName() {
-        return "Weighted Pressure Plate (Heavy)";
-    }
+    override val resistance: Double
+        get() = 2.5
 
-    @Override
-    public double getHardness() {
-        return 0.5D;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public double getResistance() {
-        return 2.5D;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    protected int computeRedstoneStrength() {
-        int count = Math.min(this.level.getCollidingEntities(getCollisionBoundingBox()).length, this.getMaxWeight());
+    override fun computeRedstoneStrength(): Int {
+        val count = min(
+            level.getCollidingEntities(collisionBoundingBox!!).size.toDouble(),
+            maxWeight.toDouble()
+        ).toInt()
 
         if (count > 0) {
-            float f = (float) Math.min(this.getMaxWeight(), count) / (float) this.getMaxWeight();
-            return Math.max(1, NukkitMath.ceilFloat(f * 15.0F));
+            val f = min(maxWeight.toDouble(), count.toDouble()).toFloat() / maxWeight.toFloat()
+            return max(1.0, ceilFloat(f * 15.0f).toDouble()).toInt()
         } else {
-            return 0;
+            return 0
         }
     }
 
-    public int getMaxWeight() {
-        return 150;
+    val maxWeight: Int
+        get() = 150
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(HEAVY_WEIGHTED_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
+            get() = Companion.field
     }
 }

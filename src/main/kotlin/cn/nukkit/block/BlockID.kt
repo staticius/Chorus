@@ -1,2516 +1,2518 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
 /**
  * @author Cool_Loong
  */
-public interface BlockID {
-    String ACACIA_BUTTON = "minecraft:acacia_button";
+interface BlockID {
+    companion object {
+        const val ACACIA_BUTTON: String = "minecraft:acacia_button"
 
-    String ACACIA_DOOR = "minecraft:acacia_door";
+        const val ACACIA_DOOR: String = "minecraft:acacia_door"
 
-    String ACACIA_DOUBLE_SLAB = "minecraft:acacia_double_slab";
+        const val ACACIA_DOUBLE_SLAB: String = "minecraft:acacia_double_slab"
 
-    String ACACIA_FENCE = "minecraft:acacia_fence";
+        const val ACACIA_FENCE: String = "minecraft:acacia_fence"
 
-    String ACACIA_FENCE_GATE = "minecraft:acacia_fence_gate";
+        const val ACACIA_FENCE_GATE: String = "minecraft:acacia_fence_gate"
 
-    String ACACIA_HANGING_SIGN = "minecraft:acacia_hanging_sign";
+        const val ACACIA_HANGING_SIGN: String = "minecraft:acacia_hanging_sign"
 
-    String ACACIA_LEAVES = "minecraft:acacia_leaves";
+        const val ACACIA_LEAVES: String = "minecraft:acacia_leaves"
 
-    String ACACIA_LOG = "minecraft:acacia_log";
+        const val ACACIA_LOG: String = "minecraft:acacia_log"
 
-    String ACACIA_PLANKS = "minecraft:acacia_planks";
+        const val ACACIA_PLANKS: String = "minecraft:acacia_planks"
 
-    String ACACIA_PRESSURE_PLATE = "minecraft:acacia_pressure_plate";
+        const val ACACIA_PRESSURE_PLATE: String = "minecraft:acacia_pressure_plate"
 
-    String ACACIA_SAPLING = "minecraft:acacia_sapling";
+        const val ACACIA_SAPLING: String = "minecraft:acacia_sapling"
 
-    String ACACIA_SLAB = "minecraft:acacia_slab";
+        const val ACACIA_SLAB: String = "minecraft:acacia_slab"
 
-    String ACACIA_STAIRS = "minecraft:acacia_stairs";
+        const val ACACIA_STAIRS: String = "minecraft:acacia_stairs"
 
-    String ACACIA_STANDING_SIGN = "minecraft:acacia_standing_sign";
+        const val ACACIA_STANDING_SIGN: String = "minecraft:acacia_standing_sign"
 
-    String ACACIA_TRAPDOOR = "minecraft:acacia_trapdoor";
+        const val ACACIA_TRAPDOOR: String = "minecraft:acacia_trapdoor"
 
-    String ACACIA_WALL_SIGN = "minecraft:acacia_wall_sign";
+        const val ACACIA_WALL_SIGN: String = "minecraft:acacia_wall_sign"
 
-    String ACACIA_WOOD = "minecraft:acacia_wood";
+        const val ACACIA_WOOD: String = "minecraft:acacia_wood"
 
-    String ACTIVATOR_RAIL = "minecraft:activator_rail";
+        const val ACTIVATOR_RAIL: String = "minecraft:activator_rail"
 
-    String AIR = "minecraft:air";
+        const val AIR: String = "minecraft:air"
 
-    String ALLIUM = "minecraft:allium";
+        const val ALLIUM: String = "minecraft:allium"
 
-    String ALLOW = "minecraft:allow";
+        const val ALLOW: String = "minecraft:allow"
 
-    String AMETHYST_BLOCK = "minecraft:amethyst_block";
+        const val AMETHYST_BLOCK: String = "minecraft:amethyst_block"
 
-    String AMETHYST_CLUSTER = "minecraft:amethyst_cluster";
+        const val AMETHYST_CLUSTER: String = "minecraft:amethyst_cluster"
 
-    String ANCIENT_DEBRIS = "minecraft:ancient_debris";
+        const val ANCIENT_DEBRIS: String = "minecraft:ancient_debris"
 
-    String ANDESITE = "minecraft:andesite";
+        const val ANDESITE: String = "minecraft:andesite"
 
-    String ANDESITE_DOUBLE_SLAB = "minecraft:andesite_double_slab";
+        const val ANDESITE_DOUBLE_SLAB: String = "minecraft:andesite_double_slab"
 
-    String ANDESITE_SLAB = "minecraft:andesite_slab";
+        const val ANDESITE_SLAB: String = "minecraft:andesite_slab"
 
-    String ANDESITE_STAIRS = "minecraft:andesite_stairs";
+        const val ANDESITE_STAIRS: String = "minecraft:andesite_stairs"
 
-    String ANDESITE_WALL = "minecraft:andesite_wall";
+        const val ANDESITE_WALL: String = "minecraft:andesite_wall"
 
-    String ANVIL = "minecraft:anvil";
+        const val ANVIL: String = "minecraft:anvil"
 
-    String AZALEA = "minecraft:azalea";
+        const val AZALEA: String = "minecraft:azalea"
 
-    String AZALEA_LEAVES = "minecraft:azalea_leaves";
+        const val AZALEA_LEAVES: String = "minecraft:azalea_leaves"
 
-    String AZALEA_LEAVES_FLOWERED = "minecraft:azalea_leaves_flowered";
+        const val AZALEA_LEAVES_FLOWERED: String = "minecraft:azalea_leaves_flowered"
 
-    String AZURE_BLUET = "minecraft:azure_bluet";
+        const val AZURE_BLUET: String = "minecraft:azure_bluet"
 
-    String BAMBOO = "minecraft:bamboo";
+        const val BAMBOO: String = "minecraft:bamboo"
 
-    String BAMBOO_BLOCK = "minecraft:bamboo_block";
+        const val BAMBOO_BLOCK: String = "minecraft:bamboo_block"
 
-    String BAMBOO_BUTTON = "minecraft:bamboo_button";
+        const val BAMBOO_BUTTON: String = "minecraft:bamboo_button"
 
-    String BAMBOO_DOOR = "minecraft:bamboo_door";
+        const val BAMBOO_DOOR: String = "minecraft:bamboo_door"
 
-    String BAMBOO_DOUBLE_SLAB = "minecraft:bamboo_double_slab";
+        const val BAMBOO_DOUBLE_SLAB: String = "minecraft:bamboo_double_slab"
 
-    String BAMBOO_FENCE = "minecraft:bamboo_fence";
+        const val BAMBOO_FENCE: String = "minecraft:bamboo_fence"
 
-    String BAMBOO_FENCE_GATE = "minecraft:bamboo_fence_gate";
+        const val BAMBOO_FENCE_GATE: String = "minecraft:bamboo_fence_gate"
 
-    String BAMBOO_HANGING_SIGN = "minecraft:bamboo_hanging_sign";
+        const val BAMBOO_HANGING_SIGN: String = "minecraft:bamboo_hanging_sign"
 
-    String BAMBOO_MOSAIC = "minecraft:bamboo_mosaic";
+        const val BAMBOO_MOSAIC: String = "minecraft:bamboo_mosaic"
 
-    String BAMBOO_MOSAIC_DOUBLE_SLAB = "minecraft:bamboo_mosaic_double_slab";
+        const val BAMBOO_MOSAIC_DOUBLE_SLAB: String = "minecraft:bamboo_mosaic_double_slab"
 
-    String BAMBOO_MOSAIC_SLAB = "minecraft:bamboo_mosaic_slab";
+        const val BAMBOO_MOSAIC_SLAB: String = "minecraft:bamboo_mosaic_slab"
 
-    String BAMBOO_MOSAIC_STAIRS = "minecraft:bamboo_mosaic_stairs";
+        const val BAMBOO_MOSAIC_STAIRS: String = "minecraft:bamboo_mosaic_stairs"
 
-    String BAMBOO_PLANKS = "minecraft:bamboo_planks";
+        const val BAMBOO_PLANKS: String = "minecraft:bamboo_planks"
 
-    String BAMBOO_PRESSURE_PLATE = "minecraft:bamboo_pressure_plate";
+        const val BAMBOO_PRESSURE_PLATE: String = "minecraft:bamboo_pressure_plate"
 
-    String BAMBOO_SAPLING = "minecraft:bamboo_sapling";
+        const val BAMBOO_SAPLING: String = "minecraft:bamboo_sapling"
 
-    String BAMBOO_SLAB = "minecraft:bamboo_slab";
+        const val BAMBOO_SLAB: String = "minecraft:bamboo_slab"
 
-    String BAMBOO_STAIRS = "minecraft:bamboo_stairs";
+        const val BAMBOO_STAIRS: String = "minecraft:bamboo_stairs"
 
-    String BAMBOO_STANDING_SIGN = "minecraft:bamboo_standing_sign";
+        const val BAMBOO_STANDING_SIGN: String = "minecraft:bamboo_standing_sign"
 
-    String BAMBOO_TRAPDOOR = "minecraft:bamboo_trapdoor";
+        const val BAMBOO_TRAPDOOR: String = "minecraft:bamboo_trapdoor"
 
-    String BAMBOO_WALL_SIGN = "minecraft:bamboo_wall_sign";
+        const val BAMBOO_WALL_SIGN: String = "minecraft:bamboo_wall_sign"
 
-    String BARREL = "minecraft:barrel";
+        const val BARREL: String = "minecraft:barrel"
 
-    String BARRIER = "minecraft:barrier";
+        const val BARRIER: String = "minecraft:barrier"
 
-    String BASALT = "minecraft:basalt";
+        const val BASALT: String = "minecraft:basalt"
 
-    String BEACON = "minecraft:beacon";
+        const val BEACON: String = "minecraft:beacon"
 
-    String BED = "minecraft:bed";
+        const val BED: String = "minecraft:bed"
 
-    String BEDROCK = "minecraft:bedrock";
+        const val BEDROCK: String = "minecraft:bedrock"
 
-    String BEE_NEST = "minecraft:bee_nest";
+        const val BEE_NEST: String = "minecraft:bee_nest"
 
-    String BEEHIVE = "minecraft:beehive";
+        const val BEEHIVE: String = "minecraft:beehive"
 
-    String BEETROOT = "minecraft:beetroot";
+        const val BEETROOT: String = "minecraft:beetroot"
 
-    String BELL = "minecraft:bell";
+        const val BELL: String = "minecraft:bell"
 
-    String BIG_DRIPLEAF = "minecraft:big_dripleaf";
+        const val BIG_DRIPLEAF: String = "minecraft:big_dripleaf"
 
-    String BIRCH_BUTTON = "minecraft:birch_button";
+        const val BIRCH_BUTTON: String = "minecraft:birch_button"
 
-    String BIRCH_DOOR = "minecraft:birch_door";
+        const val BIRCH_DOOR: String = "minecraft:birch_door"
 
-    String BIRCH_DOUBLE_SLAB = "minecraft:birch_double_slab";
+        const val BIRCH_DOUBLE_SLAB: String = "minecraft:birch_double_slab"
 
-    String BIRCH_FENCE = "minecraft:birch_fence";
+        const val BIRCH_FENCE: String = "minecraft:birch_fence"
 
-    String BIRCH_FENCE_GATE = "minecraft:birch_fence_gate";
+        const val BIRCH_FENCE_GATE: String = "minecraft:birch_fence_gate"
 
-    String BIRCH_HANGING_SIGN = "minecraft:birch_hanging_sign";
+        const val BIRCH_HANGING_SIGN: String = "minecraft:birch_hanging_sign"
 
-    String BIRCH_LEAVES = "minecraft:birch_leaves";
+        const val BIRCH_LEAVES: String = "minecraft:birch_leaves"
 
-    String BIRCH_LOG = "minecraft:birch_log";
+        const val BIRCH_LOG: String = "minecraft:birch_log"
 
-    String BIRCH_PLANKS = "minecraft:birch_planks";
+        const val BIRCH_PLANKS: String = "minecraft:birch_planks"
 
-    String BIRCH_PRESSURE_PLATE = "minecraft:birch_pressure_plate";
+        const val BIRCH_PRESSURE_PLATE: String = "minecraft:birch_pressure_plate"
 
-    String BIRCH_SAPLING = "minecraft:birch_sapling";
+        const val BIRCH_SAPLING: String = "minecraft:birch_sapling"
 
-    String BIRCH_SLAB = "minecraft:birch_slab";
+        const val BIRCH_SLAB: String = "minecraft:birch_slab"
 
-    String BIRCH_STAIRS = "minecraft:birch_stairs";
+        const val BIRCH_STAIRS: String = "minecraft:birch_stairs"
 
-    String BIRCH_STANDING_SIGN = "minecraft:birch_standing_sign";
+        const val BIRCH_STANDING_SIGN: String = "minecraft:birch_standing_sign"
 
-    String BIRCH_TRAPDOOR = "minecraft:birch_trapdoor";
+        const val BIRCH_TRAPDOOR: String = "minecraft:birch_trapdoor"
 
-    String BIRCH_WALL_SIGN = "minecraft:birch_wall_sign";
+        const val BIRCH_WALL_SIGN: String = "minecraft:birch_wall_sign"
 
-    String BIRCH_WOOD = "minecraft:birch_wood";
+        const val BIRCH_WOOD: String = "minecraft:birch_wood"
 
-    String BLACK_CANDLE = "minecraft:black_candle";
+        const val BLACK_CANDLE: String = "minecraft:black_candle"
 
-    String BLACK_CANDLE_CAKE = "minecraft:black_candle_cake";
+        const val BLACK_CANDLE_CAKE: String = "minecraft:black_candle_cake"
 
-    String BLACK_CARPET = "minecraft:black_carpet";
+        const val BLACK_CARPET: String = "minecraft:black_carpet"
 
-    String BLACK_CONCRETE = "minecraft:black_concrete";
+        const val BLACK_CONCRETE: String = "minecraft:black_concrete"
 
-    String BLACK_CONCRETE_POWDER = "minecraft:black_concrete_powder";
+        const val BLACK_CONCRETE_POWDER: String = "minecraft:black_concrete_powder"
 
-    String BLACK_GLAZED_TERRACOTTA = "minecraft:black_glazed_terracotta";
+        const val BLACK_GLAZED_TERRACOTTA: String = "minecraft:black_glazed_terracotta"
 
-    String BLACK_SHULKER_BOX = "minecraft:black_shulker_box";
+        const val BLACK_SHULKER_BOX: String = "minecraft:black_shulker_box"
 
-    String BLACK_STAINED_GLASS = "minecraft:black_stained_glass";
+        const val BLACK_STAINED_GLASS: String = "minecraft:black_stained_glass"
 
-    String BLACK_STAINED_GLASS_PANE = "minecraft:black_stained_glass_pane";
+        const val BLACK_STAINED_GLASS_PANE: String = "minecraft:black_stained_glass_pane"
 
-    String BLACK_TERRACOTTA = "minecraft:black_terracotta";
+        const val BLACK_TERRACOTTA: String = "minecraft:black_terracotta"
 
-    String BLACK_WOOL = "minecraft:black_wool";
+        const val BLACK_WOOL: String = "minecraft:black_wool"
 
-    String BLACKSTONE = "minecraft:blackstone";
+        const val BLACKSTONE: String = "minecraft:blackstone"
 
-    String BLACKSTONE_DOUBLE_SLAB = "minecraft:blackstone_double_slab";
+        const val BLACKSTONE_DOUBLE_SLAB: String = "minecraft:blackstone_double_slab"
 
-    String BLACKSTONE_SLAB = "minecraft:blackstone_slab";
+        const val BLACKSTONE_SLAB: String = "minecraft:blackstone_slab"
 
-    String BLACKSTONE_STAIRS = "minecraft:blackstone_stairs";
+        const val BLACKSTONE_STAIRS: String = "minecraft:blackstone_stairs"
 
-    String BLACKSTONE_WALL = "minecraft:blackstone_wall";
+        const val BLACKSTONE_WALL: String = "minecraft:blackstone_wall"
 
-    String BLAST_FURNACE = "minecraft:blast_furnace";
+        const val BLAST_FURNACE: String = "minecraft:blast_furnace"
 
-    String BLUE_CANDLE = "minecraft:blue_candle";
+        const val BLUE_CANDLE: String = "minecraft:blue_candle"
 
-    String BLUE_CANDLE_CAKE = "minecraft:blue_candle_cake";
+        const val BLUE_CANDLE_CAKE: String = "minecraft:blue_candle_cake"
 
-    String BLUE_CARPET = "minecraft:blue_carpet";
+        const val BLUE_CARPET: String = "minecraft:blue_carpet"
 
-    String BLUE_CONCRETE = "minecraft:blue_concrete";
+        const val BLUE_CONCRETE: String = "minecraft:blue_concrete"
 
-    String BLUE_CONCRETE_POWDER = "minecraft:blue_concrete_powder";
+        const val BLUE_CONCRETE_POWDER: String = "minecraft:blue_concrete_powder"
 
-    String BLUE_GLAZED_TERRACOTTA = "minecraft:blue_glazed_terracotta";
+        const val BLUE_GLAZED_TERRACOTTA: String = "minecraft:blue_glazed_terracotta"
 
-    String BLUE_ICE = "minecraft:blue_ice";
+        const val BLUE_ICE: String = "minecraft:blue_ice"
 
-    String BLUE_ORCHID = "minecraft:blue_orchid";
+        const val BLUE_ORCHID: String = "minecraft:blue_orchid"
 
-    String BLUE_SHULKER_BOX = "minecraft:blue_shulker_box";
+        const val BLUE_SHULKER_BOX: String = "minecraft:blue_shulker_box"
 
-    String BLUE_STAINED_GLASS = "minecraft:blue_stained_glass";
+        const val BLUE_STAINED_GLASS: String = "minecraft:blue_stained_glass"
 
-    String BLUE_STAINED_GLASS_PANE = "minecraft:blue_stained_glass_pane";
+        const val BLUE_STAINED_GLASS_PANE: String = "minecraft:blue_stained_glass_pane"
 
-    String BLUE_TERRACOTTA = "minecraft:blue_terracotta";
+        const val BLUE_TERRACOTTA: String = "minecraft:blue_terracotta"
 
-    String BLUE_WOOL = "minecraft:blue_wool";
+        const val BLUE_WOOL: String = "minecraft:blue_wool"
 
-    String BONE_BLOCK = "minecraft:bone_block";
+        const val BONE_BLOCK: String = "minecraft:bone_block"
 
-    String BOOKSHELF = "minecraft:bookshelf";
+        const val BOOKSHELF: String = "minecraft:bookshelf"
 
-    String BORDER_BLOCK = "minecraft:border_block";
+        const val BORDER_BLOCK: String = "minecraft:border_block"
 
-    String BRAIN_CORAL = "minecraft:brain_coral";
+        const val BRAIN_CORAL: String = "minecraft:brain_coral"
 
-    String BRAIN_CORAL_BLOCK = "minecraft:brain_coral_block";
+        const val BRAIN_CORAL_BLOCK: String = "minecraft:brain_coral_block"
 
-    String BRAIN_CORAL_FAN = "minecraft:brain_coral_fan";
+        const val BRAIN_CORAL_FAN: String = "minecraft:brain_coral_fan"
 
-    String BRAIN_CORAL_WALL_FAN = "minecraft:brain_coral_wall_fan";
+        const val BRAIN_CORAL_WALL_FAN: String = "minecraft:brain_coral_wall_fan"
 
-    String BREWING_STAND = "minecraft:brewing_stand";
+        const val BREWING_STAND: String = "minecraft:brewing_stand"
 
-    String BRICK_BLOCK = "minecraft:brick_block";
+        const val BRICK_BLOCK: String = "minecraft:brick_block"
 
-    String BRICK_DOUBLE_SLAB = "minecraft:brick_double_slab";
+        const val BRICK_DOUBLE_SLAB: String = "minecraft:brick_double_slab"
 
-    String BRICK_SLAB = "minecraft:brick_slab";
+        const val BRICK_SLAB: String = "minecraft:brick_slab"
 
-    String BRICK_STAIRS = "minecraft:brick_stairs";
+        const val BRICK_STAIRS: String = "minecraft:brick_stairs"
 
-    String BRICK_WALL = "minecraft:brick_wall";
+        const val BRICK_WALL: String = "minecraft:brick_wall"
 
-    String BROWN_CANDLE = "minecraft:brown_candle";
+        const val BROWN_CANDLE: String = "minecraft:brown_candle"
 
-    String BROWN_CANDLE_CAKE = "minecraft:brown_candle_cake";
+        const val BROWN_CANDLE_CAKE: String = "minecraft:brown_candle_cake"
 
-    String BROWN_CARPET = "minecraft:brown_carpet";
+        const val BROWN_CARPET: String = "minecraft:brown_carpet"
 
-    String BROWN_CONCRETE = "minecraft:brown_concrete";
+        const val BROWN_CONCRETE: String = "minecraft:brown_concrete"
 
-    String BROWN_CONCRETE_POWDER = "minecraft:brown_concrete_powder";
+        const val BROWN_CONCRETE_POWDER: String = "minecraft:brown_concrete_powder"
 
-    String BROWN_GLAZED_TERRACOTTA = "minecraft:brown_glazed_terracotta";
+        const val BROWN_GLAZED_TERRACOTTA: String = "minecraft:brown_glazed_terracotta"
 
-    String BROWN_MUSHROOM = "minecraft:brown_mushroom";
+        const val BROWN_MUSHROOM: String = "minecraft:brown_mushroom"
 
-    String BROWN_MUSHROOM_BLOCK = "minecraft:brown_mushroom_block";
+        const val BROWN_MUSHROOM_BLOCK: String = "minecraft:brown_mushroom_block"
 
-    String BROWN_SHULKER_BOX = "minecraft:brown_shulker_box";
+        const val BROWN_SHULKER_BOX: String = "minecraft:brown_shulker_box"
 
-    String BROWN_STAINED_GLASS = "minecraft:brown_stained_glass";
+        const val BROWN_STAINED_GLASS: String = "minecraft:brown_stained_glass"
 
-    String BROWN_STAINED_GLASS_PANE = "minecraft:brown_stained_glass_pane";
+        const val BROWN_STAINED_GLASS_PANE: String = "minecraft:brown_stained_glass_pane"
 
-    String BROWN_TERRACOTTA = "minecraft:brown_terracotta";
+        const val BROWN_TERRACOTTA: String = "minecraft:brown_terracotta"
 
-    String BROWN_WOOL = "minecraft:brown_wool";
+        const val BROWN_WOOL: String = "minecraft:brown_wool"
 
-    String BUBBLE_COLUMN = "minecraft:bubble_column";
+        const val BUBBLE_COLUMN: String = "minecraft:bubble_column"
 
-    String BUBBLE_CORAL = "minecraft:bubble_coral";
+        const val BUBBLE_CORAL: String = "minecraft:bubble_coral"
 
-    String BUBBLE_CORAL_BLOCK = "minecraft:bubble_coral_block";
+        const val BUBBLE_CORAL_BLOCK: String = "minecraft:bubble_coral_block"
 
-    String BUBBLE_CORAL_FAN = "minecraft:bubble_coral_fan";
+        const val BUBBLE_CORAL_FAN: String = "minecraft:bubble_coral_fan"
 
-    String BUBBLE_CORAL_WALL_FAN = "minecraft:bubble_coral_wall_fan";
+        const val BUBBLE_CORAL_WALL_FAN: String = "minecraft:bubble_coral_wall_fan"
 
-    String BUDDING_AMETHYST = "minecraft:budding_amethyst";
+        const val BUDDING_AMETHYST: String = "minecraft:budding_amethyst"
 
-    String CACTUS = "minecraft:cactus";
+        const val CACTUS: String = "minecraft:cactus"
 
-    String CAKE = "minecraft:cake";
+        const val CAKE: String = "minecraft:cake"
 
-    String CALCITE = "minecraft:calcite";
+        const val CALCITE: String = "minecraft:calcite"
 
-    String CALIBRATED_SCULK_SENSOR = "minecraft:calibrated_sculk_sensor";
+        const val CALIBRATED_SCULK_SENSOR: String = "minecraft:calibrated_sculk_sensor"
 
-    String CAMERA = "minecraft:camera";
+        const val CAMERA: String = "minecraft:camera"
 
-    String CAMPFIRE = "minecraft:campfire";
+        const val CAMPFIRE: String = "minecraft:campfire"
 
-    String CANDLE = "minecraft:candle";
+        const val CANDLE: String = "minecraft:candle"
 
-    String CANDLE_CAKE = "minecraft:candle_cake";
+        const val CANDLE_CAKE: String = "minecraft:candle_cake"
 
-    String CARROTS = "minecraft:carrots";
+        const val CARROTS: String = "minecraft:carrots"
 
-    String CARTOGRAPHY_TABLE = "minecraft:cartography_table";
+        const val CARTOGRAPHY_TABLE: String = "minecraft:cartography_table"
 
-    String CARVED_PUMPKIN = "minecraft:carved_pumpkin";
+        const val CARVED_PUMPKIN: String = "minecraft:carved_pumpkin"
 
-    String CAULDRON = "minecraft:cauldron";
+        const val CAULDRON: String = "minecraft:cauldron"
 
-    String CAVE_VINES = "minecraft:cave_vines";
+        const val CAVE_VINES: String = "minecraft:cave_vines"
 
-    String CAVE_VINES_BODY_WITH_BERRIES = "minecraft:cave_vines_body_with_berries";
+        const val CAVE_VINES_BODY_WITH_BERRIES: String = "minecraft:cave_vines_body_with_berries"
 
-    String CAVE_VINES_HEAD_WITH_BERRIES = "minecraft:cave_vines_head_with_berries";
+        const val CAVE_VINES_HEAD_WITH_BERRIES: String = "minecraft:cave_vines_head_with_berries"
 
-    String CHAIN = "minecraft:chain";
+        const val CHAIN: String = "minecraft:chain"
 
-    String CHAIN_COMMAND_BLOCK = "minecraft:chain_command_block";
+        const val CHAIN_COMMAND_BLOCK: String = "minecraft:chain_command_block"
 
-    String CHEMICAL_HEAT = "minecraft:chemical_heat";
+        const val CHEMICAL_HEAT: String = "minecraft:chemical_heat"
 
-    String CHEMISTRY_TABLE = "minecraft:chemistry_table";
+        const val CHEMISTRY_TABLE: String = "minecraft:chemistry_table"
 
-    String CHERRY_BUTTON = "minecraft:cherry_button";
+        const val CHERRY_BUTTON: String = "minecraft:cherry_button"
 
-    String CHERRY_DOOR = "minecraft:cherry_door";
+        const val CHERRY_DOOR: String = "minecraft:cherry_door"
 
-    String CHERRY_DOUBLE_SLAB = "minecraft:cherry_double_slab";
+        const val CHERRY_DOUBLE_SLAB: String = "minecraft:cherry_double_slab"
 
-    String CHERRY_FENCE = "minecraft:cherry_fence";
+        const val CHERRY_FENCE: String = "minecraft:cherry_fence"
 
-    String CHERRY_FENCE_GATE = "minecraft:cherry_fence_gate";
+        const val CHERRY_FENCE_GATE: String = "minecraft:cherry_fence_gate"
 
-    String CHERRY_HANGING_SIGN = "minecraft:cherry_hanging_sign";
+        const val CHERRY_HANGING_SIGN: String = "minecraft:cherry_hanging_sign"
 
-    String CHERRY_LEAVES = "minecraft:cherry_leaves";
+        const val CHERRY_LEAVES: String = "minecraft:cherry_leaves"
 
-    String CHERRY_LOG = "minecraft:cherry_log";
+        const val CHERRY_LOG: String = "minecraft:cherry_log"
 
-    String CHERRY_PLANKS = "minecraft:cherry_planks";
+        const val CHERRY_PLANKS: String = "minecraft:cherry_planks"
 
-    String CHERRY_PRESSURE_PLATE = "minecraft:cherry_pressure_plate";
+        const val CHERRY_PRESSURE_PLATE: String = "minecraft:cherry_pressure_plate"
 
-    String CHERRY_SAPLING = "minecraft:cherry_sapling";
+        const val CHERRY_SAPLING: String = "minecraft:cherry_sapling"
 
-    String CHERRY_SLAB = "minecraft:cherry_slab";
+        const val CHERRY_SLAB: String = "minecraft:cherry_slab"
 
-    String CHERRY_STAIRS = "minecraft:cherry_stairs";
+        const val CHERRY_STAIRS: String = "minecraft:cherry_stairs"
 
-    String CHERRY_STANDING_SIGN = "minecraft:cherry_standing_sign";
+        const val CHERRY_STANDING_SIGN: String = "minecraft:cherry_standing_sign"
 
-    String CHERRY_TRAPDOOR = "minecraft:cherry_trapdoor";
+        const val CHERRY_TRAPDOOR: String = "minecraft:cherry_trapdoor"
 
-    String CHERRY_WALL_SIGN = "minecraft:cherry_wall_sign";
+        const val CHERRY_WALL_SIGN: String = "minecraft:cherry_wall_sign"
 
-    String CHERRY_WOOD = "minecraft:cherry_wood";
+        const val CHERRY_WOOD: String = "minecraft:cherry_wood"
 
-    String CHEST = "minecraft:chest";
+        const val CHEST: String = "minecraft:chest"
 
-    String CHIPPED_ANVIL = "minecraft:chipped_anvil";
+        const val CHIPPED_ANVIL: String = "minecraft:chipped_anvil"
 
-    String CHISELED_BOOKSHELF = "minecraft:chiseled_bookshelf";
+        const val CHISELED_BOOKSHELF: String = "minecraft:chiseled_bookshelf"
 
-    String CHISELED_COPPER = "minecraft:chiseled_copper";
+        const val CHISELED_COPPER: String = "minecraft:chiseled_copper"
 
-    String CHISELED_DEEPSLATE = "minecraft:chiseled_deepslate";
+        const val CHISELED_DEEPSLATE: String = "minecraft:chiseled_deepslate"
 
-    String CHISELED_NETHER_BRICKS = "minecraft:chiseled_nether_bricks";
+        const val CHISELED_NETHER_BRICKS: String = "minecraft:chiseled_nether_bricks"
 
-    String CHISELED_POLISHED_BLACKSTONE = "minecraft:chiseled_polished_blackstone";
+        const val CHISELED_POLISHED_BLACKSTONE: String = "minecraft:chiseled_polished_blackstone"
 
-    String CHISELED_QUARTZ_BLOCK = "minecraft:chiseled_quartz_block";
+        const val CHISELED_QUARTZ_BLOCK: String = "minecraft:chiseled_quartz_block"
 
-    String CHISELED_RED_SANDSTONE = "minecraft:chiseled_red_sandstone";
+        const val CHISELED_RED_SANDSTONE: String = "minecraft:chiseled_red_sandstone"
 
-    String CHISELED_RESIN_BRICKS = "minecraft:chiseled_resin_bricks";
+        const val CHISELED_RESIN_BRICKS: String = "minecraft:chiseled_resin_bricks"
 
-    String CHISELED_SANDSTONE = "minecraft:chiseled_sandstone";
+        const val CHISELED_SANDSTONE: String = "minecraft:chiseled_sandstone"
 
-    String CHISELED_STONE_BRICKS = "minecraft:chiseled_stone_bricks";
+        const val CHISELED_STONE_BRICKS: String = "minecraft:chiseled_stone_bricks"
 
-    String CHISELED_TUFF = "minecraft:chiseled_tuff";
+        const val CHISELED_TUFF: String = "minecraft:chiseled_tuff"
 
-    String CHISELED_TUFF_BRICKS = "minecraft:chiseled_tuff_bricks";
+        const val CHISELED_TUFF_BRICKS: String = "minecraft:chiseled_tuff_bricks"
 
-    String CHORUS_FLOWER = "minecraft:chorus_flower";
+        const val CHORUS_FLOWER: String = "minecraft:chorus_flower"
 
-    String CHORUS_PLANT = "minecraft:chorus_plant";
+        const val CHORUS_PLANT: String = "minecraft:chorus_plant"
 
-    String CLAY = "minecraft:clay";
+        const val CLAY: String = "minecraft:clay"
 
-    String CLIENT_REQUEST_PLACEHOLDER_BLOCK = "minecraft:client_request_placeholder_block";
+        const val CLIENT_REQUEST_PLACEHOLDER_BLOCK: String = "minecraft:client_request_placeholder_block"
 
-    String CLOSED_EYEBLOSSOM = "minecraft:closed_eyeblossom";
+        const val CLOSED_EYEBLOSSOM: String = "minecraft:closed_eyeblossom"
 
-    String COAL_BLOCK = "minecraft:coal_block";
+        const val COAL_BLOCK: String = "minecraft:coal_block"
 
-    String COAL_ORE = "minecraft:coal_ore";
+        const val COAL_ORE: String = "minecraft:coal_ore"
 
-    String COARSE_DIRT = "minecraft:coarse_dirt";
+        const val COARSE_DIRT: String = "minecraft:coarse_dirt"
 
-    String COBBLED_DEEPSLATE = "minecraft:cobbled_deepslate";
+        const val COBBLED_DEEPSLATE: String = "minecraft:cobbled_deepslate"
 
-    String COBBLED_DEEPSLATE_DOUBLE_SLAB = "minecraft:cobbled_deepslate_double_slab";
+        const val COBBLED_DEEPSLATE_DOUBLE_SLAB: String = "minecraft:cobbled_deepslate_double_slab"
 
-    String COBBLED_DEEPSLATE_SLAB = "minecraft:cobbled_deepslate_slab";
+        const val COBBLED_DEEPSLATE_SLAB: String = "minecraft:cobbled_deepslate_slab"
 
-    String COBBLED_DEEPSLATE_STAIRS = "minecraft:cobbled_deepslate_stairs";
+        const val COBBLED_DEEPSLATE_STAIRS: String = "minecraft:cobbled_deepslate_stairs"
 
-    String COBBLED_DEEPSLATE_WALL = "minecraft:cobbled_deepslate_wall";
+        const val COBBLED_DEEPSLATE_WALL: String = "minecraft:cobbled_deepslate_wall"
 
-    String COBBLESTONE = "minecraft:cobblestone";
+        const val COBBLESTONE: String = "minecraft:cobblestone"
 
-    String COBBLESTONE_DOUBLE_SLAB = "minecraft:cobblestone_double_slab";
+        const val COBBLESTONE_DOUBLE_SLAB: String = "minecraft:cobblestone_double_slab"
 
-    String COBBLESTONE_SLAB = "minecraft:cobblestone_slab";
+        const val COBBLESTONE_SLAB: String = "minecraft:cobblestone_slab"
 
-    String COBBLESTONE_WALL = "minecraft:cobblestone_wall";
+        const val COBBLESTONE_WALL: String = "minecraft:cobblestone_wall"
 
-    String COCOA = "minecraft:cocoa";
+        const val COCOA: String = "minecraft:cocoa"
 
-    String COLORED_TORCH_BP = "minecraft:colored_torch_bp";
+        const val COLORED_TORCH_BP: String = "minecraft:colored_torch_bp"
 
-    String COLORED_TORCH_RG = "minecraft:colored_torch_rg";
+        const val COLORED_TORCH_RG: String = "minecraft:colored_torch_rg"
 
-    String COMMAND_BLOCK = "minecraft:command_block";
+        const val COMMAND_BLOCK: String = "minecraft:command_block"
 
-    String COMPOSTER = "minecraft:composter";
+        const val COMPOSTER: String = "minecraft:composter"
 
-    String CONDUIT = "minecraft:conduit";
+        const val CONDUIT: String = "minecraft:conduit"
 
-    String COPPER_BLOCK = "minecraft:copper_block";
+        const val COPPER_BLOCK: String = "minecraft:copper_block"
 
-    String COPPER_BULB = "minecraft:copper_bulb";
+        const val COPPER_BULB: String = "minecraft:copper_bulb"
 
-    String COPPER_DOOR = "minecraft:copper_door";
+        const val COPPER_DOOR: String = "minecraft:copper_door"
 
-    String COPPER_GRATE = "minecraft:copper_grate";
+        const val COPPER_GRATE: String = "minecraft:copper_grate"
 
-    String COPPER_ORE = "minecraft:copper_ore";
+        const val COPPER_ORE: String = "minecraft:copper_ore"
 
-    String COPPER_TRAPDOOR = "minecraft:copper_trapdoor";
+        const val COPPER_TRAPDOOR: String = "minecraft:copper_trapdoor"
 
-    String CORAL_FAN_HANG = "minecraft:coral_fan_hang";
+        const val CORAL_FAN_HANG: String = "minecraft:coral_fan_hang"
 
-    String CORAL_FAN_HANG2 = "minecraft:coral_fan_hang2";
+        const val CORAL_FAN_HANG2: String = "minecraft:coral_fan_hang2"
 
-    String CORAL_FAN_HANG3 = "minecraft:coral_fan_hang3";
+        const val CORAL_FAN_HANG3: String = "minecraft:coral_fan_hang3"
 
-    String CORNFLOWER = "minecraft:cornflower";
+        const val CORNFLOWER: String = "minecraft:cornflower"
 
-    String CRACKED_DEEPSLATE_BRICKS = "minecraft:cracked_deepslate_bricks";
+        const val CRACKED_DEEPSLATE_BRICKS: String = "minecraft:cracked_deepslate_bricks"
 
-    String CRACKED_DEEPSLATE_TILES = "minecraft:cracked_deepslate_tiles";
+        const val CRACKED_DEEPSLATE_TILES: String = "minecraft:cracked_deepslate_tiles"
 
-    String CRACKED_NETHER_BRICKS = "minecraft:cracked_nether_bricks";
+        const val CRACKED_NETHER_BRICKS: String = "minecraft:cracked_nether_bricks"
 
-    String CRACKED_POLISHED_BLACKSTONE_BRICKS = "minecraft:cracked_polished_blackstone_bricks";
+        const val CRACKED_POLISHED_BLACKSTONE_BRICKS: String = "minecraft:cracked_polished_blackstone_bricks"
 
-    String CRACKED_STONE_BRICKS = "minecraft:cracked_stone_bricks";
+        const val CRACKED_STONE_BRICKS: String = "minecraft:cracked_stone_bricks"
 
-    String CRAFTER = "minecraft:crafter";
+        const val CRAFTER: String = "minecraft:crafter"
 
-    String CRAFTING_TABLE = "minecraft:crafting_table";
+        const val CRAFTING_TABLE: String = "minecraft:crafting_table"
 
-    String CREAKING_HEART = "minecraft:creaking_heart";
+        const val CREAKING_HEART: String = "minecraft:creaking_heart"
 
-    String CREEPER_HEAD = "minecraft:creeper_head";
+        const val CREEPER_HEAD: String = "minecraft:creeper_head"
 
-    String CRIMSON_BUTTON = "minecraft:crimson_button";
+        const val CRIMSON_BUTTON: String = "minecraft:crimson_button"
 
-    String CRIMSON_DOOR = "minecraft:crimson_door";
+        const val CRIMSON_DOOR: String = "minecraft:crimson_door"
 
-    String CRIMSON_DOUBLE_SLAB = "minecraft:crimson_double_slab";
+        const val CRIMSON_DOUBLE_SLAB: String = "minecraft:crimson_double_slab"
 
-    String CRIMSON_FENCE = "minecraft:crimson_fence";
+        const val CRIMSON_FENCE: String = "minecraft:crimson_fence"
 
-    String CRIMSON_FENCE_GATE = "minecraft:crimson_fence_gate";
+        const val CRIMSON_FENCE_GATE: String = "minecraft:crimson_fence_gate"
 
-    String CRIMSON_FUNGUS = "minecraft:crimson_fungus";
+        const val CRIMSON_FUNGUS: String = "minecraft:crimson_fungus"
 
-    String CRIMSON_HANGING_SIGN = "minecraft:crimson_hanging_sign";
+        const val CRIMSON_HANGING_SIGN: String = "minecraft:crimson_hanging_sign"
 
-    String CRIMSON_HYPHAE = "minecraft:crimson_hyphae";
+        const val CRIMSON_HYPHAE: String = "minecraft:crimson_hyphae"
 
-    String CRIMSON_NYLIUM = "minecraft:crimson_nylium";
+        const val CRIMSON_NYLIUM: String = "minecraft:crimson_nylium"
 
-    String CRIMSON_PLANKS = "minecraft:crimson_planks";
+        const val CRIMSON_PLANKS: String = "minecraft:crimson_planks"
 
-    String CRIMSON_PRESSURE_PLATE = "minecraft:crimson_pressure_plate";
+        const val CRIMSON_PRESSURE_PLATE: String = "minecraft:crimson_pressure_plate"
 
-    String CRIMSON_ROOTS = "minecraft:crimson_roots";
+        const val CRIMSON_ROOTS: String = "minecraft:crimson_roots"
 
-    String CRIMSON_SLAB = "minecraft:crimson_slab";
+        const val CRIMSON_SLAB: String = "minecraft:crimson_slab"
 
-    String CRIMSON_STAIRS = "minecraft:crimson_stairs";
+        const val CRIMSON_STAIRS: String = "minecraft:crimson_stairs"
 
-    String CRIMSON_STANDING_SIGN = "minecraft:crimson_standing_sign";
+        const val CRIMSON_STANDING_SIGN: String = "minecraft:crimson_standing_sign"
 
-    String CRIMSON_STEM = "minecraft:crimson_stem";
+        const val CRIMSON_STEM: String = "minecraft:crimson_stem"
 
-    String CRIMSON_TRAPDOOR = "minecraft:crimson_trapdoor";
+        const val CRIMSON_TRAPDOOR: String = "minecraft:crimson_trapdoor"
 
-    String CRIMSON_WALL_SIGN = "minecraft:crimson_wall_sign";
+        const val CRIMSON_WALL_SIGN: String = "minecraft:crimson_wall_sign"
 
-    String CRYING_OBSIDIAN = "minecraft:crying_obsidian";
+        const val CRYING_OBSIDIAN: String = "minecraft:crying_obsidian"
 
-    String CUT_COPPER = "minecraft:cut_copper";
+        const val CUT_COPPER: String = "minecraft:cut_copper"
 
-    String CUT_COPPER_SLAB = "minecraft:cut_copper_slab";
+        const val CUT_COPPER_SLAB: String = "minecraft:cut_copper_slab"
 
-    String CUT_COPPER_STAIRS = "minecraft:cut_copper_stairs";
+        const val CUT_COPPER_STAIRS: String = "minecraft:cut_copper_stairs"
 
-    String CUT_RED_SANDSTONE = "minecraft:cut_red_sandstone";
+        const val CUT_RED_SANDSTONE: String = "minecraft:cut_red_sandstone"
 
-    String CUT_RED_SANDSTONE_DOUBLE_SLAB = "minecraft:cut_red_sandstone_double_slab";
+        const val CUT_RED_SANDSTONE_DOUBLE_SLAB: String = "minecraft:cut_red_sandstone_double_slab"
 
-    String CUT_RED_SANDSTONE_SLAB = "minecraft:cut_red_sandstone_slab";
+        const val CUT_RED_SANDSTONE_SLAB: String = "minecraft:cut_red_sandstone_slab"
 
-    String CUT_SANDSTONE = "minecraft:cut_sandstone";
+        const val CUT_SANDSTONE: String = "minecraft:cut_sandstone"
 
-    String CUT_SANDSTONE_DOUBLE_SLAB = "minecraft:cut_sandstone_double_slab";
+        const val CUT_SANDSTONE_DOUBLE_SLAB: String = "minecraft:cut_sandstone_double_slab"
 
-    String CUT_SANDSTONE_SLAB = "minecraft:cut_sandstone_slab";
+        const val CUT_SANDSTONE_SLAB: String = "minecraft:cut_sandstone_slab"
 
-    String CYAN_CANDLE = "minecraft:cyan_candle";
+        const val CYAN_CANDLE: String = "minecraft:cyan_candle"
 
-    String CYAN_CANDLE_CAKE = "minecraft:cyan_candle_cake";
+        const val CYAN_CANDLE_CAKE: String = "minecraft:cyan_candle_cake"
 
-    String CYAN_CARPET = "minecraft:cyan_carpet";
+        const val CYAN_CARPET: String = "minecraft:cyan_carpet"
 
-    String CYAN_CONCRETE = "minecraft:cyan_concrete";
+        const val CYAN_CONCRETE: String = "minecraft:cyan_concrete"
 
-    String CYAN_CONCRETE_POWDER = "minecraft:cyan_concrete_powder";
+        const val CYAN_CONCRETE_POWDER: String = "minecraft:cyan_concrete_powder"
 
-    String CYAN_GLAZED_TERRACOTTA = "minecraft:cyan_glazed_terracotta";
+        const val CYAN_GLAZED_TERRACOTTA: String = "minecraft:cyan_glazed_terracotta"
 
-    String CYAN_SHULKER_BOX = "minecraft:cyan_shulker_box";
+        const val CYAN_SHULKER_BOX: String = "minecraft:cyan_shulker_box"
 
-    String CYAN_STAINED_GLASS = "minecraft:cyan_stained_glass";
+        const val CYAN_STAINED_GLASS: String = "minecraft:cyan_stained_glass"
 
-    String CYAN_STAINED_GLASS_PANE = "minecraft:cyan_stained_glass_pane";
+        const val CYAN_STAINED_GLASS_PANE: String = "minecraft:cyan_stained_glass_pane"
 
-    String CYAN_TERRACOTTA = "minecraft:cyan_terracotta";
+        const val CYAN_TERRACOTTA: String = "minecraft:cyan_terracotta"
 
-    String CYAN_WOOL = "minecraft:cyan_wool";
+        const val CYAN_WOOL: String = "minecraft:cyan_wool"
 
-    String DAMAGED_ANVIL = "minecraft:damaged_anvil";
+        const val DAMAGED_ANVIL: String = "minecraft:damaged_anvil"
 
-    String DANDELION = "minecraft:dandelion";
+        const val DANDELION: String = "minecraft:dandelion"
 
-    String DARK_OAK_BUTTON = "minecraft:dark_oak_button";
+        const val DARK_OAK_BUTTON: String = "minecraft:dark_oak_button"
 
-    String DARK_OAK_DOOR = "minecraft:dark_oak_door";
+        const val DARK_OAK_DOOR: String = "minecraft:dark_oak_door"
 
-    String DARK_OAK_DOUBLE_SLAB = "minecraft:dark_oak_double_slab";
+        const val DARK_OAK_DOUBLE_SLAB: String = "minecraft:dark_oak_double_slab"
 
-    String DARK_OAK_FENCE = "minecraft:dark_oak_fence";
+        const val DARK_OAK_FENCE: String = "minecraft:dark_oak_fence"
 
-    String DARK_OAK_FENCE_GATE = "minecraft:dark_oak_fence_gate";
+        const val DARK_OAK_FENCE_GATE: String = "minecraft:dark_oak_fence_gate"
 
-    String DARK_OAK_HANGING_SIGN = "minecraft:dark_oak_hanging_sign";
+        const val DARK_OAK_HANGING_SIGN: String = "minecraft:dark_oak_hanging_sign"
 
-    String DARK_OAK_LEAVES = "minecraft:dark_oak_leaves";
+        const val DARK_OAK_LEAVES: String = "minecraft:dark_oak_leaves"
 
-    String DARK_OAK_LOG = "minecraft:dark_oak_log";
+        const val DARK_OAK_LOG: String = "minecraft:dark_oak_log"
 
-    String DARK_OAK_PLANKS = "minecraft:dark_oak_planks";
+        const val DARK_OAK_PLANKS: String = "minecraft:dark_oak_planks"
 
-    String DARK_OAK_PRESSURE_PLATE = "minecraft:dark_oak_pressure_plate";
+        const val DARK_OAK_PRESSURE_PLATE: String = "minecraft:dark_oak_pressure_plate"
 
-    String DARK_OAK_SAPLING = "minecraft:dark_oak_sapling";
+        const val DARK_OAK_SAPLING: String = "minecraft:dark_oak_sapling"
 
-    String DARK_OAK_SLAB = "minecraft:dark_oak_slab";
+        const val DARK_OAK_SLAB: String = "minecraft:dark_oak_slab"
 
-    String DARK_OAK_STAIRS = "minecraft:dark_oak_stairs";
+        const val DARK_OAK_STAIRS: String = "minecraft:dark_oak_stairs"
 
-    String DARK_OAK_TRAPDOOR = "minecraft:dark_oak_trapdoor";
+        const val DARK_OAK_TRAPDOOR: String = "minecraft:dark_oak_trapdoor"
 
-    String DARK_OAK_WOOD = "minecraft:dark_oak_wood";
+        const val DARK_OAK_WOOD: String = "minecraft:dark_oak_wood"
 
-    String DARK_PRISMARINE = "minecraft:dark_prismarine";
+        const val DARK_PRISMARINE: String = "minecraft:dark_prismarine"
 
-    String DARK_PRISMARINE_DOUBLE_SLAB = "minecraft:dark_prismarine_double_slab";
+        const val DARK_PRISMARINE_DOUBLE_SLAB: String = "minecraft:dark_prismarine_double_slab"
 
-    String DARK_PRISMARINE_SLAB = "minecraft:dark_prismarine_slab";
+        const val DARK_PRISMARINE_SLAB: String = "minecraft:dark_prismarine_slab"
 
-    String DARK_PRISMARINE_STAIRS = "minecraft:dark_prismarine_stairs";
+        const val DARK_PRISMARINE_STAIRS: String = "minecraft:dark_prismarine_stairs"
 
-    String DARKOAK_STANDING_SIGN = "minecraft:darkoak_standing_sign";
+        const val DARKOAK_STANDING_SIGN: String = "minecraft:darkoak_standing_sign"
 
-    String DARKOAK_WALL_SIGN = "minecraft:darkoak_wall_sign";
+        const val DARKOAK_WALL_SIGN: String = "minecraft:darkoak_wall_sign"
 
-    String DAYLIGHT_DETECTOR = "minecraft:daylight_detector";
+        const val DAYLIGHT_DETECTOR: String = "minecraft:daylight_detector"
 
-    String DAYLIGHT_DETECTOR_INVERTED = "minecraft:daylight_detector_inverted";
+        const val DAYLIGHT_DETECTOR_INVERTED: String = "minecraft:daylight_detector_inverted"
 
-    String DEAD_BRAIN_CORAL = "minecraft:dead_brain_coral";
+        const val DEAD_BRAIN_CORAL: String = "minecraft:dead_brain_coral"
 
-    String DEAD_BRAIN_CORAL_BLOCK = "minecraft:dead_brain_coral_block";
+        const val DEAD_BRAIN_CORAL_BLOCK: String = "minecraft:dead_brain_coral_block"
 
-    String DEAD_BRAIN_CORAL_FAN = "minecraft:dead_brain_coral_fan";
+        const val DEAD_BRAIN_CORAL_FAN: String = "minecraft:dead_brain_coral_fan"
 
-    String DEAD_BRAIN_CORAL_WALL_FAN = "minecraft:dead_brain_coral_wall_fan";
+        const val DEAD_BRAIN_CORAL_WALL_FAN: String = "minecraft:dead_brain_coral_wall_fan"
 
-    String DEAD_BUBBLE_CORAL = "minecraft:dead_bubble_coral";
+        const val DEAD_BUBBLE_CORAL: String = "minecraft:dead_bubble_coral"
 
-    String DEAD_BUBBLE_CORAL_BLOCK = "minecraft:dead_bubble_coral_block";
+        const val DEAD_BUBBLE_CORAL_BLOCK: String = "minecraft:dead_bubble_coral_block"
 
-    String DEAD_BUBBLE_CORAL_FAN = "minecraft:dead_bubble_coral_fan";
+        const val DEAD_BUBBLE_CORAL_FAN: String = "minecraft:dead_bubble_coral_fan"
 
-    String DEAD_BUBBLE_CORAL_WALL_FAN = "minecraft:dead_bubble_coral_wall_fan";
+        const val DEAD_BUBBLE_CORAL_WALL_FAN: String = "minecraft:dead_bubble_coral_wall_fan"
 
-    String DEAD_FIRE_CORAL = "minecraft:dead_fire_coral";
+        const val DEAD_FIRE_CORAL: String = "minecraft:dead_fire_coral"
 
-    String DEAD_FIRE_CORAL_BLOCK = "minecraft:dead_fire_coral_block";
+        const val DEAD_FIRE_CORAL_BLOCK: String = "minecraft:dead_fire_coral_block"
 
-    String DEAD_FIRE_CORAL_FAN = "minecraft:dead_fire_coral_fan";
+        const val DEAD_FIRE_CORAL_FAN: String = "minecraft:dead_fire_coral_fan"
 
-    String DEAD_FIRE_CORAL_WALL_FAN = "minecraft:dead_fire_coral_wall_fan";
+        const val DEAD_FIRE_CORAL_WALL_FAN: String = "minecraft:dead_fire_coral_wall_fan"
 
-    String DEAD_HORN_CORAL = "minecraft:dead_horn_coral";
+        const val DEAD_HORN_CORAL: String = "minecraft:dead_horn_coral"
 
-    String DEAD_HORN_CORAL_BLOCK = "minecraft:dead_horn_coral_block";
+        const val DEAD_HORN_CORAL_BLOCK: String = "minecraft:dead_horn_coral_block"
 
-    String DEAD_HORN_CORAL_FAN = "minecraft:dead_horn_coral_fan";
+        const val DEAD_HORN_CORAL_FAN: String = "minecraft:dead_horn_coral_fan"
 
-    String DEAD_HORN_CORAL_WALL_FAN = "minecraft:dead_horn_coral_wall_fan";
+        const val DEAD_HORN_CORAL_WALL_FAN: String = "minecraft:dead_horn_coral_wall_fan"
 
-    String DEAD_TUBE_CORAL = "minecraft:dead_tube_coral";
+        const val DEAD_TUBE_CORAL: String = "minecraft:dead_tube_coral"
 
-    String DEAD_TUBE_CORAL_BLOCK = "minecraft:dead_tube_coral_block";
+        const val DEAD_TUBE_CORAL_BLOCK: String = "minecraft:dead_tube_coral_block"
 
-    String DEAD_TUBE_CORAL_FAN = "minecraft:dead_tube_coral_fan";
+        const val DEAD_TUBE_CORAL_FAN: String = "minecraft:dead_tube_coral_fan"
 
-    String DEAD_TUBE_CORAL_WALL_FAN = "minecraft:dead_tube_coral_wall_fan";
+        const val DEAD_TUBE_CORAL_WALL_FAN: String = "minecraft:dead_tube_coral_wall_fan"
 
-    String DEADBUSH = "minecraft:deadbush";
+        const val DEADBUSH: String = "minecraft:deadbush"
 
-    String DECORATED_POT = "minecraft:decorated_pot";
+        const val DECORATED_POT: String = "minecraft:decorated_pot"
 
-    String DEEPSLATE = "minecraft:deepslate";
+        const val DEEPSLATE: String = "minecraft:deepslate"
 
-    String DEEPSLATE_BRICK_DOUBLE_SLAB = "minecraft:deepslate_brick_double_slab";
+        const val DEEPSLATE_BRICK_DOUBLE_SLAB: String = "minecraft:deepslate_brick_double_slab"
 
-    String DEEPSLATE_BRICK_SLAB = "minecraft:deepslate_brick_slab";
+        const val DEEPSLATE_BRICK_SLAB: String = "minecraft:deepslate_brick_slab"
 
-    String DEEPSLATE_BRICK_STAIRS = "minecraft:deepslate_brick_stairs";
+        const val DEEPSLATE_BRICK_STAIRS: String = "minecraft:deepslate_brick_stairs"
 
-    String DEEPSLATE_BRICK_WALL = "minecraft:deepslate_brick_wall";
+        const val DEEPSLATE_BRICK_WALL: String = "minecraft:deepslate_brick_wall"
 
-    String DEEPSLATE_BRICKS = "minecraft:deepslate_bricks";
+        const val DEEPSLATE_BRICKS: String = "minecraft:deepslate_bricks"
 
-    String DEEPSLATE_COAL_ORE = "minecraft:deepslate_coal_ore";
+        const val DEEPSLATE_COAL_ORE: String = "minecraft:deepslate_coal_ore"
 
-    String DEEPSLATE_COPPER_ORE = "minecraft:deepslate_copper_ore";
+        const val DEEPSLATE_COPPER_ORE: String = "minecraft:deepslate_copper_ore"
 
-    String DEEPSLATE_DIAMOND_ORE = "minecraft:deepslate_diamond_ore";
+        const val DEEPSLATE_DIAMOND_ORE: String = "minecraft:deepslate_diamond_ore"
 
-    String DEEPSLATE_EMERALD_ORE = "minecraft:deepslate_emerald_ore";
+        const val DEEPSLATE_EMERALD_ORE: String = "minecraft:deepslate_emerald_ore"
 
-    String DEEPSLATE_GOLD_ORE = "minecraft:deepslate_gold_ore";
+        const val DEEPSLATE_GOLD_ORE: String = "minecraft:deepslate_gold_ore"
 
-    String DEEPSLATE_IRON_ORE = "minecraft:deepslate_iron_ore";
+        const val DEEPSLATE_IRON_ORE: String = "minecraft:deepslate_iron_ore"
 
-    String DEEPSLATE_LAPIS_ORE = "minecraft:deepslate_lapis_ore";
+        const val DEEPSLATE_LAPIS_ORE: String = "minecraft:deepslate_lapis_ore"
 
-    String DEEPSLATE_REDSTONE_ORE = "minecraft:deepslate_redstone_ore";
+        const val DEEPSLATE_REDSTONE_ORE: String = "minecraft:deepslate_redstone_ore"
 
-    String DEEPSLATE_TILE_DOUBLE_SLAB = "minecraft:deepslate_tile_double_slab";
+        const val DEEPSLATE_TILE_DOUBLE_SLAB: String = "minecraft:deepslate_tile_double_slab"
 
-    String DEEPSLATE_TILE_SLAB = "minecraft:deepslate_tile_slab";
+        const val DEEPSLATE_TILE_SLAB: String = "minecraft:deepslate_tile_slab"
 
-    String DEEPSLATE_TILE_STAIRS = "minecraft:deepslate_tile_stairs";
+        const val DEEPSLATE_TILE_STAIRS: String = "minecraft:deepslate_tile_stairs"
 
-    String DEEPSLATE_TILE_WALL = "minecraft:deepslate_tile_wall";
+        const val DEEPSLATE_TILE_WALL: String = "minecraft:deepslate_tile_wall"
 
-    String DEEPSLATE_TILES = "minecraft:deepslate_tiles";
+        const val DEEPSLATE_TILES: String = "minecraft:deepslate_tiles"
 
-    String DENY = "minecraft:deny";
+        const val DENY: String = "minecraft:deny"
 
-    String DETECTOR_RAIL = "minecraft:detector_rail";
+        const val DETECTOR_RAIL: String = "minecraft:detector_rail"
 
-    String DIAMOND_BLOCK = "minecraft:diamond_block";
+        const val DIAMOND_BLOCK: String = "minecraft:diamond_block"
 
-    String DIAMOND_ORE = "minecraft:diamond_ore";
+        const val DIAMOND_ORE: String = "minecraft:diamond_ore"
 
-    String DIORITE = "minecraft:diorite";
+        const val DIORITE: String = "minecraft:diorite"
 
-    String DIORITE_DOUBLE_SLAB = "minecraft:diorite_double_slab";
+        const val DIORITE_DOUBLE_SLAB: String = "minecraft:diorite_double_slab"
 
-    String DIORITE_SLAB = "minecraft:diorite_slab";
+        const val DIORITE_SLAB: String = "minecraft:diorite_slab"
 
-    String DIORITE_STAIRS = "minecraft:diorite_stairs";
+        const val DIORITE_STAIRS: String = "minecraft:diorite_stairs"
 
-    String DIORITE_WALL = "minecraft:diorite_wall";
+        const val DIORITE_WALL: String = "minecraft:diorite_wall"
 
-    String DIRT = "minecraft:dirt";
+        const val DIRT: String = "minecraft:dirt"
 
-    String DIRT_WITH_ROOTS = "minecraft:dirt_with_roots";
+        const val DIRT_WITH_ROOTS: String = "minecraft:dirt_with_roots"
 
-    String DISPENSER = "minecraft:dispenser";
+        const val DISPENSER: String = "minecraft:dispenser"
 
-    String DOUBLE_CUT_COPPER_SLAB = "minecraft:double_cut_copper_slab";
+        const val DOUBLE_CUT_COPPER_SLAB: String = "minecraft:double_cut_copper_slab"
 
-    String DOUBLE_STONE_BLOCK_SLAB = "minecraft:double_stone_block_slab";
+        const val DOUBLE_STONE_BLOCK_SLAB: String = "minecraft:double_stone_block_slab"
 
-    String DOUBLE_STONE_BLOCK_SLAB2 = "minecraft:double_stone_block_slab2";
+        const val DOUBLE_STONE_BLOCK_SLAB2: String = "minecraft:double_stone_block_slab2"
 
-    String DOUBLE_STONE_BLOCK_SLAB3 = "minecraft:double_stone_block_slab3";
+        const val DOUBLE_STONE_BLOCK_SLAB3: String = "minecraft:double_stone_block_slab3"
 
-    String DOUBLE_STONE_BLOCK_SLAB4 = "minecraft:double_stone_block_slab4";
+        const val DOUBLE_STONE_BLOCK_SLAB4: String = "minecraft:double_stone_block_slab4"
 
-    String DRAGON_EGG = "minecraft:dragon_egg";
+        const val DRAGON_EGG: String = "minecraft:dragon_egg"
 
-    String DRAGON_HEAD = "minecraft:dragon_head";
+        const val DRAGON_HEAD: String = "minecraft:dragon_head"
 
-    String DRIED_KELP_BLOCK = "minecraft:dried_kelp_block";
+        const val DRIED_KELP_BLOCK: String = "minecraft:dried_kelp_block"
 
-    String DRIPSTONE_BLOCK = "minecraft:dripstone_block";
+        const val DRIPSTONE_BLOCK: String = "minecraft:dripstone_block"
 
-    String DROPPER = "minecraft:dropper";
+        const val DROPPER: String = "minecraft:dropper"
 
-    String ELEMENT_0 = "minecraft:element_0";
+        const val ELEMENT_0: String = "minecraft:element_0"
 
-    String ELEMENT_1 = "minecraft:element_1";
+        const val ELEMENT_1: String = "minecraft:element_1"
 
-    String ELEMENT_10 = "minecraft:element_10";
+        const val ELEMENT_10: String = "minecraft:element_10"
 
-    String ELEMENT_100 = "minecraft:element_100";
+        const val ELEMENT_100: String = "minecraft:element_100"
 
-    String ELEMENT_101 = "minecraft:element_101";
+        const val ELEMENT_101: String = "minecraft:element_101"
 
-    String ELEMENT_102 = "minecraft:element_102";
+        const val ELEMENT_102: String = "minecraft:element_102"
 
-    String ELEMENT_103 = "minecraft:element_103";
+        const val ELEMENT_103: String = "minecraft:element_103"
 
-    String ELEMENT_104 = "minecraft:element_104";
+        const val ELEMENT_104: String = "minecraft:element_104"
 
-    String ELEMENT_105 = "minecraft:element_105";
+        const val ELEMENT_105: String = "minecraft:element_105"
 
-    String ELEMENT_106 = "minecraft:element_106";
+        const val ELEMENT_106: String = "minecraft:element_106"
 
-    String ELEMENT_107 = "minecraft:element_107";
+        const val ELEMENT_107: String = "minecraft:element_107"
 
-    String ELEMENT_108 = "minecraft:element_108";
+        const val ELEMENT_108: String = "minecraft:element_108"
 
-    String ELEMENT_109 = "minecraft:element_109";
+        const val ELEMENT_109: String = "minecraft:element_109"
 
-    String ELEMENT_11 = "minecraft:element_11";
+        const val ELEMENT_11: String = "minecraft:element_11"
 
-    String ELEMENT_110 = "minecraft:element_110";
+        const val ELEMENT_110: String = "minecraft:element_110"
 
-    String ELEMENT_111 = "minecraft:element_111";
+        const val ELEMENT_111: String = "minecraft:element_111"
 
-    String ELEMENT_112 = "minecraft:element_112";
+        const val ELEMENT_112: String = "minecraft:element_112"
 
-    String ELEMENT_113 = "minecraft:element_113";
+        const val ELEMENT_113: String = "minecraft:element_113"
 
-    String ELEMENT_114 = "minecraft:element_114";
+        const val ELEMENT_114: String = "minecraft:element_114"
 
-    String ELEMENT_115 = "minecraft:element_115";
+        const val ELEMENT_115: String = "minecraft:element_115"
 
-    String ELEMENT_116 = "minecraft:element_116";
+        const val ELEMENT_116: String = "minecraft:element_116"
 
-    String ELEMENT_117 = "minecraft:element_117";
+        const val ELEMENT_117: String = "minecraft:element_117"
 
-    String ELEMENT_118 = "minecraft:element_118";
+        const val ELEMENT_118: String = "minecraft:element_118"
 
-    String ELEMENT_12 = "minecraft:element_12";
+        const val ELEMENT_12: String = "minecraft:element_12"
 
-    String ELEMENT_13 = "minecraft:element_13";
+        const val ELEMENT_13: String = "minecraft:element_13"
 
-    String ELEMENT_14 = "minecraft:element_14";
+        const val ELEMENT_14: String = "minecraft:element_14"
 
-    String ELEMENT_15 = "minecraft:element_15";
+        const val ELEMENT_15: String = "minecraft:element_15"
 
-    String ELEMENT_16 = "minecraft:element_16";
+        const val ELEMENT_16: String = "minecraft:element_16"
 
-    String ELEMENT_17 = "minecraft:element_17";
+        const val ELEMENT_17: String = "minecraft:element_17"
 
-    String ELEMENT_18 = "minecraft:element_18";
+        const val ELEMENT_18: String = "minecraft:element_18"
 
-    String ELEMENT_19 = "minecraft:element_19";
+        const val ELEMENT_19: String = "minecraft:element_19"
 
-    String ELEMENT_2 = "minecraft:element_2";
+        const val ELEMENT_2: String = "minecraft:element_2"
 
-    String ELEMENT_20 = "minecraft:element_20";
+        const val ELEMENT_20: String = "minecraft:element_20"
 
-    String ELEMENT_21 = "minecraft:element_21";
+        const val ELEMENT_21: String = "minecraft:element_21"
 
-    String ELEMENT_22 = "minecraft:element_22";
+        const val ELEMENT_22: String = "minecraft:element_22"
 
-    String ELEMENT_23 = "minecraft:element_23";
+        const val ELEMENT_23: String = "minecraft:element_23"
 
-    String ELEMENT_24 = "minecraft:element_24";
+        const val ELEMENT_24: String = "minecraft:element_24"
 
-    String ELEMENT_25 = "minecraft:element_25";
+        const val ELEMENT_25: String = "minecraft:element_25"
 
-    String ELEMENT_26 = "minecraft:element_26";
+        const val ELEMENT_26: String = "minecraft:element_26"
 
-    String ELEMENT_27 = "minecraft:element_27";
+        const val ELEMENT_27: String = "minecraft:element_27"
 
-    String ELEMENT_28 = "minecraft:element_28";
+        const val ELEMENT_28: String = "minecraft:element_28"
 
-    String ELEMENT_29 = "minecraft:element_29";
+        const val ELEMENT_29: String = "minecraft:element_29"
 
-    String ELEMENT_3 = "minecraft:element_3";
+        const val ELEMENT_3: String = "minecraft:element_3"
 
-    String ELEMENT_30 = "minecraft:element_30";
+        const val ELEMENT_30: String = "minecraft:element_30"
 
-    String ELEMENT_31 = "minecraft:element_31";
+        const val ELEMENT_31: String = "minecraft:element_31"
 
-    String ELEMENT_32 = "minecraft:element_32";
+        const val ELEMENT_32: String = "minecraft:element_32"
 
-    String ELEMENT_33 = "minecraft:element_33";
+        const val ELEMENT_33: String = "minecraft:element_33"
 
-    String ELEMENT_34 = "minecraft:element_34";
+        const val ELEMENT_34: String = "minecraft:element_34"
 
-    String ELEMENT_35 = "minecraft:element_35";
+        const val ELEMENT_35: String = "minecraft:element_35"
 
-    String ELEMENT_36 = "minecraft:element_36";
+        const val ELEMENT_36: String = "minecraft:element_36"
 
-    String ELEMENT_37 = "minecraft:element_37";
+        const val ELEMENT_37: String = "minecraft:element_37"
 
-    String ELEMENT_38 = "minecraft:element_38";
+        const val ELEMENT_38: String = "minecraft:element_38"
 
-    String ELEMENT_39 = "minecraft:element_39";
+        const val ELEMENT_39: String = "minecraft:element_39"
 
-    String ELEMENT_4 = "minecraft:element_4";
+        const val ELEMENT_4: String = "minecraft:element_4"
 
-    String ELEMENT_40 = "minecraft:element_40";
+        const val ELEMENT_40: String = "minecraft:element_40"
 
-    String ELEMENT_41 = "minecraft:element_41";
+        const val ELEMENT_41: String = "minecraft:element_41"
 
-    String ELEMENT_42 = "minecraft:element_42";
+        const val ELEMENT_42: String = "minecraft:element_42"
 
-    String ELEMENT_43 = "minecraft:element_43";
+        const val ELEMENT_43: String = "minecraft:element_43"
 
-    String ELEMENT_44 = "minecraft:element_44";
+        const val ELEMENT_44: String = "minecraft:element_44"
 
-    String ELEMENT_45 = "minecraft:element_45";
+        const val ELEMENT_45: String = "minecraft:element_45"
 
-    String ELEMENT_46 = "minecraft:element_46";
+        const val ELEMENT_46: String = "minecraft:element_46"
 
-    String ELEMENT_47 = "minecraft:element_47";
+        const val ELEMENT_47: String = "minecraft:element_47"
 
-    String ELEMENT_48 = "minecraft:element_48";
+        const val ELEMENT_48: String = "minecraft:element_48"
 
-    String ELEMENT_49 = "minecraft:element_49";
+        const val ELEMENT_49: String = "minecraft:element_49"
 
-    String ELEMENT_5 = "minecraft:element_5";
+        const val ELEMENT_5: String = "minecraft:element_5"
 
-    String ELEMENT_50 = "minecraft:element_50";
+        const val ELEMENT_50: String = "minecraft:element_50"
 
-    String ELEMENT_51 = "minecraft:element_51";
+        const val ELEMENT_51: String = "minecraft:element_51"
 
-    String ELEMENT_52 = "minecraft:element_52";
+        const val ELEMENT_52: String = "minecraft:element_52"
 
-    String ELEMENT_53 = "minecraft:element_53";
+        const val ELEMENT_53: String = "minecraft:element_53"
 
-    String ELEMENT_54 = "minecraft:element_54";
+        const val ELEMENT_54: String = "minecraft:element_54"
 
-    String ELEMENT_55 = "minecraft:element_55";
+        const val ELEMENT_55: String = "minecraft:element_55"
 
-    String ELEMENT_56 = "minecraft:element_56";
+        const val ELEMENT_56: String = "minecraft:element_56"
 
-    String ELEMENT_57 = "minecraft:element_57";
+        const val ELEMENT_57: String = "minecraft:element_57"
 
-    String ELEMENT_58 = "minecraft:element_58";
+        const val ELEMENT_58: String = "minecraft:element_58"
 
-    String ELEMENT_59 = "minecraft:element_59";
+        const val ELEMENT_59: String = "minecraft:element_59"
 
-    String ELEMENT_6 = "minecraft:element_6";
+        const val ELEMENT_6: String = "minecraft:element_6"
 
-    String ELEMENT_60 = "minecraft:element_60";
+        const val ELEMENT_60: String = "minecraft:element_60"
 
-    String ELEMENT_61 = "minecraft:element_61";
+        const val ELEMENT_61: String = "minecraft:element_61"
 
-    String ELEMENT_62 = "minecraft:element_62";
+        const val ELEMENT_62: String = "minecraft:element_62"
 
-    String ELEMENT_63 = "minecraft:element_63";
+        const val ELEMENT_63: String = "minecraft:element_63"
 
-    String ELEMENT_64 = "minecraft:element_64";
+        const val ELEMENT_64: String = "minecraft:element_64"
 
-    String ELEMENT_65 = "minecraft:element_65";
+        const val ELEMENT_65: String = "minecraft:element_65"
 
-    String ELEMENT_66 = "minecraft:element_66";
+        const val ELEMENT_66: String = "minecraft:element_66"
 
-    String ELEMENT_67 = "minecraft:element_67";
+        const val ELEMENT_67: String = "minecraft:element_67"
 
-    String ELEMENT_68 = "minecraft:element_68";
+        const val ELEMENT_68: String = "minecraft:element_68"
 
-    String ELEMENT_69 = "minecraft:element_69";
+        const val ELEMENT_69: String = "minecraft:element_69"
 
-    String ELEMENT_7 = "minecraft:element_7";
+        const val ELEMENT_7: String = "minecraft:element_7"
 
-    String ELEMENT_70 = "minecraft:element_70";
+        const val ELEMENT_70: String = "minecraft:element_70"
 
-    String ELEMENT_71 = "minecraft:element_71";
+        const val ELEMENT_71: String = "minecraft:element_71"
 
-    String ELEMENT_72 = "minecraft:element_72";
+        const val ELEMENT_72: String = "minecraft:element_72"
 
-    String ELEMENT_73 = "minecraft:element_73";
+        const val ELEMENT_73: String = "minecraft:element_73"
 
-    String ELEMENT_74 = "minecraft:element_74";
+        const val ELEMENT_74: String = "minecraft:element_74"
 
-    String ELEMENT_75 = "minecraft:element_75";
+        const val ELEMENT_75: String = "minecraft:element_75"
 
-    String ELEMENT_76 = "minecraft:element_76";
+        const val ELEMENT_76: String = "minecraft:element_76"
 
-    String ELEMENT_77 = "minecraft:element_77";
+        const val ELEMENT_77: String = "minecraft:element_77"
 
-    String ELEMENT_78 = "minecraft:element_78";
+        const val ELEMENT_78: String = "minecraft:element_78"
 
-    String ELEMENT_79 = "minecraft:element_79";
+        const val ELEMENT_79: String = "minecraft:element_79"
 
-    String ELEMENT_8 = "minecraft:element_8";
+        const val ELEMENT_8: String = "minecraft:element_8"
 
-    String ELEMENT_80 = "minecraft:element_80";
+        const val ELEMENT_80: String = "minecraft:element_80"
 
-    String ELEMENT_81 = "minecraft:element_81";
+        const val ELEMENT_81: String = "minecraft:element_81"
 
-    String ELEMENT_82 = "minecraft:element_82";
+        const val ELEMENT_82: String = "minecraft:element_82"
 
-    String ELEMENT_83 = "minecraft:element_83";
+        const val ELEMENT_83: String = "minecraft:element_83"
 
-    String ELEMENT_84 = "minecraft:element_84";
+        const val ELEMENT_84: String = "minecraft:element_84"
 
-    String ELEMENT_85 = "minecraft:element_85";
+        const val ELEMENT_85: String = "minecraft:element_85"
 
-    String ELEMENT_86 = "minecraft:element_86";
+        const val ELEMENT_86: String = "minecraft:element_86"
 
-    String ELEMENT_87 = "minecraft:element_87";
+        const val ELEMENT_87: String = "minecraft:element_87"
 
-    String ELEMENT_88 = "minecraft:element_88";
+        const val ELEMENT_88: String = "minecraft:element_88"
 
-    String ELEMENT_89 = "minecraft:element_89";
+        const val ELEMENT_89: String = "minecraft:element_89"
 
-    String ELEMENT_9 = "minecraft:element_9";
+        const val ELEMENT_9: String = "minecraft:element_9"
 
-    String ELEMENT_90 = "minecraft:element_90";
+        const val ELEMENT_90: String = "minecraft:element_90"
 
-    String ELEMENT_91 = "minecraft:element_91";
+        const val ELEMENT_91: String = "minecraft:element_91"
 
-    String ELEMENT_92 = "minecraft:element_92";
+        const val ELEMENT_92: String = "minecraft:element_92"
 
-    String ELEMENT_93 = "minecraft:element_93";
+        const val ELEMENT_93: String = "minecraft:element_93"
 
-    String ELEMENT_94 = "minecraft:element_94";
+        const val ELEMENT_94: String = "minecraft:element_94"
 
-    String ELEMENT_95 = "minecraft:element_95";
+        const val ELEMENT_95: String = "minecraft:element_95"
 
-    String ELEMENT_96 = "minecraft:element_96";
+        const val ELEMENT_96: String = "minecraft:element_96"
 
-    String ELEMENT_97 = "minecraft:element_97";
+        const val ELEMENT_97: String = "minecraft:element_97"
 
-    String ELEMENT_98 = "minecraft:element_98";
+        const val ELEMENT_98: String = "minecraft:element_98"
 
-    String ELEMENT_99 = "minecraft:element_99";
+        const val ELEMENT_99: String = "minecraft:element_99"
 
-    String EMERALD_BLOCK = "minecraft:emerald_block";
+        const val EMERALD_BLOCK: String = "minecraft:emerald_block"
 
-    String EMERALD_ORE = "minecraft:emerald_ore";
+        const val EMERALD_ORE: String = "minecraft:emerald_ore"
 
-    String ENCHANTING_TABLE = "minecraft:enchanting_table";
+        const val ENCHANTING_TABLE: String = "minecraft:enchanting_table"
 
-    String END_BRICK_STAIRS = "minecraft:end_brick_stairs";
+        const val END_BRICK_STAIRS: String = "minecraft:end_brick_stairs"
 
-    String END_BRICKS = "minecraft:end_bricks";
+        const val END_BRICKS: String = "minecraft:end_bricks"
 
-    String END_GATEWAY = "minecraft:end_gateway";
+        const val END_GATEWAY: String = "minecraft:end_gateway"
 
-    String END_PORTAL = "minecraft:end_portal";
+        const val END_PORTAL: String = "minecraft:end_portal"
 
-    String END_PORTAL_FRAME = "minecraft:end_portal_frame";
+        const val END_PORTAL_FRAME: String = "minecraft:end_portal_frame"
 
-    String END_ROD = "minecraft:end_rod";
+        const val END_ROD: String = "minecraft:end_rod"
 
-    String END_STONE = "minecraft:end_stone";
+        const val END_STONE: String = "minecraft:end_stone"
 
-    String END_STONE_BRICK_DOUBLE_SLAB = "minecraft:end_stone_brick_double_slab";
+        const val END_STONE_BRICK_DOUBLE_SLAB: String = "minecraft:end_stone_brick_double_slab"
 
-    String END_STONE_BRICK_SLAB = "minecraft:end_stone_brick_slab";
+        const val END_STONE_BRICK_SLAB: String = "minecraft:end_stone_brick_slab"
 
-    String END_STONE_BRICK_WALL = "minecraft:end_stone_brick_wall";
+        const val END_STONE_BRICK_WALL: String = "minecraft:end_stone_brick_wall"
 
-    String ENDER_CHEST = "minecraft:ender_chest";
+        const val ENDER_CHEST: String = "minecraft:ender_chest"
 
-    String EXPOSED_CHISELED_COPPER = "minecraft:exposed_chiseled_copper";
+        const val EXPOSED_CHISELED_COPPER: String = "minecraft:exposed_chiseled_copper"
 
-    String EXPOSED_COPPER = "minecraft:exposed_copper";
+        const val EXPOSED_COPPER: String = "minecraft:exposed_copper"
 
-    String EXPOSED_COPPER_BULB = "minecraft:exposed_copper_bulb";
+        const val EXPOSED_COPPER_BULB: String = "minecraft:exposed_copper_bulb"
 
-    String EXPOSED_COPPER_DOOR = "minecraft:exposed_copper_door";
+        const val EXPOSED_COPPER_DOOR: String = "minecraft:exposed_copper_door"
 
-    String EXPOSED_COPPER_GRATE = "minecraft:exposed_copper_grate";
+        const val EXPOSED_COPPER_GRATE: String = "minecraft:exposed_copper_grate"
 
-    String EXPOSED_COPPER_TRAPDOOR = "minecraft:exposed_copper_trapdoor";
+        const val EXPOSED_COPPER_TRAPDOOR: String = "minecraft:exposed_copper_trapdoor"
 
-    String EXPOSED_CUT_COPPER = "minecraft:exposed_cut_copper";
+        const val EXPOSED_CUT_COPPER: String = "minecraft:exposed_cut_copper"
 
-    String EXPOSED_CUT_COPPER_SLAB = "minecraft:exposed_cut_copper_slab";
+        const val EXPOSED_CUT_COPPER_SLAB: String = "minecraft:exposed_cut_copper_slab"
 
-    String EXPOSED_CUT_COPPER_STAIRS = "minecraft:exposed_cut_copper_stairs";
+        const val EXPOSED_CUT_COPPER_STAIRS: String = "minecraft:exposed_cut_copper_stairs"
 
-    String EXPOSED_DOUBLE_CUT_COPPER_SLAB = "minecraft:exposed_double_cut_copper_slab";
+        const val EXPOSED_DOUBLE_CUT_COPPER_SLAB: String = "minecraft:exposed_double_cut_copper_slab"
 
-    String FARMLAND = "minecraft:farmland";
+        const val FARMLAND: String = "minecraft:farmland"
 
-    String FENCE_GATE = "minecraft:fence_gate";
+        const val FENCE_GATE: String = "minecraft:fence_gate"
 
-    String FERN = "minecraft:fern";
+        const val FERN: String = "minecraft:fern"
 
-    String FIRE = "minecraft:fire";
+        const val FIRE: String = "minecraft:fire"
 
-    String FIRE_CORAL = "minecraft:fire_coral";
+        const val FIRE_CORAL: String = "minecraft:fire_coral"
 
-    String FIRE_CORAL_BLOCK = "minecraft:fire_coral_block";
+        const val FIRE_CORAL_BLOCK: String = "minecraft:fire_coral_block"
 
-    String FIRE_CORAL_FAN = "minecraft:fire_coral_fan";
+        const val FIRE_CORAL_FAN: String = "minecraft:fire_coral_fan"
 
-    String FIRE_CORAL_WALL_FAN = "minecraft:fire_coral_wall_fan";
+        const val FIRE_CORAL_WALL_FAN: String = "minecraft:fire_coral_wall_fan"
 
-    String FLETCHING_TABLE = "minecraft:fletching_table";
+        const val FLETCHING_TABLE: String = "minecraft:fletching_table"
 
-    String FLOWER_POT = "minecraft:flower_pot";
+        const val FLOWER_POT: String = "minecraft:flower_pot"
 
-    String FLOWERING_AZALEA = "minecraft:flowering_azalea";
+        const val FLOWERING_AZALEA: String = "minecraft:flowering_azalea"
 
-    String FLOWING_LAVA = "minecraft:flowing_lava";
+        const val FLOWING_LAVA: String = "minecraft:flowing_lava"
 
-    String FLOWING_WATER = "minecraft:flowing_water";
+        const val FLOWING_WATER: String = "minecraft:flowing_water"
 
-    String FRAME = "minecraft:frame";
+        const val FRAME: String = "minecraft:frame"
 
-    String FROG_SPAWN = "minecraft:frog_spawn";
+        const val FROG_SPAWN: String = "minecraft:frog_spawn"
 
-    String FROSTED_ICE = "minecraft:frosted_ice";
+        const val FROSTED_ICE: String = "minecraft:frosted_ice"
 
-    String FURNACE = "minecraft:furnace";
+        const val FURNACE: String = "minecraft:furnace"
 
-    String GILDED_BLACKSTONE = "minecraft:gilded_blackstone";
+        const val GILDED_BLACKSTONE: String = "minecraft:gilded_blackstone"
 
-    String GLASS = "minecraft:glass";
+        const val GLASS: String = "minecraft:glass"
 
-    String GLASS_PANE = "minecraft:glass_pane";
+        const val GLASS_PANE: String = "minecraft:glass_pane"
 
-    String GLOW_FRAME = "minecraft:glow_frame";
+        const val GLOW_FRAME: String = "minecraft:glow_frame"
 
-    String GLOW_LICHEN = "minecraft:glow_lichen";
+        const val GLOW_LICHEN: String = "minecraft:glow_lichen"
 
-    String GLOWINGOBSIDIAN = "minecraft:glowingobsidian";
+        const val GLOWINGOBSIDIAN: String = "minecraft:glowingobsidian"
 
-    String GLOWSTONE = "minecraft:glowstone";
+        const val GLOWSTONE: String = "minecraft:glowstone"
 
-    String GOLD_BLOCK = "minecraft:gold_block";
+        const val GOLD_BLOCK: String = "minecraft:gold_block"
 
-    String GOLD_ORE = "minecraft:gold_ore";
+        const val GOLD_ORE: String = "minecraft:gold_ore"
 
-    String GOLDEN_RAIL = "minecraft:golden_rail";
+        const val GOLDEN_RAIL: String = "minecraft:golden_rail"
 
-    String GRANITE = "minecraft:granite";
+        const val GRANITE: String = "minecraft:granite"
 
-    String GRANITE_DOUBLE_SLAB = "minecraft:granite_double_slab";
+        const val GRANITE_DOUBLE_SLAB: String = "minecraft:granite_double_slab"
 
-    String GRANITE_SLAB = "minecraft:granite_slab";
+        const val GRANITE_SLAB: String = "minecraft:granite_slab"
 
-    String GRANITE_STAIRS = "minecraft:granite_stairs";
+        const val GRANITE_STAIRS: String = "minecraft:granite_stairs"
 
-    String GRANITE_WALL = "minecraft:granite_wall";
+        const val GRANITE_WALL: String = "minecraft:granite_wall"
 
-    String GRASS_BLOCK = "minecraft:grass_block";
+        const val GRASS_BLOCK: String = "minecraft:grass_block"
 
-    String GRASS_PATH = "minecraft:grass_path";
+        const val GRASS_PATH: String = "minecraft:grass_path"
 
-    String GRAVEL = "minecraft:gravel";
+        const val GRAVEL: String = "minecraft:gravel"
 
-    String GRAY_CANDLE = "minecraft:gray_candle";
+        const val GRAY_CANDLE: String = "minecraft:gray_candle"
 
-    String GRAY_CANDLE_CAKE = "minecraft:gray_candle_cake";
+        const val GRAY_CANDLE_CAKE: String = "minecraft:gray_candle_cake"
 
-    String GRAY_CARPET = "minecraft:gray_carpet";
+        const val GRAY_CARPET: String = "minecraft:gray_carpet"
 
-    String GRAY_CONCRETE = "minecraft:gray_concrete";
+        const val GRAY_CONCRETE: String = "minecraft:gray_concrete"
 
-    String GRAY_CONCRETE_POWDER = "minecraft:gray_concrete_powder";
+        const val GRAY_CONCRETE_POWDER: String = "minecraft:gray_concrete_powder"
 
-    String GRAY_GLAZED_TERRACOTTA = "minecraft:gray_glazed_terracotta";
+        const val GRAY_GLAZED_TERRACOTTA: String = "minecraft:gray_glazed_terracotta"
 
-    String GRAY_SHULKER_BOX = "minecraft:gray_shulker_box";
+        const val GRAY_SHULKER_BOX: String = "minecraft:gray_shulker_box"
 
-    String GRAY_STAINED_GLASS = "minecraft:gray_stained_glass";
+        const val GRAY_STAINED_GLASS: String = "minecraft:gray_stained_glass"
 
-    String GRAY_STAINED_GLASS_PANE = "minecraft:gray_stained_glass_pane";
+        const val GRAY_STAINED_GLASS_PANE: String = "minecraft:gray_stained_glass_pane"
 
-    String GRAY_TERRACOTTA = "minecraft:gray_terracotta";
+        const val GRAY_TERRACOTTA: String = "minecraft:gray_terracotta"
 
-    String GRAY_WOOL = "minecraft:gray_wool";
+        const val GRAY_WOOL: String = "minecraft:gray_wool"
 
-    String GREEN_CANDLE = "minecraft:green_candle";
+        const val GREEN_CANDLE: String = "minecraft:green_candle"
 
-    String GREEN_CANDLE_CAKE = "minecraft:green_candle_cake";
+        const val GREEN_CANDLE_CAKE: String = "minecraft:green_candle_cake"
 
-    String GREEN_CARPET = "minecraft:green_carpet";
+        const val GREEN_CARPET: String = "minecraft:green_carpet"
 
-    String GREEN_CONCRETE = "minecraft:green_concrete";
+        const val GREEN_CONCRETE: String = "minecraft:green_concrete"
 
-    String GREEN_CONCRETE_POWDER = "minecraft:green_concrete_powder";
+        const val GREEN_CONCRETE_POWDER: String = "minecraft:green_concrete_powder"
 
-    String GREEN_GLAZED_TERRACOTTA = "minecraft:green_glazed_terracotta";
+        const val GREEN_GLAZED_TERRACOTTA: String = "minecraft:green_glazed_terracotta"
 
-    String GREEN_SHULKER_BOX = "minecraft:green_shulker_box";
+        const val GREEN_SHULKER_BOX: String = "minecraft:green_shulker_box"
 
-    String GREEN_STAINED_GLASS = "minecraft:green_stained_glass";
+        const val GREEN_STAINED_GLASS: String = "minecraft:green_stained_glass"
 
-    String GREEN_STAINED_GLASS_PANE = "minecraft:green_stained_glass_pane";
+        const val GREEN_STAINED_GLASS_PANE: String = "minecraft:green_stained_glass_pane"
 
-    String GREEN_TERRACOTTA = "minecraft:green_terracotta";
+        const val GREEN_TERRACOTTA: String = "minecraft:green_terracotta"
 
-    String GREEN_WOOL = "minecraft:green_wool";
+        const val GREEN_WOOL: String = "minecraft:green_wool"
 
-    String GRINDSTONE = "minecraft:grindstone";
+        const val GRINDSTONE: String = "minecraft:grindstone"
 
-    String HANGING_ROOTS = "minecraft:hanging_roots";
+        const val HANGING_ROOTS: String = "minecraft:hanging_roots"
 
-    String HARD_BLACK_STAINED_GLASS = "minecraft:hard_black_stained_glass";
+        const val HARD_BLACK_STAINED_GLASS: String = "minecraft:hard_black_stained_glass"
 
-    String HARD_BLACK_STAINED_GLASS_PANE = "minecraft:hard_black_stained_glass_pane";
+        const val HARD_BLACK_STAINED_GLASS_PANE: String = "minecraft:hard_black_stained_glass_pane"
 
-    String HARD_BLUE_STAINED_GLASS = "minecraft:hard_blue_stained_glass";
+        const val HARD_BLUE_STAINED_GLASS: String = "minecraft:hard_blue_stained_glass"
 
-    String HARD_BLUE_STAINED_GLASS_PANE = "minecraft:hard_blue_stained_glass_pane";
+        const val HARD_BLUE_STAINED_GLASS_PANE: String = "minecraft:hard_blue_stained_glass_pane"
 
-    String HARD_BROWN_STAINED_GLASS = "minecraft:hard_brown_stained_glass";
+        const val HARD_BROWN_STAINED_GLASS: String = "minecraft:hard_brown_stained_glass"
 
-    String HARD_BROWN_STAINED_GLASS_PANE = "minecraft:hard_brown_stained_glass_pane";
+        const val HARD_BROWN_STAINED_GLASS_PANE: String = "minecraft:hard_brown_stained_glass_pane"
 
-    String HARD_CYAN_STAINED_GLASS = "minecraft:hard_cyan_stained_glass";
+        const val HARD_CYAN_STAINED_GLASS: String = "minecraft:hard_cyan_stained_glass"
 
-    String HARD_CYAN_STAINED_GLASS_PANE = "minecraft:hard_cyan_stained_glass_pane";
+        const val HARD_CYAN_STAINED_GLASS_PANE: String = "minecraft:hard_cyan_stained_glass_pane"
 
-    String HARD_GLASS = "minecraft:hard_glass";
+        const val HARD_GLASS: String = "minecraft:hard_glass"
 
-    String HARD_GLASS_PANE = "minecraft:hard_glass_pane";
+        const val HARD_GLASS_PANE: String = "minecraft:hard_glass_pane"
 
-    String HARD_GRAY_STAINED_GLASS = "minecraft:hard_gray_stained_glass";
+        const val HARD_GRAY_STAINED_GLASS: String = "minecraft:hard_gray_stained_glass"
 
-    String HARD_GRAY_STAINED_GLASS_PANE = "minecraft:hard_gray_stained_glass_pane";
+        const val HARD_GRAY_STAINED_GLASS_PANE: String = "minecraft:hard_gray_stained_glass_pane"
 
-    String HARD_GREEN_STAINED_GLASS = "minecraft:hard_green_stained_glass";
+        const val HARD_GREEN_STAINED_GLASS: String = "minecraft:hard_green_stained_glass"
 
-    String HARD_GREEN_STAINED_GLASS_PANE = "minecraft:hard_green_stained_glass_pane";
+        const val HARD_GREEN_STAINED_GLASS_PANE: String = "minecraft:hard_green_stained_glass_pane"
 
-    String HARD_LIGHT_BLUE_STAINED_GLASS = "minecraft:hard_light_blue_stained_glass";
+        const val HARD_LIGHT_BLUE_STAINED_GLASS: String = "minecraft:hard_light_blue_stained_glass"
 
-    String HARD_LIGHT_BLUE_STAINED_GLASS_PANE = "minecraft:hard_light_blue_stained_glass_pane";
+        const val HARD_LIGHT_BLUE_STAINED_GLASS_PANE: String = "minecraft:hard_light_blue_stained_glass_pane"
 
-    String HARD_LIGHT_GRAY_STAINED_GLASS = "minecraft:hard_light_gray_stained_glass";
+        const val HARD_LIGHT_GRAY_STAINED_GLASS: String = "minecraft:hard_light_gray_stained_glass"
 
-    String HARD_LIGHT_GRAY_STAINED_GLASS_PANE = "minecraft:hard_light_gray_stained_glass_pane";
+        const val HARD_LIGHT_GRAY_STAINED_GLASS_PANE: String = "minecraft:hard_light_gray_stained_glass_pane"
 
-    String HARD_LIME_STAINED_GLASS = "minecraft:hard_lime_stained_glass";
+        const val HARD_LIME_STAINED_GLASS: String = "minecraft:hard_lime_stained_glass"
 
-    String HARD_LIME_STAINED_GLASS_PANE = "minecraft:hard_lime_stained_glass_pane";
+        const val HARD_LIME_STAINED_GLASS_PANE: String = "minecraft:hard_lime_stained_glass_pane"
 
-    String HARD_MAGENTA_STAINED_GLASS = "minecraft:hard_magenta_stained_glass";
+        const val HARD_MAGENTA_STAINED_GLASS: String = "minecraft:hard_magenta_stained_glass"
 
-    String HARD_MAGENTA_STAINED_GLASS_PANE = "minecraft:hard_magenta_stained_glass_pane";
+        const val HARD_MAGENTA_STAINED_GLASS_PANE: String = "minecraft:hard_magenta_stained_glass_pane"
 
-    String HARD_ORANGE_STAINED_GLASS = "minecraft:hard_orange_stained_glass";
+        const val HARD_ORANGE_STAINED_GLASS: String = "minecraft:hard_orange_stained_glass"
 
-    String HARD_ORANGE_STAINED_GLASS_PANE = "minecraft:hard_orange_stained_glass_pane";
+        const val HARD_ORANGE_STAINED_GLASS_PANE: String = "minecraft:hard_orange_stained_glass_pane"
 
-    String HARD_PINK_STAINED_GLASS = "minecraft:hard_pink_stained_glass";
+        const val HARD_PINK_STAINED_GLASS: String = "minecraft:hard_pink_stained_glass"
 
-    String HARD_PINK_STAINED_GLASS_PANE = "minecraft:hard_pink_stained_glass_pane";
+        const val HARD_PINK_STAINED_GLASS_PANE: String = "minecraft:hard_pink_stained_glass_pane"
 
-    String HARD_PURPLE_STAINED_GLASS = "minecraft:hard_purple_stained_glass";
+        const val HARD_PURPLE_STAINED_GLASS: String = "minecraft:hard_purple_stained_glass"
 
-    String HARD_PURPLE_STAINED_GLASS_PANE = "minecraft:hard_purple_stained_glass_pane";
+        const val HARD_PURPLE_STAINED_GLASS_PANE: String = "minecraft:hard_purple_stained_glass_pane"
 
-    String HARD_RED_STAINED_GLASS = "minecraft:hard_red_stained_glass";
+        const val HARD_RED_STAINED_GLASS: String = "minecraft:hard_red_stained_glass"
 
-    String HARD_RED_STAINED_GLASS_PANE = "minecraft:hard_red_stained_glass_pane";
+        const val HARD_RED_STAINED_GLASS_PANE: String = "minecraft:hard_red_stained_glass_pane"
 
-    String HARD_WHITE_STAINED_GLASS = "minecraft:hard_white_stained_glass";
+        const val HARD_WHITE_STAINED_GLASS: String = "minecraft:hard_white_stained_glass"
 
-    String HARD_WHITE_STAINED_GLASS_PANE = "minecraft:hard_white_stained_glass_pane";
+        const val HARD_WHITE_STAINED_GLASS_PANE: String = "minecraft:hard_white_stained_glass_pane"
 
-    String HARD_YELLOW_STAINED_GLASS = "minecraft:hard_yellow_stained_glass";
+        const val HARD_YELLOW_STAINED_GLASS: String = "minecraft:hard_yellow_stained_glass"
 
-    String HARD_YELLOW_STAINED_GLASS_PANE = "minecraft:hard_yellow_stained_glass_pane";
+        const val HARD_YELLOW_STAINED_GLASS_PANE: String = "minecraft:hard_yellow_stained_glass_pane"
 
-    String HARDENED_CLAY = "minecraft:hardened_clay";
+        const val HARDENED_CLAY: String = "minecraft:hardened_clay"
 
-    String HAY_BLOCK = "minecraft:hay_block";
+        const val HAY_BLOCK: String = "minecraft:hay_block"
 
-    String HEAVY_CORE = "minecraft:heavy_core";
+        const val HEAVY_CORE: String = "minecraft:heavy_core"
 
-    String HEAVY_WEIGHTED_PRESSURE_PLATE = "minecraft:heavy_weighted_pressure_plate";
+        const val HEAVY_WEIGHTED_PRESSURE_PLATE: String = "minecraft:heavy_weighted_pressure_plate"
 
-    String HONEY_BLOCK = "minecraft:honey_block";
+        const val HONEY_BLOCK: String = "minecraft:honey_block"
 
-    String HONEYCOMB_BLOCK = "minecraft:honeycomb_block";
+        const val HONEYCOMB_BLOCK: String = "minecraft:honeycomb_block"
 
-    String HOPPER = "minecraft:hopper";
+        const val HOPPER: String = "minecraft:hopper"
 
-    String HORN_CORAL = "minecraft:horn_coral";
+        const val HORN_CORAL: String = "minecraft:horn_coral"
 
-    String HORN_CORAL_BLOCK = "minecraft:horn_coral_block";
+        const val HORN_CORAL_BLOCK: String = "minecraft:horn_coral_block"
 
-    String HORN_CORAL_FAN = "minecraft:horn_coral_fan";
+        const val HORN_CORAL_FAN: String = "minecraft:horn_coral_fan"
 
-    String HORN_CORAL_WALL_FAN = "minecraft:horn_coral_wall_fan";
+        const val HORN_CORAL_WALL_FAN: String = "minecraft:horn_coral_wall_fan"
 
-    String ICE = "minecraft:ice";
+        const val ICE: String = "minecraft:ice"
 
-    String INFESTED_CHISELED_STONE_BRICKS = "minecraft:infested_chiseled_stone_bricks";
+        const val INFESTED_CHISELED_STONE_BRICKS: String = "minecraft:infested_chiseled_stone_bricks"
 
-    String INFESTED_COBBLESTONE = "minecraft:infested_cobblestone";
+        const val INFESTED_COBBLESTONE: String = "minecraft:infested_cobblestone"
 
-    String INFESTED_CRACKED_STONE_BRICKS = "minecraft:infested_cracked_stone_bricks";
+        const val INFESTED_CRACKED_STONE_BRICKS: String = "minecraft:infested_cracked_stone_bricks"
 
-    String INFESTED_DEEPSLATE = "minecraft:infested_deepslate";
+        const val INFESTED_DEEPSLATE: String = "minecraft:infested_deepslate"
 
-    String INFESTED_MOSSY_STONE_BRICKS = "minecraft:infested_mossy_stone_bricks";
+        const val INFESTED_MOSSY_STONE_BRICKS: String = "minecraft:infested_mossy_stone_bricks"
 
-    String INFESTED_STONE = "minecraft:infested_stone";
+        const val INFESTED_STONE: String = "minecraft:infested_stone"
 
-    String INFESTED_STONE_BRICKS = "minecraft:infested_stone_bricks";
+        const val INFESTED_STONE_BRICKS: String = "minecraft:infested_stone_bricks"
 
-    String INFO_UPDATE = "minecraft:info_update";
+        const val INFO_UPDATE: String = "minecraft:info_update"
 
-    String INFO_UPDATE2 = "minecraft:info_update2";
+        const val INFO_UPDATE2: String = "minecraft:info_update2"
 
-    String INVISIBLE_BEDROCK = "minecraft:invisible_bedrock";
+        const val INVISIBLE_BEDROCK: String = "minecraft:invisible_bedrock"
 
-    String IRON_BARS = "minecraft:iron_bars";
+        const val IRON_BARS: String = "minecraft:iron_bars"
 
-    String IRON_BLOCK = "minecraft:iron_block";
+        const val IRON_BLOCK: String = "minecraft:iron_block"
 
-    String IRON_DOOR = "minecraft:iron_door";
+        const val IRON_DOOR: String = "minecraft:iron_door"
 
-    String IRON_ORE = "minecraft:iron_ore";
+        const val IRON_ORE: String = "minecraft:iron_ore"
 
-    String IRON_TRAPDOOR = "minecraft:iron_trapdoor";
+        const val IRON_TRAPDOOR: String = "minecraft:iron_trapdoor"
 
-    String JIGSAW = "minecraft:jigsaw";
+        const val JIGSAW: String = "minecraft:jigsaw"
 
-    String JUKEBOX = "minecraft:jukebox";
+        const val JUKEBOX: String = "minecraft:jukebox"
 
-    String JUNGLE_BUTTON = "minecraft:jungle_button";
+        const val JUNGLE_BUTTON: String = "minecraft:jungle_button"
 
-    String JUNGLE_DOOR = "minecraft:jungle_door";
+        const val JUNGLE_DOOR: String = "minecraft:jungle_door"
 
-    String JUNGLE_DOUBLE_SLAB = "minecraft:jungle_double_slab";
+        const val JUNGLE_DOUBLE_SLAB: String = "minecraft:jungle_double_slab"
 
-    String JUNGLE_FENCE = "minecraft:jungle_fence";
+        const val JUNGLE_FENCE: String = "minecraft:jungle_fence"
 
-    String JUNGLE_FENCE_GATE = "minecraft:jungle_fence_gate";
+        const val JUNGLE_FENCE_GATE: String = "minecraft:jungle_fence_gate"
 
-    String JUNGLE_HANGING_SIGN = "minecraft:jungle_hanging_sign";
+        const val JUNGLE_HANGING_SIGN: String = "minecraft:jungle_hanging_sign"
 
-    String JUNGLE_LEAVES = "minecraft:jungle_leaves";
+        const val JUNGLE_LEAVES: String = "minecraft:jungle_leaves"
 
-    String JUNGLE_LOG = "minecraft:jungle_log";
+        const val JUNGLE_LOG: String = "minecraft:jungle_log"
 
-    String JUNGLE_PLANKS = "minecraft:jungle_planks";
+        const val JUNGLE_PLANKS: String = "minecraft:jungle_planks"
 
-    String JUNGLE_PRESSURE_PLATE = "minecraft:jungle_pressure_plate";
+        const val JUNGLE_PRESSURE_PLATE: String = "minecraft:jungle_pressure_plate"
 
-    String JUNGLE_SAPLING = "minecraft:jungle_sapling";
+        const val JUNGLE_SAPLING: String = "minecraft:jungle_sapling"
 
-    String JUNGLE_SLAB = "minecraft:jungle_slab";
+        const val JUNGLE_SLAB: String = "minecraft:jungle_slab"
 
-    String JUNGLE_STAIRS = "minecraft:jungle_stairs";
+        const val JUNGLE_STAIRS: String = "minecraft:jungle_stairs"
 
-    String JUNGLE_STANDING_SIGN = "minecraft:jungle_standing_sign";
+        const val JUNGLE_STANDING_SIGN: String = "minecraft:jungle_standing_sign"
 
-    String JUNGLE_TRAPDOOR = "minecraft:jungle_trapdoor";
+        const val JUNGLE_TRAPDOOR: String = "minecraft:jungle_trapdoor"
 
-    String JUNGLE_WALL_SIGN = "minecraft:jungle_wall_sign";
+        const val JUNGLE_WALL_SIGN: String = "minecraft:jungle_wall_sign"
 
-    String JUNGLE_WOOD = "minecraft:jungle_wood";
+        const val JUNGLE_WOOD: String = "minecraft:jungle_wood"
 
-    String KELP = "minecraft:kelp";
+        const val KELP: String = "minecraft:kelp"
 
-    String LADDER = "minecraft:ladder";
+        const val LADDER: String = "minecraft:ladder"
 
-    String LANTERN = "minecraft:lantern";
+        const val LANTERN: String = "minecraft:lantern"
 
-    String LAPIS_BLOCK = "minecraft:lapis_block";
+        const val LAPIS_BLOCK: String = "minecraft:lapis_block"
 
-    String LAPIS_ORE = "minecraft:lapis_ore";
+        const val LAPIS_ORE: String = "minecraft:lapis_ore"
 
-    String LARGE_AMETHYST_BUD = "minecraft:large_amethyst_bud";
+        const val LARGE_AMETHYST_BUD: String = "minecraft:large_amethyst_bud"
 
-    String LARGE_FERN = "minecraft:large_fern";
+        const val LARGE_FERN: String = "minecraft:large_fern"
 
-    String LAVA = "minecraft:lava";
+        const val LAVA: String = "minecraft:lava"
 
-    String LECTERN = "minecraft:lectern";
+        const val LECTERN: String = "minecraft:lectern"
 
-    String LEVER = "minecraft:lever";
+        const val LEVER: String = "minecraft:lever"
 
-    String LIGHT_BLOCK_0 = "minecraft:light_block_0";
+        const val LIGHT_BLOCK_0: String = "minecraft:light_block_0"
 
-    String LIGHT_BLOCK_1 = "minecraft:light_block_1";
+        const val LIGHT_BLOCK_1: String = "minecraft:light_block_1"
 
-    String LIGHT_BLOCK_2 = "minecraft:light_block_2";
+        const val LIGHT_BLOCK_2: String = "minecraft:light_block_2"
 
-    String LIGHT_BLOCK_3 = "minecraft:light_block_3";
+        const val LIGHT_BLOCK_3: String = "minecraft:light_block_3"
 
-    String LIGHT_BLOCK_4 = "minecraft:light_block_4";
+        const val LIGHT_BLOCK_4: String = "minecraft:light_block_4"
 
-    String LIGHT_BLOCK_5 = "minecraft:light_block_5";
+        const val LIGHT_BLOCK_5: String = "minecraft:light_block_5"
 
-    String LIGHT_BLOCK_6 = "minecraft:light_block_6";
+        const val LIGHT_BLOCK_6: String = "minecraft:light_block_6"
 
-    String LIGHT_BLOCK_7 = "minecraft:light_block_7";
+        const val LIGHT_BLOCK_7: String = "minecraft:light_block_7"
 
-    String LIGHT_BLOCK_8 = "minecraft:light_block_8";
+        const val LIGHT_BLOCK_8: String = "minecraft:light_block_8"
 
-    String LIGHT_BLOCK_9 = "minecraft:light_block_9";
+        const val LIGHT_BLOCK_9: String = "minecraft:light_block_9"
 
-    String LIGHT_BLOCK_10 = "minecraft:light_block_10";
+        const val LIGHT_BLOCK_10: String = "minecraft:light_block_10"
 
-    String LIGHT_BLOCK_11 = "minecraft:light_block_11";
+        const val LIGHT_BLOCK_11: String = "minecraft:light_block_11"
 
-    String LIGHT_BLOCK_12 = "minecraft:light_block_12";
+        const val LIGHT_BLOCK_12: String = "minecraft:light_block_12"
 
-    String LIGHT_BLOCK_13 = "minecraft:light_block_13";
+        const val LIGHT_BLOCK_13: String = "minecraft:light_block_13"
 
-    String LIGHT_BLOCK_14 = "minecraft:light_block_14";
+        const val LIGHT_BLOCK_14: String = "minecraft:light_block_14"
 
-    String LIGHT_BLOCK_15 = "minecraft:light_block_15";
+        const val LIGHT_BLOCK_15: String = "minecraft:light_block_15"
 
-    String LIGHT_BLUE_CANDLE = "minecraft:light_blue_candle";
+        const val LIGHT_BLUE_CANDLE: String = "minecraft:light_blue_candle"
 
-    String LIGHT_BLUE_CANDLE_CAKE = "minecraft:light_blue_candle_cake";
+        const val LIGHT_BLUE_CANDLE_CAKE: String = "minecraft:light_blue_candle_cake"
 
-    String LIGHT_BLUE_CARPET = "minecraft:light_blue_carpet";
+        const val LIGHT_BLUE_CARPET: String = "minecraft:light_blue_carpet"
 
-    String LIGHT_BLUE_CONCRETE = "minecraft:light_blue_concrete";
+        const val LIGHT_BLUE_CONCRETE: String = "minecraft:light_blue_concrete"
 
-    String LIGHT_BLUE_CONCRETE_POWDER = "minecraft:light_blue_concrete_powder";
+        const val LIGHT_BLUE_CONCRETE_POWDER: String = "minecraft:light_blue_concrete_powder"
 
-    String LIGHT_BLUE_GLAZED_TERRACOTTA = "minecraft:light_blue_glazed_terracotta";
+        const val LIGHT_BLUE_GLAZED_TERRACOTTA: String = "minecraft:light_blue_glazed_terracotta"
 
-    String LIGHT_BLUE_SHULKER_BOX = "minecraft:light_blue_shulker_box";
+        const val LIGHT_BLUE_SHULKER_BOX: String = "minecraft:light_blue_shulker_box"
 
-    String LIGHT_BLUE_STAINED_GLASS = "minecraft:light_blue_stained_glass";
+        const val LIGHT_BLUE_STAINED_GLASS: String = "minecraft:light_blue_stained_glass"
 
-    String LIGHT_BLUE_STAINED_GLASS_PANE = "minecraft:light_blue_stained_glass_pane";
+        const val LIGHT_BLUE_STAINED_GLASS_PANE: String = "minecraft:light_blue_stained_glass_pane"
 
-    String LIGHT_BLUE_TERRACOTTA = "minecraft:light_blue_terracotta";
+        const val LIGHT_BLUE_TERRACOTTA: String = "minecraft:light_blue_terracotta"
 
-    String LIGHT_BLUE_WOOL = "minecraft:light_blue_wool";
+        const val LIGHT_BLUE_WOOL: String = "minecraft:light_blue_wool"
 
-    String LIGHT_GRAY_CANDLE = "minecraft:light_gray_candle";
+        const val LIGHT_GRAY_CANDLE: String = "minecraft:light_gray_candle"
 
-    String LIGHT_GRAY_CANDLE_CAKE = "minecraft:light_gray_candle_cake";
+        const val LIGHT_GRAY_CANDLE_CAKE: String = "minecraft:light_gray_candle_cake"
 
-    String LIGHT_GRAY_CARPET = "minecraft:light_gray_carpet";
+        const val LIGHT_GRAY_CARPET: String = "minecraft:light_gray_carpet"
 
-    String LIGHT_GRAY_CONCRETE = "minecraft:light_gray_concrete";
+        const val LIGHT_GRAY_CONCRETE: String = "minecraft:light_gray_concrete"
 
-    String LIGHT_GRAY_CONCRETE_POWDER = "minecraft:light_gray_concrete_powder";
+        const val LIGHT_GRAY_CONCRETE_POWDER: String = "minecraft:light_gray_concrete_powder"
 
-    String LIGHT_GRAY_SHULKER_BOX = "minecraft:light_gray_shulker_box";
+        const val LIGHT_GRAY_SHULKER_BOX: String = "minecraft:light_gray_shulker_box"
 
-    String LIGHT_GRAY_STAINED_GLASS = "minecraft:light_gray_stained_glass";
+        const val LIGHT_GRAY_STAINED_GLASS: String = "minecraft:light_gray_stained_glass"
 
-    String LIGHT_GRAY_STAINED_GLASS_PANE = "minecraft:light_gray_stained_glass_pane";
+        const val LIGHT_GRAY_STAINED_GLASS_PANE: String = "minecraft:light_gray_stained_glass_pane"
 
-    String LIGHT_GRAY_TERRACOTTA = "minecraft:light_gray_terracotta";
+        const val LIGHT_GRAY_TERRACOTTA: String = "minecraft:light_gray_terracotta"
 
-    String LIGHT_GRAY_WOOL = "minecraft:light_gray_wool";
+        const val LIGHT_GRAY_WOOL: String = "minecraft:light_gray_wool"
 
-    String LIGHT_WEIGHTED_PRESSURE_PLATE = "minecraft:light_weighted_pressure_plate";
+        const val LIGHT_WEIGHTED_PRESSURE_PLATE: String = "minecraft:light_weighted_pressure_plate"
 
-    String LIGHTNING_ROD = "minecraft:lightning_rod";
+        const val LIGHTNING_ROD: String = "minecraft:lightning_rod"
 
-    String LILAC = "minecraft:lilac";
+        const val LILAC: String = "minecraft:lilac"
 
-    String LILY_OF_THE_VALLEY = "minecraft:lily_of_the_valley";
+        const val LILY_OF_THE_VALLEY: String = "minecraft:lily_of_the_valley"
 
-    String LIME_CANDLE = "minecraft:lime_candle";
+        const val LIME_CANDLE: String = "minecraft:lime_candle"
 
-    String LIME_CANDLE_CAKE = "minecraft:lime_candle_cake";
+        const val LIME_CANDLE_CAKE: String = "minecraft:lime_candle_cake"
 
-    String LIME_CARPET = "minecraft:lime_carpet";
+        const val LIME_CARPET: String = "minecraft:lime_carpet"
 
-    String LIME_CONCRETE = "minecraft:lime_concrete";
+        const val LIME_CONCRETE: String = "minecraft:lime_concrete"
 
-    String LIME_CONCRETE_POWDER = "minecraft:lime_concrete_powder";
+        const val LIME_CONCRETE_POWDER: String = "minecraft:lime_concrete_powder"
 
-    String LIME_GLAZED_TERRACOTTA = "minecraft:lime_glazed_terracotta";
+        const val LIME_GLAZED_TERRACOTTA: String = "minecraft:lime_glazed_terracotta"
 
-    String LIME_SHULKER_BOX = "minecraft:lime_shulker_box";
+        const val LIME_SHULKER_BOX: String = "minecraft:lime_shulker_box"
 
-    String LIME_STAINED_GLASS = "minecraft:lime_stained_glass";
+        const val LIME_STAINED_GLASS: String = "minecraft:lime_stained_glass"
 
-    String LIME_STAINED_GLASS_PANE = "minecraft:lime_stained_glass_pane";
+        const val LIME_STAINED_GLASS_PANE: String = "minecraft:lime_stained_glass_pane"
 
-    String LIME_TERRACOTTA = "minecraft:lime_terracotta";
+        const val LIME_TERRACOTTA: String = "minecraft:lime_terracotta"
 
-    String LIME_WOOL = "minecraft:lime_wool";
+        const val LIME_WOOL: String = "minecraft:lime_wool"
 
-    String LIT_BLAST_FURNACE = "minecraft:lit_blast_furnace";
+        const val LIT_BLAST_FURNACE: String = "minecraft:lit_blast_furnace"
 
-    String LIT_DEEPSLATE_REDSTONE_ORE = "minecraft:lit_deepslate_redstone_ore";
+        const val LIT_DEEPSLATE_REDSTONE_ORE: String = "minecraft:lit_deepslate_redstone_ore"
 
-    String LIT_FURNACE = "minecraft:lit_furnace";
+        const val LIT_FURNACE: String = "minecraft:lit_furnace"
 
-    String LIT_PUMPKIN = "minecraft:lit_pumpkin";
+        const val LIT_PUMPKIN: String = "minecraft:lit_pumpkin"
 
-    String LIT_REDSTONE_LAMP = "minecraft:lit_redstone_lamp";
+        const val LIT_REDSTONE_LAMP: String = "minecraft:lit_redstone_lamp"
 
-    String LIT_REDSTONE_ORE = "minecraft:lit_redstone_ore";
+        const val LIT_REDSTONE_ORE: String = "minecraft:lit_redstone_ore"
 
-    String LIT_SMOKER = "minecraft:lit_smoker";
+        const val LIT_SMOKER: String = "minecraft:lit_smoker"
 
-    String LODESTONE = "minecraft:lodestone";
+        const val LODESTONE: String = "minecraft:lodestone"
 
-    String LOOM = "minecraft:loom";
+        const val LOOM: String = "minecraft:loom"
 
-    String MAGENTA_CANDLE = "minecraft:magenta_candle";
+        const val MAGENTA_CANDLE: String = "minecraft:magenta_candle"
 
-    String MAGENTA_CANDLE_CAKE = "minecraft:magenta_candle_cake";
+        const val MAGENTA_CANDLE_CAKE: String = "minecraft:magenta_candle_cake"
 
-    String MAGENTA_CARPET = "minecraft:magenta_carpet";
+        const val MAGENTA_CARPET: String = "minecraft:magenta_carpet"
 
-    String MAGENTA_CONCRETE = "minecraft:magenta_concrete";
+        const val MAGENTA_CONCRETE: String = "minecraft:magenta_concrete"
 
-    String MAGENTA_CONCRETE_POWDER = "minecraft:magenta_concrete_powder";
+        const val MAGENTA_CONCRETE_POWDER: String = "minecraft:magenta_concrete_powder"
 
-    String MAGENTA_GLAZED_TERRACOTTA = "minecraft:magenta_glazed_terracotta";
+        const val MAGENTA_GLAZED_TERRACOTTA: String = "minecraft:magenta_glazed_terracotta"
 
-    String MAGENTA_SHULKER_BOX = "minecraft:magenta_shulker_box";
+        const val MAGENTA_SHULKER_BOX: String = "minecraft:magenta_shulker_box"
 
-    String MAGENTA_STAINED_GLASS = "minecraft:magenta_stained_glass";
+        const val MAGENTA_STAINED_GLASS: String = "minecraft:magenta_stained_glass"
 
-    String MAGENTA_STAINED_GLASS_PANE = "minecraft:magenta_stained_glass_pane";
+        const val MAGENTA_STAINED_GLASS_PANE: String = "minecraft:magenta_stained_glass_pane"
 
-    String MAGENTA_TERRACOTTA = "minecraft:magenta_terracotta";
+        const val MAGENTA_TERRACOTTA: String = "minecraft:magenta_terracotta"
 
-    String MAGENTA_WOOL = "minecraft:magenta_wool";
+        const val MAGENTA_WOOL: String = "minecraft:magenta_wool"
 
-    String MAGMA = "minecraft:magma";
+        const val MAGMA: String = "minecraft:magma"
 
-    String MANGROVE_BUTTON = "minecraft:mangrove_button";
+        const val MANGROVE_BUTTON: String = "minecraft:mangrove_button"
 
-    String MANGROVE_DOOR = "minecraft:mangrove_door";
+        const val MANGROVE_DOOR: String = "minecraft:mangrove_door"
 
-    String MANGROVE_DOUBLE_SLAB = "minecraft:mangrove_double_slab";
+        const val MANGROVE_DOUBLE_SLAB: String = "minecraft:mangrove_double_slab"
 
-    String MANGROVE_FENCE = "minecraft:mangrove_fence";
+        const val MANGROVE_FENCE: String = "minecraft:mangrove_fence"
 
-    String MANGROVE_FENCE_GATE = "minecraft:mangrove_fence_gate";
+        const val MANGROVE_FENCE_GATE: String = "minecraft:mangrove_fence_gate"
 
-    String MANGROVE_HANGING_SIGN = "minecraft:mangrove_hanging_sign";
+        const val MANGROVE_HANGING_SIGN: String = "minecraft:mangrove_hanging_sign"
 
-    String MANGROVE_LEAVES = "minecraft:mangrove_leaves";
+        const val MANGROVE_LEAVES: String = "minecraft:mangrove_leaves"
 
-    String MANGROVE_LOG = "minecraft:mangrove_log";
+        const val MANGROVE_LOG: String = "minecraft:mangrove_log"
 
-    String MANGROVE_PLANKS = "minecraft:mangrove_planks";
+        const val MANGROVE_PLANKS: String = "minecraft:mangrove_planks"
 
-    String MANGROVE_PRESSURE_PLATE = "minecraft:mangrove_pressure_plate";
+        const val MANGROVE_PRESSURE_PLATE: String = "minecraft:mangrove_pressure_plate"
 
-    String MANGROVE_PROPAGULE = "minecraft:mangrove_propagule";
+        const val MANGROVE_PROPAGULE: String = "minecraft:mangrove_propagule"
 
-    String MANGROVE_ROOTS = "minecraft:mangrove_roots";
+        const val MANGROVE_ROOTS: String = "minecraft:mangrove_roots"
 
-    String MANGROVE_SLAB = "minecraft:mangrove_slab";
+        const val MANGROVE_SLAB: String = "minecraft:mangrove_slab"
 
-    String MANGROVE_STAIRS = "minecraft:mangrove_stairs";
+        const val MANGROVE_STAIRS: String = "minecraft:mangrove_stairs"
 
-    String MANGROVE_STANDING_SIGN = "minecraft:mangrove_standing_sign";
+        const val MANGROVE_STANDING_SIGN: String = "minecraft:mangrove_standing_sign"
 
-    String MANGROVE_TRAPDOOR = "minecraft:mangrove_trapdoor";
+        const val MANGROVE_TRAPDOOR: String = "minecraft:mangrove_trapdoor"
 
-    String MANGROVE_WALL_SIGN = "minecraft:mangrove_wall_sign";
+        const val MANGROVE_WALL_SIGN: String = "minecraft:mangrove_wall_sign"
 
-    String MANGROVE_WOOD = "minecraft:mangrove_wood";
+        const val MANGROVE_WOOD: String = "minecraft:mangrove_wood"
 
-    String MEDIUM_AMETHYST_BUD = "minecraft:medium_amethyst_bud";
+        const val MEDIUM_AMETHYST_BUD: String = "minecraft:medium_amethyst_bud"
 
-    String MELON_BLOCK = "minecraft:melon_block";
+        const val MELON_BLOCK: String = "minecraft:melon_block"
 
-    String MELON_STEM = "minecraft:melon_stem";
+        const val MELON_STEM: String = "minecraft:melon_stem"
 
-    String MOB_SPAWNER = "minecraft:mob_spawner";
+        const val MOB_SPAWNER: String = "minecraft:mob_spawner"
 
-    String MONSTER_EGG = "minecraft:monster_egg";
+        const val MONSTER_EGG: String = "minecraft:monster_egg"
 
-    String MOSS_BLOCK = "minecraft:moss_block";
+        const val MOSS_BLOCK: String = "minecraft:moss_block"
 
-    String MOSS_CARPET = "minecraft:moss_carpet";
+        const val MOSS_CARPET: String = "minecraft:moss_carpet"
 
-    String MOSSY_COBBLESTONE = "minecraft:mossy_cobblestone";
+        const val MOSSY_COBBLESTONE: String = "minecraft:mossy_cobblestone"
 
-    String MOSSY_COBBLESTONE_DOUBLE_SLAB = "minecraft:mossy_cobblestone_double_slab";
+        const val MOSSY_COBBLESTONE_DOUBLE_SLAB: String = "minecraft:mossy_cobblestone_double_slab"
 
-    String MOSSY_COBBLESTONE_SLAB = "minecraft:mossy_cobblestone_slab";
+        const val MOSSY_COBBLESTONE_SLAB: String = "minecraft:mossy_cobblestone_slab"
 
-    String MOSSY_COBBLESTONE_STAIRS = "minecraft:mossy_cobblestone_stairs";
+        const val MOSSY_COBBLESTONE_STAIRS: String = "minecraft:mossy_cobblestone_stairs"
 
-    String MOSSY_COBBLESTONE_WALL = "minecraft:mossy_cobblestone_wall";
+        const val MOSSY_COBBLESTONE_WALL: String = "minecraft:mossy_cobblestone_wall"
 
-    String MOSSY_STONE_BRICK_DOUBLE_SLAB = "minecraft:mossy_stone_brick_double_slab";
+        const val MOSSY_STONE_BRICK_DOUBLE_SLAB: String = "minecraft:mossy_stone_brick_double_slab"
 
-    String MOSSY_STONE_BRICK_SLAB = "minecraft:mossy_stone_brick_slab";
+        const val MOSSY_STONE_BRICK_SLAB: String = "minecraft:mossy_stone_brick_slab"
 
-    String MOSSY_STONE_BRICKS = "minecraft:mossy_stone_bricks";
+        const val MOSSY_STONE_BRICKS: String = "minecraft:mossy_stone_bricks"
 
-    String MOSSY_STONE_BRICK_STAIRS = "minecraft:mossy_stone_brick_stairs";
+        const val MOSSY_STONE_BRICK_STAIRS: String = "minecraft:mossy_stone_brick_stairs"
 
-    String MOSSY_STONE_BRICK_WALL = "minecraft:mossy_stone_brick_wall";
+        const val MOSSY_STONE_BRICK_WALL: String = "minecraft:mossy_stone_brick_wall"
 
-    String MOVING_BLOCK = "minecraft:moving_block";
+        const val MOVING_BLOCK: String = "minecraft:moving_block"
 
-    String MUD = "minecraft:mud";
+        const val MUD: String = "minecraft:mud"
 
-    String MUD_BRICK_DOUBLE_SLAB = "minecraft:mud_brick_double_slab";
+        const val MUD_BRICK_DOUBLE_SLAB: String = "minecraft:mud_brick_double_slab"
 
-    String MUD_BRICK_SLAB = "minecraft:mud_brick_slab";
+        const val MUD_BRICK_SLAB: String = "minecraft:mud_brick_slab"
 
-    String MUD_BRICK_STAIRS = "minecraft:mud_brick_stairs";
+        const val MUD_BRICK_STAIRS: String = "minecraft:mud_brick_stairs"
 
-    String MUD_BRICK_WALL = "minecraft:mud_brick_wall";
+        const val MUD_BRICK_WALL: String = "minecraft:mud_brick_wall"
 
-    String MUD_BRICKS = "minecraft:mud_bricks";
+        const val MUD_BRICKS: String = "minecraft:mud_bricks"
 
-    String MUDDY_MANGROVE_ROOTS = "minecraft:muddy_mangrove_roots";
+        const val MUDDY_MANGROVE_ROOTS: String = "minecraft:muddy_mangrove_roots"
 
-    String MUSHROOM_STEM = "minecraft:mushroom_stem";
+        const val MUSHROOM_STEM: String = "minecraft:mushroom_stem"
 
-    String MYCELIUM = "minecraft:mycelium";
+        const val MYCELIUM: String = "minecraft:mycelium"
 
-    String NETHER_BRICK = "minecraft:nether_brick";
+        const val NETHER_BRICK: String = "minecraft:nether_brick"
 
-    String NETHER_BRICK_DOUBLE_SLAB = "minecraft:nether_brick_double_slab";
+        const val NETHER_BRICK_DOUBLE_SLAB: String = "minecraft:nether_brick_double_slab"
 
-    String NETHER_BRICK_FENCE = "minecraft:nether_brick_fence";
+        const val NETHER_BRICK_FENCE: String = "minecraft:nether_brick_fence"
 
-    String NETHER_BRICK_SLAB = "minecraft:nether_brick_slab";
+        const val NETHER_BRICK_SLAB: String = "minecraft:nether_brick_slab"
 
-    String NETHER_BRICK_STAIRS = "minecraft:nether_brick_stairs";
+        const val NETHER_BRICK_STAIRS: String = "minecraft:nether_brick_stairs"
 
-    String NETHER_BRICK_WALL = "minecraft:nether_brick_wall";
+        const val NETHER_BRICK_WALL: String = "minecraft:nether_brick_wall"
 
-    String NETHER_GOLD_ORE = "minecraft:nether_gold_ore";
+        const val NETHER_GOLD_ORE: String = "minecraft:nether_gold_ore"
 
-    String NETHER_SPROUTS = "minecraft:nether_sprouts";
+        const val NETHER_SPROUTS: String = "minecraft:nether_sprouts"
 
-    String NETHER_WART = "minecraft:nether_wart";
+        const val NETHER_WART: String = "minecraft:nether_wart"
 
-    String NETHER_WART_BLOCK = "minecraft:nether_wart_block";
+        const val NETHER_WART_BLOCK: String = "minecraft:nether_wart_block"
 
-    String NETHERITE_BLOCK = "minecraft:netherite_block";
+        const val NETHERITE_BLOCK: String = "minecraft:netherite_block"
 
-    String NETHERRACK = "minecraft:netherrack";
+        const val NETHERRACK: String = "minecraft:netherrack"
 
-    String NETHERREACTOR = "minecraft:netherreactor";
+        const val NETHERREACTOR: String = "minecraft:netherreactor"
 
-    String NORMAL_STONE_DOUBLE_SLAB = "minecraft:normal_stone_double_slab";
+        const val NORMAL_STONE_DOUBLE_SLAB: String = "minecraft:normal_stone_double_slab"
 
-    String NORMAL_STONE_SLAB = "minecraft:normal_stone_slab";
+        const val NORMAL_STONE_SLAB: String = "minecraft:normal_stone_slab"
 
-    String NORMAL_STONE_STAIRS = "minecraft:normal_stone_stairs";
+        const val NORMAL_STONE_STAIRS: String = "minecraft:normal_stone_stairs"
 
-    String NOTEBLOCK = "minecraft:noteblock";
+        const val NOTEBLOCK: String = "minecraft:noteblock"
 
-    String OAK_DOUBLE_SLAB = "minecraft:oak_double_slab";
+        const val OAK_DOUBLE_SLAB: String = "minecraft:oak_double_slab"
 
-    String OAK_FENCE = "minecraft:oak_fence";
+        const val OAK_FENCE: String = "minecraft:oak_fence"
 
-    String OAK_HANGING_SIGN = "minecraft:oak_hanging_sign";
+        const val OAK_HANGING_SIGN: String = "minecraft:oak_hanging_sign"
 
-    String OAK_LEAVES = "minecraft:oak_leaves";
+        const val OAK_LEAVES: String = "minecraft:oak_leaves"
 
-    String OAK_LOG = "minecraft:oak_log";
+        const val OAK_LOG: String = "minecraft:oak_log"
 
-    String OAK_PLANKS = "minecraft:oak_planks";
+        const val OAK_PLANKS: String = "minecraft:oak_planks"
 
-    String OAK_SAPLING = "minecraft:oak_sapling";
+        const val OAK_SAPLING: String = "minecraft:oak_sapling"
 
-    String OAK_SLAB = "minecraft:oak_slab";
+        const val OAK_SLAB: String = "minecraft:oak_slab"
 
-    String OAK_STAIRS = "minecraft:oak_stairs";
+        const val OAK_STAIRS: String = "minecraft:oak_stairs"
 
-    String OAK_WOOD = "minecraft:oak_wood";
+        const val OAK_WOOD: String = "minecraft:oak_wood"
 
-    String OBSERVER = "minecraft:observer";
+        const val OBSERVER: String = "minecraft:observer"
 
-    String OBSIDIAN = "minecraft:obsidian";
+        const val OBSIDIAN: String = "minecraft:obsidian"
 
-    String OCHRE_FROGLIGHT = "minecraft:ochre_froglight";
+        const val OCHRE_FROGLIGHT: String = "minecraft:ochre_froglight"
 
-    String OPEN_EYEBLOSSOM = "minecraft:open_eyeblossom";
+        const val OPEN_EYEBLOSSOM: String = "minecraft:open_eyeblossom"
 
-    String ORANGE_CANDLE = "minecraft:orange_candle";
+        const val ORANGE_CANDLE: String = "minecraft:orange_candle"
 
-    String ORANGE_CANDLE_CAKE = "minecraft:orange_candle_cake";
+        const val ORANGE_CANDLE_CAKE: String = "minecraft:orange_candle_cake"
 
-    String ORANGE_CARPET = "minecraft:orange_carpet";
+        const val ORANGE_CARPET: String = "minecraft:orange_carpet"
 
-    String ORANGE_CONCRETE = "minecraft:orange_concrete";
+        const val ORANGE_CONCRETE: String = "minecraft:orange_concrete"
 
-    String ORANGE_CONCRETE_POWDER = "minecraft:orange_concrete_powder";
+        const val ORANGE_CONCRETE_POWDER: String = "minecraft:orange_concrete_powder"
 
-    String ORANGE_GLAZED_TERRACOTTA = "minecraft:orange_glazed_terracotta";
+        const val ORANGE_GLAZED_TERRACOTTA: String = "minecraft:orange_glazed_terracotta"
 
-    String ORANGE_SHULKER_BOX = "minecraft:orange_shulker_box";
+        const val ORANGE_SHULKER_BOX: String = "minecraft:orange_shulker_box"
 
-    String ORANGE_STAINED_GLASS = "minecraft:orange_stained_glass";
+        const val ORANGE_STAINED_GLASS: String = "minecraft:orange_stained_glass"
 
-    String ORANGE_STAINED_GLASS_PANE = "minecraft:orange_stained_glass_pane";
+        const val ORANGE_STAINED_GLASS_PANE: String = "minecraft:orange_stained_glass_pane"
 
-    String ORANGE_TERRACOTTA = "minecraft:orange_terracotta";
+        const val ORANGE_TERRACOTTA: String = "minecraft:orange_terracotta"
 
-    String ORANGE_TULIP = "minecraft:orange_tulip";
+        const val ORANGE_TULIP: String = "minecraft:orange_tulip"
 
-    String ORANGE_WOOL = "minecraft:orange_wool";
+        const val ORANGE_WOOL: String = "minecraft:orange_wool"
 
-    String OXEYE_DAISY = "minecraft:oxeye_daisy";
+        const val OXEYE_DAISY: String = "minecraft:oxeye_daisy"
 
-    String OXIDIZED_CHISELED_COPPER = "minecraft:oxidized_chiseled_copper";
+        const val OXIDIZED_CHISELED_COPPER: String = "minecraft:oxidized_chiseled_copper"
 
-    String OXIDIZED_COPPER = "minecraft:oxidized_copper";
+        const val OXIDIZED_COPPER: String = "minecraft:oxidized_copper"
 
-    String OXIDIZED_COPPER_BULB = "minecraft:oxidized_copper_bulb";
+        const val OXIDIZED_COPPER_BULB: String = "minecraft:oxidized_copper_bulb"
 
-    String OXIDIZED_COPPER_DOOR = "minecraft:oxidized_copper_door";
+        const val OXIDIZED_COPPER_DOOR: String = "minecraft:oxidized_copper_door"
 
-    String OXIDIZED_COPPER_GRATE = "minecraft:oxidized_copper_grate";
+        const val OXIDIZED_COPPER_GRATE: String = "minecraft:oxidized_copper_grate"
 
-    String OXIDIZED_COPPER_TRAPDOOR = "minecraft:oxidized_copper_trapdoor";
+        const val OXIDIZED_COPPER_TRAPDOOR: String = "minecraft:oxidized_copper_trapdoor"
 
-    String OXIDIZED_CUT_COPPER = "minecraft:oxidized_cut_copper";
+        const val OXIDIZED_CUT_COPPER: String = "minecraft:oxidized_cut_copper"
 
-    String OXIDIZED_CUT_COPPER_SLAB = "minecraft:oxidized_cut_copper_slab";
+        const val OXIDIZED_CUT_COPPER_SLAB: String = "minecraft:oxidized_cut_copper_slab"
 
-    String OXIDIZED_CUT_COPPER_STAIRS = "minecraft:oxidized_cut_copper_stairs";
+        const val OXIDIZED_CUT_COPPER_STAIRS: String = "minecraft:oxidized_cut_copper_stairs"
 
-    String OXIDIZED_DOUBLE_CUT_COPPER_SLAB = "minecraft:oxidized_double_cut_copper_slab";
+        const val OXIDIZED_DOUBLE_CUT_COPPER_SLAB: String = "minecraft:oxidized_double_cut_copper_slab"
 
-    String PACKED_ICE = "minecraft:packed_ice";
+        const val PACKED_ICE: String = "minecraft:packed_ice"
 
-    String PACKED_MUD = "minecraft:packed_mud";
+        const val PACKED_MUD: String = "minecraft:packed_mud"
 
-    String PALE_OAK_DOUBLE_SLAB = "minecraft:pale_oak_double_slab";
+        const val PALE_OAK_DOUBLE_SLAB: String = "minecraft:pale_oak_double_slab"
 
-    String PALE_OAK_PLANKS = "minecraft:pale_oak_planks";
+        const val PALE_OAK_PLANKS: String = "minecraft:pale_oak_planks"
 
-    String PALE_OAK_FENCE = "minecraft:pale_oak_fence";
+        const val PALE_OAK_FENCE: String = "minecraft:pale_oak_fence"
 
-    String PALE_OAK_FENCE_GATE = "minecraft:pale_oak_fence_gate";
+        const val PALE_OAK_FENCE_GATE: String = "minecraft:pale_oak_fence_gate"
 
-    String PALE_OAK_STAIRS = "minecraft:pale_oak_stairs";
+        const val PALE_OAK_STAIRS: String = "minecraft:pale_oak_stairs"
 
-    String PALE_OAK_WOOD = "minecraft:pale_oak_wood";
+        const val PALE_OAK_WOOD: String = "minecraft:pale_oak_wood"
 
-    String PALE_OAK_DOOR = "minecraft:pale_oak_door";
+        const val PALE_OAK_DOOR: String = "minecraft:pale_oak_door"
 
-    String PALE_OAK_TRAPDOOR = "minecraft:pale_oak_trapdoor";
+        const val PALE_OAK_TRAPDOOR: String = "minecraft:pale_oak_trapdoor"
 
-    String PALE_OAK_SLAB = "minecraft:pale_oak_slab";
+        const val PALE_OAK_SLAB: String = "minecraft:pale_oak_slab"
 
-    String PALE_OAK_LOG = "minecraft:pale_oak_log";
+        const val PALE_OAK_LOG: String = "minecraft:pale_oak_log"
 
-    String PALE_OAK_LEAVES = "minecraft:pale_oak_leaves";
+        const val PALE_OAK_LEAVES: String = "minecraft:pale_oak_leaves"
 
-    String PALE_OAK_SAPLING = "minecraft:pale_oak_sapling";
+        const val PALE_OAK_SAPLING: String = "minecraft:pale_oak_sapling"
 
-    String PALE_OAK_STANDING_SIGN = "minecraft:pale_oak_standing_sign";
+        const val PALE_OAK_STANDING_SIGN: String = "minecraft:pale_oak_standing_sign"
 
-    String PALE_OAK_BUTTON = "minecraft:pale_oak_button";
+        const val PALE_OAK_BUTTON: String = "minecraft:pale_oak_button"
 
-    String PALE_OAK_HANGING_SIGN = "minecraft:pale_oak_hanging_sign";
+        const val PALE_OAK_HANGING_SIGN: String = "minecraft:pale_oak_hanging_sign"
 
-    String PALE_OAK_PRESSURE_PLATE = "minecraft:pale_oak_pressure_plate";
+        const val PALE_OAK_PRESSURE_PLATE: String = "minecraft:pale_oak_pressure_plate"
 
-    String PALE_OAK_WALL_SIGN = "minecraft:pale_oak_wall_sign";
+        const val PALE_OAK_WALL_SIGN: String = "minecraft:pale_oak_wall_sign"
 
-    String PALE_MOSS_CARPET = "minecraft:pale_moss_carpet";
+        const val PALE_MOSS_CARPET: String = "minecraft:pale_moss_carpet"
 
-    String PALE_MOSS_BLOCK = "minecraft:pale_moss_block";
+        const val PALE_MOSS_BLOCK: String = "minecraft:pale_moss_block"
 
-    String PALE_HANGING_MOSS = "minecraft:pale_hanging_moss";
+        const val PALE_HANGING_MOSS: String = "minecraft:pale_hanging_moss"
 
-    String PEARLESCENT_FROGLIGHT = "minecraft:pearlescent_froglight";
+        const val PEARLESCENT_FROGLIGHT: String = "minecraft:pearlescent_froglight"
 
-    String PEONY = "minecraft:peony";
+        const val PEONY: String = "minecraft:peony"
 
-    String PETRIFIED_OAK_DOUBLE_SLAB = "minecraft:petrified_oak_double_slab";
+        const val PETRIFIED_OAK_DOUBLE_SLAB: String = "minecraft:petrified_oak_double_slab"
 
-    String PETRIFIED_OAK_SLAB = "minecraft:petrified_oak_slab";
+        const val PETRIFIED_OAK_SLAB: String = "minecraft:petrified_oak_slab"
 
-    String PIGLIN_HEAD = "minecraft:piglin_head";
+        const val PIGLIN_HEAD: String = "minecraft:piglin_head"
 
-    String PINK_CANDLE = "minecraft:pink_candle";
+        const val PINK_CANDLE: String = "minecraft:pink_candle"
 
-    String PINK_CANDLE_CAKE = "minecraft:pink_candle_cake";
+        const val PINK_CANDLE_CAKE: String = "minecraft:pink_candle_cake"
 
-    String PINK_CARPET = "minecraft:pink_carpet";
+        const val PINK_CARPET: String = "minecraft:pink_carpet"
 
-    String PINK_CONCRETE = "minecraft:pink_concrete";
+        const val PINK_CONCRETE: String = "minecraft:pink_concrete"
 
-    String PINK_CONCRETE_POWDER = "minecraft:pink_concrete_powder";
+        const val PINK_CONCRETE_POWDER: String = "minecraft:pink_concrete_powder"
 
-    String PINK_GLAZED_TERRACOTTA = "minecraft:pink_glazed_terracotta";
+        const val PINK_GLAZED_TERRACOTTA: String = "minecraft:pink_glazed_terracotta"
 
-    String PINK_PETALS = "minecraft:pink_petals";
+        const val PINK_PETALS: String = "minecraft:pink_petals"
 
-    String PINK_SHULKER_BOX = "minecraft:pink_shulker_box";
+        const val PINK_SHULKER_BOX: String = "minecraft:pink_shulker_box"
 
-    String PINK_STAINED_GLASS = "minecraft:pink_stained_glass";
+        const val PINK_STAINED_GLASS: String = "minecraft:pink_stained_glass"
 
-    String PINK_STAINED_GLASS_PANE = "minecraft:pink_stained_glass_pane";
+        const val PINK_STAINED_GLASS_PANE: String = "minecraft:pink_stained_glass_pane"
 
-    String PINK_TERRACOTTA = "minecraft:pink_terracotta";
+        const val PINK_TERRACOTTA: String = "minecraft:pink_terracotta"
 
-    String PINK_TULIP = "minecraft:pink_tulip";
+        const val PINK_TULIP: String = "minecraft:pink_tulip"
 
-    String PINK_WOOL = "minecraft:pink_wool";
+        const val PINK_WOOL: String = "minecraft:pink_wool"
 
-    String PISTON = "minecraft:piston";
+        const val PISTON: String = "minecraft:piston"
 
-    String PISTON_ARM_COLLISION = "minecraft:piston_arm_collision";
+        const val PISTON_ARM_COLLISION: String = "minecraft:piston_arm_collision"
 
-    String PITCHER_CROP = "minecraft:pitcher_crop";
+        const val PITCHER_CROP: String = "minecraft:pitcher_crop"
 
-    String PITCHER_PLANT = "minecraft:pitcher_plant";
+        const val PITCHER_PLANT: String = "minecraft:pitcher_plant"
 
-    String PLAYER_HEAD = "minecraft:player_head";
+        const val PLAYER_HEAD: String = "minecraft:player_head"
 
-    String PODZOL = "minecraft:podzol";
+        const val PODZOL: String = "minecraft:podzol"
 
-    String POINTED_DRIPSTONE = "minecraft:pointed_dripstone";
+        const val POINTED_DRIPSTONE: String = "minecraft:pointed_dripstone"
 
-    String POLISHED_ANDESITE = "minecraft:polished_andesite";
+        const val POLISHED_ANDESITE: String = "minecraft:polished_andesite"
 
-    String POLISHED_ANDESITE_DOUBLE_SLAB = "minecraft:polished_andesite_double_slab";
+        const val POLISHED_ANDESITE_DOUBLE_SLAB: String = "minecraft:polished_andesite_double_slab"
 
-    String POLISHED_ANDESITE_SLAB = "minecraft:polished_andesite_slab";
+        const val POLISHED_ANDESITE_SLAB: String = "minecraft:polished_andesite_slab"
 
-    String POLISHED_ANDESITE_STAIRS = "minecraft:polished_andesite_stairs";
+        const val POLISHED_ANDESITE_STAIRS: String = "minecraft:polished_andesite_stairs"
 
-    String POLISHED_BASALT = "minecraft:polished_basalt";
+        const val POLISHED_BASALT: String = "minecraft:polished_basalt"
 
-    String POLISHED_BLACKSTONE = "minecraft:polished_blackstone";
+        const val POLISHED_BLACKSTONE: String = "minecraft:polished_blackstone"
 
-    String POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB = "minecraft:polished_blackstone_brick_double_slab";
+        const val POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB: String = "minecraft:polished_blackstone_brick_double_slab"
 
-    String POLISHED_BLACKSTONE_BRICK_SLAB = "minecraft:polished_blackstone_brick_slab";
+        const val POLISHED_BLACKSTONE_BRICK_SLAB: String = "minecraft:polished_blackstone_brick_slab"
 
-    String POLISHED_BLACKSTONE_BRICK_STAIRS = "minecraft:polished_blackstone_brick_stairs";
+        const val POLISHED_BLACKSTONE_BRICK_STAIRS: String = "minecraft:polished_blackstone_brick_stairs"
 
-    String POLISHED_BLACKSTONE_BRICK_WALL = "minecraft:polished_blackstone_brick_wall";
+        const val POLISHED_BLACKSTONE_BRICK_WALL: String = "minecraft:polished_blackstone_brick_wall"
 
-    String POLISHED_BLACKSTONE_BRICKS = "minecraft:polished_blackstone_bricks";
+        const val POLISHED_BLACKSTONE_BRICKS: String = "minecraft:polished_blackstone_bricks"
 
-    String POLISHED_BLACKSTONE_BUTTON = "minecraft:polished_blackstone_button";
+        const val POLISHED_BLACKSTONE_BUTTON: String = "minecraft:polished_blackstone_button"
 
-    String POLISHED_BLACKSTONE_DOUBLE_SLAB = "minecraft:polished_blackstone_double_slab";
+        const val POLISHED_BLACKSTONE_DOUBLE_SLAB: String = "minecraft:polished_blackstone_double_slab"
 
-    String POLISHED_BLACKSTONE_PRESSURE_PLATE = "minecraft:polished_blackstone_pressure_plate";
+        const val POLISHED_BLACKSTONE_PRESSURE_PLATE: String = "minecraft:polished_blackstone_pressure_plate"
 
-    String POLISHED_BLACKSTONE_SLAB = "minecraft:polished_blackstone_slab";
+        const val POLISHED_BLACKSTONE_SLAB: String = "minecraft:polished_blackstone_slab"
 
-    String POLISHED_BLACKSTONE_STAIRS = "minecraft:polished_blackstone_stairs";
+        const val POLISHED_BLACKSTONE_STAIRS: String = "minecraft:polished_blackstone_stairs"
 
-    String POLISHED_BLACKSTONE_WALL = "minecraft:polished_blackstone_wall";
+        const val POLISHED_BLACKSTONE_WALL: String = "minecraft:polished_blackstone_wall"
 
-    String POLISHED_DEEPSLATE = "minecraft:polished_deepslate";
+        const val POLISHED_DEEPSLATE: String = "minecraft:polished_deepslate"
 
-    String POLISHED_DEEPSLATE_DOUBLE_SLAB = "minecraft:polished_deepslate_double_slab";
+        const val POLISHED_DEEPSLATE_DOUBLE_SLAB: String = "minecraft:polished_deepslate_double_slab"
 
-    String POLISHED_DEEPSLATE_SLAB = "minecraft:polished_deepslate_slab";
+        const val POLISHED_DEEPSLATE_SLAB: String = "minecraft:polished_deepslate_slab"
 
-    String POLISHED_DEEPSLATE_STAIRS = "minecraft:polished_deepslate_stairs";
+        const val POLISHED_DEEPSLATE_STAIRS: String = "minecraft:polished_deepslate_stairs"
 
-    String POLISHED_DEEPSLATE_WALL = "minecraft:polished_deepslate_wall";
+        const val POLISHED_DEEPSLATE_WALL: String = "minecraft:polished_deepslate_wall"
 
-    String POLISHED_DIORITE = "minecraft:polished_diorite";
+        const val POLISHED_DIORITE: String = "minecraft:polished_diorite"
 
-    String POLISHED_DIORITE_DOUBLE_SLAB = "minecraft:polished_diorite_double_slab";
+        const val POLISHED_DIORITE_DOUBLE_SLAB: String = "minecraft:polished_diorite_double_slab"
 
-    String POLISHED_DIORITE_SLAB = "minecraft:polished_diorite_slab";
+        const val POLISHED_DIORITE_SLAB: String = "minecraft:polished_diorite_slab"
 
-    String POLISHED_DIORITE_STAIRS = "minecraft:polished_diorite_stairs";
+        const val POLISHED_DIORITE_STAIRS: String = "minecraft:polished_diorite_stairs"
 
-    String POLISHED_GRANITE = "minecraft:polished_granite";
+        const val POLISHED_GRANITE: String = "minecraft:polished_granite"
 
-    String POLISHED_GRANITE_DOUBLE_SLAB = "minecraft:polished_granite_double_slab";
+        const val POLISHED_GRANITE_DOUBLE_SLAB: String = "minecraft:polished_granite_double_slab"
 
-    String POLISHED_GRANITE_SLAB = "minecraft:polished_granite_slab";
+        const val POLISHED_GRANITE_SLAB: String = "minecraft:polished_granite_slab"
 
-    String POLISHED_GRANITE_STAIRS = "minecraft:polished_granite_stairs";
+        const val POLISHED_GRANITE_STAIRS: String = "minecraft:polished_granite_stairs"
 
-    String POLISHED_TUFF = "minecraft:polished_tuff";
+        const val POLISHED_TUFF: String = "minecraft:polished_tuff"
 
-    String POLISHED_TUFF_DOUBLE_SLAB = "minecraft:polished_tuff_double_slab";
+        const val POLISHED_TUFF_DOUBLE_SLAB: String = "minecraft:polished_tuff_double_slab"
 
-    String POLISHED_TUFF_SLAB = "minecraft:polished_tuff_slab";
+        const val POLISHED_TUFF_SLAB: String = "minecraft:polished_tuff_slab"
 
-    String POLISHED_TUFF_STAIRS = "minecraft:polished_tuff_stairs";
+        const val POLISHED_TUFF_STAIRS: String = "minecraft:polished_tuff_stairs"
 
-    String POLISHED_TUFF_WALL = "minecraft:polished_tuff_wall";
+        const val POLISHED_TUFF_WALL: String = "minecraft:polished_tuff_wall"
 
-    String POPPY = "minecraft:poppy";
+        const val POPPY: String = "minecraft:poppy"
 
-    String PORTAL = "minecraft:portal";
+        const val PORTAL: String = "minecraft:portal"
 
-    String POTATOES = "minecraft:potatoes";
+        const val POTATOES: String = "minecraft:potatoes"
 
-    String POWDER_SNOW = "minecraft:powder_snow";
+        const val POWDER_SNOW: String = "minecraft:powder_snow"
 
-    String POWERED_COMPARATOR = "minecraft:powered_comparator";
+        const val POWERED_COMPARATOR: String = "minecraft:powered_comparator"
 
-    String POWERED_REPEATER = "minecraft:powered_repeater";
+        const val POWERED_REPEATER: String = "minecraft:powered_repeater"
 
-    String PRISMARINE = "minecraft:prismarine";
+        const val PRISMARINE: String = "minecraft:prismarine"
 
-    String PRISMARINE_BRICK_DOUBLE_SLAB = "minecraft:prismarine_brick_double_slab";
+        const val PRISMARINE_BRICK_DOUBLE_SLAB: String = "minecraft:prismarine_brick_double_slab"
 
-    String PRISMARINE_BRICK_SLAB = "minecraft:prismarine_brick_slab";
+        const val PRISMARINE_BRICK_SLAB: String = "minecraft:prismarine_brick_slab"
 
-    String PRISMARINE_BRICKS = "minecraft:prismarine_bricks";
+        const val PRISMARINE_BRICKS: String = "minecraft:prismarine_bricks"
 
-    String PRISMARINE_BRICKS_STAIRS = "minecraft:prismarine_bricks_stairs";
+        const val PRISMARINE_BRICKS_STAIRS: String = "minecraft:prismarine_bricks_stairs"
 
-    String PRISMARINE_DOUBLE_SLAB = "minecraft:prismarine_double_slab";
+        const val PRISMARINE_DOUBLE_SLAB: String = "minecraft:prismarine_double_slab"
 
-    String PRISMARINE_SLAB = "minecraft:prismarine_slab";
+        const val PRISMARINE_SLAB: String = "minecraft:prismarine_slab"
 
-    String PRISMARINE_STAIRS = "minecraft:prismarine_stairs";
+        const val PRISMARINE_STAIRS: String = "minecraft:prismarine_stairs"
 
-    String PRISMARINE_WALL = "minecraft:prismarine_wall";
+        const val PRISMARINE_WALL: String = "minecraft:prismarine_wall"
 
-    String PUMPKIN = "minecraft:pumpkin";
+        const val PUMPKIN: String = "minecraft:pumpkin"
 
-    String PUMPKIN_STEM = "minecraft:pumpkin_stem";
+        const val PUMPKIN_STEM: String = "minecraft:pumpkin_stem"
 
-    String PURPLE_CANDLE = "minecraft:purple_candle";
+        const val PURPLE_CANDLE: String = "minecraft:purple_candle"
 
-    String PURPLE_CANDLE_CAKE = "minecraft:purple_candle_cake";
+        const val PURPLE_CANDLE_CAKE: String = "minecraft:purple_candle_cake"
 
-    String PURPLE_CARPET = "minecraft:purple_carpet";
+        const val PURPLE_CARPET: String = "minecraft:purple_carpet"
 
-    String PURPLE_CONCRETE = "minecraft:purple_concrete";
+        const val PURPLE_CONCRETE: String = "minecraft:purple_concrete"
 
-    String PURPLE_CONCRETE_POWDER = "minecraft:purple_concrete_powder";
+        const val PURPLE_CONCRETE_POWDER: String = "minecraft:purple_concrete_powder"
 
-    String PURPLE_GLAZED_TERRACOTTA = "minecraft:purple_glazed_terracotta";
+        const val PURPLE_GLAZED_TERRACOTTA: String = "minecraft:purple_glazed_terracotta"
 
-    String PURPLE_SHULKER_BOX = "minecraft:purple_shulker_box";
+        const val PURPLE_SHULKER_BOX: String = "minecraft:purple_shulker_box"
 
-    String PURPLE_STAINED_GLASS = "minecraft:purple_stained_glass";
+        const val PURPLE_STAINED_GLASS: String = "minecraft:purple_stained_glass"
 
-    String PURPLE_STAINED_GLASS_PANE = "minecraft:purple_stained_glass_pane";
+        const val PURPLE_STAINED_GLASS_PANE: String = "minecraft:purple_stained_glass_pane"
 
-    String PURPLE_TERRACOTTA = "minecraft:purple_terracotta";
+        const val PURPLE_TERRACOTTA: String = "minecraft:purple_terracotta"
 
-    String PURPLE_WOOL = "minecraft:purple_wool";
+        const val PURPLE_WOOL: String = "minecraft:purple_wool"
 
-    String PURPUR_BLOCK = "minecraft:purpur_block";
+        const val PURPUR_BLOCK: String = "minecraft:purpur_block"
 
-    String PURPUR_DOUBLE_SLAB = "minecraft:purpur_double_slab";
+        const val PURPUR_DOUBLE_SLAB: String = "minecraft:purpur_double_slab"
 
-    String PURPUR_PILLAR = "minecraft:purpur_pillar";
+        const val PURPUR_PILLAR: String = "minecraft:purpur_pillar"
 
-    String PURPUR_SLAB = "minecraft:purpur_slab";
+        const val PURPUR_SLAB: String = "minecraft:purpur_slab"
 
-    String PURPUR_STAIRS = "minecraft:purpur_stairs";
+        const val PURPUR_STAIRS: String = "minecraft:purpur_stairs"
 
-    String QUARTZ_BLOCK = "minecraft:quartz_block";
+        const val QUARTZ_BLOCK: String = "minecraft:quartz_block"
 
-    String QUARTZ_BRICKS = "minecraft:quartz_bricks";
+        const val QUARTZ_BRICKS: String = "minecraft:quartz_bricks"
 
-    String QUARTZ_DOUBLE_SLAB = "minecraft:quartz_double_slab";
+        const val QUARTZ_DOUBLE_SLAB: String = "minecraft:quartz_double_slab"
 
-    String QUARTZ_ORE = "minecraft:quartz_ore";
+        const val QUARTZ_ORE: String = "minecraft:quartz_ore"
 
-    String QUARTZ_PILLAR = "minecraft:quartz_pillar";
+        const val QUARTZ_PILLAR: String = "minecraft:quartz_pillar"
 
-    String QUARTZ_SLAB = "minecraft:quartz_slab";
+        const val QUARTZ_SLAB: String = "minecraft:quartz_slab"
 
-    String QUARTZ_STAIRS = "minecraft:quartz_stairs";
+        const val QUARTZ_STAIRS: String = "minecraft:quartz_stairs"
 
-    String RAIL = "minecraft:rail";
+        const val RAIL: String = "minecraft:rail"
 
-    String RAW_COPPER_BLOCK = "minecraft:raw_copper_block";
+        const val RAW_COPPER_BLOCK: String = "minecraft:raw_copper_block"
 
-    String RAW_GOLD_BLOCK = "minecraft:raw_gold_block";
+        const val RAW_GOLD_BLOCK: String = "minecraft:raw_gold_block"
 
-    String RAW_IRON_BLOCK = "minecraft:raw_iron_block";
+        const val RAW_IRON_BLOCK: String = "minecraft:raw_iron_block"
 
-    String RED_CANDLE = "minecraft:red_candle";
+        const val RED_CANDLE: String = "minecraft:red_candle"
 
-    String RED_CANDLE_CAKE = "minecraft:red_candle_cake";
+        const val RED_CANDLE_CAKE: String = "minecraft:red_candle_cake"
 
-    String RED_CARPET = "minecraft:red_carpet";
+        const val RED_CARPET: String = "minecraft:red_carpet"
 
-    String RED_CONCRETE = "minecraft:red_concrete";
+        const val RED_CONCRETE: String = "minecraft:red_concrete"
 
-    String RED_CONCRETE_POWDER = "minecraft:red_concrete_powder";
+        const val RED_CONCRETE_POWDER: String = "minecraft:red_concrete_powder"
 
-    String RED_GLAZED_TERRACOTTA = "minecraft:red_glazed_terracotta";
+        const val RED_GLAZED_TERRACOTTA: String = "minecraft:red_glazed_terracotta"
 
-    String RED_MUSHROOM = "minecraft:red_mushroom";
+        const val RED_MUSHROOM: String = "minecraft:red_mushroom"
 
-    String RED_MUSHROOM_BLOCK = "minecraft:red_mushroom_block";
+        const val RED_MUSHROOM_BLOCK: String = "minecraft:red_mushroom_block"
 
-    String RED_NETHER_BRICK = "minecraft:red_nether_brick";
+        const val RED_NETHER_BRICK: String = "minecraft:red_nether_brick"
 
-    String RED_NETHER_BRICK_DOUBLE_SLAB = "minecraft:red_nether_brick_double_slab";
+        const val RED_NETHER_BRICK_DOUBLE_SLAB: String = "minecraft:red_nether_brick_double_slab"
 
-    String RED_NETHER_BRICK_SLAB = "minecraft:red_nether_brick_slab";
+        const val RED_NETHER_BRICK_SLAB: String = "minecraft:red_nether_brick_slab"
 
-    String RED_NETHER_BRICK_STAIRS = "minecraft:red_nether_brick_stairs";
+        const val RED_NETHER_BRICK_STAIRS: String = "minecraft:red_nether_brick_stairs"
 
-    String RED_NETHER_BRICK_WALL = "minecraft:red_nether_brick_wall";
+        const val RED_NETHER_BRICK_WALL: String = "minecraft:red_nether_brick_wall"
 
-    String RED_SAND = "minecraft:red_sand";
+        const val RED_SAND: String = "minecraft:red_sand"
 
-    String RED_SANDSTONE = "minecraft:red_sandstone";
+        const val RED_SANDSTONE: String = "minecraft:red_sandstone"
 
-    String RED_SANDSTONE_DOUBLE_SLAB = "minecraft:red_sandstone_double_slab";
+        const val RED_SANDSTONE_DOUBLE_SLAB: String = "minecraft:red_sandstone_double_slab"
 
-    String RED_SANDSTONE_SLAB = "minecraft:red_sandstone_slab";
+        const val RED_SANDSTONE_SLAB: String = "minecraft:red_sandstone_slab"
 
-    String RED_SANDSTONE_STAIRS = "minecraft:red_sandstone_stairs";
+        const val RED_SANDSTONE_STAIRS: String = "minecraft:red_sandstone_stairs"
 
-    String RED_SANDSTONE_WALL = "minecraft:red_sandstone_wall";
+        const val RED_SANDSTONE_WALL: String = "minecraft:red_sandstone_wall"
 
-    String RED_SHULKER_BOX = "minecraft:red_shulker_box";
+        const val RED_SHULKER_BOX: String = "minecraft:red_shulker_box"
 
-    String RED_STAINED_GLASS = "minecraft:red_stained_glass";
+        const val RED_STAINED_GLASS: String = "minecraft:red_stained_glass"
 
-    String RED_STAINED_GLASS_PANE = "minecraft:red_stained_glass_pane";
+        const val RED_STAINED_GLASS_PANE: String = "minecraft:red_stained_glass_pane"
 
-    String RED_TERRACOTTA = "minecraft:red_terracotta";
+        const val RED_TERRACOTTA: String = "minecraft:red_terracotta"
 
-    String RED_TULIP = "minecraft:red_tulip";
+        const val RED_TULIP: String = "minecraft:red_tulip"
 
-    String RED_WOOL = "minecraft:red_wool";
+        const val RED_WOOL: String = "minecraft:red_wool"
 
-    String REDSTONE_BLOCK = "minecraft:redstone_block";
+        const val REDSTONE_BLOCK: String = "minecraft:redstone_block"
 
-    String REDSTONE_LAMP = "minecraft:redstone_lamp";
+        const val REDSTONE_LAMP: String = "minecraft:redstone_lamp"
 
-    String REDSTONE_ORE = "minecraft:redstone_ore";
+        const val REDSTONE_ORE: String = "minecraft:redstone_ore"
 
-    String REDSTONE_TORCH = "minecraft:redstone_torch";
+        const val REDSTONE_TORCH: String = "minecraft:redstone_torch"
 
-    String REDSTONE_WIRE = "minecraft:redstone_wire";
+        const val REDSTONE_WIRE: String = "minecraft:redstone_wire"
 
-    String REEDS = "minecraft:reeds";
+        const val REEDS: String = "minecraft:reeds"
 
-    String REINFORCED_DEEPSLATE = "minecraft:reinforced_deepslate";
+        const val REINFORCED_DEEPSLATE: String = "minecraft:reinforced_deepslate"
 
-    String REPEATING_COMMAND_BLOCK = "minecraft:repeating_command_block";
+        const val REPEATING_COMMAND_BLOCK: String = "minecraft:repeating_command_block"
 
-    String RESERVED6 = "minecraft:reserved6";
+        const val RESERVED6: String = "minecraft:reserved6"
 
-    String RESIN_CLUMP = "minecraft:resin_clump";
+        const val RESIN_CLUMP: String = "minecraft:resin_clump"
 
-    String RESIN_BRICK_DOUBLE_SLAB = "minecraft:resin_brick_double_slab";
+        const val RESIN_BRICK_DOUBLE_SLAB: String = "minecraft:resin_brick_double_slab"
 
-    String RESIN_BRICK_WALL = "minecraft:resin_brick_wall";
+        const val RESIN_BRICK_WALL: String = "minecraft:resin_brick_wall"
 
-    String RESIN_BRICK_STAIRS = "minecraft:resin_brick_stairs";
+        const val RESIN_BRICK_STAIRS: String = "minecraft:resin_brick_stairs"
 
-    String RESIN_BRICK_SLAB = "minecraft:resin_brick_slab";
+        const val RESIN_BRICK_SLAB: String = "minecraft:resin_brick_slab"
 
-    String RESIN_BLOCK = "minecraft:resin_block";
+        const val RESIN_BLOCK: String = "minecraft:resin_block"
 
-    String RESIN_BRICKS = "minecraft:resin_bricks";
+        const val RESIN_BRICKS: String = "minecraft:resin_bricks"
 
-    String RESPAWN_ANCHOR = "minecraft:respawn_anchor";
+        const val RESPAWN_ANCHOR: String = "minecraft:respawn_anchor"
 
-    String ROSE_BUSH = "minecraft:rose_bush";
+        const val ROSE_BUSH: String = "minecraft:rose_bush"
 
-    String SAND = "minecraft:sand";
+        const val SAND: String = "minecraft:sand"
 
-    String SANDSTONE = "minecraft:sandstone";
+        const val SANDSTONE: String = "minecraft:sandstone"
 
-    String SANDSTONE_DOUBLE_SLAB = "minecraft:sandstone_double_slab";
+        const val SANDSTONE_DOUBLE_SLAB: String = "minecraft:sandstone_double_slab"
 
-    String SANDSTONE_SLAB = "minecraft:sandstone_slab";
+        const val SANDSTONE_SLAB: String = "minecraft:sandstone_slab"
 
-    String SANDSTONE_STAIRS = "minecraft:sandstone_stairs";
+        const val SANDSTONE_STAIRS: String = "minecraft:sandstone_stairs"
 
-    String SANDSTONE_WALL = "minecraft:sandstone_wall";
+        const val SANDSTONE_WALL: String = "minecraft:sandstone_wall"
 
-    String SCAFFOLDING = "minecraft:scaffolding";
+        const val SCAFFOLDING: String = "minecraft:scaffolding"
 
-    String SCULK = "minecraft:sculk";
+        const val SCULK: String = "minecraft:sculk"
 
-    String SCULK_CATALYST = "minecraft:sculk_catalyst";
+        const val SCULK_CATALYST: String = "minecraft:sculk_catalyst"
 
-    String SCULK_SENSOR = "minecraft:sculk_sensor";
+        const val SCULK_SENSOR: String = "minecraft:sculk_sensor"
 
-    String SCULK_SHRIEKER = "minecraft:sculk_shrieker";
+        const val SCULK_SHRIEKER: String = "minecraft:sculk_shrieker"
 
-    String SCULK_VEIN = "minecraft:sculk_vein";
+        const val SCULK_VEIN: String = "minecraft:sculk_vein"
 
-    String SEA_LANTERN = "minecraft:sea_lantern";
+        const val SEA_LANTERN: String = "minecraft:sea_lantern"
 
-    String SEA_PICKLE = "minecraft:sea_pickle";
+        const val SEA_PICKLE: String = "minecraft:sea_pickle"
 
-    String SEAGRASS = "minecraft:seagrass";
+        const val SEAGRASS: String = "minecraft:seagrass"
 
-    String SHORT_GRASS = "minecraft:short_grass";
+        const val SHORT_GRASS: String = "minecraft:short_grass"
 
-    String SHROOMLIGHT = "minecraft:shroomlight";
+        const val SHROOMLIGHT: String = "minecraft:shroomlight"
 
-    String SILVER_GLAZED_TERRACOTTA = "minecraft:silver_glazed_terracotta";
+        const val SILVER_GLAZED_TERRACOTTA: String = "minecraft:silver_glazed_terracotta"
 
-    String SKELETON_SKULL = "minecraft:skeleton_skull";
+        const val SKELETON_SKULL: String = "minecraft:skeleton_skull"
 
-    String SKULL = "minecraft:skull";
+        const val SKULL: String = "minecraft:skull"
 
-    String SLIME = "minecraft:slime";
+        const val SLIME: String = "minecraft:slime"
 
-    String SMALL_AMETHYST_BUD = "minecraft:small_amethyst_bud";
+        const val SMALL_AMETHYST_BUD: String = "minecraft:small_amethyst_bud"
 
-    String SMALL_DRIPLEAF_BLOCK = "minecraft:small_dripleaf_block";
+        const val SMALL_DRIPLEAF_BLOCK: String = "minecraft:small_dripleaf_block"
 
-    String SMITHING_TABLE = "minecraft:smithing_table";
+        const val SMITHING_TABLE: String = "minecraft:smithing_table"
 
-    String SMOKER = "minecraft:smoker";
+        const val SMOKER: String = "minecraft:smoker"
 
-    String SMOOTH_BASALT = "minecraft:smooth_basalt";
+        const val SMOOTH_BASALT: String = "minecraft:smooth_basalt"
 
-    String SMOOTH_QUARTZ = "minecraft:smooth_quartz";
+        const val SMOOTH_QUARTZ: String = "minecraft:smooth_quartz"
 
-    String SMOOTH_QUARTZ_DOUBLE_SLAB = "minecraft:smooth_quartz_double_slab";
+        const val SMOOTH_QUARTZ_DOUBLE_SLAB: String = "minecraft:smooth_quartz_double_slab"
 
-    String SMOOTH_QUARTZ_SLAB = "minecraft:smooth_quartz_slab";
+        const val SMOOTH_QUARTZ_SLAB: String = "minecraft:smooth_quartz_slab"
 
-    String SMOOTH_QUARTZ_STAIRS = "minecraft:smooth_quartz_stairs";
+        const val SMOOTH_QUARTZ_STAIRS: String = "minecraft:smooth_quartz_stairs"
 
-    String SMOOTH_RED_SANDSTONE = "minecraft:smooth_red_sandstone";
+        const val SMOOTH_RED_SANDSTONE: String = "minecraft:smooth_red_sandstone"
 
-    String SMOOTH_RED_SANDSTONE_DOUBLE_SLAB = "minecraft:smooth_red_sandstone_double_slab";
+        const val SMOOTH_RED_SANDSTONE_DOUBLE_SLAB: String = "minecraft:smooth_red_sandstone_double_slab"
 
-    String SMOOTH_RED_SANDSTONE_SLAB = "minecraft:smooth_red_sandstone_slab";
+        const val SMOOTH_RED_SANDSTONE_SLAB: String = "minecraft:smooth_red_sandstone_slab"
 
-    String SMOOTH_RED_SANDSTONE_STAIRS = "minecraft:smooth_red_sandstone_stairs";
+        const val SMOOTH_RED_SANDSTONE_STAIRS: String = "minecraft:smooth_red_sandstone_stairs"
 
-    String SMOOTH_SANDSTONE = "minecraft:smooth_sandstone";
+        const val SMOOTH_SANDSTONE: String = "minecraft:smooth_sandstone"
 
-    String SMOOTH_SANDSTONE_DOUBLE_SLAB = "minecraft:smooth_sandstone_double_slab";
+        const val SMOOTH_SANDSTONE_DOUBLE_SLAB: String = "minecraft:smooth_sandstone_double_slab"
 
-    String SMOOTH_SANDSTONE_SLAB = "minecraft:smooth_sandstone_slab";
+        const val SMOOTH_SANDSTONE_SLAB: String = "minecraft:smooth_sandstone_slab"
 
-    String SMOOTH_SANDSTONE_STAIRS = "minecraft:smooth_sandstone_stairs";
+        const val SMOOTH_SANDSTONE_STAIRS: String = "minecraft:smooth_sandstone_stairs"
 
-    String SMOOTH_STONE = "minecraft:smooth_stone";
+        const val SMOOTH_STONE: String = "minecraft:smooth_stone"
 
-    String SMOOTH_STONE_DOUBLE_SLAB = "minecraft:smooth_stone_double_slab";
+        const val SMOOTH_STONE_DOUBLE_SLAB: String = "minecraft:smooth_stone_double_slab"
 
-    String SMOOTH_STONE_SLAB = "minecraft:smooth_stone_slab";
+        const val SMOOTH_STONE_SLAB: String = "minecraft:smooth_stone_slab"
 
-    String SNIFFER_EGG = "minecraft:sniffer_egg";
+        const val SNIFFER_EGG: String = "minecraft:sniffer_egg"
 
-    String SNOW = "minecraft:snow";
+        const val SNOW: String = "minecraft:snow"
 
-    String SNOW_LAYER = "minecraft:snow_layer";
+        const val SNOW_LAYER: String = "minecraft:snow_layer"
 
-    String SOUL_CAMPFIRE = "minecraft:soul_campfire";
+        const val SOUL_CAMPFIRE: String = "minecraft:soul_campfire"
 
-    String SOUL_FIRE = "minecraft:soul_fire";
+        const val SOUL_FIRE: String = "minecraft:soul_fire"
 
-    String SOUL_LANTERN = "minecraft:soul_lantern";
+        const val SOUL_LANTERN: String = "minecraft:soul_lantern"
 
-    String SOUL_SAND = "minecraft:soul_sand";
+        const val SOUL_SAND: String = "minecraft:soul_sand"
 
-    String SOUL_SOIL = "minecraft:soul_soil";
+        const val SOUL_SOIL: String = "minecraft:soul_soil"
 
-    String SOUL_TORCH = "minecraft:soul_torch";
+        const val SOUL_TORCH: String = "minecraft:soul_torch"
 
-    String SPONGE = "minecraft:sponge";
+        const val SPONGE: String = "minecraft:sponge"
 
-    String SPORE_BLOSSOM = "minecraft:spore_blossom";
+        const val SPORE_BLOSSOM: String = "minecraft:spore_blossom"
 
-    String SPRUCE_BUTTON = "minecraft:spruce_button";
+        const val SPRUCE_BUTTON: String = "minecraft:spruce_button"
 
-    String SPRUCE_DOOR = "minecraft:spruce_door";
+        const val SPRUCE_DOOR: String = "minecraft:spruce_door"
 
-    String SPRUCE_DOUBLE_SLAB = "minecraft:spruce_double_slab";
+        const val SPRUCE_DOUBLE_SLAB: String = "minecraft:spruce_double_slab"
 
-    String SPRUCE_FENCE = "minecraft:spruce_fence";
+        const val SPRUCE_FENCE: String = "minecraft:spruce_fence"
 
-    String SPRUCE_FENCE_GATE = "minecraft:spruce_fence_gate";
+        const val SPRUCE_FENCE_GATE: String = "minecraft:spruce_fence_gate"
 
-    String SPRUCE_HANGING_SIGN = "minecraft:spruce_hanging_sign";
+        const val SPRUCE_HANGING_SIGN: String = "minecraft:spruce_hanging_sign"
 
-    String SPRUCE_LEAVES = "minecraft:spruce_leaves";
+        const val SPRUCE_LEAVES: String = "minecraft:spruce_leaves"
 
-    String SPRUCE_LOG = "minecraft:spruce_log";
+        const val SPRUCE_LOG: String = "minecraft:spruce_log"
 
-    String SPRUCE_PLANKS = "minecraft:spruce_planks";
+        const val SPRUCE_PLANKS: String = "minecraft:spruce_planks"
 
-    String SPRUCE_PRESSURE_PLATE = "minecraft:spruce_pressure_plate";
+        const val SPRUCE_PRESSURE_PLATE: String = "minecraft:spruce_pressure_plate"
 
-    String SPRUCE_SAPLING = "minecraft:spruce_sapling";
+        const val SPRUCE_SAPLING: String = "minecraft:spruce_sapling"
 
-    String SPRUCE_SLAB = "minecraft:spruce_slab";
+        const val SPRUCE_SLAB: String = "minecraft:spruce_slab"
 
-    String SPRUCE_STAIRS = "minecraft:spruce_stairs";
+        const val SPRUCE_STAIRS: String = "minecraft:spruce_stairs"
 
-    String SPRUCE_STANDING_SIGN = "minecraft:spruce_standing_sign";
+        const val SPRUCE_STANDING_SIGN: String = "minecraft:spruce_standing_sign"
 
-    String SPRUCE_TRAPDOOR = "minecraft:spruce_trapdoor";
+        const val SPRUCE_TRAPDOOR: String = "minecraft:spruce_trapdoor"
 
-    String SPRUCE_WALL_SIGN = "minecraft:spruce_wall_sign";
+        const val SPRUCE_WALL_SIGN: String = "minecraft:spruce_wall_sign"
 
-    String SPRUCE_WOOD = "minecraft:spruce_wood";
+        const val SPRUCE_WOOD: String = "minecraft:spruce_wood"
 
-    String STANDING_BANNER = "minecraft:standing_banner";
+        const val STANDING_BANNER: String = "minecraft:standing_banner"
 
-    String STANDING_SIGN = "minecraft:standing_sign";
+        const val STANDING_SIGN: String = "minecraft:standing_sign"
 
-    String STICKY_PISTON = "minecraft:sticky_piston";
+        const val STICKY_PISTON: String = "minecraft:sticky_piston"
 
-    String STICKY_PISTON_ARM_COLLISION = "minecraft:sticky_piston_arm_collision";
+        const val STICKY_PISTON_ARM_COLLISION: String = "minecraft:sticky_piston_arm_collision"
 
-    String STONE = "minecraft:stone";
+        const val STONE: String = "minecraft:stone"
 
-    String STONE_BLOCK_SLAB2 = "minecraft:stone_block_slab2";
+        const val STONE_BLOCK_SLAB2: String = "minecraft:stone_block_slab2"
 
-    String STONE_BLOCK_SLAB3 = "minecraft:stone_block_slab3";
+        const val STONE_BLOCK_SLAB3: String = "minecraft:stone_block_slab3"
 
-    String STONE_BLOCK_SLAB4 = "minecraft:stone_block_slab4";
+        const val STONE_BLOCK_SLAB4: String = "minecraft:stone_block_slab4"
 
-    String STONE_BRICKS = "minecraft:stone_bricks";
+        const val STONE_BRICKS: String = "minecraft:stone_bricks"
 
-    String STONE_BRICK_DOUBLE_SLAB = "minecraft:stone_brick_double_slab";
+        const val STONE_BRICK_DOUBLE_SLAB: String = "minecraft:stone_brick_double_slab"
 
-    String STONE_BRICK_SLAB = "minecraft:stone_brick_slab";
+        const val STONE_BRICK_SLAB: String = "minecraft:stone_brick_slab"
 
-    String STONE_BRICK_STAIRS = "minecraft:stone_brick_stairs";
+        const val STONE_BRICK_STAIRS: String = "minecraft:stone_brick_stairs"
 
-    String STONE_BRICK_WALL = "minecraft:stone_brick_wall";
+        const val STONE_BRICK_WALL: String = "minecraft:stone_brick_wall"
 
-    String STONE_BUTTON = "minecraft:stone_button";
+        const val STONE_BUTTON: String = "minecraft:stone_button"
 
-    String STONE_PRESSURE_PLATE = "minecraft:stone_pressure_plate";
+        const val STONE_PRESSURE_PLATE: String = "minecraft:stone_pressure_plate"
 
-    String STONE_STAIRS = "minecraft:stone_stairs";
+        const val STONE_STAIRS: String = "minecraft:stone_stairs"
 
-    String STONECUTTER = "minecraft:stonecutter";
+        const val STONECUTTER: String = "minecraft:stonecutter"
 
-    String STONECUTTER_BLOCK = "minecraft:stonecutter_block";
+        const val STONECUTTER_BLOCK: String = "minecraft:stonecutter_block"
 
-    String STRIPPED_ACACIA_LOG = "minecraft:stripped_acacia_log";
+        const val STRIPPED_ACACIA_LOG: String = "minecraft:stripped_acacia_log"
 
-    String STRIPPED_ACACIA_WOOD = "minecraft:stripped_acacia_wood";
+        const val STRIPPED_ACACIA_WOOD: String = "minecraft:stripped_acacia_wood"
 
-    String STRIPPED_BAMBOO_BLOCK = "minecraft:stripped_bamboo_block";
+        const val STRIPPED_BAMBOO_BLOCK: String = "minecraft:stripped_bamboo_block"
 
-    String STRIPPED_BIRCH_LOG = "minecraft:stripped_birch_log";
+        const val STRIPPED_BIRCH_LOG: String = "minecraft:stripped_birch_log"
 
-    String STRIPPED_BIRCH_WOOD = "minecraft:stripped_birch_wood";
+        const val STRIPPED_BIRCH_WOOD: String = "minecraft:stripped_birch_wood"
 
-    String STRIPPED_CHERRY_LOG = "minecraft:stripped_cherry_log";
+        const val STRIPPED_CHERRY_LOG: String = "minecraft:stripped_cherry_log"
 
-    String STRIPPED_CHERRY_WOOD = "minecraft:stripped_cherry_wood";
+        const val STRIPPED_CHERRY_WOOD: String = "minecraft:stripped_cherry_wood"
 
-    String STRIPPED_CRIMSON_HYPHAE = "minecraft:stripped_crimson_hyphae";
+        const val STRIPPED_CRIMSON_HYPHAE: String = "minecraft:stripped_crimson_hyphae"
 
-    String STRIPPED_CRIMSON_STEM = "minecraft:stripped_crimson_stem";
+        const val STRIPPED_CRIMSON_STEM: String = "minecraft:stripped_crimson_stem"
 
-    String STRIPPED_DARK_OAK_LOG = "minecraft:stripped_dark_oak_log";
+        const val STRIPPED_DARK_OAK_LOG: String = "minecraft:stripped_dark_oak_log"
 
-    String STRIPPED_DARK_OAK_WOOD = "minecraft:stripped_dark_oak_wood";
+        const val STRIPPED_DARK_OAK_WOOD: String = "minecraft:stripped_dark_oak_wood"
 
-    String STRIPPED_JUNGLE_LOG = "minecraft:stripped_jungle_log";
+        const val STRIPPED_JUNGLE_LOG: String = "minecraft:stripped_jungle_log"
 
-    String STRIPPED_JUNGLE_WOOD = "minecraft:stripped_jungle_wood";
+        const val STRIPPED_JUNGLE_WOOD: String = "minecraft:stripped_jungle_wood"
 
-    String STRIPPED_MANGROVE_LOG = "minecraft:stripped_mangrove_log";
+        const val STRIPPED_MANGROVE_LOG: String = "minecraft:stripped_mangrove_log"
 
-    String STRIPPED_MANGROVE_WOOD = "minecraft:stripped_mangrove_wood";
+        const val STRIPPED_MANGROVE_WOOD: String = "minecraft:stripped_mangrove_wood"
 
-    String STRIPPED_OAK_LOG = "minecraft:stripped_oak_log";
+        const val STRIPPED_OAK_LOG: String = "minecraft:stripped_oak_log"
 
-    String STRIPPED_OAK_WOOD = "minecraft:stripped_oak_wood";
+        const val STRIPPED_OAK_WOOD: String = "minecraft:stripped_oak_wood"
 
-    String STRIPPED_PALE_OAK_LOG = "minecraft:stripped_pale_oak_log";
+        const val STRIPPED_PALE_OAK_LOG: String = "minecraft:stripped_pale_oak_log"
 
-    String STRIPPED_PALE_OAK_WOOD = "minecraft:stripped_pale_oak_wood";
+        const val STRIPPED_PALE_OAK_WOOD: String = "minecraft:stripped_pale_oak_wood"
 
-    String STRIPPED_SPRUCE_LOG = "minecraft:stripped_spruce_log";
+        const val STRIPPED_SPRUCE_LOG: String = "minecraft:stripped_spruce_log"
 
-    String STRIPPED_SPRUCE_WOOD = "minecraft:stripped_spruce_wood";
+        const val STRIPPED_SPRUCE_WOOD: String = "minecraft:stripped_spruce_wood"
 
-    String STRIPPED_WARPED_HYPHAE = "minecraft:stripped_warped_hyphae";
+        const val STRIPPED_WARPED_HYPHAE: String = "minecraft:stripped_warped_hyphae"
 
-    String STRIPPED_WARPED_STEM = "minecraft:stripped_warped_stem";
+        const val STRIPPED_WARPED_STEM: String = "minecraft:stripped_warped_stem"
 
-    String STRUCTURE_BLOCK = "minecraft:structure_block";
+        const val STRUCTURE_BLOCK: String = "minecraft:structure_block"
 
-    String STRUCTURE_VOID = "minecraft:structure_void";
+        const val STRUCTURE_VOID: String = "minecraft:structure_void"
 
-    String SUNFLOWER = "minecraft:sunflower";
+        const val SUNFLOWER: String = "minecraft:sunflower"
 
-    String SUSPICIOUS_GRAVEL = "minecraft:suspicious_gravel";
+        const val SUSPICIOUS_GRAVEL: String = "minecraft:suspicious_gravel"
 
-    String SUSPICIOUS_SAND = "minecraft:suspicious_sand";
+        const val SUSPICIOUS_SAND: String = "minecraft:suspicious_sand"
 
-    String SWEET_BERRY_BUSH = "minecraft:sweet_berry_bush";
+        const val SWEET_BERRY_BUSH: String = "minecraft:sweet_berry_bush"
 
-    String TALL_GRASS = "minecraft:tall_grass";
+        const val TALL_GRASS: String = "minecraft:tall_grass"
 
-    String TARGET = "minecraft:target";
+        const val TARGET: String = "minecraft:target"
 
-    String TINTED_GLASS = "minecraft:tinted_glass";
+        const val TINTED_GLASS: String = "minecraft:tinted_glass"
 
-    String TNT = "minecraft:tnt";
+        const val TNT: String = "minecraft:tnt"
 
-    String TORCH = "minecraft:torch";
+        const val TORCH: String = "minecraft:torch"
 
-    String TORCHFLOWER = "minecraft:torchflower";
+        const val TORCHFLOWER: String = "minecraft:torchflower"
 
-    String TORCHFLOWER_CROP = "minecraft:torchflower_crop";
+        const val TORCHFLOWER_CROP: String = "minecraft:torchflower_crop"
 
-    String TRAPDOOR = "minecraft:trapdoor";
+        const val TRAPDOOR: String = "minecraft:trapdoor"
 
-    String TRAPPED_CHEST = "minecraft:trapped_chest";
+        const val TRAPPED_CHEST: String = "minecraft:trapped_chest"
 
-    String TRIAL_SPAWNER = "minecraft:trial_spawner";
+        const val TRIAL_SPAWNER: String = "minecraft:trial_spawner"
 
-    String TRIP_WIRE = "minecraft:trip_wire";
+        const val TRIP_WIRE: String = "minecraft:trip_wire"
 
-    String TRIPWIRE_HOOK = "minecraft:tripwire_hook";
+        const val TRIPWIRE_HOOK: String = "minecraft:tripwire_hook"
 
-    String TUBE_CORAL = "minecraft:tube_coral";
+        const val TUBE_CORAL: String = "minecraft:tube_coral"
 
-    String TUBE_CORAL_BLOCK = "minecraft:tube_coral_block";
+        const val TUBE_CORAL_BLOCK: String = "minecraft:tube_coral_block"
 
-    String TUBE_CORAL_FAN = "minecraft:tube_coral_fan";
+        const val TUBE_CORAL_FAN: String = "minecraft:tube_coral_fan"
 
-    String TUBE_CORAL_WALL_FAN = "minecraft:tube_coral_wall_fan";
+        const val TUBE_CORAL_WALL_FAN: String = "minecraft:tube_coral_wall_fan"
 
-    String TUFF = "minecraft:tuff";
+        const val TUFF: String = "minecraft:tuff"
 
-    String TUFF_BRICK_DOUBLE_SLAB = "minecraft:tuff_brick_double_slab";
+        const val TUFF_BRICK_DOUBLE_SLAB: String = "minecraft:tuff_brick_double_slab"
 
-    String TUFF_BRICK_SLAB = "minecraft:tuff_brick_slab";
+        const val TUFF_BRICK_SLAB: String = "minecraft:tuff_brick_slab"
 
-    String TUFF_BRICK_STAIRS = "minecraft:tuff_brick_stairs";
+        const val TUFF_BRICK_STAIRS: String = "minecraft:tuff_brick_stairs"
 
-    String TUFF_BRICK_WALL = "minecraft:tuff_brick_wall";
+        const val TUFF_BRICK_WALL: String = "minecraft:tuff_brick_wall"
 
-    String TUFF_BRICKS = "minecraft:tuff_bricks";
+        const val TUFF_BRICKS: String = "minecraft:tuff_bricks"
 
-    String TUFF_DOUBLE_SLAB = "minecraft:tuff_double_slab";
+        const val TUFF_DOUBLE_SLAB: String = "minecraft:tuff_double_slab"
 
-    String TUFF_SLAB = "minecraft:tuff_slab";
+        const val TUFF_SLAB: String = "minecraft:tuff_slab"
 
-    String TUFF_STAIRS = "minecraft:tuff_stairs";
+        const val TUFF_STAIRS: String = "minecraft:tuff_stairs"
 
-    String TUFF_WALL = "minecraft:tuff_wall";
+        const val TUFF_WALL: String = "minecraft:tuff_wall"
 
-    String TURTLE_EGG = "minecraft:turtle_egg";
+        const val TURTLE_EGG: String = "minecraft:turtle_egg"
 
-    String TWISTING_VINES = "minecraft:twisting_vines";
+        const val TWISTING_VINES: String = "minecraft:twisting_vines"
 
-    String UNDERWATER_TORCH = "minecraft:underwater_torch";
+        const val UNDERWATER_TORCH: String = "minecraft:underwater_torch"
 
-    String UNDYED_SHULKER_BOX = "minecraft:undyed_shulker_box";
+        const val UNDYED_SHULKER_BOX: String = "minecraft:undyed_shulker_box"
 
-    String UNKNOWN = "minecraft:unknown";
+        const val UNKNOWN: String = "minecraft:unknown"
 
-    String UNLIT_REDSTONE_TORCH = "minecraft:unlit_redstone_torch";
+        const val UNLIT_REDSTONE_TORCH: String = "minecraft:unlit_redstone_torch"
 
-    String UNPOWERED_COMPARATOR = "minecraft:unpowered_comparator";
+        const val UNPOWERED_COMPARATOR: String = "minecraft:unpowered_comparator"
 
-    String UNPOWERED_REPEATER = "minecraft:unpowered_repeater";
+        const val UNPOWERED_REPEATER: String = "minecraft:unpowered_repeater"
 
-    String VAULT = "minecraft:vault";
+        const val VAULT: String = "minecraft:vault"
 
-    String VERDANT_FROGLIGHT = "minecraft:verdant_froglight";
+        const val VERDANT_FROGLIGHT: String = "minecraft:verdant_froglight"
 
-    String VINE = "minecraft:vine";
+        const val VINE: String = "minecraft:vine"
 
-    String WALL_BANNER = "minecraft:wall_banner";
+        const val WALL_BANNER: String = "minecraft:wall_banner"
 
-    String WALL_SIGN = "minecraft:wall_sign";
+        const val WALL_SIGN: String = "minecraft:wall_sign"
 
-    String WARPED_BUTTON = "minecraft:warped_button";
+        const val WARPED_BUTTON: String = "minecraft:warped_button"
 
-    String WARPED_DOOR = "minecraft:warped_door";
+        const val WARPED_DOOR: String = "minecraft:warped_door"
 
-    String WARPED_DOUBLE_SLAB = "minecraft:warped_double_slab";
+        const val WARPED_DOUBLE_SLAB: String = "minecraft:warped_double_slab"
 
-    String WARPED_FENCE = "minecraft:warped_fence";
+        const val WARPED_FENCE: String = "minecraft:warped_fence"
 
-    String WARPED_FENCE_GATE = "minecraft:warped_fence_gate";
+        const val WARPED_FENCE_GATE: String = "minecraft:warped_fence_gate"
 
-    String WARPED_FUNGUS = "minecraft:warped_fungus";
+        const val WARPED_FUNGUS: String = "minecraft:warped_fungus"
 
-    String WARPED_HANGING_SIGN = "minecraft:warped_hanging_sign";
+        const val WARPED_HANGING_SIGN: String = "minecraft:warped_hanging_sign"
 
-    String WARPED_HYPHAE = "minecraft:warped_hyphae";
+        const val WARPED_HYPHAE: String = "minecraft:warped_hyphae"
 
-    String WARPED_NYLIUM = "minecraft:warped_nylium";
+        const val WARPED_NYLIUM: String = "minecraft:warped_nylium"
 
-    String WARPED_PLANKS = "minecraft:warped_planks";
+        const val WARPED_PLANKS: String = "minecraft:warped_planks"
 
-    String WARPED_PRESSURE_PLATE = "minecraft:warped_pressure_plate";
+        const val WARPED_PRESSURE_PLATE: String = "minecraft:warped_pressure_plate"
 
-    String WARPED_ROOTS = "minecraft:warped_roots";
+        const val WARPED_ROOTS: String = "minecraft:warped_roots"
 
-    String WARPED_SLAB = "minecraft:warped_slab";
+        const val WARPED_SLAB: String = "minecraft:warped_slab"
 
-    String WARPED_STAIRS = "minecraft:warped_stairs";
+        const val WARPED_STAIRS: String = "minecraft:warped_stairs"
 
-    String WARPED_STANDING_SIGN = "minecraft:warped_standing_sign";
+        const val WARPED_STANDING_SIGN: String = "minecraft:warped_standing_sign"
 
-    String WARPED_STEM = "minecraft:warped_stem";
+        const val WARPED_STEM: String = "minecraft:warped_stem"
 
-    String WARPED_TRAPDOOR = "minecraft:warped_trapdoor";
+        const val WARPED_TRAPDOOR: String = "minecraft:warped_trapdoor"
 
-    String WARPED_WALL_SIGN = "minecraft:warped_wall_sign";
+        const val WARPED_WALL_SIGN: String = "minecraft:warped_wall_sign"
 
-    String WARPED_WART_BLOCK = "minecraft:warped_wart_block";
+        const val WARPED_WART_BLOCK: String = "minecraft:warped_wart_block"
 
-    String WATER = "minecraft:water";
+        const val WATER: String = "minecraft:water"
 
-    String WATERLILY = "minecraft:waterlily";
+        const val WATERLILY: String = "minecraft:waterlily"
 
-    String WAXED_CHISELED_COPPER = "minecraft:waxed_chiseled_copper";
+        const val WAXED_CHISELED_COPPER: String = "minecraft:waxed_chiseled_copper"
 
-    String WAXED_COPPER = "minecraft:waxed_copper";
+        const val WAXED_COPPER: String = "minecraft:waxed_copper"
 
-    String WAXED_COPPER_BULB = "minecraft:waxed_copper_bulb";
+        const val WAXED_COPPER_BULB: String = "minecraft:waxed_copper_bulb"
 
-    String WAXED_COPPER_DOOR = "minecraft:waxed_copper_door";
+        const val WAXED_COPPER_DOOR: String = "minecraft:waxed_copper_door"
 
-    String WAXED_COPPER_GRATE = "minecraft:waxed_copper_grate";
+        const val WAXED_COPPER_GRATE: String = "minecraft:waxed_copper_grate"
 
-    String WAXED_COPPER_TRAPDOOR = "minecraft:waxed_copper_trapdoor";
+        const val WAXED_COPPER_TRAPDOOR: String = "minecraft:waxed_copper_trapdoor"
 
-    String WAXED_CUT_COPPER = "minecraft:waxed_cut_copper";
+        const val WAXED_CUT_COPPER: String = "minecraft:waxed_cut_copper"
 
-    String WAXED_CUT_COPPER_SLAB = "minecraft:waxed_cut_copper_slab";
+        const val WAXED_CUT_COPPER_SLAB: String = "minecraft:waxed_cut_copper_slab"
 
-    String WAXED_CUT_COPPER_STAIRS = "minecraft:waxed_cut_copper_stairs";
+        const val WAXED_CUT_COPPER_STAIRS: String = "minecraft:waxed_cut_copper_stairs"
 
-    String WAXED_DOUBLE_CUT_COPPER_SLAB = "minecraft:waxed_double_cut_copper_slab";
+        const val WAXED_DOUBLE_CUT_COPPER_SLAB: String = "minecraft:waxed_double_cut_copper_slab"
 
-    String WAXED_EXPOSED_CHISELED_COPPER = "minecraft:waxed_exposed_chiseled_copper";
+        const val WAXED_EXPOSED_CHISELED_COPPER: String = "minecraft:waxed_exposed_chiseled_copper"
 
-    String WAXED_EXPOSED_COPPER = "minecraft:waxed_exposed_copper";
+        const val WAXED_EXPOSED_COPPER: String = "minecraft:waxed_exposed_copper"
 
-    String WAXED_EXPOSED_COPPER_BULB = "minecraft:waxed_exposed_copper_bulb";
+        const val WAXED_EXPOSED_COPPER_BULB: String = "minecraft:waxed_exposed_copper_bulb"
 
-    String WAXED_EXPOSED_COPPER_DOOR = "minecraft:waxed_exposed_copper_door";
+        const val WAXED_EXPOSED_COPPER_DOOR: String = "minecraft:waxed_exposed_copper_door"
 
-    String WAXED_EXPOSED_COPPER_GRATE = "minecraft:waxed_exposed_copper_grate";
+        const val WAXED_EXPOSED_COPPER_GRATE: String = "minecraft:waxed_exposed_copper_grate"
 
-    String WAXED_EXPOSED_COPPER_TRAPDOOR = "minecraft:waxed_exposed_copper_trapdoor";
+        const val WAXED_EXPOSED_COPPER_TRAPDOOR: String = "minecraft:waxed_exposed_copper_trapdoor"
 
-    String WAXED_EXPOSED_CUT_COPPER = "minecraft:waxed_exposed_cut_copper";
+        const val WAXED_EXPOSED_CUT_COPPER: String = "minecraft:waxed_exposed_cut_copper"
 
-    String WAXED_EXPOSED_CUT_COPPER_SLAB = "minecraft:waxed_exposed_cut_copper_slab";
+        const val WAXED_EXPOSED_CUT_COPPER_SLAB: String = "minecraft:waxed_exposed_cut_copper_slab"
 
-    String WAXED_EXPOSED_CUT_COPPER_STAIRS = "minecraft:waxed_exposed_cut_copper_stairs";
+        const val WAXED_EXPOSED_CUT_COPPER_STAIRS: String = "minecraft:waxed_exposed_cut_copper_stairs"
 
-    String WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB = "minecraft:waxed_exposed_double_cut_copper_slab";
+        const val WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB: String = "minecraft:waxed_exposed_double_cut_copper_slab"
 
-    String WAXED_OXIDIZED_CHISELED_COPPER = "minecraft:waxed_oxidized_chiseled_copper";
+        const val WAXED_OXIDIZED_CHISELED_COPPER: String = "minecraft:waxed_oxidized_chiseled_copper"
 
-    String WAXED_OXIDIZED_COPPER = "minecraft:waxed_oxidized_copper";
+        const val WAXED_OXIDIZED_COPPER: String = "minecraft:waxed_oxidized_copper"
 
-    String WAXED_OXIDIZED_COPPER_BULB = "minecraft:waxed_oxidized_copper_bulb";
+        const val WAXED_OXIDIZED_COPPER_BULB: String = "minecraft:waxed_oxidized_copper_bulb"
 
-    String WAXED_OXIDIZED_COPPER_DOOR = "minecraft:waxed_oxidized_copper_door";
+        const val WAXED_OXIDIZED_COPPER_DOOR: String = "minecraft:waxed_oxidized_copper_door"
 
-    String WAXED_OXIDIZED_COPPER_GRATE = "minecraft:waxed_oxidized_copper_grate";
+        const val WAXED_OXIDIZED_COPPER_GRATE: String = "minecraft:waxed_oxidized_copper_grate"
 
-    String WAXED_OXIDIZED_COPPER_TRAPDOOR = "minecraft:waxed_oxidized_copper_trapdoor";
+        const val WAXED_OXIDIZED_COPPER_TRAPDOOR: String = "minecraft:waxed_oxidized_copper_trapdoor"
 
-    String WAXED_OXIDIZED_CUT_COPPER = "minecraft:waxed_oxidized_cut_copper";
+        const val WAXED_OXIDIZED_CUT_COPPER: String = "minecraft:waxed_oxidized_cut_copper"
 
-    String WAXED_OXIDIZED_CUT_COPPER_SLAB = "minecraft:waxed_oxidized_cut_copper_slab";
+        const val WAXED_OXIDIZED_CUT_COPPER_SLAB: String = "minecraft:waxed_oxidized_cut_copper_slab"
 
-    String WAXED_OXIDIZED_CUT_COPPER_STAIRS = "minecraft:waxed_oxidized_cut_copper_stairs";
+        const val WAXED_OXIDIZED_CUT_COPPER_STAIRS: String = "minecraft:waxed_oxidized_cut_copper_stairs"
 
-    String WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB = "minecraft:waxed_oxidized_double_cut_copper_slab";
+        const val WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB: String = "minecraft:waxed_oxidized_double_cut_copper_slab"
 
-    String WAXED_WEATHERED_CHISELED_COPPER = "minecraft:waxed_weathered_chiseled_copper";
+        const val WAXED_WEATHERED_CHISELED_COPPER: String = "minecraft:waxed_weathered_chiseled_copper"
 
-    String WAXED_WEATHERED_COPPER = "minecraft:waxed_weathered_copper";
+        const val WAXED_WEATHERED_COPPER: String = "minecraft:waxed_weathered_copper"
 
-    String WAXED_WEATHERED_COPPER_BULB = "minecraft:waxed_weathered_copper_bulb";
+        const val WAXED_WEATHERED_COPPER_BULB: String = "minecraft:waxed_weathered_copper_bulb"
 
-    String WAXED_WEATHERED_COPPER_DOOR = "minecraft:waxed_weathered_copper_door";
+        const val WAXED_WEATHERED_COPPER_DOOR: String = "minecraft:waxed_weathered_copper_door"
 
-    String WAXED_WEATHERED_COPPER_GRATE = "minecraft:waxed_weathered_copper_grate";
+        const val WAXED_WEATHERED_COPPER_GRATE: String = "minecraft:waxed_weathered_copper_grate"
 
-    String WAXED_WEATHERED_COPPER_TRAPDOOR = "minecraft:waxed_weathered_copper_trapdoor";
+        const val WAXED_WEATHERED_COPPER_TRAPDOOR: String = "minecraft:waxed_weathered_copper_trapdoor"
 
-    String WAXED_WEATHERED_CUT_COPPER = "minecraft:waxed_weathered_cut_copper";
+        const val WAXED_WEATHERED_CUT_COPPER: String = "minecraft:waxed_weathered_cut_copper"
 
-    String WAXED_WEATHERED_CUT_COPPER_SLAB = "minecraft:waxed_weathered_cut_copper_slab";
+        const val WAXED_WEATHERED_CUT_COPPER_SLAB: String = "minecraft:waxed_weathered_cut_copper_slab"
 
-    String WAXED_WEATHERED_CUT_COPPER_STAIRS = "minecraft:waxed_weathered_cut_copper_stairs";
+        const val WAXED_WEATHERED_CUT_COPPER_STAIRS: String = "minecraft:waxed_weathered_cut_copper_stairs"
 
-    String WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB = "minecraft:waxed_weathered_double_cut_copper_slab";
+        const val WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB: String = "minecraft:waxed_weathered_double_cut_copper_slab"
 
-    String WEATHERED_CHISELED_COPPER = "minecraft:weathered_chiseled_copper";
+        const val WEATHERED_CHISELED_COPPER: String = "minecraft:weathered_chiseled_copper"
 
-    String WEATHERED_COPPER = "minecraft:weathered_copper";
+        const val WEATHERED_COPPER: String = "minecraft:weathered_copper"
 
-    String WEATHERED_COPPER_BULB = "minecraft:weathered_copper_bulb";
+        const val WEATHERED_COPPER_BULB: String = "minecraft:weathered_copper_bulb"
 
-    String WEATHERED_COPPER_DOOR = "minecraft:weathered_copper_door";
+        const val WEATHERED_COPPER_DOOR: String = "minecraft:weathered_copper_door"
 
-    String WEATHERED_COPPER_GRATE = "minecraft:weathered_copper_grate";
+        const val WEATHERED_COPPER_GRATE: String = "minecraft:weathered_copper_grate"
 
-    String WEATHERED_COPPER_TRAPDOOR = "minecraft:weathered_copper_trapdoor";
+        const val WEATHERED_COPPER_TRAPDOOR: String = "minecraft:weathered_copper_trapdoor"
 
-    String WEATHERED_CUT_COPPER = "minecraft:weathered_cut_copper";
+        const val WEATHERED_CUT_COPPER: String = "minecraft:weathered_cut_copper"
 
-    String WEATHERED_CUT_COPPER_SLAB = "minecraft:weathered_cut_copper_slab";
+        const val WEATHERED_CUT_COPPER_SLAB: String = "minecraft:weathered_cut_copper_slab"
 
-    String WEATHERED_CUT_COPPER_STAIRS = "minecraft:weathered_cut_copper_stairs";
+        const val WEATHERED_CUT_COPPER_STAIRS: String = "minecraft:weathered_cut_copper_stairs"
 
-    String WEATHERED_DOUBLE_CUT_COPPER_SLAB = "minecraft:weathered_double_cut_copper_slab";
+        const val WEATHERED_DOUBLE_CUT_COPPER_SLAB: String = "minecraft:weathered_double_cut_copper_slab"
 
-    String WEB = "minecraft:web";
+        const val WEB: String = "minecraft:web"
 
-    String WEEPING_VINES = "minecraft:weeping_vines";
+        const val WEEPING_VINES: String = "minecraft:weeping_vines"
 
-    String WET_SPONGE = "minecraft:wet_sponge";
+        const val WET_SPONGE: String = "minecraft:wet_sponge"
 
-    String WHEAT = "minecraft:wheat";
+        const val WHEAT: String = "minecraft:wheat"
 
-    String WHITE_CANDLE = "minecraft:white_candle";
+        const val WHITE_CANDLE: String = "minecraft:white_candle"
 
-    String WHITE_CANDLE_CAKE = "minecraft:white_candle_cake";
+        const val WHITE_CANDLE_CAKE: String = "minecraft:white_candle_cake"
 
-    String WHITE_CARPET = "minecraft:white_carpet";
+        const val WHITE_CARPET: String = "minecraft:white_carpet"
 
-    String WHITE_CONCRETE = "minecraft:white_concrete";
+        const val WHITE_CONCRETE: String = "minecraft:white_concrete"
 
-    String WHITE_CONCRETE_POWDER = "minecraft:white_concrete_powder";
+        const val WHITE_CONCRETE_POWDER: String = "minecraft:white_concrete_powder"
 
-    String WHITE_GLAZED_TERRACOTTA = "minecraft:white_glazed_terracotta";
+        const val WHITE_GLAZED_TERRACOTTA: String = "minecraft:white_glazed_terracotta"
 
-    String WHITE_SHULKER_BOX = "minecraft:white_shulker_box";
+        const val WHITE_SHULKER_BOX: String = "minecraft:white_shulker_box"
 
-    String WHITE_STAINED_GLASS = "minecraft:white_stained_glass";
+        const val WHITE_STAINED_GLASS: String = "minecraft:white_stained_glass"
 
-    String WHITE_STAINED_GLASS_PANE = "minecraft:white_stained_glass_pane";
+        const val WHITE_STAINED_GLASS_PANE: String = "minecraft:white_stained_glass_pane"
 
-    String WHITE_TERRACOTTA = "minecraft:white_terracotta";
+        const val WHITE_TERRACOTTA: String = "minecraft:white_terracotta"
 
-    String WHITE_TULIP = "minecraft:white_tulip";
+        const val WHITE_TULIP: String = "minecraft:white_tulip"
 
-    String WHITE_WOOL = "minecraft:white_wool";
+        const val WHITE_WOOL: String = "minecraft:white_wool"
 
-    String WITHER_ROSE = "minecraft:wither_rose";
+        const val WITHER_ROSE: String = "minecraft:wither_rose"
 
-    String WITHER_SKELETON_SKULL = "minecraft:wither_skeleton_skull";
+        const val WITHER_SKELETON_SKULL: String = "minecraft:wither_skeleton_skull"
 
-    String WOODEN_BUTTON = "minecraft:wooden_button";
+        const val WOODEN_BUTTON: String = "minecraft:wooden_button"
 
-    String WOODEN_DOOR = "minecraft:wooden_door";
+        const val WOODEN_DOOR: String = "minecraft:wooden_door"
 
-    String WOODEN_PRESSURE_PLATE = "minecraft:wooden_pressure_plate";
+        const val WOODEN_PRESSURE_PLATE: String = "minecraft:wooden_pressure_plate"
 
-    String YELLOW_CANDLE = "minecraft:yellow_candle";
+        const val YELLOW_CANDLE: String = "minecraft:yellow_candle"
 
-    String YELLOW_CANDLE_CAKE = "minecraft:yellow_candle_cake";
+        const val YELLOW_CANDLE_CAKE: String = "minecraft:yellow_candle_cake"
 
-    String YELLOW_CARPET = "minecraft:yellow_carpet";
+        const val YELLOW_CARPET: String = "minecraft:yellow_carpet"
 
-    String YELLOW_CONCRETE = "minecraft:yellow_concrete";
+        const val YELLOW_CONCRETE: String = "minecraft:yellow_concrete"
 
-    String YELLOW_CONCRETE_POWDER = "minecraft:yellow_concrete_powder";
+        const val YELLOW_CONCRETE_POWDER: String = "minecraft:yellow_concrete_powder"
 
-    String YELLOW_GLAZED_TERRACOTTA = "minecraft:yellow_glazed_terracotta";
+        const val YELLOW_GLAZED_TERRACOTTA: String = "minecraft:yellow_glazed_terracotta"
 
-    String YELLOW_SHULKER_BOX = "minecraft:yellow_shulker_box";
+        const val YELLOW_SHULKER_BOX: String = "minecraft:yellow_shulker_box"
 
-    String YELLOW_STAINED_GLASS = "minecraft:yellow_stained_glass";
+        const val YELLOW_STAINED_GLASS: String = "minecraft:yellow_stained_glass"
 
-    String YELLOW_STAINED_GLASS_PANE = "minecraft:yellow_stained_glass_pane";
+        const val YELLOW_STAINED_GLASS_PANE: String = "minecraft:yellow_stained_glass_pane"
 
-    String YELLOW_TERRACOTTA = "minecraft:yellow_terracotta";
+        const val YELLOW_TERRACOTTA: String = "minecraft:yellow_terracotta"
 
-    String YELLOW_WOOL = "minecraft:yellow_wool";
+        const val YELLOW_WOOL: String = "minecraft:yellow_wool"
 
-    String ZOMBIE_HEAD = "minecraft:zombie_head";
+        const val ZOMBIE_HEAD: String = "minecraft:zombie_head"
+    }
 }

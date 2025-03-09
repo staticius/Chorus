@@ -145,9 +145,9 @@ class Binary {
                         val y: Float
                         val z: Float
                         if (applyData is Vector3) {
-                            x = applyData.south.toFloat()
-                            y = applyData.up.toFloat()
-                            z = applyData.west.toFloat()
+                            x = applyData.x.toFloat()
+                            y = applyData.y.toFloat()
+                            z = applyData.z.toFloat()
                         } else {
                             val v3data = applyData as Vector3f
                             x = v3data.south

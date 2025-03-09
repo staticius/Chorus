@@ -1,22 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockChiseledResinBricks extends BlockResinBricks {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHISELED_RESIN_BRICKS);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockChiseledResinBricks() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockChiseledResinBricks(BlockState blockstate) {
-        super(blockstate);
+class BlockChiseledResinBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockResinBricks(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHISELED_RESIN_BRICKS)
+            get() = Companion.field
     }
 }

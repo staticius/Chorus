@@ -1,176 +1,177 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.AdventureSettings;
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.event.block.BlockRedstoneEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.vibration.VibrationEvent;
-import cn.nukkit.level.vibration.VibrationType;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.network.protocol.LevelSoundEventPacket;
-import cn.nukkit.utils.Faceable;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.level.*
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.utils.Faceable
+import cn.nukkit.utils.RedstoneComponent
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 /**
  * @author CreeperFace
  * @since 27. 11. 2016
  */
+abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneComponent, Faceable {
+    override val resistance: Double
+        get() = 2.5
 
-public abstract class BlockButton extends BlockFlowable implements RedstoneComponent, Faceable {
-    public BlockButton(BlockState meta) {
-        super(meta);
+    override val hardness: Double
+        get() = 0.5
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    @Override
-    public double getResistance() {
-        return 2.5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (!BlockLever.isSupportValid(target, face)) {
-            return false;
+            return false
         }
 
-        setBlockFace(face);
-        this.level.setBlock(block.position, this, true, true);
-        return true;
+        blockFace = face
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(player != null) {
-            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED))
-                return false;
-            Item itemInHand = player.getInventory().getItemInHand();
-            if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull())) return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (player != null) {
+            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+            val itemInHand = player.getInventory().itemInHand
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) return false
         }
-        if (this.isActivated()) {
-            return false;
-        }
-
-        this.level.scheduleUpdate(this, 30);
-
-        setActivated(true, player);
-        this.level.setBlock(this.position, this, true, false);
-        this.level.addLevelSoundEvent(this.position.add(0.5, 0.5, 0.5), LevelSoundEventPacket.SOUND_POWER_ON, this.getBlockState().blockStateHash());
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
-            this.level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, 0, 15));
-
-            updateAroundRedstone();
-            RedstoneComponent.updateAroundRedstone(getSide(getFacing().getOpposite()), getFacing());
+        if (this.isActivated) {
+            return false
         }
 
-        return true;
+        level.scheduleUpdate(this, 30)
+
+        setActivated(true, player)
+        level.setBlock(this.position, this, true, false)
+        level.addLevelSoundEvent(
+            position.add(0.5, 0.5, 0.5)!!, LevelSoundEventPacket.SOUND_POWER_ON,
+            blockState!!.blockStateHash()
+        )
+        if (level.server.settings.levelSettings().enableRedstone()) {
+            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
+
+            updateAroundRedstone()
+            updateAroundRedstone(getSide(facing!!.getOpposite()!!)!!, facing)
+        }
+
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            BlockFace thisFace = getFacing();
-            BlockFace touchingFace = thisFace.getOpposite();
-            Block side = this.getSide(touchingFace);
+            val thisFace = facing
+            val touchingFace = thisFace!!.getOpposite()
+            val side = this.getSide(touchingFace!!)
             if (!BlockLever.isSupportValid(side, thisFace)) {
-                this.level.useBreakOn(this.position, Item.get(Item.WOODEN_PICKAXE));
-                return Level.BLOCK_UPDATE_NORMAL;
+                level.useBreakOn(this.position, Item.get(Item.WOODEN_PICKAXE))
+                return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (this.isActivated()) {
-                setActivated(false);
-                this.level.setBlock(this.position, this, true, false);
-                this.level.addLevelSoundEvent(this.position.add(0.5, 0.5, 0.5), LevelSoundEventPacket.SOUND_POWER_OFF, this.getBlockState().blockStateHash());
+            if (this.isActivated) {
+                isActivated = false
+                level.setBlock(this.position, this, true, false)
+                level.addLevelSoundEvent(
+                    position.add(0.5, 0.5, 0.5)!!, LevelSoundEventPacket.SOUND_POWER_OFF,
+                    blockState!!.blockStateHash()
+                )
 
-                if (this.level.server.settings.levelSettings().enableRedstone()) {
-                    this.level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, 15, 0));
+                if (level.server.settings.levelSettings().enableRedstone()) {
+                    level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
 
-                    updateAroundRedstone();
-                    RedstoneComponent.updateAroundRedstone(getSide(getFacing().getOpposite()), getFacing());
+                    updateAroundRedstone()
+                    updateAroundRedstone(getSide(facing!!.getOpposite()!!)!!, facing)
                 }
             }
-            return Level.BLOCK_UPDATE_SCHEDULED;
+            return Level.BLOCK_UPDATE_SCHEDULED
         }
 
-        return 0;
+        return 0
     }
 
-    public boolean isActivated() {
-        return getPropertyValue(CommonBlockProperties.BUTTON_PRESSED_BIT);
-    }
+    var isActivated: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.BUTTON_PRESSED_BIT)
+        set(activated) {
+            setActivated(activated, null)
+        }
 
-    public void setActivated(boolean activated) {
-        setActivated(activated, null);
-    }
-
-    public void setActivated(boolean activated, @Nullable Player player) {
-        setPropertyValue(CommonBlockProperties.BUTTON_PRESSED_BIT, activated);
-        var pos = this.add(0.5, 0.5, 0.5);
+    fun setActivated(activated: Boolean, player: Player?) {
+        setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.BUTTON_PRESSED_BIT, activated)
+        val pos = this.add(0.5, 0.5, 0.5)
         if (activated) {
-            this.level.vibrationManager.callVibrationEvent(new VibrationEvent(player != null ? player : this, pos.position, VibrationType.BLOCK_ACTIVATE));
+            level.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    player
+                        ?: this, pos.position, VibrationType.BLOCK_ACTIVATE
+                )
+            )
         } else {
-            this.level.vibrationManager.callVibrationEvent(new VibrationEvent(player != null ? player : this, pos.position, VibrationType.BLOCK_DEACTIVATE));
+            level.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    player
+                        ?: this, pos.position, VibrationType.BLOCK_DEACTIVATE
+                )
+            )
         }
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
+    override val isPowerSource: Boolean
+        get() = true
+
+    override fun getWeakPower(side: BlockFace?): Int {
+        return if (isActivated) 15 else 0
     }
 
-    @Override
-    public int getWeakPower(BlockFace side) {
-        return isActivated() ? 15 : 0;
+    override fun getStrongPower(side: BlockFace?): Int {
+        return if (!isActivated) 0 else (if (facing == side) 15 else 0)
     }
 
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return !isActivated() ? 0 : (getFacing() == side ? 15 : 0);
-    }
+    val facing: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
 
-    public BlockFace getFacing() {
-        return BlockFace.fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index);
-    }
-
-    @Override
-    public boolean onBreak(Item item) {
-        if (isActivated()) {
-            this.level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, 15, 0));
+    override fun onBreak(item: Item?): Boolean {
+        if (isActivated) {
+            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
         }
 
-        return super.onBreak(item);
+        return super.onBreak(item)
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return getFacing();
-    }
+    override var blockFace: BlockFace?
+        get() = facing
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
 }

@@ -1,82 +1,53 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
-public class BlockGlowingobsidian extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GLOWINGOBSIDIAN);
+class BlockGlowingobsidian @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Glowing Obsidian"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val hardness: Double
+        get() = 50.0
+
+    override val resistance: Double
+        get() = 6000.0
+
+    override val lightLevel: Int
+        get() = 12
+
+    override fun toItem(): Item? {
+        return ItemBlock(get(OBSIDIAN))
     }
 
-    public BlockGlowingobsidian() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_DIAMOND
 
-    public BlockGlowingobsidian(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Glowing Obsidian";
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public double getHardness() {
-        return 50;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6000;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 12;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.OBSIDIAN));
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_DIAMOND;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() > ItemTool.TIER_DIAMOND) {
-            return new Item[] { toItem() };
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isPickaxe && item.tier > ItemTool.TIER_DIAMOND) {
+            arrayOf(toItem())
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public boolean canBePushed() {
-        return false;
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public  boolean canBePulled() {
-        return false;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(GLOWINGOBSIDIAN)
+            get() = Companion.field
     }
 }

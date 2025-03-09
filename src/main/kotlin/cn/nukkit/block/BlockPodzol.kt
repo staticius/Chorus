@@ -1,56 +1,51 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.level.Sound
+import cn.nukkit.math.BlockFace
 
 /**
  * @author xtypr
  * @since 2015/11/22
  */
-public class BlockPodzol extends BlockDirt {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PODZOL);
+class BlockPodzol : BlockDirt {
+    constructor() : super(Companion.properties.defaultState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Podzol"
+
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    public BlockPodzol() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPodzol(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Podzol";
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (!this.up().canBeReplaced()) {
-            return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (!up()!!.canBeReplaced()) {
+            return false
         }
 
-        if (item.isShovel()) {
-            item.useOn(this);
-            this.level.setBlock(this.position, Block.get(BlockID.GRASS_PATH));
+        if (item.isShovel) {
+            item.useOn(this)
+            level.setBlock(this.position, get(BlockID.GRASS_PATH))
             if (player != null) {
-                player.level.addSound(player.position, Sound.USE_GRASS);
+                player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PODZOL)
+            get() = Companion.field
+    }
 }

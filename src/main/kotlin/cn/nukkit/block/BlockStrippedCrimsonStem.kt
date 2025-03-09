@@ -1,26 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockStrippedCrimsonStem extends BlockStemStripped {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STRIPPED_CRIMSON_STEM, CommonBlockProperties.PILLAR_AXIS);
+class BlockStrippedCrimsonStem @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockStemStripped(blockstate) {
+    override val name: String
+        get() = "Stripped Crimson Stem"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockStrippedCrimsonStem() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockStrippedCrimsonStem(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Stripped Crimson Stem";
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STRIPPED_CRIMSON_STEM, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

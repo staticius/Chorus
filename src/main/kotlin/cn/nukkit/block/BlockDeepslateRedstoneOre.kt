@@ -1,40 +1,23 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+open class BlockDeepslateRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockRedstoneOre(blockstate) {
+    override val name: String
+        get() = "Deepslate Redstone Ore"
 
-public class BlockDeepslateRedstoneOre extends BlockRedstoneOre {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DEEPSLATE_REDSTONE_ORE);
+    override val hardness: Double
+        get() = 4.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getLitBlock(): Block {
+        return BlockLitDeepslateRedstoneOre()
     }
 
-    public BlockDeepslateRedstoneOre() {
-        this(PROPERTIES.getDefaultState());
+    override fun getUnlitBlock(): Block {
+        return BlockDeepslateRedstoneOre()
     }
 
-    public BlockDeepslateRedstoneOre(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Deepslate Redstone Ore";
-    }
-
-    @Override
-    public double getHardness() {
-        return 4.5;
-    }
-
-    @Override
-    public Block getLitBlock() {
-        return new BlockLitDeepslateRedstoneOre();
-    }
-
-    @Override
-    public Block getUnlitBlock() {
-        return new BlockDeepslateRedstoneOre();
+    companion object {
+        val properties: BlockProperties = BlockProperties(DEEPSLATE_REDSTONE_ORE)
+            get() = Companion.field
     }
 }

@@ -1,90 +1,69 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityNetherReactor;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.ItemID
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
 
 /**
  * @author good777LUCKY
  */
-public class BlockNetherreactor extends BlockSolid implements BlockEntityHolder<BlockEntityNetherReactor> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(NETHERREACTOR);
+class BlockNetherreactor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), BlockEntityHolder<BlockEntityNetherReactor?> {
+    override val blockEntityType: String
+        get() = BlockEntity.NETHER_REACTOR
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val blockEntityClass: Class<out Any>
+        get() = BlockEntityNetherReactor::class.java
 
-    public BlockNetherreactor() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Nether Reactor Core"
 
-    public BlockNetherreactor(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val hardness: Double
+        get() = 10.0
 
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.NETHER_REACTOR;
-    }
+    override val resistance: Double
+        get() = 6.0
 
-    @Override
-    @NotNull public Class<? extends BlockEntityNetherReactor> getBlockEntityClass() {
-        return BlockEntityNetherReactor.class;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Nether Reactor Core";
-    }
-    
-    @Override
-    public double getHardness() {
-        return 10;
-    }
-    
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-    
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-    
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe()) {
-            return new Item[]{
-                    Item.get(ItemID.DIAMOND, 0, 3),
-                    Item.get(ItemID.IRON_INGOT, 0, 6)
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isPickaxe) {
+            arrayOf(
+                get(ItemID.DIAMOND, 0, 3),
+                get(ItemID.IRON_INGOT, 0, 6)
+            )
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        return BlockEntityHolder.setBlockAndCreateEntity(this) != null;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        return BlockEntityHolder.setBlockAndCreateEntity(this) != null
     }
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.NETHERREACTOR)
+            get() = Companion.field
+    }
 }

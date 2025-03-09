@@ -32,12 +32,12 @@ class ItemEndCrystal @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val chunk = level.getChunk(block.x.toInt() shr 4, block.z.toInt() shr 4)
         val entities = level.getNearbyEntities(
             SimpleAxisAlignedBB(
-                target.position.south,
-                target.position.up,
-                target.position.west,
-                target.position.south + 1,
-                target.position.up + 2,
-                target.position.west + 1
+                target.position.x,
+                target.position.y,
+                target.position.z,
+                target.position.x + 1,
+                target.position.y + 2,
+                target.position.z + 1
             )
         )
         val up = target.up()
@@ -49,9 +49,9 @@ class ItemEndCrystal @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
-                    .add(FloatTag(target.position.south + 0.5))
-                    .add(FloatTag(up.position.up))
-                    .add(FloatTag(target.position.west + 0.5))
+                    .add(FloatTag(target.position.x + 0.5))
+                    .add(FloatTag(up.position.y))
+                    .add(FloatTag(target.position.z + 0.5))
             )
             .putList(
                 "Motion", ListTag<FloatTag>()

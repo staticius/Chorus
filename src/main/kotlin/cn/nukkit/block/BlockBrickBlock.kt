@@ -1,37 +1,20 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockBrickBlock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BRICK_BLOCK);
+class BlockBrickBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val hardness: Double
+        get() = 2.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 6.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BRICK_BLOCK)
+            get() = Companion.field
     }
-
-    public BlockBrickBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockBrickBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
 }

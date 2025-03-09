@@ -1,195 +1,192 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemSugarCane;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.tags.BlockTags;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
 
-import java.util.Objects;
+class BlockReeds @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockstate) {
+    override val name: String
+        get() = "Reeds"
 
-import static cn.nukkit.block.property.CommonBlockProperties.AGE_16;
-
-public class BlockReeds extends BlockFlowable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(REEDS, AGE_16);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemSugarCane()
     }
 
-    public BlockReeds() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockReeds(BlockState blockstate) {
-        super(blockstate);
-    }
+    var age: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_16)
+        set(age) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_16, age)
+        }
 
-    @Override
-    public String getName() {
-        return "Reeds";
-    }
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) { //Bonemeal
+            var count = 1
 
-    @Override
-    public Item toItem() {
-        return new ItemSugarCane();
-    }
+            for (i in 1..2) {
+                val id = level.getBlockIdAt(
+                    position.floorX,
+                    position.floorY - i, position.floorZ
+                )
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    public int getAge() {
-        return getPropertyValue(AGE_16);
-    }
-
-    public void setAge(int age) {
-        setPropertyValue(AGE_16, age);
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) { //Bonemeal
-            int count = 1;
-
-            for (int i = 1; i <= 2; i++) {
-                String id = this.level.getBlockIdAt(this.position.getFloorX(), this.position.getFloorY() - i, this.position.getFloorZ());
-
-                if (Objects.equals(id, REEDS)) {
-                    count++;
+                if (id == BlockID.REEDS) {
+                    count++
                 }
             }
 
             if (count < 3) {
-                boolean success = false;
-                int toGrow = 3 - count;
+                var success = false
+                val toGrow = 3 - count
 
-                for (int i = 1; i <= toGrow; i++) {
-                    Block block = this.up(i);
-                    if (block.isAir()) {
-                        BlockGrowEvent ev = new BlockGrowEvent(block, Block.get(BlockID.REEDS));
-                        Server.getInstance().pluginManager.callEvent(ev);
+                for (i in 1..toGrow) {
+                    val block = this.up(i)
+                    if (block!!.isAir) {
+                        val ev: BlockGrowEvent = BlockGrowEvent(block, get(BlockID.REEDS))
+                        instance!!.pluginManager.callEvent(ev)
 
-                        if (!ev.isCancelled()) {
-                            this.level.setBlock(block.position, ev.newState, true);
-                            success = true;
+                        if (!ev.isCancelled) {
+                            level.setBlock(block.position, ev.newState, true)
+                            success = true
                         }
-                    } else if (!block.getId().equals(REEDS)) {
-                        break;
+                    } else if (block.id != BlockID.REEDS) {
+                        break
                     }
                 }
 
                 if (success) {
-                    if (player != null && (player.gamemode & 0x01) == 0) {
-                        item.count--;
+                    if (player != null && (player.gamemode and 0x01) == 0) {
+                        item.count--
                     }
 
-                    this.level.addParticle(new BoneMealParticle(this.position));
+                    level.addParticle(BoneMealParticle(this.position))
                 }
             }
 
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
-        Level level = level;
+    override fun onUpdate(type: Int): Int {
+        var level = level
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            level.scheduleUpdate(this, 0);
-            return type;
+            level.scheduleUpdate(this, 0)
+            return type
         }
 
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (!isSupportValid()) {
-                level.useBreakOn(this.position);
+            if (!isSupportValid) {
+                level.useBreakOn(this.position)
             }
-            return type;
+            return type
         }
 
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (!isSupportValid()) {
-                level.scheduleUpdate(this, 0);
-                return type;
+            if (!isSupportValid) {
+                level.scheduleUpdate(this, 0)
+                return type
             }
-            if (getAge() < 15) {
-                setAge(this.getAge() + 1);
-                level.setBlock(this.position, this, false);
-                return type;
+            if (age < 15) {
+                age = age + 1
+                level.setBlock(this.position, this, false)
+                return type
             }
-            Block up = up();
-            if (!up.isAir()) {
-                return type;
+            val up = up()
+            if (!up!!.isAir) {
+                return type
             }
 
-            int height = 0;
-            for (Block current = this; height < 3 && current.getId().equals(REEDS); height++) {
-                current = current.down();
+            var height = 0
+            var current: Block? = this
+            while (height < 3 && current!!.id == BlockID.REEDS) {
+                current = current.down()
+                height++
             }
             if (height >= 3) {
-                return type;
+                return type
             }
 
-            BlockGrowEvent ev = new BlockGrowEvent(up, Block.get(BlockID.REEDS));
-            Server.getInstance().pluginManager.callEvent(ev);
+            val ev: BlockGrowEvent = BlockGrowEvent(up, get(BlockID.REEDS))
+            instance!!.pluginManager.callEvent(ev)
 
-            if (ev.isCancelled()) {
-                return type;
+            if (ev.isCancelled) {
+                return type
             }
 
-            if (!level.setBlock(up.position, Block.get(BlockID.REEDS), false)) {
-                return type;
+            if (!level.setBlock(up.position, get(BlockID.REEDS), false)) {
+                return type
             }
 
-            setAge(0);
-            level.setBlock(this.position, this, false);
-            return type;
+            age = 0
+            level.setBlock(this.position, this, false)
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (!block.isAir()) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!block.isAir) {
+            return false
         }
-        if (isSupportValid()) {
-            this.level.setBlock(block.position, this, true);
-            return true;
+        if (isSupportValid) {
+            level.setBlock(block.position, this, true)
+            return true
         }
-        return false;
+        return false
     }
 
-    private boolean isSupportValid() {
-        Block down = this.down();
-        String downId = down.getId();
-        if (downId.equals(REEDS)) {
-            return true;
-        }
-        if (!down.is(BlockTags.DIRT) && !down.is(BlockTags.SAND)) {
-            return false;
-        }
-        for (BlockFace face : BlockFace.Plane.HORIZONTAL) {
-            Block possibleWater = down.getSide(face);
-            if (possibleWater instanceof BlockFlowingWater
-                    || possibleWater instanceof BlockFrostedIce
-                    || possibleWater.getLevelBlockAtLayer(1) instanceof BlockFlowingWater) {
-                return true;
+    private val isSupportValid: Boolean
+        get() {
+            val down = this.down()
+            val downId = down!!.id
+            if (downId == BlockID.REEDS) {
+                return true
             }
+            if (!down.`is`(BlockTags.DIRT) && !down.`is`(BlockTags.SAND)) {
+                return false
+            }
+            for (face in BlockFace.Plane.HORIZONTAL) {
+                val possibleWater = down.getSide(face)
+                if (possibleWater is BlockFlowingWater
+                    || possibleWater is BlockFrostedIce
+                    || possibleWater!!.getLevelBlockAtLayer(1) is BlockFlowingWater
+                ) {
+                    return true
+                }
+            }
+            return false
         }
-        return false;
-    }
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    override val isFertilizable: Boolean
+        get() = true
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.REEDS, CommonBlockProperties.AGE_16)
+            get() = Companion.field
     }
 }

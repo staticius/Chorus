@@ -1,25 +1,13 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
 
-import org.jetbrains.annotations.NotNull;
+class BlockBambooFence @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFence(blockstate) {
+    override val name: String
+        get() = "Bamboo Fence"
 
-public class BlockBambooFence extends BlockFence {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_FENCE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockBambooFence() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockBambooFence(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public String getName() {
-        return "Bamboo Fence";
+    companion object {
+        val properties: BlockProperties = BlockProperties(BAMBOO_FENCE)
+            get() = Companion.field
     }
 }

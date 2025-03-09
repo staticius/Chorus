@@ -1,329 +1,330 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.AdventureSettings;
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.MinecraftCardinalDirection;
-import cn.nukkit.event.block.BlockRedstoneEvent;
-import cn.nukkit.event.block.DoorToggleEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.Transform;
-import cn.nukkit.level.Sound;
-import cn.nukkit.level.vibration.VibrationEvent;
-import cn.nukkit.level.vibration.VibrationType;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import cn.nukkit.utils.RedstoneComponent;
-import com.google.common.collect.Sets;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.Set;
-
-import static cn.nukkit.block.property.CommonBlockProperties.IN_WALL_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.OPEN_BIT;
+import cn.nukkit.AdventureSettings
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.MinecraftCardinalDirection
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.event.block.BlockRedstoneEvent
+import cn.nukkit.event.block.DoorToggleEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.*
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.utils.Faceable
+import cn.nukkit.utils.RedstoneComponent
+import com.google.common.collect.Sets
 
 /**
  * @author xtypr
  * @since 2015/11/23
  */
-public class BlockFenceGate extends BlockTransparent implements RedstoneComponent, Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(FENCE_GATE, IN_WALL_BIT, MINECRAFT_CARDINAL_DIRECTION, OPEN_BIT);
+open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockState), RedstoneComponent, Faceable {
+    override val name: String
+        get() = "Oak Fence Gate"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 2.0
+
+    override val resistance: Double
+        get() = 15.0
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    // Contains a list of positions of fence gates, which have been opened by hand (by a player).
-    // It is used to detect on redstone update, if the gate should be closed if redstone is off on the update,
-    // previously the gate always closed, when placing an unpowered redstone at the gate, this fixes it
-    // and gives the vanilla behavior; no idea how to make this better :d
-    private static final Set<Locator> manualOverrides = Sets.newConcurrentHashSet();
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    public BlockFenceGate() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockFenceGate(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Oak Fence Gate";
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 15;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    private static final double[] offMinX = new double[2];
-    private static final double[] offMinZ = new double[2];
-    private static final double[] offMaxX = new double[2];
-    private static final double[] offMaxZ = new double[2];
-
-    static {
-        offMinX[0] = 0;
-        offMinZ[0] = 0.375;
-        offMaxX[0] = 1;
-        offMaxZ[0] = 0.625;
-
-        offMinX[1] = 0.375;
-        offMinZ[1] = 0;
-        offMaxX[1] = 0.625;
-        offMaxZ[1] = 1;
-    }
-
-    private int getOffsetIndex() {
-        return switch (getBlockFace()) {
-            case SOUTH, NORTH -> 0;
-            default -> 1;
-        };
-    }
-
-    @Override
-    public double getMinX() {
-        return this.position.south + offMinX[getOffsetIndex()];
-    }
-
-    @Override
-    public double getMinZ() {
-        return this.position.west + offMinZ[getOffsetIndex()];
-    }
-
-    @Override
-    public double getMaxX() {
-        return this.position.south + offMaxX[getOffsetIndex()];
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + offMaxZ[getOffsetIndex()];
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        BlockFace direction = player.getDirection();
-        setBlockFace(direction);
-
-        if (getSide(direction.rotateY()) instanceof BlockWallBase
-                || getSide(direction.rotateYCCW()) instanceof BlockWallBase) {
-            setInWall(true);
+    private val offsetIndex: Int
+        get() = when (blockFace) {
+            BlockFace.SOUTH, BlockFace.NORTH -> 0
+            else -> 1
         }
 
-        if (!this.level.setBlock(block.position, this, true, true)) {
-            return false;
+    override var minX: Double
+        get() = position.x + offMinX[offsetIndex]
+        set(minX) {
+            super.minX = minX
         }
 
-        if (level.server.settings.levelSettings().enableRedstone() && !this.isOpen() && this.isGettingPower()) {
-            this.setOpen(null, true);
+    override var minZ: Double
+        get() = position.z + offMinZ[offsetIndex]
+        set(minZ) {
+            super.minZ = minZ
         }
-        
-        return true;
+
+    override var maxX: Double
+        get() = position.x + offMaxX[offsetIndex]
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxZ: Double
+        get() = position.z + offMaxZ[offsetIndex]
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player
+    ): Boolean {
+        val direction = player.getDirection()
+        blockFace = direction
+
+        if (getSide(direction!!.rotateY()) is BlockWallBase
+            || getSide(direction.rotateYCCW()) is BlockWallBase
+        ) {
+            isInWall = true
+        }
+
+        if (!level.setBlock(block.position, this, true, true)) {
+            return false
+        }
+
+        if (level.server.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
+            this.setOpen(null, true)
+        }
+
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player != null) {
-            Item itemInHand = player.getInventory().getItemInHand();
-            if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull())) return false;
+            val itemInHand = player.getInventory().itemInHand
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) return false
         }
-        return toggle(player);
+        return toggle(player)
     }
 
-    public boolean toggle(Player player) {
-        if(player != null) {
-            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED))
-                return false;
-        }
-        return this.setOpen(player, !this.isOpen());
-    }
-
-    public boolean setOpen(@Nullable Player player, boolean open) {
-        if (open == this.isOpen()) {
-            return false;
-        }
-
-        DoorToggleEvent event = new DoorToggleEvent(this, player);
-        this.level.server.pluginManager.callEvent(event);
-
-        if (event.isCancelled()) {
-            return false;
-        }
-
-        player = event.player;
-
-        BlockFace direction;
-
-        BlockFace originDirection = getBlockFace();
-        
+    fun toggle(player: Player?): Boolean {
         if (player != null) {
-            double yaw = player.rotation.yaw;
-            double rotation = (yaw - 90) % 360;
+            if (!player.getAdventureSettings()!!.get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+        }
+        return this.setOpen(player, !this.isOpen)
+    }
+
+    fun setOpen(player: Player?, open: Boolean): Boolean {
+        var player = player
+        if (open == this.isOpen) {
+            return false
+        }
+
+        val event = DoorToggleEvent(this, player!!)
+        level.server.pluginManager.callEvent(event)
+
+        if (event.isCancelled) {
+            return false
+        }
+
+        player = event.player
+
+        val direction: BlockFace
+
+        val originDirection = blockFace
+
+        if (player != null) {
+            val yaw = player.rotation.yaw
+            var rotation = (yaw - 90) % 360
 
             if (rotation < 0) {
-                rotation += 360.0;
+                rotation += 360.0
             }
 
-            if (originDirection.getAxis() == BlockFace.Axis.Z) {
+            direction = if (originDirection!!.axis == BlockFace.Axis.Z) {
                 if (rotation >= 0 && rotation < 180) {
-                    direction = BlockFace.NORTH;
+                    BlockFace.NORTH
                 } else {
-                    direction = BlockFace.SOUTH;
+                    BlockFace.SOUTH
                 }
             } else {
                 if (rotation >= 90 && rotation < 270) {
-                    direction = BlockFace.EAST;
+                    BlockFace.EAST
                 } else {
-                    direction = BlockFace.WEST;
+                    BlockFace.WEST
                 }
             }
         } else {
-            if (originDirection.getAxis() == BlockFace.Axis.Z) {
-                direction = BlockFace.SOUTH;
+            direction = if (originDirection!!.axis == BlockFace.Axis.Z) {
+                BlockFace.SOUTH
             } else {
-                direction = BlockFace.WEST;
+                BlockFace.WEST
             }
         }
-        
-        setBlockFace(direction);
-        setPropertyValue(OPEN_BIT, !getPropertyValue(OPEN_BIT));
-        this.level.setBlock(this.position, this, false, false);
+
+        blockFace = direction
+        setPropertyValue<Boolean, BooleanPropertyType>(
+            CommonBlockProperties.OPEN_BIT, !getPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.OPEN_BIT
+            )
+        )
+        level.setBlock(this.position, this, false, false)
 
         if (player != null) {
-            this.setManualOverride(this.isGettingPower() || isOpen());
+            this.manualOverride = this.isGettingPower || this.isOpen
         }
 
-        playOpenCloseSound();
+        playOpenCloseSound()
 
-        var source = this.getVector3().add(0.5, 0.5, 0.5);
-        VibrationEvent vibrationEvent = open ? new VibrationEvent(player != null ? player : this, source, VibrationType.BLOCK_OPEN) : new VibrationEvent(player != null ? player : this, source, VibrationType.BLOCK_CLOSE);
-        this.level.vibrationManager.callVibrationEvent(vibrationEvent);
-        return true;
+        val source = vector3.add(0.5, 0.5, 0.5)
+        val vibrationEvent = if (open) VibrationEvent(
+            player ?: this,
+            source!!, VibrationType.BLOCK_OPEN
+        ) else VibrationEvent(
+            player ?: this,
+            source!!, VibrationType.BLOCK_CLOSE
+        )
+        level.vibrationManager.callVibrationEvent(vibrationEvent)
+        return true
     }
 
-    public void playOpenCloseSound() {
-        if (this.isOpen()) {
-            this.playOpenSound();
+    fun playOpenCloseSound() {
+        if (this.isOpen) {
+            this.playOpenSound()
         } else {
-            this.playCloseSound();
+            this.playCloseSound()
         }
     }
 
-    public void playOpenSound() {
-        level.addSound(this.position, Sound.RANDOM_DOOR_OPEN);
+    open fun playOpenSound() {
+        level.addSound(this.position, Sound.RANDOM_DOOR_OPEN)
     }
 
-    public void playCloseSound() {
-        level.addSound(this.position, Sound.RANDOM_DOOR_CLOSE);
+    open fun playCloseSound() {
+        level.addSound(this.position, Sound.RANDOM_DOOR_CLOSE)
     }
 
-    public boolean isOpen() {
-        return getPropertyValue(OPEN_BIT);
-    }
+    var isOpen: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT)
+        set(open) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
+        }
 
-    public void setOpen(boolean open) {
-        setPropertyValue(OPEN_BIT,open);
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            BlockFace face = getBlockFace();
-            boolean touchingWall = getSide(face.rotateY()) instanceof BlockWallBase || getSide(face.rotateYCCW()) instanceof BlockWallBase;
-            if (touchingWall != isInWall()) {
-                this.setInWall(touchingWall);
-                level.setBlock(this.position, this, true);
-                return type;
+            val face = blockFace
+            val touchingWall = getSide(face!!.rotateY()) is BlockWallBase || getSide(face.rotateYCCW()) is BlockWallBase
+            if (touchingWall != isInWall) {
+                this.isInWall = touchingWall
+                level.setBlock(this.position, this, true)
+                return type
             }
-        } else if (type == Level.BLOCK_UPDATE_REDSTONE && this.level.server.settings.levelSettings().enableRedstone()) {
-            this.onRedstoneUpdate();
-            return type;
+        } else if (type == Level.BLOCK_UPDATE_REDSTONE && level.server.settings.levelSettings().enableRedstone()) {
+            this.onRedstoneUpdate()
+            return type
         }
 
-        return 0;
+        return 0
     }
 
-    private void onRedstoneUpdate() {
-        if ((this.isOpen() != this.isGettingPower()) && !this.getManualOverride()) {
-            if (this.isOpen() != this.isGettingPower()) {
-                level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, this.isOpen() ? 15 : 0, this.isOpen() ? 0 : 15));
+    private fun onRedstoneUpdate() {
+        if ((this.isOpen != this.isGettingPower) && !this.manualOverride) {
+            if (this.isOpen != this.isGettingPower) {
+                level.server.pluginManager.callEvent(
+                    BlockRedstoneEvent(
+                        this,
+                        if (this.isOpen) 15 else 0,
+                        if (this.isOpen) 0 else 15
+                    )
+                )
 
-                this.setOpen(null, this.isGettingPower());
+                this.setOpen(null, this.isGettingPower)
             }
-        } else if (this.getManualOverride() && (this.isGettingPower() == this.isOpen())) {
-            this.setManualOverride(false);
+        } else if (this.manualOverride && (this.isGettingPower == this.isOpen)) {
+            this.manualOverride = false
         }
     }
 
-    public void setManualOverride(boolean val) {
-        if (val) {
-            manualOverrides.add(this.getLocator());
-        } else {
-            manualOverrides.remove(this.getLocator());
+    var manualOverride: Boolean
+        get() = manualOverrides.contains(this.locator)
+        set(val) {
+            if (`val`) {
+                manualOverrides.add(this.locator)
+            } else {
+                manualOverrides.remove(this.locator)
+            }
         }
+
+    override fun onBreak(item: Item?): Boolean {
+        this.manualOverride = false
+        return super.onBreak(item)
     }
 
-    public boolean getManualOverride() {
-        return manualOverrides.contains(this.getLocator());
-    }
+    var isInWall: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.IN_WALL_BIT)
+        set(inWall) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.IN_WALL_BIT, inWall)
+        }
 
-    @Override
-    public boolean onBreak(Item item) {
-        this.setManualOverride(false);
-        return super.onBreak(item);
-    }
+    override var blockFace: BlockFace?
+        get() = fromHorizontalIndex(
+            getPropertyValue(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+            ).ordinal
+        )
+        set(face) {
+            setPropertyValue(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                MinecraftCardinalDirection.VALUES[face!!.horizontalIndex]
+            )
+        }
 
-    public boolean isInWall() {
-        return getPropertyValue(IN_WALL_BIT);
-    }
+    override val burnChance: Int
+        get() = 5
 
-    public void setInWall(boolean inWall) {
-        setPropertyValue(IN_WALL_BIT, inWall);
-    }
-    
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromHorizontalIndex(getPropertyValue(MINECRAFT_CARDINAL_DIRECTION).ordinal());
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, MinecraftCardinalDirection.VALUES[face.horizontalIndex]);
-    }
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            FENCE_GATE,
+            CommonBlockProperties.IN_WALL_BIT,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OPEN_BIT
+        )
+            get() = Companion.field
 
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
+        // Contains a list of positions of fence gates, which have been opened by hand (by a player).
+        // It is used to detect on redstone update, if the gate should be closed if redstone is off on the update,
+        // previously the gate always closed, when placing an unpowered redstone at the gate, this fixes it
+        // and gives the vanilla behavior; no idea how to make this better :d
+        private val manualOverrides: MutableSet<Locator> = Sets.newConcurrentHashSet()
 
-    @Override
-    public int getBurnAbility() {
-        return 20;
+        private val offMinX = DoubleArray(2)
+        private val offMinZ = DoubleArray(2)
+        private val offMaxX = DoubleArray(2)
+        private val offMaxZ = DoubleArray(2)
+
+        init {
+            offMinX[0] = 0.0
+            offMinZ[0] = 0.375
+            offMaxX[0] = 1.0
+            offMaxZ[0] = 0.625
+
+            offMinX[1] = 0.375
+            offMinZ[1] = 0.0
+            offMaxX[1] = 0.625
+            offMaxZ[1] = 1.0
+        }
     }
 }

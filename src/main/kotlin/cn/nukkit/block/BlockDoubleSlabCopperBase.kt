@@ -1,90 +1,84 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.enums.OxidizationLevel
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
 
 /**
  * @author joserobjr
  * @since 2021-06-14
  */
-public abstract class BlockDoubleSlabCopperBase extends BlockDoubleSlabBase implements Waxable, Oxidizable {
+abstract class BlockDoubleSlabCopperBase(blockstate: BlockState?) : BlockDoubleSlabBase(blockstate),
+    Waxable, Oxidizable {
+    override val hardness: Double
+        get() = 3.0
 
-    public BlockDoubleSlabCopperBase(BlockState blockstate) {
-        super(blockstate);
+    override val resistance: Double
+        get() = 6.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_STONE
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return 3;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return super<Waxable>.onActivate(item, player, blockFace, fx, fy, fz)
+                || super<Oxidizable>.onActivate(item, player, blockFace, fx, fy, fz)
     }
 
-    @Override
-    public double getResistance() {
-        return 6;
+    override fun onUpdate(type: Int): Int {
+        return super<Oxidizable>.onUpdate(type)
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_STONE;
+    override fun getBlockWithOxidizationLevel(oxidizationLevel: OxidizationLevel): Block {
+        return get(getCopperId(isWaxed, oxidizationLevel)).setPropertyValues(propertyValues)
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return Waxable.super.onActivate(item, player, blockFace, fx, fy, fz)
-                || Oxidizable.super.onActivate(item, player, blockFace, fx, fy, fz);
-    }
-
-    @Override
-    public int onUpdate(int type) {
-        return Oxidizable.super.onUpdate(type);
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public Block getBlockWithOxidizationLevel(@NotNull OxidizationLevel oxidizationLevel) {
-        return Block.get(getCopperId(isWaxed(), oxidizationLevel)).setPropertyValues(getPropertyValues());
-    }
-
-    @Override
-    public boolean setOxidizationLevel(@NotNull OxidizationLevel oxidizationLevel) {
-        if (getOxidizationLevel().equals(oxidizationLevel)) {
-            return true;
+    override fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean {
+        if (oxidizationLevel == oxidizationLevel) {
+            return true
         }
-        return level.setBlock(this.position, Block.get(getCopperId(isWaxed(), oxidizationLevel)).setPropertyValues(getPropertyValues()));
+        return level.setBlock(
+            this.position,
+            get(getCopperId(isWaxed, oxidizationLevel)).setPropertyValues(propertyValues)
+        )
     }
 
-    @Override
-    public boolean setWaxed(boolean waxed) {
-        if (isWaxed() == waxed) {
-            return true;
+    override fun setWaxed(waxed: Boolean): Boolean {
+        if (isWaxed == waxed) {
+            return true
         }
-        return level.setBlock(this.position, Block.get(getCopperId(isWaxed(), getOxidizationLevel())).setPropertyValues(getPropertyValues()));
+        return level.setBlock(
+            this.position, get(
+                getCopperId(
+                    isWaxed,
+                    oxidizationLevel
+                )
+            ).setPropertyValues(propertyValues)
+        )
     }
 
-    @Override
-    public boolean isWaxed() {
-        return false;
+    override fun isWaxed(): Boolean {
+        return false
     }
 
-    protected abstract String getCopperId(boolean waxed, @Nullable OxidizationLevel oxidizationLevel);
+    protected abstract fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String
 }

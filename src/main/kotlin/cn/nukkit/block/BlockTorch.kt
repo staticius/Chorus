@@ -1,118 +1,102 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.TorchFacingDirection;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.TORCH_FACING_DIRECTION;
+import cn.nukkit.Player
+import cn.nukkit.block.BlockLever.Companion.isSupportValid
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.TorchFacingDirection
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.Faceable
 
 /**
  * @author xtypr
  * @since 2015/12/2
  */
-public class BlockTorch extends BlockFlowable implements Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TORCH, TORCH_FACING_DIRECTION);
+open class BlockTorch @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockstate), Faceable {
+    override val name: String
+        get() = "Torch"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val lightLevel: Int
+        get() = 14
 
-    public BlockTorch() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockTorch(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Torch";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 14;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            TorchFacingDirection torchAttachment = getTorchAttachment();
+            val torchAttachment = torchAttachment!!
 
-            Block support = this.getSide(torchAttachment.getAttachedFace());
-            if (!BlockLever.isSupportValid(support, torchAttachment.getTorchDirection())) {
-                this.level.useBreakOn(this.position);
+            val support = this.getSide(torchAttachment.attachedFace)
+            if (!isSupportValid(support!!, torchAttachment.torchDirection!!)) {
+                level.useBreakOn(this.position)
 
-                return Level.BLOCK_UPDATE_NORMAL;
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
 
-        return 0;
+        return 0
     }
 
-    @Nullable
-    private BlockFace findValidSupport() {
-        for (BlockFace horizontalFace : BlockFace.Plane.HORIZONTAL) {
-            if (BlockLever.isSupportValid(getSide(horizontalFace.getOpposite()), horizontalFace)) {
-                return horizontalFace;
+    private fun findValidSupport(): BlockFace? {
+        for (horizontalFace in BlockFace.Plane.HORIZONTAL) {
+            if (isSupportValid(getSide(horizontalFace.getOpposite()!!)!!, horizontalFace)) {
+                return horizontalFace
             }
         }
-        if (BlockLever.isSupportValid(down(), BlockFace.UP)) {
-            return BlockFace.UP;
+        if (isSupportValid(down()!!, BlockFace.UP)) {
+            return BlockFace.UP
         }
-        return null;
+        return null
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        var target = target
+        var face = face
         if (target.canBeReplaced()) {
-            target = target.down();
-            face = BlockFace.UP;
+            target = target.down()!!
+            face = BlockFace.UP
         }
 
-        if (face == BlockFace.DOWN || !BlockLever.isSupportValid(target, face)) {
-            BlockFace valid = findValidSupport();
-            if (valid == null) {
-                return false;
-            }
-            face = valid;
+        if (face == BlockFace.DOWN || !isSupportValid(target, face)) {
+            val valid = findValidSupport() ?: return false
+            face = valid
         }
 
-        this.setBlockFace(face);
-        this.level.setBlock(block.position, this, true, true);
-        return true;
+        this.blockFace = face
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return getTorchAttachment().getTorchDirection();
-    }
-
-    /**
-     * Sets the direction that the flame is pointing.
-     */
-    @Override
-    public void setBlockFace(BlockFace face) {
-        TorchFacingDirection torchAttachment = TorchFacingDirection.getByTorchDirection(face);
-        if (torchAttachment == null) {
-            throw new IllegalArgumentException("The give BlockFace can't be mapped to TorchFace");
+    override var blockFace: BlockFace?
+        get() = torchAttachment!!.torchDirection
+        /**
+         * Sets the direction that the flame is pointing.
+         */
+        set(face) {
+            val torchAttachment = TorchFacingDirection.getByTorchDirection(face!!)
+            requireNotNull(torchAttachment) { "The give BlockFace can't be mapped to TorchFace" }
+            this.torchAttachment = torchAttachment
         }
-        setTorchAttachment(torchAttachment);
-    }
 
-    public TorchFacingDirection getTorchAttachment() {
-        return getPropertyValue(TORCH_FACING_DIRECTION);
-    }
+    var torchAttachment: TorchFacingDirection?
+        get() = getPropertyValue(CommonBlockProperties.TORCH_FACING_DIRECTION)
+        set(face) {
+            setPropertyValue(
+                CommonBlockProperties.TORCH_FACING_DIRECTION,
+                face
+            )
+        }
 
-    public void setTorchAttachment(TorchFacingDirection face) {
-        setPropertyValue(TORCH_FACING_DIRECTION, face);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
+            get() = Companion.field
     }
 }

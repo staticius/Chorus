@@ -1,9 +1,7 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-public interface Natural {
-
-    default boolean canBePickedUp() {
-        return true;
+interface Natural {
+    fun canBePickedUp(): Boolean {
+        return true
     }
-
 }

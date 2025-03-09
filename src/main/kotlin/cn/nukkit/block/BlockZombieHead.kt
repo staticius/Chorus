@@ -1,38 +1,25 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemCreeperHead;
-import cn.nukkit.item.ItemZombieHead;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemZombieHead
 
-public class BlockZombieHead extends BlockHead {
+class BlockZombieHead(blockState: BlockState?) : BlockHead(blockState) {
+    override val name: String
+        get() = "Zombie Head"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(ZOMBIE_HEAD, CommonBlockProperties.FACING_DIRECTION);
-
-    public BlockZombieHead(BlockState blockState) {
-        super(blockState);
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
+            this.toItem()
+        )
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemZombieHead()
     }
 
-    @Override
-    public String getName() {
-        return "Zombie Head";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                this.toItem()
-        };
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemZombieHead();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.ZOMBIE_HEAD, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

@@ -1,38 +1,22 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.item.ItemID
+import cn.nukkit.item.ItemTool
 
-public class BlockIronOre extends BlockOre {
-    public static final BlockProperties PROPERTIES = new BlockProperties(IRON_ORE);
+open class BlockIronOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockOre(blockstate) {
+    override val name: String
+        get() = "Iron Ore"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolTier: Int
+        get() = ItemTool.TIER_STONE
+
+    override fun getRawMaterial(): String? {
+        return ItemID.RAW_IRON
     }
 
-    public BlockIronOre() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockIronOre(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Iron Ore";
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_STONE;
-    }
-
-    @Override
-    protected @Nullable String getRawMaterial() {
-        return ItemID.RAW_IRON;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.Companion.IRON_ORE)
+            get() = Companion.field
     }
 }

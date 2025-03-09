@@ -1,483 +1,569 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.event.block.BlockFromToEvent;
-import cn.nukkit.event.block.LiquidFlowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.level.particle.SmokeParticle;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.network.protocol.LevelEventPacket;
-import it.unimi.dsi.fastutil.longs.Long2ByteMap;
-import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.event.block.BlockFromToEvent
+import cn.nukkit.event.block.LiquidFlowEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.Level.Companion.blockHash
+import cn.nukkit.level.Sound
+import cn.nukkit.level.particle.SmokeParticle
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.network.protocol.LevelEventPacket
+import it.unimi.dsi.fastutil.longs.Long2ByteMap
+import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.min
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
+    var adjacentSources: Int = 0
+    protected var flowVector: Vector3? = null
+    private val flowCostVisited: Long2ByteMap = Long2ByteOpenHashMap()
 
-import static cn.nukkit.block.property.CommonBlockProperties.LIQUID_DEPTH;
-
-public abstract class BlockLiquid extends BlockTransparent {
-    private static final byte CAN_FLOW_DOWN = 1;
-    private static final byte CAN_FLOW = 0;
-    private static final byte BLOCKED = -1;
-    public int adjacentSources = 0;
-    protected Vector3 flowVector = null;
-    private final Long2ByteMap flowCostVisited = new Long2ByteOpenHashMap();
-
-    public BlockLiquid(BlockState state) {
-        super(state);
+    override fun canBeFlowedInto(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return true;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return null
     }
 
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return null;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return false;
+    override fun canBeReplaced(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeReplaced() {
-        return true;
+    override val isSolid: Boolean
+        get() = false
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSolid() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return false;
-    }
+    override val boundingBox: AxisAlignedBB?
+        get() = null
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override var maxY: Double
+        get() = position.y + 1 - this.fluidHeightPercent
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    @Override
-    public AxisAlignedBB getBoundingBox() {
-        return null;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 1 - getFluidHeightPercent();
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateCollisionBoundingBox() {
-        return this;
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
     /**
      * Whether this fluid can place the second layer (aquifer)
      */
-    public boolean usesWaterLogging() {
-        return false;
+    open fun usesWaterLogging(): Boolean {
+        return false
     }
 
-    public float getFluidHeightPercent() {
-        float d = getLiquidDepth();
-        if (d >= 8) {
-            d = 0;
+    val fluidHeightPercent: Float
+        get() {
+            var d = liquidDepth.toFloat()
+            if (d >= 8) {
+                d = 0f
+            }
+
+            return (d + 1) / 9f
         }
 
-        return (d + 1) / 9f;
-    }
-
-    protected int getFlowDecay(Block block) {
-        if (block instanceof BlockLiquid liquid) {
-            return liquid.getLiquidDepth();
+    protected fun getFlowDecay(block: Block): Int {
+        if (block is BlockLiquid) {
+            return block.liquidDepth
         } else {
-            Block layer1 = block.getLevelBlockAtLayer(1);
-            if (layer1 instanceof BlockLiquid liquid) {
-                return liquid.getLiquidDepth();
+            val layer1 = block.getLevelBlockAtLayer(1)
+            return if (layer1 is BlockLiquid) {
+                layer1.liquidDepth
             } else {
-                return -1;
+                -1
             }
         }
     }
 
-    protected int getEffectiveFlowDecay(Block block) {
-        BlockLiquid l;
-        if (block instanceof BlockLiquid liquid) {
-            l = liquid;
+    protected fun getEffectiveFlowDecay(block: Block): Int {
+        val l = if (block is BlockLiquid) {
+            block
         } else {
-            Block layer1 = block.getLevelBlockAtLayer(1);
-            if (layer1 instanceof BlockLiquid liquid) {
-                l = liquid;
+            val layer1 = block.getLevelBlockAtLayer(1)
+            if (layer1 is BlockLiquid) {
+                layer1
             } else {
-                return -1;
+                return -1
             }
         }
-        int decay = l.getLiquidDepth();
+        var decay = l.liquidDepth
         if (decay >= 8) {
-            decay = 0;
+            decay = 0
         }
-        return decay;
+        return decay
     }
 
-    public void clearCaches() {
-        this.flowVector = null;
-        this.flowCostVisited.clear();
+    fun clearCaches() {
+        this.flowVector = null
+        flowCostVisited.clear()
     }
 
-    public Vector3 getFlowVector() {
+    fun getFlowVector(): Vector3 {
         if (this.flowVector != null) {
-            return this.flowVector;
+            return flowVector!!
         }
-        Vector3 vector = new Vector3(0, 0, 0);
-        int decay = this.getEffectiveFlowDecay(this);
-        for (int j = 0; j < 4; ++j) {
-            int x = (int) this.position.south;
-            int y = (int) this.position.up;
-            int z = (int) this.position.west;
-            switch (j) {
-                case 0:
-                    --x;
-                    break;
-                case 1:
-                    x++;
-                    break;
-                case 2:
-                    z--;
-                    break;
-                default:
-                    z++;
+        var vector: Vector3? = Vector3(0.0, 0.0, 0.0)
+        val decay = this.getEffectiveFlowDecay(this)
+        for (j in 0..3) {
+            var x = position.x.toInt()
+            val y = position.y.toInt()
+            var z = position.z.toInt()
+            when (j) {
+                0 -> --x
+                1 -> x++
+                2 -> z--
+                else -> z++
             }
-            Block sideBlock = this.level.getBlock(x, y, z);
-            int blockDecay = this.getEffectiveFlowDecay(sideBlock);
+            val sideBlock = level.getBlock(x, y, z)
+            var blockDecay = this.getEffectiveFlowDecay(sideBlock!!)
             if (blockDecay < 0) {
                 if (!sideBlock.canBeFlowedInto()) {
-                    continue;
+                    continue
                 }
-                blockDecay = this.getEffectiveFlowDecay(this.level.getBlock(x, y - 1, z));
+                blockDecay = this.getEffectiveFlowDecay(level.getBlock(x, y - 1, z)!!)
                 if (blockDecay >= 0) {
-                    int realDecay = blockDecay - (decay - 8);
-                    vector.south += (sideBlock.position.south - this.position.south) * realDecay;
-                    vector.up += (sideBlock.position.up - this.position.up) * realDecay;
-                    vector.west += (sideBlock.position.west - this.position.west) * realDecay;
+                    val realDecay = blockDecay - (decay - 8)
+                    vector!!.x += (sideBlock.position.x - position.x) * realDecay
+                    vector!!.y += (sideBlock.position.y - position.y) * realDecay
+                    vector!!.z += (sideBlock.position.z - position.z) * realDecay
                 }
             } else {
-                int realDecay = blockDecay - decay;
-                vector.south += (sideBlock.position.south - this.position.south) * realDecay;
-                vector.up += (sideBlock.position.up - this.position.up) * realDecay;
-                vector.west += (sideBlock.position.west - this.position.west) * realDecay;
+                val realDecay = blockDecay - decay
+                vector!!.x += (sideBlock.position.x - position.x) * realDecay
+                vector!!.y += (sideBlock.position.y - position.y) * realDecay
+                vector!!.z += (sideBlock.position.z - position.z) * realDecay
             }
         }
-        if (getLiquidDepth() >= 8) {
-            if (!this.canFlowInto(this.level.getBlock((int) this.position.south, (int) this.position.up, (int) this.position.west - 1)) ||
-                    !this.canFlowInto(this.level.getBlock((int) this.position.south, (int) this.position.up, (int) this.position.west + 1)) ||
-                    !this.canFlowInto(this.level.getBlock((int) this.position.south - 1, (int) this.position.up, (int) this.position.west)) ||
-                    !this.canFlowInto(this.level.getBlock((int) this.position.south + 1, (int) this.position.up, (int) this.position.west)) ||
-                    !this.canFlowInto(this.level.getBlock((int) this.position.south, (int) this.position.up + 1, (int) this.position.west - 1)) ||
-                    !this.canFlowInto(this.level.getBlock((int) this.position.south, (int) this.position.up + 1, (int) this.position.west + 1)) ||
-                    !this.canFlowInto(this.level.getBlock((int) this.position.south - 1, (int) this.position.up + 1, (int) this.position.west)) ||
-                    !this.canFlowInto(this.level.getBlock((int) this.position.south + 1, (int) this.position.up + 1, (int) this.position.west))) {
-                vector = vector.normalize().add(0, -6, 0);
+        if (liquidDepth >= 8) {
+            if (!this.canFlowInto(
+                    level.getBlock(
+                        position.x.toInt(),
+                        position.y.toInt(), position.z.toInt() - 1
+                    )!!
+                ) || !this.canFlowInto(
+                    level.getBlock(
+                        position.x.toInt(),
+                        position.y.toInt(), position.z.toInt() + 1
+                    )!!
+                ) || !this.canFlowInto(
+                    level.getBlock(
+                        position.x.toInt() - 1,
+                        position.y.toInt(), position.z.toInt()
+                    )!!
+                ) || !this.canFlowInto(
+                    level.getBlock(
+                        position.x.toInt() + 1,
+                        position.y.toInt(), position.z.toInt()
+                    )!!
+                ) || !this.canFlowInto(
+                    level.getBlock(
+                        position.x.toInt(),
+                        position.y.toInt() + 1, position.z.toInt() - 1
+                    )!!
+                ) || !this.canFlowInto(
+                    level.getBlock(
+                        position.x.toInt(),
+                        position.y.toInt() + 1, position.z.toInt() + 1
+                    )!!
+                ) || !this.canFlowInto(
+                    level.getBlock(
+                        position.x.toInt() - 1,
+                        position.y.toInt() + 1, position.z.toInt()
+                    )!!
+                ) || !this.canFlowInto(
+                    level.getBlock(
+                        position.x.toInt() + 1,
+                        position.y.toInt() + 1, position.z.toInt()
+                    )!!
+                )
+            ) {
+                vector = vector!!.normalize().add(0.0, -6.0, 0.0)
             }
         }
-        return this.flowVector = vector.normalize();
+        return vector!!.normalize().also { this.flowVector = it }
     }
 
-    @Override
-    public void addVelocityToEntity(Entity entity, Vector3 vector) {
+    override fun addVelocityToEntity(entity: Entity, vector: Vector3) {
         if (entity.canBeMovedByCurrents()) {
-            Vector3 flow = this.getFlowVector();
-            vector.south += flow.south;
-            vector.up += flow.up;
-            vector.west += flow.west;
+            val flow = this.getFlowVector()
+            vector.x += flow.x
+            vector.y += flow.y
+            vector.z += flow.z
         }
     }
 
-    /**
-     * define the depth at which the fluid flows one block of decay
-     */
-    public int getFlowDecayPerBlock() {
-        return 1;
-    }
+    open val flowDecayPerBlock: Int
+        /**
+         * define the depth at which the fluid flows one block of decay
+         */
+        get() = 1
 
-    @Override
-    public int onUpdate(int type) {
-        if (type == Level.BLOCK_UPDATE_NORMAL) {//for normal update tick
-            this.checkForMixing();
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_NORMAL) { //for normal update tick
+            this.checkForMixing()
             if (usesWaterLogging() && layer > 0) {
-                Block layer0 = this.level.getBlock(this.position, 0);
-                if (layer0.isAir()) {
-                    this.level.setBlock(this.position, 1, Block.get(BlockID.AIR), false, false);
-                    this.level.setBlock(this.position, 0, this, false, false);
-                } else if (layer0.getWaterloggingLevel() <= 0 || layer0.getWaterloggingLevel() == 1 && getLiquidDepth() > 0) {
-                    this.level.setBlock(this.position, 1, Block.get(BlockID.AIR), true, true);
+                val layer0 = level.getBlock(this.position, 0)
+                if (layer0!!.isAir) {
+                    level.setBlock(this.position, 1, get(BlockID.AIR), false, false)
+                    level.setBlock(this.position, 0, this, false, false)
+                } else if (layer0.waterloggingLevel <= 0 || layer0.waterloggingLevel == 1 && liquidDepth > 0) {
+                    level.setBlock(this.position, 1, get(BlockID.AIR), true, true)
                 }
             }
-            this.level.scheduleUpdate(this, this.tickRate());
-            return 0;
+            level.scheduleUpdate(this, this.tickRate())
+            return 0
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            int decay = this.getFlowDecay(this);
-            int multiplier = this.getFlowDecayPerBlock();
+            var decay = this.getFlowDecay(this)
+            val multiplier = this.flowDecayPerBlock
             if (decay > 0) {
-                int smallestFlowDecay = -100;
-                this.adjacentSources = 0;
-                smallestFlowDecay = this.getSmallestFlowDecay(this.level.getBlock((int) this.position.south, (int) this.position.up, (int) this.position.west - 1), smallestFlowDecay);
-                smallestFlowDecay = this.getSmallestFlowDecay(this.level.getBlock((int) this.position.south, (int) this.position.up, (int) this.position.west + 1), smallestFlowDecay);
-                smallestFlowDecay = this.getSmallestFlowDecay(this.level.getBlock((int) this.position.south - 1, (int) this.position.up, (int) this.position.west), smallestFlowDecay);
-                smallestFlowDecay = this.getSmallestFlowDecay(this.level.getBlock((int) this.position.south + 1, (int) this.position.up, (int) this.position.west), smallestFlowDecay);
-                int newDecay = smallestFlowDecay + multiplier;
+                var smallestFlowDecay = -100
+                this.adjacentSources = 0
+                smallestFlowDecay = this.getSmallestFlowDecay(
+                    level.getBlock(
+                        position.x.toInt(), position.y.toInt(), position.z.toInt() - 1
+                    )!!, smallestFlowDecay
+                )
+                smallestFlowDecay = this.getSmallestFlowDecay(
+                    level.getBlock(
+                        position.x.toInt(), position.y.toInt(), position.z.toInt() + 1
+                    )!!, smallestFlowDecay
+                )
+                smallestFlowDecay = this.getSmallestFlowDecay(
+                    level.getBlock(
+                        position.x.toInt() - 1, position.y.toInt(), position.z.toInt()
+                    )!!, smallestFlowDecay
+                )
+                smallestFlowDecay = this.getSmallestFlowDecay(
+                    level.getBlock(
+                        position.x.toInt() + 1, position.y.toInt(), position.z.toInt()
+                    )!!, smallestFlowDecay
+                )
+                var newDecay = smallestFlowDecay + multiplier
                 if (newDecay >= 8 || smallestFlowDecay < 0) {
-                    newDecay = -1;
+                    newDecay = -1
                 }
-                int topFlowDecay = this.getFlowDecay(this.level.getBlock((int) this.position.south, (int) this.position.up + 1, (int) this.position.west));
+                val topFlowDecay = this.getFlowDecay(
+                    level.getBlock(
+                        position.x.toInt(),
+                        position.y.toInt() + 1, position.z.toInt()
+                    )!!
+                )
                 if (topFlowDecay >= 0) {
-                    newDecay = topFlowDecay | 0x08;
+                    newDecay = topFlowDecay or 0x08
                 }
-                if (this.adjacentSources >= 2 && this instanceof BlockFlowingWater) {
-                    Block bottomBlock = this.level.getBlock((int) this.position.south, (int) this.position.up - 1, (int) this.position.west);
-                    if (bottomBlock.isSolid()) {
-                        newDecay = 0;
-                    } else if (bottomBlock instanceof BlockFlowingWater w && w.getLiquidDepth() == 0) {
-                        newDecay = 0;
+                if (this.adjacentSources >= 2 && this is BlockFlowingWater) {
+                    var bottomBlock = level.getBlock(
+                        position.x.toInt(),
+                        position.y.toInt() - 1, position.z.toInt()
+                    )
+                    if (bottomBlock!!.isSolid) {
+                        newDecay = 0
+                    } else if (bottomBlock is BlockFlowingWater && bottomBlock.liquidDepth == 0) {
+                        newDecay = 0
                     } else {
-                        bottomBlock = bottomBlock.getLevelBlockAtLayer(1);
-                        if (bottomBlock instanceof BlockFlowingWater w && w.getLiquidDepth() == 0) {
-                            newDecay = 0;
+                        bottomBlock = bottomBlock.getLevelBlockAtLayer(1)
+                        if (bottomBlock is BlockFlowingWater && bottomBlock.liquidDepth == 0) {
+                            newDecay = 0
                         }
                     }
                 }
                 if (newDecay != decay) {
-                    decay = newDecay;
-                    boolean decayed = decay < 0;
-                    Block to;
-                    if (decayed) {
-                        to = Block.get(BlockID.AIR);
+                    decay = newDecay
+                    val decayed = decay < 0
+                    val to = if (decayed) {
+                        get(BlockID.AIR)
                     } else {
-                        to = getLiquidWithNewDepth(decay);
+                        getLiquidWithNewDepth(decay)
                     }
-                    BlockFromToEvent event = new BlockFromToEvent(this, to);
-                    level.server.pluginManager.callEvent(event);
-                    if (!event.isCancelled()) {
-                        this.level.setBlock(this.position, layer, event.to, true, true);
+                    val event = BlockFromToEvent(this, to)
+                    level.server.pluginManager.callEvent(event)
+                    if (!event.isCancelled) {
+                        level.setBlock(this.position, layer, event.to, true, true)
                         if (!decayed) {
-                            this.level.scheduleUpdate(this, this.tickRate());
+                            level.scheduleUpdate(this, this.tickRate())
                         }
                     }
                 }
             }
             if (decay >= 0) {
-                Block bottomBlock = this.level.getBlock((int) this.position.south, (int) this.position.up - 1, (int) this.position.west);
-                this.flowIntoBlock(bottomBlock, decay | 0x08);
-                if (decay == 0 || !(usesWaterLogging() ? bottomBlock.canWaterloggingFlowInto() : bottomBlock.canBeFlowedInto())) {
-                    int adjacentDecay;
-                    if (decay >= 8) {
-                        adjacentDecay = 1;
+                val bottomBlock = level.getBlock(
+                    position.x.toInt(),
+                    position.y.toInt() - 1, position.z.toInt()
+                )
+                this.flowIntoBlock(bottomBlock!!, decay or 0x08)
+                if (decay == 0 || !(if (usesWaterLogging()) bottomBlock.canWaterloggingFlowInto() else bottomBlock.canBeFlowedInto())) {
+                    val adjacentDecay = if (decay >= 8) {
+                        1
                     } else {
-                        adjacentDecay = decay + multiplier;
+                        decay + multiplier
                     }
                     if (adjacentDecay < 8) {
-                        boolean[] flags = this.getOptimalFlowDirections();
+                        val flags = this.optimalFlowDirections
                         if (flags[0]) {
-                            this.flowIntoBlock(this.level.getBlock((int) this.position.south - 1, (int) this.position.up, (int) this.position.west), adjacentDecay);
+                            this.flowIntoBlock(
+                                level.getBlock(
+                                    position.x.toInt() - 1,
+                                    position.y.toInt(), position.z.toInt()
+                                )!!, adjacentDecay
+                            )
                         }
                         if (flags[1]) {
-                            this.flowIntoBlock(this.level.getBlock((int) this.position.south + 1, (int) this.position.up, (int) this.position.west), adjacentDecay);
+                            this.flowIntoBlock(
+                                level.getBlock(
+                                    position.x.toInt() + 1,
+                                    position.y.toInt(), position.z.toInt()
+                                )!!, adjacentDecay
+                            )
                         }
                         if (flags[2]) {
-                            this.flowIntoBlock(this.level.getBlock((int) this.position.south, (int) this.position.up, (int) this.position.west - 1), adjacentDecay);
+                            this.flowIntoBlock(
+                                level.getBlock(
+                                    position.x.toInt(),
+                                    position.y.toInt(), position.z.toInt() - 1
+                                )!!, adjacentDecay
+                            )
                         }
                         if (flags[3]) {
-                            this.flowIntoBlock(this.level.getBlock((int) this.position.south, (int) this.position.up, (int) this.position.west + 1), adjacentDecay);
+                            this.flowIntoBlock(
+                                level.getBlock(
+                                    position.x.toInt(),
+                                    position.y.toInt(), position.z.toInt() + 1
+                                )!!, adjacentDecay
+                            )
                         }
                     }
                 }
-                this.checkForMixing();
+                this.checkForMixing()
             }
         }
-        return 0;
+        return 0
     }
 
-    protected void flowIntoBlock(Block block, int newFlowDecay) {
-        if (this.canFlowInto(block) && !(block instanceof BlockLiquid)) {
+    protected open fun flowIntoBlock(block: Block, newFlowDecay: Int) {
+        var block = block
+        if (this.canFlowInto(block) && block !is BlockLiquid) {
             if (usesWaterLogging()) {
-                Block layer1 = block.getLevelBlockAtLayer(1);
-                if (layer1 instanceof BlockLiquid) {
-                    return;
+                val layer1 = block.getLevelBlockAtLayer(1)
+                if (layer1 is BlockLiquid) {
+                    return
                 }
 
-                if (block.getWaterloggingLevel() > 1) {
-                    block = layer1;
+                if (block.waterloggingLevel > 1) {
+                    block = layer1!!
                 }
             }
 
-            LiquidFlowEvent event = new LiquidFlowEvent(block, this, newFlowDecay);
-            level.server.pluginManager.callEvent(event);
-            if (!event.isCancelled()) {
-                if (block.layer == 0 && !block.isAir()) {
-                    this.level.useBreakOn(block.position, block instanceof BlockWeb ? Item.get(Item.WOODEN_SWORD) : null);
+            val event = LiquidFlowEvent(block, this, newFlowDecay)
+            level.server.pluginManager.callEvent(event)
+            if (!event.isCancelled) {
+                if (block.layer == 0 && !block.isAir) {
+                    level.useBreakOn(block.position, if (block is BlockWeb) Item.get(Item.WOODEN_SWORD) else null)
                 }
-                this.level.setBlock(block.position, block.layer, getLiquidWithNewDepth(newFlowDecay), true, true);
-                this.level.scheduleUpdate(block, this.tickRate());
+                level.setBlock(block.position, block.layer, getLiquidWithNewDepth(newFlowDecay), true, true)
+                level.scheduleUpdate(block, this.tickRate())
             }
         }
     }
 
-    private int calculateFlowCost(int blockX, int blockY, int blockZ, int accumulatedCost, int maxCost, int originOpposite, int lastOpposite) {
-        int cost = 1000;
-        for (int j = 0; j < 4; ++j) {
+    private fun calculateFlowCost(
+        blockX: Int,
+        blockY: Int,
+        blockZ: Int,
+        accumulatedCost: Int,
+        maxCost: Int,
+        originOpposite: Int,
+        lastOpposite: Int
+    ): Int {
+        var cost = 1000
+        for (j in 0..3) {
             if (j == originOpposite || j == lastOpposite) {
-                continue;
+                continue
             }
-            int x = blockX;
-            int y = blockY;
-            int z = blockZ;
+            var x = blockX
+            val y = blockY
+            var z = blockZ
             if (j == 0) {
-                --x;
+                --x
             } else if (j == 1) {
-                ++x;
+                ++x
             } else if (j == 2) {
-                --z;
+                --z
             } else {
-                ++z;
+                ++z
             }
-            long hash = Level.blockHash(x, y, z, this.level);
-            if (!this.flowCostVisited.containsKey(hash)) {
-                Block blockSide = this.level.getBlock(x, y, z);
-                if (!this.canFlowInto(blockSide)) {
-                    this.flowCostVisited.put(hash, BLOCKED);
-                } else if (usesWaterLogging() ?
-                        this.level.getBlock(x, y - 1, z).canWaterloggingFlowInto() :
-                        this.level.getBlock(x, y - 1, z).canBeFlowedInto()) {
-                    this.flowCostVisited.put(hash, CAN_FLOW_DOWN);
+            val hash = blockHash(x, y, z, this.level)
+            if (!flowCostVisited.containsKey(hash)) {
+                val blockSide = level.getBlock(x, y, z)
+                if (!this.canFlowInto(blockSide!!)) {
+                    flowCostVisited.put(hash, BLOCKED)
+                } else if (if (usesWaterLogging()) level.getBlock(x, y - 1, z)!!
+                        .canWaterloggingFlowInto() else level.getBlock(
+                        x,
+                        y - 1,
+                        z
+                    )!!
+                        .canBeFlowedInto()
+                ) {
+                    flowCostVisited.put(hash, CAN_FLOW_DOWN)
                 } else {
-                    this.flowCostVisited.put(hash, CAN_FLOW);
+                    flowCostVisited.put(hash, CAN_FLOW)
                 }
             }
-            byte status = this.flowCostVisited.get(hash);
+            val status = flowCostVisited[hash]
             if (status == BLOCKED) {
-                continue;
+                continue
             } else if (status == CAN_FLOW_DOWN) {
-                return accumulatedCost;
+                return accumulatedCost
             }
             if (accumulatedCost >= maxCost) {
-                continue;
+                continue
             }
-            int realCost = this.calculateFlowCost(x, y, z, accumulatedCost + 1, maxCost, originOpposite, j ^ 0x01);
+            val realCost = this.calculateFlowCost(x, y, z, accumulatedCost + 1, maxCost, originOpposite, j xor 0x01)
             if (realCost < cost) {
-                cost = realCost;
+                cost = realCost
             }
         }
-        return cost;
+        return cost
     }
 
-    @Override
-    public double getHardness() {
-        return 100d;
-    }
+    override val hardness: Double
+        get() = 100.0
 
-    @Override
-    public double getResistance() {
-        return 500;
-    }
+    override val resistance: Double
+        get() = 500.0
 
-    private boolean[] getOptimalFlowDirections() {
-        int[] flowCost = new int[]{
+    private val optimalFlowDirections: BooleanArray
+        get() {
+            val flowCost = intArrayOf(
                 1000,
                 1000,
                 1000,
                 1000
-        };
-        int maxCost = 4 / this.getFlowDecayPerBlock();
-        for (int j = 0; j < 4; ++j) {
-            int x = (int) this.position.south;
-            int y = (int) this.position.up;
-            int z = (int) this.position.west;
-            if (j == 0) {
-                --x;
-            } else if (j == 1) {
-                ++x;
-            } else if (j == 2) {
-                --z;
-            } else {
-                ++z;
+            )
+            var maxCost = 4 / this.flowDecayPerBlock
+            for (j in 0..3) {
+                var x = position.x.toInt()
+                val y = position.y.toInt()
+                var z = position.z.toInt()
+                if (j == 0) {
+                    --x
+                } else if (j == 1) {
+                    ++x
+                } else if (j == 2) {
+                    --z
+                } else {
+                    ++z
+                }
+                val block = level.getBlock(x, y, z)
+                if (!this.canFlowInto(block!!)) {
+                    flowCostVisited.put(
+                        blockHash(
+                            x,
+                            y,
+                            z,
+                            level
+                        ), BLOCKED
+                    )
+                } else if (if (usesWaterLogging()) level.getBlock(x, y - 1, z)
+                        .canWaterloggingFlowInto() else level.getBlock(x, y - 1, z)
+                        .canBeFlowedInto()
+                ) {
+                    flowCostVisited.put(
+                        blockHash(
+                            x,
+                            y,
+                            z,
+                            level
+                        ), CAN_FLOW_DOWN
+                    )
+                    maxCost = 0
+                    flowCost[j] = maxCost
+                } else if (maxCost > 0) {
+                    flowCostVisited.put(
+                        blockHash(
+                            x,
+                            y,
+                            z,
+                            level
+                        ), CAN_FLOW
+                    )
+                    flowCost[j] = this.calculateFlowCost(x, y, z, 1, maxCost, j xor 0x01, j xor 0x01)
+                    maxCost = min(maxCost.toDouble(), flowCost[j].toDouble()).toInt()
+                }
             }
-            Block block = this.level.getBlock(x, y, z);
-            if (!this.canFlowInto(block)) {
-                this.flowCostVisited.put(Level.blockHash(x, y, z, this.level), BLOCKED);
-            } else if (usesWaterLogging() ?
-                    this.level.getBlock(x, y - 1, z).canWaterloggingFlowInto() :
-                    this.level.getBlock(x, y - 1, z).canBeFlowedInto()) {
-                this.flowCostVisited.put(Level.blockHash(x, y, z, this.level), CAN_FLOW_DOWN);
-                flowCost[j] = maxCost = 0;
-            } else if (maxCost > 0) {
-                this.flowCostVisited.put(Level.blockHash(x, y, z, this.level), CAN_FLOW);
-                flowCost[j] = this.calculateFlowCost(x, y, z, 1, maxCost, j ^ 0x01, j ^ 0x01);
-                maxCost = Math.min(maxCost, flowCost[j]);
+            flowCostVisited.clear()
+            var minCost = Double.MAX_VALUE
+            for (i in 0..3) {
+                val d = flowCost[i].toDouble()
+                if (d < minCost) {
+                    minCost = d
+                }
             }
-        }
-        this.flowCostVisited.clear();
-        double minCost = Double.MAX_VALUE;
-        for (int i = 0; i < 4; i++) {
-            double d = flowCost[i];
-            if (d < minCost) {
-                minCost = d;
+            val isOptimalFlowDirection = BooleanArray(4)
+            for (i in 0..3) {
+                isOptimalFlowDirection[i] = (flowCost[i].toDouble() == minCost)
             }
+            return isOptimalFlowDirection
         }
-        boolean[] isOptimalFlowDirection = new boolean[4];
-        for (int i = 0; i < 4; ++i) {
-            isOptimalFlowDirection[i] = (flowCost[i] == minCost);
-        }
-        return isOptimalFlowDirection;
-    }
 
-    private int getSmallestFlowDecay(Block block, int decay) {
-        int blockDecay = this.getFlowDecay(block);
+    private fun getSmallestFlowDecay(block: Block, decay: Int): Int {
+        var blockDecay = this.getFlowDecay(block)
         if (blockDecay < 0) {
-            return decay;
+            return decay
         } else if (blockDecay == 0) {
-            ++this.adjacentSources;
+            ++this.adjacentSources
         } else if (blockDecay >= 8) {
-            blockDecay = 0;
+            blockDecay = 0
         }
-        return (decay >= 0 && blockDecay >= decay) ? decay : blockDecay;
+        return if (decay >= 0 && blockDecay >= decay) decay else blockDecay
     }
 
     /**
      * Handle for mixing function between fluids,
      * which is currently used to handle with the mixing of lava with water
      */
-    protected void checkForMixing() {
+    protected open fun checkForMixing() {
     }
 
-    protected void triggerLavaMixEffects(Vector3 pos) {
-        Random random = ThreadLocalRandom.current();
-        this.level.addLevelEvent(pos.add(0.5, 0.5, 0.5), LevelEventPacket.EVENT_SOUND_FIZZ, (int) ((random.nextFloat() - random.nextFloat()) * 800) + 2600);
+    protected fun triggerLavaMixEffects(pos: Vector3) {
+        val random: Random = ThreadLocalRandom.current()
+        level.addLevelEvent(
+            pos.add(0.5, 0.5, 0.5)!!,
+            LevelEventPacket.EVENT_SOUND_FIZZ,
+            ((random.nextFloat() - random.nextFloat()) * 800).toInt() + 2600
+        )
 
-        for (int i = 0; i < 8; ++i) {
-            this.level.addParticle(new SmokeParticle(pos.add(Math.random(), 1.2, Math.random())));
+        for (i in 0..7) {
+            level.addParticle(SmokeParticle(pos.add(Math.random(), 1.2, Math.random())!!))
         }
     }
 
@@ -486,89 +572,84 @@ public abstract class BlockLiquid extends BlockTransparent {
      *
      * @param depth the new depth
      */
-    public abstract BlockLiquid getLiquidWithNewDepth(int depth);
+    abstract fun getLiquidWithNewDepth(depth: Int): BlockLiquid
 
-    @Override
-    public boolean canPassThrough() {
-        return true;
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    @Override
-    public void onEntityCollide(Entity entity) {
-        entity.resetFallDistance();
+    override fun onEntityCollide(entity: Entity) {
+        entity.resetFallDistance()
     }
 
 
-    protected boolean liquidCollide(Block cause, Block result) {
-        BlockFromToEvent event = new BlockFromToEvent(this, result);
-        this.level.server.pluginManager.callEvent(event);
-        if (event.isCancelled()) {
-            return false;
+    protected fun liquidCollide(cause: Block?, result: Block): Boolean {
+        val event = BlockFromToEvent(this, result)
+        level.server.pluginManager.callEvent(event)
+        if (event.isCancelled) {
+            return false
         }
-        this.level.setBlock(this.position, event.to, true, true);
-        this.level.setBlock(this.position, 1, Block.get(BlockID.AIR), true, true);
-        this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.RANDOM_FIZZ);
-        return true;
+        level.setBlock(this.position, event.to, true, true)
+        level.setBlock(this.position, 1, get(BlockID.AIR), true, true)
+        level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.RANDOM_FIZZ)
+        return true
     }
 
-    protected boolean canFlowInto(Block block) {
+    protected fun canFlowInto(block: Block): Boolean {
         if (usesWaterLogging()) {
             if (block.canWaterloggingFlowInto()) {
-                Block blockLayer1 = block.getLevelBlockAtLayer(1);
-                return !(block instanceof BlockLiquid liquid && liquid.getLiquidDepth() == 0) && !(blockLayer1 instanceof BlockLiquid liquid1 && liquid1.getLiquidDepth() == 0);
+                val blockLayer1 = block.getLevelBlockAtLayer(1)
+                return !(block is BlockLiquid && block.liquidDepth == 0) && !(blockLayer1 is BlockLiquid && blockLayer1.liquidDepth == 0)
             }
         }
-        return block.canBeFlowedInto() && !(block instanceof BlockLiquid liquid && liquid.getLiquidDepth() == 0);
+        return block.canBeFlowedInto() && !(block is BlockLiquid && block.liquidDepth == 0)
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.AIR));
+    override fun toItem(): Item? {
+        return ItemBlock(get(BlockID.AIR))
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean sticksToPiston() {
-        return false;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    /**
-     * If bit 0x8 is set, this fluid is "falling" and spreads only downward. At this level, the lower bits are essentially ignored, since this block is then at its highest fluid level. This level is equal to the falling water above, equal to 8 plus the level of the non-falling lava above it.
-     * <p>
-     * The lower three bits are the fluid block's level. 0 is the highest fluid level (not necessarily filling the block - this depends on the neighboring fluid blocks above each upper corner of the block). Data values increase as the fluid level of the block drops: 1 is the next highest, 2 lower, on through 7, the lowest fluid level. Along a line on a flat plane, water drops one level per meter.
-     */
-    public int getLiquidDepth() {
-        return getPropertyValue(LIQUID_DEPTH);
-    }
+    var liquidDepth: Int
+        /**
+         * If bit 0x8 is set, this fluid is "falling" and spreads only downward. At this level, the lower bits are essentially ignored, since this block is then at its highest fluid level. This level is equal to the falling water above, equal to 8 plus the level of the non-falling lava above it.
+         *
+         *
+         * The lower three bits are the fluid block's level. 0 is the highest fluid level (not necessarily filling the block - this depends on the neighboring fluid blocks above each upper corner of the block). Data values increase as the fluid level of the block drops: 1 is the next highest, 2 lower, on through 7, the lowest fluid level. Along a line on a flat plane, water drops one level per meter.
+         */
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.LIQUID_DEPTH)
+        set(liquidDepth) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.LIQUID_DEPTH, liquidDepth)
+        }
 
-    public void setLiquidDepth(int liquidDepth) {
-        setPropertyValue(LIQUID_DEPTH, liquidDepth);
-    }
+    val isSource: Boolean
+        get() = liquidDepth == 0
 
-    public boolean isSource() {
-        return getLiquidDepth() == 0;
-    }
+    val isFlowingDown: Boolean
+        get() = liquidDepth >= 8
 
-    public boolean isFlowingDown() {
-        return getLiquidDepth() >= 8;
-    }
+    val isSourceOrFlowingDown: Boolean
+        get() {
+            val liquidDepth = liquidDepth
+            return liquidDepth == 0 || liquidDepth == 8
+        }
 
-    public boolean isSourceOrFlowingDown() {
-        int liquidDepth = getLiquidDepth();
-        return liquidDepth == 0 || liquidDepth == 8;
-    }
+    override val lightFilter: Int
+        get() = 2
 
-    @Override
-    public int getLightFilter() {
-        return 2;
-    }
+    override val walkThroughExtraCost: Int
+        get() = 20
 
-    @Override
-    public int getWalkThroughExtraCost() {
-        return 20;
+    companion object {
+        private const val CAN_FLOW_DOWN: Byte = 1
+        private const val CAN_FLOW: Byte = 0
+        private const val BLOCKED: Byte = -1
     }
 }

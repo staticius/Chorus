@@ -1,111 +1,99 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.StructureBlockType;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityStructBlock;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType.name
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntitySpawnable.spawnTo
+import cn.nukkit.blockentity.BlockEntityStructBlock.getInventory
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.utils.BlockColor.equals
 
-import static cn.nukkit.block.property.CommonBlockProperties.STRUCTURE_BLOCK_TYPE;
+class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockstate), BlockEntityHolder<BlockEntityStructBlock?> {
+    var structureBlockType: StructureBlockType
+        get() = getPropertyValue(CommonBlockProperties.STRUCTURE_BLOCK_TYPE)
+        set(type) {
+            setPropertyValue(
+                CommonBlockProperties.STRUCTURE_BLOCK_TYPE,
+                type
+            )
+        }
 
-public class BlockStructureBlock extends BlockSolid implements BlockEntityHolder<BlockEntityStructBlock> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(STRUCTURE_BLOCK, STRUCTURE_BLOCK_TYPE);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockStructureBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockStructureBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public StructureBlockType getStructureBlockType() {
-        return getPropertyValue(STRUCTURE_BLOCK_TYPE);
-    }
-
-    public void setStructureBlockType(StructureBlockType type) {
-        setPropertyValue(STRUCTURE_BLOCK_TYPE, type);
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player != null) {
-            if (player.isCreative() && player.isOp()) {
-                BlockEntityStructBlock tile = this.getOrCreateBlockEntity();
-                tile.spawnTo(player);
-                player.addWindow(tile.getInventory());
+            if (player.isCreative && player.isOp) {
+                val tile: BlockEntityStructBlock? = this.orCreateBlockEntity
+                tile.spawnTo(player)
+                player.addWindow(tile.getInventory())
             }
         }
-        return true;
+        return true
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (player != null && (!player.isCreative() || !player.isOp())) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (player != null && (!player.isCreative || !player.isOp)) {
+            return false
         }
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true) != null;
+        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true) != null
     }
 
-    @Override
-    public String getName() {
-        return getStructureBlockType().name() + "Structure Block";
+    override val name: String
+        get() = structureBlockType.name + "Structure Block"
+
+    override val hardness: Double
+        get() = -1.0
+
+    override val resistance: Double
+        get() = 18000000.0
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return -1;
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return player != null && player.isCreative
     }
 
-    @Override
-    public double getResistance() {
-        return 18000000;
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return player != null && player.isCreative();
-    }
+    override val blockEntityClass: Class<out Any>
+        get() = BlockEntityStructBlock::class.java
 
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
+    override val blockEntityType: String
+        get() = BlockEntity.STRUCTURE_BLOCK
 
-    @Override
-    public boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityStructBlock> getBlockEntityClass() {
-        return BlockEntityStructBlock.class;
-    }
-
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.STRUCTURE_BLOCK;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STRUCTURE_BLOCK, CommonBlockProperties.STRUCTURE_BLOCK_TYPE)
+            get() = Companion.field
     }
 }

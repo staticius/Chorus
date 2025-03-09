@@ -1,31 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockWaxedOxidizedDoubleCutCopperSlab extends BlockOxidizedDoubleCutCopperSlab {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
+class BlockWaxedOxidizedDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockOxidizedDoubleCutCopperSlab(blockstate) {
+    override val singleSlab: BlockState
+        get() = BlockWaxedOxidizedCutCopperSlab.Companion.PROPERTIES.getDefaultState()
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun isWaxed(): Boolean {
+        return true
     }
 
-    public BlockWaxedOxidizedDoubleCutCopperSlab() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWaxedOxidizedDoubleCutCopperSlab(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public BlockState getSingleSlab() {
-        return BlockWaxedOxidizedCutCopperSlab.PROPERTIES.getDefaultState();
-    }
-
-    @Override
-    public boolean isWaxed() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB,
+            CommonBlockProperties.MINECRAFT_VERTICAL_HALF
+        )
+            get() = Companion.field
     }
 }

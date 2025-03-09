@@ -1,20 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockWhiteTerracotta extends BlockHardenedClay {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WHITE_TERRACOTTA);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockWhiteTerracotta() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWhiteTerracotta(BlockState blockstate) {
-        super(blockstate);
+class BlockWhiteTerracotta @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockHardenedClay(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WHITE_TERRACOTTA)
+            get() = Companion.field
     }
 }

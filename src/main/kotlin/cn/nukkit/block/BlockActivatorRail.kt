@@ -1,65 +1,49 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.OptionalBoolean;
-import cn.nukkit.utils.Rail;
-import cn.nukkit.utils.RedstoneComponent;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.utils.OptionalBoolean
+import cn.nukkit.utils.Rail
+import cn.nukkit.utils.Rail.Orientation.Companion.byMetadata
+import cn.nukkit.utils.Rail.isRailBlock
+import cn.nukkit.utils.RedstoneComponent
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-import org.jetbrains.annotations.NotNull;
+class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockRail(blockstate), RedstoneComponent {
+    override val name: String
+        get() = "Activator Rail"
 
-import static cn.nukkit.block.property.CommonBlockProperties.RAIL_DATA_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.RAIL_DIRECTION_6;
-
-public class BlockActivatorRail extends BlockRail implements RedstoneComponent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(ACTIVATOR_RAIL, RAIL_DATA_BIT, RAIL_DIRECTION_6);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockActivatorRail() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockActivatorRail(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Activator Rail";
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE || type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (super.onUpdate(type) == Level.BLOCK_UPDATE_NORMAL) {
-                return 0; // Already broken
+                return 0 // Already broken
             }
 
-            if (!this.level.server.settings.levelSettings().enableRedstone()) {
-                return 0;
+            if (!level.server.settings.levelSettings().enableRedstone()) {
+                return 0
             }
 
-            boolean wasPowered = isActive();
-            boolean isPowered = this.isGettingPower()
+            val wasPowered = isActive
+            val isPowered = this.isGettingPower
                     || checkSurrounding(this.position, true, 0)
-                    || checkSurrounding(this.position, false, 0);
+                    || checkSurrounding(this.position, false, 0)
 
             // Avoid Block mistake
             if (wasPowered != isPowered) {
-                setActive(isPowered);
-                RedstoneComponent.updateAroundRedstone(down(), BlockFace.UP);
-                if (getOrientation().isAscending()) {
-                    RedstoneComponent.updateAroundRedstone(up(), BlockFace.DOWN);
+                isActive = isPowered
+                updateAroundRedstone(down()!!, BlockFace.UP)
+                if (orientation!!.isAscending) {
+                    updateAroundRedstone(up()!!, BlockFace.DOWN)
                 }
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
     /**
@@ -70,141 +54,140 @@ public class BlockActivatorRail extends BlockRail implements RedstoneComponent {
      * @param power    The count of the rail that had been counted
      * @return Boolean of the surrounding area. Where the powered rail on!
      */
-    protected boolean checkSurrounding(Vector3 pos, boolean relative, int power) {
+    protected fun checkSurrounding(pos: Vector3, relative: Boolean, power: Int): Boolean {
         if (power >= 8) {
-            return false;
+            return false
         }
 
-        int dx = pos.getFloorX();
-        int dy = pos.getFloorY();
-        int dz = pos.getFloorZ();
+        var dx = pos.floorX
+        var dy = pos.floorY
+        var dz = pos.floorZ
 
-        BlockRail block;
-        Block block2 = level.getBlock(new Vector3(dx, dy, dz));
+        val block: BlockRail
+        val block2 = level.getBlock(Vector3(dx.toDouble(), dy.toDouble(), dz.toDouble()))
 
-        if (Rail.isRailBlock(block2)) {
-            block = (BlockRail) block2;
+        if (isRailBlock(block2!!)) {
+            block = block2 as BlockRail
         } else {
-            return false;
+            return false
         }
 
-        Rail.Orientation base = null;
-        boolean onStraight = true;
+        var base: Rail.Orientation? = null
+        var onStraight = true
 
-        switch (block.getOrientation()) {
-            case STRAIGHT_NORTH_SOUTH -> {
+        when (block.orientation) {
+            Rail.Orientation.STRAIGHT_NORTH_SOUTH -> {
                 if (relative) {
-                    dz++;
+                    dz++
                 } else {
-                    dz--;
+                    dz--
                 }
             }
-            case STRAIGHT_EAST_WEST -> {
+
+            Rail.Orientation.STRAIGHT_EAST_WEST -> {
                 if (relative) {
-                    dx--;
+                    dx--
                 } else {
-                    dx++;
+                    dx++
                 }
             }
-            case ASCENDING_EAST -> {
+
+            Rail.Orientation.ASCENDING_EAST -> {
                 if (relative) {
-                    dx--;
+                    dx--
                 } else {
-                    dx++;
-                    dy++;
-                    onStraight = false;
+                    dx++
+                    dy++
+                    onStraight = false
                 }
-                base = Rail.Orientation.STRAIGHT_EAST_WEST;
+                base = Rail.Orientation.STRAIGHT_EAST_WEST
             }
-            case ASCENDING_WEST -> {
+
+            Rail.Orientation.ASCENDING_WEST -> {
                 if (relative) {
-                    dx--;
-                    dy++;
-                    onStraight = false;
+                    dx--
+                    dy++
+                    onStraight = false
                 } else {
-                    dx++;
+                    dx++
                 }
-                base = Rail.Orientation.STRAIGHT_EAST_WEST;
+                base = Rail.Orientation.STRAIGHT_EAST_WEST
             }
-            case ASCENDING_NORTH -> {
+
+            Rail.Orientation.ASCENDING_NORTH -> {
                 if (relative) {
-                    dz++;
+                    dz++
                 } else {
-                    dz--;
-                    dy++;
-                    onStraight = false;
+                    dz--
+                    dy++
+                    onStraight = false
                 }
-                base = Rail.Orientation.STRAIGHT_NORTH_SOUTH;
+                base = Rail.Orientation.STRAIGHT_NORTH_SOUTH
             }
-            case ASCENDING_SOUTH -> {
+
+            Rail.Orientation.ASCENDING_SOUTH -> {
                 if (relative) {
-                    dz++;
-                    dy++;
-                    onStraight = false;
+                    dz++
+                    dy++
+                    onStraight = false
                 } else {
-                    dz--;
+                    dz--
                 }
-                base = Rail.Orientation.STRAIGHT_NORTH_SOUTH;
+                base = Rail.Orientation.STRAIGHT_NORTH_SOUTH
             }
-            default -> {
-                return false;
+
+            else -> {
+                return false
             }
         }
 
-        return canPowered(new Vector3(dx, dy, dz), base, power, relative)
-                || onStraight && canPowered(new Vector3(dx, dy - 1., dz), base, power, relative);
+        return canPowered(Vector3(dx.toDouble(), dy.toDouble(), dz.toDouble()), base, power, relative)
+                || onStraight && canPowered(Vector3(dx.toDouble(), dy - 1.0, dz.toDouble()), base, power, relative)
     }
 
-    protected boolean canPowered(Vector3 pos, Rail.Orientation state, int power, boolean relative) {
-        Block block = level.getBlock(pos);
+    protected fun canPowered(pos: Vector3, state: Rail.Orientation?, power: Int, relative: Boolean): Boolean {
+        val block = level.getBlock(pos) as? BlockActivatorRail ?: return false
 
-        if (!(block instanceof BlockActivatorRail)) {
-            return false;
-        }
-
-        Rail.Orientation base = ((BlockActivatorRail) block).getOrientation();
+        val base = block.orientation
 
         return (state != Rail.Orientation.STRAIGHT_EAST_WEST
-                || base != Rail.Orientation.STRAIGHT_NORTH_SOUTH
-                && base != Rail.Orientation.ASCENDING_NORTH
-                && base != Rail.Orientation.ASCENDING_SOUTH)
+                || base != Rail.Orientation.STRAIGHT_NORTH_SOUTH && base != Rail.Orientation.ASCENDING_NORTH && base != Rail.Orientation.ASCENDING_SOUTH)
                 && (state != Rail.Orientation.STRAIGHT_NORTH_SOUTH
-                || base != Rail.Orientation.STRAIGHT_EAST_WEST
-                && base != Rail.Orientation.ASCENDING_EAST
-                && base != Rail.Orientation.ASCENDING_WEST)
-                && (block.isGettingPower() || checkSurrounding(pos, relative, power + 1));
+                || base != Rail.Orientation.STRAIGHT_EAST_WEST && base != Rail.Orientation.ASCENDING_EAST && base != Rail.Orientation.ASCENDING_WEST)
+                && (block.isGettingPower || checkSurrounding(pos, relative, power + 1))
     }
 
-    @Override
-    public boolean isActive() {
-        return getPropertyValue(RAIL_DATA_BIT);
+    override fun isActive(): Boolean {
+        return getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.RAIL_DATA_BIT)
     }
 
-    @Override
-    public OptionalBoolean isRailActive() {
-        return OptionalBoolean.of(getPropertyValue(RAIL_DATA_BIT));
+    override fun isRailActive(): OptionalBoolean {
+        return OptionalBoolean.of(getPropertyValue(CommonBlockProperties.RAIL_DATA_BIT))
     }
 
-    @Override
-    public void setRailActive(boolean active) {
-        setPropertyValue(RAIL_DATA_BIT, active);
+    override fun setRailActive(active: Boolean) {
+        setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.RAIL_DATA_BIT, active)
     }
 
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
+    override val hardness: Double
+        get() = 0.5
 
     /**
      * Changes the rail direction.
      *
      * @param orientation The new orientation
      */
-    public void setRailDirection(Rail.Orientation orientation) {
-        setPropertyValue(RAIL_DIRECTION_6, orientation.metadata());
+    override fun setRailDirection(orientation: Rail.Orientation) {
+        setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RAIL_DIRECTION_6, orientation.metadata())
     }
 
-    public Rail.Orientation getOrientation() {
-        return Rail.Orientation.byMetadata(getPropertyValue(RAIL_DIRECTION_6));
+    override fun getOrientation(): Rail.Orientation? {
+        return byMetadata(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RAIL_DIRECTION_6))
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(ACTIVATOR_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
+            get() = Companion.field
     }
 }

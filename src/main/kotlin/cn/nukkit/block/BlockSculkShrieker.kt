@@ -1,91 +1,59 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntitySculkShrieker;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.AxisAlignedBB;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.item.ItemTool
 
+class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockstate), BlockEntityHolder<BlockEntitySculkShrieker?> {
+    override val name: String
+        get() = "Sculk Shrieker"
 
-public class BlockSculkShrieker extends BlockFlowable implements BlockEntityHolder<BlockEntitySculkShrieker> {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(SCULK_SHRIEKER, CommonBlockProperties.ACTIVE, CommonBlockProperties.CAN_SUMMON);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    public BlockSculkShrieker() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    public BlockSculkShrieker(BlockState blockstate) {
-        super(blockstate);
+    override val resistance: Double
+        get() = 3.0
+
+    override val hardness: Double
+        get() = 3.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
+
+    override val blockEntityClass: Class<out Any>
+        get() = BlockEntitySculkShrieker::class.java
+
+    override val blockEntityType: String
+        get() = BlockEntity.SCULK_SHRIEKER
+
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Sculk Shrieker";
+    override fun breaksWhenMoved(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBePulled() {
-        return false;
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBePushed() {
-        return false;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public double getResistance() {
-        return 3;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public double getHardness() {
-        return 3.0;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HOE;
-    }
-
-    @Override
-    @NotNull public Class<? extends BlockEntitySculkShrieker> getBlockEntityClass() {
-        return BlockEntitySculkShrieker.class;
-    }
-
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.SCULK_SHRIEKER;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return false;
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return false;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SCULK_SHRIEKER, CommonBlockProperties.ACTIVE, CommonBlockProperties.CAN_SUMMON)
+            get() = Companion.field
     }
 }

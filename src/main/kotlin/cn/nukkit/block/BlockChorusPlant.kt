@@ -1,118 +1,110 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
 
-import javax.annotation.Nullable;
-import java.util.concurrent.ThreadLocalRandom;
+class BlockChorusPlant : BlockTransparent {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockChorusPlant extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHORUS_PLANT);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val name: String
+        get() = "Chorus Plant"
 
-    public BlockChorusPlant() {
-        super(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 0.4
 
-    public BlockChorusPlant(BlockState blockState) {
-        super(blockState);
-    }
+    override val resistance: Double
+        get() = 0.4
 
-    @Override
-    public String getName() {
-        return "Chorus Plant";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    public double getHardness() {
-        return 0.4;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.4;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    private boolean isPositionValid() {
-        // (a chorus plant with at least one other chorus plant horizontally adjacent) breaks unless (at least one of the vertically adjacent blocks is air)
-        // (a chorus plant) breaks unless (the block below is (chorus plant or end stone)) or (any horizontally adjacent block is a (chorus plant above (chorus plant or end stone_))
-        boolean horizontal = false;
-        boolean horizontalSupported = false;
-        Block down = down();
-        for (BlockFace face : BlockFace.Plane.HORIZONTAL) {
-            Block side = getSide(face);
-            if (side.getId().equals(CHORUS_PLANT)) {
-                if (!horizontal) {
-                    if (!up().getId().equals(AIR) && !down.getId().equals(AIR)) {
-                        return false;
+    private val isPositionValid: Boolean
+        get() {
+            // (a chorus plant with at least one other chorus plant horizontally adjacent) breaks unless (at least one of the vertically adjacent blocks is air)
+            // (a chorus plant) breaks unless (the block below is (chorus plant or end stone)) or (any horizontally adjacent block is a (chorus plant above (chorus plant or end stone_))
+            var horizontal = false
+            var horizontalSupported = false
+            val down = down()
+            for (face in BlockFace.Plane.HORIZONTAL) {
+                val side = getSide(face)
+                if (side!!.id == CHORUS_PLANT) {
+                    if (!horizontal) {
+                        if (up()!!.id != AIR && down!!.id != AIR) {
+                            return false
+                        }
+                        horizontal = true
                     }
-                    horizontal = true;
-                }
 
-                Block sideSupport = side.down();
-                if (sideSupport.getId().equals(CHORUS_PLANT) || sideSupport.getId().equals(END_STONE)) {
-                    horizontalSupported = true;
+                    val sideSupport = side.down()
+                    if (sideSupport!!.id == CHORUS_PLANT || sideSupport.id == END_STONE) {
+                        horizontalSupported = true
+                    }
                 }
             }
+
+            if (horizontal && horizontalSupported) {
+                return true
+            }
+
+            return down!!.id == CHORUS_PLANT || down.id == END_STONE
         }
 
-        if (horizontal && horizontalSupported) {
-            return true;
-        }
-        
-        return down.getId().equals(CHORUS_PLANT) || down.getId().equals(END_STONE);
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isPositionValid()) {
-                level.scheduleUpdate(this, 1);
-                return type;
+            if (!isPositionValid) {
+                level.scheduleUpdate(this, 1)
+                return type
             }
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            level.useBreakOn(this.position, null, null, true);
-            return type;
+            level.useBreakOn(this.position, null, null, true)
+            return type
         }
-        
-        return 0;
+
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (!isPositionValid()) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isPositionValid) {
+            return false
         }
-        return super.place(item, block, target, face, fx, fy, fz, player);
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return ThreadLocalRandom.current().nextBoolean() ? new Item[]{ Item.get(ItemID.CHORUS_FRUIT, 0, 1) } : Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (ThreadLocalRandom.current().nextBoolean()) arrayOf(
+            get(
+                ItemID.CHORUS_FRUIT,
+                0,
+                1
+            )
+        ) else Item.EMPTY_ARRAY
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public  boolean sticksToPiston() {
-        return false;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHORUS_PLANT)
+            get() = Companion.field
+    }
 }

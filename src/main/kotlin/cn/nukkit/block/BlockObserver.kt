@@ -1,174 +1,156 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.event.block.BlockRedstoneEvent;
-import cn.nukkit.event.redstone.RedstoneUpdateEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.plugin.PluginManager;
-import cn.nukkit.utils.Faceable;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_FACING_DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.POWERED_BIT;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.event.block.BlockRedstoneEvent
+import cn.nukkit.event.redstone.RedstoneUpdateEvent
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.Faceable
+import cn.nukkit.utils.RedstoneComponent
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+import kotlin.math.abs
 
 /**
  * @author Leonidius20, joserobjr
  * @since 18.08.18
  */
-public class BlockObserver extends BlockSolid implements RedstoneComponent, Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(OBSERVER, CommonBlockProperties.MINECRAFT_FACING_DIRECTION, POWERED_BIT);
+class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), RedstoneComponent, Faceable {
+    override val name: String
+        get() = "Observer"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockObserver() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockObserver(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Observer";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (player != null) {
-            if (Math.abs(player.position.getFloorX() - this.position.south) <= 1 && Math.abs(player.position.getFloorZ() - this.position.west) <= 1) {
-                double y = player.position.up + player.getEyeHeight();
-                if (y - this.position.up > 2) {
-                    setBlockFace(BlockFace.DOWN);
-                } else if (this.position.up - y > 0) {
-                    setBlockFace(BlockFace.UP);
+            if (abs(player.position.floorX - position.x) <= 1 && abs(player.position.floorZ - position.z) <= 1) {
+                val y = player.position.y + player.getEyeHeight()
+                blockFace = if (y - position.y > 2) {
+                    BlockFace.DOWN
+                } else if (position.y - y > 0) {
+                    BlockFace.UP
                 } else {
-                    setBlockFace(player.getHorizontalFacing());
+                    player.getHorizontalFacing()
                 }
             } else {
-                setBlockFace(player.getHorizontalFacing());
+                blockFace = player.getHorizontalFacing()
             }
         }
 
-        this.level.setBlock(block.position, this, true, true);
-        return true;
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
+    override val isPowerSource: Boolean
+        get() = true
+
+    override fun getStrongPower(side: BlockFace?): Int {
+        return if (isPowered && side == blockFace) 15 else 0
     }
 
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return isPowered() && side == getBlockFace() ? 15 : 0;
+    override fun getWeakPower(face: BlockFace?): Int {
+        return getStrongPower(face)
     }
 
-    @Override
-    public int getWeakPower(BlockFace face) {
-        return getStrongPower(face);
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_SCHEDULED || type == Level.BLOCK_UPDATE_MOVED) {
-            RedstoneUpdateEvent ev = new RedstoneUpdateEvent(this);
-            PluginManager pluginManager = level.server.pluginManager;
-            pluginManager.callEvent(ev);
-            if (ev.isCancelled()) {
-                return 0;
+            val ev = RedstoneUpdateEvent(this)
+            val pluginManager = level.server.pluginManager
+            pluginManager.callEvent(ev)
+            if (ev.isCancelled) {
+                return 0
             }
 
-            if (!isPowered()) {
-                level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, 0, 15));
-                setPowered(true);
+            if (!isPowered) {
+                level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
+                isPowered = true
 
                 if (level.setBlock(this.position, this)) {
-                    getSide(getBlockFace().getOpposite()).onUpdate(Level.BLOCK_UPDATE_REDSTONE);
-                    RedstoneComponent.updateAroundRedstone(getSide(getBlockFace().getOpposite()));
-                    level.scheduleUpdate(this, 2);
+                    getSide(blockFace!!.getOpposite()!!)!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+                    updateAroundRedstone(getSide(blockFace!!.getOpposite()!!)!!)
+                    level.scheduleUpdate(this, 2)
                 }
             } else {
-                pluginManager.callEvent(new BlockRedstoneEvent(this, 15, 0));
-                setPowered(false);
+                pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
+                isPowered = false
 
-                level.setBlock(this.position, this);
-                getSide(getBlockFace().getOpposite()).onUpdate(Level.BLOCK_UPDATE_REDSTONE);
-                RedstoneComponent.updateAroundRedstone(getSide(getBlockFace().getOpposite()));
+                level.setBlock(this.position, this)
+                getSide(blockFace!!.getOpposite()!!)!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+                updateAroundRedstone(getSide(blockFace!!.getOpposite()!!)!!)
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public void onNeighborChange(@NotNull BlockFace side) {
-        Server server = level.server;
-        BlockFace blockFace = getBlockFace();
-        if (!server.settings.levelSettings().enableRedstone() || side != blockFace || level.isUpdateScheduled(this.position, this)) {
-            return;
-        }
-
-        RedstoneUpdateEvent ev = new RedstoneUpdateEvent(this);
-        server.pluginManager.callEvent(ev);
-        if (ev.isCancelled()) {
-            return;
+    override fun onNeighborChange(side: BlockFace) {
+        val server = level.server
+        val blockFace = blockFace
+        if (!server.settings.levelSettings().enableRedstone() || side != blockFace || level.isUpdateScheduled(
+                this.position,
+                this
+            )
+        ) {
+            return
         }
 
-        level.scheduleUpdate(this, 1);
+        val ev = RedstoneUpdateEvent(this)
+        server.pluginManager.callEvent(ev)
+        if (ev.isCancelled) {
+            return
+        }
+
+        level.scheduleUpdate(this, 1)
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public double getHardness() {
-        return 3.5;
-    }
+    override val hardness: Double
+        get() = 3.5
 
-    @Override
-    public double getResistance() {
-        return 17.5;
-    }
+    override val resistance: Double
+        get() = 17.5
 
-    public boolean isPowered() {
-        return getPropertyValue(POWERED_BIT);
-    }
+    var isPowered: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT)
+        set(powered) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT, powered)
+        }
 
-    public void setPowered(boolean powered) {
-        setPropertyValue(POWERED_BIT, powered);
-    }
+    override var blockFace: BlockFace?
+        get() = getPropertyValue(CommonBlockProperties.MINECRAFT_FACING_DIRECTION)
+        set(face) {
+            setPropertyValue(
+                CommonBlockProperties.MINECRAFT_FACING_DIRECTION,
+                face
+            )
+        }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return getPropertyValue(MINECRAFT_FACING_DIRECTION);
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(MINECRAFT_FACING_DIRECTION, face);
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.OBSERVER,
+            CommonBlockProperties.MINECRAFT_FACING_DIRECTION,
+            CommonBlockProperties.POWERED_BIT
+        )
+            get() = Companion.field
     }
 }

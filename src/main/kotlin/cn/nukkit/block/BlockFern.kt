@@ -1,124 +1,116 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+class BlockFern : BlockFlowable, FlowerPotBlock {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockFern extends BlockFlowable implements BlockFlowerPot.FlowerPotBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(FERN);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBeReplaced(): Boolean {
+        return true
     }
 
-    public BlockFern() {
-        super(PROPERTIES.getDefaultState());
-    }
+    override val burnChance: Int
+        get() = 60
 
-    public BlockFern(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val burnAbility: Int
+        get() = 100
 
-    @Override
-    public boolean canBeReplaced() {
-        return true;
-    }
+    override val isFertilizable: Boolean
+        get() = true
 
-    @Override
-    public int getBurnChance() {
-        return 60;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 100;
-    }
-
-    @Override
-    public boolean isFertilizable() {
-        return true;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (BlockSweetBerryBush.isSupportValid(down())) {
-            this.level.setBlock(block.position, this, true);
-            return true;
+            level.setBlock(block.position, this, true)
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!BlockSweetBerryBush.isSupportValid(down(1, 0))) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) {
-            Block up = this.up();
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) {
+            val up = this.up()
 
-            if (up.isAir()) {
-                if (player != null && !player.isCreative()) {
-                    item.count--;
+            if (up!!.isAir) {
+                if (player != null && !player.isCreative) {
+                    item.count--
                 }
 
-                BlockLargeFern doublePlant = new BlockLargeFern();
-                doublePlant.setTopHalf(false);
+                val doublePlant = BlockLargeFern()
+                doublePlant.isTopHalf = false
 
-                this.level.addParticle(new BoneMealParticle(this.position));
-                this.level.setBlock(this.position, doublePlant, true, false);
+                level.addParticle(BoneMealParticle(this.position))
+                level.setBlock(this.position, doublePlant, true, false)
 
-                doublePlant.setTopHalf(true);
-                this.level.setBlock(up.position, doublePlant, true);
-                this.level.updateAround(this.position);
+                doublePlant.isTopHalf = true
+                level.setBlock(up.position, doublePlant, true)
+                level.updateAround(this.position)
             }
 
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
+    override fun getDrops(item: Item): Array<Item?>? {
         // https://minecraft.wiki/w/Fortune#Grass_and_ferns
-        List<Item> drops = new ArrayList<>(2);
-        if (item.isShears()) {
-            drops.add(toItem());
+        val drops: MutableList<Item?> = ArrayList(2)
+        if (item.isShears) {
+            drops.add(toItem())
         }
 
-        ThreadLocalRandom random = ThreadLocalRandom.current();
+        val random = ThreadLocalRandom.current()
         if (random.nextInt(8) == 0) {
-            Enchantment fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING);
-            int fortuneLevel = fortune != null ? fortune.getLevel() : 0;
-            int amount = fortuneLevel == 0 ? 1 : 1 + random.nextInt(fortuneLevel * 2);
-            drops.add(Item.get(ItemID.WHEAT_SEEDS, 0, amount));
+            val fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
+            val fortuneLevel = fortune?.level ?: 0
+            val amount = if (fortuneLevel == 0) 1 else 1 + random.nextInt(fortuneLevel * 2)
+            drops.add(get(ItemID.WHEAT_SEEDS, 0, amount))
         }
 
-        return drops.toArray(Item.EMPTY_ARRAY);
+        return drops.toArray(Item.EMPTY_ARRAY)
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHEARS;
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHEARS
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(FERN)
+            get() = Companion.field
     }
 }

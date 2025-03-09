@@ -1,95 +1,77 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
+import cn.nukkit.level.*
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.utils.random.NukkitRandom.nextInt
 
+class BlockBuddingAmethyst : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockBuddingAmethyst extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BUDDING_AMETHYST);
-    private static final NukkitRandom RANDOM = new NukkitRandom();
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockBuddingAmethyst() {
-        super(PROPERTIES.getDefaultState());
+    override val name: String
+        get() = "Budding Amethyst"
+
+    override val resistance: Double
+        get() = 1.5
+
+    override val hardness: Double
+        get() = 1.5
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    public BlockBuddingAmethyst(BlockState blockState) {
-        super(blockState);
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Budding Amethyst";
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public double getResistance() {
-        return 1.5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    @Override
-    public boolean sticksToPiston() {
-        return false;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
             if (RANDOM.nextInt(5) == 1) {
-                tryGrow(0);
+                tryGrow(0)
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    public void tryGrow(int time) {
+    fun tryGrow(time: Int) {
         if (time > 6) {
-            return;
+            return
         }
-        final BlockFace face = BlockFace.fromIndex(RANDOM.nextInt(6));
-        final Block side = this.getSide(face);
-        BlockAmethystBud tmp;
-        if (side.canBeReplaced()) {
-            tmp = new BlockSmallAmethystBud();
-            tmp.setBlockFace(face);
-            this.level.setBlock(side.position, tmp, true, true);
-        } else if (side instanceof BlockSmallAmethystBud) {
-            tmp = new BlockMediumAmethystBud();
-            tmp.setBlockFace(face);
-            this.level.setBlock(side.position, tmp, true, true);
-        } else if (side instanceof BlockMediumAmethystBud) {
-            tmp = new BlockLargeAmethystBud();
-            tmp.setBlockFace(face);
-            this.level.setBlock(side.position, tmp, true, true);
-        } else if (side instanceof BlockLargeAmethystBud) {
-            tmp = new BlockAmethystCluster();
-            tmp.setBlockFace(face);
-            this.level.setBlock(side.position, tmp, true, true);
+        val face = fromIndex(RANDOM.nextInt(6))
+        val side = this.getSide(face!!)
+        val tmp: BlockAmethystBud
+        if (side!!.canBeReplaced()) {
+            tmp = BlockSmallAmethystBud()
+            tmp.blockFace = face
+            level.setBlock(side.position, tmp, true, true)
+        } else if (side is BlockSmallAmethystBud) {
+            tmp = BlockMediumAmethystBud()
+            tmp.blockFace = face
+            level.setBlock(side.position, tmp, true, true)
+        } else if (side is BlockMediumAmethystBud) {
+            tmp = BlockLargeAmethystBud()
+            tmp.blockFace = face
+            level.setBlock(side.position, tmp, true, true)
+        } else if (side is BlockLargeAmethystBud) {
+            tmp = BlockAmethystCluster()
+            tmp.blockFace = face
+            level.setBlock(side.position, tmp, true, true)
         } else {
-            tryGrow(time + 1);
+            tryGrow(time + 1)
         }
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BUDDING_AMETHYST)
+            get() = Companion.field
+        private val RANDOM: NukkitRandom = NukkitRandom()
     }
 }

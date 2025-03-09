@@ -1,103 +1,89 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.inventory.BlockInventoryHolder;
-import cn.nukkit.inventory.Inventory;
-import cn.nukkit.inventory.LoomInventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Supplier;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.inventory.BlockInventoryHolder
+import cn.nukkit.inventory.Inventory
+import cn.nukkit.inventory.LoomInventory
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.horizontals
+import cn.nukkit.utils.Faceable
+import java.util.function.Supplier
 
 /**
  * @implNote Faceable since FUTURE
  */
+class BlockLoom @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockState), Faceable, BlockInventoryHolder {
+    override val name: String
+        get() = "Loom"
 
-public class BlockLoom extends BlockSolid implements Faceable, BlockInventoryHolder {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LOOM, CommonBlockProperties.DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemBlock(BlockLoom())
     }
 
-    public BlockLoom() {
-        this(PROPERTIES.getDefaultState());
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override val resistance: Double
+        get() = 12.5
+
+    override val hardness: Double
+        get() = 2.5
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockLoom(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Loom";
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockLoom());
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public double getResistance() {
-        return 12.5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 2.5;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player != null) {
-            Item itemInHand = player.getInventory().getItemInHand();
-            if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull())) {
-                return false;
+            val itemInHand = player.getInventory().itemInHand
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+                return false
             }
-            player.addWindow(getInventory());
+            player.addWindow(inventory!!)
         }
-        return true;
+        return true
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (player != null) {
-            setBlockFace(player.getDirection().getOpposite());
+            blockFace = player.getDirection()!!.getOpposite()!!
         }
-        this.level.setBlock(this.position, this, true, true);
-        return true;
+        level.setBlock(this.position, this, true, true)
+        return true
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.getHorizontals()[getPropertyValue(CommonBlockProperties.DIRECTION)];
+    override var blockFace: BlockFace
+        get() = horizontals[getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)]!!
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face.horizontalIndex)
+        }
+
+    override fun blockInventorySupplier(): Supplier<Inventory?> {
+        return Supplier { LoomInventory(this) }
     }
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.DIRECTION, face.horizontalIndex);
-    }
-
-    @Override
-    public Supplier<Inventory> blockInventorySupplier() {
-        return () -> new LoomInventory(this);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LOOM, CommonBlockProperties.DIRECTION)
+            get() = Companion.field
     }
 }

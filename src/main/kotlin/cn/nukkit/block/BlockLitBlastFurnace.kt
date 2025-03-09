@@ -1,45 +1,27 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityBlastFurnace;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.blockentity.*
+import cn.nukkit.item.*
 
-public class BlockLitBlastFurnace extends BlockLitFurnace {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIT_BLAST_FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
+open class BlockLitBlastFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockLitFurnace(blockstate) {
+    override val name: String
+        get() = "Burning Blast Furnace"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val blockEntityType: String
+        get() = BlockEntity.BLAST_FURNACE
+
+    override val blockEntityClass: Class<out BlockEntityFurnace>
+        get() = BlockEntityBlastFurnace::class.java
+
+    override fun toItem(): Item? {
+        return ItemBlock(BlockBlastFurnace())
     }
 
-    public BlockLitBlastFurnace() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockLitBlastFurnace(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Burning Blast Furnace";
-    }
-
-    @Override
-    @NotNull public String getBlockEntityType() {
-        return BlockEntity.BLAST_FURNACE;
-    }
-
-    @Override
-    @NotNull public Class<? extends BlockEntityBlastFurnace> getBlockEntityClass() {
-        return BlockEntityBlastFurnace.class;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockBlastFurnace());
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.LIT_BLAST_FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

@@ -1,93 +1,78 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.event.block.BlockFadeEvent;
-import cn.nukkit.event.block.BlockSpreadEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.level.generator.object.BlockManager;
-import cn.nukkit.level.generator.object.legacytree.LegacyTallGrass;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.event.block.BlockFadeEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.Sound
+import cn.nukkit.level.generator.`object`.BlockManager.applyBlockUpdate
+import cn.nukkit.level.generator.`object`.legacytree.LegacyTallGrass.growGrass
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.*
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
+open class BlockGrassBlock(blockstate: BlockState?) : BlockDirt(blockstate) {
+    override val resistance: Double
+        get() = 0.6
 
-public class BlockGrassBlock extends BlockDirt {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GRASS_BLOCK);
+    override val name: String
+        get() = "Grass Block"
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockGrassBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.6;
-    }
-
-    @Override
-    public String getName() {
-        return "Grass Block";
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (!this.up().canBeReplaced()) {
-            return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (!up()!!.canBeReplaced()) {
+            return false
         }
 
-        if (item.isFertilizer()) {
-            if (player != null && (player.gamemode & 0x01) == 0) {
-                item.count--;
+        if (item.isFertilizer) {
+            if (player != null && (player.gamemode and 0x01) == 0) {
+                item.count--
             }
-            this.level.addParticle(new BoneMealParticle(this.position));
-            BlockManager blockManager = new BlockManager(this.level);
-            LegacyTallGrass.growGrass(blockManager, this.position, new NukkitRandom());
-            blockManager.applyBlockUpdate();
-            return true;
-        } else if (item.isHoe()) {
-            item.useOn(this);
-            this.level.setBlock(this.position, Block.get(BlockID.FARMLAND));
+            level.addParticle(BoneMealParticle(this.position))
+            val blockManager: BlockManager = BlockManager(this.level)
+            LegacyTallGrass.growGrass(blockManager, this.position, NukkitRandom())
+            blockManager.applyBlockUpdate()
+            return true
+        } else if (item.isHoe) {
+            item.useOn(this)
+            level.setBlock(this.position, get(FARMLAND))
             if (player != null) {
-                player.level.addSound(player.position, Sound.USE_GRASS);
+                player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
-            return true;
-        } else if (item.isShovel()) {
-            item.useOn(this);
-            this.level.setBlock(this.position, Block.get(BlockID.GRASS_PATH));
+            return true
+        } else if (item.isShovel) {
+            item.useOn(this)
+            level.setBlock(this.position, get(GRASS_PATH))
             if (player != null) {
-                player.level.addSound(player.position, Sound.USE_GRASS);
+                player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
             // Grass dies and changes to dirt after a random time (when a random tick lands on the block)
             // if directly covered by any opaque block.
             // Transparent blocks can kill grass in a similar manner,
             // but only if they cause the light level above the grass block to be four or below (like water does),
             // and the surrounding area is not otherwise sufficiently lit up.
-            if (up().getLightFilter() > 1) {
-                BlockFadeEvent ev = new BlockFadeEvent(this, Block.get(BlockID.DIRT));
-                Server.getInstance().pluginManager.callEvent(ev);
-                if (!ev.isCancelled()) {
-                    this.level.setBlock(this.position, ev.newState);
-                    return type;
+            if (up()!!.lightFilter > 1) {
+                val ev = BlockFadeEvent(this, get(DIRT))
+                instance!!.pluginManager.callEvent(ev)
+                if (!ev.isCancelled) {
+                    level.setBlock(this.position, ev.newState)
+                    return type
                 }
             }
 
@@ -96,45 +81,44 @@ public class BlockGrassBlock extends BlockDirt {
             // For a dirt block to accept grass from a nearby grass block, the following requirements must be met:
 
             // The source block must have a light level of 9 or brighter directly above it.
-            if (level.getFullLight(this.position.add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
-
+            if (level.getFullLight(position.add(0.0, 1.0, 0.0)!!) >= BlockCrops.minimumLightLevel) {
                 // The dirt block receiving grass must be within a 3×5×3 range of the source block
                 // where the source block is in the center of the second topmost layer of that range.
-                ThreadLocalRandom random = ThreadLocalRandom.current();
-                int x = random.nextInt((int) this.position.south - 1, (int) this.position.south + 1 + 1);
-                int y = random.nextInt((int) this.position.up - 3, (int) this.position.up + 1 + 1);
-                int z = random.nextInt((int) this.position.west - 1, (int) this.position.west + 1 + 1);
-                Block block = this.level.getBlock(new Vector3(x, y, z));
-                if (block.getId().equals(Block.DIRT)
-                        // The dirt block must have a light level of at least 4 above it.
-                        && level.getFullLight(block.position) >= 4
 
-                        // Any block directly above the dirt block must not reduce light by 2 levels or more.
-                        && block.up().getLightFilter() < 2) {
-                    BlockSpreadEvent ev = new BlockSpreadEvent(block, this, Block.get(BlockID.GRASS_BLOCK));
-                    Server.getInstance().pluginManager.callEvent(ev);
-                    if (!ev.isCancelled()) {
-                        this.level.setBlock(block.position, ev.newState);
+                val random = ThreadLocalRandom.current()
+                val x = random.nextInt(position.x.toInt() - 1, position.x.toInt() + 1 + 1)
+                val y = random.nextInt(position.y.toInt() - 3, position.y.toInt() + 1 + 1)
+                val z = random.nextInt(position.z.toInt() - 1, position.z.toInt() + 1 + 1)
+                val block = level.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
+                if (block!!.id == Block.DIRT // The dirt block must have a light level of at least 4 above it.
+                    && level.getFullLight(block.position) >= 4 // Any block directly above the dirt block must not reduce light by 2 levels or more.
+                    && block.up()!!.lightFilter < 2
+                ) {
+                    val ev: BlockSpreadEvent = BlockSpreadEvent(block, this, get(GRASS_BLOCK))
+                    instance!!.pluginManager.callEvent(ev)
+                    if (!ev.isCancelled) {
+                        level.setBlock(block.position, ev.newState)
                     }
                 }
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{Block.get(DIRT).toItem()};
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(get(DIRT).toItem())
     }
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    override val isFertilizable: Boolean
+        get() = true
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(GRASS_BLOCK)
+            get() = Companion.field
     }
 }

@@ -1,38 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemCreeperHead;
-import cn.nukkit.item.ItemPlayerHead;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-public class BlockCreeperHead extends BlockHead {
+class BlockCreeperHead(blockState: BlockState?) : BlockHead(blockState) {
+    override val name: String
+        get() = "Creeper Head"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(CREEPER_HEAD, CommonBlockProperties.FACING_DIRECTION);
-
-    public BlockCreeperHead(BlockState blockState) {
-        super(blockState);
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
+            this.toItem()
+        )
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemCreeperHead()
     }
 
-    @Override
-    public String getName() {
-        return "Creeper Head";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                this.toItem()
-        };
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemCreeperHead();
+    companion object {
+        val properties: BlockProperties = BlockProperties(CREEPER_HEAD, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

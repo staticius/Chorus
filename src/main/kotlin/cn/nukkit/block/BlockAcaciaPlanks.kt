@@ -1,20 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockAcaciaPlanks extends BlockPlanks {
-    public static final BlockProperties PROPERTIES = new BlockProperties(ACACIA_PLANKS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockAcaciaPlanks() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockAcaciaPlanks(BlockState blockstate) {
-        super(blockstate);
+class BlockAcaciaPlanks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockPlanks(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(ACACIA_PLANKS)
+            get() = Companion.field
     }
 }

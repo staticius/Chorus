@@ -1,139 +1,132 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.registry.Registries;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3.equals
+import cn.nukkit.registry.Registries
 
-import javax.annotation.Nullable;
+abstract class BlockCopperGrateBase(blockState: BlockState?) : BlockFlowable(blockState), Oxidizable,
+    Waxable {
+    override val hardness: Double
+        get() = 3.0
 
-public abstract class BlockCopperGrateBase extends BlockFlowable implements Oxidizable, Waxable {
-    public BlockCopperGrateBase(BlockState blockState) {
-        super(blockState);
+    override val resistance: Double
+        get() = 6.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_STONE
+
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return 3;
+    override fun breaksWhenMoved(): Boolean {
+        return false
     }
 
-    @Override
-    public double getResistance() {
-        return 6;
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    override fun isSolid(side: BlockFace): Boolean {
+        return true
     }
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_STONE;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return false;
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return false;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return true;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        for (Player p : this.level.getPlayers().values()) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        for (p in level.getPlayers().values) {
             // Check if a player's position matches the target block's position
-            if (p.position.floor().equals(block.position.floor())) {
+            if (p.position.floor()!!.equals(block.position.floor())) {
                 // Prevent block placement if a player is found at the target position
-                return false;
+                return false
             }
         }
 
-        Block down = this.down();
-        if (!down.isAir()) {
-            this.level.setBlock(block.position, this, true, true);
-            return true;
+        val down = this.down()
+        if (!down!!.isAir) {
+            level.setBlock(block.position, this, true, true)
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return super<Waxable>.onActivate(item, player, blockFace, fx, fy, fz)
+                || super<Oxidizable>.onActivate(item, player, blockFace, fx, fy, fz)
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return Waxable.super.onActivate(item, player, blockFace, fx, fy, fz)
-                || Oxidizable.super.onActivate(item, player, blockFace, fx, fy, fz);
+    override fun onUpdate(type: Int): Int {
+        return super<Oxidizable>.onUpdate(type)
     }
 
-    @Override
-    public int onUpdate(int type) {
-        return Oxidizable.super.onUpdate(type);
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun getBlockWithOxidizationLevel(oxidizationLevel: OxidizationLevel): Block {
+        return Registries.BLOCK.getBlockProperties(getCopperId(isWaxed, oxidizationLevel)).defaultState.toBlock()
     }
 
-    @Override
-    public Block getBlockWithOxidizationLevel(@NotNull OxidizationLevel oxidizationLevel) {
-        return Registries.BLOCK.getBlockProperties(getCopperId(isWaxed(), oxidizationLevel)).getDefaultState().toBlock();
-    }
-
-    @Override
-    public boolean setOxidizationLevel(@NotNull OxidizationLevel oxidizationLevel) {
-        if (getOxidizationLevel().equals(oxidizationLevel)) {
-            return true;
+    override fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean {
+        if (oxidizationLevel == oxidizationLevel) {
+            return true
         }
-        return level.setBlock(this.position, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
+        return level.setBlock(this.position, get(getCopperId(isWaxed, oxidizationLevel)))
     }
 
-    @Override
-    public boolean setWaxed(boolean waxed) {
-        if (isWaxed() == waxed) {
-            return true;
+    override fun setWaxed(waxed: Boolean): Boolean {
+        if (isWaxed == waxed) {
+            return true
         }
-        return level.setBlock(this.position, Block.get(getCopperId(waxed, getOxidizationLevel())));
+        return level.setBlock(
+            this.position, get(
+                getCopperId(
+                    waxed,
+                    oxidizationLevel
+                )
+            )
+        )
     }
 
-    @Override
-    public boolean isWaxed() {
-        return false;
+    override fun isWaxed(): Boolean {
+        return false
     }
 
-    protected String getCopperId(boolean waxed, @Nullable OxidizationLevel oxidizationLevel) {
+    protected fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {
-            return getId();
+            return id
         }
-        return switch (oxidizationLevel) {
-            case UNAFFECTED -> waxed ? WAXED_COPPER_GRATE : COPPER_GRATE;
-            case EXPOSED -> waxed ? WAXED_EXPOSED_COPPER_GRATE : EXPOSED_COPPER_GRATE;
-            case WEATHERED -> waxed ? WAXED_WEATHERED_COPPER_GRATE : WEATHERED_COPPER_GRATE;
-            case OXIDIZED -> waxed ? WAXED_OXIDIZED_COPPER_GRATE : OXIDIZED_COPPER_GRATE;
-        };
+        return when (oxidizationLevel) {
+            OxidizationLevel.UNAFFECTED -> if (waxed) WAXED_COPPER_GRATE else COPPER_GRATE
+            OxidizationLevel.EXPOSED -> if (waxed) WAXED_EXPOSED_COPPER_GRATE else EXPOSED_COPPER_GRATE
+            OxidizationLevel.WEATHERED -> if (waxed) WAXED_WEATHERED_COPPER_GRATE else WEATHERED_COPPER_GRATE
+            OxidizationLevel.OXIDIZED -> if (waxed) WAXED_OXIDIZED_COPPER_GRATE else OXIDIZED_COPPER_GRATE
+        }
     }
 }

@@ -1,6 +1,7 @@
 package cn.nukkit.level
 
 import cn.nukkit.math.Vector3
+import cn.nukkit.math.Rotator2
 
 /**
  * @author MagicDroidX (Nukkit Project)
@@ -44,9 +45,9 @@ class Transform : Locator {
     }
 
     constructor(position: Vector3, rotation: Rotator2, headYaw: Double, level: Level) : super(
-        position.south,
-        position.up,
-        position.west,
+        position.x,
+        position.y,
+        position.z,
         level
     ) {
         this.rotation = rotation
@@ -90,7 +91,7 @@ class Transform : Locator {
     }
 
     override fun toString(): String {
-        return "Location (level=" + getLevel().name + ", x=" + position.south + ", y=" + position.up + ", z=" + position.west + ", yaw=" + rotation.yaw + ", pitch=" + rotation.pitch + ", headYaw=" + this.headYaw + ")"
+        return "Location (level=" + level.getName() + ", x=" + position.x + ", y=" + position.y + ", z=" + position.z + ", yaw=" + rotation.yaw + ", pitch=" + rotation.pitch + ", headYaw=" + this.headYaw + ")"
     }
 
     fun add(x: Double): Transform {
@@ -103,18 +104,18 @@ class Transform : Locator {
 
     override fun add(x: Double, y: Double, z: Double): Transform {
         return Transform(
-            position.south + x,
-            position.up + y,
-            position.west + z,
+            position.x + x,
+            position.y + y,
+            position.z + z,
             rotation.yaw, rotation.pitch, this.headYaw, this.level
         )
     }
 
-    fun add(x: Vector3): Transform {
+    fun add(v: Vector3): Transform {
         return Transform(
-            position.south + x.getX(),
-            position.up + x.getY(),
-            position.west + x.getZ(),
+            position.x + v.x,
+            position.y + v.y,
+            position.z + v.z,
             rotation.yaw, rotation.pitch, this.headYaw, this.level
         )
     }
@@ -131,33 +132,33 @@ class Transform : Locator {
         return this.add(-x, -y, -z)
     }
 
-    fun subtract(x: Vector3): Transform {
-        return this.add(-x.getX(), -x.getY(), -x.getZ())
+    fun subtract(v: Vector3): Transform {
+        return this.add(-v.x, -v.y, -v.z)
     }
 
     fun multiply(number: Double): Transform {
         return Transform(
-            position.south * number,
-            position.up * number,
-            position.west * number,
+            position.x * number,
+            position.y * number,
+            position.z * number,
             rotation.yaw, rotation.pitch, this.headYaw, this.level
         )
     }
 
     fun divide(number: Double): Transform {
         return Transform(
-            position.south / number,
-            position.up / number,
-            position.west / number,
+            position.x / number,
+            position.y / number,
+            position.z / number,
             rotation.yaw, rotation.pitch, this.headYaw, this.level
         )
     }
 
     fun ceil(): Transform {
         return Transform(
-            Math.ceil(position.south).toInt().toDouble(), Math.ceil(
-                position.up
-            ).toInt().toDouble(), Math.ceil(position.west).toInt().toDouble(),
+            Math.ceil(position.x).toInt().toDouble(), Math.ceil(
+                position.y
+            ).toInt().toDouble(), Math.ceil(position.z).toInt().toDouble(),
             rotation.yaw, rotation.pitch, this.headYaw, this.level
         )
     }
@@ -173,18 +174,18 @@ class Transform : Locator {
 
     fun round(): Transform {
         return Transform(
-            Math.round(position.south).toDouble(), Math.round(
-                position.up
-            ).toDouble(), Math.round(position.west).toDouble(),
+            Math.round(position.x).toDouble(), Math.round(
+                position.y
+            ).toDouble(), Math.round(position.z).toDouble(),
             rotation.yaw, rotation.pitch, this.headYaw, this.level
         )
     }
 
     fun abs(): Transform {
         return Transform(
-            Math.abs(position.south).toInt().toDouble(), Math.abs(
-                position.up
-            ).toInt().toDouble(), Math.abs(position.west).toInt().toDouble(),
+            Math.abs(position.x).toInt().toDouble(), Math.abs(
+                position.y
+            ).toInt().toDouble(), Math.abs(position.z).toInt().toDouble(),
             rotation.yaw, rotation.pitch, this.headYaw, this.level
         )
     }
@@ -203,7 +204,7 @@ class Transform : Locator {
             pitch: Double = 0.0,
             headYaw: Double = 0.0
         ): Transform {
-            return Transform(pos.south, pos.up, pos.west, yaw, pitch, headYaw, level)
+            return Transform(pos.x, pos.y, pos.z, yaw, pitch, headYaw, level)
         }
     }
 }

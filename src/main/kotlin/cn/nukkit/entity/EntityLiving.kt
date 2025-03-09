@@ -117,8 +117,8 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
                     this.setOnFire(2 * server!!.getDifficulty())
                 }
 
-                val deltaX: Double = position.south - damager.position.south
-                val deltaZ: Double = position.west - damager.position.west
+                val deltaX: Double = position.x - damager.position.x
+                val deltaZ: Double = position.z - damager.position.z
                 this.knockBack(damager, source.getDamage().toDouble(), deltaX, deltaZ, source.knockBack.toDouble())
             }
 
@@ -151,19 +151,19 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         f = 1 / f
 
         val motion: Vector3 = Vector3(
-            motion.south,
-            motion.up, motion.west
+            motion.x,
+            motion.y, motion.z
         )
 
-        motion.south /= 2.0
-        motion.up /= 2.0
-        motion.west /= 2.0
-        motion.south += x * f * base
-        motion.up += base
-        motion.west += z * f * base
+        motion.x /= 2.0
+        motion.y /= 2.0
+        motion.z /= 2.0
+        motion.x += x * f * base
+        motion.y += base
+        motion.z += z * f * base
 
-        if (motion.up > base) {
-            motion.up = base
+        if (motion.y > base) {
+            motion.y = base
         }
 
         this.setMotion(motion)
@@ -282,7 +282,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         // Math.round处理在某些条件下 出现x.999999的坐标条件,这里选择四舍五入
         val block: Block = level!!.getTickCachedBlock(
             position.getFloorX(), (Math.round(
-                position.up
+                position.y
             ) - 1).toInt(),
             position.getFloorZ()
         )
@@ -412,7 +412,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         val entityPos: Vector3 = damager.position
         val direction: Vector3? = this.getDirectionVector()
         val normalizedVector: Vector3 = position.subtract(entityPos).normalize()
-        val blocked: Boolean = (normalizedVector.south * direction!!.south) + (normalizedVector.west * direction.west) < 0.0
+        val blocked: Boolean = (normalizedVector.x * direction!!.x) + (normalizedVector.z * direction.z) < 0.0
         val knockBack: Boolean = damager !is EntityProjectile
         val event: EntityDamageBlockedEvent = EntityDamageBlockedEvent(this, source, knockBack, true)
         if (!blocked || !source.canBeReducedByArmor()) {

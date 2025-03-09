@@ -1,209 +1,191 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityEnderChest;
-import cn.nukkit.inventory.HumanEnderChestInventory;
-import cn.nukkit.inventory.SpecialWindowId;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.StringTag;
-import cn.nukkit.nbt.tag.Tag;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.CommonPropertyMap
+import cn.nukkit.blockentity.*
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.StringTag
+import cn.nukkit.nbt.tag.Tag
+import cn.nukkit.utils.Faceable
 
-import javax.annotation.Nullable;
-import java.util.Map;
-
-public class BlockEnderChest extends BlockTransparent implements Faceable, BlockEntityHolder<BlockEntityEnderChest> {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(ENDER_CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityEnderChest?> {
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockEnderChest() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val blockEntityType: String
+        get() = BlockEntity.ENDER_CHEST
 
-    public BlockEnderChest(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val blockEntityClass: Class<out E>
+        get() = BlockEntityEnderChest::class.java
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
+    override val lightLevel: Int
+        get() = 7
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.ENDER_CHEST;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityEnderChest> getBlockEntityClass() {
-        return BlockEntityEnderChest.class;
-    }
+    override val name: String
+        get() = "Ender Chest"
 
-    @Override
-    public int getLightLevel() {
-        return 7;
-    }
+    override val hardness: Double
+        get() = 22.5
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
+    override val resistance: Double
+        get() = 3000.0
 
-    @Override
-    public String getName() {
-        return "Ender Chest";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public double getHardness() {
-        return 22.5;
-    }
+    override var minX: Double
+        get() = position.x + 0.0625
+        set(minX) {
+            super.minX = minX
+        }
 
-    @Override
-    public double getResistance() {
-        return 3000;
-    }
+    override var minZ: Double
+        get() = position.z + 0.0625
+        set(minZ) {
+            super.minZ = minZ
+        }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override var maxX: Double
+        get() = position.x + 0.9375
+        set(maxX) {
+            super.maxX = maxX
+        }
 
-    @Override
-    public double getMinX() {
-        return this.position.south + 0.0625;
-    }
+    override var maxY: Double
+        get() = position.y + 0.9475
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.0625;
-    }
+    override var maxZ: Double
+        get() = position.z + 0.9375
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
 
-    @Override
-    public double getMaxX() {
-        return this.position.south + 0.9375;
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        blockFace = if (player != null) fromHorizontalIndex(
+            player.getDirection()!!.getOpposite()!!.horizontalIndex
+        ) else BlockFace.SOUTH
 
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.9475;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 0.9375;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        setBlockFace(player != null ? BlockFace.fromHorizontalIndex(player.getDirection().getOpposite().horizontalIndex) : BlockFace.SOUTH);
-
-        CompoundTag nbt = new CompoundTag();
+        val nbt = CompoundTag()
 
         if (item.hasCustomName()) {
-            nbt.putString("CustomName", item.getCustomName());
+            nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            Map<String, Tag> customData = item.getCustomBlockData().getTags();
-            for (Map.Entry<String, Tag> tag : customData.entrySet()) {
-                nbt.put(tag.getKey(), tag.getValue());
+            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            for ((key, value) in customData) {
+                nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;
+        return BlockEntityHolder.Companion.setBlockAndCreateEntity<BlockEntityEnderChest?, BlockEnderChest>(
+            this,
+            true,
+            true,
+            nbt
+        ) != null
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if(isNotActivate(player)) return false;
+    override fun onActivate(
+        item: Item,
+        player: Player,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (isNotActivate(player)) return false
 
-        Block top = this.up();
-        if (!top.isTransparent()) {
-            return false;
+        val top = this.up()
+        if (!top!!.isTransparent) {
+            return false
         }
 
-        BlockEntityEnderChest chest = getOrCreateBlockEntity();
-        if (chest.namedTag.contains("Lock") && chest.namedTag.get("Lock") instanceof StringTag
-                && !chest.namedTag.getString("Lock").equals(item.getCustomName())) {
-            return false;
+        val chest = getOrCreateBlockEntity()
+        if (chest.namedTag.contains("Lock") && chest.namedTag.get("Lock") is StringTag
+            && (chest.namedTag.getString("Lock") != item.customName)
+        ) {
+            return false
         }
 
-        HumanEnderChestInventory enderChestInventory = player.getEnderChestInventory();
-        enderChestInventory.setBlockEntityEnderChest(player, chest);
-        player.addWindow(enderChestInventory);
-        return true;
+        val enderChestInventory = player.getEnderChestInventory()
+        enderChestInventory!!.setBlockEntityEnderChest(player, chest)
+        player.addWindow(enderChestInventory)
+        return true
     }
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() >= getToolTier()) {
-            return new Item[]{
-                    Item.get(Block.get(OBSIDIAN).getItemId(), 0, 8)
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isPickaxe && item.tier >= toolTier) {
+            arrayOf(
+                get(get(OBSIDIAN).itemId, 0, 8)
+            )
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public boolean canBePushed() {
-        return false;
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBePulled() {
-        return false;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this, 0);
+    override fun toItem(): Item? {
+        return ItemBlock(this, 0)
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(this.getPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION));
-    }
+    override var blockFace: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]
+        set(face) {
+            this.setPropertyValue(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+            )
+        }
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        this.setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face));
-    }
+    override val blockEntity: E?
+        get() = getTypedBlockEntity(BlockEntityEnderChest::class.java)
 
-    @Override
-    public @Nullable BlockEntityEnderChest getBlockEntity() {
-        return getTypedBlockEntity(BlockEntityEnderChest.class);
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(ENDER_CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

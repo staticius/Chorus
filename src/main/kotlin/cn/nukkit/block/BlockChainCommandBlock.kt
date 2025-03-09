@@ -1,26 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockChainCommandBlock extends BlockCommandBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHAIN_COMMAND_BLOCK, CommonBlockProperties.CONDITIONAL_BIT, CommonBlockProperties.FACING_DIRECTION);
+class BlockChainCommandBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCommandBlock(blockstate) {
+    override val name: String
+        get() = "Chain Command Block"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockChainCommandBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockChainCommandBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Chain Command Block";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            CHAIN_COMMAND_BLOCK,
+            CommonBlockProperties.CONDITIONAL_BIT,
+            CommonBlockProperties.FACING_DIRECTION
+        )
+            get() = Companion.field
     }
 }

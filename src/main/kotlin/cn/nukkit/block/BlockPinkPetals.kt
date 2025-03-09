@@ -1,91 +1,100 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.tags.BlockTags;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
-
-import static cn.nukkit.block.property.CommonBlockProperties.*;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.CommonPropertyMap
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import cn.nukkit.tags.BlockTags
 
 /**
  * PowerNukkitX Project 2023/7/15
  *
  * @author daoge_cmd
  */
-public class BlockPinkPetals extends BlockFlowable {
+class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockState) {
+    override val name: String
+        get() = "Pink Petals"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(PINK_PETALS,
-            GROWTH, MINECRAFT_CARDINAL_DIRECTION);
-
-    public BlockPinkPetals() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPinkPetals(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public String getName() {
-        return "Pink Petals";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (!isSupportValid(block.down())) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isSupportValid(block.down()!!)) {
+            return false
         }
 
         if (player != null) {
-            setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(player.getHorizontalFacing().getOpposite()));
+            setPropertyValue(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[player.getHorizontalFacing().getOpposite()]
+            )
         }
 
-        return this.level.setBlock(this.position, this);
+        return level.setBlock(this.position, this)
     }
 
-    private static boolean isSupportValid(Block block) {
-        return block.is(BlockTags.DIRT);
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) {
-            if (getPropertyValue(GROWTH) < 3) {
-                setPropertyValue(GROWTH, getPropertyValue(GROWTH) + 1);
-                level.setBlock(this.position, this);
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) {
+            if (getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH) < 3) {
+                setPropertyValue<Int, IntPropertyType>(
+                    CommonBlockProperties.GROWTH, getPropertyValue<Int, IntPropertyType>(
+                        CommonBlockProperties.GROWTH
+                    ) + 1
+                )
+                level.setBlock(this.position, this)
             } else {
-                level.dropItem(this.position, this.toItem());
+                level.dropItem(this.position, toItem()!!)
             }
 
-            this.level.addParticle(new BoneMealParticle(this.position));
-            item.count--;
-            return true;
+            level.addParticle(BoneMealParticle(this.position))
+            item.count--
+            return true
         }
 
-        if (Objects.equals(item.getBlockId(), PINK_PETALS) && getPropertyValue(GROWTH) < 3) {
-            setPropertyValue(GROWTH, getPropertyValue(GROWTH) + 1);
-            level.setBlock(this.position, this);
-            item.count--;
-            return true;
+        if (item.blockId == BlockID.PINK_PETALS && getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH) < 3) {
+            setPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.GROWTH, getPropertyValue<Int, IntPropertyType>(
+                    CommonBlockProperties.GROWTH
+                ) + 1
+            )
+            level.setBlock(this.position, this)
+            item.count--
+            return true
         }
 
-        return false;
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.PINK_PETALS,
+            CommonBlockProperties.GROWTH, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )
+            get() = Companion.field
+
+        private fun isSupportValid(block: Block): Boolean {
+            return block.`is`(BlockTags.DIRT)
+        }
     }
 }

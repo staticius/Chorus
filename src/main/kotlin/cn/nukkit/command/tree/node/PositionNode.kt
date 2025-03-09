@@ -21,13 +21,13 @@ abstract class PositionNode(private val pattern: Pattern) : ParamNode<Locator?>(
     fun <E> get(basePos: Locator): E? {
         if (this.value == null) return null
         if (this.getRelative(0)) {
-            value!!.position.setX(value!!.position.south + basePos.x)
+            value!!.position.setX(value!!.position.x + basePos.x)
         }
         if (this.getRelative(1)) {
-            value!!.position.setY(value!!.position.up + basePos.y)
+            value!!.position.setY(value!!.position.y + basePos.y)
         }
         if (this.getRelative(2)) {
-            value!!.position.setZ(value!!.position.west + basePos.z)
+            value!!.position.setZ(value!!.position.z + basePos.z)
         }
         return value as E?
     }
@@ -72,25 +72,25 @@ abstract class PositionNode(private val pattern: Pattern) : ParamNode<Locator?>(
                                 0 -> {
                                     vector3 = BVector3.fromLocation(loc).rotateYaw(-90.0).setPitch(0.0)
                                         .setLength(relativeAngleCoordinate.toDouble()).addToPos()
-                                    coordinate[0] += vector3.south
-                                    coordinate[1] += vector3.up
-                                    coordinate[2] += vector3.west
+                                    coordinate[0] += vector3.x
+                                    coordinate[1] += vector3.y
+                                    coordinate[2] += vector3.z
                                 }
 
                                 1 -> {
                                     vector3 = BVector3.fromLocation(loc).rotatePitch(-90.0)
                                         .setLength(relativeAngleCoordinate.toDouble()).addToPos()
-                                    coordinate[0] += vector3.south
-                                    coordinate[1] += vector3.up
-                                    coordinate[2] += vector3.west
+                                    coordinate[0] += vector3.x
+                                    coordinate[1] += vector3.y
+                                    coordinate[2] += vector3.z
                                 }
 
                                 2 -> {
                                     vector3 = BVector3.fromLocation(loc).setLength(relativeAngleCoordinate.toDouble())
                                         .addToPos()
-                                    coordinate[0] += vector3.south
-                                    coordinate[1] += vector3.up
-                                    coordinate[2] += vector3.west
+                                    coordinate[0] += vector3.x
+                                    coordinate[1] += vector3.y
+                                    coordinate[2] += vector3.z
                                 }
 
                                 else -> {

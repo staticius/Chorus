@@ -1,75 +1,77 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
 
-import static cn.nukkit.block.property.CommonBlockProperties.PILLAR_AXIS;
+abstract class BlockLog(blockState: BlockState?) : BlockSolid(blockState), IBlockWood {
+    abstract override fun getStrippedState(): BlockState
 
-
-public abstract class BlockLog extends BlockSolid implements IBlockWood {
-    public BlockLog(BlockState blockState) {
-        super(blockState);
-    }
-
-    public abstract BlockState getStrippedState();
-
-    public BlockFace.Axis getPillarAxis() {
-        return getPropertyValue(PILLAR_AXIS);
-    }
-
-    public void setPillarAxis(BlockFace.Axis axis) {
-        setPropertyValue(PILLAR_AXIS, axis);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        setPillarAxis(face.getAxis());
-        level.setBlock(block.position, this, true, true);
-        return true;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isAxe()) {
-            Block strippedBlock = Block.get(getStrippedState());
-            strippedBlock.setPropertyValue(PILLAR_AXIS, this.getPillarAxis());
-            item.useOn(this);
-            this.level.setBlock(this.position, strippedBlock, true, true);
-            return true;
+    var pillarAxis: BlockFace.Axis?
+        get() = getPropertyValue(
+            CommonBlockProperties.PILLAR_AXIS
+        )
+        set(axis) {
+            setPropertyValue(
+                CommonBlockProperties.PILLAR_AXIS,
+                axis
+            )
         }
-        return false;
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        pillarAxis = face.axis
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public double getResistance() {
-        return 2;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isAxe) {
+            val strippedBlock = get(strippedState)
+            strippedBlock.setPropertyValue(
+                CommonBlockProperties.PILLAR_AXIS,
+                pillarAxis
+            )
+            item.useOn(this)
+            level.setBlock(this.position, strippedBlock, true, true)
+            return true
+        }
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
+    override val resistance: Double
+        get() = 2.0
 
-    @Override
-    public int getBurnAbility() {
-        return 10;
-    }
+    override val hardness: Double
+        get() = 2.0
+
+    override val burnChance: Int
+        get() = 5
+
+    override val burnAbility: Int
+        get() = 10
 }

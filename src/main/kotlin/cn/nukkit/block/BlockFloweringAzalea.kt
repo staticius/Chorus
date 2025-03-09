@@ -1,27 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockFloweringAzalea @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockAzalea(blockstate) {
+    override val name: String
+        get() = "FloweringAzalea"
 
-public class BlockFloweringAzalea extends BlockAzalea {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(FLOWERING_AZALEA);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    companion object {
+        val properties: BlockProperties = BlockProperties(FLOWERING_AZALEA)
+            get() = Companion.field
     }
-
-    public BlockFloweringAzalea() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockFloweringAzalea(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "FloweringAzalea";
-    }
-
 }

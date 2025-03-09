@@ -1,44 +1,27 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBambooSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
+class BlockBambooWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockWallSign(blockState) {
+    override val name: String
+        get() = "Bamboo Wall Sign"
 
-
-public class BlockBambooWallSign extends BlockWallSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_WALL_SIGN, FACING_DIRECTION);
-
-    public BlockBambooWallSign() {
-        this(PROPERTIES.getDefaultState());
+    override fun getStandingSignId(): String {
+        return BAMBOO_STANDING_SIGN
     }
 
-    public BlockBambooWallSign(BlockState blockState) {
-        super(blockState);
+    override fun getWallSignId(): String {
+        return BlockAcaciaWallSign.properties.identifier
     }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemBambooSign()
     }
 
-    public String getName() {
-        return "Bamboo Wall Sign";
-    }
-
-    @Override
-    public String getStandingSignId() {
-        return BAMBOO_STANDING_SIGN;
-    }
-
-    @Override
-    public String getWallSignId() {
-        return BlockAcaciaWallSign.PROPERTIES.getIdentifier();
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBambooSign();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BAMBOO_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

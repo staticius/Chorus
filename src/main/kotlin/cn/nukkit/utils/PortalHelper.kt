@@ -89,7 +89,7 @@ object PortalHelper : BlockID {
             )
         }
         val heightDistance = Comparator.comparingDouble { block: Block? ->
-            val ey = by - block!!.position.up
+            val ey = by - block!!.position.y
             ey * ey
         }
 

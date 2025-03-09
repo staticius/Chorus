@@ -1,28 +1,17 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.DoublePlantType;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockSunflower extends BlockDoublePlant {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SUNFLOWER, CommonBlockProperties.UPPER_BLOCK_BIT);
+class BlockSunflower : BlockDoublePlant {
+    constructor() : super(Companion.properties.getDefaultState())
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    public BlockSunflower() {
-        super(PROPERTIES.getDefaultState());
-    }
+    override val doublePlantType: DoublePlantType
+        get() = DoublePlantType.SUNFLOWER
 
-    public BlockSunflower(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public @NotNull DoublePlantType getDoublePlantType() {
-        return DoublePlantType.SUNFLOWER;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SUNFLOWER, CommonBlockProperties.UPPER_BLOCK_BIT)
+            get() = Companion.field
     }
 }

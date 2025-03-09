@@ -1,22 +1,29 @@
-package cn.nukkit.block.customblock.data;
+package cn.nukkit.block.customblock.data
 
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.FloatTag;
-import cn.nukkit.nbt.tag.ListTag;
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.FloatTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.nbt.tag.Tag
 
-
-public record SelectionBox(double originX, double originY, double originZ, double sizeX, double sizeY,
-                           double sizeZ) implements NBTData {
-    public CompoundTag toCompoundTag() {
-        return new CompoundTag()
-                .putBoolean("enabled", true)
-                .putList("origin", new ListTag<>()
-                        .add(new FloatTag((float) originX))
-                        .add(new FloatTag((float) originY))
-                        .add(new FloatTag((float) originZ)))
-                .putList("size", new ListTag<>()
-                        .add(new FloatTag((float) sizeX))
-                        .add(new FloatTag((float) sizeY))
-                        .add(new FloatTag((float) sizeZ)));
+@JvmRecord
+data class SelectionBox(
+    val originX: Double, val originY: Double, val originZ: Double, val sizeX: Double, val sizeY: Double,
+    val sizeZ: Double
+) : NBTData {
+    override fun toCompoundTag(): CompoundTag? {
+        return CompoundTag()
+            .putBoolean("enabled", true)
+            .putList(
+                "origin", ListTag<Tag?>()
+                    .add(FloatTag(originX.toFloat()))
+                    .add(FloatTag(originY.toFloat()))
+                    .add(FloatTag(originZ.toFloat()))
+            )
+            .putList(
+                "size", ListTag<Tag?>()
+                    .add(FloatTag(sizeX.toFloat()))
+                    .add(FloatTag(sizeY.toFloat()))
+                    .add(FloatTag(sizeZ.toFloat()))
+            )
     }
 }

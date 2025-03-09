@@ -1,41 +1,25 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
-public class BlockLitDeepslateRedstoneOre extends BlockDeepslateRedstoneOre implements IBlockOreRedstoneGlowing {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIT_DEEPSLATE_REDSTONE_ORE);
+class BlockLitDeepslateRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDeepslateRedstoneOre(blockstate), IBlockOreRedstoneGlowing {
+    override val name: String
+        get() = "Glowing Deepslate Redstone Ore"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val lightLevel: Int
+        get() = 9
+
+    override fun toItem(): Item? {
+        return super<IBlockOreRedstoneGlowing>.toItem()
     }
 
-    public BlockLitDeepslateRedstoneOre() {
-        this(PROPERTIES.getDefaultState());
+    override fun onUpdate(type: Int): Int {
+        return super<IBlockOreRedstoneGlowing>.onUpdate(this, type)
     }
 
-    public BlockLitDeepslateRedstoneOre(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Glowing Deepslate Redstone Ore";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 9;
-    }
-
-    @Override
-    public Item toItem() {
-        return IBlockOreRedstoneGlowing.super.toItem();
-    }
-
-    @Override
-    public int onUpdate(int type) {
-        return IBlockOreRedstoneGlowing.super.onUpdate(this, type);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LIT_DEEPSLATE_REDSTONE_ORE)
+            get() = Companion.field
     }
 }

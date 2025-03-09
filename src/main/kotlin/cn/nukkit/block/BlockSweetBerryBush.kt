@@ -1,214 +1,196 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.event.block.BlockHarvestEvent;
-import cn.nukkit.event.entity.EntityDamageByBlockEvent;
-import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemSweetBerries;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.Sound;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.MathHelper;
-import cn.nukkit.tags.BlockTags;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.entity.Entity
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.MathHelper.clamp
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockstate) {
+    override val name: String
+        get() = "Sweet Berry Bush"
 
-public class BlockSweetBerryBush extends BlockFlowable {
+    override val burnChance: Int
+        get() = 30
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(SWEET_BERRY_BUSH, CommonBlockProperties.GROWTH);
+    override val burnAbility: Int
+        get() = 60
 
-    public BlockSweetBerryBush() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockSweetBerryBush(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val hardness: Double
+        get() = if (growth == 0) 0.0 else 0.25
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        val age: Int = MathHelper.clamp(growth, 0, 3)
 
-    @Override
-    public String getName() {
-        return "Sweet Berry Bush";
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 30;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 60;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public double getHardness() {
-        return getGrowth() == 0 ? 0 : 0.25;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        int age = MathHelper.clamp(getGrowth(), 0, 3);
-
-        if (age < 3 && item.isFertilizer()) {
-            BlockSweetBerryBush block = (BlockSweetBerryBush) this.clone();
-            block.setGrowth(block.getGrowth() + 1);
-            if (block.getGrowth() > 3) {
-                block.setGrowth(3);
+        if (age < 3 && item.isFertilizer) {
+            val block = clone() as BlockSweetBerryBush
+            block.setGrowth(block.growth + 1)
+            if (block.growth > 3) {
+                block.setGrowth(3)
             }
-            BlockGrowEvent ev = new BlockGrowEvent(this, block);
-            Server.getInstance().pluginManager.callEvent(ev);
+            val ev: BlockGrowEvent = BlockGrowEvent(this, block)
+            instance!!.pluginManager.callEvent(ev)
 
-            if (ev.isCancelled()) {
-                return false;
+            if (ev.isCancelled) {
+                return false
             }
 
-            this.level.setBlock(this.position, ev.newState, false, true);
-            this.level.addParticle(new BoneMealParticle(this.position));
+            level.setBlock(this.position, ev.newState, false, true)
+            level.addParticle(BoneMealParticle(this.position))
 
-            if (player != null && (player.gamemode & 0x01) == 0) {
-                item.count--;
+            if (player != null && (player.gamemode and 0x01) == 0) {
+                item.count--
             }
 
-            return true;
+            return true
         }
 
-        if (age < 2){
-            return true;
+        if (age < 2) {
+            return true
         }
 
-        int amount = 1 + ThreadLocalRandom.current().nextInt(2);
+        var amount = 1 + ThreadLocalRandom.current().nextInt(2)
         if (age == 3) {
-            amount++;
+            amount++
         }
 
-        BlockHarvestEvent event = new BlockHarvestEvent(this,
-                new BlockSweetBerryBush().setGrowth(1),
-                new Item[]{ new ItemSweetBerries(0, amount) }
-        );
+        val event: BlockHarvestEvent = BlockHarvestEvent(
+            this,
+            BlockSweetBerryBush().setGrowth(1),
+            arrayOf<Item>(ItemSweetBerries(0, amount))
+        )
 
-        level.server.pluginManager.callEvent(event);
-        if (!event.isCancelled()) {
-            level.setBlock(this.position, event.newState, true, true);
-            Item[] drops = event.drops;
+        level.server.pluginManager.callEvent(event)
+        if (!event.isCancelled) {
+            level.setBlock(this.position, event.newState, true, true)
+            val drops: Array<Item> = event.drops
             if (drops != null) {
-                Locator dropPos = add(0.5, 0.5, 0.5);
-                for (Item drop : drops) {
+                val dropPos = add(0.5, 0.5, 0.5)
+                for (drop in drops) {
                     if (drop != null) {
-                        level.dropItem(dropPos.position, drop);
+                        level.dropItem(dropPos.position, drop)
                     }
                 }
             }
         }
 
-        return true;
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isSupportValid(down())) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+            if (!isSupportValid(down()!!)) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (getGrowth() < 3 && ThreadLocalRandom.current().nextInt(5) == 0
-                    && level.getFullLight(this.position.add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
-                BlockGrowEvent event = new BlockGrowEvent(this, Block.get(getId()).setPropertyValue(CommonBlockProperties.GROWTH, getGrowth() + 1));
-                if (!event.isCancelled()) {
-                    level.setBlock(this.position, event.newState, true, true);
+            if (growth < 3 && ThreadLocalRandom.current().nextInt(5) == 0 && level.getFullLight(
+                    position.add(0.0, 1.0, 0.0)!!
+                ) >= BlockCrops.minimumLightLevel
+            ) {
+                val event: BlockGrowEvent = BlockGrowEvent(
+                    this, get(id).setPropertyValue<Int, IntPropertyType>(
+                        CommonBlockProperties.GROWTH, growth + 1
+                    )
+                )
+                if (!event.isCancelled) {
+                    level.setBlock(this.position, event.newState, true, true)
                 }
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (target.getId().equals(SWEET_BERRY_BUSH) || !block.isAir()) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (target.id == BlockID.SWEET_BERRY_BUSH || !block.isAir) {
+            return false
         }
-        if (isSupportValid(down())) {
-            this.level.setBlock(block.position, this, true);
-            return true;
+        if (isSupportValid(down()!!)) {
+            level.setBlock(block.position, this, true)
+            return true
         }
-        return false;
+        return false
     }
 
-    public static boolean isSupportValid(Block block) {
-        return block.is(BlockTags.DIRT);
+    override fun hasEntityCollision(): Boolean {
+        return growth > 0
     }
 
-    @Override
-    public boolean hasEntityCollision() {
-        return getGrowth() > 0;
-    }
-
-    @Override
-    public void onEntityCollide(Entity entity) {
-        if (getGrowth() > 0) {
+    override fun onEntityCollide(entity: Entity) {
+        if (growth > 0) {
             if (entity.positionChanged && !entity.isSneaking() && ThreadLocalRandom.current().nextInt(20) == 0) {
-                if (entity.attack(new EntityDamageByBlockEvent(this, entity, EntityDamageEvent.DamageCause.CONTACT, 1))) {
-                    level.addSound(entity.position, Sound.BLOCK_SWEET_BERRY_BUSH_HURT);
+                if (entity.attack(EntityDamageByBlockEvent(this, entity, EntityDamageEvent.DamageCause.CONTACT, 1f))) {
+                    level.addSound(entity.position, Sound.BLOCK_SWEET_BERRY_BUSH_HURT)
                 }
             }
         }
     }
 
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return getGrowth() > 0 ? this : null;
-    }
+    override val collisionBoundingBox: AxisAlignedBB?
+        get() = if (growth > 0) this else null
 
-    @Override
-    public Item[] getDrops(Item item) {
-        int age = MathHelper.clamp(getGrowth(), 0, 3);
-        
-        int amount = 1;
+    override fun getDrops(item: Item): Array<Item?>? {
+        val age: Int = MathHelper.clamp(growth, 0, 3)
+
+        var amount = 1
         if (age > 1) {
-            amount = 1 + ThreadLocalRandom.current().nextInt(2);
+            amount = 1 + ThreadLocalRandom.current().nextInt(2)
             if (age == 3) {
-                amount++;
+                amount++
             }
         }
 
-        return new Item[]{ new ItemSweetBerries(0, amount) };
+        return arrayOf<Item?>(ItemSweetBerries(0, amount))
     }
 
-    public int getGrowth() {
-        return getPropertyValue(CommonBlockProperties.GROWTH);
+    val growth: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH)
+
+    fun setGrowth(growth: Int): Block {
+        return setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH, growth)
     }
 
-    public Block setGrowth(int growth) {
-        return setPropertyValue(CommonBlockProperties.GROWTH, growth);
+    override fun toItem(): Item? {
+        return ItemSweetBerries()
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemSweetBerries();
-    }
+    override val isFertilizable: Boolean
+        get() = true
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SWEET_BERRY_BUSH, CommonBlockProperties.GROWTH)
+            get() = Companion.field
+
+        fun isSupportValid(block: Block): Boolean {
+            return block.`is`(BlockTags.DIRT)
+        }
     }
 }

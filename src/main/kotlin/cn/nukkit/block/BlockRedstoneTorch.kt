@@ -1,141 +1,131 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.redstone.RedstoneUpdateEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import static cn.nukkit.block.property.CommonBlockProperties.TORCH_FACING_DIRECTION;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.RedstoneComponent.updateAllAroundRedstone
 
 /**
  * @author Angelic47 (Nukkit Project)
  */
+class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockTorch(blockstate), RedstoneComponent {
+    override val name: String
+        get() = "Redstone Torch"
 
-public class BlockRedstoneTorch extends BlockTorch implements RedstoneComponent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(REDSTONE_TORCH, TORCH_FACING_DIRECTION);
+    override val lightLevel: Int
+        get() = 7
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockRedstoneTorch() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRedstoneTorch(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Redstone Torch";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 7;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (!super.place(item, block, target, face, fx, fy, fz, player)) {
-            return false;
+            return false
         }
 
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
+        if (level.server.settings.levelSettings().enableRedstone()) {
             if (!checkState()) {
-                updateAllAroundRedstone(getBlockFace().getOpposite());
+                updateAllAroundRedstone(blockFace!!.getOpposite())
             }
 
-            checkState();
+            checkState()
         }
 
-        return true;
+        return true
     }
 
-    @Override
-    public int getWeakPower(BlockFace side) {
-        return getBlockFace() != side ? 15 : 0;
+    override fun getWeakPower(side: BlockFace?): Int {
+        return if (blockFace != side) 15 else 0
     }
 
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return side == BlockFace.DOWN ? this.getWeakPower(side) : 0;
+    override fun getStrongPower(side: BlockFace?): Int {
+        return if (side == BlockFace.DOWN) this.getWeakPower(side) else 0
     }
 
-    @Override
-    public boolean onBreak(Item item) {
+    override fun onBreak(item: Item?): Boolean {
         if (!super.onBreak(item)) {
-            return false;
+            return false
         }
 
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
-            updateAllAroundRedstone(getBlockFace().getOpposite());
+        if (level.server.settings.levelSettings().enableRedstone()) {
+            updateAllAroundRedstone(blockFace!!.getOpposite())
         }
-        return true;
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (super.onUpdate(type) == 0) {
-            if (!this.level.server.settings.levelSettings().enableRedstone()) {
-                return 0;
+            if (!level.server.settings.levelSettings().enableRedstone()) {
+                return 0
             }
 
             if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-                this.level.scheduleUpdate(this, tickRate());
+                level.scheduleUpdate(this, tickRate())
             } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-                RedstoneUpdateEvent ev = new RedstoneUpdateEvent(this);
-                level.server.pluginManager.callEvent(ev);
+                val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+                level.server.pluginManager.callEvent(ev)
 
-                if (ev.isCancelled()) {
-                    return 0;
+                if (ev.isCancelled) {
+                    return 0
                 }
 
                 if (checkState()) {
-                    return 1;
+                    return 1
                 }
             }
         }
 
-        return 0;
+        return 0
     }
 
-    private boolean checkState() {
-        if (isPoweredFromSide()) {
-            this.level.setBlock(this.position, Block.get(BlockID.UNLIT_REDSTONE_TORCH).setPropertyValues(getPropertyValues()), false, true);
-            updateAllAroundRedstone(getBlockFace().getOpposite());
-            return true;
+    private fun checkState(): Boolean {
+        if (isPoweredFromSide) {
+            level.setBlock(
+                this.position,
+                get(BlockID.UNLIT_REDSTONE_TORCH).setPropertyValues(propertyValues),
+                false,
+                true
+            )
+            updateAllAroundRedstone(blockFace!!.getOpposite())
+            return true
         }
-        return false;
+        return false
     }
 
-    /**
-     * Whether there is a power source in the opposite face of the current face
-     */
-    protected boolean isPoweredFromSide() {
-        BlockFace face = getBlockFace().getOpposite();
-        Block side = this.getSide(face);
-        if (side instanceof BlockPistonBase && side.isGettingPower()) {
-            return true;
+    protected val isPoweredFromSide: Boolean
+        /**
+         * Whether there is a power source in the opposite face of the current face
+         */
+        get() {
+            val face = blockFace!!.getOpposite()
+            val side = this.getSide(face!!)
+            if (side is BlockPistonBase && side.isGettingPower) {
+                return true
+            }
+
+            return level.isSidePowered(side!!.position, face)
         }
 
-        return this.level.isSidePowered(side.position, face);
+    override val isPowerSource: Boolean
+        get() = true
+
+    override fun tickRate(): Int {
+        return 2
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.REDSTONE_TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
+            get() = Companion.field
     }
-
-    @Override
-    public int tickRate() {
-        return 2;
-    }
-
 }

@@ -1,107 +1,88 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * @author Pub4Game
  * @since 2015/12/26
  */
-public class BlockNetherrack extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(NETHERRACK);
+class BlockNetherrack : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockNetherrack() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockNetherrack(BlockState blockState) {
-        super(blockState);
-    }
+    override val resistance: Double
+        get() = 0.4
 
-    @Override
-    public double getResistance() {
-        return 0.4;
-    }
+    override val hardness: Double
+        get() = 0.4
 
-    @Override
-    public double getHardness() {
-        return 0.4;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
+    override val name: String
+        get() = "Netherrack"
 
-    @Override
-    public String getName() {
-        return "Netherrack";
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isNull() || !item.isFertilizer() || up().getId() != AIR) {
-            return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isNull || !item.isFertilizer || up()!!.id !== BlockID.AIR) {
+            return false
         }
 
-        List<String> options = new ArrayList<String>();
-        for (BlockFace face : BlockFace.Plane.HORIZONTAL) {
-            String id = getSide(face).getId();
-            if ((id.equals(CRIMSON_NYLIUM) || id.equals(WARPED_NYLIUM)) && !options.contains(id)) {
-                options.add(id);
+        val options: MutableList<String> = ArrayList()
+        for (face in BlockFace.Plane.HORIZONTAL) {
+            val id = getSide(face)!!.id
+            if ((id == BlockID.CRIMSON_NYLIUM || id == BlockID.WARPED_NYLIUM) && !options.contains(id)) {
+                options.add(id)
             }
         }
-        
-        String nylium;
-        int size = options.size();
-        if (size == 0) {
-            return false;
+
+        val nylium: String
+        val size = options.size
+        nylium = if (size == 0) {
+            return false
         } else if (size == 1) {
-            nylium = options.get(0);
+            options[0]
         } else {
-            nylium = options.get(ThreadLocalRandom.current().nextInt(size));
+            options[ThreadLocalRandom.current().nextInt(size)]
         }
 
-        if (level.setBlock(this.position, Block.get(nylium), true)) {
-            if (player == null || !player.isCreative()) {
-                item.count--;
+        if (level.setBlock(this.position, get(nylium), true)) {
+            if (player == null || !player.isCreative) {
+                item.count--
             }
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    override val isFertilizable: Boolean
+        get() = true
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.NETHERRACK)
+            get() = Companion.field
     }
 }

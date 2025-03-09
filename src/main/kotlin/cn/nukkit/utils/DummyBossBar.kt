@@ -98,9 +98,9 @@ class DummyBossBar private constructor(builder: Builder) {
         pkAdd.type = Registries.ENTITY.getEntityNetworkId(EntityID.CREEPER)
         pkAdd.entityUniqueId = bossBarId
         pkAdd.entityRuntimeId = bossBarId
-        pkAdd.x = player.position.south.toFloat()
+        pkAdd.x = player.position.x.toFloat()
         pkAdd.y = -74f // Below the bedrock
-        pkAdd.z = player.position.west.toFloat()
+        pkAdd.z = player.position.z.toFloat()
         pkAdd.speedX = 0f
         pkAdd.speedY = 0f
         pkAdd.speedZ = 0f
@@ -173,9 +173,9 @@ class DummyBossBar private constructor(builder: Builder) {
     fun updateBossEntityPosition() {
         val pk = MoveEntityAbsolutePacket()
         pk.eid = this.bossBarId
-        pk.x = player.position.south
+        pk.x = player.position.x
         pk.y = -74.0
-        pk.z = player.position.west
+        pk.z = player.position.z
         pk.headYaw = 0.0
         pk.yaw = 0.0
         pk.pitch = 0.0

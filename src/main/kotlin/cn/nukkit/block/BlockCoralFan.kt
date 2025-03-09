@@ -1,127 +1,129 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.block.BlockFadeEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.*
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.utils.Faceable
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
+abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate), Faceable {
+    override val waterloggingLevel: Int
+        get() = 1
 
-import static cn.nukkit.block.property.CommonBlockProperties.CORAL_FAN_DIRECTION;
+    open val isDead: Boolean
+        get() = false
 
+    abstract val deadCoralFan: Block
 
-public abstract class BlockCoralFan extends BlockFlowable implements Faceable {
-    public BlockCoralFan(BlockState blockstate) {
-        super(blockstate);
-    }
+    override var blockFace: BlockFace?
+        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION) + 1)
+        set(blockFace) {
+            super.blockFace = blockFace
+        }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
+    open val rootsFace: BlockFace?
+        get() = BlockFace.DOWN
 
-    public boolean isDead() {
-        return false;
-    }
-
-    public abstract Block getDeadCoralFan();
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromHorizontalIndex(getPropertyValue(CORAL_FAN_DIRECTION) + 1);
-    }
-
-    public BlockFace getRootsFace() {
-        return BlockFace.DOWN;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            Block side = getSide(getRootsFace());
-            if (!side.isSolid() || side.getId().equals(MAGMA) || side.getId().equals(SOUL_SAND)) {
-                this.level.useBreakOn(this.position);
+            val side = getSide(rootsFace!!)
+            if (!side!!.isSolid || side.id == MAGMA || side.id == SOUL_SAND) {
+                level.useBreakOn(this.position)
             } else {
-                this.level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40));
+                level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40))
             }
-            return type;
+            return type
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            Block side = getSide(getRootsFace());
-            if (side.getId().equals(ICE)) {
-                this.level.useBreakOn(this.position);
-                return type;
+            val side = getSide(rootsFace!!)
+            if (side!!.id == ICE) {
+                level.useBreakOn(this.position)
+                return type
             }
 
-            if (!isDead() && !(getLevelBlockAtLayer(1) instanceof BlockFlowingWater) && !(getLevelBlockAtLayer(1) instanceof BlockFrostedIce)) {
-                BlockFadeEvent event = new BlockFadeEvent(this, getDeadCoralFan());
-                if (!event.isCancelled()) {
-                    this.level.setBlock(this.position, event.newState, true, true);
+            if (!isDead && (getLevelBlockAtLayer(1) !is BlockFlowingWater) && (getLevelBlockAtLayer(1) !is BlockFrostedIce)) {
+                val event: BlockFadeEvent = BlockFadeEvent(this, deadCoralFan)
+                if (!event.isCancelled) {
+                    level.setBlock(this.position, event.newState, true, true)
                 }
             }
-            return type;
+            return type
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (getPropertyValue(CORAL_FAN_DIRECTION) == 0) {
-                setPropertyValue(CORAL_FAN_DIRECTION, 1);
+            if (getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION) == 0) {
+                setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION, 1)
             } else {
-                setPropertyValue(CORAL_FAN_DIRECTION, 0);
+                setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION, 0)
             }
-            this.level.setBlock(this.position, this, true, true);
-            return type;
+            level.setBlock(this.position, this, true, true)
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player
+    ): Boolean {
         if (face == BlockFace.DOWN) {
-            return false;
+            return false
         }
 
-        Block layer1 = block.getLevelBlockAtLayer(1);
-        boolean hasWater = layer1 instanceof BlockFlowingWater;
-        if (!layer1.isAir() && (!hasWater || layer1.blockstate.specialValue() != 0 && layer1.blockstate.specialValue() != 8)) {
-            return false;
+        val layer1 = block.getLevelBlockAtLayer(1)
+        val hasWater = layer1 is BlockFlowingWater
+        if (!layer1!!.isAir && (!hasWater || layer1.blockState!!.specialValue()
+                .toInt() != 0 && layer1.blockState!!.specialValue().toInt() != 8)
+        ) {
+            return false
         }
 
-        if (hasWater && layer1.blockstate.specialValue() == 8) {
-            this.level.setBlock(this.position, 1, new BlockFlowingWater(), true, false);
+        if (hasWater && layer1.blockState!!.specialValue().toInt() == 8) {
+            level.setBlock(this.position, 1, BlockFlowingWater(), true, false)
         }
 
-        if (!target.isSolid() || target.getId().equals(MAGMA) || target.getId().equals(SOUL_SAND)) {
-            return false;
+        if (!target.isSolid || target.id == MAGMA || target.id == SOUL_SAND) {
+            return false
         }
 
         if (face == BlockFace.UP) {
-            double rotation = player.rotation.yaw % 360;
+            var rotation = player.rotation.yaw % 360
             if (rotation < 0) {
-                rotation += 360.0;
+                rotation += 360.0
             }
-            int axisBit = rotation >= 0 && rotation < 12 || (342 <= rotation && rotation < 360) ? 0 : 1;
-            setPropertyValue(CORAL_FAN_DIRECTION, axisBit);
-            this.level.setBlock(this.position, 0, hasWater ? this.clone() : getDeadCoralFan().setPropertyValues(blockstate.getBlockPropertyValues()), true, true);
+            val axisBit = if (rotation >= 0 && rotation < 12 || (342 <= rotation && rotation < 360)) 0 else 1
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION, axisBit)
+            level.setBlock(
+                this.position, 0, if (hasWater) this.clone() else deadCoralFan.setPropertyValues(
+                    blockState!!.blockPropertyValues
+                ), true, true
+            )
         } else {
-            Block deadBlock = getDeadCoralFan();
-            this.level.setBlock(this.position, 0, deadBlock, true, true);
+            val deadBlock = deadCoralFan
+            level.setBlock(this.position, 0, deadBlock, true, true)
         }
 
-        return true;
+        return true
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null) {
-            return super.getDrops(item);
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null) {
+            super.getDrops(item)
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 }

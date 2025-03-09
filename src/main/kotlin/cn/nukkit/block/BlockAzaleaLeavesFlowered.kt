@@ -1,29 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-import static cn.nukkit.block.property.CommonBlockProperties.PERSISTENT_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.UPDATE_BIT;
+class BlockAzaleaLeavesFlowered @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockAzaleaLeaves(blockState) {
+    override val name: String
+        get() = "Azalea Leaves Flowered"
 
-public class BlockAzaleaLeavesFlowered extends BlockAzaleaLeaves {
-    public static final BlockProperties PROPERTIES = new BlockProperties(AZALEA_LEAVES_FLOWERED,PERSISTENT_BIT, UPDATE_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            AZALEA_LEAVES_FLOWERED,
+            CommonBlockProperties.PERSISTENT_BIT,
+            CommonBlockProperties.UPDATE_BIT
+        )
+            get() = Companion.field
     }
-
-    public BlockAzaleaLeavesFlowered() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockAzaleaLeavesFlowered(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Azalea Leaves Flowered";
-    }
-
 }

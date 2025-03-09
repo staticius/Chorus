@@ -1,232 +1,220 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.block.property.enums.WoodType;
-import cn.nukkit.event.block.LeavesDecayEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Hash;
-import it.unimi.dsi.fastutil.longs.Long2LongMap;
-import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static cn.nukkit.block.property.CommonBlockProperties.PERSISTENT_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.UPDATE_BIT;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.event.block.LeavesDecayEvent
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemID
+import cn.nukkit.item.ItemTool
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.Hash.hashBlock
+import it.unimi.dsi.fastutil.longs.Long2LongMap
+import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * @author Angelic47 (Nukkit Project)
  */
-public abstract class BlockLeaves extends BlockTransparent {
-    private static final BlockFace[] VISIT_ORDER = new BlockFace[]{
-            BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN, BlockFace.UP
-    };
+abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockState) {
+    override val hardness: Double
+        get() = 0.2
 
-    public BlockLeaves(BlockState blockState) {
-        super(blockState);
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
+
+    abstract val type: WoodType
+
+    override val name: String
+        get() = type.name + " Leaves"
+
+    override val burnChance: Int
+        get() = 30
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override val burnAbility: Int
+        get() = 60
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        this.isPersistent = true
+        level.setBlock(this.position, this, true)
+        return true
     }
 
-    @Override
-    public double getHardness() {
-        return 0.2;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HOE;
-    }
-
-    public abstract WoodType getType();
-
-    @Override
-    public String getName() {
-        return getType().getName() + " Leaves";
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 30;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 60;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        this.setPersistent(true);
-        this.level.setBlock(this.position, this, true);
-        return true;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isShears()) {
-            return new Item[]{
-                    toItem()
-            };
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (item.isShears) {
+            return arrayOf(
+                toItem()
+            )
         }
 
-        List<Item> drops = new ArrayList<>(1);
-        Enchantment fortuneEnchantment = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING);
+        val drops: MutableList<Item> = ArrayList(1)
+        val fortuneEnchantment = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
 
-        int fortune = fortuneEnchantment != null ? fortuneEnchantment.getLevel() : 0;
-        int appleOdds;
-        int stickOdds;
-        int saplingOdds;
-        switch (fortune) {
-            case 0 -> {
-                appleOdds = 200;
-                stickOdds = 50;
-                saplingOdds = getType() == WoodType.JUNGLE ? 40 : 20;
+        val fortune = fortuneEnchantment?.level ?: 0
+        val appleOdds: Int
+        val stickOdds: Int
+        val saplingOdds: Int
+        when (fortune) {
+            0 -> {
+                appleOdds = 200
+                stickOdds = 50
+                saplingOdds = if (type == WoodType.JUNGLE) 40 else 20
             }
-            case 1 -> {
-                appleOdds = 180;
-                stickOdds = 45;
-                saplingOdds = getType() == WoodType.JUNGLE ? 36 : 16;
+
+            1 -> {
+                appleOdds = 180
+                stickOdds = 45
+                saplingOdds = if (type == WoodType.JUNGLE) 36 else 16
             }
-            case 2 -> {
-                appleOdds = 160;
-                stickOdds = 40;
-                saplingOdds = getType() == WoodType.JUNGLE ? 32 : 12;
+
+            2 -> {
+                appleOdds = 160
+                stickOdds = 40
+                saplingOdds = if (type == WoodType.JUNGLE) 32 else 12
             }
-            default -> {
-                appleOdds = 120;
-                stickOdds = 30;
-                saplingOdds = getType() == WoodType.JUNGLE ? 24 : 10;
+
+            else -> {
+                appleOdds = 120
+                stickOdds = 30
+                saplingOdds = if (type == WoodType.JUNGLE) 24 else 10
             }
         }
 
-        ThreadLocalRandom random = ThreadLocalRandom.current();
+        val random = ThreadLocalRandom.current()
         if (canDropApple() && random.nextInt(appleOdds) == 0) {
-            drops.add(Item.get(ItemID.APPLE));
+            drops.add(Item.get(ItemID.APPLE))
         }
         if (random.nextInt(stickOdds) == 0) {
-            drops.add(Item.get(ItemID.STICK));
+            drops.add(Item.get(ItemID.STICK))
         }
         if (random.nextInt(saplingOdds) == 0) {
-            drops.add(toSapling());
+            drops.add(toSapling())
         }
 
-        return drops.toArray(Item.EMPTY_ARRAY);
+        return drops.toArray(Item.EMPTY_ARRAY)
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (isCheckDecay()) {
-                if (isPersistent() || findLog(this, 7, null)) {
-                    setCheckDecay(false);
-                    level.setBlock(this.position, this, false, false);
+            if (isCheckDecay) {
+                if (isPersistent || findLog(this, 7, null)) {
+                    isCheckDecay = false
+                    level.setBlock(this.position, this, false, false)
                 } else {
-                    LeavesDecayEvent ev = new LeavesDecayEvent(this);
-                    Server.getInstance().pluginManager.callEvent(ev);
-                    if (!ev.isCancelled()) {
-                        level.useBreakOn(this.position);
+                    val ev = LeavesDecayEvent(this)
+                    instance!!.pluginManager.callEvent(ev)
+                    if (!ev.isCancelled) {
+                        level.useBreakOn(this.position)
                     }
                 }
-                return type;
+                return type
             }
         } else if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (!isCheckDecay()) {
-                setCheckDecay(true);
-                level.setBlock(this.position, this, false, false);
+            if (!isCheckDecay) {
+                isCheckDecay = true
+                level.setBlock(this.position, this, false, false)
             }
 
             // Slowly propagates the need to update instead of peaking down the TPS for huge trees
-            for (BlockFace side : BlockFace.values()) {
-                Block other = getSide(side);
-                if (other instanceof BlockLeaves otherLeave) {
-                    if (!otherLeave.isCheckDecay()) {
-                        level.scheduleUpdate(otherLeave, 2);
+            for (side in BlockFace.entries) {
+                val other = getSide(side)
+                if (other is BlockLeaves) {
+                    if (!other.isCheckDecay) {
+                        level.scheduleUpdate(other, 2)
                     }
                 }
             }
-            return type;
+            return type
         }
-        return type;
+        return type
     }
 
-    private Boolean findLog(Block current, int distance, Long2LongMap visited) {
+    private fun findLog(current: Block?, distance: Int, visited: Long2LongMap?): Boolean {
+        var visited = visited
         if (visited == null) {
-            visited = new Long2LongOpenHashMap();
-            visited.defaultReturnValue(-1);
+            visited = Long2LongOpenHashMap()
+            visited.defaultReturnValue(-1)
         }
-        if (current instanceof IBlockWood || current instanceof BlockMangroveRoots) {
-            return true;
+        if (current is IBlockWood || current is BlockMangroveRoots) {
+            return true
         }
-        if (distance == 0 || !(current instanceof BlockLeaves)) {
-            return false;
+        if (distance == 0 || current !is BlockLeaves) {
+            return false
         }
-        long hash = Hash.hashBlock(current.position);
+        val hash = hashBlock(current.position)
         if (visited.get(hash) >= distance) {
-            return false;
+            return false
         }
-        visited.put(hash, distance);
-        for (BlockFace face : VISIT_ORDER) {
+        visited.put(hash, distance.toLong())
+        for (face in VISIT_ORDER) {
             if (findLog(current.getSide(face), distance - 1, visited)) {
-                return true;
+                return true
             }
         }
-        return false;
+        return false
     }
 
-    public boolean isCheckDecay() {
-        return getPropertyValue(UPDATE_BIT);
+    var isCheckDecay: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT)
+        set(checkDecay) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.UPDATE_BIT,
+                checkDecay
+            )
+        }
+
+    var isPersistent: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.PERSISTENT_BIT)
+        set(persistent) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.PERSISTENT_BIT,
+                persistent
+            )
+        }
+
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    public void setCheckDecay(boolean checkDecay) {
-        setPropertyValue(UPDATE_BIT, checkDecay);
+    protected fun canDropApple(): Boolean {
+        return type == WoodType.OAK
     }
 
-    public boolean isPersistent() {
-        return getPropertyValue(PERSISTENT_BIT);
+    override fun diffusesSkyLight(): Boolean {
+        return true
     }
 
-    public void setPersistent(boolean persistent) {
-        setPropertyValue(PERSISTENT_BIT, persistent);
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    protected boolean canDropApple() {
-        return getType() == WoodType.OAK;
+    open fun toSapling(): Item {
+        return Item.AIR
     }
 
-    @Override
-    public boolean diffusesSkyLight() {
-        return true;
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    @Override
-    public boolean sticksToPiston() {
-        return false;
-    }
-
-    public Item toSapling() {
-        return Item.AIR;
+    companion object {
+        private val VISIT_ORDER = arrayOf(
+            BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN, BlockFace.UP
+        )
     }
 }

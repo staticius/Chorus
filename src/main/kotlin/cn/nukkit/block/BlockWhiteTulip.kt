@@ -1,22 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+class BlockWhiteTulip : BlockFlower {
+    constructor() : super(Companion.properties.getDefaultState())
 
-public class BlockWhiteTulip extends BlockFlower {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WHITE_TULIP);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockWhiteTulip() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWhiteTulip(BlockState blockstate) {
-        super(blockstate);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WHITE_TULIP)
+            get() = Companion.field
     }
 }

@@ -1,179 +1,176 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.BambooLeafSize;
-import cn.nukkit.block.property.enums.WoodType;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.BambooLeafSize
+import cn.nukkit.block.property.enums.WoodType
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.*
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
-
-
-public class BlockBambooSapling extends BlockSapling {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_SAPLING, CommonBlockProperties.AGE_BIT);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSapling(blockstate) {
+    override fun getWoodType(): WoodType? {
+        return null
     }
 
-    public BlockBambooSapling() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Bamboo Sapling"
 
-    public BlockBambooSapling(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public WoodType getWoodType() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return "Bamboo Sapling";
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (isSupportInvalid()) {
-                level.useBreakOn(this.position, null, null, true);
+            if (isSupportInvalid) {
+                level.useBreakOn(this.position, null, null, true)
             } else {
-                Block up = up();
-                if (up.getId().equals(BAMBOO)) {
-                    BlockBamboo upperBamboo = (BlockBamboo) up;
-                    BlockBamboo newState = new BlockBamboo();
-                    newState.setThick(upperBamboo.isThick());
-                    level.setBlock(this.position, newState, true, true);
+                val up = up()
+                if (up!!.id == BAMBOO) {
+                    val upperBamboo = up as BlockBamboo
+                    val newState = BlockBamboo()
+                    newState.isThick = upperBamboo.isThick
+                    level.setBlock(this.position, newState, true, true)
                 }
             }
-            return type;
+            return type
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            Block up = up();
-            if (!isAge() && up.isAir() && level.getFullLight(up.position) >= BlockCrops.MINIMUM_LIGHT_LEVEL && ThreadLocalRandom.current().nextInt(3) == 0) {
-                BlockBamboo newState = new BlockBamboo();
-                newState.setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
-                BlockGrowEvent blockGrowEvent = new BlockGrowEvent(up, newState);
-                level.server.pluginManager.callEvent(blockGrowEvent);
-                if (!blockGrowEvent.isCancelled()) {
-                    Block newState1 = blockGrowEvent.newState;
-                    newState1.position.up = up.position.up;
-                    newState1.position.south = this.position.south;
-                    newState1.position.west = this.position.west;
-                    newState1.level = level;
-                    newState1.place(toItem(), up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null);
+            val up = up()
+            if (!isAge && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.minimumLightLevel && ThreadLocalRandom.current()
+                    .nextInt(3) == 0
+            ) {
+                val newState = BlockBamboo()
+                newState.bambooLeafSize = BambooLeafSize.SMALL_LEAVES
+                val blockGrowEvent = BlockGrowEvent(up, newState)
+                level.server.pluginManager.callEvent(blockGrowEvent)
+                if (!blockGrowEvent.isCancelled) {
+                    val newState1 = blockGrowEvent.newState
+                    newState1!!.position.y = up.position.y
+                    newState1.position.x = position.x
+                    newState1.position.z = position.z
+                    newState1.level = level
+                    newState1.place(toItem()!!, up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null)
                 }
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (isSupportInvalid()) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (isSupportInvalid) {
+            return false
         }
 
-        if (this.getLevelBlock() instanceof BlockLiquid || this.getLevelBlockAtLayer(1) instanceof BlockLiquid) {
-            return false;
+        if (levelBlock is BlockLiquid || getLevelBlockAtLayer(1) is BlockLiquid) {
+            return false
         }
 
-        this.level.setBlock(this.position, this, true, true);
-        return true;
+        level.setBlock(this.position, this, true, true)
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) {
-
-            boolean success = false;
-            Block block = this.up();
-            if (block.isAir()) {
-                success = grow(block);
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) {
+            var success = false
+            val block = this.up()
+            if (block!!.isAir) {
+                success = grow(block)
             }
 
             if (success) {
-                if (player != null && (player.gamemode & 0x01) == 0) {
-                    item.count--;
+                if (player != null && (player.gamemode and 0x01) == 0) {
+                    item.count--
                 }
 
-                level.addParticle(new BoneMealParticle(this.position));
+                level.addParticle(BoneMealParticle(this.position))
             }
 
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    public boolean grow(Block up) {
-        BlockBamboo bamboo = new BlockBamboo();
-        bamboo.position.south = this.position.south;
-        bamboo.position.up = this.position.up;
-        bamboo.position.west = this.position.west;
-        bamboo.level = level;
-        return bamboo.grow(up);
+    fun grow(up: Block?): Boolean {
+        val bamboo = BlockBamboo()
+        bamboo.position.x = position.x
+        bamboo.position.y = position.y
+        bamboo.position.z = position.z
+        bamboo.level = level
+        return bamboo.grow(up!!)
     }
 
-    private boolean isSupportInvalid() {
-        return switch (down().getId()) {
-            case BAMBOO, DIRT, GRASS_BLOCK, SAND, GRAVEL, PODZOL, BAMBOO_SAPLING, MOSS_BLOCK -> false;
-            default -> true;
-        };
+    private val isSupportInvalid: Boolean
+        get() = when (down()!!.id) {
+            BAMBOO, DIRT, GRASS_BLOCK, SAND, GRAVEL, PODZOL, BAMBOO_SAPLING, MOSS_BLOCK -> false
+            else -> true
+        }
+
+    override val resistance: Double
+        get() = 5.0
+
+    var isAge: Boolean
+        /**
+         * Alias age == 0 | age == false | !age
+         */
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT)
+        set(isAge) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT, isAge)
+        }
+
+    override fun toItem(): Item? {
+        return ItemBlock(BlockBamboo())
     }
 
-    @Override
-    public double getResistance() {
-        return 5;
-    }
+    override var minX: Double
+        get() = position.x + 0.125
+        set(minX) {
+            super.minX = minX
+        }
 
-    /**
-     * Alias age == 0 | age == false | !age
-     */
-    public boolean isAge() {
-        return getPropertyValue(CommonBlockProperties.AGE_BIT);
-    }
+    override var maxX: Double
+        get() = position.x + 0.875
+        set(maxX) {
+            super.maxX = maxX
+        }
 
-    public void setAge(boolean isAge) {
-        setPropertyValue(CommonBlockProperties.AGE_BIT, isAge);
-    }
+    override var minZ: Double
+        get() = position.z + 0.125
+        set(minZ) {
+            super.minZ = minZ
+        }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockBamboo());
-    }
+    override var maxZ: Double
+        get() = position.z + 0.875
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
 
-    @Override
-    public double getMinX() {
-        return this.position.south + 0.125;
-    }
+    override var maxY: Double
+        get() = position.y + 0.875
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    @Override
-    public double getMaxX() {
-        return this.position.south + 0.875;
-    }
-
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.125;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 0.875;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.875;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BAMBOO_SAPLING, CommonBlockProperties.AGE_BIT)
+            get() = Companion.field
     }
 }

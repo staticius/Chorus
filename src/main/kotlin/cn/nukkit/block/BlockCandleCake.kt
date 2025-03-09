@@ -1,162 +1,154 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.Sound
+import cn.nukkit.math.BlockFace
 
-import javax.annotation.Nullable;
-import java.util.Objects;
+open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockState) {
+    override val name: String
+        get() = "Cake Block With " + colorName + " Candle"
 
-public class BlockCandleCake extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CANDLE_CAKE, CommonBlockProperties.LIT);
+    protected val colorName: String
+        get() = "Simple"
 
-    public BlockCandleCake(BlockState blockState) {
-        super(blockState);
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockCandleCake() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    @Override
-    public String getName() {
-        return "Cake Block With " + getColorName() + " Candle";
-    }
+    override val resistance: Double
+        get() = 0.5
 
-    protected String getColorName() {
-        return "Simple";
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.5;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public double getMinX() {
-        return this.position.south + (1 + blockstate.specialValue() * 2) / 16d;
-    }
-
-    @Override
-    public double getMinY() {
-        return this.position.up;
-    }
-
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.0625;
-    }
-
-    @Override
-    public double getMaxX() {
-        return this.position.south - 0.0625 + 1;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.5;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west - 0.0625 + 1;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (!down().isAir()) {
-            level.setBlock(block.position, this, true, true);
-            return true;
+    override var minX: Double
+        get() = position.x + (1 + blockState!!.specialValue() * 2) / 16.0
+        set(minX) {
+            super.minX = minX
         }
-        return false;
+
+    override var minY: Double
+        get() = position.y
+        set(minY) {
+            super.minY = minY
+        }
+
+    override var minZ: Double
+        get() = position.z + 0.0625
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x - 0.0625 + 1
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxY: Double
+        get() = position.y + 0.5
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override var maxZ: Double
+        get() = position.z - 0.0625 + 1
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!down()!!.isAir) {
+            level.setBlock(block.position, this, true, true)
+            return true
+        }
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down().isAir()) {
-                level.setBlock(this.position, Block.get(BlockID.AIR), true);
-                return Level.BLOCK_UPDATE_NORMAL;
+            if (down()!!.isAir) {
+                level.setBlock(this.position, get(AIR), true)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         }
 
-        return 0;
+        return 0
     }
 
-    public BlockCandle toCandleForm() {
-        return new BlockCandle();
+    open fun toCandleForm(): BlockCandle {
+        return BlockCandle()
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{toCandleForm().toItem()};
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(toCandleForm().toItem())
     }
 
-    @SuppressWarnings("DuplicatedCode")
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (getPropertyValue(CommonBlockProperties.LIT) && !Objects.equals(item.getId(), ItemID.FLINT_AND_STEEL)) {
-            setPropertyValue(CommonBlockProperties.LIT, false);
-            level.addSound(this.position, Sound.RANDOM_FIZZ);
-            level.setBlock(this.position, this, true, true);
-            return true;
-        } else if (!getPropertyValue(CommonBlockProperties.LIT) && Objects.equals(item.getId(), ItemID.FLINT_AND_STEEL)) {
-            setPropertyValue(CommonBlockProperties.LIT, true);
-            level.addSound(this.position, Sound.FIRE_IGNITE);
-            level.setBlock(this.position, this, true, true);
-            return true;
-        } else if (player != null && (player.foodData.isHungry() || player.isCreative())) {
-            final Block cake = new BlockCake();
-            this.level.setBlock(this.position, cake, true, true);
-            this.level.dropItem(this.position.add(0.5, 0.5, 0.5), getDrops(null)[0]);
-            return this.level.getBlock(this.position).onActivate(Item.get(AIR), player, blockFace, fx, fy, fz);
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT) && item.id != ItemID.FLINT_AND_STEEL) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT, false)
+            level.addSound(this.position, Sound.RANDOM_FIZZ)
+            level.setBlock(this.position, this, true, true)
+            return true
+        } else if (!getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT) && item.id == ItemID.FLINT_AND_STEEL) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT, true)
+            level.addSound(this.position, Sound.FIRE_IGNITE)
+            level.setBlock(this.position, this, true, true)
+            return true
+        } else if (player != null && (player.foodData!!.isHungry || player.isCreative)) {
+            val cake: Block = BlockCake()
+            level.setBlock(this.position, cake, true, true)
+            level.dropItem(
+                position.add(0.5, 0.5, 0.5)!!,
+                getDrops(null)!![0]!!
+            )
+            return level.getBlock(this.position)!!
+                .onActivate(Item.get(AIR), player, blockFace, fx, fy, fz)
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int getComparatorInputOverride() {
-        return 14;
+    override val comparatorInputOverride: Int
+        get() = 14
+
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+    override fun sticksToPiston(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean sticksToPiston() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CANDLE_CAKE, CommonBlockProperties.LIT)
+            get() = Companion.field
     }
 }

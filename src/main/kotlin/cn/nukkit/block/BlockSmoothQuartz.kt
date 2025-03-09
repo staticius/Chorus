@@ -1,22 +1,11 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockSmoothQuartz extends BlockSandstone {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SMOOTH_QUARTZ, CommonBlockProperties.PILLAR_AXIS);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockSmoothQuartz() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSmoothQuartz(BlockState blockstate) {
-        super(blockstate);
+class BlockSmoothQuartz @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSandstone(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SMOOTH_QUARTZ, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

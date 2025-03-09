@@ -1,33 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
+import cn.nukkit.item.ItemTool
 
 /**
  * @author CreeperFace
  * @since 2.6.2017
  */
-public abstract class BlockConcrete extends BlockSolid {
-    public BlockConcrete(BlockState blockState) {
-        super(blockState);
-    }
+abstract class BlockConcrete(blockState: BlockState?) : BlockSolid(blockState) {
+    override val resistance: Double
+        get() = 9.0
 
-    @Override
-    public double getResistance() {
-        return 9;
-    }
+    override val hardness: Double
+        get() = 1.8
 
-    @Override
-    public double getHardness() {
-        return 1.8;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 }

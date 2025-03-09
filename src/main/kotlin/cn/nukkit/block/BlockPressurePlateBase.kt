@@ -1,214 +1,230 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.event.Event;
-import cn.nukkit.event.block.BlockRedstoneEvent;
-import cn.nukkit.event.entity.EntityInteractEvent;
-import cn.nukkit.event.player.PlayerInteractEvent;
-import cn.nukkit.event.player.PlayerInteractEvent.Action;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.network.protocol.LevelSoundEventPacket;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import static cn.nukkit.block.property.CommonBlockProperties.REDSTONE_SIGNAL;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.event.Event
+import cn.nukkit.event.block.BlockRedstoneEvent
+import cn.nukkit.event.entity.EntityInteractEvent
+import cn.nukkit.event.player.PlayerInteractEvent
+import cn.nukkit.item.*
+import cn.nukkit.item.ItemTool.Companion.getBestTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.SimpleAxisAlignedBB
+import cn.nukkit.network.protocol.LevelSoundEventPacket
+import cn.nukkit.utils.RedstoneComponent
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 /**
  * @author Snake1999
  * @since 2016/1/11
  */
+abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(blockState),
+    RedstoneComponent {
+    @JvmField
+    protected var onPitch: Float = 0f
+    @JvmField
+    protected var offPitch: Float = 0f
 
-public abstract class BlockPressurePlateBase extends BlockFlowable implements RedstoneComponent {
-    protected float onPitch;
-    protected float offPitch;
+    protected abstract fun computeRedstoneStrength(): Int
 
-    public BlockPressurePlateBase(BlockState blockState) {
-        super(blockState);
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    protected abstract int computeRedstoneStrength();
-
-    @Override
-    public boolean canPassThrough() {
-        return true;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override var minX: Double
+        get() = position.x + 0.625
+        set(minX) {
+            super.minX = minX
+        }
 
-    @Override
-    public double getMinX() {
-        return this.position.south + 0.625;
-    }
+    override var minZ: Double
+        get() = position.z + 0.625
+        set(minZ) {
+            super.minZ = minZ
+        }
 
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.625;
-    }
+    override var minY: Double
+        get() = position.y + 0
+        set(minY) {
+            super.minY = minY
+        }
 
-    @Override
-    public double getMinY() {
-        return this.position.up + 0;
-    }
+    override var maxX: Double
+        get() = position.x + 0.9375
+        set(maxX) {
+            super.maxX = maxX
+        }
 
-    @Override
-    public double getMaxX() {
-        return this.position.south + 0.9375;
-    }
+    override var maxZ: Double
+        get() = position.z + 0.9375
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
 
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 0.9375;
-    }
+    override var maxY: Double
+        get() = if (isActivated) position.y + 0.03125 else position.y + 0.0625
+        set(maxY) {
+            super.maxY = maxY
+        }
 
-    @Override
-    public double getMaxY() {
-        return isActivated() ? this.position.up + 0.03125 : this.position.up + 0.0625;
-    }
+    override val isPowerSource: Boolean
+        get() = true
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
+    val isActivated: Boolean
+        get() = redstonePower == 0
 
-    public boolean isActivated() {
-        return getRedstonePower() == 0;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    public static boolean isSupportValid(Block block, BlockFace blockFace) {
-        return BlockLever.isSupportValid(block, blockFace) || block instanceof BlockFence;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isSupportValid(down(), BlockFace.UP)) {
-                this.level.useBreakOn(this.position, ItemTool.getBestTool(getToolType()));
+            if (!isSupportValid(down()!!, BlockFace.UP)) {
+                level.useBreakOn(this.position, getBestTool(toolType))
             }
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            int power = this.getRedstonePower();
+            val power = this.redstonePower
 
             if (power > 0) {
-                this.updateState(power);
+                this.updateState(power)
             }
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (!isSupportValid(down(), BlockFace.UP)) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isSupportValid(down()!!, BlockFace.UP)) {
+            return false
         }
 
-        this.level.setBlock(block.position, this, true, true);
-        return true;
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    @Override
-    protected AxisAlignedBB recalculateCollisionBoundingBox() {
-        return new SimpleAxisAlignedBB(this.position.south + 0.125, this.position.up, this.position.west + 0.125, this.position.south + 0.875, this.position.up + 0.25, this.position.west + 0.875D);
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+        return SimpleAxisAlignedBB(
+            position.x + 0.125,
+            position.y,
+            position.z + 0.125,
+            position.x + 0.875, position.y + 0.25, position.z + 0.875
+        )
     }
 
-    @Override
-    public void onEntityCollide(Entity entity) {
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return;
+    override fun onEntityCollide(entity: Entity?) {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return
         }
 
-        int power = getRedstonePower();
+        val power = redstonePower
 
         if (power == 0) {
-            Event ev;
-            if (entity instanceof Player) {
-                ev = new PlayerInteractEvent((Player) entity, null, this.position, null, Action.PHYSICAL);
+            val ev: Event = if (entity is Player) {
+                PlayerInteractEvent(
+                    entity,
+                    null,
+                    position,
+                    null,
+                    PlayerInteractEvent.Action.PHYSICAL
+                )
             } else {
-                ev = new EntityInteractEvent(entity, this);
+                EntityInteractEvent(entity, this)
             }
 
-            this.level.server.pluginManager.callEvent(ev);
+            level.server.pluginManager.callEvent(ev)
 
-            if (!ev.isCancelled()) {
-                updateState(power);
+            if (!ev.isCancelled) {
+                updateState(power)
             }
         }
     }
 
-    protected void updateState(int oldStrength) {
-        int strength = this.computeRedstoneStrength();
-        boolean wasPowered = oldStrength > 0;
-        boolean isPowered = strength > 0;
+    protected fun updateState(oldStrength: Int) {
+        val strength = this.computeRedstoneStrength()
+        val wasPowered = oldStrength > 0
+        val isPowered = strength > 0
 
         if (oldStrength != strength) {
-            this.setRedstonePower(strength);
-            this.level.setBlock(this.position, this, false, false);
+            this.redstonePower = strength
+            level.setBlock(this.position, this, false, false)
 
-            updateAroundRedstone();
-            RedstoneComponent.updateAroundRedstone(this.getSide(BlockFace.DOWN));
+            updateAroundRedstone()
+            updateAroundRedstone(getSide(BlockFace.DOWN)!!)
 
             if (!isPowered && wasPowered) {
-                this.playOffSound();
-                this.level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, 15, 0));
+                this.playOffSound()
+                level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
             } else if (isPowered && !wasPowered) {
-                this.playOnSound();
-                this.level.server.pluginManager.callEvent(new BlockRedstoneEvent(this, 0, 15));
+                this.playOnSound()
+                level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
             }
         }
 
         if (isPowered) {
-            this.level.scheduleUpdate(this, 20);
+            level.scheduleUpdate(this, 20)
         }
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
+    override fun onBreak(item: Item?): Boolean {
+        level.setBlock(this.position, get(BlockID.AIR), true, true)
 
-        if (this.getRedstonePower() > 0) {
-            updateAroundRedstone();
-            RedstoneComponent.updateAroundRedstone(this.getSide(BlockFace.DOWN));
+        if (this.redstonePower > 0) {
+            updateAroundRedstone()
+            updateAroundRedstone(getSide(BlockFace.DOWN)!!)
         }
 
-        return true;
+        return true
     }
 
-    @Override
-    public int getWeakPower(BlockFace side) {
-        return getRedstonePower();
+    override fun getWeakPower(side: BlockFace?): Int {
+        return redstonePower
     }
 
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return side == BlockFace.UP ? this.getRedstonePower() : 0;
+    override fun getStrongPower(side: BlockFace?): Int {
+        return if (side == BlockFace.UP) redstonePower else 0
     }
 
-    public int getRedstonePower() {
-        return getPropertyValue(REDSTONE_SIGNAL);
+    var redstonePower: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REDSTONE_SIGNAL)
+        set(power) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REDSTONE_SIGNAL, power)
+        }
+
+    protected fun playOnSound() {
+        level.addLevelSoundEvent(
+            position.add(0.5, 0.1, 0.5)!!,
+            LevelSoundEventPacket.SOUND_POWER_ON,
+            blockState!!.blockStateHash()
+        )
     }
 
-    public void setRedstonePower(int power) {
-        setPropertyValue(REDSTONE_SIGNAL, power);
+    protected fun playOffSound() {
+        level.addLevelSoundEvent(
+            position.add(0.5, 0.1, 0.5)!!,
+            LevelSoundEventPacket.SOUND_POWER_OFF,
+            blockState!!.blockStateHash()
+        )
     }
 
-    protected void playOnSound() {
-        this.level.addLevelSoundEvent(this.position.add(0.5, 0.1, 0.5), LevelSoundEventPacket.SOUND_POWER_ON, getBlockState().blockStateHash());
-    }
-
-    protected void playOffSound() {
-        this.level.addLevelSoundEvent(this.position.add(0.5, 0.1, 0.5), LevelSoundEventPacket.SOUND_POWER_OFF, getBlockState().blockStateHash());
+    companion object {
+        fun isSupportValid(block: Block, blockFace: BlockFace): Boolean {
+            return BlockLever.isSupportValid(block, blockFace) || block is BlockFence
+        }
     }
 }

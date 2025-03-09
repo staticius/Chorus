@@ -1,34 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
 
-public class BlockPaleHangingMoss extends BlockHanging {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PALE_HANGING_MOSS, CommonBlockProperties.TIP);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockPaleHangingMoss @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockHanging(blockstate) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        return isSupportValid && super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    public BlockPaleHangingMoss() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val isSupportValid: Boolean
+        get() = up()!!.isSolid || up() is BlockPaleHangingMoss
 
-    public BlockPaleHangingMoss(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        return isSupportValid() && super.place(item, block, target, face, fx, fy, fz, player);
-    }
-
-    @Override
-    protected boolean isSupportValid() {
-        return this.up().isSolid() || this.up() instanceof BlockPaleHangingMoss;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PALE_HANGING_MOSS, CommonBlockProperties.TIP)
+            get() = Companion.field
     }
 }

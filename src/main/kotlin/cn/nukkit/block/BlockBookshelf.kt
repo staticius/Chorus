@@ -1,68 +1,46 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
+import cn.nukkit.item.Item.Companion.get
 
 /**
  * @author Nukkit Project Team
  */
-public class BlockBookshelf extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BOOKSHELF);
+open class BlockBookshelf : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockBookshelf() {
-        super(PROPERTIES.getDefaultState());
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Bookshelf"
+
+    override val hardness: Double
+        get() = 1.5
+
+    override val resistance: Double
+        get() = 7.5
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override val burnChance: Int
+        get() = 30
+
+    override val burnAbility: Int
+        get() = 20
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
+            get(ItemID.BOOK, 0, 3)
+        )
     }
 
-    public BlockBookshelf(BlockState blockState) {
-        super(blockState);
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public String getName() {
-        return "Bookshelf";
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5D;
-    }
-
-    @Override
-    public double getResistance() {
-        return 7.5D;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 30;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                Item.get(ItemID.BOOK, 0, 3)
-        };
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BOOKSHELF)
+            get() = Companion.field
     }
 }

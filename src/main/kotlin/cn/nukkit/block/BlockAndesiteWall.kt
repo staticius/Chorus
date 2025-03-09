@@ -1,58 +1,35 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-public class BlockAndesiteWall extends BlockWallBase {
+class BlockAndesiteWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWallBase(blockstate) {
+    override val name: String
+        get() = "Andesite Wall"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(
+    override val resistance: Double
+        get() = 6.0
+
+    override val hardness: Double
+        get() = 1.5
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun toItem(): Item? {
+        return ItemBlock(properties.defaultState.toBlock())
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
             ANDESITE_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
-    );
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockAndesiteWall() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockAndesiteWall(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Andesite Wall";
-    }
-
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this.getProperties().getDefaultState().toBlock());
+        )
+            get() = Companion.field
     }
 }

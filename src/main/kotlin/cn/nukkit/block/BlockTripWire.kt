@@ -1,245 +1,228 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemShears;
-import cn.nukkit.item.ItemString;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.vibration.VibrationEvent;
-import cn.nukkit.level.vibration.VibrationType;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.entity.Entity
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
 
-import javax.annotation.Nullable;
+class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+    BlockTransparent(state) {
+    override val name: String
+        get() = "Tripwire"
 
-import static cn.nukkit.block.BlockTripwireHook.MAX_TRIPWIRE_CIRCUIT_LENGTH;
-import static cn.nukkit.block.property.CommonBlockProperties.ATTACHED_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.DISARMED_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.POWERED_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.SUSPENDED_BIT;
-
-public class BlockTripWire extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TRIP_WIRE,
-            POWERED_BIT, SUSPENDED_BIT, ATTACHED_BIT, DISARMED_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    public BlockTripWire() {
-        this(PROPERTIES.getDefaultState());
+    override val waterloggingLevel: Int
+        get() = 2
+
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    public BlockTripWire(BlockState state) {
-        super(state);
+    override val resistance: Double
+        get() = 0.0
+
+    override val hardness: Double
+        get() = 0.0
+
+    override val boundingBox: AxisAlignedBB?
+        get() = null
+
+    override fun toItem(): Item? {
+        return ItemString()
     }
 
-    @Override
-    public String getName() {
-        return "Tripwire";
-    }
+    override val itemId: String
+        get() = ItemID.STRING
 
-    @Override
-    public boolean canPassThrough() {
-        return true;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
-    }
-
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox() {
-        return null;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemString();
-    }
-
-    @Override
-    @NotNull public String getItemId() {
-        return ItemID.STRING;
-    }
-
-    public boolean isPowered() {
-        return this.getPropertyValue(POWERED_BIT);
-    }
-
-    public boolean isAttached() {
-        return this.getPropertyValue(ATTACHED_BIT);
-    }
-
-    public boolean isSuspended() {
-        return this.getPropertyValue(SUSPENDED_BIT);
-    }
-
-    public boolean isDisarmed() {
-        return this.getPropertyValue(DISARMED_BIT);
-    }
-
-    public void setPowered(boolean isPowered) {
-        if (this.isPowered() == isPowered) {
-            return;
+    var isPowered: Boolean
+        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT)
+        set(isPowered) {
+            if (field == isPowered) {
+                return
+            }
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.POWERED_BIT,
+                isPowered
+            )
         }
-        this.setPropertyValue(POWERED_BIT, isPowered);
-    }
 
-    public void setAttached(boolean isAttached) {
-        if (this.isAttached() == isAttached) {
-            return;
+    var isAttached: Boolean
+        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.ATTACHED_BIT)
+        set(isAttached) {
+            if (field == isAttached) {
+                return
+            }
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.ATTACHED_BIT,
+                isAttached
+            )
         }
-        this.setPropertyValue(ATTACHED_BIT, isAttached);
-    }
 
-    public void setDisarmed(boolean isDisarmed) {
-        if (this.isDisarmed() == isDisarmed) {
-            return;
+    var isSuspended: Boolean
+        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.SUSPENDED_BIT)
+        set(isSuspended) {
+            if (field == isSuspended) {
+                return
+            }
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.SUSPENDED_BIT,
+                isSuspended
+            )
         }
-        this.setPropertyValue(DISARMED_BIT, isDisarmed);
-    }
 
-    public void setSuspended(boolean isSuspended) {
-        if (this.isSuspended() == isSuspended) {
-            return;
+    var isDisarmed: Boolean
+        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.DISARMED_BIT)
+        set(isDisarmed) {
+            if (field == isDisarmed) {
+                return
+            }
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.DISARMED_BIT,
+                isDisarmed
+            )
         }
-        this.setPropertyValue(SUSPENDED_BIT, isSuspended);
-    }
 
-    @Override
-    public void onEntityCollide(Entity entity) {
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return;
+    override fun onEntityCollide(entity: Entity) {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return
         }
         if (!entity.doesTriggerPressurePlate()) {
-            return;
+            return
         }
-        if (this.isPowered()) {
-            return;
+        if (this.isPowered) {
+            return
         }
 
-        this.setPowered(true);
-        this.level.setBlock(this.position, this, true, false);
-        this.updateHook(false);
+        this.isPowered = true
+        level.setBlock(this.position, this, true, false)
+        this.updateHook(false)
 
-        this.level.scheduleUpdate(this, 10);
-        this.level.updateComparatorOutputLevelSelective(this.position, true);
+        level.scheduleUpdate(this, 10)
+        level.updateComparatorOutputLevelSelective(this.position, true)
     }
 
-    private void updateHook(boolean scheduleUpdate) {
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return;
+    private fun updateHook(scheduleUpdate: Boolean) {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return
         }
 
-        for (BlockFace side : new BlockFace[]{BlockFace.SOUTH, BlockFace.WEST}) {
-            for (int i = 1; i < MAX_TRIPWIRE_CIRCUIT_LENGTH; ++i) {
-                Block block = this.getSide(side, i);
+        for (side in arrayOf<BlockFace>(BlockFace.SOUTH, BlockFace.WEST)) {
+            for (i in 1..<BlockTripwireHook.Companion.MAX_TRIPWIRE_CIRCUIT_LENGTH) {
+                val block = this.getSide(side, i)
 
-                if (block instanceof BlockTripwireHook hook) {
-                    if (hook.getFacing() == side.getOpposite()) {
-                        hook.updateLine(false, true, i, this);
+                if (block is BlockTripwireHook) {
+                    if (block.facing == side.getOpposite()) {
+                        block.updateLine(false, true, i, this)
                     }
 
                     /*if(scheduleUpdate) {
                         this.level.scheduleUpdate(hook, 10);
                     }*/
-                    break;
+                    break
                 }
 
-                if (!(block instanceof BlockTripWire)) {
-                    break;
+                if (block !is BlockTripWire) {
+                    break
                 }
             }
         }
     }
 
-    @Override
-    public int onUpdate(int type) {
-        if (!this.level.server.settings.levelSettings().enableRedstone()) {
-            return 0;
+    override fun onUpdate(type: Int): Int {
+        if (!level.server.settings.levelSettings().enableRedstone()) {
+            return 0
         }
 
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (!isPowered()) {
-                return type;
+            if (!isPowered) {
+                return type
             }
 
-            for (Entity entity : this.level.getCollidingEntities(this.getCollisionBoundingBox())) {
+            for (entity in level.getCollidingEntities(collisionBoundingBox!!)) {
                 if (!entity.doesTriggerPressurePlate()) {
-                    continue;
+                    continue
                 }
-                this.level.scheduleUpdate(this, 10);
-                return type;
+                level.scheduleUpdate(this, 10)
+                return type
             }
 
-            this.setPowered(false);
-            this.level.setBlock(this.position, this, true, false);
-            this.updateHook(false);
+            this.isPowered = false
+            level.setBlock(this.position, this, true, false)
+            this.updateHook(false)
 
-            this.level.updateComparatorOutputLevelSelective(this.position, true);
+            level.updateComparatorOutputLevelSelective(this.position, true)
 
-            return type;
+            return type
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        this.level.setBlock(this.position, this, true, true);
-        this.updateHook(false);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        level.setBlock(this.position, this, true, true)
+        this.updateHook(false)
 
-        return true;
+        return true
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        if (item instanceof ItemShears) {
-            this.setDisarmed(true);
-            this.level.setBlock(this.position, this, true, false);
-            this.updateHook(false);
-            this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
+    override fun onBreak(item: Item?): Boolean {
+        if (item is ItemShears) {
+            this.isDisarmed = true
+            level.setBlock(this.position, this, true, false)
+            this.updateHook(false)
+            level.setBlock(this.position, get(BlockID.AIR), true, true)
             //todo: initiator should be a entity
-            level.vibrationManager.callVibrationEvent(new VibrationEvent(
-                    this, this.position.add(0.5, 0.5, 0.5), VibrationType.SHEAR));
-            return true;
+            level.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    this, position.add(0.5, 0.5, 0.5)!!, VibrationType.SHEAR
+                )
+            )
+            return true
         }
 
-        this.setPowered(true);
-        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
-        this.updateHook(true);
+        this.isPowered = true
+        level.setBlock(this.position, get(BlockID.AIR), true, true)
+        this.updateHook(true)
 
-        return true;
+        return true
     }
 
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.5;
+    override var maxY: Double
+        get() = position.y + 0.5
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    protected AxisAlignedBB recalculateCollisionBoundingBox() {
-        return this;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.TRIP_WIRE,
+            CommonBlockProperties.POWERED_BIT,
+            CommonBlockProperties.SUSPENDED_BIT,
+            CommonBlockProperties.ATTACHED_BIT,
+            CommonBlockProperties.DISARMED_BIT
+        )
+            get() = Companion.field
     }
 }

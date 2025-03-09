@@ -1,48 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.math.BlockFace
 
-import static cn.nukkit.block.property.CommonBlockProperties.TWISTING_VINES_AGE;
+class BlockTwistingVines @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockVinesNether(blockstate) {
+    override val name: String
+        get() = "Twisting Vines"
 
-public class BlockTwistingVines extends BlockVinesNether {
-    public static final BlockProperties PROPERTIES = new BlockProperties(TWISTING_VINES, TWISTING_VINES_AGE);
+    override val growthDirection: BlockFace
+        get() = BlockFace.UP
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override var vineAge: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.TWISTING_VINES_AGE)
+        set(vineAge) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.TWISTING_VINES_AGE, vineAge)
+        }
 
-    public BlockTwistingVines() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val maxVineAge: Int
+        get() = CommonBlockProperties.TWISTING_VINES_AGE.getMax()
 
-    public BlockTwistingVines(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Twisting Vines";
-    }
-
-    @Override
-    @NotNull public BlockFace getGrowthDirection() {
-        return BlockFace.UP;
-    }
-
-    @Override
-    public int getVineAge() {
-        return getPropertyValue(TWISTING_VINES_AGE);
-    }
-
-    @Override
-    public void setVineAge(int vineAge) {
-        setPropertyValue(TWISTING_VINES_AGE, vineAge);
-    }
-
-    @Override
-    public int getMaxVineAge() {
-        return TWISTING_VINES_AGE.getMax();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.TWISTING_VINES, CommonBlockProperties.TWISTING_VINES_AGE)
+            get() = Companion.field
     }
 }

@@ -75,9 +75,9 @@ open class FangLineExecutor : EntityControl, IBehaviorExecutor {
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
-                    .add(FloatTag(transform.position.south))
-                    .add(FloatTag(transform.position.up))
-                    .add(FloatTag(transform.position.west))
+                    .add(FloatTag(transform.position.x))
+                    .add(FloatTag(transform.position.y))
+                    .add(FloatTag(transform.position.z))
             )
             .putList(
                 "Motion", ListTag<FloatTag>()

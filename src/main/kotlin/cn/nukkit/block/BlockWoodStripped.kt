@@ -1,33 +1,29 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.Item
+import cn.nukkit.math.BlockFace
 
-
-public abstract class BlockWoodStripped extends BlockWood {
-    public BlockWoodStripped(BlockState blockstate) {
-        super(blockstate);
+abstract class BlockWoodStripped(blockstate: BlockState?) : BlockWood(blockstate) {
+    override fun getStrippedState(): BlockState {
+        return blockState!!
     }
 
-    @Override
-    public BlockState getStrippedState() {
-        return getBlockState();
+    override val name: String
+        get() = "Stripped " + super.name
+
+    override fun canBeActivated(): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Stripped " + super.getName();
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return false;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return false
     }
 }

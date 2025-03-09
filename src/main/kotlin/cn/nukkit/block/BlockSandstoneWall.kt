@@ -1,58 +1,37 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemBlock
+import cn.nukkit.item.ItemTool
 
-public class BlockSandstoneWall extends BlockWallBase {
+class BlockSandstoneWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockWallBase(blockstate) {
+    override val name: String
+        get() = "Sandstone Wall"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(
-            SANDSTONE_WALL,
+    override val resistance: Double
+        get() = 0.8
+
+    override val hardness: Double
+        get() = 0.8
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun toItem(): Item? {
+        return ItemBlock(properties.getDefaultState().toBlock())
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.SANDSTONE_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
-    );
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockSandstoneWall() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSandstoneWall(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Sandstone Wall";
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.8;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.8;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(this.getProperties().getDefaultState().toBlock());
+        )
+            get() = Companion.field
     }
 }

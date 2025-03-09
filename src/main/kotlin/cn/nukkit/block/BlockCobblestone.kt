@@ -1,55 +1,33 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
 /**
  * @author Angelic47 (Nukkit Project)
  */
-public class BlockCobblestone extends BlockSolid {
+class BlockCobblestone @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockState) {
+    override val hardness: Double
+        get() = 2.0
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(COBBLESTONE);
+    override val resistance: Double
+        get() = 30.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val name: String
+        get() = "Cobblestone"
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockCobblestone() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCobblestone(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 30;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public String getName() {
-        return "Cobblestone";
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(COBBLESTONE)
+            get() = Companion.field
     }
 }

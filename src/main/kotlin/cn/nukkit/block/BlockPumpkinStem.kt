@@ -1,53 +1,33 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.ItemID
+import cn.nukkit.math.BlockFace
 
-public class BlockPumpkinStem extends BlockCropsStem {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PUMPKIN_STEM, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.GROWTH);
+class BlockPumpkinStem @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCropsStem(blockstate) {
+    override val name: String
+        get() = "Pumpkin Stem"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val fruitId: String
+        get() = BlockID.PUMPKIN
 
-    public BlockPumpkinStem() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val seedsId: String
+        get() = ItemID.PUMPKIN_SEEDS
 
-    public BlockPumpkinStem(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val strippedState: BlockState
+        get() = BlockStrippedAcaciaLog.properties.defaultState
 
-    @Override
-    public String getName() {
-        return "Pumpkin Stem";
-    }
+    override var blockFace: BlockFace
+        get() = facing!!
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
+        }
 
-    @Override
-    public String getFruitId() {
-        return PUMPKIN;
-    }
-
-    @Override
-    public String getSeedsId() {
-        return ItemID.PUMPKIN_SEEDS;
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return BlockStrippedAcaciaLog.PROPERTIES.getDefaultState();
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return getFacing();
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index);
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.PUMPKIN_STEM, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.GROWTH)
+            get() = Companion.field
     }
 }

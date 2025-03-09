@@ -1,106 +1,79 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.math.*
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.utils.Faceable
 
 /**
  * Alias NetherPortal
  */
-public class BlockPortal extends BlockFlowable implements Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PORTAL, CommonBlockProperties.PORTAL_AXIS);
+class BlockPortal @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockstate), Faceable {
+    override val name: String
+        get() = "Nether Portal Block"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    public BlockPortal() {
-        this(PROPERTIES.getDefaultState());
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return player != null && player.isCreative
     }
 
-    public BlockPortal(BlockState blockstate) {
-        super(blockstate);
+    override val hardness: Double
+        get() = -1.0
+
+    override val lightLevel: Int
+        get() = 11
+
+    override fun toItem(): Item? {
+        return ItemBlock(get(BlockID.AIR))
     }
 
-    @Override
-    public String getName() {
-        return "Nether Portal Block";
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return player != null && player.isCreative();
-    }
-
-    @Override
-    public double getHardness() {
-        return -1;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 11;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.AIR));
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public boolean onBreak(Item item) {
-        boolean result = super.onBreak(item);
-        for (BlockFace face : BlockFace.values()) {
-            Block b = this.getSide(face);
+    override fun onBreak(item: Item?): Boolean {
+        var result = super.onBreak(item)
+        for (face in BlockFace.entries) {
+            val b = this.getSide(face)
             if (b != null) {
-                if (b instanceof BlockPortal) {
-                    result &= b.onBreak(item);
+                if (b is BlockPortal) {
+                    result = result and b.onBreak(item)
                 }
             }
         }
-        return result;
+        return result
     }
 
-    @Override
-    public boolean hasEntityCollision() {
-        return true;
+    override fun hasEntityCollision(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return this;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromHorizontalIndex(this.blockstate.specialValue() & 0x07);
+    override var blockFace: BlockFace?
+        get() = fromHorizontalIndex(blockState!!.specialValue().toInt() and 0x07)
+        set(blockFace) {
+            super.blockFace = blockFace
+        }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PORTAL, CommonBlockProperties.PORTAL_AXIS)
+            get() = Companion.field
     }
 }

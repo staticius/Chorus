@@ -65,11 +65,11 @@ abstract class SlenderProjectile : EntityProjectile {
         var collisionBlock: Block? = null
         for (i in 0..<SPLIT_NUMBER) {
             val collisionBlocks: Array<Block> =
-                level!!.getCollisionBlocks(currentAABB.offset(dirVector.south, dirVector.up, dirVector.west))
+                level!!.getCollisionBlocks(currentAABB.offset(dirVector.x, dirVector.y, dirVector.z))
             val collisionEntities: List<Entity?> =
                 level!!.fastCollidingEntities(currentAABB, this)
             if (collisionBlocks.size != 0) {
-                currentAABB.offset(-dirVector.south, -dirVector.up, -dirVector.west)
+                currentAABB.offset(-dirVector.x, -dirVector.y, -dirVector.z)
                 collisionBlock = Arrays.stream(collisionBlocks).min(
                     Comparator.comparingDouble(
                         ToDoubleFunction { block: Block -> projectile.position.distanceSquared(block.position) })
@@ -138,9 +138,9 @@ abstract class SlenderProjectile : EntityProjectile {
         boundingBox!!.offset(0.0, dy, 0.0)
         boundingBox!!.offset(dx, 0.0, 0.0)
         boundingBox!!.offset(0.0, 0.0, dz)
-        position.south = (boundingBox!!.getMinX() + boundingBox!!.getMaxX()) / 2
-        position.up = boundingBox!!.getMinY() - this.ySize
-        position.west = (boundingBox!!.getMinZ() + boundingBox!!.getMaxZ()) / 2
+        position.x = (boundingBox!!.getMinX() + boundingBox!!.getMaxX()) / 2
+        position.y = boundingBox!!.getMinY() - this.ySize
+        position.z = (boundingBox!!.getMinZ() + boundingBox!!.getMaxZ()) / 2
 
         this.checkChunks()
 
@@ -148,21 +148,21 @@ abstract class SlenderProjectile : EntityProjectile {
         this.updateFallState(this.onGround)
 
         if (movX != dx) {
-            motion.south = 0.0
+            motion.x = 0.0
         }
         if (movY != dy) {
-            motion.up = 0.0
+            motion.y = 0.0
         }
         if (movZ != dz) {
-            motion.west = 0.0
+            motion.z = 0.0
         }
 
         //collide with block
         if (this.isCollided && !this.hadCollision) {
             this.hadCollision = true
-            motion.south = 0.0
-            motion.up = 0.0
-            motion.west = 0.0
+            motion.x = 0.0
+            motion.y = 0.0
+            motion.z = 0.0
             val bVector3: BVector3 = BVector3.fromPos(Vector3(dx, dy, dz))
             var blockFace: BlockFace? = BlockFace.fromHorizontalAngle(bVector3.getYaw())
             var block: Block = level!!.getBlock(
@@ -217,9 +217,9 @@ abstract class SlenderProjectile : EntityProjectile {
                     lastHitBlock!!.blockZ
                 ).isAir()
             ) {
-                motion.up -= getGravity().toDouble()
+                motion.y -= getGravity().toDouble()
                 updateRotation()
-                this.move(motion.south, motion.up, motion.west)
+                this.move(motion.x, motion.y, motion.z)
                 this.updateMovement()
             }
             return this.entityBaseTick(tickDiff)
@@ -231,14 +231,14 @@ abstract class SlenderProjectile : EntityProjectile {
             if (!this.isCollided) {
                 updateMotion()
             }
-            if (!this.hadCollision || abs(motion.south) > 0.00001 || abs(
-                    motion.up
-                ) > 0.00001 || abs(motion.west) > 0.00001
+            if (!this.hadCollision || abs(motion.x) > 0.00001 || abs(
+                    motion.y
+                ) > 0.00001 || abs(motion.z) > 0.00001
             ) {
                 updateRotation()
                 hasUpdate = true
             }
-            this.move(motion.south, motion.up, motion.west)
+            this.move(motion.x, motion.y, motion.z)
             this.updateMovement()
         }
         return hasUpdate

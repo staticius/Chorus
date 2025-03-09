@@ -1,42 +1,23 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockWarpedPlanks extends BlockPlanks {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_PLANKS);
+class BlockWarpedPlanks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockPlanks(blockstate) {
+    override val name: String
+        get() = "Warped Planks"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 2.0
+
+    override val resistance: Double
+        get() = 3.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WARPED_PLANKS)
+            get() = Companion.field
     }
-
-    public BlockWarpedPlanks() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWarpedPlanks(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Warped Planks";
-    }
-
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
 }

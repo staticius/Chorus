@@ -28,13 +28,13 @@ class EntityCrossbowFirework(chunk: IChunk?, nbt: CompoundTag) : EntityFireworks
                 this.lastUpdate = currentTick
                 var hasUpdate: Boolean = this.entityBaseTick(tickDiff)
                 if (this.isAlive()) {
-                    motion.south *= 1.15
-                    motion.west *= 1.15
-                    this.move(motion.south, motion.up, motion.west)
+                    motion.x *= 1.15
+                    motion.z *= 1.15
+                    this.move(motion.x, motion.y, motion.z)
                     this.updateMovement()
-                    val f: Float = sqrt(motion.south * motion.south + motion.west * motion.west).toFloat()
-                    rotation.yaw = (atan2(motion.south, motion.west) * 57.29577951308232).toFloat().toDouble()
-                    rotation.pitch = (atan2(motion.up, f.toDouble()) * 57.29577951308232).toFloat().toDouble()
+                    val f: Float = sqrt(motion.x * motion.x + motion.z * motion.z).toFloat()
+                    rotation.yaw = (atan2(motion.x, motion.z) * 57.29577951308232).toFloat().toDouble()
+                    rotation.pitch = (atan2(motion.y, f.toDouble()) * 57.29577951308232).toFloat().toDouble()
                     if (this.fireworkAge == 0) {
                         level!!.addLevelSoundEvent(this.position, 56)
                     }
@@ -51,9 +51,9 @@ class EntityCrossbowFirework(chunk: IChunk?, nbt: CompoundTag) : EntityFireworks
                         this.kill()
                     }
                 }
-                return hasUpdate || !this.onGround || abs(motion.south) > 1.0E-5 || abs(
-                    motion.up
-                ) > 1.0E-5 || abs(motion.west) > 1.0E-5
+                return hasUpdate || !this.onGround || abs(motion.x) > 1.0E-5 || abs(
+                    motion.y
+                ) > 1.0E-5 || abs(motion.z) > 1.0E-5
             }
         }
     }

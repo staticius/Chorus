@@ -1,37 +1,22 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
 
-import org.jetbrains.annotations.NotNull;
+class BlockDriedKelpBlock : BlockSolid {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockDriedKelpBlock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DRIED_KELP_BLOCK);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val name: String
+        get() = "Dried Kelp Block"
+
+    override val hardness: Double
+        get() = 0.5
+
+    override val resistance: Double
+        get() = 2.5
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(DRIED_KELP_BLOCK)
+            get() = Companion.field
     }
-
-    public BlockDriedKelpBlock() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockDriedKelpBlock(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Dried Kelp Block";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.5F;
-    }
-    
-    @Override
-    public double getResistance() {
-        return 2.5;
-    }
-
 }

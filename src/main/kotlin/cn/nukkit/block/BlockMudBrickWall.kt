@@ -1,44 +1,32 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+class BlockMudBrickWall @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockWallBase(blockState) {
+    override val name: String
+        get() = "Mud Brick Wall"
 
-public class BlockMudBrickWall extends BlockWallBase{
-    public static final BlockProperties PROPERTIES = new BlockProperties(MUD_BRICK_WALL, CommonBlockProperties.WALL_CONNECTION_TYPE_EAST, CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH, CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH, CommonBlockProperties.WALL_CONNECTION_TYPE_WEST, CommonBlockProperties.WALL_POST_BIT);
+    override val resistance: Double
+        get() = 3.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 1.5
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.MUD_BRICK_WALL,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
+            CommonBlockProperties.WALL_POST_BIT
+        )
+            get() = Companion.field
     }
-
-    public BlockMudBrickWall() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMudBrickWall(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Mud Brick Wall";
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
 }

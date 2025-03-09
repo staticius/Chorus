@@ -1,29 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-import static cn.nukkit.block.property.CommonBlockProperties.IN_WALL_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.OPEN_BIT;
+class BlockDarkOakFenceGate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFenceGate(blockstate) {
+    override val name: String
+        get() = "Dark Oak Fence Gate"
 
-public class BlockDarkOakFenceGate extends BlockFenceGate {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DARK_OAK_FENCE_GATE,  IN_WALL_BIT, MINECRAFT_CARDINAL_DIRECTION, OPEN_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockDarkOakFenceGate() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockDarkOakFenceGate(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Dark Oak Fence Gate";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            DARK_OAK_FENCE_GATE,
+            CommonBlockProperties.IN_WALL_BIT,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.OPEN_BIT
+        )
+            get() = Companion.field
     }
 }

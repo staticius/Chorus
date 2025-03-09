@@ -1,213 +1,200 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.item.EntityTnt;
-import cn.nukkit.event.block.BlockIgniteEvent;
-import cn.nukkit.event.entity.EntityCombustByBlockEvent;
-import cn.nukkit.event.entity.EntityDamageByBlockEvent;
-import cn.nukkit.event.entity.EntityDamageEvent.DamageCause;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.GameRule;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.effect.EffectType
+import cn.nukkit.entity.item.EntityTnt
+import cn.nukkit.event.block.BlockIgniteEvent
+import cn.nukkit.event.entity.EntityCombustByBlockEvent
+import cn.nukkit.event.entity.EntityDamageByBlockEvent
+import cn.nukkit.event.entity.EntityDamageEvent.DamageCause
+import cn.nukkit.item.*
+import cn.nukkit.level.GameRule
+import cn.nukkit.level.Level
+import cn.nukkit.math.*
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class BlockFlowingLava extends BlockLiquid {
+open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockLiquid(blockstate) {
+    override val lightLevel: Int
+        get() = 15
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(FLOWING_LAVA, CommonBlockProperties.LIQUID_DEPTH);
+    override val name: String
+        get() = "Lava"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override fun onEntityCollide(entity: Entity) {
+        entity.highestPosition -= (entity.highestPosition - entity.position.y) * 0.5
 
-    public BlockFlowingLava() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockFlowingLava(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 15;
-    }
-
-    @Override
-    public String getName() {
-        return "Lava";
-    }
-
-    @Override
-    public void onEntityCollide(Entity entity) {
-        entity.highestPosition -= (entity.highestPosition - entity.position.up) * 0.5;
-
-        EntityCombustByBlockEvent ev = new EntityCombustByBlockEvent(this, entity, 8);
-        Server.getInstance().pluginManager.callEvent(ev);
-        if (!ev.isCancelled()
-                // Making sure the entity is actually alive and not invulnerable.
-                && entity.isAlive()
-                && entity.noDamageTicks == 0) {
-            entity.setOnFire(ev.duration);
+        val ev = EntityCombustByBlockEvent(this, entity, 8)
+        instance!!.pluginManager.callEvent(ev)
+        if (!ev.isCancelled // Making sure the entity is actually alive and not invulnerable.
+            && entity.isAlive()
+            && entity.noDamageTicks == 0
+        ) {
+            entity.setOnFire(ev.duration)
         }
 
         if (!entity.hasEffect(EffectType.FIRE_RESISTANCE)) {
-            entity.attack(new EntityDamageByBlockEvent(this, entity, DamageCause.LAVA, 4));
+            entity.attack(EntityDamageByBlockEvent(this, entity, DamageCause.LAVA, 4f))
         }
 
-        super.onEntityCollide(entity);
+        super.onEntityCollide(entity)
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        boolean ret = this.level.setBlock(this.position, this, true, false);
-        this.level.scheduleUpdate(this, this.tickRate());
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val ret = level.setBlock(this.position, this, true, false)
+        level.scheduleUpdate(this, this.tickRate())
 
-        return ret;
+        return ret
     }
 
-    @Override
-    public int onUpdate(int type) {
-        int result = super.onUpdate(type);
+    override fun onUpdate(type: Int): Int {
+        val result = super.onUpdate(type)
 
-        if (type == Level.BLOCK_UPDATE_RANDOM && this.level.gameRules.getBoolean(GameRule.DO_FIRE_TICK)) {
-            Random random = ThreadLocalRandom.current();
+        if (type == Level.BLOCK_UPDATE_RANDOM && level.gameRules!!.getBoolean(GameRule.DO_FIRE_TICK)) {
+            val random: Random = ThreadLocalRandom.current()
 
-            int i = random.nextInt(3);
+            val i = random.nextInt(3)
 
             if (i > 0) {
-                for (int k = 0; k < i; ++k) {
-                    Vector3 v = this.position.add(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
-                    Block block = this.level.getBlock(v);
+                for (k in 0..<i) {
+                    val v = position.add((random.nextInt(3) - 1).toDouble(), 1.0, (random.nextInt(3) - 1).toDouble())
+                    val block = level.getBlock(v!!)
 
-                    if (block.isAir()) {
+                    if (block!!.isAir) {
                         if (this.isSurroundingBlockFlammable(block)) {
-                            BlockIgniteEvent e = new BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA);
-                            this.level.server.pluginManager.callEvent(e);
+                            val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
+                            level.server.pluginManager.callEvent(e)
 
-                            if (!e.isCancelled()) {
-                                Block fire = Block.get(BlockID.FIRE);
-                                this.level.setBlock(v, fire, true);
-                                this.level.scheduleUpdate(fire, fire.tickRate());
-                                return Level.BLOCK_UPDATE_RANDOM;
+                            if (!e.isCancelled) {
+                                val fire = get(FIRE)
+                                level.setBlock(v, fire, true)
+                                level.scheduleUpdate(fire, fire.tickRate())
+                                return Level.BLOCK_UPDATE_RANDOM
                             }
 
-                            return 0;
+                            return 0
                         }
-                    } else if (block.isSolid()) {
-                        return Level.BLOCK_UPDATE_RANDOM;
+                    } else if (block.isSolid) {
+                        return Level.BLOCK_UPDATE_RANDOM
                     }
                 }
             } else {
-                for (int k = 0; k < 3; ++k) {
-                    Vector3 v = this.position.add(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
-                    Block block = this.level.getBlock(v);
+                for (k in 0..2) {
+                    val v = position.add((random.nextInt(3) - 1).toDouble(), 0.0, (random.nextInt(3) - 1).toDouble())
+                    val block = level.getBlock(v!!)
 
-                    if (block.up().isAir() && block.getBurnChance() > 0) {
-                        BlockIgniteEvent e = new BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA);
-                        this.level.server.pluginManager.callEvent(e);
+                    if (block!!.up()!!.isAir && block.burnChance > 0) {
+                        val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
+                        level.server.pluginManager.callEvent(e)
 
-                        if (!e.isCancelled()) {
-                            Block fire = Block.get(BlockID.FIRE);
-                            this.level.setBlock(v, fire, true);
-                            this.level.scheduleUpdate(fire, fire.tickRate());
+                        if (!e.isCancelled) {
+                            val fire = get(FIRE)
+                            level.setBlock(v, fire, true)
+                            level.scheduleUpdate(fire, fire.tickRate())
                         }
                     }
                 }
             }
         }
 
-        return result;
+        return result
     }
 
-    protected boolean isSurroundingBlockFlammable(Block block) {
-        for (final var face : BlockFace.values()) {
-            final var b = block.getSide(face);
-            if (b.getBurnChance() > 0) {
-                return true;
+    protected fun isSurroundingBlockFlammable(block: Block): Boolean {
+        for (face in BlockFace.entries) {
+            val b = block.getSide(face)
+            if (b!!.burnChance > 0) {
+                return true
             }
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public BlockLiquid getLiquidWithNewDepth(int depth) {
-        return new BlockFlowingLava(this.blockstate.setPropertyValue(PROPERTIES, CommonBlockProperties.LIQUID_DEPTH.createValue(depth)));
+    override fun getLiquidWithNewDepth(depth: Int): BlockLiquid {
+        return BlockFlowingLava(
+            blockState!!.setPropertyValue(
+                Companion.properties,
+                CommonBlockProperties.LIQUID_DEPTH.createValue(depth)
+            )
+        )
     }
 
-    @Override
-    public int tickRate() {
-        if (this.level.getDimension() == Level.DIMENSION_NETHER) {
-            return 10;
+    override fun tickRate(): Int {
+        if (level.dimension == Level.DIMENSION_NETHER) {
+            return 10
         }
-        return 30;
+        return 30
     }
 
-    @Override
-    public int getFlowDecayPerBlock() {
-        if (this.level.getDimension() == Level.DIMENSION_NETHER) {
-            return 1;
+    override fun getFlowDecayPerBlock(): Int {
+        if (level.dimension == Level.DIMENSION_NETHER) {
+            return 1
         }
-        return 2;
+        return 2
     }
 
-    @Override
-    protected void checkForMixing() {
-        Block colliding = null;
-        Block down = this.getSide(BlockFace.DOWN);
-        for (int side = 1; side < 6; ++side) { //don't check downwards side
-            Block blockSide = this.getSide(BlockFace.fromIndex(side));
-            if (blockSide instanceof BlockFlowingWater || blockSide.getLevelBlockAtLayer(1) instanceof BlockFlowingWater) {
-                colliding = blockSide;
-                break;
+    override fun checkForMixing() {
+        var colliding: Block? = null
+        val down = this.getSide(BlockFace.DOWN)
+        for (side in 1..5) { //don't check downwards side
+            val blockSide = this.getSide(fromIndex(side)!!)
+            if (blockSide is BlockFlowingWater || blockSide!!.getLevelBlockAtLayer(1) is BlockFlowingWater) {
+                colliding = blockSide
+                break
             }
-            if (down instanceof BlockSoulSoil) {
-                if (blockSide instanceof BlockBlueIce) {
-                    liquidCollide(this, Block.get(BlockID.BASALT));
-                    return;
+            if (down is BlockSoulSoil) {
+                if (blockSide is BlockBlueIce) {
+                    liquidCollide(this, get(BASALT))
+                    return
                 }
             }
         }
         if (colliding != null) {
-            if (this.getLiquidDepth() == 0) {
-                this.liquidCollide(colliding, Block.get(BlockID.OBSIDIAN));
-            } else if (this.getLiquidDepth() <= 4) {
-                this.liquidCollide(colliding, Block.get(BlockID.COBBLESTONE));
+            if (this.liquidDepth == 0) {
+                this.liquidCollide(colliding, get(OBSIDIAN))
+            } else if (this.liquidDepth <= 4) {
+                this.liquidCollide(colliding, get(COBBLESTONE))
             }
         }
     }
 
-    @Override
-    protected void flowIntoBlock(Block block, int newFlowDecay) {
-        if (block instanceof BlockFlowingWater) {
-            ((BlockLiquid) block).liquidCollide(this, Block.get(BlockID.STONE));
+    override fun flowIntoBlock(block: Block, newFlowDecay: Int) {
+        if (block is BlockFlowingWater) {
+            (block as BlockLiquid).liquidCollide(this, get(STONE))
         } else {
-            super.flowIntoBlock(block, newFlowDecay);
+            super.flowIntoBlock(block, newFlowDecay)
         }
     }
 
-    @Override
-    public void addVelocityToEntity(Entity entity, Vector3 vector) {
-        if (!(entity instanceof EntityTnt)) {
-            super.addVelocityToEntity(entity, vector);
+    override fun addVelocityToEntity(entity: Entity, vector: Vector3?) {
+        if (entity !is EntityTnt) {
+            super.addVelocityToEntity(entity, vector)
         }
     }
 
-    @Override
-    public double getPassableBlockFrictionFactor() {
-        return 0.3;
+    override val passableBlockFrictionFactor: Double
+        get() = 0.3
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(FLOWING_LAVA, CommonBlockProperties.LIQUID_DEPTH)
+            get() = Companion.field
     }
 }

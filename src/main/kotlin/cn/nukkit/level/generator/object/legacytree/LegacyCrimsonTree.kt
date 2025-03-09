@@ -6,8 +6,8 @@ import cn.nukkit.block.BlockState
 
 class LegacyCrimsonTree : LegacyNetherTree() {
     override val trunkBlockState: BlockState
-        get() = BlockCrimsonStem.PROPERTIES.getDefaultState()
+        get() = BlockCrimsonStem.properties.getDefaultState()
 
     override val leafBlockState: BlockState
-        get() = BlockNetherWartBlock.PROPERTIES.getDefaultState()
+        get() = BlockNetherWartBlock.properties.getDefaultState()
 }

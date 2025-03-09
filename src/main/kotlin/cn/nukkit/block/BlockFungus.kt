@@ -1,83 +1,87 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
+import cn.nukkit.item.Item
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
 
-import javax.annotation.Nullable;
-
-
-public abstract class BlockFungus extends BlockFlowable implements BlockFlowerPot.FlowerPotBlock, Natural {
-    public BlockFungus(BlockState blockState) {
-        super(blockState);
+abstract class BlockFungus(blockState: BlockState?) : BlockFlowable(blockState), FlowerPotBlock,
+    Natural {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isValidSupport(down()!!)) {
+            return false
+        }
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (!isValidSupport(down())) {
-            return false;
+    override fun onUpdate(type: Int): Int {
+        if (type == Level.BLOCK_UPDATE_NORMAL && !isValidSupport(down()!!)) {
+            level.useBreakOn(this.position)
+            return type
         }
-        return super.place(item, block, target, face, fx, fy, fz, player);
+
+        return 0
     }
 
-    @Override
-    public int onUpdate(int type) {
-        if (type == Level.BLOCK_UPDATE_NORMAL && !isValidSupport(down())) {
-            level.useBreakOn(this.position);
-            return type;
-        }
-        
-        return 0;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isNull() || !item.isFertilizer()) {
-            return false;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isNull || !item.isFertilizer) {
+            return false
         }
 
-        level.addParticle(new BoneMealParticle(this.position));
+        level.addParticle(BoneMealParticle(this.position))
 
-        if (player != null && !player.isCreative()) {
-            item.count--;
+        if (player != null && !player.isCreative) {
+            item.count--
         }
 
-        Block down = down();
-        if (!isValidSupport(down)) {
-            level.useBreakOn(this.position);
-            return true;
+        val down = down()
+        if (!isValidSupport(down!!)) {
+            level.useBreakOn(this.position)
+            return true
         }
-        
+
         if (!canGrowOn(down)) {
-            return true;
+            return true
         }
 
-        grow(player);
-        
-        return true;
+        grow(player)
+
+        return true
     }
 
-    protected abstract boolean canGrowOn(Block support);
+    protected abstract fun canGrowOn(support: Block?): Boolean
 
-    protected boolean isValidSupport(@NotNull Block support) {
-        return switch (support.getId()) {
-            case GRASS_BLOCK, DIRT, PODZOL, FARMLAND, CRIMSON_NYLIUM, WARPED_NYLIUM, SOUL_SOIL, MYCELIUM -> true;
-            default -> false;
-        };
+    protected fun isValidSupport(support: Block): Boolean {
+        return when (support.id) {
+            GRASS_BLOCK, DIRT, PODZOL, FARMLAND, CRIMSON_NYLIUM, WARPED_NYLIUM, SOUL_SOIL, MYCELIUM -> true
+            else -> false
+        }
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public abstract boolean grow(@Nullable Player cause);
+    abstract fun grow(cause: Player?): Boolean
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
-    }
+    override val isFertilizable: Boolean
+        get() = true
 }

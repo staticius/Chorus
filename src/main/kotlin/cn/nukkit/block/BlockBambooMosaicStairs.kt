@@ -1,42 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
 
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+class BlockBambooMosaicStairs(blockState: BlockState?) : BlockStairs(blockState) {
+    override val name: String
+        get() = "Bamboo Mosaic Stairs"
 
-public class BlockBambooMosaicStairs extends BlockStairs {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO_MOSAIC_STAIRS, CommonBlockProperties.UPSIDE_DOWN_BIT, CommonBlockProperties.WEIRDO_DIRECTION);
+    override val hardness: Double
+        get() = 2.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val resistance: Double
+        get() = 3.0
 
-    public BlockBambooMosaicStairs(BlockState blockState) {
-        super(blockState);
-    }
+    override val burnChance: Int
+        get() = 5
 
-    public String getName() {
-        return "Bamboo Mosaic Stairs";
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BAMBOO_MOSAIC_STAIRS,
+            CommonBlockProperties.UPSIDE_DOWN_BIT,
+            CommonBlockProperties.WEIRDO_DIRECTION
+        )
+            get() = Companion.field
     }
 }

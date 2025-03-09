@@ -1,28 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.DoublePlantType;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.DoublePlantType
 
-public class BlockPeony extends BlockDoublePlant {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PEONY, CommonBlockProperties.UPPER_BLOCK_BIT);
+class BlockPeony : BlockDoublePlant {
+    constructor() : super(Companion.properties.defaultState)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    public BlockPeony() {
-        super(PROPERTIES.getDefaultState());
-    }
+    override val doublePlantType: DoublePlantType
+        get() = DoublePlantType.PAEONIA
 
-    public BlockPeony(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public @NotNull DoublePlantType getDoublePlantType() {
-        return DoublePlantType.PAEONIA;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PEONY, CommonBlockProperties.UPPER_BLOCK_BIT)
+            get() = Companion.field
     }
 }

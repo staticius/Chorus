@@ -1,54 +1,36 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.ItemTool
 
-public class BlockEndStoneBrickSlab extends BlockSlab {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(END_STONE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF);
-
-    public BlockEndStoneBrickSlab(BlockState blockState) {
-        super(blockState, END_STONE_BRICK_DOUBLE_SLAB);
+class BlockEndStoneBrickSlab(blockState: BlockState?) : BlockSlab(blockState, END_STONE_BRICK_DOUBLE_SLAB) {
+    override fun getSlabName(): String {
+        return "End Stone Brick"
     }
 
-    @Override
-    public String getSlabName() {
-        return "End Stone Brick";
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return slab.id == this.id
     }
 
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return slab.getId().equals(this.getId());
+    override val hardness: Double
+        get() = 3.0
+
+    override val resistance: Double
+        get() = 9.0
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public double getHardness() {
-        return 3;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public double getResistance() {
-        return 9;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(END_STONE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            get() = Companion.field
     }
 }

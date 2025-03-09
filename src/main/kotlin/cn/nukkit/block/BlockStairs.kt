@@ -1,139 +1,154 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import static cn.nukkit.block.property.CommonBlockProperties.UPSIDE_DOWN_BIT;
-import static cn.nukkit.block.property.CommonBlockProperties.WEIRDO_DIRECTION;
+import cn.nukkit.Player
+import cn.nukkit.block.Block.Companion.get
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.math.AxisAlignedBB.intersectsWith
+import cn.nukkit.math.BlockFace
+import cn.nukkit.registry.BiomeRegistry.get
+import cn.nukkit.registry.BlockRegistry.get
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public abstract class BlockStairs extends BlockTransparent implements Faceable {
-    public BlockStairs(BlockState blockState) {
-        super(blockState);
+abstract class BlockStairs(blockState: BlockState?) : BlockTransparent(blockState), Faceable {
+    override var minY: Double
+        get() = position.y + (if (isUpsideDown) 0.5 else 0.0)
+        set(minY) {
+            super.minY = minY
+        }
+
+    override var maxY: Double
+        get() = position.y + (if (isUpsideDown) 1.0 else 0.5)
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override fun isSolid(side: BlockFace): Boolean {
+        return side == BlockFace.UP && isUpsideDown || side == BlockFace.DOWN && !isUpsideDown
     }
 
-    @Override
-    public double getMinY() {
-        return this.position.up + (isUpsideDown() ? 0.5 : 0);
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + (isUpsideDown() ? 1 : 0.5);
-    }
-
-    @Override
-    public boolean isSolid(BlockFace side) {
-        return side == BlockFace.UP && isUpsideDown() || side == BlockFace.DOWN && !isUpsideDown();
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
         if (player != null) {
-            setBlockFace(player.getDirection());
+            blockFace = player.getDirection()
         }
 
         if ((fy > 0.5 && face != BlockFace.UP) || face == BlockFace.DOWN) {
-            setUpsideDown(true);
+            isUpsideDown = true
         }
-        this.level.setBlock(block.position, this, true, true);
+        level.setBlock(block.position, this, true, true)
 
-        return true;
+        return true
     }
 
-    @Override
-    public boolean collidesWithBB(AxisAlignedBB bb) {
-        BlockFace face = getBlockFace();
-        double minSlabY = 0;
-        double maxSlabY = 0.5;
-        double minHalfSlabY = 0.5;
-        double maxHalfSlabY = 1;
+    override fun collidesWithBB(bb: AxisAlignedBB): Boolean {
+        val face = blockFace
+        var minSlabY = 0.0
+        var maxSlabY = 0.5
+        var minHalfSlabY = 0.5
+        var maxHalfSlabY = 1.0
 
-        if (isUpsideDown()) {
-            minSlabY = 0.5;
-            maxSlabY = 1;
-            minHalfSlabY = 0;
-            maxHalfSlabY = 0.5;
-        }
-
-        if (bb.intersectsWith(new SimpleAxisAlignedBB(
-                this.position.south,
-                this.position.up + minSlabY,
-                this.position.west,
-                this.position.south + 1,
-                this.position.up + maxSlabY,
-                this.position.west + 1
-        ))) {
-            return true;
+        if (isUpsideDown) {
+            minSlabY = 0.5
+            maxSlabY = 1.0
+            minHalfSlabY = 0.0
+            maxHalfSlabY = 0.5
         }
 
-        return switch (face) {
-            case EAST -> bb.intersectsWith(new SimpleAxisAlignedBB(
-                    this.position.south + 0.5,
-                    this.position.up + minHalfSlabY,
-                    this.position.west,
-                    this.position.south + 1,
-                    this.position.up + maxHalfSlabY,
-                    this.position.west + 1
-            ));
-            case WEST -> bb.intersectsWith(new SimpleAxisAlignedBB(
-                    this.position.south,
-                    this.position.up + minHalfSlabY,
-                    this.position.west,
-                    this.position.south + 0.5,
-                    this.position.up + maxHalfSlabY,
-                    this.position.west + 1
-            ));
-            case SOUTH -> bb.intersectsWith(new SimpleAxisAlignedBB(
-                    this.position.south,
-                    this.position.up + minHalfSlabY,
-                    this.position.west + 0.5,
-                    this.position.south + 1,
-                    this.position.up + maxHalfSlabY,
-                    this.position.west + 1
-            ));
-            case NORTH -> bb.intersectsWith(new SimpleAxisAlignedBB(
-                    this.position.south,
-                    this.position.up + minHalfSlabY,
-                    this.position.west,
-                    this.position.south + 1,
-                    this.position.up + maxHalfSlabY,
-                    this.position.west + 0.5
-            ));
-            default -> false;
-        };
+        if (bb.intersectsWith(
+                SimpleAxisAlignedBB(
+                    position.x,
+                    position.y + minSlabY,
+                    position.z,
+                    position.x + 1,
+                    position.y + maxSlabY,
+                    position.z + 1
+                )
+            )
+        ) {
+            return true
+        }
+
+        return when (face) {
+            BlockFace.EAST -> bb.intersectsWith(
+                SimpleAxisAlignedBB(
+                    position.x + 0.5,
+                    position.y + minHalfSlabY,
+                    position.z,
+                    position.x + 1,
+                    position.y + maxHalfSlabY,
+                    position.z + 1
+                )
+            )
+
+            BlockFace.WEST -> bb.intersectsWith(
+                SimpleAxisAlignedBB(
+                    position.x,
+                    position.y + minHalfSlabY,
+                    position.z,
+                    position.x + 0.5,
+                    position.y + maxHalfSlabY,
+                    position.z + 1
+                )
+            )
+
+            BlockFace.SOUTH -> bb.intersectsWith(
+                SimpleAxisAlignedBB(
+                    position.x,
+                    position.y + minHalfSlabY,
+                    position.z + 0.5,
+                    position.x + 1,
+                    position.y + maxHalfSlabY,
+                    position.z + 1
+                )
+            )
+
+            BlockFace.NORTH -> bb.intersectsWith(
+                SimpleAxisAlignedBB(
+                    position.x,
+                    position.y + minHalfSlabY,
+                    position.z,
+                    position.x + 1,
+                    position.y + maxHalfSlabY,
+                    position.z + 0.5
+                )
+            )
+
+            else -> false
+        }
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    public void setUpsideDown(boolean upsideDown) {
-        setPropertyValue(UPSIDE_DOWN_BIT, upsideDown);
-    }
+    var isUpsideDown: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPSIDE_DOWN_BIT)
+        set(upsideDown) {
+            setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.UPSIDE_DOWN_BIT,
+                upsideDown
+            )
+        }
 
-    public boolean isUpsideDown() {
-        return getPropertyValue(UPSIDE_DOWN_BIT);
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.EWSN_DIRECTION.inverse().get(getPropertyValue(WEIRDO_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(WEIRDO_DIRECTION, CommonPropertyMap.EWSN_DIRECTION.get(face));
-    }
+    var blockFace: BlockFace?
+        get() = CommonPropertyMap.EWSN_DIRECTION.inverse()
+            .get(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.WEIRDO_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.WEIRDO_DIRECTION,
+                CommonPropertyMap.EWSN_DIRECTION.get(face)
+            )
+        }
 }

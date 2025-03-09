@@ -66,8 +66,8 @@ class EntitySnowball @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag,
         for (i in length..<allPackets.size) {
             allPackets.get(i) = particlePackets.get(i % length)
         }
-        val chunkX: Int = position.south.toInt() shr 4
-        val chunkZ: Int = position.west.toInt() shr 4
+        val chunkX: Int = position.x.toInt() shr 4
+        val chunkZ: Int = position.z.toInt() shr 4
         val level: Level = level!!
         for (p: DataPacket? in allPackets) {
             Server.broadcastPacket(level.getChunkPlayers(chunkX, chunkZ).values, p)

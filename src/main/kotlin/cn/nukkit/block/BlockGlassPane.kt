@@ -1,56 +1,38 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
 
 /**
  * @author xtypr
  * @since 2015/12/6
  */
-public class BlockGlassPane extends BlockThin {
+open class BlockGlassPane : BlockThin {
+    constructor() : super(Companion.properties.defaultState)
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(GLASS_PANE);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val name: String
+        get() = "Glass Pane"
+
+    override val resistance: Double
+        get() = 1.5
+
+    override val waterloggingLevel: Int
+        get() = 1
+
+    override val hardness: Double
+        get() = 0.3
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    public BlockGlassPane() {
-        super(PROPERTIES.getDefaultState());
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    public BlockGlassPane(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Glass Pane";
-    }
-
-    @Override
-    public double getResistance() {
-        return 1.5;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.3;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
-    }
-
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(GLASS_PANE)
+            get() = Companion.field
     }
 }

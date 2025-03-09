@@ -111,11 +111,11 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                 }
             }*/
 
-            motion.up -= getGravity().toDouble()
+            motion.y -= getGravity().toDouble()
 
             if (this.checkObstruction(
-                    position.south,
-                    position.up, position.west
+                    position.x,
+                    position.y, position.z
                 )
             ) {
                 hasUpdate = true
@@ -140,38 +140,38 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
             }
 
             if (this.closestPlayer != null) {
-                val dX: Double = (closestPlayer!!.position.south - position.south) / 8.0
+                val dX: Double = (closestPlayer!!.position.x - position.x) / 8.0
                 val dY: Double =
-                    (closestPlayer!!.position.up + closestPlayer!!.getEyeHeight().toDouble() / 2.0 - position.up) / 8.0
-                val dZ: Double = (closestPlayer!!.position.west - position.west) / 8.0
+                    (closestPlayer!!.position.y + closestPlayer!!.getEyeHeight().toDouble() / 2.0 - position.y) / 8.0
+                val dZ: Double = (closestPlayer!!.position.z - position.z) / 8.0
                 val d: Double = sqrt(dX * dX + dY * dY + dZ * dZ)
                 var diff: Double = 1.0 - d
 
                 if (diff > 0.0) {
                     diff = diff * diff
-                    motion.south += dX / d * diff * 0.1
-                    motion.up += dY / d * diff * 0.1
-                    motion.west += dZ / d * diff * 0.1
+                    motion.x += dX / d * diff * 0.1
+                    motion.y += dY / d * diff * 0.1
+                    motion.z += dZ / d * diff * 0.1
                 }
             }
 
-            this.move(motion.south, motion.up, motion.west)
+            this.move(motion.x, motion.y, motion.z)
 
             var friction: Double = 1.0 - this.getDrag()
 
-            if (this.onGround && (abs(motion.south) > 0.00001 || abs(
-                    motion.west
+            if (this.onGround && (abs(motion.x) > 0.00001 || abs(
+                    motion.z
                 ) > 0.00001)
             ) {
                 friction = level!!.getBlock(position.add(0.0, -1.0, 0.0).floor()).getFrictionFactor() * friction
             }
 
-            motion.south *= friction
-            motion.up *= (1 - this.getDrag()).toDouble()
-            motion.west *= friction
+            motion.x *= friction
+            motion.y *= (1 - this.getDrag()).toDouble()
+            motion.z *= friction
 
             if (this.onGround) {
-                motion.up *= -0.5
+                motion.y *= -0.5
             }
 
             this.updateMovement()
@@ -182,9 +182,9 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
             }
         }
 
-        return hasUpdate || !this.onGround || abs(motion.south) > 0.00001 || abs(
-            motion.up
-        ) > 0.00001 || abs(motion.west) > 0.00001
+        return hasUpdate || !this.onGround || abs(motion.x) > 0.00001 || abs(
+            motion.y
+        ) > 0.00001 || abs(motion.z) > 0.00001
     }
 
     override fun saveNBT() {

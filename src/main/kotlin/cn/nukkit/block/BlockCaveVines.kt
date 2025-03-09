@@ -1,183 +1,158 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate) {
+    override val name: String
+        get() = "Cave Vines"
 
-import static cn.nukkit.block.property.CommonBlockProperties.GROWING_PLANT_AGE;
+    override val hardness: Double
+        get() = 0.0
 
+    override val isTransparent: Boolean
+        get() = true
 
-public class BlockCaveVines extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CAVE_VINES, GROWING_PLANT_AGE);
+    override val isSolid: Boolean
+        get() = false
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockCaveVines() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCaveVines(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Cave Vines";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public boolean isTransparent() {
-        return true;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    public static boolean isValidSupport(Block block) {
-        if (block instanceof BlockLiquid) return false;
-        else return block.up().isSolid() || block.up() instanceof BlockCaveVines;
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!isValidSupport(this)) {
-                this.level.useBreakOn(this.position);
+                level.useBreakOn(this.position)
             }
-            return type;
+            return type
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            Random random = ThreadLocalRandom.current();
+            val random: Random = ThreadLocalRandom.current()
             //random mature,The feature that I added.
             if (random.nextInt(4) == 0) {
-                int growth = getGrowth();
-                if (growth + 4 < getMaxGrowth()) {
-                    BlockCaveVines block = (BlockCaveVines) this.clone();
-                    block.setGrowth(growth + 4);
-                    BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                    Server.getInstance().pluginManager.callEvent(ev);
-                    if (!ev.isCancelled()) {
-                        this.level.setBlock(this.position, ev.newState, false, true);
+                val growth = growth
+                if (growth + 4 < maxGrowth) {
+                    val block = clone() as BlockCaveVines
+                    block.growth = growth + 4
+                    val ev = BlockGrowEvent(this, block)
+                    instance!!.pluginManager.callEvent(ev)
+                    if (!ev.isCancelled) {
+                        level.setBlock(this.position, ev.newState!!, false, true)
                     } else {
-                        return type;
+                        return type
                     }
                 } else {
-                    BlockCaveVines block;
-                    if (this.up() instanceof BlockCaveVines && !(this.down() instanceof BlockCaveVines)) {
-                        block = new BlockCaveVinesHeadWithBerries();
-                    } else block = new BlockCaveVinesBodyWithBerries();
-                    block.setGrowth(getMaxGrowth());
-                    BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                    Server.getInstance().pluginManager.callEvent(ev);
-                    if (!ev.isCancelled()) {
-                        this.level.setBlock(this.position, ev.newState, false, true);
+                    val block = if (up() is BlockCaveVines && down() !is BlockCaveVines) {
+                        BlockCaveVinesHeadWithBerries()
+                    } else BlockCaveVinesBodyWithBerries()
+                    block.growth = maxGrowth
+                    val ev = BlockGrowEvent(this, block)
+                    instance!!.pluginManager.callEvent(ev)
+                    if (!ev.isCancelled) {
+                        level.setBlock(this.position, ev.newState!!, false, true)
                     } else {
-                        return type;
+                        return type
                     }
                 }
             }
             //random grow feature,according to wiki in https://minecraft.wiki/w/Glow_Berries#Growth
-            if (down().isAir() && random.nextInt(10) == 0) {
-                BlockCaveVines block;
-                if (this.up() instanceof BlockCaveVines && !(this.down() instanceof BlockCaveVines)) {
-                    block = new BlockCaveVinesHeadWithBerries();
-                } else block = new BlockCaveVinesBodyWithBerries();
-                block.setGrowth(getMaxGrowth());
-                BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                Server.getInstance().pluginManager.callEvent(ev);
-                if (!ev.isCancelled()) {
-                    this.level.setBlock(this.down().position, ev.newState, false, true);
+            if (down()!!.isAir && random.nextInt(10) == 0) {
+                val block = if (up() is BlockCaveVines && down() !is BlockCaveVines) {
+                    BlockCaveVinesHeadWithBerries()
+                } else BlockCaveVinesBodyWithBerries()
+                block.growth = maxGrowth
+                val ev = BlockGrowEvent(this, block)
+                instance!!.pluginManager.callEvent(ev)
+                if (!ev.isCancelled) {
+                    level.setBlock(down()!!.position, ev.newState!!, false, true)
                 } else {
-                    return type;
+                    return type
                 }
-            } else if (down().isAir()) {
-                BlockCaveVines block = new BlockCaveVines();
-                block.setGrowth(0);
-                BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                Server.getInstance().pluginManager.callEvent(ev);
-                if (!ev.isCancelled()) {
-                    this.level.setBlock(this.down().position, ev.newState, false, true);
+            } else if (down()!!.isAir) {
+                val block = BlockCaveVines()
+                block.growth = 0
+                val ev = BlockGrowEvent(this, block)
+                instance!!.pluginManager.callEvent(ev)
+                if (!ev.isCancelled) {
+                    level.setBlock(down()!!.position, ev.newState!!, false, true)
                 }
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) {
-            BlockCaveVines block;
-            if (this.up() instanceof BlockCaveVines && !(this.down() instanceof BlockCaveVines)) {
-                block = new BlockCaveVinesHeadWithBerries();
-            } else block = new BlockCaveVinesBodyWithBerries();
-            int max = getMaxGrowth();
-            int growth = getGrowth();
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) {
+            val block = if (up() is BlockCaveVines && down() !is BlockCaveVines) {
+                BlockCaveVinesHeadWithBerries()
+            } else BlockCaveVinesBodyWithBerries()
+            val max = maxGrowth
+            val growth = growth
             if (growth < max) {
-                block.setGrowth(max);
-                BlockGrowEvent ev = new BlockGrowEvent(this, block);
-                Server.getInstance().pluginManager.callEvent(ev);
-                if (ev.isCancelled()) {
-                    return false;
+                block.growth = max
+                val ev = BlockGrowEvent(this, block)
+                instance!!.pluginManager.callEvent(ev)
+                if (ev.isCancelled) {
+                    return false
                 }
-                this.level.setBlock(this.position, ev.newState, false, true);
-                this.level.addParticle(new BoneMealParticle(this.position));
-                if (player != null && !player.isCreative()) {
-                    item.count--;
+                level.setBlock(this.position, ev.newState!!, false, true)
+                level.addParticle(BoneMealParticle(this.position))
+                if (player != null && !player.isCreative) {
+                    item.count--
                 }
             }
-            return true;
+            return true
         }
-        if (item.isNull()) {
-            if (this.getGrowth() == 25) {
-                BlockCaveVines block = new BlockCaveVines();
-                block.setGrowth(0);
-                this.level.setBlock(this.position, block, false, true);
-                this.level.dropItem(this.position, Item.get(ItemID.GLOW_BERRIES));
+        if (item.isNull) {
+            if (this.growth == 25) {
+                val block = BlockCaveVines()
+                block.growth = 0
+                level.setBlock(this.position, block, false, true)
+                level.dropItem(this.position, Item.get(ItemID.GLOW_BERRIES))
             }
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    private int getMaxGrowth() {
-        return GROWING_PLANT_AGE.getMax();
-    }
+    private val maxGrowth: Int
+        get() = CommonBlockProperties.GROWING_PLANT_AGE.getMax()
 
-    private int getGrowth() {
-        return getPropertyValue(GROWING_PLANT_AGE);
-    }
+    private var growth: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWING_PLANT_AGE)
+        private set(growth) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWING_PLANT_AGE, growth)
+        }
 
-    private void setGrowth(int growth) {
-        setPropertyValue(GROWING_PLANT_AGE, growth);
+    companion object {
+        val properties: BlockProperties = BlockProperties(CAVE_VINES, CommonBlockProperties.GROWING_PLANT_AGE)
+            get() = Companion.field
+
+        fun isValidSupport(block: Block): Boolean {
+            return if (block is BlockLiquid) false
+            else block.up()!!.isSolid || block.up() is BlockCaveVines
+        }
     }
 }

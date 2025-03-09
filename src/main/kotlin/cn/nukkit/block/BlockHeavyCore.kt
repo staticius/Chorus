@@ -1,98 +1,79 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.AxisAlignedBB;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.AxisAlignedBB
 
-public class BlockHeavyCore extends BlockFlowable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(HEAVY_CORE);
+class BlockHeavyCore : BlockFlowable {
+    constructor() : super(Companion.properties.defaultState)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    constructor(blockstate: BlockState?) : super(blockstate)
+
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return this
     }
 
-    public BlockHeavyCore() {
-        super(PROPERTIES.getDefaultState());
+    override var minX: Double
+        get() = position.x + 0.25
+        set(minX) {
+            super.minX = minX
+        }
+
+    override var minZ: Double
+        get() = position.z + 0.25
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x + 0.75
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxY: Double
+        get() = position.y + 0.50
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override var maxZ: Double
+        get() = position.z + 0.75
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    public BlockHeavyCore(BlockState blockstate) {
-        super(blockstate);
+    override val name: String
+        get() = "Heavy Core"
+
+    override val resistance: Double
+        get() = 30.0
+
+    override val hardness: Double
+        get() = 10.0
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return this;
+    override fun breaksWhenMoved(): Boolean {
+        return false
     }
 
-    @Override
-    public double getMinX() {
-        return this.position.south + 0.25;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public double getMinZ() {
-        return this.position.west + 0.25;
-    }
-
-    @Override
-    public double getMaxX() {
-        return this.position.south + 0.75;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.50;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 0.75;
-    }
-
-    @Override
-    public boolean canPassThrough() {
-        return false;
-    }
-
-    @Override
-    public String getName() {
-        return "Heavy Core";
-    }
-
-    @Override
-    public double getResistance() {
-        return 30;
-    }
-
-    @Override
-    public double getHardness() {
-        return 10;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean breaksWhenMoved() {
-        return false;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
+    companion object {
+        val properties: BlockProperties = BlockProperties(HEAVY_CORE)
+            get() = Companion.field
     }
 }

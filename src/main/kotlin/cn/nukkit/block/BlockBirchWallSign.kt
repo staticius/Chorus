@@ -1,45 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBirchSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
+class BlockBirchWallSign : BlockWallSign {
+    constructor() : super(Companion.properties.defaultState)
 
+    constructor(blockState: BlockState?) : super(blockState)
 
-public class BlockBirchWallSign extends BlockWallSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BIRCH_WALL_SIGN, FACING_DIRECTION);
+    override val name: String
+        get() = "Birch Wall Sign"
 
-    public BlockBirchWallSign() {
-        super(PROPERTIES.getDefaultState());
+    override fun getWallSignId(): String {
+        return BIRCH_WALL_SIGN
     }
 
-    public BlockBirchWallSign(BlockState blockState) {
-        super(blockState);
+    override fun getStandingSignId(): String {
+        return BIRCH_WALL_SIGN
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemBirchSign()
     }
 
-    @Override
-    public String getName() {
-        return "Birch Wall Sign";
-    }
-
-    @Override
-    public String getWallSignId() {
-        return BIRCH_WALL_SIGN;
-    }
-
-    @Override
-    public String getStandingSignId() {
-        return BIRCH_WALL_SIGN;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBirchSign();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BIRCH_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

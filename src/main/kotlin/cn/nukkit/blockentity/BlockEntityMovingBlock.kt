@@ -59,9 +59,9 @@ class BlockEntityMovingBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
             } else {
                 this.movingBlock = blockState.toBlock()
             }
-            this.movingBlock!!.position.south = position.south
-            this.movingBlock!!.position.up = position.up
-            this.movingBlock!!.position.west = position.west
+            this.movingBlock!!.position.x = position.x
+            this.movingBlock!!.position.y = position.y
+            this.movingBlock!!.position.z = position.z
         } else {
             this.close()
         }
@@ -89,9 +89,9 @@ class BlockEntityMovingBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
     fun moveCollidedEntities(piston: BlockEntityPistonArm, moveDirection: BlockFace) {
         var bb: AxisAlignedBB? = movingBlock!!.boundingBox ?: return
         bb = bb.getOffsetBoundingBox(
-            position.south + (piston.progress * moveDirection.xOffset) - moveDirection.xOffset,
-            position.up + (piston.progress * moveDirection.yOffset) - moveDirection.yOffset,
-            position.west + (piston.progress * moveDirection.zOffset) - moveDirection.zOffset //带动站在移动方块上的实体
+            position.x + (piston.progress * moveDirection.xOffset) - moveDirection.xOffset,
+            position.y + (piston.progress * moveDirection.yOffset) - moveDirection.yOffset,
+            position.z + (piston.progress * moveDirection.zOffset) - moveDirection.zOffset //带动站在移动方块上的实体
         ).addCoord(0.0, if (moveDirection.axis.isHorizontal) 0.25 else 0.0, 0.0)
         for (entity in level.getCollidingEntities(bb)) piston.moveEntity(entity, moveDirection)
     }

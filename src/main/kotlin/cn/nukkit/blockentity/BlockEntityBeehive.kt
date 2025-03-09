@@ -239,9 +239,9 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
 
             saveData.putList(
                 "Pos", ListTag<FloatTag>()
-                    .add(FloatTag(spawnLocator.position.south))
-                    .add(FloatTag(spawnLocator.position.up))
-                    .add(FloatTag(spawnLocator.position.west))
+                    .add(FloatTag(spawnLocator.position.x))
+                    .add(FloatTag(spawnLocator.position.y))
+                    .add(FloatTag(spawnLocator.position.z))
             )
 
             saveData.putList(

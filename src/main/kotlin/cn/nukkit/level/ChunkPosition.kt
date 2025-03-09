@@ -7,7 +7,7 @@ import cn.nukkit.math.Vector3
  * @author Adam Matthew (Nukkit Project)
  */
 class ChunkPosition(val x: Int, val y: Int, val z: Int) {
-    constructor(vec3d: Vector3) : this(MathHelper.floor(vec3d.south), MathHelper.floor(vec3d.up), MathHelper.floor(vec3d.west))
+    constructor(vec3d: Vector3) : this(MathHelper.floor(vec3d.x), MathHelper.floor(vec3d.y), MathHelper.floor(vec3d.z))
 
     override fun equals(`object`: Any?): Boolean {
         return if (`object` !is ChunkPosition) {

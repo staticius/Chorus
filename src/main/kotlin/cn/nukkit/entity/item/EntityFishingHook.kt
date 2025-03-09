@@ -85,9 +85,9 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
                 val offset: Vector3f? = entity.getMountedOffset(this)
                 setPosition(
                     Vector3(
-                        entity.position.south + offset!!.south,
-                        entity.position.up + offset.up,
-                        entity.position.west + offset.west
+                        entity.position.x + offset!!.south,
+                        entity.position.y + offset.up,
+                        entity.position.z + offset.west
                     )
                 )
             }
@@ -98,9 +98,9 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
 
         val inWater: Boolean = this.isInsideOfWater()
         if (inWater) { //防止鱼钩沉底 水中的阻力
-            motion.south = 0.0
-            motion.up -= getGravity() * -0.04
-            motion.west = 0.0
+            motion.x = 0.0
+            motion.y -= getGravity() * -0.04
+            motion.z = 0.0
             hasUpdate = true
         }
 
@@ -148,13 +148,13 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
     override fun updateMotion() {
         //正确的浮力
         if (this.isInsideOfWater() && this.getY() < this.getWaterHeight() - 2) {
-            motion.south = 0.0
-            motion.up += getGravity().toDouble()
-            motion.west = 0.0
+            motion.x = 0.0
+            motion.y += getGravity().toDouble()
+            motion.z = 0.0
         } else if (this.isInsideOfWater() && this.getY() >= this.getWaterHeight() - 2) { //防止鱼钩上浮超出水面
-            motion.south = 0.0
-            motion.west = 0.0
-            motion.up = 0.0
+            motion.x = 0.0
+            motion.z = 0.0
+            motion.y = 0.0
         } else { //处理不在水中的情况
             super.updateMotion()
         }
@@ -194,9 +194,9 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
             level!!.addParticle(
                 BubbleParticle(
                     position.setComponents(
-                        position.south + random.nextDouble() * 0.5 - 0.25,
+                        position.x + random.nextDouble() * 0.5 - 0.25,
                         getWaterHeight().toDouble(),
-                        position.west + random.nextDouble() * 0.5 - 0.25
+                        position.z + random.nextDouble() * 0.5 - 0.25
                     )
                 )
             )
@@ -206,25 +206,25 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
     fun spawnFish() {
         val random: ThreadLocalRandom = ThreadLocalRandom.current()
         this.fish = Vector3(
-            position.south + (random.nextDouble() * 1.2 + 1) * (if (random.nextBoolean()) -1 else 1),
+            position.x + (random.nextDouble() * 1.2 + 1) * (if (random.nextBoolean()) -1 else 1),
             getWaterHeight().toDouble(),
-            position.west + (random.nextDouble() * 1.2 + 1) * (if (random.nextBoolean()) -1 else 1)
+            position.z + (random.nextDouble() * 1.2 + 1) * (if (random.nextBoolean()) -1 else 1)
         )
     }
 
     fun attractFish(): Boolean {
         val multiply: Double = 0.1
         fish!!.setComponents(
-            fish!!.south + (position.south - fish!!.south) * multiply,
-            fish!!.up,
-            fish!!.west + (position.west - fish!!.west) * multiply
+            fish!!.x + (position.x - fish!!.x) * multiply,
+            fish!!.y,
+            fish!!.z + (position.z - fish!!.z) * multiply
         )
         if (ThreadLocalRandom.current().nextInt(100) < 85) {
             level!!.addParticle(WaterParticle(this.fish))
         }
         val dist: Double = abs(
-            sqrt(position.south * position.south + position.west * position.west) - sqrt(
-                fish!!.south * fish!!.south + fish!!.west * fish!!.west
+            sqrt(position.x * position.x + position.z * position.z) - sqrt(
+                fish!!.x * fish!!.x + fish!!.z * fish!!.z
             )
         )
         return dist < 0.15
@@ -235,11 +235,11 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
             val item: Item = Fishing.getFishingResult(this.rod)
             val experience: Int = ThreadLocalRandom.current().nextInt(3) + 1
             val pos: Vector3 = Vector3(
-                position.south,
-                getWaterHeight().toDouble(), position.west
+                position.x,
+                getWaterHeight().toDouble(), position.z
             ) //实体生成在水面上
             val motion: Vector3 = shootingEntity.position.subtract(pos).multiply(0.1)
-            motion.up += sqrt(shootingEntity.position.distance(pos)) * 0.08
+            motion.y += sqrt(shootingEntity.position.distance(pos)) * 0.08
 
             val event: PlayerFishEvent = PlayerFishEvent(shootingEntity, this, item, experience, motion)
             getServer()!!.pluginManager.callEvent(event)
@@ -248,8 +248,8 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
                 val itemEntity: EntityItem? = Entity.Companion.createEntity(
                     EntityID.Companion.ITEM,
                     level!!.getChunk(
-                        position.south.toInt() shr 4,
-                        position.west.toInt() shr 4, true
+                        position.x.toInt() shr 4,
+                        position.z.toInt() shr 4, true
                     ),
                     Entity.Companion.getDefaultNBT(
                         pos,
@@ -283,12 +283,12 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
         pk.entityRuntimeId = this.getId()
         pk.entityUniqueId = this.getId()
         pk.type = getNetworkId()
-        pk.x = position.south.toFloat()
-        pk.y = position.up.toFloat()
-        pk.z = position.west.toFloat()
-        pk.speedX = motion.south.toFloat()
-        pk.speedY = motion.up.toFloat()
-        pk.speedZ = motion.west.toFloat()
+        pk.x = position.x.toFloat()
+        pk.y = position.y.toFloat()
+        pk.z = position.z.toFloat()
+        pk.speedX = motion.x.toFloat()
+        pk.speedY = motion.y.toFloat()
+        pk.speedZ = motion.z.toFloat()
         pk.yaw = rotation.yaw.toFloat()
         pk.pitch = rotation.pitch.toFloat()
 

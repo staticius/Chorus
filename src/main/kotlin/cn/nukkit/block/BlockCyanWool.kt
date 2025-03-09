@@ -1,29 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.tags.BlockTags;
-import cn.nukkit.utils.DyeColor;
-import org.jetbrains.annotations.NotNull;
+import java.util.Set
 
-import java.util.Set;
-
-public class BlockCyanWool extends BlockWool {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CYAN_WOOL, Set.of(BlockTags.PNX_WOOL));
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockCyanWool @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWool(blockstate) {
+    override fun getDyeColor(): DyeColor {
+        return DyeColor.CYAN
     }
 
-    public BlockCyanWool() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCyanWool(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public DyeColor getDyeColor() {
-        return DyeColor.CYAN;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CYAN_WOOL, Set.of<String>(BlockTags.PNX_WOOL))
+            get() = Companion.field
     }
 }

@@ -1,52 +1,35 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.enums.MonsterEggStoneType;
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
 
-import static cn.nukkit.block.property.CommonBlockProperties.MONSTER_EGG_STONE_TYPE;
+class BlockMonsterEgg @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    var monsterEggStoneType: MonsterEggStoneType
+        get() = getPropertyValue(CommonBlockProperties.MONSTER_EGG_STONE_TYPE)
+        set(value) {
+            setPropertyValue(
+                CommonBlockProperties.MONSTER_EGG_STONE_TYPE,
+                value
+            )
+        }
 
-public class BlockMonsterEgg extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MONSTER_EGG, MONSTER_EGG_STONE_TYPE);
+    override val name: String
+        get() = monsterEggStoneType.name + " Monster Egg"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 0.0
+
+    override val resistance: Double
+        get() = 0.75
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    public BlockMonsterEgg() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMonsterEgg(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @NotNull public MonsterEggStoneType getMonsterEggStoneType() {
-        return getPropertyValue(MONSTER_EGG_STONE_TYPE);
-    }
-
-    public void setMonsterEggStoneType(@NotNull MonsterEggStoneType value) {
-        setPropertyValue(MONSTER_EGG_STONE_TYPE, value);
-    }
-
-    @Override
-    public String getName() {
-        return getMonsterEggStoneType().name() + " Monster Egg";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.75;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.MONSTER_EGG, CommonBlockProperties.MONSTER_EGG_STONE_TYPE)
+            get() = Companion.field
     }
 }

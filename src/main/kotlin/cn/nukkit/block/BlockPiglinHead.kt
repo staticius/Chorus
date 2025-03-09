@@ -1,39 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemDragonHead;
-import cn.nukkit.item.ItemHead;
-import cn.nukkit.item.ItemPiglinHead;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-public class BlockPiglinHead extends BlockHead implements ItemHead {
+class BlockPiglinHead(blockState: BlockState?) : BlockHead(blockState), ItemHead {
+    override val name: String
+        get() = "Piglin Head"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(PIGLIN_HEAD, CommonBlockProperties.FACING_DIRECTION);
-
-    public BlockPiglinHead(BlockState blockState) {
-        super(blockState);
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
+            this.toItem()
+        )
     }
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun toItem(): Item? {
+        return ItemPiglinHead()
     }
 
-    @Override
-    public String getName() {
-        return "Piglin Head";
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                this.toItem()
-        };
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemPiglinHead();
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PIGLIN_HEAD, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

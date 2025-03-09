@@ -1,223 +1,196 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityBeehive;
-import cn.nukkit.event.player.PlayerInteractEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Sound;
-import cn.nukkit.level.vibration.VibrationEvent;
-import cn.nukkit.level.vibration.VibrationType;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.blockentity.*
+import cn.nukkit.event.player.PlayerInteractEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Sound
+import cn.nukkit.level.vibration.VibrationEvent
+import cn.nukkit.level.vibration.VibrationType
+import cn.nukkit.math.*
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.utils.Faceable
 
-import java.util.List;
+open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityBeehive?> {
+    override val name: String
+        get() = "Beehive"
 
-import static cn.nukkit.block.property.CommonBlockProperties.HONEY_LEVEL;
-
-
-public class BlockBeehive extends BlockSolid implements Faceable, BlockEntityHolder<BlockEntityBeehive> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BEEHIVE, CommonBlockProperties.DIRECTION, HONEY_LEVEL);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getBlockEntityType(): String {
+        return BlockEntity.BEEHIVE
     }
 
-    public BlockBeehive() {
-        this(PROPERTIES.getDefaultState());
+    override fun getBlockEntityClass(): Class<out BlockEntityBeehive> {
+        return BlockEntityBeehive::class.java
     }
 
-    public BlockBeehive(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
 
-    @Override
-    public String getName() {
-        return "Beehive";
-    }
+    override val burnChance: Int
+        get() = 5
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.BEEHIVE;
-    }
+    override val burnAbility: Int
+        get() = 20
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityBeehive> getBlockEntityClass() {
-        return BlockEntityBeehive.class;
-    }
+    override val hardness: Double
+        get() = 0.6
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
+    override val resistance: Double
+        get() = 3.0
 
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.6;
-    }
-
-    @Override
-    public double getResistance() {
-        return 3;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (player == null) {
-            setBlockFace(BlockFace.SOUTH);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        blockFace = if (player == null) {
+            BlockFace.SOUTH
         } else {
-            setBlockFace(player.getDirection().getOpposite());
+            player.getDirection()!!.getOpposite()
         }
 
-        int honeyLevel = item.hasCustomBlockData() ? item.getCustomBlockData().getByte("HoneyLevel") : 0;
-        setHoneyLevel(honeyLevel);
-        BlockEntityBeehive beehive = BlockEntityHolder.setBlockAndCreateEntity(this, true, true, item.getCustomBlockData());
-        if (beehive == null) {
-            return false;
-        }
+        val honeyLevel = (if (item.hasCustomBlockData()) item.customBlockData!!.getByte("HoneyLevel") else 0).toInt()
+        this.honeyLevel = honeyLevel
+        val beehive = BlockEntityHolder.setBlockAndCreateEntity(
+            this,
+            true,
+            true,
+            item.customBlockData
+        )
+            ?: return false
 
         if (beehive.namedTag.getByte("ShouldSpawnBees") > 0) {
-            List<BlockFace> validSpawnFaces = beehive.scanValidSpawnFaces(true);
-            for (BlockEntityBeehive.Occupant occupant : beehive.getOccupants()) {
-                beehive.spawnOccupant(occupant, validSpawnFaces);
+            val validSpawnFaces = beehive.scanValidSpawnFaces(true)
+            for (occupant in beehive.getOccupants()) {
+                beehive.spawnOccupant(occupant, validSpawnFaces)
             }
 
-            beehive.namedTag.putByte("ShouldSpawnBees", 0);
+            beehive.namedTag.putByte("ShouldSpawnBees", 0)
         }
-        return true;
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.getId().equals(ItemID.SHEARS) && isFull()) {
-            honeyCollected(player);
-            level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_BEEHIVE_SHEAR);
-            item.useOn(this);
-            for (int i = 0; i < 3; ++i) {
-                level.dropItem(this.position, Item.get(ItemID.HONEYCOMB));
+    override fun onActivate(
+        item: Item,
+        player: Player,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.id == ItemID.SHEARS && isFull) {
+            honeyCollected(player)
+            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_BEEHIVE_SHEAR)
+            item.useOn(this)
+            for (i in 0..2) {
+                level.dropItem(this.position, Item.get(ItemID.HONEYCOMB))
             }
-            level.vibrationManager.callVibrationEvent(new VibrationEvent(this, this.position.add(0.5, 0.5, 0.5), VibrationType.SHEAR));
-            return true;
+            level.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    this,
+                    position.add(0.5, 0.5, 0.5)!!, VibrationType.SHEAR
+                )
+            )
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public void onTouch(@NotNull Vector3 vector, @NotNull Item item, @NotNull BlockFace face, float fx, float fy, float fz, @Nullable Player player, PlayerInteractEvent.@NotNull Action action) {
-        if(player != null) this.getOrCreateBlockEntity().setInteractingEntity(player);
-        super.onTouch(vector, item, face, fx, fy, fz, player, action);
+    override fun onTouch(
+        vector: Vector3,
+        item: Item,
+        face: BlockFace,
+        fx: Float,
+        fy: Float,
+        fz: Float,
+        player: Player?,
+        action: PlayerInteractEvent.Action
+    ) {
+        if (player != null) getOrCreateBlockEntity().setInteractingEntity(player)
+        super.onTouch(vector, item, face, fx, fy, fz, player, action)
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public void honeyCollected(Player player) {
-        honeyCollected(player, level.server.getDifficulty() > 0 && !player.isCreative());
-    }
-
-    public void honeyCollected(Player player, boolean angerBees) {
-        getOrCreateBlockEntity().setHoneyLevel(0);
-        if (!down().getId().equals(BlockID.CAMPFIRE) && angerBees) {
-            angerBees(player);
+    @JvmOverloads
+    fun honeyCollected(player: Player, angerBees: Boolean = level.server.getDifficulty() > 0 && !player.isCreative) {
+        getOrCreateBlockEntity().honeyLevel = 0
+        if (down()!!.id != CAMPFIRE && angerBees) {
+            angerBees(player)
         }
     }
 
-    public void angerBees(Player player) {
-        BlockEntityBeehive beehive = getBlockEntity();
-        if (beehive != null) {
-            beehive.angerBees(player);
-        }
+    fun angerBees(player: Player?) {
+        val beehive = blockEntity
+        beehive?.angerBees(player)
     }
 
-    @Override
-    public Item toItem() {
-        Item item = new ItemBlock(this);
+    override fun toItem(): Item? {
+        val item: Item = ItemBlock(this)
         if (level != null) {
-            BlockEntityBeehive beehive = getBlockEntity();
+            val beehive = blockEntity
             if (beehive != null) {
-                beehive.saveNBT();
-                if (!beehive.isHoneyEmpty() || !beehive.isEmpty()) {
-                    CompoundTag copy = beehive.namedTag.copy();
-                    copy.putByte("HoneyLevel", getHoneyLevel());
-                    item.setCustomBlockData(copy);
+                beehive.saveNBT()
+                if (!beehive.isHoneyEmpty || !beehive.isEmpty) {
+                    val copy = beehive.namedTag.copy()
+                    copy.putByte("HoneyLevel", honeyLevel)
+                    item.setCustomBlockData(copy)
                 }
             }
         }
-        return item;
+        return item
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION));
+    override var blockFace: BlockFace?
+        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face!!.horizontalIndex)
+        }
+
+    var honeyLevel: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HONEY_LEVEL)
+        set(honeyLevel) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HONEY_LEVEL, honeyLevel)
+        }
+
+    val isEmpty: Boolean
+        get() = honeyLevel == CommonBlockProperties.HONEY_LEVEL.getMin()
+
+    val isFull: Boolean
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HONEY_LEVEL) === CommonBlockProperties.HONEY_LEVEL.getMax()
+
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.DIRECTION, face.horizontalIndex);
-    }
+    override val comparatorInputOverride: Int
+        get() = honeyLevel
 
-    public void setHoneyLevel(int honeyLevel) {
-        setPropertyValue(HONEY_LEVEL, honeyLevel);
-    }
-
-    public int getHoneyLevel() {
-        return getPropertyValue(HONEY_LEVEL);
-    }
-
-    public boolean isEmpty() {
-        return getHoneyLevel() == HONEY_LEVEL.getMin();
-    }
-
-    public boolean isFull() {
-        return getPropertyValue(HONEY_LEVEL) == HONEY_LEVEL.getMax();
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride() {
-        return getHoneyLevel();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BEEHIVE, CommonBlockProperties.DIRECTION, CommonBlockProperties.HONEY_LEVEL)
+            get() = Companion.field
     }
 }

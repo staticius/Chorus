@@ -1,47 +1,27 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockResin extends BlockSolid {
+class BlockResin @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(state) {
+    override val hardness: Double
+        get() = 0.0
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(RESIN_BLOCK);
+    override val resistance: Double
+        get() = 0.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockResin() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockResin(BlockState state) {
-        super(state);
-    }
-
-    @Override
-    public double getHardness() {
-        return 0;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.RESIN_BLOCK)
+            get() = Companion.field
     }
 }

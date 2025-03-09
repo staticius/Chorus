@@ -1,38 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.Item
 
+open class BlockMossCarpet @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCarpet(blockstate) {
+    override val name: String
+        get() = "Moss Carpet"
 
-public class BlockMossCarpet extends BlockCarpet {
+    override val resistance: Double
+        get() = 0.1
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(MOSS_CARPET);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(toItem())
     }
 
-    public BlockMossCarpet() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMossCarpet(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Moss Carpet";
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.1;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{toItem()};
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MOSS_CARPET)
+            get() = Companion.field
     }
 }

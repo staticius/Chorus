@@ -1,86 +1,77 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.entity.effect.Effect;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.entity.Entity
+import cn.nukkit.entity.effect.Effect.Companion.get
+import cn.nukkit.entity.effect.EffectType
+import cn.nukkit.event.entity.EntityDamageEvent
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
+import kotlin.math.floor
 
-public class BlockHayBlock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(HAY_BLOCK, CommonBlockProperties.DEPRECATED, CommonBlockProperties.PILLAR_AXIS);
+class BlockHayBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val hardness: Double
+        get() = 0.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 0.5
+
+    override val burnChance: Int
+        get() = 60
+
+    override val burnAbility: Int
+        get() = 20
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_HOE
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        this.pillarAxis = face.axis
+        level.setBlock(block.position, this, true)
+        return true
     }
 
-    public BlockHayBlock() {
-        this(PROPERTIES.getDefaultState());
+    var pillarAxis: BlockFace.Axis?
+        get() = getPropertyValue(
+            CommonBlockProperties.PILLAR_AXIS
+        )
+        set(axis) {
+            setPropertyValue(
+                CommonBlockProperties.PILLAR_AXIS,
+                axis
+            )
+        }
+
+    override fun useDefaultFallDamage(): Boolean {
+        return false
     }
 
-    public BlockHayBlock(BlockState blockstate) {
-        super(blockstate);
-    }
+    override fun onEntityFallOn(entity: Entity, fallDistance: Float) {
+        val jumpBoost = if (entity.hasEffect(EffectType.JUMP_BOOST)) get(EffectType.JUMP_BOOST).getLevel() else 0
+        var damage = floor((fallDistance - 3 - jumpBoost).toDouble()).toFloat()
 
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.5;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 60;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_HOE;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        this.setPillarAxis(face.getAxis());
-        this.level.setBlock(block.position, this, true);
-        return true;
-    }
-
-    public BlockFace.Axis getPillarAxis() {
-        return getPropertyValue(CommonBlockProperties.PILLAR_AXIS);
-    }
-
-    public void setPillarAxis(BlockFace.Axis axis) {
-        setPropertyValue(CommonBlockProperties.PILLAR_AXIS, axis);
-    }
-
-    @Override
-    public boolean useDefaultFallDamage() {
-        return false;
-    }
-
-    @Override
-    public void onEntityFallOn(Entity entity, float fallDistance) {
-        int jumpBoost = entity.hasEffect(EffectType.JUMP_BOOST)? Effect.get(EffectType.JUMP_BOOST).getLevel() : 0;
-        float damage = (float) Math.floor(fallDistance - 3 - jumpBoost);
-
-        damage *= 0.2F;
+        damage *= 0.2f
 
         if (damage > 0) {
-            entity.attack(new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.FALL, damage));
+            entity.attack(EntityDamageEvent(entity, EntityDamageEvent.DamageCause.FALL, damage))
         }
+    }
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(HAY_BLOCK, CommonBlockProperties.DEPRECATED, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

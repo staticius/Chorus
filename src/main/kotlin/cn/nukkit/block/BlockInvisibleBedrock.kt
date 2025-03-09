@@ -1,71 +1,46 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
 
-public class BlockInvisibleBedrock extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(INVISIBLE_BEDROCK);
+class BlockInvisibleBedrock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Invisible Bedrock"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val waterloggingLevel: Int
+        get() = 2
+
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    public BlockInvisibleBedrock() {
-        this(PROPERTIES.getDefaultState());
+    override val hardness: Double
+        get() = -1.0
+
+    override val resistance: Double
+        get() = 18000000.0
+
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return false
     }
 
-    public BlockInvisibleBedrock(BlockState blockstate) {
-        super(blockstate);
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Invisible Bedrock";
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
+    override fun toItem(): Item? {
+        return ItemBlock(get(BlockID.Companion.AIR))
     }
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    @Override
-    public double getHardness() {
-        return -1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 18000000;
-    }
-
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return false;
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public  boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.AIR));
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.Companion.INVISIBLE_BEDROCK)
+            get() = Companion.field
     }
 }

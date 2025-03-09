@@ -1,24 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION;
-
-public class BlockChippedAnvil extends BlockAnvil {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHIPPED_ANVIL, MINECRAFT_CARDINAL_DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockChippedAnvil @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockAnvil(blockstate) {
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(CHIPPED_ANVIL, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
-
-    public BlockChippedAnvil() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockChippedAnvil(BlockState blockstate) {
-        super(blockstate);
-    }
-
 }

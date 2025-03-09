@@ -1,168 +1,148 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityFurnace;
-import cn.nukkit.inventory.ContainerInventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.StringTag;
-import cn.nukkit.nbt.tag.Tag;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.CommonPropertyMap
+import cn.nukkit.blockentity.*
+import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.nbt.tag.StringTag
+import cn.nukkit.nbt.tag.Tag
+import cn.nukkit.utils.Faceable
 
-import java.util.Map;
+open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityFurnace?> {
+    override val name: String
+        get() = "Burning Furnace"
 
-public class BlockLitFurnace extends BlockSolid implements Faceable, BlockEntityHolder<BlockEntityFurnace> {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIT_FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
+    override val blockEntityClass: Class<out BlockEntityFurnace>
+        get() = BlockEntityFurnace::class.java
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val blockEntityType: String
+        get() = BlockEntity.FURNACE
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockLitFurnace() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 3.5
 
-    public BlockLitFurnace(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val resistance: Double
+        get() = 17.5
 
-    @Override
-    public String getName() {
-        return "Burning Furnace";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityFurnace> getBlockEntityClass() {
-        return BlockEntityFurnace.class;
-    }
+    override val lightLevel: Int
+        get() = 13
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.FURNACE;
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        blockFace = if (player != null) fromHorizontalIndex(
+            player.getDirection()!!.getOpposite()!!.horizontalIndex
+        ) else BlockFace.SOUTH
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public double getHardness() {
-        return 3.5;
-    }
-
-    @Override
-    public double getResistance() {
-        return 17.5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 13;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        setBlockFace(player != null ? BlockFace.fromHorizontalIndex(player.getDirection().getOpposite().horizontalIndex) : BlockFace.SOUTH);
-
-        CompoundTag nbt = new CompoundTag().putList("Items", new ListTag<>());
+        val nbt = CompoundTag().putList("Items", ListTag())
 
         if (item.hasCustomName()) {
-            nbt.putString("CustomName", item.getCustomName());
+            nbt!!.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            Map<String, Tag> customData = item.getCustomBlockData().getTags();
-            for (Map.Entry<String, Tag> tag : customData.entrySet()) {
-                nbt.put(tag.getKey(), tag.getValue());
+            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            for ((key, value) in customData) {
+                nbt!!.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;
+        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
-        return true;
+    override fun onBreak(item: Item?): Boolean {
+        level.setBlock(this.position, get(BlockID.AIR), true, true)
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player == null) {
-            return false;
+            return false
         }
-            Item itemInHand = player.getInventory().getItemInHand();
-            if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull())) {
-                return false;
+        val itemInHand = player.getInventory().itemInHand
+        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+            return false
+        }
+
+        val furnace = orCreateBlockEntity!!
+        if (furnace.namedTag.contains("Lock") && furnace.namedTag.get("Lock") is StringTag
+            && (furnace.namedTag.getString("Lock") != item.customName)
+        ) {
+            return false
+        }
+
+        player.addWindow(furnace.getInventory())
+        return true
+    }
+
+    override fun toItem(): Item? {
+        return ItemBlock(get(BlockID.FURNACE))
+    }
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
+    }
+
+    override val comparatorInputOverride: Int
+        get() {
+            val blockEntity = blockEntity
+
+            if (blockEntity != null) {
+                return calculateRedstone(blockEntity.getInventory())
             }
 
-        BlockEntityFurnace furnace = getOrCreateBlockEntity();
-        if (furnace.namedTag.contains("Lock") && furnace.namedTag.get("Lock") instanceof StringTag
-                && !furnace.namedTag.getString("Lock").equals(item.getCustomName())) {
-            return false;
+            return super.comparatorInputOverride
         }
 
-        player.addWindow(furnace.getInventory());
-        return true;
-
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(Block.get(BlockID.FURNACE));
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride() {
-        BlockEntityFurnace blockEntity = getBlockEntity();
-
-        if (blockEntity != null) {
-            return ContainerInventory.calculateRedstone(blockEntity.getInventory());
+    override var blockFace: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]
+        set(face) {
+            this.setPropertyValue(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+            )
         }
 
-        return super.getComparatorInputOverride();
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(getPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        this.setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face));
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.LIT_FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

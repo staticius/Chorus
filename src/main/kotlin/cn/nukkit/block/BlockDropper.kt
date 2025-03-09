@@ -1,79 +1,47 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityDropper;
-import cn.nukkit.dispenser.DispenseBehavior;
-import cn.nukkit.dispenser.DropperDispenseBehavior;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.blockentity.*
+import cn.nukkit.dispenser.DispenseBehavior
+import cn.nukkit.dispenser.DropperDispenseBehavior
+import cn.nukkit.item.*
 
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
-import static cn.nukkit.block.property.CommonBlockProperties.TRIGGERED_BIT;
+class BlockDropper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockDispenser(blockstate) {
+    override val name: String
+        get() = "Dropper"
 
-
-public class BlockDropper extends BlockDispenser {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(DROPPER, FACING_DIRECTION, TRIGGERED_BIT);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun getBlockEntityClass(): Class<out BlockEntityDropper?> {
+        return BlockEntityDropper::class.java
     }
 
-    public BlockDropper() {
-        this(PROPERTIES.getDefaultState());
+    override fun getBlockEntityType(): String {
+        return BlockEntity.DROPPER
     }
 
-    public BlockDropper(BlockState blockstate) {
-        super(blockstate);
+    override fun dispense() {
+        super.dispense()
     }
 
-    @Override
-    public String getName() {
-        return "Dropper";
+    override fun getDispenseBehavior(item: Item): DispenseBehavior {
+        return DropperDispenseBehavior()
     }
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityDropper> getBlockEntityClass() {
-        return BlockEntityDropper.class;
-    }
+    override val resistance: Double
+        get() = 3.5
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.DROPPER;
-    }
+    override val hardness: Double
+        get() = 3.5
 
-    @Override
-    public void dispense() {
-        super.dispense();
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    protected DispenseBehavior getDispenseBehavior(Item item) {
-        return new DropperDispenseBehavior();
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public double getResistance() {
-        return 3.5;
-    }
-
-    @Override
-    public double getHardness() {
-        return 3.5;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(DROPPER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TRIGGERED_BIT)
+            get() = Companion.field
     }
 }

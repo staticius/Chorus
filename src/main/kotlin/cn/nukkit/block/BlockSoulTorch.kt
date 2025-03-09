@@ -1,33 +1,19 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
 
 
-import org.jetbrains.annotations.NotNull;
+class BlockSoulTorch @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockTorch(blockstate) {
+    override val name: String
+        get() = "Soul Torch"
 
-import static cn.nukkit.block.property.CommonBlockProperties.TORCH_FACING_DIRECTION;
+    override val lightLevel: Int
+        get() = 10
 
-public class BlockSoulTorch extends BlockTorch {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SOUL_TORCH, TORCH_FACING_DIRECTION);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockSoulTorch() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSoulTorch(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Soul Torch";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 10;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SOUL_TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
+            get() = Companion.field
     }
 }

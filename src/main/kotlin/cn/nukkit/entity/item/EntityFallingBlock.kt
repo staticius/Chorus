@@ -59,7 +59,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
     }
 
     override fun canCollide(): Boolean {
-        return blockState!!.getIdentifier() == BlockID.ANVIL
+        return blockState!!.identifier == BlockID.ANVIL
     }
 
     override fun initEntity() {
@@ -84,7 +84,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
     }
 
     override fun canCollideWith(entity: Entity): Boolean {
-        return blockState!!.getIdentifier() == BlockID.ANVIL
+        return blockState!!.identifier == BlockID.ANVIL
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
@@ -106,7 +106,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
         var hasUpdate: Boolean = entityBaseTick(tickDiff)
 
         if (isAlive()) {
-            val b: String = blockState!!.getIdentifier()
+            val b: String = blockState!!.identifier
             if ((b == BlockID.SAND ||
                         b == BlockID.GRAVEL ||
                         b == BlockID.ANVIL
@@ -121,19 +121,19 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                 }
             }
 
-            motion.up -= getGravity().toDouble()
+            motion.y -= getGravity().toDouble()
 
-            move(motion.south, motion.up, motion.west)
+            move(motion.x, motion.y, motion.z)
 
             val friction: Float = 1 - getDrag()
 
-            motion.south *= friction.toDouble()
-            motion.up *= (1 - getDrag()).toDouble()
-            motion.west *= friction.toDouble()
+            motion.x *= friction.toDouble()
+            motion.y *= (1 - getDrag()).toDouble()
+            motion.z *= friction.toDouble()
 
             val pos: Vector3 = (Vector3(
-                position.south - 0.5,
-                position.up, position.west - 0.5
+                position.x - 0.5,
+                position.y, position.z - 0.5
             )).round()
             if (breakOnLava && level!!.getBlock(pos.subtract(0.0, 1.0, 0.0)) is BlockFlowingLava) {
                 close()
@@ -149,8 +149,8 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                 val block: Block = level!!.getBlock(pos)
 
                 val floorPos: Vector3 = (Vector3(
-                    position.south - 0.5,
-                    position.up, position.west - 0.5
+                    position.x - 0.5,
+                    position.y, position.z - 0.5
                 )).floor()
                 val floorBlock: Block = level!!.getBlock(floorPos)
                 //handle for snow stack
@@ -216,7 +216,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                             level!!.addParticle(DestroyBlockParticle(pos, Block.get(blockState)))
                         } else {
                             while (pos.getY() < level!!.getMaxHeight()) {
-                                if (!level!!.getBlock(pos).isAir()) pos.up++ else break
+                                if (!level!!.getBlock(pos).isAir()) pos.y++ else break
                             }
                             level!!.setBlock(pos, eventTo, true)
                         }
@@ -276,9 +276,9 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
             updateMovement()
         }
 
-        return hasUpdate || !onGround || abs(motion.south) > 0.00001 || abs(
-            motion.up
-        ) > 0.00001 || abs(motion.west) > 0.00001
+        return hasUpdate || !onGround || abs(motion.x) > 0.00001 || abs(
+            motion.y
+        ) > 0.00001 || abs(motion.z) > 0.00001
     }
 
     fun getBlock(): Block {
@@ -287,16 +287,16 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
 
     override fun saveNBT() {
         super.saveNBT()
-        namedTag!!.putCompound("Block", blockState!!.getBlockStateTag())
+        namedTag!!.putCompound("Block", blockState!!.blockStateTag)
     }
 
     override fun canBeMovedByCurrents(): Boolean {
-        return !onGround && blockState!!.getIdentifier() != BlockID.DRIPSTONE_BLOCK
+        return !onGround && blockState!!.identifier != BlockID.DRIPSTONE_BLOCK
     }
 
     override fun resetFallDistance() {
         if (!this.closed) { // For falling anvil: do not reset fall distance before dealing damage to entities
-            this.highestPosition = position.up
+            this.highestPosition = position.y
         }
     }
 

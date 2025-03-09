@@ -1,75 +1,65 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.Sound
+import cn.nukkit.math.BlockFace
 
 /**
  * @author xtypr
  * @since 2015/11/22
  */
-public class BlockGrassPath extends BlockGrassBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GRASS_PATH);
+class BlockGrassPath : BlockGrassBlock {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockGrassPath() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockGrassPath(BlockState blockState) {
-        super(blockState);
-    }
+    override val name: String
+        get() = "Dirt Path"
 
-    @Override
-    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val hardness: Double
+        get() = 0.65
 
-    @Override
-    public String getName() {
-        return "Dirt Path";
-    }
+    override val resistance: Double
+        get() = 0.65
 
-    @Override
-    public double getHardness() {
-        return 0.65;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.65;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (this.up().isSolid()) {
-                this.level.setBlock(this.position, Block.get(BlockID.DIRT), false, true);
+            if (up()!!.isSolid) {
+                level.setBlock(this.position, get(DIRT), false, true)
             }
 
-            return Level.BLOCK_UPDATE_NORMAL;
+            return Level.BLOCK_UPDATE_NORMAL
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isHoe()) {
-            item.useOn(this);
-            this.level.setBlock(this.position, get(FARMLAND), true);
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isHoe) {
+            item.useOn(this)
+            level.setBlock(this.position, get(FARMLAND), true)
             if (player != null) {
-                player.level.addSound(player.position, Sound.USE_GRASS);
+                player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public boolean isTransparent() {
-        return true;
+    override val isTransparent: Boolean
+        get() = true
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(GRASS_PATH)
+            get() = Companion.field
     }
 }

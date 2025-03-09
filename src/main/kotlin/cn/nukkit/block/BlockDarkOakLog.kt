@@ -1,26 +1,15 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
-public class BlockDarkOakLog extends BlockLog {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DARK_OAK_LOG, CommonBlockProperties.PILLAR_AXIS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockDarkOakLog @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockLog(blockstate) {
+    override fun getStrippedState(): BlockState {
+        return BlockStrippedDarkOakLog.properties.defaultState
     }
 
-    public BlockDarkOakLog() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockDarkOakLog(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public BlockState getStrippedState() {
-        return BlockStrippedDarkOakLog.PROPERTIES.getDefaultState();
+    companion object {
+        val properties: BlockProperties = BlockProperties(DARK_OAK_LOG, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

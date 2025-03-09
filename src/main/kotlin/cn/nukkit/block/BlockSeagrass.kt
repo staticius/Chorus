@@ -1,148 +1,157 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.SeaGrassType;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemBlock
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import cn.nukkit.utils.BlockColor.equals
 
-import static cn.nukkit.block.property.CommonBlockProperties.*;
+class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockstate) {
+    override val name: String
+        get() = "Seagrass"
 
-
-public class BlockSeagrass extends BlockFlowable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SEAGRASS, SEA_GRASS_TYPE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockSeagrass() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSeagrass(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Seagrass";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Block down = down();
-        Block layer1Block = block.getLevelBlockAtLayer(1);
-        int waterDamage;
-        if (down.isSolid() && !down.getId().equals(MAGMA) && !down.getId().equals(SOUL_SAND) &&
-                (layer1Block instanceof BlockFlowingWater water && ((waterDamage = (water.getLiquidDepth())) == 0 || waterDamage == 8))
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val down = down()
+        val layer1Block = block.getLevelBlockAtLayer(1)
+        val waterDamage: Int
+        if (down!!.isSolid && (down.id != BlockID.MAGMA) && (down.id != BlockID.SOUL_SAND) &&
+            (layer1Block is BlockFlowingWater && ((layer1Block.liquidDepth.also {
+                waterDamage = it
+            }) == 0 || waterDamage == 8))
         ) {
             if (waterDamage == 8) {
-                this.level.setBlock(this.position, 1, new BlockFlowingWater(), true, false);
+                level.setBlock(this.position, 1, BlockFlowingWater(), true, false)
             }
-            this.level.setBlock(this.position, 0, this, true, true);
-            return true;
+            level.setBlock(this.position, 0, this, true, true)
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            Block blockLayer1 = getLevelBlockAtLayer(1);
-            int damage;
-            if (!(blockLayer1 instanceof BlockFrostedIce)
-                    && (!(blockLayer1 instanceof BlockFlowingWater) || ((damage = blockLayer1.blockstate.specialValue()) != 0 && damage != 8))) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+            val blockLayer1 = getLevelBlockAtLayer(1)
+            val damage: Int
+            if (blockLayer1 !is BlockFrostedIce && (blockLayer1 !is BlockFlowingWater || ((blockLayer1.blockState!!.specialValue()
+                    .also {
+                        damage =
+                            it.toInt()
+                    }) != 0 && damage != 8))
+            ) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
 
-            Block down = down();
-            SeaGrassType propertyValue = getPropertyValue(SEA_GRASS_TYPE);
+            val down = down()
+            val propertyValue: SeaGrassType = getPropertyValue(CommonBlockProperties.SEA_GRASS_TYPE)
             if (propertyValue == SeaGrassType.DEFAULT || propertyValue == SeaGrassType.DOUBLE_BOT) {
-                if (!down.isSolid() || down.getId().equals(MAGMA) || down.getId().equals(SOUL_SAND)) {
-                    this.level.useBreakOn(this.position);
-                    return Level.BLOCK_UPDATE_NORMAL;
+                if (!down!!.isSolid || down.id == BlockID.MAGMA || down.id == BlockID.SOUL_SAND) {
+                    level.useBreakOn(this.position)
+                    return Level.BLOCK_UPDATE_NORMAL
                 }
 
                 if (propertyValue == SeaGrassType.DOUBLE_BOT) {
-                    Block up = up();
-                    if (!up.getId().equals(getId()) || up.getPropertyValue(SEA_GRASS_TYPE) != SeaGrassType.DOUBLE_TOP) {
-                        this.level.useBreakOn(this.position);
+                    val up = up()
+                    if (up!!.id != id || up.getPropertyValue<SeaGrassType, EnumPropertyType<SeaGrassType>>(
+                            CommonBlockProperties.SEA_GRASS_TYPE
+                        ) != SeaGrassType.DOUBLE_TOP
+                    ) {
+                        level.useBreakOn(this.position)
                     }
                 }
-            } else if (!down.getId().equals(getId()) || down.getPropertyValue(SEA_GRASS_TYPE) != SeaGrassType.DOUBLE_BOT) {
-                this.level.useBreakOn(this.position);
+            } else if (down!!.id != id || down.getPropertyValue<SeaGrassType, EnumPropertyType<SeaGrassType>>(
+                    CommonBlockProperties.SEA_GRASS_TYPE
+                ) != SeaGrassType.DOUBLE_BOT
+            ) {
+                level.useBreakOn(this.position)
             }
 
-            return Level.BLOCK_UPDATE_NORMAL;
+            return Level.BLOCK_UPDATE_NORMAL
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (getPropertyValue(SEA_GRASS_TYPE) == SeaGrassType.DEFAULT && item.isFertilizer()) {
-            Block up = this.up();
-            int damage;
-            if (up instanceof BlockFlowingWater w && ((damage = w.getLiquidDepth()) == 0 || damage == 8)) {
-                if (player != null && (player.gamemode & 0x01) == 0) {
-                    item.count--;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (getPropertyValue<SeaGrassType, EnumPropertyType<SeaGrassType>>(CommonBlockProperties.SEA_GRASS_TYPE) == SeaGrassType.DEFAULT && item.isFertilizer) {
+            val up = this.up()
+            val damage: Int
+            if (up is BlockFlowingWater && ((up.liquidDepth.also { damage = it }) == 0 || damage == 8)) {
+                if (player != null && (player.gamemode and 0x01) == 0) {
+                    item.count--
                 }
 
-                this.level.addParticle(new BoneMealParticle(this.position));
-                this.level.setBlock(this.position, new BlockSeagrass().setPropertyValue(SEA_GRASS_TYPE, SeaGrassType.DOUBLE_BOT), true, false);
-                this.level.setBlock(up.position, 1, up, true, false);
-                this.level.setBlock(up.position, 0, new BlockSeagrass().setPropertyValue(SEA_GRASS_TYPE, SeaGrassType.DOUBLE_TOP), true);
-                return true;
+                level.addParticle(BoneMealParticle(this.position))
+                level.setBlock(
+                    this.position, BlockSeagrass().setPropertyValue<SeaGrassType, EnumPropertyType<SeaGrassType>>(
+                        CommonBlockProperties.SEA_GRASS_TYPE, SeaGrassType.DOUBLE_BOT
+                    ), true, false
+                )
+                level.setBlock(up.position, 1, up, true, false)
+                level.setBlock(
+                    up.position, 0, BlockSeagrass().setPropertyValue<SeaGrassType, EnumPropertyType<SeaGrassType>>(
+                        CommonBlockProperties.SEA_GRASS_TYPE, SeaGrassType.DOUBLE_TOP
+                    ), true
+                )
+                return true
             }
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isShears()) {
-            return new Item[]{toItem()};
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isShears) {
+            arrayOf(toItem())
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public boolean canBeReplaced() {
-        return true;
+    override fun canBeReplaced(): Boolean {
+        return true
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
+    override val waterloggingLevel: Int
+        get() = 2
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHEARS
+
+    override fun toItem(): Item? {
+        return ItemBlock(BlockSeagrass(), 0)
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHEARS;
-    }
+    override val isFertilizable: Boolean
+        get() = true
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockSeagrass(), 0);
-    }
-
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SEAGRASS, CommonBlockProperties.SEA_GRASS_TYPE)
+            get() = Companion.field
     }
 }

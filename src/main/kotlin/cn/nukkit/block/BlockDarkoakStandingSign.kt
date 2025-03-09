@@ -1,33 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemDarkOakSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-public class BlockDarkoakStandingSign extends BlockStandingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DARKOAK_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockDarkoakStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockStandingSign(blockstate) {
+    override fun getWallSignId(): String {
+        return BlockDarkoakWallSign.Companion.PROPERTIES.getIdentifier()
     }
 
-    public BlockDarkoakStandingSign() {
-        this(PROPERTIES.getDefaultState());
+    override fun toItem(): Item? {
+        return ItemDarkOakSign()
     }
 
-    public BlockDarkoakStandingSign(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getWallSignId() {
-        return BlockDarkoakWallSign.PROPERTIES.getIdentifier();
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemDarkOakSign();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(DARKOAK_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+            get() = Companion.field
     }
 }

@@ -1,71 +1,48 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemDiamond;
-import cn.nukkit.item.ItemID;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.item.*
+import cn.nukkit.item.enchantment.Enchantment
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
-
-public class BlockDiamondOre extends BlockOre {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DIAMOND_ORE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+open class BlockDiamondOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockOre(blockstate) {
+    override fun getRawMaterial(): String? {
+        return ItemID.DIAMOND
     }
 
-    public BlockDiamondOre() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Diamond Ore"
 
-    public BlockDiamondOre(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_IRON
 
-    @Override
-    protected @Nullable String getRawMaterial() {
-        return ItemID.DIAMOND;
-    }
-
-    @Override
-    public String getName() {
-        return "Diamond Ore";
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_IRON;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() >= getToolTier()) {
-            int count = 1;
-            Enchantment fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING);
-            if (fortune != null && fortune.getLevel() >= 1) {
-                int i = ThreadLocalRandom.current().nextInt(fortune.getLevel() + 2) - 1;
+    override fun getDrops(item: Item): Array<Item?>? {
+        if (item.isPickaxe && item.tier >= toolTier) {
+            var count = 1
+            val fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
+            if (fortune != null && fortune.level >= 1) {
+                var i = ThreadLocalRandom.current().nextInt(fortune.level + 2) - 1
 
                 if (i < 0) {
-                    i = 0;
+                    i = 0
                 }
 
-                count = i + 1;
+                count = i + 1
             }
 
-            return new Item[]{
-                    new ItemDiamond(0, count)
-            };
+            return arrayOf(
+                ItemDiamond(0, count)
+            )
         } else {
-            return Item.EMPTY_ARRAY;
+            return Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public int getDropExp() {
-        return ThreadLocalRandom.current().nextInt(3, 8);
+    override val dropExp: Int
+        get() = ThreadLocalRandom.current().nextInt(3, 8)
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(DIAMOND_ORE)
+            get() = Companion.field
     }
 }

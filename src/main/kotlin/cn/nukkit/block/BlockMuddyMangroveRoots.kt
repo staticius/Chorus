@@ -1,66 +1,60 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
 
-public class BlockMuddyMangroveRoots extends BlockSolid implements Natural {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MUDDY_MANGROVE_ROOTS, CommonBlockProperties.PILLAR_AXIS);
+class BlockMuddyMangroveRoots : BlockSolid, Natural {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockMuddyMangroveRoots() {
-        super(PROPERTIES.getDefaultState());
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Muddy Mangrove Roots"
+
+    override val hardness: Double
+        get() = 0.7
+
+    override val resistance: Double
+        get() = 0.7
+
+    override val toolTier: Int
+        get() = ItemTool.TYPE_SHOVEL
+
+    override val isTransparent: Boolean
+        get() = true
+
+    var pillarAxis: BlockFace.Axis?
+        get() = getPropertyValue(
+            CommonBlockProperties.PILLAR_AXIS
+        )
+        set(axis) {
+            setPropertyValue(
+                CommonBlockProperties.PILLAR_AXIS,
+                axis!!
+            )
+        }
+
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        pillarAxis = face.axis
+        level.setBlock(block.position, this, true, true)
+        return true
     }
 
-    public BlockMuddyMangroveRoots(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Muddy Mangrove Roots";
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.7;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.7;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    @Override
-    public boolean isTransparent() {
-        return true;
-    }
-
-    public BlockFace.Axis getPillarAxis() {
-        return getPropertyValue(CommonBlockProperties.PILLAR_AXIS);
-    }
-
-    public void setPillarAxis(BlockFace.Axis axis) {
-        setPropertyValue(CommonBlockProperties.PILLAR_AXIS, axis);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        setPillarAxis(face.getAxis());
-        level.setBlock(block.position, this, true, true);
-        return true;
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.MUDDY_MANGROVE_ROOTS, CommonBlockProperties.PILLAR_AXIS)
+            get() = Companion.field
     }
 }

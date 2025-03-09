@@ -1,36 +1,18 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockWarpedFence @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFence(blockstate) {
+    override val name: String
+        get() = "Warped Fence"
 
-public class BlockWarpedFence extends BlockFence {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_FENCE);
+    override val burnChance: Int
+        get() = 0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val burnAbility: Int
+        get() = 0
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WARPED_FENCE)
+            get() = Companion.field
     }
-
-    public BlockWarpedFence() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWarpedFence(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Warped Fence";
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 0;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 0;
-    }
-
 }

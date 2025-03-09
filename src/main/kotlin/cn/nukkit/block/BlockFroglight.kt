@@ -1,18 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-public abstract class BlockFroglight extends BlockSolid {
+abstract class BlockFroglight(blockState: BlockState?) : BlockSolid(blockState) {
+    override val lightLevel: Int
+        get() = 15
 
-    public BlockFroglight(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 15;
-    }
-
-    @Override
-    public double getResistance() {
-        return 0.3;
-    }
+    override val resistance: Double
+        get() = 0.3
 }

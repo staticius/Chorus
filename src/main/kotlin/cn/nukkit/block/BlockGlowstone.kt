@@ -1,69 +1,51 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemGlowstoneDust;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.math.MathHelper;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Random;
+import cn.nukkit.item.*
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.math.MathHelper.clamp
+import java.util.*
 
 /**
  * @author xtypr
  * @since 2015/12/6
  */
-public class BlockGlowstone extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(GLOWSTONE);
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+class BlockGlowstone : BlockTransparent {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockGlowstone() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockGlowstone(BlockState blockState) {
-        super(blockState);
-    }
+    override val name: String
+        get() = "Glowstone"
 
-    @Override
-    public String getName() {
-        return "Glowstone";
-    }
+    override val resistance: Double
+        get() = 1.5
 
-    @Override
-    public double getResistance() {
-        return 1.5;
-    }
+    override val hardness: Double
+        get() = 0.3
 
-    @Override
-    public double getHardness() {
-        return 0.3;
-    }
+    override val lightLevel: Int
+        get() = 15
 
-    @Override
-    public int getLightLevel() {
-        return 15;
-    }
+    override fun getDrops(item: Item): Array<Item?>? {
+        val random = Random()
+        var count = 2 + random.nextInt(3)
 
-    @Override
-    public Item[] getDrops(Item item) {
-        Random random = new Random();
-        int count = 2 + random.nextInt(3);
-
-        Enchantment fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING);
-        if (fortune != null && fortune.getLevel() >= 1) {
-            count += random.nextInt(fortune.getLevel() + 1);
+        val fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
+        if (fortune != null && fortune.level >= 1) {
+            count += random.nextInt(fortune.level + 1)
         }
 
-        return new Item[]{
-                new ItemGlowstoneDust(0, MathHelper.clamp(count, 1, 4))
-        };
+        return arrayOf(
+            ItemGlowstoneDust(0, clamp(count, 1, 4))
+        )
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(GLOWSTONE)
+            get() = Companion.field
     }
 }

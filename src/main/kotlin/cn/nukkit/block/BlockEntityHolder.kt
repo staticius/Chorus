@@ -1,148 +1,138 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Locator;
-import cn.nukkit.level.format.IChunk;
-import cn.nukkit.math.BlockVector3;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.utils.LevelException;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntity.Companion.createBlockEntity
+import cn.nukkit.level.Level
+import cn.nukkit.level.Locator
+import cn.nukkit.level.format.IChunk
+import cn.nukkit.math.BlockVector3
+import cn.nukkit.math.Vector3
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.utils.LevelException
 
-import javax.annotation.Nullable;
+interface BlockEntityHolder<E : BlockEntity?> {
+    val blockEntity: E?
+        get() {
+            val level = level ?: throw LevelException("Undefined Level reference")
+            val blockEntity = if (this is Vector3) {
+                level.getBlockEntity(this as Vector3)
+            } else if (this is BlockVector3) {
+                level.getBlockEntity((this as BlockVector3))
+            } else {
+                level.getBlockEntity(BlockVector3(floorX, floorY, floorZ))
+            }
 
-
-public interface BlockEntityHolder<E extends BlockEntity> {
-
-    @Nullable
-    default E getBlockEntity() {
-        Level level = getLevel();
-        if (level == null) {
-            throw new LevelException("Undefined Level reference");
+            val blockEntityClass = blockEntityClass
+            if (blockEntityClass.isInstance(blockEntity)) {
+                return blockEntityClass.cast(blockEntity)
+            }
+            return null
         }
-        BlockEntity blockEntity;
-        if (this instanceof Vector3) {
-            blockEntity = level.getBlockEntity((Vector3) this);
-        } else if (this instanceof BlockVector3) {
-            blockEntity = level.getBlockEntity((BlockVector3) this);
-        } else {
-            blockEntity = level.getBlockEntity(new BlockVector3(getFloorX(), getFloorY(), getFloorZ()));
-        }
 
-        Class<? extends E> blockEntityClass = getBlockEntityClass();
-        if (blockEntityClass.isInstance(blockEntity)) {
-            return blockEntityClass.cast(blockEntity);
-        }
-        return null;
+    fun createBlockEntity(): E {
+        return createBlockEntity(null)
     }
 
-    default @NotNull E createBlockEntity() {
-        return createBlockEntity(null);
-    }
+    fun createBlockEntity(initialData: CompoundTag?, vararg args: Any?): E {
+        var initialData = initialData
+        val typeName = blockEntityType
+        val chunk = chunk ?: throw LevelException("Undefined Level or chunk reference")
+        initialData = initialData?.copy() ?: CompoundTag()
+        val created = createBlockEntity(
+            typeName, chunk,
+            initialData
+                .putString("id", typeName)
+                .putInt("x", floorX)
+                .putInt("y", floorY)
+                .putInt("z", floorZ),
+            *args
+        )
 
-    default @NotNull E createBlockEntity(@Nullable CompoundTag initialData, @Nullable Object... args) {
-        String typeName = getBlockEntityType();
-        IChunk chunk = getChunk();
-        if (chunk == null) {
-            throw new LevelException("Undefined Level or chunk reference");
-        }
-        if (initialData == null) {
-            initialData = new CompoundTag();
-        } else {
-            initialData = initialData.copy();
-        }
-        BlockEntity created = BlockEntity.createBlockEntity(typeName, chunk,
-                initialData
-                        .putString("id", typeName)
-                        .putInt("x", getFloorX())
-                        .putInt("y", getFloorY())
-                        .putInt("z", getFloorZ()),
-                args);
-
-        Class<? extends E> entityClass = getBlockEntityClass();
+        val entityClass = blockEntityClass
 
         if (!entityClass.isInstance(created)) {
-            String error = "Failed to create the block entity " + typeName + " of class " + entityClass + " at " + getLocator() + ", " +
-                    "the created type is not an instance of the requested class. Created: " + created;
-            if (created != null) {
-                created.close();
+            val error =
+                "Failed to create the block entity " + typeName + " of class " + entityClass + " at " + locator + ", " +
+                        "the created type is not an instance of the requested class. Created: " + created
+            created?.close()
+            throw IllegalStateException(error)
+        }
+        return entityClass.cast(created)
+    }
+
+    val orCreateBlockEntity: E
+        get() {
+            val blockEntity = blockEntity
+            if (blockEntity != null) {
+                return blockEntity
             }
-            throw new IllegalStateException(error);
+            return createBlockEntity()
         }
-        return entityClass.cast(created);
-    }
 
-    default @NotNull E getOrCreateBlockEntity() {
-        E blockEntity = getBlockEntity();
-        if (blockEntity != null) {
-            return blockEntity;
-        }
-        return createBlockEntity();
-    }
+    val blockEntityClass: Class<out E>
 
-    @NotNull
-    Class<? extends E> getBlockEntityClass();
+    val blockEntityType: String
 
-    @NotNull
-    String getBlockEntityType();
+    val chunk: IChunk?
 
-    @Nullable
-    IChunk getChunk();
+    val floorX: Int
 
-    int getFloorX();
+    val floorY: Int
 
-    int getFloorY();
+    val floorZ: Int
 
-    int getFloorZ();
+    val locator: Locator
 
-    @NotNull
-    Locator getLocator();
+    val level: Level
 
-    Level getLevel();
-
-    @Nullable
-    static <E extends BlockEntity, H extends BlockEntityHolder<E>> E setBlockAndCreateEntity(@NotNull H holder) {
-        return setBlockAndCreateEntity(holder, true, true);
-    }
-
-    @Nullable
-    static <E extends BlockEntity, H extends BlockEntityHolder<E>> E setBlockAndCreateEntity(
-            @NotNull H holder, boolean direct, boolean update) {
-        return setBlockAndCreateEntity(holder, direct, update, null);
-    }
-
-    @Nullable
-    static <E extends BlockEntity, H extends BlockEntityHolder<E>> E setBlockAndCreateEntity(
-            @NotNull H holder, boolean direct, boolean update, @Nullable CompoundTag initialData,
-            @Nullable Object... args) {
-        Block block = holder.getBlock();
-        Level level = block.level;
-        Block layer0 = level.getBlock(block.position, 0);
-        Block layer1 = level.getBlock(block.position, 1);
-        if (level.setBlock(block.position, block, direct, update)) {
-            try {
-                return holder.createBlockEntity(initialData, args);
-            } catch (Exception e) {
-                Loggers.logBlocKEntityHolder.warn("Failed to create block entity {} at {} at ", holder.getBlockEntityType(), holder.getLocator(), e);
-                level.setBlock(layer0.position, 0, layer0, direct, update);
-                level.setBlock(layer1.position, 1, layer1, direct, update);
-                throw e;
+    val block: Block?
+        get() {
+            return if (this is Block) {
+                field
+            } else if (this is Locator) {
+                locator.levelBlock
+            } else if (this is Vector3) {
+                level.getBlock(vector3)
+            } else {
+                level.getBlock(floorX, floorY, floorZ)
             }
         }
 
-        return null;
-    }
+    companion object {
+        fun <E : BlockEntity?, H : BlockEntityHolder<E>?> setBlockAndCreateEntity(holder: H): E? {
+            return setBlockAndCreateEntity(holder, true, true)
+        }
 
-    default Block getBlock() {
-        if (this instanceof Block block) {
-            return block;
-        } else if (this instanceof Locator locator) {
-            return locator.getLevelBlock();
-        } else if (this instanceof Vector3 vector3) {
-            return getLevel().getBlock(vector3);
-        } else {
-            return getLevel().getBlock(getFloorX(), getFloorY(), getFloorZ());
+        fun <E : BlockEntity?, H : BlockEntityHolder<E>?> setBlockAndCreateEntity(
+            holder: H, direct: Boolean, update: Boolean
+        ): E? {
+            return setBlockAndCreateEntity(holder, direct, update, null)
+        }
+
+        fun <E : BlockEntity?, H : BlockEntityHolder<E>?> setBlockAndCreateEntity(
+            holder: H, direct: Boolean, update: Boolean, initialData: CompoundTag?,
+            vararg args: Any?
+        ): E? {
+            val block = holder!!.block
+            val level = block!!.level
+            val layer0 = level.getBlock(block.position, 0)
+            val layer1 = level.getBlock(block.position, 1)
+            if (level.setBlock(block.position, block, direct, update)) {
+                try {
+                    return holder.createBlockEntity(initialData, *args)
+                } catch (e: Exception) {
+                    Loggers.logBlocKEntityHolder.warn(
+                        "Failed to create block entity {} at {} at ",
+                        holder.blockEntityType,
+                        holder.locator, e
+                    )
+                    level.setBlock(layer0!!.position, 0, layer0, direct, update)
+                    level.setBlock(layer1!!.position, 1, layer1, direct, update)
+                    throw e
+                }
+            }
+
+            return null
         }
     }
 }

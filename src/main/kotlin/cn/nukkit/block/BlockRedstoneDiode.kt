@@ -1,127 +1,133 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.event.redstone.RedstoneUpdateEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.Faceable;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION;
+import cn.nukkit.Player
+import cn.nukkit.block.Block.Companion.get
+import cn.nukkit.block.BlockLever.Companion.isSupportValid
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.EnumPropertyType
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.level.Level
+import cn.nukkit.math.AxisAlignedBB
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.utils.Faceable
+import cn.nukkit.utils.RedstoneComponent.Companion.updateAroundRedstone
+import cn.nukkit.utils.RedstoneComponent.updateAllAroundRedstone
+import cn.nukkit.utils.RedstoneComponent.updateAroundRedstone
+import kotlin.math.max
 
 /**
  * @author CreeperFace
  */
+abstract class BlockRedstoneDiode(blockstate: BlockState?) : BlockFlowable(blockstate),
+    RedstoneComponent, Faceable {
+    @JvmField
+    protected var isPowered: Boolean = false
 
-public abstract class BlockRedstoneDiode extends BlockFlowable implements RedstoneComponent, Faceable {
+    override val waterloggingLevel: Int
+        get() = 2
 
-    protected boolean isPowered = false;
-
-    public BlockRedstoneDiode(BlockState blockstate) {
-        super(blockstate);
+    override fun canBeFlowedInto(): Boolean {
+        return false
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
-    }
+    override fun onBreak(item: Item?): Boolean {
+        level.setBlock(this.position, get(BlockID.AIR), true, true)
 
-    @Override
-    public boolean canBeFlowedInto() {
-        return false;
-    }
-
-    @Override
-    public boolean onBreak(Item item) {
-        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
-
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
-            updateAllAroundRedstone();
+        if (level.server.settings.levelSettings().enableRedstone()) {
+            updateAllAroundRedstone()
         }
-        return true;
+        return true
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (!isSupportValid(down())) {
-            return false;
-        }
-
-        setBlockFace(player != null ? player.getDirection().getOpposite() : BlockFace.SOUTH);
-        if (!this.level.setBlock(block.position, this, true, true)) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (!isSupportValid(down()!!)) {
+            return false
         }
 
-        if (this.level.server.settings.levelSettings().enableRedstone()) {
+        blockFace = if (player != null) player.getDirection()!!.getOpposite() else BlockFace.SOUTH
+        if (!level.setBlock(block.position, this, true, true)) {
+            return false
+        }
+
+        if (level.server.settings.levelSettings().enableRedstone()) {
             if (shouldBePowered()) {
-                this.level.scheduleUpdate(this, 1);
+                level.scheduleUpdate(this, 1)
             }
         }
-        return true;
+        return true
     }
 
-    protected boolean isSupportValid(Block support) {
-        return BlockLever.isSupportValid(support, BlockFace.UP) || support instanceof BlockCauldron;
+    protected fun isSupportValid(support: Block): Boolean {
+        return isSupportValid(support, BlockFace.UP) || support is BlockCauldron
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (!this.level.server.settings.levelSettings().enableRedstone()) {
-                return 0;
+            if (!level.server.settings.levelSettings().enableRedstone()) {
+                return 0
             }
 
-            if (!this.isLocked()) {
-                Vector3 pos = this.position;
-                boolean shouldBePowered = this.shouldBePowered();
+            if (!this.isLocked) {
+                val pos = this.position
+                val shouldBePowered = this.shouldBePowered()
 
                 if (this.isPowered && !shouldBePowered) {
-                    this.level.setBlock(pos, this.getUnpowered(), true, true);
+                    level.setBlock(pos, this.unpowered, true, true)
 
-                    Block side = this.getSide(getFacing().getOpposite());
-                    side.onUpdate(Level.BLOCK_UPDATE_REDSTONE);
-                    RedstoneComponent.updateAroundRedstone(side);
+                    val side = this.getSide(facing!!.getOpposite()!!)
+                    side!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+                    RedstoneComponent.updateAroundRedstone(side)
                 } else if (!this.isPowered) {
-                    this.level.setBlock(pos, this.getPowered(), true, true);
-                    Block side = this.getSide(getFacing().getOpposite());
-                    side.onUpdate(Level.BLOCK_UPDATE_REDSTONE);
-                    RedstoneComponent.updateAroundRedstone(side);
+                    level.setBlock(pos, this.getPowered(), true, true)
+                    val side = this.getSide(facing!!.getOpposite()!!)
+                    side!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+                    RedstoneComponent.updateAroundRedstone(side)
 
                     if (!shouldBePowered) {
-                        level.scheduleUpdate(getPowered(), this.position, this.getDelay());
+                        level.scheduleUpdate(getPowered(), this.position, this.delay)
                     }
                 }
             }
         } else if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            if (type == Level.BLOCK_UPDATE_NORMAL && !isSupportValid(down())) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
-            } else if (this.level.server.settings.levelSettings().enableRedstone()) {
+            if (type == Level.BLOCK_UPDATE_NORMAL && !isSupportValid(down()!!)) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
+            } else if (level.server.settings.levelSettings().enableRedstone()) {
                 // Redstone event
-                RedstoneUpdateEvent ev = new RedstoneUpdateEvent(this);
-                level.server.pluginManager.callEvent(ev);
-                if (ev.isCancelled()) {
-                    return 0;
+                val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+                level.server.pluginManager.callEvent(ev)
+                if (ev.isCancelled) {
+                    return 0
                 }
 
-                this.updateState();
-                return type;
+                this.updateState()
+                return type
             }
         }
-        return 0;
+        return 0
     }
 
-    public void updateState() {
-        if (!this.isLocked()) {
-            boolean shouldPowered = this.shouldBePowered();
+    open fun updateState() {
+        if (!this.isLocked) {
+            val shouldPowered = this.shouldBePowered()
 
-            if ((this.isPowered && !shouldPowered || !this.isPowered && shouldPowered) && !this.level.isBlockTickPending(this.position, this)) {
+            if ((this.isPowered && !shouldPowered || !this.isPowered && shouldPowered) && !level.isBlockTickPending(
+                    this.position,
+                    this
+                )
+            ) {
                 /*int priority = -1;
 
                 if (this.isFacingTowardsRepeater()) {
@@ -130,121 +136,134 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
                     priority = -2;
                 }*/
 
-                this.level.scheduleUpdate(this, this.position, this.getDelay());
+                level.scheduleUpdate(
+                    this, this.position,
+                    delay
+                )
             }
         }
     }
 
-    public boolean isLocked() {
-        return false;
-    }
+    open val isLocked: Boolean
+        get() = false
 
-    protected int calculateInputStrength() {
-        BlockFace face = getFacing();
-        Vector3 pos = this.position.getSide(face);
-        int power = this.level.getRedstonePower(pos, face);
+    protected open fun calculateInputStrength(): Int {
+        val face = facing
+        val pos = position.getSide(face!!)
+        val power = level.getRedstonePower(pos!!, face)
 
         if (power >= 15) {
-            return power;
+            return power
         } else {
-            Block block = this.level.getBlock(pos);
-            return Math.max(power, block.getId().equals(Block.REDSTONE_WIRE) ? block.blockstate.specialValue() : 0);
+            val block = level.getBlock(pos)
+            return max(
+                power.toDouble(),
+                (if (block!!.id == Block.REDSTONE_WIRE) block.blockState!!.specialValue() else 0).toDouble()
+            ).toInt()
         }
     }
 
-    protected int getPowerOnSides() {
-        Vector3 pos = this.position;
+    protected val powerOnSides: Int
+        get() {
+            val pos = this.position
 
-        BlockFace face = getFacing();
-        BlockFace face1 = face.rotateY();
-        BlockFace face2 = face.rotateYCCW();
-        return Math.max(this.getPowerOnSide(pos.getSide(face1), face1), this.getPowerOnSide(pos.getSide(face2), face2));
+            val face = facing
+            val face1 = face!!.rotateY()
+            val face2 = face.rotateYCCW()
+            return max(
+                getPowerOnSide(pos.getSide(face1)!!, face1)
+                    .toDouble(), getPowerOnSide(pos.getSide(face2)!!, face2).toDouble()
+            ).toInt()
+        }
+
+    protected fun getPowerOnSide(pos: Vector3, side: BlockFace?): Int {
+        val block = level.getBlock(pos)
+        return if (isAlternateInput(block!!)) (if (block.id == Block.REDSTONE_BLOCK) 15 else (if (block.id == Block.REDSTONE_WIRE)
+            block.blockState!!.specialValue()
+                .toInt()
+        else
+            level.getStrongPower(pos, side))) else 0
     }
 
-    protected int getPowerOnSide(Vector3 pos, BlockFace side) {
-        Block block = this.level.getBlock(pos);
-        return isAlternateInput(block) ? (block.getId().equals(Block.REDSTONE_BLOCK) ? 15 : (block.getId().equals(Block.REDSTONE_WIRE) ?
-                block.blockstate.specialValue()
-                :
-                this.level.getStrongPower(pos, side))) : 0;
+    override val isPowerSource: Boolean
+        get() = true
+
+    protected open fun shouldBePowered(): Boolean {
+        return this.calculateInputStrength() > 0
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
+    abstract val facing: BlockFace?
+
+    protected abstract val delay: Int
+
+    protected abstract val unpowered: Block
+
+    protected abstract fun getPowered(): Block
+
+    override var maxY: Double
+        get() = position.y + 0.125
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override fun canPassThrough(): Boolean {
+        return false
     }
 
-    protected boolean shouldBePowered() {
-        return this.calculateInputStrength() > 0;
+    protected open fun isAlternateInput(block: Block): Boolean {
+        return block.isPowerSource
     }
 
-    public abstract BlockFace getFacing();
+    protected open val redstoneSignal: Int
+        get() = 15
 
-    protected abstract int getDelay();
-
-    protected abstract Block getUnpowered();
-
-    protected abstract Block getPowered();
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 0.125;
+    override fun getStrongPower(side: BlockFace?): Int {
+        return getWeakPower(side)
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return false;
+    override fun getWeakPower(side: BlockFace?): Int {
+        return if (!this.isPowered()) 0 else (if (facing == side) redstoneSignal else 0)
     }
 
-    protected boolean isAlternateInput(Block block) {
-        return block.isPowerSource();
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public static boolean isDiode(Block block) {
-        return block instanceof BlockRedstoneDiode;
+    open fun isPowered(): Boolean {
+        return isPowered
     }
 
-    protected int getRedstoneSignal() {
-        return 15;
+    val isFacingTowardsRepeater: Boolean
+        get() {
+            val side = facing!!.getOpposite()
+            val block = this.getSide(side!!)
+            return block is BlockRedstoneDiode && block.facing != side
+        }
+
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        return SimpleAxisAlignedBB(
+            position.x,
+            position.y,
+            position.z, position.x + 1, position.y + 0.125, position.z + 1
+        )
     }
 
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return getWeakPower(side);
-    }
+    override var blockFace: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
+            getPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+            )
+        )
+        set(face) {
+            setPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face)
+            )
+        }
 
-    @Override
-    public int getWeakPower(BlockFace side) {
-        return !this.isPowered() ? 0 : (getFacing() == side ? this.getRedstoneSignal() : 0);
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    public boolean isPowered() {
-        return isPowered;
-    }
-
-    public boolean isFacingTowardsRepeater() {
-        BlockFace side = getFacing().getOpposite();
-        Block block = this.getSide(side);
-        return block instanceof BlockRedstoneDiode && ((BlockRedstoneDiode) block).getFacing() != side;
-    }
-
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        return new SimpleAxisAlignedBB(this.position.south, this.position.up, this.position.west, this.position.south + 1, this.position.up + 0.125, this.position.west + 1);
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(getPropertyValue(MINECRAFT_CARDINAL_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face));
+    companion object {
+        fun isDiode(block: Block?): Boolean {
+            return block is BlockRedstoneDiode
+        }
     }
 }

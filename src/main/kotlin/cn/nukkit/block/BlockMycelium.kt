@@ -1,115 +1,102 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.DirtType;
-import cn.nukkit.event.block.BlockSpreadEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Sound;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3
+import cn.nukkit.utils.random.NukkitRandom.nextInt
 
 /**
  * @author Pub4Game
  * @since 03.01.2016
  */
-public class BlockMycelium extends BlockDirt {
-    public static final BlockProperties PROPERTIES = new BlockProperties(MYCELIUM);
+class BlockMycelium : BlockDirt {
+    constructor() : super(Companion.properties.defaultState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    constructor(blockState: BlockState?) : super(blockState)
+
+    override val name: String
+        get() = "Mycelium"
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHOVEL
+
+    override val hardness: Double
+        get() = 0.6
+
+    override val resistance: Double
+        get() = 2.5
+
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf<Item?>(
+            ItemBlock(get(BlockID.DIRT))
+        )
     }
 
-    public BlockMycelium() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockMycelium(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Mycelium";
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHOVEL;
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.6;
-    }
-
-    @Override
-    public double getResistance() {
-        return 2.5;
-    }
-
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                new ItemBlock(Block.get(BlockID.DIRT))
-        };
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (level.getFullLight(add(0, 1, 0).position) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
+            if (level.getFullLight(add(0.0, 1.0, 0.0).position) >= BlockCrops.minimumLightLevel) {
                 //TODO: light levels
-                NukkitRandom random = new NukkitRandom();
-                int x = random.nextInt(this.position.getFloorX() - 1, this.position.getFloorX() + 1);
-                int y = random.nextInt(this.position.getFloorY() - 1, this.position.getFloorY() + 1);
-                int z = random.nextInt(this.position.getFloorZ() - 1, this.position.getFloorZ() + 1);
-                Block block = this.level.getBlock(new Vector3(x, y, z));
-                if (block.getId().equals(Block.DIRT) && block.getPropertyValue(CommonBlockProperties.DIRT_TYPE) == DirtType.NORMAL) {
-                    if (block.up().isTransparent()) {
-                        BlockSpreadEvent ev = new BlockSpreadEvent(block, this, Block.get(BlockID.MYCELIUM));
-                        Server.getInstance().pluginManager.callEvent(ev);
-                        if (!ev.isCancelled()) {
-                            this.level.setBlock(block.position, ev.newState);
+                val random: NukkitRandom = NukkitRandom()
+                val x: Int = random.nextInt(position.floorX - 1, position.floorX + 1)
+                val y: Int = random.nextInt(position.floorY - 1, position.floorY + 1)
+                val z: Int = random.nextInt(position.floorZ - 1, position.floorZ + 1)
+                val block = level.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
+                if (block!!.id == Block.DIRT && block.getPropertyValue<DirtType, EnumPropertyType<DirtType>>(
+                        CommonBlockProperties.DIRT_TYPE
+                    ) == DirtType.NORMAL
+                ) {
+                    if (block.up()!!.isTransparent) {
+                        val ev: BlockSpreadEvent = BlockSpreadEvent(block, this, get(BlockID.MYCELIUM))
+                        instance!!.pluginManager.callEvent(ev)
+                        if (!ev.isCancelled) {
+                            level.setBlock(block.position, ev.newState)
                         }
                     }
                 }
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
-    }
-    
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (!this.up().canBeReplaced()) {
-            return false;
+    override fun canBeActivated(): Boolean {
+        return true
+    }
+
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (!up()!!.canBeReplaced()) {
+            return false
         }
 
-        if (item.isShovel()) {
-            item.useOn(this);
-            this.level.setBlock(this.position, Block.get(BlockID.GRASS_PATH));
+        if (item.isShovel) {
+            item.useOn(this)
+            level.setBlock(this.position, get(BlockID.GRASS_PATH))
             if (player != null) {
-                player.level.addSound(player.position, Sound.USE_GRASS);
+                player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
-            return true;
+            return true
         }
-        return false;
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.MYCELIUM)
+            get() = Companion.field
     }
 }

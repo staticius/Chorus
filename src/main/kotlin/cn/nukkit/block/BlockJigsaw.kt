@@ -1,87 +1,78 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.Faceable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromIndex
+import cn.nukkit.math.Vector3
+import cn.nukkit.utils.Faceable
+import kotlin.math.abs
 
-public class BlockJigsaw extends BlockSolid implements Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(JIGSAW, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.ROTATION);
+class BlockJigsaw @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate), Faceable {
+    override val name: String
+        get() = "Jigsaw"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockJigsaw() {
-        this(PROPERTIES.getDefaultState());
+    override val resistance: Double
+        get() = 18000000.0
+
+    override val hardness: Double
+        get() = -1.0
+
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        return false
     }
 
-    public BlockJigsaw(BlockState blockstate) {
-        super(blockstate);
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Jigsaw";
-    }
+    override var blockFace: BlockFace?
+        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        set(face) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+        }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player
+    ): Boolean {
+        if (abs(player.position.x - position.x) < 2 && abs(player.position.z - position.z) < 2) {
+            val y = player.position.y + player.getEyeHeight()
 
-    @Override
-    public double getResistance() {
-        return 18000000;
-    }
-
-    @Override
-    public double getHardness() {
-        return -1;
-    }
-
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player) {
-        return false;
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return BlockFace.fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (Math.abs(player.position.south - this.position.south) < 2 && Math.abs(player.position.west - this.position.west) < 2) {
-            double y = player.position.up + player.getEyeHeight();
-
-            if (y - this.position.up > 2) {
-                this.setBlockFace(BlockFace.UP);
-            } else if (this.position.up - y > 0) {
-                this.setBlockFace(BlockFace.DOWN);
+            if (y - position.y > 2) {
+                this.blockFace = BlockFace.UP
+            } else if (position.y - y > 0) {
+                this.blockFace = BlockFace.DOWN
             } else {
-                this.setBlockFace(player.getHorizontalFacing().getOpposite());
+                this.blockFace = player.getHorizontalFacing().getOpposite()
             }
         } else {
-            this.setBlockFace(player.getHorizontalFacing().getOpposite());
+            this.blockFace = player.getHorizontalFacing().getOpposite()
         }
-        this.level.setBlock(block.position, this, true, false);
+        level.setBlock(block.position, this, true, false)
 
-        return super.place(item, block, target, face, fx, fy, fz, player);
+        return super.place(item, block, target, face, fx, fy, fz, player)
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.Companion.JIGSAW,
+            CommonBlockProperties.FACING_DIRECTION,
+            CommonBlockProperties.ROTATION
+        )
+            get() = Companion.field
     }
 }

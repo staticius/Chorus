@@ -1,21 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockAllium : BlockFlower {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockAllium extends BlockFlower {
-    public static final BlockProperties PROPERTIES = new BlockProperties(ALLIUM);
+    constructor(blockstate: BlockState?) : super(blockstate)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockAllium() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockAllium(BlockState blockstate) {
-        super(blockstate);
+    companion object {
+        val properties: BlockProperties = BlockProperties(ALLIUM)
+            get() = Companion.field
     }
 }

@@ -332,15 +332,15 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     fun onInput(clientLoc: Transform) {
         if (this.getRider() == null || this.owner == null || getSaddle().isNull) return
         //每次输入乘骑玩家位置之前都要确保motion为0,避免onGround不更新
-        motion.south = 0.0
-        motion.up = 0.0
-        motion.west = 0.0
+        motion.x = 0.0
+        motion.y = 0.0
+        motion.z = 0.0
         this.moveTarget = null
         this.lookTarget = null
         this.move(
-            clientLoc.position.south - position.south,
-            clientLoc.position.up - position.up,
-            clientLoc.position.west - position.west
+            clientLoc.position.x - position.x,
+            clientLoc.position.y - position.y,
+            clientLoc.position.z - position.z
         )
         rotation.yaw = clientLoc.rotation.yaw
         this.headYaw = clientLoc.headYaw
@@ -501,12 +501,12 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         addEntity.yaw = rotation.yaw.toFloat()
         addEntity.headYaw = rotation.yaw.toFloat()
         addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.south.toFloat()
-        addEntity.y = position.up.toFloat() + this.baseOffset
-        addEntity.z = position.west.toFloat()
-        addEntity.speedX = motion.south.toFloat()
-        addEntity.speedY = motion.up.toFloat()
-        addEntity.speedZ = motion.west.toFloat()
+        addEntity.x = position.x.toFloat()
+        addEntity.y = position.y.toFloat() + this.baseOffset
+        addEntity.z = position.z.toFloat()
+        addEntity.speedX = motion.x.toFloat()
+        addEntity.speedY = motion.y.toFloat()
+        addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
         addEntity.attributes = attributeMap!!.values.toArray<Attribute>(Attribute.Companion.EMPTY_ARRAY)
         addEntity.links = arrayOfNulls(passengers.size)

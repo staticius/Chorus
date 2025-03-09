@@ -1,53 +1,30 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockSmoothStone extends BlockSolid {
+class BlockSmoothStone @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockState) {
+    override val name: String
+        get() = "Smooth Stone"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(SMOOTH_STONE);
+    override val hardness: Double
+        get() = 1.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 10.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockSmoothStone() {
-        this(PROPERTIES.getDefaultState());
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SMOOTH_STONE)
+            get() = Companion.field
     }
-
-    public BlockSmoothStone(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Smooth Stone";
-    }
-    
-    @Override
-    public double getHardness() {
-        return 1.5;
-    }
-    
-    @Override
-    public double getResistance() {
-        return 10;
-    }
-    
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
-    
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
 }

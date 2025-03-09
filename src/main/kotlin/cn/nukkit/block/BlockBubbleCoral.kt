@@ -1,59 +1,46 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.event.block.BlockFadeEvent;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.level.*
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.concurrent.ThreadLocalRandom;
-
-public class BlockBubbleCoral extends BlockCoral {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BUBBLE_CORAL);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+open class BlockBubbleCoral @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCoral(blockstate) {
+    override fun isDead(): Boolean {
+        return false
     }
 
-    public BlockBubbleCoral() {
-        this(PROPERTIES.getDefaultState());
+    override fun getDeadCoral(): Block {
+        return BlockDeadBubbleCoral()
     }
 
-    public BlockBubbleCoral(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public boolean isDead() {
-        return false;
-    }
-
-    @Override
-    public Block getDeadCoral() {
-        return new BlockDeadBubbleCoral();
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (this.getId().equals(BUBBLE_CORAL)) {
-                this.level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40));
+            if (this.id == BUBBLE_CORAL) {
+                level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40))
             }
-            return type;
+            return type
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            for (BlockFace face : BlockFace.values()) {
-                if (getSideAtLayer(0, face) instanceof BlockFlowingWater ||
-                        getSideAtLayer(1, face) instanceof BlockFlowingWater ||
-                        getSideAtLayer(0, face) instanceof BlockFrostedIce || getSideAtLayer(1, face) instanceof BlockFrostedIce) {
-                    return type;
+            for (face in BlockFace.entries) {
+                if (getSideAtLayer(0, face) is BlockFlowingWater ||
+                    getSideAtLayer(1, face) is BlockFlowingWater ||
+                    getSideAtLayer(0, face) is BlockFrostedIce || getSideAtLayer(1, face) is BlockFrostedIce
+                ) {
+                    return type
                 }
             }
-            BlockFadeEvent event = new BlockFadeEvent(this, getDeadCoral());
-            if (!event.isCancelled()) {
-                this.level.setBlock(this.position, event.newState, true, true);
+            val event: BlockFadeEvent = BlockFadeEvent(this, deadCoral)
+            if (!event.isCancelled) {
+                level.setBlock(this.position, event.newState, true, true)
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BUBBLE_CORAL)
+            get() = Companion.field
     }
 }

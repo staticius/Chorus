@@ -1,25 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockPolishedTuff @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTuff(blockstate) {
+    override val name: String
+        get() = "Polished Tuff"
 
-public class BlockPolishedTuff extends BlockTuff {
-    public static final BlockProperties PROPERTIES = new BlockProperties(POLISHED_TUFF);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockPolishedTuff() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPolishedTuff(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Polished Tuff";
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.POLISHED_TUFF)
+            get() = Companion.field
     }
 }

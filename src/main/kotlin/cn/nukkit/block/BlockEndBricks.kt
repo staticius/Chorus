@@ -1,25 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockEndBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockEndStone(blockstate) {
+    override val name: String
+        get() = "End Stone Bricks"
 
-public class BlockEndBricks extends BlockEndStone {
-    public static final BlockProperties PROPERTIES = new BlockProperties(END_BRICKS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockEndBricks() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockEndBricks(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "End Stone Bricks";
+    companion object {
+        val properties: BlockProperties = BlockProperties(END_BRICKS)
+            get() = Companion.field
     }
 }

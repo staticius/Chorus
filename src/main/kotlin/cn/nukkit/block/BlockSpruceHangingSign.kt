@@ -1,26 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
 
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+class BlockSpruceHangingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockHangingSign(blockstate) {
+    override val name: String
+        get() = "Spruce Hanging Sign"
 
-public class BlockSpruceHangingSign extends BlockHangingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SPRUCE_HANGING_SIGN, CommonBlockProperties.ATTACHED_BIT, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.GROUND_SIGN_DIRECTION, CommonBlockProperties.HANGING);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockSpruceHangingSign() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSpruceHangingSign(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public String getName() {
-        return "Spruce Hanging Sign";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.SPRUCE_HANGING_SIGN,
+            CommonBlockProperties.ATTACHED_BIT,
+            CommonBlockProperties.FACING_DIRECTION,
+            CommonBlockProperties.GROUND_SIGN_DIRECTION,
+            CommonBlockProperties.HANGING
+        )
+            get() = Companion.field
     }
 }

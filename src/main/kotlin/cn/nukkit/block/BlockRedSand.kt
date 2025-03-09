@@ -1,21 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockRedSand : BlockSand {
+    constructor() : super(Companion.properties.getDefaultState())
 
-public class BlockRedSand extends BlockSand {
-    public static final BlockProperties PROPERTIES = new BlockProperties(RED_SAND);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockRedSand() {
-        super(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRedSand(BlockState blockState) {
-        super(blockState);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.RED_SAND)
+            get() = Companion.field
     }
 }

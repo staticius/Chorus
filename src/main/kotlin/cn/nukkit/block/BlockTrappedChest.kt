@@ -1,120 +1,113 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityChest;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.BlockFace.Plane;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.Tag;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.blockentity.BlockEntity
+import cn.nukkit.blockentity.BlockEntityChest
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.BlockFace.Companion.fromHorizontalIndex
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.nbt.tag.Tag
+import kotlin.math.min
 
-import java.util.Map;
+class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockChest(blockstate) {
+    override val name: String
+        get() = "Trapped Chest"
 
-import javax.annotation.Nullable;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        blockFace = if (player != null) fromHorizontalIndex(
+            player.getDirection()!!.getOpposite()!!.horizontalIndex
+        ) else BlockFace.SOUTH
 
+        var chest: BlockEntityChest? = null
 
-public class BlockTrappedChest extends BlockChest {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(TRAPPED_CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockTrappedChest() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockTrappedChest(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Trapped Chest";
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        setBlockFace(player != null ? BlockFace.fromHorizontalIndex(player.getDirection().getOpposite().horizontalIndex) : BlockFace.SOUTH);
-
-        BlockEntityChest chest = null;
-
-        for (BlockFace side : Plane.HORIZONTAL) {
-            if ((getBlockFace() == BlockFace.WEST || getBlockFace() == BlockFace.EAST) && (side == BlockFace.WEST || side == BlockFace.EAST)) {
-                continue;
-            } else if ((getBlockFace() == BlockFace.NORTH || getBlockFace() == BlockFace.SOUTH) && (side == BlockFace.NORTH || side == BlockFace.SOUTH)) {
-                continue;
+        for (side in BlockFace.Plane.HORIZONTAL) {
+            if ((blockFace == BlockFace.WEST || blockFace == BlockFace.EAST) && (side == BlockFace.WEST || side == BlockFace.EAST)) {
+                continue
+            } else if ((blockFace == BlockFace.NORTH || blockFace == BlockFace.SOUTH) && (side == BlockFace.NORTH || side == BlockFace.SOUTH)) {
+                continue
             }
-            Block c = this.getSide(side);
-            if (c instanceof BlockTrappedChest trappedChest && trappedChest.getBlockFace() == getBlockFace()) {
-                BlockEntity blockEntity = this.level.getBlockEntity(trappedChest.position);
-                if (blockEntity instanceof BlockEntityChest && !((BlockEntityChest) blockEntity).isPaired()) {
-                    chest = (BlockEntityChest) blockEntity;
-                    break;
+            val c = this.getSide(side)
+            if (c is BlockTrappedChest && c.blockFace == blockFace) {
+                val blockEntity = level.getBlockEntity(c.position)
+                if (blockEntity is BlockEntityChest && !blockEntity.isPaired) {
+                    chest = blockEntity
+                    break
                 }
             }
         }
 
-        this.level.setBlock(block.position, this, true, true);
-        CompoundTag nbt = new CompoundTag()
-                .putList("Items", new ListTag<>())
-                .putString("id", BlockEntity.CHEST)
-                .putInt("x", (int) this.position.south)
-                .putInt("y", (int) this.position.up)
-                .putInt("z", (int) this.position.west);
+        level.setBlock(block.position, this, true, true)
+        val nbt = CompoundTag()
+            .putList("Items", ListTag<Tag?>())
+            .putString("id", BlockEntity.CHEST)
+            .putInt("x", position.x.toInt())
+            .putInt("y", position.y.toInt())
+            .putInt("z", position.z.toInt())
 
         if (item.hasCustomName()) {
-            nbt.putString("CustomName", item.getCustomName());
+            nbt!!.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            Map<String, Tag> customData = item.getCustomBlockData().getTags();
-            for (Map.Entry<String, Tag> tag : customData.entrySet()) {
-                nbt.put(tag.getKey(), tag.getValue());
+            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            for ((key, value) in customData) {
+                nbt!!.put(key, value)
             }
         }
 
-        BlockEntityChest blockEntity = (BlockEntityChest) BlockEntity.createBlockEntity(BlockEntity.CHEST, this.level.getChunk((int) this.position.south >> 4, (int) this.position.west >> 4), nbt);
-
-        if (blockEntity == null) {
-            return false;
-        }
+        val blockEntity = BlockEntity.createBlockEntity(
+            BlockEntity.CHEST,
+            level.getChunk(
+                position.x.toInt() shr 4,
+                position.z.toInt() shr 4
+            ),
+            nbt
+        ) as BlockEntityChest?
+            ?: return false
 
         if (chest != null) {
-            chest.pairWith(blockEntity);
-            blockEntity.pairWith(chest);
+            chest.pairWith(blockEntity)
+            blockEntity.pairWith(chest)
         }
 
-        return true;
+        return true
     }
 
-    @Override
-    public int getWeakPower(BlockFace face) {
-        int playerCount = 0;
+    override fun getWeakPower(face: BlockFace?): Int {
+        var playerCount = 0
 
-        BlockEntity blockEntity = this.level.getBlockEntity(this.position);
+        val blockEntity = level.getBlockEntity(this.position)
 
-        if (blockEntity instanceof BlockEntityChest) {
-            playerCount = ((BlockEntityChest) blockEntity).getInventory().getViewers().size();
+        if (blockEntity is BlockEntityChest) {
+            playerCount = blockEntity.getInventory().getViewers().size
         }
 
-        return Math.min(playerCount, 15);
+        return min(playerCount.toDouble(), 15.0).toInt()
     }
 
-    @Override
-    public int getStrongPower(BlockFace side) {
-        return side == BlockFace.UP ? this.getWeakPower(side) : 0;
+    override fun getStrongPower(side: BlockFace?): Int {
+        return if (side == BlockFace.UP) this.getWeakPower(side) else 0
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
+    override val isPowerSource: Boolean
+        get() = true
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.TRAPPED_CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

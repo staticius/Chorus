@@ -1,99 +1,78 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.event.block.BlockFadeEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Level;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.event.block.BlockFadeEvent
+import cn.nukkit.item.*
+import cn.nukkit.item.enchantment.Enchantment
+import cn.nukkit.level.Level
 
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class BlockIce extends BlockTransparent {
-    public static final BlockProperties PROPERTIES = new BlockProperties(ICE);
+open class BlockIce : BlockTransparent {
+    constructor() : super(Companion.properties.defaultState)
 
-    public BlockIce() {
-        super(PROPERTIES.getDefaultState());
-    }
+    constructor(blockState: BlockState?) : super(blockState)
 
-    public BlockIce(BlockState blockState) {
-        super(blockState);
-    }
+    override val name: String
+        get() = "Ice"
 
-    @Override
-    public String getName() {
-        return "Ice";
-    }
+    override val resistance: Double
+        get() = 2.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    @Override
-    public double getResistance() {
-        return 2.5;
-    }
+    val frictionFactor: Double
+        get() = 0.98
 
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public double getFrictionFactor() {
-        return 0.98;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public boolean onBreak(Item item) {
-        if (level.getDimension() == Level.DIMENSION_NETHER 
-                || item.getEnchantmentLevel(Enchantment.ID_SILK_TOUCH) > 0 
-                || down().isAir()) {
-            return super.onBreak(item);
+    override fun onBreak(item: Item): Boolean {
+        if (level.dimension == Level.DIMENSION_NETHER || item.getEnchantmentLevel(Enchantment.ID_SILK_TOUCH) > 0 || down()!!.isAir) {
+            return super.onBreak(item)
         }
 
-        return level.setBlock(this.position, Block.get(BlockID.FLOWING_WATER), true);
+        return level.setBlock(this.position, get(BlockID.Companion.FLOWING_WATER), true)
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (level.getBlockLightAt((int) this.position.south, (int) this.position.up, (int) this.position.west) >= 12) {
-                BlockFadeEvent event = new BlockFadeEvent(this, level.getDimension() == Level.DIMENSION_NETHER ? get(AIR) : get(FLOWING_WATER));
-                level.server.pluginManager.callEvent(event);
-                if (!event.isCancelled()) {
-                    level.setBlock(this.position, event.newState, true);
+            if (level.getBlockLightAt(
+                    position.x.toInt(),
+                    position.y.toInt(), position.z.toInt()
+                ) >= 12
+            ) {
+                val event = BlockFadeEvent(
+                    this,
+                    if (level.dimension == Level.DIMENSION_NETHER) get(BlockID.Companion.AIR) else get(BlockID.Companion.FLOWING_WATER)
+                )
+                level.server.pluginManager.callEvent(event)
+                if (!event.isCancelled) {
+                    level.setBlock(this.position, event.newState, true)
                 }
-                return Level.BLOCK_UPDATE_RANDOM;
+                return Level.BLOCK_UPDATE_RANDOM
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    public boolean canSilkTouch() {
-        return true;
+    override fun canSilkTouch(): Boolean {
+        return true
     }
 
-    @Override
-    public int getBurnChance() {
-        return -1;
-    }
+    override val burnChance: Int
+        get() = -1
 
-    @Override
-    public int getLightFilter() {
-        return 2;
+    override val lightFilter: Int
+        get() = 2
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.Companion.ICE)
+            get() = Companion.field
     }
 }

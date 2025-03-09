@@ -1,26 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockCherryPlanks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockPlanks(blockstate) {
+    override val name: String
+        get() = "Cherry Planks"
 
-public class BlockCherryPlanks extends BlockPlanks {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHERRY_PLANKS);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHERRY_PLANKS)
+            get() = Companion.field
     }
-
-    public BlockCherryPlanks() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockCherryPlanks(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Cherry Planks";
-    }
-
 }

@@ -1,30 +1,16 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockWaxedWeatheredCutCopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockWeatheredCutCopper(blockstate) {
+    override val name: String
+        get() = "Waxed Weathered Cut Copper"
 
-public class BlockWaxedWeatheredCutCopper extends BlockWeatheredCutCopper {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WAXED_WEATHERED_CUT_COPPER);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun isWaxed(): Boolean {
+        return true
     }
 
-    public BlockWaxedWeatheredCutCopper() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWaxedWeatheredCutCopper(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Waxed Weathered Cut Copper";
-    }
-
-    @Override
-    public boolean isWaxed() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.WAXED_WEATHERED_CUT_COPPER)
+            get() = Companion.field
     }
 }

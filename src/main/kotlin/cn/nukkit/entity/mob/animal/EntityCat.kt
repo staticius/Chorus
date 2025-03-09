@@ -43,7 +43,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
 
     override fun updateMovement() {
         //猫猫流线运动怎么可能会摔落造成伤害呢~
-        this.highestPosition = position.up
+        this.highestPosition = position.y
         super.updateMovement()
     }
 

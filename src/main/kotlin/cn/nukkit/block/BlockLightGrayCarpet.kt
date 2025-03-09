@@ -1,20 +1,9 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
-
-public class BlockLightGrayCarpet extends BlockCarpet {
-    public static final BlockProperties PROPERTIES = new BlockProperties(LIGHT_GRAY_CARPET);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockLightGrayCarpet() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockLightGrayCarpet(BlockState blockstate) {
-        super(blockstate);
+class BlockLightGrayCarpet @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockCarpet(blockstate) {
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LIGHT_GRAY_CARPET)
+            get() = Companion.field
     }
 }

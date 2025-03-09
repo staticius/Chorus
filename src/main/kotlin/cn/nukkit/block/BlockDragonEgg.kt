@@ -1,117 +1,111 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.block.BlockFromToEvent;
-import cn.nukkit.event.player.PlayerInteractEvent;
-import cn.nukkit.event.player.PlayerInteractEvent.Action;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.network.protocol.LevelEventPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.event.block.BlockFromToEvent
+import cn.nukkit.event.player.PlayerInteractEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.*
+import cn.nukkit.network.protocol.LevelEventPacket
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.abs
 
-import java.util.concurrent.ThreadLocalRandom;
+class BlockDragonEgg : BlockFallable {
+    constructor() : super(Companion.properties.defaultState)
 
-public class BlockDragonEgg extends BlockFallable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(DRAGON_EGG);
+    constructor(blockState: BlockState?) : super(blockState)
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val name: String
+        get() = "Dragon Egg"
 
-    public BlockDragonEgg() {
-        super(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 3.0
 
-    public BlockDragonEgg(BlockState blockState) {
-        super(blockState);
-    }
+    override val resistance: Double
+        get() = 45.0
 
-    @Override
-    public String getName() {
-        return "Dragon Egg";
-    }
+    override val lightLevel: Int
+        get() = 1
 
-    @Override
-    public double getHardness() {
-        return 3;
-    }
+    override val isTransparent: Boolean
+        get() = true
 
-    @Override
-    public double getResistance() {
-        return 45;
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public int getLightLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean isTransparent() {
-        return true;
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_TOUCH) {
-            this.teleport();
+            this.teleport()
         }
-        return super.onUpdate(type);
+        return super.onUpdate(type)
     }
 
-    @Override
-    public void onTouch(@NotNull Vector3 vector, @NotNull Item item, @NotNull BlockFace face, float fx, float fy, float fz, @Nullable Player player, PlayerInteractEvent.@NotNull Action action) {
-        if (player != null && (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)) {
-            if (player.isCreative() && action == Action.LEFT_CLICK_BLOCK) {
-                return;
+    override fun onTouch(
+        vector: Vector3,
+        item: Item,
+        face: BlockFace,
+        fx: Float,
+        fy: Float,
+        fz: Float,
+        player: Player?,
+        action: PlayerInteractEvent.Action
+    ) {
+        if (player != null && (action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK || action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)) {
+            if (player.isCreative && action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+                return
             }
-            onUpdate(Level.BLOCK_UPDATE_TOUCH);
+            onUpdate(Level.BLOCK_UPDATE_TOUCH)
         }
     }
 
-    public void teleport() {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        for (int i = 0; i < 1000; ++i) {
-            Block to = this.level.getBlock(this.position.add(random.nextInt(-16, 16), random.nextInt(0, 16), random.nextInt(-16, 16)));
-            if (to.isAir()) {
-                BlockFromToEvent event = new BlockFromToEvent(this, to);
-                this.level.server.pluginManager.callEvent(event);
-                if (event.isCancelled()) return;
-                to = event.to;
+    fun teleport() {
+        val random = ThreadLocalRandom.current()
+        for (i in 0..999) {
+            var to =
+                level.getBlock(
+                    position.add(
+                        random.nextInt(-16, 16).toDouble(),
+                        random.nextInt(0, 16).toDouble(),
+                        random.nextInt(-16, 16).toDouble()
+                    )!!
+                )
+            if (to!!.isAir) {
+                val event = BlockFromToEvent(this, to)
+                level.server.pluginManager.callEvent(event)
+                if (event.isCancelled) return
+                to = event.to
 
-                int diffX = this.position.getFloorX() - to.position.getFloorX();
-                int diffY = this.position.getFloorY() - to.position.getFloorY();
-                int diffZ = this.position.getFloorZ() - to.position.getFloorZ();
-                LevelEventPacket pk = new LevelEventPacket();
-                pk.evid = LevelEventPacket.EVENT_PARTICLE_DRAGON_EGG;
-                pk.data = (((((Math.abs(diffX) << 16) | (Math.abs(diffY) << 8)) | Math.abs(diffZ)) | ((diffX < 0 ? 1 : 0) << 24)) | ((diffY < 0 ? 1 : 0) << 25)) | ((diffZ < 0 ? 1 : 0) << 26);
-                pk.x = this.position.getFloorX();
-                pk.y = this.position.getFloorY();
-                pk.z = this.position.getFloorZ();
-                this.level.addChunkPacket(this.position.getFloorX() >> 4, this.position.getFloorZ() >> 4, pk);
-                this.level.setBlock(this.position, get(AIR), true);
-                this.level.setBlock(to.position, this, true);
-                return;
+                val diffX = position.floorX - to.position.floorX
+                val diffY = position.floorY - to.position.floorY
+                val diffZ = position.floorZ - to.position.floorZ
+                val pk = LevelEventPacket()
+                pk.evid = LevelEventPacket.EVENT_PARTICLE_DRAGON_EGG
+                pk.data =
+                    (((((abs(diffX.toDouble()).toInt() shl 16) or (abs(diffY.toDouble()).toInt() shl 8)) or abs(diffZ.toDouble()).toInt()) or ((if (diffX < 0) 1 else 0) shl 24)) or ((if (diffY < 0) 1 else 0) shl 25)) or ((if (diffZ < 0) 1 else 0) shl 26)
+                pk.x = position.floorX.toFloat()
+                pk.y = position.floorY.toFloat()
+                pk.z = position.floorZ.toFloat()
+                level.addChunkPacket(
+                    position.floorX shr 4,
+                    position.floorZ shr 4, pk
+                )
+                level.setBlock(this.position, get(AIR), true)
+                level.setBlock(to.position, this, true)
+                return
             }
         }
     }
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean sticksToPiston() {
-        return false;
+    override fun sticksToPiston(): Boolean {
+        return false
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(DRAGON_EGG)
+            get() = Companion.field
     }
 }

@@ -142,13 +142,13 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         packet.eventId = LevelEventPacket.EVENT_PARTICLE_CREAKING_HEART_TRIAL
         val tag = CompoundTag()
         tag.putInt("CreakingAmount", 1)
-        tag.putFloat("CreakingX", position.south.toFloat())
-        tag.putFloat("CreakingY", position.up.toFloat())
-        tag.putFloat("CreakingZ", position.west.toFloat())
+        tag.putFloat("CreakingX", position.x.toFloat())
+        tag.putFloat("CreakingY", position.y.toFloat())
+        tag.putFloat("CreakingZ", position.z.toFloat())
         tag.putInt("HeartAmount", 1)
-        tag.putFloat("HeartX", creakingHeart!!.position.south.toFloat())
-        tag.putFloat("HeartY", creakingHeart!!.position.up.toFloat())
-        tag.putFloat("HeartZ", creakingHeart!!.position.west.toFloat())
+        tag.putFloat("HeartX", creakingHeart!!.position.x.toFloat())
+        tag.putFloat("HeartY", creakingHeart!!.position.y.toFloat())
+        tag.putFloat("HeartZ", creakingHeart!!.position.z.toFloat())
         packet.tag = tag
         Server.broadcastPacket(this.viewers.values, packet)
     }

@@ -1,150 +1,152 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.WoodType;
-import cn.nukkit.event.level.StructureGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.generator.object.BlockManager;
-import cn.nukkit.level.generator.object.ObjectCherryTree;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.random.RandomSourceProvider;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.WoodType
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.event.level.StructureGrowEvent.blockList
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.generator.`object`.BlockManager.applySubChunkUpdate
+import cn.nukkit.level.generator.`object`.BlockManager.blocks
+import cn.nukkit.level.generator.`object`.ObjectCherryTree.generate
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.*
+import cn.nukkit.utils.random.RandomSourceProvider.Companion.create
+import java.util.concurrent.ThreadLocalRandom
+import java.util.function.Predicate
 
-import java.util.concurrent.ThreadLocalRandom;
-
-import static cn.nukkit.block.property.CommonBlockProperties.AGE_BIT;
-
-
-public class BlockCherrySapling extends BlockSapling implements BlockFlowerPot.FlowerPotBlock {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(CHERRY_SAPLING, AGE_BIT);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSapling(blockstate), FlowerPotBlock {
+    override fun getWoodType(): WoodType {
+        return WoodType.CHERRY
     }
 
-    public BlockCherrySapling() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val name: String
+        get() = "Cherry Sapling"
 
-    public BlockCherrySapling(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public WoodType getWoodType() {
-        return WoodType.CHERRY;
-    }
-
-    @Override
-    public String getName() {
-        return "Cherry Sapling";
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (isSupportInvalid()) {
-                this.level.useBreakOn(this.position);
-                return Level.BLOCK_UPDATE_NORMAL;
+            if (isSupportInvalid) {
+                level.useBreakOn(this.position)
+                return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
-            if (level.getFullLight(this.position.add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
-                if (isAged()) {
-                    this.grow();
+            if (level.getFullLight(position.add(0.0, 1.0, 0.0)!!) >= BlockCrops.Companion.MINIMUM_LIGHT_LEVEL) {
+                if (isAged) {
+                    this.grow()
                 } else {
-                    setAged(true);
-                    this.level.setBlock(this.position, this, true);
-                    return Level.BLOCK_UPDATE_RANDOM;
+                    isAged = true
+                    level.setBlock(this.position, this, true)
+                    return Level.BLOCK_UPDATE_RANDOM
                 }
             } else {
-                return Level.BLOCK_UPDATE_RANDOM;
+                return Level.BLOCK_UPDATE_RANDOM
             }
         }
-        return Level.BLOCK_UPDATE_NORMAL;
+        return Level.BLOCK_UPDATE_NORMAL
     }
 
-    private void grow() {
-        BlockManager blockManager = new BlockManager(this.level);
-        Vector3 vector3 = new Vector3(this.position.south, this.position.up - 1, this.position.west);
-        var objectCherryTree = new ObjectCherryTree();
-        boolean generate = objectCherryTree.generate(blockManager, RandomSourceProvider.create(), this.position);
+    private fun grow() {
+        val blockManager: BlockManager = BlockManager(this.level)
+        val vector3 = Vector3(
+            position.x, position.y - 1,
+            position.z
+        )
+        val objectCherryTree: ObjectCherryTree = ObjectCherryTree()
+        val generate: Boolean = objectCherryTree.generate(blockManager, RandomSourceProvider.create(), this.position)
         if (generate) {
-            StructureGrowEvent ev = new StructureGrowEvent(this, blockManager.getBlocks());
-            this.level.server.pluginManager.callEvent(ev);
-            if (ev.isCancelled()) {
-                return;
+            val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
+            level.server.pluginManager.callEvent(ev)
+            if (ev.isCancelled) {
+                return
             }
-            if (this.level.getBlock(vector3).getId().equals(BlockID.DIRT_WITH_ROOTS)) {
-                this.level.setBlock(vector3, Block.get(BlockID.DIRT));
+            if (level.getBlock(vector3)!!.id == DIRT_WITH_ROOTS) {
+                level.setBlock(vector3, get(DIRT))
             }
-            blockManager.applySubChunkUpdate(ev.getBlockList(), block -> !block.isAir());
+            blockManager.applySubChunkUpdate(
+                ev.blockList,
+                Predicate { block: Block -> !block.isAir })
         }
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (isSupportInvalid()) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (isSupportInvalid) {
+            return false
         }
 
-        if (this.getLevelBlock() instanceof BlockLiquid || this.getLevelBlockAtLayer(1) instanceof BlockLiquid) {
-            return false;
+        if (levelBlock is BlockLiquid || getLevelBlockAtLayer(1) is BlockLiquid) {
+            return false
         }
 
-        this.level.setBlock(this.position, this, true, true);
-        return true;
+        level.setBlock(this.position, this, true, true)
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) { // BoneMeal and so on
-            if (player != null && !player.isCreative()) {
-                item.count--;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) { // BoneMeal and so on
+            if (player != null && !player.isCreative) {
+                item.count--
             }
 
-            this.level.addParticle(new BoneMealParticle(this.position));
+            level.addParticle(BoneMealParticle(this.position))
             if (ThreadLocalRandom.current().nextFloat() >= 0.45) {
-                return true;
+                return true
             }
 
-            this.grow();
+            this.grow()
 
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    private boolean isSupportInvalid() {
-        String downId = down().getId();
-        return !(downId.equals(DIRT) || downId.equals(GRASS_BLOCK) || downId.equals(SAND) || downId.equals(GRAVEL) || downId.equals(PODZOL));
+    private val isSupportInvalid: Boolean
+        get() {
+            val downId = down()!!.id
+            return !(downId == DIRT || downId == GRASS_BLOCK || downId == SAND || downId == GRAVEL || downId == PODZOL)
+        }
+
+    var isAge: Boolean
+        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT)
+        set(age) {
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.AGE_BIT,
+                age
+            )
+        }
+
+    override fun toItem(): Item? {
+        return ItemBlock(BlockCherrySapling())
     }
 
-    public boolean isAge() {
-        return this.getPropertyValue(AGE_BIT);
-    }
+    override val isFertilizable: Boolean
+        get() = true
 
-    public void setAge(boolean age) {
-        this.setPropertyValue(AGE_BIT, age);
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockCherrySapling());
-    }
-
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CHERRY_SAPLING, CommonBlockProperties.AGE_BIT)
+            get() = Companion.field
     }
 }

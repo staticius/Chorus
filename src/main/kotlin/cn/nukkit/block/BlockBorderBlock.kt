@@ -1,87 +1,76 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
+import cn.nukkit.math.*
 
-import javax.annotation.Nullable;
+class BlockBorderBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockWallBase(blockstate) {
+    override val hardness: Double
+        get() = -1.0
 
-public class BlockBorderBlock extends BlockWallBase {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BORDER_BLOCK, CommonBlockProperties.WALL_CONNECTION_TYPE_EAST, CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH, CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH, CommonBlockProperties.WALL_CONNECTION_TYPE_WEST, CommonBlockProperties.WALL_POST_BIT);
+    override val resistance: Double
+        get() = 18000000.0
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val name: String
+        get() = "Border Block"
+
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    public BlockBorderBlock() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    public BlockBorderBlock(BlockState blockstate) {
-        super(blockstate);
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public double getHardness() {
-        return -1;
-    }
-
-    @Override
-    public double getResistance() {
-        return 18000000;
-    }
-
-    @Override
-    public String getName() {
-        return "Border Block";
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public  boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (player != null && (!player.isCreative() || !player.isOp())) {
-            return false;
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (player != null && (!player.isCreative || !player.isOp)) {
+            return false
         }
-        return super.place(item, block, target, face, fx, fy, fz, player);
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    @Override
-    public boolean isBreakable(@NotNull Vector3 vector, int layer, BlockFace face, Item item, @Nullable Player player) {
-        if (player != null && (!player.isCreative() || !player.isOp())) {
-            return false;
+    override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
+        if (player != null && (!player.isCreative || !player.isOp)) {
+            return false
         }
-        return super.isBreakable(vector, layer, face, item, player);
+        return super.isBreakable(vector, layer, face, item, player)
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return Item.EMPTY_ARRAY;
+    override fun getDrops(item: Item): Array<Item?>? {
+        return Item.EMPTY_ARRAY
     }
 
-    @Override
-    protected AxisAlignedBB recalculateBoundingBox() {
-        AxisAlignedBB aabb = super.recalculateBoundingBox();
-        aabb.setMinY(Double.MIN_VALUE);
-        aabb.setMaxY(Double.MAX_VALUE);
-        return aabb;
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
+        val aabb = super.recalculateBoundingBox()
+        aabb!!.minY = Double.MIN_VALUE
+        aabb.maxY = Double.MAX_VALUE
+        return aabb
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BORDER_BLOCK,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
+            CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
+            CommonBlockProperties.WALL_POST_BIT
+        )
+            get() = Companion.field
     }
 }

@@ -65,8 +65,8 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
 
     override fun onUpdate(currentTick: Int): Boolean {
         // 记录最大高度，用于计算坠落伤害
-        if (!this.onGround && position.up > highestPosition) {
-            this.highestPosition = position.up
+        if (!this.onGround && position.y > highestPosition) {
+            this.highestPosition = position.y
         }
         // 添加挤压伤害
         if (needsCollisionDamage) {
@@ -111,27 +111,27 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
             fallingTick++
         }
         super.updateMovement()
-        this.move(motion.south, motion.up, motion.west)
+        this.move(motion.x, motion.y, motion.z)
     }
 
     fun isFalling(): Boolean {
-        return !this.onGround && position.up < this.highestPosition
+        return !this.onGround && position.y < this.highestPosition
     }
 
     fun addTmpMoveMotion(tmpMotion: Vector3) {
-        motion.south += tmpMotion.south
-        motion.up += tmpMotion.up
-        motion.west += tmpMotion.west
+        motion.x += tmpMotion.x
+        motion.y += tmpMotion.y
+        motion.z += tmpMotion.z
     }
 
     fun addTmpMoveMotionXZ(tmpMotion: Vector3) {
-        motion.south += tmpMotion.south
-        motion.west += tmpMotion.west
+        motion.x += tmpMotion.x
+        motion.z += tmpMotion.z
     }
 
     protected fun handleGravity() {
         //重力一直存在
-        motion.up -= getGravity().toDouble()
+        motion.y -= getGravity().toDouble()
         if (!this.onGround && this.hasWaterAt(getFootHeight())) {
             //落地水
             resetFallDistance()
@@ -145,16 +145,16 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         //未在地面就没有地面阻力
         if (!this.onGround) return
         //小于精度
-        if (Math.abs(motion.west) < PRECISION && Math.abs(
-                motion.south
+        if (Math.abs(motion.z) < PRECISION && Math.abs(
+                motion.x
             ) < PRECISION
         ) return
         // 减少移动向量（计算摩擦系数，在冰上滑得更远）
         val factor: Double = getGroundFrictionFactor()
-        motion.south *= factor
-        motion.west *= factor
-        if (Math.abs(motion.south) < PRECISION) motion.south = 0.0
-        if (Math.abs(motion.west) < PRECISION) motion.west = 0.0
+        motion.x *= factor
+        motion.z *= factor
+        if (Math.abs(motion.x) < PRECISION) motion.x = 0.0
+        if (Math.abs(motion.z) < PRECISION) motion.z = 0.0
     }
 
     /**
@@ -162,17 +162,17 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
      */
     protected fun handlePassableBlockFrictionMovement() {
         //小于精度
-        if (Math.abs(motion.west) < PRECISION && Math.abs(
-                motion.south
-            ) < PRECISION && Math.abs(motion.up) < PRECISION
+        if (Math.abs(motion.z) < PRECISION && Math.abs(
+                motion.x
+            ) < PRECISION && Math.abs(motion.y) < PRECISION
         ) return
         val factor: Double = getPassableBlockFrictionFactor()
-        motion.south *= factor
-        motion.up *= factor
-        motion.west *= factor
-        if (Math.abs(motion.south) < PRECISION) motion.south = 0.0
-        if (Math.abs(motion.up) < PRECISION) motion.up = 0.0
-        if (Math.abs(motion.west) < PRECISION) motion.west = 0.0
+        motion.x *= factor
+        motion.y *= factor
+        motion.z *= factor
+        if (Math.abs(motion.x) < PRECISION) motion.x = 0.0
+        if (Math.abs(motion.y) < PRECISION) motion.y = 0.0
+        if (Math.abs(motion.z) < PRECISION) motion.z = 0.0
     }
 
     /**
@@ -208,17 +208,17 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
             Predicate<Block> { block: Block? -> block is BlockLiquid })) {
             blockLiquid = each as BlockLiquid?
             val flowVector: Vector3 = blockLiquid!!.getFlowVector()
-            tmp.south += flowVector.south
-            tmp.up += flowVector.up
-            tmp.west += flowVector.west
+            tmp.x += flowVector.x
+            tmp.y += flowVector.y
+            tmp.z += flowVector.z
         }
         if (blockLiquid != null) {
             val len: Double = tmp.length()
             val speed: Float = getLiquidMovementSpeed(blockLiquid) * 0.3f
             if (len > 0) {
-                motion.south += tmp.south / len * speed
-                motion.up += tmp.up / len * speed
-                motion.west += tmp.west / len * speed
+                motion.x += tmp.x / len * speed
+                motion.y += tmp.y / len * speed
+                motion.z += tmp.z / len * speed
             }
         }
     }
@@ -229,7 +229,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
 
     protected fun handleFloatingMovement() {
         if (this.hasWaterAt(0f)) {
-            motion.up += this.getGravity() * getFloatingForceFactor()
+            motion.y += this.getGravity() * getFloatingForceFactor()
         }
     }
 
@@ -265,8 +265,8 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
 
     protected fun handleCollideMovement(currentTick: Int) {
         val selfAABB: AxisAlignedBB = getOffsetBoundingBox().getOffsetBoundingBox(
-            motion.south,
-            motion.up, motion.west
+            motion.x,
+            motion.y, motion.z
         )
         val collidingEntities: MutableList<Entity> =
             level!!.fastCollidingEntities(selfAABB, this)
@@ -355,12 +355,12 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         if (this.offsetBoundingBox == null) return
         val dx: Double = this.getWidth() * 0.5
         val dz: Double = this.getHeight() * 0.5
-        offsetBoundingBox.setMinX(position.south - dx)
-        offsetBoundingBox.setMaxX(position.south + dz)
-        offsetBoundingBox.setMinY(position.up)
-        offsetBoundingBox.setMaxY(position.up + this.getHeight())
-        offsetBoundingBox.setMinZ(position.west - dz)
-        offsetBoundingBox.setMaxZ(position.west + dz)
+        offsetBoundingBox.setMinX(position.x - dx)
+        offsetBoundingBox.setMaxX(position.x + dz)
+        offsetBoundingBox.setMinY(position.y)
+        offsetBoundingBox.setMaxY(position.y + this.getHeight())
+        offsetBoundingBox.setMinZ(position.z - dz)
+        offsetBoundingBox.setMaxZ(position.z + dz)
     }
 
     fun getOffsetBoundingBox(): AxisAlignedBB {

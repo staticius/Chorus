@@ -1,45 +1,26 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemWarpedSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.Item
 
-import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
+class BlockWarpedWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockWallSign(blockState) {
+    override val wallSignId: String
+        get() = BlockID.WARPED_WALL_SIGN
 
+    override val standingSignId: String?
+        get() = BlockID.WARPED_STANDING_SIGN
 
-public class BlockWarpedWallSign extends BlockWallSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_WALL_SIGN, FACING_DIRECTION);
+    override val name: String
+        get() = "Warped Wall Sign"
 
-    public BlockWarpedWallSign() {
-        this(PROPERTIES.getDefaultState());
+    override fun toItem(): Item? {
+        return ItemWarpedSign()
     }
 
-    public BlockWarpedWallSign(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public String getWallSignId() {
-        return WARPED_WALL_SIGN;
-    }
-
-    @Override
-    public String getStandingSignId() {
-        return WARPED_STANDING_SIGN;
-    }
-
-    @Override
-    public String getName() {
-        return "Warped Wall Sign";
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemWarpedSign();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.WARPED_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+            get() = Companion.field
     }
 }

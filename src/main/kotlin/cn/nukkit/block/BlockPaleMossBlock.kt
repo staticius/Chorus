@@ -1,86 +1,102 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.level.Locator;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.*
+import cn.nukkit.level.Locator
+import java.util.*
+import kotlin.math.abs
 
-import java.util.Random;
-
-public class BlockPaleMossBlock extends BlockMossBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(PALE_MOSS_BLOCK);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockPaleMossBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockPaleMossBlock(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Pale Moss";
-    }
+class BlockPaleMossBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockMossBlock(blockstate) {
+    override val name: String
+        get() = "Pale Moss"
 
 
-    public void convertToMoss(Locator pos) {
-        Random random = new Random();
-        for (double x = pos.position.south - 3; x <= pos.position.south + 3; x++) {
-            for (double z = pos.position.west - 3; z <= pos.position.west + 3; z++) {
-                for (double y = pos.position.up + 5; y >= pos.position.up - 5; y--) {
-                    if (canConvertToMoss(pos.level.getBlock(new Locator(x, y, z, pos.level).position)) && (random.nextDouble() < 0.6 || Math.abs(x - pos.position.south) < 3 && Math.abs(z - pos.position.west) < 3)) {
-                        pos.level.setBlock(new Locator(x, y, z, pos.level).position, Block.get(BlockID.PALE_MOSS_BLOCK));
-                        break;
+    override fun convertToMoss(pos: Locator) {
+        val random = Random()
+        var x = pos.position.x - 3
+        while (x <= pos.position.x + 3) {
+            var z = pos.position.z - 3
+            while (z <= pos.position.z + 3) {
+                var y = pos.position.y + 5
+                while (y >= pos.position.y - 5) {
+                    if (canConvertToMoss(
+                            pos.level.getBlock(
+                                Locator(
+                                    x,
+                                    y,
+                                    z,
+                                    pos.level
+                                ).position
+                            )!!
+                        ) && (random.nextDouble() < 0.6 || abs(x - pos.position.x) < 3 && abs(z - pos.position.z) < 3)
+                    ) {
+                        pos.level.setBlock(Locator(x, y, z, pos.level).position, get(BlockID.PALE_MOSS_BLOCK))
+                        break
                     }
+                    y--
                 }
+                z++
             }
+            x++
         }
     }
 
-    public void populateRegion(Locator pos) {
-        Random random = new Random();
-        for (double x = pos.position.south - 3; x <= pos.position.south + 3; x++) {
-            for (double z = pos.position.west - 3; z <= pos.position.west + 3; z++) {
-                for (double y = pos.position.up + 5; y >= pos.position.up - 5; y--) {
-                    if (canBePopulated(new Locator(x, y, z, pos.level))) {
-                        if (!canGrowPlant(new Locator(x, y, z, pos.level)))
-                            break;
-                        double randomDouble = random.nextDouble();
+    override fun populateRegion(pos: Locator) {
+        val random = Random()
+        var x = pos.position.x - 3
+        while (x <= pos.position.x + 3) {
+            var z = pos.position.z - 3
+            while (z <= pos.position.z + 3) {
+                var y = pos.position.y + 5
+                while (y >= pos.position.y - 5) {
+                    if (canBePopulated(Locator(x, y, z, pos.level))) {
+                        if (!canGrowPlant(Locator(x, y, z, pos.level))) break
+                        val randomDouble = random.nextDouble()
                         if (randomDouble >= 0 && randomDouble < 0.3125) {
-                            pos.level.setBlock(new Locator(x, y, z, pos.level).position, Block.get(BlockID.TALL_GRASS), true, true);
+                            pos.level.setBlock(
+                                Locator(x, y, z, pos.level).position,
+                                get(BlockID.TALL_GRASS),
+                                true,
+                                true
+                            )
                         }
                         if (randomDouble >= 0.3125 && randomDouble < 0.46875) {
-                            pos.level.setBlock(new Locator(x, y, z, pos.level).position, Block.get(BlockID.PALE_MOSS_CARPET), true, true);
+                            pos.level.setBlock(
+                                Locator(x, y, z, pos.level).position,
+                                get(BlockID.PALE_MOSS_CARPET),
+                                true,
+                                true
+                            )
                         }
                         if (randomDouble >= 0.46875 && randomDouble < 0.53125) {
-                            if (canBePopulated2BlockAir(new Locator(x, y, z, pos.level))) {
-                                BlockLargeFern rootBlock = new BlockLargeFern();
-                                rootBlock.setTopHalf(false);
-                                pos.level.setBlock(new Locator(x, y, z, pos.level).position, rootBlock, true, true);
-                                BlockLargeFern topBlock = new BlockLargeFern();
-                                topBlock.setTopHalf(true);
-                                pos.level.setBlock(new Locator(x, y + 1, z, pos.level).position, topBlock, true, true);
+                            if (canBePopulated2BlockAir(Locator(x, y, z, pos.level))) {
+                                val rootBlock = BlockLargeFern()
+                                rootBlock.isTopHalf = false
+                                pos.level.setBlock(Locator(x, y, z, pos.level).position, rootBlock, true, true)
+                                val topBlock = BlockLargeFern()
+                                topBlock.isTopHalf = true
+                                pos.level.setBlock(Locator(x, y + 1, z, pos.level).position, topBlock, true, true)
                             } else {
-                                BlockTallGrass block = new BlockTallGrass();
-                                pos.level.setBlock(new Locator(x, y, z, pos.level).position, block, true, true);
+                                val block = BlockTallGrass()
+                                pos.level.setBlock(Locator(x, y, z, pos.level).position, block, true, true)
                             }
                         }
-                        break;
+                        break
                     }
+                    y--
                 }
+                z++
             }
+            x++
         }
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{new ItemBlock(Block.get(BlockID.PALE_MOSS_BLOCK))};
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(ItemBlock(get(BlockID.PALE_MOSS_BLOCK)))
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PALE_MOSS_BLOCK)
+            get() = Companion.field
     }
 }

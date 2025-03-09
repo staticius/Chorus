@@ -1,145 +1,134 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.OxidizationLevel;
-import cn.nukkit.event.redstone.RedstoneUpdateEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.registry.Registries;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.Vector3.equals
+import cn.nukkit.registry.Registries
+import cn.nukkit.utils.RedstoneComponent
 
-import javax.annotation.Nullable;
+abstract class BlockCopperBulbBase(blockState: BlockState?) : BlockSolid(blockState), RedstoneComponent,
+    Oxidizable, Waxable {
+    override val hardness: Double
+        get() = 3.0
 
-public abstract class BlockCopperBulbBase extends BlockSolid implements RedstoneComponent, Oxidizable, Waxable {
-    public BlockCopperBulbBase(BlockState blockState) {
-        super(blockState);
+    override val resistance: Double
+        get() = 6.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_STONE
+
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        return super<Waxable>.onActivate(item, player, blockFace, fx, fy, fz)
+                || super<Oxidizable>.onActivate(item, player, blockFace, fx, fy, fz)
     }
 
-    @Override
-    public double getHardness() {
-        return 3;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public double getResistance() {
-        return 6;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_STONE;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        return Waxable.super.onActivate(item, player, blockFace, fx, fy, fz)
-                || Oxidizable.super.onActivate(item, player, blockFace, fx, fy, fz);
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public int onUpdate(int type) {
-        Oxidizable.super.onUpdate(type);
+    override fun onUpdate(type: Int): Int {
+        super<Oxidizable>.onUpdate(type)
 
         if (type == Level.BLOCK_UPDATE_REDSTONE) {
-            RedstoneUpdateEvent ev = new RedstoneUpdateEvent(this);
-            level.server.pluginManager.callEvent(ev);
+            val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+            level.server.pluginManager.callEvent(ev)
 
-            if (ev.isCancelled()) {
-                return 0;
+            if (ev.isCancelled) {
+                return 0
             }
 
-            if (isGettingPower()) {
-                this.setLit(!(getLit()));
+            if (isGettingPower) {
+                this.lit = !(lit)
 
-                this.setPowered(true);
-                this.level.setBlock(this.position, this, true, true);
-                return 1;
+                this.powered = true
+                level.setBlock(this.position, this, true, true)
+                return 1
             }
 
-            if(getPowered()) {
-                this.setPowered(false);
-                this.level.setBlock(this.position, this, true, true);
-                return 1;
+            if (powered) {
+                this.powered = false
+                level.setBlock(this.position, this, true, true)
+                return 1
             }
         }
-        return 0;
+        return 0
     }
 
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public int getComparatorInputOverride() {
-        return getLit() ? 15 : 0;
-    }
+    override val comparatorInputOverride: Int
+        get() = if (lit) 15 else 0
 
-    public void setLit(boolean lit) {
-        this.setPropertyValue(CommonBlockProperties.LIT, lit);
-    }
-
-    public void setPowered(boolean powered) {
-        this.setPropertyValue(CommonBlockProperties.POWERED_BIT, powered);
-    }
-
-    public boolean getLit() {
-        return getPropertyValue(CommonBlockProperties.LIT);
-    }
-
-    public boolean getPowered() {
-        return getPropertyValue(CommonBlockProperties.POWERED_BIT);
-    }
-
-    @Override
-    public Block getBlockWithOxidizationLevel(@NotNull OxidizationLevel oxidizationLevel) {
-        return Registries.BLOCK.getBlockProperties(getCopperId(isWaxed(), oxidizationLevel)).getDefaultState().toBlock();
-    }
-
-    @Override
-    public boolean setOxidizationLevel(@NotNull OxidizationLevel oxidizationLevel) {
-        if (getOxidizationLevel().equals(oxidizationLevel)) {
-            return true;
+    var lit: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT)
+        set(lit) {
+            this.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT, lit)
         }
-        return level.setBlock(this.position, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
-    }
 
-    @Override
-    public boolean setWaxed(boolean waxed) {
-        if (isWaxed() == waxed) {
-            return true;
+    var powered: Boolean
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT)
+        set(powered) {
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.POWERED_BIT,
+                powered
+            )
         }
-        return level.setBlock(this.position, Block.get(getCopperId(waxed, getOxidizationLevel())));
+
+    override fun getBlockWithOxidizationLevel(oxidizationLevel: OxidizationLevel): Block {
+        return Registries.BLOCK.getBlockProperties(getCopperId(isWaxed, oxidizationLevel)).defaultState.toBlock()
     }
 
-    @Override
-    public boolean isWaxed() {
-        return false;
+    override fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean {
+        if (oxidizationLevel == oxidizationLevel) {
+            return true
+        }
+        return level.setBlock(this.position, get(getCopperId(isWaxed, oxidizationLevel)))
     }
 
-    protected String getCopperId(boolean waxed, @Nullable OxidizationLevel oxidizationLevel) {
+    override fun setWaxed(waxed: Boolean): Boolean {
+        if (isWaxed == waxed) {
+            return true
+        }
+        return level.setBlock(
+            this.position, get(
+                getCopperId(
+                    waxed,
+                    oxidizationLevel
+                )
+            )
+        )
+    }
+
+    override fun isWaxed(): Boolean {
+        return false
+    }
+
+    protected fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {
-            return getId();
+            return id
         }
-        return switch (oxidizationLevel) {
-            case UNAFFECTED -> waxed ? WAXED_COPPER_BULB : COPPER_BULB;
-            case EXPOSED -> waxed ? WAXED_EXPOSED_COPPER_BULB : EXPOSED_COPPER_BULB;
-            case WEATHERED -> waxed ? WAXED_WEATHERED_COPPER_BULB : WEATHERED_COPPER_BULB;
-            case OXIDIZED -> waxed ? WAXED_OXIDIZED_COPPER_BULB : OXIDIZED_COPPER_BULB;
-        };
+        return when (oxidizationLevel) {
+            OxidizationLevel.UNAFFECTED -> if (waxed) WAXED_COPPER_BULB else COPPER_BULB
+            OxidizationLevel.EXPOSED -> if (waxed) WAXED_EXPOSED_COPPER_BULB else EXPOSED_COPPER_BULB
+            OxidizationLevel.WEATHERED -> if (waxed) WAXED_WEATHERED_COPPER_BULB else WEATHERED_COPPER_BULB
+            OxidizationLevel.OXIDIZED -> if (waxed) WAXED_OXIDIZED_COPPER_BULB else OXIDIZED_COPPER_BULB
+        }
     }
 }

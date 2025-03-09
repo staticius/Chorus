@@ -104,13 +104,13 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
         get() = level.name!!
 
     val x: Double
-        get() = position.south
+        get() = position.x
 
     val y: Double
-        get() = position.up
+        get() = position.y
 
     val z: Double
-        get() = position.west
+        get() = position.z
 
     val chunk: IChunk?
         get() = level.getChunk(position.chunkX, position.chunkZ)
@@ -126,7 +126,7 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
     companion object {
         @JvmStatic
         fun fromObject(pos: Vector3, level: Level): Locator {
-            return Locator(pos.south, pos.up, pos.west, level)
+            return Locator(pos.x, pos.y, pos.z, level)
         }
     }
 }

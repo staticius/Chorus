@@ -1,97 +1,80 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.event.redstone.RedstoneUpdateEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.RedstoneComponent;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import cn.nukkit.Player
+import cn.nukkit.event.Event.isCancelled
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemBlock
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Level
+import cn.nukkit.math.BlockFace
 
 /**
  * @author Nukkit Project Team
  */
+open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockState), RedstoneComponent {
+    override val name: String
+        get() = "Redstone Lamp"
 
-public class BlockRedstoneLamp extends BlockSolid implements RedstoneComponent {
+    override val hardness: Double
+        get() = 0.3
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(REDSTONE_LAMP);
+    override val resistance: Double
+        get() = 1.5
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    public BlockRedstoneLamp() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRedstoneLamp(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Redstone Lamp";
-    }
-
-    @Override
-    public double getHardness() {
-        return 0.3D;
-    }
-
-    @Override
-    public double getResistance() {
-        return 1.5D;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (this.isGettingPower()) {
-            this.level.setBlock(this.position, Block.get(BlockID.LIT_REDSTONE_LAMP), false, true);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        if (this.isGettingPower) {
+            level.setBlock(this.position, get(BlockID.LIT_REDSTONE_LAMP), false, true)
         } else {
-            this.level.setBlock(this.position, this, false, true);
+            level.setBlock(this.position, this, false, true)
         }
-        return true;
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            if (!this.level.server.settings.levelSettings().enableRedstone()) {
-                return 0;
+            if (!level.server.settings.levelSettings().enableRedstone()) {
+                return 0
             }
 
-            if (this.isGettingPower()) {
+            if (this.isGettingPower) {
                 // Redstone event
-                RedstoneUpdateEvent ev = new RedstoneUpdateEvent(this);
-                level.server.pluginManager.callEvent(ev);
-                if (ev.isCancelled()) {
-                    return 0;
+                val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+                level.server.pluginManager.callEvent(ev)
+                if (ev.isCancelled) {
+                    return 0
                 }
 
-                this.level.updateComparatorOutputLevelSelective(this.position, true);
+                level.updateComparatorOutputLevelSelective(this.position, true)
 
-                this.level.setBlock(this.position, Block.get(BlockID.LIT_REDSTONE_LAMP), false, false);
-                return 1;
+                level.setBlock(this.position, get(BlockID.LIT_REDSTONE_LAMP), false, false)
+                return 1
             }
         }
 
-        return 0;
+        return 0
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        return new Item[]{
-                new ItemBlock(Block.get(BlockID.REDSTONE_LAMP))
-        };
+    override fun getDrops(item: Item): Array<Item?>? {
+        return arrayOf(
+            ItemBlock(get(BlockID.REDSTONE_LAMP))
+        )
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_LAMP)
+            get() = Companion.field
     }
 }

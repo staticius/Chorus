@@ -1,41 +1,24 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
 
 /**
  * @author Angelic47 (Nukkit Project)
  */
+class BlockFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockLitFurnace(blockstate) {
+    override val name: String
+        get() = "Furnace"
 
-public class BlockFurnace extends BlockLitFurnace {
+    override val lightLevel: Int
+        get() = 0
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockFurnace() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockFurnace(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Furnace";
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 0;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+            get() = Companion.field
     }
 }

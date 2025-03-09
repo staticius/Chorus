@@ -1,26 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
+
+import cn.nukkit.block.property.CommonBlockProperties
 
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import org.jetbrains.annotations.NotNull;
+class BlockWarpedHangingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockHangingSign(blockstate) {
+    override val name: String
+        get() = "Warped Hanging Sign"
 
-public class BlockWarpedHangingSign extends BlockHangingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(WARPED_HANGING_SIGN, CommonBlockProperties.ATTACHED_BIT, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.GROUND_SIGN_DIRECTION, CommonBlockProperties.HANGING);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockWarpedHangingSign() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockWarpedHangingSign(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    public String getName() {
-        return "Warped Hanging Sign";
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.WARPED_HANGING_SIGN,
+            CommonBlockProperties.ATTACHED_BIT,
+            CommonBlockProperties.FACING_DIRECTION,
+            CommonBlockProperties.GROUND_SIGN_DIRECTION,
+            CommonBlockProperties.HANGING
+        )
+            get() = Companion.field
     }
 }

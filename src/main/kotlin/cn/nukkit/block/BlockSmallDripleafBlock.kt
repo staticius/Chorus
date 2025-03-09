@@ -1,169 +1,171 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.CommonPropertyMap;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.ParticleEffect;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.utils.Faceable;
-import cn.nukkit.utils.random.NukkitRandom;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.Block.Companion.get
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.item.Item
+import cn.nukkit.item.Item.Companion.get
+import cn.nukkit.item.ItemTool
+import cn.nukkit.level.Locator
+import cn.nukkit.math.BlockFace
+import cn.nukkit.registry.BiomeRegistry.get
+import cn.nukkit.registry.BlockRegistry.get
+import cn.nukkit.utils.random.NukkitRandom.nextInt
 
-import javax.annotation.Nullable;
+class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockFlowable(blockstate), Faceable {
+    override val name: String
+        get() = "Small Dripleaf"
 
-public class BlockSmallDripleafBlock extends BlockFlowable implements Faceable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(SMALL_DRIPLEAF_BLOCK, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonBlockProperties.UPPER_BLOCK_BIT);
+    var blockFace: BlockFace?
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
+            getPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+            )
+        )
+        set(face) {
+            setPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face)
+            )
+        }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
+    var isUpperBlock: Boolean
+        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPPER_BLOCK_BIT)
+        set(isUpperBlock) {
+            this.setPropertyValue<Boolean, BooleanPropertyType>(
+                CommonBlockProperties.UPPER_BLOCK_BIT,
+                isUpperBlock
+            )
+        }
 
-    public BlockSmallDripleafBlock() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val waterloggingLevel: Int
+        get() = 2
 
-    public BlockSmallDripleafBlock(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_SHEARS
 
-    @Override
-    public String getName() {
-        return "Small Dripleaf";
-    }
-
-    @Override
-    public BlockFace getBlockFace() {
-        return CommonPropertyMap.CARDINAL_BLOCKFACE.get(getPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION));
-    }
-
-    @Override
-    public void setBlockFace(BlockFace face) {
-        setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face));
-    }
-
-    public boolean isUpperBlock() {
-        return this.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT);
-    }
-
-    public void setUpperBlock(boolean isUpperBlock) {
-        this.setPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT, isUpperBlock);
-    }
-
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_SHEARS;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        BlockSmallDripleafBlock dripleaf = new BlockSmallDripleafBlock();
-        BlockSmallDripleafBlock dripleafTop = new BlockSmallDripleafBlock();
-        dripleafTop.setUpperBlock(true);
-        BlockFace direction = player != null ? player.getDirection().getOpposite() : BlockFace.SOUTH;
-        dripleaf.setBlockFace(direction);
-        dripleafTop.setBlockFace(direction);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val dripleaf = BlockSmallDripleafBlock()
+        val dripleafTop = BlockSmallDripleafBlock()
+        dripleafTop.isUpperBlock = true
+        val direction = if (player != null) player.getDirection()!!.getOpposite() else BlockFace.SOUTH
+        dripleaf.blockFace = direction
+        dripleafTop.blockFace = direction
         if (canKeepAlive(block)) {
-            this.level.setBlock(block.position, dripleaf, true, true);
-            this.level.setBlock(block.getSide(BlockFace.UP).position, dripleafTop, true, true);
-            return true;
+            level.setBlock(block.position, dripleaf, true, true)
+            level.setBlock(block.getSide(BlockFace.UP)!!.position, dripleafTop, true, true)
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isShears()) {
-            return new Item[]{toItem()};
+    override fun getDrops(item: Item): Array<Item?>? {
+        return if (item.isShears) {
+            arrayOf(toItem())
         } else {
-            return Item.EMPTY_ARRAY;
+            Item.EMPTY_ARRAY
         }
     }
 
-    @Override
-    public boolean onBreak(@NotNull Item item) {
-        this.level.setBlock(this.position, new BlockAir(), true, true);
-        if (item.isShears())
-            this.level.dropItem(this.position, this.toItem());
-        if (this.getSide(BlockFace.UP).getId().equals(BlockID.SMALL_DRIPLEAF_BLOCK)) {
-            this.level.getBlock(this.getSide(BlockFace.UP).position).onBreak(null);
+    override fun onBreak(item: Item): Boolean {
+        level.setBlock(this.position, BlockAir(), true, true)
+        if (item.isShears) level.dropItem(this.position, toItem()!!)
+        if (getSide(BlockFace.UP)!!.id == BlockID.SMALL_DRIPLEAF_BLOCK) {
+            level.getBlock(getSide(BlockFace.UP)!!.position)!!.onBreak(null)
         }
-        if (this.getSide(BlockFace.DOWN).getId().equals(BlockID.SMALL_DRIPLEAF_BLOCK)) {
-            this.level.getBlock(this.getSide(BlockFace.DOWN).position).onBreak(null);
+        if (getSide(BlockFace.DOWN)!!.id == BlockID.SMALL_DRIPLEAF_BLOCK) {
+            level.getBlock(getSide(BlockFace.DOWN)!!.position)!!.onBreak(null)
         }
-        return true;
+        return true
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (!canKeepAlive(this)) {
-            this.level.setBlock(this.position, new BlockAir(), true, true);
-            this.level.dropItem(this.position, this.toItem());
+            level.setBlock(this.position, BlockAir(), true, true)
+            level.dropItem(this.position, toItem()!!)
         }
-        return super.onUpdate(type);
+        return super.onUpdate(type)
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) {
-            NukkitRandom random = new NukkitRandom();
-            int height = random.nextInt(4) + 2;
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) {
+            val random: NukkitRandom = NukkitRandom()
+            val height: Int = random.nextInt(4) + 2
 
-            BlockBigDripleaf blockBigDripleafDown = new BlockBigDripleaf();
-            BlockBigDripleaf blockBigDripleafHead = new BlockBigDripleaf();
-            BlockFace direction = player != null ? player.getDirection().getOpposite() : BlockFace.SOUTH;
-            blockBigDripleafDown.setBlockFace(direction);
-            blockBigDripleafHead.setBlockFace(direction);
-            blockBigDripleafHead.setHead(true);
+            val blockBigDripleafDown = BlockBigDripleaf()
+            val blockBigDripleafHead = BlockBigDripleaf()
+            val direction = if (player != null) player.getDirection()!!.getOpposite() else BlockFace.SOUTH
+            blockBigDripleafDown.blockFace = direction
+            blockBigDripleafHead.blockFace = direction
+            blockBigDripleafHead.isHead = true
 
-            Block buttom = this.clone();
-            while (buttom.getSide(BlockFace.DOWN).getId().equals(BlockID.SMALL_DRIPLEAF_BLOCK)) {
-                buttom = buttom.getSide(BlockFace.DOWN);
+            var buttom: Block? = this.clone()
+            while (buttom!!.getSide(BlockFace.DOWN)!!.id == BlockID.SMALL_DRIPLEAF_BLOCK) {
+                buttom = buttom.getSide(BlockFace.DOWN)
             }
 
-            for (int i = 0; i < height; i++) {
-                this.level.setBlock(buttom.position.add(0, i, 0), blockBigDripleafDown, true, true);
+            for (i in 0..<height) {
+                level.setBlock(buttom.position.add(0.0, i.toDouble(), 0.0)!!, blockBigDripleafDown, true, true)
             }
-            this.level.setBlock(buttom.position.add(0, height, 0), blockBigDripleafHead, true, true);
+            level.setBlock(buttom.position.add(0.0, height.toDouble(), 0.0)!!, blockBigDripleafHead, true, true)
 
-            this.level.addParticleEffect(this.position.add(0.5, 0.5, 0.5), ParticleEffect.CROP_GROWTH);
-            item.count--;
-            return true;
+            level.addParticleEffect(position.add(0.5, 0.5, 0.5)!!, ParticleEffect.CROP_GROWTH)
+            item.count--
+            return true
         }
-        return false;
+        return false
     }
 
-    public boolean canKeepAlive(Locator pos) {
-        Block blockDown = this.level.getBlock(pos.getSide(BlockFace.DOWN).position);
-        Block blockHere = this.level.getBlock(pos.position, 1);
-        Block blockUp = this.level.getBlock(pos.getSide(BlockFace.UP).position);
-        if (this.level.getBlock(blockDown.position) instanceof BlockClay) {
-            return true;
+    fun canKeepAlive(pos: Locator): Boolean {
+        val blockDown = level.getBlock(pos.getSide(BlockFace.DOWN)!!.position)
+        val blockHere = level.getBlock(pos.position, 1)
+        val blockUp = level.getBlock(pos.getSide(BlockFace.UP)!!.position)
+        if (level.getBlock(blockDown!!.position) is BlockClay) {
+            return true
         }
-        if (this.level.getBlock(blockDown.position) instanceof BlockSmallDripleafBlock && !((BlockSmallDripleafBlock) this.level.getBlock(blockDown.position)).isUpperBlock()) {
-            return true;
+        if (level.getBlock(blockDown.position) is BlockSmallDripleafBlock && !(level.getBlock(
+                blockDown.position
+            ) as BlockSmallDripleafBlock).isUpperBlock
+        ) {
+            return true
         }
-        if (blockHere instanceof BlockFlowingWater && (blockUp instanceof BlockAir || blockUp instanceof BlockSmallDripleafBlock) && (blockDown instanceof BlockGrassBlock || blockDown instanceof BlockDirt || blockDown instanceof BlockDirtWithRoots || blockDown instanceof BlockMossBlock)) {
-            return true;
+        if (blockHere is BlockFlowingWater && (blockUp is BlockAir || blockUp is BlockSmallDripleafBlock) && (blockDown is BlockGrassBlock || blockDown is BlockDirt || blockDown is BlockDirtWithRoots || blockDown is BlockMossBlock)) {
+            return true
         }
-        return false;
+        return false
     }
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    override val isFertilizable: Boolean
+        get() = true
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.SMALL_DRIPLEAF_BLOCK,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.UPPER_BLOCK_BIT
+        )
+            get() = Companion.field
     }
 }

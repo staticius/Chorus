@@ -1,48 +1,32 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
+import cn.nukkit.item.ItemTool
 
-public abstract class BlockWoodenSlab extends BlockSlab {
-    public BlockWoodenSlab(BlockState blockState, BlockState doubleSlab) {
-        super(blockState, doubleSlab);
+abstract class BlockWoodenSlab : BlockSlab {
+    constructor(blockState: BlockState?, doubleSlab: BlockState?) : super(blockState, doubleSlab)
+
+    constructor(blockState: BlockState?, doubleSlab: String) : super(blockState, doubleSlab)
+
+    override val name: String
+        get() = (if (isOnTop) "Upper " else "") + slabName + " Wood Slab"
+
+    override fun isSameType(slab: BlockSlab): Boolean {
+        return slab.id == id
     }
 
-    public BlockWoodenSlab(BlockState blockState, String doubleSlab) {
-        super(blockState, doubleSlab);
+    override val burnChance: Int
+        get() = 5
+
+    override val burnAbility: Int
+        get() = 20
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    @Override
-    public String getName() {
-        return (isOnTop() ? "Upper " : "") + getSlabName() + " Wood Slab";
-    }
-
-    @Override
-    public boolean isSameType(BlockSlab slab) {
-        return slab.getId().equals(getId());
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public int getBurnAbility() {
-        return 20;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TYPE_NONE;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TYPE_NONE
 }

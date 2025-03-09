@@ -1,88 +1,73 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.inventory.BlockInventoryHolder;
-import cn.nukkit.inventory.Inventory;
-import cn.nukkit.inventory.SmithingInventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.inventory.BlockInventoryHolder
+import cn.nukkit.inventory.Inventory
+import cn.nukkit.item.Item
+import cn.nukkit.item.ItemTool
+import cn.nukkit.math.BlockFace
+import java.util.function.Supplier
 
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
+class BlockSmithingTable @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockSolid(blockState), BlockInventoryHolder {
+    override val name: String
+        get() = "Smithing Table"
 
-
-public class BlockSmithingTable extends BlockSolid implements BlockInventoryHolder {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(SMITHING_TABLE);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockSmithingTable() {
-        this(PROPERTIES.getDefaultState());
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    public BlockSmithingTable(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Smithing Table";
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @org.jetbrains.annotations.Nullable Player player) {
-        return super.place(item, block, target, face, fx, fy, fz, player);
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player == null) {
-            return false;
+            return false
         }
 
-        player.addWindow(getInventory());
-        return true;
+        player.addWindow(inventory!!)
+        return true
     }
 
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    override val resistance: Double
+        get() = 12.5
+
+    override val hardness: Double
+        get() = 2.5
+
+    override val burnChance: Int
+        get() = 5
+
+    override fun canHarvestWithHand(): Boolean {
+        return true
     }
 
-    @Override
-    public double getResistance() {
-        return 12.5;
+    override fun blockInventorySupplier(): Supplier<Inventory?> {
+        return Supplier<Inventory?> { SmithingInventory(this) }
     }
 
-    @Override
-    public double getHardness() {
-        return 2.5;
-    }
-
-    @Override
-    public int getBurnChance() {
-        return 5;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return true;
-    }
-
-    @Override
-    public Supplier<Inventory> blockInventorySupplier() {
-        return () -> new SmithingInventory(this);
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SMITHING_TABLE)
+            get() = Companion.field
     }
 }

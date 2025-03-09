@@ -1,201 +1,194 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityBrewingStand;
-import cn.nukkit.inventory.ContainerInventory;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.StringTag;
-import cn.nukkit.nbt.tag.Tag;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.blockentity.*
+import cn.nukkit.inventory.ContainerInventory.Companion.calculateRedstone
+import cn.nukkit.item.*
+import cn.nukkit.math.BlockFace
+import cn.nukkit.nbt.tag.CompoundTag
+import cn.nukkit.nbt.tag.ListTag
+import cn.nukkit.nbt.tag.StringTag
+import cn.nukkit.nbt.tag.Tag
 
-import java.util.Map;
+class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBrewingStand?> {
+    override val name: String
+        get() = "Brewing Stand"
 
-public class BlockBrewingStand extends BlockTransparent implements BlockEntityHolder<BlockEntityBrewingStand> {
-
-    public static final BlockProperties PROPERTIES = new BlockProperties(BREWING_STAND, CommonBlockProperties.BREWING_STAND_SLOT_A_BIT, CommonBlockProperties.BREWING_STAND_SLOT_B_BIT, CommonBlockProperties.BREWING_STAND_SLOT_C_BIT);
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    public BlockBrewingStand() {
-        this(PROPERTIES.getDefaultState());
-    }
+    override val hardness: Double
+        get() = 0.5
 
-    public BlockBrewingStand(BlockState blockstate) {
-        super(blockstate);
-    }
+    override val resistance: Double
+        get() = 2.5
 
-    @Override
-    public String getName() {
-        return "Brewing Stand";
-    }
+    override val waterloggingLevel: Int
+        get() = 1
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public double getHardness() {
-        return 0.5;
-    }
+    override val lightLevel: Int
+        get() = 1
 
-    @Override
-    public double getResistance() {
-        return 2.5;
-    }
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        level.setBlock(block.position, this, true, true)
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 1;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 1;
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        level.setBlock(block.position, this, true, true);
-
-        CompoundTag nbt = new CompoundTag()
-                .putList("Items", new ListTag<>())
-                .putString("id", BlockEntity.BREWING_STAND)
-                .putInt("x", (int) this.position.south)
-                .putInt("y", (int) this.position.up)
-                .putInt("z", (int) this.position.west);
+        val nbt = CompoundTag()
+            .putList("Items", ListTag<Tag?>())
+            .putString("id", BlockEntity.BREWING_STAND)
+            .putInt("x", position.x.toInt())
+            .putInt("y", position.y.toInt())
+            .putInt("z", position.z.toInt())
 
         if (item.hasCustomName()) {
-            nbt.putString("CustomName", item.getCustomName());
+            nbt!!.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            Map<String, Tag> customData = item.getCustomBlockData().getTags();
-            for (Map.Entry<String, Tag> tag : customData.entrySet()) {
-                nbt.put(tag.getKey(), tag.getValue());
+            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            for ((key, value) in customData) {
+                nbt!!.put(key, value)
             }
         }
 
-        BlockEntityBrewingStand brewing = (BlockEntityBrewingStand) BlockEntity.createBlockEntity(BlockEntity.BREWING_STAND, level.getChunk((int) this.position.south >> 4, (int) this.position.west >> 4), nbt);
-        return brewing != null;
+        val brewing = BlockEntity.createBlockEntity(
+            BlockEntity.BREWING_STAND, level.getChunk(
+                position.x.toInt() shr 4, position.z.toInt() shr 4
+            ), nbt
+        ) as BlockEntityBrewingStand?
+        return brewing != null
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         if (player != null) {
-            Item itemInHand = player.getInventory().getItemInHand();
-            if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull())) {
-                return false;
+            val itemInHand = player.getInventory().itemInHand
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+                return false
             }
-            BlockEntity t = level.getBlockEntity(this.position);
-            BlockEntityBrewingStand brewing;
-            if (t instanceof BlockEntityBrewingStand) {
-                brewing = (BlockEntityBrewingStand) t;
+            val t = level.getBlockEntity(this.position)
+            val brewing: BlockEntityBrewingStand?
+            if (t is BlockEntityBrewingStand) {
+                brewing = t
             } else {
-                CompoundTag nbt = new CompoundTag()
-                        .putList("Items", new ListTag<>())
-                        .putString("id", BlockEntity.BREWING_STAND)
-                        .putInt("x", (int) this.position.south)
-                        .putInt("y", (int) this.position.up)
-                        .putInt("z", (int) this.position.west);
-                brewing = (BlockEntityBrewingStand) BlockEntity.createBlockEntity(BlockEntity.BREWING_STAND, this.level.getChunk((int) this.position.south >> 4, (int) this.position.west >> 4), nbt);
+                val nbt = CompoundTag()
+                    .putList("Items", ListTag<Tag?>())
+                    .putString("id", BlockEntity.BREWING_STAND)
+                    .putInt("x", position.x.toInt())
+                    .putInt("y", position.y.toInt())
+                    .putInt("z", position.z.toInt())
+                brewing = BlockEntity.createBlockEntity(
+                    BlockEntity.BREWING_STAND,
+                    level.getChunk(position.x.toInt() shr 4, position.z.toInt() shr 4), nbt
+                ) as BlockEntityBrewingStand?
                 if (brewing == null) {
-                    return false;
+                    return false
                 }
             }
 
-            if (brewing.namedTag.contains("Lock") && brewing.namedTag.get("Lock") instanceof StringTag) {
-                if (!brewing.namedTag.getString("Lock").equals(item.getCustomName())) {
-                    return false;
+            if (brewing.namedTag.contains("Lock") && brewing.namedTag.get("Lock") is StringTag) {
+                if (brewing.namedTag.getString("Lock") != item.customName) {
+                    return false
                 }
             }
 
-            player.addWindow(brewing.getInventory());
+            player.addWindow(brewing.getInventory())
         }
 
-        return true;
+        return true
     }
 
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_WOODEN;
-    }
+    override val toolTier: Int
+        get() = ItemTool.TIER_WOODEN
 
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
+    override val isSolid: Boolean
+        get() = false
 
-    @Override
-    public double getMinX() {
-        return this.position.south + 7 / 16.0;
-    }
-
-    @Override
-    public double getMinZ() {
-        return this.position.west + 7 / 16.0;
-    }
-
-    @Override
-    public double getMaxX() {
-        return this.position.south + 1 - 7 / 16.0;
-    }
-
-    @Override
-    public double getMaxY() {
-        return this.position.up + 1 - 2 / 16.0;
-    }
-
-    @Override
-    public double getMaxZ() {
-        return this.position.west + 1 - 7 / 16.0;
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride() {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride() {
-        BlockEntity blockEntity = this.level.getBlockEntity(this.position);
-
-        if (blockEntity instanceof BlockEntityBrewingStand) {
-            return ContainerInventory.calculateRedstone(((BlockEntityBrewingStand) blockEntity).getInventory());
+    override var minX: Double
+        get() = position.x + 7 / 16.0
+        set(minX) {
+            super.minX = minX
         }
 
-        return super.getComparatorInputOverride();
+    override var minZ: Double
+        get() = position.z + 7 / 16.0
+        set(minZ) {
+            super.minZ = minZ
+        }
+
+    override var maxX: Double
+        get() = position.x + 1 - 7 / 16.0
+        set(maxX) {
+            super.maxX = maxX
+        }
+
+    override var maxY: Double
+        get() = position.y + 1 - 2 / 16.0
+        set(maxY) {
+            super.maxY = maxY
+        }
+
+    override var maxZ: Double
+        get() = position.z + 1 - 7 / 16.0
+        set(maxZ) {
+            super.maxZ = maxZ
+        }
+
+    override fun hasComparatorInputOverride(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    override val comparatorInputOverride: Int
+        get() {
+            val blockEntity =
+                level.getBlockEntity(this.position)
+
+            if (blockEntity is BlockEntityBrewingStand) {
+                return calculateRedstone(blockEntity.getInventory())
+            }
+
+            return super.comparatorInputOverride
+        }
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    @NotNull
-    public Class<? extends BlockEntityBrewingStand> getBlockEntityClass() {
-        return BlockEntityBrewingStand.class;
+    override fun getBlockEntityClass(): Class<out BlockEntityBrewingStand> {
+        return BlockEntityBrewingStand::class.java
     }
 
-    @Override
-    @NotNull
-    public String getBlockEntityType() {
-        return BlockEntity.BREWING_STAND;
+    override fun getBlockEntityType(): String {
+        return BlockEntity.BREWING_STAND
+    }
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BREWING_STAND,
+            CommonBlockProperties.BREWING_STAND_SLOT_A_BIT,
+            CommonBlockProperties.BREWING_STAND_SLOT_B_BIT,
+            CommonBlockProperties.BREWING_STAND_SLOT_C_BIT
+        )
+            get() = Companion.field
     }
 }

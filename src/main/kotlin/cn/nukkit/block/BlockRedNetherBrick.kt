@@ -1,25 +1,12 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import org.jetbrains.annotations.NotNull;
+class BlockRedNetherBrick @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+    BlockNetherBrick(blockstate) {
+    override val name: String
+        get() = "Red Nether Bricks"
 
-public class BlockRedNetherBrick extends BlockNetherBrick {
-    public static final BlockProperties PROPERTIES = new BlockProperties(RED_NETHER_BRICK);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockRedNetherBrick() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockRedNetherBrick(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Red Nether Bricks";
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.RED_NETHER_BRICK)
+            get() = Companion.field
     }
 }

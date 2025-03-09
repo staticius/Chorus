@@ -1,57 +1,33 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
+class BlockAncientDebris @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Ancient Derbris"
 
-public class BlockAncientDebris extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(ANCIENT_DEBRIS);
+    override val toolTier: Int
+        get() = ItemTool.TIER_DIAMOND
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val resistance: Double
+        get() = 1200.0
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
+
+    override val hardness: Double
+        get() = 30.0
+
+    override val isLavaResistant: Boolean
+        get() = true
+
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    public BlockAncientDebris() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockAncientDebris(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Ancient Derbris";
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_DIAMOND;
-    }
-    
-    @Override
-    public double getResistance() {
-        return 1200;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
-    @Override
-    public double getHardness() {
-        return 30;
-    }
-
-    @Override
-    public boolean isLavaResistant() {
-        return true;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
+    companion object {
+        val properties: BlockProperties = BlockProperties(ANCIENT_DEBRIS)
+            get() = Companion.field
     }
 }

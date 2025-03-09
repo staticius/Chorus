@@ -1,36 +1,21 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.math.BlockFace
 
-public class BlockSmoothBasalt extends BlockBasalt {
+class BlockSmoothBasalt @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+    BlockBasalt(blockState) {
+    override val name: String
+        get() = "Smooth Basalt"
 
-    public static final BlockProperties PROPERTIES = new BlockProperties(SMOOTH_BASALT);
+    override var pillarAxis: BlockFace.Axis?
+        get() =// ignore
+            null
+        set(axis) {
+            // ignore
+        }
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockSmoothBasalt() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockSmoothBasalt(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    public String getName() {
-        return "Smooth Basalt";
-    }
-
-    public BlockFace.Axis getPillarAxis() {
-        // ignore
-        return null;
-    }
-
-    public void setPillarAxis(BlockFace.Axis axis) {
-        // ignore
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.SMOOTH_BASALT)
+            get() = Companion.field
     }
 }

@@ -1,38 +1,25 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBirchSign;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.item.*
 
-public class BlockBirchStandingSign extends BlockStandingSign {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BIRCH_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+class BlockBirchStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockStandingSign(blockstate) {
+    override fun getStandingSignId(): String {
+        return Companion.properties.identifier
     }
 
-    public BlockBirchStandingSign() {
-        this(PROPERTIES.getDefaultState());
+    override fun getWallSignId(): String {
+        return BlockBirchWallSign.Companion.PROPERTIES.getIdentifier()
     }
 
-    public BlockBirchStandingSign(BlockState blockstate) {
-        super(blockstate);
+    override fun toItem(): Item? {
+        return ItemBirchSign()
     }
 
-    @Override
-    protected String getStandingSignId() {
-        return PROPERTIES.getIdentifier();
-    }
-
-    @Override
-    public String getWallSignId() {
-        return BlockBirchWallSign.PROPERTIES.getIdentifier();
-    }
-
-    @Override
-    public Item toItem() {
-        return new ItemBirchSign();
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BIRCH_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+            get() = Companion.field
     }
 }

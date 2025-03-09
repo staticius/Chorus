@@ -1,182 +1,187 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.Server.Companion.instance
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.type.IntPropertyType
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.Level
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
+class BlockKelp @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockFlowable(blockstate) {
+    override val name: String
+        get() = "Kelp"
 
-import static cn.nukkit.block.property.CommonBlockProperties.KELP_AGE;
+    var age: Int
+        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.KELP_AGE)
+        set(age) {
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.KELP_AGE, age)
+        }
 
-
-public class BlockKelp extends BlockFlowable {
-    public static final BlockProperties PROPERTIES = new BlockProperties(KELP, KELP_AGE);
-
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    public BlockKelp() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockKelp(BlockState blockstate) {
-        super(blockstate);
-    }
-
-    @Override
-    public String getName() {
-        return "Kelp";
-    }
-
-    public int getAge() {
-        return getPropertyValue(KELP_AGE);
-    }
-
-    public void setAge(int age) {
-        setPropertyValue(KELP_AGE, age);
-    }
-
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Block down = down();
-        Block layer1Block = block.getLevelBlockAtLayer(1);
-        if ((down.getId().equals(KELP) || down.isSolid()) && !down.getId().equals(MAGMA) && !down.getId().equals(ICE) && !down.getId().equals(SOUL_SAND) &&
-                (layer1Block instanceof BlockFlowingWater flowingWater && flowingWater.isSourceOrFlowingDown())
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        val down = down()
+        val layer1Block = block.getLevelBlockAtLayer(1)
+        if ((down!!.id == BlockID.Companion.KELP || down.isSolid) && (down.id != BlockID.Companion.MAGMA) && (down.id != BlockID.Companion.ICE) && (down.id != BlockID.Companion.SOUL_SAND) &&
+            (layer1Block is BlockFlowingWater && layer1Block.isSourceOrFlowingDown)
         ) {
-            if (((BlockFlowingWater) layer1Block).isFlowingDown()) {
-                this.level.setBlock(this.position, 1, get(FLOWING_WATER), true, false);
+            if (layer1Block.isFlowingDown) {
+                level.setBlock(this.position, 1, get(BlockID.Companion.FLOWING_WATER), true, false)
             }
 
-            int maxAge = KELP_AGE.getMax();
-            if (down.getId().equals(KELP) && down.getPropertyValue(KELP_AGE) != maxAge - 1) {
-                setAge(maxAge - 1);
-                this.level.setBlock(down.position, down, true, true);
+            val maxAge: Int = CommonBlockProperties.KELP_AGE.getMax()
+            if (down.id == BlockID.Companion.KELP && down.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.KELP_AGE) != maxAge - 1) {
+                age = maxAge - 1
+                level.setBlock(down.position, down, true, true)
             }
 
             //Placing it by hand gives it a random age value between 0 and 24.
-            setAge(ThreadLocalRandom.current().nextInt(maxAge));
-            this.level.setBlock(this.position, this, true, true);
-            return true;
+            age = ThreadLocalRandom.current().nextInt(maxAge)
+            level.setBlock(this.position, this, true, true)
+            return true
         } else {
-            return false;
+            return false
         }
     }
 
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            Block blockLayer1 = getLevelBlockAtLayer(1);
-            if (!(blockLayer1 instanceof BlockFrostedIce) &&
-                    (!(blockLayer1 instanceof BlockFlowingWater) || !((BlockFlowingWater) blockLayer1).isSourceOrFlowingDown())) {
-                this.level.useBreakOn(this.position);
-                return type;
+            val blockLayer1 = getLevelBlockAtLayer(1)
+            if (blockLayer1 !is BlockFrostedIce &&
+                (blockLayer1 !is BlockFlowingWater || !blockLayer1.isSourceOrFlowingDown)
+            ) {
+                level.useBreakOn(this.position)
+                return type
             }
 
-            Block down = down();
-            if ((!down.isSolid() && !down.getId().equals(KELP)) || down.getId().equals(MAGMA) || down.getId().equals(ICE) || down.getId().equals(SOUL_SAND)) {
-                this.level.useBreakOn(this.position);
-                return type;
+            val down = down()
+            if ((!down!!.isSolid && down.id != BlockID.Companion.KELP) || down.id == BlockID.Companion.MAGMA || down.id == BlockID.Companion.ICE || down.id == BlockID.Companion.SOUL_SAND) {
+                level.useBreakOn(this.position)
+                return type
             }
 
-            if (blockLayer1 instanceof BlockFlowingWater w && w.isFlowingDown()) {
-                this.level.setBlock(this.position, 1, get(FLOWING_WATER), true, false);
+            if (blockLayer1 is BlockFlowingWater && blockLayer1.isFlowingDown) {
+                level.setBlock(this.position, 1, get(BlockID.Companion.FLOWING_WATER), true, false)
             }
-            return type;
+            return type
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             if (ThreadLocalRandom.current().nextInt(100) <= 14) {
-                grow();
+                grow()
             }
-            return type;
+            return type
         }
-        return super.onUpdate(type);
+        return super.onUpdate(type)
     }
 
-    public boolean grow() {
-        int age = getAge();
-        int maxValue = KELP_AGE.getMax();
+    fun grow(): Boolean {
+        val age = age
+        val maxValue: Int = CommonBlockProperties.KELP_AGE.getMax()
         if (age < maxValue) {
-            Block up = up();
-            if (up instanceof BlockFlowingWater w && w.isSourceOrFlowingDown()) {
-                Block grown = new BlockKelp(blockstate.setPropertyValue(PROPERTIES, KELP_AGE.createValue(getAge() + 1)));
-                BlockGrowEvent ev = new BlockGrowEvent(this, grown);
-                Server.getInstance().pluginManager.callEvent(ev);
-                if (!ev.isCancelled()) {
-                    this.setAge(maxValue);
-                    this.level.setBlock(this.position, 0, this, true, true);
-                    this.level.setBlock(up.position, 1, get(FLOWING_WATER), true, false);
-                    this.level.setBlock(up.position, 0, ev.newState, true, true);
-                    return true;
+            val up = up()
+            if (up is BlockFlowingWater && up.isSourceOrFlowingDown) {
+                val grown: Block = BlockKelp(
+                    blockState!!.setPropertyValue(
+                        Companion.properties, CommonBlockProperties.KELP_AGE.createValue(
+                            this.age + 1
+                        )
+                    )
+                )
+                val ev = BlockGrowEvent(this, grown)
+                instance!!.pluginManager.callEvent(ev)
+                if (!ev.isCancelled) {
+                    this.age = maxValue
+                    level.setBlock(this.position, 0, this, true, true)
+                    level.setBlock(up.position, 1, get(BlockID.Companion.FLOWING_WATER), true, false)
+                    level.setBlock(up.position, 0, ev.newState!!, true, true)
+                    return true
                 }
             }
         }
-        return false;
+        return false
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        Block down = down();
-        if (down.getId().equals(KELP)) {
-            BlockKelp blockKelp = new BlockKelp(blockstate.setPropertyValue(PROPERTIES, KELP_AGE.createValue(ThreadLocalRandom.current().nextInt(KELP_AGE.getMax()))));
-            this.level.setBlock(down.position, blockKelp, true, true);
+    override fun onBreak(item: Item?): Boolean {
+        val down = down()
+        if (down!!.id == BlockID.Companion.KELP) {
+            val blockKelp = BlockKelp(
+                blockState!!.setPropertyValue(
+                    Companion.properties, CommonBlockProperties.KELP_AGE.createValue(
+                        ThreadLocalRandom.current().nextInt(
+                            CommonBlockProperties.KELP_AGE.getMax()
+                        )
+                    )
+                )
+            )
+            level.setBlock(down.position, blockKelp, true, true)
         }
-        this.level.setBlock(this.position, get(AIR), true, true);
-        return true;
+        level.setBlock(this.position, get(BlockID.Companion.AIR), true, true)
+        return true
     }
 
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
         //Bone meal
-        if (item.isFertilizer()) {
-            int x = (int) this.position.south;
-            int z = (int) this.position.west;
-            for (int y = (int) this.position.up + 1; y < 255; y++) {
-                Block blockAbove = level.getBlock(x, y, z);
-                String blockIdAbove = blockAbove.getId();
-                if (!Objects.equals(blockIdAbove, KELP)) {
-                    if (blockAbove instanceof BlockFlowingWater water) {
-                        if (water.isSourceOrFlowingDown()) {
-                            BlockKelp highestKelp = (BlockKelp) level.getBlock(x, y - 1, z);
-                            if (highestKelp.grow()) {
-                                this.level.addParticle(new BoneMealParticle(this.position));
+        if (item.isFertilizer) {
+            val x = position.x.toInt()
+            val z = position.z.toInt()
+            for (y in position.y.toInt() + 1..254) {
+                val blockAbove = level.getBlock(x, y, z)
+                val blockIdAbove = blockAbove!!.id
+                if (blockIdAbove != BlockID.Companion.KELP) {
+                    if (blockAbove is BlockFlowingWater) {
+                        if (blockAbove.isSourceOrFlowingDown) {
+                            val highestKelp = level.getBlock(x, y - 1, z) as BlockKelp?
+                            if (highestKelp!!.grow()) {
+                                level.addParticle(BoneMealParticle(this.position))
 
-                                if (player != null && (player.gamemode & 0x01) == 0) {
-                                    item.count--;
+                                if (player != null && (player.gamemode and 0x01) == 0) {
+                                    item.count--
                                 }
 
-                                return true;
+                                return true
                             }
                         }
                     }
-                    return false;
+                    return false
                 }
             }
 
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
-    @Override
-    public int getWaterloggingLevel() {
-        return 2;
+    override val waterloggingLevel: Int
+        get() = 2
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
+    override val isFertilizable: Boolean
+        get() = true
 
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.Companion.KELP, CommonBlockProperties.KELP_AGE)
+            get() = Companion.field
     }
 }

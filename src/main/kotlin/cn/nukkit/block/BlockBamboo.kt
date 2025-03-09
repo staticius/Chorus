@@ -1,331 +1,324 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.Player;
-import cn.nukkit.block.property.enums.BambooLeafSize;
-import cn.nukkit.block.property.enums.BambooStalkThickness;
-import cn.nukkit.event.block.BlockGrowEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.particle.BoneMealParticle;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.MathHelper;
-import cn.nukkit.network.protocol.AnimatePacket;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.Player
+import cn.nukkit.block.BlockFlowerPot.FlowerPotBlock
+import cn.nukkit.block.property.CommonBlockProperties
+import cn.nukkit.block.property.enums.BambooLeafSize
+import cn.nukkit.block.property.enums.BambooStalkThickness
+import cn.nukkit.block.property.type.BooleanPropertyType
+import cn.nukkit.event.block.BlockGrowEvent
+import cn.nukkit.item.*
+import cn.nukkit.level.*
+import cn.nukkit.level.particle.BoneMealParticle
+import cn.nukkit.math.BlockFace
+import cn.nukkit.math.MathHelper.clamp
+import cn.nukkit.network.protocol.AnimatePacket
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
+class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockState), FlowerPotBlock {
+    override val name: String
+        get() = "Bamboo"
 
-import static cn.nukkit.block.property.CommonBlockProperties.*;
-import static cn.nukkit.block.property.enums.BambooLeafSize.*;
-
-
-public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.FlowerPotBlock {
-    public static final BlockProperties PROPERTIES = new BlockProperties(BAMBOO, AGE_BIT, BAMBOO_LEAF_SIZE, BAMBOO_STALK_THICKNESS);
-
-    public BlockBamboo() {
-        this(PROPERTIES.getDefaultState());
-    }
-
-    public BlockBamboo(BlockState blockState) {
-        super(blockState);
-    }
-
-    @Override
-    @NotNull
-    public BlockProperties getProperties() {
-        return PROPERTIES;
-    }
-
-    @Override
-    public String getName() {
-        return "Bamboo";
-    }
-
-    @Override
-    public int onUpdate(int type) {
+    override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (isSupportInvalid()) {
-                level.scheduleUpdate(this, 0);
+            if (isSupportInvalid) {
+                level.scheduleUpdate(this, 0)
             }
-            return type;
+            return type
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            level.useBreakOn(this.position, null, null, true);
+            level.useBreakOn(this.position, null, null, true)
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            Block up = up();
-            if (getAge() == 0 && up.isAir() && level.getFullLight(up.position) >= BlockCrops.MINIMUM_LIGHT_LEVEL && ThreadLocalRandom.current().nextInt(3) == 0) {
-                grow(up);
+            val up = up()
+            if (age == 0 && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.minimumLightLevel && ThreadLocalRandom.current()
+                    .nextInt(3) == 0
+            ) {
+                grow(up)
             }
-            return type;
+            return type
         }
-        return 0;
+        return 0
     }
 
-    public boolean grow(Block up) {
-        BlockBamboo newState = new BlockBamboo();
-        if (isThick()) {
-            newState.setThick(true);
-            newState.setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
+    fun grow(up: Block): Boolean {
+        val newState = BlockBamboo()
+        if (isThick) {
+            newState.isThick = true
+            newState.bambooLeafSize = BambooLeafSize.SMALL_LEAVES
         } else {
-            newState.setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
+            newState.bambooLeafSize = BambooLeafSize.SMALL_LEAVES
         }
-        BlockGrowEvent blockGrowEvent = new BlockGrowEvent(up, newState);
-        level.server.pluginManager.callEvent(blockGrowEvent);
-        if (!blockGrowEvent.isCancelled()) {
-            Block newState1 = blockGrowEvent.newState;
-            newState1.position.south = this.position.south;
-            newState1.position.up = up.position.up;
-            newState1.position.west = this.position.west;
-            newState1.level = level;
-            newState1.place(toItem(), up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null);
-            return true;
+        val blockGrowEvent = BlockGrowEvent(up, newState)
+        level.server.pluginManager.callEvent(blockGrowEvent)
+        if (!blockGrowEvent.isCancelled) {
+            val newState1 = blockGrowEvent.newState
+            newState1!!.position.x = position.x
+            newState1.position.y = up.position.y
+            newState1.position.z = position.z
+            newState1.level = level
+            newState1.place(toItem()!!, up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null)
+            return true
         }
-        return false;
+        return false
     }
 
-    public int countHeight() {
-        int count = 0;
-        Optional<Block> opt;
-        Block down = this;
-        while ((opt = down.down().firstInLayers(b -> b.getId() == BAMBOO)).isPresent()) {
-            down = opt.get();
+    fun countHeight(): Int {
+        var count = 0
+        var opt: Optional<Block?>
+        var down: Block = this
+        while ((down.down()!!.firstInLayers { b: Block? -> b!!.id === BAMBOO }.also { opt = it }).isPresent) {
+            down = opt.get()
             if (++count >= 16) {
-                break;
+                break
             }
         }
-        return count;
+        return count
     }
 
-    @Override
-    public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Block down = down();
-        String downId = down.getId();
-        if (!downId.equals(BAMBOO) && !downId.equals(BAMBOO_SAPLING)) {
-            BlockBambooSapling sampling = new BlockBambooSapling();
-            sampling.position.south = this.position.south;
-            sampling.position.up = this.position.up;
-            sampling.position.west = this.position.west;
-            sampling.level = level;
-            return sampling.place(item, block, target, face, fx, fy, fz, player);
+    override fun place(
+        item: Item,
+        block: Block,
+        target: Block,
+        face: BlockFace,
+        fx: Double,
+        fy: Double,
+        fz: Double,
+        player: Player?
+    ): Boolean {
+        var down = down()
+        val downId = down!!.id
+        if (downId != BAMBOO && downId != BAMBOO_SAPLING) {
+            val sampling = BlockBambooSapling()
+            sampling.position.x = position.x
+            sampling.position.y = position.y
+            sampling.position.z = position.z
+            sampling.level = level
+            return sampling.place(item, block, target, face, fx, fy, fz, player)
         }
 
-        boolean canGrow = true;
+        var canGrow = true
 
-        if (downId.equals(BAMBOO_SAPLING)) {
+        if (downId == BAMBOO_SAPLING) {
             if (player != null) {
-                AnimatePacket animatePacket = new AnimatePacket();
-                animatePacket.action = AnimatePacket.Action.SWING_ARM;
-                animatePacket.eid = player.getId();
-                this.level.addChunkPacket(player.position.getChunkX(), player.position.getChunkZ(), animatePacket);
+                val animatePacket = AnimatePacket()
+                animatePacket.action = AnimatePacket.Action.SWING_ARM
+                animatePacket.eid = player.getId()
+                level.addChunkPacket(player.position.chunkX, player.position.chunkZ, animatePacket)
             }
-            setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
+            bambooLeafSize = BambooLeafSize.SMALL_LEAVES
         }
-        if (down instanceof BlockBamboo bambooDown) {
-            canGrow = bambooDown.getAge() == 0;
-            boolean thick = bambooDown.isThick();
+        if (down is BlockBamboo) {
+            canGrow = down.age == 0
+            val thick = down.isThick
             if (!thick) {
-                boolean setThick = true;
-                for (int i = 2; i <= 3; i++) {
-                    if (getSide(BlockFace.DOWN, i).getId() != BAMBOO) {
-                        setThick = false;
+                var setThick = true
+                for (i in 2..3) {
+                    if (getSide(BlockFace.DOWN, i)!!.id !== BAMBOO) {
+                        setThick = false
                     }
                 }
                 if (setThick) {
-                    setThick(true);
-                    setBambooLeafSize(LARGE_LEAVES);
-                    bambooDown.setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
-                    bambooDown.setThick(true);
-                    bambooDown.setAge(1);
-                    this.level.setBlock(bambooDown.position, bambooDown, false, true);
-                    while ((down = down.down()) instanceof BlockBamboo) {
-                        bambooDown = (BlockBamboo) down;
-                        bambooDown.setThick(true);
-                        bambooDown.setBambooLeafSize(BambooLeafSize.NO_LEAVES);
-                        bambooDown.setAge(1);
-                        this.level.setBlock(bambooDown.position, bambooDown, false, true);
+                    isThick = true
+                    bambooLeafSize = BambooLeafSize.LARGE_LEAVES
+                    down.bambooLeafSize = BambooLeafSize.SMALL_LEAVES
+                    down.isThick = true
+                    down.age = 1
+                    level.setBlock(down.position, down, false, true)
+                    while ((down!!.down().also { down = it }) is BlockBamboo) {
+                        down = down as BlockBamboo
+                        down.isThick = true
+                        down.bambooLeafSize = BambooLeafSize.NO_LEAVES
+                        down.age = 1
+                        level.setBlock(down.position, down, false, true)
                     }
                 } else {
-                    setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
-                    bambooDown.setAge(1);
-                    this.level.setBlock(bambooDown.position, bambooDown, false, true);
+                    bambooLeafSize = BambooLeafSize.SMALL_LEAVES
+                    down.age = 1
+                    level.setBlock(down.position, down, false, true)
                 }
             } else {
-                setThick(true);
-                setBambooLeafSize(LARGE_LEAVES);
-                setAge(0);
-                bambooDown.setBambooLeafSize(LARGE_LEAVES);
-                bambooDown.setAge(1);
-                this.level.setBlock(bambooDown.position, bambooDown, false, true);
-                down = bambooDown.down();
-                if (down instanceof BlockBamboo) {
-                    bambooDown = (BlockBamboo) down;
-                    bambooDown.setBambooLeafSize(SMALL_LEAVES);
-                    bambooDown.setAge(1);
-                    this.level.setBlock(bambooDown.position, bambooDown, false, true);
-                    down = bambooDown.down();
-                    if (down instanceof BlockBamboo) {
-                        bambooDown = (BlockBamboo) down;
-                        bambooDown.setBambooLeafSize(NO_LEAVES);
-                        bambooDown.setAge(1);
-                        this.level.setBlock(bambooDown.position, bambooDown, false, true);
+                isThick = true
+                bambooLeafSize = BambooLeafSize.LARGE_LEAVES
+                age = 0
+                down.bambooLeafSize = BambooLeafSize.LARGE_LEAVES
+                down.age = 1
+                level.setBlock(down.position, down, false, true)
+                down = down.down()
+                if (down is BlockBamboo) {
+                    down = down as BlockBamboo
+                    down.bambooLeafSize = BambooLeafSize.SMALL_LEAVES
+                    down.age = 1
+                    level.setBlock(down.position, down, false, true)
+                    down = down.down()
+                    if (down is BlockBamboo) {
+                        down = down as BlockBamboo
+                        down.bambooLeafSize = BambooLeafSize.NO_LEAVES
+                        down.age = 1
+                        level.setBlock(down.position, down, false, true)
                     }
                 }
             }
-        } else if (isSupportInvalid()) {
-            return false;
+        } else if (isSupportInvalid) {
+            return false
         }
 
-        int height = canGrow ? countHeight() : 0;
-        if (!canGrow || height >= 15 || height >= 11 && ThreadLocalRandom.current().nextFloat() < 0.25F) {
-            setAge(1);
+        val height = if (canGrow) countHeight() else 0
+        if (!canGrow || height >= 15 || height >= 11 && ThreadLocalRandom.current().nextFloat() < 0.25f) {
+            age = 1
         }
 
-        this.level.setBlock(this.position, this, false, true);
-        return true;
+        level.setBlock(this.position, this, false, true)
+        return true
     }
 
-    @Override
-    public boolean onBreak(Item item) {
-        Optional<Block> down = down().firstInLayers(b -> b instanceof BlockBamboo);
-        if (down.isPresent()) {
-            BlockBamboo bambooDown = (BlockBamboo) down.get();
-            int height = bambooDown.countHeight();
-            if (height < 15 && (height < 11 || !(ThreadLocalRandom.current().nextFloat() < 0.25F))) {
-                bambooDown.setAge(0);
-                this.level.setBlock(bambooDown.position, bambooDown.layer, bambooDown, false, true);
+    override fun onBreak(item: Item?): Boolean {
+        val down = down()!!.firstInLayers { b: Block? -> b is BlockBamboo }
+        if (down.isPresent) {
+            val bambooDown = down.get() as BlockBamboo
+            val height = bambooDown.countHeight()
+            if (height < 15 && (height < 11 || !(ThreadLocalRandom.current().nextFloat() < 0.25f))) {
+                bambooDown.age = 0
+                level.setBlock(bambooDown.position, bambooDown.layer, bambooDown, false, true)
             }
         }
-        return super.onBreak(item);
+        return super.onBreak(item)
     }
 
-    @Override
-    public boolean canPassThrough() {
-        return true;
+    override fun canPassThrough(): Boolean {
+        return true
     }
 
-    private boolean isSupportInvalid() {
-        return switch (down().getId()) {
-            case BAMBOO, DIRT, GRASS_BLOCK, SAND, GRAVEL, PODZOL, BAMBOO_SAPLING, MOSS_BLOCK -> false;
-            default -> true;
-        };
+    private val isSupportInvalid: Boolean
+        get() = when (down()!!.id) {
+            BAMBOO, DIRT, GRASS_BLOCK, SAND, GRAVEL, PODZOL, BAMBOO_SAPLING, MOSS_BLOCK -> false
+            else -> true
+        }
+
+    override fun toItem(): Item? {
+        return ItemBlock(BlockBamboo())
     }
 
-    @Override
-    public Item toItem() {
-        return new ItemBlock(new BlockBamboo());
+    override val hardness: Double
+        get() = 2.0
+
+    override val resistance: Double
+        get() = 5.0
+
+    var isThick: Boolean
+        get() = bambooStalkThickness == BambooStalkThickness.THICK
+        set(thick) {
+            bambooStalkThickness = if (thick) BambooStalkThickness.THICK else BambooStalkThickness.THIN
+        }
+
+    var bambooStalkThickness: BambooStalkThickness
+        get() = getPropertyValue(CommonBlockProperties.BAMBOO_STALK_THICKNESS)
+        set(value) {
+            setPropertyValue(
+                CommonBlockProperties.BAMBOO_STALK_THICKNESS,
+                value
+            )
+        }
+
+    override val toolType: Int
+        get() = ItemTool.TYPE_AXE
+
+    var bambooLeafSize: BambooLeafSize?
+        get() = getPropertyValue(CommonBlockProperties.BAMBOO_LEAF_SIZE)
+        set(bambooLeafSize) {
+            setPropertyValue(
+                CommonBlockProperties.BAMBOO_LEAF_SIZE,
+                bambooLeafSize
+            )
+        }
+
+    override fun canBeActivated(): Boolean {
+        return true
     }
 
-    @Override
-    public double getHardness() {
-        return 2;
-    }
+    override fun onActivate(
+        item: Item,
+        player: Player?,
+        blockFace: BlockFace?,
+        fx: Float,
+        fy: Float,
+        fz: Float
+    ): Boolean {
+        if (item.isFertilizer) {
+            var top = position.y.toInt()
+            var count = 1
 
-    @Override
-    public double getResistance() {
-        return 5;
-    }
-
-    public boolean isThick() {
-        return getBambooStalkThickness().equals(BambooStalkThickness.THICK);
-    }
-
-    public void setThick(boolean thick) {
-        setBambooStalkThickness(thick ? BambooStalkThickness.THICK : BambooStalkThickness.THIN);
-    }
-
-    public BambooStalkThickness getBambooStalkThickness() {
-        return getPropertyValue(BAMBOO_STALK_THICKNESS);
-    }
-
-    public void setBambooStalkThickness(@NotNull BambooStalkThickness value) {
-        setPropertyValue(BAMBOO_STALK_THICKNESS, value);
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_AXE;
-    }
-
-    public BambooLeafSize getBambooLeafSize() {
-        return getPropertyValue(BAMBOO_LEAF_SIZE);
-    }
-
-    public void setBambooLeafSize(BambooLeafSize bambooLeafSize) {
-        setPropertyValue(BAMBOO_LEAF_SIZE, bambooLeafSize);
-    }
-
-    @Override
-    public boolean canBeActivated() {
-        return true;
-    }
-
-    @Override
-    public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        if (item.isFertilizer()) {
-            int top = (int) this.position.up;
-            int count = 1;
-
-            for (int i = 1; i <= 16; i++) {
-                String id = this.level.getBlockIdAt(this.position.getFloorX(), this.position.getFloorY() - i, this.position.getFloorZ());
-                if (Objects.equals(id, BAMBOO)) {
-                    count++;
+            for (i in 1..16) {
+                val id = level.getBlockIdAt(
+                    position.floorX,
+                    position.floorY - i, position.floorZ
+                )
+                if (id == BAMBOO) {
+                    count++
                 } else {
-                    break;
+                    break
                 }
             }
 
-            for (int i = 1; i <= 16; i++) {
-                String id = this.level.getBlockIdAt(this.position.getFloorX(), this.position.getFloorY() + i, this.position.getFloorZ());
-                if (Objects.equals(id, BAMBOO)) {
-                    top++;
-                    count++;
+            for (i in 1..16) {
+                val id = level.getBlockIdAt(
+                    position.floorX,
+                    position.floorY + i, position.floorZ
+                )
+                if (id == BAMBOO) {
+                    top++
+                    count++
                 } else {
-                    break;
+                    break
                 }
             }
 
             //15格以上需要嫁接（放置竹子）
             if (count >= 15) {
-                return false;
+                return false
             }
 
-            boolean success = false;
+            var success = false
 
-            Block block = this.up(top - (int) this.position.up + 1);
-            if (block.getId() == BlockID.AIR) {
-                success = grow(block);
+            val block = this.up(top - position.y.toInt() + 1)
+            if (block!!.id === AIR) {
+                success = grow(block!!)
             }
 
             if (success) {
-                if (player != null && player.isSurvival()) {
-                    item.count--;
+                if (player != null && player.isSurvival) {
+                    item.count--
                 }
-                level.addParticle(new BoneMealParticle(this.position));
+                level.addParticle(BoneMealParticle(this.position))
             }
 
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    public int getAge() {
-        return getPropertyValue(AGE_BIT) ? 1 : 0;
+    var age: Int
+        get() = if (getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT)) 1 else 0
+        set(age) {
+            var age = age
+            age = clamp(age, 0, 1)
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT, age == 1)
+        }
+
+    override fun breaksWhenMoved(): Boolean {
+        return true
     }
 
-    public void setAge(int age) {
-        age = MathHelper.clamp(age, 0, 1);
-        setPropertyValue(AGE_BIT, age == 1);
-    }
+    override val isFertilizable: Boolean
+        get() = true
 
-    @Override
-    public boolean breaksWhenMoved() {
-        return true;
-    }
-
-    @Override
-    public boolean isFertilizable() {
-        return true;
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BAMBOO,
+            CommonBlockProperties.AGE_BIT,
+            CommonBlockProperties.BAMBOO_LEAF_SIZE,
+            CommonBlockProperties.BAMBOO_STALK_THICKNESS
+        )
+            get() = Companion.field
     }
 }

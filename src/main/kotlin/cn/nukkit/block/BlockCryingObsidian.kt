@@ -1,67 +1,41 @@
-package cn.nukkit.block;
+package cn.nukkit.block
 
-import cn.nukkit.item.ItemTool;
-import org.jetbrains.annotations.NotNull;
+import cn.nukkit.item.ItemTool
 
-public class BlockCryingObsidian extends BlockSolid {
-    public static final BlockProperties PROPERTIES = new BlockProperties(CRYING_OBSIDIAN);
+class BlockCryingObsidian @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+    BlockSolid(blockstate) {
+    override val name: String
+        get() = "Crying Obsidian"
 
-    @Override
-    @NotNull public BlockProperties getProperties() {
-        return PROPERTIES;
+    override val hardness: Double
+        get() = 50.0
+
+    override val resistance: Double
+        get() = 1200.0
+
+    override val lightLevel: Int
+        get() = 10
+
+    override val toolTier: Int
+        get() = ItemTool.TIER_DIAMOND
+
+    override fun canBePushed(): Boolean {
+        return false
     }
 
-    public BlockCryingObsidian() {
-        this(PROPERTIES.getDefaultState());
+    override fun canBePulled(): Boolean {
+        return false
     }
 
-    public BlockCryingObsidian(BlockState blockstate) {
-        super(blockstate);
+    override fun canHarvestWithHand(): Boolean {
+        return false
     }
 
-    @Override
-    public String getName() {
-        return "Crying Obsidian";
-    }
+    override val toolType: Int
+        get() = ItemTool.TYPE_PICKAXE
 
-    @Override
-    public double getHardness() {
-        return 50;
+    companion object {
+        val properties: BlockProperties = BlockProperties(CRYING_OBSIDIAN)
+            get() = Companion.field
     }
-
-    @Override
-    public double getResistance() {
-        return 1200;
-    }
-
-    @Override
-    public int getLightLevel() {
-        return 10;
-    }
-
-    @Override
-    public int getToolTier() {
-        return ItemTool.TIER_DIAMOND;
-    }
-
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-
-    @Override
-    public boolean canBePulled() {
-        return false;
-    }
-
-    @Override
-    public boolean canHarvestWithHand() {
-        return false;
-    }
-
-    @Override
-    public int getToolType() {
-        return ItemTool.TYPE_PICKAXE;
-    }
-
 }
