@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor
 import lombok.Getter
 import java.util.*
 
-@Getter
-@AllArgsConstructor
+
+
 open class PlayerInfo {
     private val username: String? = null
     private val uniqueId: UUID? = null

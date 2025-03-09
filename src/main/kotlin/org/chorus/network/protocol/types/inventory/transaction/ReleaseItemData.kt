@@ -7,7 +7,7 @@ import lombok.ToString
 /**
  * @author CreeperFace
  */
-@ToString
+
 class ReleaseItemData : TransactionData {
     var actionType: Int = 0
     var hotbarSlot: Int = 0

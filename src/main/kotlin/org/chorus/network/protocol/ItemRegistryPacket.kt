@@ -11,11 +11,11 @@ import java.nio.ByteOrder
 /**
  * @author GoodLucky777
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ItemRegistryPacket : DataPacket() {
     private var entries: Array<Entry?>? = Entry.EMPTY_ARRAY
 
@@ -44,7 +44,7 @@ class ItemRegistryPacket : DataPacket() {
         return if (entries == null) null else if (entries!!.size == 0) Entry.EMPTY_ARRAY else entries!!.clone()
     }
 
-    @ToString
+
     class Entry(
         val name: String,
         val runtimeId: Int, val version: Int,

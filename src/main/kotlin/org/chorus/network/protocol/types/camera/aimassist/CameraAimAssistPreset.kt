@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.Data
 
-@Data
+
 class CameraAimAssistPreset {
     var identifier: String? = null
     var categories: String? = null

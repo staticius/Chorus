@@ -12,7 +12,7 @@ import lombok.Value
  * change an item in an inventory.
  * Item stack requests are either approved or rejected by the server using the ItemStackResponse packet.
  */
-@Value
+
 @RequiredArgsConstructor
 class ItemStackRequest {
     /**

@@ -8,8 +8,8 @@ import lombok.EqualsAndHashCode
 import lombok.Getter
 import lombok.experimental.Accessors
 
-@EqualsAndHashCode(callSuper = true)
-@Getter
+(callSuper = true)
+
 @Accessors(fluent = true)
 class ServerSettings : OkaeriConfig() {
     @Comment("nukkit.server.settings.baseSettings")
@@ -44,8 +44,8 @@ class ServerSettings : OkaeriConfig() {
     @CustomKey("gameplay-settings")
     val gameplaySettings = GameplaySettings()
 
-    @EqualsAndHashCode(callSuper = true)
-    @Data
+    (callSuper = true)
+
     @Accessors(fluent = true)
     class BaseSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.baseSettings.language")
@@ -82,8 +82,8 @@ class ServerSettings : OkaeriConfig() {
         var saveUnknownBlock: Boolean = true
     }
 
-    @EqualsAndHashCode(callSuper = true)
-    @Data
+    (callSuper = true)
+
     @Accessors(fluent = true)
     class NetworkSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.networkSettings.compressionLevel")
@@ -105,8 +105,8 @@ class ServerSettings : OkaeriConfig() {
         var packetLimit: Int = 240
     }
 
-    @EqualsAndHashCode(callSuper = true)
-    @Data
+    (callSuper = true)
+
     @Accessors(fluent = true)
     class DebugSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.debugSettings.level")
@@ -122,8 +122,8 @@ class ServerSettings : OkaeriConfig() {
         var allowBeta: Boolean = false
     }
 
-    @EqualsAndHashCode(callSuper = true)
-    @Data
+    (callSuper = true)
+
     @Accessors(fluent = true)
     class LevelSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.levelSettings.autoTickRate")
@@ -151,8 +151,8 @@ class ServerSettings : OkaeriConfig() {
         var levelThread: Boolean = false
     }
 
-    @EqualsAndHashCode(callSuper = true)
-    @Data
+    (callSuper = true)
+
     @Accessors(fluent = true)
     class ChunkSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.chunkSettings.perTickSend")
@@ -177,8 +177,8 @@ class ServerSettings : OkaeriConfig() {
         var generationQueueSize: Int = 128
     }
 
-    @EqualsAndHashCode(callSuper = true)
-    @Data
+    (callSuper = true)
+
     @Accessors(fluent = true)
     class FreezeArraySettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.freezearray.enable")
@@ -193,8 +193,8 @@ class ServerSettings : OkaeriConfig() {
         var batchOperation: Int = 32
     }
 
-    @EqualsAndHashCode(callSuper = true)
-    @Data
+    (callSuper = true)
+
     @Accessors(fluent = true)
     class PlayerSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.playersettings.savePlayerData")
@@ -213,8 +213,8 @@ class ServerSettings : OkaeriConfig() {
         var spawnRadius: Int = 16
     }
 
-    @EqualsAndHashCode(callSuper = true)
-    @Data
+    (callSuper = true)
+
     @Accessors(fluent = true)
     class GameplaySettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.gameplaysettings.enableCommandBlocks")

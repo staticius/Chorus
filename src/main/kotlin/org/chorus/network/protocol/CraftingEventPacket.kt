@@ -9,13 +9,13 @@ import java.util.function.Function
 /**
  * @author Nukkit Project Team
  */
-@EqualsAndHashCode(callSuper = false)
-@Builder
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+(callSuper = false)
+
+
+
+
+
+
 class CraftingEventPacket : DataPacket() {
     var windowId: Int = 0
     var type: Int = 0

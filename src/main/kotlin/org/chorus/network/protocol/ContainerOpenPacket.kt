@@ -3,11 +3,11 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ContainerOpenPacket : DataPacket() {
     var windowId: Int = 0
     var type: Int = 0

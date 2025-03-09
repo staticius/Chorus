@@ -9,11 +9,11 @@ import java.io.IOException
 import java.nio.ByteOrder
 
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class UpdateTradePacket : DataPacket() {
     var containerId: Byte = 0
     var containerType: Byte = 15 //trading id

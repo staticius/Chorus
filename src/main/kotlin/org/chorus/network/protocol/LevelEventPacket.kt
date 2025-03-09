@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.utils.*
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class LevelEventPacket : DataPacket() {
     @JvmField
     var evid: Int = 0

@@ -6,7 +6,7 @@ import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
 import lombok.AccessLevel
 import lombok.NoArgsConstructor
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+(access = AccessLevel.PRIVATE)
 class BlockStateUpdater_1_15_0 : Updater {
     override fun registerUpdaters(context: CompoundTagUpdaterContext) {
         context.addUpdater(1, 15, 0)

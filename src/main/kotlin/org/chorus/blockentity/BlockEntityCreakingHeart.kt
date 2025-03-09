@@ -14,7 +14,7 @@ import org.chorus.utils.*
 import lombok.Getter
 
 class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
-    @Getter
+    
     private var linkedCreaking: EntityCreaking? = null
 
     var spawnRangeHorizontal: Double = 16.5

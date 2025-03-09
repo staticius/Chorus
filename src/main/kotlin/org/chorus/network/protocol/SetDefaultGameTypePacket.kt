@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class SetDefaultGameTypePacket : DataPacket() {
     var gamemode: Int = 0
 

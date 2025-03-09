@@ -6,11 +6,11 @@ import lombok.*
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Getter
-@Setter
-@ToString(exclude = ["data"])
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+(exclude = ["data"])
+
+
 class LevelChunkPacket : DataPacket() {
     @JvmField
     var chunkX: Int = 0

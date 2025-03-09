@@ -7,7 +7,7 @@ import lombok.Getter
  * @date 2023/6/10
  * PowerNukkitX Project
  */
-@Getter
+
 enum class EaseType(private val type: String) {
     LINEAR("linear"),
     SPRING("spring"),

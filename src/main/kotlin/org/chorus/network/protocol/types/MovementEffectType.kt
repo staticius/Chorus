@@ -3,7 +3,7 @@ package org.chorus.network.protocol.types
 import org.chorus.entity.Entity.getId
 import lombok.*
 
-@Getter
+
 @RequiredArgsConstructor
 enum class MovementEffectType {
     INVALID(-1),

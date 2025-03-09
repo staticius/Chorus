@@ -4,10 +4,10 @@ import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+
+
+
+
 class PlayerArmorDamagePacket : DataPacket() {
     val flags: MutableSet<PlayerArmorDamageFlag> = EnumSet.noneOf(
         PlayerArmorDamageFlag::class.java

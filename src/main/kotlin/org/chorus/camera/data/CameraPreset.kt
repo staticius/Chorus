@@ -20,7 +20,7 @@ import java.util.function.Consumer
  * @date 2023/6/11
  * PowerNukkitX Project
  */
-@Getter
+
 class CameraPreset(
     private val identifier: String?,
     inheritFrom: String?,
@@ -62,7 +62,7 @@ class CameraPreset(
     /**
      * Remember to call the registerCameraPresets() method to register!
      */
-    @Builder
+    
     constructor(
         identifier: String?,
         inheritFrom: String?,

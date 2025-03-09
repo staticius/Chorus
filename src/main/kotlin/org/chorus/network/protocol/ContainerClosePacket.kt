@@ -5,11 +5,11 @@ import org.chorus.inventory.InventoryType.Companion.from
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ContainerClosePacket : DataPacket() {
     var windowId: Int = 0
     var wasServerInitiated: Boolean = true

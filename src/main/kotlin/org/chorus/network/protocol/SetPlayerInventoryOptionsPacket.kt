@@ -7,11 +7,11 @@ import org.chorus.network.protocol.types.inventory.InventoryTabLeft
 import org.chorus.network.protocol.types.inventory.InventoryTabRight
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class SetPlayerInventoryOptionsPacket : DataPacket() {
     var leftTab: InventoryTabLeft? = null
     var rightTab: InventoryTabRight? = null

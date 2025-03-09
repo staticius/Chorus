@@ -5,7 +5,7 @@ import lombok.Value
 /**
  * ItemEntry holds information on what item stack should be present in a specific slot.
  */
-@Value
+
 class ItemStackResponseSlot(
     var slot: Int, var hotbarSlot: Int, var count: Int,
     /**

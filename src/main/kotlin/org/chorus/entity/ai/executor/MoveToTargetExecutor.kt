@@ -6,7 +6,7 @@ import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 import lombok.Getter
 
-@Getter
+
 open class MoveToTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置
     protected var memory: MemoryType<out IVector3?>?,
     protected var speed: Float,

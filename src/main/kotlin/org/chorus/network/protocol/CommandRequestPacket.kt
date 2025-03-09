@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.CommandOriginData
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class CommandRequestPacket : DataPacket() {
     var command: String? = null
     var data: CommandOriginData? = null

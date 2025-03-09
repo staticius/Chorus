@@ -7,10 +7,10 @@ import lombok.*
 import lombok.experimental.Accessors
 import java.util.function.Consumer
 
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@AllArgsConstructor
+
 class ElementDropdown : ElementCustom {
     protected var text: String? = null
     protected var options: MutableList<String?>? = null

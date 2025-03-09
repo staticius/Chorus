@@ -4,13 +4,13 @@ import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-@Builder
-@Getter
-@Setter
-@ToString(doNotUseGetters = true)
-@NoArgsConstructor
-@AllArgsConstructor
+(doNotUseGetters = true, callSuper = false)
+
+
+
+(doNotUseGetters = true)
+
+
 class UpdateClientInputLocksPacket : DataPacket() {
     var lockComponentData: Int = 0
     var serverPosition: Vector3f? = null

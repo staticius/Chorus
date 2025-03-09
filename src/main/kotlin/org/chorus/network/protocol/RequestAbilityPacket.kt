@@ -5,11 +5,11 @@ import org.chorus.network.protocol.types.AbilityType
 import org.chorus.network.protocol.types.PlayerAbility
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class RequestAbilityPacket : DataPacket() {
     var ability: PlayerAbility? = null
     var type: AbilityType? = null

@@ -5,11 +5,11 @@ import org.chorus.utils.version.Version
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString(exclude = ["sha256"])
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+(exclude = ["sha256"])
+
+
 class ResourcePackDataInfoPacket : AbstractResourcePackDataPacket() {
     override var packId: UUID? = null
     override var packVersion: Version? = null

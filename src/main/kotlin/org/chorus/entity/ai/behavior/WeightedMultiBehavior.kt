@@ -20,7 +20,7 @@ import java.util.concurrent.*
  * After filtering out the behaviors that return success, the group with the highest priority is selected<br></br>
  * If there are still multiple behaviors at this point, one of them is randomly selected for execution based on the return value of the [IBehavior.getWeight] method of the behavior
  */
-@Getter
+
 class WeightedMultiBehavior : AbstractBehavior {
     /**
      * 此组的优先级。在BehaviorGroup中，获取优先级将会返回此值指代整个组的优先级
@@ -31,7 +31,7 @@ class WeightedMultiBehavior : AbstractBehavior {
     override val priority: Int
     protected var behaviors: Set<IBehavior>
 
-    @Setter
+    
     protected var currentBehavior: IBehavior? = null
 
     constructor(priority: Int, vararg behaviors: IBehavior?) {

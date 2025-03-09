@@ -6,10 +6,10 @@ import lombok.Getter
 import lombok.Setter
 import lombok.experimental.Accessors
 
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@AllArgsConstructor
+
 class ElementInput : ElementCustom {
     private val text: String? = null
     private val placeholder: String? = null

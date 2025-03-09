@@ -13,8 +13,8 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import lombok.*
 import java.util.function.Consumer
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+
+(callSuper = false)
 class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Handle<BedrockBatchWrapper>) :
     AbstractReferenceCounted() {
     private var compressed: ByteBuf? = null

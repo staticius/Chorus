@@ -9,11 +9,11 @@ import org.chorus.utils.*
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class AddPlayerPacket : DataPacket() {
     var uuid: UUID? = null
     var username: String? = null

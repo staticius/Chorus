@@ -8,7 +8,7 @@ import lombok.Value
 /**
  * Used to control that pop up on the player's respawn screen
  */
-@Value
+
 class PlayerDiedEventData : EventData {
     private val attackerEntityId = 0
     private val attackerVariant = 0

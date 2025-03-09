@@ -7,7 +7,7 @@ import lombok.Value
  * AutoCraftRecipeStackRequestActionData is sent by the client similarly to the CraftRecipeStackRequestActionData. The
  * only difference is that the recipe is automatically created and crafted by shift clicking the recipe book.
  */
-@Value
+
 class AutoCraftRecipeAction : RecipeItemStackRequestAction {
     override var recipeNetworkId: Int = 0
     override var numberOfRequestedCrafts: Int = 0

@@ -3,7 +3,7 @@ package org.chorus.network.protocol.types
 import lombok.Data
 import java.util.*
 
-@Data
+
 class AbilityLayer {
     var layerType: Type = Type.CACHE
     var abilitiesSet: MutableSet<PlayerAbility> = EnumSet.noneOf(PlayerAbility::class.java)

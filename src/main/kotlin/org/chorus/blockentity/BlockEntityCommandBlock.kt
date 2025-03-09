@@ -23,7 +23,7 @@ import com.google.common.base.Strings
 import lombok.Getter
 import java.util.function.Consumer
 
-@Getter
+
 class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt), ICommandBlock,
     BlockEntityInventoryHolder {
     protected var conditionalMode: Boolean = false

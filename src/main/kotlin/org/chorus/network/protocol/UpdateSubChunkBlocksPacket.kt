@@ -6,11 +6,11 @@ import org.chorus.network.protocol.types.BlockChangeEntry
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class UpdateSubChunkBlocksPacket : DataPacket() {
     var chunkX: Int = 0
     var chunkY: Int = 0

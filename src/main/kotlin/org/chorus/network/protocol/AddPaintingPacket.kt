@@ -3,11 +3,11 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class AddPaintingPacket : DataPacket() {
     var entityUniqueId: Long = 0
     var entityRuntimeId: Long = 0

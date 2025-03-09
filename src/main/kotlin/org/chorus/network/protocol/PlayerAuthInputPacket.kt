@@ -9,11 +9,11 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequest
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PlayerAuthInputPacket : DataPacket() {
     var yaw: Float = 0f
     var pitch: Float = 0f

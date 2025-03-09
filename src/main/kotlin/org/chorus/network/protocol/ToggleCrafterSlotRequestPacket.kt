@@ -4,11 +4,11 @@ import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ToggleCrafterSlotRequestPacket : DataPacket() {
     var blockPosition: Vector3f? = null
     var slot: Byte = 0

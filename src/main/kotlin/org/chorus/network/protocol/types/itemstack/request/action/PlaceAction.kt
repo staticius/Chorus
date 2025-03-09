@@ -8,7 +8,7 @@ import lombok.Value
  * another slot, such as when shift clicking an item in the inventory to move it around or when moving an item
  * in the cursor into a slot.
  */
-@Value
+
 class PlaceAction : TransferItemStackRequestAction {
     override var count: Int = 0
     override var source: ItemStackRequestSlotData? = null

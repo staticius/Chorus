@@ -25,12 +25,12 @@ import java.util.stream.Collectors
  * @author Cool_Loong
  */
 class BlockProperties(identifier: String, blockTags: Set<String?>, vararg properties: BlockPropertyType<*>?) {
-    @Getter
+    
     private val identifier: String
     private val propertyTypeSet: Set<BlockPropertyType<*>>
     private var specialValueMap: Map<Short, BlockState>? = null
 
-    @Getter
+    
     private var defaultState: BlockState? = null
     val specialValueBits: Byte
 

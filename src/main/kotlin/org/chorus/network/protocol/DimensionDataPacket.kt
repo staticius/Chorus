@@ -4,10 +4,10 @@ import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+
+
+
+
 class DimensionDataPacket : DataPacket() {
     override fun decode(byteBuf: HandleByteBuf) {
     }

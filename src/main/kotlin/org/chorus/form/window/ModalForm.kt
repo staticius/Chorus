@@ -10,18 +10,18 @@ import lombok.experimental.Accessors
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@NoArgsConstructor
+
 class ModalForm : Form<ModalResponse?> {
     protected var content: String = ""
 
-    @Setter(AccessLevel.NONE)
+    
     protected var yes: Consumer<Player> =
         Consumer { player: Player? -> }
 
-    @Setter(AccessLevel.NONE)
+    
     protected var no: Consumer<Player> =
         Consumer { player: Player? -> }
 

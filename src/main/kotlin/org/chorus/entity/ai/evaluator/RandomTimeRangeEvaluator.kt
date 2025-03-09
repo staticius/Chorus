@@ -4,7 +4,7 @@ import org.chorus.entity.mob.EntityMob
 import lombok.Getter
 import java.util.concurrent.ThreadLocalRandom
 
-@Getter
+
 class RandomTimeRangeEvaluator(//gt
     protected var minTime: Int, protected var maxTime: Int
 ) : IBehaviorEvaluator {

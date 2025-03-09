@@ -6,11 +6,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PlayerListPacket : DataPacket() {
     @JvmField
     var type: Byte = 0
@@ -51,7 +51,7 @@ class PlayerListPacket : DataPacket() {
         }
     }
 
-    @ToString
+    
     class Entry {
         val uuid: UUID
 

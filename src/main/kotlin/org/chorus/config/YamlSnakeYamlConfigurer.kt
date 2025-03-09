@@ -27,7 +27,7 @@ class YamlSnakeYamlConfigurer : Configurer {
     private val yaml: Yaml
     private var map: MutableMap<String, Any>? = LinkedHashMap()
 
-    @Setter
+
     private val commentPrefix = "# "
 
     constructor(yaml: Yaml, map: MutableMap<String, Any>) {

@@ -7,7 +7,7 @@ import lombok.ToString
 /**
  * @author CreeperFace
  */
-@ToString
+
 class UseItemOnEntityData : TransactionData {
     var entityRuntimeId: Long = 0
     var actionType: Int = 0

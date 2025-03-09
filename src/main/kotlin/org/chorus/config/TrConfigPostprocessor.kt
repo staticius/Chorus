@@ -15,7 +15,7 @@ import java.util.function.Predicate
 import java.util.stream.Collectors
 import kotlin.math.max
 
-@Data
+
 class TrConfigPostprocessor {
     private var context: String? = null
 

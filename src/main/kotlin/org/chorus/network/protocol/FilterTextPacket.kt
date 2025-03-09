@@ -24,12 +24,12 @@ import lombok.*
  * @author joserobjr
  * @since 2021-02-14
  */
-@Builder
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
+
 class FilterTextPacket : DataPacket() {
     var text: String? = null
     var isFromServer: Boolean = false

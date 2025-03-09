@@ -17,11 +17,11 @@ import java.lang.String
 /**
  * @author joserobjr
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PositionTrackingDBServerBroadcastPacket : DataPacket() {
     private var action: Action? = null
     private var trackingId = 0

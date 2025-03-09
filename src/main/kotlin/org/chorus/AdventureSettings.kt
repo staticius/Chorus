@@ -19,11 +19,11 @@ class AdventureSettings : Cloneable {
         Type::class.java
     )
 
-    @Getter
+    
     private var playerPermission: PlayerPermission? = null
 
-    @Getter
-    @Setter
+    
+    
     private var commandPermission: CommandPermission? = null
 
     private var player: Player

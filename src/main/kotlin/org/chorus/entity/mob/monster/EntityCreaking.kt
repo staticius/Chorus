@@ -45,7 +45,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         return EntityID.Companion.CREAKING
     }
 
-    @Setter
+
     protected var creakingHeart: BlockEntityCreakingHeart? = null
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

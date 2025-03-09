@@ -190,7 +190,7 @@ class Level(
     /**base tick system */
     private val baseTickThread: Thread
 
-    @Getter
+    
     private val baseTickGameLoop: GameLoop
 
     /**sub tick system */
@@ -198,7 +198,7 @@ class Level(
     private val subTickGameLoop: GameLoop
 
     //Scheduler
-    @Getter
+    
     var scheduler: ServerScheduler
 
     /**antiXray system */
@@ -4788,8 +4788,8 @@ class Level(
                 '}'
     }
 
-    @AllArgsConstructor
-    @Data
+    
+    
     private class QueuedUpdate {
         val block: Block? = null
         val neighbor: BlockFace? = null

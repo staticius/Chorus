@@ -3,11 +3,11 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class AnvilDamagePacket : DataPacket() {
     var damage: Int = 0
     var x: Int = 0

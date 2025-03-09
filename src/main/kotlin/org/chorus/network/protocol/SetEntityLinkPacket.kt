@@ -7,11 +7,11 @@ import lombok.*
 /**
  * @since 15-10-22
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class SetEntityLinkPacket : DataPacket() {
     var vehicleUniqueId: Long = 0 //from
     var riderUniqueId: Long = 0 //to

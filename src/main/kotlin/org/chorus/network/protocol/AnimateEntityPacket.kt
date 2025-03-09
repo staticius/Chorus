@@ -6,11 +6,11 @@ import lombok.*
 /**
  * @author IWareQ
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class AnimateEntityPacket : DataPacket() {
     var animation: String? = null
     var nextState: String? = null
@@ -63,23 +63,23 @@ class AnimateEntityPacket : DataPacket() {
      * 包含一个实体动画的信息的记录类<br></br>
      * 用于[cn.nukkit.network.protocol.AnimateEntityPacket]网络包
      */
-    @Builder
+
     class Animation {
         val animation: String? = null
 
-        @Builder.Default
+
         val nextState: String = DEFAULT_NEXT_STATE
 
-        @Builder.Default
+
         val blendOutTime: Float = DEFAULT_BLEND_OUT_TIME
 
-        @Builder.Default
+
         val stopExpression: String = DEFAULT_STOP_EXPRESSION
 
-        @Builder.Default
+
         val controller: String = DEFAULT_CONTROLLER
 
-        @Builder.Default
+
         val stopExpressionVersion: Int = DEFAULT_STOP_EXPRESSION_VERSION
 
         companion object {

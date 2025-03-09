@@ -6,11 +6,11 @@ import lombok.*
 /**
  * @since 15-10-15
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class InteractPacket : DataPacket() {
     var action: Int = 0
     var target: Long = 0

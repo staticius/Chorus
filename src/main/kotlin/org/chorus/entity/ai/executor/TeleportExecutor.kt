@@ -10,7 +10,7 @@ import kotlin.math.floor
 import kotlin.math.min
 
 @RequiredArgsConstructor
-@AllArgsConstructor
+
 class TeleportExecutor : IBehaviorExecutor {
     var maxDistance: Int = 0
     var minDistance: Int = 0

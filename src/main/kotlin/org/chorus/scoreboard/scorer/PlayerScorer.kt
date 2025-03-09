@@ -10,7 +10,7 @@ import org.chorus.scoreboard.data.ScorerType
 import lombok.Getter
 import java.util.*
 
-@Getter
+
 class PlayerScorer : IScorer {
     private val uuid: UUID?
 

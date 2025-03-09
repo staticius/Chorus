@@ -5,7 +5,7 @@ import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 import lombok.AllArgsConstructor
 
-@AllArgsConstructor
+
 class NearestBlockIncementExecutor : IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {
         if (!entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK)) {

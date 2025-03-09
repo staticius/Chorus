@@ -3,11 +3,11 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PlayerInputPacket : DataPacket() {
     var motionX: Float = 0f
     var motionY: Float = 0f

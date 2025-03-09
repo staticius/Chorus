@@ -7,11 +7,11 @@ import lombok.*
  * @author xtypr
  * @since 2016/1/5
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ChangeDimensionPacket : DataPacket() {
     @JvmField
     var dimension: Int = 0

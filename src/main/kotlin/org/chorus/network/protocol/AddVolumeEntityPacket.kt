@@ -4,11 +4,11 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class AddVolumeEntityPacket : DataPacket() {
     var id: Int = 0
     var data: CompoundTag? = null

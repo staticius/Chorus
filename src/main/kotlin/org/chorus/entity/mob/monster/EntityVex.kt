@@ -46,8 +46,8 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
         return EntityID.Companion.VEX
     }
 
-    @Getter
-    @Setter
+
+
     private val illager: EntityEvocationIllager? = null
     private val start_damage_timer = ThreadLocalRandom.current().nextInt(30, 120)
 

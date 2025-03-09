@@ -38,11 +38,11 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         return EntityID.Companion.ALLAY
     }
 
-    @Getter
+    
     private var lastItemDropTick: Int = -1
 
-    @Getter
-    @Setter
+    
+    
     var dropCollectCooldown: Int = 60
 
 

@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.utils.*
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PlayerFogPacket : DataPacket() {
     //Fog stack containing fog effects from the /fog command
     @JvmField

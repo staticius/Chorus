@@ -10,7 +10,7 @@ import lombok.Setter
  * AbstractBehavior contains a [BehaviorState] property and its Getter/Setter
  */
 abstract class AbstractBehavior : IBehavior {
-    @Getter
-    @Setter
+    
+    
     override var behaviorState: BehaviorState = BehaviorState.STOP
 }

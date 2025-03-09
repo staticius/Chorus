@@ -4,11 +4,11 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class CompressedBiomeDefinitionListPacket : DataPacket() {
     var definitions: CompoundTag? = null
     override fun encode(byteBuf: HandleByteBuf) {

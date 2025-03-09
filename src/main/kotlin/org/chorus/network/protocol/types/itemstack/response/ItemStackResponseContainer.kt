@@ -7,7 +7,7 @@ import lombok.Value
 /**
  * ContainerEntry holds information on what slots in a container have what item stack in them.
  */
-@Value
+
 class ItemStackResponseContainer {
     /**
      * container that the slots that follow are in.

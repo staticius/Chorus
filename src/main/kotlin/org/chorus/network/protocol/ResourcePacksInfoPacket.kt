@@ -5,11 +5,11 @@ import org.chorus.resourcepacks.ResourcePack
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ResourcePacksInfoPacket : DataPacket() {
     var isForcedToAccept: Boolean = false
     var hasAddonPacks: Boolean = false

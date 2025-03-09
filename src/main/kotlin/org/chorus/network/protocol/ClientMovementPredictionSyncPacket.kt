@@ -7,11 +7,11 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import lombok.*
 import java.math.BigInteger
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ClientMovementPredictionSyncPacket : DataPacket() {
     private val flags: MutableSet<EntityFlag> = ObjectOpenHashSet()
     private var actorBoundingBox: Vector3f? = null

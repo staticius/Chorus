@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class UnlockedRecipesPacket : DataPacket() {
     var unlockedNotification: Boolean = false
     val unlockedRecipes: MutableList<String> = ObjectArrayList()

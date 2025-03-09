@@ -7,10 +7,10 @@ import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlo
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseStatus
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+
+
+
+
 class ItemStackResponsePacket : DataPacket() {
     val entries: List<ItemStackResponse> = ArrayList()
 

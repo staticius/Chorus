@@ -7,7 +7,7 @@ import lombok.Value
 /**
  * Holds information on a specific slot client-side.
  */
-@Value
+
 class ItemStackRequestSlotData {
     /**
      * container that the slots that follow are in.

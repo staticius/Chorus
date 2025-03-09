@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.ServerboundLoadingScreenPacketType
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ServerboundLoadingScreenPacket : DataPacket() {
     private var type: ServerboundLoadingScreenPacketType? = null
 

@@ -19,8 +19,8 @@ import lombok.Setter
  * @author PikyCZ
  */
 class EntityEvocationFang(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {
-    @Getter
-    @Setter
+
+
     private val evocationIllager: EntityEvocationIllager? = null
 
     override fun getIdentifier(): String {

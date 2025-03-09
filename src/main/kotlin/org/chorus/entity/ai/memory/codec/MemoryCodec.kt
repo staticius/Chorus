@@ -6,7 +6,7 @@ import lombok.Getter
 import java.util.function.BiConsumer
 import java.util.function.Function
 
-@Getter
+
 open class MemoryCodec<Data>(
     decoder: Function<CompoundTag, Data?>,
     encoder: BiConsumer<Data, CompoundTag>

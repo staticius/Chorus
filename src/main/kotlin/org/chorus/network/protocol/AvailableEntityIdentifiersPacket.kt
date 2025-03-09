@@ -4,10 +4,10 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.registry.Registries
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+
+
+
+
 class AvailableEntityIdentifiersPacket : DataPacket() {
     override fun decode(byteBuf: HandleByteBuf) {
     }

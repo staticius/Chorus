@@ -8,10 +8,10 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.function.BiConsumer
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+
+
+
+
 class CreativeContentPacket : DataPacket() {
     private val groups: List<CreativeItemGroup> = ObjectArrayList()
     private val contents: List<CreativeItemData> = ObjectArrayList()

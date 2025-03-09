@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor
 import lombok.Getter
 import lombok.ToString
 
-@ToString
-@Getter
-@AllArgsConstructor
+
+
+
 class CreativeItemGroup {
     private val category: CreativeItemCategory? = null
     private val name: String? = null

@@ -7,10 +7,10 @@ import lombok.Getter
 import lombok.Setter
 import lombok.experimental.Accessors
 
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@AllArgsConstructor
+
 class ElementSlider : ElementCustom {
     private val text: String? = null
     private val min = 0f

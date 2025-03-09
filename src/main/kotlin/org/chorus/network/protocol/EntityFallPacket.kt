@@ -3,11 +3,11 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class EntityFallPacket : DataPacket() {
     var eid: Long = 0
     var fallDistance: Float = 0f

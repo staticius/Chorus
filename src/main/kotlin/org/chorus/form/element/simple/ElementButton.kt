@@ -10,10 +10,10 @@ import lombok.experimental.Accessors
 /**
  * The button object used to add buttons within [cn.nukkit.form.window.SimpleForm]
  */
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@AllArgsConstructor
+
 class ElementButton : Element {
     /**
      * The button text shown

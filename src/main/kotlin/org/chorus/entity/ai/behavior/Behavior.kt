@@ -11,7 +11,7 @@ import lombok.Getter
  *
  * A single behavior object, containing an executor and an evaluator, with the behavior object delegating their methods
  */
-@Getter
+
 class Behavior @JvmOverloads constructor(
     protected var executor: IBehaviorExecutor,
     protected var evaluator: IBehaviorEvaluator,

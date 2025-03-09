@@ -4,11 +4,11 @@ import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PlayerActionPacket : DataPacket() {
     @JvmField
     var entityId: Long = 0

@@ -6,11 +6,11 @@ import lombok.*
 /**
  * @since 15-10-14
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class TakeItemEntityPacket : DataPacket() {
     @JvmField
     var entityId: Long = 0

@@ -3,11 +3,11 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class LevelSoundEventPacketV2 : LevelSoundEventPacket() {
     override var sound: Int = 0
     override var x: Float = 0f

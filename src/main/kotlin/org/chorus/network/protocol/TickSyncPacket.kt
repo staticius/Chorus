@@ -6,11 +6,11 @@ import lombok.*
 /**
  * @author GoodLucky777
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class TickSyncPacket : DataPacket() {
     var requestTimestamp: Long = 0
     var responseTimestamp: Long = 0

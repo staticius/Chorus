@@ -52,7 +52,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
     protected val defSubsOp: MutableSet<Permissible> = Collections.newSetFromMap(WeakHashMap())
 
-    @Getter
+
     protected val fileAssociations: MutableMap<String, PluginLoader> = HashMap()
 
     fun getPlugin(name: String?): Plugin? {

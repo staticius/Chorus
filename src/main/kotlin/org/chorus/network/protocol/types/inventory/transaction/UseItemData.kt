@@ -10,7 +10,7 @@ import lombok.ToString
 /**
  * @author CreeperFace
  */
-@ToString
+
 class UseItemData : TransactionData {
     var actionType: Int = 0
     var blockPos: BlockVector3? = null

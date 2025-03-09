@@ -6,8 +6,8 @@ import org.chorus.scoreboard.IScoreboardLine
 import lombok.Getter
 import lombok.Setter
 
-@Getter
-@Setter
+
+
 class ScoreboardLineChangeEvent @JvmOverloads constructor(
     scoreboard: IScoreboard,
     private val line: IScoreboardLine?,

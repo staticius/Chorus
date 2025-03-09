@@ -8,11 +8,11 @@ import org.chorus.recipe.descriptor.DefaultDescriptor
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class CraftingDataPacket : DataPacket() {
     private val entries: MutableList<Recipe> = ArrayList()
     private val brewingEntries: List<BrewingRecipe> = ArrayList()

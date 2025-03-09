@@ -24,11 +24,11 @@ import lombok.*
  * @author joserobjr
  * @since 2021-07-06
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class NPCDialoguePacket : DataPacket() {
     @JvmField
     var runtimeEntityId: Long = 0

@@ -10,11 +10,11 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class InventoryTransactionPacket : DataPacket() {
     var transactionType: Int = 0
     var actions: Array<NetworkInventoryAction>

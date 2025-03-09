@@ -30,7 +30,7 @@ import lombok.Getter
 import java.util.Set
 
 class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt) {
-    @Getter
+
     private var rollState = RollState.UNROLLED
 
     override fun getIdentifier(): String {

@@ -4,11 +4,11 @@ import org.chorus.level.GameRules
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class GameRulesChangedPacket : DataPacket() {
     @JvmField
     var gameRules: GameRules? = null

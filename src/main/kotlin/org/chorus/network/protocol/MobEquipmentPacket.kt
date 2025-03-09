@@ -4,11 +4,11 @@ import org.chorus.item.Item
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class MobEquipmentPacket : DataPacket() {
     var eid: Long = 0
     var item: Item? = null

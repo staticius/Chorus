@@ -5,11 +5,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class SpawnParticleEffectPacket : DataPacket() {
     var dimensionId: Int = 0
     var uniqueEntityId: Long = -1

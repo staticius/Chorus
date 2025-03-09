@@ -8,11 +8,11 @@ import lombok.*
  *
  * @since v503
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ChangeMobPropertyPacket : DataPacket() {
     var uniqueEntityId: Long = 0
     var property: String? = null

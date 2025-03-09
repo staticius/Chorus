@@ -9,11 +9,11 @@ import org.chorus.registry.Registries
 import org.chorus.utils.*
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class AddEntityPacket : DataPacket() {
     @JvmField
     var entityUniqueId: Long = 0

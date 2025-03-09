@@ -6,11 +6,11 @@ import lombok.*
 /**
  * @author joserobjr
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PositionTrackingDBClientRequestPacket : DataPacket() {
     var action: Action? = null
     var trackingId: Int = 0

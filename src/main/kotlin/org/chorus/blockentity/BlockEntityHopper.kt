@@ -37,12 +37,12 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
     private val temporalVector = BlockVector3()
 
     //由容器矿车检测漏斗并通知更新，这样子能大幅优化性能
-    @Getter
-    @Setter
+    
+    
     private val minecartInvPickupFrom: InventoryHolder? = null
 
-    @Getter
-    @Setter
+    
+    
     private val minecartInvPushTo: InventoryHolder? = null
 
     override fun initBlockEntity() {

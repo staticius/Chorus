@@ -3,7 +3,7 @@ package org.chorus.recipe.descriptor
 import org.chorus.item.Item
 import lombok.Value
 
-@Value
+
 class ComplexAliasDescriptor : ItemDescriptor {
     var name: String? = null
 

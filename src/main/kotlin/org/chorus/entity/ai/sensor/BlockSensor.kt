@@ -6,7 +6,7 @@ import org.chorus.entity.mob.EntityMob
 import lombok.Getter
 
 //存储最近的玩家的Memory
-@Getter
+
 class BlockSensor @JvmOverloads constructor(
     protected var blockClass: Class<out Block>,
     protected var memory: MemoryType<Block?>,

@@ -6,11 +6,11 @@ import lombok.*
 /**
  * @since 15-10-14
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class MovePlayerPacket : DataPacket() {
     @JvmField
     var eid: Long = 0

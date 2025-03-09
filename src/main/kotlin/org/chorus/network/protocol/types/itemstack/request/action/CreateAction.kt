@@ -10,7 +10,7 @@ import lombok.Value
  * that are not fully consumed when used for a recipe should not be destroyed there, but instead, should be
  * turned into their respective resulting items.
  */
-@Value
+
 class CreateAction : ItemStackRequestAction {
     var slot: Int = 0
 

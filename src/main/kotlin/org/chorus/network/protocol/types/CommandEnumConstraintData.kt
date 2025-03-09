@@ -7,7 +7,7 @@ import lombok.Value
  * CommandEnumConstraintData is sent in the AvailableCommandsPacket to limit what values of an enum may be used
  * taking in account things such as whether cheats are enabled.
  */
-@Value
+
 class CommandEnumConstraintData {
     // The option in an enum that the constraints should be applied to.
     var option: String? = null

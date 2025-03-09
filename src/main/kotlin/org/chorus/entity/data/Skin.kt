@@ -15,8 +15,8 @@ import java.util.*
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@ToString(exclude = ["geometryData", "animationData"])
-@EqualsAndHashCode(exclude = ["trusted"])
+(exclude = ["geometryData", "animationData"])
+(exclude = ["trusted"])
 class Skin {
     private val animations: MutableList<SkinAnimation?> = ArrayList()
     private val personaPieces: MutableList<PersonaPiece?> = ArrayList()

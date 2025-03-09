@@ -5,11 +5,11 @@ import org.chorus.utils.UUIDValidator
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ResourcePackClientResponsePacket : DataPacket() {
     var responseStatus: Byte = 0
     var packEntries: Array<Entry>
@@ -40,7 +40,7 @@ class ResourcePackClientResponsePacket : DataPacket() {
         }
     }
 
-    @ToString
+    
     class Entry(val uuid: UUID, val version: String) {
     }
 

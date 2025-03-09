@@ -7,11 +7,11 @@ import lombok.*
  * @author CreeperFace
  * @since 30. 10. 2016
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class BossEventPacket : DataPacket() {
     @JvmField
     var bossEid: Long = 0

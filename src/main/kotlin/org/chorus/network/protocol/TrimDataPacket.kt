@@ -7,12 +7,12 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.function.Consumer
 
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-@Builder
-@Getter
-@Setter
-@ToString(doNotUseGetters = true)
-@AllArgsConstructor
+(doNotUseGetters = true, callSuper = false)
+
+
+
+(doNotUseGetters = true)
+
 class TrimDataPacket : DataPacket() {
     val patterns: MutableList<TrimPattern> = ObjectArrayList()
     val materials: MutableList<TrimMaterial> = ObjectArrayList()

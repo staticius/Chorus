@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types.itemstack.request.action
 
 import lombok.Value
 
-@Value
+
 class CraftLoomAction : ItemStackRequestAction {
     var patternId: String? = null
 

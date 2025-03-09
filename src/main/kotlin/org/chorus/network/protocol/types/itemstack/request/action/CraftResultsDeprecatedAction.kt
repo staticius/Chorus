@@ -9,7 +9,7 @@ import lombok.Value
  * This action is also sent when an item is enchanted. Enchanting should be treated mostly the same way as
  * crafting, where the old item is consumed.
  */
-@Value
+
 class CraftResultsDeprecatedAction : ItemStackRequestAction {
     var resultItems: Array<Item>
     var timesCrafted: Int = 0

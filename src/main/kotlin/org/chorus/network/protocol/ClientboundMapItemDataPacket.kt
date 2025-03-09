@@ -17,11 +17,11 @@ import java.awt.image.BufferedImage
  * @author CreeperFace
  * @since 5.3.2017
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ClientboundMapItemDataPacket : DataPacket() {
     var eids: LongArray = EMPTY_LONGS
 
@@ -142,7 +142,7 @@ class ClientboundMapItemDataPacket : DataPacket() {
         }
     }
 
-    @Getter
+    
     class MapTrackedObject {
         private val type: Type
         private var entityId: Long = 0

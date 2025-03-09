@@ -476,7 +476,7 @@ class EntityRegistry : EntityID,
         }
     }
 
-    @Getter
+    
     class CustomEntityDefinition(val id: String, val bid: String, val hasSpawnegg: Boolean, val summonable: Boolean)
 
     @JvmRecord

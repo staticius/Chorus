@@ -7,11 +7,11 @@ import lombok.*
 import java.util.*
 import java.util.function.BiConsumer
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class UpdateAbilitiesPacket : DataPacket() {
     @JvmField
     var entityId: Long = 0

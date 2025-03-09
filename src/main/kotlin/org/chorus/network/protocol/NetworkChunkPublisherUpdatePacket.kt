@@ -4,11 +4,11 @@ import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class NetworkChunkPublisherUpdatePacket : DataPacket() {
     var position: BlockVector3? = null
     var radius: Int = 0

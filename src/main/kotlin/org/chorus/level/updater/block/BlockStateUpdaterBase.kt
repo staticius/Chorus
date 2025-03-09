@@ -18,7 +18,7 @@ import kotlin.collections.Map
 import kotlin.collections.MutableMap
 import kotlin.collections.set
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+(access = AccessLevel.PRIVATE)
 class BlockStateUpdaterBase : Updater {
     override fun registerUpdaters(context: CompoundTagUpdaterContext) {
         context.addUpdater(0, 0, 0)

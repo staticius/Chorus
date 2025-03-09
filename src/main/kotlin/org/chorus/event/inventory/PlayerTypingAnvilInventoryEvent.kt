@@ -29,7 +29,7 @@ import lombok.ToString
  * @author joserobjr
  * @since 2021-02-14
  */
-@ToString
+
 class PlayerTypingAnvilInventoryEvent(
     val player: Player,
     inventory: AnvilInventory,

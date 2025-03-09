@@ -6,11 +6,11 @@ import org.chorus.network.protocol.types.hud.HudVisibility
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class SetHudPacket : DataPacket() {
     val elements: MutableSet<HudElement> = ObjectOpenHashSet()
     var visibility: HudVisibility? = null

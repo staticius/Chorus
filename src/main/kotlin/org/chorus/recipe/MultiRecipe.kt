@@ -5,7 +5,7 @@ import org.chorus.recipe.descriptor.ItemDescriptor
 import lombok.ToString
 import java.util.*
 
-@ToString
+
 class MultiRecipe(val id: UUID) : Recipe {
     override val recipeId: String
         get() = id.toString()

@@ -7,10 +7,10 @@ import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import lombok.*
 
-@ToString
+
 class ZlibCompression(private val zlib: CompressionProvider) : BatchCompression {
-    @Getter
-    @Setter
+    
+    
     override val level: Int = 7
 
     @Throws(Exception::class)

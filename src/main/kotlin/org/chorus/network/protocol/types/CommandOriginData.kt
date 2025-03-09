@@ -6,7 +6,7 @@ import java.util.*
 /**
  * @author SupremeMortal (Nukkit project)
  */
-@ToString
+
 class CommandOriginData(
     val type: Origin, val uuid: UUID, val requestId: String, //event
     private val varlong: Long?

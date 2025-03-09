@@ -6,10 +6,10 @@ import lombok.*
  * Stores updates from ints to Strings.
  */
 class OrderedUpdater(oldProperty: String?, newProperty: String?, offset: Int, vararg order: String) {
-    @Getter
+
     private val oldProperty: String?
 
-    @Getter
+
     private val newProperty: String?
 
     private val order: Array<String>

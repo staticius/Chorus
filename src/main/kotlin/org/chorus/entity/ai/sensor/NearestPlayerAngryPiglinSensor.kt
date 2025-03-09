@@ -8,7 +8,7 @@ import org.chorus.inventory.*
 import lombok.Getter
 
 //存储最近的玩家的Memory
-@Getter
+
 class NearestPlayerAngryPiglinSensor : ISensor {
     override fun sense(entity: EntityMob) {
         for (player in entity.viewers.values) {

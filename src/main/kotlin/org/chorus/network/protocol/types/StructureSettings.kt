@@ -5,8 +5,8 @@ import org.chorus.math.Vector3f
 import lombok.AllArgsConstructor
 import lombok.Value
 
-@Value
-@AllArgsConstructor
+
+
 class StructureSettings {
     var paletteName: String? = null
     var ignoringEntities: Boolean = false

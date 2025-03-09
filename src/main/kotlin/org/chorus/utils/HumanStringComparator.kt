@@ -4,7 +4,7 @@ import org.chorus.nbt.tag.ListTag.add
 import lombok.NoArgsConstructor
 import kotlin.math.min
 
-@NoArgsConstructor
+
 class HumanStringComparator : Comparator<String> {
     override fun compare(o1: String, o2: String): Int {
         if (o1 == o2) {

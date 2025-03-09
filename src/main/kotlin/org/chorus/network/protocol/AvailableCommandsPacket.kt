@@ -16,11 +16,11 @@ import java.util.function.ObjIntConsumer
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class AvailableCommandsPacket : DataPacket() {
     var commands: Map<String?, CommandDataVersions>? = null
     val constraints: List<CommandEnumConstraintData> = ObjectArrayList()

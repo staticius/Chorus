@@ -18,10 +18,10 @@ import java.util.function.Consumer
  *
  * @param <T> A response object
 </T> */
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@NoArgsConstructor
+
 abstract class Form<T : Response?>(title: String) {
     protected val `object`: JsonObject = JsonObject()
     protected val meta: Object2ObjectOpenHashMap<String, Any> = Object2ObjectOpenHashMap()
@@ -30,15 +30,15 @@ abstract class Form<T : Response?>(title: String) {
 
     protected var title: String = ""
 
-    @Setter(AccessLevel.NONE)
+    
     protected var closed: Consumer<Player?>? =
         Consumer { player: Player? -> }
 
-    @Setter(AccessLevel.NONE)
+    
     protected var submitted: BiConsumer<Player?, T>? =
         BiConsumer { player: Player?, response: T -> }
 
-    @Getter
+    
     protected var response: T? = null
 
     init {

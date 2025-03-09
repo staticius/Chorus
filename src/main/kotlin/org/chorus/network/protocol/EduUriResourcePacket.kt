@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.EduSharedUriResource
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class EduUriResourcePacket : DataPacket() {
     var eduSharedUriResource: EduSharedUriResource? = null
 

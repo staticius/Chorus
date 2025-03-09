@@ -15,10 +15,10 @@ import java.lang.reflect.Type
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@NoArgsConstructor
+
 class CustomForm(title: String) : Form<CustomResponse?>(title) {
     var elements: ObjectArrayList<ElementCustom> = ObjectArrayList()
 

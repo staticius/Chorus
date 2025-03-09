@@ -27,9 +27,9 @@ import kotlin.math.min
 /**
  * 标准行为组实现
  */
-@Getter
-@Setter
-class BehaviorGroup @Builder constructor(
+
+
+class BehaviorGroup  constructor(
     /**
      * 记录距离上次路径更新过去的gt数
      */

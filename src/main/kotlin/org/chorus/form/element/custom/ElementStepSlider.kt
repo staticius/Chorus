@@ -7,10 +7,10 @@ import lombok.*
 import lombok.experimental.Accessors
 import java.util.function.Consumer
 
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@AllArgsConstructor
+
 class ElementStepSlider : ElementCustom {
     protected var text: String? = null
     protected var steps: MutableList<String?>? = null

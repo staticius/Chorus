@@ -6,11 +6,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PlayerSkinPacket : DataPacket() {
     @JvmField
     var uuid: UUID? = null

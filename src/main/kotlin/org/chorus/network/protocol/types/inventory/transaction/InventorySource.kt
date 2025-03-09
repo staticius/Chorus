@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor
 import lombok.Value
 
 
-@Value
+
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class InventorySource {
     private val type: Type? = null

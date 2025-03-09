@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.Value
 
 
-@Value
+
 class RecipeUnlockingRequirement {
     var context: UnlockingContext? = null
     var ingredients: List<ItemDescriptor> = ObjectArrayList()

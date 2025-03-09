@@ -22,8 +22,8 @@ import kotlin.math.min
 /**
  * 标准A*寻路实现
  */
-@Getter
-@Setter
+
+
 open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected var entity: EntityMob) :
     SimpleRouteFinder(blockEvaluator) {
     protected val openList: PriorityQueue<Node> = PriorityQueue()

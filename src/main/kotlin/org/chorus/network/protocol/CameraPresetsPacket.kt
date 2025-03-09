@@ -10,10 +10,10 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.function.Consumer
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+
+
+
+
 class CameraPresetsPacket : DataPacket() {
     @JvmField
     val presets: List<CameraPreset> = ObjectArrayList()

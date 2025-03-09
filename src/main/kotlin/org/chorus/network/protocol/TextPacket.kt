@@ -8,11 +8,11 @@ import java.util.function.Function
 /**
  * @since 15-10-13
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class TextPacket : DataPacket() {
     @JvmField
     var type: Byte = 0

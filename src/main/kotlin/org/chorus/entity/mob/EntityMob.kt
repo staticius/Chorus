@@ -79,7 +79,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
      */
     protected var diffHandDamage: FloatArray
 
-    @Getter
+
     private val equipment = EntityEquipment(this)
 
 
@@ -380,7 +380,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     /**
      * 是否为活跃实体，如果实体不活跃，就应当降低AI运行频率
      */
-    @Getter
+
     var isActive: Boolean = true
 
     init {

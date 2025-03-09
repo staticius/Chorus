@@ -14,11 +14,11 @@ import lombok.*
 import java.awt.Color
 import java.util.function.Consumer
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class CameraInstructionPacket : DataPacket() {
     var setInstruction: SetInstruction? = null
     var fadeInstruction: FadeInstruction? = null

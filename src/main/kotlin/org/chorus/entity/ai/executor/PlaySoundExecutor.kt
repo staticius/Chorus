@@ -5,7 +5,7 @@ import org.chorus.level.Sound
 import lombok.AllArgsConstructor
 import java.util.concurrent.ThreadLocalRandom
 
-@AllArgsConstructor
+
 class PlaySoundExecutor(private val sound: Sound) : IBehaviorExecutor {
     var minPitch: Float = 0.8f
     var maxPitch: Float = 1.2f

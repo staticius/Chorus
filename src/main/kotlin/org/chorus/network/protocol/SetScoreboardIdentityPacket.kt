@@ -5,11 +5,11 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class SetScoreboardIdentityPacket : DataPacket() {
     val entries: List<Entry> = ObjectArrayList()
     var action: Action? = null

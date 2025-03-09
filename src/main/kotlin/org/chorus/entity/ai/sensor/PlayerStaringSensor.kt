@@ -6,7 +6,7 @@ import org.chorus.entity.mob.EntityMob
 import lombok.Getter
 import kotlin.math.abs
 
-@Getter
+
 open class PlayerStaringSensor(
     protected var range: Double,
     protected var triggerDiff: Double,

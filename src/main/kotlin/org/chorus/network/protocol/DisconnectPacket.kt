@@ -7,11 +7,11 @@ import lombok.*
 /**
  * @since 15-10-12
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class DisconnectPacket : DataPacket() {
     var reason: DisconnectFailReason = DisconnectFailReason.UNKNOWN
     @JvmField

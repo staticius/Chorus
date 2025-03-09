@@ -23,8 +23,8 @@ import kotlin.math.atan
 class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, nbt) {
     private var occupants: MutableList<Occupant>? = null
 
-    @Getter
-    @Setter
+    
+    
     private val interactingEntity: Entity? = null
 
     override fun initBlockEntity() {

@@ -4,11 +4,11 @@ import org.chorus.lang.TranslationContainer
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class DeathInfoPacket : DataPacket() {
     @JvmField
     var translation: TranslationContainer? = null

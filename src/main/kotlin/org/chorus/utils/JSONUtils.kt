@@ -735,8 +735,8 @@ object JSONUtils {
         }
     }
 
-    @Setter
-    @Getter
+    
+    
     class GsonException : FormativeRuntimeException {
         constructor() : super()
 

@@ -8,7 +8,7 @@ import lombok.Value
  * This action is also sent when an item is enchanted. Enchanting should be treated mostly the same way as
  * crafting, where the old item is consumed.
  */
-@Value
+
 class CraftRecipeAction : RecipeItemStackRequestAction {
     override var recipeNetworkId: Int = 0
 

@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import lombok.*
 
-@ToString
+
 class SnappyCompression : BatchCompression {
     @Throws(Exception::class)
     override fun encode(ctx: ChannelHandlerContext, msg: ByteBuf): ByteBuf? {

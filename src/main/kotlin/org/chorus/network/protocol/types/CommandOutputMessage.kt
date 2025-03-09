@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types
 
 import lombok.Value
 
-@Value
+
 class CommandOutputMessage(
     var internal: Boolean,
     var messageId: String, var parameters: Array<String?>

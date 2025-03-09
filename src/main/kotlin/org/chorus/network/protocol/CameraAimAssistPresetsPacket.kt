@@ -11,11 +11,11 @@ import java.util.List
 import java.util.function.BiConsumer
 import java.util.function.Function
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class CameraAimAssistPresetsPacket : DataPacket() {
     private val categories: MutableList<CameraAimAssistCategories> = ObjectArrayList()
     private val presets: MutableList<CameraAimAssistPreset> = ObjectArrayList()

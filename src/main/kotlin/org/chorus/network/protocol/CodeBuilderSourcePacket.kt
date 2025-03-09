@@ -6,12 +6,12 @@ import org.chorus.network.protocol.types.CodeBuilderOperationType
 import lombok.*
 
 //EDU exclusive
-@Builder
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
+
 class CodeBuilderSourcePacket : DataPacket() {
     var operation: CodeBuilderOperationType? = null
     var category: CodeBuilderCategoryType? = null

@@ -7,11 +7,11 @@ import lombok.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PlayerEnchantOptionsPacket : DataPacket() {
     var options: List<EnchantOptionData> = ArrayList()
 

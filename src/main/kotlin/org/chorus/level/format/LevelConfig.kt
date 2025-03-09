@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor
 import lombok.experimental.Accessors
 import java.util.concurrent.ThreadLocalRandom
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+
+
+
 @Accessors(fluent = true)
 data class LevelConfig (
     var format: String = "leveldb",
@@ -17,9 +17,9 @@ data class LevelConfig (
     var generators: Map<Int, GeneratorConfig>? = null,
 ) {
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Data
+
+
+
     @Accessors(fluent = true)
     data class GeneratorConfig (
         var name: String? = null,

@@ -155,7 +155,7 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
 
         private val ID2NAME = Int2ObjectOpenHashMap<String?>()
 
-        @Getter
+        
         private val ITEMDATA = ObjectOpenHashSet<ItemData>()
 
         private var itemPalette: ByteArray

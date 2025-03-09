@@ -9,11 +9,11 @@ import lombok.experimental.Accessors
 /**
  * The response of a [cn.nukkit.form.window.ModalForm]
  */
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@NoArgsConstructor
-@AllArgsConstructor
+
+
 class ModalResponse : Response() {
     /**
      * The ordinal of the selected option:

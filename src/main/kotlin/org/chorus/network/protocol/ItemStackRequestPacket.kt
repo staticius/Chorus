@@ -6,10 +6,10 @@ import lombok.*
 import java.util.List
 import java.util.function.Function
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+
+
+
+
 class ItemStackRequestPacket : DataPacket() {
     val requests: MutableList<ItemStackRequest> = ArrayList()
 

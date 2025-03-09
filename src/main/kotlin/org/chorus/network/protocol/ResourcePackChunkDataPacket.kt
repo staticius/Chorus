@@ -5,11 +5,11 @@ import org.chorus.utils.version.Version
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString(exclude = ["data"])
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+(exclude = ["data"])
+
+
 class ResourcePackChunkDataPacket : AbstractResourcePackDataPacket() {
     override var packId: UUID? = null
     override var packVersion: Version? = null

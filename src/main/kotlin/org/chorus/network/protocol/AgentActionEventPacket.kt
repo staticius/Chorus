@@ -7,11 +7,11 @@ import lombok.*
 /**
  * @since v503
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class AgentActionEventPacket : DataPacket() {
     var requestId: String? = null
     var actionType: AgentActionType? = null

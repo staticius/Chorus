@@ -7,7 +7,7 @@ import lombok.experimental.Accessors
 /**
  * The image of a [ElementButton]
  */
-@Getter
+
 @Accessors(chain = true, fluent = true)
 class ButtonImage(type: Type, data: String?) {
     protected val `object`: JsonObject = JsonObject()

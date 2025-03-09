@@ -16,7 +16,7 @@ import lombok.Setter
 import lombok.SneakyThrows
 import java.util.stream.Collectors
 
-@Getter
+
 class RawText private constructor(base: org.chorus.command.utils.RawText.Component) {
     private var base: org.chorus.command.utils.RawText.Component? = null
 
@@ -32,8 +32,8 @@ class RawText private constructor(base: org.chorus.command.utils.RawText.Compone
         return JSONUtils.to(base)
     }
 
-    @Getter
-    @Setter
+
+
     class Component {
         @SerializedName("text")
         private val component_text: String? = null

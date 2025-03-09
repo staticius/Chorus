@@ -8,11 +8,11 @@ import lombok.*
 import java.io.IOException
 import java.nio.ByteOrder
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class LevelEventGenericPacket : DataPacket() {
     var eventId: Int = 0
     var tag: CompoundTag? = null

@@ -18,7 +18,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 
-@Getter
+
 class JSONScoreboardStorage(path: String) : IScoreboardStorage {
     protected var filePath: Path = Paths.get(path)
     protected var json: Config? = null

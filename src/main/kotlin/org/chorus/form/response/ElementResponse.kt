@@ -7,7 +7,7 @@ import lombok.experimental.Accessors
 /**
  * The response of a [cn.nukkit.form.element.custom.ElementDropdown] or [cn.nukkit.form.element.custom.ElementStepSlider]
  */
-@Getter
+
 @Accessors(fluent = true)
 @RequiredArgsConstructor
 class ElementResponse {

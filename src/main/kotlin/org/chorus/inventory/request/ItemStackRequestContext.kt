@@ -6,8 +6,8 @@ import lombok.Getter
 import lombok.Setter
 
 class ItemStackRequestContext(@field:Getter private val itemStackRequest: ItemStackRequest) {
-    @Getter
-    @Setter
+    
+    
     private val currentActionIndex = 0
     private val extraData: MutableMap<String, Any> =
         HashMap()

@@ -3,11 +3,11 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class NPCRequestPacket : DataPacket() {
     var entityRuntimeId: Long = 0
     var requestType: RequestType = RequestType.SET_SKIN

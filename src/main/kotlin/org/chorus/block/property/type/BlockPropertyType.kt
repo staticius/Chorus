@@ -33,15 +33,15 @@ interface BlockPropertyType<DATATYPE> {
         return createValue(defaultValue)
     }
 
-    @Getter
+    
     enum class Type {
         BOOLEAN,
         INT,
         ENUM
     }
 
-    @Getter
-    @ToString
+    
+    
     abstract class BlockPropertyValue<DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?, SERIALIZED_DATATYPE> internal constructor(
         protected val propertyType: PROPERTY, @JvmField protected val value: DATATYPE
     ) {

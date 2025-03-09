@@ -57,7 +57,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     @JvmField
     var address: InetSocketAddress?
 
-    @Getter
+    
     protected var authenticated: Boolean = false
 
 

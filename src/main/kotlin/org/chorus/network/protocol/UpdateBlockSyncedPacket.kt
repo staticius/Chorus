@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.BlockSyncType
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class UpdateBlockSyncedPacket : UpdateBlockPacket() {
     var actorUniqueId: Long = 0
     var updateType: BlockSyncType? = null

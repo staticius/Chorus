@@ -9,10 +9,10 @@ import lombok.experimental.Accessors
 /**
  * The response of a [cn.nukkit.form.window.CustomForm]
  */
-@Getter
-@Setter
+
+
 @Accessors(chain = true)
-@AllArgsConstructor
+
 class CustomResponse : Response() {
     val responses: Int2ObjectOpenHashMap<Any> = Int2ObjectOpenHashMap()
 

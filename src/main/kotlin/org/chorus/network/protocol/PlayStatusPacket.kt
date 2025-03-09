@@ -6,11 +6,11 @@ import lombok.*
 /**
  * @since 15-10-13
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PlayStatusPacket : DataPacket() {
     @JvmField
     var status: Int = 0

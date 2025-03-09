@@ -12,11 +12,11 @@ import java.nio.ByteOrder
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-@Getter
-@Setter
-@ToString(exclude = ["namedTag"])
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+(exclude = ["namedTag"])
+
+
 class BlockEntityDataPacket : DataPacket() {
     var x: Int = 0
     var y: Int = 0

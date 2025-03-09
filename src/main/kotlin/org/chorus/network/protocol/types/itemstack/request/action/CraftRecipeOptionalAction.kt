@@ -5,7 +5,7 @@ import lombok.Value
 /**
  * Called when renaming an item in an anvil or cartography table. Uses the filter strings present in the request.
  */
-@Value
+
 class CraftRecipeOptionalAction : ItemStackRequestAction {
     /**
      * For the cartography table, if a certain MULTI recipe is being called, this points to the network ID that was assigned.

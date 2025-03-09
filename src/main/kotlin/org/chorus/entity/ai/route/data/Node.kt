@@ -8,8 +8,8 @@ import java.util.*
 /**
  * 寻路节点
  */
-@Getter
-@Setter
+
+
 class Node(private val vector3: Vector3?, private val parent: Node?, private val G: Int, private val H: Int) :
     Comparable<Node?> {
     private val F = G + H

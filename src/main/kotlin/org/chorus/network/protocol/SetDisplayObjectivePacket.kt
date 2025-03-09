@@ -5,11 +5,11 @@ import org.chorus.scoreboard.data.DisplaySlot
 import org.chorus.scoreboard.data.SortOrder
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class SetDisplayObjectivePacket : DataPacket() {
     @JvmField
     var displaySlot: DisplaySlot? = null

@@ -3,7 +3,7 @@ package org.chorus.network.protocol.types
 import org.chorus.block.property.enums.StructureBlockType
 import lombok.Value
 
-@Value
+
 class StructureEditorData {
     var name: String? = null
     var filteredName: String? = null

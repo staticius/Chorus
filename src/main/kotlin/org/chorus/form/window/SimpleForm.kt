@@ -12,10 +12,10 @@ import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.IntFunction
 
-@Getter
-@Setter
+
+
 @Accessors(chain = true, fluent = true)
-@NoArgsConstructor
+
 class SimpleForm : Form<SimpleResponse?> {
     protected var content: String = ""
 

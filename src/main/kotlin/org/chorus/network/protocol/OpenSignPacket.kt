@@ -4,13 +4,13 @@ import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-@Builder
-@Getter
-@Setter
-@ToString(doNotUseGetters = true)
-@NoArgsConstructor
-@AllArgsConstructor
+(doNotUseGetters = true, callSuper = false)
+
+
+
+(doNotUseGetters = true)
+
+
 class OpenSignPacket : DataPacket() {
     @JvmField
     var position: BlockVector3? = null

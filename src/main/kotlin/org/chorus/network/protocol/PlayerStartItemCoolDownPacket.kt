@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class PlayerStartItemCoolDownPacket : DataPacket() {
     @JvmField
     var itemCategory: String? = null

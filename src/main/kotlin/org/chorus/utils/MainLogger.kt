@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j
 We need to keep this class for backwards compatibility
  */
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+(access = AccessLevel.PRIVATE)
 class MainLogger : ThreadedLogger() {
     override fun emergency(message: String?) {
         MainLogger.log.error(message)

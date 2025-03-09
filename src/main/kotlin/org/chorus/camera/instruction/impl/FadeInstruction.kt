@@ -11,8 +11,8 @@ import java.awt.Color
  * @date 2023/6/11
  * PowerNukkitX Project
  */
-@Builder
-@Getter
+
+
 class FadeInstruction : CameraInstruction {
     private val color: Color? = null
     private val time: Time? = null

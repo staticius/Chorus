@@ -13,11 +13,11 @@ import java.util.*
 /**
  * @since on 15-10-13
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class LoginPacket : DataPacket() {
     var username: String? = null
     var titleId: String? = null

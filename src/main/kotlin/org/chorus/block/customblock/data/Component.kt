@@ -7,8 +7,8 @@ import lombok.Builder
 import lombok.Getter
 import kotlin.math.min
 
-@Builder
-@Getter
+
+
 class Component : NBTData {
     private val result = CompoundTag()
     var collisionBox: CollisionBox? = null

@@ -7,11 +7,11 @@ import org.chorus.network.protocol.types.CommandOutputType
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class CommandOutputPacket : DataPacket() {
     @JvmField
     val messages: List<CommandOutputMessage> = ObjectArrayList()

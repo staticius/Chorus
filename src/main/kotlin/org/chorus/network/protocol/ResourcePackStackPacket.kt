@@ -7,11 +7,11 @@ import org.chorus.resourcepacks.ResourcePack
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ResourcePackStackPacket : DataPacket() {
     var mustAccept: Boolean = false
     var behaviourPackStack: Array<ResourcePack> = ResourcePack.EMPTY_ARRAY
@@ -50,7 +50,7 @@ class ResourcePackStackPacket : DataPacket() {
         byteBuf.writeBoolean(isHasEditorPacks)
     }
 
-    @Value
+    
     class ExperimentData {
         var name: String? = null
         var enabled: Boolean = false

@@ -5,11 +5,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.GameType
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class UpdatePlayerGameTypePacket : DataPacket() {
     @JvmField
     var gameType: GameType? = null

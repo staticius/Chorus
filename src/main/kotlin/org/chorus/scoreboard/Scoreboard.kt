@@ -12,12 +12,12 @@ import lombok.Setter
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 
-@Getter
+
 class Scoreboard @JvmOverloads constructor(
     override var objectiveName: String,
     override var displayName: String,
     override var criteriaName: String = "dummy",
-    @Setter override var sortOrder: SortOrder = SortOrder.ASCENDING
+     override var sortOrder: SortOrder = SortOrder.ASCENDING
 ) :
     IScoreboard {
     protected var viewers: MutableMap<DisplaySlot, MutableSet<IScoreboardViewer>> = HashMap()

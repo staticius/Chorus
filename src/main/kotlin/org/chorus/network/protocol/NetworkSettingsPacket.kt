@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.PacketCompressionAlgorithm
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class NetworkSettingsPacket : DataPacket() {
     var compressionThreshold: Int = 0
     var compressionAlgorithm: PacketCompressionAlgorithm? = null

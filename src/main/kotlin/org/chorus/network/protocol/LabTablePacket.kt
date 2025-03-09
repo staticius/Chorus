@@ -6,11 +6,11 @@ import org.chorus.network.protocol.types.LabTableReactionType
 import org.chorus.network.protocol.types.LabTableType
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class LabTablePacket : DataPacket() {
     var actionType: LabTableType? = null
     var blockPosition: BlockVector3? = null

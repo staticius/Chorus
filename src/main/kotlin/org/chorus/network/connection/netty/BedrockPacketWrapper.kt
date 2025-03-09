@@ -9,10 +9,10 @@ import lombok.Data
 import lombok.EqualsAndHashCode
 import lombok.NoArgsConstructor
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-@AllArgsConstructor
-@NoArgsConstructor
+
+(callSuper = false)
+
+
 class BedrockPacketWrapper(
     private var packetId: Int,
     private var senderSubClientId: Int,

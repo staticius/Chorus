@@ -5,11 +5,11 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class EmoteListPacket : DataPacket() {
     var runtimeId: Long = 0
     val pieceIds: MutableList<UUID> = ObjectArrayList()

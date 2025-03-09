@@ -3,11 +3,11 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString(exclude = ["namedtag"])
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+(exclude = ["namedtag"])
+
+
 class UpdateEquipmentPacket : DataPacket() {
     var windowId: Int = 0
     var windowType: Int = 0

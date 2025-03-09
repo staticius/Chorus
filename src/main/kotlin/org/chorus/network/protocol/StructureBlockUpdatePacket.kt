@@ -7,11 +7,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.*
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class StructureBlockUpdatePacket : DataPacket() {
     var blockPosition: BlockVector3? = null
     var editorData: StructureEditorData? = null

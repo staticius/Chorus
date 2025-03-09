@@ -6,11 +6,11 @@ import org.chorus.network.protocol.types.PropertySyncData
 import org.chorus.utils.*
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class SetEntityDataPacket : DataPacket() {
     @JvmField
     var eid: Long = 0

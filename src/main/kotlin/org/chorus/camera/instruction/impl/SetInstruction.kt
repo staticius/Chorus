@@ -14,8 +14,8 @@ import lombok.Getter
  * @date 2023/6/11
  * PowerNukkitX Project
  */
-@Builder
-@Getter
+
+
 class SetInstruction : CameraInstruction {
     private val ease: Ease? = null
     private val pos: Vector3f? = null

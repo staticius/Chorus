@@ -8,11 +8,11 @@ import org.chorus.network.protocol.types.PlayerAbility
 import org.chorus.network.protocol.types.PlayerPermission
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class RequestPermissionsPacket : DataPacket() {
     var uniqueEntityId: Long = 0
     var permissions: PlayerPermission? = null

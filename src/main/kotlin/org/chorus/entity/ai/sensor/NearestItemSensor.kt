@@ -7,7 +7,7 @@ import org.chorus.item.*
 import lombok.Getter
 
 //存储最近的玩家的Memory
-@Getter
+
 class NearestItemSensor @JvmOverloads constructor(
     protected var range: Double,
     protected var minRange: Double,

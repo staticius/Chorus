@@ -15,7 +15,7 @@ import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
-@Getter
+
 class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标位置
     protected var memory: MemoryType<out Vector3?>?,
     protected var speed: Float,

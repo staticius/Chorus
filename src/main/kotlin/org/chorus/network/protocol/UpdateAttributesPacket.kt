@@ -4,11 +4,11 @@ import org.chorus.entity.Attribute
 import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class UpdateAttributesPacket : DataPacket() {
     @JvmField
     var entries: Array<Attribute>?

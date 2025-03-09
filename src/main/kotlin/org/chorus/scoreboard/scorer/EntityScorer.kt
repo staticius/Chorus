@@ -8,7 +8,7 @@ import org.chorus.scoreboard.data.ScorerType
 import lombok.Getter
 import java.util.*
 
-@Getter
+
 class EntityScorer : IScorer {
     private val entityUuid: UUID?
 

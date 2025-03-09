@@ -7,11 +7,11 @@ import lombok.*
  * @author Pub4Game
  * @since 03.07.2016
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ItemFrameDropItemPacket : DataPacket() {
     var x: Int = 0
     var y: Int = 0

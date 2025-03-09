@@ -9,7 +9,7 @@ import lombok.Value
  * (or the equivalent on mobile). The InventoryTransaction packet is still used for that action, regardless of
  * whether the item stack network IDs are used or not.
  */
-@Value
+
 class DropAction : ItemStackRequestAction {
     var count: Int = 0
     var source: ItemStackRequestSlotData? = null

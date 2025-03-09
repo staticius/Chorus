@@ -8,7 +8,7 @@ import lombok.Data
  * Represents an individual response to a [ItemStackRequest]
  * sent as part of [ItemStackResponsePacket].
  */
-@Data
+
 class ItemStackResponse(
     /**
      * Replaces the success boolean as of v419

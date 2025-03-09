@@ -18,7 +18,7 @@ class MemoryType<Data> @JvmOverloads constructor(
 ) {
     private val defaultData: Supplier<Data>
 
-    @Getter
+
     private var codec: IMemoryCodec<Data>? = null
 
     constructor(identifier: Identifier, defaultData: Data) : this(

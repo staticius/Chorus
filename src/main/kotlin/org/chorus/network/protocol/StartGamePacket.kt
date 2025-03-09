@@ -16,11 +16,11 @@ import java.util.*
  * @since 15-10-13
  */
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class StartGamePacket : DataPacket() {
     var entityUniqueId: Long = 0
     var entityRuntimeId: Long = 0

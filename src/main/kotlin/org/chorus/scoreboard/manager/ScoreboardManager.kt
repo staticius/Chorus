@@ -16,7 +16,7 @@ import lombok.Getter
 import java.util.function.Consumer
 
 
-@Getter
+
 class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardManager {
     override var scoreboards: MutableMap<String?, IScoreboard?>? = HashMap()
     override var display: MutableMap<DisplaySlot, IScoreboard?> = HashMap()

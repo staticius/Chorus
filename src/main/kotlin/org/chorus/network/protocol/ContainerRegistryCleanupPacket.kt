@@ -6,10 +6,10 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import lombok.*
 import java.util.function.Consumer
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+
+
+
+
 class ContainerRegistryCleanupPacket : DataPacket() {
     private val removedContainers: List<FullContainerName> = ObjectArrayList()
 

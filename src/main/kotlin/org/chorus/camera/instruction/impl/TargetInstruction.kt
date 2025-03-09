@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
+
+
 class TargetInstruction : CameraInstruction {
     private var targetCenterOffset: Vector3f? = null
     private var uniqueEntityId: Long = 0

@@ -4,8 +4,8 @@ import org.chorus.math.BlockVector3
 import lombok.AllArgsConstructor
 import lombok.Data
 
-@Data
-@AllArgsConstructor
+
+
 class PlayerBlockActionData {
     private val action: PlayerActionType? = null
     private val position: BlockVector3? = null

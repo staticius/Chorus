@@ -7,11 +7,11 @@ import lombok.*
  * @author CreeperFace
  * @since 5.3.2017
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class MapInfoRequestPacket : DataPacket() {
     var mapId: Long = 0
 

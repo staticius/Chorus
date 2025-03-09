@@ -733,7 +733,7 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
         private val CUSTOM_ITEM_DEFINITIONS: MutableMap<String?, CustomItemDefinition?> = HashMap()
         private val isLoad = AtomicBoolean(false)
 
-        @Getter
+        
         private var itemComponents = CompoundTag()
     }
 }

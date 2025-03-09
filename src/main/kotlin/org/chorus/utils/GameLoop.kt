@@ -27,12 +27,12 @@ class GameLoop private constructor(
     private val onTick: Consumer<GameLoop>
     private val onStop: Runnable
 
-    @Getter
+
     private val loopCountPerSec: Int
     private val tickSummary = FloatArray(20)
     private val MSPTSummary = FloatArray(20)
 
-    @Getter
+
     private var tick = 0
 
     init {

@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.camera.aimassist.ClientCameraAimAssistPacketAction
 import lombok.*
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class ClientCameraAimAssistPacket : DataPacket() {
     private var cameraPresetId: String? = null
     private var action: ClientCameraAimAssistPacketAction? = null

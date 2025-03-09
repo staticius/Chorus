@@ -4,11 +4,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import lombok.*
 
 //EDU exclusive
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
+
+
+
+
 class CodeBuilderPacket : DataPacket() {
     var isOpening: Boolean = false
     var url: String = ""
