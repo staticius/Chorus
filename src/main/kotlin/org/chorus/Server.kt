@@ -138,7 +138,10 @@ import kotlin.math.min
  * @author Box
  */
 
-class Server internal constructor(val filePath: String, val dataPath: String, val pluginPath: String, predefinedLanguage: String?) {
+class Server internal constructor(val filePath: String, dataPath: String, pluginPath: String, predefinedLanguage: String?) {
+    val dataPath: String = File(dataPath).absolutePath + "/"
+    val pluginPath: String = File(pluginPath).absolutePath + "/"
+
     lateinit var bannedPlayers: BanList
         private set
 
@@ -1122,7 +1125,8 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
             player.getSkin(),
             player.loginChainData.XUID
         )
-        network.pong!!.playerCount(playerList.size).update()
+        network.pong!!.playerCount = playerList.size
+        network.pong!!.update()
     }
 
     @ApiStatus.Internal
@@ -1139,7 +1143,8 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
             )
 
             broadcastPacket(playerList.values, pk)
-            network.pong!!.playerCount(playerList.size).update()
+            network.pong!!.playerCount = playerList.size
+            network.pong!!.update()
         }
     }
 
@@ -1246,7 +1251,7 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
 
     @JvmOverloads
     fun removePlayerListData(uuid: UUID, players: Collection<Player> = playerList.values) {
-        this.removePlayerListData(uuid, players.toArray<Player>(Player.Companion.EMPTY_ARRAY))
+        this.removePlayerListData(uuid, players.toTypedArray())
     }
 
     /**
@@ -1261,16 +1266,16 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
         val pk = PlayerListPacket()
         pk.type = PlayerListPacket.TYPE_ADD
         pk.entries = playerList.values.stream()
-            .map<PlayerListPacket.Entry> { p: Player ->
+            .map { p: Player ->
                 PlayerListPacket.Entry(
                     p.getUniqueId()!!,
                     p.getId(),
                     p.getDisplayName(),
                     p.getSkin()!!,
-                    p.getLoginChainData().xUID
+                    p.loginChainData.XUID
                 )
             }
-            .toArray<PlayerListPacket.Entry?> { _Dummy_.__Array__() }
+            .toArray { size -> arrayOfNulls<PlayerListPacket.Entry>(size) }
 
         player.dataPacket(pk)
     }
@@ -1321,10 +1326,10 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
      * @param info the player info
      */
     fun updateName(info: PlayerInfo) {
-        val uniqueId = info.getUniqueId()
-        val name = info.getUsername()
+        val uniqueId = info.uniqueId
+        val name = info.username
 
-        val nameBytes: ByteArray = name.toLowerCase(Locale.ENGLISH).getBytes(StandardCharsets.UTF_8)
+        val nameBytes: ByteArray = name.lowercase(Locale.ENGLISH).toByteArray(StandardCharsets.UTF_8)
 
         val buffer = ByteBuffer.allocate(16)
         buffer.putLong(uniqueId.getMostSignificantBits())
@@ -1442,7 +1447,7 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
         }
 
         if (create) {
-            if (settings.playerSettings().savePlayerData()) {
+            if (settings.playerSettings.savePlayerData) {
                 Server.log.info(this.baseLang.tr("nukkit.data.playerNotFound", uuid))
             }
             val spawn = getDefaultLevel()!!.safeSpawn
@@ -1514,7 +1519,7 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
      */
     fun saveOfflinePlayerData(nameOrUUid: String, tag: CompoundTag, async: Boolean) {
         val uuid = lookupName(nameOrUUid).orElse(UUID.fromString(nameOrUUid))
-        if (settings.playerSettings().savePlayerData()) {
+        if (settings.playerSettings.savePlayerData) {
             scheduler.scheduleTask(InternalPlugin.INSTANCE, object : Task() {
                 val hasRun: AtomicBoolean = AtomicBoolean(false)
 
@@ -1616,12 +1621,12 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
             }
         }
 
-        return matchedPlayer.toArray<Player>(Player.Companion.EMPTY_ARRAY)
+        return matchedPlayer.toTypedArray()
     }
 
     @ApiStatus.Internal
     fun removePlayer(player: Player) {
-        val toRemove = players.remove(player.getRawSocketAddress())
+        val toRemove = players.remove(player.rawSocketAddress)
         if (toRemove != null) {
             return
         }
@@ -1689,7 +1694,7 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
      * @param player 玩家
      */
     fun sendRecipeList(player: Player) {
-        player.getSession().sendRawPacket(ProtocolInfo.CRAFTING_DATA_PACKET, Registries.RECIPE.craftingPacket)
+        player.session.sendRawPacket(ProtocolInfo.CRAFTING_DATA_PACKET, Registries.RECIPE.craftingPacket)
     }
 
     /**
@@ -1760,7 +1765,6 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
         Preconditions.checkState(instance == null, "Already initialized!")
         instance = this
 
-        this.filePath = filePath
         if (!File(dataPath + "worlds/").exists()) {
             File(dataPath + "worlds/").mkdirs()
         }
@@ -1770,8 +1774,6 @@ class Server internal constructor(val filePath: String, val dataPath: String, va
         if (!File(pluginPath).exists()) {
             File(pluginPath).mkdirs()
         }
-        this.dataPath = File(dataPath).absolutePath + "/"
-        this.pluginPath = File(pluginPath).absolutePath + "/"
         val commandDataPath = File(dataPath).absolutePath + "/command_data"
         if (!File(commandDataPath).exists()) {
             File(commandDataPath).mkdirs()

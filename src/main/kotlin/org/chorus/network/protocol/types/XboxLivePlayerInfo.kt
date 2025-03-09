@@ -6,10 +6,10 @@ import lombok.Getter
 import java.util.*
 
 class XboxLivePlayerInfo(
-    username: String?,
-    uuid: UUID?,
-    skin: Skin?,
-    data: ClientChainData?,
-     private val xuid: String
+    username: String,
+    uuid: UUID,
+    skin: Skin,
+    data: ClientChainData,
+    val xuid: String
 ) : PlayerInfo(username, uuid, skin, data) {
 }

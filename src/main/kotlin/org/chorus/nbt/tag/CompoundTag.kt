@@ -23,7 +23,7 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
     override val id: Byte
         get() = Tag.Companion.TAG_Compound
 
-    open fun put(name: String?, tag: Tag?): CompoundTag? {
+    open fun put(name: String?, tag: Tag?): CompoundTag {
         tags!![name] = tag
         return this
     }
@@ -47,57 +47,57 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         return this
     }
 
-    open fun putShort(name: String?, value: Int): CompoundTag? {
+    open fun putShort(name: String?, value: Int): CompoundTag {
         tags!![name] = ShortTag(value)
         return this
     }
 
-    open fun putInt(name: String?, value: Int): CompoundTag? {
+    open fun putInt(name: String?, value: Int): CompoundTag {
         tags!![name] = IntTag(value)
         return this
     }
 
-    open fun putLong(name: String?, value: Long): CompoundTag? {
+    open fun putLong(name: String?, value: Long): CompoundTag {
         tags!![name] = LongTag(value)
         return this
     }
 
-    open fun putFloat(name: String?, value: Float): CompoundTag? {
+    open fun putFloat(name: String?, value: Float): CompoundTag {
         tags!![name] = FloatTag(value)
         return this
     }
 
-    open fun putDouble(name: String?, value: Double): CompoundTag? {
+    open fun putDouble(name: String?, value: Double): CompoundTag {
         tags!![name] = DoubleTag(value)
         return this
     }
 
-    open fun putString(name: String?, value: String): CompoundTag? {
+    open fun putString(name: String?, value: String): CompoundTag {
         tags!![name] = StringTag(value)
         return this
     }
 
-    open fun putByteArray(name: String?, value: ByteArray?): CompoundTag? {
+    open fun putByteArray(name: String?, value: ByteArray?): CompoundTag {
         tags!![name] = ByteArrayTag(value)
         return this
     }
 
-    open fun putIntArray(name: String?, value: IntArray?): CompoundTag? {
+    open fun putIntArray(name: String?, value: IntArray?): CompoundTag {
         tags!![name] = IntArrayTag(value)
         return this
     }
 
-    open fun putList(name: String?, listTag: ListTag<out Tag?>?): CompoundTag? {
+    open fun putList(name: String?, listTag: ListTag<out Tag?>?): CompoundTag {
         tags!![name] = listTag
         return this
     }
 
-    open fun putCompound(name: String?, value: CompoundTag?): CompoundTag? {
+    open fun putCompound(name: String?, value: CompoundTag?): CompoundTag {
         tags!![name] = value
         return this
     }
 
-    open fun putBoolean(string: String?, `val`: Boolean): CompoundTag? {
+    open fun putBoolean(string: String?, `val`: Boolean): CompoundTag {
         putByte(string, if (`val`) 1 else 0)
         return this
     }
@@ -176,7 +176,7 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
 
     open fun getShort(name: String?): Short {
         if (!tags!!.containsKey(name)) return 0
-        return (tags[name] as NumberTag<*>).data.toShort()
+        return (tags[name] as NumberTag<*>).data!!.toShort()
     }
 
     open fun getInt(name: String?): Int {
