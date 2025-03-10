@@ -1,14 +1,10 @@
-<p align="right">
-<img src="https://raw.githubusercontent.com/PowerNukkitX/PowerNukkitX/master/.github/img/lang/eng.svg">
-</p>
-
 <p align="center">
-    <a href="https://powernukkitx.com">
-      <img src="https://www.powernukkitx.com/assets/image/PNX_LOGO_sm.png" width=20%>
+    <a href="https://enderverse-creations.com">
+      <img src="https://raw.githubusercontent.com/Enderverse-Creations/Chorus/refs/heads/main/.github/img/chorus.png?token=GHSAT0AAAAAAC3JQDAOHFLPHN773NYCWM24Z6OWNXQ" width=20%>
     </a>
     <p align="center">
         <strong>
-            A Minecraft Bedrock Editon Server Software, open source and written in java
+            Minecraft: Bedrock server software, open source and written in Kotlin
         </strong>
     </p>
 </p>
@@ -46,7 +42,6 @@
 **Feature-rich, highly customizable third-party server software for Minecraft: Bedrock Edition.**
 - 🪄 **Custom Item, Block and Entity support**
 - 🤖 **Vanilla-like Mob AI**
-- 🪴 **Terra Generator**
 - ✏️ **Full Vanilla Command Support**
 - 🗃️ **Full Item, Block and Container Support**
 - 🗿 **More features to discover...**
@@ -80,14 +75,14 @@ Join our [Discord](https://discord.gg/apwd7uauZg) server to chat with other user
 
 
 
-## 🤝 Contributing to PowerNukkitX
+## 🤝 Contributing to Chorus
 
 Contributions, issues and feature requests are welcome!<br />Feel free to
 check [issues page](https://github.com/PowerNukkitX/PowerNukkitX/issues). You can also take a look at
 the [contributing guide](.github/CONTRIBUTING.md).
 
 <a href="https://github.com/PowerNukkitX/PowerNukkitX/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=PowerNukkitX/PowerNukkitX" />
+  <!-- <img src="" /> -->
 </a>
 
 ## Give a ⭐️ if this project helped you!
