@@ -6,7 +6,7 @@ import org.chorus.Server
  * 将全部剩余的参数以空格为分隔符合并，解析为[String]值
  *
  *
- * 所有命令参数类型为[COMMAND][cn.nukkit.command.data.CommandParamType.COMMAND]如果没有手动指定[IParamNode],则会默认使用这个解析
+ * 所有命令参数类型为[COMMAND][org.chorus.command.data.CommandParamType.COMMAND]如果没有手动指定[IParamNode],则会默认使用这个解析
  */
 class CommandNode : ParamNode<String?>() {
     private val TMP: MutableList<String> = ArrayList()

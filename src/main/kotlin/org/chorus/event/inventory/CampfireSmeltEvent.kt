@@ -6,9 +6,7 @@ import org.chorus.event.HandlerList
 import org.chorus.event.block.BlockEvent
 import org.chorus.item.Item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class CampfireSmeltEvent(campfire: BlockEntityCampfire, source: Item, result: Item) :
     BlockEvent(campfire.block), Cancellable {
     val campfire: BlockEntityCampfire

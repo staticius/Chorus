@@ -10,7 +10,7 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.buffer.ByteBufInputStream
 import io.netty.handler.codec.EncoderException
-import lombok.*
+
 import java.io.IOException
 import java.lang.String
 

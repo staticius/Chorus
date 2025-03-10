@@ -2,9 +2,7 @@ package org.chorus.item.enchantment.bow
 
 import org.chorus.item.enchantment.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentBowPower :
     EnchantmentBow(Enchantment.Companion.ID_BOW_POWER, "arrowDamage", Rarity.COMMON) {
     override fun getMinEnchantAbility(level: Int): Int {

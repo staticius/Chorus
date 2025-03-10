@@ -13,9 +13,9 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.*
-import lombok.Getter
-import lombok.Setter
-import lombok.extern.slf4j.Slf4j
+
+
+
 import java.util.*
 import kotlin.math.atan
 

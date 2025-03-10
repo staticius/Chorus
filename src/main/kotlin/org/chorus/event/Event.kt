@@ -17,11 +17,11 @@ import org.chorus.utils.EventException
  *
  *
  * 关于监听器的实现，参阅：[Listener] <br></br>
- * For the way to implement a listener, see: [cn.nukkit.event.Listener]
+ * For the way to implement a listener, see: [org.chorus.event.Listener]
  *
  * @author Unknown(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @see cn.nukkit.event.EventHandler
+ * @see org.chorus.event.EventHandler
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */

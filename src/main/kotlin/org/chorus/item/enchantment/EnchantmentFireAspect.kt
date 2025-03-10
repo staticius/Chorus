@@ -6,9 +6,7 @@ import org.chorus.event.entity.EntityCombustByEntityEvent
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import kotlin.math.max
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentFireAspect :
     Enchantment(Enchantment.Companion.ID_FIRE_ASPECT, "fire", Rarity.RARE, EnchantmentType.SWORD) {
     override fun getMinEnchantAbility(level: Int): Int {

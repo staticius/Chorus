@@ -3,9 +3,7 @@ package org.chorus.item.enchantment
 import org.chorus.block.BlockCarvedPumpkin
 import org.chorus.item.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 enum class EnchantmentType {
     ALL,
     ARMOR,

@@ -26,9 +26,7 @@ import kotlin.collections.MutableList
 import kotlin.collections.get
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState), RedstoneComponent,
     Faceable {
     override fun canBeActivated(): Boolean {

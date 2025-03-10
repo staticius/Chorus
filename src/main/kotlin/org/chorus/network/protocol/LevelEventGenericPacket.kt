@@ -4,7 +4,7 @@ import org.chorus.nbt.NBTIO.writeValue
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.handler.codec.EncoderException
-import lombok.*
+
 import java.io.IOException
 import java.nio.ByteOrder
 

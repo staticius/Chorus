@@ -3,7 +3,7 @@ package org.chorus.scoreboard
 import org.chorus.Server
 import org.chorus.event.scoreboard.ScoreboardLineChangeEvent
 import org.chorus.scoreboard.scorer.IScorer
-import lombok.Getter
+
 
 
 class ScoreboardLine @JvmOverloads constructor(

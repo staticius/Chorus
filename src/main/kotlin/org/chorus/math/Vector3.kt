@@ -1,12 +1,10 @@
 package org.chorus.math
 
-import lombok.SneakyThrows
+
 import kotlin.math.max
 import kotlin.math.sqrt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) :
     Cloneable, IVector3 {
     override val vector3: Vector3

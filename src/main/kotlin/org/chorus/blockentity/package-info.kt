@@ -94,7 +94,7 @@ import org.chorus.recipe.CampfireRecipe
 import org.chorus.block.BlockCampfire
 import org.chorus.event.inventory.CampfireSmeltEvent
 import org.chorus.block.BlockCauldron
-import lombok.RequiredArgsConstructor
+
 import org.chorus.inventory.DispenserInventory
 import org.chorus.inventory.EjectableInventory
 import org.chorus.block.BlockFrame

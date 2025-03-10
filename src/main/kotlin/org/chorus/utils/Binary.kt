@@ -13,9 +13,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class Binary {
     fun unsignShort(value: Int): Int {
         return value and 0xffff

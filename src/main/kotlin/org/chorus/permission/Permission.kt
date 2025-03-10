@@ -2,9 +2,7 @@ package org.chorus.permission
 
 import org.chorus.Server
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class Permission @JvmOverloads constructor(
     @JvmField val name: String,
     description: String? = null,

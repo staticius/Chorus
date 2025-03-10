@@ -5,7 +5,7 @@ import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.registry.BlockRegistry
 import org.chorus.registry.Registries
 import com.google.gson.JsonParser
-import lombok.SneakyThrows
+
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.BufferedReader

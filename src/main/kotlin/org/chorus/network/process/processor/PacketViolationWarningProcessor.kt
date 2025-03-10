@@ -5,7 +5,7 @@ import org.chorus.entity.EntityHuman.getName
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.PacketViolationWarningPacket
 import org.chorus.network.protocol.ProtocolInfo
-import lombok.extern.slf4j.Slf4j
+
 import java.lang.reflect.Field
 import java.util.*
 

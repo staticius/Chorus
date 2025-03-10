@@ -9,9 +9,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.level.Locator
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EntitySpawnEvent(entity: Entity) : EntityEvent(), Cancellable {
     val type: Int
 

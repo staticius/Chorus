@@ -4,7 +4,7 @@ import org.chorus.Server
 import org.chorus.resourcepacks.ResourcePack
 import org.chorus.resourcepacks.ZippedResourcePack
 import com.google.common.io.Files
-import lombok.extern.slf4j.Slf4j
+
 import java.io.File
 
 

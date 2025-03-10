@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types
 
 import org.chorus.entity.Entity.getId
-import lombok.*
+
 
 
 @RequiredArgsConstructor

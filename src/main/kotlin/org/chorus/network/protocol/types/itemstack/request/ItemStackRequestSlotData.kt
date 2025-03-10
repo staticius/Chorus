@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types.itemstack.request
 
 import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import lombok.Value
+
 
 /**
  * Holds information on a specific slot client-side.

@@ -5,9 +5,7 @@ import org.chorus.item.*
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class BlockIce : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 

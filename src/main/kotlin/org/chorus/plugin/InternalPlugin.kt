@@ -1,7 +1,7 @@
 package org.chorus.plugin
 
-import lombok.AccessLevel
-import lombok.NoArgsConstructor
+
+
 
 (access = AccessLevel.PRIVATE)
 class InternalPlugin : PluginBase() {

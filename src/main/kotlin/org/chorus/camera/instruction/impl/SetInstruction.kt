@@ -6,8 +6,8 @@ import org.chorus.camera.instruction.CameraInstruction
 import org.chorus.math.Vector2f
 import org.chorus.math.Vector3f
 import org.chorus.utils.OptionalValue
-import lombok.Builder
-import lombok.Getter
+
+
 
 /**
  * @author daoge_cmd

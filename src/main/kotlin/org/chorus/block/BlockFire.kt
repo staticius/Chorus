@@ -22,9 +22,7 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     var age: Int

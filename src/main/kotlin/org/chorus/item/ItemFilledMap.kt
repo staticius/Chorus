@@ -8,7 +8,7 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.ClientboundMapItemDataPacket
 import org.chorus.plugin.InternalPlugin
-import lombok.extern.slf4j.Slf4j
+
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream

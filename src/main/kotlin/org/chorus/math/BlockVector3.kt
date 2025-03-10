@@ -1,6 +1,6 @@
 package org.chorus.math
 
-import lombok.SneakyThrows
+
 import kotlin.math.pow
 import kotlin.math.sqrt
 

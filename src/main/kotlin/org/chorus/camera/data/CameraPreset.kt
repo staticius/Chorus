@@ -10,8 +10,8 @@ import org.chorus.network.protocol.UpdateSoftEnumPacket
 import org.chorus.network.protocol.types.camera.CameraAudioListener
 import org.chorus.network.protocol.types.camera.aimassist.CameraPresetAimAssist
 import org.chorus.utils.OptionalValue
-import lombok.Builder
-import lombok.Getter
+
+
 import java.util.*
 import java.util.function.Consumer
 

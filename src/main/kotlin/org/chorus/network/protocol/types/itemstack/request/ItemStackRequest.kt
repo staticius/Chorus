@@ -3,8 +3,8 @@ package org.chorus.network.protocol.types.itemstack.request
 import org.chorus.network.protocol.ItemStackRequestPacket
 import org.chorus.network.protocol.PlayerAuthInputPacket
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestAction
-import lombok.RequiredArgsConstructor
-import lombok.Value
+
+
 
 /**
  * Request represents a single request present in an [ItemStackRequestPacket] or

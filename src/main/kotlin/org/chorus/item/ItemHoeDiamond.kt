@@ -1,8 +1,6 @@
 package org.chorus.item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemHoeDiamond @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemTool(ItemID.Companion.DIAMOND_HOE, meta, count, "Diamond Hoe") {
     override val maxDurability: Int

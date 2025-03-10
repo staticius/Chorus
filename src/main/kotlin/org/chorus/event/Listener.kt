@@ -35,8 +35,8 @@ package org.chorus.event
 </pre> *
  *
  *
- * 关于注册监听类，请看：[cn.nukkit.plugin.PluginManager.registerEvents].<br></br>
- * For registering listener class, See: [cn.nukkit.plugin.PluginManager.registerEvents].
+ * 关于注册监听类，请看：[org.chorus.plugin.PluginManager.registerEvents].<br></br>
+ * For registering listener class, See: [org.chorus.plugin.PluginManager.registerEvents].
  *
  *
  * 关于处理器的优先级和处理器是否忽略被取消的事件，请看：[EventHandler].<br></br>
@@ -44,7 +44,7 @@ package org.chorus.event
  *
  * @author Unknown(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @see cn.nukkit.event.Event
+ * @see org.chorus.event.Event
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */

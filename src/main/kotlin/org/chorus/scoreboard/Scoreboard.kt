@@ -7,8 +7,8 @@ import org.chorus.scoreboard.data.SortOrder
 import org.chorus.scoreboard.displayer.IScoreboardViewer
 import org.chorus.scoreboard.scorer.FakeScorer
 import org.chorus.scoreboard.scorer.IScorer
-import lombok.Getter
-import lombok.Setter
+
+
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 

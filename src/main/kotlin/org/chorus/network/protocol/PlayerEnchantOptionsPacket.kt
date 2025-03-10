@@ -3,7 +3,7 @@ package org.chorus.network.protocol
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.connection.util.HandleByteBuf
-import lombok.*
+
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 

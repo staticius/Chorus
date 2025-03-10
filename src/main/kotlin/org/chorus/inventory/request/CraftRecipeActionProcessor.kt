@@ -2,7 +2,6 @@ package org.chorus.inventory.request
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.entity.mob.villagers.EntityVillagerV2.addExperience
 import org.chorus.entity.mob.villagers.EntityVillagerV2.addGossip
@@ -28,7 +27,7 @@ import org.chorus.recipe.SmithingTransformRecipe
 import org.chorus.recipe.SmithingTrimRecipe
 import org.chorus.registry.Registries
 import org.chorus.utils.TradeRecipeBuildUtils
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import kotlin.math.max
 
@@ -105,7 +104,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 context.put(ENCH_RECIPE_KEY, true)
             }
             return null
-        } else if (action.recipeNetworkId >= TradeRecipeBuildUtils.TRADE_RECIPEID) { //handle village trade recipe
+        } else if (action.recipeNetworkId >= TradeRecipeBuildUtils.TRADE_RECIPE_ID) { //handle village trade recipe
             val tradeRecipe = TradeRecipeBuildUtils.RECIPE_MAP[action.recipeNetworkId]
             if (tradeRecipe == null) {
                 CraftRecipeActionProcessor.log.error("Can't find trade recipe from netId {}", action.recipeNetworkId)

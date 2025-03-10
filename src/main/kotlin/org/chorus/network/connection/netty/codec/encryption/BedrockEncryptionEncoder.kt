@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBufAllocator
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageEncoder
 import io.netty.util.concurrent.FastThreadLocal
-import lombok.RequiredArgsConstructor
+
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.util.concurrent.atomic.AtomicLong

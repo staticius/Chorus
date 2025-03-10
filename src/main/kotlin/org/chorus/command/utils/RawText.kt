@@ -11,9 +11,9 @@ import org.chorus.scoreboard.scorer.IScorer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.utils.JSONUtils
 import com.google.gson.annotations.SerializedName
-import lombok.Getter
-import lombok.Setter
-import lombok.SneakyThrows
+
+
+
 import java.util.stream.Collectors
 
 

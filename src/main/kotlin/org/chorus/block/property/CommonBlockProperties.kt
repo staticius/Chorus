@@ -352,7 +352,7 @@ interface CommonBlockProperties {
         @JvmField
         val PILLAR_AXIS: org.chorus.block.property.type.EnumPropertyType<BlockFace.Axis> = org.chorus.block.property.type.EnumPropertyType.of<BlockFace.Axis>(
             "pillar_axis",
-            BlockFace.Axis::class.java, BlockFace.Axis.cn.nukkit.math.BlockFace.Axis.entries.toTypedArray().get(0)
+            BlockFace.Axis::class.java, BlockFace.Axis.org.chorus.math.BlockFace.Axis.entries.toTypedArray().get(0)
         )
 
         @JvmField

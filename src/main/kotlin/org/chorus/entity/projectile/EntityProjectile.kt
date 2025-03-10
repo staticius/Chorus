@@ -22,9 +22,7 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EntityProjectile @JvmOverloads constructor(
     chunk: IChunk?,
     nbt: CompoundTag?,

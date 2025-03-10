@@ -2,7 +2,7 @@ package org.chorus.block.property.type
 
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.utils.Utils.computeRequiredBits
-import lombok.Getter
+
 import java.util.stream.IntStream
 
 /**

@@ -103,24 +103,24 @@ abstract class Enchantment : Cloneable {
     val identifier: Identifier?
 
     /**
-     * This value is for treasures of [cn.nukkit.item.randomitem.Fishing], specifically [cn.nukkit.item.randomitem.fishing.FishingEnchantmentItemSelector]
-     * If false, this enchantment cannot be fished using a [cn.nukkit.item.ItemFishingRod]
+     * This value is for treasures of [org.chorus.item.randomitem.Fishing], specifically [org.chorus.item.randomitem.fishing.FishingEnchantmentItemSelector]
+     * If false, this enchantment cannot be fished using a [org.chorus.item.ItemFishingRod]
      *
      * @return whether this enchantment can be fished or not
      */
     /**
-     * Decides whether this enchantment can be fished ([cn.nukkit.item.randomitem.fishing.FishingEnchantmentItemSelector]) using a [cn.nukkit.item.ItemFishingRod]
+     * Decides whether this enchantment can be fished ([org.chorus.item.randomitem.fishing.FishingEnchantmentItemSelector]) using a [org.chorus.item.ItemFishingRod]
      *
      * @param fishable true if it is fishable
      */
     var isFishable: Boolean = true
     /**
-     * This value is used for deciding which enchantments can be obtained within the [cn.nukkit.block.BlockEnchantingTable], used within [EnchantmentHelper]
+     * This value is used for deciding which enchantments can be obtained within the [org.chorus.block.BlockEnchantingTable], used within [EnchantmentHelper]
      *
      * @return true if it can be obtained
      */
     /**
-     * Decides whether this enchantment can be obtained from a [cn.nukkit.block.BlockEnchantingTable]
+     * Decides whether this enchantment can be obtained from a [org.chorus.block.BlockEnchantingTable]
      *
      * @param obtainableFromEnchantingTable true if it is obtainable
      */
@@ -240,7 +240,7 @@ abstract class Enchantment : Cloneable {
      * 覆写该方法提供当实体被攻击时盔甲提供的保护值
      *
      *
-     * 目前只生效于[HumanType][cn.nukkit.entity.EntityHumanType] 和 [EntityMob][EntityMonster]
+     * 目前只生效于[HumanType][org.chorus.entity.EntityHumanType] 和 [EntityMob][EntityMonster]
      *
      * @param event 该实体被攻击的事件
      * @return the protection factor
@@ -256,7 +256,7 @@ abstract class Enchantment : Cloneable {
      * 覆写该方法提供当实体使用附魔武器攻击所增益的攻击力
      *
      *
-     * 目前只生效于[Player][cn.nukkit.Player] 和 使用了[MeleeAttackExecutor][cn.nukkit.entity.ai.executor.MeleeAttackExecutor]行为的实体
+     * 目前只生效于[Player][org.chorus.Player] 和 使用了[MeleeAttackExecutor][org.chorus.entity.ai.executor.MeleeAttackExecutor]行为的实体
      *
      * @param target 攻击的目标实体
      * @param damager the entity that deals the damage
@@ -780,7 +780,7 @@ abstract class Enchantment : Cloneable {
                 try {
                     val clazz = loadClass(
                         Thread.currentThread().contextClassLoader,
-                        "cn.nukkit.item.customitem.$className", classWriter.toByteArray()
+                        "org.chorus.item.customitem.$className", classWriter.toByteArray()
                     ) as Class<out Item>
                     Registries.ITEM.registerCustomItem(InternalPlugin.INSTANCE, clazz)
                 } catch (e: ClassNotFoundException) {

@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.evaluator
 
 import org.chorus.entity.mob.EntityMob
-import lombok.Getter
+
 import java.util.concurrent.ThreadLocalRandom
 
 

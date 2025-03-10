@@ -2,9 +2,7 @@ package org.chorus.level
 
 import org.chorus.level.format.IChunk
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface ChunkLoader {
     val loaderId: Int
 

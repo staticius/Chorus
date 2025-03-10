@@ -7,9 +7,7 @@ import org.chorus.item.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentThorns :
     Enchantment(Enchantment.Companion.ID_THORNS, "thorns", Rarity.VERY_RARE, EnchantmentType.ARMOR) {
     override fun getMinEnchantAbility(level: Int): Int {

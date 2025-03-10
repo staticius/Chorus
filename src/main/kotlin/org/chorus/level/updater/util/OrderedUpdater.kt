@@ -1,6 +1,6 @@
 package org.chorus.level.updater.util
 
-import lombok.*
+
 
 /**
  * Stores updates from ints to Strings.

@@ -8,9 +8,7 @@ import java.nio.charset.*
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class NBTOutputStream @JvmOverloads constructor(
     stream: OutputStream?,
     val endianness: ByteOrder = ByteOrder.BIG_ENDIAN,

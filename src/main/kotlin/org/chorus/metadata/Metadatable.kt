@@ -2,9 +2,7 @@ package org.chorus.metadata
 
 import org.chorus.plugin.Plugin
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface Metadatable {
     fun setMetadata(metadataKey: String?, newMetadataValue: MetadataValue?)
 

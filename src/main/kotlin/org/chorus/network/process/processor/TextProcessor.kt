@@ -6,7 +6,7 @@ import org.chorus.config.ServerPropertiesKeys
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.TextPacket
-import lombok.extern.slf4j.Slf4j
+
 
 
 class TextProcessor : DataPacketProcessor<TextPacket>() {

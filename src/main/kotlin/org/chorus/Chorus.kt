@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.core.LoggerContext
 import org.chorus.scheduler.AsyncTask
+import org.chorus.utils.Loggable
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.*
@@ -31,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * The launcher class of Chorus, including the `main` function.
  */
-object Chorus {
+object Chorus : Loggable {
     val GIT_INFO: Properties? = gitInfo
     val VERSION: String? = version
     val CODENAME: String = dynamic("Chorus")
@@ -184,8 +185,6 @@ object Chorus {
         LogManager.shutdown()
         Runtime.getRuntime().halt(0) // force exit
     }
-
-    private val log: Logger by lazy { LoggerFactory.getLogger(AsyncTask::class.java) }
 
     private fun requiresShortTitle(): Boolean {
         //Shorter title for Windows 8/2012

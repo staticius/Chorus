@@ -4,8 +4,8 @@ import org.chorus.nbt.NBTIO.read
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import io.netty.util.internal.EmptyArrays
-import lombok.SneakyThrows
-import lombok.extern.slf4j.Slf4j
+
+
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -14,9 +14,7 @@ import java.util.function.*
 import java.util.function.Function
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class BinaryStream {
     var offset: Int

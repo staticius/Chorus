@@ -1,7 +1,7 @@
 package org.chorus.scheduler
 
 import org.chorus.plugin.Plugin
-import lombok.extern.slf4j.Slf4j
+
 
 /**
  * @author MagicDroidX

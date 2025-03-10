@@ -3,7 +3,7 @@ package org.chorus.entity.ai.behavior
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.executor.IBehaviorExecutor
 import org.chorus.entity.mob.EntityMob
-import lombok.Getter
+
 
 /**
  * 单个的行为对象，包含一个执行器和一个评估器，行为对象委托了它们的方法

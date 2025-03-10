@@ -12,7 +12,7 @@ import org.chorus.scoreboard.displayer.IScoreboardViewer
 import org.chorus.scoreboard.scorer.EntityScorer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.scoreboard.storage.IScoreboardStorage
-import lombok.Getter
+
 import java.util.function.Consumer
 
 

@@ -2,9 +2,7 @@ package org.chorus.item
 
 import org.chorus.utils.DyeColor
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class ItemDye : Item {
     constructor(dyeColor: DyeColor) : this(dyeColor.itemDyeMeta, 1)
 

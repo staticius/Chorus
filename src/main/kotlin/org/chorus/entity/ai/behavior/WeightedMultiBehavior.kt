@@ -2,20 +2,20 @@ package org.chorus.entity.ai.behavior
 
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
 import org.chorus.entity.mob.EntityMob
-import lombok.Getter
-import lombok.Setter
+
+
 import java.util.concurrent.*
 
 /**
  * 由多个行为[IBehavior]组成的组（注意和行为组[IBehaviorGroup]区分）<br></br>
- * 调用方法[cn.nukkit.entity.ai.executor.IBehaviorExecutor.execute]前，必须调用此对象的评估函数以确认激活的是哪个行为<br></br>
+ * 调用方法[org.chorus.entity.ai.executor.IBehaviorExecutor.execute]前，必须调用此对象的评估函数以确认激活的是哪个行为<br></br>
  * 在评估时，会评估所有包含的子行为<br></br>
  * 筛选出返回成功的行为后，会选取最高优先级的那一组<br></br>
  * 如果到这一步依然存在多个行为，则会根据行为的[IBehavior.getWeight]方法的返回值随机选取其中一个作为执行行为
  *
  *
  * A group consisting of multiple behaviors [IBehavior] (note the distinction with behavior groups [IBehaviorGroup])<br></br>
- * Before calling the method [cn.nukkit.entity.ai.executor.IBehaviorExecutor.execute], the evaluation function of this object must be called to confirm which behavior is activated<br></br>
+ * Before calling the method [org.chorus.entity.ai.executor.IBehaviorExecutor.execute], the evaluation function of this object must be called to confirm which behavior is activated<br></br>
  * During evaluation, all contained child behaviors are evaluated<br></br>
  * After filtering out the behaviors that return success, the group with the highest priority is selected<br></br>
  * If there are still multiple behaviors at this point, one of them is randomly selected for execution based on the return value of the [IBehavior.getWeight] method of the behavior

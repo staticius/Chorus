@@ -11,8 +11,8 @@ import org.chorus.registry.ItemRuntimeIdRegistry.RuntimeEntry
 import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
-import lombok.Getter
-import lombok.extern.slf4j.Slf4j
+
+
 import me.sunlan.fastreflection.FastConstructor
 import me.sunlan.fastreflection.FastMemberLoader
 import org.jetbrains.annotations.UnmodifiableView

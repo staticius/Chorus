@@ -99,7 +99,7 @@ import org.chorus.math.BlockVector3
 import org.chorus.utils.SemVersion
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.level.format.leveldb.LevelDat.Abilities
-import lombok.AccessLevel
+
 import org.chorus.level.GameRules
 import org.chorus.level.format.leveldb.LevelDat.Experiments
 import org.chorus.level.format.leveldb.LevelDat.WorldPolicies
@@ -165,12 +165,12 @@ import java.util.concurrent.locks.StampedLock
 import org.chorus.level.biome.BiomeID
 import org.chorus.nbt.tag.NumberTag
 import java.util.function.BiPredicate
-import lombok.AllArgsConstructor
-import lombok.NoArgsConstructor
-import lombok.experimental.Accessors
+
+
+
 import org.chorus.level.format.LevelConfig.AntiXrayMode
 import org.chorus.level.format.LevelProviderManager
-import lombok.experimental.UtilityClass
+
 import org.chorus.level.updater.item.ItemUpdater_1_20_60
 import org.chorus.level.updater.item.ItemUpdater_1_20_70
 import org.chorus.level.updater.item.ItemUpdater_1_20_80
@@ -223,7 +223,7 @@ import org.chorus.level.updater.block.BlockStateUpdater_1_21_30
 import org.chorus.level.updater.block.BlockStateUpdater_1_21_40
 import org.chorus.level.updater.block.BlockStateUpdater_1_21_60
 import org.chorus.utils.JSONUtils
-import lombok.RequiredArgsConstructor
+
 import org.chorus.network.protocol.DataPacket
 import java.util.Locale
 import org.chorus.level.particle.GenericParticle

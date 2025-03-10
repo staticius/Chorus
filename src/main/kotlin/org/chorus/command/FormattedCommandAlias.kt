@@ -4,11 +4,9 @@ import org.chorus.Server
 import org.chorus.lang.TranslationContainer
 import org.chorus.utils.TextFormat
 import io.netty.util.internal.EmptyArrays
-import lombok.extern.slf4j.Slf4j
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
+
 
 class FormattedCommandAlias : Command {
     private val formatStrings: Array<String>

@@ -8,7 +8,7 @@ import org.chorus.network.protocol.types.BannerPatternType
 import org.chorus.network.protocol.types.itemstack.request.action.CraftLoomAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.utils.DyeColor
-import lombok.extern.slf4j.Slf4j
+
 
 /**
  * @author CoolLoong

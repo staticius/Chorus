@@ -30,9 +30,7 @@ import kotlin.collections.set
 import kotlin.collections.toTypedArray
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class Command @JvmOverloads constructor(
     name: String,
     description: String = "",

@@ -3,8 +3,8 @@ package org.chorus.network.protocol.types.inventory.transaction
 import org.chorus.item.Item
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.InventoryTransactionPacket
-import lombok.*
-import lombok.extern.slf4j.Slf4j
+
+
 
 /**
  * @author CreeperFace

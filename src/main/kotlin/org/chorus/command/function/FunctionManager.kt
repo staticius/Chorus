@@ -1,7 +1,7 @@
 package org.chorus.command.function
 
 import org.chorus.command.data.CommandEnum
-import lombok.Getter
+
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path

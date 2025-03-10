@@ -6,7 +6,7 @@ import org.chorus.scheduler.FileWriteTask
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import lombok.extern.slf4j.Slf4j
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.DumperOptions
@@ -527,8 +527,7 @@ class Config {
         return HashSet()
     }
 
-    companion object {
-        private val log: Logger by lazy { LoggerFactory.getLogger(Config::class.java) }
+    companion object : Loggable {
 
         const val DETECT: Int = -1 //Detect by file extension
         const val PROPERTIES: Int = 0 // .properties

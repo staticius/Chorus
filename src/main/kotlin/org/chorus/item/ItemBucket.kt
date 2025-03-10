@@ -19,9 +19,7 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.network.protocol.UpdateBlockPacket
 import org.chorus.utils.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class ItemBucket : Item {
     @JvmOverloads
     constructor(meta: Int = 0, count: Int = 1) : super(ItemID.Companion.BUCKET, meta, count)

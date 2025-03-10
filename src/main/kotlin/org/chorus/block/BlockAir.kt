@@ -5,9 +5,7 @@ import org.chorus.item.*
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockAir : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 

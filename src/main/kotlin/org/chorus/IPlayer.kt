@@ -14,9 +14,9 @@ import java.util.*
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @see cn.nukkit.Player
+ * @see org.chorus.Player
  *
- * @see cn.nukkit.OfflinePlayer
+ * @see org.chorus.OfflinePlayer
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
@@ -35,9 +35,9 @@ interface IPlayer : ServerOperator, Metadatable {
      * Returns the name of this player.
      *
      *
-     * 如果是在线的玩家，这个函数只会返回登录名字。如果要返回显示的名字，参见[cn.nukkit.Player.getDisplayName]<br></br>
+     * 如果是在线的玩家，这个函数只会返回登录名字。如果要返回显示的名字，参见[org.chorus.Player.getDisplayName]<br></br>
      * Notice that this will only return its login name. If you need its display name, turn to
-     * [cn.nukkit.Player.getDisplayName]
+     * [org.chorus.Player.getDisplayName]
      *
      * @return 这个玩家的名称。<br></br>The name of this player.
      * @since Nukkit 1.0 | Nukkit API 1.0.0
@@ -72,7 +72,7 @@ interface IPlayer : ServerOperator, Metadatable {
      * Returns if this player is pardoned by whitelist.
      *
      * @return 这个玩家是否已加入白名单。<br></br>If this player is pardoned by whitelist.
-     * @see cn.nukkit.Server.isWhitelisted
+     * @see org.chorus.Server.isWhitelisted
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -84,9 +84,9 @@ interface IPlayer : ServerOperator, Metadatable {
      * `true` for add and `false` for remove.
      * @see .isWhitelisted
      *
-     * @see cn.nukkit.Server.addWhitelist
+     * @see org.chorus.Server.addWhitelist
      *
-     * @see cn.nukkit.Server.removeWhitelist
+     * @see org.chorus.Server.removeWhitelist
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -97,7 +97,7 @@ interface IPlayer : ServerOperator, Metadatable {
      * Returns a `Player` object for this interface.
      *
      * @return 这个接口的 `Player`对象。<br></br>a `Player` object for this interface.
-     * @see cn.nukkit.Server.getPlayerExact
+     * @see org.chorus.Server.getPlayerExact
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -110,7 +110,7 @@ interface IPlayer : ServerOperator, Metadatable {
      * @return 玩家所在的服务器。<br></br>the server carrying this player.
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
-    val server: Server?
+    val server: Server
 
     /**
      * 得到这个玩家第一次游戏的时间。<br></br>

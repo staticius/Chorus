@@ -1,11 +1,9 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
-import lombok.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
+
 
 
 (exclude = ["data"])

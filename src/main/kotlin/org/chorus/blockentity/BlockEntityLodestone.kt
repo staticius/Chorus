@@ -5,7 +5,7 @@ import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import it.unimi.dsi.fastutil.ints.IntList
-import lombok.extern.slf4j.Slf4j
+
 import java.io.IOException
 import java.util.*
 

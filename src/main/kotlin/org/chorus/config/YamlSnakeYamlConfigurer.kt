@@ -8,8 +8,8 @@ import eu.okaeri.configs.schema.ConfigDeclaration
 import eu.okaeri.configs.schema.FieldDeclaration
 import eu.okaeri.configs.schema.GenericsDeclaration
 import eu.okaeri.configs.serdes.SerdesContext
-import lombok.Setter
-import lombok.experimental.Accessors
+
+
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.LoaderOptions
 import org.yaml.snakeyaml.Yaml

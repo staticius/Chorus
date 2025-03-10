@@ -17,16 +17,14 @@ import com.google.gson.annotations.SerializedName
 import io.netty.util.internal.EmptyArrays
 import it.unimi.dsi.fastutil.ints.Int2IntArrayMap
 import it.unimi.dsi.fastutil.ints.Int2IntMap
-import lombok.extern.slf4j.Slf4j
+
 import org.jetbrains.annotations.ApiStatus
 import java.io.IOException
 import java.io.UncheckedIOException
 import java.nio.ByteOrder
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 abstract class Item : Cloneable, ItemID {
     var id: String

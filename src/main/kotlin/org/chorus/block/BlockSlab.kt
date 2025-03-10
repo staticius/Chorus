@@ -7,9 +7,7 @@ import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class BlockSlab : BlockTransparent {
     protected val doubleSlab: BlockState?
 

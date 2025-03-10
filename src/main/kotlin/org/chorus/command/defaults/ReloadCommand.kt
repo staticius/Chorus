@@ -9,9 +9,7 @@ import org.chorus.utils.TextFormat
 import kotlin.collections.Map
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ReloadCommand(name: String) : VanillaCommand(name, "Reload the server/plugin") {
     init {
         this.permission = "nukkit.command.reload"

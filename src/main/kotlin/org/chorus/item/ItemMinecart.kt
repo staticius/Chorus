@@ -10,9 +10,7 @@ import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.*
 import org.chorus.utils.Rail
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemMinecart @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.MINECART, meta, count, "Minecart") {
     override fun canBeActivated(): Boolean {

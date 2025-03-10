@@ -8,7 +8,7 @@ import org.chorus.level.format.LevelConfig
 import org.chorus.level.format.LevelConfig.GeneratorConfig
 import org.chorus.level.format.leveldb.LevelDBProvider
 import org.chorus.level.generator.terra.PNXPlatform
-import lombok.SneakyThrows
+
 import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions

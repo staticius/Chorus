@@ -4,7 +4,7 @@ package org.chorus.command.tree.node
  * 解析全部剩余参数拼接为`String`值
  *
  *
- * 所有命令参数类型为[JSON][cn.nukkit.command.data.CommandParamType.JSON]的
+ * 所有命令参数类型为[JSON][org.chorus.command.data.CommandParamType.JSON]的
  * 如果没有手动指定[IParamNode],则会默认使用这个解析
  */
 class RemainStringNode : ParamNode<String?>() {

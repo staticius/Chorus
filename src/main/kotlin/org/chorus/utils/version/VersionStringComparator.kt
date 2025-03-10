@@ -19,13 +19,13 @@ package org.chorus.utils.version
 import javax.annotation.Nonnull
 
 /**
- * A comparator that compares two strings as two [cn.nukkit.utils.version.Version] objects.
+ * A comparator that compares two strings as two [org.chorus.utils.version.Version] objects.
  * @author joserobjr
  * @since 0.1.0
  */
 open class VersionStringComparator : Comparator<String> {
     /**
-     * Compare two strings as two [cn.nukkit.utils.version.Version] objects.
+     * Compare two strings as two [org.chorus.utils.version.Version] objects.
      * @param o1 The first version string
      * @param o2 The second version string
      * @return `-1`, `0`, or `1` if the first is older, equals, or newer than the second version

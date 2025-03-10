@@ -19,11 +19,9 @@ import org.chorus.network.protocol.types.SpawnPointType
 import org.chorus.utils.DyeColor
 import org.chorus.utils.Faceable
 import org.chorus.utils.TextFormat
-import lombok.extern.slf4j.Slf4j
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
+
 
 class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBed?> {

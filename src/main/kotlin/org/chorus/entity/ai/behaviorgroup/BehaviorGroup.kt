@@ -17,7 +17,7 @@ import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.mob.EntityMob
 import org.chorus.level.*
 import org.chorus.math.*
-import lombok.*
+
 import java.util.*
 import java.util.function.Consumer
 import java.util.stream.Collectors

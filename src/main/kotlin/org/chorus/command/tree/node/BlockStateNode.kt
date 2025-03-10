@@ -8,7 +8,7 @@ import org.chorus.block.property.type.BlockPropertyType
  * Parse the corresponding parameter to the value of [BlockState],Must be defined one after [BlockNode]
  *
  *
- * Corresponding parameter type [cn.nukkit.command.data.CommandParamType.BLOCK_STATES]
+ * Corresponding parameter type [org.chorus.command.data.CommandParamType.BLOCK_STATES]
  */
 class BlockStateNode : ParamNode<BlockState?>() {
     override fun fill(arg: String) {

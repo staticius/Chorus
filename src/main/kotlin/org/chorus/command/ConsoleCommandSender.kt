@@ -6,11 +6,9 @@ import org.chorus.lang.TranslationContainer
 import org.chorus.level.GameRule
 import org.chorus.permission.Permission
 import org.chorus.plugin.Plugin
-import lombok.extern.slf4j.Slf4j
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
+
 
 open class ConsoleCommandSender : CommandSender {
     private val perm: PermissibleBase

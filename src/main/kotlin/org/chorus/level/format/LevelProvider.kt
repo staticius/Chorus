@@ -6,9 +6,7 @@ import org.chorus.level.Level
 import org.chorus.math.Vector3
 import it.unimi.dsi.fastutil.Pair
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface LevelProvider {
     val dimensionData: DimensionData
 

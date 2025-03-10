@@ -11,7 +11,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
-import lombok.Getter
+
 
 class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     

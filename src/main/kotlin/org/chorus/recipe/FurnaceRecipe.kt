@@ -5,9 +5,7 @@ import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.registry.RecipeRegistry
 import java.util.List
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class FurnaceRecipe(recipeId: String?, result: Item, ingredient: Item) :
     SmeltingRecipe(
         recipeId

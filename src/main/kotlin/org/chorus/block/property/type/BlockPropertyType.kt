@@ -1,8 +1,8 @@
 package org.chorus.block.property.type
 
 import org.chorus.block.property.type.IntPropertyType
-import lombok.Getter
-import lombok.ToString
+
+
 
 /**
  * Allay Project 2023/3/19

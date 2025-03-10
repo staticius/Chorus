@@ -2,9 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class BlockPlanks(blockState: BlockState?) : BlockSolid(blockState) {
     override val hardness: Double
         get() = 2.0

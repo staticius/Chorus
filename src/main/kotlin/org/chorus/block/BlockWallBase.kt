@@ -14,7 +14,7 @@ import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.math.VectorMath.calculateAxis
 import org.chorus.math.VectorMath.calculateFace
 import org.chorus.utils.Faceable
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import kotlin.collections.Map
 import kotlin.collections.set

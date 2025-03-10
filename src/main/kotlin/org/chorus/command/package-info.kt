@@ -59,7 +59,7 @@ import org.chorus.command.PluginCommand
 import org.chorus.plugin.InternalPlugin
 import org.chorus.utils.JSONUtils
 import org.chorus.command.utils.RawText.Component.ScoreComponent
-import lombok.SneakyThrows
+
 import org.chorus.scoreboard.IScoreboard
 import org.chorus.scoreboard.scorer.IScorer
 import org.chorus.scoreboard.scorer.PlayerScorer

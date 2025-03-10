@@ -98,7 +98,7 @@ import org.chorus.entity.data.profession.Profession
 import org.chorus.block.BlockCrops
 import org.chorus.math.BlockFace
 import org.chorus.math.BVector3
-import lombok.RequiredArgsConstructor
+
 import org.chorus.item.ItemFood
 import org.chorus.entity.ai.executor.EntityBreedingExecutor
 import org.chorus.network.protocol.EntityEventPacket
@@ -125,7 +125,7 @@ import org.chorus.utils.DyeColor
 import org.chorus.entity.item.EntityAreaEffectCloud
 import org.chorus.entity.mob.monster.EntityEnderDragon
 import org.chorus.entity.item.EntityEnderCrystal
-import lombok.AllArgsConstructor
+
 import org.chorus.item.ItemBow
 import org.chorus.entity.projectile.abstract_arrow.EntityArrow
 import org.chorus.event.entity.EntityShootBowEvent

@@ -7,7 +7,7 @@ import org.chorus.network.protocol.PositionTrackingDBClientRequestPacket
 import org.chorus.network.protocol.PositionTrackingDBServerBroadcastPacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.positiontracking.PositionTracking
-import lombok.extern.slf4j.Slf4j
+
 import java.io.IOException
 
 

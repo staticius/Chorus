@@ -1,10 +1,10 @@
 package org.chorus.form.element.custom
 
 import com.google.gson.JsonObject
-import lombok.AllArgsConstructor
-import lombok.Getter
-import lombok.Setter
-import lombok.experimental.Accessors
+
+
+
+
 
 
 

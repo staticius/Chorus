@@ -6,8 +6,8 @@ import org.chorus.inventory.Inventory
 import org.chorus.inventory.InventoryHolder
 import org.chorus.inventory.fake.FakeInventory
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import lombok.experimental.UtilityClass
-import lombok.extern.slf4j.Slf4j
+
+
 
 
 @UtilityClass

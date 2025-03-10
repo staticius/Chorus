@@ -3,8 +3,8 @@ package org.chorus.form.element.custom
 import com.google.common.base.Preconditions
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import lombok.*
-import lombok.experimental.Accessors
+
+
 import java.util.function.Consumer
 
 

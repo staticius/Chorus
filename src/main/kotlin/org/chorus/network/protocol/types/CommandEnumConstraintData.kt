@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types
 
 import org.chorus.command.data.CommandEnum
-import lombok.Value
+
 
 /**
  * CommandEnumConstraintData is sent in the AvailableCommandsPacket to limit what values of an enum may be used

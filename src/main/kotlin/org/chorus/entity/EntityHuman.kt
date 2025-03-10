@@ -18,9 +18,7 @@ import org.chorus.network.protocol.types.EntityLink
 import java.util.*
 import java.util.function.Predicate
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk, nbt) {
     @JvmField
     protected var uuid: UUID? = null

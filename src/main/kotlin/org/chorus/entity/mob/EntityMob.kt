@@ -29,7 +29,7 @@ import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.*
 import org.chorus.network.protocol.MoveEntityDeltaPacket
 import org.chorus.utils.*
-import lombok.Getter
+
 import java.util.*
 import java.util.concurrent.*
 import java.util.function.Consumer

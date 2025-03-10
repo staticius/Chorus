@@ -3,9 +3,7 @@ package org.chorus.plugin
 import org.chorus.event.*
 import org.chorus.utils.EventException
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class RegisteredListener(
     val listener: Listener,
     private var executor: EventExecutor,

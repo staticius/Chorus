@@ -1,6 +1,5 @@
 package org.chorus.utils
 
-import org.chorus.math.Vector3.equals
 import java.io.Serial
 import java.io.Serializable
 import java.util.*
@@ -30,11 +29,11 @@ import kotlin.math.min
  *
  * @see AbstractList
 </T> */
-class SortedList<T>(// 元素排序比较器
+open class SortedList<T>(// 元素排序比较器
     private val comparator: Comparator<in T>
 ) : AbstractList<T>(), Serializable {
     // 用以获取下一个节点的id
-    private var NEXT_NODE_ID = Int.MIN_VALUE
+    private var nextNodeID = Int.MIN_VALUE
 
     // 平衡树的根节点
     private var root: Node? = null
@@ -45,14 +44,14 @@ class SortedList<T>(// 元素排序比较器
      *
      * 此方法仅允许添加非null值，如果给定对象为null，则列表保持不变并返回false。
      *
-     * @param object 要添加的元素
+     * @param element 要添加的元素
      * @return 当给定对象为null时为false，否则为true
      */
-    override fun add(`object`: T): Boolean {
+    override fun add(element: T): Boolean {
         var treeAltered = false
-        if (`object` != null) {
+        if (element != null) {
             // 将值包装在节点中并添加它到树上
-            add(Node(`object`)) //这将确保modcount自增
+            add(Node(element)) //这将确保modcount自增
             treeAltered = true
         }
         return treeAltered
@@ -69,11 +68,11 @@ class SortedList<T>(// 元素排序比较器
      *
      * @param toAdd 要新增的节点
      */
-    override fun add(toAdd: Node) {
+    protected fun add(toAdd: Node) {
         if (root == null) {
             root = toAdd
         } else {
-            var current: Node = root
+            var current: Node? = root
             while (current != null) { // 理论上这玩意==true，但是为了确保使用动态代理、JVMTI、调试器或JVMCI时仍然能正常，我们需要判断下
                 val comparison: Int = toAdd.compareTo(current)
                 current = if (comparison < 0) { // toAdd < node
@@ -149,11 +148,11 @@ class SortedList<T>(// 元素排序比较器
                 throw NoSuchElementException()
             }
 
-            lastReturned = nextNode
-            nextNode = nextNode.successor()
+            lastReturned = nextNode!!
+            nextNode = nextNode!!.successor()
             nextIndex++
 
-            return lastReturned.value
+            return lastReturned!!.value
         }
 
         override fun remove() {
@@ -161,7 +160,7 @@ class SortedList<T>(// 元素排序比较器
 
             checkNotNull(lastReturned)
 
-            this@SortedList.remove(lastReturned)
+            this@SortedList.remove(lastReturned!!)
             lastReturned = null
 
             // 下一个节点现在可能不正确，所以需要再次获取它。
@@ -188,8 +187,9 @@ class SortedList<T>(// 元素排序比较器
     /**
      * @return 存储在此SortedList中的元素数量。
      */
-    override fun size(): Int {
-        return if (root == null) 0 else 1 + root.numChildren
+    override val size: Int
+        get() {
+        return if (root == null) 0 else 1 + root!!.numChildren
     }
 
     /**
@@ -206,11 +206,11 @@ class SortedList<T>(// 元素排序比较器
      * 元素比较使用[Object.equals]方法，并假设给定的obj必须具有与此SortedList中的元素相等的T类型。
      * 时间复杂度为*O(log(n))*，其中n是列表中的元素数。
      *
-     * @param obj 要检查存在性的对象
+     * @param element 要检查存在性的对象
      * @return 是否存在于此SortedList中
      */
-    override fun contains(obj: Any?): Boolean {
-        return obj != null && !isEmpty() && findFirstNodeWithValue(obj as T) != null
+    override fun contains(element: T): Boolean {
+        return element != null && !isEmpty() && findFirstNodeWithValue(element) != null
     }
 
     /**
@@ -227,11 +227,11 @@ class SortedList<T>(// 元素排序比较器
         while (current != null) {
             val comparison = comparator.compare(current.value, value)
             if (comparison == 0) {
-                while (current.leftChild != null
-                    && comparator.compare(current.leftChild.value, value) == 0
-                ) {
-                    current = current.leftChild
-                }
+                while (current!!.leftChild != null
+                        && comparator.compare(current.leftChild!!.value, value) == 0
+                    ) {
+                        current = current.leftChild
+                    }
                 break
             } else if (comparison < 0) {
                 current = current.rightChild
@@ -252,7 +252,7 @@ class SortedList<T>(// 元素排序比较器
      * @return 被删除的元素
      * @throws IllegalArgumentException 如果索引不是有效的索引则抛出此异常
      */
-    override fun remove(index: Int): T {
+    override fun removeAt(index: Int): T {
         // 在索引处获取节点，如果节点索引不存在，将抛出异常。
         val nodeAtIndex: Node = findNodeAtIndex(index)
         remove(nodeAtIndex)
@@ -265,14 +265,14 @@ class SortedList<T>(// 元素排序比较器
      *
      * 返回是否找到并删除了匹配的元素。
      *
-     * @param value 要移除的元素
+     * @param element 要移除的元素
      * @return 是否找到并删除了匹配的元素。
      */
-    override fun remove(value: Any?): Boolean {
+    override fun remove(element: T): Boolean {
         var treeAltered = false
         try {
-            if (value != null && root != null) {
-                val toRemove: Node? = findFirstNodeWithValue(value as T)
+            if (element != null && root != null) {
+                val toRemove: Node? = findFirstNodeWithValue(element)
                 if (toRemove != null) {
                     remove(toRemove)
                     treeAltered = true
@@ -289,22 +289,22 @@ class SortedList<T>(// 元素排序比较器
      *
      * @param toRemove 此SortedList中的节点
      */
-    override fun remove(toRemove: Node) {
-        if (toRemove.isLeaf()) {
-            val parent: Node = toRemove.parent
+    protected fun remove(toRemove: Node) {
+        if (toRemove.isLeaf) {
+            val parent: Node? = toRemove.parent
             if (parent == null) {
                 root = null
             } else {
                 toRemove.detachFromParentIfLeaf()
             }
         } else if (toRemove.hasTwoChildren()) {
-            val successor: Node = toRemove.successor()
+            val successor: Node = toRemove.successor()!!
             toRemove.switchValuesForThoseIn(successor)
             remove(successor)
         } else if (toRemove.leftChild != null) {
-            toRemove.leftChild.contractParent()
+            toRemove.leftChild!!.contractParent()
         } else {
-            toRemove.rightChild.contractParent()
+            toRemove.rightChild!!.contractParent()
         }
         modCount++
     }
@@ -326,7 +326,7 @@ class SortedList<T>(// 元素排序比较器
     protected fun findNodeAtIndex(index: Int): Node {
         require(!(index < 0 || index >= size)) { "$index is not valid index." }
         var current: Node? = root
-        var totalSmallerElements = if (current.leftChild == null) 0 else current.leftChild.sizeOfSubTree()
+        var totalSmallerElements = if (current?.leftChild == null) 0 else current.leftChild!!.sizeOfSubTree()
         while (current != null) {
             if (totalSmallerElements == index) {
                 break
@@ -334,14 +334,14 @@ class SortedList<T>(// 元素排序比较器
             if (totalSmallerElements > index) {
                 current = current.leftChild
                 totalSmallerElements--
-                totalSmallerElements -= if (Objects.requireNonNull<Node?>(current).rightChild == null) 0 else current.rightChild.sizeOfSubTree()
+                totalSmallerElements -= if (Objects.requireNonNull<Node?>(current).rightChild == null) 0 else current!!.rightChild!!.sizeOfSubTree()
             } else {
                 totalSmallerElements++
                 current = current.rightChild
-                totalSmallerElements += if (current.leftChild == null) 0 else current.leftChild.sizeOfSubTree()
+                totalSmallerElements += if (current?.leftChild == null) 0 else current.leftChild!!.sizeOfSubTree()
             }
         }
-        return current
+        return current!!
     }
 
     override fun isEmpty(): Boolean {
@@ -352,11 +352,11 @@ class SortedList<T>(// 元素排序比较器
         root = null
     }
 
-    override fun toArray(): Array<Any> {
+    override fun toArray(): Array<Any?> {
         val array = arrayOfNulls<Any>(size)
         var positionToInsert = 0
         if (root != null) {
-            var next: Node = root.smallestNodeInSubTree()
+            var next: Node? = root!!.smallestNodeInSubTree()
             while (next != null) {
                 array[positionToInsert] = next.value
                 positionToInsert++
@@ -367,22 +367,6 @@ class SortedList<T>(// 元素排序比较器
         return array
     }
 
-    override fun <E> toArray(holder: Array<E>): Array<E> {
-        var holder = holder
-        val size = size
-        if (holder.size < size) {
-            val classOfE = holder.javaClass.componentType
-            holder = java.lang.reflect.Array.newInstance(classOfE, size) as Array<E>
-        }
-        val itr: Iterator<T> = iterator()
-        var posToAdd = 0
-        while (itr.hasNext()) {
-            holder[posToAdd] = itr.next() as E
-            posToAdd++
-        }
-        return holder
-    }
-
     /**
      * 返回整个列表中的最小平衡因子。仅供测试使用
      */
@@ -390,7 +374,7 @@ class SortedList<T>(// 元素排序比较器
         var minBalanceFactor = 0
         var current: Node? = root
         while (current != null) {
-            minBalanceFactor = min(current.getBalanceFactor().toDouble(), minBalanceFactor.toDouble()).toInt()
+            minBalanceFactor = min(current.balanceFactor.toDouble(), minBalanceFactor.toDouble()).toInt()
             current = current.successor()
         }
         return minBalanceFactor
@@ -403,7 +387,7 @@ class SortedList<T>(// 元素排序比较器
         var maxBalanceFactor = 0
         var current: Node? = root
         while (current != null) {
-            maxBalanceFactor = max(current.getBalanceFactor().toDouble(), maxBalanceFactor.toDouble()).toInt()
+            maxBalanceFactor = max(current.balanceFactor.toDouble(), maxBalanceFactor.toDouble()).toInt()
             current = current.successor()
         }
         return maxBalanceFactor
@@ -411,50 +395,43 @@ class SortedList<T>(// 元素排序比较器
 
     //从startNode开始执行二叉树的再平衡，并向上递归树。..
     private fun rebalanceTree(startNode: Node) {
-        var current: Node = startNode
+        var current: Node? = startNode
         while (current != null) {
             //获取此时左右子树之间的差异。
-            val balanceFactor: Int = current.getBalanceFactor()
+            val balanceFactor: Int = current.balanceFactor
 
             if (balanceFactor == -2) {
-                if (current.rightChild.getBalanceFactor() == 1) {
-                    current.rightChild.leftChild.rightRotateAsPivot()
+                if (current.rightChild!!.balanceFactor == 1) {
+                    current.rightChild!!.leftChild!!.rightRotateAsPivot()
                 }
-                current.rightChild.leftRotateAsPivot()
+                current.rightChild!!.leftRotateAsPivot()
             } else if (balanceFactor == 2) {
-                if (current.leftChild.getBalanceFactor() == -1) {
-                    current.leftChild.rightChild.leftRotateAsPivot()
+                if (current.leftChild!!.balanceFactor == -1) {
+                    current.leftChild!!.rightChild!!.leftRotateAsPivot()
                 }
-                current.leftChild.rightRotateAsPivot()
+                current.leftChild!!.rightRotateAsPivot()
             }
 
             if (current.parent == null) {
                 root = current
                 break
             } else {
-                current = current.parent
+                current = current.parent!!
             }
         }
     }
 
-    /**
-     * 用于表示树中位置的内部类。每个节点存储一个相等值的列表，包含它们的子节点和父节点、在该点扎根的子树的高度以及它们拥有的子元素的总数。
-     *
-     *
-     * 顺便提一句，这里的left和right仅仅是处于中国人描述数据结构的习惯，并不是影射某些买办/新官僚政治立场左右摇晃，本人坚定信仰中国特色社会主义。
-     *
-     * @author superice666
-     */
-    protected inner class Node(t: T) : Comparable<Node> {
+    protected open inner class Node(t: T) : Comparable<Node> {
         var value: T
             private set
 
-        private var leftChild: Node? = null
-        private var rightChild: Node? = null
-        private var parent: Node? = null
+        var leftChild: Node? = null
+        var rightChild: Node? = null
+        var parent: Node? = null
 
         private var height = 0
-        private var numChildren = 0
+        var numChildren = 0
+            private set
 
         /**
          * 此节点的唯一id：自动生成，节点越新，此值越高。
@@ -463,7 +440,7 @@ class SortedList<T>(// 元素排序比较器
 
         init {
             this.value = t
-            this.id = NEXT_NODE_ID++
+            this.id = nextNodeID++
         }
 
         fun hasTwoChildren(): Boolean {
@@ -471,14 +448,14 @@ class SortedList<T>(// 元素排序比较器
         }
 
         // 如果是叶节点，则删除该节点，并更新树中的子节点数和高度。
-        private fun detachFromParentIfLeaf() {
+        fun detachFromParentIfLeaf() {
             if (!isLeaf || parent == null) {
                 throw RuntimeException("Call made to detachFromParentIfLeaf, but this is not a leaf node with a parent!")
             }
             if (isLeftChildOfParent) {
-                parent.setLeftChild(null)
+                parent!!.setLeftChild(null)
             } else {
-                parent.setRightChild(null)
+                parent!!.setRightChild(null)
             }
         }
 
@@ -488,24 +465,24 @@ class SortedList<T>(// 元素排序比较器
              *
              * @return 此节点的父节点（如果存在），否则为null
              */
-            get() = if (parent != null && parent.parent != null) parent.parent else null
+            get() = if (parent != null && parent!!.parent != null) parent!!.parent else null
 
         // 将此节点在树上向上移动一个槽口，更新值并重新平衡树。
-        private fun contractParent() {
-            if (parent == null || parent.hasTwoChildren()) {
+        fun contractParent() {
+            if (parent == null || parent!!.hasTwoChildren()) {
                 throw RuntimeException("Can not call contractParent on root node or when the parent has two children!")
             }
             val grandParent: Node? = grandParent
             if (grandParent != null) {
                 if (isLeftChildOfParent) {
-                    if (parent.isLeftChildOfParent()) {
+                    if (parent!!.isLeftChildOfParent) {
                         grandParent.leftChild = this
                     } else {
                         grandParent.rightChild = this
                     }
                     parent = grandParent
                 } else {
-                    if (parent.isLeftChildOfParent()) {
+                    if (parent!!.isLeftChildOfParent) {
                         grandParent.leftChild = this
                     } else {
                         grandParent.rightChild = this
@@ -528,7 +505,7 @@ class SortedList<T>(// 元素排序比较器
              *
              * @return 如果这是其父节点的左子节点，则为true，否则为false
              */
-            get() = parent != null && parent.leftChild === this
+            get() = parent != null && parent!!.leftChild === this
 
         val isRightChildOfParent: Boolean
             /**
@@ -536,7 +513,7 @@ class SortedList<T>(// 元素排序比较器
              *
              * @return 如果这是其父节点的右子节点，则为true，否则为false
              */
-            get() = parent != null && parent.rightChild === this
+            get() = parent != null && parent!!.rightChild === this
 
         protected fun getLeftChild(): Node? {
             return leftChild
@@ -562,11 +539,11 @@ class SortedList<T>(// 元素排序比较器
 
         fun smallestNodeInSubTree(): Node {
             var current: Node = this
-            while (current != null) {
+            while (true) {
                 if (current.leftChild == null) {
                     break
                 } else {
-                    current = current.leftChild
+                    current = current.leftChild!!
                 }
             }
             return current
@@ -574,11 +551,11 @@ class SortedList<T>(// 元素排序比较器
 
         protected fun largestNodeInSubTree(): Node {
             var current: Node = this
-            while (current != null) {
+            while (true) {
                 if (current.rightChild == null) {
                     break
                 } else {
-                    current = current.rightChild
+                    current = current.rightChild!!
                 }
             }
             return current
@@ -592,13 +569,13 @@ class SortedList<T>(// 元素排序比较器
         fun successor(): Node? {
             var successor: Node? = null
             if (rightChild != null) {
-                successor = rightChild.smallestNodeInSubTree()
+                successor = rightChild!!.smallestNodeInSubTree()
             } else if (parent != null) {
                 var current: Node = this
-                while (current != null && current.isRightChildOfParent()) {
-                    current = current.parent
+                while (current.isRightChildOfParent) {
+                    current = current.parent!!
                 }
-                successor = Objects.requireNonNull<Node?>(current).parent
+                successor = Objects.requireNonNull(current).parent
             }
             return successor
         }
@@ -611,20 +588,20 @@ class SortedList<T>(// 元素排序比较器
         protected fun predecessor(): Node? {
             var predecessor: Node? = null
             if (leftChild != null) {
-                predecessor = leftChild.largestNodeInSubTree()
+                predecessor = leftChild!!.largestNodeInSubTree()
             } else if (parent != null) {
                 var current: Node = this
-                while (current != null && current.isLeftChildOfParent()) {
-                    current = current.parent
+                while (current.isLeftChildOfParent) {
+                    current = current.parent!!
                 }
-                predecessor = Objects.requireNonNull<Node?>(current).parent
+                predecessor = Objects.requireNonNull(current).parent
             }
             return predecessor
         }
 
         // 将子节点设置为左/右，仅当给定节点为null或叶，且当前子节点相同时才应如此
         private fun setChild(isLeft: Boolean, leaf: Node?) {
-            //perform the update..
+            //perform the update.
             if (leaf != null) {
                 leaf.parent = this
             }
@@ -649,23 +626,23 @@ class SortedList<T>(// 元素排序比较器
 
         override fun toString(): String {
             return "[Node: value: " + value +
-                    ", leftChild value: " + (if (leftChild == null) "null" else leftChild.value) +
-                    ", rightChild value: " + (if (rightChild == null) "null" else rightChild.value) +
+                    ", leftChild value: " + (if (leftChild == null) "null" else leftChild!!.value) +
+                    ", rightChild value: " + (if (rightChild == null) "null" else rightChild!!.value) +
                     ", height: " + height +
                     ", numChildren: " + numChildren + "]\n"
         }
 
         // 使用当前节点作为轴左旋。
-        private fun leftRotateAsPivot() {
-            if (parent == null || parent.rightChild !== this) {
+        fun leftRotateAsPivot() {
+            if (parent == null || parent!!.rightChild !== this) {
                 throw RuntimeException("Can't left rotate as pivot has no valid parent node.")
             }
 
             // 首先将此节点向上移动，分离父节点。
-            val oldParent: Node = parent
+            val oldParent: Node = parent!!
             val grandParent: Node? = grandParent
             if (grandParent != null) {
-                if (parent.isLeftChildOfParent()) {
+                if (parent!!.isLeftChildOfParent) {
                     grandParent.leftChild = this
                 } else {
                     grandParent.rightChild = this
@@ -694,15 +671,15 @@ class SortedList<T>(// 元素排序比较器
             return 1 + numChildren
         }
 
-        private fun rightRotateAsPivot() {
-            if (parent == null || parent.leftChild !== this) {
+        fun rightRotateAsPivot() {
+            if (parent == null || parent!!.leftChild !== this) {
                 throw RuntimeException("Can't right rotate as pivot has no valid parent node.")
             }
 
-            val oldParent: Node = parent
+            val oldParent: Node = parent!!
             val grandParent: Node? = grandParent
             if (grandParent != null) {
-                if (parent.isLeftChildOfParent()) {
+                if (parent!!.isLeftChildOfParent) {
                     grandParent.leftChild = this
                 } else {
                     grandParent.rightChild = this
@@ -711,7 +688,7 @@ class SortedList<T>(// 元素排序比较器
             this.parent = grandParent
 
             oldParent.parent = this
-            val oldRightChild: Node = rightChild
+            val oldRightChild: Node? = rightChild
             rightChild = oldParent
             if (oldRightChild != null) {
                 oldRightChild.parent = oldParent
@@ -725,18 +702,18 @@ class SortedList<T>(// 元素排序比较器
          * 更新此路径上节点的高度和子节点数。还为路径上的每个节点（包括此节点）调用[.updateAdditionalCachedValues]
          */
         protected fun updateCachedValues() {
-            var current: Node = this
+            var current: Node? = this
             while (current != null) {
-                if (current.isLeaf()) {
+                if (current.isLeaf) {
                     current.height = 0
                     current.numChildren = 0
                 } else {
-                    val leftTreeHeight = if (current.leftChild == null) 0 else current.leftChild.height
-                    val rightTreeHeight = if (current.rightChild == null) 0 else current.rightChild.height
-                    current.height = 1 + max(leftTreeHeight.toDouble(), rightTreeHeight.toDouble())
+                    val leftTreeHeight = if (current.leftChild == null) 0 else current.leftChild!!.height
+                    val rightTreeHeight = if (current.rightChild == null) 0 else current.rightChild!!.height
+                    current.height = 1 + max(leftTreeHeight, rightTreeHeight)
 
-                    val leftTreeSize = if (current.leftChild == null) 0 else current.leftChild.sizeOfSubTree()
-                    val rightTreeSize = if (current.rightChild == null) 0 else current.rightChild.sizeOfSubTree()
+                    val leftTreeSize = if (current.leftChild == null) 0 else current.leftChild!!.sizeOfSubTree()
+                    val rightTreeSize = if (current.rightChild == null) 0 else current.rightChild!!.sizeOfSubTree()
                     current.numChildren = leftTreeSize + rightTreeSize
                 }
 
@@ -763,23 +740,23 @@ class SortedList<T>(// 元素排序比较器
 
         // 将此节点中的值替换为其他节点中的值。
         // 应该只在需要删除并且只有一个值时调用。
-        private fun switchValuesForThoseIn(other: Node) {
+        fun switchValuesForThoseIn(other: Node) {
             this.value = other.value
         }
 
-        private val balanceFactor: Int
-            get() = (if (leftChild == null) 0 else leftChild.height + 1) -
-                    (if (rightChild == null) 0 else rightChild.height + 1)
+        val balanceFactor: Int
+            get() = (if (leftChild == null) 0 else leftChild!!.height + 1) -
+                    (if (rightChild == null) 0 else rightChild!!.height + 1)
 
-        private fun setLeftChild(leaf: Node?) {
-            if ((leaf != null && !leaf.isLeaf()) || (leftChild != null && !leftChild.isLeaf())) {
+        fun setLeftChild(leaf: Node?) {
+            if ((leaf != null && !leaf.isLeaf) || (leftChild != null && !leftChild!!.isLeaf)) {
                 throw RuntimeException("setLeftChild should only be called with null or a leaf node, to replace a likewise child node.")
             }
             setChild(true, leaf)
         }
 
-        private fun setRightChild(leaf: Node?) {
-            if ((leaf != null && !leaf.isLeaf()) || (rightChild != null && !rightChild.isLeaf())) {
+        fun setRightChild(leaf: Node?) {
+            if ((leaf != null && !leaf.isLeaf) || (rightChild != null && !rightChild!!.isLeaf)) {
                 throw RuntimeException("setRightChild should only be called with null or a leaf node, to replace a likewise child node.")
             }
             setChild(false, leaf)

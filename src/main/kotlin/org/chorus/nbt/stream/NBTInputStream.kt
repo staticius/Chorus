@@ -11,9 +11,7 @@ import kotlin.collections.LinkedHashMap
 import kotlin.collections.MutableList
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class NBTInputStream @JvmOverloads constructor(
     stream: InputStream,
     val endianness: ByteOrder = ByteOrder.BIG_ENDIAN,

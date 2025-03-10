@@ -101,10 +101,10 @@ class CommandLogger(
     }
 
     /**
-     * 添加一条消息，参数可以是纯文本，也可以是客户端，服务端，以及[PluginI18n][cn.nukkit.lang.PluginI18n]中的多语言文本，默认输出颜色红色
+     * 添加一条消息，参数可以是纯文本，也可以是客户端，服务端，以及[PluginI18n][org.chorus.lang.PluginI18n]中的多语言文本，默认输出颜色红色
      *
      *
-     * Add a message, the parameters can be plain text, or client-side, server-side, and multilingual text in [PluginI18n][cn.nukkit.lang.PluginI18n], default output color red
+     * Add a message, the parameters can be plain text, or client-side, server-side, and multilingual text in [PluginI18n][org.chorus.lang.PluginI18n], default output color red
      *
      * @param key the key
      * @return the command logger
@@ -114,10 +114,10 @@ class CommandLogger(
     }
 
     /**
-     * 添加一条消息，参数可以是纯文本，也可以是客户端，服务端，以及[PluginI18n][cn.nukkit.lang.PluginI18n]中的多语言文本，默认输出颜色红色
+     * 添加一条消息，参数可以是纯文本，也可以是客户端，服务端，以及[PluginI18n][org.chorus.lang.PluginI18n]中的多语言文本，默认输出颜色红色
      *
      *
-     * Add a message, the parameters can be plain text, or client-side, server-side, and multilingual text in [PluginI18n][cn.nukkit.lang.PluginI18n], default output color red
+     * Add a message, the parameters can be plain text, or client-side, server-side, and multilingual text in [PluginI18n][org.chorus.lang.PluginI18n], default output color red
      *
      * @param key    the key
      * @param params the params

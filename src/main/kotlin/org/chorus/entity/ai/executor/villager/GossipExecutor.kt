@@ -11,7 +11,7 @@ import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.item.*
 import org.chorus.math.*
 import org.chorus.utils.*
-import lombok.RequiredArgsConstructor
+
 import java.util.*
 
 @RequiredArgsConstructor

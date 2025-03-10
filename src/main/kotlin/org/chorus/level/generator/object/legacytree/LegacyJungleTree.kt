@@ -1,8 +1,6 @@
 package org.chorus.level.generator.`object`.legacytree
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class LegacyJungleTree : LegacyTreeGenerator() {
     override val type: WoodType
         get() = WoodType.JUNGLE

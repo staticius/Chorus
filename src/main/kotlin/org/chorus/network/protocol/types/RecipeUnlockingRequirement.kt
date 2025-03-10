@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types
 
 import org.chorus.recipe.descriptor.ItemDescriptor
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.Value
+
 
 
 

@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
-import lombok.Value
+
 
 /**
  * ConsumeStackRequestAction is sent by the client when it uses an item to craft another item. The original

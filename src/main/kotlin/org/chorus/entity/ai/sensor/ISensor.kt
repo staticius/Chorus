@@ -5,11 +5,11 @@ import org.chorus.entity.mob.EntityMob
 
 /**
  * 此接口抽象了一个传感器 <br></br>
- * 传感器用于搜集环境信息并向记忆存储器[IMemoryStorage]写入一个记忆[cn.nukkit.entity.ai.memory.MemoryType]
+ * 传感器用于搜集环境信息并向记忆存储器[IMemoryStorage]写入一个记忆[org.chorus.entity.ai.memory.MemoryType]
  *
  *
  * This interface abstracts a sensor<br></br>
- * The sensor is used to collect environmental information and write a memory [cn.nukkit.entity.ai.memory.MemoryType] to the memory storage [IMemoryStorage]
+ * The sensor is used to collect environmental information and write a memory [org.chorus.entity.ai.memory.MemoryType] to the memory storage [IMemoryStorage]
  */
 interface ISensor {
     /**

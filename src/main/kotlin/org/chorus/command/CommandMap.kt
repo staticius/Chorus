@@ -1,8 +1,6 @@
 package org.chorus.command
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface CommandMap {
     /**
      * 注册全部命令

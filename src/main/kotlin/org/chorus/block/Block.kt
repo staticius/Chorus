@@ -33,14 +33,12 @@ import org.chorus.registry.Registries
 import org.chorus.tags.BlockTags.getTagSet
 import org.chorus.utils.BlockColor
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import java.util.function.Predicate
 import kotlin.math.pow
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     Metadatable, AxisAlignedBB, BlockID {

@@ -12,9 +12,7 @@ import org.chorus.event.vehicle.VehicleDestroyEvent
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt), EntityRideable,
     EntityInteractable {
     protected var rollingDirection: Boolean = true

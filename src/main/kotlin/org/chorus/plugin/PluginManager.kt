@@ -11,8 +11,8 @@ import org.chorus.permission.Permission
 import org.chorus.utils.PluginException
 import org.chorus.utils.Utils
 import io.netty.util.internal.EmptyArrays
-import lombok.Getter
-import lombok.extern.slf4j.Slf4j
+
+
 import java.io.File
 import java.lang.Deprecated
 import java.lang.reflect.Method

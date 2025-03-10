@@ -8,9 +8,7 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.ByteTag
 import org.chorus.utils.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class ItemArmor : Item, ItemDurable {
     constructor(id: String) : super(id)
 

@@ -1,11 +1,13 @@
 package org.chorus.utils
 
 import org.chorus.Server
-import lombok.extern.slf4j.Slf4j
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.lang.management.ManagementFactory
 import java.lang.management.ThreadInfo
 import kotlin.concurrent.Volatile
 import kotlin.math.max
+import kotlin.system.exitProcess
 
 
 class Watchdog(private val server: Server, private val time: Long) : Thread() {
@@ -36,22 +38,22 @@ class Watchdog(private val server: Server, private val time: Long) : Thread() {
                 val now = System.currentTimeMillis()
                 val diff = now - current
                 if (!responding && diff > time * 2) {
-                    System.exit(1) // Kill the server if it gets stuck on shutdown
+                    exitProcess(1) // Kill the server if it gets stuck on shutdown
                 }
 
                 if (diff <= time) {
                     responding = true
-                } else if (responding && now - server.busyingTime < 60) {
+                } else if (responding && now - server.getBusyingTime() < 60) {
                     val builder = StringBuilder(
                         "--------- Server stopped responding --------- (" + Math.round(diff / 1000.0) + "s)"
                     ).append('\n')
-                        .append("Please report this to PowerNukkitX:").append('\n')
-                        .append(" - https://github.com/PowerNukkitX/PowerNukkitX/issues/new").append('\n')
+                        .append("Please report this to Chorus:").append('\n')
+                        .append(" - https://github.com/Enderverse-Creations/Chorus/issues/new").append('\n')
                         .append("---------------- Main thread ----------------").append('\n')
 
                     dumpThread(
                         ManagementFactory.getThreadMXBean().getThreadInfo(
-                            server.primaryThread.id, Int.MAX_VALUE
+                            server.thread.threadId(), Int.MAX_VALUE
                         ), builder
                     )
 
@@ -62,7 +64,7 @@ class Watchdog(private val server: Server, private val time: Long) : Thread() {
                         dumpThread(threads[i], builder)
                     }
                     builder.append("---------------------------------------------").append('\n')
-                    Watchdog.log.error(builder.toString())
+                    log.error(builder.toString())
                     responding = false
                     server.forceShutdown()
                 }
@@ -70,7 +72,7 @@ class Watchdog(private val server: Server, private val time: Long) : Thread() {
             try {
                 sleep(max((time / 4).toDouble(), 1000.0).toLong())
             } catch (interruption: InterruptedException) {
-                Watchdog.log.error(
+                log.error(
                     "The Watchdog Thread has been interrupted and is no longer monitoring the server state",
                     interruption
                 )
@@ -78,10 +80,10 @@ class Watchdog(private val server: Server, private val time: Long) : Thread() {
                 return
             }
         }
-        Watchdog.log.warn("Watchdog was stopped")
+        log.warn("Watchdog was stopped")
     }
 
-    companion object {
+    companion object : Loggable {
         private fun dumpThread(thread: ThreadInfo?, builder: StringBuilder) {
             if (thread == null) {
                 builder.append("Attempted to dump a null thread!").append('\n')
@@ -92,7 +94,7 @@ class Watchdog(private val server: Server, private val time: Long) : Thread() {
                 .append(" | Native: ").append(thread.isInNative).append(" | State: ").append(thread.threadState)
                 .append('\n')
             // Monitors
-            if (thread.lockedMonitors.size != 0) {
+            if (thread.lockedMonitors.isNotEmpty()) {
                 builder.append("\tThread is waiting on monitor(s):").append('\n')
                 for (monitor in thread.lockedMonitors) {
                     builder.append("\t\tLocked on:").append(monitor.lockedStackFrame).append('\n')

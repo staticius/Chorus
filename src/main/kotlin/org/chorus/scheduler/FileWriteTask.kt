@@ -1,16 +1,14 @@
 package org.chorus.scheduler
 
 import org.chorus.utils.Utils
-import lombok.extern.slf4j.Slf4j
+
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class FileWriteTask : AsyncTask {
     private val file: File

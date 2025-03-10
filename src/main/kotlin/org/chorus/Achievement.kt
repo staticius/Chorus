@@ -1,9 +1,6 @@
 package org.chorus
 
-import org.chorus.config.ServerProperties.get
 import org.chorus.config.ServerPropertiesKeys
-import org.chorus.lang.BaseLang.tr
-import org.chorus.nbt.tag.ListTag.get
 import org.chorus.utils.*
 
 /**
@@ -14,24 +11,24 @@ class Achievement(val message: String, vararg requires: String) {
     val requires: Array<String>
 
     init {
-        this.requires = requires
+        this.requires = arrayOf(*requires)
     }
 
     fun broadcast(player: Player) {
-        val translation: String = Server.Companion.getInstance().getLanguage()
+        val translation: String = Server.instance.baseLang
             .tr("chat.type.achievement", player.getDisplayName(), TextFormat.GREEN.toString() + this.message)
 
-        if (Server.Companion.getInstance().getProperties()
+        if (Server.instance.properties
                 .get(ServerPropertiesKeys.ANNOUNCE_PLAYER_ACHIEVEMENTS, true)
         ) {
-            Server.Companion.getInstance().broadcastMessage(translation)
+            Server.instance.broadcastMessage(translation)
         } else {
             player.sendMessage(translation)
         }
     }
 
     companion object {
-        val achievements: HashMap<String, Achievement> = object : HashMap<String?, Achievement?>() {
+        val achievements: HashMap<String, Achievement> = object : HashMap<String, Achievement>() {
             init {
                 put("mineWood", Achievement("Getting Wood"))
                 put("buildWorkBench", Achievement("Benchmarking", "mineWood"))
@@ -51,16 +48,16 @@ class Achievement(val message: String, vararg requires: String) {
             if (!achievements.containsKey(achievementId)) {
                 return false
             }
-            val translation: String = Server.Companion.getInstance().getLanguage().tr(
+            val translation: String = Server.instance.baseLang.tr(
                 "chat.type.achievement",
                 player.getDisplayName(),
                 TextFormat.GREEN.toString() + achievements[achievementId]!!.message + TextFormat.RESET
             )
 
-            if (Server.Companion.getInstance().getProperties()
+            if (Server.instance.properties
                     .get(ServerPropertiesKeys.ANNOUNCE_PLAYER_ACHIEVEMENTS, true)
             ) {
-                Server.Companion.getInstance().broadcastMessage(translation)
+                Server.instance.broadcastMessage(translation)
             } else {
                 player.sendMessage(translation)
             }

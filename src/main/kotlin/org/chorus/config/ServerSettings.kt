@@ -3,10 +3,10 @@ package org.chorus.config
 import eu.okaeri.configs.OkaeriConfig
 import eu.okaeri.configs.annotation.Comment
 import eu.okaeri.configs.annotation.CustomKey
-import lombok.Data
-import lombok.EqualsAndHashCode
-import lombok.Getter
-import lombok.experimental.Accessors
+
+
+
+
 
 (callSuper = true)
 

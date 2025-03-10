@@ -16,7 +16,7 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.registry.Registries
 import org.chorus.utils.HashUtils
 import org.chorus.utils.ThreadCache
-import lombok.extern.slf4j.Slf4j
+
 import java.io.*
 import java.nio.ByteOrder
 import java.nio.file.Files

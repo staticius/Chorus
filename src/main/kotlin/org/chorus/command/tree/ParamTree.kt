@@ -26,7 +26,7 @@ class ParamTree {
         private set
 
     /**
-     * 从给定的命令中初始化命令节点树，其中每个参数类型[CommandParamType][cn.nukkit.command.data.CommandParamType]会对应一个默认的参数节点,或者使用<br></br>
+     * 从给定的命令中初始化命令节点树，其中每个参数类型[CommandParamType][org.chorus.command.data.CommandParamType]会对应一个默认的参数节点,或者使用<br></br>
      * [CommandParameter.newType]<br></br>
      * [CommandParameter.newEnum]<br></br>
      * 初始化指定的命令节点。

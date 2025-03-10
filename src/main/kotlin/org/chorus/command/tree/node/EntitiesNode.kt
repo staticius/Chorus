@@ -10,7 +10,7 @@ import com.google.common.collect.Lists
  * 解析为`List<Entity>`值
  *
  *
- * 所有命令参数类型为[TARGET][cn.nukkit.command.data.CommandParamType.TARGET]如果没有手动指定[IParamNode],则会默认使用这个解析
+ * 所有命令参数类型为[TARGET][org.chorus.command.data.CommandParamType.TARGET]如果没有手动指定[IParamNode],则会默认使用这个解析
  */
 class EntitiesNode : TargetNode<Entity?>() {
     //todo 支持uuid 或者 xuid

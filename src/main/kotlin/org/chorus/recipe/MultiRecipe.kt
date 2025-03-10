@@ -2,7 +2,7 @@ package org.chorus.recipe
 
 import org.chorus.item.Item
 import org.chorus.recipe.descriptor.ItemDescriptor
-import lombok.ToString
+
 import java.util.*
 
 

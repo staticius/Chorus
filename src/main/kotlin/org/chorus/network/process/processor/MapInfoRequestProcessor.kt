@@ -10,7 +10,7 @@ import org.chorus.network.protocol.MapInfoRequestPacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.plugin.InternalPlugin
 import org.chorus.scheduler.AsyncTask
-import lombok.extern.slf4j.Slf4j
+
 
 
 class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {

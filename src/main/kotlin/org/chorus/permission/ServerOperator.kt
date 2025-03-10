@@ -6,7 +6,7 @@ package org.chorus.permission
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @see cn.nukkit.permission.Permissible
+ * @see org.chorus.permission.Permissible
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */

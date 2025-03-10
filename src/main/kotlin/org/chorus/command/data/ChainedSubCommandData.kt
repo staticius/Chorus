@@ -1,7 +1,7 @@
 package org.chorus.command.data
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.Data
+
 
 
 class ChainedSubCommandData {

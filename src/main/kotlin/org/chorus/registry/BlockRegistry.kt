@@ -8,7 +8,7 @@ import org.chorus.level.Level
 import org.chorus.plugin.Plugin
 import org.chorus.registry.ItemRuntimeIdRegistry.RuntimeEntry
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import lombok.extern.slf4j.Slf4j
+
 import me.sunlan.fastreflection.FastConstructor
 import me.sunlan.fastreflection.FastMemberLoader
 import org.jetbrains.annotations.UnmodifiableView

@@ -2,9 +2,7 @@ package org.chorus.permission
 
 import org.chorus.plugin.Plugin
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface Permissible : ServerOperator {
     fun isPermissionSet(name: String?): Boolean
 

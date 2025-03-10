@@ -1,13 +1,13 @@
 package org.chorus.form.response
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import lombok.AllArgsConstructor
-import lombok.Getter
-import lombok.Setter
-import lombok.experimental.Accessors
+
+
+
+
 
 /**
- * The response of a [cn.nukkit.form.window.CustomForm]
+ * The response of a [org.chorus.form.window.CustomForm]
  */
 
 

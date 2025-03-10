@@ -7,9 +7,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 object NukkitMath {
     private const val ZERO_BYTE: Byte = 0
     private const val ZERO_INTEGER = 0

@@ -1,8 +1,6 @@
 package org.chorus.item.enchantment
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentWaterWalker :
     Enchantment(Enchantment.Companion.ID_WATER_WALKER, "waterWalker", Rarity.RARE, EnchantmentType.ARMOR_FEET) {
     override fun getMinEnchantAbility(level: Int): Int {

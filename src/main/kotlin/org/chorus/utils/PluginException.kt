@@ -1,8 +1,6 @@
 package org.chorus.utils
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PluginException : ServerException {
     constructor(message: String?) : super(message)
 

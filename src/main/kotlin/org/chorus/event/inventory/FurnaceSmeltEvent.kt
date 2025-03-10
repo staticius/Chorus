@@ -6,9 +6,7 @@ import org.chorus.event.HandlerList
 import org.chorus.event.block.BlockEvent
 import org.chorus.item.Item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class FurnaceSmeltEvent(furnace: BlockEntityFurnace, source: Item, result: Item, xp: Float) :
     BlockEvent(furnace.block), Cancellable {
     val furnace: BlockEntityFurnace

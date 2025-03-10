@@ -14,7 +14,7 @@ import org.chorus.nbt.tag.CompoundTag.putList
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 import org.chorus.utils.RedstoneComponent.updateAroundRedstone
-import lombok.extern.slf4j.Slf4j
+
 import kotlin.math.max
 
 /**

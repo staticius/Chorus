@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-import lombok.Value
+
 
 /**
  * CraftRecipeStackRequestActionData is sent by the client the moment it begins crafting an item. This is the

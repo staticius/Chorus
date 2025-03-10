@@ -16,7 +16,7 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import io.netty.util.internal.StringUtil
 import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import java.util.stream.Stream
 import kotlin.math.max

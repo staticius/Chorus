@@ -46,8 +46,8 @@ import org.chorus.event.HandlerList
 import org.chorus.plugin.RegisteredListener
 import org.chorus.plugin.MethodEventExecutor
 import org.chorus.event.EventPriority
-import lombok.NoArgsConstructor
-import lombok.AccessLevel
+
+
 import org.chorus.plugin.PluginClassLoader
 import java.util.jar.JarFile
 import org.chorus.event.plugin.PluginEnableEvent

@@ -12,9 +12,7 @@ import org.chorus.nbt.tag.CompoundTag
 import java.util.*
 import java.util.function.Consumer
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableContainer(chunk, nbt) {
     protected var doubleInventory: DoubleChestInventory? = null
 

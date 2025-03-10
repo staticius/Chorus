@@ -33,7 +33,7 @@ interface PluginLoader {
      * @return 加载完毕的插件的 `Plugin`对象。<br></br>The loaded plugin as a `Plugin` object.
      * @throws java.lang.Exception 插件加载失败所抛出的异常。<br></br>Thrown when an error occurred.
      * @see .loadPlugin
-     * @see cn.nukkit.plugin.PluginBase.init
+     * @see org.chorus.plugin.PluginBase.init
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
     @Throws(Exception::class)
@@ -58,7 +58,7 @@ interface PluginLoader {
      * @return 加载完毕的插件的 `Plugin`对象。<br></br>The loaded plugin as a `Plugin` object.
      * @throws java.lang.Exception 插件加载失败所抛出的异常。<br></br>Thrown when an error occurred.
      * @see .loadPlugin
-     * @see cn.nukkit.plugin.PluginBase.init
+     * @see org.chorus.plugin.PluginBase.init
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
     @Throws(Exception::class)

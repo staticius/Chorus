@@ -2,9 +2,7 @@ package org.chorus.permission
 
 import org.chorus.Server
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 object DefaultPermissions {
     const val ROOT: String = "nukkit"
 

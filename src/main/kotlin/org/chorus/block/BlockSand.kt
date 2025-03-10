@@ -2,9 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class BlockSand : BlockFallable, Natural {
     constructor() : super(Companion.properties.getDefaultState())
 

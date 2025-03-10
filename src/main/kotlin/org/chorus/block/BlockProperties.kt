@@ -13,7 +13,7 @@ import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap
-import lombok.Getter
+
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 import java.util.function.BinaryOperator

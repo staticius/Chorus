@@ -2,8 +2,8 @@ package org.chorus.inventory.request
 
 import org.chorus.network.protocol.types.itemstack.request.ItemStackRequest
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
-import lombok.Getter
-import lombok.Setter
+
+
 
 class ItemStackRequestContext(@field:Getter private val itemStackRequest: ItemStackRequest) {
     

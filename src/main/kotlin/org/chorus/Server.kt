@@ -2620,9 +2620,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         }
     }
 
-    companion object {
-        private val log: Logger by lazy { LoggerFactory.getLogger(Server::class.java) }
-
+    companion object : Loggable {
         const val BROADCAST_CHANNEL_ADMINISTRATIVE: String = "nukkit.broadcast.admin"
         const val BROADCAST_CHANNEL_USERS: String = "nukkit.broadcast.user"
 

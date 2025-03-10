@@ -26,7 +26,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
-import lombok.Getter
+
 import java.util.Set
 
 class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt) {

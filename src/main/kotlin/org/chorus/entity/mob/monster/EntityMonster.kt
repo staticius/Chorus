@@ -7,9 +7,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.max
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EntityMonster(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityCanAttack {
     protected var spawnedByNight: Boolean = true
 

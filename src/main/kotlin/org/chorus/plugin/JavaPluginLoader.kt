@@ -5,8 +5,8 @@ import org.chorus.event.plugin.PluginDisableEvent
 import org.chorus.event.plugin.PluginEnableEvent
 import org.chorus.utils.PluginException
 import org.chorus.utils.Utils
-import lombok.Getter
-import lombok.extern.slf4j.Slf4j
+
+
 import java.io.File
 import java.io.IOException
 import java.util.jar.JarFile

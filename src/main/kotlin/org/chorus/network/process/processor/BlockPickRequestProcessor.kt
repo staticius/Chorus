@@ -9,7 +9,7 @@ import org.chorus.math.Vector3
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.BlockPickRequestPacket
 import org.chorus.network.protocol.ProtocolInfo
-import lombok.extern.slf4j.Slf4j
+
 
 
 class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() {

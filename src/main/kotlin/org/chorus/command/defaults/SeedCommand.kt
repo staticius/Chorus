@@ -8,9 +8,7 @@ import org.chorus.command.utils.CommandLogger
 import kotlin.collections.Map
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class SeedCommand(name: String) : VanillaCommand(name, "Show the level's seed") {
     init {
         this.permission = "nukkit.command.seed"

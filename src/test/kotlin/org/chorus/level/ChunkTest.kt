@@ -15,7 +15,7 @@ import org.chorus.level.format.LevelProvider
 import org.chorus.level.format.UnsafeChunk
 import org.chorus.math.Vector3
 import org.chorus.nbt.NBTIO
-import lombok.SneakyThrows
+
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

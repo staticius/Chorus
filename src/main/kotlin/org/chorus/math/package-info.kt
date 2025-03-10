@@ -11,7 +11,7 @@ import org.chorus.level.Transform.pitch
 import org.chorus.math.IVector3
 import org.chorus.math.ChunkVector2
 import org.chorus.math.BlockFace
-import lombok.SneakyThrows
+
 import org.chorus.math.Vector3f
 import org.chorus.math.BlockVector3
 import org.chorus.math.BVector3
@@ -32,6 +32,6 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.level.MovingObjectPosition
 import org.chorus.math.AxisAlignedBB.BBConsumer
-import lombok.RequiredArgsConstructor
+
 import java.util.concurrent.atomic.AtomicInteger
 

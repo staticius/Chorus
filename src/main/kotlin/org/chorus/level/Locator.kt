@@ -4,7 +4,7 @@ import org.chorus.block.*
 import org.chorus.blockentity.BlockEntity
 import org.chorus.level.format.IChunk
 import org.chorus.math.Vector3
-import lombok.extern.slf4j.Slf4j
+
 
 
 open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) : NamedPosition, Cloneable, IVector3 {

@@ -5,9 +5,7 @@ import java.util.*
 import java.util.stream.Collectors
 import kotlin.math.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 object VectorMath {
     fun getDirection2D(azimuth: Double): Vector2 {
         return Vector2(cos(azimuth), sin(azimuth))

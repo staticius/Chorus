@@ -2,7 +2,7 @@ package org.chorus.resourcepacks
 
 import org.chorus.Server
 import com.google.gson.JsonParser
-import lombok.extern.slf4j.Slf4j
+
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException

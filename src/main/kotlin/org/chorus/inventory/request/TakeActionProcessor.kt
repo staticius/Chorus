@@ -6,7 +6,7 @@ import org.chorus.inventory.*
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.network.protocol.types.itemstack.request.action.TakeAction
-import lombok.extern.slf4j.Slf4j
+
 
 
 /**

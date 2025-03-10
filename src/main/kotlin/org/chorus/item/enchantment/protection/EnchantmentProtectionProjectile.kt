@@ -4,9 +4,7 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.item.enchantment.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentProtectionProjectile : EnchantmentProtection(
     Enchantment.Companion.ID_PROTECTION_PROJECTILE,
     "projectile",

@@ -9,7 +9,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.registry.Registries
 import org.chorus.scheduler.Task
 import org.chorus.utils.ChunkException
-import lombok.extern.slf4j.Slf4j
+
 
 /**
  * @author MagicDroidX

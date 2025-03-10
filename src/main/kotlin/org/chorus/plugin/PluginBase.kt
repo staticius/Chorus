@@ -6,7 +6,7 @@ import org.chorus.utils.Config
 import org.chorus.utils.ConfigSection
 import org.chorus.utils.Utils
 import com.google.common.base.Preconditions
-import lombok.extern.slf4j.Slf4j
+
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
 import java.io.File
@@ -19,7 +19,7 @@ import java.io.InputStream
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @see cn.nukkit.plugin.PluginDescription
+ * @see org.chorus.plugin.PluginDescription
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
@@ -304,7 +304,7 @@ abstract class PluginBase : Plugin {
          * `HelloWorld v1.0.0`
          *
          * @return 这个插件完整的名字。<br></br>The full name of this plugin.
-         * @see cn.nukkit.plugin.PluginDescription.getFullName
+         * @see org.chorus.plugin.PluginDescription.getFullName
          *
          * @since Nukkit 1.0 | Nukkit API 1.0.0
          */

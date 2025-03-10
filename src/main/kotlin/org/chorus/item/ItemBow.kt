@@ -21,9 +21,7 @@ import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemTool(ItemID.Companion.BOW, meta, count, "Bow") {
     override val maxDurability: Int

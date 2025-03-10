@@ -4,7 +4,7 @@ import org.chorus.Server
 import org.chorus.command.RemoteConsoleCommandSender
 import org.chorus.event.server.RemoteServerCommandEvent
 import org.chorus.utils.TextFormat
-import lombok.extern.slf4j.Slf4j
+
 import java.io.IOException
 
 /**

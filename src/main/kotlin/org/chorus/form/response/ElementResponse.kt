@@ -1,11 +1,11 @@
 package org.chorus.form.response
 
-import lombok.Getter
-import lombok.RequiredArgsConstructor
-import lombok.experimental.Accessors
+
+
+
 
 /**
- * The response of a [cn.nukkit.form.element.custom.ElementDropdown] or [cn.nukkit.form.element.custom.ElementStepSlider]
+ * The response of a [org.chorus.form.element.custom.ElementDropdown] or [org.chorus.form.element.custom.ElementStepSlider]
  */
 
 @Accessors(fluent = true)

@@ -6,9 +6,7 @@ import org.chorus.block.property.enums.WoodType.name
 import org.chorus.registry.Registries
 import org.chorus.utils.DyeColor.name
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class BlockWood(blockstate: BlockState?) : BlockLog(blockstate) {
     abstract val woodType: WoodType
 

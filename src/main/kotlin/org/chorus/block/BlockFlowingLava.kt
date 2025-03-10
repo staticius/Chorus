@@ -18,9 +18,7 @@ import org.chorus.math.BlockFace.Companion.fromIndex
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockLiquid(blockstate) {
     override val lightLevel: Int

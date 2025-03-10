@@ -19,7 +19,7 @@ import com.google.common.base.Objects
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufInputStream
 import io.netty.buffer.ByteBufOutputStream
-import lombok.extern.slf4j.Slf4j
+
 import java.io.IOException
 import java.nio.ByteOrder
 

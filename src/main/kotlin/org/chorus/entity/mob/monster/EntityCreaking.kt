@@ -34,7 +34,7 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventGenericPacket
 import org.chorus.network.protocol.LevelEventPacket
-import lombok.Setter
+
 import java.util.*
 import java.util.Set
 import java.util.concurrent.*

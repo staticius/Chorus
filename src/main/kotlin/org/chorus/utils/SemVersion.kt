@@ -5,7 +5,7 @@ import org.chorus.nbt.tag.ListTag
 import com.google.common.base.Preconditions
 
 @JvmRecord
-data class SemVersion(major: Int, minor: Int, patch: Int, revision: Int, build: Int) {
+data class SemVersion(val major: Int, val minor: Int, val patch: Int, val revision: Int, val build: Int) {
     fun toTag(): ListTag<IntTag> {
         val tag = ListTag<IntTag>()
         tag.add(IntTag(major))
@@ -15,12 +15,6 @@ data class SemVersion(major: Int, minor: Int, patch: Int, revision: Int, build: 
         tag.add(IntTag(build))
         return tag
     }
-
-    val major: Int = major
-    val minor: Int = minor
-    val patch: Int = patch
-    val revision: Int = revision
-    val build: Int = build
 
     companion object {
         fun from(versions: ListTag<IntTag>): SemVersion {

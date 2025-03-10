@@ -14,7 +14,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.*
-import lombok.RequiredArgsConstructor
+
 
 @RequiredArgsConstructor
 class ShulkerAttackExecutor : IBehaviorExecutor {

@@ -2,11 +2,11 @@ package org.chorus.form.window
 
 import org.chorus.Player
 import org.chorus.form.response.ModalResponse
-import lombok.AccessLevel
-import lombok.Getter
-import lombok.NoArgsConstructor
-import lombok.Setter
-import lombok.experimental.Accessors
+
+
+
+
+
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 

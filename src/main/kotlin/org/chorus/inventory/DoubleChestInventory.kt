@@ -9,9 +9,7 @@ import org.chorus.network.protocol.InventorySlotPacket
 import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
     ContainerInventory(null, InventoryType.CONTAINER, 27 + 27) {
     val leftSide: ChestInventory = left.realInventory

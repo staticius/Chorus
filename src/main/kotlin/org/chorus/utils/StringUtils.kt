@@ -16,7 +16,7 @@ object StringUtils {
     }
 
     fun capitalize(str: String): String {
-        if (str.length == 0) {
+        if (str.isEmpty()) {
             return ""
         }
         if (str.length == 1) {
@@ -35,9 +35,6 @@ object StringUtils {
      * @param str       the str
      * @param limit     the limit
      * @return the list
-     */
-    /**
-     * @see .fastSplit
      */
     @JvmOverloads
     fun fastSplit(delimiter: String, str: String, limit: Int = Int.MAX_VALUE): List<String> {

@@ -29,7 +29,7 @@ import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
-import lombok.extern.slf4j.Slf4j
+
 
 
 open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

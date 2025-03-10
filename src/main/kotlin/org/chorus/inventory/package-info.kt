@@ -80,7 +80,7 @@ import org.chorus.inventory.InventoryType
 import org.chorus.block.BlockID
 import org.chorus.inventory.fake.DoubleFakeBlock
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
-import lombok.experimental.UtilityClass
+
 import org.chorus.inventory.CraftingTableInventory
 import org.chorus.inventory.request.ItemStackRequestActionProcessor
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
@@ -169,7 +169,7 @@ import org.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus.event.inventory.InventoryOpenEvent
 import org.chorus.event.inventory.InventoryCloseEvent
 import org.chorus.network.protocol.InventoryContentPacket
-import lombok.RequiredArgsConstructor
+
 import org.chorus.block.BlockLoom
 import org.chorus.block.BlockAnvil
 import org.chorus.inventory.ContainerInventory

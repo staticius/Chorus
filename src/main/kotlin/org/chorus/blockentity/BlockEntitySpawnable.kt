@@ -5,9 +5,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.BlockEntityDataPacket
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class BlockEntitySpawnable(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, nbt) {
     override fun initBlockEntity() {
         super.initBlockEntity()

@@ -3,7 +3,7 @@ package org.chorus.plugin
 import org.chorus.event.Event
 import org.chorus.event.Listener
 import org.chorus.utils.EventException
-import lombok.extern.slf4j.Slf4j
+
 import org.objectweb.asm.*
 import java.lang.ref.WeakReference
 import java.lang.reflect.InaccessibleObjectException
@@ -13,9 +13,7 @@ import java.lang.reflect.Modifier
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class MethodEventExecutor(val method: Method?) : EventExecutor {
     @Throws(EventException::class)
@@ -218,7 +216,7 @@ class MethodEventExecutor(val method: Method?) : EventExecutor {
             Objects.requireNonNull(method).isAccessible = true
             try {
                 val args =
-                    arrayOf<Any>("cn.nukkit.plugin.PNXMethodEventExecutor$" + compileTime.get(), b, 0, b.size)
+                    arrayOf<Any>("org.chorus.plugin.PNXMethodEventExecutor$" + compileTime.get(), b, 0, b.size)
                 clazz = method!!.invoke(loader, *args) as Class<*>
             } finally {
                 method!!.isAccessible = false

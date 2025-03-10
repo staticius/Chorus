@@ -17,16 +17,14 @@ import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.ints.IntList
-import lombok.extern.slf4j.Slf4j
+
 import org.jetbrains.annotations.ApiStatus
 import java.util.*
 import java.util.function.Consumer
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 abstract class BaseInventory(
     override var holder: InventoryHolder?,

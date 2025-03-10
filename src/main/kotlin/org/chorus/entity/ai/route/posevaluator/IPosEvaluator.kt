@@ -9,8 +9,8 @@ import org.chorus.math.Vector3
  * 通过编写特定的坐标评估器，可以自定义寻路器的寻路策略
  *
  *
- * [IPosEvaluator] are used by [IRouteFinder][cn.nukkit.entity.ai.route.finder.IRouteFinder] to evaluate coordinates<br></br>
- * By writing specific coordinate [IPosEvaluator], [IRouteFinder][cn.nukkit.entity.ai.route.finder.IRouteFinder]'s pathfinding strategy can be customized
+ * [IPosEvaluator] are used by [IRouteFinder][org.chorus.entity.ai.route.finder.IRouteFinder] to evaluate coordinates<br></br>
+ * By writing specific coordinate [IPosEvaluator], [IRouteFinder][org.chorus.entity.ai.route.finder.IRouteFinder]'s pathfinding strategy can be customized
  */
 interface IPosEvaluator {
     /**

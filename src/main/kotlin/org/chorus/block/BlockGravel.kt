@@ -5,9 +5,7 @@ import org.chorus.item.Item.Companion.get
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.utils.random.NukkitRandom.nextInt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockGravel : BlockFallable, Natural {
     constructor() : super(Companion.properties.defaultState)
 

@@ -9,13 +9,10 @@ import org.chorus.blockentity.BlockEntitySign
 import org.chorus.blockentity.BlockEntitySpawnable
 import org.chorus.camera.data.CameraPreset.Companion.presets
 import org.chorus.command.CommandSender
-import org.chorus.config.ServerProperties.get
 import org.chorus.config.ServerPropertiesKeys
 import org.chorus.dialog.window.FormWindowDialog
 import org.chorus.entity.*
 import org.chorus.entity.Attribute.Companion.getAttribute
-import org.chorus.entity.EntityHuman.getSkin
-import org.chorus.entity.EntityHuman.getUniqueId
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.data.PlayerFlag
@@ -37,46 +34,32 @@ import org.chorus.event.inventory.InventoryPickupArrowEvent
 import org.chorus.event.inventory.InventoryPickupItemEvent
 import org.chorus.event.inventory.InventoryPickupTridentEvent
 import org.chorus.event.player.*
-import org.chorus.event.player.PlayerKickEvent.Reason.toString
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
 import org.chorus.event.server.DataPacketSendEvent
 import org.chorus.form.window.Form
 import org.chorus.inventory.*
 import org.chorus.inventory.fake.FakeInventory
 import org.chorus.item.*
-import org.chorus.item.Item.id
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.item.enchantment.Enchantment.level
 import org.chorus.lang.CommandOutputContainer
 import org.chorus.lang.LangCode
 import org.chorus.lang.LangCode.Companion.from
 import org.chorus.lang.TextContainer
-import org.chorus.lang.TextContainer.toString
 import org.chorus.lang.TranslationContainer
-import org.chorus.lang.TranslationContainer.parameters
 import org.chorus.level.*
 import org.chorus.level.Level.Companion.chunkHash
 import org.chorus.level.Level.Companion.generateChunkLoaderId
 import org.chorus.level.Level.Companion.getHashX
 import org.chorus.level.Level.Companion.getHashZ
-import org.chorus.level.Level.id
-import org.chorus.level.Level.safeSpawn
 import org.chorus.level.Locator.Companion.fromObject
-import org.chorus.level.Transform.pitch
-import org.chorus.level.Transform.yaw
 import org.chorus.level.format.IChunk
 import org.chorus.level.particle.PunchBlockParticle
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
 import org.chorus.math.*
-import org.chorus.math.BlockVector3.add
 import org.chorus.math.NukkitMath.round
-import org.chorus.math.Vector3.add
 import org.chorus.metadata.MetadataValue
 import org.chorus.nbt.tag.*
-import org.chorus.nbt.tag.CompoundTag.remove
-import org.chorus.nbt.tag.ListTag.add
-import org.chorus.nbt.tag.ListTag.get
 import org.chorus.network.connection.BedrockDisconnectReasons
 import org.chorus.network.connection.BedrockSession
 import org.chorus.network.process.SessionState
@@ -86,13 +69,9 @@ import org.chorus.network.protocol.CameraShakePacket.CameraShakeType
 import org.chorus.network.protocol.types.*
 import org.chorus.network.protocol.types.GameType.Companion.from
 import org.chorus.permission.*
-import org.chorus.permission.BanList.isBanned
-import org.chorus.permission.BanList.remove
 import org.chorus.plugin.InternalPlugin
 import org.chorus.plugin.Plugin
 import org.chorus.scheduler.AsyncTask
-import org.chorus.scheduler.ServerScheduler.scheduleDelayedTask
-import org.chorus.scheduler.ServerScheduler.scheduleTask
 import org.chorus.scheduler.Task
 import org.chorus.scheduler.TaskHandler
 import org.chorus.scoreboard.IScoreboard
@@ -103,13 +82,9 @@ import org.chorus.scoreboard.displayer.IScoreboardViewer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.utils.*
 import org.chorus.utils.Binary.Companion.writeUUID
-import org.chorus.utils.Config.remove
 import org.chorus.utils.Identifier.Companion.tryParse
-import org.chorus.utils.Identifier.toString
 import org.chorus.utils.PortalHelper.moveToTheEnd
 import org.chorus.utils.TextFormat.Companion.clean
-import com.github.benmanes.caffeine.cache.Cache
-import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.common.base.Preconditions
 import com.google.common.base.Strings
 import com.google.common.collect.BiMap
@@ -143,13 +118,7 @@ import kotlin.math.*
  */
 
 open class Player @UsedByReflection constructor(
-    /**
-     * Get the network Session for the player
-     *
-     * @return the network Session
-     */
     val session: BedrockSession,
-    /** */
     val playerInfo: PlayerInfo
 ) :
     EntityHuman(null, CompoundTag()), CommandSender, ChunkLoader, IPlayer, IScoreboardViewer {
@@ -158,7 +127,6 @@ open class Player @UsedByReflection constructor(
     var agentId: Long = 0L
     var dimensionId: Int = 0
     var enchantmentSeed: Int = 0
-    override var enderChestInventory: List<EntityItemSlot> = ArrayList()
     var fogCommandStack: List<String> = ArrayList()
     var formatVersion: String = ""
 
@@ -553,7 +521,7 @@ open class Player @UsedByReflection constructor(
 
     init {
         this.perm = PermissibleBase(this)
-        this.server = Server.Companion.getInstance()
+        this.server = Server.instance
         this.lastBreak = -1
         this.socketAddress = session.address
         this.rawSocketAddress = socketAddress
@@ -801,7 +769,7 @@ open class Player @UsedByReflection constructor(
         super.initEntity()
         val level = if (namedTag!!.containsString("SpawnLevel")) {
             server!!.getLevelByName(namedTag!!.getString("SpawnLevel")!!)
-        } else Server.Companion.getInstance().getDefaultLevel()
+        } else Server.instance.getDefaultLevel()
         if (namedTag!!.containsInt("SpawnX") && namedTag!!.containsInt("SpawnY") && namedTag!!.containsInt("SpawnZ")) {
             this.spawnPoint = Locator(
                 namedTag!!.getInt("SpawnX").toDouble(),
@@ -1424,7 +1392,7 @@ open class Player @UsedByReflection constructor(
             nbt = oldPlayer.namedTag
             oldPlayer.close("disconnectionScreen.loggedinOtherLocation")
         } else {
-            val existData: Boolean = Server.Companion.getInstance().hasOfflinePlayerData(this.getName())
+            val existData: Boolean = Server.instance.hasOfflinePlayerData(this.getName())
             nbt = if (existData) {
                 server!!.getOfflinePlayerData(this.getName(), false)
             } else {
@@ -2211,7 +2179,7 @@ open class Player @UsedByReflection constructor(
             skinPacket.skin = this.getSkin()
             skinPacket.newSkinName = getSkin()!!.getSkinId()
             skinPacket.oldSkinName = ""
-            Server.Companion.broadcastPacket(Server.Companion.getInstance().getOnlinePlayers().values, skinPacket)
+            Server.Companion.broadcastPacket(Server.instance.getOnlinePlayers().values, skinPacket)
         }
     }
 
@@ -2547,7 +2515,7 @@ open class Player @UsedByReflection constructor(
     }
 
     fun awardAchievement(achievementId: String): Boolean {
-        if (!Server.Companion.getInstance().getProperties().get(ServerPropertiesKeys.ACHIEVEMENTS, true)) {
+        if (!Server.instance.properties.get(ServerPropertiesKeys.ACHIEVEMENTS, true)) {
             return false
         }
 
@@ -2653,7 +2621,7 @@ open class Player @UsedByReflection constructor(
             pk.gameType = from(networkGamemode)
             pk.entityId = this.getId()
             val players: HashSet<Player> =
-                Sets.newHashSet<Player>(Server.Companion.getInstance().getOnlinePlayers().values)
+                Sets.newHashSet<Player>(Server.instance.getOnlinePlayers().values)
             //不向自身发送UpdatePlayerGameTypePacket，我们将使用SetPlayerGameTypePacket
             players.remove(this)
             //我们需要给所有玩家发送此包，来使玩家客户端能正确渲染玩家实体
@@ -3254,7 +3222,7 @@ open class Player @UsedByReflection constructor(
             ).also { ev = it })
         if (!ev.isCancelled) {
             val message = if (isAdmin) {
-                if (!Server.Companion.getInstance().getNameBans().isBanned(getName())) {
+                if (!Server.instance.getNameBans().isBanned(getName())) {
                     "Kicked by admin." + (if (!reasonString.isEmpty()) " Reason: $reasonString" else "")
                 } else {
                     reasonString

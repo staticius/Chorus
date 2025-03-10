@@ -1,8 +1,6 @@
 package org.chorus.item.enchantment
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentLure :
     Enchantment(Enchantment.Companion.ID_LURE, "fishingSpeed", Rarity.RARE, EnchantmentType.FISHING_ROD) {
     override fun getMinEnchantAbility(level: Int): Int {

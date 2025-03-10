@@ -8,9 +8,7 @@ import org.chorus.utils.EventException
 import com.google.common.collect.ImmutableMap
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class EntityDamageEvent(entity: Entity, cause: DamageCause?, modifiers: Map<DamageModifier?, Float?>) :
     EntityEvent(), Cancellable {
     @JvmField
@@ -248,7 +246,7 @@ open class EntityDamageEvent(entity: Entity, cause: DamageCause?, modifiers: Map
         FLYING_INTO_WALL,
 
         /**
-         * Damage caused when an entity steps on a hot block, like [cn.nukkit.block.BlockID.MAGMA]
+         * Damage caused when an entity steps on a hot block, like [org.chorus.block.BlockID.MAGMA]
          */
         HOT_FLOOR,
 

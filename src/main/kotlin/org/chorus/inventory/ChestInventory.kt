@@ -12,9 +12,7 @@ import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.utils.LevelException
 import org.chorus.utils.RedstoneComponent
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, InventoryType.CONTAINER, 27),
     BlockEntityInventoryNameable {
     protected var doubleInventory: DoubleChestInventory? = null

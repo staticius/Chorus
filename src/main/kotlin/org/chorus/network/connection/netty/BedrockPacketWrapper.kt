@@ -4,10 +4,10 @@ import org.chorus.network.protocol.DataPacket
 import io.netty.buffer.ByteBuf
 import io.netty.util.AbstractReferenceCounted
 import io.netty.util.ReferenceCountUtil
-import lombok.AllArgsConstructor
-import lombok.Data
-import lombok.EqualsAndHashCode
-import lombok.NoArgsConstructor
+
+
+
+
 
 
 (callSuper = false)

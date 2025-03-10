@@ -11,7 +11,7 @@ import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.recipe.descriptor.ItemDescriptor
 import org.chorus.recipe.descriptor.ItemTagDescriptor
 import org.chorus.registry.Registries
-import lombok.extern.slf4j.Slf4j
+
 
 
 class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipeAction> {

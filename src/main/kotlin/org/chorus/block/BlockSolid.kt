@@ -2,9 +2,7 @@ package org.chorus.block
 
 import org.chorus.math.BlockFace
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class BlockSolid(blockState: BlockState?) : Block(blockState) {
     override val isSolid: Boolean
         get() = true

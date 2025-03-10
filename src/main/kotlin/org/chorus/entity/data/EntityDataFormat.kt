@@ -4,7 +4,7 @@ import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
 import org.chorus.math.Vector3f
 import org.chorus.nbt.tag.CompoundTag
-import lombok.RequiredArgsConstructor
+
 
 @RequiredArgsConstructor
 enum class EntityDataFormat {

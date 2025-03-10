@@ -2,7 +2,7 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.DisconnectFailReason
-import lombok.*
+
 
 /**
  * @since 15-10-12

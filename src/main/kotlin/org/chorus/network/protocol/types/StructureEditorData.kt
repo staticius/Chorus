@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types
 
 import org.chorus.block.property.enums.StructureBlockType
-import lombok.Value
+
 
 
 class StructureEditorData {

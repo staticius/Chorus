@@ -4,9 +4,7 @@ import org.chorus.blockentity.BlockEntityFurnace
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class FurnaceTypeInventory(furnace: BlockEntityFurnace?) : SmeltingInventory(furnace, InventoryType.FURNACE, 3) {
     override fun init() {
         val map = super.slotTypeMap()

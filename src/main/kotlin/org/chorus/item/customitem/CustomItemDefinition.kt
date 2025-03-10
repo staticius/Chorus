@@ -12,7 +12,7 @@ import org.chorus.utils.*
 import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
@@ -29,10 +29,10 @@ import kotlin.collections.listOf
 import kotlin.collections.set
 
 /**
- * CustomBlockDefinition用于获得发送给客户端的物品行为包数据。[CustomItemDefinition.SimpleBuilder]中提供的方法都是控制发送给客户端数据，如果需要控制服务端部分行为，请覆写[Item][cn.nukkit.item.Item]中的方法。
+ * CustomBlockDefinition用于获得发送给客户端的物品行为包数据。[CustomItemDefinition.SimpleBuilder]中提供的方法都是控制发送给客户端数据，如果需要控制服务端部分行为，请覆写[Item][org.chorus.item.Item]中的方法。
  *
  *
- * CustomBlockDefinition is used to get the data of the item behavior_pack sent to the client. The methods provided in [CustomItemDefinition.SimpleBuilder] control the data sent to the client, if you need to control some of the server-side behavior, please override the methods in [Item][cn.nukkit.item.Item].
+ * CustomBlockDefinition is used to get the data of the item behavior_pack sent to the client. The methods provided in [CustomItemDefinition.SimpleBuilder] control the data sent to the client, if you need to control some of the server-side behavior, please override the methods in [Item][org.chorus.item.Item].
  */
 
 @JvmRecord

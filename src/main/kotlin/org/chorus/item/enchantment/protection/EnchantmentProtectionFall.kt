@@ -4,9 +4,7 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.item.enchantment.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentProtectionFall :
     EnchantmentProtection(Enchantment.Companion.ID_PROTECTION_FALL, "fall", Rarity.UNCOMMON, TYPE.FALL) {
     override fun getMinEnchantAbility(level: Int): Int {

@@ -5,9 +5,7 @@ import org.chorus.plugin.Plugin
 import org.chorus.utils.PluginException
 import org.chorus.utils.ServerException
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PermissibleBase(opable: ServerOperator?) : Permissible {
     var opable: ServerOperator? = null
 

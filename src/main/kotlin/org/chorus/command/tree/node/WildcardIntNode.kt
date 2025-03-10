@@ -4,7 +4,7 @@ package org.chorus.command.tree.node
  * 代表一个可以输入通配符 * 的[IntNode],当输入通配符时，将会解析结果将变成默认值[.defaultV]
  *
  *
- * 所有命令参数类型为[WILDCARD_INT][cn.nukkit.command.data.CommandParamType.WILDCARD_INT]如果没有手动指定[IParamNode],则会默认使用这个解析
+ * 所有命令参数类型为[WILDCARD_INT][org.chorus.command.data.CommandParamType.WILDCARD_INT]如果没有手动指定[IParamNode],则会默认使用这个解析
  *
  *
  * `defaultV = Integer.MIN_VALUE`

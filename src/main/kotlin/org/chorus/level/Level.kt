@@ -59,8 +59,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.longs.*
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectIterator
-import lombok.*
-import lombok.extern.slf4j.Slf4j
+
+
 import java.awt.Color
 import java.io.*
 import java.lang.ref.SoftReference
@@ -77,9 +77,7 @@ import java.util.stream.IntStream
 import java.util.stream.Stream
 import kotlin.jvm.Synchronized
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class Level(
     server: Server,
@@ -394,7 +392,7 @@ class Level(
      * Broadcasts sound to players
      *
      * @param pos  position where sound should be played
-     * @param type ID of the sound from [cn.nukkit.network.protocol.LevelSoundEventPacket]
+     * @param type ID of the sound from [org.chorus.network.protocol.LevelSoundEventPacket]
      * @param data generic data that can affect sound
      */
     @JvmOverloads

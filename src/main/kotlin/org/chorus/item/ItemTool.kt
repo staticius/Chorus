@@ -9,9 +9,7 @@ import org.chorus.nbt.tag.ByteTag
 import org.chorus.utils.*
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class ItemTool @JvmOverloads constructor(id: String, meta: Int = 0, count: Int = 1, name: String? = null) :
     Item(id, meta, count, name), ItemDurable {
     override val maxStackSize: Int

@@ -211,7 +211,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     @JvmField
     protected var inEndPortal: Boolean = false
     @JvmField
-    protected var server: Server? = null
+    protected var server: Server = Server.instance
     protected var isPlayer: Boolean = this is Player
     private var maxHealth: Int = 20
     protected var name: String? = null
@@ -224,7 +224,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     private val intProperties: MutableMap<String?, Int> = LinkedHashMap()
     private val floatProperties: MutableMap<String?, Float> = LinkedHashMap()
     @JvmField
-    protected val attributes: Map<Int, Attribute> = HashMap()
+    protected val attributes: MutableMap<Int, Attribute> = HashMap()
 
     private fun idConvertToName(): String {
         val path: String = getIdentifier().split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
@@ -2415,7 +2415,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     /**
      * Whether the entity can activate pressure plates.
-     * Used for [cn.nukkit.entity.mob.EntityBat]s only.
+     * Used for [org.chorus.entity.mob.EntityBat]s only.
      *
      * @return triggers pressure plate
      */
@@ -3136,7 +3136,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         return PropertySyncData(intArray, floatArray)
     }
 
-    fun getAttributes(): Map<Int, Attribute> {
+    fun getAttributes(): MutableMap<Int, Attribute> {
         return attributes
     }
 

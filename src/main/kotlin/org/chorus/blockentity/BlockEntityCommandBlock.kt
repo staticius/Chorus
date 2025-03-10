@@ -20,7 +20,7 @@ import org.chorus.permission.*
 import org.chorus.plugin.Plugin
 import org.chorus.utils.*
 import com.google.common.base.Strings
-import lombok.Getter
+
 import java.util.function.Consumer
 
 
