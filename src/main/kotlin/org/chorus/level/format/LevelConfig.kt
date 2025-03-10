@@ -7,20 +7,11 @@ import lombok.NoArgsConstructor
 import lombok.experimental.Accessors
 import java.util.concurrent.ThreadLocalRandom
 
-
-
-
-@Accessors(fluent = true)
 data class LevelConfig (
     var format: String = "leveldb",
     var enable: Boolean = true,
-    var generators: Map<Int, GeneratorConfig>? = null,
+    var generators: MutableMap<Int, GeneratorConfig> = mutableMapOf(),
 ) {
-
-
-
-
-    @Accessors(fluent = true)
     data class GeneratorConfig (
         var name: String? = null,
         var seed: Long = ThreadLocalRandom.current().nextLong(Long.MIN_VALUE, Long.MAX_VALUE),

@@ -5,8 +5,6 @@ import org.chorus.PlayerHandle
 import org.chorus.Server
 import org.chorus.block.BlockFrame
 import org.chorus.block.BlockLectern
-import org.chorus.entity.Entity.getServer
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.event.player.*
 import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
@@ -18,7 +16,6 @@ import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.MovePlayerPacket
 import org.chorus.network.protocol.PlayerActionPacket
 import org.chorus.network.protocol.ProtocolInfo
-import lombok.extern.slf4j.Slf4j
 
 
 class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
@@ -289,7 +286,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 if (!player.getServer()
-                        .getAllowFlight() && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
+                        .allowFlight() && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
                 ) {
                     player.kick(PlayerKickEvent.Reason.FLYING_DISABLED, "Flying is not enabled on this server")
                     break

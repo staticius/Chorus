@@ -127,6 +127,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.system.exitProcess
 
 /**
  * Represents a server object, global singleton.
@@ -141,6 +142,8 @@ import kotlin.math.min
 class Server internal constructor(val filePath: String, dataPath: String, pluginPath: String, predefinedLanguage: String?) {
     val dataPath: String = File(dataPath).absolutePath + "/"
     val pluginPath: String = File(pluginPath).absolutePath + "/"
+
+    val properties: ServerProperties = ServerProperties(this.dataPath)
 
     lateinit var bannedPlayers: BanList
         private set
@@ -225,7 +228,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         private set
 
     private var serverAuthoritativeMovementMode = 0
-    var getAllowFlight: Boolean? = null
+    val allowFlight: Boolean = properties.get(ServerPropertiesKeys.ALLOW_FLIGHT, false)
     private var difficulty = Int.MAX_VALUE
     var defaultGamemode: Int = Int.MAX_VALUE
         /**
@@ -244,8 +247,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
          */
         set(defaultGamemode) {
             field = defaultGamemode
-            network.pong!!.gameType = getGamemodeString(defaultGamemode, true)
-            network.pong!!.update()
+            network.pong.gameType = getGamemodeString(defaultGamemode, true)
+            network.pong.update()
         }
     private var autoSaveTicker = 0
     private var autoSaveTicks = 6000
@@ -260,8 +263,6 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         private set
 
     private val uniquePlayers: MutableSet<UUID> = HashSet()
-
-    val properties: ServerProperties = ServerProperties(this.dataPath)
 
     private val players: MutableMap<InetSocketAddress?, Player> = ConcurrentHashMap()
     private val playerList: MutableMap<UUID, Player> = ConcurrentHashMap()
@@ -334,7 +335,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
         if (this.getDefaultLevel() == null) {
             var levelFolder = properties.get(ServerPropertiesKeys.LEVEL_NAME, "world")
-            if (levelFolder == null || levelFolder.trim { it <= ' ' }.isEmpty()) {
+            if (levelFolder.trim { it <= ' ' }.isEmpty()) {
                 log.warn("level-name cannot be null, using default")
                 levelFolder = "world"
                 properties.get(ServerPropertiesKeys.LEVEL_NAME, levelFolder)
@@ -345,7 +346,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 //generate the default world
                 val generatorConfig = HashMap<Int, GeneratorConfig>()
                 //spawn seed
-                var seed: Long
+                val seed: Long
                 val seedString =
                     properties.get(ServerPropertiesKeys.LEVEL_SEED, System.currentTimeMillis()).toString()
                 seed = try {
@@ -378,8 +379,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      * Reload Server
      */
     fun reload() {
-        Server.log.info("Reloading...")
-        Server.log.info("Saving levels...")
+        log.info("Reloading...")
+        log.info("Saving levels...")
 
         for (level in this.levelArray) {
             level.save()
@@ -390,7 +391,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         pluginManager.clearPlugins()
         commandMap.clearCommands()
 
-        Server.log.info("Reloading properties...")
+        log.info("Reloading properties...")
         properties.reload()
         this.maxPlayers = properties.get(ServerPropertiesKeys.MAX_PLAYERS, 20)
         if (properties.get(ServerPropertiesKeys.HARDCORE, false) && this.getDifficulty() < 3) {
@@ -417,7 +418,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 //        JSFeatures.initInternalFeatures();
         scoreboardManager.read()
 
-        Server.log.info("Reloading Registries...")
+        log.info("Reloading Registries...")
         run {
             Registries.POTION.reload()
             Registries.PACKET.reload()
@@ -502,33 +503,33 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
             settings.save()
 
-            Server.log.debug("Disabling all plugins")
+            log.debug("Disabling all plugins")
             pluginManager.disablePlugins()
 
-            Server.log.debug("Removing event handlers")
+            log.debug("Removing event handlers")
             unregisterAll()
 
-            Server.log.debug("Saving scoreboards data")
+            log.debug("Saving scoreboards data")
             scoreboardManager.save()
 
-            Server.log.debug("Stopping all tasks")
+            log.debug("Stopping all tasks")
             scheduler.cancelAllTasks()
             scheduler.mainThreadHeartbeat((this.nextTick + 10000).toInt())
 
-            Server.log.debug("Unloading all levels")
+            log.debug("Unloading all levels")
             for (level in this.levelArray) {
                 this.unloadLevel(level, true)
                 while (level.isThreadRunning) Thread.sleep(1)
             }
             if (positionTrackingService != null) {
-                Server.log.debug("Closing position tracking service")
+                log.debug("Closing position tracking service")
                 positionTrackingService.close()
             }
 
-            Server.log.debug("Closing console")
+            log.debug("Closing console")
             consoleThread.interrupt()
 
-            Server.log.debug("Stopping network interfaces")
+            log.debug("Stopping network interfaces")
             network.shutdown()
             playerDataDB!!.close()
             //close watchdog and metrics
@@ -541,7 +542,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             computeThreadPool.shutdownNow()
             //todo other things
         } catch (e: Exception) {
-            Server.log.error("Exception happened while shutting down, exiting the process", e)
+            log.error("Exception happened while shutting down, exiting the process", e)
             System.exit(1)
         }
     }
@@ -555,21 +556,21 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         }
         this.tick = 0
 
-        Server.log.info(
+        log.info(
             this.baseLang.tr(
                 "nukkit.server.defaultGameMode", getGamemodeString(
                     gamemode
                 )
             )
         )
-        Server.log.info(
+        log.info(
             this.baseLang.tr(
                 "nukkit.server.networkStart",
-                TextFormat.YELLOW.toString() + (if (ip.isEmpty()) "*" else ip),
+                TextFormat.YELLOW.toString() + (ip.ifEmpty { "*" }),
                 TextFormat.YELLOW.toString() + port.toString()
             )
         )
-        Server.log.info(
+        log.info(
             this.baseLang.tr(
                 "nukkit.server.startFinished",
                 ((System.currentTimeMillis() - Chorus.START_TIME).toDouble() / 1000).toString()
@@ -604,11 +605,11 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                         }
                     }
                 } catch (e: RuntimeException) {
-                    Server.log.error("A RuntimeException happened while ticking the server", e)
+                    log.error("A RuntimeException happened while ticking the server", e)
                 }
             }
         } catch (e: Throwable) {
-            Server.log.error("Exception happened while ticking server\n{}", allThreadDumps, e)
+            log.error("Exception happened while ticking server\n{}", allThreadDumps, e)
         }
     }
 
@@ -648,7 +649,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                             if (r > baseTickRate) {
                                 level.tickRateCounter = level.tickRate
                             }
-                            Server.log.debug(
+                            log.debug(
                                 "Raising level \"{}\" tick rate to {} ticks",
                                 level.getName(),
                                 level.tickRate
@@ -660,26 +661,20 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                                     (baseTickRate + 1).toDouble(),
                                     min(autoTickRateLimit.toDouble(), (tickMs / 50).toDouble())
                                 ).toInt()
-                                Server.log.debug(
-                                    "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                                    level.getName(),
-                                    round(tickMs.toDouble(), 2),
-                                    level.tickRate
-                                )
                             } else if ((tickMs / level.tickRate) >= 50 && level.tickRate < autoTickRateLimit) {
-                                level.tickRate = level.tickRate + 1
-                                Server.log.debug(
-                                    "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                                    level.getName(),
-                                    round(tickMs.toDouble(), 2),
-                                    level.tickRate
-                                )
+                                level.tickRate += 1
                             }
+                            log.debug(
+                                "Level \"{}\" took {}ms, setting tick rate to {} ticks",
+                                level.getName(),
+                                round(tickMs.toDouble(), 2),
+                                level.tickRate
+                            )
                             level.tickRateCounter = level.tickRate
                         }
                     }
                 } catch (e: Exception) {
-                    Server.log.error(
+                    log.error(
                         this.baseLang.tr(
                             "nukkit.level.tickError",
                             level.folderPath, getExceptionMessage(e)
@@ -715,7 +710,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             try {
                 Thread.sleep(max(5.0, (-time - 25).toDouble()).toLong())
             } catch (e: InterruptedException) {
-                Server.log.debug("The thread {} got interrupted", Thread.currentThread().name, e)
+                log.debug("The thread {} got interrupted", Thread.currentThread().name, e)
             }
         }
 
@@ -744,7 +739,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 try {
                     pluginManager.callEvent(QueryRegenerateEvent(this, 5).also { this.queryInformation = it })
                 } catch (e: Exception) {
-                    Server.log.error("", e)
+                    log.error("", e)
                 }
             }
         }
@@ -983,9 +978,6 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             scheduler.scheduleTask(null) { executeCommand(sender, commandLine) }
             return 1
         }
-        if (sender == null) {
-            throw ServerException("CommandSender is not valid")
-        }
 
         var cmd = commandLine.trimStart()
         if (cmd.isEmpty()) {
@@ -1022,7 +1014,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     fun silentExecuteCommand(sender: Player?, vararg commands: String) {
         val revert = ArrayList<Level>()
         val server = instance
-        for (level in server!!.levels.values) {
+        for (level in server.levels.values) {
             if (level.gameRules!!.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
                 level.gameRules!!.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false)
                 revert.add(level)
@@ -1063,7 +1055,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      * @param type 插件加载顺序<br></br>Plugin loading order
      */
     fun enablePlugins(type: PluginLoadOrder) {
-        for (plugin in ArrayList<Plugin>(pluginManager.getPlugins().values)) {
+        for (plugin in ArrayList(pluginManager.getPlugins().values)) {
             if (!plugin.isEnabled && type == plugin.description!!.order) {
                 this.enablePlugin(plugin)
             }
@@ -1119,14 +1111,14 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     fun addOnlinePlayer(player: Player) {
         playerList[player.getUniqueId()!!] = player
         this.updatePlayerListData(
-            player.getUniqueId(),
+            player.getUniqueId()!!,
             player.getId(),
             player.getDisplayName(),
-            player.getSkin(),
+            player.getSkin()!!,
             player.loginChainData.XUID
         )
-        network.pong!!.playerCount = playerList.size
-        network.pong!!.update()
+        network.pong.playerCount = playerList.size
+        network.pong.update()
     }
 
     @ApiStatus.Internal
@@ -1143,8 +1135,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             )
 
             broadcastPacket(playerList.values, pk)
-            network.pong!!.playerCount = playerList.size
-            network.pong!!.update()
+            network.pong.playerCount = playerList.size
+            network.pong.update()
         }
     }
 
@@ -1332,8 +1324,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         val nameBytes: ByteArray = name.lowercase(Locale.ENGLISH).toByteArray(StandardCharsets.UTF_8)
 
         val buffer = ByteBuffer.allocate(16)
-        buffer.putLong(uniqueId.getMostSignificantBits())
-        buffer.putLong(uniqueId.getLeastSignificantBits())
+        buffer.putLong(uniqueId.mostSignificantBits)
+        buffer.putLong(uniqueId.leastSignificantBits)
         val array = buffer.array()
         val bytes = playerDataDB!![array]
         if (bytes == null) {
@@ -1431,7 +1423,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
     private fun getOfflinePlayerDataInternal(uuid: UUID?, create: Boolean): CompoundTag? {
         if (uuid == null) {
-            Server.log.error("UUID is empty, cannot query player data")
+            log.error("UUID is empty, cannot query player data")
             return null
         }
         try {
@@ -1448,7 +1440,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
         if (create) {
             if (settings.playerSettings.savePlayerData) {
-                Server.log.info(this.baseLang.tr("nukkit.data.playerNotFound", uuid))
+                log.info(this.baseLang.tr("nukkit.data.playerNotFound", uuid))
             }
             val spawn = getDefaultLevel()!!.safeSpawn
             val nbt = CompoundTag()
@@ -1481,10 +1473,10 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 .putBoolean("OnGround", true)
                 .putBoolean("Invulnerable", false)
 
-            this.saveOfflinePlayerData(uuid, nbt!!, true)
+            this.saveOfflinePlayerData(uuid, nbt, true)
             return nbt
         } else {
-            Server.log.error("Player {} does not exist and cannot read playerdata", uuid)
+            log.error("Player {} does not exist and cannot read playerdata", uuid)
             return null
         }
     }
@@ -1559,13 +1551,13 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      * @return 玩家实例对象，获取失败为null<br></br>Player instance object,failed to get null
      */
     fun getPlayer(name: String): Player? {
-        var name = name
+        var name1 = name
         var found: Player? = null
-        name = name.lowercase()
+        name1 = name1.lowercase()
         var delta = Int.MAX_VALUE
         for (player in onlinePlayers.values) {
-            if (player.getName().lowercase().startsWith(name)) {
-                val curDelta: Int = player.getName().length - name.length
+            if (player.getName().lowercase().startsWith(name1)) {
+                val curDelta: Int = player.getName().length - name1.length
                 if (curDelta < delta) {
                     found = player
                     delta = curDelta
@@ -1589,10 +1581,10 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      * @return 玩家实例对象，获取失败为null<br></br>Player instance object,failed to get null
      */
     fun getPlayerExact(name: String): Player? {
-        var name = name
-        name = name.lowercase()
+        var name1 = name
+        name1 = name1.lowercase()
         for (player in onlinePlayers.values) {
-            if (player.getName().lowercase() == name) {
+            if (player.getName().lowercase() == name1) {
                 return player
             }
         }
@@ -1610,13 +1602,13 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      * @return 匹配到的所有玩家, 若匹配不到则为一个空数组<br></br>All players matched, if not matched then an empty array
      */
     fun matchPlayer(partialName: String): Array<Player> {
-        var partialName = partialName
-        partialName = partialName.lowercase()
+        var partialName1 = partialName
+        partialName1 = partialName1.lowercase()
         val matchedPlayer: MutableList<Player> = ArrayList()
         for (player in onlinePlayers.values) {
-            if (player.getName().lowercase() == partialName) {
+            if (player.getName().lowercase() == partialName1) {
                 return arrayOf(player)
-            } else if (player.getName().lowercase().contains(partialName)) {
+            } else if (player.getName().lowercase().contains(partialName1)) {
                 matchedPlayer.add(player)
             }
         }
@@ -1761,8 +1753,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
     /** */
     init {
-        var predefinedLanguage = predefinedLanguage
-        Preconditions.checkState(instance == null, "Already initialized!")
+        var predefinedLanguage1 = predefinedLanguage
+        Preconditions.checkState(false, "Already initialized!")
         instance = this
 
         if (!File(dataPath + "worlds/").exists()) {
@@ -1786,13 +1778,13 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         val config = File(this.dataPath + "nukkit.yml")
         var chooseLanguage: String? = null
         if (!config.exists()) {
-            Server.log.info("{}Welcome! Please choose a language first!", TextFormat.GREEN)
+            log.info("{}Welcome! Please choose a language first!", TextFormat.GREEN)
             try {
                 val languageList = javaClass.module.getResourceAsStream("language/language.list")
                 checkNotNull(languageList) { "language/language.list is missing. If you are running a development version, make sure you have run 'git submodule update --init'." }
                 val lines = readFile(languageList).split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 for (line in lines) {
-                    Server.log.info(line)
+                    log.info(line)
                 }
             } catch (e: IOException) {
                 throw RuntimeException(e)
@@ -1800,9 +1792,9 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
             while (chooseLanguage == null) {
                 val lang: String
-                if (predefinedLanguage != null) {
-                    Server.log.info("Trying to load language from predefined language: {}", predefinedLanguage)
-                    lang = predefinedLanguage
+                if (predefinedLanguage1 != null) {
+                    log.info("Trying to load language from predefined language: {}", predefinedLanguage1)
+                    lang = predefinedLanguage1
                 } else {
                     lang = console.readLine()
                 }
@@ -1811,12 +1803,12 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                     javaClass.classLoader.getResourceAsStream("language/$lang/lang.json").use { conf ->
                         if (conf != null) {
                             chooseLanguage = lang
-                        } else if (predefinedLanguage != null) {
+                        } else if (predefinedLanguage1 != null) {
                             log.warn(
                                 "No language found for predefined language: {}, please choose a valid language",
-                                predefinedLanguage
+                                predefinedLanguage1
                             )
-                            predefinedLanguage = null
+                            predefinedLanguage1 = null
                         }
                     }
                 } catch (e: IOException) {
@@ -1828,9 +1820,9 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             chooseLanguage = configInstance.getString("settings.language", "eng")
         }
         this.baseLang = BaseLang(chooseLanguage!!)
-        this.language = mapInternalLang(chooseLanguage!!)
-        Server.log.info("Loading {}...", TextFormat.GREEN.toString() + "nukkit.yml" + TextFormat.RESET)
-        this.settings = ConfigManager.create<ServerSettings>(
+        this.baseLangCode= mapInternalLang(chooseLanguage!!)
+        log.info("Loading {}...", TextFormat.GREEN.toString() + "nukkit.yml" + TextFormat.RESET)
+        this.settings = ConfigManager.create(
             ServerSettings::class.java
         ) { it: OkaeriConfig ->
             it.withConfigurer(YamlSnakeYamlConfigurer())
@@ -1839,7 +1831,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             it.saveDefaults()
             it.load(true)
         }
-        settings.baseSettings().language(chooseLanguage)
+        settings.baseSettings.language = chooseLanguage!!
 
         this.computeThreadPool = ForkJoinPool(
             min(
@@ -1850,40 +1842,38 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
         levelArray = Level.EMPTY_ARRAY
 
-        val targetLevel = Level.getLevel(settings.debugSettings().level())
-        val currentLevel = Chorus.getLogLevel()
+        val targetLevel = org.apache.logging.log4j.Level.getLevel(settings.debugSettings.level)
+        val currentLevel = Chorus.logLevel
         if (targetLevel != null && targetLevel.intLevel() > currentLevel!!.intLevel()) {
-            Chorus.setLogLevel(targetLevel)
+            Chorus.logLevel = targetLevel
         }
 
-        Server.log.info("Loading {}...", TextFormat.GREEN.toString() + "server.properties" + TextFormat.RESET)
+        log.info("Loading {}...", TextFormat.GREEN.toString() + "server.properties" + TextFormat.RESET)
 
         val isShaded = isShaded
-        if (!isValidStart || (JarStart.isUsingJavaJar() && !isShaded)) {
-            Server.log.error(this.baseLang.tr("nukkit.start.invalid"))
-            return
+        if (!isValidStart || (JarStart.isUsingJavaJar && !isShaded)) {
+            log.error(this.baseLang.tr("nukkit.start.invalid"))
+            throw RuntimeException()
         }
         if (!properties.get(ServerPropertiesKeys.ALLOW_SHADED, false) && isShaded) {
-            Server.log.error(this.baseLang.tr("nukkit.start.shaded1"))
-            Server.log.error(this.baseLang.tr("nukkit.start.shaded2"))
-            Server.log.error(this.baseLang.tr("nukkit.start.shaded3"))
-            return
+            log.error(this.baseLang.tr("nukkit.start.shaded1"))
+            log.error(this.baseLang.tr("nukkit.start.shaded2"))
+            log.error(this.baseLang.tr("nukkit.start.shaded3"))
+            throw RuntimeException()
         }
 
-        this.isNetherAllowed = properties.get(ServerPropertiesKeys.ALLOW_THE_END, true)
-        this.useTerra = properties.get(ServerPropertiesKeys.USE_TERRA, false)
         this.checkLoginTime = properties.get(ServerPropertiesKeys.CHECK_LOGIN_TIME, false)
 
-        Server.log.info(this.baseLang.tr("language.selected", language.name, language.getLang()))
-        Server.log.info(
+        log.info(this.baseLang.tr("language.selected", baseLang.name, baseLang.getLang()))
+        log.info(
             this.baseLang.tr(
                 "nukkit.server.start",
                 TextFormat.AQUA.toString() + this.version + TextFormat.RESET
             )
         )
 
-        val poolSize: String = settings.baseSettings().asyncWorkers()
-        var poolSizeNumber = try {
+        val poolSize: String = settings.baseSettings.asyncWorkers
+        val poolSizeNumber = try {
             poolSize.toInt()
         } catch (e: Exception) {
             max(Runtime.getRuntime().availableProcessors().toDouble(), 4.0).toInt()
@@ -1891,7 +1881,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         ServerScheduler.WORKERS = poolSizeNumber
         this.scheduler = ServerScheduler()
 
-        setProvider(settings.networkSettings().zlibProvider())
+        setProvider(settings.networkSettings.zlibProvider)
 
         this.serverAuthoritativeMovementMode =
             when (properties.get(ServerPropertiesKeys.SERVER_AUTHORITATIVE_MOVEMENT, "server-auth")) {
@@ -1900,7 +1890,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 "server-auth-with-rewind" -> 2
                 else -> throw IllegalArgumentException()
             }
-        if (settings.baseSettings().waterdogpe()) {
+        if (settings.baseSettings.waterdogpe) {
             this.checkLoginTime = false
         }
 
@@ -1912,7 +1902,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                     port
                 )
             } catch (e: IllegalArgumentException) {
-                Server.log.error(this.baseLang.tr(e.message, e.cause!!.message))
+                log.error(this.baseLang.tr(e.message!!, e.cause!!.message!!))
             }
         }
         this.entityMetadata = EntityMetadataStore()
@@ -1930,7 +1920,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             properties.get(ServerPropertiesKeys.DIFFICULTY, 3)
         }
 
-        Server.log.info(
+        log.info(
             this.baseLang.tr(
                 "nukkit.server.info",
                 name,
@@ -1938,7 +1928,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 apiVersion
             )
         )
-        Server.log.info(this.baseLang.tr("nukkit.server.license"))
+        log.info(this.baseLang.tr("nukkit.server.license"))
         this.consoleSender = ConsoleCommandSender()
 
         // Initialize metrics
@@ -1974,15 +1964,15 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         }
 
         freezableArrayManager = FreezableArrayManager(
-            settings.freezeArraySettings().enable(),
-            settings.freezeArraySettings().slots(),
-            settings.freezeArraySettings().defaultTemperature(),
-            settings.freezeArraySettings().freezingPoint(),
-            settings.freezeArraySettings().absoluteZero(),
-            settings.freezeArraySettings().boilingPoint(),
-            settings.freezeArraySettings().melting(),
-            settings.freezeArraySettings().singleOperation(),
-            settings.freezeArraySettings().batchOperation()
+            settings.freezeArraySettings.enable,
+            settings.freezeArraySettings.slots,
+            settings.freezeArraySettings.defaultTemperature,
+            settings.freezeArraySettings.freezingPoint,
+            settings.freezeArraySettings.absoluteZero,
+            settings.freezeArraySettings.boilingPoint,
+            settings.freezeArraySettings.melting,
+            settings.freezeArraySettings.singleOperation,
+            settings.freezeArraySettings.batchOperation
         )
         scoreboardManager = ScoreboardManager(JSONScoreboardStorage("$commandDataPath/scoreboard.json"))
         functionManager = FunctionManager("$commandDataPath/functions")
@@ -1996,8 +1986,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                     .compressionType(CompressionType.ZLIB_RAW)
             )
         } catch (e: IOException) {
-            Server.log.error("", e)
-            System.exit(1)
+            log.error("", e)
+            exitProcess(1)
         }
         this.resourcePackManager = ResourcePackManager(
             ZippedResourcePackLoader(File(Chorus.DATA_PATH, "resource_packs")),
@@ -2010,15 +2000,15 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         console.setExecutingCommands(true)
 
         try {
-            Server.log.debug("Loading position tracking service")
+            log.debug("Loading position tracking service")
             this.positionTrackingService =
                 PositionTrackingService(File(Chorus.DATA_PATH, "services/position_tracking_db"))
         } catch (e: IOException) {
-            Server.log.error("Failed to start the Position Tracking DB service!", e)
+            log.error("Failed to start the Position Tracking DB service!", e)
         }
         pluginManager.loadInternalPlugin()
 
-        this.languageCode = UUID.randomUUID()
+        this.serverID = UUID.randomUUID()
         pluginManager.loadPlugins(this.pluginPath)
         run {
             //trim
@@ -2053,13 +2043,13 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         properties.save()
 
         if (this.getDefaultLevel() == null) {
-            Server.log.error(this.baseLang.tr("nukkit.level.defaultError"))
+            log.error(this.baseLang.tr("nukkit.level.defaultError"))
             this.forceShutdown()
 
-            return
+            throw RuntimeException()
         }
 
-        this.autoSaveTicks = settings.baseSettings().autosave()
+        this.autoSaveTicks = settings.baseSettings.autosave
 
         this.enablePlugins(PluginLoadOrder.POSTWORLD)
 
@@ -2068,7 +2058,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         buildPacketData()
         buildPlayerProperty()
 
-        if (settings.baseSettings().installSpark()) {
+        if (settings.baseSettings.installSpark) {
             initSpark(this)
         }
 
@@ -2085,7 +2075,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      * @return 世界是否已经加载<br></br>Is the world already loaded
      */
     fun isLevelLoaded(name: String): Boolean {
-        if (!name.matches(levelDimPattern.toRegex())) {
+        if (!name.matches(LEVEL_DIM_PATTERN.toRegex())) {
             for (i in 0..2) {
                 if (this.getLevelByName("$name Dim$i") != null) {
                     return true
@@ -2123,12 +2113,12 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      * @return level实例<br></br>level instance
      */
     fun getLevelByName(name: String): Level? {
-        var name = name
-        if (!name.matches(levelDimPattern.toRegex())) {
-            name = "$name Dim0"
+        var name1 = name
+        if (!name1.matches(LEVEL_DIM_PATTERN.toRegex())) {
+            name1 = "$name1 Dim0"
         }
         for (level in this.levelArray) {
-            if (level.getName().equals(name, ignoreCase = true)) {
+            if (level.getName().equals(name1, ignoreCase = true)) {
                 return level
             }
         }
@@ -2181,7 +2171,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             //verify the provider
             val provider = getProvider(path)
             if (provider == null) {
-                Server.log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName, "Unknown provider"))
+                log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName, "Unknown provider"))
                 return null
             }
             val map: MutableMap<Int, GeneratorConfig> = HashMap()
@@ -2193,7 +2183,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 LevelConfig.AntiXrayMode.LOW,
                 true,
                 DimensionEnum.OVERWORLD.dimensionData,
-                emptyMap<Any, Any>()
+                emptyMap()
             )
             levelConfig = LevelConfig(getProviderName(provider), true, map)
             try {
@@ -2211,43 +2201,43 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      * @return whether load success
      */
     fun loadLevel(levelFolderName: String): Boolean {
-        var levelFolderName = levelFolderName
-        if (levelFolderName.matches(levelDimPattern.toRegex())) {
-            levelFolderName = levelFolderName.replaceFirst("\\sDim\\d$".toRegex(), "")
+        var levelFolderName1 = levelFolderName
+        if (levelFolderName1.matches(LEVEL_DIM_PATTERN.toRegex())) {
+            levelFolderName1 = levelFolderName1.replaceFirst("\\sDim\\d$".toRegex(), "")
         }
-        val levelConfig = getLevelConfig(levelFolderName) ?: return false
-        val path = if (levelFolderName.contains("/") || levelFolderName.contains("\\")) {
-            levelFolderName
+        val levelConfig = getLevelConfig(levelFolderName1) ?: return false
+        val path = if (levelFolderName1.contains("/") || levelFolderName1.contains("\\")) {
+            levelFolderName1
         } else {
-            File(this.dataPath, "worlds/$levelFolderName").absolutePath
+            File(this.dataPath, "worlds/$levelFolderName1").absolutePath
         }
         val pathS = Path.of(path).toString()
         val provider = getProvider(pathS)
 
-        val generators: Map<Int, GeneratorConfig?> = levelConfig.generators()
-        for ((key, value): Map.Entry<Int, GeneratorConfig?> in generators) {
-            val levelName = "$levelFolderName Dim$key"
+        val generators: Map<Int, GeneratorConfig> = levelConfig.generators
+        for ((key, value) in generators) {
+            val levelName = "$levelFolderName1 Dim$key"
             if (this.isLevelLoaded(levelName)) {
                 return true
             }
             val level: Level
             try {
                 if (provider == null) {
-                    Server.log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName, "the level does not exist"))
+                    log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName1, "the level does not exist"))
                     return false
                 }
                 level = Level(
                     this, levelName, pathS, generators.size, provider,
-                    value!!
+                    value
                 )
             } catch (e: Exception) {
-                Server.log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName, e.message), e)
+                log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName1, e.message!!), e)
                 return false
             }
             levels[level.id] = level
             level.initLevel()
             pluginManager.callEvent(LevelLoadEvent(level))
-            level.tickRate = settings.levelSettings().baseTickRate()
+            level.tickRate = settings.levelSettings.baseTickRate
         }
         if (tick != 0) { //update world enum when load  
             WorldCommand.WORLD_NAME_ENUM.updateSoftEnum()
@@ -2256,7 +2246,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     }
 
     fun generateLevel(name: String, levelConfig: LevelConfig?): Boolean {
-        var levelConfig = levelConfig
+        var levelConfig1 = levelConfig
         if (name.isBlank()) {
             return false
         }
@@ -2271,46 +2261,46 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         val config = jpath.resolve("config.json").toFile()
         if (config.exists()) {
             try {
-                levelConfig = from(FileReader(config), LevelConfig::class.java)
-                FileUtils.write(config, toPretty<LevelConfig?>(levelConfig), StandardCharsets.UTF_8)
+                levelConfig1 = from(FileReader(config), LevelConfig::class.java)
+                FileUtils.write(config, toPretty<LevelConfig?>(levelConfig1), StandardCharsets.UTF_8)
             } catch (e: Exception) {
-                Server.log.error("The levelConfig is not exists under the {} path", path)
+                log.error("The levelConfig is not exists under the {} path", path)
                 return false
             }
-        } else if (levelConfig != null) {
+        } else if (levelConfig1 != null) {
             try {
                 jpath.toFile().mkdirs()
                 config.createNewFile()
-                FileUtils.write(config, toPretty<LevelConfig?>(levelConfig), StandardCharsets.UTF_8)
+                FileUtils.write(config, toPretty<LevelConfig?>(levelConfig1), StandardCharsets.UTF_8)
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
         } else {
-            Server.log.error("The levelConfig is not specified and no config.json exists under the {} path", path)
+            log.error("The levelConfig is not specified and no config.json exists under the {} path", path)
             return false
         }
 
-        for (entry in levelConfig.generators().entrySet()) {
-            val generatorConfig: GeneratorConfig = entry.getValue()
-            val provider = getProviderByName(levelConfig.format())
+        for (entry in levelConfig1.generators.entries) {
+            val generatorConfig: GeneratorConfig = entry.value
+            val provider = getProviderByName(levelConfig1.format)
             val level: Level
             try {
                 provider.getMethod("generate", String::class.java, String::class.java, GeneratorConfig::class.java)
                     .invoke(null, path, name, generatorConfig)
-                val levelName = name + " Dim" + entry.getKey()
+                val levelName = name + " Dim" + entry.key
                 if (this.isLevelLoaded(levelName)) {
                     log.warn("level {} has already been loaded!", levelName)
                     continue
                 }
-                level = Level(this, levelName, path, levelConfig.generators().size(), provider, generatorConfig)
+                level = Level(this, levelName, path, levelConfig1.generators.size, provider, generatorConfig)
 
                 levels[level.id] = level
                 level.initLevel()
-                level.tickRate = settings.levelSettings().baseTickRate()
+                level.tickRate = settings.levelSettings.baseTickRate
                 pluginManager.callEvent(LevelInitEvent(level))
                 pluginManager.callEvent(LevelLoadEvent(level))
             } catch (e: Exception) {
-                Server.log.error(this.baseLang.tr("nukkit.level.generationError", name, getExceptionMessage(e)), e)
+                log.error(this.baseLang.tr("nukkit.level.generationError", name, getExceptionMessage(e)), e)
                 return false
             }
         }
@@ -2318,49 +2308,49 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     }
 
     fun addOp(name: String) {
-        iPBans.set(name.lowercase(), true)
+        operators[name.lowercase()] = true
         val player = this.getPlayerExact(name)
         if (player != null) {
             player.recalculatePermissions()
             player.getAdventureSettings()!!.onOpChange(true)
             player.getAdventureSettings()!!.update()
-            player.getSession().syncAvailableCommands()
+            player.session.syncAvailableCommands()
         }
-        iPBans.save(true)
+        operators.save(true)
     }
 
     fun removeOp(name: String) {
-        iPBans.remove(name.lowercase())
+        operators.remove(name.lowercase())
         val player = this.getPlayerExact(name)
         if (player != null) {
             player.recalculatePermissions()
             player.getAdventureSettings()!!.onOpChange(false)
             player.getAdventureSettings()!!.update()
-            player.getSession().syncAvailableCommands()
+            player.session.syncAvailableCommands()
         }
-        iPBans.save()
+        operators.save()
     }
 
     fun addWhitelist(name: String) {
-        ops.set(name.lowercase(), true)
-        ops.save(true)
+        whitelist[name.lowercase()] = true
+        whitelist.save(true)
     }
 
     fun removeWhitelist(name: String) {
-        ops.remove(name.lowercase())
-        ops.save(true)
+        whitelist.remove(name.lowercase())
+        whitelist.save(true)
     }
 
     fun isWhitelisted(name: String): Boolean {
-        return !this.hasWhitelist() || iPBans.exists(name, true) || ops.exists(name, true)
+        return !this.hasWhitelist() || operators.exists(name, true) || whitelist.exists(name, true)
     }
 
     fun isOp(name: String?): Boolean {
-        return name != null && iPBans.exists(name, true)
+        return name != null && operators.exists(name, true)
     }
 
     fun reloadWhitelist() {
-        ops.reload()
+        whitelist.reload()
     }
 
     // endregion
@@ -2376,7 +2366,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      */
     fun setMaxPlayers(maxPlayers: Int) {
         this.maxPlayers = maxPlayers
-        network.pong!!.maximumPlayerCount(maxPlayers).update()
+        network.pong.maximumPlayerCount = maxPlayers
+        network.pong.update()
     }
 
     val port: Int
@@ -2488,17 +2479,6 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
          */
         get() = properties.get(ServerPropertiesKeys.SPAWN_PROTECTION, 16)
 
-    val allowFlight: Boolean
-        /**
-         * @return 服务器是否允许飞行<br></br>Whether the server allows flying
-         */
-        get() {
-            if (getAllowFlight == null) {
-                getAllowFlight = properties.get(ServerPropertiesKeys.ALLOW_FLIGHT, false)
-            }
-            return getAllowFlight
-        }
-
     val isHardcore: Boolean
         /**
          * @return 服务器是否为硬核模式<br></br>Whether the server is in hardcore mode
@@ -2517,7 +2497,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
          */
         set(motd) {
             properties.get(ServerPropertiesKeys.MOTD, motd)
-            network.pong!!.motd(motd).update()
+            network.pong.motd = motd
+            network.pong.update()
         }
 
     var subMotd: String
@@ -2539,7 +2520,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
          */
         set(subMotd) {
             properties.get(ServerPropertiesKeys.SUB_MOTD, subMotd)
-            network.pong!!.subMotd(subMotd).update()
+            network.pong.subMotd = subMotd
+            network.pong.update()
         }
 
     val forceResources: Boolean
@@ -2576,10 +2558,6 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             "vie" -> LangCode.valueOf("en_US")
             else -> throw IllegalArgumentException()
         }
-    }
-
-    fun isTheEndAllowed(): Boolean {
-        return this.isNetherAllowed
     }
 
     fun isIgnoredPacket(clazz: Class<out DataPacket?>): Boolean {
@@ -2679,7 +2657,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             }
         }
 
-        const val levelDimPattern: String = "^.*Dim[0-9]$"
+        const val LEVEL_DIM_PATTERN: String = "^.*Dim[0-9]$"
 
         /**
          * 默认`direct=false`
@@ -2702,10 +2680,10 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
          */
         fun getGamemodeString(mode: Int, direct: Boolean): String {
             return when (mode) {
-                Player.Companion.SURVIVAL -> if (direct) "Survival" else "%gameMode.survival"
-                Player.Companion.CREATIVE -> if (direct) "Creative" else "%gameMode.creative"
-                Player.Companion.ADVENTURE -> if (direct) "Adventure" else "%gameMode.adventure"
-                Player.Companion.SPECTATOR -> if (direct) "Spectator" else "%gameMode.spectator"
+                Player.SURVIVAL -> if (direct) "Survival" else "%gameMode.survival"
+                Player.CREATIVE -> if (direct) "Creative" else "%gameMode.creative"
+                Player.ADVENTURE -> if (direct) "Adventure" else "%gameMode.adventure"
+                Player.SPECTATOR -> if (direct) "Spectator" else "%gameMode.spectator"
                 else -> "UNKNOWN"
             }
         }
@@ -2721,10 +2699,10 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
          */
         fun getGamemodeFromString(str: String): Int {
             return when (str.trim { it <= ' ' }.lowercase()) {
-                "0", "survival", "s" -> Player.Companion.SURVIVAL
-                "1", "creative", "c" -> Player.Companion.CREATIVE
-                "2", "adventure", "a" -> Player.Companion.ADVENTURE
-                "3", "spectator" -> Player.Companion.SPECTATOR
+                "0", "survival", "s" -> Player.SURVIVAL
+                "1", "creative", "c" -> Player.CREATIVE
+                "2", "adventure", "a" -> Player.ADVENTURE
+                "3", "spectator" -> Player.SPECTATOR
                 else -> -1
             }
         }

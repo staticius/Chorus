@@ -60,7 +60,7 @@ class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fal
         if (this.fallbackLangMap == null) this.fallbackLangMap = this.langMap
     }
 
-    val name: String?
+    val name: String
         get() = this.get("language.name")
 
     fun getLang(): String {
@@ -191,11 +191,11 @@ class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fal
      * @param id the id
      * @return the string
      */
-    fun get(id: String): String? {
+    fun get(id: String): String {
         if (langMap!!.containsKey(id)) {
-            return langMap!![id]
+            return langMap!![id]!!
         } else if (fallbackLangMap!!.containsKey(id)) {
-            return fallbackLangMap!![id]
+            return fallbackLangMap!![id]!!
         }
         return id
     }

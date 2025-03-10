@@ -12,23 +12,20 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.atomic.AtomicBoolean
 
 @RequiredArgsConstructor
-class ChorusConsole : SimpleTerminalConsole() {
-    private val server: Server? = null
+class ChorusConsole(private val server: Server) : SimpleTerminalConsole() {
     private val consoleQueue: BlockingQueue<String> = LinkedBlockingQueue()
     private val executingCommands = AtomicBoolean(false)
 
     override fun isRunning(): Boolean {
-        return server!!.isRunning
+        return server.isRunning()
     }
 
     override fun runCommand(command: String) {
         if (executingCommands.get()) {
-            val event = ServerCommandEvent(server!!.consoleSender, command)
-            if (server.pluginManager != null) {
-                server.pluginManager.callEvent(event)
-            }
+            val event = ServerCommandEvent(server.consoleSender, command)
+            server.pluginManager.callEvent(event)
             if (!event.isCancelled) {
-                Server.getInstance().scheduler.scheduleTask(
+                server.scheduler.scheduleTask(
                     InternalPlugin.INSTANCE
                 ) { server.executeCommand(event.sender, event.command) }
             }
@@ -46,7 +43,7 @@ class ChorusConsole : SimpleTerminalConsole() {
     }
 
     override fun shutdown() {
-        server!!.shutdown()
+        server.shutdown()
     }
 
     override fun buildReader(builder: LineReaderBuilder): LineReader {

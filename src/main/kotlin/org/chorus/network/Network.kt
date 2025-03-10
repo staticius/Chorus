@@ -60,8 +60,21 @@ class Network @JvmOverloads constructor(
     /**
      * Gets raknet pong.
      */
-    var pong: BedrockPong?
-        private set
+    val pong: BedrockPong = BedrockPong(
+        null,
+        "MCPE",
+        server.motd,
+        server.subMotd,
+        server.onlinePlayers.size,
+        server.getMaxPlayers(),
+        server.serverID.mostSignificantBits,
+        Server.getGamemodeString(server.defaultGamemode, true)
+        false,
+        ProtocolInfo.CURRENT_PROTOCOL,
+        null,
+        server.port,
+        server.port
+    )
 
     init {
         server.scheduler.scheduleTask(InternalPlugin.INSTANCE, {
@@ -91,23 +104,10 @@ class Network @JvmOverloads constructor(
             server.port
         )
 
-        this.pong = BedrockPong()
-            .edition("MCPE")
-            .motd(server.motd)
-            .subMotd(server.subMotd)
-            .playerCount(server.onlinePlayers.size)
-            .maximumPlayerCount(server.maxPlayers)
-            .serverId(UUID.randomUUID().mostSignificantBits)
-            .gameType(Server.getGamemodeString(server.defaultGamemode, true))
-            .nintendoLimited(false)
-            .protocolVersion(ProtocolInfo.CURRENT_PROTOCOL)
-            .ipv4Port(server.port)
-            .ipv6Port(server.port)
-
         this.channel = ServerBootstrap()
             .channelFactory(RakChannelFactory.server(oclass))
             .option<ByteBuf>(RakChannelOption.RAK_ADVERTISEMENT, pong!!.toByteBuf())
-            .option(RakChannelOption.RAK_PACKET_LIMIT, server.settings.networkSettings().packetLimit())
+            .option(RakChannelOption.RAK_PACKET_LIMIT, server.settings.networkSettings.packetLimit)
             .option<Boolean>(RakChannelOption.RAK_SEND_COOKIE, true)
             .group(eventloopgroup)
             .childHandler(object : BedrockServerInitializer() {
@@ -141,7 +141,7 @@ class Network @JvmOverloads constructor(
             .bind(bindAddress)
             .awaitUninterruptibly()
             .channel() as RakServerChannel
-        pong!!.channel(channel)
+        pong!!.channel = channel
     }
 
     @JvmRecord

@@ -11,9 +11,7 @@ import java.util.*
 import java.util.function.Consumer
 
 @RequiredArgsConstructor
-class NukkitConsoleCompleter : Completer {
-    private val server: Server? = null
-
+class NukkitConsoleCompleter(private val server: Server) : Completer {
     override fun complete(lineReader: LineReader, parsedLine: ParsedLine, candidates: MutableList<Candidate>) {
         if (parsedLine.wordIndex() == 0) {
             if (parsedLine.word().isEmpty()) {
@@ -29,10 +27,10 @@ class NukkitConsoleCompleter : Completer {
 
                 candidates.add(Candidate(match))
             }
-        } else if (parsedLine.wordIndex() > 0 && !parsedLine.word().isEmpty()) {
+        } else if (parsedLine.wordIndex() > 0 && parsedLine.word().isNotEmpty()) {
             val word = parsedLine.word()
             val names: SortedSet<String> = TreeSet()
-            server!!.onlinePlayers.values.forEach(Consumer<Player> { p: Player -> names.add(p.getName()) })
+            server.onlinePlayers.values.forEach(Consumer<Player> { p: Player -> names.add(p.getName()) })
             for (match in names) {
                 if (!match.lowercase().startsWith(word.lowercase())) {
                     continue
@@ -44,7 +42,8 @@ class NukkitConsoleCompleter : Completer {
     }
 
     private fun addCandidates(commandConsumer: Consumer<String>) {
-        for (command in server!!.commandMap.commands.keys) {
+        for (command in server.commandMap.commands.keys) {
+            if (command == null) continue
             if (!command.contains(":")) {
                 commandConsumer.accept(command)
             }

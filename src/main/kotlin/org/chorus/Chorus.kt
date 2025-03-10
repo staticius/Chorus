@@ -255,7 +255,7 @@ object Chorus {
             return version.append(commitId).toString()
         }
 
-    private var logLevel: Level?
+    var logLevel: Level?
         get() {
             val ctx =
                 LogManager.getContext(false) as LoggerContext

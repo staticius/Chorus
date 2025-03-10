@@ -3,7 +3,6 @@ package org.chorus.network.process.processor
 import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.EntityOwnable.hasOwner
 import org.chorus.entity.item.EntityBoat
 import org.chorus.entity.item.EntityBoat.onInput
@@ -156,7 +155,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.START_FLYING)) {
             if (!player.getServer()
-                    .getAllowFlight() && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
+                    .allowFlight() && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
             ) {
                 player.kick(PlayerKickEvent.Reason.FLYING_DISABLED, "Flying is not enabled on this server")
                 return

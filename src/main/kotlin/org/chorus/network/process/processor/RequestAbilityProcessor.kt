@@ -2,8 +2,6 @@ package org.chorus.network.process.processor
 
 import org.chorus.AdventureSettings
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.event.player.PlayerIllegalFlightEvent
 import org.chorus.event.player.PlayerKickEvent
 import org.chorus.event.player.PlayerToggleFlightEvent
@@ -11,7 +9,6 @@ import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.RequestAbilityPacket
 import org.chorus.network.protocol.types.PlayerAbility
-import lombok.extern.slf4j.Slf4j
 
 
 class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
@@ -24,7 +21,7 @@ class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
         }
 
         if (!player.getServer()
-                .getAllowFlight() && pk.boolValue && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
+                .allowFlight() && pk.boolValue && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
         ) {
             val pife = PlayerIllegalFlightEvent(player)
             player.getServer().getPluginManager().callEvent(pife)

@@ -4798,7 +4798,7 @@ class Level(
     companion object {
         // region finals - number finals
         @JvmField
-        val EMPTY_ARRAY: Array<Level?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<Level> = arrayOf()
         const val BLOCK_UPDATE_NORMAL: Int = 1
         const val BLOCK_UPDATE_RANDOM: Int = 2
         const val BLOCK_UPDATE_SCHEDULED: Int = 3
@@ -4825,7 +4825,7 @@ class Level(
         private var chunkLoaderCounter = 1
 
         // endregion finals - number finals
-        private val randomTickBlocks: Set<String> = HashSet(64) // The blocks that can randomly tick
+        private val randomTickBlocks: MutableSet<String> = HashSet(64) // The blocks that can randomly tick
         private val ENTITY_BUFFER = arrayOfNulls<Entity>(512)
 
         init {
