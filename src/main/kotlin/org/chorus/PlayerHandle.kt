@@ -49,7 +49,7 @@ class PlayerHandle(val player: Player) {
             player.blockBreakProgress = blockBreakProgress
         }
 
-    val hiddenPlayers: Map<UUID?, Player?>
+    val hiddenPlayers: MutableMap<UUID, Player>
         get() = player.hiddenPlayers
 
     val chunksPerTick: Int
