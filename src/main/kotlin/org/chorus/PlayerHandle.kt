@@ -3,20 +3,16 @@ package org.chorus
 import org.chorus.block.*
 import org.chorus.dialog.window.FormWindowDialog
 import org.chorus.entity.*
-import org.chorus.entity.Entity.getName
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.form.window.Form
 import org.chorus.inventory.*
 import org.chorus.level.*
-import org.chorus.level.Level.getName
 import org.chorus.math.*
 import org.chorus.network.protocol.PlayerFogPacket
 import org.chorus.network.protocol.types.PlayerBlockActionData
 import org.chorus.scheduler.AsyncTask
 import org.chorus.utils.DummyBossBar
 import org.chorus.utils.LoginChainData
-import com.github.benmanes.caffeine.cache.Cache
 import com.google.common.collect.BiMap
 import java.net.InetSocketAddress
 import java.util.*
@@ -131,7 +127,7 @@ class PlayerHandle(val player: Player) {
         }
 
     val isCheckMovement: Boolean
-        get() = player.checkMovement
+        get() = player.isCheckingMovement
 
     fun setFoodData(foodData: PlayerFood?) {
         player.foodData = foodData
@@ -143,13 +139,13 @@ class PlayerHandle(val player: Player) {
             player.formWindowCount = formWindowCount
         }
 
-    val formWindows: Map<Int?, Form<*>?>
+    val formWindows: MutableMap<Int, Form<*>>
         get() = player.formWindows
 
-    val windows: BiMap<Inventory?, Int?>
+    val windows: BiMap<Inventory, Int>
         get() = player.windows
 
-    val windowIndex: BiMap<Int?, Inventory?>
+    val windowIndex: BiMap<Int, Inventory>
         get() = player.windowIndex
 
     var closingWindowId: Int
@@ -158,14 +154,14 @@ class PlayerHandle(val player: Player) {
             player.closingWindowId = closingWindowId
         }
 
-    fun setFormWindows(formWindows: MutableMap<Int?, Form<*>?>) {
+    fun setFormWindows(formWindows: MutableMap<Int, Form<*>>) {
         player.formWindows = formWindows
     }
 
-    val serverSettings: Map<Int?, Form<*>?>
+    val serverSettings: Map<Int, Form<*>>
         get() = player.serverSettings
 
-    fun setServerSettings(serverSettings: MutableMap<Int?, Form<*>?>) {
+    fun setServerSettings(serverSettings: MutableMap<Int, Form<*>>) {
         player.serverSettings = serverSettings
     }
 
@@ -175,7 +171,7 @@ class PlayerHandle(val player: Player) {
             player.dialogWindows = dialogWindows
         }
 
-    fun setDummyBossBars(dummyBossBars: MutableMap<Long?, DummyBossBar?>) {
+    fun setDummyBossBars(dummyBossBars: MutableMap<Long, DummyBossBar?>) {
         player.dummyBossBars = dummyBossBars
     }
 
@@ -205,7 +201,7 @@ class PlayerHandle(val player: Player) {
         player.lastAttackEntity = lastAttackEntity
     }
 
-    var fogStack: List<PlayerFogPacket.Fog?>?
+    var fogStack: List<PlayerFogPacket.Fog>
         get() = player.fogStack
         set(fogStack) {
             player.fogStack = fogStack
@@ -215,7 +211,7 @@ class PlayerHandle(val player: Player) {
         player.lastBeAttackEntity = lastBeAttackEntity
     }
 
-    val loginChainData: LoginChainData?
+    val loginChainData: LoginChainData
         get() = player.loginChainData
 
     var preLoginEventTask: AsyncTask?
