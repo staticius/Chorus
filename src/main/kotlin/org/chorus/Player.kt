@@ -266,7 +266,7 @@ open class Player @UsedByReflection constructor(
      */
     var inAirTicks: Int = 0
     var startAirTicks: Int = 5
-    protected var adventureSettings: AdventureSettings? = null
+    var adventureSettings: AdventureSettings = AdventureSettings(this)
 
     /**
      * @since 1.2.1.0-PN
@@ -1422,7 +1422,6 @@ open class Player @UsedByReflection constructor(
             nbt.putInt("playerGameType", this.gamemode)
         }
 
-        this.adventureSettings = AdventureSettings(this)
         adventureSettings!!.init(nbt)
 
         val level: Level

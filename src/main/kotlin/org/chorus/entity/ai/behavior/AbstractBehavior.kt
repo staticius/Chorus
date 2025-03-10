@@ -10,7 +10,5 @@ package org.chorus.entity.ai.behavior
  * AbstractBehavior contains a [BehaviorState] property and its Getter/Setter
  */
 abstract class AbstractBehavior : IBehavior {
-    
-    
-    override var behaviorState: BehaviorState = BehaviorState.STOP
+    override var behaviorState: BehaviorState? = BehaviorState.STOP
 }
