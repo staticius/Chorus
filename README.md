@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://enderverse-creations.com">
-      <img src="https://raw.githubusercontent.com/Enderverse-Creations/Chorus/refs/heads/main/.github/img/chorus.png?token=GHSAT0AAAAAAC3JQDAOHFLPHN773NYCWM24Z6OWNXQ" width=20%>
+      <img src=".github/img/chorus.png" width=25% alt="Chorus">
     </a>
     <p align="center">
         <strong>
