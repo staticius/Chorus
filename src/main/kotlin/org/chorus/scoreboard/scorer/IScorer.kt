@@ -10,23 +10,23 @@ import org.chorus.scoreboard.data.ScorerType
  */
 interface IScorer {
     /**
-     * 获取追踪对象类型
-     * @return 追踪对象类型
+     * Get the tracking object type
+     * @return Tracking object type
      */
     val scorerType: ScorerType
 
     /**
-     * 获取名称
-     * @return 追踪对象类型
+     * Get the name
+     * @return Tracking object type
      */
     val name: String
 
     /**
-     * 内部方法
-     * 转换到network信息
-     * @param scoreboard 所属计分板
-     * @param line 所属行
-     * @return network信息
+     * Internal method
+     * Convert to network information
+     * @param scoreboard
+     * @param line
+     * @return network information
      */
     fun toNetworkInfo(scoreboard: IScoreboard, line: IScoreboardLine): ScoreInfo?
 }
