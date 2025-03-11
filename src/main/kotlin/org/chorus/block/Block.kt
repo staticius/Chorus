@@ -42,7 +42,7 @@ import kotlin.math.pow
 
 
 abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
-    Metadatable, AxisAlignedBB, BlockID.IVector3, Loggable {
+    Metadatable, AxisAlignedBB, IVector3, Loggable {
     var blockState: BlockState? = null
     protected var color: BlockColor? = null
     @JvmField
@@ -343,7 +343,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         else color = VANILLA_BLOCK_COLOR_MAP[blockState!!.blockStateHash()
             .toLong()]
         if (color == null) {
-            log.error("Failed to get color of block " + name)
+            log.error("Failed to get color of block $name")
             log.error("Current block state hash: " + blockState!!.blockStateHash())
             color = BlockColor.VOID_BLOCK_COLOR
         }
@@ -358,7 +358,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
             val parts =
                 path.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             for (part in parts) {
-                if (!part.isEmpty()) {
+                if (part.isNotEmpty()) {
                     result.append(part[0].uppercaseChar()).append(part.substring(1)).append(" ")
                 }
             }
@@ -431,7 +431,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         return if (item is ItemCustomTool && item.speed != null) {
             customToolBreakTimeBonus(customToolType(item), item.speed)
         } else toolBreakTimeBonus0(
-            toolType0(item, this), item.tier,
+            customToolType(item), item.tier,
             id
         )
     }
@@ -439,17 +439,17 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     private fun customToolBreakTimeBonus(toolType: Int, speed: Int?): Double {
         if (speed != null) return speed.toDouble()
         else if (toolType == ItemTool.TYPE_SWORD) {
-            return if (this is BlockWeb) {
-                15.0
-            } else if (this is BlockBamboo) {
-                30.0
-            } else 1.0
+            return when (this) {
+                is BlockWeb -> 15.0
+                is BlockBamboo -> 30.0
+                else -> 1.0
+            }
         } else if (toolType == ItemTool.TYPE_SHEARS) {
-            return if (this is BlockWool || this is BlockLeaves) {
-                5.0
-            } else if (this is BlockWeb) {
-                15.0
-            } else 1.0
+            return when (this) {
+                is BlockWool, is BlockLeaves -> 5.0
+                is BlockWeb -> 15.0
+                else -> 1.0
+            }
         } else if (toolType == ItemTool.TYPE_NONE) return 1.0
         return 0.0
     }
@@ -465,12 +465,12 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         return ItemTool.TYPE_NONE
     }
 
-    private fun toolBreakTimeBonus0(toolType: Int, toolTier: Int, BlockID.String): Double {
+    private fun toolBreakTimeBonus0(toolType: Int, toolTier: Int, blockId: String): Double {
         if (toolType == ItemTool.TYPE_SWORD) {
-            if (BlockID.== BlockID.WEB) {
+            if (blockId == BlockID.WEB) {
                 return 15.0
             }
-            if (BlockID.== BlockID.BAMBOO) {
+            if (blockId == BlockID.BAMBOO) {
                 return 30.0
             }
             return 1.0
@@ -478,7 +478,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         if (toolType == ItemTool.TYPE_SHEARS) {
             if (this is BlockWool || this is BlockLeaves) {
                 return 5.0
-            } else if (BlockID.== BlockID.WEB) {
+            } else if (blockId == BlockID.WEB) {
                 return 15.0
             }
             return 1.0
@@ -491,12 +491,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
             ItemTool.TIER_DIAMOND -> 8.0
             ItemTool.TIER_NETHERITE -> 9.0
             ItemTool.TIER_GOLD -> 12.0
-            else -> {
-                if (toolTier == ItemTool.TIER_NETHERITE) {
-                    9.0
-                }
-                1.0
-            }
+            else -> 1.0
         }
     }
 
@@ -868,7 +863,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         return MovingObjectPosition.fromBlock(
             position.x.toInt(),
             position.y.toInt(), position.z.toInt(), f,
-            vector.add(position.x, position.y, position.z)!!
+            vector.add(position.x, position.y, position.z)
         )
     }
 
@@ -1006,7 +1001,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
             if (this is BlockEntityHolder<*> && obj is BlockEntityHolder<*>) {
                 val be1: BlockEntity = this.orCreateBlockEntity
                 val be2: BlockEntity = obj.orCreateBlockEntity
-                return this.id == obj.id && this.blockState === obj.blockState && be1.cleanedNBT!!.equals(be2.cleanedNBT)
+                return this.id == obj.id && this.blockState === obj.blockState && be1.cleanedNBT!! == be2.cleanedNBT
             }
         }
         return false
@@ -1016,7 +1011,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         get() = this.blockState === properties.defaultState
 
     open fun toItem(): Item? {
-        return properties.defaultState?.let { ItemBlock(it.toBlock()) }
+        return properties.defaultState.let { ItemBlock(it.toBlock()) }
     }
 
     /**
@@ -1200,18 +1195,18 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
 
         @JvmStatic
         fun get(id: String): Block {
-            var id = id
-            id = if (id.contains(":")) id else "minecraft:$id"
-            val block = Registries.BLOCK.get(id) ?: return BlockAir()
+            var id1 = id
+            id1 = if (id1.contains(":")) id1 else "minecraft:$id1"
+            val block = Registries.BLOCK.get(id1) ?: return BlockAir()
             return block
         }
 
         @JvmStatic
         fun get(id: String, pos: Locator): Block {
-            var id = id
-            id = if (id.contains(":")) id else "minecraft:$id"
+            var id1 = id
+            id1 = if (id1.contains(":")) id1 else "minecraft:$id1"
             val block =
-                Registries.BLOCK.get(id, pos.position.floorX, pos.position.floorY, pos.position.floorZ, pos.level)
+                Registries.BLOCK.get(id1, pos.position.floorX, pos.position.floorY, pos.position.floorZ, pos.level)
             if (block == null) {
                 val blockAir = BlockAir()
                 blockAir.position.x = pos.position.floorX.toDouble()
@@ -1224,17 +1219,17 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         }
 
         fun get(id: String, pos: Locator, layer: Int): Block {
-            var id = id
-            id = if (id.contains(":")) id else "minecraft:$id"
-            val block = get(id, pos)
+            var id1 = id
+            id1 = if (id1.contains(":")) id1 else "minecraft:$id1"
+            val block = get(id1, pos)
             block.layer = layer
             return block
         }
 
         fun get(id: String, level: Level, x: Int, y: Int, z: Int): Block {
-            var id = id
-            id = if (id.contains(":")) id else "minecraft:$id"
-            val block = Registries.BLOCK.get(id, x, y, z, level)
+            var id1 = id
+            id1 = if (id1.contains(":")) id1 else "minecraft:$id1"
+            val block = Registries.BLOCK.get(id1, x, y, z, level)
             if (block == null) {
                 val blockAir = BlockAir()
                 blockAir.position.x = x.toDouble()
@@ -1247,9 +1242,9 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         }
 
         fun get(id: String, level: Level, x: Int, y: Int, z: Int, layer: Int): Block {
-            var id = id
-            id = if (id.contains(":")) id else "minecraft:$id"
-            val block = get(id, level, x, y, z)
+            var id1 = id
+            id1 = if (id1.contains(":")) id1 else "minecraft:$id1"
+            val block = get(id1, level, x, y, z)
             block.layer = layer
             return block
         }
@@ -1296,19 +1291,6 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
 
         private fun speedRateByHasteLore0(hasteLoreLevel: Int): Double {
             return 1.0 + (0.2 * hasteLoreLevel)
-        }
-
-        private fun toolType0(item: Item, b: Block): Int {
-            if (b is BlockLeaves && item.isHoe) {
-                return ItemTool.TYPE_SHEARS
-            }
-            if (item.isSword) return ItemTool.TYPE_SWORD
-            if (item.isShovel) return ItemTool.TYPE_SHOVEL
-            if (item.isPickaxe) return ItemTool.TYPE_PICKAXE
-            if (item.isAxe) return ItemTool.TYPE_AXE
-            if (item.isHoe) return ItemTool.TYPE_HOE
-            if (item.isShears) return ItemTool.TYPE_SHEARS
-            return ItemTool.TYPE_NONE
         }
 
         private fun correctTool0(blockToolType: Int, item: Item, b: Block): Boolean {
