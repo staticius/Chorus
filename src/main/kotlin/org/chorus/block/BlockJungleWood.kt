@@ -11,6 +11,6 @@ class BlockJungleWood(blockstate: BlockState?) : BlockWood(blockstate) {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.Companion.JUNGLE_WOOD, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

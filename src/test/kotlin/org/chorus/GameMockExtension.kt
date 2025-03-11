@@ -35,7 +35,7 @@ import org.chorus.utils.ClientChainData
 import org.chorus.utils.collection.FreezableArrayManager
 import eu.okaeri.configs.ConfigManager
 import eu.okaeri.configs.OkaeriConfig
-import lombok.extern.slf4j.Slf4j
+
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.reflect.FieldUtils
 import org.junit.jupiter.api.extension.ExtensionContext
@@ -60,7 +60,7 @@ class GameMockExtension : MockitoExtension() {
 
     override fun beforeEach(context: ExtensionContext) {
         serverMockedStatic = Mockito.mockStatic(Server::class.java)
-        serverMockedStatic.`when`<Any>(Verification { Server.getInstance() }).thenReturn(server)
+        serverMockedStatic.`when`<Any>(Verification { Server.instance }).thenReturn(server)
         super.beforeEach(context)
     }
 
@@ -138,7 +138,7 @@ class GameMockExtension : MockitoExtension() {
 
         init {
             Mockito.mockStatic(Server::class.java).use { serverMockedStatic ->
-                serverMockedStatic.`when`<Any> { Server.getInstance() }.thenReturn(server)
+                serverMockedStatic.`when`<Any> { Server.instance }.thenReturn(server)
                 Registries.PACKET.init()
                 Registries.ENTITY.init()
                 Profession.init()
@@ -165,7 +165,7 @@ class GameMockExtension : MockitoExtension() {
                 Mockito.`when`(server.scheduler).thenReturn(serverScheduler)
                 Mockito.`when`(banList.entires).thenReturn(LinkedHashMap())
                 Mockito.`when`(server.ipBans).thenReturn(banList)
-                Mockito.`when`(server.language).thenReturn(BaseLang("eng", "src/main/resources/language"))
+                Mockito.`when`(server.baseLang..thenReturn(BaseLang("eng", "src/main/resources/language"))
                 val serverSettings = ConfigManager.create(
                     ServerSettings::class.java
                 ) { it: OkaeriConfig ->
@@ -334,7 +334,6 @@ class GameMockExtension : MockitoExtension() {
                 throw RuntimeException(e)
             }
             level = Level(
-                Server.getInstance(),
                 "newlevel",
                 "src/test/resources/newlevel",
                 1,

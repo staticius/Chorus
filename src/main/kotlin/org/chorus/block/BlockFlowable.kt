@@ -2,9 +2,7 @@ package org.chorus.block
 
 import org.chorus.math.AxisAlignedBB
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class BlockFlowable(blockState: BlockState?) : BlockTransparent(blockState) {
     override fun canBeFlowedInto(): Boolean {
         return true

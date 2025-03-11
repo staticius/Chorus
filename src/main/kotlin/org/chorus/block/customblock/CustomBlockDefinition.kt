@@ -16,7 +16,7 @@ import org.chorus.math.Vector3f
 import org.chorus.nbt.tag.*
 import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
-import lombok.extern.slf4j.Slf4j
+
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 

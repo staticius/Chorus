@@ -35,7 +35,7 @@ class BlockCryingObsidian @JvmOverloads constructor(blockstate: BlockState? = Co
         get() = ItemTool.TYPE_PICKAXE
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRYING_OBSIDIAN)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRYING_OBSIDIAN)
+
     }
 }

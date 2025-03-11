@@ -125,11 +125,11 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            CREAKING_HEART,
+BlockID.CREAKING_HEART,
             CommonBlockProperties.NATURAL,
             CommonBlockProperties.CREAKING_HEART_STATE,
             CommonBlockProperties.PILLAR_AXIS
         )
-            get() = Companion.field
+
     }
 }

@@ -12,7 +12,7 @@ import org.chorus.scoreboard.displayer.IScoreboardViewer
 import org.chorus.scoreboard.scorer.EntityScorer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.scoreboard.storage.IScoreboardStorage
-import lombok.Getter
+
 import java.util.function.Consumer
 
 
@@ -28,7 +28,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
 
     override fun addScoreboard(scoreboard: IScoreboard): Boolean {
         val event = ScoreboardObjectiveChangeEvent(scoreboard, ScoreboardObjectiveChangeEvent.ActionType.ADD)
-        Server.getInstance().pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return false
         }
@@ -44,7 +44,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
     override fun removeScoreboard(objectiveName: String): Boolean {
         val removed = scoreboards!![objectiveName] ?: return false
         val event = ScoreboardObjectiveChangeEvent(removed, ScoreboardObjectiveChangeEvent.ActionType.REMOVE)
-        Server.getInstance().pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return false
         }

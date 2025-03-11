@@ -19,13 +19,13 @@ class BlockTuffWall @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.TUFF_WALL,
+BlockID.BlockID.TUFF_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-            get() = Companion.field
+
     }
 }

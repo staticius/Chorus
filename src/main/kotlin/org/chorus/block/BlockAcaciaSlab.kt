@@ -2,13 +2,15 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockAcaciaSlab(blockstate: BlockState?) : BlockWoodenSlab(blockstate, ACACIA_DOUBLE_SLAB) {
+class BlockAcaciaSlab(blockstate: BlockState?) : BlockWoodenSlab(blockstate, BlockID.ACACIA_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Acacia"
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(ACACIA_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ACACIA_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

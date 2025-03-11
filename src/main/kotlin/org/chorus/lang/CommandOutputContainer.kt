@@ -3,7 +3,7 @@ package org.chorus.lang
 import org.chorus.network.protocol.types.CommandOutputMessage
 
 /**
- * [CommandOutputPacket][cn.nukkit.network.protocol.CommandOutputPacket] 负载消息的容器，支持同时发送多条消息
+ * [CommandOutputPacket][org.chorus.network.protocol.CommandOutputPacket] 负载消息的容器，支持同时发送多条消息
  */
 class CommandOutputContainer : Cloneable {
     @JvmField

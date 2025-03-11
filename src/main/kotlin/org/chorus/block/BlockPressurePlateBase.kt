@@ -128,7 +128,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(b
     }
 
     override fun onEntityCollide(entity: Entity?) {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return
         }
 
@@ -147,7 +147,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(b
                 EntityInteractEvent(entity, this)
             }
 
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
 
             if (!ev.isCancelled) {
                 updateState(power)
@@ -169,10 +169,10 @@ abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(b
 
             if (!isPowered && wasPowered) {
                 this.playOffSound()
-                level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
+                Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
             } else if (isPowered && !wasPowered) {
                 this.playOnSound()
-                level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
+                Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
             }
         }
 

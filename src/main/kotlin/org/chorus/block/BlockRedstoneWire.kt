@@ -37,7 +37,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Comp
             return false
         }
 
-        if (level.server.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings().enableRedstone()) {
             level.setBlock(block.position, this, true)
 
             this.updateSurroundingRedstone(true)
@@ -129,7 +129,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Comp
         }
 
         if (meta != maxStrength) {
-            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, meta, maxStrength))
+            Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, meta, maxStrength))
 
             this.redStoneSignal = maxStrength
             level.setBlock(this.position, this, false, true)
@@ -159,7 +159,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Comp
 
         val pos = this.locator
 
-        if (level.server.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings().enableRedstone()) {
             this.updateSurroundingRedstone(false)
             level.setBlock(this.position, air, true, true)
 
@@ -189,13 +189,13 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Comp
             return 0
         }
 
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return 0
         }
 
         // Redstone event
         val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
-        level.server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return 0
         }
@@ -321,7 +321,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_WIRE, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+
 
         protected fun canConnectUpwardsTo(level: Level, pos: Vector3): Boolean {
             return canConnectTo(level.getBlock(pos)!!, null)

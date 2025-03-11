@@ -4,7 +4,7 @@ import org.chorus.entity.*
 import java.awt.Color
 
 class EffectSlowness :
-    Effect(EffectType.Companion.SLOWNESS, "%potion.moveSlowdown", Color(139, 175, 224), true) {
+    Effect(EffectType.SLOWNESS, "%potion.moveSlowdown", Color(139, 175, 224), true) {
     override fun add(entity: Entity) {
         if (entity is EntityLiving) {
             val oldEffect: Effect? = entity.getEffect(this.getType())

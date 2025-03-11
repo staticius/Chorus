@@ -60,6 +60,6 @@ class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SOUL_SAND)
-            get() = Companion.field
+
     }
 }

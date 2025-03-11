@@ -16,13 +16,15 @@ class BlockBambooFenceGate @JvmOverloads constructor(blockstate: BlockState? = C
         level.addSound(this.position, Sound.CLOSE_BAMBOO_WOOD_FENCE_GATE)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BAMBOO_FENCE_GATE,
+            BlockID.BAMBOO_FENCE_GATE,
             CommonBlockProperties.IN_WALL_BIT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-            get() = Companion.field
     }
 }

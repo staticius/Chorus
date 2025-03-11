@@ -20,7 +20,7 @@ import io.netty.util.internal.PlatformDependent
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import lombok.extern.slf4j.Slf4j
+
 import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption

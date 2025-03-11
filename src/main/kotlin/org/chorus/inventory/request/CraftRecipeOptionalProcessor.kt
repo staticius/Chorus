@@ -3,8 +3,6 @@ package org.chorus.inventory.request
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.BlockID
-import org.chorus.entity.Entity.getServer
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.inventory.AnvilInventory
 import org.chorus.inventory.CartographyTableInventory
 import org.chorus.item.*
@@ -16,7 +14,7 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import io.netty.util.internal.StringUtil
 import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import java.util.stream.Stream
 import kotlin.math.max
@@ -270,7 +268,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
         inventory: CartographyTableInventory,
         filterString: String?
     ): Item? {
-        val server: Server = player.getServer()
+        val server: Server = Server.instance
         val input = inventory.input
         val additional = inventory.additional
         var result = Item.AIR

@@ -48,11 +48,11 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
 
     private val isWaterdog: Boolean
         get() {
-            if (waterdogXUID == null || Server.getInstance() == null) {
+            if (waterdogXUID == null || Server.instance == null) {
                 return false
             }
 
-            return Server.getInstance().settings.baseSettings().waterdogpe()
+            return Server.instance.settings.baseSettings().waterdogpe()
         }
 
     /**//////////////////////////////////////////////////////////////////////// */ // Override
@@ -155,7 +155,7 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
         val base = token.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         if (base.size < 2) return null
         val json = String(Base64.getDecoder().decode(base[1]), StandardCharsets.UTF_8)
-        //Server.getInstance().getLogger().debug(json);
+        //Server.instance.getLogger().debug(json);
         return JSONUtils.from(json, JsonObject::class.java)
     }
 

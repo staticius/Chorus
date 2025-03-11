@@ -1,8 +1,6 @@
 package org.chorus.item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemEgg @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ProjectileItem(ItemID.Companion.EGG, meta, count, "Egg") {
     override val projectileEntityType: String

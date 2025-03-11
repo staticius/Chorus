@@ -5,9 +5,7 @@ import org.chorus.item.*
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockAir : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 
@@ -53,9 +51,11 @@ class BlockAir : BlockTransparent {
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(AIR)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.AIR)
         val STATE: BlockState = properties.defaultState
     }
 }

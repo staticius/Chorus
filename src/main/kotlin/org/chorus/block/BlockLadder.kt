@@ -206,6 +206,6 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LADDER, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

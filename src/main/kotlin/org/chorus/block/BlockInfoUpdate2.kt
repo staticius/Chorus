@@ -4,6 +4,6 @@ class BlockInfoUpdate2 @JvmOverloads constructor(blockstate: BlockState? = Compa
     Block(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.Companion.INFO_UPDATE2)
-            get() = Companion.field
+
     }
 }

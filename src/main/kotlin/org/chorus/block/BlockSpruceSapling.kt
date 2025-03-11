@@ -13,6 +13,6 @@ class BlockSpruceSapling : BlockSapling {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SPRUCE_SAPLING, CommonBlockProperties.AGE_BIT)
-            get() = Companion.field
+
     }
 }

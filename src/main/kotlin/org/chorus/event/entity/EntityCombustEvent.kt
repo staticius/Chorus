@@ -4,9 +4,7 @@ import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class EntityCombustEvent(combustee: Entity?, duration: Int) : EntityEvent(), Cancellable {
     @JvmField
     var duration: Int

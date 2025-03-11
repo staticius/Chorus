@@ -3,9 +3,7 @@ package org.chorus.item
 import org.chorus.block.Block
 import org.chorus.registry.Registries
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class ItemBlock @JvmOverloads constructor(block: Block, aux: Int = 0, count: Int = 1) :
     Item(block, aux, count, block.name, true) {
     override var damage: Int

@@ -58,7 +58,7 @@ class BlockDeny : BlockSolid {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DENY)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DENY)
+
     }
 }

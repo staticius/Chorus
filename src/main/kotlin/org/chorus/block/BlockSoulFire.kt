@@ -25,6 +25,6 @@ class BlockSoulFire @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SOUL_FIRE, CommonBlockProperties.AGE_16)
-            get() = Companion.field
+
     }
 }

@@ -4,6 +4,6 @@ class BlockSprucePlanks @JvmOverloads constructor(blockstate: BlockState? = Comp
     BlockPlanks(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SPRUCE_PLANKS)
-            get() = Companion.field
+
     }
 }

@@ -40,7 +40,7 @@ import io.netty.util.ByteProcessor
 import io.netty.util.internal.ObjectUtil
 import io.netty.util.internal.StringUtil
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.SneakyThrows
+
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream

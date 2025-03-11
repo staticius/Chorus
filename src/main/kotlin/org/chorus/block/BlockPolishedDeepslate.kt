@@ -4,6 +4,6 @@ class BlockPolishedDeepslate @JvmOverloads constructor(blockstate: BlockState? =
     BlockCobbledDeepslate(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.POLISHED_DEEPSLATE)
-            get() = Companion.field
+
     }
 }

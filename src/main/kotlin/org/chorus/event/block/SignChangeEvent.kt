@@ -5,9 +5,7 @@ import org.chorus.block.Block
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class SignChangeEvent(block: Block, val player: Player, lines: Array<String?>) :
     BlockEvent(block), Cancellable {
     var lines: Array<String?> = arrayOfNulls(4)

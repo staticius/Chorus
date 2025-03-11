@@ -72,10 +72,10 @@ class GuardianAttackExecutor(
                         entity,
                         target!!,
                         DamageCause.ENTITY_ATTACK,
-                        (entity as EntityMonster).getDiffHandDamage(Server.getInstance().difficulty)
+                        (entity as EntityMonster).getDiffHandDamage(Server.instance.difficulty)
                     )
                     target!!.attack(event)
-                    if (Server.getInstance().difficulty >= 2) {
+                    if (Server.instance.difficulty >= 2) {
                         val event2 = EntityDamageByEntityEvent(
                             entity,
                             target!!, DamageCause.MAGIC, 1f

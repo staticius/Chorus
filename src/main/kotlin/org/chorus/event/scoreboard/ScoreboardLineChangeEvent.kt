@@ -3,8 +3,8 @@ package org.chorus.event.scoreboard
 import org.chorus.event.HandlerList
 import org.chorus.scoreboard.IScoreboard
 import org.chorus.scoreboard.IScoreboardLine
-import lombok.Getter
-import lombok.Setter
+
+
 
 
 

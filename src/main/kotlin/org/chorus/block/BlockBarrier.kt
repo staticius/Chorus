@@ -4,10 +4,6 @@ import org.chorus.Player
 import org.chorus.item.*
 import org.chorus.math.*
 
-/**
- * @author Pub4Game
- * @since 03.01.2016
- */
 class BlockBarrier @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockState) {
     override val name: String
@@ -34,8 +30,10 @@ class BlockBarrier @JvmOverloads constructor(blockState: BlockState? = Companion
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BARRIER)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BARRIER)
     }
 }

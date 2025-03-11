@@ -5,9 +5,7 @@ import org.chorus.level.Level
 import org.chorus.plugin.Plugin
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockMetadataStore(private val owningLevel: Level) : MetadataStore() {
     override fun disambiguate(block: Metadatable, metadataKey: String): String {
         require(block is Block) { "Argument must be a Block instance" }

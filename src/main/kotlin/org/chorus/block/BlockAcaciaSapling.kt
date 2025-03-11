@@ -12,8 +12,11 @@ class BlockAcaciaSapling : BlockSapling {
         return WoodType.ACACIA
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(ACACIA_SAPLING, CommonBlockProperties.AGE_BIT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ACACIA_SAPLING, CommonBlockProperties.AGE_BIT)
+
     }
 }

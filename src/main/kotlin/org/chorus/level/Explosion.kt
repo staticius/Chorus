@@ -11,7 +11,7 @@ import org.chorus.event.block.BlockExplodeEvent.affectedBlocks
 import org.chorus.event.entity.EntityExplodeEvent.blockList
 import org.chorus.inventory.InventoryHolder
 import org.chorus.item.Item.getBlock
-import org.chorus.math.NukkitMath
+import org.chorus.math.ChorusMath
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventPacket
@@ -189,7 +189,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 this.source, affectedBlocksList, yield
             )
             ev.setIgnitions(if (fireIgnitions == null) LinkedHashSet<E>(0) else fireIgnitions)
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
             } else {
@@ -203,7 +203,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 what, this.source, this.affectedBlocks,
                 if (fireIgnitions == null) LinkedHashSet<Block>(0) else fireIgnitions, yield, this.fireChance
             )
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
             } else {
@@ -214,12 +214,12 @@ class Explosion protected constructor(private val source: Locator, size: Double,
         }
 
         val explosionSize = this.size * 2.0
-        val minX = NukkitMath.floorDouble(this.source.position.x - explosionSize - 1).toDouble()
-        val maxX = NukkitMath.ceilDouble(this.source.position.x + explosionSize + 1).toDouble()
-        val minY = NukkitMath.floorDouble(this.source.position.y - explosionSize - 1).toDouble()
-        val maxY = NukkitMath.ceilDouble(this.source.position.y + explosionSize + 1).toDouble()
-        val minZ = NukkitMath.floorDouble(this.source.position.z - explosionSize - 1).toDouble()
-        val maxZ = NukkitMath.ceilDouble(this.source.position.z + explosionSize + 1).toDouble()
+        val minX = ChorusMath.floorDouble(this.source.position.x - explosionSize - 1).toDouble()
+        val maxX = ChorusMath.ceilDouble(this.source.position.x + explosionSize + 1).toDouble()
+        val minY = ChorusMath.floorDouble(this.source.position.y - explosionSize - 1).toDouble()
+        val maxY = ChorusMath.ceilDouble(this.source.position.y + explosionSize + 1).toDouble()
+        val minZ = ChorusMath.floorDouble(this.source.position.z - explosionSize - 1).toDouble()
+        val maxZ = ChorusMath.ceilDouble(this.source.position.z + explosionSize + 1).toDouble()
 
         val explosionBB: AxisAlignedBB = SimpleAxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ)
         val list = level.getNearbyEntities(explosionBB, if (what is Entity) what else null)
@@ -301,14 +301,14 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 val index = Hash.hashBlock(sideBlock.x.toInt(), sideBlock.y.toInt(), sideBlock.z.toInt())
                 if (!affectedBlocks!!.contains(sideBlock) && !updateBlocks.contains(index)) {
                     var ev: BlockUpdateEvent = BlockUpdateEvent(level.getBlock(sideBlock))
-                    level.server.pluginManager.callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         ev.getBlock().onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
                     }
                     val layer1 = level.getBlock(sideBlock, 1)
                     if (!layer1!!.isAir) {
                         ev = BlockUpdateEvent(layer1)
-                        level.server.pluginManager.callEvent(ev)
+                        Server.instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
                             ev.getBlock().onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
                         }

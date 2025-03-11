@@ -58,7 +58,7 @@ class EntityExplosionExecutor @JvmOverloads constructor(
             ev.isBlockBreaking = false
         }
 
-        Server.getInstance().pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
         if (!ev.isCancelled) {
             val explosion = Explosion(entity.locator, ev.force.toFloat().toDouble(), entity)

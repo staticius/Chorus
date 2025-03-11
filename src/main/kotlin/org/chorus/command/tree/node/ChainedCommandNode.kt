@@ -5,7 +5,7 @@ import java.util.*
 import java.util.function.Consumer
 
 /**
- * [ExecuteCommand][cn.nukkit.command.defaults.ExecuteCommand]命令的链命令节点
+ * [ExecuteCommand][org.chorus.command.defaults.ExecuteCommand]命令的链命令节点
  */
 class ChainedCommandNode : EnumNode() {
     private var remain = false

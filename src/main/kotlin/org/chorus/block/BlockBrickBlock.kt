@@ -13,8 +13,10 @@ class BlockBrickBlock @JvmOverloads constructor(blockstate: BlockState? = Compan
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BRICK_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BRICK_BLOCK)
     }
 }

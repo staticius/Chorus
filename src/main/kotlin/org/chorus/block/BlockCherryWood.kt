@@ -13,7 +13,7 @@ class BlockCherryWood @JvmOverloads constructor(blockstate: BlockState? = Compan
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHERRY_WOOD, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHERRY_WOOD, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }

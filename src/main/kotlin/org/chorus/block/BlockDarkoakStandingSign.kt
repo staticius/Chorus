@@ -15,7 +15,7 @@ class BlockDarkoakStandingSign @JvmOverloads constructor(blockstate: BlockState?
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DARKOAK_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.DARKOAK_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+
     }
 }

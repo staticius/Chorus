@@ -83,7 +83,7 @@ class BlockChain : BlockTransparent {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHAIN, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHAIN, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }

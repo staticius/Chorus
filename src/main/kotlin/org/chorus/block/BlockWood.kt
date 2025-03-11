@@ -1,22 +1,17 @@
 package org.chorus.block
 
-import org.chorus.block.Block.name
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.enums.WoodType.name
+import org.chorus.block.property.enums.WoodType
 import org.chorus.registry.Registries
-import org.chorus.utils.DyeColor.name
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
 abstract class BlockWood(blockstate: BlockState?) : BlockLog(blockstate) {
-    abstract val woodType: WoodType
+    abstract fun getWoodType(): WoodType
 
     override val name: String
-        get() = woodType.name + " Wood"
+        get() = getWoodType().name + " Wood"
 
     override fun getStrippedState(): BlockState {
-        val strippedId = when (woodType) {
+        val strippedId = when (getWoodType()) {
             WoodType.OAK -> BlockID.STRIPPED_OAK_WOOD
             WoodType.SPRUCE -> BlockID.STRIPPED_SPRUCE_WOOD
             WoodType.BIRCH -> BlockID.STRIPPED_BIRCH_WOOD

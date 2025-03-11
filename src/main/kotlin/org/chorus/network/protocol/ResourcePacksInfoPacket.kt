@@ -2,7 +2,7 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.resourcepacks.ResourcePack
-import lombok.*
+
 import java.util.*
 
 

@@ -17,6 +17,6 @@ class BlockNetherBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockStat
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.NETHER_BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

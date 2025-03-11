@@ -33,6 +33,6 @@ class BlockSnifferEgg : BlockTransparent {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SNIFFER_EGG, CommonBlockProperties.CRACKED_STATE)
-            get() = Companion.field
+
     }
 }

@@ -80,7 +80,7 @@ class BlockDirtWithRoots : BlockDirt {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DIRT_WITH_ROOTS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DIRT_WITH_ROOTS)
+
     }
 }

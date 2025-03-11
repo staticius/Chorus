@@ -39,6 +39,6 @@ class BlockMangroveRoots : BlockTransparent {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MANGROVE_ROOTS)
-            get() = Companion.field
+
     }
 }

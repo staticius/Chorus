@@ -4,6 +4,6 @@ class BlockReserved6 @JvmOverloads constructor(blockstate: BlockState? = Compani
     Block(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RESERVED6)
-            get() = Companion.field
+
     }
 }

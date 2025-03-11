@@ -9,8 +9,8 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.*
-import lombok.experimental.Accessors
+
+
 import java.lang.reflect.Type
 import java.util.function.BiConsumer
 import java.util.function.Consumer

@@ -84,6 +84,6 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState? = Companion.pr
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LOOM, CommonBlockProperties.DIRECTION)
-            get() = Companion.field
+
     }
 }

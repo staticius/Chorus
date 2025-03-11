@@ -9,9 +9,7 @@ import org.chorus.event.player.PlayerKickEvent
 import kotlin.collections.Map
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BanCommand(name: String) : VanillaCommand(name, "commands.ban.description", "%commands.ban.usage") {
     init {
         this.permission = "nukkit.command.ban.player"

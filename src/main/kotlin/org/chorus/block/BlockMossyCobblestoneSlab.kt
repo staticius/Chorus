@@ -26,6 +26,6 @@ class BlockMossyCobblestoneSlab(blockState: BlockState?) :
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MOSSY_COBBLESTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

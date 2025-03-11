@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.event.block.BlockRedstoneEvent
@@ -66,14 +67,14 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companio
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_SCHEDULED || type == Level.BLOCK_UPDATE_MOVED) {
             val ev = RedstoneUpdateEvent(this)
-            val pluginManager = level.server.pluginManager
+            val pluginManager = Server.instance.pluginManager
             pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return 0
             }
 
             if (!isPowered) {
-                level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
+                Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
                 isPowered = true
 
                 if (level.setBlock(this.position, this)) {
@@ -95,7 +96,7 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companio
     }
 
     override fun onNeighborChange(side: BlockFace) {
-        val server = level.server
+        val server = Server.instance
         val blockFace = blockFace
         if (!server.settings.levelSettings().enableRedstone() || side != blockFace || level.isUpdateScheduled(
                 this.position,
@@ -147,10 +148,10 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.OBSERVER,
+BlockID.BlockID.OBSERVER,
             CommonBlockProperties.MINECRAFT_FACING_DIRECTION,
             CommonBlockProperties.POWERED_BIT
         )
-            get() = Companion.field
+
     }
 }

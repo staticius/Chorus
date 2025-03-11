@@ -18,7 +18,7 @@ class BlockCrimsonWallSign @JvmOverloads constructor(blockState: BlockState? = C
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRIMSON_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+
     }
 }

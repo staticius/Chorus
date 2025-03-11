@@ -3,9 +3,7 @@ package org.chorus.item.enchantment.damage
 import org.chorus.entity.*
 import org.chorus.item.enchantment.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentDamageSmite :
     EnchantmentDamage(Enchantment.Companion.ID_DAMAGE_SMITE, "undead", Rarity.UNCOMMON, TYPE.SMITE) {
     override fun getMinEnchantAbility(level: Int): Int {

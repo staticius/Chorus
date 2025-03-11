@@ -9,9 +9,7 @@ import org.chorus.level.vibration.VibrationType
 import org.chorus.math.Vector3
 import org.chorus.network.protocol.CompletedUsingItemPacket
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class ItemFood : Item {
     constructor(id: String) : super(id)
 
@@ -47,7 +45,7 @@ abstract class ItemFood : Item {
         }
 
         val event = PlayerItemConsumeEvent(player, this)
-        Server.getInstance().pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             player.getInventory().sendContents(player)

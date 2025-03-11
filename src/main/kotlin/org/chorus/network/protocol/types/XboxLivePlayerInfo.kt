@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types
 
 import org.chorus.entity.data.Skin
 import org.chorus.utils.ClientChainData
-import lombok.Getter
+
 import java.util.*
 
 class XboxLivePlayerInfo(

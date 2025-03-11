@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types
 
 import org.chorus.entity.Entity.getId
-import lombok.*
+
 
 enum class Platform(@field:Getter override val name: String, @field:Getter private val id: Int) {
     UNKNOWN("Unknown", -1),

@@ -9,10 +9,10 @@ class BlockMangroveButton @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.MANGROVE_BUTTON,
+BlockID.BlockID.MANGROVE_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

@@ -5,9 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.level.MovingObjectPosition
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ProjectileHitEvent @JvmOverloads constructor(
     entity: EntityProjectile?,
     movingObjectPosition: MovingObjectPosition? = null

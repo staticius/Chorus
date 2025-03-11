@@ -48,6 +48,6 @@ class BlockMelonBlock @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MELON_BLOCK)
-            get() = Companion.field
+
     }
 }

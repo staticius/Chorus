@@ -16,7 +16,7 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.registry.Registries
 import org.chorus.utils.HashUtils
 import org.chorus.utils.ThreadCache
-import lombok.extern.slf4j.Slf4j
+
 import java.io.*
 import java.nio.ByteOrder
 import java.nio.file.Files
@@ -369,7 +369,7 @@ object NBTIO {
     @Throws(IOException::class)
     fun readValue(inputStream: InputStream, endianness: ByteOrder, network: Boolean): CompoundTag? {
         val nbtInputStream = NBTInputStream(inputStream, endianness, network)
-        return nbtInputStream.readValue<CompoundTag>(Tag.Companion.TAG_Compound.toInt())
+        return nbtInputStream.readValue<CompoundTag>(Tag.Companion.TAG_COMPOUND.toInt())
     }
 
     @Throws(IOException::class)

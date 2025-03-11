@@ -2,7 +2,7 @@ package org.chorus.network.protocol
 
 import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
-import lombok.*
+
 
 (doNotUseGetters = true, callSuper = false)
 

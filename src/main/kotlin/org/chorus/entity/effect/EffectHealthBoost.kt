@@ -3,7 +3,7 @@ package org.chorus.entity.effect
 import org.chorus.entity.*
 import java.awt.Color
 
-class EffectHealthBoost : Effect(EffectType.Companion.HEALTH_BOOST, "%potion.healthBoost", Color(248, 125, 35)) {
+class EffectHealthBoost : Effect(EffectType.HEALTH_BOOST, "%potion.healthBoost", Color(248, 125, 35)) {
     override fun add(entity: Entity) {
         entity.setMaxHealth(entity.getMaxHealth() + 4 * this.getLevel())
     }

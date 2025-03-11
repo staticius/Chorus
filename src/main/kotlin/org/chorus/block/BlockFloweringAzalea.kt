@@ -6,7 +6,7 @@ class BlockFloweringAzalea @JvmOverloads constructor(blockstate: BlockState? = C
         get() = "FloweringAzalea"
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FLOWERING_AZALEA)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FLOWERING_AZALEA)
+
     }
 }

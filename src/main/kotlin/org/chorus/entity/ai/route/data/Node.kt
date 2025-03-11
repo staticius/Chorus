@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.route.data
 
 import org.chorus.math.*
-import lombok.Getter
-import lombok.Setter
+
+
 import java.util.*
 
 /**

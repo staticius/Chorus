@@ -5,8 +5,10 @@ class BlockAzureBluet : BlockFlower {
 
     constructor(blockstate: BlockState?) : super(blockstate)
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(AZURE_BLUET)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.AZURE_BLUET)
     }
 }

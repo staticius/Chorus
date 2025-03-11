@@ -18,7 +18,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.ints.IntList
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import it.unimi.dsi.fastutil.ints.IntSet
-import lombok.extern.slf4j.Slf4j
+
 import java.io.*
 import java.lang.ref.WeakReference
 import java.util.*
@@ -241,7 +241,7 @@ class PositionTrackingService(folder: File) : Closeable {
             })
         }
 
-        Server.getInstance().onlinePlayers.values.forEach(Consumer { player: Player -> this.detectNeededUpdates(player) })
+        Server.instance.onlinePlayers.values.forEach(Consumer { player: Player -> this.detectNeededUpdates(player) })
     }
 
     private fun inventories(player: Player): Iterable<Inventory> {
@@ -471,7 +471,7 @@ class PositionTrackingService(folder: File) : Closeable {
 
     @Throws(IOException::class)
     private fun handlerEnabled(trackingHandler: Int) {
-        val server = Server.getInstance()
+        val server = Server.instance
         for (player in server.onlinePlayers.values) {
             if (hasTrackingDevice(player, trackingHandler) && !isTracking(player, trackingHandler, false)) {
                 startTracking(player, trackingHandler, false)

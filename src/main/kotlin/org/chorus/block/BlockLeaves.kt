@@ -27,10 +27,10 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
     override val toolType: Int
         get() = ItemTool.TYPE_HOE
 
-    abstract val type: WoodType
+    abstract fun getType(): WoodType
 
     override val name: String
-        get() = type.name + " Leaves"
+        get() = getType().name + " Leaves"
 
     override val burnChance: Int
         get() = 30
@@ -74,25 +74,25 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
             0 -> {
                 appleOdds = 200
                 stickOdds = 50
-                saplingOdds = if (type == WoodType.JUNGLE) 40 else 20
+                saplingOdds = if (getType() == WoodType.JUNGLE) 40 else 20
             }
 
             1 -> {
                 appleOdds = 180
                 stickOdds = 45
-                saplingOdds = if (type == WoodType.JUNGLE) 36 else 16
+                saplingOdds = if (getType() == WoodType.JUNGLE) 36 else 16
             }
 
             2 -> {
                 appleOdds = 160
                 stickOdds = 40
-                saplingOdds = if (type == WoodType.JUNGLE) 32 else 12
+                saplingOdds = if (getType() == WoodType.JUNGLE) 32 else 12
             }
 
             else -> {
                 appleOdds = 120
                 stickOdds = 30
-                saplingOdds = if (type == WoodType.JUNGLE) 24 else 10
+                saplingOdds = if (getType() == WoodType.JUNGLE) 24 else 10
             }
         }
 
@@ -107,7 +107,7 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
             drops.add(toSapling())
         }
 
-        return drops.toArray(Item.EMPTY_ARRAY)
+        return drops.toTypedArray()
     }
 
     override fun onUpdate(type: Int): Int {
@@ -115,10 +115,10 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
             if (isCheckDecay) {
                 if (isPersistent || findLog(this, 7, null)) {
                     isCheckDecay = false
-                    level.setBlock(this.position, this, false, false)
+                    level.setBlock(this.position, this, direct = false, update = false)
                 } else {
                     val ev = LeavesDecayEvent(this)
-                    instance!!.pluginManager.callEvent(ev)
+                    instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         level.useBreakOn(this.position)
                     }
@@ -128,7 +128,7 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
         } else if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (!isCheckDecay) {
                 isCheckDecay = true
-                level.setBlock(this.position, this, false, false)
+                level.setBlock(this.position, this, direct = false, update = false)
             }
 
             // Slowly propagates the need to update instead of peaking down the TPS for huge trees
@@ -146,10 +146,10 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
     }
 
     private fun findLog(current: Block?, distance: Int, visited: Long2LongMap?): Boolean {
-        var visited = visited
-        if (visited == null) {
-            visited = Long2LongOpenHashMap()
-            visited.defaultReturnValue(-1)
+        var visited1 = visited
+        if (visited1 == null) {
+            visited1 = Long2LongOpenHashMap()
+            visited1.defaultReturnValue(-1)
         }
         if (current is IBlockWood || current is BlockMangroveRoots) {
             return true
@@ -158,12 +158,12 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
             return false
         }
         val hash = hashBlock(current.position)
-        if (visited.get(hash) >= distance) {
+        if (visited1.get(hash) >= distance) {
             return false
         }
-        visited.put(hash, distance.toLong())
+        visited1.put(hash, distance.toLong())
         for (face in VISIT_ORDER) {
-            if (findLog(current.getSide(face), distance - 1, visited)) {
+            if (findLog(current.getSide(face), distance - 1, visited1)) {
                 return true
             }
         }
@@ -171,18 +171,18 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
     }
 
     var isCheckDecay: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT)
+        get() = getPropertyValue(CommonBlockProperties.UPDATE_BIT)
         set(checkDecay) {
-            setPropertyValue<Boolean, BooleanPropertyType>(
+            setPropertyValue(
                 CommonBlockProperties.UPDATE_BIT,
                 checkDecay
             )
         }
 
     var isPersistent: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.PERSISTENT_BIT)
+        get() = getPropertyValue(CommonBlockProperties.PERSISTENT_BIT)
         set(persistent) {
-            setPropertyValue<Boolean, BooleanPropertyType>(
+            setPropertyValue(
                 CommonBlockProperties.PERSISTENT_BIT,
                 persistent
             )
@@ -193,7 +193,7 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
     }
 
     protected fun canDropApple(): Boolean {
-        return type == WoodType.OAK
+        return getType() == WoodType.OAK
     }
 
     override fun diffusesSkyLight(): Boolean {

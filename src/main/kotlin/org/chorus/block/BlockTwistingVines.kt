@@ -24,6 +24,6 @@ class BlockTwistingVines @JvmOverloads constructor(blockstate: BlockState? = Com
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.TWISTING_VINES, CommonBlockProperties.TWISTING_VINES_AGE)
-            get() = Companion.field
+
     }
 }

@@ -7,6 +7,6 @@ class BlockUnderwaterTorch @JvmOverloads constructor(blockstate: BlockState? = C
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.UNDERWATER_TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

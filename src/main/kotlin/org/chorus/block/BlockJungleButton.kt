@@ -9,10 +9,10 @@ class BlockJungleButton @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.JUNGLE_BUTTON,
+BlockID.BlockID.Companion.JUNGLE_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

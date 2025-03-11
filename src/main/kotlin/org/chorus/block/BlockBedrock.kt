@@ -46,8 +46,10 @@ class BlockBedrock @JvmOverloads constructor(blockstate: BlockState? = Companion
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BEDROCK, CommonBlockProperties.INFINIBURN_BIT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BEDROCK, CommonBlockProperties.INFINIBURN_BIT)
     }
 }

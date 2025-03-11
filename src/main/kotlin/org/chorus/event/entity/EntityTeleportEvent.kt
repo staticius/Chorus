@@ -6,9 +6,7 @@ import org.chorus.event.HandlerList
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
 import org.chorus.level.Transform
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EntityTeleportEvent @JvmOverloads constructor(
     entity: Entity?,
     from: Transform,

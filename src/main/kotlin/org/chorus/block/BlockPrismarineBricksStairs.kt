@@ -26,10 +26,10 @@ class BlockPrismarineBricksStairs @JvmOverloads constructor(blockstate: BlockSta
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.PRISMARINE_BRICKS_STAIRS,
+BlockID.BlockID.PRISMARINE_BRICKS_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+            
     }
 }

@@ -11,7 +11,7 @@ import org.chorus.network.protocol.ProtocolInfo
 class MovePlayerProcessor : DataPacketProcessor<MovePlayerPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: MovePlayerPacket) {
         val player = playerHandle.player
-        if (Server.getInstance().serverAuthoritativeMovement > 0) {
+        if (Server.instance.serverAuthoritativeMovement > 0) {
             return
         }
         val newPos = Vector3(pk.x.toDouble(), (pk.y - playerHandle.baseOffset).toDouble(), pk.z.toDouble())

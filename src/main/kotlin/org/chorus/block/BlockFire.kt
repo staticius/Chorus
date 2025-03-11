@@ -22,9 +22,7 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     var age: Int
@@ -89,7 +87,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
 
             if (!this.isBlockTopFacingSurfaceSolid(down) && !this.canNeighborBurn()) {
                 val event = BlockFadeEvent(this, get(AIR))
-                level.server.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     level.setBlock(this.position, event.newState, true)
                 }
@@ -114,7 +112,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
             //TODO: END
             if (!this.isBlockTopFacingSurfaceSolid(down) && !this.canNeighborBurn()) {
                 val event = BlockFadeEvent(this, get(AIR))
-                level.server.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     level.setBlock(this.position, event.newState, true)
                 }
@@ -137,14 +135,14 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
                 if (!forever && !this.canNeighborBurn()) {
                     if (!this.isBlockTopFacingSurfaceSolid(down) || meta > 3) {
                         val event = BlockFadeEvent(this, get(AIR))
-                        level.server.pluginManager.callEvent(event)
+                        Server.instance.pluginManager.callEvent(event)
                         if (!event.isCancelled) {
                             level.setBlock(this.position, event.newState, true)
                         }
                     }
                 } else if (!forever && (down.burnAbility <= 0) && meta == 15 && random.nextInt(4) == 0) {
                     val event = BlockFadeEvent(this, get(AIR))
-                    level.server.pluginManager.callEvent(event)
+                    Server.instance.pluginManager.callEvent(event)
                     if (!event.isCancelled) {
                         level.setBlock(this.position, event.newState, true)
                     }
@@ -176,7 +174,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
                                     )
 
                                     if (chance > 0) {
-                                        val t = (chance + 40 + level.server.getDifficulty() * 7) / (meta + 30)
+                                        val t = (chance + 40 + Server.instance.getDifficulty() * 7) / (meta + 30)
 
                                         //TODO: decrease the t if the rainfall values are high
                                         if (t > 0 && random.nextInt(k) <= t) {
@@ -192,7 +190,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
                                                 null,
                                                 BlockIgniteEvent.BlockIgniteCause.SPREAD
                                             )
-                                            level.server.pluginManager.callEvent(e)
+                                            Server.instance.pluginManager.callEvent(e)
 
                                             if (!e.isCancelled) {
                                                 level.setBlock(
@@ -233,7 +231,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
                 }
 
                 val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.SPREAD)
-                level.server.pluginManager.callEvent(e)
+                Server.instance.pluginManager.callEvent(e)
 
                 if (!e.isCancelled) {
                     level.setBlock(
@@ -249,7 +247,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
                 }
             } else {
                 val ev = BlockBurnEvent(block)
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
 
                 if (!ev.isCancelled) {
                     level.setBlock(block.position, get(AIR), true)
@@ -339,7 +337,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
                     level.canBlockSeeSky(north()!!.position))
         ) {
             val event = BlockFadeEvent(this, get(AIR))
-            level.server.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 level.setBlock(this.position, event.newState, true)
             }
@@ -349,7 +347,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FIRE, CommonBlockProperties.AGE_16)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FIRE, CommonBlockProperties.AGE_16)
+
     }
 }

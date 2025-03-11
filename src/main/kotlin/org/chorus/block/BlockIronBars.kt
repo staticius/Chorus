@@ -36,6 +36,6 @@ class BlockIronBars @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.Companion.IRON_BARS)
-            get() = Companion.field
+            
     }
 }

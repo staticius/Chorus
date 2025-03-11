@@ -73,7 +73,7 @@ class BlockDeadbush @JvmOverloads constructor(blockState: BlockState? = Companio
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEADBUSH)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEADBUSH)
+
     }
 }

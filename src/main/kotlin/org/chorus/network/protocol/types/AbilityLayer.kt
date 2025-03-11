@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types
 
-import lombok.Data
+
 import java.util.*
 
 

@@ -24,7 +24,7 @@ class BlockFletchingTable @JvmOverloads constructor(blockstate: BlockState? = Co
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FLETCHING_TABLE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FLETCHING_TABLE)
+
     }
 }

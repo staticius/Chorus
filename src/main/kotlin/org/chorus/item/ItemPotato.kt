@@ -2,9 +2,7 @@ package org.chorus.item
 
 import org.chorus.block.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class ItemPotato @JvmOverloads constructor(
     id: String = ItemID.Companion.POTATO,
     meta: Int = 0,

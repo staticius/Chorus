@@ -62,6 +62,6 @@ class BlockObsidian : BlockSolid {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OBSIDIAN)
-            get() = Companion.field
+
     }
 }

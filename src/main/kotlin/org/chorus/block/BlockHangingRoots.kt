@@ -23,7 +23,7 @@ class BlockHangingRoots @JvmOverloads constructor(blockstate: BlockState? = Comp
         get() = up()!!.isSolid
 
     companion object {
-        val properties: BlockProperties = BlockProperties(HANGING_ROOTS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.HANGING_ROOTS)
+            
     }
 }

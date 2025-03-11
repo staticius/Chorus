@@ -76,7 +76,7 @@ abstract class BlockHead(blockState: BlockState?) : BlockTransparent(blockState)
     }
 
     override fun onUpdate(type: Int): Int {
-        if ((type != Level.BLOCK_UPDATE_REDSTONE && type != Level.BLOCK_UPDATE_NORMAL) || !level.server.settings.levelSettings()
+        if ((type != Level.BLOCK_UPDATE_REDSTONE && type != Level.BLOCK_UPDATE_NORMAL) || !Server.instance.settings.levelSettings()
                 .enableRedstone()
         ) {
             return 0
@@ -88,7 +88,7 @@ abstract class BlockHead(blockState: BlockState?) : BlockTransparent(blockState)
         }
 
         val ev = RedstoneUpdateEvent(this)
-        level.server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return 0
         }

@@ -8,9 +8,7 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.ByteTag
 import org.chorus.utils.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class ItemArmor : Item, ItemDurable {
     constructor(id: String) : super(id)
 
@@ -71,7 +69,7 @@ abstract class ItemArmor : Item, ItemDurable {
         get() = super.damage
         set(damage) {
             val event = ItemWearEvent(this, damage)
-            val pluginManager = Server.getInstance().pluginManager
+            val pluginManager = Server.instance.pluginManager
             pluginManager?.callEvent(event) //Method gets called on server start before plugin manager is initiated
 
             if (!event.isCancelled) {

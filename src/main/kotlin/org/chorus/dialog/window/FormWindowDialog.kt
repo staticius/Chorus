@@ -7,7 +7,7 @@ import org.chorus.entity.Entity
 import org.chorus.utils.JSONUtils
 import com.google.common.reflect.TypeToken
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.extern.slf4j.Slf4j
+
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader

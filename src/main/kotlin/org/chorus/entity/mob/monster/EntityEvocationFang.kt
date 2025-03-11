@@ -12,8 +12,8 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.LevelSoundEventPacketV2
-import lombok.Getter
-import lombok.Setter
+
+
 
 /**
  * @author PikyCZ

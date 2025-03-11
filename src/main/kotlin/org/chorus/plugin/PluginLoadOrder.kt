@@ -6,10 +6,10 @@ package org.chorus.plugin
  *
  *
  *
- * Nukkit插件的加载顺序有两个:[cn.nukkit.plugin.PluginLoadOrder.STARTUP]
- * 和 [cn.nukkit.plugin.PluginLoadOrder.POSTWORLD]。<br></br>
- * The load order of a Nukkit plugin can be [cn.nukkit.plugin.PluginLoadOrder.STARTUP]
- * or [cn.nukkit.plugin.PluginLoadOrder.POSTWORLD].
+ * Nukkit插件的加载顺序有两个:[org.chorus.plugin.PluginLoadOrder.STARTUP]
+ * 和 [org.chorus.plugin.PluginLoadOrder.POSTWORLD]。<br></br>
+ * The load order of a Nukkit plugin can be [org.chorus.plugin.PluginLoadOrder.STARTUP]
+ * or [org.chorus.plugin.PluginLoadOrder.POSTWORLD].
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author iNevet(code) @ Nukkit Project
@@ -21,7 +21,7 @@ enum class PluginLoadOrder {
      * 表示这个插件在服务器启动时就开始加载。<br></br>
      * Indicates that the plugin will be loaded at startup.
      *
-     * @see cn.nukkit.plugin.PluginLoadOrder
+     * @see org.chorus.plugin.PluginLoadOrder
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -31,7 +31,7 @@ enum class PluginLoadOrder {
      * 表示这个插件在第一个世界加载完成后开始加载。<br></br>
      * Indicates that the plugin will be loaded after the first/default world was created.
      *
-     * @see cn.nukkit.plugin.PluginLoadOrder
+     * @see org.chorus.plugin.PluginLoadOrder
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */

@@ -3,7 +3,7 @@ package org.chorus.entity.ai.sensor
 import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.EntityMob
-import lombok.Getter
+
 
 //存储最近的玩家的Memory
 

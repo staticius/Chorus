@@ -15,9 +15,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.Map
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.description", "%commands.banip.usage") {
     init {
         this.permission = "nukkit.command.ban.ip"

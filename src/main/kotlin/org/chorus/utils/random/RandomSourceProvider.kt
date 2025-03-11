@@ -50,11 +50,11 @@ interface RandomSourceProvider {
     companion object {
         @JvmStatic
         fun create(): RandomSourceProvider {
-            return NukkitRandom()
+            return ChorusRandom()
         }
 
         fun create(seed: Long): RandomSourceProvider {
-            return NukkitRandom(seed)
+            return ChorusRandom(seed)
         }
     }
 }

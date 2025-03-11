@@ -1,13 +1,13 @@
 package org.chorus.utils
 
 import org.chorus.Server
-import lombok.extern.slf4j.Slf4j
+
 import java.io.*
 import java.nio.file.Files
 import javax.annotation.Nonnull
 
 
-object SparkInstaller {
+object SparkInstaller : Loggable {
     @JvmStatic
     fun initSpark(@Nonnull server: Server): Boolean {
         var download = false
@@ -26,14 +26,14 @@ object SparkInstaller {
                         try {
                             Files.copy(`in`, targetPath.toPath())
                             server.pluginManager.enablePlugin(server.pluginManager.loadPlugin(targetPath)!!)
-                            SparkInstaller.log.info("Spark has been installed.")
+                            log.info("Spark has been installed.")
                         } catch (e: Exception) {
-                            SparkInstaller.log.warn("Failed to copy spark: {}", e.stackTrace.contentToString())
+                            log.warn("Failed to copy spark: {}", e.stackTrace.contentToString())
                         }
                     }
                 }
             } catch (e: IOException) {
-                SparkInstaller.log.warn("Failed to download spark: {}", e.stackTrace.contentToString())
+                log.warn("Failed to download spark: {}", e.stackTrace.contentToString())
             }
         }
 

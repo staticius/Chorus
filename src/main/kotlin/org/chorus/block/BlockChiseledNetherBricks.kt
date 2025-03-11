@@ -25,6 +25,6 @@ class BlockChiseledNetherBricks @JvmOverloads constructor(blockstate: BlockState
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHISELED_NETHER_BRICKS)
-            get() = Companion.field
+
     }
 }

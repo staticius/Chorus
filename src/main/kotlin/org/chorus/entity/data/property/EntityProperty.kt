@@ -59,7 +59,7 @@ abstract class EntityProperty(private val identifier: String) {
                                         EnumEntityProperty(
                                             name,
                                             enums.toArray<String>(IntFunction<Array<String>> { _Dummy_.__Array__() }),
-                                            enums.getFirst()
+                                            enums.first()
                                         )
                                     }
 

@@ -5,7 +5,7 @@ import org.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
 import org.chorus.registry.Registries
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.*
+
 import java.util.function.BiConsumer
 
 

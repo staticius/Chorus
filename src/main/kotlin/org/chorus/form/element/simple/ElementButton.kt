@@ -2,13 +2,13 @@ package org.chorus.form.element.simple
 
 import org.chorus.form.element.Element
 import com.google.gson.JsonObject
-import lombok.AllArgsConstructor
-import lombok.Getter
-import lombok.Setter
-import lombok.experimental.Accessors
+
+
+
+
 
 /**
- * The button object used to add buttons within [cn.nukkit.form.window.SimpleForm]
+ * The button object used to add buttons within [org.chorus.form.window.SimpleForm]
  */
 
 

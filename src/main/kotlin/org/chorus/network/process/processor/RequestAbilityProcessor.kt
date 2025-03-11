@@ -2,6 +2,7 @@ package org.chorus.network.process.processor
 
 import org.chorus.AdventureSettings
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.event.player.PlayerIllegalFlightEvent
 import org.chorus.event.player.PlayerKickEvent
 import org.chorus.event.player.PlayerToggleFlightEvent
@@ -20,18 +21,17 @@ class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
             return
         }
 
-        if (!player.getServer()
-                .allowFlight() && pk.boolValue && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
+        if (!Server.instance.allowFlight && pk.boolValue && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
         ) {
             val pife = PlayerIllegalFlightEvent(player)
-            player.getServer().getPluginManager().callEvent(pife)
+            Server.instance.pluginManager.callEvent(pife)
             if (!pife.isKick) return
             player.kick(PlayerKickEvent.Reason.FLYING_DISABLED, "Flying is not enabled on this server")
             return
         }
 
         val playerToggleFlightEvent = PlayerToggleFlightEvent(player, pk.boolValue)
-        player.getServer().getPluginManager().callEvent(playerToggleFlightEvent)
+        Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
         if (playerToggleFlightEvent.isCancelled) {
             player.adventureSettings.update()
         } else {

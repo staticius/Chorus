@@ -38,7 +38,7 @@ open class BlockWallSign @JvmOverloads constructor(blockState: BlockState? = Com
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
         }
 
-    override var signDirection: CompassRoseDirection?
+    override var getSignDirection: CompassRoseDirection?
         get() = blockFace!!.compassRoseDirection
         set(direction) {
             blockFace = direction!!.closestBlockFace
@@ -46,6 +46,6 @@ open class BlockWallSign @JvmOverloads constructor(blockState: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

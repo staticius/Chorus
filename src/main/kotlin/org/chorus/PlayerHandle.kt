@@ -1,5 +1,6 @@
 package org.chorus
 
+import com.github.benmanes.caffeine.cache.Cache
 import org.chorus.block.*
 import org.chorus.dialog.window.FormWindowDialog
 import org.chorus.entity.*
@@ -49,7 +50,7 @@ class PlayerHandle(val player: Player) {
         get() = player.hiddenPlayers
 
     val chunksPerTick: Int
-        get() = player.chunksPerTick
+        get() = player.chunkSendCountPerTick
 
     val spawnThreshold: Int
         get() = player.spawnThreshold
@@ -165,7 +166,7 @@ class PlayerHandle(val player: Player) {
         player.serverSettings = serverSettings
     }
 
-    var dialogWindows: Cache<String?, FormWindowDialog?>
+    var dialogWindows: Cache<String, FormWindowDialog?>
         get() = player.dialogWindows
         set(dialogWindows) {
             player.dialogWindows = dialogWindows

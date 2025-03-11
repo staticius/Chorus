@@ -22,7 +22,7 @@ class LongTag : NumberTag<Long> {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_Long
+        get() = Tag.Companion.TAG_LONG
 
     override fun toString(): String {
         return "LongTag  (data:$data)"

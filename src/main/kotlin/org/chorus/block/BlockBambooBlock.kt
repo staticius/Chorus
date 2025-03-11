@@ -17,8 +17,10 @@ class BlockBambooBlock @JvmOverloads constructor(blockState: BlockState? = Compa
         return BlockStrippedBambooBlock.properties.defaultState
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BAMBOO_BLOCK, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_BLOCK, CommonBlockProperties.PILLAR_AXIS)
     }
 }

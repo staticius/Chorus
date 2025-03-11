@@ -27,7 +27,7 @@ class BlockCrimsonSlab @JvmOverloads constructor(blockstate: BlockState? = Compa
         get() = 3.5
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRIMSON_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

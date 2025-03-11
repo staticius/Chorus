@@ -75,7 +75,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
 
         if (isFull) {
             val event: ComposterEmptyEvent = ComposterEmptyEvent(this, player, item, Item.get(ItemID.BONE_MEAL), 0)
-            level.server.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
                 level.setBlock(this.position, this, true, true)
@@ -92,7 +92,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
 
         val success = Random().nextInt(100) < chance
         val event: ComposterFillEvent = ComposterFillEvent(this, player, item, chance, success)
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             return true
@@ -121,7 +121,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     fun empty(item: Item?, player: Player?): Item? {
         val event: ComposterEmptyEvent = ComposterEmptyEvent(this, player, item, ItemBoneMeal(), 0)
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (!event.isCancelled) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
             level.setBlock(this.position, this, true, true)
@@ -138,8 +138,8 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
         get() = OUTPUT_ITEM.clone()
 
     companion object {
-        val properties: BlockProperties = BlockProperties(COMPOSTER, CommonBlockProperties.COMPOSTER_FILL_LEVEL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.COMPOSTER, CommonBlockProperties.COMPOSTER_FILL_LEVEL)
+
         private val compostableItems: Object2IntMap<String> = Object2IntOpenHashMap()
         private val compostableBlocks: Object2IntMap<BlockState?> = Object2IntOpenHashMap()
         val OUTPUT_ITEM: Item = ItemBoneMeal()
@@ -165,23 +165,22 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
             }
         }
 
-        fun registerBlocks(chance: Int, vararg blockIds: String) {
-            for (blockId in blockIds) {
-                registerBlock(chance, blockId, 0)
+        fun registerBlocks(chance: Int, vararg BlockID.: String) {
+            for (BlockID.in BlockID.) {
+                registerBlock(chance, BlockID.0)
             }
         }
 
-        fun registerBlock(chance: Int, blockId: String) {
-            val blockState = Registries.BLOCK.get(blockId)!!.blockState
+        fun registerBlock(chance: Int, BlockID.String) {
+            val blockState = Registries.BLOCK.get(BlockID.!!.blockState
             compostableBlocks.put(blockState, chance)
         }
 
-        fun registerBlock(chance: Int, blockId: String, meta: Int) {
-            val i = Registries.BLOCKSTATE_ITEMMETA.get(blockId, meta)
+        fun registerBlock(chance: Int, BlockID.String, meta: Int) {
+            val i = Registries.BLOCKSTATE_ITEMMETA.get(BlockID.meta)
             val blockState: BlockState
             if (i == 0) {
-                val block = Registries.BLOCK.get(blockId)
-                blockState = block!!.properties.defaultState
+                val block = Registries.BLOCK.get(BlockID.blockState = block!!.properties.defaultState
             } else {
                 blockState = Registries.BLOCKSTATE.get(i)
             }

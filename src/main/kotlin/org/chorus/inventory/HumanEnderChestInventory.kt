@@ -9,7 +9,7 @@ import org.chorus.network.protocol.BlockEventPacket
 import org.chorus.network.protocol.ContainerClosePacket
 import org.chorus.network.protocol.ContainerOpenPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import lombok.extern.slf4j.Slf4j
+
 
 
 class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryType.CONTAINER, 27),

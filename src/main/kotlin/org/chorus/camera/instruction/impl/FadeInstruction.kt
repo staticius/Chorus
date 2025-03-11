@@ -2,8 +2,8 @@ package org.chorus.camera.instruction.impl
 
 import org.chorus.camera.data.Time
 import org.chorus.camera.instruction.CameraInstruction
-import lombok.Builder
-import lombok.Getter
+
+
 import java.awt.Color
 
 /**

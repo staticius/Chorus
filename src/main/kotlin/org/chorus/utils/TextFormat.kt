@@ -4,9 +4,15 @@ import com.google.common.collect.Maps
 import java.util.regex.Pattern
 
 /**
+ * The special character which prefixes all format codes. Use this if
+ * you need to dynamically convert format codes from your custom format.
+ */
+const val ESCAPE: Char = '\u00A7'
+
+/**
  * All supported formatting values for chat and console.
  */
-enum class TextFormat @JvmOverloads constructor(
+enum class TextFormat(
     code: Char, private val intCode: Int,
     /**
      * Checks if this code is a format code as opposed to a color code.
@@ -173,37 +179,8 @@ enum class TextFormat @JvmOverloads constructor(
      */
     RESET('r', 0x15);
 
-    /**
-     * Gets the char value associated with this color
-     *
-     * @return A char value of this color code
-     */
-    val char: Char = code
-
-    private val toString: String
-
-    init {
-        this.toString = String(charArrayOf(ESCAPE, code))
-    }
-
-    override fun toString(): String {
-        return toString
-    }
-
-    val isColor: Boolean
-        /**
-         * Checks if this code is a color code as opposed to a format code.
-         */
-        get() = !isFormat && this != RESET
-
     companion object {
-        /**
-         * The special character which prefixes all format codes. Use this if
-         * you need to dynamically convert format codes from your custom format.
-         */
-        const val ESCAPE: Char = '\u00A7'
-
-        private val CLEAN_PATTERN: Pattern = Pattern.compile("(?i)" + ESCAPE + "[0-9A-V]")
+        private val CLEAN_PATTERN: Pattern = Pattern.compile("(?i)$ESCAPE[0-9A-V]")
         private val BY_ID: MutableMap<Int, TextFormat> = Maps.newTreeMap()
         private val BY_CHAR: MutableMap<Char, TextFormat> = HashMap()
 
@@ -248,11 +225,7 @@ enum class TextFormat @JvmOverloads constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun clean(input: String?, recursive: Boolean = false): String? {
-            if (input == null) {
-                return null
-            }
-
+        fun clean(input: String, recursive: Boolean = false): String {
             val result = CLEAN_PATTERN.matcher(input).replaceAll("")
 
             if (recursive && CLEAN_PATTERN.matcher(result).find()) {
@@ -263,13 +236,13 @@ enum class TextFormat @JvmOverloads constructor(
 
         /**
          * Translates a string using an alternate format code character into a
-         * string that uses the internal TextFormat.ESCAPE format code
+         * string that uses the internal ESCAPE format code
          * character. The alternate format code character will only be replaced if
          * it is immediately followed by 0-9, A-G, a-g, K-O, k-o, R or r.
          *
          * @param altFormatChar   The alternate format code character to replace. Ex: &amp;
          * @param textToTranslate Text containing the alternate format code character.
-         * @return Text containing the TextFormat.ESCAPE format code character.
+         * @return Text containing the ESCAPE format code character.
          */
         fun colorize(altFormatChar: Char, textToTranslate: String): String {
             val b = textToTranslate.toCharArray()
@@ -284,12 +257,12 @@ enum class TextFormat @JvmOverloads constructor(
 
         /**
          * Translates a string, using an ampersand (&amp;) as an alternate format code
-         * character, into a string that uses the internal TextFormat.ESCAPE format
+         * character, into a string that uses the internal ESCAPE format
          * code character. The alternate format code character will only be replaced if
          * it is immediately followed by 0-9, A-G, a-g, K-O, k-o, R or r.
          *
          * @param textToTranslate Text containing the alternate format code character.
-         * @return Text containing the TextFormat.ESCAPE format code character.
+         * @return Text containing the ESCAPE format code character.
          */
         fun colorize(textToTranslate: String): String {
             return colorize('&', textToTranslate)
@@ -326,4 +299,23 @@ enum class TextFormat @JvmOverloads constructor(
             return result.toString()
         }
     }
+
+    /**
+     * Gets the char value associated with this color
+     *
+     * @return A char value of this color code
+     */
+    val char: Char = code
+
+    private val toString: String = String(charArrayOf(ESCAPE, code))
+
+    override fun toString(): String {
+        return toString
+    }
+
+    val isColor: Boolean
+        /**
+         * Checks if this code is a color code as opposed to a format code.
+         */
+        get() = !isFormat && this != RESET
 }

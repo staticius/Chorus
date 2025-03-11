@@ -10,7 +10,7 @@ import org.chorus.camera.instruction.impl.TargetInstruction
 import org.chorus.entity.Entity.getId
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.utils.OptionalBoolean
-import lombok.*
+
 import java.awt.Color
 import java.util.function.Consumer
 

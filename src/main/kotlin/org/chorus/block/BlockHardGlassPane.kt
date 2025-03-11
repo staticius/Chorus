@@ -4,6 +4,6 @@ class BlockHardGlassPane @JvmOverloads constructor(blockstate: BlockState? = Com
     Block(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.HARD_GLASS_PANE)
-            get() = Companion.field
+
     }
 }

@@ -8,9 +8,7 @@ import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.sqrt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockIterator @JvmOverloads constructor(
     private val level: Level, start: Vector3, direction: Vector3, yOffset: Double = 0.0,
     private val maxDistance: Int = 0

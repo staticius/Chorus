@@ -12,9 +12,7 @@ import org.chorus.event.vehicle.VehicleDestroyEvent
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt), EntityRideable,
     EntityInteractable {
     protected var rollingDirection: Boolean = true
@@ -98,7 +96,7 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
             val byEvent: VehicleDamageByEntityEvent =
                 VehicleDamageByEntityEvent(this, damagingEntity, source.getFinalDamage().toDouble())
 
-            getServer()!!.pluginManager.callEvent(byEvent)
+            Server.instance.pluginManager.callEvent(byEvent)
 
             if (byEvent.isCancelled) return false
 
@@ -106,7 +104,7 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
         } else {
             val damageEvent: VehicleDamageEvent = VehicleDamageEvent(this, source.getFinalDamage().toDouble())
 
-            getServer()!!.pluginManager.callEvent(damageEvent)
+            Server.instance.pluginManager.callEvent(damageEvent)
 
             if (damageEvent.isCancelled) return false
         }
@@ -116,13 +114,13 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
                 val damagingEntity: Entity = source.damager
                 val byDestroyEvent: VehicleDestroyByEntityEvent = VehicleDestroyByEntityEvent(this, damagingEntity)
 
-                getServer()!!.pluginManager.callEvent(byDestroyEvent)
+                Server.instance.pluginManager.callEvent(byDestroyEvent)
 
                 if (byDestroyEvent.isCancelled) return false
             } else {
                 val destroyEvent: VehicleDestroyEvent = VehicleDestroyEvent(this)
 
-                getServer()!!.pluginManager.callEvent(destroyEvent)
+                Server.instance.pluginManager.callEvent(destroyEvent)
 
                 if (destroyEvent.isCancelled) return false
             }

@@ -17,8 +17,8 @@ import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.registry.Registries
-import lombok.Getter
-import lombok.Setter
+
+
 
 /**
  * @author CreeperFace

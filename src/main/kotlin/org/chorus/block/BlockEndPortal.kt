@@ -83,8 +83,8 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState? = Compani
         }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(END_PORTAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.END_PORTAL)
+
 
         fun spawnObsidianPlatform(locator: Locator) {
             val level = locator.level

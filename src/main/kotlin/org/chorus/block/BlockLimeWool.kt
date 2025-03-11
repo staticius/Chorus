@@ -12,6 +12,6 @@ class BlockLimeWool @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIME_WOOL, Set.of(BlockTags.PNX_WOOL))
-            get() = Companion.field
+
     }
 }

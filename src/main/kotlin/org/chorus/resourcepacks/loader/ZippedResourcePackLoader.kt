@@ -4,7 +4,7 @@ import org.chorus.Server
 import org.chorus.resourcepacks.ResourcePack
 import org.chorus.resourcepacks.ZippedResourcePack
 import com.google.common.io.Files
-import lombok.extern.slf4j.Slf4j
+
 import java.io.File
 
 
@@ -15,13 +15,13 @@ class ZippedResourcePackLoader(//资源包文件存放地址
         if (!path.exists()) {
             path.mkdirs()
         } else require(path.isDirectory) {
-            Server.getInstance().language
+            Server.instance.language
                 .tr("nukkit.resources.invalid-path", path.name)
         }
     }
 
     override fun loadPacks(): List<ResourcePack> {
-        val baseLang = Server.getInstance().language
+        val baseLang = Server.instance.language
         val loadedResourcePacks: MutableList<ResourcePack> = ArrayList()
         for (pack in path.listFiles()) {
             try {

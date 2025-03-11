@@ -16,7 +16,7 @@ class BlockDioriteDoubleSlab @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DIORITE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.DIORITE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

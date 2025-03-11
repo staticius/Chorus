@@ -187,6 +187,6 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState? = Companion.p
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REEDS, CommonBlockProperties.AGE_16)
-            get() = Companion.field
+
     }
 }

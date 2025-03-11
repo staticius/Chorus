@@ -3,9 +3,7 @@ package org.chorus.plugin
 import java.io.File
 import java.net.URLClassLoader
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PluginClassLoader(private val loader: JavaPluginLoader, parent: ClassLoader?, file: File) :
     URLClassLoader(arrayOf(file.toURI().toURL()), parent) {
     private val classes: MutableMap<String, Class<*>?> = HashMap()

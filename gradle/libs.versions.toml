@@ -32,7 +32,6 @@ org-mockito-mockito-junit-jupiter = "5.8.0"
 org-openjdk-jmh-jmh-core = "1.37"
 org-openjdk-jmh-jmh-generator-annprocess = "1.37"
 org-ow2-asm-asm = "9.7"
-org-projectlombok-lombok = "1.18.30"
 org-xerial-snappy-snappy-java = "1.1.10.5"
 org-yaml-snakeyaml = "2.2"
 commons-lang3 = "3.14.0"
@@ -40,6 +39,7 @@ commons-rng = "1.5"
 com-github-stateless4j = "2.6.0"
 eu-okaeri-core = "c995d17b6e"
 disruptor = "4.0.0"
+caffeine-ver = "3.2.0"
 
 [libraries]
 libdeflate = { module = "cn.powernukkitx:libdeflate-java", version.ref = "cn-powernukkitx-libdeflate-java" }
@@ -84,6 +84,7 @@ snappy = { module = "org.xerial.snappy:snappy-java", version.ref = "org-xerial-s
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 okaeri = { module = "com.github.PowerNukkitX:okaeri-configs", version.ref = "eu-okaeri-core" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine-ver"}
 
 [bundles]
 netty = ["netty-raknet", "netty-epoll", "netty-kqueue"]

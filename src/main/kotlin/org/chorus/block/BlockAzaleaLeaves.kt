@@ -22,9 +22,11 @@ open class BlockAzaleaLeaves @JvmOverloads constructor(blockState: BlockState? =
         return WoodType.OAK
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(AZALEA_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.AZALEA_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
     }
 }

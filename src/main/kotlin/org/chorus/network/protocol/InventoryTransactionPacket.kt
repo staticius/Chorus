@@ -7,7 +7,7 @@ import org.chorus.network.protocol.types.inventory.transaction.*
 import org.chorus.network.protocol.types.inventory.transaction.UseItemData.PredictedResult
 import org.chorus.network.protocol.types.inventory.transaction.UseItemData.TriggerType
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.*
+
 import java.util.*
 
 

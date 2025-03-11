@@ -2,9 +2,7 @@ package org.chorus.entity
 
 import org.chorus.entity.data.EntityFlag
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface EntityAgeable {
     fun getDataFlag(id: EntityFlag?): Boolean
     fun setDataFlag(entityFlag: EntityFlag?, value: Boolean)

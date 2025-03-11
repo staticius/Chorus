@@ -1,9 +1,9 @@
 package org.chorus.inventory
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.blockentity.BlockEntityCommandBlock
 import org.chorus.blockentity.BlockEntityNameable
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.inventory.InventoryOpenEvent
 import org.chorus.item.*
 import org.chorus.math.Vector3
@@ -143,7 +143,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
         }
 
         val ev = InventoryOpenEvent(this, who)
-        who.getServer().getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
         }

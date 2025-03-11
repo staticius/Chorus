@@ -5,6 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.BlockVector3
 import org.chorus.math.MathHelper
 import org.chorus.math.Vector3
+import org.chorus.utils.random.RandomSourceProvider
 
 class ObjectJungleBigTree(
     baseHeightIn: Int,

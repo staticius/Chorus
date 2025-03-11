@@ -55,7 +55,7 @@ class BlockGildedBlackstone @JvmOverloads constructor(blockstate: BlockState? = 
         get() = 6.0
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GILDED_BLACKSTONE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GILDED_BLACKSTONE)
+
     }
 }

@@ -7,9 +7,7 @@ import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class BlockSlab : BlockTransparent {
     protected val doubleSlab: BlockState?
 
@@ -21,8 +19,7 @@ abstract class BlockSlab : BlockTransparent {
         this.doubleSlab = Registries.BLOCK.get(doubleSlab)!!.blockState
     }
 
-    @JvmField
-    abstract val slabName: String
+    abstract fun getSlabName(): String
 
     abstract override fun canHarvestWithHand(): Boolean
 
@@ -31,7 +28,7 @@ abstract class BlockSlab : BlockTransparent {
     abstract override val toolType: Int
 
     override val name: String
-        get() = (if (isOnTop) "Upper " else "") + slabName + " Slab"
+        get() = (if (isOnTop) "Upper " else "") + getSlabName() + " Slab"
 
     override var minY: Double
         get() = if (isOnTop) position.y + 0.5 else position.y

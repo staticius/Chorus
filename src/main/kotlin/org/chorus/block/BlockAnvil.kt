@@ -24,8 +24,8 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Compan
     BlockFallable(blockstate), Faceable, BlockInventoryHolder {
     var anvilDamage: Damage
         get() = when (this) {
-            -> Damage.SLIGHTLY_DAMAGED
-            -> Damage.VERY_DAMAGED
+            is BlockChippedAnvil -> Damage.SLIGHTLY_DAMAGED
+            is BlockDamagedAnvil -> Damage.VERY_DAMAGED
             else -> Damage.UNDAMAGED
         }
         set(anvilDamage) {
@@ -74,10 +74,10 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Compan
         if (player == null) {
             level.addSound(this.position, Sound.RANDOM_ANVIL_LAND, 1f, 0.8f)
         } else {
-            val players: Collection<Player?> = level.getChunkPlayers(
+            val players: MutableCollection<Player?> = level.getChunkPlayers(
                 position.chunkX,
                 position.chunkZ
-            ).values
+            ).values.toMutableList()
             players.remove(player)
             if (!players.isEmpty()) {
                 level.addSound(this.position, Sound.RANDOM_ANVIL_LAND, 1f, 0.8f, players)
@@ -88,14 +88,14 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     override fun onActivate(
         item: Item,
-        player: Player,
+        player: Player?,
         blockFace: BlockFace?,
         fx: Float,
         fy: Float,
         fz: Float
     ): Boolean {
         if (isNotActivate(player)) return false
-        player.addWindow(inventory!!)
+        player?.addWindow(inventory!!)
         return true
     }
 
@@ -137,8 +137,10 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Compan
         return ItemBlock(clone().setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION.createDefaultValue()))
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(ANVIL, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ANVIL, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
     }
 }

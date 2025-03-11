@@ -9,8 +9,10 @@ class BlockBubbleCoralBlock : BlockCoralBlock {
         return BlockDeadBubbleCoralBlock()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BUBBLE_CORAL_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BUBBLE_CORAL_BLOCK)
     }
 }

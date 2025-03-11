@@ -1412,7 +1412,7 @@ class Int2ObjectNonBlockingMap<TypeV>
      *
      * **Warning:** the iterator associated with this Set
      * requires the creation of [Entry] objects with each
-     * iteration.  The [cn.nukkit.utils.collection.nb.Int2ObjectNonBlockingMap]
+     * iteration.  The [org.chorus.utils.collection.nb.Int2ObjectNonBlockingMap]
      * does not normally create or using [Entry] objects so
      * they will be created soley to support this iteration.  Iterating using
      * [Map.keySet] or [Map.values] will be more efficient.  In addition,

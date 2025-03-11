@@ -242,7 +242,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     }
 
     private fun getMaxDiffHealth(): Int {
-        return when (getServer()!!.difficulty) {
+        return when (Server.instance.difficulty) {
             2 -> 450
             3 -> 600
             else -> 300
@@ -339,7 +339,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
 
     private fun explode() {
         val ev = EntityExplosionPrimeEvent(this, 7.0)
-        server!!.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled) {
             val explosion = Explosion(this.locator, ev.force.toFloat().toDouble(), this)
             if (ev.isBlockBreaking && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {

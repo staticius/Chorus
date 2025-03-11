@@ -74,6 +74,6 @@ class BlockPortal @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PORTAL, CommonBlockProperties.PORTAL_AXIS)
-            get() = Companion.field
+
     }
 }

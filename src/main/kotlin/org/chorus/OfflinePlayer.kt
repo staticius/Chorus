@@ -11,32 +11,22 @@ import java.util.*
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @see cn.nukkit.Player
+ * @see org.chorus.Player
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
-class OfflinePlayer @JvmOverloads constructor(override val server: Server, uuid: UUID?, name: String? = null) :
+class OfflinePlayer @JvmOverloads constructor(uuid: UUID?, name: String? = null) :
     IPlayer {
     private val namedTag: CompoundTag
 
-    constructor(server: Server, name: String?) : this(server, null, name)
+    constructor(name: String?) : this(null, name)
 
-    /**
-     * 初始化这个`OfflinePlayer`对象。<br></br>
-     * Initializes the object `OfflinePlayer`.
-     *
-     * @param server 这个玩家所在服务器的`Server`对象。<br></br>
-     * The server this player is in, as a `Server` object.
-     * @param uuid   这个玩家的UUID。<br></br>
-     * UUID of this player.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
-     */
     init {
         var nbt: CompoundTag?
         nbt = if (uuid != null) {
-            server.getOfflinePlayerData(uuid, false)
+            Server.instance.getOfflinePlayerData(uuid, false)
         } else if (name != null) {
-            server.getOfflinePlayerData(name, false)
+            Server.instance.getOfflinePlayerData(name, false)
         } else {
             throw IllegalArgumentException("Name and UUID cannot both be null")
         }
@@ -64,7 +54,7 @@ class OfflinePlayer @JvmOverloads constructor(override val server: Server, uuid:
             return null
         }
 
-    override val uniqueId: UUID?
+    override val uuid: UUID?
         get() {
             if (namedTag != null) {
                 val least = namedTag.getLong("UUIDLeast")
@@ -77,78 +67,70 @@ class OfflinePlayer @JvmOverloads constructor(override val server: Server, uuid:
             return null
         }
 
-    override fun getServer(): Server? {
-        return server
-    }
-
     override var isOp: Boolean
-        get() = server.isOp(name!!.lowercase())
+        get() = Server.instance.isOp(name!!.lowercase())
         set(value) {
-            if (value == field) {
-                return
-            }
-
             if (value) {
-                server.addOp(name!!.lowercase())
+                Server.instance.addOp(name!!.lowercase())
             } else {
-                server.removeOp(name!!.lowercase())
+                Server.instance.removeOp(name!!.lowercase())
             }
         }
 
     override var isBanned: Boolean
-        get() = server.nameBans.isBanned(this.name)
+        get() = Server.instance.bannedPlayers.isBanned(this.name)
         set(value) {
             if (value) {
-                server.nameBans.addBan(this.name, null, null, null)
+                Server.instance.bannedPlayers.addBan(this.name!!, null, null, null)
             } else {
-                server.nameBans.remove(this.name)
+                Server.instance.bannedPlayers.remove(this.name!!)
             }
         }
 
     override var isWhitelisted: Boolean
-        get() = server.isWhitelisted(name!!.lowercase())
+        get() = Server.instance.isWhitelisted(name!!.lowercase())
         set(value) {
             if (value) {
-                server.addWhitelist(name!!.lowercase())
+                Server.instance.addWhitelist(name!!.lowercase())
             } else {
-                server.removeWhitelist(name!!.lowercase())
+                Server.instance.removeWhitelist(name!!.lowercase())
             }
         }
 
     override val player: Player
-        get() = server.getPlayerExact(name!!)!!
+        get() = Server.instance.getPlayerExact(name!!)!!
 
-    override val firstPlayed: Long?
-        get() = if (this.namedTag != null) namedTag.getLong("firstPlayed") else null
+    override val firstPlayed: Long
+        get() = namedTag.getLong("firstPlayed")
 
-    override val lastPlayed: Long?
-        get() = if (this.namedTag != null) namedTag.getLong("lastPlayed") else null
+    override val lastPlayed: Long
+        get() = namedTag.getLong("lastPlayed")
 
     override fun hasPlayedBefore(): Boolean {
-        return this.namedTag != null
+        return true
     }
 
     override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        server.playerMetadata.setMetadata(this, metadataKey, newMetadataValue)
+        Server.instance.playerMetadata.setMetadata(this, metadataKey, newMetadataValue)
     }
 
     override fun getMetadata(metadataKey: String): List<MetadataValue?>? {
-        return server.playerMetadata.getMetadata(this, metadataKey)
+        return Server.instance.playerMetadata.getMetadata(this, metadataKey)
     }
 
     override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue? {
-        return server.playerMetadata.getMetadata(this, metadataKey, plugin)
+        return Server.instance.playerMetadata.getMetadata(this, metadataKey, plugin)
     }
 
     override fun hasMetadata(metadataKey: String): Boolean {
-        return server.playerMetadata.hasMetadata(this, metadataKey)
+        return Server.instance.playerMetadata.hasMetadata(this, metadataKey)
     }
 
     override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
-        return server.playerMetadata.hasMetadata(this, metadataKey, plugin)
+        return Server.instance.playerMetadata.hasMetadata(this, metadataKey, plugin)
     }
 
     override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        server.playerMetadata.removeMetadata(this, metadataKey, owningPlugin)
+        Server.instance.playerMetadata.removeMetadata(this, metadataKey, owningPlugin)
     }
 }

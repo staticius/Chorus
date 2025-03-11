@@ -43,8 +43,8 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
     override val isBlockEntityValid: Boolean
         get() {
-            val blockID = block.id
-            return blockID === Block.BEACON
+            val BlockID.= block.id
+            return BlockID.=== Block.BEACON
         }
 
     override val spawnCompound: CompoundTag
@@ -156,8 +156,8 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
             for (queryX in tileX - powerLevel..tileX + powerLevel) {
                 for (queryZ in tileZ - powerLevel..tileZ + powerLevel) {
-                    val testBlockId = level.getBlockIdAt(queryX, queryY, queryZ)
-                    if (testBlockId !== Block.IRON_BLOCK && testBlockId !== Block.GOLD_BLOCK && testBlockId !== Block.EMERALD_BLOCK && testBlockId !== Block.DIAMOND_BLOCK && testBlockId !== Block.NETHERITE_BLOCK
+                    val testBlockID.= level.getBlockIdAt(queryX, queryY, queryZ)
+                    if (testBlockID.!== Block.IRON_BLOCK && testBlockID.!== Block.GOLD_BLOCK && testBlockID.!== Block.EMERALD_BLOCK && testBlockID.!== Block.DIAMOND_BLOCK && testBlockID.!== Block.NETHERITE_BLOCK
                     ) {
                         return powerLevel - 1
                     }

@@ -69,15 +69,15 @@ class EntityHusk(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt) {
                 ),
                 Behavior(
                     MeleeAttackExecutor(
-                        CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 40, true, 10, Effect.Companion.get(
-                            EffectType.Companion.HUNGER
+                        CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 40, true, 10, Effect.get(
+                            EffectType.HUNGER
                         ).setDuration(140)
                     ), EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET), 4, 1
                 ),
                 Behavior(
                     MeleeAttackExecutor(
-                        CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, 40, false, 10, Effect.Companion.get(
-                            EffectType.Companion.HUNGER
+                        CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, 40, false, 10, Effect.get(
+                            EffectType.HUNGER
                         ).setDuration(140)
                     ), EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER), 3, 1
                 ),
@@ -88,8 +88,8 @@ class EntityHusk(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt) {
                         40,
                         true,
                         30,
-                        Effect.Companion.get(
-                            EffectType.Companion.HUNGER
+                        Effect.get(
+                            EffectType.HUNGER
                         ).setDuration(140)
                     ), EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET), 2, 1
                 ),

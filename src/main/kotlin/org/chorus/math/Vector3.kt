@@ -1,12 +1,10 @@
 package org.chorus.math
 
-import lombok.SneakyThrows
+
 import kotlin.math.max
 import kotlin.math.sqrt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) :
     Cloneable, IVector3 {
     override val vector3: Vector3
@@ -48,39 +46,39 @@ open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double 
     val chunkVector: ChunkVector2
         get() = ChunkVector2(chunkX, chunkZ)
 
-    open fun add(x: Double): Vector3? {
+    open fun add(x: Double): Vector3 {
         return this.add(x, 0.0, 0.0)
     }
 
-    open fun add(x: Double, y: Double): Vector3? {
+    open fun add(x: Double, y: Double): Vector3 {
         return this.add(x, y, 0.0)
     }
 
-    open fun add(x: Double, y: Double, z: Double): Vector3? {
+    open fun add(x: Double, y: Double, z: Double): Vector3 {
         return Vector3(this.x + x, this.y + y, this.z + z)
     }
 
-    open fun add(x: Vector3): Vector3? {
+    open fun add(x: Vector3): Vector3 {
         return Vector3(this.x + x.x, this.y + x.y, this.z + x.z)
     }
 
-    open fun subtract(x: Double): Vector3? {
+    open fun subtract(x: Double): Vector3 {
         return this.subtract(x, 0.0, 0.0)
     }
 
-    open fun subtract(x: Double, y: Double): Vector3? {
+    open fun subtract(x: Double, y: Double): Vector3 {
         return this.subtract(x, y, 0.0)
     }
 
-    open fun subtract(x: Double, y: Double, z: Double): Vector3? {
+    open fun subtract(x: Double, y: Double, z: Double): Vector3 {
         return this.add(-x, -y, -z)
     }
 
-    open fun subtract(x: Vector3): Vector3? {
+    open fun subtract(x: Vector3): Vector3 {
         return this.add(-x.x, -x.y, -x.z)
     }
 
-    open fun multiply(number: Double): Vector3? {
+    open fun multiply(number: Double): Vector3 {
         return Vector3(this.x * number, this.y * number, this.z * number)
     }
 
@@ -88,7 +86,7 @@ open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double 
         return Vector3(this.x / number, this.y / number, this.z / number)
     }
 
-    open fun ceil(): Vector3? {
+    open fun ceil(): Vector3 {
         return Vector3(
             kotlin.math.ceil(this.x).toInt().toDouble(),
             kotlin.math.ceil(this.y).toInt().toDouble(),
@@ -98,7 +96,7 @@ open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double 
         )
     }
 
-    open fun floor(): Vector3? {
+    open fun floor(): Vector3 {
         return Vector3(
             floorX.toDouble(),
             floorY.toDouble(),
@@ -106,7 +104,7 @@ open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double 
         )
     }
 
-    open fun round(): Vector3? {
+    open fun round(): Vector3 {
         return Vector3(
             Math.round(this.x).toDouble(), Math.round(this.y).toDouble(), Math.round(
                 this.z
@@ -114,7 +112,7 @@ open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double 
         )
     }
 
-    open fun abs(): Vector3? {
+    open fun abs(): Vector3 {
         return Vector3(
             kotlin.math.abs(this.x).toInt().toDouble(),
             kotlin.math.abs(this.y).toInt().toDouble(),
@@ -124,11 +122,11 @@ open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double 
         )
     }
 
-    open fun getSide(face: BlockFace): Vector3? {
+    open fun getSide(face: BlockFace): Vector3 {
         return this.getSide(face, 1)
     }
 
-    open fun getSide(face: BlockFace, step: Int): Vector3? {
+    open fun getSide(face: BlockFace, step: Int): Vector3 {
         return Vector3(
             this.x + face.xOffset * step,
             y + face.yOffset * step,
@@ -145,51 +143,51 @@ open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double 
         )
     }
 
-    open fun up(): Vector3? {
+    open fun up(): Vector3 {
         return up(1)
     }
 
-    open fun up(step: Int): Vector3? {
+    open fun up(step: Int): Vector3 {
         return getSide(BlockFace.UP, step)
     }
 
-    open fun down(): Vector3? {
+    open fun down(): Vector3 {
         return down(1)
     }
 
-    open fun down(step: Int): Vector3? {
+    open fun down(step: Int): Vector3 {
         return getSide(BlockFace.DOWN, step)
     }
 
-    open fun north(): Vector3? {
+    open fun north(): Vector3 {
         return north(1)
     }
 
-    open fun north(step: Int): Vector3? {
+    open fun north(step: Int): Vector3 {
         return getSide(BlockFace.NORTH, step)
     }
 
-    open fun south(): Vector3? {
+    open fun south(): Vector3 {
         return south(1)
     }
 
-    open fun south(step: Int): Vector3? {
+    open fun south(step: Int): Vector3 {
         return getSide(BlockFace.SOUTH, step)
     }
 
-    open fun east(): Vector3? {
+    open fun east(): Vector3 {
         return east(1)
     }
 
-    open fun east(step: Int): Vector3? {
+    open fun east(step: Int): Vector3 {
         return getSide(BlockFace.EAST, step)
     }
 
-    open fun west(): Vector3? {
+    open fun west(): Vector3 {
         return west(1)
     }
 
-    open fun west(step: Int): Vector3? {
+    open fun west(step: Int): Vector3 {
         return getSide(BlockFace.WEST, step)
     }
 
@@ -431,7 +429,6 @@ open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double 
         return super.hashCode()
     }
 
-    @SneakyThrows
     public override fun clone(): Vector3 {
         return super.clone() as Vector3
     }

@@ -21,7 +21,7 @@ import org.chorus.Player
 import org.chorus.event.HandlerList
 import org.chorus.inventory.AnvilInventory
 import org.chorus.inventory.Inventory
-import lombok.ToString
+
 
 /**
  * Fired when a player change anything in the item name in an open Anvil inventory window.

@@ -58,6 +58,6 @@ open class BlockPrismarine : BlockSolid {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PRISMARINE)
-            get() = Companion.field
+
     }
 }

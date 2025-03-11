@@ -14,6 +14,6 @@ class BlockOakSapling : BlockSapling {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OAK_SAPLING, CommonBlockProperties.AGE_BIT)
-            get() = Companion.field
+
     }
 }

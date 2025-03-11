@@ -4,9 +4,7 @@ import org.chorus.entity.EntityLiving
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class EntityDeathEvent @JvmOverloads constructor(entity: EntityLiving?, drops: Array<Item>? = Item.EMPTY_ARRAY) :
     EntityEvent() {
     private var drops: Array<Item>?

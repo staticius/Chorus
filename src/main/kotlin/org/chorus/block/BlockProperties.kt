@@ -13,7 +13,7 @@ import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap
-import lombok.Getter
+
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 import java.util.function.BinaryOperator
@@ -26,12 +26,14 @@ import java.util.stream.Collectors
  */
 class BlockProperties(identifier: String, blockTags: Set<String?>, vararg properties: BlockPropertyType<*>?) {
     
-    private val identifier: String
+    val identifier: String
     private val propertyTypeSet: Set<BlockPropertyType<*>>
-    private var specialValueMap: Map<Short, BlockState>? = null
+    var specialValueMap: Map<Short, BlockState>
+        private set
 
     
-    private var defaultState: BlockState? = null
+    var defaultState: BlockState
+        private set
     val specialValueBits: Byte
 
     constructor(identifier: String, vararg properties: BlockPropertyType<*>?) : this(

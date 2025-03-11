@@ -2,7 +2,7 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.util.internal.EmptyArrays
-import lombok.*
+
 import java.util.function.Function
 
 /**

@@ -1,8 +1,6 @@
 package org.chorus.event
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 enum class EventPriority(val slot: Int) {
     /**
      * Event call is of very low importance and should be ran first, to allow

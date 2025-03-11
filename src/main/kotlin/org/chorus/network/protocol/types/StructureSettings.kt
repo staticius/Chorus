@@ -2,8 +2,8 @@ package org.chorus.network.protocol.types
 
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3f
-import lombok.AllArgsConstructor
-import lombok.Value
+
+
 
 
 

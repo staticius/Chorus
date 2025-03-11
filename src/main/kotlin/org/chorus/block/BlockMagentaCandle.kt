@@ -11,6 +11,6 @@ class BlockMagentaCandle @JvmOverloads constructor(blockstate: BlockState? = Com
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MAGENTA_CANDLE, CommonBlockProperties.CANDLES, CommonBlockProperties.LIT)
-            get() = Companion.field
+
     }
 }

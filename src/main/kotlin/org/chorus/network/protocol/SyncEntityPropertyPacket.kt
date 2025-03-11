@@ -5,8 +5,8 @@ import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.buffer.ByteBufInputStream
-import lombok.*
-import lombok.extern.slf4j.Slf4j
+
+
 import java.nio.ByteOrder
 
 

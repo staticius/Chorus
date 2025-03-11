@@ -3,15 +3,13 @@ package org.chorus.math
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class Vector2f @JvmOverloads constructor(@JvmField var x: Float = 0f, @JvmField var y: Float = 0f) {
     val floorX: Int
-        get() = NukkitMath.floorFloat(this.x)
+        get() = ChorusMath.floorFloat(this.x)
 
     val floorY: Int
-        get() = NukkitMath.floorFloat(this.y)
+        get() = ChorusMath.floorFloat(this.y)
 
     fun add(x: Float): Vector2f {
         return this.add(x, 0f)

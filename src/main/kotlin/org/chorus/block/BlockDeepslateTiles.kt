@@ -24,7 +24,7 @@ open class BlockDeepslateTiles @JvmOverloads constructor(blockstate: BlockState?
         get() = ItemTool.TIER_WOODEN
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEEPSLATE_TILES)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEEPSLATE_TILES)
+
     }
 }

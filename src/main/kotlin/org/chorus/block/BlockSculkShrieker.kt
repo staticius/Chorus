@@ -54,6 +54,6 @@ class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState? = Com
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SCULK_SHRIEKER, CommonBlockProperties.ACTIVE, CommonBlockProperties.CAN_SUMMON)
-            get() = Companion.field
+
     }
 }

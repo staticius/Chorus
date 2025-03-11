@@ -14,7 +14,7 @@ import org.chorus.nbt.tag.CompoundTag.putList
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 import org.chorus.utils.RedstoneComponent.updateAroundRedstone
-import lombok.extern.slf4j.Slf4j
+
 import kotlin.math.max
 
 /**
@@ -149,7 +149,7 @@ abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneD
     }
 
     private fun onChange() {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return
         }
 
@@ -199,7 +199,7 @@ abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneD
         try {
             createBlockEntity(CompoundTag().putList("Items", ListTag<Tag>()))
         } catch (e: Exception) {
-            BlockRedstoneComparator.log.warn("Failed to create the block entity {} at {}", blockEntityType, locator, e)
+            BlockRedstoneComparator.log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), locator, e)
             level.setBlock(layer0!!.position, 0, layer0, true)
             level.setBlock(layer1!!.position, 1, layer1, true)
             return false

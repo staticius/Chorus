@@ -6,9 +6,7 @@ import org.chorus.entity.weather.EntityLightningStrike
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class CreeperPowerEvent(creeper: EntityCreeper?, cause: PowerCause?) : EntityEvent(), Cancellable {
     /**
      * Gets the cause of the creeper being (un)powered.

@@ -60,7 +60,7 @@ open class Token : SNBTConstants, Node {
     /**
      * It would be extremely rare that an application
      * programmer would use this method. It needs to
-     * be public because it is part of the cn.nukkit.nbt.snbt.Node interface.
+     * be public because it is part of the org.chorus.nbt.snbt.Node interface.
      */
     override fun setBeginOffset(beginOffset: Int) {
         this.beginOffset = beginOffset
@@ -69,7 +69,7 @@ open class Token : SNBTConstants, Node {
     /**
      * It would be extremely rare that an application
      * programmer would use this method. It needs to
-     * be public because it is part of the cn.nukkit.nbt.snbt.Node interface.
+     * be public because it is part of the org.chorus.nbt.snbt.Node interface.
      */
     override fun setEndOffset(endOffset: Int) {
         this.endOffset = endOffset

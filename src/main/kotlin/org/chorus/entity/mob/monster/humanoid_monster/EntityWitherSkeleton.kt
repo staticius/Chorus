@@ -67,15 +67,15 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
                 Behavior(PlaySoundExecutor(Sound.MOB_WITHER_AMBIENT), RandomSoundEvaluator(), 5, 1),
                 Behavior(
                     MeleeAttackExecutor(
-                        CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 40, true, 10, Effect.Companion.get(
-                            EffectType.Companion.WITHER
+                        CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 40, true, 10, Effect.get(
+                            EffectType.WITHER
                         ).setDuration(200)
                     ), EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET), 4, 1
                 ),
                 Behavior(
                     MeleeAttackExecutor(
-                        CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, 40, false, 10, Effect.Companion.get(
-                            EffectType.Companion.WITHER
+                        CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, 40, false, 10, Effect.get(
+                            EffectType.WITHER
                         ).setDuration(200)
                     ), EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER), 2, 1
                 ),

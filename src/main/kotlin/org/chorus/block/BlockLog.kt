@@ -48,7 +48,7 @@ abstract class BlockLog(blockState: BlockState?) : BlockSolid(blockState), IBloc
         fz: Float
     ): Boolean {
         if (item.isAxe) {
-            val strippedBlock = get(strippedState)
+            val strippedBlock = get(getStrippedState())
             strippedBlock.setPropertyValue(
                 CommonBlockProperties.PILLAR_AXIS,
                 pillarAxis

@@ -14,7 +14,7 @@ class GeneratorTest {
     @Test
     fun testCreate(level: Level, levelProvider: LevelProvider) {
         val loop = GameLoop.builder().loopCountPerSec(200).onTick { d: GameLoop ->
-            level.getScheduler().mainThreadHeartbeat(d.tick)
+            level.scheduler.mainThreadHeartbeat(d.tick)
         }.build()
         val thread = Thread { loop.startLoop() }
         thread.start()
@@ -31,7 +31,7 @@ class GeneratorTest {
     @Test
     fun testLight(level: Level, levelProvider: LevelProvider) {
         val loop = GameLoop.builder().loopCountPerSec(200).onTick { d: GameLoop ->
-            level.getScheduler().mainThreadHeartbeat(d.tick)
+            level.scheduler.mainThreadHeartbeat(d.tick)
         }.build()
         val thread = Thread { loop.startLoop() }
         thread.start()

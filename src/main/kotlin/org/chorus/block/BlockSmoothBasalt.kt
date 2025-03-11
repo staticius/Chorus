@@ -16,6 +16,6 @@ class BlockSmoothBasalt @JvmOverloads constructor(blockState: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SMOOTH_BASALT)
-            get() = Companion.field
+
     }
 }

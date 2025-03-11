@@ -2,13 +2,12 @@ package org.chorus.item
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.Entity.getServer
 import org.chorus.level.Level
 import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.ClientboundMapItemDataPacket
 import org.chorus.plugin.InternalPlugin
-import lombok.extern.slf4j.Slf4j
+
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -166,7 +165,7 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
         if (getDamage() == 6) return false
-        val server: Server = player.getServer()
+        val server: Server = Server.instance
         renderMap(server.getLevel(mapWorld), mapStartX, mapStartZ, mapScale)
         player.getInventory().setItemInHand(this)
         sendImage(player, mapScale)

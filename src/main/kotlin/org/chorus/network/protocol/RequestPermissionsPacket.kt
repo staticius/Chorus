@@ -6,7 +6,7 @@ import org.chorus.entity.Entity.getId
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.PlayerAbility
 import org.chorus.network.protocol.types.PlayerPermission
-import lombok.*
+
 
 
 
@@ -41,7 +41,7 @@ class RequestPermissionsPacket : DataPacket() {
 
     val targetPlayer: Player?
         get() {
-            for (player in Server.getInstance().onlinePlayers.values()) {
+            for (player in Server.instance.onlinePlayers.values()) {
                 if (player.getId() == this.uniqueEntityId) return player
             }
             return null

@@ -7,9 +7,7 @@ import org.chorus.command.utils.CommandLogger
 import kotlin.collections.Map
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class StopCommand(name: String) : VanillaCommand(name, "commands.stop.description") {
     init {
         this.permission = "nukkit.command.stop"

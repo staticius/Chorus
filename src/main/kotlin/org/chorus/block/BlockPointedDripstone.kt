@@ -7,7 +7,7 @@ import org.chorus.block.property.enums.CauldronLiquid
 import org.chorus.block.property.enums.DripstoneThickness
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.entity.Entity
-import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.block.BlockFallEvent
 import org.chorus.event.block.CauldronFilledByDrippingLiquidEvent
@@ -125,9 +125,9 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
         val placeX = block.position.floorX
         val placeY = block.position.floorY
         val placeZ = block.position.floorZ
-        val upBlockID = level.getBlockIdAt(placeX, placeY + 1, placeZ)
-        val downBlockID = level.getBlockIdAt(placeX, placeY - 1, placeZ)
-        if (upBlockID == BlockID.AIR && downBlockID == BlockID.AIR) return false
+        val upBlockID.= level.getBlockIdAt(placeX, placeY + 1, placeZ)
+        val downBlockID.= level.getBlockIdAt(placeX, placeY - 1, placeZ)
+        if (upBlockID.== BlockID.AIR && downBlockID.== BlockID.AIR) return false
         /*    "up" define is exist drip stone in block above,"down" is Similarly.
               up   down
           1   yes   yes
@@ -136,7 +136,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
           4   no    yes
         */
         val state =
-            if (upBlockID == BlockID.POINTED_DRIPSTONE) (if (downBlockID == BlockID.POINTED_DRIPSTONE) 1 else 2) else (if (downBlockID != BlockID.POINTED_DRIPSTONE) 3 else 4
+            if (upBlockID.== BlockID.POINTED_DRIPSTONE) (if (downBlockID.== BlockID.POINTED_DRIPSTONE) 1 else 2) else (if (downBlockID.!= BlockID.POINTED_DRIPSTONE) 3 else 4
                     )
         var hanging = false
         when (state) {
@@ -261,15 +261,15 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
     protected fun getPointedDripStoneLength(x: Int, y: Int, z: Int, hanging: Boolean): Int {
         if (hanging) {
             for (j in y + 1..<level.dimensionData.maxHeight) {
-                val blockId = level.getBlockIdAt(x, j, z)
-                if (blockId != BlockID.POINTED_DRIPSTONE) {
+                val BlockID.= level.getBlockIdAt(x, j, z)
+                if (BlockID.!= BlockID.POINTED_DRIPSTONE) {
                     return j - y - 1
                 }
             }
         } else {
             for (j in y - 1 downTo level.dimensionData.minHeight + 1) {
-                val blockId = level.getBlockIdAt(x, j, z)
-                if (blockId != BlockID.POINTED_DRIPSTONE) {
+                val BlockID.= level.getBlockIdAt(x, j, z)
+                if (BlockID.!= BlockID.POINTED_DRIPSTONE) {
                     return y - j - 1
                 }
             }
@@ -373,10 +373,10 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.POINTED_DRIPSTONE,
+BlockID.BlockID.POINTED_DRIPSTONE,
             CommonBlockProperties.DRIPSTONE_THICKNESS,
             CommonBlockProperties.HANGING
         )
-            get() = Companion.field
+
     }
 }

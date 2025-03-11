@@ -97,6 +97,6 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

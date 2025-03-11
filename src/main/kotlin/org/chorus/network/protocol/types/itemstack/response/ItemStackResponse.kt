@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types.itemstack.response
 
 import org.chorus.network.protocol.ItemStackResponsePacket
 import org.chorus.network.protocol.types.itemstack.request.ItemStackRequest
-import lombok.Data
+
 
 /**
  * Represents an individual response to a [ItemStackRequest]

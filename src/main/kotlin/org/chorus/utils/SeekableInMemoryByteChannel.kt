@@ -27,7 +27,7 @@ class SeekableInMemoryByteChannel @JvmOverloads constructor(data: ByteArray = By
     @Throws(IOException::class)
     override fun position(newPosition: Long): SeekableByteChannel {
         this.ensureOpen()
-        if (newPosition >= 0L && newPosition <= 2147483647L) {
+        if (newPosition in 0L..2147483647L) {
             this.position = newPosition.toInt()
             return this
         } else {
@@ -40,7 +40,7 @@ class SeekableInMemoryByteChannel @JvmOverloads constructor(data: ByteArray = By
     }
 
     override fun truncate(newSize: Long): SeekableByteChannel {
-        if (newSize >= 0L && newSize <= 2147483647L) {
+        if (newSize in 0L..2147483647L) {
             if (size.toLong() > newSize) {
                 this.size = newSize.toInt()
             }

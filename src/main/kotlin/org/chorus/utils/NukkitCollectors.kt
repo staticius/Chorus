@@ -17,7 +17,7 @@
  */
 package org.chorus.utils
 
-import lombok.experimental.UtilityClass
+
 import java.util.stream.Collector
 import java.util.stream.Collectors
 

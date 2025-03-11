@@ -65,7 +65,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
         blockFace = facing
 
-        if (level.server.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings().enableRedstone()) {
             val powered = this.isGettingPower
 
             if (powered == this.isEnabled) {
@@ -87,7 +87,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
     ): Boolean {
         if (isNotActivate(player)) return false
 
-        val blockEntity = orCreateBlockEntity!!
+        val blockEntity = getOrCreateBlockEntity()!!
 
         return player.addWindow(blockEntity.getInventory()) != -1
     }
@@ -118,7 +118,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
         }
 
     override fun onUpdate(type: Int): Int {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return 0
         }
 
@@ -273,7 +273,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(HOPPER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TOGGLE_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.HOPPER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TOGGLE_BIT)
+
     }
 }

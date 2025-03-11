@@ -2,8 +2,8 @@ package org.chorus.nbt.tag
 
 import org.chorus.utils.Binary
 
-class ByteArrayTag : Tag {
-    var data: ByteArray?
+class ByteArrayTag : Tag<ByteArray> {
+    var data: ByteArray? = null
 
     constructor()
 
@@ -12,7 +12,7 @@ class ByteArrayTag : Tag {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_Byte_Array
+        get() = Tag.Companion.TAG_BYTE_ARRAY
 
     override fun toString(): String {
         return "ByteArrayTag " + " (data: 0x" + Binary.bytesToHexString(data, true) + " [" + data!!.size + " bytes])"
@@ -36,9 +36,9 @@ class ByteArrayTag : Tag {
         return builder.toString()
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (super.equals(obj)) {
-            val byteArrayTag = obj as ByteArrayTag
+    override fun equals(other: Any?): Boolean {
+        if (super.equals(other)) {
+            val byteArrayTag = other as ByteArrayTag
             return ((data == null && byteArrayTag.data == null) || (data != null && data.contentEquals(byteArrayTag.data)))
         }
         return false
@@ -50,9 +50,9 @@ class ByteArrayTag : Tag {
         return result
     }
 
-    override fun copy(): Tag {
+    override fun copy(): Tag<ByteArray> {
         val cp = ByteArray(data!!.size)
-        System.arraycopy(data, 0, cp, 0, data!!.size)
+        System.arraycopy(data!!, 0, cp, 0, data!!.size)
         return ByteArrayTag(cp)
     }
 

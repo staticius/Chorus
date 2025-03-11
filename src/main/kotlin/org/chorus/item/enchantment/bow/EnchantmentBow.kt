@@ -6,9 +6,7 @@ import org.chorus.item.ItemBow
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.item.enchantment.EnchantmentType
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EnchantmentBow protected constructor(id: Int, name: String, rarity: Rarity) :
     Enchantment(id, name, rarity, EnchantmentType.BOW) {
     /**

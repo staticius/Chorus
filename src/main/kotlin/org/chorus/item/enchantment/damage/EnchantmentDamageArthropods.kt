@@ -1,15 +1,13 @@
 package org.chorus.item.enchantment.damage
 
 import org.chorus.entity.*
-import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.item.enchantment.*
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentDamageArthropods :
     EnchantmentDamage(Enchantment.Companion.ID_DAMAGE_ARTHROPODS, "arthropods", Rarity.UNCOMMON, TYPE.SMITE) {
     override fun getMinEnchantAbility(level: Int): Int {

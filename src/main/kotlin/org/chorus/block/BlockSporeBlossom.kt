@@ -36,6 +36,6 @@ class BlockSporeBlossom @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SPORE_BLOSSOM)
-            get() = Companion.field
+
     }
 }

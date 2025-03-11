@@ -59,7 +59,7 @@ class BlockGrassPath : BlockGrassBlock {
         get() = true
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GRASS_PATH)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GRASS_PATH)
+
     }
 }

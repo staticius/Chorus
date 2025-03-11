@@ -11,7 +11,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
-import lombok.Getter
+
 
 class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     
@@ -82,7 +82,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
             if (ent != null) {
                 val ev =
                     CreatureSpawnEvent(ent.networkId, pos, CompoundTag(), CreatureSpawnEvent.SpawnReason.CREAKING_HEART)
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     ent.close()
                 } else {

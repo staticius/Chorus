@@ -152,6 +152,6 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SEAGRASS, CommonBlockProperties.SEA_GRASS_TYPE)
-            get() = Companion.field
+
     }
 }

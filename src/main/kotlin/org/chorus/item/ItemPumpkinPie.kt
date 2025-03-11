@@ -1,8 +1,6 @@
 package org.chorus.item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemPumpkinPie @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemFood(ItemID.Companion.PUMPKIN_PIE, meta, count, "Pumpkin Pie") {
     override val foodRestore: Int

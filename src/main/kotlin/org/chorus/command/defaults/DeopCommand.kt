@@ -19,8 +19,8 @@ import kotlin.collections.set
 class DeopCommand(name: String) : VanillaCommand(name, "commands.deop.description") {
     init {
         this.permission = "nukkit.command.op.take"
-        commandParameters["default"] = arrayOf<CommandParameter?>(
-            CommandParameter.Companion.newType("player", CommandParamType.TARGET, IPlayersNode())
+        commandParameters["default"] = arrayOf(
+            CommandParameter.newType("player", CommandParamType.TARGET, IPlayersNode())
         )
         this.enableParamTree()
     }

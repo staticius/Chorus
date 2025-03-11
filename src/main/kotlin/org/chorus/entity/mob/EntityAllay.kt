@@ -27,8 +27,8 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
-import lombok.Getter
-import lombok.Setter
+
+
 import java.util.Set
 import java.util.function.Function
 

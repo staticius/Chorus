@@ -1,7 +1,7 @@
 package org.chorus.recipe.descriptor
 
 import org.chorus.item.Item
-import lombok.Value
+
 
 
 class ComplexAliasDescriptor : ItemDescriptor {

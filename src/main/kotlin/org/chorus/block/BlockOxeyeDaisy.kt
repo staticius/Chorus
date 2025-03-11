@@ -7,6 +7,6 @@ class BlockOxeyeDaisy : BlockFlower {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OXEYE_DAISY)
-            get() = Companion.field
+
     }
 }

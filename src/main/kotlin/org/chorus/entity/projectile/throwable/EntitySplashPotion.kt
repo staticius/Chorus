@@ -80,7 +80,7 @@ open class EntitySplashPotion : EntityThrowable {
     protected open fun splash(collidedWith: Entity?) {
         var potion: PotionType? = PotionType.Companion.get(this.potionId)
         val event: PotionCollideEvent = PotionCollideEvent(potion, this)
-        server!!.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             return

@@ -8,7 +8,7 @@ import com.google.gson.JsonSyntaxException
  * 解析为[RawText]值
  *
  *
- * 所有命令参数类型为[RAWTEXT][cn.nukkit.command.data.CommandParamType.RAWTEXT]如果没有手动指定[IParamNode],则会默认使用这个解析
+ * 所有命令参数类型为[RAWTEXT][org.chorus.command.data.CommandParamType.RAWTEXT]如果没有手动指定[IParamNode],则会默认使用这个解析
  */
 class RawTextNode : ParamNode<org.chorus.command.utils.RawText?>() {
     override fun fill(arg: String) {

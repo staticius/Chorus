@@ -63,7 +63,7 @@ class Scores : CachedSimpleSelectorArgument() {
     protected data class ScoreCondition(val objectiveName: String, val min: Int, val max: Int, val reversed: Boolean) {
         fun test(entity: Entity): Boolean {
             val scoreboard =
-                Server.getInstance().scoreboardManager.getScoreboard(objectiveName) ?: return false
+                Server.instance.scoreboardManager.getScoreboard(objectiveName) ?: return false
             val scorer = if (entity is Player) PlayerScorer(entity) else EntityScorer(entity)
             if (!scoreboard.containLine(scorer)) return false
             val value = scoreboard.getLine(scorer)!!.score

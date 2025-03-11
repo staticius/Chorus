@@ -1,8 +1,6 @@
 package org.chorus.entity
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface EntityRideable {
     /**
      * Mount or Dismounts an Entity from a rideable entity

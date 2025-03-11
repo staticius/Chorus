@@ -143,13 +143,13 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                                 if (lastAttack is EntityMob) {
                                     if (lastAttack.getLastDamageCause() is EntityDamageByEntityEvent) {
                                         if (event.getDamager() is Player) {
-                                            player.removeEffect(EffectType.Companion.MINING_FATIGUE)
+                                            player.removeEffect(EffectType.MINING_FATIGUE)
                                             player.addEffect(
-                                                Effect.Companion.get(EffectType.Companion.REGENERATION).setDuration(
+                                                Effect.get(EffectType.REGENERATION).setDuration(
                                                     (if (player.hasEffect(
-                                                            EffectType.Companion.REGENERATION
+                                                            EffectType.REGENERATION
                                                         )
-                                                    ) player.getEffect(EffectType.Companion.REGENERATION)
+                                                    ) player.getEffect(EffectType.REGENERATION)
                                                         .getDuration() else 0) + 100
                                                 )
                                             )

@@ -4,7 +4,7 @@ import org.chorus.network.protocol.SetScorePacket.ScoreInfo
 import org.chorus.scoreboard.IScoreboard
 import org.chorus.scoreboard.IScoreboardLine
 import org.chorus.scoreboard.data.ScorerType
-import lombok.Getter
+
 
 
 class FakeScorer(override val name: String) : IScorer {

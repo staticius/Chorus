@@ -5,34 +5,14 @@ import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntity.close
 import org.chorus.entity.Entity
 import org.chorus.entity.Entity.Companion.createEntity
 import org.chorus.entity.Entity.Companion.getDefaultNBT
-import org.chorus.entity.Entity.close
-import org.chorus.entity.Entity.scheduleUpdate
-import org.chorus.entity.Entity.spawnToAll
-import org.chorus.entity.Entity.teleport
-import org.chorus.entity.EntityAsyncPrepare.asyncPrepare
-import org.chorus.entity.EntityHuman.getName
-import org.chorus.entity.data.EntityDataMap.get
-import org.chorus.entity.data.EntityDataMap.put
 import org.chorus.entity.item.EntityXpOrb.Companion.splitIntoOrbSizes
-import org.chorus.entity.mob.EntityMob.getBehaviorGroup
-import org.chorus.entity.weather.EntityLightningBolt.setEffect
-import org.chorus.entity.weather.EntityLightningBolt.spawnToAll
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.Event.setCancelled
-import org.chorus.event.block.BlockBreakEvent.dropExp
-import org.chorus.event.block.BlockBreakEvent.drops
-import org.chorus.event.block.BlockBreakEvent.isFastBreak
-import org.chorus.event.block.BlockEvent.getBlock
 import org.chorus.event.player.PlayerInteractEvent
 import org.chorus.inventory.BlockInventoryHolder
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
-import org.chorus.item.Item.getBlock
-import org.chorus.item.ItemBucket.isWater
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.format.*
 import org.chorus.level.format.LevelConfig.AntiXrayMode
@@ -59,15 +39,22 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.longs.*
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectIterator
-import lombok.*
-import lombok.extern.slf4j.Slf4j
+import org.chorus.api.NonComputationAtomic
+import org.chorus.event.level.ChunkLoadEvent
+import org.chorus.level.vibration.VibrationManager
+import org.chorus.metadata.Metadatable
+import org.chorus.scheduler.BlockUpdateScheduler
+import org.chorus.utils.collection.nb.Int2ObjectNonBlockingMap
+import org.chorus.level.vibration.SimpleVibrationManager
+import org.chorus.metadata.BlockMetadataStore
+import org.chorus.scheduler.ServerScheduler
+
+
 import java.awt.Color
 import java.io.*
 import java.lang.ref.SoftReference
 import java.util.*
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ThreadLocalRandom
+import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.*
 import java.util.function.Function
@@ -77,19 +64,16 @@ import java.util.stream.IntStream
 import java.util.stream.Stream
 import kotlin.jvm.Synchronized
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class Level(
-    server: Server,
     name: String,
     path: String,
     val dimensionCount: Int,
     provider: Class<out LevelProvider>,
     generatorConfig: GeneratorConfig
 ) :
-    Metadatable {
+    Metadatable, Loggable {
     @NonComputationAtomic
     val updateEntities: Long2ObjectNonBlockingMap<Entity> = Long2ObjectNonBlockingMap()
 
@@ -97,16 +81,14 @@ class Level(
     private val blockEntities = Long2ObjectNonBlockingMap<BlockEntity>()
 
     @NonComputationAtomic
-    private val players = Long2ObjectNonBlockingMap<Player>()
+    val players = Long2ObjectNonBlockingMap<Player>()
 
     @NonComputationAtomic
     private val entities = Long2ObjectNonBlockingMap<Entity>()
     private val updateBlockEntities: ConcurrentLinkedQueue<BlockEntity> = ConcurrentLinkedQueue<BlockEntity>()
     private val chunkGenerationQueue = ConcurrentHashMap<Long, Boolean?>()
     private var chunkGenerationQueueSize = 8
-    @JvmField
-    val server: Server
-    val id: Int
+    val id: Int = levelIdCounter++
 
     // Loaders still remain single-threaded
     private val loaders = Int2ObjectOpenHashMap<ChunkLoader>()
@@ -132,7 +114,7 @@ class Level(
     private val changeBlocksPresent = Any()
 
     // Storing extra blocks past 512 is redundant
-    private val changeBlocksFullMap: Int2ObjectOpenHashMap<Any> = object : Int2ObjectOpenHashMap<Any?>() {
+    private val changeBlocksFullMap: Int2ObjectOpenHashMap<Any> = object : Int2ObjectOpenHashMap<Any>() {
         override fun size(): Int {
             return Character.MAX_VALUE.code
         }
@@ -165,7 +147,7 @@ class Level(
     private var provider: AtomicReference<LevelProvider>? = null
     private var time: Float
     private var nextTimeSendTick = 0
-    private val name: String
+    val name: String
     @JvmField
     val folderPath: String
     private val mutableBlock: Vector3? = null
@@ -230,15 +212,15 @@ class Level(
     fun initLevel() {
         this.gameRules = requireProvider().gamerules
         val spawn = this.spawnLocation
-        if (!getChunk(spawn.position.chunkX, spawn.position.chunkZ, true).getChunkState().canSend()) {
+        if (!getChunk(spawn.position.chunkX, spawn.position.chunkZ, true).chunkState.canSend()) {
             this.generateChunk(spawn.position.chunkX, spawn.position.chunkZ)
         }
         subTickThread.start()
-        if (server.settings.levelSettings().levelThread()) {
+        if (Server.instance.settings.levelSettings.levelThread) {
             baseTickThread.start()
         }
-        Level.log.info(
-            server.language.tr(
+        log.info(
+            Server.instance.baseLang.tr(
                 "nukkit.level.init",
                 TextFormat.GREEN.toString() + this.folderName + TextFormat.RESET
             )
@@ -274,7 +256,7 @@ class Level(
     }
 
     fun close() {
-        if (server.settings.levelSettings().levelThread() && baseTickThread.isAlive) {
+        if (Server.instance.settings.levelSettings().levelThread() && baseTickThread.isAlive) {
             baseTickGameLoop.stop()
         } else remove()
     }
@@ -283,7 +265,7 @@ class Level(
         subTickGameLoop.stop()
         scheduler.cancelAllTasks()
         scheduler.mainThreadHeartbeat(this.tick + 10000)
-        server.levels.remove(this.id)
+        Server.instance.levels.remove(this.id)
         val levelProvider = provider!!.get()
         if (levelProvider != null) {
             if (this.autoSave) {
@@ -304,7 +286,7 @@ class Level(
     }
 
     fun addSound(pos: Vector3, sound: Sound, volume: Float, pitch: Float, players: Collection<Player?>) {
-        this.addSound(pos, sound, volume, pitch, *players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.addSound(pos, sound, volume, pitch, *players.toTypedArray())
     }
 
     fun addSound(pos: Vector3, sound: Sound, volume: Float, pitch: Float, vararg players: Player?) {
@@ -322,7 +304,7 @@ class Level(
         if (players == null || players.size == 0) {
             addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, packet)
         } else {
-            Server.broadcastPacket(players, packet)
+            Server.instance.broadcastPacket(players, packet)
         }
     }
 
@@ -343,7 +325,7 @@ class Level(
         packet.z = z
         packet.data = data
 
-        this.addChunkPacket(NukkitMath.floorFloat(x) shr 4, NukkitMath.floorFloat(z) shr 4, packet)
+        this.addChunkPacket(ChorusMath.floorFloat(x) shr 4, ChorusMath.floorFloat(z) shr 4, packet)
     }
 
     @JvmOverloads
@@ -394,7 +376,7 @@ class Level(
      * Broadcasts sound to players
      *
      * @param pos  position where sound should be played
-     * @param type ID of the sound from [cn.nukkit.network.protocol.LevelSoundEventPacket]
+     * @param type ID of the sound from [org.chorus.network.protocol.LevelSoundEventPacket]
      * @param data generic data that can affect sound
      */
     @JvmOverloads
@@ -424,7 +406,7 @@ class Level(
     }
 
     fun addParticle(particle: Particle, players: Collection<Player?>) {
-        this.addParticle(particle, players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.addParticle(particle, players.toTypedArray())
     }
 
     @JvmOverloads
@@ -440,7 +422,7 @@ class Level(
         } else {
             if (packets != null) {
                 for (p in packets) {
-                    Server.broadcastPacket(players, p)
+                    Server.instance.broadcastPacket(players, p)
                 }
             }
         }
@@ -470,7 +452,7 @@ class Level(
             particleEffect,
             uniqueEntityId,
             dimensionId,
-            *players.toArray<Player>(Player.EMPTY_ARRAY)
+            *players.toTypedArray()
         )
     }
 
@@ -500,7 +482,7 @@ class Level(
         if (players == null || players.size == 0) {
             addChunkPacket(pos.getFloorX() shr 4, pos.getFloorZ() shr 4, pk)
         } else {
-            Server.broadcastPacket(players, pk)
+            Server.instance.broadcastPacket(players, pk)
         }
     }
 
@@ -508,41 +490,41 @@ class Level(
     fun unload(force: Boolean = false): Boolean {
         val ev: LevelUnloadEvent = LevelUnloadEvent(this)
 
-        if (this === server.defaultLevel && !force) {
+        if (this === Server.instance.defaultLevel && !force) {
             ev.setCancelled()
         }
 
-        server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
         if (!force && ev.isCancelled) {
             return false
         }
 
-        Level.log.info(
-            server.language.tr(
+        log.info(
+            Server.instance.baseLang.tr(
                 "nukkit.level.unloading",
                 TextFormat.GREEN.toString() + this.getName() + TextFormat.WHITE
             )
         )
-        val defaultLevel = server.defaultLevel
+        val defaultLevel = Server.instance.defaultLevel
 
-        for (player in getPlayers().values().toArray<Player>(Player.EMPTY_ARRAY)) {
+        for (player in getPlayers().values) {
             if (this === defaultLevel || defaultLevel == null) {
                 player.close(player.leaveMessage, "Forced default level unload")
             } else {
-                player.teleport(server.defaultLevel.safeSpawn)
+                player.teleport(Server.instance.defaultLevel!!.safeSpawn)
             }
         }
 
         if (this === defaultLevel) {
-            server.defaultLevel = null
+            Server.instance.defaultLevel = null
         }
 
         this.close()
-        if (force && server.settings.levelSettings().levelThread()) {
-            server.scheduler.scheduleDelayedTask({
+        if (force && Server.instance.settings.levelSettings().levelThread()) {
+            Server.instance.scheduler.scheduleDelayedTask({
                 if (baseTickThread.isAlive) {
-                    server.logger.critical(getName() + " failed to unload. Trying to stop the thread.")
+                    Server.instance.logger.critical(getName() + " failed to unload. Trying to stop the thread.")
                     baseTickThread.interrupt()
                 }
             }, 100)
@@ -570,12 +552,12 @@ class Level(
         return Collections.emptyMap()
     }
 
-    fun getChunkLoaders(chunkX: Int, chunkZ: Int): Array<ChunkLoader?> {
+    fun getChunkLoaders(chunkX: Int, chunkZ: Int): Array<ChunkLoader> {
         val index = chunkHash(chunkX, chunkZ)
         return if (chunkLoaders.containsKey(index)) {
-            chunkLoaders[index].values().toArray<ChunkLoader>(ChunkLoader.Companion.EMPTY_ARRAY)
+            chunkLoaders[index].values.toTypedArray()
         } else {
-            ChunkLoader.Companion.EMPTY_ARRAY
+            ChunkLoader.EMPTY_ARRAY
         }
     }
 
@@ -650,11 +632,11 @@ class Level(
         val pk: SetTimePacket = SetTimePacket()
         pk.time = time.toInt()
 
-        Server.broadcastPacket(players, pk)
+        Server.instance.broadcastPacket(players, pk)
     }
 
     fun sendTime() {
-        this.sendTime(*players.values().toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendTime(*players.values().toTypedArray())
     }
 
     fun releaseTickCachedBlocks() {
@@ -666,36 +648,36 @@ class Level(
     }
 
     private fun doTick(gameLoop: GameLoop) {
-        val baseTickRate: Int = server.settings.levelSettings().baseTickRate()
+        val baseTickRate: Int = Server.instance.settings.levelSettings().baseTickRate()
         val levelTime = System.currentTimeMillis()
         val tickMs = (System.currentTimeMillis() - levelTime).toInt()
         doTick(gameLoop.getTick())
-        if (server.settings.levelSettings().autoTickRate()) {
+        if (Server.instance.settings.levelSettings().autoTickRate()) {
             if (tickMs < 50 && this.tickRate > baseTickRate) {
                 val r: Int
                 this.tickRate = (this.tickRate - 1).also { r = it }
                 if (r > baseTickRate) {
                     this.tickRateCounter = this.tickRate
                 }
-                Level.log.debug(
+                log.debug(
                     "Raising level \"{}\" tick rate to {} ticks", this.getName(),
                     tickRate
                 )
             } else if (tickMs >= 50) {
-                val autoTickRateLimit: Int = server.settings.levelSettings().autoTickRateLimit()
+                val autoTickRateLimit: Int = Server.instance.settings.levelSettings().autoTickRateLimit()
                 if (this.tickRate == baseTickRate) {
                     this.tickRate =
                         Math.max(baseTickRate + 1, Math.min(autoTickRateLimit, tickMs / 50))
-                    Level.log.debug(
+                    log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getName(), NukkitMath.round(tickMs.toDouble(), 2),
+                        this.getName(), ChorusMath.round(tickMs.toDouble(), 2),
                         tickRate
                     )
                 } else if ((tickMs / this.tickRate) >= 50 && this.tickRate < autoTickRateLimit) {
                     this.tickRate = this.tickRate + 1
-                    Level.log.debug(
+                    log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getName(), NukkitMath.round(tickMs.toDouble(), 2),
+                        this.getName(), ChorusMath.round(tickMs.toDouble(), 2),
                         tickRate
                     )
                 }
@@ -743,7 +725,7 @@ class Level(
                 val queuedUpdate = normalUpdateQueue.poll()
                 val block = getBlock(queuedUpdate.block!!.position, queuedUpdate.block.layer)
                 val event: BlockUpdateEvent = BlockUpdateEvent(block)
-                server.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
 
                 if (!event.isCancelled) {
                     block!!.onUpdate(BLOCK_UPDATE_NORMAL)
@@ -761,7 +743,7 @@ class Level(
                                 entity.asyncPrepare(tick)
                             }
                         })
-                }, Server.getInstance().computeThreadPool).join()
+                }, Server.instance.getInstance().computeThreadPool).join()
                 for (id in updateEntities.keySetLong()) {
                     val entity = updateEntities[id]
                     if (entity is EntityMob) {
@@ -801,7 +783,7 @@ class Level(
                             } else {
                                 val toSend: Collection<Player> =
                                     getChunkPlayers(chunkX, chunkZ).values()
-                                val playerArray = toSend.toArray<Player>(Player.EMPTY_ARRAY)
+                                val playerArray = toSend.toTypedArray()
                                 val size: Int = blocks.size()
                                 if (isAntiXrayEnabled) {
                                     antiXraySystem!!.obfuscateSendBlocks(index, playerArray, blocks)
@@ -828,10 +810,10 @@ class Level(
                 val chunkX = getHashX(index)
                 val chunkZ = getHashZ(index)
                 val chunkPlayers: Array<Player> =
-                    getChunkPlayers(chunkX, chunkZ).values().toArray<Player>(Player.EMPTY_ARRAY)
+                    getChunkPlayers(chunkX, chunkZ).values().toTypedArray()
                 if (chunkPlayers.size > 0) {
                     for (pk in chunkPackets[index]!!) {
-                        Server.broadcastPacket(chunkPlayers, pk)
+                        Server.instance.broadcastPacket(chunkPlayers, pk)
                     }
                 }
             }
@@ -840,12 +822,12 @@ class Level(
             if (gameRules!!.isStale) {
                 val packet: GameRulesChangedPacket = GameRulesChangedPacket()
                 packet.gameRules = gameRules
-                Server.broadcastPacket(players.values().toArray<Player>(Player.EMPTY_ARRAY), packet)
+                Server.instance.broadcastPacket(players.values().toTypedArray(), packet)
                 gameRules!!.refresh()
             }
         } catch (e: Exception) {
-            Level.log.error(
-                server.language.tr(
+            log.error(
+                Server.instance.baseLang.tr(
                     "nukkit.level.tickError",
                     this.folderPath, Utils.getExceptionMessage(e)
                 ), e
@@ -863,7 +845,7 @@ class Level(
                 val intValue = entry.intValue
                 val key: String = entry.getKey()
                 if (intValue == 0) {
-                    val player = server.getPlayer(key)
+                    val player = Server.instance.getPlayer(key)
                     if (player != null) {
                         if (isRaining) {
                             val pk = LevelEventPacket()
@@ -970,7 +952,7 @@ class Level(
 
             val bolt: EntityLightningBolt = EntityLightningBolt(chunk, nbt)
             val ev: LightningStrikeEvent = LightningStrikeEvent(this, bolt)
-            server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
                 bolt.spawnToAll()
             } else {
@@ -1069,7 +1051,7 @@ class Level(
         pk.z = z + 0.5f
         pk.data = (data shl 8) or id
 
-        Server.broadcastPacket(players, pk)
+        Server.instance.broadcastPacket(players, pk)
     }
 
     fun sendBlocks(target: Array<Player>, blocks: Array<IVector3?>) {
@@ -1146,7 +1128,7 @@ class Level(
             packets.add(updateBlockPacket)
         }
         for (p in packets) {
-            Server.broadcastPacket(target, p)
+            Server.instance.broadcastPacket(target, p)
         }
     }
 
@@ -1248,7 +1230,7 @@ class Level(
             return false
         }
 
-        server.pluginManager.callEvent(LevelSaveEvent(this))
+        Server.instance.pluginManager.callEvent(LevelSaveEvent(this))
 
         val levelProvider = this.requireProvider()
         levelProvider.time = time.toInt().toLong()
@@ -1413,14 +1395,14 @@ class Level(
 
     fun scanBlocks(bb: AxisAlignedBB, condition: BiPredicate<BlockVector3?, BlockState?>): List<Block> {
         val min = BlockVector3(
-            NukkitMath.floorDouble(bb.getMinX()),
-            NukkitMath.floorDouble(bb.getMinY()),
-            NukkitMath.floorDouble(bb.getMinZ())
+            ChorusMath.floorDouble(bb.minX),
+            ChorusMath.floorDouble(bb.minY),
+            ChorusMath.floorDouble(bb.minZ)
         )
         val max = BlockVector3(
-            NukkitMath.floorDouble(bb.getMaxX()),
-            NukkitMath.floorDouble(bb.getMaxY()),
-            NukkitMath.floorDouble(bb.getMaxZ())
+            ChorusMath.floorDouble(bb.maxX),
+            ChorusMath.floorDouble(bb.maxY),
+            ChorusMath.floorDouble(bb.maxZ)
         )
         val minChunk: ChunkVector2 = min.chunkVector
         val maxChunk: ChunkVector2 = max.chunkVector
@@ -1481,12 +1463,12 @@ class Level(
         ignoreCollidesCheck: Boolean,
         condition: Predicate<Block>
     ): Array<Block> {
-        val minX = NukkitMath.floorDouble(bb.getMinX())
-        val minY = NukkitMath.floorDouble(bb.getMinY())
-        val minZ = NukkitMath.floorDouble(bb.getMinZ())
-        val maxX = NukkitMath.ceilDouble(bb.getMaxX())
-        val maxY = NukkitMath.ceilDouble(bb.getMaxY())
-        val maxZ = NukkitMath.ceilDouble(bb.getMaxZ())
+        val minX = ChorusMath.floorDouble(bb.minX)
+        val minY = ChorusMath.floorDouble(bb.minY)
+        val minZ = ChorusMath.floorDouble(bb.minZ)
+        val maxX = ChorusMath.ceilDouble(bb.maxX)
+        val maxY = ChorusMath.ceilDouble(bb.maxY)
+        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
 
         val collides: MutableList<Block> = ArrayList()
 
@@ -1557,12 +1539,12 @@ class Level(
         ignoreCollidesCheck: Boolean,
         condition: Predicate<Block>
     ): Array<Block> {
-        val minX = NukkitMath.floorDouble(bb.getMinX())
-        val minY = NukkitMath.floorDouble(bb.getMinY())
-        val minZ = NukkitMath.floorDouble(bb.getMinZ())
-        val maxX = NukkitMath.ceilDouble(bb.getMaxX())
-        val maxY = NukkitMath.ceilDouble(bb.getMaxY())
-        val maxZ = NukkitMath.ceilDouble(bb.getMaxZ())
+        val minX = ChorusMath.floorDouble(bb.minX)
+        val minY = ChorusMath.floorDouble(bb.minY)
+        val minZ = ChorusMath.floorDouble(bb.minZ)
+        val maxX = ChorusMath.ceilDouble(bb.maxX)
+        val maxY = ChorusMath.ceilDouble(bb.maxY)
+        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
 
         val collides: MutableList<Block> = ArrayList()
 
@@ -1619,12 +1601,12 @@ class Level(
         entities: Boolean,
         solidEntities: Boolean
     ): Array<AxisAlignedBB> {
-        val minX = NukkitMath.floorDouble(bb.getMinX())
-        val minY = NukkitMath.floorDouble(bb.getMinY())
-        val minZ = NukkitMath.floorDouble(bb.getMinZ())
-        val maxX = NukkitMath.ceilDouble(bb.getMaxX())
-        val maxY = NukkitMath.ceilDouble(bb.getMaxY())
-        val maxZ = NukkitMath.ceilDouble(bb.getMaxZ())
+        val minX = ChorusMath.floorDouble(bb.minX)
+        val minY = ChorusMath.floorDouble(bb.minY)
+        val minZ = ChorusMath.floorDouble(bb.minZ)
+        val maxX = ChorusMath.ceilDouble(bb.maxX)
+        val maxY = ChorusMath.ceilDouble(bb.maxY)
+        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
 
         val collides: MutableList<AxisAlignedBB> = ArrayList<AxisAlignedBB>()
 
@@ -1662,12 +1644,12 @@ class Level(
         entities: Boolean,
         solidEntities: Boolean
     ): List<AxisAlignedBB> {
-        val minX = NukkitMath.floorDouble(bb.getMinX())
-        val minY = NukkitMath.floorDouble(bb.getMinY())
-        val minZ = NukkitMath.floorDouble(bb.getMinZ())
-        val maxX = NukkitMath.ceilDouble(bb.getMaxX())
-        val maxY = NukkitMath.ceilDouble(bb.getMaxY())
-        val maxZ = NukkitMath.ceilDouble(bb.getMaxZ())
+        val minX = ChorusMath.floorDouble(bb.minX)
+        val minY = ChorusMath.floorDouble(bb.minY)
+        val minZ = ChorusMath.floorDouble(bb.minZ)
+        val maxX = ChorusMath.ceilDouble(bb.maxX)
+        val maxY = ChorusMath.ceilDouble(bb.maxY)
+        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
 
         val collides: MutableList<AxisAlignedBB> = ArrayList<AxisAlignedBB>()
 
@@ -1696,12 +1678,12 @@ class Level(
     }
 
     fun hasCollision(entity: Entity?, bb: AxisAlignedBB, entities: Boolean): Boolean {
-        val minX = NukkitMath.floorDouble(NukkitMath.round(bb.getMinX(), 4))
-        val minY = NukkitMath.floorDouble(NukkitMath.round(bb.getMinY(), 4))
-        val minZ = NukkitMath.floorDouble(NukkitMath.round(bb.getMinZ(), 4))
-        val maxX = NukkitMath.ceilDouble(NukkitMath.round(bb.getMaxX(), 4) - 0.00001)
-        val maxY = NukkitMath.ceilDouble(NukkitMath.round(bb.getMaxY(), 4) - 0.00001)
-        val maxZ = NukkitMath.ceilDouble(NukkitMath.round(bb.getMaxZ(), 4) - 0.00001)
+        val minX = ChorusMath.floorDouble(ChorusMath.round(bb.minX, 4))
+        val minY = ChorusMath.floorDouble(ChorusMath.round(bb.minY, 4))
+        val minZ = ChorusMath.floorDouble(ChorusMath.round(bb.minZ, 4))
+        val maxX = ChorusMath.ceilDouble(ChorusMath.round(bb.maxX, 4) - 0.00001)
+        val maxY = ChorusMath.ceilDouble(ChorusMath.round(bb.maxY, 4) - 0.00001)
+        val maxZ = ChorusMath.ceilDouble(ChorusMath.round(bb.maxZ, 4) - 0.00001)
 
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
@@ -2195,7 +2177,7 @@ class Level(
         if (direct) {
             if (isAntiXrayEnabled && block.isTransparent) {
                 this.sendBlocks(
-                    getChunkPlayers(cx, cz).values().toArray<Player>(Player.EMPTY_ARRAY),
+                    getChunkPlayers(cx, cz).values().toTypedArray(),
                     arrayOf<Vector3?>(
                         block.position.add(-1.0),
                         block.position.add(1.0),
@@ -2208,7 +2190,7 @@ class Level(
                 )
             }
             this.sendBlocks(
-                getChunkPlayers(cx, cz).values().toArray<Player>(Player.EMPTY_ARRAY),
+                getChunkPlayers(cx, cz).values().toTypedArray(),
                 arrayOf<Block?>(block),
                 UpdateBlockPacket.FLAG_ALL_PRIORITY,
                 block.layer
@@ -2218,12 +2200,12 @@ class Level(
         }
 
         if (update) {
-            if (server.settings.chunkSettings().lightUpdates()) {
+            if (Server.instance.settings.chunkSettings().lightUpdates()) {
                 updateAllLight(block.position)
             }
 
             val ev: BlockUpdateEvent = BlockUpdateEvent(block)
-            server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
                 for (entity in this.getNearbyEntitiesSafe(
                     SimpleAxisAlignedBB(
@@ -2489,7 +2471,7 @@ class Level(
                     ev.setCancelled()
                 }
 
-                server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return null
                 }
@@ -2667,7 +2649,7 @@ class Level(
                 ev.setCancelled()
             }
 
-            server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
                 target.onTouch(vector, item, face, fx, fy, fz, player, ev.action)
                 if (ev.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && target.canBeActivated() && target.onActivate(
@@ -2825,7 +2807,7 @@ class Level(
                 event.setCancelled()
             }
 
-            server.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 return null
             }
@@ -2875,7 +2857,7 @@ class Level(
     }
 
     fun isInSpawnRadius(vector3: Vector3): Boolean {
-        val distance = server.spawnRadius
+        val distance = Server.instance.spawnRadius
         if (distance > -1) {
             val t = Vector2(vector3.x, vector3.z)
             val s = Vector2(
@@ -2905,10 +2887,10 @@ class Level(
         var overflow: ArrayList<Entity>? = null
 
         if (entity == null || entity.canCollide()) {
-            val minX = NukkitMath.floorDouble((bb.getMinX() - 2) / 16)
-            val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) / 16)
-            val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) / 16)
-            val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) / 16)
+            val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
+            val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
+            val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
+            val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
@@ -2935,10 +2917,10 @@ class Level(
         val result = ArrayList<Entity>()
 
         if (entity == null || entity.canCollide()) {
-            val minX = NukkitMath.floorDouble((bb.getMinX() - 2) / 16)
-            val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) / 16)
-            val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) / 16)
-            val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) / 16)
+            val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
+            val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
+            val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
+            val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
@@ -2958,10 +2940,10 @@ class Level(
 
     fun streamCollidingEntities(bb: AxisAlignedBB, entity: Entity?): Stream<Entity?> {
         if (entity == null || entity.canCollide()) {
-            val minX = NukkitMath.floorDouble((bb.getMinX() - 2) / 16)
-            val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) / 16)
-            val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) / 16)
-            val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) / 16)
+            val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
+            val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
+            val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
+            val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
 
             val allEntities = ArrayList<Entity?>()
 
@@ -3009,10 +2991,10 @@ class Level(
     fun getNearbyEntities(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): Array<Entity?> {
         var index = 0
 
-        val minX = NukkitMath.floorDouble((bb.getMinX() - 2) * 0.0625)
-        val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) * 0.0625)
-        val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) * 0.0625)
-        val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) * 0.0625)
+        val minX = ChorusMath.floorDouble((bb.minX - 2) * 0.0625)
+        val maxX = ChorusMath.ceilDouble((bb.maxX + 2) * 0.0625)
+        val minZ = ChorusMath.floorDouble((bb.minZ - 2) * 0.0625)
+        val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) * 0.0625)
 
         var overflow: ArrayList<Entity>? = null
 
@@ -3036,10 +3018,10 @@ class Level(
     }
 
     fun fastNearbyEntities(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): List<Entity> {
-        val minX = NukkitMath.floorDouble((bb.getMinX() - 2) * 0.0625)
-        val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) * 0.0625)
-        val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) * 0.0625)
-        val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) * 0.0625)
+        val minX = ChorusMath.floorDouble((bb.minX - 2) * 0.0625)
+        val maxX = ChorusMath.ceilDouble((bb.maxX + 2) * 0.0625)
+        val minZ = ChorusMath.floorDouble((bb.minZ - 2) * 0.0625)
+        val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) * 0.0625)
 
         val result = ArrayList<Entity>()
 
@@ -3157,7 +3139,7 @@ class Level(
         chunk!!.setBlockState(x and 0x0f, ensureY(y), z and 0x0f, state, layer)
         addBlockChange(x, y, z)
         temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble())
-        if (server.settings.chunkSettings().lightUpdates()) {
+        if (Server.instance.settings.chunkSettings().lightUpdates()) {
             updateAllLight(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
         }
     }
@@ -3274,10 +3256,8 @@ class Level(
 
     /** */
     init {
-        this.id = levelIdCounter++
         this.blockMetadata = BlockMetadataStore(this)
-        this.server = server
-        this.autoSave = server.autoSave
+        this.autoSave = Server.instance.autoSave
         this.generatorClass = Registries.GENERATOR[generatorConfig.name()]
         if (generatorClass == null) {
             throw NullPointerException("Can't find generator for " + generatorConfig.name() + " The level " + name + " can't be load!")
@@ -3306,8 +3286,8 @@ class Level(
         val levelProvider = requireProvider()
         //to be changed later as the Dim0 will be deleted to be put in a config.json file of the world
         val levelNameDim = levelProvider.name.replace(" Dim0", "")
-        Level.log.info(
-            this.server.language.tr(
+        log.info(
+            this.Server.instance.baseLang.tr(
                 "nukkit.level.preparing",
                 TextFormat.GREEN.toString() + levelNameDim + TextFormat.RESET
             )
@@ -3348,14 +3328,14 @@ class Level(
         this.updateQueue = BlockUpdateScheduler(this, currentTick)
 
         this.chunkTickRadius = Math.min(
-            this.server.viewDistance, Math.max(
+            this.Server.instance.viewDistance, Math.max(
                 1,
-                this.server.settings.chunkSettings().tickRadius()
+                this.Server.instance.settings.chunkSettings().tickRadius()
             )
         )
-        this.chunkGenerationQueueSize = this.server.settings.chunkSettings().generationQueueSize()
-        this.chunksPerTicks = this.server.settings.chunkSettings().chunksPerTicks()
-        this.clearChunksOnTick = this.server.settings.chunkSettings().clearTickList()
+        this.chunkGenerationQueueSize = this.Server.instance.settings.chunkSettings().generationQueueSize()
+        this.chunksPerTicks = this.Server.instance.settings.chunkSettings().chunksPerTicks()
+        this.clearChunksOnTick = this.Server.instance.settings.chunkSettings().clearTickList()
         chunkTickList.clear()
         this.temporalVector = Vector3(0.0, 0.0, 0.0)
         this.scheduler = ServerScheduler()
@@ -3379,7 +3359,7 @@ class Level(
         }
         subTickGameLoop = GameLoop.builder()
             .onTick(Consumer<GameLoop> { currentTick: GameLoop -> this.subTick(currentTick) })
-            .onStop(Runnable { Level.log.debug("$levelName SubTick is closed!") })
+            .onStop(Runnable { log.debug("$levelName SubTick is closed!") })
             .loopCountPerSec(20)
             .build()
         this.subTickThread = object : Thread() {
@@ -3519,7 +3499,7 @@ class Level(
     fun setSpawnLocation(pos: Vector3) {
         val previousSpawn = this.spawnLocation
         requireProvider().spawn = pos
-        server.pluginManager.callEvent(SpawnChangeEvent(this, previousSpawn))
+        Server.instance.pluginManager.callEvent(SpawnChangeEvent(this, previousSpawn))
         getPlayers().values().stream()
             .filter(Predicate<Player> { player: Player -> player.spawn.second() == null || player.spawn.second() == SpawnPointType.WORLD }
             ).forEach(Consumer<Player> { player: Player ->
@@ -3579,7 +3559,7 @@ class Level(
                 doLevelGarbageCollection(false)
             }
         } catch (e: Exception) {
-            server.logger.error("Subtick Thread for level " + folderName + " failed.", e)
+            Server.instance.logger.error("Subtick Thread for level " + folderName + " failed.", e)
         }
     }
 
@@ -3718,7 +3698,7 @@ class Level(
             return true
         }
 
-        val tickingAreaManager: TickingAreaManager? = server.tickingAreaManager
+        val tickingAreaManager: TickingAreaManager? = Server.instance.tickingAreaManager
         if (tickingAreaManager != null && tickingAreaManager.getTickingAreaByChunk(
                 this.getName(),
                 ChunkPos(getHashX(hash), getHashZ(hash))
@@ -3732,15 +3712,15 @@ class Level(
         } else false
     }
 
-    fun getChunk(chunkX: Int, chunkZ: Int): IChunk? {
+    fun getChunk(chunkX: Int, chunkZ: Int): IChunk {
         return this.getChunk(chunkX, chunkZ, false)
     }
 
-    fun getChunk(pos: ChunkVector2): IChunk? {
+    fun getChunk(pos: ChunkVector2): IChunk {
         return getChunk(pos.x, pos.z, false)
     }
 
-    fun getChunk(chunkX: Int, chunkZ: Int, create: Boolean): IChunk? {
+    fun getChunk(chunkX: Int, chunkZ: Int, create: Boolean): IChunk {
         val index = chunkHash(chunkX, chunkZ)
         var chunk = requireProvider().getLoadedChunk(index)
         if (chunk == null) {
@@ -3765,7 +3745,7 @@ class Level(
                 chunk = this.forceLoadChunk(index, chunkX, chunkZ, create)
             }
             chunk
-        }, this.getScheduler().getAsyncTaskThreadPool())
+        }, this.scheduler.getAsyncTaskThreadPool())
     }
 
 
@@ -3778,20 +3758,13 @@ class Level(
         return forceLoadChunk(index, x, z, generate) != null
     }
 
-    private fun forceLoadChunk(index: Long, x: Int, z: Int, generate: Boolean): IChunk? {
+    private fun forceLoadChunk(index: Long, x: Int, z: Int, generate: Boolean): IChunk {
         val chunk = requireProvider().getChunk(x, z, generate)
-        if (chunk == null) {
-            check(!generate) { "Could not create new Chunk" }
-            return null
+        if (chunk == null && !generate) {
+            throw IllegalStateException("Could not create new Chunk")
         }
 
-        if (chunk.provider != null) {
-            server.pluginManager.callEvent(ChunkLoadEvent(chunk, !chunk.isGenerated))
-        } else {
-            this.unloadChunk(x, z, false)
-            return chunk
-        }
-
+        Server.instance.pluginManager.callEvent(ChunkLoadEvent(chunk, !chunk.isGenerated))
         chunk.initChunk()
 
         if (this.isChunkInUse(index)) {
@@ -3862,7 +3835,7 @@ class Level(
 
         if (chunk != null && chunk.provider != null) {
             val ev: ChunkUnloadEvent = ChunkUnloadEvent(chunk)
-            server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
             }
@@ -3891,7 +3864,7 @@ class Level(
             }
             levelProvider.unloadChunk(x, z, safe)
         } catch (e: Exception) {
-            Level.log.error(server.language.tr("nukkit.level.chunkUnloadError", e.toString()), e)
+            log.error(Server.instance.baseLang.tr("nukkit.level.chunkUnloadError", e.toString()), e)
         }
 
         return true
@@ -3908,7 +3881,7 @@ class Level(
         get() = getSafeSpawn(null)
 
     fun getSafeSpawn(spawn: Vector3?): Locator {
-        return getSafeSpawn(spawn, server.settings.playerSettings().spawnRadius())
+        return getSafeSpawn(spawn, Server.instance.settings.playerSettings().spawnRadius())
     }
 
     fun getSafeSpawn(spawn: Vector3?, horizontalMaxOffset: Int): Locator {
@@ -3964,7 +3937,7 @@ class Level(
             }
         }
 
-        Level.log.warn("cannot find a safe spawn around " + spawn.asBlockVector3() + "!")
+        log.warn("cannot find a safe spawn around " + spawn.asBlockVector3() + "!")
         return Locator.Companion.fromObject(spawn, this)
     }
 
@@ -3983,9 +3956,9 @@ class Level(
 
     val isTicked: Boolean
         get() {
-            return if (server.settings.levelSettings().levelThread()) {
+            return if (Server.instance.settings.levelSettings().levelThread()) {
                 baseTickGameLoop.isRunning()
-            } else server.levels.containsKey(this.id)
+            } else Server.instance.levels.containsKey(this.id)
         }
 
     val isThreadRunning: Boolean
@@ -4182,7 +4155,7 @@ class Level(
                     val time: Long = entry.getValue()
                     if (maxUnload <= 0) {
                         break
-                    } else if (time > (now - Server.getInstance().settings.levelSettings().chunkUnloadDelay())) {
+                    } else if (time > (now - Server.instance.getInstance().settings.levelSettings().chunkUnloadDelay())) {
                         continue
                     }
                 }
@@ -4208,32 +4181,32 @@ class Level(
     }
 
     override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        server.levelMetadata.setMetadata(this, metadataKey, newMetadataValue)
+        Server.instance.levelMetadata.setMetadata(this, metadataKey, newMetadataValue)
     }
 
     override fun getMetadata(metadataKey: String): List<MetadataValue> {
-        return server.levelMetadata.getMetadata(this, metadataKey)
+        return Server.instance.levelMetadata.getMetadata(this, metadataKey)
     }
 
     override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue {
-        return server.levelMetadata.getMetadata(this, metadataKey, plugin)
+        return Server.instance.levelMetadata.getMetadata(this, metadataKey, plugin)
     }
 
     override fun hasMetadata(metadataKey: String): Boolean {
-        return server.levelMetadata.hasMetadata(this, metadataKey)
+        return Server.instance.levelMetadata.hasMetadata(this, metadataKey)
     }
 
     override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
-        return server.levelMetadata.hasMetadata(this, metadataKey, plugin)
+        return Server.instance.levelMetadata.hasMetadata(this, metadataKey, plugin)
     }
 
     override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        server.levelMetadata.removeMetadata(this, metadataKey, owningPlugin)
+        Server.instance.levelMetadata.removeMetadata(this, metadataKey, owningPlugin)
     }
 
     fun setRaining(raining: Boolean): Boolean {
         val ev: WeatherChangeEvent = WeatherChangeEvent(this, raining)
-        server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
         if (ev.isCancelled) {
             return false
@@ -4267,7 +4240,7 @@ class Level(
 
     fun setThundering(thundering: Boolean): Boolean {
         val ev: ThunderChangeEvent = ThunderChangeEvent(this, thundering)
-        server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
         if (ev.isCancelled) {
             return false
@@ -4302,7 +4275,7 @@ class Level(
     fun sendWeather(players: Array<Player?>?) {
         var players = players
         if (players == null) {
-            players = getPlayers().values().toArray<Player>(Player.EMPTY_ARRAY)
+            players = getPlayers().values().toTypedArray()
         }
 
         val pk = LevelEventPacket()
@@ -4314,7 +4287,7 @@ class Level(
             pk.evid = LevelEventPacket.EVENT_STOP_RAINING
         }
 
-        Server.broadcastPacket(players, pk)
+        Server.instance.broadcastPacket(players, pk)
 
         if (this.isThundering()) {
             pk.evid = LevelEventPacket.EVENT_START_THUNDERSTORM
@@ -4323,7 +4296,7 @@ class Level(
             pk.evid = LevelEventPacket.EVENT_STOP_THUNDERSTORM
         }
 
-        Server.broadcastPacket(players, pk)
+        Server.instance.broadcastPacket(players, pk)
     }
 
     fun sendWeather(player: Player?) {
@@ -4446,13 +4419,13 @@ class Level(
     }
 
     fun isAreaLoaded(bb: AxisAlignedBB): Boolean {
-        if (bb.getMaxY() < (if (isOverWorld) -64 else 0) || bb.getMinY() >= (if (isOverWorld) 320 else 256)) {
+        if (bb.maxY < (if (isOverWorld) -64 else 0) || bb.minY >= (if (isOverWorld) 320 else 256)) {
             return false
         }
-        val minX = NukkitMath.floorDouble(bb.getMinX()) shr 4
-        val minZ = NukkitMath.floorDouble(bb.getMinZ()) shr 4
-        val maxX = NukkitMath.floorDouble(bb.getMaxX()) shr 4
-        val maxZ = NukkitMath.floorDouble(bb.getMaxZ()) shr 4
+        val minX = ChorusMath.floorDouble(bb.minX) shr 4
+        val minZ = ChorusMath.floorDouble(bb.minZ) shr 4
+        val maxX = ChorusMath.floorDouble(bb.maxX) shr 4
+        val maxZ = ChorusMath.floorDouble(bb.maxZ) shr 4
 
         for (x in minX..maxX) {
             for (z in minZ..maxZ) {
@@ -4714,9 +4687,9 @@ class Level(
     }
 
     fun getBlockDensity(source: Vector3, boundingBox: AxisAlignedBB): Float {
-        val diffX: Double = boundingBox.getMaxX() - boundingBox.getMinX()
-        val diffY: Double = boundingBox.getMaxY() - boundingBox.getMinY()
-        val diffZ: Double = boundingBox.getMaxZ() - boundingBox.getMinZ()
+        val diffX: Double = boundingBox.maxX - boundingBox.minX
+        val diffY: Double = boundingBox.maxY - boundingBox.minY
+        val diffZ: Double = boundingBox.maxZ - boundingBox.minZ
         val xInterval = 1 / (diffX * 2 + 1)
         val yInterval = 1 / (diffY * 2 + 1)
         val zInterval = 1 / (diffZ * 2 + 1)
@@ -4726,7 +4699,7 @@ class Level(
         }
 
         val xOffset = (1 - Math.floor(1 / xInterval) * xInterval) / 2
-        val yOffset: Double = boundingBox.getMinY()
+        val yOffset: Double = boundingBox.minY
         val zOffset = (1 - Math.floor(1 / zInterval) * zInterval) / 2
 
         var visibleBlocks = 0
@@ -4779,7 +4752,7 @@ class Level(
         }
 
     val tick: Int
-        get() = if (server.settings.levelSettings().levelThread()) this.getBaseTickGameLoop().getTick() else server.tick
+        get() = if (Server.instance.settings.levelSettings().levelThread()) this.getBaseTickGameLoop().getTick() else Server.instance.tick
 
     override fun toString(): String {
         return "Level{" +

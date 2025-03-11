@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 import org.chorus.item.Item
-import lombok.Value
+
 
 /**
  * CraftResultsDeprecatedStackRequestAction is an additional, deprecated packet sent by the client after

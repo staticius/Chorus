@@ -3,9 +3,7 @@ package org.chorus.block
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockStone @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
     BlockSolid(blockState) {
     override val hardness: Double
@@ -34,6 +32,6 @@ class BlockStone @JvmOverloads constructor(blockState: BlockState? = Companion.p
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.STONE)
-            get() = Companion.field
+
     }
 }

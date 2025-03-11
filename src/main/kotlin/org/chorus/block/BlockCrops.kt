@@ -12,9 +12,7 @@ import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class BlockCrops(blockState: BlockState?) : BlockFlowable(blockState) {
     val maxGrowth: Int
         get() = CommonBlockProperties.GROWTH.getMax()
@@ -122,6 +120,6 @@ abstract class BlockCrops(blockState: BlockState?) : BlockFlowable(blockState) {
 
     companion object {
         val minimumLightLevel: Int = 9
-            get() = Companion.field
+
     }
 }

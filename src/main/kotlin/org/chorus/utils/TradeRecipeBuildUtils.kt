@@ -47,8 +47,8 @@ class TradeRecipeBuildUtils(tag: CompoundTag, private val size: Int) {
      * @param tier 该配方需要的交易等级 从1开始
      */
     fun setTier(tier: Int): TradeRecipeBuildUtils {
-        var tier = tier
-        recipe.putInt("tier", --tier) //需要村民等级
+        var tier1 = tier
+        recipe.putInt("tier", --tier1) //需要村民等级
         return this
     }
 
@@ -66,9 +66,9 @@ class TradeRecipeBuildUtils(tag: CompoundTag, private val size: Int) {
     }
 
     companion object {
-        const val TRADE_RECIPEID: Int = 10000
+        const val TRADE_RECIPE_ID: Int = 10000
         val RECIPE_MAP: ConcurrentHashMap<Int, CompoundTag> = ConcurrentHashMap()
-        private val TRADE_RECIPE_NETID = AtomicInteger(TRADE_RECIPEID)
+        private val TRADE_RECIPE_NET_ID = AtomicInteger(TRADE_RECIPE_ID)
 
         /**
          * @param buyA   交易材料1
@@ -87,7 +87,7 @@ class TradeRecipeBuildUtils(tag: CompoundTag, private val size: Int) {
                 .putInt("buyCountA", buyA.getCount())
                 .putInt("buyCountB", 0)
                 .putInt("demand", 0) //未知
-                .putInt("netId", TRADE_RECIPE_NETID.getAndIncrement())
+                .putInt("netId", TRADE_RECIPE_NET_ID.getAndIncrement())
                 .putFloat("priceMultiplierB", 0f)
                 .putCompound(
                     "sell", CompoundTag()
@@ -98,12 +98,12 @@ class TradeRecipeBuildUtils(tag: CompoundTag, private val size: Int) {
                 )
                 .putInt("uses", 0) //未知
             if (buyA.hasCompoundTag()) {
-                cmp!!.getCompound("buyA")!!.putCompound("tag", buyA.namedTag)
+                cmp.getCompound("buyA")!!.putCompound("tag", buyA.namedTag)
             }
             if (output.hasCompoundTag()) {
-                cmp!!.getCompound("sell")!!.putCompound("tag", output.namedTag)
+                cmp.getCompound("sell")!!.putCompound("tag", output.namedTag)
             }
-            return TradeRecipeBuildUtils(cmp!!, 2)
+            return TradeRecipeBuildUtils(cmp, 2)
         }
 
         /**
@@ -131,7 +131,7 @@ class TradeRecipeBuildUtils(tag: CompoundTag, private val size: Int) {
                 .putInt("buyCountA", buyA.getCount())
                 .putInt("buyCountA", buyB.getCount())
                 .putInt("demand", 0) //未知
-                .putInt("netId", TRADE_RECIPE_NETID.getAndIncrement())
+                .putInt("netId", TRADE_RECIPE_NET_ID.getAndIncrement())
                 .putCompound(
                     "sell", CompoundTag()
                         .putByte("Count", output.getCount())
@@ -141,15 +141,15 @@ class TradeRecipeBuildUtils(tag: CompoundTag, private val size: Int) {
                 )
                 .putInt("uses", 0) //未知
             if (buyA.hasCompoundTag()) {
-                cmp!!.getCompound("buyA")!!.putCompound("tag", buyA.namedTag)
+                cmp.getCompound("buyA")!!.putCompound("tag", buyA.namedTag)
             }
             if (buyB.hasCompoundTag()) {
-                cmp!!.getCompound("buyB")!!.putCompound("tag", buyB.namedTag)
+                cmp.getCompound("buyB")!!.putCompound("tag", buyB.namedTag)
             }
             if (output.hasCompoundTag()) {
-                cmp!!.getCompound("sell")!!.putCompound("tag", output.namedTag)
+                cmp.getCompound("sell")!!.putCompound("tag", output.namedTag)
             }
-            return TradeRecipeBuildUtils(cmp!!, 3)
+            return TradeRecipeBuildUtils(cmp, 3)
         }
     }
 }

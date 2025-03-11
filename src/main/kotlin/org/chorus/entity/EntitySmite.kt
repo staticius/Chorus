@@ -14,8 +14,8 @@ import org.chorus.level.*
  */
 interface EntitySmite {
     fun burn(entity: Entity) {
-        if (entity.level!!.getDimension() == Level.DIMENSION_OVERWORLD && entity.level!!.isDaytime() && !entity.level!!.isRaining() && (!entity.hasEffect(
-                EffectType.Companion.FIRE_RESISTANCE
+        if (entity.level!!.dimension == Level.DIMENSION_OVERWORLD && entity.level!!.isDaytime() && !entity.level!!.isRaining() && (!entity.hasEffect(
+                EffectType.FIRE_RESISTANCE
             ) || (entity is EntityInventoryHolder && entity.getHelmet().isNull()))
             && !entity.isInsideOfWater() && !entity.isUnderBlock() && !entity.isOnFire()
         ) {

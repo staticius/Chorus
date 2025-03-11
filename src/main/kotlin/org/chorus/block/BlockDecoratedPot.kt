@@ -84,7 +84,7 @@ class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntity
         get() = 1
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DECORATED_POT, CommonBlockProperties.DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DECORATED_POT, CommonBlockProperties.DIRECTION)
+
     }
 }

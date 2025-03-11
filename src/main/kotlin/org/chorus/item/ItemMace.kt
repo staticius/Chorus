@@ -1,14 +1,14 @@
 package org.chorus.item
 
 import org.chorus.entity.*
-import org.chorus.math.NukkitMath
+import org.chorus.math.ChorusMath
 
 class ItemMace : ItemTool(ItemID.Companion.MACE) {
     override val maxDurability: Int
         get() = 501
 
     override fun getAttackDamage(entity: Entity): Int {
-        val height = NukkitMath.floorDouble(entity.highestPosition - entity.position.y)
+        val height = ChorusMath.floorDouble(entity.highestPosition - entity.position.y)
         if (height < 1.5f) return 6
         var damage = 0
         for (i in 0..height) {

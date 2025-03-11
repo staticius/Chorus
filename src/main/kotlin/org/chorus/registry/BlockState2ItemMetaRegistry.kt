@@ -56,7 +56,7 @@ class BlockState2ItemMetaRegistry : IRegistry<String, Int, Int> {
     }
 
     companion object {
-        //blockid#meta -> blockhash
+        //BlockID.meta -> blockhash
         private val MAP = Object2IntOpenHashMap<String>()
         private val isLoad = AtomicBoolean(false)
     }

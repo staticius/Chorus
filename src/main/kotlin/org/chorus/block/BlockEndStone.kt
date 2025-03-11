@@ -31,7 +31,7 @@ open class BlockEndStone : BlockSolid {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(END_STONE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.END_STONE)
+
     }
 }

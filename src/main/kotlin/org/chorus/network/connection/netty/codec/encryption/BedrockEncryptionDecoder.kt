@@ -4,7 +4,7 @@ import org.chorus.network.connection.netty.BedrockBatchWrapper
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.CorruptedFrameException
 import io.netty.handler.codec.MessageToMessageDecoder
-import lombok.RequiredArgsConstructor
+
 import java.util.concurrent.atomic.AtomicLong
 import javax.crypto.Cipher
 import javax.crypto.SecretKey

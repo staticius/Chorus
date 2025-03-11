@@ -5,9 +5,7 @@ import org.chorus.network.protocol.DataPacket
 import org.chorus.utils.Utils
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class Particle : Vector3 {
     constructor() : super(0.0, 0.0, 0.0)
 

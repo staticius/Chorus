@@ -2,7 +2,7 @@ package org.chorus.console
 
 import org.chorus.Player
 import org.chorus.Server
-import lombok.RequiredArgsConstructor
+
 import org.jline.reader.Candidate
 import org.jline.reader.Completer
 import org.jline.reader.LineReader

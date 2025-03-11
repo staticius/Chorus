@@ -13,7 +13,7 @@ import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodec_v2
 import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodec_v3
 import org.chorus.network.protocol.types.*
 import io.netty.channel.*
-import lombok.extern.slf4j.Slf4j
+
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
 
 

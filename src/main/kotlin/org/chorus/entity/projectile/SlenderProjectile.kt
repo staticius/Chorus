@@ -85,9 +85,9 @@ abstract class SlenderProjectile : EntityProjectile {
             }
         }
         val centerPoint1: Vector3 = Vector3(
-            (currentAABB.getMinX() + currentAABB.getMaxX()) / 2,
-            (currentAABB.getMinY() + currentAABB.getMaxY()) / 2,
-            (currentAABB.getMinZ() + currentAABB.getMaxZ()) / 2
+            (currentAABB.minX + currentAABB.maxX) / 2,
+            (currentAABB.minY + currentAABB.maxY) / 2,
+            (currentAABB.minZ + currentAABB.maxZ) / 2
         )
         //collide with entity
         if (collisionEntity != null) {
@@ -100,9 +100,9 @@ abstract class SlenderProjectile : EntityProjectile {
         }
 
         val centerPoint2: Vector3 = Vector3(
-            (boundingBox!!.getMinX() + boundingBox!!.getMaxX()) / 2,
-            (boundingBox!!.getMinY() + boundingBox!!.getMaxY()) / 2,
-            (boundingBox!!.getMinZ() + boundingBox!!.getMaxZ()) / 2
+            (boundingBox!!.minX + boundingBox!!.maxX) / 2,
+            (boundingBox!!.minY + boundingBox!!.maxY) / 2,
+            (boundingBox!!.minZ + boundingBox!!.maxZ) / 2
         )
         val diff: Vector3 = centerPoint1.subtract(centerPoint2)
         if (dy > 0) {
@@ -138,9 +138,9 @@ abstract class SlenderProjectile : EntityProjectile {
         boundingBox!!.offset(0.0, dy, 0.0)
         boundingBox!!.offset(dx, 0.0, 0.0)
         boundingBox!!.offset(0.0, 0.0, dz)
-        position.x = (boundingBox!!.getMinX() + boundingBox!!.getMaxX()) / 2
-        position.y = boundingBox!!.getMinY() - this.ySize
-        position.z = (boundingBox!!.getMinZ() + boundingBox!!.getMaxZ()) / 2
+        position.x = (boundingBox!!.minX + boundingBox!!.maxX) / 2
+        position.y = boundingBox!!.minY - this.ySize
+        position.z = (boundingBox!!.minZ + boundingBox!!.maxZ) / 2
 
         this.checkChunks()
 
@@ -186,7 +186,7 @@ abstract class SlenderProjectile : EntityProjectile {
             if (block.isAir() && collisionBlock != null) {
                 block = collisionBlock
             }
-            server!!.pluginManager.callEvent(
+            Server.instance.pluginManager.callEvent(
                 ProjectileHitEvent(
                     this, MovingObjectPosition.fromBlock(
                         block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ(), blockFace,

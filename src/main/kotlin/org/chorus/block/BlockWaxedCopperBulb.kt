@@ -18,6 +18,6 @@ class BlockWaxedCopperBulb @JvmOverloads constructor(blockstate: BlockState? = C
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WAXED_COPPER_BULB, CommonBlockProperties.LIT, CommonBlockProperties.POWERED_BIT)
-            get() = Companion.field
+
     }
 }

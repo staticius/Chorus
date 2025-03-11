@@ -2,9 +2,7 @@ package org.chorus.level.generator.`object`.legacytree
 
 import org.chorus.block.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class LegacySpruceTree : LegacyTreeGenerator() {
     override val type: WoodType
         get() = WoodType.SPRUCE

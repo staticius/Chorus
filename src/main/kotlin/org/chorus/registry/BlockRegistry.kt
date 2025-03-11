@@ -8,9 +8,10 @@ import org.chorus.level.Level
 import org.chorus.plugin.Plugin
 import org.chorus.registry.ItemRuntimeIdRegistry.RuntimeEntry
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import lombok.extern.slf4j.Slf4j
+
 import me.sunlan.fastreflection.FastConstructor
 import me.sunlan.fastreflection.FastMemberLoader
+import org.chorus.utils.Loggable
 import org.jetbrains.annotations.UnmodifiableView
 import java.lang.reflect.Modifier
 import java.util.*
@@ -27,12 +28,7 @@ import kotlin.collections.Set
 import kotlin.collections.set
 import kotlin.collections.setOf
 
-/**
- * @author Cool_Loong | Mcayear | KoshakMineDEV | WWMB | Draglis
- */
-
-class BlockRegistry : BlockID,
-    IRegistry<String, Block?, Class<out Block?>> {
+class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
     override fun init() {
         if (isLoad.getAndSet(true)) return
         try {
@@ -1149,9 +1145,14 @@ class BlockRegistry : BlockID,
                 require(value.getMethod("getProperties").declaringClass == value)
             } catch (noSuchMethodException: Exception) {
                 throw RegisterException(
-                    """${"There block: %s must override a method \n@Override\n".formatted(key)}    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
-    } in this class!"""
+                    """
+                    Block class: ${value.simpleName} must override method:
+                    
+                    @Override    
+                    public @NotNull BlockProperties getProperties() {
+                        return PROPERTIES;
+                    }
+                    """.trimIndent()
                 )
             }
             if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) && properties.type == BlockProperties::class.java) {
@@ -1162,17 +1163,13 @@ class BlockRegistry : BlockID,
                 } else {
                     KEYSET.add(key)
                     PROPERTIES[key] = blockProperties
-                    blockProperties.specialValueMap.values.forEach(Consumer { value: BlockState ->
-                        Registries.BLOCKSTATE.registerInternal(
-                            value
-                        )
+                    blockProperties.specialValueMap.values.forEach(Consumer { v: BlockState ->
+                        Registries.BLOCKSTATE.registerInternal(v)
                     })
                 }
             } else {
                 throw RegisterException(
-                    "There block: %s must define a field `public static final BlockProperties PROPERTIES` in this class!".formatted(
-                        key
-                    )
+                    "Block: $key must define a field `public static final BlockProperties PROPERTIES`!"
                 )
             }
         } catch (e: NoSuchFieldException) {
@@ -1214,23 +1211,26 @@ class BlockRegistry : BlockID,
                 blockProperties = properties[value] as BlockProperties
             } else {
                 throw RegisterException(
-                    "There custom block class: %s must define a field `public static final BlockProperties PROPERTIES` in this class!".formatted(
-                        value.simpleName
-                    )
+                    "Block: ${value.simpleName} must define a field `public static final BlockProperties PROPERTIES`!"
                 )
             }
             try {
                 require(value.getMethod("getProperties").declaringClass == value)
             } catch (noSuchMethodException: Exception) {
                 throw RegisterException(
-                    """${"There custom block class: %s must override a method \n@Override\n".formatted(value.simpleName)}    public @NotNull BlockProperties getProperties() {
-        return PROPERTIES;
-    } in this class!"""
+                    """
+                    Custom block class: ${value.simpleName} must override method:
+                    
+                    @Override    
+                    public @NotNull BlockProperties getProperties() {
+                        return PROPERTIES;
+                    }
+                    """.trimIndent()
                 )
             }
             val key = blockProperties.identifier
             val memberLoader: FastMemberLoader =
-                IRegistry.Companion.fastMemberLoaderCache.computeIfAbsent(plugin.name) { p: String? ->
+                IRegistry.fastMemberLoaderCache.computeIfAbsent(plugin.name) {
                     FastMemberLoader(plugin.pluginClassLoader)
                 }
             val c = FastConstructor.create(value.getConstructor(BlockState::class.java), memberLoader, false)
@@ -1238,7 +1238,7 @@ class BlockRegistry : BlockID,
                 if (CustomBlock::class.java.isAssignableFrom(value)) {
                     val customBlock = c.invoke(null as Any?) as CustomBlock
                     val customBlockDefinitions =
-                        CUSTOM_BLOCK_DEFINITIONS.computeIfAbsent(plugin) { p: Plugin? -> ArrayList() }
+                        CUSTOM_BLOCK_DEFINITIONS.computeIfAbsent(plugin) { ArrayList() }
                     customBlockDefinitions.add(customBlock.definition)
                     val rid = 255 - CustomBlockDefinition.getRuntimeId(customBlock.id)
                     Registries.ITEM_RUNTIMEID.registerCustomRuntimeItem(RuntimeEntry(customBlock.id, rid, false))
@@ -1249,10 +1249,8 @@ class BlockRegistry : BlockID,
                     }
                     KEYSET.add(key)
                     PROPERTIES[key] = blockProperties
-                    blockProperties.specialValueMap.values.forEach(Consumer { value: BlockState ->
-                        Registries.BLOCKSTATE.registerInternal(
-                            value
-                        )
+                    blockProperties.specialValueMap.values.forEach(Consumer { v: BlockState ->
+                        Registries.BLOCKSTATE.registerInternal(v)
                     })
                 } else {
                     throw RegisterException("Register Error,must implement the CustomBlock interface!")
@@ -1275,7 +1273,7 @@ class BlockRegistry : BlockID,
         try {
             register(key, value)
         } catch (e: Exception) {
-            BlockRegistry.log.error("", e)
+            log.error("", e)
         }
     }
 
@@ -1298,8 +1296,8 @@ class BlockRegistry : BlockID,
         return properties!!
     }
 
-    override fun get(identifier: String): Block? {
-        val constructor = CACHE_CONSTRUCTORS[identifier] ?: return null
+    override fun get(key: String): Block? {
+        val constructor = CACHE_CONSTRUCTORS[key] ?: return null
         try {
             return constructor.invoke(null as Any?) as Block
         } catch (e: Throwable) {

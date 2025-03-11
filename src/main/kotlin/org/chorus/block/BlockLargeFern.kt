@@ -13,6 +13,6 @@ class BlockLargeFern : BlockDoublePlant {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LARGE_FERN, CommonBlockProperties.UPPER_BLOCK_BIT)
-            get() = Companion.field
+
     }
 }

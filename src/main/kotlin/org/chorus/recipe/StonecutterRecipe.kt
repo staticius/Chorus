@@ -51,10 +51,10 @@ class StonecutterRecipe(
     }
 
     val result: Item
-        get() = results.getFirst().clone()
+        get() = results.first().clone()
 
     val ingredient: Item
-        get() = ingredients.getFirst().toItem().clone()
+        get() = ingredients.first().toItem().clone()
 
     override fun match(input: Input): Boolean {
         return true

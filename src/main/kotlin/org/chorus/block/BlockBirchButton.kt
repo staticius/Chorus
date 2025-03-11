@@ -7,12 +7,14 @@ class BlockBirchButton @JvmOverloads constructor(blockstate: BlockState? = Compa
     override val name: String
         get() = "Birch Button"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BIRCH_BUTTON,
+            BlockID.BIRCH_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
     }
 }

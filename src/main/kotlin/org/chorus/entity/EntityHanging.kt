@@ -4,9 +4,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EntityHanging(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
     protected var direction: Int = 0
 

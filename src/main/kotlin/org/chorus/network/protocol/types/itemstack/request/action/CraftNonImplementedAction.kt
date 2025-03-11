@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-import lombok.Value
+
 
 /**
  * CraftNonImplementedStackRequestActionData is an action sent for inventory actions that aren't yet implemented

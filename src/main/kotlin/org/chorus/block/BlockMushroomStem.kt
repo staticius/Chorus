@@ -12,6 +12,6 @@ class BlockMushroomStem @JvmOverloads constructor(blockstate: BlockState? = Comp
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MUSHROOM_STEM, CommonBlockProperties.HUGE_MUSHROOM_BITS)
-            get() = Companion.field
+
     }
 }

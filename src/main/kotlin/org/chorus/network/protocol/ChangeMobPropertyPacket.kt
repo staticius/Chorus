@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
-import lombok.*
+
 
 /**
  * Server-bound packet to change the properties of a mob.

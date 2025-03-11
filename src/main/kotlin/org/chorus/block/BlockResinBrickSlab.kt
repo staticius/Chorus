@@ -25,6 +25,6 @@ class BlockResinBrickSlab(blockState: BlockState?) : BlockSlab(blockState, Block
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.RESIN_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

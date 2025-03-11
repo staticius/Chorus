@@ -83,9 +83,9 @@ class UsePotionExecutor
     }
 
     fun getPotion(entity: Entity): Item {
-        if (entity.isInsideOfWater && !entity.hasEffect(EffectType.Companion.WATER_BREATHING)) {
+        if (entity.isInsideOfWater && !entity.hasEffect(EffectType.WATER_BREATHING)) {
             return ItemPotion.fromPotion(PotionType.Companion.WATER_BREATHING)
-        } else if (!entity.hasEffect(EffectType.Companion.FIRE_RESISTANCE) && (entity.isOnFire || Arrays.stream<Block>(
+        } else if (!entity.hasEffect(EffectType.FIRE_RESISTANCE) && (entity.isOnFire || Arrays.stream<Block>(
                 entity.level!!.getCollisionBlocks(
                     entity.getBoundingBox()!!.getOffsetBoundingBox(0.0, -1.0, 0.0)
                 )

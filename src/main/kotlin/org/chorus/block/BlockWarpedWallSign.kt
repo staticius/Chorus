@@ -21,6 +21,6 @@ class BlockWarpedWallSign @JvmOverloads constructor(blockState: BlockState? = Co
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WARPED_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

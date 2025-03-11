@@ -1,6 +1,6 @@
 package org.chorus.scheduler
 
-import lombok.extern.slf4j.Slf4j
+
 
 /**
  * 表达一个任务的类。<br></br>A class that describes a task.

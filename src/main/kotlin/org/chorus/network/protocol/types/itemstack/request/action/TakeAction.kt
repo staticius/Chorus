@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
-import lombok.Value
+
 
 /**
  * TakeStackRequestActionData is sent by the client to the server to take x amount of items from one slot in a

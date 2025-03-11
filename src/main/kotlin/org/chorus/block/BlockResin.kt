@@ -22,6 +22,6 @@ class BlockResin @JvmOverloads constructor(state: BlockState? = Companion.proper
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RESIN_BLOCK)
-            get() = Companion.field
+
     }
 }

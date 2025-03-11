@@ -6,8 +6,6 @@ import org.chorus.network.protocol.RequestPermissionsPacket
 import org.chorus.network.protocol.UpdateAbilitiesPacket
 import org.chorus.network.protocol.UpdateAdventureSettingsPacket
 import org.chorus.network.protocol.types.*
-import lombok.Getter
-import lombok.Setter
 import java.util.*
 
 /**
@@ -83,7 +81,7 @@ class AdventureSettings : Cloneable {
         }
     }
 
-    fun set(ability: PlayerAbility?, value: Boolean): AdventureSettings {
+    fun set(ability: PlayerAbility, value: Boolean): AdventureSettings {
         val type = ability2TypeMap[ability]
         if (type != null) {
             values[type] = value
@@ -109,7 +107,7 @@ class AdventureSettings : Cloneable {
     fun update() {
         //Permission to send to all players so they can see each other
         //Make sure it will be sent to yourself (eg: there is no such player among the online players when the player enters the server)
-        val players: MutableCollection<Player> = HashSet<Player>(player.getServer().onlinePlayers.values)
+        val players: MutableCollection<Player> = HashSet<Player>(Server.instance.onlinePlayers.values)
         players.add(this.player)
         sendAbilities(players)
         updateAdventureSettings()
@@ -171,7 +169,7 @@ class AdventureSettings : Cloneable {
 
         packet.abilityLayers.add(layer)
 
-        Server.Companion.broadcastPacket(players, packet)
+        Server.broadcastPacket(players, packet)
     }
 
     /**
@@ -180,7 +178,7 @@ class AdventureSettings : Cloneable {
     fun saveNBT() {
         val nbt = player.namedTag
         val abilityTag = CompoundTag()
-        values.forEach { (type: Type?, bool: Boolean?) ->
+        values.forEach { (type, bool) ->
             abilityTag.put(type.name, IntTag(if (bool) 1 else 0))
         }
         nbt!!.put(KEY_ABILITIES, abilityTag)
@@ -271,6 +269,6 @@ class AdventureSettings : Cloneable {
         const val KEY_PLAYER_PERMISSION: String = "PlayerPermission"
         const val KEY_COMMAND_PERMISSION: String = "CommandPermission"
 
-        private val ability2TypeMap: MutableMap<PlayerAbility?, Type> = HashMap()
+        private val ability2TypeMap: MutableMap<PlayerAbility, Type> = EnumMap(PlayerAbility::class.java)
     }
 }

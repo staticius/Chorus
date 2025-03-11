@@ -10,12 +10,14 @@ class BlockBirchLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
     }
 
     override fun toSapling(): Item {
-        return Item.get(BIRCH_SAPLING)
+        return Item.get(BlockID.BIRCH_SAPLING)
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BIRCH_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.BIRCH_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
     }
 }

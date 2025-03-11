@@ -6,9 +6,9 @@ package org.chorus.command
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @see cn.nukkit.plugin.PluginBase
+ * @see org.chorus.plugin.PluginBase
  *
- * @see cn.nukkit.command.CommandExecutor.onCommand
+ * @see org.chorus.command.CommandExecutor.onCommand
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
@@ -35,9 +35,9 @@ interface CommandExecutor {
      *
      *
      * 如果你想测试一个命令发送者是否有权限执行这个命令，
-     * 可以使用[cn.nukkit.command.Command.testPermissionSilent]。<br></br>
+     * 可以使用[org.chorus.command.Command.testPermissionSilent]。<br></br>
      * If you want to test whether a command sender has the permission to execute a command,
-     * you can use [cn.nukkit.command.Command.testPermissionSilent].
+     * you can use [org.chorus.command.Command.testPermissionSilent].
      *
      * @param sender  这个命令的发送者，可以是玩家或控制台等。<br></br>
      * The sender of this command, this can be a player or a console.

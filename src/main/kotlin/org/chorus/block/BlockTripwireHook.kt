@@ -92,7 +92,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         isHookBroken: Boolean, doUpdateAroundHook: Boolean,
         eventDistance: Int = -1, eventBlock: BlockTripWire? = null
     ) {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return
         }
 
@@ -182,10 +182,10 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
     private fun addSound(pos: Vector3, canConnect: Boolean, nextPowered: Boolean, attached: Boolean, powered: Boolean) {
         if (nextPowered && !powered) {
             level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_POWER_ON)
-            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
+            Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
         } else if (!nextPowered && powered) {
             level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_POWER_OFF)
-            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
+            Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
         } else if (canConnect && !attached) {
             level.addLevelSoundEvent(pos, LevelSoundEventPacket.SOUND_ATTACH)
         } else if (!canConnect && attached) {
@@ -289,9 +289,9 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         const val MAX_TRIPWIRE_CIRCUIT_LENGTH: Int = 42
 
         val properties: BlockProperties = BlockProperties(
-            BlockID.TRIPWIRE_HOOK,
+BlockID.BlockID.TRIPWIRE_HOOK,
             CommonBlockProperties.DIRECTION, CommonBlockProperties.ATTACHED_BIT, CommonBlockProperties.POWERED_BIT
         )
-            get() = Companion.field
+
     }
 }

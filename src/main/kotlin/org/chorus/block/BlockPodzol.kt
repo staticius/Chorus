@@ -46,6 +46,6 @@ class BlockPodzol : BlockDirt {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PODZOL)
-            get() = Companion.field
+
     }
 }

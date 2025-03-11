@@ -131,7 +131,7 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
                             CompoundTag(),
                             CreatureSpawnEvent.SpawnReason.SPAWNER
                         )
-                        level.server.pluginManager.callEvent(ev)
+                        Server.instance.pluginManager.callEvent(ev)
 
                         if (ev.isCancelled) {
                             continue

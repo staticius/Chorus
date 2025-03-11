@@ -46,6 +46,6 @@ class BlockWeb @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WEB)
-            get() = Companion.field
+            
     }
 }

@@ -31,6 +31,6 @@ class BlockNetherBrickFence @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHER_BRICK_FENCE)
-            get() = Companion.field
+
     }
 }

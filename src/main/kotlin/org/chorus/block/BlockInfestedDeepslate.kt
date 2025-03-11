@@ -24,6 +24,6 @@ class BlockInfestedDeepslate @JvmOverloads constructor(blockState: BlockState? =
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.Companion.INFESTED_DEEPSLATE, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

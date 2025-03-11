@@ -5,9 +5,7 @@ import org.chorus.utils.Logger
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PluginLogger(context: Plugin) : Logger {
     private val pluginName: String
     private val log: org.apache.logging.log4j.Logger

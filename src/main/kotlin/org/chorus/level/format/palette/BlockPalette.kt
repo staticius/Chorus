@@ -7,7 +7,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.level.format.bitarray.BitArrayVersion
 import org.chorus.registry.Registries
 import org.chorus.utils.ByteBufVarInt
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 import io.netty.buffer.ByteBuf
 import it.unimi.dsi.fastutil.ints.IntSet
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList
@@ -45,7 +45,7 @@ class BlockPalette : Palette<BlockState?> {
         val fakeBlockMap = level.antiXraySystem.rawFakeOreToPutRuntimeIdMap
         val transparentBlockSet: IntSet = AntiXraySystem.Companion.getRawTransparentBlockRuntimeIds()
         val XAndDenominator = level.antiXraySystem.fakeOreDenominator - 1
-        val nukkitRandom = NukkitRandom(level.seed)
+        val chorusRandom = ChorusRandom(level.seed)
 
         var write = if (obfuscatePalette == null) this else obfuscatePalette!!
         if (needReObfuscate) {
@@ -65,14 +65,14 @@ class BlockPalette : Palette<BlockState?> {
                         rid = tmp
                     } else {
                         val tmp2 = fakeBlockMap[rid]
-                        if (tmp2 != null && (nukkitRandom.nextInt() and XAndDenominator) == 0 && canBeObfuscated(
+                        if (tmp2 != null && (chorusRandom.nextInt() and XAndDenominator) == 0 && canBeObfuscated(
                                 transparentBlockSet,
                                 x,
                                 y,
                                 z
                             )
                         ) {
-                            rid = tmp2.getInt(nukkitRandom.nextInt(0, tmp2.size - 1))
+                            rid = tmp2.getInt(chorusRandom.nextInt(0, tmp2.size - 1))
                         }
                     }
                 }

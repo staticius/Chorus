@@ -11,6 +11,6 @@ class BlockWaxedWeatheredCutCopperSlab @JvmOverloads constructor(blockstate: Blo
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WAXED_WEATHERED_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

@@ -3,9 +3,7 @@ package org.chorus.level
 import org.chorus.entity.Entity
 import org.chorus.math.Vector3
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class MovingObjectPosition {
     /**
      * 0 = block, 1 = entity

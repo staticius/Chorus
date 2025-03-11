@@ -1,8 +1,6 @@
 package org.chorus.item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemBread @JvmOverloads constructor(count: Int = 1) : ItemFood(ItemID.Companion.BREAD, 0, count) {
     override val foodRestore: Int
         get() = 5

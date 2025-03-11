@@ -276,7 +276,7 @@ class ScoreboardCommand(name: String) :
         log: CommandLogger
     ): Int {
         val list = result.value
-        val manager: IScoreboardManager = Server.getInstance().scoreboardManager
+        val manager: IScoreboardManager = Server.instance.scoreboardManager
         try {
             when (result.key) {
                 "objectives-add" -> {
@@ -849,7 +849,7 @@ class ScoreboardCommand(name: String) :
         wildcardTargetStr: String,
         wildcardScoreboard: IScoreboard?
     ): Set<IScorer> {
-        val manager: IScoreboardManager = Server.getInstance().scoreboardManager
+        val manager: IScoreboardManager = Server.instance.scoreboardManager
         var scorers: MutableSet<IScorer> = HashSet()
         if (wildcardTargetStr == "*") {
             if (wildcardScoreboard != null) {
@@ -866,8 +866,8 @@ class ScoreboardCommand(name: String) :
                         t
                     ) else EntityScorer(t)
                 }.collect<MutableSet<IScorer>, Any>(Collectors.toSet<IScorer>())
-        } else if (Server.getInstance().getPlayer(wildcardTargetStr) != null) {
-            scorers.add(PlayerScorer(Server.getInstance().getPlayer(wildcardTargetStr)))
+        } else if (Server.instance.getPlayer(wildcardTargetStr) != null) {
+            scorers.add(PlayerScorer(Server.instance.getPlayer(wildcardTargetStr)))
         } else {
             scorers.add(FakeScorer(wildcardTargetStr))
         }

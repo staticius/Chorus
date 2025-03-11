@@ -21,7 +21,7 @@ class BlockChiseledTuff @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHISELED_TUFF)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHISELED_TUFF)
+
     }
 }

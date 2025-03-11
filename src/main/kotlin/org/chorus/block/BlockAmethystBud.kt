@@ -11,7 +11,7 @@ import java.util.*
 
 abstract class BlockAmethystBud(blockState: BlockState?) : BlockTransparent(blockState), Faceable {
     override val name: String
-        get() = namePrefix + " Amethyst Bud"
+        get() = "$namePrefix Amethyst Bud"
 
     protected abstract val namePrefix: String
 
@@ -63,20 +63,24 @@ abstract class BlockAmethystBud(blockState: BlockState?) : BlockTransparent(bloc
         }
 
         blockFace = face
-        level.setBlock(block.position, this, true, true)
+        level.setBlock(block.position, this, direct = true, update = true)
         return true
     }
 
-    override fun onBreak(item: Item): Boolean {
-        if (item.isPickaxe) {
-            Arrays.stream(this.getDrops(item)).forEach { item1: Item? ->
-                level.dropItem(
-                    position.add(0.5, 0.0, 0.5)!!, item1!!
-                )
+    override fun onBreak(item: Item?): Boolean {
+        if (item != null) {
+            if (item.isPickaxe) {
+                Arrays.stream(this.getDrops(item)).forEach { item1 ->
+                    if (item1 != null) {
+                        level.dropItem(
+                            position.add(0.5, 0.0, 0.5), item1
+                        )
+                    }
+                }
+                level.setBlock(this.position, layer, get(BlockID.AIR), direct = true, update = true)
+            } else {
+                level.setBlock(this.position, layer, get(BlockID.AIR), direct = true, update = true)
             }
-            level.setBlock(this.position, layer, get(AIR), true, true)
-        } else {
-            level.setBlock(this.position, layer, get(AIR), true, true)
         }
 
         return true

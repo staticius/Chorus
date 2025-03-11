@@ -12,14 +12,15 @@ import org.chorus.level.vibration.VibrationType
 import org.chorus.math.*
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.utils.Faceable
+import org.chorus.Server
 
 open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityBeehive?> {
+    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityBeehive> {
     override val name: String
         get() = "Beehive"
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.BEEHIVE
+        return BlockEntityID.BEEHIVE
     }
 
     override fun getBlockEntityClass(): Class<out BlockEntityBeehive> {
@@ -61,9 +62,9 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
         this.honeyLevel = honeyLevel
         val beehive = BlockEntityHolder.setBlockAndCreateEntity(
             this,
-            true,
-            true,
-            item.customBlockData
+            direct = true,
+            update = true,
+            initialData = item.customBlockData
         )
             ?: return false
 
@@ -80,15 +81,17 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     override fun onActivate(
         item: Item,
-        player: Player,
+        player: Player?,
         blockFace: BlockFace?,
         fx: Float,
         fy: Float,
         fz: Float
     ): Boolean {
         if (item.id == ItemID.SHEARS && isFull) {
-            honeyCollected(player)
-            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_BEEHIVE_SHEAR)
+            if (player != null) {
+                honeyCollected(player)
+            }
+            level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_BEEHIVE_SHEAR)
             item.useOn(this)
             for (i in 0..2) {
                 level.dropItem(this.position, Item.get(ItemID.HONEYCOMB))
@@ -96,7 +99,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
             level.vibrationManager.callVibrationEvent(
                 VibrationEvent(
                     this,
-                    position.add(0.5, 0.5, 0.5)!!, VibrationType.SHEAR
+                    position.add(0.5, 0.5, 0.5), VibrationType.SHEAR
                 )
             )
             return true
@@ -114,7 +117,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
         player: Player?,
         action: PlayerInteractEvent.Action
     ) {
-        if (player != null) getOrCreateBlockEntity().setInteractingEntity(player)
+        if (player != null) getOrCreateBlockEntity().interactingEntity = player
         super.onTouch(vector, item, face, fx, fy, fz, player, action)
     }
 
@@ -123,9 +126,9 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     @JvmOverloads
-    fun honeyCollected(player: Player, angerBees: Boolean = level.server.getDifficulty() > 0 && !player.isCreative) {
+    fun honeyCollected(player: Player, angerBees: Boolean = Server.instance.getDifficulty() > 0 && !player.isCreative) {
         getOrCreateBlockEntity().honeyLevel = 0
-        if (down()!!.id != CAMPFIRE && angerBees) {
+        if (down()!!.id != BlockID.CAMPFIRE && angerBees) {
             angerBees(player)
         }
     }
@@ -137,15 +140,13 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     override fun toItem(): Item? {
         val item: Item = ItemBlock(this)
-        if (level != null) {
-            val beehive = blockEntity
-            if (beehive != null) {
-                beehive.saveNBT()
-                if (!beehive.isHoneyEmpty || !beehive.isEmpty) {
-                    val copy = beehive.namedTag.copy()
-                    copy.putByte("HoneyLevel", honeyLevel)
-                    item.setCustomBlockData(copy)
-                }
+        val beehive = blockEntity
+        if (beehive != null) {
+            beehive.saveNBT()
+            if (!beehive.isHoneyEmpty || !beehive.isEmpty) {
+                val copy = beehive.namedTag.copy()
+                copy.putByte("HoneyLevel", honeyLevel)
+                item.setCustomBlockData(copy)
             }
         }
         return item
@@ -164,22 +165,22 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     override var blockFace: BlockFace?
-        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
+        get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION))
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face!!.horizontalIndex)
+            setPropertyValue(CommonBlockProperties.DIRECTION, face!!.horizontalIndex)
         }
 
     var honeyLevel: Int
-        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HONEY_LEVEL)
+        get() = getPropertyValue(CommonBlockProperties.HONEY_LEVEL)
         set(honeyLevel) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HONEY_LEVEL, honeyLevel)
+            setPropertyValue(CommonBlockProperties.HONEY_LEVEL, honeyLevel)
         }
 
     val isEmpty: Boolean
-        get() = honeyLevel == CommonBlockProperties.HONEY_LEVEL.getMin()
+        get() = honeyLevel == CommonBlockProperties.HONEY_LEVEL.min
 
     val isFull: Boolean
-        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HONEY_LEVEL) === CommonBlockProperties.HONEY_LEVEL.getMax()
+        get() = getPropertyValue(CommonBlockProperties.HONEY_LEVEL) == CommonBlockProperties.HONEY_LEVEL.max
 
     override fun hasComparatorInputOverride(): Boolean {
         return true
@@ -188,9 +189,11 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
     override val comparatorInputOverride: Int
         get() = honeyLevel
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BEEHIVE, CommonBlockProperties.DIRECTION, CommonBlockProperties.HONEY_LEVEL)
-            get() = Companion.field
+            BlockProperties(BlockID.BEEHIVE, CommonBlockProperties.DIRECTION, CommonBlockProperties.HONEY_LEVEL)
     }
 }

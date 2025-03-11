@@ -1,25 +1,22 @@
 package org.chorus.utils
 
 import org.chorus.plugin.Plugin
-import lombok.extern.slf4j.Slf4j
+
 import java.io.*
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
 
-/**
- * SimpleConfig for Nukkit
- * added 11/02/2016 by fromgate
- */
-
 abstract class SimpleConfig(file: File) {
+    companion object : Loggable
+
     private val configFile = file
 
     @JvmOverloads
     constructor(
         plugin: Plugin,
         fileName: String = "config.yml"
-    ) : this(File(plugin.dataFolder + File.separator + fileName))
+    ) : this(File(plugin.dataFolder!!.path + File.separator + fileName))
 
     init {
         configFile.parentFile.mkdirs()
@@ -71,14 +68,17 @@ abstract class SimpleConfig(file: File) {
                     val genericFieldType = field.genericType
                     if (genericFieldType is ParameterizedType) {
                         val fieldArgClass = genericFieldType.actualTypeArguments[0] as Class<*>
-                        if (fieldArgClass == Int::class.java) field[this] = cfg.getIntegerList(path)
-                        else if (fieldArgClass == Boolean::class.java) field[this] = cfg.getBooleanList(path)
-                        else if (fieldArgClass == Double::class.java) field[this] = cfg.getDoubleList(path)
-                        else if (fieldArgClass == Char::class.java) field[this] = cfg.getCharacterList(path)
-                        else if (fieldArgClass == Byte::class.java) field[this] = cfg.getByteList(path)
-                        else if (fieldArgClass == Float::class.java) field[this] = cfg.getFloatList(path)
-                        else if (fieldArgClass == Short::class.java) field[this] = cfg.getFloatList(path)
-                        else if (fieldArgClass == String::class.java) field[this] = cfg.getStringList(path)
+                        when (fieldArgClass) {
+                            Int::class.java -> field[this] = cfg.getIntegerList(path)
+                            Boolean::class.java -> field[this] = cfg.getBooleanList(path)
+                            Long::class.java -> field[this] = cfg.getLongList(path)
+                            Double::class.java -> field[this] = cfg.getDoubleList(path)
+                            String::class.java -> field[this] = cfg.getStringList(path)
+                            Char::class.java -> field[this] = cfg.getCharacterList(path)
+                            Byte::class.java -> field[this] = cfg.getByteList(path)
+                            Float::class.java -> field[this] = cfg.getFloatList(path)
+                            Short::class.java -> field[this] = cfg.getShortList(path)
+                        }
                     } else field[this] = cfg.getList(path) // Hell knows what's kind of List was found :)
                 } else throw IllegalStateException("SimpleConfig did not supports class: " + field.type.name + " for config field " + configFile.name)
             } catch (e: Exception) {
@@ -97,7 +97,7 @@ abstract class SimpleConfig(file: File) {
             )
             path = pathDefine.value
         }
-        if (path == null || path.isEmpty()) path = field.name.replace("_".toRegex(), ".")
+        if (path.isNullOrEmpty()) path = field.name.replace("_".toRegex(), ".")
         if (Modifier.isFinal(field.modifiers)) return null
         if (Modifier.isPrivate(field.modifiers)) field.isAccessible = true
         return path

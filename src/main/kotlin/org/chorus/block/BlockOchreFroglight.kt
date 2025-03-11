@@ -9,6 +9,6 @@ class BlockOchreFroglight @JvmOverloads constructor(blockState: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OCHRE_FROGLIGHT, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

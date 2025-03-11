@@ -3,7 +3,7 @@ package org.chorus.network.protocol
 import org.chorus.Server
 import org.chorus.entity.data.Skin
 import org.chorus.network.connection.util.HandleByteBuf
-import lombok.*
+
 import java.util.*
 
 
@@ -36,7 +36,7 @@ class PlayerSkinPacket : DataPacket() {
         byteBuf.writeSkin(skin!!)
         byteBuf.writeString(newSkinName!!)
         byteBuf.writeString(oldSkinName!!)
-        byteBuf.writeBoolean(skin!!.isTrusted() || Server.getInstance().settings.playerSettings().forceSkinTrusted())
+        byteBuf.writeBoolean(skin!!.isTrusted() || Server.instance.settings.playerSettings().forceSkinTrusted())
     }
 
     override fun pid(): Int {

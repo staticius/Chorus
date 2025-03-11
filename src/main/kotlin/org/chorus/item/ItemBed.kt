@@ -4,9 +4,7 @@ import org.chorus.block.BlockBed
 import org.chorus.block.BlockID
 import org.chorus.utils.DyeColor
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemBed @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(BlockID.BED, meta, count) {
     override fun internalAdjust() {

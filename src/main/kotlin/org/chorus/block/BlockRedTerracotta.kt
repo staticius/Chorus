@@ -4,6 +4,6 @@ class BlockRedTerracotta @JvmOverloads constructor(blockstate: BlockState? = Com
     BlockHardenedClay(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RED_TERRACOTTA)
-            get() = Companion.field
+
     }
 }

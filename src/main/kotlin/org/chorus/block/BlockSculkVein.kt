@@ -11,6 +11,6 @@ class BlockSculkVein @JvmOverloads constructor(blockstate: BlockState? = Compani
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SCULK_VEIN, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
-            get() = Companion.field
+
     }
 }

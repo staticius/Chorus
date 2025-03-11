@@ -9,6 +9,6 @@ class BlockMagentaStainedGlassPane @JvmOverloads constructor(blockstate: BlockSt
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MAGENTA_STAINED_GLASS_PANE)
-            get() = Companion.field
+
     }
 }

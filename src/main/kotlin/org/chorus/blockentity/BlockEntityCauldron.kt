@@ -9,7 +9,7 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.BlockColor
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import lombok.RequiredArgsConstructor
+
 
 /**
  * @author CreeperFace (Nukkit Project)
@@ -109,7 +109,7 @@ class BlockEntityCauldron(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
             return
         }
         val block = block as BlockCauldron
-        val viewers = level.getChunkPlayers(position.chunkX, position.chunkZ).values.toArray<Player>(Player.EMPTY_ARRAY)
+        val viewers = level.getChunkPlayers(position.chunkX, position.chunkZ).values.toTypedArray()
         level.sendBlocks(viewers, arrayOf(block.position))
         super.spawnToAll()
         level.scheduler.scheduleTask(null) {

@@ -8,14 +8,16 @@ class BlockBambooHangingSign @JvmOverloads constructor(blockstate: BlockState? =
     override val name: String
         get() = "Bamboo Hanging Sign"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BAMBOO_HANGING_SIGN,
+            BlockID.BAMBOO_HANGING_SIGN,
             CommonBlockProperties.ATTACHED_BIT,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.GROUND_SIGN_DIRECTION,
             CommonBlockProperties.HANGING
         )
-            get() = Companion.field
     }
 }

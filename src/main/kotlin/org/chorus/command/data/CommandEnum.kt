@@ -71,7 +71,7 @@ class CommandEnum {
         packet.name = this.name
         packet.values = Arrays.stream(value).toList()
         packet.type = mode
-        Server.broadcastPacket(Server.getInstance().onlinePlayers.values, packet)
+        Server.broadcastPacket(Server.instance.onlinePlayers.values, packet)
     }
 
     fun updateSoftEnum() {
@@ -80,7 +80,7 @@ class CommandEnum {
         packet.name = this.name
         packet.values = this.getValues()
         packet.type = UpdateSoftEnumPacket.Type.SET
-        Server.broadcastPacket(Server.getInstance().onlinePlayers.values, packet)
+        Server.broadcastPacket(Server.instance.onlinePlayers.values, packet)
     }
 
     companion object {
@@ -105,12 +105,12 @@ class CommandEnum {
 
         val FUNCTION_FILE: CommandEnum = CommandEnum(
             "filepath"
-        ) { Server.getInstance().functionManager.functions.keys }
+        ) { Server.instance.functionManager.functions.keys }
 
         @JvmField
         val SCOREBOARD_OBJECTIVES: CommandEnum = CommandEnum(
             "ScoreboardObjectives"
-        ) { Server.getInstance().scoreboardManager.scoreboards.keys }
+        ) { Server.instance.scoreboardManager.scoreboards.keys }
 
         val CAMERA_PRESETS: CommandEnum = CommandEnum(
             "preset"

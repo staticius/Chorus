@@ -64,6 +64,6 @@ class BlockNetherreactor @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHERREACTOR)
-            get() = Companion.field
+
     }
 }

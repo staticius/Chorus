@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-import lombok.Value
+
 
 /**
  * CreateStackRequestActionData is sent by the client when an item is created through being used as part of a

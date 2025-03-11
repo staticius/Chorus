@@ -36,6 +36,6 @@ class BlockSlime : BlockTransparent {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SLIME)
-            get() = Companion.field
+
     }
 }

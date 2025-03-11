@@ -2,9 +2,7 @@ package org.chorus.level
 
 import org.chorus.level.format.IChunk
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface ChunkLoader {
     val loaderId: Int
 
@@ -25,6 +23,6 @@ interface ChunkLoader {
     fun onChunkUnloaded(chunk: IChunk?)
 
     companion object {
-        val EMPTY_ARRAY: Array<ChunkLoader?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<ChunkLoader> = emptyArray()
     }
 }

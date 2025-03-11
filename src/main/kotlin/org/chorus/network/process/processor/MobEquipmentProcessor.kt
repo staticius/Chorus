@@ -9,7 +9,7 @@ import org.chorus.item.enchantment.Enchantment.Companion.getEnchantments
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.MobEquipmentPacket
 import org.chorus.network.protocol.ProtocolInfo
-import lombok.extern.slf4j.Slf4j
+
 
 
 class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {

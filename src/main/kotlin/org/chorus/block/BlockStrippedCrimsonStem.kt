@@ -10,6 +10,6 @@ class BlockStrippedCrimsonStem @JvmOverloads constructor(blockstate: BlockState?
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STRIPPED_CRIMSON_STEM, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

@@ -31,6 +31,6 @@ class BlockNetheriteBlock : BlockSolid {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHERITE_BLOCK)
-            get() = Companion.field
+
     }
 }

@@ -5,7 +5,7 @@ package org.chorus.command.tree.node
  * 解析为[String]值
  *
  *
- * 所有命令参数类型为[WILDCARD_TARGET][cn.nukkit.command.data.CommandParamType.WILDCARD_TARGET]如果没有手动指定[IParamNode],则会默认使用这个解析
+ * 所有命令参数类型为[WILDCARD_TARGET][org.chorus.command.data.CommandParamType.WILDCARD_TARGET]如果没有手动指定[IParamNode],则会默认使用这个解析
  */
 class WildcardTargetStringNode : StringNode() {
     override fun fill(arg: String) {

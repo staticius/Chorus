@@ -5,7 +5,7 @@ import org.chorus.entity.*
 import java.awt.Color
 
 class EffectHunger :
-    Effect(EffectType.Companion.HUNGER, "%potion.hunger", Color(88, 118, 83)) {
+    Effect(EffectType.HUNGER, "%potion.hunger", Color(88, 118, 83)) {
     override fun canTick(): Boolean {
         return true
     }

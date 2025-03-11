@@ -9,7 +9,7 @@ class BlockCrimsonHyphae @JvmOverloads constructor(blockstate: BlockState? = Com
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRIMSON_HYPHAE, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_HYPHAE, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }

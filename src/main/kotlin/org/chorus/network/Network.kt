@@ -27,7 +27,7 @@ import io.netty.channel.kqueue.KQueueEventLoopGroup
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.DatagramChannel
 import io.netty.channel.socket.nio.NioDatagramChannel
-import lombok.extern.slf4j.Slf4j
+
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
@@ -42,9 +42,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadFactory
 import java.util.concurrent.atomic.AtomicReference
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class Network @JvmOverloads constructor(
     val server: Server,
@@ -82,7 +80,7 @@ class Network @JvmOverloads constructor(
             try {
                 tmpIfs = SystemInfo().hardware.networkIFs
             } catch (t: Throwable) {
-                Network.log.warn(Server.getInstance().language.get("nukkit.start.hardwareMonitorDisabled"))
+                Network.log.warn(Server.instance.language.get("nukkit.start.hardwareMonitorDisabled"))
             }
             hardWareNetworkInterfaces.set(tmpIfs)
         }, true)
@@ -184,7 +182,7 @@ class Network @JvmOverloads constructor(
             this.process()
         } catch (e: Exception) {
             Network.log.error(
-                server.language.tr(
+                server.baseLang.tr(
                     "nukkit.server.networkError",
                     javaClass.name, Utils.getExceptionMessage(e)
                 ), e

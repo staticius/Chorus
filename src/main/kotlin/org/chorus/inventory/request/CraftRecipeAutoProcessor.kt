@@ -1,7 +1,7 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.Entity.getServer
+import org.chorus.Server
 import org.chorus.event.inventory.CraftItemEvent
 import org.chorus.item.*
 import org.chorus.network.protocol.types.itemstack.request.action.AutoCraftRecipeAction
@@ -11,7 +11,7 @@ import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.recipe.descriptor.ItemDescriptor
 import org.chorus.recipe.descriptor.ItemTagDescriptor
 import org.chorus.registry.Registries
-import lombok.extern.slf4j.Slf4j
+
 
 
 class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipeAction> {
@@ -29,7 +29,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
             .toArray<Item> { _Dummy_.__Array__() }
 
         val craftItemEvent = CraftItemEvent(player, eventItems, recipe, 1)
-        player.getServer().getPluginManager().callEvent(craftItemEvent)
+        Server.instance.pluginManager.callEvent(craftItemEvent)
         if (craftItemEvent.isCancelled) {
             return context.error()
         }
@@ -77,7 +77,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
                 return context.error()
             }
             if (recipe.results.size == 1) {
-                val output: Item = recipe.results.getFirst().clone()
+                val output: Item = recipe.results.first().clone()
                 output.setCount(output.getCount() * action.timesCrafted)
                 val createdOutput = player.creativeOutputInventory
                 createdOutput.setItem(0, output.clone().autoAssignStackNetworkId(), false)

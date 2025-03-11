@@ -6,7 +6,7 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.camera.aimassist.*
 import org.chorus.utils.OptionalValue
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.*
+
 import java.util.List
 import java.util.function.BiConsumer
 import java.util.function.Function

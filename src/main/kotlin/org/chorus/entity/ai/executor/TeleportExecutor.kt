@@ -3,8 +3,8 @@ package org.chorus.entity.ai.executor
 import org.chorus.entity.mob.EntityMob
 import org.chorus.level.*
 import org.chorus.math.*
-import lombok.AllArgsConstructor
-import lombok.RequiredArgsConstructor
+
+
 import java.util.concurrent.*
 import kotlin.math.floor
 import kotlin.math.min

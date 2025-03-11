@@ -4,8 +4,8 @@ import org.chorus.nbt.NBTIO.read
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import io.netty.util.internal.EmptyArrays
-import lombok.SneakyThrows
-import lombok.extern.slf4j.Slf4j
+
+
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -14,15 +14,14 @@ import java.util.function.*
 import java.util.function.Function
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class BinaryStream {
     var offset: Int
-    private var buffer: ByteArray?
+    var buffer: ByteArray
+        private set
     var count: Int
-        protected set
+        private set
 
     constructor() {
         this.buffer = ByteArray(32)
@@ -43,30 +42,30 @@ class BinaryStream {
         return this
     }
 
-    fun setBuffer(buffer: ByteArray?) {
+    fun setBuffer(buffer: ByteArray) {
         this.buffer = buffer
         this.count = buffer?.size ?: -1
     }
 
-    fun setBuffer(buffer: ByteArray?, offset: Int) {
+    fun setBuffer(buffer: ByteArray, offset: Int) {
         this.setBuffer(buffer)
         this.offset = offset
     }
 
     fun getBuffer(): ByteArray {
-        return buffer!!.copyOf(count)
+        return buffer.copyOf(count)
     }
 
     @JvmOverloads
     fun get(len: Int = this.count - this.offset): ByteArray {
-        var len = len
-        if (len < 0) {
+        var len1 = len
+        if (len1 < 0) {
             this.offset = this.count - 1
             return EmptyArrays.EMPTY_BYTES
         }
-        len = min(len.toDouble(), (this.count - this.offset).toDouble()).toInt()
-        this.offset += len
-        return Arrays.copyOfRange(this.buffer, this.offset - len, this.offset)
+        len1 = min(len1.toDouble(), (this.count - this.offset).toDouble()).toInt()
+        this.offset += len1
+        return Arrays.copyOfRange(this.buffer, this.offset - len1, this.offset)
     }
 
     fun put(bytes: ByteArray?) {
@@ -81,17 +80,17 @@ class BinaryStream {
     }
 
     val long: Long
-        get() = Binary.Companion.readLong(this.get(8))
+        get() = Binary.readLong(this.get(8))
 
     fun putLong(l: Long) {
-        this.put(Binary.Companion.writeLong(l))
+        this.put(Binary.writeLong(l))
     }
 
     val int: Int
-        get() = Binary.Companion.readInt(this.get(4))
+        get() = Binary.readInt(this.get(4))
 
     fun putInt(i: Int) {
-        this.put(Binary.Companion.writeInt(i))
+        this.put(Binary.writeInt(i))
     }
 
     fun putMedium(i: Int) {
@@ -112,17 +111,17 @@ class BinaryStream {
         }
 
     val lLong: Long
-        get() = Binary.Companion.readLLong(this.get(8))
+        get() = Binary.readLLong(this.get(8))
 
     fun putLLong(l: Long) {
-        this.put(Binary.Companion.writeLLong(l))
+        this.put(Binary.writeLLong(l))
     }
 
     val lInt: Int
-        get() = Binary.Companion.readLInt(this.get(4))
+        get() = Binary.readLInt(this.get(4))
 
     fun putLInt(i: Int) {
-        this.put(Binary.Companion.writeLInt(i))
+        this.put(Binary.writeLInt(i))
     }
 
     fun <T> putNotNull(data: T?, consumer: Consumer<T?>) {
@@ -142,53 +141,53 @@ class BinaryStream {
     }
 
     val short: Int
-        get() = Binary.Companion.readShort(this.get(2))
+        get() = Binary.readShort(this.get(2))
 
     fun putShort(s: Int) {
-        this.put(Binary.Companion.writeShort(s))
+        this.put(Binary.writeShort(s))
     }
 
     val lShort: Int
-        get() = Binary.Companion.readLShort(this.get(2))
+        get() = Binary.readLShort(this.get(2))
 
     fun putLShort(s: Int) {
-        this.put(Binary.Companion.writeLShort(s))
+        this.put(Binary.writeLShort(s))
     }
 
     val float: Float
         get() = getFloat(-1)
 
     fun getFloat(accuracy: Int): Float {
-        return Binary.Companion.readFloat(this.get(4), accuracy)
+        return Binary.readFloat(this.get(4), accuracy)
     }
 
     fun putFloat(v: Float) {
-        this.put(Binary.Companion.writeFloat(v))
+        this.put(Binary.writeFloat(v))
     }
 
     val lFloat: Float
         get() = getLFloat(-1)
 
     fun getLFloat(accuracy: Int): Float {
-        return Binary.Companion.readLFloat(this.get(4), accuracy)
+        return Binary.readLFloat(this.get(4), accuracy)
     }
 
     fun putLFloat(v: Float) {
-        this.put(Binary.Companion.writeLFloat(v))
+        this.put(Binary.writeLFloat(v))
     }
 
     val triad: Int
-        get() = Binary.Companion.readTriad(this.get(3))
+        get() = Binary.readTriad(this.get(3))
 
     fun putTriad(triad: Int) {
-        this.put(Binary.Companion.writeTriad(triad))
+        this.put(Binary.writeTriad(triad))
     }
 
     val lTriad: Int
-        get() = Binary.Companion.readLTriad(this.get(3))
+        get() = Binary.readLTriad(this.get(3))
 
     fun putLTriad(triad: Int) {
-        this.put(Binary.Companion.writeLTriad(triad))
+        this.put(Binary.writeLTriad(triad))
     }
 
     val boolean: Boolean
@@ -199,7 +198,7 @@ class BinaryStream {
     }
 
     val byte: Byte
-        get() = (buffer!![offset++].toInt() and 0xff).toByte()
+        get() = (buffer[offset++].toInt() and 0xff).toByte()
 
     fun putByte(b: Byte) {
         this.put(byteArrayOf(b))
@@ -280,7 +279,7 @@ class BinaryStream {
         val deque = ArrayDeque<T>()
         val count = unsignedVarInt.toInt()
         for (i in 0..<count) {
-            deque.add(function.apply(this))
+            deque.add(function.apply(this)!!)
         }
         return deque.toArray(java.lang.reflect.Array.newInstance(clazz, 0) as Array<T>)
     }

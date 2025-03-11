@@ -5,9 +5,9 @@ import eu.okaeri.configs.postprocessor.ConfigContextManipulator
 import eu.okaeri.configs.postprocessor.ConfigLineFilter
 import eu.okaeri.configs.postprocessor.ConfigLineInfo
 import eu.okaeri.configs.postprocessor.ConfigSectionWalker
-import lombok.Cleanup
-import lombok.Data
-import lombok.SneakyThrows
+
+
+
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -205,7 +205,7 @@ class TrConfigPostprocessor {
 
             val newLines: MutableList<String> = ArrayList()
             for (line in strings) {
-                val trLine = Server.getInstance().language.tr(line)
+                val trLine = Server.instance.baseLang.tr(line)
                 var prefix = if (trLine.startsWith(commentPrefix.trim { it <= ' ' })) "" else commentPrefix
                 val result = (if (trLine.isEmpty()) "" else prefix) + trLine
 

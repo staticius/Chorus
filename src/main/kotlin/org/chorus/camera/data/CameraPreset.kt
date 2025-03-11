@@ -10,8 +10,8 @@ import org.chorus.network.protocol.UpdateSoftEnumPacket
 import org.chorus.network.protocol.types.camera.CameraAudioListener
 import org.chorus.network.protocol.types.camera.aimassist.CameraPresetAimAssist
 import org.chorus.utils.OptionalValue
-import lombok.Builder
-import lombok.Getter
+
+
 import java.util.*
 import java.util.function.Consumer
 
@@ -118,7 +118,7 @@ class CameraPreset(
             for (preset in presets) {
                 preset.id = id++
             }
-            Server.getInstance().onlinePlayers.values.forEach(Consumer { obj: Player -> obj.sendCameraPresets() })
+            Server.instance.onlinePlayers.values.forEach(Consumer { obj: Player -> obj.sendCameraPresets() })
         }
 
         val FIRST_PERSON: CameraPreset = CameraPreset.builder()

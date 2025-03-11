@@ -3,7 +3,7 @@ package org.chorus.dialog.response
 import org.chorus.dialog.element.ElementDialogButton
 import org.chorus.dialog.window.FormWindowDialog
 import org.chorus.network.protocol.NPCRequestPacket
-import lombok.Getter
+
 
 
 class FormResponseDialog(packet: NPCRequestPacket, dialog: FormWindowDialog) {

@@ -12,7 +12,7 @@ open class BlockExposedCutCopper @JvmOverloads constructor(blockstate: BlockStat
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(EXPOSED_CUT_COPPER)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.EXPOSED_CUT_COPPER)
+
     }
 }

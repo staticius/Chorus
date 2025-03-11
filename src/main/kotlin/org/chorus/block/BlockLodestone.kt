@@ -5,7 +5,7 @@ import org.chorus.blockentity.*
 import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
-import lombok.extern.slf4j.Slf4j
+
 import java.io.IOException
 
 /**
@@ -59,7 +59,7 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
 
         val trackingHandle: Int
         try {
-            trackingHandle = orCreateBlockEntity!!.requestTrackingHandler()
+            trackingHandle = getOrCreateBlockEntity()!!.requestTrackingHandler()
             compass.trackingHandle = trackingHandle
         } catch (e: Exception) {
             BlockLodestone.log.warn("Could not create a lodestone compass to {} for {}", locator, player.getName(), e)
@@ -83,7 +83,7 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
 
         if (added) {
             try {
-                level.server.getPositionTrackingService().startTracking(player, trackingHandle, false)
+                Server.instance.getPositionTrackingService().startTracking(player, trackingHandle, false)
             } catch (e: IOException) {
                 BlockLodestone.log.warn(
                     "Failed to make the player {} track {} at {}",
@@ -128,6 +128,6 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LODESTONE)
-            get() = Companion.field
+
     }
 }

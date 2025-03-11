@@ -13,11 +13,11 @@ class BlockGlowFrame @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            GLOW_FRAME,
+BlockID.GLOW_FRAME,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.ITEM_FRAME_MAP_BIT,
             CommonBlockProperties.ITEM_FRAME_PHOTO_BIT
         )
-            get() = Companion.field
+
     }
 }

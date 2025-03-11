@@ -95,7 +95,7 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState? = Compani
         }
 
     fun increaseStrength() {
-        orCreateBlockEntity.changePitch()
+        getOrCreateBlockEntity().changePitch()
     }
 
     val instrument: Instrument
@@ -240,6 +240,6 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NOTEBLOCK)
-            get() = Companion.field
+
     }
 }

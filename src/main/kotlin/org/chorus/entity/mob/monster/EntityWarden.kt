@@ -89,10 +89,10 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                     for (player in entity.level!!.players.values) {
                         if (!player.isCreative && !player.isSpectator && entity.position.distanceSquared(player.position) <= 400) {
                             var effect =
-                                player.getEffect(EffectType.Companion.DARKNESS)
+                                player.getEffect(EffectType.DARKNESS)
                             if (effect == null) {
                                 effect =
-                                    Effect.Companion.get(EffectType.Companion.DARKNESS)
+                                    Effect.get(EffectType.DARKNESS)
                                 effect.setDuration(260)
                                 player.addEffect(effect)
                                 continue
@@ -138,7 +138,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 Behavior(
                     WardenMeleeAttackExecutor(
                         CoreMemoryTypes.Companion.ATTACK_TARGET,
-                        when (getServer()!!.difficulty) {
+                        when (Server.instance.difficulty) {
                             1 -> 16
                             2 -> 30
                             3 -> 45
@@ -277,11 +277,11 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
             this.memoryStorage!!.get<MutableMap<Entity?, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
         val attackTarget = this.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
         val origin = angerValueMap.getOrDefault(entity, 0)
-        var added = NukkitMath.clamp(origin + addition, 0, 150)
+        var added = ChorusMath.clamp(origin + addition, 0, 150)
         if (added == 0) angerValueMap.remove(entity)
         else if (added >= 80) {
             added += 20
-            added = NukkitMath.clamp(added, 0, 150)
+            added = ChorusMath.clamp(added, 0, 150)
             angerValueMap[entity] = added
             val changed = attackTarget == null ||
                     (entity is Player && attackTarget !is Player)
@@ -336,7 +336,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 ?: return 40
         val anger = this.memoryStorage!!.get<MutableMap<Entity, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
             .getOrDefault(target, 0)
-        return (40 - NukkitMath.clamp((anger / 80f), 0f, 1f) * 30f).toInt()
+        return (40 - ChorusMath.clamp((anger / 80f), 0f, 1f) * 30f).toInt()
     }
 
     override fun setOnFire(seconds: Int) {

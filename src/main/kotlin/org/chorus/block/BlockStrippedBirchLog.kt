@@ -15,6 +15,6 @@ class BlockStrippedBirchLog @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.STRIPPED_BIRCH_LOG, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

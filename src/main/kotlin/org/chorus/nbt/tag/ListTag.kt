@@ -5,7 +5,7 @@ import java.util.function.Consumer
 import java.util.stream.Collectors
 import kotlin.math.max
 
-class ListTag<T : Tag?> : Tag {
+class ListTag<T : Tag<*>> : Tag<MutableList<T>> {
     private var list: MutableList<T> = ArrayList()
 
     var type: Byte = 0
@@ -29,7 +29,7 @@ class ListTag<T : Tag?> : Tag {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_List
+        get() = Tag.Companion.TAG_LIST
 
     override fun toString(): String {
         val joiner = StringJoiner(",\n\t")
@@ -39,7 +39,7 @@ class ListTag<T : Tag?> : Tag {
 
     override fun toSNBT(): String {
         return "[" + list.stream()
-            .map { obj: T -> obj!!.toSNBT() }
+            .map { obj: T -> obj.toSNBT() }
             .collect(Collectors.joining(",")) + "]"
     }
 
@@ -52,7 +52,7 @@ class ListTag<T : Tag?> : Tag {
             val joiner1 = StringJoiner(",\n$addSpace")
             list.forEach(Consumer { tag: T ->
                 joiner1.add(
-                    tag!!.toSNBT(space).replace(
+                    tag.toSNBT(space).replace(
                         "\n", """
      
      $addSpace
@@ -63,19 +63,19 @@ class ListTag<T : Tag?> : Tag {
             return "[\n$addSpace$joiner1\n]"
         } else {
             val joiner2 = StringJoiner(", ")
-            list.forEach(Consumer { tag: T -> joiner2.add(tag!!.toSNBT(space)) })
+            list.forEach(Consumer { tag: T -> joiner2.add(tag.toSNBT(space)) })
             return "[$joiner2]"
         }
     }
 
     fun add(tag: T): ListTag<T> {
-        type = tag.getId()
+        type = tag.id
         list.add(tag)
         return this
     }
 
     fun add(index: Int, tag: T): ListTag<T> {
-        type = tag.getId()
+        type = tag.id
 
         if (index >= list.size) {
             list.add(index, tag)
@@ -85,11 +85,11 @@ class ListTag<T : Tag?> : Tag {
         return this
     }
 
-    override fun parseValue(): List<Any?> {
-        val value: MutableList<Any?> = ArrayList(list.size)
+    override fun parseValue(): MutableList<T> {
+        val value: MutableList<T> = ArrayList(list.size)
 
         for (t in this.list) {
-            value.add(t!!.parseValue())
+            value.add(t.parseValue() as T)
         }
 
         return value
@@ -121,19 +121,19 @@ class ListTag<T : Tag?> : Tag {
         return list.size
     }
 
-    override fun copy(): Tag {
-        val res = ListTag<T?>()
+    override fun copy(): Tag<MutableList<T>> {
+        val res = ListTag<T>()
         res.type = type
         for (t in list) {
-            val copy: T? = t!!.copy() as T
+            val copy: T = t.copy() as T
             res.list.add(copy)
         }
         return res
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (super.equals(obj)) {
-            val o = obj as ListTag<*>
+    override fun equals(other: Any?): Boolean {
+        if (super.equals(other)) {
+            val o = other as ListTag<*>
             if (type == o.type) {
                 return list == o.list
             }

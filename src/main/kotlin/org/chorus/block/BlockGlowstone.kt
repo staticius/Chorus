@@ -45,7 +45,7 @@ class BlockGlowstone : BlockTransparent {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GLOWSTONE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GLOWSTONE)
+
     }
 }

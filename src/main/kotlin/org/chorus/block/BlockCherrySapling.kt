@@ -59,7 +59,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
         val generate: Boolean = objectCherryTree.generate(blockManager, RandomSourceProvider.create(), this.position)
         if (generate) {
             val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return
             }
@@ -146,7 +146,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
         get() = true
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHERRY_SAPLING, CommonBlockProperties.AGE_BIT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHERRY_SAPLING, CommonBlockProperties.AGE_BIT)
+
     }
 }

@@ -70,12 +70,12 @@ class PiglinTradeExecutor : EntityControl, IBehaviorExecutor {
             } else if (random < 21) {
                 item = Item.get(
                     Item.SPLASH_POTION,
-                    EffectType.Companion.FIRE_RESISTANCE.id
+                    EffectType.FIRE_RESISTANCE.id
                 )
             } else if (random < 29) {
                 item = Item.get(
                     Item.POTION,
-                    EffectType.Companion.FIRE_RESISTANCE.id
+                    EffectType.FIRE_RESISTANCE.id
                 )
             } else if (random < 39) {
                 item = Item.get(Item.POTION)

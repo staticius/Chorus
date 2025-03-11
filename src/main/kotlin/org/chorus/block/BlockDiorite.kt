@@ -21,7 +21,7 @@ class BlockDiorite @JvmOverloads constructor(blockstate: BlockState? = Companion
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DIORITE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DIORITE)
+
     }
 }

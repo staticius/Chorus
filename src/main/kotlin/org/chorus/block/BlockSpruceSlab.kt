@@ -10,6 +10,6 @@ class BlockSpruceSlab(blockstate: BlockState?) : BlockWoodenSlab(blockstate, Blo
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SPRUCE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

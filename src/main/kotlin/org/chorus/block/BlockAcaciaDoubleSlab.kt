@@ -7,13 +7,15 @@ class BlockAcaciaDoubleSlab(blockstate: BlockState?) : BlockDoubleWoodenSlab(blo
         return "Acacia"
     }
 
-    override fun getSingleSlab(): BlockState {
-        return BlockAcaciaSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab(): BlockState? {
+        return Companion.properties.defaultState
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(ACACIA_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.ACACIA_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

@@ -24,7 +24,7 @@ class BlockDiamondBlock @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DIAMOND_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DIAMOND_BLOCK)
+
     }
 }

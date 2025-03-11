@@ -12,17 +12,15 @@ import org.chorus.item.*
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.NukkitMath
+import org.chorus.math.ChorusMath
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
 import java.util.concurrent.*
 import java.util.function.Predicate
 
 abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), IHuman {
-    @JvmField
-    protected var inventory: HumanInventory? = null
+    override var inventory: HumanInventory? = null
     protected var enderChestInventory: HumanEnderChestInventory? = null
-    @JvmField
     protected var offhandInventory: HumanOffHandInventory? = null
 
     override fun getInventory(): HumanInventory {
@@ -79,7 +77,7 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
 
             source.setDamage(
                 -source.getFinalDamage() * Math.min(
-                    NukkitMath.ceilFloat(
+                    ChorusMath.ceilFloat(
                         Math.min(
                             epf,
                             25

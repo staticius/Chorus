@@ -1,6 +1,6 @@
 package org.chorus.block.property.enums
 
-import lombok.Getter
+
 
 enum class WoodType(@field:Getter override val name: String) {
     OAK("Oak"),

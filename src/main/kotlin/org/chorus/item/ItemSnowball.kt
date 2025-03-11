@@ -1,8 +1,6 @@
 package org.chorus.item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemSnowball @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
     ProjectileItem(ItemID.Companion.SNOWBALL, 0, count, "Snowball") {
     override val maxStackSize: Int

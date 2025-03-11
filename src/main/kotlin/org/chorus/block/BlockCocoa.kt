@@ -92,7 +92,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
         fz: Double,
         player: Player?
     ): Boolean {
-        if (target is BlockJungleLog || target is BlockWood && target.woodType == WoodType.JUNGLE) {
+        if (target is BlockJungleLog || target is BlockWood && target.getWoodType() == WoodType.JUNGLE) {
             if (face != BlockFace.DOWN && face != BlockFace.UP) {
                 setPropertyValue<Int, IntPropertyType>(
                     CommonBlockProperties.DIRECTION,
@@ -109,7 +109,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val side =
                 this.getSide(fromIndex(faces2[getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)])!!)
-            if (!((side is BlockWood && side.woodType == WoodType.JUNGLE) || side is BlockJungleLog)) {
+            if (!((side is BlockWood && side.getWoodType() == WoodType.JUNGLE) || side is BlockJungleLog)) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
@@ -232,8 +232,8 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(COCOA, CommonBlockProperties.AGE_3, CommonBlockProperties.DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.COCOA, CommonBlockProperties.AGE_3, CommonBlockProperties.DIRECTION)
+
 
         protected val EAST: Array<AxisAlignedBB> = arrayOf<SimpleAxisAlignedBB>(
             SimpleAxisAlignedBB(0.6875, 0.4375, 0.375, 0.9375, 0.75, 0.625),

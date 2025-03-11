@@ -4,7 +4,7 @@ import org.chorus.PlayerHandle
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.SetLocalPlayerAsInitializedPacket
-import lombok.extern.slf4j.Slf4j
+
 
 
 class SetLocalPlayerAsInitializedPacketProcessor : DataPacketProcessor<SetLocalPlayerAsInitializedPacket>() {

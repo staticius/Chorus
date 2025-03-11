@@ -13,7 +13,7 @@ abstract class GenerateStage {
     abstract fun name(): String
 
     open val executor: Executor
-        get() = Server.getInstance().computeThreadPool
+        get() = Server.instance.computeThreadPool
 
     private fun next(stage: GenerateStage) {
         if (this.nextStage == null) {

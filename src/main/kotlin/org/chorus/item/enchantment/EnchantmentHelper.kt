@@ -5,7 +5,7 @@ import org.chorus.entity.effect.PotionType.equals
 import org.chorus.item.*
 import org.chorus.level.Locator
 import org.chorus.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Collectors
 import kotlin.math.abs
@@ -24,7 +24,7 @@ object EnchantmentHelper {
             return emptyList()
         }
 
-        val random = NukkitRandom(seed.toLong())
+        val random = ChorusRandom(seed.toLong())
 
         val bookshelfCount = countBookshelves(tablePos)
         val baseRequiredLevel = random.nextRange(1, 8) + (bookshelfCount shr 1) + random.nextRange(0, bookshelfCount)
@@ -95,7 +95,7 @@ object EnchantmentHelper {
     }
 
     private fun createEnchantOption(
-        random: NukkitRandom,
+        random: ChorusRandom,
         inputItem: Item,
         requiredXpLevel: Int,
         entry: Int
@@ -167,7 +167,7 @@ object EnchantmentHelper {
         return list
     }
 
-    private fun getRandomWeightedEnchantment(random: NukkitRandom, enchantments: List<Enchantment>): Enchantment? {
+    private fun getRandomWeightedEnchantment(random: ChorusRandom, enchantments: List<Enchantment>): Enchantment? {
         if (enchantments.isEmpty()) {
             return null
         }
@@ -190,7 +190,7 @@ object EnchantmentHelper {
         return result
     }
 
-    private fun getRandomOptionName(random: NukkitRandom): String {
+    private fun getRandomOptionName(random: ChorusRandom): String {
         val name = StringBuilder()
         for (i in random.nextBoundedInt(15 - 5 + 1) + 5 downTo 1) {
             name.append((random.nextBoundedInt('z'.code - 'a'.code + 1) + 'a'.code).toChar())

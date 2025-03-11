@@ -6,5 +6,5 @@ package org.chorus.block
  * which can make naturally generated leaves not decay.
  */
 interface IBlockWood {
-    val strippedState: BlockState?
+    fun getStrippedState(): BlockState
 }

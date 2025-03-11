@@ -3,7 +3,7 @@ package org.chorus.utils
 import org.chorus.entity.data.EntityDataFormat
 import org.chorus.entity.data.EntityDataMap
 import org.chorus.math.*
-import org.chorus.math.NukkitMath.round
+import org.chorus.math.ChorusMath.round
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import java.io.*
@@ -13,9 +13,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class Binary {
     fun unsignShort(value: Int): Int {
         return value and 0xffff
@@ -104,7 +102,7 @@ class Binary {
             return appendBytes(writeLLong(uuid.mostSignificantBits), *writeLLong(uuid.leastSignificantBits))
         }
 
-        fun writeEntityData(entityDataMap: EntityDataMap): ByteArray? {
+        fun writeEntityData(entityDataMap: EntityDataMap): ByteArray {
             val stream = BinaryStream()
             stream.putUnsignedVarInt(entityDataMap.size().toLong()) //size
             for ((key, data) in entityDataMap) {

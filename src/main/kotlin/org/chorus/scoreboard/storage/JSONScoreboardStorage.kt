@@ -11,7 +11,7 @@ import org.chorus.scoreboard.scorer.FakeScorer
 import org.chorus.scoreboard.scorer.IScorer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.utils.Config
-import lombok.Getter
+
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path

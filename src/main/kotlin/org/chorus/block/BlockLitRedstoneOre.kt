@@ -20,6 +20,6 @@ class BlockLitRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIT_REDSTONE_ORE)
-            get() = Companion.field
+
     }
 }

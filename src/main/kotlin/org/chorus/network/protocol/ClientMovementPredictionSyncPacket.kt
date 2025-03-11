@@ -4,7 +4,7 @@ import org.chorus.entity.data.EntityFlag
 import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-import lombok.*
+
 import java.math.BigInteger
 
 

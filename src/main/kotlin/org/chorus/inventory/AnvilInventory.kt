@@ -6,9 +6,7 @@ import org.chorus.item.Item
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import com.google.common.collect.BiMap
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class AnvilInventory(anvil: BlockAnvil?) //2 INPUT, 1 OUTPUT
     : ContainerInventory(anvil, InventoryType.ANVIL, 3), CraftTypeInventory, SoleInventory {
     override fun networkSlotMap(): BiMap<Int, Int>? {

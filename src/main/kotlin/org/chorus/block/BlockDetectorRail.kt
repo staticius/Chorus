@@ -2,15 +2,12 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.entity.item.EntityMinecartAbstract
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
 import org.chorus.inventory.InventoryHolder
 import org.chorus.math.BlockFace
 import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.utils.OptionalBoolean
-import org.chorus.utils.Rail
-import org.chorus.utils.Rail.Orientation.Companion.byMetadata
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
@@ -27,16 +24,19 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     override val comparatorInputOverride: Int
-        get() = if (findMinecart() is InventoryHolder) calculateRedstone(
-            inventoryHolder.inventory
-        ) else 0
+        get() {
+            val mc = findMinecart()
+            return if (mc is InventoryHolder) calculateRedstone(
+                mc.inventory
+            ) else 0
+        }
 
-    override fun getWeakPower(side: BlockFace?): Int {
-        return if (isActive) 15 else 0
+    override fun getWeakPower(face: BlockFace?): Int {
+        return if (isActive()) 15 else 0
     }
 
     override fun getStrongPower(side: BlockFace?): Int {
-        return if (isActive) (if (side == BlockFace.UP) 15 else 0) else 0
+        return if (isActive()) (if (side == BlockFace.UP) 15 else 0) else 0
     }
 
     fun findMinecart(): EntityMinecartAbstract? {
@@ -56,9 +56,9 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     fun updateState(powered: Boolean) {
-        val wasPowered = isActive
+        val wasPowered = isActive()
         if (powered != wasPowered) {
-            this.isActive = powered
+            this.setIsActive(powered)
             updateAroundRedstone()
             updateAroundRedstone(getSide(BlockFace.DOWN)!!)
         }
@@ -82,22 +82,9 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState? = Comp
         setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.RAIL_DATA_BIT, active)
     }
 
-    /**
-     * Changes the rail direction.
-     *
-     * @param orientation The new orientation
-     */
-    override fun setRailDirection(orientation: Rail.Orientation) {
-        setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RAIL_DIRECTION_6, orientation.metadata())
-    }
-
-    override fun getOrientation(): Rail.Orientation? {
-        return byMetadata(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RAIL_DIRECTION_6))
-    }
-
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DETECTOR_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
-            get() = Companion.field
+            BlockProperties(BlockID.DETECTOR_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
+
     }
 }

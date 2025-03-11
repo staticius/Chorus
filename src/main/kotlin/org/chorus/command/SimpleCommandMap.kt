@@ -11,7 +11,7 @@ import org.chorus.plugin.InternalPlugin
 import org.chorus.utils.TextFormat
 import org.chorus.utils.Utils
 import io.netty.util.internal.EmptyArrays
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import java.util.function.Function
 import java.util.stream.Collectors
@@ -26,9 +26,7 @@ import kotlin.collections.component2
 import kotlin.collections.iterator
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class SimpleCommandMap(private val server: Server) : CommandMap {
     protected val knownCommands: MutableMap<String?, Command> = HashMap()
@@ -159,7 +157,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
 
     override fun registerSimpleCommands(`object`: Any) {
         for (method in `object`.javaClass.declaredMethods) {
-            val def = method.getAnnotation(cn.nukkit.command.simple.Command::class.java)
+            val def = method.getAnnotation(org.chorus.command.simple.Command::class.java)
             if (def != null) {
                 val sc = SimpleCommand(`object`, method, def.name, def.description, def.usageMessage, def.aliases)
 
@@ -314,7 +312,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
             }
         } catch (e: Exception) {
             SimpleCommandMap.log.error(
-                server.language.tr(
+                server.baseLang.tr(
                     "nukkit.command.exception",
                     cmdLine,
                     target.toString(),

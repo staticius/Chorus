@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types.itemstack.response
 
 import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import lombok.Value
+
 
 /**
  * ContainerEntry holds information on what slots in a container have what item stack in them.

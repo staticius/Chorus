@@ -7,6 +7,6 @@ class BlockRedSand : BlockSand {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RED_SAND)
-            get() = Companion.field
+
     }
 }

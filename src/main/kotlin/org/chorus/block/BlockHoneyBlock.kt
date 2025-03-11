@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.entity.Entity
-import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.level.Sound
@@ -113,7 +113,7 @@ class BlockHoneyBlock @JvmOverloads constructor(blockstate: BlockState? = Compan
     companion object {
         private val RANDOM = Random()
 
-        val properties: BlockProperties = BlockProperties(HONEY_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.HONEY_BLOCK)
+
     }
 }

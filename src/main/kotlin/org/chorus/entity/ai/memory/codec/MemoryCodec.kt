@@ -2,7 +2,7 @@ package org.chorus.entity.ai.memory.codec
 
 import org.chorus.entity.mob.EntityMob
 import org.chorus.nbt.tag.CompoundTag
-import lombok.Getter
+
 import java.util.function.BiConsumer
 import java.util.function.Function
 

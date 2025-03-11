@@ -33,6 +33,6 @@ class BlockTuffDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Co
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.TUFF_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

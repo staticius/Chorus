@@ -3,7 +3,7 @@ package org.chorus.level.generator.`object`
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.Vector3
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 
 class ObjectPaleOakTree : TreeGenerator() {
     /**
@@ -181,7 +181,7 @@ class ObjectPaleOakTree : TreeGenerator() {
         val material = worldIn.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
         if (material == AIR) {
             worldIn.setBlockStateAt(blockpos, PALE_OAK_LEAVES)
-            val random = NukkitRandom(worldIn.seed + x + y + z)
+            val random = ChorusRandom(worldIn.seed + x + y + z)
             if (random.nextInt(2) == 0) {
                 val depth = random.nextInt(1, 6)
                 for (i in 1..<depth) {

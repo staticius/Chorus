@@ -15,6 +15,6 @@ open class BlockResinBricks @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RESIN_BRICKS)
-            get() = Companion.field
+
     }
 }

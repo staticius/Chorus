@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
 class BlockBlackstoneSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockSlab(blockstate, BLACKSTONE_DOUBLE_SLAB) {
+    BlockSlab(blockstate, BlockID.BLACKSTONE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Blackstone"
     }
@@ -23,9 +23,11 @@ class BlockBlackstoneSlab @JvmOverloads constructor(blockstate: BlockState? = Co
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BLACKSTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.BLACKSTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

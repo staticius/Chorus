@@ -6,11 +6,11 @@ import org.chorus.item.*
 class BlockAcaciaWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockWallSign(blockState) {
     override fun getWallSignId(): String {
-        return ACACIA_WALL_SIGN
+        return BlockID.ACACIA_WALL_SIGN
     }
 
     override fun getStandingSignId(): String {
-        return ACACIA_STANDING_SIGN
+        return BlockID.ACACIA_STANDING_SIGN
     }
 
     override val name: String
@@ -20,8 +20,10 @@ class BlockAcaciaWallSign @JvmOverloads constructor(blockState: BlockState? = Co
         return ItemAcaciaSign()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(ACACIA_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ACACIA_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
     }
 }

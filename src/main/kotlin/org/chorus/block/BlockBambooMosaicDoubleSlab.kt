@@ -10,7 +10,7 @@ class BlockBambooMosaicDoubleSlab @JvmOverloads constructor(blockstate: BlockSta
     }
 
     override fun getSingleSlab(): BlockState {
-        return BlockBambooMosaicSlab.Companion.PROPERTIES.getDefaultState()
+        return BlockBambooMosaicSlab.properties.defaultState
     }
 
     override val burnChance: Int
@@ -22,9 +22,11 @@ class BlockBambooMosaicDoubleSlab @JvmOverloads constructor(blockstate: BlockSta
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BAMBOO_MOSAIC_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.BAMBOO_MOSAIC_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

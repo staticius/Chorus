@@ -18,7 +18,7 @@ class BlockDarkoakWallSign @JvmOverloads constructor(blockState: BlockState? = C
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DARKOAK_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DARKOAK_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+
     }
 }

@@ -2,7 +2,6 @@ package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
 import org.chorus.blockentity.BlockEntityItemFrame
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.player.PlayerMapInfoRequestEvent
 import org.chorus.item.*
 import org.chorus.network.process.DataPacketProcessor
@@ -10,7 +9,7 @@ import org.chorus.network.protocol.MapInfoRequestPacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.plugin.InternalPlugin
 import org.chorus.scheduler.AsyncTask
-import lombok.extern.slf4j.Slf4j
+
 
 
 class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
@@ -48,7 +47,7 @@ class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
 
         if (mapItem != null) {
             val event: PlayerMapInfoRequestEvent
-            player.getServer().getPluginManager()
+            Server.instance.pluginManager
                 .callEvent(PlayerMapInfoRequestEvent(player, mapItem).also { event = it })
 
             if (!event.isCancelled) {

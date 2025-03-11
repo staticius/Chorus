@@ -10,14 +10,16 @@ class BlockAcaciaHangingSign : BlockHangingSign {
     override val name: String
         get() = "Acacia Hanging Sign"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            ACACIA_HANGING_SIGN,
+            BlockID.ACACIA_HANGING_SIGN,
             CommonBlockProperties.ATTACHED_BIT,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.GROUND_SIGN_DIRECTION,
             CommonBlockProperties.HANGING
         )
-            get() = Companion.field
     }
 }

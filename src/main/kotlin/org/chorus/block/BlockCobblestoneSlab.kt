@@ -24,7 +24,7 @@ class BlockCobblestoneSlab(blockState: BlockState?) : BlockSlab(blockState, COBB
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(COBBLESTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.COBBLESTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

@@ -242,7 +242,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
             motion.y += sqrt(shootingEntity.position.distance(pos)) * 0.08
 
             val event: PlayerFishEvent = PlayerFishEvent(shootingEntity, this, item, experience, motion)
-            getServer()!!.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
 
             if (!event.isCancelled) {
                 val itemEntity: EntityItem? = Entity.Companion.createEntity(
@@ -303,7 +303,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
 
 
     override fun onCollideWithEntity(entity: Entity) {
-        server!!.pluginManager.callEvent(ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity)))
+        Server.instance.pluginManager.callEvent(ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity)))
         val damage: Float = getResultDamage().toFloat()
 
         val ev: EntityDamageEvent

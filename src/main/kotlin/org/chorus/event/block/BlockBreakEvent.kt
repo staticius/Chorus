@@ -7,9 +7,7 @@ import org.chorus.event.HandlerList
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockBreakEvent(
     val player: Player?,
     block: Block,

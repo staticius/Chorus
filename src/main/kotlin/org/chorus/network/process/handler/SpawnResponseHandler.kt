@@ -12,7 +12,7 @@ import org.chorus.registry.ItemRegistry
 import org.chorus.registry.ItemRuntimeIdRegistry
 import org.chorus.registry.Registries
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-import lombok.extern.slf4j.Slf4j
+
 import java.util.function.Consumer
 import kotlin.math.max
 import kotlin.math.min
@@ -20,7 +20,7 @@ import kotlin.math.min
 
 class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
     init {
-        val server: Server = player.getServer()
+        val server: Server = Server.instance
 
         this.startGame()
 
@@ -115,7 +115,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
     }
 
     private fun startGame() {
-        val server: Server = player.getServer()
+        val server: Server = Server.instance
         val startPk = StartGamePacket()
 
         startPk.entityUniqueId = player!!.getId()

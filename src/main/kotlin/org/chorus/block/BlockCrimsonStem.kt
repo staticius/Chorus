@@ -9,7 +9,7 @@ class BlockCrimsonStem @JvmOverloads constructor(blockstate: BlockState? = Compa
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRIMSON_STEM, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_STEM, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }

@@ -26,8 +26,10 @@ class BlockAmethystBlock @JvmOverloads constructor(blockstate: BlockState? = Com
     override val isLavaResistant: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(AMETHYST_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.AMETHYST_BLOCK)
     }
 }

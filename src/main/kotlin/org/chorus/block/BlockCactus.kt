@@ -184,10 +184,10 @@ class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.prope
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            CACTUS,
+BlockID.CACTUS,
             CommonBlockProperties.AGE_16
         )
-            get() = Companion.field
+
 
         val maxAge: Int
             get() = CommonBlockProperties.AGE_16.getMax()

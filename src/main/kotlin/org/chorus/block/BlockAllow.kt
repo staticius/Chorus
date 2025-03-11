@@ -60,8 +60,10 @@ class BlockAllow : BlockSolid {
         return Item.EMPTY_ARRAY
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(ALLOW)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ALLOW)
     }
 }

@@ -3,9 +3,7 @@ package org.chorus.permission
 import org.chorus.plugin.Plugin
 import org.chorus.utils.PluginException
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PermissionAttachment(plugin: Plugin, permissible: Permissible?) {
     var removalCallback: PermissionRemovedExecutor? = null
 

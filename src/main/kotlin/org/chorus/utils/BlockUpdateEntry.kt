@@ -4,9 +4,7 @@ import org.chorus.block.Block
 import org.chorus.math.Vector3
 import java.util.concurrent.atomic.AtomicLong
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockUpdateEntry : Comparable<BlockUpdateEntry> {
     var priority: Int = 0
     var delay: Long = 0

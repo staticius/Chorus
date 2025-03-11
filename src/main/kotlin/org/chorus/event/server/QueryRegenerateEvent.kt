@@ -11,9 +11,7 @@ import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufAllocator
 import java.nio.charset.StandardCharsets
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class QueryRegenerateEvent @JvmOverloads constructor(server: Server, var timeout: Int = 5) :
     ServerEvent() {
     var serverName: String = server.motd

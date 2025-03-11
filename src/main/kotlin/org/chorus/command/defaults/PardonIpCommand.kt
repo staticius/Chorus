@@ -10,9 +10,7 @@ import java.util.regex.Pattern
 import kotlin.collections.Map
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PardonIpCommand(name: String) : VanillaCommand(name, "unban an IP") {
     init {
         this.permission = "nukkit.command.unban.ip"

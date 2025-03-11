@@ -16,6 +16,6 @@ class BlockJungleStandingSign @JvmOverloads constructor(blockstate: BlockState? 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.Companion.JUNGLE_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+
     }
 }

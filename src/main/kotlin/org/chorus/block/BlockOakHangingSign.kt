@@ -10,12 +10,12 @@ class BlockOakHangingSign @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.OAK_HANGING_SIGN,
+BlockID.BlockID.OAK_HANGING_SIGN,
             CommonBlockProperties.ATTACHED_BIT,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.GROUND_SIGN_DIRECTION,
             CommonBlockProperties.HANGING
         )
-            get() = Companion.field
+
     }
 }

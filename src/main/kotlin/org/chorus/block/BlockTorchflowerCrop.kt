@@ -120,6 +120,6 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TORCHFLOWER_CROP, CommonBlockProperties.GROWTH)
-            get() = Companion.field
+
     }
 }

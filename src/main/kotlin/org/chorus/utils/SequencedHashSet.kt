@@ -1,7 +1,5 @@
 package org.chorus.utils
 
-import org.chorus.entity.data.EntityDataMap.size
-import org.chorus.nbt.tag.ListTag.size
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap
@@ -12,12 +10,12 @@ class SequencedHashSet<E> : MutableList<E> {
     private val inverse: Int2ObjectMap<E> = Int2ObjectLinkedOpenHashMap()
     private var index = 0
 
-    override fun indexOf(o: Any): Int {
-        return map.getInt(o)
+    override fun indexOf(element: E): Int {
+        return map.getInt(element)
     }
 
-    override fun lastIndexOf(o: Any): Int {
-        return map.getInt(o)
+    override fun lastIndexOf(element: E): Int {
+        return map.getInt(element)
     }
 
     override fun listIterator(): MutableListIterator<E> {
@@ -32,46 +30,39 @@ class SequencedHashSet<E> : MutableList<E> {
         throw UnsupportedOperationException()
     }
 
-    override fun size(): Int {
-        return map.size()
-    }
+    override val size: Int
+        get() {
+            return map.size
+        }
 
     override fun isEmpty(): Boolean {
         return map.isEmpty()
     }
 
-    override fun contains(o: Any): Boolean {
-        return map.containsKey(o)
+    override fun contains(element: E): Boolean {
+        return map.containsKey(element)
     }
 
     override fun iterator(): MutableIterator<E> {
         return map.keys.iterator()
     }
 
-    override fun toArray(): Array<Any> {
-        return map.keys.toTypedArray()
-    }
-
-    override fun <T> toArray(a: Array<T>): Array<T> {
-        return map.keys.toArray(a)
-    }
-
-    override fun add(e: E): Boolean {
-        if (!map.containsKey(e)) {
+    override fun add(element: E): Boolean {
+        if (!map.containsKey(element)) {
             val index = index++
-            map.put(e, index)
-            inverse.put(index, e)
+            map.put(element, index)
+            inverse.put(index, element)
             return true
         }
         return false
     }
 
-    override fun remove(o: Any): Boolean {
+    override fun remove(element: E): Boolean {
         throw UnsupportedOperationException()
     }
 
-    override fun containsAll(c: Collection<*>): Boolean {
-        return map.keys.containsAll(c)
+    override fun containsAll(elements: Collection<E>): Boolean {
+        return map.keys.containsAll(elements)
     }
 
     override fun addAll(c: Collection<E>): Boolean {
@@ -85,11 +76,11 @@ class SequencedHashSet<E> : MutableList<E> {
         throw UnsupportedOperationException()
     }
 
-    override fun retainAll(c: Collection<*>?): Boolean {
+    override fun retainAll(elements: Collection<E>): Boolean {
         throw UnsupportedOperationException()
     }
 
-    override fun removeAll(c: Collection<*>?): Boolean {
+    override fun removeAll(elements: Collection<E>): Boolean {
         throw UnsupportedOperationException()
     }
 
@@ -109,7 +100,7 @@ class SequencedHashSet<E> : MutableList<E> {
         throw UnsupportedOperationException()
     }
 
-    override fun remove(index: Int): E {
+    override fun removeAt(index: Int): E {
         throw UnsupportedOperationException()
     }
 

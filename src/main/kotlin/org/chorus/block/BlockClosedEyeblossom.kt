@@ -6,7 +6,7 @@ open class BlockClosedEyeblossom : BlockFlower {
     constructor(blockstate: BlockState?) : super(blockstate)
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CLOSED_EYEBLOSSOM)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CLOSED_EYEBLOSSOM)
+
     }
 }

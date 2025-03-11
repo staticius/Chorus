@@ -8,10 +8,7 @@ import org.apache.commons.rng.simple.RandomSource
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
-class NukkitRandom : RandomSourceProvider {
+class ChorusRandom : RandomSourceProvider {
     val provider: RestorableUniformRandomProvider
     val sampler: ContinuousSampler
 
@@ -32,7 +29,7 @@ class NukkitRandom : RandomSourceProvider {
     }
 
     override fun fork(): RandomSourceProvider {
-        return NukkitRandom(nextLong())
+        return ChorusRandom(nextLong())
     }
 
     override fun nextInt(min: Int, max: Int): Int {

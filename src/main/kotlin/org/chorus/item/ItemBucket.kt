@@ -3,7 +3,6 @@ package org.chorus.item
 import org.chorus.Player
 import org.chorus.block.*
 import org.chorus.entity.Entity.Companion.createEntity
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.EntityID
 import org.chorus.entity.EntityVariant
 import org.chorus.event.player.PlayerBucketEmptyEvent
@@ -19,9 +18,7 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.network.protocol.UpdateBlockPacket
 import org.chorus.utils.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class ItemBucket : Item {
     @JvmOverloads
     constructor(meta: Int = 0, count: Int = 1) : super(ItemID.Companion.BUCKET, meta, count)
@@ -183,7 +180,7 @@ open class ItemBucket : Item {
                     get(ItemID.Companion.BUCKET, 8, 1)
                 }
                 val ev: PlayerBucketFillEvent
-                player.getServer().getPluginManager().callEvent(
+                Server.instance.pluginManager.callEvent(
                     PlayerBucketFillEvent(
                         player, block, face, target,
                         this, result
@@ -267,7 +264,7 @@ open class ItemBucket : Item {
                 nether = !isLava
             }
 
-            player.getServer().getPluginManager().callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
 
             if (!ev.isCancelled) {
                 player.level!!.setBlock(placementBlock.position, placementBlock.layer, targetBlock, true, true)

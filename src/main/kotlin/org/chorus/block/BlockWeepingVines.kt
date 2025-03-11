@@ -24,6 +24,6 @@ class BlockWeepingVines @JvmOverloads constructor(blockstate: BlockState? = Comp
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WEEPING_VINES, CommonBlockProperties.WEEPING_VINES_AGE)
-            get() = Companion.field
+
     }
 }

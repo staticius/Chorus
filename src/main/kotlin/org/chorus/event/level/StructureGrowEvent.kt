@@ -10,11 +10,11 @@ import java.util.*
  */
 class StructureGrowEvent(val block: Block, private val blocks: MutableList<Block>) :
     LevelEvent(Objects.requireNonNull(block.level)), Cancellable {
-    var blockList: List<Block>?
+    var blockList: List<Block>
         get() = this.blocks
         set(blocks) {
             this.blocks.clear()
-            if (blocks != null) this.blocks.addAll(blocks)
+            this.blocks.addAll(blocks)
         }
 
     companion object {

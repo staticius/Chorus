@@ -1,13 +1,12 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.PositionTrackingDBClientRequestPacket
 import org.chorus.network.protocol.PositionTrackingDBServerBroadcastPacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.positiontracking.PositionTracking
-import lombok.extern.slf4j.Slf4j
+
 import java.io.IOException
 
 
@@ -16,7 +15,7 @@ class PositionTrackingDBClientRequestProcessor : DataPacketProcessor<PositionTra
         val player = playerHandle.player
         try {
             val positionTracking: PositionTracking =
-                player.getServer().getPositionTrackingService().startTracking(player, pk.trackingId, true)
+                Server.instance.getPositionTrackingService().startTracking(player, pk.trackingId, true)
             if (positionTracking != null) {
                 return
             }

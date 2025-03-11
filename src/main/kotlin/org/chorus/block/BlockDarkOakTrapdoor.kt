@@ -9,11 +9,11 @@ class BlockDarkOakTrapdoor @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            DARK_OAK_TRAPDOOR,
+BlockID.DARK_OAK_TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-            get() = Companion.field
+
     }
 }

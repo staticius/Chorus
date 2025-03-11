@@ -2,9 +2,7 @@ package org.chorus.item.enchantment
 
 import org.chorus.item.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentEfficiency :
     Enchantment(Enchantment.Companion.ID_EFFICIENCY, "digging", Rarity.COMMON, EnchantmentType.DIGGER) {
     override fun getMinEnchantAbility(level: Int): Int {

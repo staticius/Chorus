@@ -44,7 +44,7 @@ import org.chorus.level.tickingarea.manager.SimpleTickingAreaManager
 import org.chorus.level.tickingarea.manager.TickingAreaManager
 import org.chorus.level.tickingarea.storage.JSONTickingAreaStorage
 import org.chorus.level.updater.block.BlockStateUpdaterBase
-import org.chorus.math.NukkitMath.round
+import org.chorus.math.ChorusMath.round
 import org.chorus.metadata.EntityMetadataStore
 import org.chorus.metadata.LevelMetadataStore
 import org.chorus.metadata.PlayerMetadataStore
@@ -105,8 +105,6 @@ import org.iq80.leveldb.DB
 import org.iq80.leveldb.Options
 import org.iq80.leveldb.impl.Iq80DBFactory
 import org.jetbrains.annotations.ApiStatus
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileReader
 import java.io.IOException
@@ -270,7 +268,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     lateinit var queryInformation: QueryRegenerateEvent
         private set
 
-    private val positionTrackingService: PositionTrackingService? = null
+    private var positionTrackingService: PositionTrackingService? = null
 
     /**
      * @return 获得所有游戏世界<br></br>Get all the game world
@@ -303,7 +301,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     lateinit var settings: ServerSettings
         private set
     private var watchdog: Watchdog? = null
-    private val playerDataDB: DB? = null
+    private lateinit var playerDataDB: DB
 
     lateinit var freezableArrayManager: FreezableArrayManager
         private set
@@ -311,9 +309,12 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     val enabledNetworkEncryption: Boolean = properties.get(ServerPropertiesKeys.NETWORK_ENCRYPTION, true)
 
     /**default levels */
-    private var defaultLevel: Level? = null
-    private var defaultNether: Level? = null
-    private var defaultEnd: Level? = null
+    var defaultLevel: Level? = null
+        private set
+    var defaultNether: Level? = null
+        private set
+    var defaultEnd: Level? = null
+        private set
 
     val allowNether: Boolean = properties.get(ServerPropertiesKeys.ALLOW_NETHER, true)
     val allowEnd: Boolean = properties.get(ServerPropertiesKeys.ALLOW_THE_END, true)
@@ -521,9 +522,10 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 this.unloadLevel(level, true)
                 while (level.isThreadRunning) Thread.sleep(1)
             }
-            if (positionTrackingService != null) {
+            val tempPositionTrackingService = positionTrackingService
+            if (tempPositionTrackingService != null) {
                 log.debug("Closing position tracking service")
-                positionTrackingService.close()
+                tempPositionTrackingService.close()
             }
 
             log.debug("Closing console")
@@ -1297,7 +1299,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      */
     fun lookupName(name: String): Optional<UUID> {
         val nameBytes = name.lowercase().toByteArray(StandardCharsets.UTF_8)
-        val uuidBytes = playerDataDB!![nameBytes] ?: return Optional.empty()
+        val uuidBytes = playerDataDB[nameBytes] ?: return Optional.empty()
 
         if (uuidBytes.size != 16) {
             log.warn("Invalid uuid in name lookup database detected! Removing")
@@ -1327,7 +1329,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         buffer.putLong(uniqueId.mostSignificantBits)
         buffer.putLong(uniqueId.leastSignificantBits)
         val array = buffer.array()
-        val bytes = playerDataDB!![array]
+        val bytes = playerDataDB[array]
         if (bytes == null) {
             playerDataDB.put(nameBytes, array)
         }
@@ -1343,8 +1345,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             return result
         }
 
-        return lookupName(name).map { uuid: UUID? -> OfflinePlayer(this, uuid) }
-            .orElse(OfflinePlayer(this, name))
+        return lookupName(name).map { uuid: UUID? -> OfflinePlayer(uuid) }
+            .orElse(OfflinePlayer(name))
     }
 
     /**
@@ -1363,7 +1365,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             return onlinePlayer.get()
         }
 
-        return OfflinePlayer(this, uuid)
+        return OfflinePlayer(uuid)
     }
 
     /**
@@ -1447,7 +1449,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 .putLong("firstPlayed", System.currentTimeMillis() / 1000)
                 .putLong("lastPlayed", System.currentTimeMillis() / 1000)
                 .putList(
-                    "Pos", ListTag<FloatTag?>()
+                    "Pos", ListTag<FloatTag>()
                         .add(FloatTag(spawn.position.x))
                         .add(FloatTag(spawn.position.y))
                         .add(FloatTag(spawn.position.z))
@@ -1457,13 +1459,13 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 .putCompound("Achievements", CompoundTag())
                 .putInt("playerGameType", this.gamemode)
                 .putList(
-                    "Motion", ListTag<FloatTag?>()
+                    "Motion", ListTag<FloatTag>()
                         .add(FloatTag(0f))
                         .add(FloatTag(0f))
                         .add(FloatTag(0f))
                 )
                 .putList(
-                    "Rotation", ListTag<FloatTag?>()
+                    "Rotation", ListTag<FloatTag>()
                         .add(FloatTag(0f))
                         .add(FloatTag(0f))
                 )
@@ -2227,8 +2229,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                     return false
                 }
                 level = Level(
-                    this, levelName, pathS, generators.size, provider,
-                    value
+                    levelName, pathS, generators.size, provider, value
                 )
             } catch (e: Exception) {
                 log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName1, e.message!!), e)
@@ -2292,7 +2293,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                     log.warn("level {} has already been loaded!", levelName)
                     continue
                 }
-                level = Level(this, levelName, path, levelConfig1.generators.size, provider, generatorConfig)
+                level = Level(levelName, path, levelConfig1.generators.size, provider, generatorConfig)
 
                 levels[level.id] = level
                 level.initLevel()
@@ -2620,9 +2621,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         }
     }
 
-    companion object {
-        private val log: Logger by lazy { LoggerFactory.getLogger(Server::class.java) }
-
+    companion object : Loggable {
         const val BROADCAST_CHANNEL_ADMINISTRATIVE: String = "nukkit.broadcast.admin"
         const val BROADCAST_CHANNEL_USERS: String = "nukkit.broadcast.user"
 

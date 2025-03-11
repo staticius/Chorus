@@ -30,7 +30,7 @@ class BlockEndStoneBrickSlab(blockState: BlockState?) : BlockSlab(blockState, EN
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(END_STONE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.END_STONE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

@@ -79,7 +79,7 @@ class EntityShulkerBullet(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, n
         for (entity: Entity in collidingEntities) {
             if (entity.attack(EntityDamageByEntityEvent(this, entity, DamageCause.CONTACT, 4f))) {
                 level!!.addSound(entity.position, Sound.MOB_SHULKER_BULLET_HIT)
-                entity.addEffect(Effect.Companion.get(EffectType.Companion.LEVITATION).setDuration(200))
+                entity.addEffect(Effect.get(EffectType.LEVITATION).setDuration(200))
             }
         }
         return true

@@ -10,9 +10,7 @@ import org.chorus.network.protocol.PlayerEnchantOptionsPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import com.google.common.collect.BiMap
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantInventory(table: BlockEntityEnchantTable?) : ContainerInventory(table, InventoryType.ENCHANTMENT, 2),
     BlockEntityInventoryNameable, CraftTypeInventory, SoleInventory {
     override fun networkSlotMap(): BiMap<Int, Int>? {

@@ -17,7 +17,7 @@ class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState? = C
     }
 
     override fun onUpdate(type: Int): Int {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return 0
         }
 
@@ -29,7 +29,7 @@ class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState? = C
         if (type == Level.BLOCK_UPDATE_SCHEDULED && !this.isGettingPower) {
             // Redstone event
             val ev = RedstoneUpdateEvent(this)
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return 0
             }
@@ -43,6 +43,6 @@ class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIT_REDSTONE_LAMP)
-            get() = Companion.field
+
     }
 }

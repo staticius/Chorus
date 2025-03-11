@@ -3,7 +3,7 @@ package org.chorus.network.protocol
 import org.chorus.Server
 import org.chorus.entity.data.Skin
 import org.chorus.network.connection.util.HandleByteBuf
-import lombok.*
+
 import java.util.*
 
 
@@ -41,7 +41,7 @@ class PlayerListPacket : DataPacket() {
 
             for (entry in this.entries) {
                 byteBuf.writeBoolean(
-                    entry.trustedSkin || Server.getInstance().settings.playerSettings().forceSkinTrusted()
+                    entry.trustedSkin || Server.instance.settings.playerSettings().forceSkinTrusted()
                 )
             }
         } else {

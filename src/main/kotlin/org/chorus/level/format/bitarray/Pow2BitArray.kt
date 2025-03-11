@@ -1,6 +1,6 @@
 package org.chorus.level.format.bitarray
 
-import org.chorus.math.NukkitMath
+import org.chorus.math.ChorusMath
 import com.google.common.base.Objects
 
 /**
@@ -44,7 +44,7 @@ data class Pow2BitArray(val version: BitArrayVersion, val size: Int, val words: 
     }
 
     init {
-        val expectedWordsLength = NukkitMath.ceilFloat(size.toFloat() / version.entriesPerWord)
+        val expectedWordsLength = ChorusMath.ceilFloat(size.toFloat() / version.entriesPerWord)
         require(words.size == expectedWordsLength) {
             "Invalid length given for storage, got: " + words.size +
                     " but expected: " + expectedWordsLength

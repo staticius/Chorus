@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 
 class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockAmethystBud(blockState) {
@@ -17,37 +17,35 @@ class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState? = C
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         if (item.isPickaxe) {
             val fortuneLvl = item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING)
             when (fortuneLvl) {
-                1 -> return if (RANDOM.nextInt(3) == 0) {
-                    arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
-                } else {
-                    arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
+                1 -> {
+                    val bound = RANDOM.nextInt(3)
+                    return when (bound) {
+                        0 -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
+                        else -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
+                    }
                 }
 
                 2 -> {
                     val bound = RANDOM.nextInt(4)
-                    return if (bound == 0) {
-                        arrayOf(get(ItemID.AMETHYST_SHARD, 0, 12))
-                    } else if (bound == 1) {
-                        arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
-                    } else {
-                        arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
+                    return when (bound) {
+                        0 -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 12))
+                        1 -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
+                        else -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
                     }
                 }
 
                 3 -> {
                     val bound2 = RANDOM.nextInt(5)
-                    if (bound2 == 0) {
-                        return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 16))
-                    } else if (bound2 == 1) {
-                        return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 12))
-                    } else if (bound2 == 2) {
-                        return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
+                    return when (bound2) {
+                        0 -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 16))
+                        1 -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 12))
+                        2 ->  arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
+                        else -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
                     }
-                    return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
                 }
 
                 else -> return arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
@@ -57,10 +55,12 @@ class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState? = C
         }
     }
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(AMETHYST_CLUSTER, CommonBlockProperties.MINECRAFT_BLOCK_FACE)
-            get() = Companion.field
+    override val properties: BlockProperties
+        get() = Companion.properties
 
-        private val RANDOM = NukkitRandom()
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.AMETHYST_CLUSTER, CommonBlockProperties.MINECRAFT_BLOCK_FACE)
+
+        private val RANDOM = ChorusRandom()
     }
 }

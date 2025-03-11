@@ -7,13 +7,16 @@ class BlockAcaciaTrapdoor @JvmOverloads constructor(blockstate: BlockState? = Co
     override val name: String
         get() = "Acacia Trapdoor"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            ACACIA_TRAPDOOR,
+            BlockID.ACACIA_TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-            get() = Companion.field
+
     }
 }

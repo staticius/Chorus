@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
-import lombok.Value
+
 
 /**
  * SwapStackRequestActionData is sent by the client to swap the item in its cursor with an item present in another

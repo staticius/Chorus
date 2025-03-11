@@ -4,7 +4,7 @@ import org.chorus.compression.CompressionProvider
 import org.chorus.network.protocol.types.*
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
-import lombok.*
+
 
 
 class SnappyCompression : BatchCompression {

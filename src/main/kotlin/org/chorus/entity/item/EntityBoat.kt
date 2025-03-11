@@ -226,7 +226,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
                 }
             }
         }
-        getServer()!!.pluginManager.callEvent(VehicleUpdateEvent(this))
+        Server.instance.pluginManager.callEvent(VehicleUpdateEvent(this))
         return hasUpdated
     }
 
@@ -272,7 +272,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         )
 
         if (from != to) {
-            getServer()!!.pluginManager.callEvent(VehicleMoveEvent(this, from, to))
+            Server.instance.pluginManager.callEvent(VehicleMoveEvent(this, from, to))
         }
 
         //TODO: lily pad collision
@@ -388,7 +388,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
     }
 
     fun getWaterLevel(): Double {
-        val maxY: Double = boundingBox!!.getMinY() + getBaseOffset()
+        val maxY: Double = boundingBox!!.minY + getBaseOffset()
         val consumer: BBConsumer<Double> = object : BBConsumer<Double?> {
             private var diffY: Double = Double.MAX_VALUE
 
@@ -399,7 +399,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
                 if (block is BlockFlowingWater || ((block.getLevelBlockAtLayer(1)
                         .also { block = it }) is BlockFlowingWater)
                 ) {
-                    val level: Double = block.getMaxY()
+                    val level: Double = block.maxY
 
                     diffY = min(maxY - level, diffY)
                 }
@@ -497,7 +497,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             var diffX: Double = entity.position.x - position.x
             var diffZ: Double = entity.position.z - position.z
 
-            var direction: Double = NukkitMath.getDirection(diffX, diffZ)
+            var direction: Double = ChorusMath.getDirection(diffX, diffZ)
 
             if (direction >= 0.009999999776482582) {
                 direction = sqrt(direction)

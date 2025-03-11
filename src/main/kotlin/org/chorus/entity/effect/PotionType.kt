@@ -24,7 +24,7 @@ data class PotionType(
 
     fun applyEffects(entity: Entity, splash: Boolean, health: Double) {
         val event: PotionApplyEvent = PotionApplyEvent(this, this.getEffects(splash), entity)
-        Server.getInstance().pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             return

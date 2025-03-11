@@ -9,7 +9,7 @@ class BlockDeadFireCoralFan : BlockCoralFanDead {
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DEAD_FIRE_CORAL_FAN, CommonBlockProperties.CORAL_FAN_DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.DEAD_FIRE_CORAL_FAN, CommonBlockProperties.CORAL_FAN_DIRECTION)
+
     }
 }

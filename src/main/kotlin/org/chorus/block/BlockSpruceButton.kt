@@ -9,10 +9,10 @@ class BlockSpruceButton @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.SPRUCE_BUTTON,
+BlockID.BlockID.SPRUCE_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

@@ -3,9 +3,7 @@ package org.chorus.math
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class SimpleAxisAlignedBB : AxisAlignedBB {
     override var minX: Double
     override var minY: Double

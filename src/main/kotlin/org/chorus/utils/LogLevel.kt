@@ -3,9 +3,7 @@ package org.chorus.utils
 import org.apache.logging.log4j.util.TriConsumer
 import java.util.function.BiConsumer
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 enum class LogLevel(
     private val logTo: BiConsumer<MainLogger, String?>,
     private val logThrowableTo: TriConsumer<MainLogger, String?, Throwable?>
