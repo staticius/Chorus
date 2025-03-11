@@ -4,7 +4,6 @@ import org.chorus.Player
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntity.cleanedNBT
 import org.chorus.entity.Entity
 import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
@@ -24,7 +23,6 @@ import org.chorus.math.Vector3
 import org.chorus.metadata.MetadataValue
 import org.chorus.metadata.Metadatable
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.nbt.tag.CompoundTag.equals
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.StringTag
 import org.chorus.nbt.tag.Tag
@@ -33,7 +31,9 @@ import org.chorus.registry.Registries
 import org.chorus.tags.BlockTags.getTagSet
 import org.chorus.utils.BlockColor
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
+import org.chorus.Server
 import org.chorus.math.IVector3
+import org.chorus.utils.Loggable
 
 import java.util.*
 import java.util.function.Predicate
@@ -42,7 +42,7 @@ import kotlin.math.pow
 
 
 abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
-    Metadatable, AxisAlignedBB, BlockID, IVector3 {
+    Metadatable, AxisAlignedBB, BlockID, IVector3, Loggable {
     var blockState: BlockState? = null
     protected var color: BlockColor? = null
     @JvmField
@@ -339,12 +339,12 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     }
 
     fun getColor(): BlockColor {
-        if (color != null) return color
+        if (color != null) return color!!
         else color = VANILLA_BLOCK_COLOR_MAP[blockState!!.blockStateHash()
             .toLong()]
         if (color == null) {
-            Block.log.error("Failed to get color of block " + name)
-            Block.log.error("Current block state hash: " + blockState!!.blockStateHash())
+            log.error("Failed to get color of block " + name)
+            log.error("Current block state hash: " + blockState!!.blockStateHash())
             color = BlockColor.VOID_BLOCK_COLOR
         }
         return color!!
@@ -368,7 +368,6 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     /**
      * The properties that fully describe all possible and valid states that this block can have.
      */
-    @JvmField
     abstract val properties: BlockProperties
 
     val id: String
@@ -377,8 +376,8 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     open val itemId: String
         get() = id
 
-    val propertyValues: List<BlockPropertyValue<*, *, *>>
-        get() = blockState!!.blockPropertyValues
+    val propertyValues: MutableList<BlockPropertyValue<*, *, *>>
+        get() = blockState!!.blockPropertyValues!!
 
     val isAir: Boolean
         get() = this.blockState === BlockAir.properties.defaultState
@@ -409,9 +408,9 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         return this
     }
 
-    fun setPropertyValues(values: List<BlockPropertyValue<*, *, *>>): Block {
+    fun setPropertyValues(values: MutableList<BlockPropertyValue<*, *, *>>): Block {
         this.blockState = blockState!!.setPropertyValues(
-            properties, *values.toArray<BlockPropertyValue<*, *, *>> { _Dummy_.__Array__() })
+            properties, *values.toTypedArray())
         return this
     }
 
@@ -880,37 +879,27 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         }
 
     override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        if (this.level != null) {
-            level.getBlockMetadata().setMetadata(this, metadataKey, newMetadataValue)
-        }
+        level.getBlockMetadata()?.setMetadata(this, metadataKey, newMetadataValue)
     }
 
     override fun getMetadata(metadataKey: String): List<MetadataValue?>? {
-        if (this.level != null) {
-            return level.getBlockMetadata().getMetadata(this, metadataKey)
-        }
-        return null
+        return level.getBlockMetadata()?.getMetadata(this, metadataKey)
     }
 
     override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue? {
-        if (this.level != null) {
-            return level.getBlockMetadata().getMetadata(this, metadataKey, plugin)
-        }
-        return null
+        return level.getBlockMetadata()?.getMetadata(this, metadataKey, plugin)
     }
 
     override fun hasMetadata(metadataKey: String): Boolean {
-        return this.level != null && level.getBlockMetadata().hasMetadata(this, metadataKey)
+        return level.getBlockMetadata()?.hasMetadata(this, metadataKey) ?: false
     }
 
     override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
-        return this.level != null && level.getBlockMetadata().hasMetadata(this, metadataKey, plugin)
+        return level.getBlockMetadata()?.hasMetadata(this, metadataKey, plugin) ?: false
     }
 
     override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        if (this.level != null) {
-            level.getBlockMetadata().removeMetadata(this, metadataKey, owningPlugin)
-        }
+        level.getBlockMetadata()?.removeMetadata(this, metadataKey, owningPlugin)
     }
 
     override fun clone(): Block {
@@ -1015,8 +1004,8 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
                 return this.id == obj.id && this.blockState === obj.blockState
             }
             if (this is BlockEntityHolder<*> && obj is BlockEntityHolder<*>) {
-                val be1: BlockEntity = holder1.getOrCreateBlockEntity()
-                val be2: BlockEntity = otherBlock.getOrCreateBlockEntity()
+                val be1: BlockEntity = this.orCreateBlockEntity
+                val be2: BlockEntity = obj.orCreateBlockEntity
                 return this.id == obj.id && this.blockState === obj.blockState && be1.cleanedNBT!!.equals(be2.cleanedNBT)
             }
         }
@@ -1027,7 +1016,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         get() = this.blockState === properties.defaultState
 
     open fun toItem(): Item? {
-        return ItemBlock(properties.defaultState.toBlock())
+        return properties.defaultState?.let { ItemBlock(it.toBlock()) }
     }
 
     /**
@@ -1052,11 +1041,11 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
          */
         get() = false
 
-    fun firstInLayers(condition: Predicate<Block?>): Optional<Block?> {
+    fun firstInLayers(condition: Predicate<Block?>): Optional<Block> {
         return firstInLayers(0, condition)
     }
 
-    fun firstInLayers(startingLayer: Int, condition: Predicate<Block?>): Optional<Block?> {
+    fun firstInLayers(startingLayer: Int, condition: Predicate<Block?>): Optional<Block> {
         val maximumLayer = level.requireProvider().maximumLayer
         for (layer in startingLayer..maximumLayer) {
             val block = this.getLevelBlockAtLayer(layer)
@@ -1065,7 +1054,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
             }
         }
 
-        return Optional.empty()
+        return Optional.empty<Block?>()
     }
 
     val isBlockChangeAllowed: Boolean
@@ -1095,7 +1084,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
                 val tag = itemInHand.getNamedTagEntry("CanDestroy")
                 var canBreak = false
                 if (tag is ListTag<*>) {
-                    for (v in (tag as ListTag<out Tag>).all) {
+                    for (v in (tag as ListTag<out Tag<*>>).all) {
                         if (v !is StringTag) {
                             continue
                         }
@@ -1143,7 +1132,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
          * @return if the gets powered.
          */
         get() {
-            if (!Server.instance.settings.levelSettings().enableRedstone()) return false
+            if (!Server.instance.settings.levelSettings.enableRedstone) return false
 
             for (side in BlockFace.entries) {
                 val b = getSide(side)!!.levelBlock
@@ -1174,11 +1163,11 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
      */
     fun cloneTo(pos: Locator, update: Boolean): Boolean {
         //清除旧方块
-        level.setBlock(pos.position, this.layer, get(BlockID.AIR), false, false)
-        if (this is BlockEntityHolder<*> && holder.getBlockEntity() != null) {
+        level.setBlock(pos.position, this.layer, get(BlockID.AIR), direct = false, update = false)
+        if (this is BlockEntityHolder<*> && this.blockEntity != null) {
             val clonedBlock = this.clone()
             clonedBlock.position(pos)
-            val tag: CompoundTag = holder.getBlockEntity().cleanedNBT
+            val tag: CompoundTag? = this.blockEntity!!.cleanedNBT
             //方块实体要求direct=true
             return BlockEntityHolder.setBlockAndCreateEntity(
                 clonedBlock as BlockEntityHolder<*>,
@@ -1197,14 +1186,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
 
     companion object {
         val EMPTY_ARRAY: Array<Block?> = arrayOfNulls(0)
-        open val frictionFactor: Double = 0.6
-            /**
-             * 服务端侧的摩擦系数，用于控制玩家丢弃物品、实体、船其在上方移动的速度。值越大，移动越快。
-             *
-             *
-             * The friction on the server side, which is used to control the speed that player drops item,entity walk and boat movement on the block.The larger the value, the faster the movement.
-             */
-            get() = Companion.field
+        val frictionFactor: Double = 0.6
         const val DEFAULT_AIR_FLUID_FRICTION: Double = 0.95
         val VANILLA_BLOCK_COLOR_MAP: Long2ObjectOpenHashMap<BlockColor> = Long2ObjectOpenHashMap()
         @JvmStatic
@@ -1300,10 +1282,10 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         }
 
         fun getWithState(id: String, blockState: BlockState): Block {
-            var id = id
-            id = if (id.contains(":")) id else "minecraft:$id"
-            val block = get(id)
-            block.setPropertyValues(blockState.blockPropertyValues)
+            var id1 = id
+            id1 = if (id1.contains(":")) id1 else "minecraft:$id1"
+            val block = get(id1)
+            blockState.blockPropertyValues?.let { block.setPropertyValues(it) }
             return block
         }
 

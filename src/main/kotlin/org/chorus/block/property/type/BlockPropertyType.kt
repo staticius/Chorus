@@ -10,40 +10,29 @@ import org.chorus.block.property.type.IntPropertyType
  * @author daoge_cmd
  */
 interface BlockPropertyType<DATATYPE> {
-    @JvmField
     val name: String?
-
-    @JvmField
     val defaultValue: DATATYPE
-
-    @JvmField
     val validValues: List<DATATYPE>?
-
-    @JvmField
     val type: Type?
 
-    fun createValue(value: DATATYPE): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>?, *>
+    fun createValue(value: DATATYPE): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>, *>
 
-    fun tryCreateValue(value: Any?): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>?, *>?
+    fun tryCreateValue(value: Any?): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>, *>?
 
-    @JvmField
     val bitSize: Byte
 
-    fun createDefaultValue(): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>?, *> {
+    fun createDefaultValue(): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>, *> {
         return createValue(defaultValue)
     }
 
-    
     enum class Type {
         BOOLEAN,
         INT,
         ENUM
     }
 
-    
-    
-    abstract class BlockPropertyValue<DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?, SERIALIZED_DATATYPE> internal constructor(
-        protected val propertyType: PROPERTY, @JvmField protected val value: DATATYPE
+    abstract class BlockPropertyValue<DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>, SERIALIZED_DATATYPE> internal constructor(
+        val propertyType: PROPERTY, val value: DATATYPE
     ) {
         abstract val index: Int
 
@@ -52,10 +41,12 @@ interface BlockPropertyType<DATATYPE> {
 
     companion object {
         fun getPropertyType(clazz: Class<*>): Type? {
-            return if (clazz == BooleanPropertyType::class.java) Type.BOOLEAN
-            else if (clazz == IntPropertyType::class.java) Type.INT
-            else if (clazz == EnumPropertyType::class.java) Type.ENUM
-            else null
+            return when (clazz) {
+                BooleanPropertyType::class.java -> Type.BOOLEAN
+                IntPropertyType::class.java -> Type.INT
+                EnumPropertyType::class.java -> Type.ENUM
+                else -> null
+            }
         }
     }
 }

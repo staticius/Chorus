@@ -10,7 +10,7 @@ import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.LevelException
 
-interface BlockEntityHolder<E : BlockEntity?> {
+interface BlockEntityHolder<E : BlockEntity> {
     val blockEntity: E?
         get() {
             val level = level ?: throw LevelException("Undefined Level reference")
@@ -109,11 +109,11 @@ interface BlockEntityHolder<E : BlockEntity?> {
             return setBlockAndCreateEntity(holder, direct, update, null)
         }
 
-        fun <E : BlockEntity?, H : BlockEntityHolder<E>?> setBlockAndCreateEntity(
+        fun <E : BlockEntity?, H : BlockEntityHolder<E>> setBlockAndCreateEntity(
             holder: H, direct: Boolean, update: Boolean, initialData: CompoundTag?,
             vararg args: Any?
         ): E? {
-            val block = holder!!.block
+            val block = holder.block
             val level = block!!.level
             val layer0 = level.getBlock(block.position, 0)
             val layer1 = level.getBlock(block.position, 1)

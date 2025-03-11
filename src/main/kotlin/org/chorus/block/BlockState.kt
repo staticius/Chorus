@@ -1,19 +1,15 @@
 package org.chorus.block
 
 import org.chorus.block.Block.Companion.get
-import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue.propertyType
+import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.item.Item
 import org.chorus.level.Locator
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.CompoundTagView
 import org.chorus.registry.Registries
 import org.jetbrains.annotations.UnmodifiableView
 
-/**
- * Allay Project 2023/4/29
- *
- * @author daoge_cmd
- */
 interface BlockState {
-    @JvmField
     val identifier: String
 
     fun blockStateHash(): Int
@@ -22,8 +18,7 @@ interface BlockState {
 
     fun unsignedBlockStateHash(): Long
 
-    @JvmField
-    val blockPropertyValues: @UnmodifiableView MutableList<Any?>?
+    val blockPropertyValues: @UnmodifiableView MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>?
 
     val blockStateTag: @UnmodifiableView CompoundTagView?
 
@@ -35,13 +30,12 @@ interface BlockState {
         value: DATATYPE
     ): BlockState?
 
-    fun setPropertyValue(properties: BlockProperties, propertyValue: BlockPropertyValue<*, *, *>?): BlockState?
+    fun setPropertyValue(properties: BlockProperties, propertyValue: BlockPropertyType.BlockPropertyValue<*, *, *>?): BlockState?
 
-    fun setPropertyValues(properties: BlockProperties, vararg values: BlockPropertyValue<*, *, *>?): BlockState?
+    fun setPropertyValues(properties: BlockProperties, vararg values: BlockPropertyType.BlockPropertyValue<*, *, *>?): BlockState?
 
     val isDefaultState: Boolean
-        get() = Registries.BLOCK.getBlockProperties(identifier)
-            .getDefaultState() === this
+        get() = Registries.BLOCK.getBlockProperties(identifier).defaultState === this
 
     fun toBlock(): Block {
         return get(this)
@@ -57,23 +51,23 @@ interface BlockState {
 
     companion object {
         fun makeUnknownBlockState(hash: Int, blockTag: CompoundTag?): BlockState {
-            return BlockStateImpl.Companion.makeUnknownBlockState(hash, blockTag)
+            return BlockStateImpl.makeUnknownBlockState(hash, blockTag)
         }
 
-        fun computeSpecialValue(propertyValues: Array<BlockPropertyValue<*, *, *>>): Short {
+        fun computeSpecialValue(propertyValues: Array<BlockPropertyType.BlockPropertyValue<*, *, *>>): Short {
             var specialValueBits: Byte = 0
-            for (value in propertyValues) specialValueBits += value.propertyType.bitSize
+            for (value in propertyValues) specialValueBits = (specialValueBits + (value.propertyType.bitSize)).toByte()
             return computeSpecialValue(specialValueBits, propertyValues)
         }
 
-        fun computeSpecialValue(specialValueBits: Byte, propertyValues: Array<BlockPropertyValue<*, *, *>>): Short {
-            var specialValueBits = specialValueBits
+        fun computeSpecialValue(specialValueBits: Byte, propertyValues: Array<BlockPropertyType.BlockPropertyValue<*, *, *>>): Short {
+            var specialValueBits1 = specialValueBits
             var specialValue: Short = 0
             for (value in propertyValues) {
                 specialValue =
-                    (specialValue.toInt() or ((value.index as Short) shl (specialValueBits - value.propertyType.bitSize)).toShort()
+                    (specialValue.toInt() or (value.index shl (specialValueBits1 - value.propertyType.bitSize)).toShort()
                         .toInt()).toShort()
-                specialValueBits -= value.propertyType.bitSize
+                specialValueBits1 = (specialValueBits1 - value.propertyType.bitSize).toByte()
             }
             return specialValue
         }

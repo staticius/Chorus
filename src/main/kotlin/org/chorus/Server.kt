@@ -268,7 +268,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     lateinit var queryInformation: QueryRegenerateEvent
         private set
 
-    private val positionTrackingService: PositionTrackingService? = null
+    private var positionTrackingService: PositionTrackingService? = null
 
     /**
      * @return 获得所有游戏世界<br></br>Get all the game world
@@ -301,7 +301,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     lateinit var settings: ServerSettings
         private set
     private var watchdog: Watchdog? = null
-    private val playerDataDB: DB? = null
+    private var playerDataDB: DB? = null
 
     lateinit var freezableArrayManager: FreezableArrayManager
         private set
@@ -1448,7 +1448,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 .putLong("firstPlayed", System.currentTimeMillis() / 1000)
                 .putLong("lastPlayed", System.currentTimeMillis() / 1000)
                 .putList(
-                    "Pos", ListTag<FloatTag?>()
+                    "Pos", ListTag<FloatTag>()
                         .add(FloatTag(spawn.position.x))
                         .add(FloatTag(spawn.position.y))
                         .add(FloatTag(spawn.position.z))
@@ -1458,13 +1458,13 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 .putCompound("Achievements", CompoundTag())
                 .putInt("playerGameType", this.gamemode)
                 .putList(
-                    "Motion", ListTag<FloatTag?>()
+                    "Motion", ListTag<FloatTag>()
                         .add(FloatTag(0f))
                         .add(FloatTag(0f))
                         .add(FloatTag(0f))
                 )
                 .putList(
-                    "Rotation", ListTag<FloatTag?>()
+                    "Rotation", ListTag<FloatTag>()
                         .add(FloatTag(0f))
                         .add(FloatTag(0f))
                 )

@@ -26,7 +26,7 @@ import java.util.stream.Collectors
  */
 class BlockProperties(identifier: String, blockTags: Set<String?>, vararg properties: BlockPropertyType<*>?) {
     
-    private val identifier: String
+    val identifier: String
     private val propertyTypeSet: Set<BlockPropertyType<*>>
     private var specialValueMap: Map<Short, BlockState>? = null
 

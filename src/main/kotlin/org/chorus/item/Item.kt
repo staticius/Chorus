@@ -650,10 +650,10 @@ abstract class Item : Cloneable, ItemID {
         return this
     }
 
-    fun getNamedTagEntry(name: String?): Tag? {
+    fun getNamedTagEntry(name: String?): Tag<*>? {
         val tag = this.namedTag
         if (tag != null) {
-            return if (tag.contains(name)) tag[name] else null
+            return if (tag.contains(name)) tag.get(name) else null
         }
 
         return null
