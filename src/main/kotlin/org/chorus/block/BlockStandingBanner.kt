@@ -18,7 +18,7 @@ import org.chorus.nbt.tag.CompoundTag.getList
 import org.chorus.nbt.tag.CompoundTag.put
 import org.chorus.nbt.tag.ListTag.size
 import org.chorus.utils.BlockColor.equals
-import lombok.extern.slf4j.Slf4j
+
 import kotlin.math.floor
 
 
@@ -102,7 +102,7 @@ open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState?
             createBlockEntity(nbt)
             return true
         } catch (e: Exception) {
-            BlockStandingBanner.log.error("Failed to create the block entity {} at {}", blockEntityType, locator, e)
+            BlockStandingBanner.log.error("Failed to create the block entity {} at {}", getBlockEntityType(), locator, e)
             level.setBlock(layer0!!.position, 0, layer0, true)
             level.setBlock(layer0.position, 1, layer1!!, true)
             return false
@@ -186,6 +186,6 @@ open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState?
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STANDING_BANNER, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+
     }
 }

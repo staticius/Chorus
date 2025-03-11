@@ -16,7 +16,7 @@ class BlockGraniteDoubleSlab @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(GRANITE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.GRANITE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            
     }
 }

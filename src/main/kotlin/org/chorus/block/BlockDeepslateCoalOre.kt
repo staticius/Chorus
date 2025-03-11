@@ -9,7 +9,7 @@ class BlockDeepslateCoalOre @JvmOverloads constructor(blockstate: BlockState? = 
         get() = 4.5
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEEPSLATE_COAL_ORE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEEPSLATE_COAL_ORE)
+
     }
 }

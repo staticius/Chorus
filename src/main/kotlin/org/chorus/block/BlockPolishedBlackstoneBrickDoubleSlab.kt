@@ -15,9 +15,9 @@ class BlockPolishedBlackstoneBrickDoubleSlab @JvmOverloads constructor(blockstat
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB,
+BlockID.BlockID.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB,
             CommonBlockProperties.MINECRAFT_VERTICAL_HALF
         )
-            get() = Companion.field
+
     }
 }

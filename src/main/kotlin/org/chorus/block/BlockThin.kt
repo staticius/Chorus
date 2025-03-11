@@ -50,15 +50,18 @@ abstract class BlockThin(blockState: BlockState?) : BlockTransparent(blockState)
         )
     }
 
-    override fun canConnect(block: Block): Boolean {
-        return when (block.id) {
-            BlockID.GLASS_PANE, BlockID.BLACK_STAINED_GLASS_PANE, BlockID.BLUE_STAINED_GLASS_PANE, BlockID.BROWN_STAINED_GLASS_PANE, BlockID.CYAN_STAINED_GLASS_PANE, BlockID.GRAY_STAINED_GLASS_PANE, BlockID.GREEN_STAINED_GLASS_PANE, BlockID.LIGHT_BLUE_STAINED_GLASS_PANE, BlockID.LIGHT_GRAY_STAINED_GLASS_PANE, BlockID.LIME_STAINED_GLASS_PANE, BlockID.MAGENTA_STAINED_GLASS_PANE, BlockID.ORANGE_STAINED_GLASS_PANE, BlockID.PINK_STAINED_GLASS_PANE, BlockID.PURPLE_STAINED_GLASS_PANE, BlockID.RED_STAINED_GLASS_PANE, BlockID.WHITE_STAINED_GLASS_PANE, BlockID.YELLOW_STAINED_GLASS_PANE, BlockID.IRON_BARS, BlockID.COBBLESTONE_WALL, BlockID.COBBLED_DEEPSLATE_WALL -> true
-            else -> {
-                if (block is BlockTrapdoor) {
-                    block.isOpen && block.blockFace == calculateFace(this.position, block.position)
+    override fun canConnect(block: Block?): Boolean {
+        if (block != null) {
+            return when (block.id) {
+                BlockID.GLASS_PANE, BlockID.BLACK_STAINED_GLASS_PANE, BlockID.BLUE_STAINED_GLASS_PANE, BlockID.BROWN_STAINED_GLASS_PANE, BlockID.CYAN_STAINED_GLASS_PANE, BlockID.GRAY_STAINED_GLASS_PANE, BlockID.GREEN_STAINED_GLASS_PANE, BlockID.LIGHT_BLUE_STAINED_GLASS_PANE, BlockID.LIGHT_GRAY_STAINED_GLASS_PANE, BlockID.LIME_STAINED_GLASS_PANE, BlockID.MAGENTA_STAINED_GLASS_PANE, BlockID.ORANGE_STAINED_GLASS_PANE, BlockID.PINK_STAINED_GLASS_PANE, BlockID.PURPLE_STAINED_GLASS_PANE, BlockID.RED_STAINED_GLASS_PANE, BlockID.WHITE_STAINED_GLASS_PANE, BlockID.YELLOW_STAINED_GLASS_PANE, BlockID.IRON_BARS, BlockID.COBBLESTONE_WALL, BlockID.COBBLED_DEEPSLATE_WALL -> true
+                else -> {
+                    if (block is BlockTrapdoor) {
+                        block.isOpen && block.blockFace == calculateFace(this.position, block.position)
+                    }
+                    block.isSolid
                 }
-                block.isSolid
             }
         }
+        return false
     }
 }

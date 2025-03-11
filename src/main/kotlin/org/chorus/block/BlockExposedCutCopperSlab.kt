@@ -18,7 +18,7 @@ open class BlockExposedCutCopperSlab : BlockCutCopperSlab {
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(EXPOSED_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.EXPOSED_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

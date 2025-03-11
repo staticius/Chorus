@@ -1,14 +1,13 @@
 package org.chorus.level
 
 import org.chorus.GameMockExtension
-import org.chorus.Server
 import org.chorus.TestPlayer
 import org.chorus.TestUtils
 import org.chorus.level.format.LevelConfig
 import org.chorus.level.format.LevelConfig.GeneratorConfig
 import org.chorus.level.format.leveldb.LevelDBProvider
 import org.chorus.level.generator.terra.PNXPlatform
-import lombok.SneakyThrows
+
 import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
@@ -80,7 +79,6 @@ class TerraTest {
             val objectObjectHashMap = HashMap<String, Any>()
             objectObjectHashMap["pack"] = "overworld"
             level = Level(
-                Server.getInstance(),
                 "terra",
                 "src/test/resources/terra",
                 1,

@@ -15,9 +15,9 @@ package org.chorus.event
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author null(javadoc) @ Nukkit Project
- * @see cn.nukkit.event.Listener
+ * @see org.chorus.event.Listener
  *
- * @see cn.nukkit.event.Event
+ * @see org.chorus.event.Event
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
@@ -46,7 +46,7 @@ annotation class EventHandler(
      *
      *
      * @return 这个处理器的优先级。<br></br>The priority of this handler.
-     * @see cn.nukkit.event.EventHandler
+     * @see org.chorus.event.EventHandler
      */
     val priority: EventPriority = EventPriority.NORMAL,
     /**
@@ -59,7 +59,7 @@ annotation class EventHandler(
      * not called. Otherwise, the method is always called.
      *
      * @return 这个处理器是否忽略被取消的事件。<br></br>Whether cancelled events should be ignored.
-     * @see cn.nukkit.event.EventHandler
+     * @see org.chorus.event.EventHandler
      */
     val ignoreCancelled: Boolean = false
 )

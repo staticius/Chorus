@@ -3,7 +3,7 @@ package org.chorus.nbt.tag
 import com.google.common.base.Preconditions
 import java.util.*
 
-class StringTag : Tag {
+class StringTag : Tag<String> {
     var data: String? = null
 
     constructor()
@@ -17,7 +17,7 @@ class StringTag : Tag {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_String
+        get() = TAG_STRING
 
     override fun toString(): String {
         return "StringTag  (data: $data)"
@@ -31,13 +31,13 @@ class StringTag : Tag {
         return "\"" + data + "\""
     }
 
-    override fun copy(): Tag {
+    override fun copy(): Tag<String> {
         return StringTag(data!!)
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (super.equals(obj)) {
-            val o = obj as StringTag
+    override fun equals(other: Any?): Boolean {
+        if (super.equals(other)) {
+            val o = other as StringTag
             return ((data == null && o.data == null) || (data != null && data == o.data))
         }
         return false

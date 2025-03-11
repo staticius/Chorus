@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
@@ -16,14 +15,11 @@ import org.chorus.utils.OptionalBoolean
 import org.chorus.utils.OptionalBoolean.Companion.empty
 import org.chorus.utils.Rail
 import org.chorus.utils.Rail.Orientation.Companion.ascending
-import org.chorus.utils.Rail.Orientation.Companion.byMetadata
 import org.chorus.utils.Rail.Orientation.Companion.curved
 import org.chorus.utils.Rail.Orientation.Companion.straight
 import org.chorus.utils.Rail.Orientation.Companion.straightOrCurved
 import java.util.*
 import java.util.function.Consumer
-import java.util.function.Function
-import java.util.stream.Collectors
 import java.util.stream.Stream
 import kotlin.collections.ArrayList
 import kotlin.collections.Collection
@@ -35,15 +31,11 @@ import kotlin.collections.MutableList
 import kotlin.collections.MutableMap
 import kotlin.collections.set
 
-/**
- * @author Snake1999
- * @since 2016/1/11
- */
-open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockState), Faceable {
     // 0x8: Set the block active
     // 0x7: Reset the block to normal
-    // If the rail can be powered. So its a complex rail!
+    // If the rail can be powered. So it's a complex rail!
     protected var canBePowered: Boolean = false
 
     override val name: String
@@ -68,7 +60,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            val ascendingDirection = orientation!!.ascendingDirection()
+            val ascendingDirection = getOrientation()!!.ascendingDirection()
             if (!checkCanBePlace(this.down()) || (ascendingDirection.isPresent && !checkCanBePlace(
                     this.getSide(
                         ascendingDirection.get()
@@ -79,7 +71,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
                 return Level.BLOCK_UPDATE_NORMAL
             }
         }
-        if (type == Level.BLOCK_UPDATE_REDSTONE && railDirection.isCurved) {
+        if (type == Level.BLOCK_UPDATE_REDSTONE && getRailDirection().isCurved) {
             val connect = checkRailsConnected().values
             val railFace: MutableList<BlockFace?> = ArrayList()
             for (face in connect) {
@@ -98,7 +90,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
                     Rail.Orientation.CURVED_NORTH_EAST
                 } else Rail.Orientation.CURVED_NORTH_WEST
             }
-            orientation = orient
+            setOrientation(orient)
         }
         return 0
     }
@@ -133,30 +125,29 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
         val faces: List<BlockFace?> = ArrayList(railsAround.values)
         if (railsAround.size == 1) {
             val other = rails[0]
-            this.railDirection = this.connect(other, railsAround[other]!!)
+            this.setRailDirection(this.connect(other, railsAround[other]!!))
         } else if (railsAround.size == 4) {
             if (this.isAbstract) {
-                this.railDirection = this.connect(
+                this.setRailDirection(this.connect(
                     rails[faces.indexOf(BlockFace.SOUTH)],
                     BlockFace.SOUTH,
                     rails[faces.indexOf(BlockFace.EAST)],
                     BlockFace.EAST
-                )
+                ))
             } else {
-                this.railDirection = this.connect(
+                this.setRailDirection(this.connect(
                     rails[faces.indexOf(BlockFace.EAST)],
                     BlockFace.EAST,
                     rails[faces.indexOf(BlockFace.WEST)],
                     BlockFace.WEST
-                )
+                ))
             }
-        } else if (!railsAround.isEmpty()) {
+        } else if (railsAround.isNotEmpty()) {
             if (this.isAbstract) {
                 if (railsAround.size == 2) {
                     val rail1 = rails[0]
                     val rail2 = rails[1]
-                    this.railDirection =
-                        this.connect(rail1, railsAround[rail1]!!, rail2, railsAround[rail2]!!)
+                    this.setRailDirection(this.connect(rail1, railsAround[rail1]!!, rail2, railsAround[rail2]!!))
                 } else {
                     val cd = Stream.of(
                         Rail.Orientation.CURVED_SOUTH_EAST,
@@ -167,8 +158,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
                         .findFirst().get().connectingDirections()
                     val f1 = cd[0]
                     val f2 = cd[1]
-                    this.railDirection =
-                        this.connect(rails[faces.indexOf(f1)], f1, rails[faces.indexOf(f2)], f2)
+                    this.setRailDirection(this.connect(rails[faces.indexOf(f1)], f1, rails[faces.indexOf(f2)], f2))
                 }
             } else {
                 val f = faces.stream()
@@ -176,14 +166,13 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
                     .get()
                 val fo = f.getOpposite()
                 if (faces.contains(fo)) { //Opposite connectable
-                    this.railDirection =
-                        this.connect(rails[faces.indexOf(f)], f, rails[faces.indexOf(fo)], fo!!)
+                    this.setRailDirection(this.connect(rails[faces.indexOf(f)], f, rails[faces.indexOf(fo)], fo!!))
                 } else {
-                    this.railDirection = this.connect(rails[faces.indexOf(f)], f)
+                    this.setRailDirection(this.connect(rails[faces.indexOf(f)], f))
                 }
             }
         }
-        level.setBlock(this.position, this, true, true)
+        level.setBlock(this.position, this, direct = true, update = true)
         if (!isAbstract) {
             level.scheduleUpdate(this, this.position, 0)
         }
@@ -219,30 +208,33 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
         val delta = (position.y - other.position.y).toInt()
         val rails = other.checkRailsConnected()
         if (rails.isEmpty()) { //Only one
-            other.orientation =
+            other.setOrientation(
                 if (delta == 1) ascending(face.getOpposite()!!) else straight(
                     face
                 )
+            )
             return if (delta == -1) ascending(face) else straight(face)
         } else if (rails.size == 1) { //Already connected
             val faceConnected = rails.values.iterator().next()
 
             if (other.isAbstract && faceConnected != face) { //Curve!
-                other.orientation = curved(face.getOpposite()!!, faceConnected)
+                other.setOrientation(curved(face.getOpposite()!!, faceConnected))
                 return if (delta == -1) ascending(face) else straight(face)
             } else if (faceConnected == face) { //Turn!
-                if (!other.orientation!!.isAscending) {
-                    other.orientation =
+                if (!other.getOrientation()!!.isAscending) {
+                    other.setOrientation(
                         if (delta == 1) ascending(face.getOpposite()!!) else straight(
                             face
                         )
+                    )
                 }
                 return if (delta == -1) ascending(face) else straight(face)
-            } else if (other.orientation!!.hasConnectingDirections(BlockFace.NORTH, BlockFace.SOUTH)) { //North-south
-                other.orientation =
+            } else if (other.getOrientation()!!.hasConnectingDirections(BlockFace.NORTH, BlockFace.SOUTH)) { //North-south
+                other.setOrientation(
                     if (delta == 1) ascending(face.getOpposite()!!) else straight(
                         face
                     )
+                )
                 return if (delta == -1) ascending(face) else straight(face)
             }
         }
@@ -251,22 +243,18 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
 
     private fun checkRailsAroundAffected(): Map<BlockRail, BlockFace?> {
         val railsAround =
-            this.checkRailsAround(Arrays.asList(BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH))
-        return railsAround.keys.stream()
-            .filter { r: BlockRail -> r.checkRailsConnected().size != 2 }
-            .collect(
-                Collectors.toMap(
-                    Function { r: BlockRail -> r },
-                    Function { key: BlockRail -> railsAround[key] })
-            )
+            this.checkRailsAround(listOf(BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH))
+        return railsAround.entries
+            .filter { it.key.checkRailsConnected().size != 2 }
+            .associate { it.key to it.value }
     }
 
     private fun checkRailsAround(faces: Collection<BlockFace>): Map<BlockRail, BlockFace> {
         val result: MutableMap<BlockRail, BlockFace> = HashMap()
-        faces.forEach(Consumer<BlockFace> { f: BlockFace ->
+        faces.forEach(Consumer { f: BlockFace ->
             val b = this.getSide(f)
             Stream.of<Block?>(b, b!!.up(), b.down())
-                .filter { obj: Block? -> obj.isRailBlock() }
+                .filter { obj: Block? -> obj is BlockRail }
                 .forEach { block: Block -> result[block as BlockRail] = f }
         })
         return result
@@ -274,15 +262,11 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
 
     protected fun checkRailsConnected(): Map<BlockRail, BlockFace> {
         val railsAround = this.checkRailsAround(
-            orientation!!.connectingDirections()
+            getOrientation()!!.connectingDirections()
         )
-        return railsAround.keys.stream()
-            .filter { r: BlockRail -> r.orientation!!.hasConnectingDirections(railsAround[r]!!.getOpposite()) }
-            .collect(
-                Collectors.toMap(
-                    Function { r: BlockRail -> r },
-                    Function { key: BlockRail -> railsAround[key] })
-            )
+        return railsAround.entries
+            .filter { it.key.getOrientation()!!.hasConnectingDirections(it.value.getOpposite()) }
+            .associate { it.key to it.value }
     }
 
     val isAbstract: Boolean
@@ -292,46 +276,45 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
         return this.canBePowered
     }
 
-    open var railDirection: Rail.Orientation
-        get() = orientation!!
-        /**
-         * Changes the rail direction without changing anything else.
-         *
-         * @param orientation The new orientation
-         */
-        set(orientation) {
-            setPropertyValue<Int, IntPropertyType>(
-                CommonBlockProperties.RAIL_DIRECTION_10,
-                orientation.metadata()
-            )
-        }
+    /**
+     * Changes the rail direction without changing anything else.
+     *
+     * @param orientation The new orientation
+     */
+    open fun setRailDirection(orientation: Rail.Orientation) {
+        setPropertyValue(
+            CommonBlockProperties.RAIL_DIRECTION_10,
+            orientation.metadata()
+        )
+    }
 
-    open var orientation: Rail.Orientation?
-        /**
-         * Get the rail orientation.
-         *
-         * @return the orientation
-         */
-        get() = byMetadata(
-            getPropertyValue<Int, IntPropertyType>(
+    open fun getRailDirection(): Rail.Orientation {
+        return getOrientation()!!
+    }
+
+    /**
+     * Changes the rail direction and update the state in the world if the orientation changed in a single call.
+     *
+     *
+     * Note that the level block won't change if the current block has already the given orientation.
+     *
+     * @see .setRailDirection
+     * @see Level.setBlock
+     */
+    open fun setOrientation(orientation: Rail.Orientation) {
+        if (orientation != getOrientation()) {
+            setRailDirection(orientation)
+            level.setBlock(this.position, this, direct = true, update = true)
+        }
+    }
+
+    open fun getOrientation(): Rail.Orientation? {
+        return Rail.Orientation.byMetadata(
+            getPropertyValue(
                 CommonBlockProperties.RAIL_DIRECTION_10
             )
         )
-        /**
-         * Changes the rail direction and update the state in the world if the orientation changed in a single call.
-         *
-         *
-         * Note that the level block won't change if the current block has already the given orientation.
-         *
-         * @see .setRailDirection
-         * @see Level.setBlock
-         */
-        set(o) {
-            if (o != field) {
-                railDirection = o!!
-                level.setBlock(this.position, this, true, true)
-            }
-        }
+    }
 
     val realMeta: Int
         get() {
@@ -346,35 +329,37 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
             return blockState!!.specialValue().toInt()
         }
 
-    open var isActive: Boolean
-        get() = properties.containProperty<Boolean, BooleanPropertyType>(CommonBlockProperties.ACTIVE) && getPropertyValue<Boolean, BooleanPropertyType>(
+    open fun isActive(): Boolean {
+        return properties.containProperty(CommonBlockProperties.ACTIVE) && getPropertyValue<Boolean, BooleanPropertyType>(
             CommonBlockProperties.ACTIVE
         )
-        /**
-         * Changes the active flag and update the state in the world in a single call.
-         *
-         *
-         * The active flag will not change if the block state don't have the [CommonBlockProperties.ACTIVE] property,
-         * and it will not throw exceptions related to missing block properties.
-         *
-         *
-         * The level block will always update.
-         *
-         * @see .setRailDirection
-         * @see Level.setBlock
-         */
-        set(active) {
-            if (properties.containProperty<Boolean, BooleanPropertyType>(CommonBlockProperties.ACTIVE)) {
-                setRailActive(active)
-            }
-            level.setBlock(this.position, this, true, true)
-        }
+    }
 
-    open val isRailActive: OptionalBoolean?
-        get() = if (properties.containProperty<Boolean, BooleanPropertyType>(CommonBlockProperties.ACTIVE)) OptionalBoolean.of(
+    /**
+     * Changes the active flag and update the state in the world in a single call.
+     *
+     *
+     * The active flag will not change if the block state don't have the [CommonBlockProperties.ACTIVE] property,
+     * and it will not throw exceptions related to missing block properties.
+     *
+     *
+     * The level block will always update.
+     *
+     * @see .setRailDirection
+     * @see Level.setBlock
+     */
+    open fun setIsActive(active: Boolean) {
+        if (properties.containProperty(CommonBlockProperties.ACTIVE)) {
+            setRailActive(active)
+        }
+        level.setBlock(this.position, this, direct = true, update = true)
+    }
+
+    open fun isRailActive(): OptionalBoolean? {
+        return if (properties.containProperty(CommonBlockProperties.ACTIVE)) OptionalBoolean.of(
             getPropertyValue(CommonBlockProperties.ACTIVE)
         ) else empty()
-
+    }
     /**
      * @throws NoSuchElementException If attempt to set the rail to active but it don't have the [CommonBlockProperties.ACTIVE] property.
      */
@@ -402,8 +387,10 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
     override val waterloggingLevel: Int
         get() = 1
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RAIL, CommonBlockProperties.RAIL_DIRECTION_10)
-            get() = Companion.field
     }
 }

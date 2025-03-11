@@ -13,6 +13,6 @@ class BlockLilac : BlockDoublePlant {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LILAC, CommonBlockProperties.UPPER_BLOCK_BIT)
-            get() = Companion.field
+
     }
 }

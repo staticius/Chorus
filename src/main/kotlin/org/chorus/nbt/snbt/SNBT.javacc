@@ -1,6 +1,6 @@
 //Powered by javacc21 https://github.com/javacc21/javacc21
-PARSER_PACKAGE="cn.nukkit.nbt.snbt";
-NODE_PACKAGE="cn.nukkit.nbt.snbt.ast";
+PARSER_PACKAGE="org.chorus.nbt.snbt";
+NODE_PACKAGE="org.chorus.nbt.snbt.ast";
 DEFAULT_LEXICAL_STATE=SNBT;
 LEGACY_GLITCHY_LOOKAHEAD=false;
 

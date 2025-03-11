@@ -26,7 +26,7 @@ open class BlockCopperOre @JvmOverloads constructor(blockstate: BlockState? = Co
         get() = 3.0
 
     companion object {
-        val properties: BlockProperties = BlockProperties(COPPER_ORE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.COPPER_ORE)
+
     }
 }

@@ -24,7 +24,7 @@ class BlockEmeraldBlock @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(EMERALD_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.EMERALD_BLOCK)
+
     }
 }

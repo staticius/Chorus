@@ -22,6 +22,6 @@ class BlockInfestedCobblestone @JvmOverloads constructor(blockState: BlockState?
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.Companion.INFESTED_COBBLESTONE)
-            get() = Companion.field
+
     }
 }

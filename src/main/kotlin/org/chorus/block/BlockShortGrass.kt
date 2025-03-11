@@ -111,6 +111,6 @@ class BlockShortGrass : BlockFlowable {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SHORT_GRASS)
-            get() = Companion.field
+            
     }
 }

@@ -86,7 +86,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
         }
 
         if (item.getBlock() is FlowerPotBlock && potBlock.isPotBlockState()) {
-            val blockEntity = orCreateBlockEntity!!
+            val blockEntity = getOrCreateBlockEntity()!!
             blockEntity.namedTag.putCompound("PlantBlock", potBlock.getPlantBlockTag())
 
             setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT, true)
@@ -99,7 +99,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
     }
 
     fun removeFlower() {
-        val blockEntity = orCreateBlockEntity!!
+        val blockEntity = getOrCreateBlockEntity()!!
         blockEntity.namedTag.remove("PlantBlock")
 
         setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT, false)
@@ -143,7 +143,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
             return false
         }
 
-        orCreateBlockEntity
+        getOrCreateBlockEntity()
         if (hasFlower()) {
             return false
         }
@@ -263,7 +263,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FLOWER_POT, CommonBlockProperties.UPDATE_BIT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FLOWER_POT, CommonBlockProperties.UPDATE_BIT)
+
     }
 }

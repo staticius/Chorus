@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-import lombok.Value
+
 
 /**
  * BeaconPaymentStackRequestActionData is sent by the client when it submits an item to enable effects from a

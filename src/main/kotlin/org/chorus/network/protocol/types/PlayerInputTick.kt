@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types
 
-import lombok.AllArgsConstructor
-import lombok.Getter
+
+
 
 
 

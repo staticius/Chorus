@@ -10,6 +10,6 @@ class BlockYellowCandleCake @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.YELLOW_CANDLE_CAKE, CommonBlockProperties.LIT)
-            get() = Companion.field
+
     }
 }

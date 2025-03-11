@@ -13,7 +13,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.NumberTag
 import org.chorus.utils.collection.nb.Long2ObjectNonBlockingMap
 import com.google.common.base.Preconditions
-import lombok.extern.slf4j.Slf4j
+
 import org.jetbrains.annotations.ApiStatus
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicLong

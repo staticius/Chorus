@@ -68,8 +68,8 @@ import org.yaml.snakeyaml.Yaml
  * A set of String, the Nukkit API versions that the plugin supports. Plugin developers should debug in different
  * Nukkit APIs and try out the versions supported, and add them to this list.
  *  * **main**<br></br>
- * 字符串，表示这个插件的主类。插件的主类*不能放在“cn.nukkit”包下*。<br></br>
- * String, the main class of plugin. The main class* can't be placed at 'cn.nukkit' package*.
+ * 字符串，表示这个插件的主类。插件的主类*不能放在“org.chorus”包下*。<br></br>
+ * String, the main class of plugin. The main class* can't be placed at 'org.chorus' package*.
  *  * *author* or *authors*<br></br>
  * 字符串/字符串序列，两个任选一个，表示这个插件的作者/作者列表。<br></br>
  * String or A set of String. One of two is chosen, to describe the author or the list of authors.
@@ -334,8 +334,8 @@ class PluginDescription {
             list.add(api as String?)
             this.compatibleAPIs = list
         }
-        if (main!!.startsWith("cn.nukkit.") && (this.main != "cn.nukkit.plugin.InternalPlugin") && (name != "PowerNukkit")) {
-            throw PluginException("Invalid PluginDescription main, cannot start within the cn.nukkit. package")
+        if (main!!.startsWith("org.chorus.") && (this.main != "org.chorus.plugin.InternalPlugin") && (name != "PowerNukkit")) {
+            throw PluginException("Invalid PluginDescription main, cannot start within the org.chorus. package")
         }
 
         if (plugin.containsKey("commands") && plugin["commands"] is Map<*, *>) {

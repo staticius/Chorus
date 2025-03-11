@@ -51,7 +51,7 @@ class BlockCraftingTable @JvmOverloads constructor(blockState: BlockState? = Com
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRAFTING_TABLE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRAFTING_TABLE)
+
     }
 }

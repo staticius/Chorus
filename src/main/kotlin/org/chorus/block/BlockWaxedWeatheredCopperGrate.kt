@@ -12,6 +12,6 @@ class BlockWaxedWeatheredCopperGrate @JvmOverloads constructor(blockstate: Block
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WAXED_WEATHERED_COPPER_GRATE)
-            get() = Companion.field
+
     }
 }

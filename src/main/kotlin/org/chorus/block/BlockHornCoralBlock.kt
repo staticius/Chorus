@@ -10,7 +10,7 @@ class BlockHornCoralBlock : BlockCoralBlock {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(HORN_CORAL_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.HORN_CORAL_BLOCK)
+
     }
 }

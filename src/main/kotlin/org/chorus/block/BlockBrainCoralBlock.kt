@@ -9,8 +9,10 @@ class BlockBrainCoralBlock : BlockCoralBlock {
         return BlockDeadBrainCoralBlock()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BRAIN_CORAL_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BRAIN_CORAL_BLOCK)
     }
 }

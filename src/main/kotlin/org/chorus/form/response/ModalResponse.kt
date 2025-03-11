@@ -1,13 +1,13 @@
 package org.chorus.form.response
 
-import lombok.AllArgsConstructor
-import lombok.Getter
-import lombok.NoArgsConstructor
-import lombok.Setter
-import lombok.experimental.Accessors
+
+
+
+
+
 
 /**
- * The response of a [cn.nukkit.form.window.ModalForm]
+ * The response of a [org.chorus.form.window.ModalForm]
  */
 
 

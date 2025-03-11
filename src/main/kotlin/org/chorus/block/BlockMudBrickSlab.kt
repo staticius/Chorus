@@ -33,6 +33,6 @@ class BlockMudBrickSlab @JvmOverloads constructor(blockState: BlockState? = Comp
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MUD_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            
     }
 }

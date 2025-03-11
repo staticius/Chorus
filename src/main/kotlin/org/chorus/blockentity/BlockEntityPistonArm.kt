@@ -73,7 +73,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         //玩家客户端会自动处理移动
         if (diff == 0f || !entity.canBePushed() || entity is Player) return
         val event = EntityMoveByPistonEvent(entity, entity.locator.position)
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) return
         entity.onPushByPiston(this)
         if (entity.closed) return
@@ -246,8 +246,8 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     override val isBlockEntityValid: Boolean
         get() {
-            val blockId = block.id
-            return blockId == BlockID.PISTON || blockId == BlockID.STICKY_PISTON
+            val BlockID.= block.id
+            return BlockID.== BlockID.PISTON || BlockID.== BlockID.STICKY_PISTON
         }
 
     override val spawnCompound: CompoundTag

@@ -11,9 +11,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 import kotlin.collections.set
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PardonCommand(name: String) : VanillaCommand(name, "unban a player") {
     init {
         this.permission = "nukkit.command.unban.player"

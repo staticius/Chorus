@@ -4,7 +4,7 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.TrimMaterial
 import org.chorus.network.protocol.types.TrimPattern
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.*
+
 import java.util.function.Consumer
 
 (doNotUseGetters = true, callSuper = false)

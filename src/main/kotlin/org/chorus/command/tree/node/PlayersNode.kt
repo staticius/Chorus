@@ -32,7 +32,7 @@ class PlayersNode : TargetNode<Player?>() {
                     .collect(Collectors.toList())
             this.value = result
         } else {
-            this.value = listOf(Server.getInstance().getPlayer(arg))
+            this.value = listOf(Server.instance.getPlayer(arg))
         }
     }
 }

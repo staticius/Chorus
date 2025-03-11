@@ -9,11 +9,11 @@ class BlockDarkOakFenceGate @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            DARK_OAK_FENCE_GATE,
+BlockID.DARK_OAK_FENCE_GATE,
             CommonBlockProperties.IN_WALL_BIT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-            get() = Companion.field
+
     }
 }

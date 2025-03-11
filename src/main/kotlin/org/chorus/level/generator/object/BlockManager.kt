@@ -8,10 +8,11 @@ import org.chorus.level.format.UnsafeChunk
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
 import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.UpdateSubChunkBlocksPacket
+import org.chorus.network.protocol.types.BlockChangeEntry
 import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import java.util.function.Consumer
-import java.util.function.Function
 import java.util.function.Predicate
 
 class BlockManager(val level: Level) {
@@ -30,7 +31,7 @@ class BlockManager(val level: Level) {
     fun getBlockIdAt(x: Int, y: Int, z: Int, layer: Int): String {
         val block = caches.computeIfAbsent(
             hashXYZ(x, y, z, layer),
-            Long2ObjectFunction { k: Long -> level.getBlock(x, y, z, layer) })
+            Long2ObjectFunction { level.getBlock(x, y, z, layer) })
         return block!!.id
     }
 
@@ -41,39 +42,39 @@ class BlockManager(val level: Level) {
     fun getBlockAt(x: Int, y: Int, z: Int): Block? {
         return caches.computeIfAbsent(
             hashXYZ(x, y, z, 0),
-            Long2ObjectFunction { k: Long -> level.getBlock(x, y, z) })
+            Long2ObjectFunction { level.getBlock(x, y, z) })
     }
 
-    fun setBlockStateAt(blockVector3: Vector3, blockState: BlockState?) {
+    fun setBlockStateAt(blockVector3: Vector3, blockState: BlockState) {
         this.setBlockStateAt(blockVector3.floorX, blockVector3.floorY, blockVector3.floorZ, blockState)
     }
 
-    fun setBlockStateAt(blockVector3: BlockVector3, blockState: BlockState?) {
+    fun setBlockStateAt(blockVector3: BlockVector3, blockState: BlockState) {
         this.setBlockStateAt(blockVector3.x, blockVector3.y, blockVector3.z, blockState)
     }
 
-    fun setBlockStateAt(x: Int, y: Int, z: Int, state: BlockState?) {
+    fun setBlockStateAt(x: Int, y: Int, z: Int, state: BlockState) {
         val hashXYZ = hashXYZ(x, y, z, 0)
         val block = Block.get(state, level, x, y, z, 0)
         places.put(hashXYZ, block)
         caches.put(hashXYZ, block)
     }
 
-    fun setBlockStateAt(x: Int, y: Int, z: Int, layer: Int, state: BlockState?) {
+    fun setBlockStateAt(x: Int, y: Int, z: Int, layer: Int, state: BlockState) {
         val hashXYZ = hashXYZ(x, y, z, layer)
         val block = Block.get(state, level, x, y, z, layer)
         places.put(hashXYZ, block)
         caches.put(hashXYZ, block)
     }
 
-    fun setBlockStateAt(x: Int, y: Int, z: Int, blockId: String?) {
+    fun setBlockStateAt(x: Int, y: Int, z: Int, blockId: String) {
         val hashXYZ = hashXYZ(x, y, z, 0)
         val block = Block.get(blockId, level, x, y, z, 0)
         places.put(hashXYZ, block)
         caches.put(hashXYZ, block)
     }
 
-    fun getChunk(chunkX: Int, chunkZ: Int): IChunk? {
+    fun getChunk(chunkX: Int, chunkZ: Int): IChunk {
         return level.getChunk(chunkX, chunkZ)
     }
 
@@ -89,47 +90,47 @@ class BlockManager(val level: Level) {
     val isTheEnd: Boolean
         get() = level.isTheEnd
 
-    val blocks: List<Block>
-        get() = ArrayList<Block>(places.values())
+    val blocks: MutableList<Block>
+        get() = ArrayList(places.values)
 
     fun applyBlockUpdate() {
-        for (b in places.values()) {
-            level.setBlock(b.position, b, true, true)
+        for (b in places.values) {
+            level.setBlock(b.position, b, direct = true, update = true)
         }
     }
 
     @JvmOverloads
     fun applySubChunkUpdate(
         blockList: List<Block> = ArrayList<Block>(
-            places.values()
+            places.values
         ), predicate: Predicate<Block>? = null
     ) {
-        var blockList = blockList
+        var blockList1 = blockList
         if (predicate != null) {
-            blockList = blockList.stream().filter(predicate).toList()
+            blockList1 = blockList1.stream().filter(predicate).toList()
         }
-        val chunks = HashMap<IChunk?, ArrayList<Block>>()
-        val batchs: HashMap<SubChunkEntry, UpdateSubChunkBlocksPacket> =
-            HashMap<SubChunkEntry, UpdateSubChunkBlocksPacket>()
-        for (b in blockList) {
+        val chunks: MutableMap<IChunk, ArrayList<Block>> = HashMap()
+        val batchs: MutableMap<SubChunkEntry, UpdateSubChunkBlocksPacket> =
+            HashMap()
+        for (b in blockList1) {
             val chunk = chunks.computeIfAbsent(
                 level.getChunk(b.position.chunkX, b.position.chunkZ, true)
-            ) { c: IChunk? -> ArrayList() }
+            ) { _: IChunk? -> ArrayList() }
             chunk.add(b)
             val batch: UpdateSubChunkBlocksPacket = batchs.computeIfAbsent(
-                SubChunkEntry(b.position.chunkX shl 4, (b.position.floorY shr 4) shl 4, b.position.chunkZ shl 4),
-                Function<SubChunkEntry, UpdateSubChunkBlocksPacket> { s: SubChunkEntry ->
-                    UpdateSubChunkBlocksPacket(
-                        s.x,
-                        s.y,
-                        s.z
-                    )
-                })
+                SubChunkEntry(b.position.chunkX shl 4, (b.position.floorY shr 4) shl 4, b.position.chunkZ shl 4)
+            ) { s: SubChunkEntry ->
+                val pk = UpdateSubChunkBlocksPacket()
+                pk.chunkX = s.x
+                pk.chunkY = s.y
+                pk.chunkZ = s.z
+                pk
+            }
             if (b.layer == 1) {
                 batch.extraBlocks.add(
                     BlockChangeEntry(
                         b.position.asBlockVector3(),
-                        b.blockState.unsignedBlockStateHash(),
+                        b.blockState!!.unsignedBlockStateHash(),
                         ProtocolInfo.UPDATE_BLOCK_PACKET,
                         -1,
                         BlockChangeEntry.MessageType.NONE
@@ -139,7 +140,7 @@ class BlockManager(val level: Level) {
                 batch.standardBlocks.add(
                     BlockChangeEntry(
                         b.position.asBlockVector3(),
-                        b.blockState.unsignedBlockStateHash(),
+                        b.blockState!!.unsignedBlockStateHash(),
                         ProtocolInfo.UPDATE_BLOCK_PACKET,
                         -1,
                         BlockChangeEntry.MessageType.NONE
@@ -147,10 +148,10 @@ class BlockManager(val level: Level) {
                 )
             }
         }
-        chunks.entrySet().parallelStream()
-            .forEach(Consumer<Map.Entry<IChunk?, ArrayList<Block?>?>> { entry: Map.Entry<IChunk?, ArrayList<Block?>?> ->
-                val key: IChunk = entry.getKey()
-                val value: ArrayList<Block> = entry.getValue()
+        chunks.entries.parallelStream()
+            .forEach { entry ->
+                val key: IChunk = entry.key
+                val value: ArrayList<Block> = entry.value
                 key.batchProcess { unsafeChunk: UnsafeChunk ->
                     value.forEach(Consumer { b: Block ->
                         unsafeChunk.setBlockState(
@@ -164,8 +165,8 @@ class BlockManager(val level: Level) {
                     unsafeChunk.recalculateHeightMap()
                 }
                 key.reObfuscateChunk()
-            })
-        for (p in batchs.values()) {
+            }
+        for (p in batchs.values) {
             Server.broadcastPacket(level.players.values(), p)
         }
         places.clear()

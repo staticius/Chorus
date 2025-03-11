@@ -2,7 +2,6 @@ package org.chorus.inventory.request
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.entity.mob.villagers.EntityVillagerV2.addExperience
 import org.chorus.entity.mob.villagers.EntityVillagerV2.addGossip
@@ -28,7 +27,7 @@ import org.chorus.recipe.SmithingTransformRecipe
 import org.chorus.recipe.SmithingTrimRecipe
 import org.chorus.registry.Registries
 import org.chorus.utils.TradeRecipeBuildUtils
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import kotlin.math.max
 
@@ -94,7 +93,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 enchantOptionData.minLevel,
                 player
             )
-            Server.getInstance().pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 if ((player.gamemode and 0x01) == 0) {
                     player.setExperience(player.experience, player.experienceLevel - (enchantOptionData.entry + 1))
@@ -105,7 +104,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 context.put(ENCH_RECIPE_KEY, true)
             }
             return null
-        } else if (action.recipeNetworkId >= TradeRecipeBuildUtils.TRADE_RECIPEID) { //handle village trade recipe
+        } else if (action.recipeNetworkId >= TradeRecipeBuildUtils.TRADE_RECIPE_ID) { //handle village trade recipe
             val tradeRecipe = TradeRecipeBuildUtils.RECIPE_MAP[action.recipeNetworkId]
             if (tradeRecipe == null) {
                 CraftRecipeActionProcessor.log.error("Can't find trade recipe from netId {}", action.recipeNetworkId)
@@ -177,7 +176,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             Collections.addAll(items, *d)
         }
         val craftItemEvent = CraftItemEvent(player, items.toArray(Item.EMPTY_ARRAY), recipe, numberOfRequestedCrafts)
-        player.getServer().getPluginManager().callEvent(craftItemEvent)
+        Server.instance.pluginManager.callEvent(craftItemEvent)
         if (craftItemEvent.isCancelled) {
             return context.error()
         }
@@ -223,7 +222,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             if (recipe.results.size == 1) {
                 // 若配方输出物品为1，客户端将不会发送CreateAction，此时我们直接在CraftRecipeAction输出物品到CREATED_OUTPUT
                 // 若配方输出物品为多个，客户端将会发送CreateAction，此时我们将在CreateActionProcessor里面输出物品到CREATED_OUTPUT
-                val output: Item = recipe.results.getFirst().clone()
+                val output: Item = recipe.results.first().clone()
                 output.setCount(output.getCount() * numberOfRequestedCrafts)
                 val createdOutput = player.creativeOutputInventory
                 createdOutput.setItem(0, output.clone().autoAssignStackNetworkId(), false)

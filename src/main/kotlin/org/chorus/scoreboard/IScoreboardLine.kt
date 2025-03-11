@@ -9,70 +9,67 @@ import org.chorus.scoreboard.scorer.IScorer
  */
 interface IScoreboardLine {
     /**
-     * 获取追踪对象
-     * @return 追踪对象
+     * GetTrackingObject
+     * @return TrackingObjects
      */
-    @JvmField
     val scorer: IScorer
 
     /**
-     * 获取行id
-     * 客户端通过此id标识计分板上的每个行
-     * @return 行id
+     * Get the line id
+     * The client identifies each row on the scoreboard through this id
+     * @return line id
      */
     val lineId: Long
 
     /**
-     * 获取此计分行所属的计分板
-     * @return 所属计分板
+     * Get the scoreboard to which this branch belongs
+     * @return Scoreboard
      */
-    @JvmField
     val scoreboard: IScoreboard
 
     /**
-     * 获取分数
-     * @return 分数
+     * Get scores
+     * @return score
      */
-    @JvmField
     val score: Int
 
     /**
-     * 设置分数
-     * @param score 分数
-     * @return 是否成功（事件被撤回就会false）
+     * Set the score
+     * @param score
+     * @return Whether the success (event is withdrawn will be false)
      */
     fun setScore(score: Int): Boolean
 
     /**
-     * 增加分数
-     * @param addition 增加量
-     * @return 是否成功（事件被撤回就会false）
+     * Increase score
+     * @param addition Increase amount
+     * @return Whether the success (event is withdrawn will be false)
      */
     fun addScore(addition: Int): Boolean {
         return setScore(score + addition)
     }
 
     /**
-     * 减少分数
-     * @param reduction 减少量
-     * @return 是否成功（事件被撤回就会false）
+     * Reduce score
+     * @param reduction
+     * @return Whether the success (event is withdrawn will be false)
      */
     fun removeScore(reduction: Int): Boolean {
         return setScore(score - reduction)
     }
 
     /**
-     * 内部方法
-     * 转换到network信息
-     * @return network信息
+     * Internal method
+     * Convert to network information
+     * @return network information
      */
     fun toNetworkInfo(): ScoreInfo? {
         return scorer.toNetworkInfo(scoreboard, this)
     }
 
     /**
-     * 内部方法
-     * 通知所属计分板对象更新此行信息
+     * Internal method
+     * Notify the scoreboard object to update this line information
      */
     fun updateScore() {
         scoreboard.updateScore(this)

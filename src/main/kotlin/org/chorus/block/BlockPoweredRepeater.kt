@@ -25,10 +25,10 @@ class BlockPoweredRepeater @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.POWERED_REPEATER,
+BlockID.BlockID.POWERED_REPEATER,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.REPEATER_DELAY
         )
-            get() = Companion.field
+
     }
 }

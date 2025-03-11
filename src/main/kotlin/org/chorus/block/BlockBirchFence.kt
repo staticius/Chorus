@@ -5,8 +5,10 @@ class BlockBirchFence @JvmOverloads constructor(blockstate: BlockState? = Compan
     override val name: String
         get() = "Birch Fence"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BIRCH_FENCE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BIRCH_FENCE)
     }
 }

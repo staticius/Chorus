@@ -10,15 +10,17 @@ class BlockBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = C
     }
 
     override fun getSingleSlab(): BlockState {
-        return BlockBrickSlab.Companion.PROPERTIES.getDefaultState()
+        return BlockBrickSlab.properties.defaultState
     }
 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.BRICK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

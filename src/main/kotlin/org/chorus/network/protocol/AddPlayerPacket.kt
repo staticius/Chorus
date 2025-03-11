@@ -6,7 +6,7 @@ import org.chorus.item.Item
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.PropertySyncData
 import org.chorus.utils.*
-import lombok.*
+
 import java.util.*
 
 
@@ -29,7 +29,7 @@ class AddPlayerPacket : DataPacket() {
     var pitch: Float = 0f
     var yaw: Float = 0f
     var item: Item? = null
-    var gameType: Int = Server.getInstance().gamemode
+    var gameType: Int = Server.instance.gamemode
     var entityData: EntityDataMap = EntityDataMap()
     var syncedProperties: PropertySyncData = PropertySyncData(intArrayOf(), floatArrayOf())
     var deviceId: String = ""

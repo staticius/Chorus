@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 import org.chorus.recipe.descriptor.ItemDescriptor
-import lombok.Value
+
 
 /**
  * AutoCraftRecipeStackRequestActionData is sent by the client similarly to the CraftRecipeStackRequestActionData. The

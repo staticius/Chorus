@@ -5,14 +5,14 @@ import org.chorus.item.ItemTool
 
 abstract class BlockDoubleSlabBase(blockState: BlockState?) : BlockSolid(blockState) {
     override val name: String
-        get() = "Double " + slabName + " Slab"
+        get() = "Double ${getSlabName()} Slab"
 
-    abstract val slabName: String
+    abstract fun getSlabName(): String
 
-    abstract val singleSlab: BlockState?
+    abstract fun getSingleSlab(): BlockState?
 
     override fun toItem(): Item? {
-        return get(singleSlab).toItem()
+        return get(getSingleSlab()).toItem()
     }
 
     override val hardness: Double

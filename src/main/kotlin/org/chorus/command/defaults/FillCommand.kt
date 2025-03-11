@@ -10,7 +10,7 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
 import org.chorus.math.AxisAlignedBB
-import org.chorus.math.NukkitMath
+import org.chorus.math.ChorusMath
 import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.utils.Utils
 import kotlin.math.max
@@ -74,7 +74,7 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
         }
 
         val size =
-            NukkitMath.floorDouble((aabb.maxX - aabb.minX + 1) * (aabb.maxY - aabb.minY + 1) * (aabb.maxZ - aabb.minZ + 1))
+            ChorusMath.floorDouble((aabb.maxX - aabb.minX + 1) * (aabb.maxY - aabb.minY + 1) * (aabb.maxZ - aabb.minZ + 1))
         if (size > 16 * 16 * 16 * 8) {
             log.addError("commands.fill.tooManyBlocks", size.toString(), (16 * 16 * 16 * 8).toString())
             log.addError("Operation will continue, but too many blocks may cause stuttering")
@@ -82,8 +82,8 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
 
         val level = from.level
 
-        for (chunkX in NukkitMath.floorDouble(aabb.minX) shr 4..(NukkitMath.floorDouble(aabb.maxX) shr 4)) {
-            for (chunkZ in NukkitMath.floorDouble(aabb.minZ) shr 4..(NukkitMath.floorDouble(aabb.maxZ) shr 4)) {
+        for (chunkX in ChorusMath.floorDouble(aabb.minX) shr 4..(ChorusMath.floorDouble(aabb.maxX) shr 4)) {
+            for (chunkZ in ChorusMath.floorDouble(aabb.minZ) shr 4..(ChorusMath.floorDouble(aabb.maxZ) shr 4)) {
                 if (level.getChunkIfLoaded(chunkX, chunkZ) == null) {
                     log.addError("commands.fill.failed").output()
                     return 0
@@ -103,19 +103,19 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
                 }
                 when (oldBlockHandling) {
                     FillMode.OUTLINE -> {
-                        for (x in NukkitMath.floorDouble(aabb.minX)..NukkitMath.floorDouble(aabb.maxX)) {
-                            for (z in NukkitMath.floorDouble(aabb.minZ)..NukkitMath.floorDouble(aabb.maxZ)) {
-                                for (y in NukkitMath.floorDouble(aabb.minY)..NukkitMath.floorDouble(aabb.maxY)) {
+                        for (x in ChorusMath.floorDouble(aabb.minX)..ChorusMath.floorDouble(aabb.maxX)) {
+                            for (z in ChorusMath.floorDouble(aabb.minZ)..ChorusMath.floorDouble(aabb.maxZ)) {
+                                for (y in ChorusMath.floorDouble(aabb.minY)..ChorusMath.floorDouble(aabb.maxY)) {
                                     val isBorderX =
-                                        x == NukkitMath.floorDouble(from.position.x) || x == NukkitMath.floorDouble(
+                                        x == ChorusMath.floorDouble(from.position.x) || x == ChorusMath.floorDouble(
                                             to.position.x
                                         )
                                     val isBorderZ =
-                                        z == NukkitMath.floorDouble(from.position.z) || z == NukkitMath.floorDouble(
+                                        z == ChorusMath.floorDouble(from.position.z) || z == ChorusMath.floorDouble(
                                             to.position.z
                                         )
                                     val isBorderY =
-                                        y == NukkitMath.floorDouble(from.position.y) || y == NukkitMath.floorDouble(
+                                        y == ChorusMath.floorDouble(from.position.y) || y == ChorusMath.floorDouble(
                                             to.position.y
                                         )
 
@@ -129,20 +129,20 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
                     }
 
                     FillMode.HOLLOW -> {
-                        for (x in NukkitMath.floorDouble(aabb.minX)..NukkitMath.floorDouble(aabb.maxX)) {
-                            for (z in NukkitMath.floorDouble(aabb.minZ)..NukkitMath.floorDouble(aabb.maxZ)) {
-                                for (y in NukkitMath.floorDouble(aabb.minY)..NukkitMath.floorDouble(aabb.maxY)) {
+                        for (x in ChorusMath.floorDouble(aabb.minX)..ChorusMath.floorDouble(aabb.maxX)) {
+                            for (z in ChorusMath.floorDouble(aabb.minZ)..ChorusMath.floorDouble(aabb.maxZ)) {
+                                for (y in ChorusMath.floorDouble(aabb.minY)..ChorusMath.floorDouble(aabb.maxY)) {
                                     val block: Block
                                     val isBorderX =
-                                        x == NukkitMath.floorDouble(from.position.x) || x == NukkitMath.floorDouble(
+                                        x == ChorusMath.floorDouble(from.position.x) || x == ChorusMath.floorDouble(
                                             to.position.x
                                         )
                                     val isBorderZ =
-                                        z == NukkitMath.floorDouble(from.position.z) || z == NukkitMath.floorDouble(
+                                        z == ChorusMath.floorDouble(from.position.z) || z == ChorusMath.floorDouble(
                                             to.position.z
                                         )
                                     val isBorderY =
-                                        y == NukkitMath.floorDouble(from.position.y) || y == NukkitMath.floorDouble(
+                                        y == ChorusMath.floorDouble(from.position.y) || y == ChorusMath.floorDouble(
                                             to.position.y
                                         )
 

@@ -75,14 +75,14 @@ class ItemTrident @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             entityShootBowEvent.setCancelled()
         }
 
-        Server.getInstance().pluginManager.callEvent(entityShootBowEvent)
+        Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
             entityShootBowEvent.getProjectile().close()
         } else {
             entityShootBowEvent.getProjectile()
                 .setMotion(entityShootBowEvent.getProjectile().getMotion().multiply(entityShootBowEvent.force))
             val ev = ProjectileLaunchEvent(entityShootBowEvent.getProjectile(), player)
-            Server.getInstance().pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 entityShootBowEvent.getProjectile().close()
             } else {

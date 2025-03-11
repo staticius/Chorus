@@ -18,9 +18,7 @@ import org.chorus.math.BlockFace.Companion.fromIndex
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockLiquid(blockstate) {
     override val lightLevel: Int
@@ -80,7 +78,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
                     if (block!!.isAir) {
                         if (this.isSurroundingBlockFlammable(block)) {
                             val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
-                            level.server.pluginManager.callEvent(e)
+                            Server.instance.pluginManager.callEvent(e)
 
                             if (!e.isCancelled) {
                                 val fire = get(FIRE)
@@ -102,7 +100,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
 
                     if (block!!.up()!!.isAir && block.burnChance > 0) {
                         val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
-                        level.server.pluginManager.callEvent(e)
+                        Server.instance.pluginManager.callEvent(e)
 
                         if (!e.isCancelled) {
                             val fire = get(FIRE)
@@ -194,7 +192,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
         get() = 0.3
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FLOWING_LAVA, CommonBlockProperties.LIQUID_DEPTH)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FLOWING_LAVA, CommonBlockProperties.LIQUID_DEPTH)
+
     }
 }

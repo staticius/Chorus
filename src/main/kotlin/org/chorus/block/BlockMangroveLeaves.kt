@@ -62,10 +62,10 @@ class BlockMangroveLeaves : BlockLeaves {
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.MANGROVE_LEAVES,
+BlockID.BlockID.MANGROVE_LEAVES,
             CommonBlockProperties.PERSISTENT_BIT,
             CommonBlockProperties.UPDATE_BIT
         )
-            get() = Companion.field
+
     }
 }

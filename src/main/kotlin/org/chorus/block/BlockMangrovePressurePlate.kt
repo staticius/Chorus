@@ -15,6 +15,6 @@ class BlockMangrovePressurePlate @JvmOverloads constructor(blockstate: BlockStat
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MANGROVE_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+
     }
 }

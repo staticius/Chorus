@@ -1,18 +1,18 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.inventory.GrindstoneEvent
 import org.chorus.inventory.GrindstoneInventory
 import org.chorus.item.*
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.math.NukkitMath
+import org.chorus.math.ChorusMath
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.types.itemstack.request.action.CraftGrindstoneAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
-import lombok.extern.slf4j.Slf4j
+import org.chorus.Server
+
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.stream.Stream
@@ -48,7 +48,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
             inventory,
             firstItem ?: Item.AIR, pair.left(), secondItem ?: Item.AIR, exp, player
         )
-        player.getServer().getPluginManager().callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             player.removeAllWindows(false)
             player.sendAllInventories()
@@ -131,7 +131,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
             .sum()
 
         resultExperience = ThreadLocalRandom.current().nextInt(
-            NukkitMath.ceilDouble(resultExperience.toDouble() / 2),
+            ChorusMath.ceilDouble(resultExperience.toDouble() / 2),
             resultExperience + 1
         )
         return resultExperience

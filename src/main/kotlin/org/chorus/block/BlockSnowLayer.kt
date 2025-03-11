@@ -158,13 +158,13 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
         level.setBlock(this.position, 0, newBlock, true, false)
         level.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
             val target =
-                level.getChunkPlayers(position.chunkX, position.chunkZ).values.toArray<Player>(Player.EMPTY_ARRAY)
+                level.getChunkPlayers(position.chunkX, position.chunkZ).values.toTypedArray()
             val blocks = arrayOf<Vector3?>(this.position)
             level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false)
             level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false)
         }, 10)
 
-        val target = level.getChunkPlayers(position.chunkX, position.chunkZ).values.toArray<Player>(Player.EMPTY_ARRAY)
+        val target = level.getChunkPlayers(position.chunkX, position.chunkZ).values.toTypedArray()
         val blocks = arrayOf<Vector3?>(this.position)
         level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false)
         level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false)
@@ -212,7 +212,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
             blockState!!.setPropertyValue(Companion.properties, CommonBlockProperties.HEIGHT, snowHeight)
         )
         val event: BlockFadeEvent = BlockFadeEvent(toMelt, newState)
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return false
         }
@@ -268,6 +268,6 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SNOW_LAYER, CommonBlockProperties.COVERED_BIT, CommonBlockProperties.HEIGHT)
-            get() = Companion.field
+
     }
 }

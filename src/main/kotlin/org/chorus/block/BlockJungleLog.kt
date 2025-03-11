@@ -11,6 +11,6 @@ class BlockJungleLog @JvmOverloads constructor(blockstate: BlockState? = Compani
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.Companion.JUNGLE_LOG, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

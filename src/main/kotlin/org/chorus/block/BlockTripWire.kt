@@ -92,7 +92,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
         }
 
     override fun onEntityCollide(entity: Entity) {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return
         }
         if (!entity.doesTriggerPressurePlate()) {
@@ -111,7 +111,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
     }
 
     private fun updateHook(scheduleUpdate: Boolean) {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return
         }
 
@@ -138,7 +138,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
     }
 
     override fun onUpdate(type: Int): Int {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return 0
         }
 
@@ -217,12 +217,12 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.TRIP_WIRE,
+BlockID.BlockID.TRIP_WIRE,
             CommonBlockProperties.POWERED_BIT,
             CommonBlockProperties.SUSPENDED_BIT,
             CommonBlockProperties.ATTACHED_BIT,
             CommonBlockProperties.DISARMED_BIT
         )
-            get() = Companion.field
+
     }
 }

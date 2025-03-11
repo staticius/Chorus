@@ -5,9 +5,7 @@ import org.chorus.entity.item.EntityItem
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemSpawnEvent(item: EntityItem?) : EntityEvent(), Cancellable {
     init {
         this.entity = item

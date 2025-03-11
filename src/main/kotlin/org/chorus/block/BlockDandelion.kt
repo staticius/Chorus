@@ -7,7 +7,7 @@ class BlockDandelion @JvmOverloads constructor(blockstate: BlockState? = Compani
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DANDELION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DANDELION)
+
     }
 }

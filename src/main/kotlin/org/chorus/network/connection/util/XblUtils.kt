@@ -2,7 +2,7 @@ package org.chorus.network.connection.util
 
 import io.netty.util.internal.logging.InternalLogger
 import io.netty.util.internal.logging.InternalLoggerFactory
-import lombok.experimental.UtilityClass
+
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader

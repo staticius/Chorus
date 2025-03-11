@@ -3,9 +3,7 @@ package org.chorus.metadata
 import org.chorus.plugin.Plugin
 import java.lang.ref.WeakReference
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class MetadataValue protected constructor(owningPlugin: Plugin) {
     protected val owningPlugin: WeakReference<Plugin> =
         WeakReference(owningPlugin)

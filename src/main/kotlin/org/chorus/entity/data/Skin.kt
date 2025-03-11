@@ -3,8 +3,8 @@ package org.chorus.entity.data
 import org.chorus.nbt.stream.FastByteArrayOutputStream
 import org.chorus.utils.*
 import com.google.common.base.Preconditions
-import lombok.EqualsAndHashCode
-import lombok.ToString
+
+
 import org.jose4j.json.internal.json_simple.JSONObject
 import org.jose4j.json.internal.json_simple.JSONValue
 import java.awt.Color
@@ -12,9 +12,7 @@ import java.awt.image.BufferedImage
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 (exclude = ["geometryData", "animationData"])
 (exclude = ["trusted"])
 class Skin {

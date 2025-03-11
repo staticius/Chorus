@@ -109,6 +109,6 @@ class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState? = 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STONECUTTER_BLOCK, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-            get() = Companion.field
+
     }
 }

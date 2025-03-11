@@ -5,9 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PlayerItemHeldEvent(player: Player?, item: Item, hotbarSlot: Int) : PlayerEvent(),
     Cancellable {
     val item: Item

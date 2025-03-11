@@ -24,12 +24,14 @@ class BlockAndesiteStairs @JvmOverloads constructor(blockstate: BlockState? = Co
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            ANDESITE_STAIRS,
+            BlockID.ANDESITE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
     }
 }

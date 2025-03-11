@@ -5,7 +5,7 @@ import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.EmotePacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.UUIDValidator
-import lombok.extern.slf4j.Slf4j
+
 
 
 class EmoteProcessor : DataPacketProcessor<EmotePacket>() {

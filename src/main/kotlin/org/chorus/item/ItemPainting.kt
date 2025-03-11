@@ -15,9 +15,7 @@ import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemPainting @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
     Item(ItemID.Companion.PAINTING, 0, count, "Painting") {
     override fun canBeActivated(): Boolean {

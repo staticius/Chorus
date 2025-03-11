@@ -6,11 +6,9 @@ import org.chorus.lang.TranslationContainer
 import org.chorus.level.GameRule
 import org.chorus.permission.Permission
 import org.chorus.plugin.Plugin
-import lombok.extern.slf4j.Slf4j
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
+
 
 open class ConsoleCommandSender : CommandSender {
     private val perm: PermissibleBase
@@ -63,7 +61,7 @@ open class ConsoleCommandSender : CommandSender {
         get() = false
 
     override val server: Server?
-        get() = Server.getInstance()
+        get() = Server.instance
 
     override fun sendMessage(message: String) {
         for (line in message.trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
@@ -72,16 +70,16 @@ open class ConsoleCommandSender : CommandSender {
     }
 
     override fun sendMessage(message: TextContainer) {
-        this.sendMessage(server!!.language.tr(message))
+        this.sendMessage(Server.instance.baseLang.tr(message))
     }
 
     override fun sendCommandOutput(container: CommandOutputContainer) {
         if (this.transform.level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             for (msg in container.messages) {
                 var text =
-                    server!!.language.tr(TranslationContainer(msg.messageId, *msg.parameters))
+                    Server.instance.baseLang.tr(TranslationContainer(msg.messageId, *msg.parameters))
                 val event: ConsoleCommandOutputEvent = ConsoleCommandOutputEvent(this, text)
-                server!!.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (event.isCancelled()) continue
                 text = event.getMessage()
                 this.sendMessage(text)

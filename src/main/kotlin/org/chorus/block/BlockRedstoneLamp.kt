@@ -45,14 +45,14 @@ open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState? =
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            if (!level.server.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings().enableRedstone()) {
                 return 0
             }
 
             if (this.isGettingPower) {
                 // Redstone event
                 val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return 0
                 }
@@ -75,6 +75,6 @@ open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_LAMP)
-            get() = Companion.field
+
     }
 }

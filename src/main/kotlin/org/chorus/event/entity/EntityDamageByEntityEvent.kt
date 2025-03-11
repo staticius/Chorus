@@ -4,9 +4,7 @@ import org.chorus.entity.Entity
 import org.chorus.entity.effect.EffectType
 import org.chorus.item.enchantment.Enchantment
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class EntityDamageByEntityEvent : EntityDamageEvent {
     @JvmField
     val damager: Entity

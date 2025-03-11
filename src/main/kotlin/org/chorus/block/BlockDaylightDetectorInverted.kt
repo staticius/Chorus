@@ -29,7 +29,7 @@ class BlockDaylightDetectorInverted @JvmOverloads constructor(blockState: BlockS
         if (isNotActivate(player)) return false
         val block = BlockDaylightDetector()
         level.setBlock(this.position, block, true, true)
-        if (level.server.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings().enableRedstone()) {
             block.updatePower()
         }
         return true
@@ -40,7 +40,7 @@ class BlockDaylightDetectorInverted @JvmOverloads constructor(blockState: BlockS
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DAYLIGHT_DETECTOR_INVERTED, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+            BlockProperties(BlockID.DAYLIGHT_DETECTOR_INVERTED, CommonBlockProperties.REDSTONE_SIGNAL)
+
     }
 }

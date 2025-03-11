@@ -169,7 +169,7 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                         this,
                         source.getEntity(),
                         DamageCause.THORNS,
-                        (if (getServer()!!.difficulty == 3) 2 else 3).toFloat()
+                        (if (Server.instance.difficulty == 3) 2 else 3).toFloat()
                     )
                 )
             }
@@ -182,11 +182,11 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
         if (!this.closed && this.isAlive) {
             for (p in this.viewers.values) {
                 if (p.locallyInitialized && p.getGamemode() % 2 == 0 && p.position.distance(this.position) < 50 && !p.hasEffect(
-                        EffectType.Companion.MINING_FATIGUE
+                        EffectType.MINING_FATIGUE
                     )
                 ) {
                     p.addEffect(
-                        Effect.Companion.get(EffectType.Companion.MINING_FATIGUE).setAmplifier(2).setDuration(6000)
+                        Effect.get(EffectType.MINING_FATIGUE).setAmplifier(2).setDuration(6000)
                     )
                     val pk = LevelEventPacket()
                     pk.evid = LevelEventPacket.EVENT_PARTICLE_SOUND_GUARDIAN_GHOST

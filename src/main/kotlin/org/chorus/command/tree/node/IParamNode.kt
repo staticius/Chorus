@@ -88,7 +88,7 @@ interface IParamNode<T> {
     }
 
     /**
-     * 这个方法用于初始化[ParamList]和一些能从[CommandParameter][cn.nukkit.command.data.CommandParameter]得到的参数,例如optional enumData等，插件不需要调用
+     * 这个方法用于初始化[ParamList]和一些能从[CommandParameter][org.chorus.command.data.CommandParameter]得到的参数,例如optional enumData等，插件不需要调用
      *
      * @param parent   the parent
      * @param name     the name

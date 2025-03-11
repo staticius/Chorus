@@ -5,9 +5,7 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.lang.TranslationContainer
 import org.chorus.plugin.Plugin
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PluginCommand<T : Plugin?> : Command, PluginIdentifiableCommand {
     private val owningPlugin: T
 

@@ -49,6 +49,6 @@ class BlockStrippedBambooBlock @JvmOverloads constructor(blockState: BlockState?
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STRIPPED_BAMBOO_BLOCK, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

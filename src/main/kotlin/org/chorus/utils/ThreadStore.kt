@@ -2,9 +2,7 @@ package org.chorus.utils
 
 import java.util.concurrent.ConcurrentHashMap
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 object ThreadStore {
     val store: MutableMap<String, Any> = ConcurrentHashMap()
 }

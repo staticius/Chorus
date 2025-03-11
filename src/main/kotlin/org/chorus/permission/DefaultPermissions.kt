@@ -2,9 +2,7 @@ package org.chorus.permission
 
 import org.chorus.Server
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 object DefaultPermissions {
     const val ROOT: String = "nukkit"
 
@@ -13,9 +11,9 @@ object DefaultPermissions {
         if (parent != null) {
             parent.children[perm.name] = true
         }
-        Server.getInstance().pluginManager.addPermission(perm)
+        Server.instance.pluginManager.addPermission(perm)
 
-        return Server.getInstance().pluginManager.getPermission(perm.name)
+        return Server.instance.pluginManager.getPermission(perm.name)
     }
 
     @JvmStatic

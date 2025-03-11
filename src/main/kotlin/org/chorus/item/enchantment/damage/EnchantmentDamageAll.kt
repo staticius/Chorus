@@ -3,9 +3,7 @@ package org.chorus.item.enchantment.damage
 import org.chorus.entity.*
 import org.chorus.item.enchantment.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentDamageAll :
     EnchantmentDamage(Enchantment.Companion.ID_DAMAGE_ALL, "all", Rarity.COMMON, TYPE.ALL) {
     override fun getMinEnchantAbility(level: Int): Int {

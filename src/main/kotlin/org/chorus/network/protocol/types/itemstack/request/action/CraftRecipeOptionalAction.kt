@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-import lombok.Value
+
 
 /**
  * Called when renaming an item in an anvil or cartography table. Uses the filter strings present in the request.

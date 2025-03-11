@@ -5,9 +5,7 @@ import java.util.*
 import java.util.stream.Collectors
 import kotlin.math.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 object VectorMath {
     fun getDirection2D(azimuth: Double): Vector2 {
         return Vector2(cos(azimuth), sin(azimuth))
@@ -35,7 +33,7 @@ object VectorMath {
         var lastXCut = if (from.x < to.x) from else to
         val targetXCut = if (from.x > to.x) from else to
         if (from.x != to.x) {
-            for (xCut in NukkitMath.ceilDouble(min(from.x, to.x))..<NukkitMath.floorDouble(max(from.x, to.x)) + 1) {
+            for (xCut in ChorusMath.ceilDouble(min(from.x, to.x))..<ChorusMath.floorDouble(max(from.x, to.x)) + 1) {
                 val ratio = (xCut - from.x) / (to.x - from.x)
                 val currentXCut =
                     Vector3(xCut.toDouble(), from.y + (to.y - from.y) * ratio, from.z + (to.z - from.z) * ratio)
@@ -43,7 +41,7 @@ object VectorMath {
                     xCuts.add(FixedVector3(lastXCut, currentXCut))
                 }
                 lastXCut = currentXCut
-                if (xCut + 1 > NukkitMath.floorDouble(max(from.x, to.x))) {
+                if (xCut + 1 > ChorusMath.floorDouble(max(from.x, to.x))) {
                     xCuts.add(FixedVector3(lastXCut, targetXCut))
                 }
             }
@@ -57,12 +55,12 @@ object VectorMath {
                 var lastZCut = if (xCut.from.z < xCut.to.z) xCut.from else xCut.to
                 val targetZCut = if (xCut.from.z > xCut.to.z) xCut.from else xCut.to
                 val oldSize = zCuts.size
-                for (zCut in NukkitMath.ceilDouble(
+                for (zCut in ChorusMath.ceilDouble(
                     min(
                         xCut.from.z,
                         xCut.to.z
                     )
-                )..<NukkitMath.floorDouble(max(xCut.from.z, xCut.to.z)) + 1) {
+                )..<ChorusMath.floorDouble(max(xCut.from.z, xCut.to.z)) + 1) {
                     val ratio = (zCut - xCut.from.z) / (xCut.to.z - xCut.from.z)
                     val currentZCut = Vector3(
                         xCut.from.x + (xCut.to.x - xCut.from.x) * ratio,
@@ -73,7 +71,7 @@ object VectorMath {
                         zCuts.add(FixedVector3(lastZCut, currentZCut))
                     }
                     lastZCut = currentZCut
-                    if (zCut + 1 > NukkitMath.floorDouble(max(xCut.from.z, xCut.to.z))) {
+                    if (zCut + 1 > ChorusMath.floorDouble(max(xCut.from.z, xCut.to.z))) {
                         zCuts.add(FixedVector3(lastZCut, targetZCut))
                     }
                 }
@@ -87,12 +85,12 @@ object VectorMath {
                 var lastYCut = if (zCut.from.y < zCut.to.y) zCut.from else zCut.to
                 val targetYCut = if (zCut.from.y > zCut.to.y) zCut.from else zCut.to
                 val oldSize = yCuts.size
-                for (yCut in NukkitMath.ceilDouble(
+                for (yCut in ChorusMath.ceilDouble(
                     min(
                         zCut.from.y,
                         zCut.to.y
                     )
-                )..<NukkitMath.floorDouble(max(zCut.from.y, zCut.to.y)) + 1) {
+                )..<ChorusMath.floorDouble(max(zCut.from.y, zCut.to.y)) + 1) {
                     val ratio = (yCut - zCut.from.y) / (zCut.to.y - zCut.from.y)
                     val currentYCut = Vector3(
                         zCut.from.x + (zCut.to.x - zCut.from.x) * ratio,
@@ -103,7 +101,7 @@ object VectorMath {
                         yCuts.add(FixedVector3(lastYCut, currentYCut))
                     }
                     lastYCut = currentYCut
-                    if (yCut + 1 > NukkitMath.floorDouble(max(zCut.from.y, zCut.to.y))) {
+                    if (yCut + 1 > ChorusMath.floorDouble(max(zCut.from.y, zCut.to.y))) {
                         yCuts.add(FixedVector3(lastYCut, targetYCut))
                     }
                 }

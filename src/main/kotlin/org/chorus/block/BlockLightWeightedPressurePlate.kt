@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
-import org.chorus.math.NukkitMath.ceilFloat
+import org.chorus.math.ChorusMath.ceilFloat
 import kotlin.math.min
 
 class BlockLightWeightedPressurePlate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
@@ -47,6 +47,6 @@ class BlockLightWeightedPressurePlate @JvmOverloads constructor(blockstate: Bloc
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.LIGHT_WEIGHTED_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+
     }
 }

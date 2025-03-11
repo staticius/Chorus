@@ -8,14 +8,11 @@ import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.sqrt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
 class TickCachedBlockIterator @JvmOverloads constructor(
     private val level: Level, start: Vector3, direction: Vector3, yOffset: Double = 0.0,
     private val maxDistance: Int = 0
 ) :
-    MutableIterator<Block?> {
+    Iterator<Block?> {
     private var end = false
 
     private val blockQueue = arrayOfNulls<Block>(3)
@@ -31,9 +28,9 @@ class TickCachedBlockIterator @JvmOverloads constructor(
     private val secondStep: Int
     private val thirdStep: Int
 
-    private var mainFace: BlockFace? = null
-    private var secondFace: BlockFace? = null
-    private var thirdFace: BlockFace? = null
+    private lateinit var mainFace: BlockFace
+    private lateinit var secondFace: BlockFace
+    private lateinit var thirdFace: BlockFace
 
     init {
         val startClone = Vector3(start.x, start.y, start.z)
@@ -93,13 +90,13 @@ class TickCachedBlockIterator @JvmOverloads constructor(
         }
 
         val d = mainPosition / mainDirection
-        val secondd = secondPosition - secondDirection * d
-        val thirdd = thirdPosition - thirdDirection * d
+        val second = secondPosition - secondDirection * d
+        val third = thirdPosition - thirdDirection * d
 
-        this.secondError = floor(secondd * gridSize).toInt()
-        this.secondStep = Math.round(secondDirection / mainDirection * gridSize).toInt()
-        this.thirdError = floor(thirdd * gridSize).toInt()
-        this.thirdStep = Math.round(thirdDirection / mainDirection * gridSize).toInt()
+        this.secondError = floor(second * GRID_SIZE).toInt()
+        this.secondStep = Math.round(secondDirection / mainDirection * GRID_SIZE).toInt()
+        this.thirdError = floor(third * GRID_SIZE).toInt()
+        this.thirdStep = Math.round(thirdDirection / mainDirection * GRID_SIZE).toInt()
 
         if (this.secondError + this.secondStep <= 0) {
             this.secondError = -this.secondStep + 1
@@ -109,20 +106,20 @@ class TickCachedBlockIterator @JvmOverloads constructor(
             this.thirdError = -this.thirdStep + 1
         }
 
-        var lastBlock = startBlock!!.getTickCachedSide(mainFace!!.getOpposite())
+        var lastBlock = startBlock!!.getTickCachedSide(mainFace.getOpposite()!!)
 
         if (this.secondError < 0) {
-            this.secondError += gridSize
-            lastBlock = lastBlock.getTickCachedSide(secondFace!!.getOpposite())
+            this.secondError += GRID_SIZE
+            lastBlock = lastBlock?.getTickCachedSide(secondFace.getOpposite()!!)
         }
 
         if (this.thirdError < 0) {
-            this.thirdError += gridSize
-            lastBlock = lastBlock.getTickCachedSide(thirdFace!!.getOpposite())
+            this.thirdError += GRID_SIZE
+            lastBlock = lastBlock?.getTickCachedSide(thirdFace.getOpposite()!!)
         }
 
-        this.secondError -= gridSize
-        this.thirdError -= gridSize
+        this.secondError -= GRID_SIZE
+        this.thirdError -= GRID_SIZE
 
         blockQueue[0] = lastBlock
 
@@ -230,25 +227,25 @@ class TickCachedBlockIterator @JvmOverloads constructor(
             blockQueue[2] = blockQueue[0]!!.getTickCachedSide(this.mainFace)
 
             if ((this.secondStep * this.thirdError) < (this.thirdStep * this.secondError)) {
-                blockQueue[1] = blockQueue[2].getTickCachedSide(this.secondFace)
-                blockQueue[0] = blockQueue[1].getTickCachedSide(this.thirdFace)
+                blockQueue[1] = blockQueue[2]?.getTickCachedSide(this.secondFace)
+                blockQueue[0] = blockQueue[1]?.getTickCachedSide(this.thirdFace)
             } else {
-                blockQueue[1] = blockQueue[2].getTickCachedSide(this.thirdFace)
-                blockQueue[0] = blockQueue[1].getTickCachedSide(this.secondFace)
+                blockQueue[1] = blockQueue[2]?.getTickCachedSide(this.thirdFace)
+                blockQueue[0] = blockQueue[1]?.getTickCachedSide(this.secondFace)
             }
 
-            this.thirdError -= gridSize
-            this.secondError -= gridSize
+            this.thirdError -= GRID_SIZE
+            this.secondError -= GRID_SIZE
             this.currentBlock = 2
         } else if (this.secondError > 0) {
             blockQueue[1] = blockQueue[0]!!.getTickCachedSide(this.mainFace)
-            blockQueue[0] = blockQueue[1].getTickCachedSide(this.secondFace)
-            this.secondError -= gridSize
+            blockQueue[0] = blockQueue[1]?.getTickCachedSide(this.secondFace)
+            this.secondError -= GRID_SIZE
             this.currentBlock = 1
         } else if (this.thirdError > 0) {
             blockQueue[1] = blockQueue[0]!!.getTickCachedSide(this.mainFace)
-            blockQueue[0] = blockQueue[1].getTickCachedSide(this.thirdFace)
-            this.thirdError -= gridSize
+            blockQueue[0] = blockQueue[1]?.getTickCachedSide(this.thirdFace)
+            this.thirdError -= GRID_SIZE
             this.currentBlock = 1
         } else {
             blockQueue[0] = blockQueue[0]!!.getTickCachedSide(this.mainFace)
@@ -257,6 +254,6 @@ class TickCachedBlockIterator @JvmOverloads constructor(
     }
 
     companion object {
-        private const val gridSize = 1 shl 24
+        private const val GRID_SIZE = 1 shl 24
     }
 }

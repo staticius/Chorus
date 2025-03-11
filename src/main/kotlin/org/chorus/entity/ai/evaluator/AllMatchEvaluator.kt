@@ -9,9 +9,9 @@ import org.chorus.entity.mob.EntityMob
  * An evaluator that is executed only after all behaviors have been evaluated.
  */
 open class AllMatchEvaluator : MultiBehaviorEvaluator {
-    constructor(evaluators: Set<IBehaviorEvaluator?>) : super(evaluators)
+    constructor(evaluators: Set<IBehaviorEvaluator>) : super(evaluators)
 
-    constructor(vararg evaluators: IBehaviorEvaluator?) : super(*evaluators)
+    constructor(vararg evaluators: IBehaviorEvaluator) : super(*evaluators)
 
     override fun evaluate(entity: EntityMob): Boolean {
         for (evaluator in evaluators) {

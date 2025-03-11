@@ -26,10 +26,10 @@ class BlockNetherBrickStairs @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.NETHER_BRICK_STAIRS,
+BlockID.BlockID.NETHER_BRICK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+            
     }
 }

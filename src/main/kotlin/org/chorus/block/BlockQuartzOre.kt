@@ -4,7 +4,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemQuartz
 import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockQuartzOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
@@ -47,7 +47,7 @@ class BlockQuartzOre @JvmOverloads constructor(blockstate: BlockState? = Compani
     }
 
     override val dropExp: Int
-        get() = NukkitRandom().nextInt(1, 5)
+        get() = ChorusRandom().nextInt(1, 5)
 
     override fun canHarvestWithHand(): Boolean {
         return false
@@ -59,6 +59,6 @@ class BlockQuartzOre @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.QUARTZ_ORE)
-            get() = Companion.field
+
     }
 }

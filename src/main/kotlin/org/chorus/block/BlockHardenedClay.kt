@@ -21,7 +21,7 @@ open class BlockHardenedClay @JvmOverloads constructor(blockstate: BlockState? =
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(HARDENED_CLAY)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.HARDENED_CLAY)
+
     }
 }

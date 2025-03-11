@@ -3,7 +3,7 @@ package org.chorus.level.updater.block
 import org.chorus.level.updater.Updater
 import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
 import org.chorus.nbt.tag.CompoundTag
-import lombok.experimental.UtilityClass
+
 import java.util.function.Consumer
 import kotlin.collections.ArrayList
 import kotlin.collections.MutableList

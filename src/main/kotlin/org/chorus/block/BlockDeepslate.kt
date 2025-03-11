@@ -40,7 +40,7 @@ class BlockDeepslate : BlockSolid {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEEPSLATE, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEEPSLATE, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }

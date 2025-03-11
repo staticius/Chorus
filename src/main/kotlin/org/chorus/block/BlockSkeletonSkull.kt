@@ -20,6 +20,6 @@ class BlockSkeletonSkull(blockState: BlockState?) : BlockHead(blockState) {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SKELETON_SKULL, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

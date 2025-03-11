@@ -27,7 +27,7 @@ class BlockDripstoneBlock @JvmOverloads constructor(blockstate: BlockState? = Co
         get() = true
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DRIPSTONE_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DRIPSTONE_BLOCK)
+
     }
 }

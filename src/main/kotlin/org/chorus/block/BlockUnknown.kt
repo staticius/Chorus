@@ -2,9 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockUnknown @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     Block(null) {
     init {
@@ -20,6 +18,6 @@ class BlockUnknown @JvmOverloads constructor(blockstate: BlockState? = Companion
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.UNKNOWN)
-            get() = Companion.field
+
     }
 }

@@ -24,9 +24,11 @@ class BlockBrickStairs @JvmOverloads constructor(blockstate: BlockState? = Compa
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BRICK_STAIRS, CommonBlockProperties.UPSIDE_DOWN_BIT, CommonBlockProperties.WEIRDO_DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.BRICK_STAIRS, CommonBlockProperties.UPSIDE_DOWN_BIT, CommonBlockProperties.WEIRDO_DIRECTION)
     }
 }

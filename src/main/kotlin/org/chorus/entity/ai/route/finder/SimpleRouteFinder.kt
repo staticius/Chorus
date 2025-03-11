@@ -2,7 +2,7 @@ package org.chorus.entity.ai.route.finder
 
 import org.chorus.entity.ai.route.data.Node
 import org.chorus.entity.ai.route.posevaluator.IPosEvaluator
-import lombok.Getter
+
 
 /**
  * 非异步的路径查找抽象类 <br></br>

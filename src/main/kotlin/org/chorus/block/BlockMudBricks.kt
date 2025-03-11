@@ -21,6 +21,6 @@ class BlockMudBricks @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MUD_BRICKS)
-            get() = Companion.field
+
     }
 }

@@ -40,7 +40,7 @@ open class BlockDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockS
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DOUBLE_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.DOUBLE_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

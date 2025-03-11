@@ -33,6 +33,6 @@ class BlockWarpedSlab @JvmOverloads constructor(blockstate: BlockState? = Compan
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WARPED_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

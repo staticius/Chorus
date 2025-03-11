@@ -212,6 +212,6 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState? = Compa
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SCAFFOLDING, CommonBlockProperties.STABILITY, CommonBlockProperties.STABILITY_CHECK)
-            get() = Companion.field
+            
     }
 }

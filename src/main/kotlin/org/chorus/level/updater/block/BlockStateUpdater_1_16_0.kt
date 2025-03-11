@@ -3,8 +3,8 @@ package org.chorus.level.updater.block
 import org.chorus.level.updater.Updater
 import org.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
 import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
-import lombok.AccessLevel
-import lombok.RequiredArgsConstructor
+
+
 import kotlin.collections.set
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.camera.aimassist
 
-import lombok.Data
+
 
 
 class CameraAimAssistCategory {

@@ -4,9 +4,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.level.format.IChunk
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ChunkUnloadEvent(chunk: IChunk) : ChunkEvent(chunk), Cancellable {
     companion object {
         val handlers: HandlerList = HandlerList()

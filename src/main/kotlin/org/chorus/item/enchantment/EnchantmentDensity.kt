@@ -2,9 +2,7 @@ package org.chorus.item.enchantment
 
 import org.chorus.entity.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentDensity : Enchantment(Enchantment.Companion.ID_DENSITY, "density", Rarity.RARE, EnchantmentType.MACE) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 10 + (level - 1) * 20

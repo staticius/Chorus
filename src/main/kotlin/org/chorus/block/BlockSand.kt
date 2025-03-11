@@ -2,9 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class BlockSand : BlockFallable, Natural {
     constructor() : super(Companion.properties.getDefaultState())
 
@@ -30,6 +28,6 @@ open class BlockSand : BlockFallable, Natural {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SAND)
-            get() = Companion.field
+
     }
 }

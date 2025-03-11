@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.block.property.type.IntPropertyType
@@ -31,19 +32,19 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Compan
                 return 0 // Already broken
             }
 
-            if (!level.server.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings.enableRedstone) {
                 return 0
             }
-            val wasPowered = isActive
+            val wasPowered = isActive()
             val isPowered = this.isGettingPower
                     || checkSurrounding(this.position, true, 0)
                     || checkSurrounding(this.position, false, 0)
 
             // Avoid Block mistake
             if (wasPowered != isPowered) {
-                isActive = isPowered
+                setIsActive(isPowered)
                 updateAroundRedstone(down()!!, BlockFace.UP, BlockFace.DOWN)
-                if (orientation!!.isAscending) {
+                if (getOrientation()!!.isAscending) {
                     updateAroundRedstone(up()!!, BlockFace.UP, BlockFace.DOWN)
                 }
             }
@@ -54,7 +55,7 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     override fun afterRemoval(newBlock: Block?, update: Boolean) {
         updateAroundRedstone(down()!!)
-        if (orientation!!.isAscending) {
+        if (getOrientation()!!.isAscending) {
             updateAroundRedstone(up()!!)
         }
         super.afterRemoval(newBlock, update)
@@ -89,7 +90,7 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Compan
         }
 
         // Used to check if the next ascending rail should be what
-        val base = block.orientation
+        val base = block.getOrientation()
         var onStraight = true
         // Third: Recalculate the base position
         when (base) {
@@ -155,7 +156,7 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Compan
                 return false
             }
         }
-        // Next check the if rail is on power state
+        // Next check if the rail is on power state
         return canPowered(Vector3(dx.toDouble(), dy.toDouble(), dz.toDouble()), base, power, relative)
                 || onStraight && canPowered(Vector3(dx.toDouble(), dy - 1.0, dz.toDouble()), base, power, relative)
     }
@@ -164,8 +165,8 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Compan
         val block = level.getBlock(pos) as? BlockGoldenRail ?: return false
         // What! My block is air??!! Impossible! XD
 
-        // Sometimes the rails are diffrent orientation
-        val base = block.orientation
+        // Sometimes the rails are different orientation
+        val base = block.getOrientation()
 
         // Possible way how to know when the rail is activated is rail were directly powered
         // OR recheck the surrounding... Which will returns here =w=
@@ -176,21 +177,17 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Compan
                 && (block.isGettingPower || checkSurrounding(pos, relative, power + 1))
     }
 
-    override fun setRailDirection(orientation: Rail.Orientation) {
-        setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RAIL_DIRECTION_6, orientation.metadata())
-    }
-
     override fun getOrientation(): Rail.Orientation? {
-        return byMetadata(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RAIL_DIRECTION_6))
+        return byMetadata(getPropertyValue(CommonBlockProperties.RAIL_DIRECTION_6))
     }
 
-    override fun setActive(active: Boolean) {
+    override fun setIsActive(active: Boolean) {
         setRailActive(active)
-        level.setBlock(this.position, this, true, true)
+        level.setBlock(this.position, this, direct = true, update = true)
     }
 
     override fun isActive(): Boolean {
-        return getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.RAIL_DATA_BIT)
+        return getPropertyValue(CommonBlockProperties.RAIL_DATA_BIT)
     }
 
     override fun isRailActive(): OptionalBoolean {
@@ -198,12 +195,12 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Compan
     }
 
     override fun setRailActive(active: Boolean) {
-        setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.RAIL_DATA_BIT, active)
+        setPropertyValue(CommonBlockProperties.RAIL_DATA_BIT, active)
     }
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(GOLDEN_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
-            get() = Companion.field
+            BlockProperties(BlockID.GOLDEN_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
+
     }
 }

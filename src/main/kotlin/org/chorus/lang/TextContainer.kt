@@ -1,6 +1,6 @@
 package org.chorus.lang
 
-import lombok.extern.slf4j.Slf4j
+
 
 /**
  * 文本容器

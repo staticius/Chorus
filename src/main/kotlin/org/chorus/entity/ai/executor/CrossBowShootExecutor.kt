@@ -172,7 +172,7 @@ class CrossBowShootExecutor(
         arrow.pickupMode = EntityProjectile.Companion.PICKUP_NONE
 
         val entityShootBowEvent = EntityShootBowEvent(entity, bow, arrow, f)
-        Server.getInstance().pluginManager.callEvent(entityShootBowEvent)
+        Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
             entityShootBowEvent.projectile.kill()
         } else {
@@ -181,7 +181,7 @@ class CrossBowShootExecutor(
             )
             if (entityShootBowEvent.projectile != null) {
                 val projectev = ProjectileLaunchEvent(entityShootBowEvent.projectile, entity)
-                Server.getInstance().pluginManager.callEvent(projectev)
+                Server.instance.pluginManager.callEvent(projectev)
                 if (projectev.isCancelled) {
                     entityShootBowEvent.projectile.kill()
                 } else {

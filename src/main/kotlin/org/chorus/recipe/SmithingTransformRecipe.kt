@@ -46,13 +46,13 @@ class SmithingTransformRecipe(
     }
 
     val result: Item
-        get() = results.getFirst()
+        get() = results.first()
 
     override val type: RecipeType
         get() = RecipeType.SMITHING_TRANSFORM
 
     val base: ItemDescriptor
-        get() = ingredients.getFirst()
+        get() = ingredients.first()
 
     val addition: ItemDescriptor
         get() = ingredients[1]

@@ -77,7 +77,7 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
     override fun onUpdate(type: Int): Int {
         getOrCreateBlockEntity()
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (level.server.settings.levelSettings().enableRedstone()) {
+            if (Server.instance.settings.levelSettings().enableRedstone()) {
                 this.blockEntity!!.calPower()
                 this.setPhase(0)
                 updateAroundRedstone()
@@ -119,10 +119,10 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            CALIBRATED_SCULK_SENSOR,
+BlockID.CALIBRATED_SCULK_SENSOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.SCULK_SENSOR_PHASE
         )
-            get() = Companion.field
+
     }
 }

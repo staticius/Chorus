@@ -19,13 +19,13 @@ class BlockCobbledDeepslateWall @JvmOverloads constructor(blockstate: BlockState
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            COBBLED_DEEPSLATE_WALL,
+BlockID.COBBLED_DEEPSLATE_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-            get() = Companion.field
+
     }
 }

@@ -105,7 +105,7 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState? = Compan
         }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FROSTED_ICE, CommonBlockProperties.AGE_4)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FROSTED_ICE, CommonBlockProperties.AGE_4)
+
     }
 }

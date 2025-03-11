@@ -48,7 +48,7 @@ class ItemFlintAndSteel @JvmOverloads constructor(meta: Int = 0, count: Int = 1)
 
             if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {
                 val e = BlockIgniteEvent(block, null, player, BlockIgniteEvent.BlockIgniteCause.FLINT_AND_STEEL)
-                block.level.server.pluginManager.callEvent(e)
+                block.Server.instance.pluginManager.callEvent(e)
 
                 if (!e.isCancelled) {
                     level.setBlock(fire.position, fire, true)

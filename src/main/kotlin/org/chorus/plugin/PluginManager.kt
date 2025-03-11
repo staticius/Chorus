@@ -11,8 +11,8 @@ import org.chorus.permission.Permission
 import org.chorus.utils.PluginException
 import org.chorus.utils.Utils
 import io.netty.util.internal.EmptyArrays
-import lombok.Getter
-import lombok.extern.slf4j.Slf4j
+
+
 import java.io.File
 import java.lang.Deprecated
 import java.lang.reflect.Method
@@ -193,7 +193,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
                             if (plugins.containsKey(name) || this.getPlugin(name) != null) {
                                 PluginManager.log.error(
-                                    server.language.tr(
+                                    server.baseLang.tr(
                                         "nukkit.plugin.duplicateError",
                                         name!!
                                     )
@@ -214,7 +214,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                     ) { "The getCompatibleAPI version don't match the format majorVersion.minorVersion.patch" }
                                 } catch (e: NullPointerException) {
                                     PluginManager.log.error(
-                                        server.language.tr(
+                                        server.baseLang.tr(
                                             "nukkit.plugin.loadError",
                                             name!!, "Wrong API format"
                                         ), e
@@ -222,7 +222,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                     continue
                                 } catch (e: IllegalArgumentException) {
                                     PluginManager.log.error(
-                                        server.language.tr(
+                                        server.baseLang.tr(
                                             "nukkit.plugin.loadError",
                                             name!!, "Wrong API format"
                                         ), e
@@ -252,7 +252,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
                             if (compatible > 0) {
                                 PluginManager.log.error(
-                                    server.language.tr(
+                                    server.baseLang.tr(
                                         "nukkit.plugin.loadError",
                                         name!!, "%nukkit.plugin.incompatibleAPI"
                                     )
@@ -281,7 +281,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                         }
                     } catch (e: Exception) {
                         PluginManager.log.error(
-                            server.language.tr(
+                            server.baseLang.tr(
                                 "nukkit.plugin" +
                                         ".fileError", file.name, dictionary.toString(), Utils
                                     .getExceptionMessage(e)
@@ -331,7 +331,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                         if (plugin != null) {
                             loadedPlugins[name] = plugin
                         } else {
-                            PluginManager.log.error(server.language.tr("nukkit.plugin.genericLoadError", name))
+                            PluginManager.log.error(server.baseLang.tr("nukkit.plugin.genericLoadError", name))
                         }
                     }
                 }
@@ -347,7 +347,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             if (plugin != null) {
                                 loadedPlugins[name] = plugin
                             } else {
-                                PluginManager.log.error(server.language.tr("nukkit.plugin.genericLoadError", name))
+                                PluginManager.log.error(server.baseLang.tr("nukkit.plugin.genericLoadError", name))
                             }
                         }
                     }
@@ -355,7 +355,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                     if (missingDependency) {
                         for (name in plugins.keys) {
                             PluginManager.log.error(
-                                server.language.tr(
+                                server.baseLang.tr(
                                     "nukkit.plugin.loadError",
                                     name,
                                     "%nukkit.plugin.circularDependency"
@@ -518,7 +518,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             val data = value!!
             if (key.contains(":")) {
                 PluginManager.log.error(
-                    server.language.tr(
+                    server.baseLang.tr(
                         "nukkit.plugin.commandError",
                         key,
                         plugin.description.fullName
@@ -544,7 +544,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                         for (alias in aliases) {
                             if (alias.contains(":")) {
                                 PluginManager.log.error(
-                                    server.language.tr(
+                                    server.baseLang.tr(
                                         "nukkit.plugin.aliasError",
                                         alias,
                                         plugin.description.fullName
@@ -632,7 +632,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                     registration.callEvent(event)
                 } catch (e: Exception) {
                     PluginManager.log.error(
-                        server.language.tr(
+                        server.baseLang.tr(
                             "nukkit.plugin.eventError", event.getEventName(), registration.plugin.description.fullName,
                             e.message!!, registration.listener.javaClass.name
                         ), e
@@ -685,7 +685,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 if (clazz.getAnnotation<Deprecated?>(Deprecated::class.java) != null) {
                     if (java.lang.String.valueOf(server.settings.baseSettings().deprecatedVerbose()).toBoolean()) {
                         PluginManager.log.warn(
-                            server.language.tr(
+                            server.baseLang.tr(
                                 "nukkit.plugin.deprecatedEvent",
                                 plugin.name,
                                 clazz.name,

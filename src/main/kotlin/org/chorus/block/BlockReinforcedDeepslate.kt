@@ -11,6 +11,6 @@ class BlockReinforcedDeepslate @JvmOverloads constructor(blockstate: BlockState?
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REINFORCED_DEEPSLATE)
-            get() = Companion.field
+
     }
 }

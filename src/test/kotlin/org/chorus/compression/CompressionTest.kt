@@ -14,7 +14,7 @@ class CompressionTest {
     @Order(1)
     @Throws(IllegalAccessException::class)
     fun testDirectBuffer() {
-        Server.getInstance().settings.networkSettings().compressionBufferSize(CompressionProvider.MAX_INFLATE_LEN)
+        Server.instance.settings.networkSettings().compressionBufferSize(CompressionProvider.MAX_INFLATE_LEN)
         val directBuffer = FieldUtils.readDeclaredStaticField(
             LibDeflateThreadLocal::class.java, "DIRECT_BUFFER", true
         ) as ThreadLocal<ByteBuffer>
@@ -28,7 +28,7 @@ class CompressionTest {
     @Order(2)
     @Throws(IOException::class)
     fun testLibDeflateInflate() {
-        Server.getInstance().settings.networkSettings().compressionBufferSize(512)
+        Server.instance.settings.networkSettings().compressionBufferSize(512)
         ZlibChooser.setProvider(3)
         val currentProvider = ZlibChooser.getCurrentProvider()
         val bytes = ByteArray(1024)

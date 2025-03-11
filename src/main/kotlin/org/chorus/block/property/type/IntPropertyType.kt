@@ -2,7 +2,7 @@ package org.chorus.block.property.type
 
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.utils.Utils.computeRequiredBits
-import lombok.Getter
+
 import java.util.stream.IntStream
 
 /**
@@ -12,25 +12,17 @@ import java.util.stream.IntStream
  */
 class IntPropertyType private constructor(
     name: String,
-    @field:Getter private val min: Int,
-    @field:Getter private val max: Int,
+    val min: Int,
+    val max: Int,
     defaultData: Int
 ) :
-    BaseBlockPropertyType<Int?>(
+    BaseBlockPropertyType<Int>(
         name, IntStream.range(min, max + 1).boxed().toList(), defaultData, computeRequiredBits(
             min,
             max
         )
     ) {
-    private val cachedValues: Array<IntPropertyValue>
-
-    init {
-        cachedValues = arrayOfNulls(max - min + 1)
-        for (i in min..max) {
-            val value = IntPropertyValue(i)
-            cachedValues[i] = value
-        }
-    }
+    private val cachedValues: Array<IntPropertyValue> = Array(max - min + 1) { i -> IntPropertyValue(i + min) }
 
     override fun getType(): BlockPropertyType.Type {
         return BlockPropertyType.Type.INT
@@ -40,20 +32,20 @@ class IntPropertyType private constructor(
         return cachedValues[value - min]
     }
 
-    override fun tryCreateValue(value: Any): IntPropertyValue {
+    override fun tryCreateValue(value: Any?): IntPropertyValue {
         if (value is Number) {
             return cachedValues[value.toInt() - min]
         } else throw IllegalArgumentException("Invalid value for int property type: $value")
     }
 
-    inner class IntPropertyValue internal constructor(value: Int?) :
-        BlockPropertyValue<Int?, IntPropertyType?, Int?>(this@IntPropertyType, value) {
+    inner class IntPropertyValue internal constructor(value: Int) :
+        BlockPropertyValue<Int, IntPropertyType, Int?>(this@IntPropertyType, value) {
         override fun getIndex(): Int {
-            return value!! - min
+            return value - min
         }
 
         override fun getSerializedValue(): Int {
-            return value!!
+            return value
         }
 
         override fun toString(): String {

@@ -1,7 +1,7 @@
 package org.chorus.network.connection.util
 
 import org.chorus.utils.JSONUtils
-import lombok.experimental.UtilityClass
+
 import org.jose4j.json.JsonUtil
 import org.jose4j.jwa.AlgorithmConstraints
 import org.jose4j.jws.AlgorithmIdentifiers
@@ -194,7 +194,7 @@ object EncryptionUtils {
     }
 
     /**
-     * Create handshake JWS used in the [cn.nukkit.network.connection.packet.ServerToClientHandshakePacket]
+     * Create handshake JWS used in the [org.chorus.network.connection.packet.ServerToClientHandshakePacket]
      * which completes the encryption handshake.
      *
      * @param serverKeyPair used to sign the JWT

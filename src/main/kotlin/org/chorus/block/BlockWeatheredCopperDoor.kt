@@ -10,12 +10,12 @@ class BlockWeatheredCopperDoor @JvmOverloads constructor(blockstate: BlockState?
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.WEATHERED_COPPER_DOOR,
+BlockID.BlockID.WEATHERED_COPPER_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-            get() = Companion.field
+
     }
 }

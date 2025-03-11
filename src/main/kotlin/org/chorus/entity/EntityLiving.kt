@@ -114,7 +114,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
                 }
 
                 if (damager.isOnFire() && damager !is Player) {
-                    this.setOnFire(2 * server!!.getDifficulty())
+                    this.setOnFire(2 * Server.instance.getDifficulty())
                 }
 
                 val deltaX: Double = position.x - damager.position.x
@@ -175,11 +175,11 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         }
         super.kill()
         val ev: EntityDeathEvent = EntityDeathEvent(this, this.getDrops())
-        server!!.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
-        val manager: IScoreboardManager? = server!!.scoreboardManager
+        val manager: IScoreboardManager = Server.instance.scoreboardManager
         //测试环境中此项会null，所以说需要判空下
-        if (manager != null) manager.onEntityDead(this)
+        manager.onEntityDead(this)
 
         if (level!!.gameRules.getBoolean(GameRule.DO_ENTITY_DROPS)) {
             for (item: Item? in ev.getDrops()) {
@@ -219,11 +219,11 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
                 this.attack(EntityDamageEvent(this, DamageCause.SUFFOCATION, 1f))
             }
 
-            if (this.isOnLadder() || this.hasEffect(EffectType.Companion.LEVITATION) || this.hasEffect(EffectType.Companion.SLOW_FALLING)) {
+            if (this.isOnLadder() || this.hasEffect(EffectType.LEVITATION) || this.hasEffect(EffectType.SLOW_FALLING)) {
                 this.resetFallDistance()
             }
 
-            if (!this.hasEffect(EffectType.Companion.WATER_BREATHING) && !this.hasEffect(EffectType.Companion.CONDUIT_POWER) && this.isInsideOfWater()) {
+            if (!this.hasEffect(EffectType.WATER_BREATHING) && !this.hasEffect(EffectType.CONDUIT_POWER) && this.isInsideOfWater()) {
                 if (this is EntitySwimmable || (this is Player && (this.isCreative() || this.isSpectator()))) {
                     this.setAirTicks(400)
                 } else {
@@ -387,7 +387,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
      * @param speed 速度大小<br></br>Speed value
      */
     open fun setMovementSpeed(speed: Float) {
-        this.movementSpeed = NukkitMath.round(speed.toDouble(), 2).toFloat()
+        this.movementSpeed = ChorusMath.round(speed.toDouble(), 2).toFloat()
     }
 
     fun getAirTicks(): Int {
@@ -419,7 +419,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             event.setCancelled()
         }
 
-        getServer()!!.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return false
         }

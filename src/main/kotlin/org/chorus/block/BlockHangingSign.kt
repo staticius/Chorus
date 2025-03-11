@@ -4,8 +4,8 @@ import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityHangingSign
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.Item
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
@@ -14,17 +14,16 @@ import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.math.CompassRoseDirection
 import org.chorus.math.CompassRoseDirection.Companion.from
 import org.chorus.nbt.tag.CompoundTag
-import lombok.extern.slf4j.Slf4j
+import org.chorus.utils.Loggable
+
 import kotlin.math.floor
 
 
 abstract class BlockHangingSign(blockState: BlockState?) : BlockSignBase(blockState),
-    BlockEntityHolder<BlockEntityHangingSign?> {
-    override val blockEntityClass: Class<out BlockEntityHangingSign>
-        get() = BlockEntityHangingSign::class.java
+    BlockEntityHolder<BlockEntityHangingSign>, Loggable {
+    override fun getBlockEntityClass(): Class<out BlockEntityHangingSign> = BlockEntityHangingSign::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.HANGING_SIGN
+    override fun getBlockEntityType(): String = BlockEntityID.HANGING_SIGN
 
     override val boundingBox: AxisAlignedBB?
         get() = null //01 23 45
@@ -47,16 +46,16 @@ abstract class BlockHangingSign(blockState: BlockState?) : BlockSignBase(blockSt
     }
 
     val isHanging: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING)
+        get() = getPropertyValue(CommonBlockProperties.HANGING)
 
     val isAttached: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.ATTACHED_BIT)
+        get() = getPropertyValue(CommonBlockProperties.ATTACHED_BIT)
 
-    override fun getSignDirection(): CompassRoseDirection? {
+    override fun getSignDirection(): CompassRoseDirection {
         return if (isHanging && isAttached) {
-            from(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROUND_SIGN_DIRECTION))
+            from(getPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION))
         } else {
-            fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))!!.compassRoseDirection
+            fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))!!.compassRoseDirection!!
         }
     }
 
@@ -70,15 +69,15 @@ abstract class BlockHangingSign(blockState: BlockState?) : BlockSignBase(blockSt
         fz: Double,
         player: Player?
     ): Boolean {
-        var face = face
+        var face1 = face
         if (player != null && !player.isSneaking() && target is BlockSignBase) {
             return false
         }
-        if (face == BlockFace.UP) {
+        if (face1 == BlockFace.UP) {
             val blockFace = checkGroundBlock() ?: return false
-            face = blockFace
+            face1 = blockFace
         }
-        if (target is BlockHangingSign && face != BlockFace.DOWN) {
+        if (target is BlockHangingSign && face1 != BlockFace.DOWN) {
             return false
         }
 
@@ -87,7 +86,7 @@ abstract class BlockHangingSign(blockState: BlockState?) : BlockSignBase(blockSt
 
         val nbt = CompoundTag()
 
-        if (face == BlockFace.DOWN) {
+        if (face1 == BlockFace.DOWN) {
             this.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING, true)
             val direction = from(
                 floor((((player?.rotation?.yaw ?: 0.0) + 180) * 16 / 360) + 0.5).toInt() and 0x0f
@@ -107,7 +106,7 @@ abstract class BlockHangingSign(blockState: BlockState?) : BlockSignBase(blockSt
                 level.setBlock(block.position, this, true)
             }
         } else {
-            this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.rotateY().index)
+            this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face1.rotateY().index)
             level.setBlock(block.position, this, true)
         }
         if (item.hasCustomBlockData()) {
@@ -121,7 +120,7 @@ abstract class BlockHangingSign(blockState: BlockState?) : BlockSignBase(blockSt
             player?.openSignEditor(this.position, true)
             return true
         } catch (e: Exception) {
-            BlockHangingSign.log.warn("Failed to create block entity {} at {}", blockEntityType, locator, e)
+            log.warn("Failed to create block entity {} at {}", getBlockEntityType(), locator, e)
             level.setBlock(layer0!!.position, 0, layer0, true)
             level.setBlock(layer1!!.position, 0, layer1, true)
             return false

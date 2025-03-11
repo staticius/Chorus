@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.blockentity.BlockEntityShulkerBox
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
 import org.chorus.item.*
@@ -17,18 +13,13 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.tags.BlockTags
-import java.util.Set
 
-/**
- * @author Reece Mackie
- */
 open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blockState),
-    BlockEntityHolder<BlockEntityShulkerBox?> {
-    override val blockEntityClass: Class<out BlockEntityShulkerBox>
-        get() = BlockEntityShulkerBox::class.java
+    BlockEntityHolder<BlockEntityShulkerBox> {
 
-    override val blockEntityType: String
-        get() = BlockEntity.SHULKER_BOX
+    override fun getBlockEntityClass(): Class<out BlockEntityShulkerBox> = BlockEntityShulkerBox::class.java
+
+    override fun getBlockEntityType(): String = BlockEntityID.SHULKER_BOX
 
     override val hardness: Double
         get() = 2.0
@@ -46,13 +37,10 @@ open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blo
     override val waterloggingLevel: Int
         get() = 1
 
-    open val shulkerBox: Item
-        get() = ItemBlock(this)
+    open fun getShulkerBox(): Item = ItemBlock(this)
 
     override fun toItem(): Item? {
-        val item = shulkerBox
-
-        if (this.level == null) return item
+        val item = getShulkerBox()
 
         val tile = blockEntity ?: return item
 
@@ -103,20 +91,20 @@ open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blo
 
         val t = item.namedTag
 
-        // This code gets executed when the player has broken the shulker box and placed it back (©Kevims 2020)
+        // This code gets executed when the player has broken the shulker box and placed it back
         if (t != null && t.contains("Items")) {
             nbt.putList("Items", t.getList("Items"))
         }
 
-        // This code gets executed when the player has copied the shulker box in creative mode (©Kevims 2020)
+        // This code gets executed when the player has copied the shulker box in creative mode
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData: Map<String?, Tag<*>?> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
+        return BlockEntityHolder.setBlockAndCreateEntity(this, direct = true, update = true, initialData = nbt) != null
     }
 
     override fun canHarvestWithHand(): Boolean {
@@ -135,7 +123,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blo
             return false
         }
 
-        val box = orCreateBlockEntity!!
+        val box = getOrCreateBlockEntity()
         val block = this.getSide(fromIndex(box.namedTag.getByte("facing").toInt())!!)
         if ((block !is BlockAir) && (block !is BlockLiquid) && (block !is BlockFlowable)) {
             return false
@@ -174,8 +162,10 @@ open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blo
     override val itemMaxStackSize: Int
         get() = 1
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.UNDYED_SHULKER_BOX, Set.of(BlockTags.PNX_SHULKERBOX))
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.UNDYED_SHULKER_BOX, setOf(BlockTags.PNX_SHULKERBOX))
     }
 }

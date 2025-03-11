@@ -25,6 +25,6 @@ class BlockRedSandstoneSlab(blockState: BlockState?) : BlockSlab(blockState, Blo
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.RED_SANDSTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

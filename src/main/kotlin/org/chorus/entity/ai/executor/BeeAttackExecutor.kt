@@ -23,10 +23,10 @@ class BeeAttackExecutor(
                 val entity1 = entity.getMemoryStorage()!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
                 if (entity1 != null) {
                     this.lookTarget = entity1.position.clone()
-                    if (Server.getInstance().difficulty == 2) {
-                        entity1.addEffect(Effect.Companion.get(EffectType.Companion.POISON).setDuration(200))
-                    } else if (Server.getInstance().difficulty == 3) {
-                        entity1.addEffect(Effect.Companion.get(EffectType.Companion.POISON).setDuration(360))
+                    if (Server.instance.difficulty == 2) {
+                        entity1.addEffect(Effect.get(EffectType.POISON).setDuration(200))
+                    } else if (Server.instance.difficulty == 3) {
+                        entity1.addEffect(Effect.get(EffectType.POISON).setDuration(360))
                     }
                 }
             }

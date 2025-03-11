@@ -25,6 +25,6 @@ class BlockNormalStoneSlab(blockState: BlockState?) : BlockSlab(blockState, Bloc
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.NORMAL_STONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

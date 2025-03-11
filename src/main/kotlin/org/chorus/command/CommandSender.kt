@@ -20,7 +20,7 @@ import org.chorus.permission.Permissible
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @author smartcmd(code) @ PowerNukkitX Project
- * @see cn.nukkit.command.CommandExecutor.onCommand
+ * @see org.chorus.command.CommandExecutor.onCommand
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
@@ -32,7 +32,7 @@ interface CommandSender : Permissible {
      * Sends a message to the command sender.
      *
      * @param message 要发送的信息.<br></br>Message to send.
-     * @see cn.nukkit.utils.TextFormat
+     * @see org.chorus.utils.TextFormat
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -65,7 +65,7 @@ interface CommandSender : Permissible {
      * @return 命令发送者所在的服务器.<br></br>the server of the command sender.
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
-    val server: Server?
+    val server: Server
 
     /**
      * 返回命令发送者的名称.<br></br>
@@ -82,13 +82,13 @@ interface CommandSender : Permissible {
      * `if(sender instanceof ConsoleCommandSender) .....;`
      *
      * @return 命令发送者的名称.<br></br>the name of the command sender.
-     * @see cn.nukkit.Player.getName
-     * @see cn.nukkit.command.ConsoleCommandSender.getName
-     * @see cn.nukkit.plugin.PluginDescription
+     * @see org.chorus.Player.getName
+     * @see org.chorus.command.ConsoleCommandSender.getName
+     * @see org.chorus.plugin.PluginDescription
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
-    val name: String
+    fun getName(): String
 
     /**
      * @return 发送者是否为玩家<br></br>whether the sender is an player
@@ -136,11 +136,11 @@ interface CommandSender : Permissible {
         /**
          * @return 返回发送者的Position<br></br>return the sender's position.
          */
-        get() = Locator(0.0, 0.0, 0.0, Server.getInstance().defaultLevel)
+        get() = Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel)
 
     val transform: Transform
         /**
          * @return 返回发送者克隆过的Location<br></br>return the sender's location.
          */
-        get() = Transform(0.0, 0.0, 0.0, Server.getInstance().defaultLevel)
+        get() = Transform(0.0, 0.0, 0.0, Server.instance.defaultLevel)
 }

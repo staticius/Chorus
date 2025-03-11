@@ -34,18 +34,18 @@ object PaletteUtils {
     ): Pair<Int?, SemVersion?>? {
         require(maxDepth >= 0) { "NBT compound is too deeply nested" }
         when (type) {
-            Tag.TAG_End -> {
+            Tag.TAG_END -> {
             }
 
-            Tag.TAG_Byte -> input.skipBytes(1)
-            Tag.TAG_Short -> input.skipBytes(2)
-            Tag.TAG_Int, Tag.TAG_Float -> input.skipBytes(4)
-            Tag.TAG_Long, Tag.TAG_Double -> input.skipBytes(8)
-            Tag.TAG_Byte_Array -> input.skipBytes(input.readInt())
-            Tag.TAG_String -> input.skipBytes(input.readUnsignedShort())
-            Tag.TAG_Compound -> {
+            Tag.TAG_BYTE -> input.skipBytes(1)
+            Tag.TAG_SHORT -> input.skipBytes(2)
+            Tag.TAG_INT, Tag.TAG_FLOAT -> input.skipBytes(4)
+            Tag.TAG_LONG, Tag.TAG_DOUBLE -> input.skipBytes(8)
+            Tag.TAG_BYTE_ARRAY -> input.skipBytes(input.readInt())
+            Tag.TAG_STRING -> input.skipBytes(input.readUnsignedShort())
+            Tag.TAG_COMPOUND -> {
                 var nbtType: Int
-                while ((input.readUnsignedByte().also { nbtType = it }) != Tag.TAG_End.toInt()) {
+                while ((input.readUnsignedByte().also { nbtType = it }) != Tag.TAG_END.toInt()) {
                     val end = byteBuf.readerIndex()
                     val name = input.readUTF()
                     if (name == "version") {
@@ -70,7 +70,7 @@ object PaletteUtils {
                 }
             }
 
-            Tag.TAG_List -> {
+            Tag.TAG_LIST -> {
                 val typeId = input.readUnsignedByte()
                 val listLength = input.readInt()
                 for (i in 0..<listLength) {
@@ -78,7 +78,7 @@ object PaletteUtils {
                 }
             }
 
-            Tag.TAG_Int_Array -> input.skipBytes(input.readInt() * 4)
+            Tag.TAG_INT_ARRAY -> input.skipBytes(input.readInt() * 4)
         }
         return null
     }

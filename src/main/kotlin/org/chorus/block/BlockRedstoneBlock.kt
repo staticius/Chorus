@@ -63,6 +63,6 @@ class BlockRedstoneBlock @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_BLOCK)
-            get() = Companion.field
+
     }
 }

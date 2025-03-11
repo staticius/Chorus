@@ -24,6 +24,6 @@ class BlockShroomlight : BlockTransparent {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SHROOMLIGHT)
-            get() = Companion.field
+
     }
 }

@@ -28,8 +28,8 @@ class SetMaxPlayersCommand(name: String) : VanillaCommand(name, "commands.setmax
         var maxPlayers = result.value!!.getResult<Int>(0)!!
         var lowerBound = false
 
-        if (maxPlayers < Server.getInstance().onlinePlayers.size) {
-            maxPlayers = Server.getInstance().onlinePlayers.size
+        if (maxPlayers < Server.instance.onlinePlayers.size) {
+            maxPlayers = Server.instance.onlinePlayers.size
             lowerBound = true
         }
 

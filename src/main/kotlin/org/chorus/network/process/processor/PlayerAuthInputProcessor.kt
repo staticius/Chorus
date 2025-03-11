@@ -3,6 +3,7 @@ package org.chorus.network.process.processor
 import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.entity.EntityOwnable.hasOwner
 import org.chorus.entity.item.EntityBoat
 import org.chorus.entity.item.EntityBoat.onInput
@@ -76,7 +77,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
 
         if (pk.inputData.contains(AuthInputAction.START_SPRINTING)) {
             val event = PlayerToggleSprintEvent(player, true)
-            player.getServer().getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 player.sendData(player)
             } else {
@@ -85,7 +86,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_SPRINTING)) {
             val event = PlayerToggleSprintEvent(player, false)
-            player.getServer().getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 player.sendData(player)
             } else {
@@ -94,7 +95,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.START_SNEAKING)) {
             val event = PlayerToggleSneakEvent(player, true)
-            player.getServer().getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 player.sendData(player)
             } else {
@@ -103,7 +104,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_SNEAKING)) {
             val event = PlayerToggleSneakEvent(player, false)
-            player.getServer().getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 player.sendData(player)
             } else {
@@ -115,11 +116,11 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.START_JUMPING)) {
             val playerJumpEvent = PlayerJumpEvent(player)
-            player.getServer().getPluginManager().callEvent(playerJumpEvent)
+            Server.instance.pluginManager.callEvent(playerJumpEvent)
         }
         if (pk.inputData.contains(AuthInputAction.START_SWIMMING)) {
             val playerSwimmingEvent = PlayerToggleSwimEvent(player, true)
-            player.getServer().getPluginManager().callEvent(playerSwimmingEvent)
+            Server.instance.pluginManager.callEvent(playerSwimmingEvent)
             if (playerSwimmingEvent.isCancelled) {
                 player.sendData(player)
             } else {
@@ -128,7 +129,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_SWIMMING)) {
             val playerSwimmingEvent = PlayerToggleSwimEvent(player, false)
-            player.getServer().getPluginManager().callEvent(playerSwimmingEvent)
+            Server.instance.pluginManager.callEvent(playerSwimmingEvent)
             if (playerSwimmingEvent.isCancelled) {
                 player.sendData(player)
             } else {
@@ -137,7 +138,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.START_GLIDING)) {
             val playerToggleGlideEvent = PlayerToggleGlideEvent(player, true)
-            player.getServer().getPluginManager().callEvent(playerToggleGlideEvent)
+            Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
             if (playerToggleGlideEvent.isCancelled) {
                 player.sendData(player)
             } else {
@@ -146,7 +147,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_GLIDING)) {
             val playerToggleGlideEvent = PlayerToggleGlideEvent(player, false)
-            player.getServer().getPluginManager().callEvent(playerToggleGlideEvent)
+            Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
             if (playerToggleGlideEvent.isCancelled) {
                 player.sendData(player)
             } else {
@@ -154,14 +155,13 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
             }
         }
         if (pk.inputData.contains(AuthInputAction.START_FLYING)) {
-            if (!player.getServer()
-                    .allowFlight() && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
+            if (!Server.instance.allowFlight && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
             ) {
                 player.kick(PlayerKickEvent.Reason.FLYING_DISABLED, "Flying is not enabled on this server")
                 return
             }
             val playerToggleFlightEvent = PlayerToggleFlightEvent(player, true)
-            player.getServer().getPluginManager().callEvent(playerToggleFlightEvent)
+            Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
             if (playerToggleFlightEvent.isCancelled) {
                 player.adventureSettings.update()
             } else {
@@ -170,7 +170,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_FLYING)) {
             val playerToggleFlightEvent = PlayerToggleFlightEvent(player, false)
-            player.getServer().getPluginManager().callEvent(playerToggleFlightEvent)
+            Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
             if (playerToggleFlightEvent.isCancelled) {
                 player.adventureSettings.update()
             } else {

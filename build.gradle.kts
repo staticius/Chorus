@@ -9,9 +9,8 @@ plugins {
     idea
     jacoco
     id("io.github.goooler.shadow") version "8.1.7"
-    id("io.freefair.lombok") version "8.4"
     id("com.gorylenko.gradle-git-properties") version "2.4.1"
-    kotlin("jvm")
+    kotlin("jvm") version "2.1.10"
 }
 
 group = "org.chorus"
@@ -54,6 +53,7 @@ dependencies {
     implementation(libs.bundles.terminal)
     implementation(libs.graalvm.polyglot)
     implementation(libs.okaeri)
+    implementation(libs.caffeine)
     runtimeOnly(libs.bundles.graalvm.runtime)
 
     testImplementation(libs.bundles.test)
@@ -87,7 +87,6 @@ sourceSets {
 tasks.register<DefaultTask>("buildFast") {
     dependsOn(tasks.build)
     group = "alpha build"
-    tasks["delombok"].enabled = false
     tasks["javadoc"].enabled = false
     tasks["javadocJar"].enabled = false
     tasks["sourcesJar"].enabled = false
@@ -103,7 +102,6 @@ tasks.register<DefaultTask>("buildFast") {
 tasks.register<DefaultTask>("buildSkipChores") {
     dependsOn(tasks.build)
     group = "alpha build"
-    tasks["delombok"].enabled = false
     tasks["javadoc"].enabled = false
     tasks["javadocJar"].enabled = false
     tasks["sourcesJar"].enabled = false
@@ -117,7 +115,6 @@ tasks.register<DefaultTask>("buildSkipChores") {
 tasks.register<DefaultTask>("buildForGithubAction") {
     dependsOn(tasks.build)
     group = "build"
-    tasks["delombok"].enabled = false
     tasks["javadoc"].enabled = false
     tasks["javadocJar"].enabled = false
 }

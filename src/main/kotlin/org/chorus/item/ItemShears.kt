@@ -1,8 +1,6 @@
 package org.chorus.item
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemShears @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemTool(ItemID.Companion.SHEARS, meta, count, "Shears") {
     override val maxDurability: Int

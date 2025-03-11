@@ -12,7 +12,7 @@ object BDSEntityTranslator {
             if (entityNetworkId == 0) return null
             linkedCompoundTag.putString("identifier", identifier)
         }
-        if (from.containsList("Pos", Tag.TAG_Double)) {
+        if (from.containsList("Pos", Tag.TAG_DOUBLE)) {
             val pos = from.getList("Pos", DoubleTag::class.java)
             val target = ListTag<FloatTag>()
             for (v in pos.all) {
@@ -26,7 +26,7 @@ object BDSEntityTranslator {
             target.add(FloatTag(0f))
             linkedCompoundTag.putList("Pos", target)
         }
-        if (from.containsList("Motion", Tag.TAG_Double)) {
+        if (from.containsList("Motion", Tag.TAG_DOUBLE)) {
             val pos = from.getList("Motion", DoubleTag::class.java)
             val target = ListTag<FloatTag>()
             for (v in pos.all) {

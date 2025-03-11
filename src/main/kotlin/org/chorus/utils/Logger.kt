@@ -1,8 +1,6 @@
 package org.chorus.utils
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface Logger {
     fun emergency(message: String?)
 

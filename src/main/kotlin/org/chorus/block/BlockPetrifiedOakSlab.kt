@@ -25,6 +25,6 @@ class BlockPetrifiedOakSlab(blockState: BlockState?) : BlockSlab(blockState, Blo
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PETRIFIED_OAK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

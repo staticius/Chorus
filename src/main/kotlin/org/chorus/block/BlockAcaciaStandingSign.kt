@@ -10,8 +10,11 @@ class BlockAcaciaStandingSign @JvmOverloads constructor(blockstate: BlockState? 
     }
 
     override fun getWallSignId(): String {
-        return BlockAcaciaWallSign.Companion.PROPERTIES.getIdentifier()
+        return BlockAcaciaWallSign.properties.identifier
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     override fun toItem(): Item? {
         return ItemAcaciaSign()
@@ -19,7 +22,7 @@ class BlockAcaciaStandingSign @JvmOverloads constructor(blockstate: BlockState? 
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(ACACIA_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.ACACIA_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+
     }
 }

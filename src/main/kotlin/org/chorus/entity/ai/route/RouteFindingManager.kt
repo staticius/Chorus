@@ -23,7 +23,7 @@ class RouteFindingManager protected constructor() {
     }
 
     fun submit(task: RouteFindingTask) {
-        task.setStartTime(Server.getInstance().nextTick)
+        task.setStartTime(Server.instance.nextTick)
         pool.submit(task)
     }
 

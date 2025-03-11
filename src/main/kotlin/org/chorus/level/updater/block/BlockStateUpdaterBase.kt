@@ -8,8 +8,8 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
-import lombok.AccessLevel
-import lombok.NoArgsConstructor
+
+
 import java.io.IOException
 import kotlin.collections.HashMap
 import kotlin.collections.Iterator

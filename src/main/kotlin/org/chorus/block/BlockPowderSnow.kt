@@ -48,6 +48,6 @@ class BlockPowderSnow : BlockTransparent {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.POWDER_SNOW)
-            get() = Companion.field
+
     }
 }

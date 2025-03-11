@@ -2,7 +2,6 @@ package org.chorus.level.vibration
 
 import org.chorus.Server
 import org.chorus.entity.Entity
-import org.chorus.event.Event.isCancelled
 import org.chorus.level.*
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
@@ -15,7 +14,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
 
     override fun callVibrationEvent(event: VibrationEvent) {
         val vibrationOccurPluginEvent: VibrationOccurEvent = VibrationOccurEvent(event)
-        level.server.pluginManager.callEvent(vibrationOccurPluginEvent)
+        Server.instance.pluginManager.callEvent(vibrationOccurPluginEvent)
         if (vibrationOccurPluginEvent.isCancelled) {
             return
         }
@@ -32,7 +31,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
                 this.createVibration(listener, event)
                 level.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
                     val vibrationArrivePluginEvent: VibrationArriveEvent = VibrationArriveEvent(event, listener)
-                    level.server.pluginManager.callEvent(vibrationArrivePluginEvent)
+                    Server.instance.pluginManager.callEvent(vibrationArrivePluginEvent)
                     if (vibrationArrivePluginEvent.isCancelled) {
                         return@scheduleDelayedTask
                     }

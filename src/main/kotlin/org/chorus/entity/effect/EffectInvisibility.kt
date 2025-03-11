@@ -4,7 +4,7 @@ import org.chorus.entity.*
 import org.chorus.entity.data.EntityFlag
 import java.awt.Color
 
-class EffectInvisibility : Effect(EffectType.Companion.INVISIBILITY, "%potion.invisibility", Color(246, 246, 246)) {
+class EffectInvisibility : Effect(EffectType.INVISIBILITY, "%potion.invisibility", Color(246, 246, 246)) {
     override fun add(entity: Entity) {
         entity.setDataFlag(EntityFlag.INVISIBLE, true)
         entity.setNameTagVisible(false)

@@ -4,7 +4,7 @@ import org.chorus.entity.*
 import java.awt.Color
 
 class EffectAbsorption :
-    Effect(EffectType.Companion.ABSORPTION, "%potion.absorption", Color(37, 82, 165)) {
+    Effect(EffectType.ABSORPTION, "%potion.absorption", Color(37, 82, 165)) {
     override fun add(entity: Entity) {
         val absorption: Int = (4 * this.getLevel())
         if (absorption > entity.getAbsorption()) {

@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types.inventory.transaction
 
 import org.chorus.item.Item
 import org.chorus.math.Vector3
-import lombok.ToString
+
 
 /**
  * @author CreeperFace

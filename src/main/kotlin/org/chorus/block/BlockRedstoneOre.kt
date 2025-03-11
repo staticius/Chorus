@@ -56,6 +56,6 @@ open class BlockRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_ORE)
-            get() = Companion.field
+
     }
 }

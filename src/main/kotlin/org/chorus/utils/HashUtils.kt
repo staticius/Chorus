@@ -5,8 +5,8 @@ import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.*
-import lombok.SneakyThrows
-import lombok.experimental.UtilityClass
+
+
 import java.nio.ByteOrder
 
 /**
@@ -25,15 +25,15 @@ class HashUtils {
         val states = TreeMapCompoundTag()
         for (value in propertyValues) {
             when (value.propertyType.type) {
-                BlockPropertyType.Type.INT -> states.putInt(value.propertyType.name, value.serializedValue as Int)
+                BlockPropertyType.Type.INT -> states.putInt(value.propertyType.name, value.getSerializedValue() as Int)
                 BlockPropertyType.Type.ENUM -> states.putString(
                     value.propertyType.name,
-                    value.serializedValue.toString()
+                    value.getSerializedValue().toString()
                 )
 
                 BlockPropertyType.Type.BOOLEAN -> states.putByte(
                     value.propertyType.name,
-                    (value.serializedValue as Byte).toInt()
+                    (value.getSerializedValue() as Byte).toInt()
                 )
             }
         }
@@ -52,15 +52,15 @@ class HashUtils {
         val states = TreeMapCompoundTag()
         for (value in propertyValues) {
             when (value.propertyType.type) {
-                BlockPropertyType.Type.INT -> states.putInt(value.propertyType.name, value.serializedValue as Int)
+                BlockPropertyType.Type.INT -> states.putInt(value.propertyType.name, value.getSerializedValue() as Int)
                 BlockPropertyType.Type.ENUM -> states.putString(
                     value.propertyType.name,
-                    value.serializedValue.toString()
+                    value.getSerializedValue().toString()
                 )
 
                 BlockPropertyType.Type.BOOLEAN -> states.putByte(
                     value.propertyType.name,
-                    (value.serializedValue as Byte).toInt()
+                    (value.getSerializedValue() as Byte).toInt()
                 )
             }
         }

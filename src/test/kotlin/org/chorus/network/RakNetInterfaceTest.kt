@@ -16,7 +16,7 @@ import io.netty.channel.ChannelInitializer
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioDatagramChannel
-import lombok.extern.slf4j.Slf4j
+
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory
 import org.cloudburstmc.netty.channel.raknet.RakChildChannel
 import org.cloudburstmc.netty.channel.raknet.RakClientChannel

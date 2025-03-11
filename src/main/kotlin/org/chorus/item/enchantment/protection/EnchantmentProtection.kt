@@ -5,9 +5,7 @@ import org.chorus.item.ItemElytra
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.item.enchantment.EnchantmentType
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EnchantmentProtection protected constructor(
     id: Int,
     name: String,

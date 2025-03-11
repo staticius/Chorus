@@ -11,6 +11,6 @@ class BlockLightGrayCandle @JvmOverloads constructor(blockstate: BlockState? = C
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.LIGHT_GRAY_CANDLE, CommonBlockProperties.CANDLES, CommonBlockProperties.LIT)
-            get() = Companion.field
+
     }
 }

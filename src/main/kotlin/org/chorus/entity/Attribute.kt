@@ -72,7 +72,7 @@ class Attribute private constructor(
         var value: Float = value
         if (value > this.getMaxValue() || value < this.getMinValue()) {
             require(fit) { "Value " + value + " exceeds the range!" }
-            value = Math.min(Math.max(value, this.getMinValue()), this.getMaxValue())
+            value = value.coerceAtLeast(this.getMinValue()).coerceAtMost(this.getMaxValue())
         }
         this.currentValue = value
         return this
@@ -98,12 +98,8 @@ class Attribute private constructor(
         return defaultMaximum
     }
 
-    public override fun clone(): Any {
-        try {
-            return super.clone() as Attribute?
-        } catch (e: CloneNotSupportedException) {
-            return null
-        }
+    public override fun clone(): Attribute {
+        return super.clone() as Attribute
     }
 
     override fun toString(): String {
@@ -296,23 +292,25 @@ class Attribute private constructor(
          * }
         </pre> *
          *
-         * @param NBT the nbt
+         * @param nbt the nbt
          * @return the attribute
          */
-        fun fromNBT(NBT: CompoundTag): Attribute {
-            if (NBT.containsString("Name")
-                && NBT.containsFloat("Base")
-                && NBT.containsFloat("Current")
-                && NBT.containsFloat("DefaultMax")
-                && NBT.containsFloat("DefaultMin")
-                && NBT.containsFloat("Max")
-                && NBT.containsFloat("Min")
+        fun fromNBT(nbt: CompoundTag): Attribute {
+            if (nbt.containsString("Name")
+                && nbt.containsFloat("Base")
+                && nbt.containsFloat("Current")
+                && nbt.containsFloat("DefaultMax")
+                && nbt.containsFloat("DefaultMin")
+                && nbt.containsFloat("Max")
+                && nbt.containsFloat("Min")
             ) {
-                return getAttributeByName(NBT.getString("Name"))
-                    .setMinValue(NBT.getFloat("Min"))
-                    .setMaxValue(NBT.getFloat("Max"))
-                    .setValue(NBT.getFloat("Current"))
-                    .setDefaultValue(NBT.getFloat("Base"))
+                val attribute = getAttributeByName(nbt.getString("Name")!!)
+                    ?: throw RuntimeException("Attribute not found: " + nbt.getString("Name"))
+                return attribute
+                    .setMinValue(nbt.getFloat("Min"))
+                    .setMaxValue(nbt.getFloat("Max"))
+                    .setValue(nbt.getFloat("Current"))
+                    .setDefaultValue(nbt.getFloat("Base"))
             }
             throw IllegalArgumentException("NBT format error")
         }
@@ -327,9 +325,9 @@ class Attribute private constructor(
          * @return the attribute
          */
         @JvmStatic
-        fun getAttribute(id: Int): Attribute? {
+        fun getAttribute(id: Int): Attribute {
             if (attributes.containsKey(id)) {
-                return attributes.get(id)!!.clone()
+                return attributes[id]!!.clone()
             }
             throw ServerException("Attribute id: " + id + " not found")
         }
@@ -344,7 +342,7 @@ class Attribute private constructor(
          * @return null |Attribute
          */
         fun getAttributeByName(name: String): Attribute? {
-            for (a: Attribute in attributes.values()) {
+            for (a: Attribute in attributes.values) {
                 if (a.getName() == name) {
                     return a.clone()
                 }

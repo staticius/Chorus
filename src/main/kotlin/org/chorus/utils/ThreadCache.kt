@@ -16,13 +16,13 @@ object ThreadCache {
         byteCache256.clean()
     }
 
-    val idArray: IterableThreadLocal<Array<ByteArray>> = object : IterableThreadLocal<Array<ByteArray?>>() {
+    val idArray: IterableThreadLocal<Array<ByteArray?>> = object : IterableThreadLocal<Array<ByteArray?>>() {
         override fun init(): Array<ByteArray?> {
             return arrayOfNulls(16)
         }
     }
 
-    val dataArray: IterableThreadLocal<Array<ByteArray>> = object : IterableThreadLocal<Array<ByteArray?>>() {
+    val dataArray: IterableThreadLocal<Array<ByteArray?>> = object : IterableThreadLocal<Array<ByteArray?>>() {
         override fun init(): Array<ByteArray?> {
             return arrayOfNulls(16)
         }

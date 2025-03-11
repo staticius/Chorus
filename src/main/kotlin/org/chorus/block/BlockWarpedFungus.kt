@@ -34,7 +34,7 @@ class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState? = Comp
             position.floorX, position.floorY, position.floorZ, nukkitRandom
         )
         val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
-        level.server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
         }
@@ -44,6 +44,6 @@ class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_FUNGUS)
-            get() = Companion.field
+
     }
 }

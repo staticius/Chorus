@@ -1,10 +1,10 @@
 package org.chorus.level.format
 
 import org.chorus.level.DimensionData
-import lombok.AllArgsConstructor
-import lombok.Data
-import lombok.NoArgsConstructor
-import lombok.experimental.Accessors
+
+
+
+
 import java.util.concurrent.ThreadLocalRandom
 
 data class LevelConfig (

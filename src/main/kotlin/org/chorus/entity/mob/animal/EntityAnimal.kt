@@ -12,9 +12,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
 import java.util.concurrent.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EntityAnimal(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt) {
     override fun initEntity() {
         super.initEntity()

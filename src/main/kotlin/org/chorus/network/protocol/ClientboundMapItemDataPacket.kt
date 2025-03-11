@@ -9,7 +9,7 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.utils.*
 import io.netty.util.internal.EmptyArrays
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.*
+
 import java.awt.Color
 import java.awt.image.BufferedImage
 

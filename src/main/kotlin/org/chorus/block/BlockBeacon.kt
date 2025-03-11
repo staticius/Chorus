@@ -9,13 +9,13 @@ import org.chorus.math.BlockFace
  * @author Angelic47 (Nukkit Project)
  */
 class BlockBeacon @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBeacon?> {
+    BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBeacon> {
     override fun getBlockEntityClass(): Class<out BlockEntityBeacon> {
         return BlockEntityBeacon::class.java
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.BEACON
+        return BlockEntityID.BEACON
     }
 
     override val hardness: Double
@@ -83,8 +83,10 @@ class BlockBeacon @JvmOverloads constructor(blockstate: BlockState? = Companion.
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BEACON)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BEACON)
     }
 }

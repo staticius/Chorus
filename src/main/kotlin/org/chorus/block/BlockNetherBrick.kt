@@ -32,6 +32,6 @@ open class BlockNetherBrick : BlockSolid {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHER_BRICK)
-            get() = Companion.field
+
     }
 }

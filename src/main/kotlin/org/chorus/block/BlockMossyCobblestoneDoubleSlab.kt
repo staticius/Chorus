@@ -17,6 +17,6 @@ class BlockMossyCobblestoneDoubleSlab @JvmOverloads constructor(blockstate: Bloc
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MOSSY_COBBLESTONE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

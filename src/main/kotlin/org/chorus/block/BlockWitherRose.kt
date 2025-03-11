@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.entity.Entity
-import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 import org.chorus.item.Item
 import org.chorus.math.AxisAlignedBB
@@ -26,7 +26,7 @@ class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState? = Compan
     }
 
     override fun onEntityCollide(entity: Entity?) {
-        if (level.server.getDifficulty() != 0 && entity is EntityLiving) {
+        if (Server.instance.getDifficulty() != 0 && entity is EntityLiving) {
             if (!entity!!.invulnerable && !entity.hasEffect(EffectType.WITHER) && (entity !is Player || !entity.isCreative && !entity.isSpectator)) {
                 val effect = get(EffectType.WITHER)
                 effect.setDuration(40)
@@ -46,6 +46,6 @@ class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WITHER_ROSE)
-            get() = Companion.field
+
     }
 }

@@ -142,10 +142,10 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            COMMAND_BLOCK,
+BlockID.COMMAND_BLOCK,
             CommonBlockProperties.CONDITIONAL_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

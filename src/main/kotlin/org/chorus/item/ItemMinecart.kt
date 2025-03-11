@@ -10,9 +10,7 @@ import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.*
 import org.chorus.utils.Rail
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemMinecart @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.MINECART, meta, count, "Minecart") {
     override fun canBeActivated(): Boolean {
@@ -30,19 +28,21 @@ class ItemMinecart @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         fz: Double
     ): Boolean {
         if (Rail.isRailBlock(target)) {
-            val type = (target as BlockRail).orientation
+            val type = (target as BlockRail).getOrientation()
             var adjacent = 0.0
-            if (type.isAscending) {
-                adjacent = 0.5
+            if (type != null) {
+                if (type.isAscending) {
+                    adjacent = 0.5
+                }
             }
             val minecart = createEntity(
-                Entity.MINECART,
+                EntityID.MINECART,
                 level.getChunk(target.position.floorX shr 4, target.position.floorZ shr 4), CompoundTag()
                     .putList(
-                        "Pos", ListTag<Tag>()
-                            .add(FloatTag(target.getX() + 0.5))
-                            .add(FloatTag(target.getY() + 0.0625 + adjacent))
-                            .add(FloatTag(target.getZ() + 0.5))
+                        "Pos", ListTag<FloatTag>()
+                            .add(FloatTag(target.x + 0.5))
+                            .add(FloatTag(target.y + 0.0625 + adjacent))
+                            .add(FloatTag(target.z + 0.5))
                     )
                     .putList(
                         "Motion", ListTag<Tag>()

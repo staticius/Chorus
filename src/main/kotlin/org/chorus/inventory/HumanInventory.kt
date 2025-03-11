@@ -82,7 +82,7 @@ class HumanInventory(human: IHuman?) //9+27+4
 
         if (holder is Player) {
             val ev = PlayerItemHeldEvent(player, this.getItem(slot), slot)
-            holder.level.server.pluginManager.callEvent(ev)
+            holder.Server.instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
                 this.sendContents(this.getViewers())
@@ -170,7 +170,7 @@ class HumanInventory(human: IHuman?) //9+27+4
     }
 
     fun sendHeldItem(players: Collection<Player?>) {
-        this.sendHeldItem(*players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendHeldItem(*players.toTypedArray())
     }
 
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
@@ -368,7 +368,7 @@ class HumanInventory(human: IHuman?) //9+27+4
         //Armor change
         if (!ignoreArmorEvents && index >= ARMORS_INDEX) {
             val ev = EntityArmorChangeEvent(holder.getEntity(), this.getItem(index), item, index)
-            Server.getInstance().pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled && this.holder != null) {
                 this.sendArmorSlot(index, this.getViewers())
                 return false
@@ -376,7 +376,7 @@ class HumanInventory(human: IHuman?) //9+27+4
             item = ev.newItem
         } else {
             val ev = EntityInventoryChangeEvent(holder.getEntity(), this.getItem(index), item, index)
-            Server.getInstance().pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 this.sendSlot(index, this.getViewers())
                 return false
@@ -398,7 +398,7 @@ class HumanInventory(human: IHuman?) //9+27+4
                     holder.getEntity(),
                     old!!, item, index
                 )
-                Server.getInstance().pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     this.sendSlot(index, this.getViewers())
                     return false
@@ -409,7 +409,7 @@ class HumanInventory(human: IHuman?) //9+27+4
                     holder.getEntity(),
                     old!!, item, index
                 )
-                Server.getInstance().pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     this.sendSlot(index, this.getViewers())
                     return false
@@ -478,7 +478,7 @@ class HumanInventory(human: IHuman?) //9+27+4
      * @param players the players
      */
     fun sendArmorContents(players: Collection<Player?>) {
-        this.sendArmorContents(players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendArmorContents(players.toTypedArray())
     }
 
     /**
@@ -548,7 +548,7 @@ class HumanInventory(human: IHuman?) //9+27+4
      * @param players the players
      */
     fun sendArmorSlot(index: Int, players: Collection<Player?>) {
-        this.sendArmorSlot(index, players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendArmorSlot(index, players.toTypedArray())
     }
 
     /**
@@ -597,7 +597,7 @@ class HumanInventory(human: IHuman?) //9+27+4
     }
 
     override fun sendContents(players: Collection<Player?>) {
-        this.sendContents(*players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendContents(*players.toTypedArray())
     }
 
     override fun sendContents(vararg players: Player) {
@@ -628,7 +628,7 @@ class HumanInventory(human: IHuman?) //9+27+4
     }
 
     override fun sendSlot(index: Int, players: Collection<Player?>) {
-        this.sendSlot(index, *players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendSlot(index, *players.toTypedArray())
     }
 
     override fun sendSlot(index: Int, vararg players: Player) {

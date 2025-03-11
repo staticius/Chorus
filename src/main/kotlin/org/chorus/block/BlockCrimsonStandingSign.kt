@@ -15,7 +15,7 @@ class BlockCrimsonStandingSign @JvmOverloads constructor(blockstate: BlockState?
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(CRIMSON_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.CRIMSON_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+
     }
 }

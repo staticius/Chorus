@@ -6,8 +6,8 @@ import org.chorus.form.element.simple.ElementButton
 import org.chorus.form.response.SimpleResponse
 import com.google.gson.JsonArray
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
-import lombok.*
-import lombok.experimental.Accessors
+
+
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.IntFunction

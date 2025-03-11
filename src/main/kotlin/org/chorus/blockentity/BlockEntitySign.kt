@@ -8,9 +8,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     private var frontText: Array<String?>?
     private var backText: Array<String?>?

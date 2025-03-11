@@ -22,6 +22,6 @@ class BlockPolishedAndesite @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.POLISHED_ANDESITE)
-            get() = Companion.field
+
     }
 }

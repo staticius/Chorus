@@ -5,7 +5,7 @@ import org.chorus.blockentity.BlockEntityBeacon
 import org.chorus.inventory.BeaconInventory
 import org.chorus.network.protocol.types.itemstack.request.action.BeaconPaymentAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import lombok.extern.slf4j.Slf4j
+
 
 
 class BeaconPaymentActionProcessor : ItemStackRequestActionProcessor<BeaconPaymentAction> {

@@ -5,7 +5,7 @@ import org.chorus.block.BlockLiquid
 import org.chorus.event.player.PlayerTeleportEvent
 import org.chorus.math.*
 import org.chorus.network.protocol.LevelSoundEventPacket
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 
 /**
  * @author Leonidius20
@@ -32,7 +32,7 @@ class ItemChorusFruit @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val level = player.level ?: return false
         if (player.isInsideOfWater()) return false
 
-        val random = NukkitRandom()
+        val random = ChorusRandom()
         for (attempts in 0..127) {
             val x = random.nextInt(minX, maxX)
             var y = random.nextInt(minY, maxY)

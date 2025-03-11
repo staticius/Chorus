@@ -3,7 +3,7 @@ package org.chorus.network.protocol.types.eventdata
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.EventData
 import org.chorus.network.protocol.types.EventDataType
-import lombok.Value
+
 
 /**
  * Used to control that pop up on the player's respawn screen

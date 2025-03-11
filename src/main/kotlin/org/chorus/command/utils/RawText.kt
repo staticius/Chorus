@@ -11,9 +11,9 @@ import org.chorus.scoreboard.scorer.IScorer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.utils.JSONUtils
 import com.google.gson.annotations.SerializedName
-import lombok.Getter
-import lombok.Setter
-import lombok.SneakyThrows
+
+
+
 import java.util.stream.Collectors
 
 
@@ -144,7 +144,7 @@ class RawText private constructor(base: org.chorus.command.utils.RawText.Compone
 
         @SneakyThrows
         private fun preParseScore(component: org.chorus.command.utils.RawText.Component, sender: CommandSender): org.chorus.command.utils.RawText.Component? {
-            val scoreboard = Server.getInstance().scoreboardManager.getScoreboard(component.component_score!!.objective)
+            val scoreboard = Server.instance.scoreboardManager.getScoreboard(component.component_score!!.objective)
                 ?: return null
             val name_str = component.component_score.name
             var scorer: IScorer? = null
@@ -163,8 +163,8 @@ class RawText private constructor(base: org.chorus.command.utils.RawText.Compone
                         }.toList()
                 if (scorers.isEmpty()) return null
                 scorer = scorers[0]
-            } else if (Server.getInstance().getPlayer(name_str) != null) {
-                scorer = PlayerScorer(Server.getInstance().getPlayer(name_str))
+            } else if (Server.instance.getPlayer(name_str) != null) {
+                scorer = PlayerScorer(Server.instance.getPlayer(name_str))
             } else {
                 scorer = FakeScorer(name_str)
             }

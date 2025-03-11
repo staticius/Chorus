@@ -8,12 +8,14 @@ class BlockBirchDoubleSlab(blockstate: BlockState?) : BlockDoubleWoodenSlab(bloc
     }
 
     override fun getSingleSlab(): BlockState {
-        return BlockBirchSlab.Companion.PROPERTIES.getDefaultState()
+        return BlockBirchSlab.properties.defaultState
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BIRCH_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.BIRCH_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

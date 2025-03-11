@@ -205,7 +205,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         cloudEffects = ArrayList(1)
         for (effectTag: CompoundTag in namedTag!!.getList<CompoundTag>("mobEffects", CompoundTag::class.java)
             .getAll()) {
-            val effect: Effect = Effect.Companion.get(effectTag.getByte("Id").toInt())
+            val effect: Effect = Effect.get(effectTag.getByte("Id").toInt())
                 .setAmbient(effectTag.getBoolean("Ambient"))
                 .setAmplifier(effectTag.getByte("Amplifier").toInt())
                 .setVisible(effectTag.getBoolean("DisplayOnScreenTextureAnimation"))

@@ -1,6 +1,6 @@
 package org.chorus.camera.data
 
-import lombok.Getter
+
 
 /**
  * @author daoge_cmd

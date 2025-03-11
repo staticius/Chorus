@@ -46,7 +46,7 @@ abstract class BlockCopperBulbBase(blockState: BlockState?) : BlockSolid(blockSt
 
         if (type == Level.BLOCK_UPDATE_REDSTONE) {
             val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
                 return 0

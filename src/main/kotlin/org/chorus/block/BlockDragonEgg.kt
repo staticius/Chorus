@@ -71,7 +71,7 @@ class BlockDragonEgg : BlockFallable {
                 )
             if (to!!.isAir) {
                 val event = BlockFromToEvent(this, to)
-                level.server.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (event.isCancelled) return
                 to = event.to
 
@@ -105,7 +105,7 @@ class BlockDragonEgg : BlockFallable {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DRAGON_EGG)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DRAGON_EGG)
+
     }
 }

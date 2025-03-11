@@ -19,7 +19,7 @@ abstract class BlockDeadCoralWallFan(blockstate: BlockState?) : BlockCoralFanDea
         }
     }
 
-    override var blockFace: BlockFace
+    override var blockFace: BlockFace?
         get() {
             val face =
                 getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_DIRECTION)
@@ -35,9 +35,9 @@ abstract class BlockDeadCoralWallFan(blockstate: BlockState?) : BlockCoralFanDea
         }
 
     override val rootsFace: BlockFace?
-        get() = blockFace.getOpposite()
+        get() = blockFace?.getOpposite()
 
     override fun toItem(): Item? {
-        return ItemBlock(if (isDead) deadCoralFan else this)
+        return ItemBlock(if (isDead) getDeadCoralFan() else this)
     }
 }

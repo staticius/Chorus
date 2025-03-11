@@ -4,7 +4,7 @@ import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.math.IVector3
 import org.chorus.math.Vector3
-import lombok.Getter
+
 
 
 open class MoveToTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置

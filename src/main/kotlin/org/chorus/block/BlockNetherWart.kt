@@ -85,7 +85,7 @@ class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHER_WART, CommonBlockProperties.AGE_4)
-            get() = Companion.field
+
     }
 }
 

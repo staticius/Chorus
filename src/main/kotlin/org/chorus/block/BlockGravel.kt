@@ -3,11 +3,9 @@ package org.chorus.block
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.utils.random.NukkitRandom.nextInt
+import org.chorus.utils.random.ChorusRandom.nextInt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockGravel : BlockFallable, Natural {
     constructor() : super(Companion.properties.defaultState)
 
@@ -64,7 +62,7 @@ class BlockGravel : BlockFallable, Natural {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GRAVEL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GRAVEL)
+
     }
 }

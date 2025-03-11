@@ -2,7 +2,7 @@ package org.chorus.scoreboard.data
 
 /**
  * 追踪对象类型 <br></br>
- * 除了INVALID，其他枚举都有对应[cn.nukkit.scoreboard.scorer.IScorer]的实现类 <br></br>
+ * 除了INVALID，其他枚举都有对应[org.chorus.scoreboard.scorer.IScorer]的实现类 <br></br>
  * 对于插件来说，使用FAKE类型即可
  */
 enum class ScorerType {

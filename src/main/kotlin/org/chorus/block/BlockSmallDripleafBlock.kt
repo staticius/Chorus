@@ -11,7 +11,7 @@ import org.chorus.level.Locator
 import org.chorus.math.BlockFace
 import org.chorus.registry.BiomeRegistry.get
 import org.chorus.registry.BlockRegistry.get
-import org.chorus.utils.random.NukkitRandom.nextInt
+import org.chorus.utils.random.ChorusRandom.nextInt
 
 class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate), Faceable {
@@ -162,10 +162,10 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.SMALL_DRIPLEAF_BLOCK,
+BlockID.BlockID.SMALL_DRIPLEAF_BLOCK,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.UPPER_BLOCK_BIT
         )
-            get() = Companion.field
+
     }
 }

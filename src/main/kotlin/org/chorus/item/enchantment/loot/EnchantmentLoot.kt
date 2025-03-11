@@ -2,9 +2,7 @@ package org.chorus.item.enchantment.loot
 
 import org.chorus.item.enchantment.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EnchantmentLoot protected constructor(id: Int, name: String, rarity: Rarity, type: EnchantmentType) :
     Enchantment(id, name, rarity, type) {
     override fun getMinEnchantAbility(level: Int): Int {

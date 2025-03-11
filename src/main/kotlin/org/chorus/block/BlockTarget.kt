@@ -10,7 +10,7 @@ import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.math.*
-import org.chorus.math.NukkitMath.ceilDouble
+import org.chorus.math.ChorusMath.ceilDouble
 import org.chorus.utils.RedstoneComponent
 import java.util.*
 
@@ -43,11 +43,11 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.
             return deactivatePower()
         }
 
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return false
         }
 
-        val target = orCreateBlockEntity!!
+        val target = getOrCreateBlockEntity()!!
         val previous = target.activePower
         level.cancelSheduledUpdate(this.position, this)
         level.scheduleUpdate(this, ticks)
@@ -64,7 +64,7 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.
             val currentPower = target.activePower
             target.activePower = 0
             target.close()
-            if (currentPower != 0 && level.server.settings.levelSettings().enableRedstone()) {
+            if (currentPower != 0 && Server.instance.settings.levelSettings().enableRedstone()) {
                 updateAroundRedstone()
             }
             return true
@@ -139,6 +139,6 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TARGET)
-            get() = Companion.field
+
     }
 }

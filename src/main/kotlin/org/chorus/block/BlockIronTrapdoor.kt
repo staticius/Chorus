@@ -48,11 +48,11 @@ class BlockIronTrapdoor @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.IRON_TRAPDOOR,
+BlockID.BlockID.Companion.IRON_TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-            get() = Companion.field
+
     }
 }

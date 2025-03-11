@@ -15,6 +15,6 @@ class BlockStrippedMangroveWood @JvmOverloads constructor(blockstate: BlockState
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STRIPPED_MANGROVE_WOOD, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

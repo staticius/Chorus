@@ -110,7 +110,7 @@ class BlockFern : BlockFlowable, FlowerPotBlock {
         get() = ItemTool.TYPE_SHEARS
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FERN)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FERN)
+
     }
 }

@@ -1,7 +1,7 @@
 package org.chorus.command.defaults
 
 import org.chorus.command.CommandSender
-import org.chorus.math.NukkitMath
+import org.chorus.math.ChorusMath
 import org.chorus.utils.TextFormat
 
 /**
@@ -47,7 +47,7 @@ class GarbageCollectorCommand(name: String) :
         sender.sendMessage(TextFormat.GOLD.toString() + "Entities: " + TextFormat.RED + entitiesCollected)
         sender.sendMessage(TextFormat.GOLD.toString() + "Block Entities: " + TextFormat.RED + tilesCollected)
         sender.sendMessage(
-            TextFormat.GOLD.toString() + "Memory freed: " + TextFormat.RED + NukkitMath.round(
+            TextFormat.GOLD.toString() + "Memory freed: " + TextFormat.RED + ChorusMath.round(
                 (freedMemory / 1024.0 / 1024.0),
                 2
             ) + " MB"

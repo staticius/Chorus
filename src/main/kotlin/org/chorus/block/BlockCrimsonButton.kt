@@ -9,10 +9,10 @@ class BlockCrimsonButton @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            CRIMSON_BUTTON,
+BlockID.CRIMSON_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

@@ -2,14 +2,12 @@ package org.chorus.permission
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import lombok.extern.slf4j.Slf4j
+
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class BanEntry(name: String) {
     @JvmField

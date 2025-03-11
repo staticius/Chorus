@@ -2,6 +2,7 @@ package org.chorus.block
 
 open class BlockBrainCoral @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockCoral(blockstate) {
+
     override fun isDead(): Boolean {
         return false
     }
@@ -10,8 +11,10 @@ open class BlockBrainCoral @JvmOverloads constructor(blockstate: BlockState? = C
         return BlockDeadBrainCoral()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BRAIN_CORAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BRAIN_CORAL)
     }
 }

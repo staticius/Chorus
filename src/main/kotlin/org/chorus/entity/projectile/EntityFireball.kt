@@ -73,7 +73,7 @@ class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(ch
         this.close()
         val ev: EntityExplosionPrimeEvent = EntityExplosionPrimeEvent(this, 1.2)
         ev.fireChance = .4
-        server!!.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled) {
             val explosion: Explosion =
                 Explosion(this.getLocator(), ev.force.toFloat().toDouble(), this.shootingEntity)

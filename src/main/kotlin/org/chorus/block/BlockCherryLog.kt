@@ -27,8 +27,8 @@ class BlockCherryLog : BlockLog {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHERRY_LOG, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHERRY_LOG, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }
 

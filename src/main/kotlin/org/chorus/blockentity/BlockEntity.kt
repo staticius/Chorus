@@ -9,7 +9,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.registry.Registries
 import org.chorus.scheduler.Task
 import org.chorus.utils.ChunkException
-import lombok.extern.slf4j.Slf4j
+
 
 /**
  * @author MagicDroidX
@@ -34,7 +34,7 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
             throw ChunkException("Invalid garbage Chunk given to Block Entity")
         }
 
-        this.server = chunk.provider.level.server
+        this.server = Server.instance
         this.chunk = chunk
         this.setLevel(chunk.provider.level)
         this.namedTag = nbt

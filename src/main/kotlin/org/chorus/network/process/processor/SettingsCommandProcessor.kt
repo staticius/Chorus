@@ -1,7 +1,6 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.SettingsCommandPacket
@@ -11,7 +10,7 @@ class SettingsCommandProcessor : DataPacketProcessor<SettingsCommandPacket>() {
         val player = playerHandle.player.asPlayer()
 
         val command = pk.command.lowercase()
-        player.getServer().executeCommand(player, command)
+        Server.instance.executeCommand(player, command)
     }
 
     override val packetId: Int

@@ -4,7 +4,6 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.blockentity.*
 import org.chorus.entity.Entity
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus.event.inventory.InventoryCloseEvent
 import org.chorus.event.inventory.InventoryOpenEvent
@@ -17,16 +16,14 @@ import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.ints.IntList
-import lombok.extern.slf4j.Slf4j
+
 import org.jetbrains.annotations.ApiStatus
 import java.util.*
 import java.util.function.Consumer
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 abstract class BaseInventory(
     override var holder: InventoryHolder?,
@@ -112,7 +109,7 @@ abstract class BaseInventory(
         val holder = this.holder
         if (holder is Entity) {
             val ev = EntityInventoryChangeEvent(holder, this.getItem(index), item, index)
-            Server.getInstance().pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 this.sendSlot(index, this.getViewers())
                 return false
@@ -359,7 +356,7 @@ abstract class BaseInventory(
                     holder as Entity,
                     old!!, item, index
                 )
-                Server.getInstance().pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     this.sendSlot(index, this.getViewers())
                     return false
@@ -391,7 +388,7 @@ abstract class BaseInventory(
 
     override fun open(who: Player): Boolean {
         val ev = InventoryOpenEvent(this, who)
-        who.getServer().getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
         }
@@ -402,7 +399,7 @@ abstract class BaseInventory(
 
     override fun close(who: Player) {
         val ev = InventoryCloseEvent(this, who)
-        who.getServer().getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         this.onClose(who)
     }
 
@@ -516,7 +513,7 @@ abstract class BaseInventory(
     }
 
     override fun sendContents(players: Collection<Player?>) {
-        this.sendContents(*players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendContents(*players.toTypedArray())
     }
 
     override fun sendSlot(index: Int, player: Player) {
@@ -545,7 +542,7 @@ abstract class BaseInventory(
     }
 
     override fun sendSlot(index: Int, players: Collection<Player?>) {
-        this.sendSlot(index, *players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendSlot(index, *players.toTypedArray())
     }
 
 

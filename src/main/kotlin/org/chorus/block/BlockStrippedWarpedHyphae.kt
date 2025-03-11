@@ -11,6 +11,6 @@ class BlockStrippedWarpedHyphae @JvmOverloads constructor(blockstate: BlockState
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STRIPPED_WARPED_HYPHAE, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

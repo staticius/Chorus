@@ -2,7 +2,7 @@ package org.chorus.resourcepacks
 
 import org.chorus.Server
 import com.google.gson.JsonParser
-import lombok.extern.slf4j.Slf4j
+
 import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
@@ -29,7 +29,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
 
     init {
         require(file.exists()) {
-            Server.getInstance().language
+            Server.instance.language
                 .tr("nukkit.resources.zip.not-found", file.name)
         }
 
@@ -66,7 +66,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
         }
 
         require(this.verifyManifest()) {
-            Server.getInstance().language
+            Server.instance.language
                 .tr("nukkit.resources.zip.invalid-manifest")
         }
     }
@@ -87,7 +87,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
                 .findFirst()
                 .orElseThrow {
                     IllegalArgumentException(
-                        Server.getInstance().language.tr("nukkit.resources.zip.no-manifest")
+                        Server.instance.baseLang.tr("nukkit.resources.zip.no-manifest")
                     )
                 }
         }

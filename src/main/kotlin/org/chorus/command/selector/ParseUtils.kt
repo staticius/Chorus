@@ -99,7 +99,7 @@ object ParseUtils {
             "c", "creative", "1" -> 1
             "a", "adventure", "2" -> 2
             "spectator", "3" -> 3
-            "d", "default" -> Server.getInstance().defaultGamemode
+            "d", "default" -> Server.instance.defaultGamemode
             else -> throw SelectorSyntaxException("Unknown gamemode token: $token")
         }
     }

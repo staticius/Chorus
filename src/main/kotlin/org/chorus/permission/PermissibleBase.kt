@@ -5,9 +5,7 @@ import org.chorus.plugin.Plugin
 import org.chorus.utils.PluginException
 import org.chorus.utils.ServerException
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PermissibleBase(opable: ServerOperator?) : Permissible {
     var opable: ServerOperator? = null
 
@@ -47,7 +45,7 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
             return permissions[name].getValue()
         }
 
-        val perm = Server.getInstance().pluginManager.getPermission(name)
+        val perm = Server.instance.pluginManager.getPermission(name)
 
         if (perm != null) {
             val permission = perm.default
@@ -96,10 +94,10 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
 
     override fun recalculatePermissions() {
         this.clearPermissions()
-        val defaults = Server.getInstance().pluginManager.getDefaultPermissions(
+        val defaults = Server.instance.pluginManager.getDefaultPermissions(
             isOp
         )
-        Server.getInstance().pluginManager.subscribeToDefaultPerms(
+        Server.instance.pluginManager.subscribeToDefaultPerms(
             this.isOp,
             if (this.parent != null) this.parent else this
         )
@@ -110,7 +108,7 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
                 if (this.parent != null) this.parent else this,
                 name!!, null, true
             )
-            Server.getInstance().pluginManager.subscribeToPermission(
+            Server.instance.pluginManager.subscribeToPermission(
                 name,
                 if (this.parent != null) this.parent else this
             )
@@ -124,17 +122,17 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
 
     fun clearPermissions() {
         for (name in permissions.keys) {
-            Server.getInstance().pluginManager.unsubscribeFromPermission(
+            Server.instance.pluginManager.unsubscribeFromPermission(
                 name,
                 if (this.parent != null) this.parent else this
             )
         }
 
-        Server.getInstance().pluginManager.unsubscribeFromDefaultPerms(
+        Server.instance.pluginManager.unsubscribeFromDefaultPerms(
             false,
             if (this.parent != null) this.parent else this
         )
-        Server.getInstance().pluginManager.unsubscribeFromDefaultPerms(
+        Server.instance.pluginManager.unsubscribeFromDefaultPerms(
             true,
             if (this.parent != null) this.parent else this
         )
@@ -149,7 +147,7 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
     ) {
         for ((key, v) in children) {
             val name = key!!
-            val perm = Server.getInstance().pluginManager.getPermission(name)
+            val perm = Server.instance.pluginManager.getPermission(name)
             val value = (v xor invert)
             permissions[name] = PermissionAttachmentInfo(
                 if (this.parent != null) parent else this,
@@ -157,7 +155,7 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
                 attachment,
                 value
             )
-            Server.getInstance().pluginManager.subscribeToPermission(
+            Server.instance.pluginManager.subscribeToPermission(
                 name,
                 if (this.parent != null) this.parent else this
             )

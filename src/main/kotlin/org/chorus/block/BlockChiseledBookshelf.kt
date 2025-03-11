@@ -142,7 +142,7 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(CHISELED_BOOKSHELF, CommonBlockProperties.BOOKS_STORED, CommonBlockProperties.DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.CHISELED_BOOKSHELF, CommonBlockProperties.BOOKS_STORED, CommonBlockProperties.DIRECTION)
+
     }
 }

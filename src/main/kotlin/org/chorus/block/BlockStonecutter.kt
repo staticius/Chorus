@@ -28,6 +28,6 @@ class BlockStonecutter @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.STONECUTTER)
-            get() = Companion.field
+
     }
 }

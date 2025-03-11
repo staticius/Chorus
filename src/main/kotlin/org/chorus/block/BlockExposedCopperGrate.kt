@@ -9,7 +9,7 @@ class BlockExposedCopperGrate @JvmOverloads constructor(blockstate: BlockState? 
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(EXPOSED_COPPER_GRATE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.EXPOSED_COPPER_GRATE)
+
     }
 }

@@ -7,9 +7,7 @@ import org.chorus.level.particle.ItemBreakParticle
 import org.chorus.nbt.tag.CompoundTag
 import java.util.concurrent.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EntityEgg @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityThrowable(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {

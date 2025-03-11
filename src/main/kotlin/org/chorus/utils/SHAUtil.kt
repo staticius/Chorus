@@ -1,10 +1,9 @@
 package org.chorus.utils
 
-import lombok.experimental.UtilityClass
+
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
-@UtilityClass
 class SHAUtil {
     fun SHA256(strText: String?): String? {
         return SHA(strText, "SHA-256")
@@ -23,7 +22,7 @@ class SHAUtil {
         var strResult: String? = null
 
         // 是否是有效字符串
-        if (strText != null && !strText.isEmpty()) {
+        if (!strText.isNullOrEmpty()) {
             try {
                 val messageDigest = MessageDigest.getInstance(strType)
                 messageDigest.update(strText.toByteArray())

@@ -35,7 +35,7 @@ class BlockClay : BlockSolid, Natural {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CLAY)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CLAY)
+
     }
 }

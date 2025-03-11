@@ -6,7 +6,7 @@ package org.chorus.block.property.enums
  *
  *
  *
- * Placeholder，use [cn.nukkit.math.BlockFace.Axis]
+ * Placeholder，use [org.chorus.math.BlockFace.Axis]
  * @author daoge_cmd
  */
 @Deprecated("")

@@ -10,10 +10,10 @@ import org.chorus.math.*
 import java.util.concurrent.*
 
 /**
- * 实体移动到主人身边.(只对实现了接口 [EntityOwnable][cn.nukkit.entity.EntityOwnable] 的实体有效)
+ * 实体移动到主人身边.(只对实现了接口 [EntityOwnable][org.chorus.entity.EntityOwnable] 的实体有效)
  *
  *
- * The entity moves to the master's side.(Only valid for entities that implement the interface [EntityOwnable][cn.nukkit.entity.EntityOwnable])
+ * The entity moves to the master's side.(Only valid for entities that implement the interface [EntityOwnable][org.chorus.entity.EntityOwnable])
  */
 class EntityMoveToOwnerExecutor @JvmOverloads constructor(
     protected var speed: Float,

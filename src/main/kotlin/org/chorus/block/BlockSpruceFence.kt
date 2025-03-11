@@ -7,6 +7,6 @@ class BlockSpruceFence @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SPRUCE_FENCE)
-            get() = Companion.field
+
     }
 }

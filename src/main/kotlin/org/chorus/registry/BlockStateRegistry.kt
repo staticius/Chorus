@@ -31,10 +31,10 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
                     if (BlockRegistry.Companion.skipBlockSet.contains(name)) continue
                     val state = Registries.BLOCKSTATE[hash]
                     if (state == null) {
-                        Server.getInstance().logger.alert("$name ($hash) was not a part of block_states.json.")
+                        Server.instance.logger.alert("$name ($hash) was not a part of block_states.json.")
                     } else {
                         if (state.identifier != name) {
-                            Server.getInstance().logger.alert("BlockState " + hash + " was not " + name + ". Instead it is " + state.identifier)
+                            Server.instance.logger.alert("BlockState " + hash + " was not " + name + ". Instead it is " + state.identifier)
                         }
                     }
                     val hexString = entry["mapColor"].asString.substring(1, 9)

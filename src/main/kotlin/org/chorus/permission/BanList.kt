@@ -4,16 +4,14 @@ import org.chorus.utils.Utils
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import lombok.extern.slf4j.Slf4j
+
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 class BanList(private val file: String) {
     private var list = LinkedHashMap<String?, BanEntry>()

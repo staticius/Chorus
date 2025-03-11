@@ -35,7 +35,7 @@ class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.de
         when (result.key) {
             "list" -> {
                 val strBuilder = StringBuilder()
-                Server.getInstance().levels.values.forEach(Consumer { level: Level ->
+                Server.instance.levels.values.forEach(Consumer { level: Level ->
                     strBuilder.append(level.name)
                     strBuilder.append(", ")
                 })
@@ -48,10 +48,10 @@ class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.de
 
             "tp" -> {
                 val levelName = result.value!!.getResult<String>(1)
-                var level = Server.getInstance().getLevelByName(levelName)
+                var level = Server.instance.getLevelByName(levelName)
                 if (level == null) {
-                    if (Server.getInstance().loadLevel(levelName)) {
-                        level = Server.getInstance().getLevelByName(levelName)
+                    if (Server.instance.loadLevel(levelName)) {
+                        level = Server.instance.getLevelByName(levelName)
                     } else {
                         log.addMessage("nukkit.command.world.levelNotFound", levelName).output()
                         return 0
@@ -73,7 +73,7 @@ class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.de
         val WORLD_NAME_ENUM: CommandEnum = CommandEnum(
             "world"
         ) {
-            Server.getInstance().levels.values.stream()
+            Server.instance.levels.values.stream()
                 .map { obj: Level -> obj.name }.toList()
         }
     }

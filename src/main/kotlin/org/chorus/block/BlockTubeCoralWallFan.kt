@@ -16,6 +16,6 @@ class BlockTubeCoralWallFan : BlockCoralWallFan {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.TUBE_CORAL_WALL_FAN, CommonBlockProperties.CORAL_DIRECTION)
-            get() = Companion.field
+
     }
 }

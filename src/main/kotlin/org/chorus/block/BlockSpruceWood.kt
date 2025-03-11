@@ -10,6 +10,6 @@ class BlockSpruceWood(blockstate: BlockState?) : BlockWood(blockstate) {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SPRUCE_WOOD, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

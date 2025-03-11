@@ -20,6 +20,6 @@ class BlockPaleOakStandingSign @JvmOverloads constructor(blockstate: BlockState?
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PALE_OAK_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+
     }
 }

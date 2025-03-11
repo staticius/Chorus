@@ -3,7 +3,7 @@ package org.chorus.scheduler
 import org.chorus.plugin.Plugin
 import org.chorus.utils.PluginException
 import org.chorus.utils.Utils
-import lombok.extern.slf4j.Slf4j
+
 import org.jetbrains.annotations.ApiStatus
 import java.util.*
 import java.util.ArrayDeque
@@ -450,9 +450,9 @@ class ServerScheduler {
         var task: TaskHandler
         while ((pending.poll().also { task = it }) != null) {
             val tick = max(currentTick.toDouble(), task.nextRunTick.toDouble()).toInt() // Do not schedule in the past
-            val queue = Utils.getOrCreate<Int, ArrayDeque<TaskHandler>, ArrayDeque<*>>(
+            val queue = Utils.getOrCreate(
                 queueMap,
-                ArrayDeque::class.java, tick
+                ArrayDeque<TaskHandler>()::class.java, tick
             )
             queue.add(task)
         }

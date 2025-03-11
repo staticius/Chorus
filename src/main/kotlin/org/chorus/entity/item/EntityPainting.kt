@@ -20,9 +20,7 @@ import java.util.function.BinaryOperator
 import java.util.function.Function
 import java.util.function.Predicate
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, nbt) {
     override fun getIdentifier(): String {
         return EntityID.Companion.PAINTING

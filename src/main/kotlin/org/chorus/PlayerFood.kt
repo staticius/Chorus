@@ -2,17 +2,12 @@ package org.chorus
 
 import org.chorus.entity.*
 import org.chorus.entity.Attribute.Companion.getAttribute
-import org.chorus.entity.Entity.equals
-import org.chorus.entity.Entity.getAttributes
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.EntityRegainHealthEvent
 import org.chorus.event.player.PlayerFoodLevelChangeEvent
-import org.chorus.item.Item.equals
 import org.chorus.item.ItemFood
-import org.chorus.math.BlockVector3.equals
-import org.chorus.plugin.PluginManager.callEvent
 import kotlin.math.max
 import kotlin.math.min
 
@@ -44,7 +39,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
         }
 
         val event = PlayerFoodLevelChangeEvent(this.player, food, saturation)
-        Server.Companion.getInstance().getPluginManager().callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             this.sendFood(this.food)
@@ -66,7 +61,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
         saturation = max(0.0, min(saturation.toDouble(), food.toDouble())).toFloat()
 
         val event = PlayerFoodLevelChangeEvent(player, food, saturation)
-        Server.Companion.getInstance().getPluginManager().callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (!event.isCancelled) {
             this.saturation = event.foodSaturationLevel
@@ -89,7 +84,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
     fun sendFood(food: Int = this.food) {
         if (player.spawned) {
             val attribute: Attribute =
-                player.getAttributes().computeIfAbsent(Attribute.FOOD) { obj: Int? -> getAttribute() }
+                player.getAttributes().computeIfAbsent(Attribute.FOOD) { obj: Int -> getAttribute(obj) }
             if (attribute.getValue() != food.toFloat()) {
                 attribute.setValue(food.toFloat())
                 player.syncAttribute(attribute)
@@ -120,7 +115,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
     }
 
     fun exhaust(amount: Double) {
-        if (!this.isEnabled || Server.Companion.getInstance()
+        if (!this.isEnabled || Server.instance
                 .getDifficulty() == 0 || player.hasEffect(EffectType.SATURATION)
         ) {
             return
@@ -167,7 +162,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
             this.foodTickTimer = 0
         }
 
-        val difficulty: Int = Server.Companion.getInstance().getDifficulty()
+        val difficulty: Int = Server.instance.getDifficulty()
 
         if (difficulty == 0 && this.foodTickTimer % 10 == 0) {
             if (this.isHungry) {

@@ -11,7 +11,7 @@ import org.chorus.math.BlockFace
 open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockState) {
     override val name: String
-        get() = "Cake Block With " + colorName + " Candle"
+        get() = "Cake Block With $colorName Candle"
 
     protected val colorName: String
         get() = "Simple"
@@ -148,7 +148,7 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState? = C
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CANDLE_CAKE, CommonBlockProperties.LIT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CANDLE_CAKE, CommonBlockProperties.LIT)
+
     }
 }

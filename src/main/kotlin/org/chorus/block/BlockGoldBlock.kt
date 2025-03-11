@@ -24,7 +24,7 @@ class BlockGoldBlock @JvmOverloads constructor(blockstate: BlockState? = Compani
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GOLD_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GOLD_BLOCK)
+
     }
 }

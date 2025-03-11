@@ -17,7 +17,7 @@ open class BlockDeepslateRedstoneOre @JvmOverloads constructor(blockstate: Block
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEEPSLATE_REDSTONE_ORE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEEPSLATE_REDSTONE_ORE)
+
     }
 }

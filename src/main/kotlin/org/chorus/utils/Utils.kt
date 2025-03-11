@@ -3,10 +3,10 @@ package org.chorus.utils
 import org.chorus.block.Block
 import org.chorus.level.Level
 import org.chorus.math.*
-import org.chorus.math.NukkitMath.ceilDouble
-import org.chorus.math.NukkitMath.floorDouble
+import org.chorus.math.ChorusMath.ceilDouble
+import org.chorus.math.ChorusMath.floorDouble
 import io.netty.buffer.ByteBuf
-import lombok.extern.slf4j.Slf4j
+
 import java.io.*
 import java.lang.management.ManagementFactory
 import java.nio.channels.FileChannel
@@ -24,11 +24,7 @@ import java.util.zip.ZipOutputStream
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
-
-object Utils {
+object Utils : Loggable {
     val EMPTY_INTEGERS: Array<Int?> = arrayOfNulls(0)
 
 
@@ -90,7 +86,6 @@ object Utils {
 
     @Throws(IOException::class)
     fun writeFile(file: File, content: InputStream) {
-        requireNotNull(content) { "content must not be null" }
         if (!file.exists()) {
             file.createNewFile()
         }
@@ -135,7 +130,7 @@ object Utils {
             val stringBuilder = StringBuilder()
             temp = br.readLine()
             while (temp != null) {
-                if (stringBuilder.length != 0) {
+                if (stringBuilder.isNotEmpty()) {
                     stringBuilder.append("\n")
                 }
                 stringBuilder.append(temp)
@@ -251,7 +246,7 @@ object Utils {
         return result and 0xFFFFFFFFL
     }
 
-    fun splitArray(arrayToSplit: Array<Any>, chunkSize: Int): Array<Array<Any>>? {
+    fun splitArray(arrayToSplit: Array<Any>, chunkSize: Int): Array<Array<Any>?>? {
         if (chunkSize <= 0) {
             return null
         }
@@ -259,7 +254,7 @@ object Utils {
         val rest = arrayToSplit.size % chunkSize
         val chunks = arrayToSplit.size / chunkSize + (if (rest > 0) 1 else 0)
 
-        val arrays: Array<Array<Any>> = arrayOfNulls(chunks)
+        val arrays: Array<Array<Any>?> = arrayOfNulls(chunks)
         for (i in 0..<(if (rest > 0) chunks - 1 else chunks)) {
             arrays[i] = Arrays.copyOfRange(arrayToSplit, i * chunkSize, i * chunkSize + chunkSize)
         }
@@ -270,14 +265,12 @@ object Utils {
         return arrays
     }
 
-    fun <T> reverseArray(data: Array<T>) {
+    fun <T> reverseArray(data: Array<T?>) {
         reverseArray<T>(data, false)
     }
 
-    fun <T> concatArray(vararg arrays: Array<T>): Array<T> {
-        val list = ArrayList<T>()
-        for (array in arrays) list.addAll(Arrays.asList(*array))
-        return java.lang.reflect.Array.newInstance(arrays[0][0].javaClass.getComponentType(), list.size) as Array<T>
+    inline fun <reified T> concatArray(vararg arrays: Array<T>): Array<T> {
+        return arrays.flatMap { it.asList() }.toTypedArray()
     }
 
     fun <T> reverseArray(array: Array<T?>, copy: Boolean): Array<T?> {
@@ -301,8 +294,8 @@ object Utils {
         return data
     }
 
-    fun <T> clone2dArray(array: Array<Array<T?>>): Array<Array<T?>> {
-        val newArray: Array<Array<T?>> = array.copyOf(array.size)
+    fun <T> clone2dArray(array: Array<Array<T?>>): Array<Array<T?>?> {
+        val newArray: Array<Array<T?>?> = array.copyOf(array.size)
 
         for (i in array.indices) {
             newArray[i] = array[i].copyOf(array[i].size)
@@ -323,13 +316,13 @@ object Utils {
         return existing
     }
 
-    fun <T, U, V : U?> getOrCreate(map: MutableMap<T, U>, clazz: Class<V>, key: T): U {
+    fun <T, U, V : U> getOrCreate(map: MutableMap<T, U>, clazz: Class<V>, key: T): U {
         var existing = map[key]
         if (existing != null) {
             return existing
         }
         try {
-            val toPut: U = clazz.newInstance()
+            val toPut: U = clazz.getDeclaredConstructor().newInstance()
             existing = map.putIfAbsent(key, toPut)
             if (existing == null) {
                 return toPut
@@ -372,9 +365,9 @@ object Utils {
     }
 
     private fun hexToBin(ch: Char): Int {
-        if ('0' <= ch && ch <= '9') return ch.code - '0'.code
-        if ('A' <= ch && ch <= 'F') return ch.code - 'A'.code + 10
-        if ('a' <= ch && ch <= 'f') return ch.code - 'a'.code + 10
+        if (ch in '0'..'9') return ch.code - '0'.code
+        if (ch in 'A'..'F') return ch.code - 'A'.code + 10
+        if (ch in 'a'..'f') return ch.code - 'a'.code + 10
         return -1
     }
 
@@ -478,10 +471,7 @@ object Utils {
         return true
     }
 
-
-    //used for commands /fill , /clone and so on
-    //todo: using other methods instead of this one
-    fun getLevelBlocks(level: Level, bb: AxisAlignedBB): Array<Block> {
+    fun getLevelBlocks(level: Level, bb: AxisAlignedBB): Array<Block?> {
         val minX = floorDouble(min(bb.minX, bb.maxX))
         val minY = floorDouble(min(bb.minY, bb.maxY))
         val minZ = floorDouble(min(bb.minZ, bb.maxZ))
@@ -500,7 +490,7 @@ object Utils {
             }
         }
 
-        return blocks.toArray(Block.EMPTY_ARRAY)
+        return blocks.toTypedArray()
     }
 
     const val ACCORDING_X_OBTAIN_Y: Int = 0
@@ -511,17 +501,17 @@ object Utils {
 
     fun calLinearFunction(pos1: Vector3, pos2: Vector3, element: Double, type: Int): Double {
         if (pos1.floorY != pos2.floorY) return Double.MAX_VALUE
-        return if (pos1.getX() === pos2.getX()) {
-            if (type == ACCORDING_Y_OBTAIN_X) pos1.getX()
+        return if (pos1.x == pos2.x) {
+            if (type == ACCORDING_Y_OBTAIN_X) pos1.x
             else Double.MAX_VALUE
-        } else if (pos1.getZ() === pos2.getZ()) {
-            if (type == ACCORDING_X_OBTAIN_Y) pos1.getZ()
+        } else if (pos1.z == pos2.z) {
+            if (type == ACCORDING_X_OBTAIN_Y) pos1.z
             else Double.MAX_VALUE
         } else {
             if (type == ACCORDING_X_OBTAIN_Y) {
-                (element - pos1.getX()) * (pos1.getZ() - pos2.getZ()) / (pos1.getX() - pos2.getX()) + pos1.getZ()
+                (element - pos1.x) * (pos1.z - pos2.z) / (pos1.x - pos2.x) + pos1.z
             } else {
-                (element - pos1.getZ()) * (pos1.getX() - pos2.getX()) / (pos1.getZ() - pos2.getZ()) + pos1.getX()
+                (element - pos1.z) * (pos1.x - pos2.x) / (pos1.z - pos2.z) + pos1.x
             }
         }
     }

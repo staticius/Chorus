@@ -7,6 +7,6 @@ class BlockPrismarineBricks : BlockPrismarine {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PRISMARINE_BRICKS)
-            get() = Companion.field
+
     }
 }

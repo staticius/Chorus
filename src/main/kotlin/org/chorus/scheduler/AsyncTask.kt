@@ -1,6 +1,7 @@
 package org.chorus.scheduler
 
 import org.chorus.Server
+import org.chorus.utils.Loggable
 import org.chorus.utils.ThreadStore
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -48,9 +49,7 @@ abstract class AsyncTask : Runnable {
         this.isFinished = false
     }
 
-    companion object {
-        private val log: Logger by lazy { LoggerFactory.getLogger(AsyncTask::class.java) }
-
+    companion object : Loggable {
         val FINISHED_LIST: Queue<AsyncTask> = ConcurrentLinkedQueue()
 
         fun collectTask() {

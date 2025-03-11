@@ -19,20 +19,20 @@ import org.chorus.entity.mob.EntityMob
  */
 interface IBehaviorGroup {
     /**
-     * 调用行为组内部的所有行为[IBehavior]的评估器[cn.nukkit.entity.ai.evaluator.IBehaviorEvaluator]
+     * 调用行为组内部的所有行为[IBehavior]的评估器[org.chorus.entity.ai.evaluator.IBehaviorEvaluator]
      *
      *
-     * Call the evaluator [cn.nukkit.entity.ai.evaluator.IBehaviorEvaluator] of all behavior [IBehavior] inside the behavior group
+     * Call the evaluator [org.chorus.entity.ai.evaluator.IBehaviorEvaluator] of all behavior [IBehavior] inside the behavior group
      *
      * @param entity 目标实体对象
      */
     fun evaluateBehaviors(entity: EntityMob?)
 
     /**
-     * 调用行为组内部的所有核心行为[IBehavior]的评估器[cn.nukkit.entity.ai.evaluator.IBehaviorEvaluator]
+     * 调用行为组内部的所有核心行为[IBehavior]的评估器[org.chorus.entity.ai.evaluator.IBehaviorEvaluator]
      *
      *
-     * Call the evaluator [cn.nukkit.entity.ai.evaluator.IBehaviorEvaluator] of all core behavior [IBehavior] inside the behavior group
+     * Call the evaluator [org.chorus.entity.ai.evaluator.IBehaviorEvaluator] of all core behavior [IBehavior] inside the behavior group
      *
      * @param entity 目标实体对象
      */
@@ -49,20 +49,20 @@ interface IBehaviorGroup {
     fun collectSensorData(entity: EntityMob?)
 
     /**
-     * 调用行为组内部所有被激活的行为[IBehavior]的执行器[cn.nukkit.entity.ai.executor.IBehaviorExecutor]
+     * 调用行为组内部所有被激活的行为[IBehavior]的执行器[org.chorus.entity.ai.executor.IBehaviorExecutor]
      *
      *
-     * Call the executor [cn.nukkit.entity.ai.executor.IBehaviorExecutor] of all activated behavior [IBehavior] inside the behavior group
+     * Call the executor [org.chorus.entity.ai.executor.IBehaviorExecutor] of all activated behavior [IBehavior] inside the behavior group
      *
      * @param entity 目标实体对象
      */
     fun tickRunningBehaviors(entity: EntityMob?)
 
     /**
-     * 调用行为组内部所有被激活的核心行为[IBehavior]的执行器[cn.nukkit.entity.ai.executor.IBehaviorExecutor]
+     * 调用行为组内部所有被激活的核心行为[IBehavior]的执行器[org.chorus.entity.ai.executor.IBehaviorExecutor]
      *
      *
-     * Call the executor [cn.nukkit.entity.ai.executor.IBehaviorExecutor] of all activated core behavior [IBehavior] inside the behavior group
+     * Call the executor [org.chorus.entity.ai.executor.IBehaviorExecutor] of all activated core behavior [IBehavior] inside the behavior group
      *
      * @param entity 目标实体对象
      */

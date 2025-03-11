@@ -1,8 +1,6 @@
 package org.chorus.item.enchantment
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentWaterBreath :
     Enchantment(Enchantment.Companion.ID_WATER_BREATHING, "oxygen", Rarity.RARE, EnchantmentType.ARMOR_HEAD) {
     override fun getMinEnchantAbility(level: Int): Int {

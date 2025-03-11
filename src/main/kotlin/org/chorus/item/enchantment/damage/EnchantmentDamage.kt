@@ -4,9 +4,7 @@ import org.chorus.item.Item
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.item.enchantment.EnchantmentType
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EnchantmentDamage protected constructor(
     id: Int,
     name: String,

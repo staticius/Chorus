@@ -20,6 +20,6 @@ class BlockZombieHead(blockState: BlockState?) : BlockHead(blockState) {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.ZOMBIE_HEAD, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+            
     }
 }

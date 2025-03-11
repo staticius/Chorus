@@ -10,16 +10,18 @@ class BlockBirchStandingSign @JvmOverloads constructor(blockstate: BlockState? =
     }
 
     override fun getWallSignId(): String {
-        return BlockBirchWallSign.Companion.PROPERTIES.getIdentifier()
+        return BlockBirchWallSign.properties.identifier
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBirchSign()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BIRCH_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.BIRCH_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
     }
 }

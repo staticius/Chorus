@@ -109,7 +109,7 @@ class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chu
 
     override fun onInteract(player: Player, item: Item, v: Vector3): Boolean {
         if (item is ItemGoldenApple) {
-            if (hasEffect(EffectType.Companion.WEAKNESS)) {
+            if (hasEffect(EffectType.WEAKNESS)) {
                 if (!getDataFlag(EntityFlag.SHAKING)) {
                     setDataFlag(EntityFlag.SHAKING)
                     if (!player.isCreative) {
@@ -152,7 +152,7 @@ class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chu
         this.close()
         equipment.contents.values.forEach(Consumer { i: Item? -> level!!.dropItem(this.position, i) })
         val villager = EntityVillagerV2(this.locator.chunk, this.namedTag)
-        villager.addEffect(Effect.Companion.get(EffectType.Companion.NAUSEA).setDuration(200))
+        villager.addEffect(Effect.get(EffectType.NAUSEA).setDuration(200))
         villager.setPosition(this.position)
         villager.setRotation(rotation.yaw, rotation.pitch)
         villager.spawnToAll()

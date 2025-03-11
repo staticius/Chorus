@@ -1,8 +1,8 @@
 package org.chorus.form.element.simple
 
 import com.google.gson.JsonObject
-import lombok.*
-import lombok.experimental.Accessors
+
+
 
 /**
  * The image of a [ElementButton]

@@ -2,9 +2,7 @@ package org.chorus.item
 
 import org.chorus.block.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class ItemString @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.STRING, meta, count, "String") {
     init {

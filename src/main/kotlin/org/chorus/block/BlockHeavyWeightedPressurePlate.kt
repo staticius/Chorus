@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
-import org.chorus.math.NukkitMath.ceilFloat
+import org.chorus.math.ChorusMath.ceilFloat
 import kotlin.math.max
 import kotlin.math.min
 
@@ -47,7 +47,7 @@ class BlockHeavyWeightedPressurePlate @JvmOverloads constructor(blockstate: Bloc
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(HEAVY_WEIGHTED_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+            BlockProperties(BlockID.HEAVY_WEIGHTED_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
+
     }
 }

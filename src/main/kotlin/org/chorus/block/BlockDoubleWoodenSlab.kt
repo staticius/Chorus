@@ -5,7 +5,7 @@ import org.chorus.item.ItemTool
 
 abstract class BlockDoubleWoodenSlab(blockstate: BlockState?) : BlockDoubleSlabBase(blockstate) {
     override val name: String
-        get() = "Double $slabName Wood Slab"
+        get() = "Double ${getSlabName()} Wood Slab"
 
     override val resistance: Double
         get() = 15.0

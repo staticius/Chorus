@@ -1,6 +1,6 @@
 package org.chorus.scoreboard.data
 
-import lombok.Getter
+
 
 /**
  * 计分板显示槽位枚举

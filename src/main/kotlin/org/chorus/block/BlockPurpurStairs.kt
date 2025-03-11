@@ -26,6 +26,6 @@ class BlockPurpurStairs @JvmOverloads constructor(blockstate: BlockState? = Comp
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

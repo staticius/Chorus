@@ -3,9 +3,7 @@ package org.chorus.level
 import org.chorus.math.Vector3
 import org.chorus.math.Rotator2
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class Transform : Locator {
     @JvmField
     var rotation: Rotator2

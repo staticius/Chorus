@@ -15,20 +15,20 @@ import kotlin.collections.iterator
 import kotlin.collections.set
 import kotlin.math.max
 
-open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<String?, Tag?>? = HashMap()) :
-    Tag() {
-    open val allTags: Collection<Tag?>
+open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<String?, Tag<*>?>? = HashMap()) :
+    Tag<MutableMap<String?, Tag<*>?>>() {
+    open val allTags: Collection<Tag<*>?>
         get() = tags!!.values
 
     override val id: Byte
-        get() = Tag.Companion.TAG_Compound
+        get() = Tag.Companion.TAG_COMPOUND
 
-    open fun put(name: String?, tag: Tag?): CompoundTag {
+    open fun put(name: String?, tag: Tag<*>?): CompoundTag {
         tags!![name] = tag
         return this
     }
 
-    fun putIfNull(name: String?, tag: Tag?): CompoundTag {
+    fun putIfNull(name: String?, tag: Tag<*>?): CompoundTag {
         if (!tags!!.containsKey(name)) {
             tags[name] = tag
         }
@@ -87,7 +87,7 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         return this
     }
 
-    open fun putList(name: String?, listTag: ListTag<out Tag?>?): CompoundTag {
+    open fun putList(name: String?, listTag: ListTag<out Tag<*>>?): CompoundTag {
         tags!![name] = listTag
         return this
     }
@@ -102,7 +102,7 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         return this
     }
 
-    open fun get(name: String?): Tag? {
+    open fun get(name: String?): Tag<*>? {
         return tags!![name]
     }
 
@@ -165,13 +165,13 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         return this
     }
 
-    open fun <T : Tag?> removeAndGet(name: String?): T? {
+    open fun <T : Tag<*>?> removeAndGet(name: String?): T? {
         return tags!!.remove(name) as T?
     }
 
     open fun getByte(name: String?): Byte {
         if (!tags!!.containsKey(name)) return 0.toByte()
-        return (tags[name] as NumberTag<*>).data.toByte()
+        return (tags[name] as NumberTag<*>).data!!.toByte()
     }
 
     open fun getShort(name: String?): Short {
@@ -181,22 +181,22 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
 
     open fun getInt(name: String?): Int {
         if (!tags!!.containsKey(name)) return 0
-        return (tags[name] as NumberTag<*>).data.toInt()
+        return (tags[name] as NumberTag<*>).data!!.toInt()
     }
 
     open fun getLong(name: String?): Long {
         if (!tags!!.containsKey(name)) return 0
-        return (tags[name] as NumberTag<*>).data.toLong()
+        return (tags[name] as NumberTag<*>).data!!.toLong()
     }
 
     open fun getFloat(name: String?): Float {
         if (!tags!!.containsKey(name)) return 0f
-        return (tags[name] as NumberTag<*>).data.toFloat()
+        return (tags[name] as NumberTag<*>).data!!.toFloat()
     }
 
     open fun getDouble(name: String?): Double {
         if (!tags!!.containsKey(name)) return 0.0
-        return (tags[name] as NumberTag<*>).data.toDouble()
+        return (tags[name] as NumberTag<*>).data!!.toDouble()
     }
 
     open fun getString(name: String?): String? {
@@ -223,34 +223,34 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         return tags[name] as CompoundTag?
     }
 
-    open fun getList(name: String?): ListTag<out Tag?>? {
+    open fun getList(name: String?): ListTag<out Tag<*>>? {
         if (!tags!!.containsKey(name)) return ListTag()
-        return tags[name] as ListTag<out Tag?>?
+        return tags[name] as ListTag<out Tag<*>>?
     }
 
-    open fun <T : Tag?> getList(name: String?, type: Class<T>?): ListTag<T?>? {
+    open fun <T : Tag<*>> getList(name: String?, type: Class<T>?): ListTag<T>? {
         if (tags!!.containsKey(name)) {
-            return tags[name] as ListTag<T?>?
+            return tags[name] as ListTag<T>?
         }
         return ListTag()
     }
 
-    open fun getTags(): MutableMap<String?, Tag?> {
+    open fun getTags(): MutableMap<String?, Tag<*>?> {
         return HashMap(this.tags)
     }
 
-    val entrySet: @UnmodifiableView MutableSet<Map.Entry<String?, Tag?>>
+    val entrySet: @UnmodifiableView MutableSet<Map.Entry<String?, Tag<*>?>>
         get() = Collections.unmodifiableSet(
             tags!!.entries
         )
 
-    override fun parseValue(): Map<String?, Any?> {
-        val value: MutableMap<String?, Any?> = HashMap(
+    override fun parseValue(): MutableMap<String?, Tag<*>?> {
+        val value: MutableMap<String?, Tag<*>?> = HashMap(
             tags!!.size
         )
 
         for ((key, value1) in tags) {
-            value[key] = value1!!.parseValue()
+            value[key] = value1!!.parseValue() as Tag<*>
         }
 
         return value
@@ -262,7 +262,7 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
 
     override fun toString(): String {
         val joiner = StringJoiner(",\n\t")
-        tags!!.forEach { (key: String?, tag: Tag?) ->
+        tags!!.forEach { (key, tag) ->
             joiner.add(
                 '\''.toString() + key + "' : " + tag.toString().replace("\n", "\n\t")
             )
@@ -272,7 +272,7 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
 
     override fun toSNBT(): String {
         val joiner = StringJoiner(",")
-        tags!!.forEach { (key: String?, tag: Tag?) -> joiner.add("\"" + key + "\":" + tag!!.toSNBT()) }
+        tags!!.forEach { (key, tag) -> joiner.add("\"" + key + "\":" + tag!!.toSNBT()) }
         return "{$joiner}"
     }
 
@@ -280,7 +280,7 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         val addSpace = StringBuilder()
         addSpace.append(" ".repeat(max(0.0, space.toDouble()).toInt()))
         val joiner = StringJoiner(",\n$addSpace")
-        tags!!.forEach { (key: String?, tag: Tag?) ->
+        tags!!.forEach { (key, tag) ->
             joiner.add(
                 "\"$key\": " + tag!!.toSNBT(space).replace(
                     "\n",
@@ -305,9 +305,9 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         return tag
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (super.equals(obj)) {
-            val o = obj as CompoundTag
+    override fun equals(other: Any?): Boolean {
+        if (super.equals(other)) {
+            val o = other as CompoundTag
             return tags!!.entries == o.tags!!.entries
         }
         return false

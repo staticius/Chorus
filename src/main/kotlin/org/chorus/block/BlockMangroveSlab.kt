@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 class BlockMangroveSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockWoodenSlab(blockstate, BlockID.MANGROVE_DOUBLE_SLAB) {
     override val name: String
-        get() = (if (isOnTop) "Upper " else "") + slabName + " Wood Slab"
+        get() = (if (isOnTop) "Upper " else "") + getSlabName() + " Wood Slab"
 
     override fun getSlabName(): String {
         return "Mangrove"
@@ -14,6 +14,5 @@ class BlockMangroveSlab @JvmOverloads constructor(blockstate: BlockState? = Comp
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MANGROVE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
     }
 }

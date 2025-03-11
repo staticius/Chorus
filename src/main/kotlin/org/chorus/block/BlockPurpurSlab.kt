@@ -25,6 +25,6 @@ class BlockPurpurSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID.P
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PURPUR_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

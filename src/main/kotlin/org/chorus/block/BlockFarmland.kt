@@ -31,7 +31,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState? = Companio
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (up()!!.isSolid) {
                 val farmEvent = FarmLandDecayEvent(null, this)
-                level.server.pluginManager.callEvent(farmEvent)
+                Server.instance.pluginManager.callEvent(farmEvent)
                 if (farmEvent.isCancelled) return 0
 
                 level.setBlock(this.position, get(DIRT), false, true)
@@ -106,7 +106,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState? = Companio
                 level.setBlock(this.position, this, false, moistureAmount == 1)
             } else {
                 val farmEvent = FarmLandDecayEvent(null, this)
-                level.server.pluginManager.callEvent(farmEvent)
+                Server.instance.pluginManager.callEvent(farmEvent)
                 if (farmEvent.isCancelled) return 0
                 level.setBlock(this.position, get(Block.DIRT), false, true)
             }
@@ -135,7 +135,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState? = Companio
         }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FARMLAND, CommonBlockProperties.MOISTURIZED_AMOUNT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FARMLAND, CommonBlockProperties.MOISTURIZED_AMOUNT)
+
     }
 }

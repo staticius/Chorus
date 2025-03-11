@@ -168,7 +168,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                             floorBlock,
                             Block.get(Block.SNOW_LAYER).setPropertyValue(CommonBlockProperties.HEIGHT, 7)
                         )
-                        server!!.pluginManager.callEvent(event)
+                        Server.instance.pluginManager.callEvent(event)
                         if (!event.isCancelled) {
                             level!!.setBlock(floorPos, event.to, true)
 
@@ -180,7 +180,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                                         Block.SNOW_LAYER
                                     ).setPropertyValue(CommonBlockProperties.HEIGHT, mergedHeight - 8 - 1)
                                 )
-                                server!!.pluginManager.callEvent(event2)
+                                Server.instance.pluginManager.callEvent(event2)
                                 if (!event2.isCancelled) {
                                     level!!.setBlock(abovePos, event2.to, true)
                                 }
@@ -191,7 +191,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                             this, floorBlock,
                             Block.get(Block.SNOW_LAYER).setPropertyValue(CommonBlockProperties.HEIGHT, mergedHeight - 1)
                         )
-                        server!!.pluginManager.callEvent(event)
+                        Server.instance.pluginManager.callEvent(event)
                         if (!event.isCancelled) {
                             level!!.setBlock(floorPos, event.to, true)
                         }
@@ -205,7 +205,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                     }
                 } else {
                     val event: EntityBlockChangeEvent = EntityBlockChangeEvent(this, block, Block.get(blockState))
-                    server!!.pluginManager.callEvent(event)
+                    Server.instance.pluginManager.callEvent(event)
                     if (!event.isCancelled) {
                         val eventTo: Block = event.to
 

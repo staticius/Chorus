@@ -108,6 +108,6 @@ class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState? = Comp
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.TRAPPED_CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-            get() = Companion.field
+
     }
 }

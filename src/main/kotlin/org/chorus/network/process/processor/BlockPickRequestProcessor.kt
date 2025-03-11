@@ -1,15 +1,13 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.event.player.PlayerBlockPickEvent
 import org.chorus.inventory.HumanInventory
 import org.chorus.math.Vector3
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.BlockPickRequestPacket
 import org.chorus.network.protocol.ProtocolInfo
-import lombok.extern.slf4j.Slf4j
+
 
 
 class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() {
@@ -42,7 +40,7 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
             pickEvent.setCancelled()
         }
 
-        player.getServer().getPluginManager().callEvent(pickEvent)
+        Server.instance.pluginManager.callEvent(pickEvent)
 
         if (!pickEvent.isCancelled) {
             var itemExists = false

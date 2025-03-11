@@ -5,14 +5,19 @@ import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.enums.BigDripleafTilt
-import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.entity.Entity
 import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.event.block.BigDripleafTiltChangeEvent
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.level.Sound
 import org.chorus.level.particle.BoneMealParticle
-import org.chorus.math.*
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.utils.Faceable
 import kotlin.math.ceil
 
@@ -33,9 +38,9 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
         }
 
     var isHead: Boolean
-        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.BIG_DRIPLEAF_HEAD)
+        get() = this.getPropertyValue(CommonBlockProperties.BIG_DRIPLEAF_HEAD)
         set(isHead) {
-            this.setPropertyValue<Boolean, BooleanPropertyType>(
+            this.setPropertyValue(
                 CommonBlockProperties.BIG_DRIPLEAF_HEAD,
                 isHead
             )
@@ -51,7 +56,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
             this,
             this.tilt, tilt
         )
-        instance!!.pluginManager.callEvent(event)
+        instance.pluginManager.callEvent(event)
         if (event.isCancelled) return false
         this.setPropertyValue(CommonBlockProperties.BIG_DRIPLEAF_TILT, tilt)
         return true
@@ -93,19 +98,19 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
         val id = below!!.id
         if (!isValidSupportBlock(id)) return false
 
-        if (id == BIG_DRIPLEAF) {
+        if (id == BlockID.BIG_DRIPLEAF) {
             val b = BlockBigDripleaf()
             val bf = (below as BlockBigDripleaf).blockFace
             b.blockFace = bf
             b.isHead = false
-            level.setBlock(below.position, b, true, false)
+            level.setBlock(below.position, b, direct = true, update = false)
             blockFace = bf
         } else {
-            blockFace = if (player != null) player.getHorizontalFacing().getOpposite() else BlockFace.SOUTH
+            blockFace = if (player != null) player.getHorizontalFacing()?.getOpposite() else BlockFace.SOUTH
         }
         isHead = true
 
-        if (block is BlockFlowingWater) level.setBlock(this.position, 1, block, true, false)
+        if (block is BlockFlowingWater) level.setBlock(this.position, 1, block, direct = true, update = false)
         return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
@@ -120,7 +125,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
         if (item.isFertilizer) {
             var head: Block = this
             var up: Block?
-            while ((head.up().also { up = it })!!.id === BIG_DRIPLEAF) head = up!!
+            while ((head.up().also { up = it })!!.id === BlockID.BIG_DRIPLEAF) head = up!!
             if (head.position.floorY + 1 > level.maxHeight) return false
             val above = head.up()
             if (!above!!.isAir && above !is BlockFlowingWater) return false
@@ -128,8 +133,8 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
             level.addParticle(BoneMealParticle(this.position))
             val aboveDownBlock = BlockBigDripleaf()
             aboveDownBlock.blockFace = this.blockFace
-            level.setBlock(above.position.getSideVec(BlockFace.DOWN), aboveDownBlock, true, false)
-            if (above is BlockFlowingWater) level.setBlock(above.position, 1, above, true, false)
+            level.setBlock(above.position.getSideVec(BlockFace.DOWN), aboveDownBlock, direct = true, update = false)
+            if (above is BlockFlowingWater) level.setBlock(above.position, 1, above, direct = true, update = false)
             val aboveBock = BlockBigDripleaf()
             aboveBock.blockFace = this.blockFace
             aboveBock.isHead = true
@@ -153,7 +158,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
             }
 
             if (!isHead) {
-                if (up()!!.id == BIG_DRIPLEAF) {
+                if (up()!!.id == BlockID.BIG_DRIPLEAF) {
                     return 0
                 }
 
@@ -168,7 +173,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
 
             if (level.isBlockPowered(this.position)) {
                 setTilt(BigDripleafTilt.NONE)
-                level.setBlock(this.position, this, true, false)
+                level.setBlock(this.position, this, direct = true, update = false)
                 return Level.BLOCK_UPDATE_SCHEDULED
             }
 
@@ -178,8 +183,9 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
                 BigDripleafTilt.FULL_TILT -> {
                     level.addSound(this.position, Sound.TILT_UP_BIG_DRIPLEAF)
                     setTilt(BigDripleafTilt.NONE)
-                    level.setBlock(this.position, this, true, false)
+                    level.setBlock(this.position, this, direct = true, update = false)
                 }
+                else -> {}
             }
             return Level.BLOCK_UPDATE_SCHEDULED
         }
@@ -191,7 +197,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
             if (!level.isBlockPowered(this.position)) return 0
             if (tilt != BigDripleafTilt.UNSTABLE) level.addSound(this.position, Sound.TILT_UP_BIG_DRIPLEAF)
             setTilt(BigDripleafTilt.NONE)
-            level.setBlock(this.position, this, true, false)
+            level.setBlock(this.position, this, direct = true, update = false)
 
             level.cancelSheduledUpdate(this.position, this)
             return Level.BLOCK_UPDATE_SCHEDULED
@@ -251,20 +257,20 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
     }
 
     private fun isValidSupportBlock(id: String): Boolean {
-        return id == BIG_DRIPLEAF ||
-                id == GRASS_BLOCK ||
-                id == DIRT ||
-                id == MYCELIUM ||
-                id == PODZOL ||
-                id == FARMLAND ||
-                id == DIRT_WITH_ROOTS ||
-                id == MOSS_BLOCK ||
-                id == CLAY
+        return id == BlockID.BIG_DRIPLEAF ||
+                id == BlockID.GRASS_BLOCK ||
+                id == BlockID.DIRT ||
+                id == BlockID.MYCELIUM ||
+                id == BlockID.PODZOL ||
+                id == BlockID.FARMLAND ||
+                id == BlockID.DIRT_WITH_ROOTS ||
+                id == BlockID.MOSS_BLOCK ||
+                id == BlockID.CLAY
     }
 
     private fun setTiltAndScheduleTick(tilt: BigDripleafTilt): Boolean {
         if (!setTilt(tilt)) return false
-        level.setBlock(this.position, this, true, false)
+        level.setBlock(this.position, this, direct = true, update = false)
 
         when (tilt) {
             BigDripleafTilt.NONE -> level.scheduleUpdate(this, 1)
@@ -284,13 +290,15 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BIG_DRIPLEAF,
+            BlockID.BIG_DRIPLEAF,
             CommonBlockProperties.BIG_DRIPLEAF_HEAD,
             CommonBlockProperties.BIG_DRIPLEAF_TILT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )
-            get() = Companion.field
     }
 }

@@ -95,7 +95,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
             return false
         }
 
-        if (level.server.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
+        if (Server.instance.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
             this.setOpen(null, true)
         }
 
@@ -131,7 +131,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
         }
 
         val event = DoorToggleEvent(this, player!!)
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             return false
@@ -229,7 +229,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
                 level.setBlock(this.position, this, true)
                 return type
             }
-        } else if (type == Level.BLOCK_UPDATE_REDSTONE && level.server.settings.levelSettings().enableRedstone()) {
+        } else if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings().enableRedstone()) {
             this.onRedstoneUpdate()
             return type
         }
@@ -240,7 +240,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
     private fun onRedstoneUpdate() {
         if ((this.isOpen != this.isGettingPower) && !this.manualOverride) {
             if (this.isOpen != this.isGettingPower) {
-                level.server.pluginManager.callEvent(
+                Server.instance.pluginManager.callEvent(
                     BlockRedstoneEvent(
                         this,
                         if (this.isOpen) 15 else 0,
@@ -297,12 +297,12 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            FENCE_GATE,
+BlockID.FENCE_GATE,
             CommonBlockProperties.IN_WALL_BIT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-            get() = Companion.field
+
 
         // Contains a list of positions of fence gates, which have been opened by hand (by a player).
         // It is used to detect on redstone update, if the gate should be closed if redstone is off on the update,

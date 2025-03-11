@@ -9,9 +9,7 @@ import kotlin.collections.MutableMap
 import kotlin.collections.set
 import kotlin.math.min
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class HelpCommand(name: String) :
     VanillaCommand(name, "commands.help.description", "%commands.help.usage", arrayOf<String>("?")) {
     init {

@@ -6,9 +6,7 @@ import org.chorus.event.entity.EntityCombustByEntityEvent
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import kotlin.math.max
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentFireAspect :
     Enchantment(Enchantment.Companion.ID_FIRE_ASPECT, "fire", Rarity.RARE, EnchantmentType.SWORD) {
     override fun getMinEnchantAbility(level: Int): Int {
@@ -29,7 +27,7 @@ class EnchantmentFireAspect :
             val duration = max((entity!!.fireTicks / 20).toDouble(), (getLevel() shl 2).toDouble()).toInt()
 
             val ev = EntityCombustByEntityEvent(attacker, entity, duration)
-            Server.getInstance().pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
 
             if (!ev.isCancelled) {
                 entity.setOnFire(ev.duration)

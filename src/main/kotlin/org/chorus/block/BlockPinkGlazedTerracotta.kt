@@ -7,6 +7,6 @@ class BlockPinkGlazedTerracotta @JvmOverloads constructor(blockstate: BlockState
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PINK_GLAZED_TERRACOTTA, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

@@ -10,9 +10,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PlayerInteractEvent @JvmOverloads constructor(
     player: Player,
     item: Item?,

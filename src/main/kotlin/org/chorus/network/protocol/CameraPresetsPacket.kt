@@ -7,7 +7,7 @@ import org.chorus.network.protocol.types.camera.aimassist.CameraAimAssist
 import org.chorus.network.protocol.types.camera.aimassist.CameraPresetAimAssist
 import org.chorus.utils.OptionalValue
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import lombok.*
+
 import java.util.function.Consumer
 
 

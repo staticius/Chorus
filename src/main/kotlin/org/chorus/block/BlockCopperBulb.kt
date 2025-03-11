@@ -13,7 +13,7 @@ class BlockCopperBulb @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(COPPER_BULB, CommonBlockProperties.LIT, CommonBlockProperties.POWERED_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.COPPER_BULB, CommonBlockProperties.LIT, CommonBlockProperties.POWERED_BIT)
+
     }
 }

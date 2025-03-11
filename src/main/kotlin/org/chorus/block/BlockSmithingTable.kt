@@ -68,6 +68,6 @@ class BlockSmithingTable @JvmOverloads constructor(blockState: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SMITHING_TABLE)
-            get() = Companion.field
+
     }
 }

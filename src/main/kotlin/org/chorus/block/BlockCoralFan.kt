@@ -2,8 +2,7 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.IntPropertyType
-import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.BlockFadeEvent
 import org.chorus.item.*
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
@@ -19,10 +18,10 @@ abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate
     open val isDead: Boolean
         get() = false
 
-    abstract val deadCoralFan: Block
+    abstract fun getDeadCoralFan(): Block
 
     override var blockFace: BlockFace?
-        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION) + 1)
+        get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION) + 1)
         set(blockFace) {
             super.blockFace = blockFace
         }
@@ -31,38 +30,42 @@ abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate
         get() = BlockFace.DOWN
 
     override fun onUpdate(type: Int): Int {
-        if (type == Level.BLOCK_UPDATE_NORMAL) {
-            val side = getSide(rootsFace!!)
-            if (!side!!.isSolid || side.id == MAGMA || side.id == SOUL_SAND) {
-                level.useBreakOn(this.position)
-            } else {
-                level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40))
-            }
-            return type
-        } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            val side = getSide(rootsFace!!)
-            if (side!!.id == ICE) {
-                level.useBreakOn(this.position)
+        when (type) {
+            Level.BLOCK_UPDATE_NORMAL -> {
+                val side = getSide(rootsFace!!)
+                if (!side!!.isSolid || side.id == BlockID.MAGMA || side.id == BlockID.SOUL_SAND) {
+                    level.useBreakOn(this.position)
+                } else {
+                    level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40))
+                }
                 return type
             }
-
-            if (!isDead && (getLevelBlockAtLayer(1) !is BlockFlowingWater) && (getLevelBlockAtLayer(1) !is BlockFrostedIce)) {
-                val event: BlockFadeEvent = BlockFadeEvent(this, deadCoralFan)
-                if (!event.isCancelled) {
-                    level.setBlock(this.position, event.newState, true, true)
+            Level.BLOCK_UPDATE_SCHEDULED -> {
+                val side = getSide(rootsFace!!)
+                if (side!!.id == BlockID.ICE) {
+                    level.useBreakOn(this.position)
+                    return type
                 }
+
+                if (!isDead && (getLevelBlockAtLayer(1) !is BlockFlowingWater) && (getLevelBlockAtLayer(1) !is BlockFrostedIce)) {
+                    val event = BlockFadeEvent(this, getDeadCoralFan())
+                    if (!event.isCancelled) {
+                        level.setBlock(this.position, event.newState, direct = true, update = true)
+                    }
+                }
+                return type
             }
-            return type
-        } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION) == 0) {
-                setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION, 1)
-            } else {
-                setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION, 0)
+            Level.BLOCK_UPDATE_RANDOM -> {
+                if (getPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION) == 0) {
+                    setPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION, 1)
+                } else {
+                    setPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION, 0)
+                }
+                level.setBlock(this.position, this, direct = true, update = true)
+                return type
             }
-            level.setBlock(this.position, this, true, true)
-            return type
+            else -> return 0
         }
-        return 0
     }
 
     override fun place(
@@ -73,7 +76,7 @@ abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate
         fx: Double,
         fy: Double,
         fz: Double,
-        player: Player
+        player: Player?
     ): Boolean {
         if (face == BlockFace.DOWN) {
             return false
@@ -88,28 +91,28 @@ abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate
         }
 
         if (hasWater && layer1.blockState!!.specialValue().toInt() == 8) {
-            level.setBlock(this.position, 1, BlockFlowingWater(), true, false)
+            level.setBlock(this.position, 1, BlockFlowingWater(), direct = true, update = false)
         }
 
-        if (!target.isSolid || target.id == MAGMA || target.id == SOUL_SAND) {
+        if (!target.isSolid || target.id == BlockID.MAGMA || target.id == BlockID.SOUL_SAND) {
             return false
         }
 
         if (face == BlockFace.UP) {
-            var rotation = player.rotation.yaw % 360
+            var rotation = player!!.rotation.yaw % 360
             if (rotation < 0) {
                 rotation += 360.0
             }
             val axisBit = if (rotation >= 0 && rotation < 12 || (342 <= rotation && rotation < 360)) 0 else 1
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_FAN_DIRECTION, axisBit)
+            setPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION, axisBit)
             level.setBlock(
-                this.position, 0, if (hasWater) this.clone() else deadCoralFan.setPropertyValues(
-                    blockState!!.blockPropertyValues
-                ), true, true
+                this.position, 0, if (hasWater) this.clone() else getDeadCoralFan().setPropertyValues(
+                    blockState!!.blockPropertyValues!!
+                ), direct = true, update = true
             )
         } else {
-            val deadBlock = deadCoralFan
-            level.setBlock(this.position, 0, deadBlock, true, true)
+            val deadBlock = getDeadCoralFan()
+            level.setBlock(this.position, 0, deadBlock, direct = true, update = true)
         }
 
         return true

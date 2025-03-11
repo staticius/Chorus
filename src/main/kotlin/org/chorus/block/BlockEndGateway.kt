@@ -100,7 +100,7 @@ class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(END_GATEWAY)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.END_GATEWAY)
+
     }
 }

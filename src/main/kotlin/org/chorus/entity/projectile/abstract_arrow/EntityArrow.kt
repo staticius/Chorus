@@ -14,9 +14,7 @@ import org.chorus.network.protocol.EntityEventPacket
 import java.util.concurrent.*
 import java.util.function.Consumer
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EntityArrow @JvmOverloads constructor(
     chunk: IChunk?,
     nbt: CompoundTag,

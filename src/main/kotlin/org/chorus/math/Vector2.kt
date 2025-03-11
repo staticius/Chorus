@@ -2,9 +2,7 @@ package org.chorus.math
 
 import kotlin.math.sqrt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class Vector2 @JvmOverloads constructor(@JvmField var x: Double = 0.0, @JvmField var y: Double = 0.0) {
     val floorX: Int
         get() = kotlin.math.floor(this.x).toInt()

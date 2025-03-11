@@ -1,7 +1,6 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.event.player.PlayerDropItemEvent
 import org.chorus.inventory.*
@@ -10,7 +9,7 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import com.google.common.collect.Lists
-import lombok.extern.slf4j.Slf4j
+
 import java.util.List
 
 /**
@@ -30,7 +29,7 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
         var item = inventory.getItem(slot)
 
         val ev: PlayerDropItemEvent
-        player.getServer().getPluginManager().callEvent(PlayerDropItemEvent(player, item).also { ev = it })
+        Server.instance.pluginManager.callEvent(PlayerDropItemEvent(player, item).also { ev = it })
         if (ev.isCancelled) {
             return context.error()
         }

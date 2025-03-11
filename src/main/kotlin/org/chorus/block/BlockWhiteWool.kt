@@ -9,6 +9,6 @@ class BlockWhiteWool @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WHITE_WOOL, Set.of<String?>(BlockTags.PNX_WOOL))
-            get() = Companion.field
+
     }
 }

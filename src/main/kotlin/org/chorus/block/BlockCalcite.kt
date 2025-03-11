@@ -27,7 +27,7 @@ class BlockCalcite : BlockSolid {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CALCITE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CALCITE)
+
     }
 }

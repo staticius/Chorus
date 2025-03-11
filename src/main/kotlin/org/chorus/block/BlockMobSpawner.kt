@@ -100,6 +100,6 @@ class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MOB_SPAWNER)
-            get() = Companion.field
+
     }
 }

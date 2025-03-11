@@ -10,6 +10,6 @@ class BlockPaleOakWood(blockstate: BlockState?) : BlockWood(blockstate) {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PALE_OAK_WOOD, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

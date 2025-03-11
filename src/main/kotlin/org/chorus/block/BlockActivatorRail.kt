@@ -1,8 +1,7 @@
 package org.chorus.block
 
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
@@ -24,20 +23,20 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState? = Com
                 return 0 // Already broken
             }
 
-            if (!level.server.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings.enableRedstone) {
                 return 0
             }
 
-            val wasPowered = isActive
+            val wasPowered = isActive()
             val isPowered = this.isGettingPower
                     || checkSurrounding(this.position, true, 0)
                     || checkSurrounding(this.position, false, 0)
 
             // Avoid Block mistake
             if (wasPowered != isPowered) {
-                isActive = isPowered
+                setIsActive(isPowered)
                 updateAroundRedstone(down()!!, BlockFace.UP)
-                if (orientation!!.isAscending) {
+                if (getOrientation()!!.isAscending) {
                     updateAroundRedstone(up()!!, BlockFace.DOWN)
                 }
             }
@@ -75,7 +74,7 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState? = Com
         var base: Rail.Orientation? = null
         var onStraight = true
 
-        when (block.orientation) {
+        when (block.getOrientation()) {
             Rail.Orientation.STRAIGHT_NORTH_SOUTH -> {
                 if (relative) {
                     dz++
@@ -148,7 +147,7 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState? = Com
     protected fun canPowered(pos: Vector3, state: Rail.Orientation?, power: Int, relative: Boolean): Boolean {
         val block = level.getBlock(pos) as? BlockActivatorRail ?: return false
 
-        val base = block.orientation
+        val base = block.getOrientation()
 
         return (state != Rail.Orientation.STRAIGHT_EAST_WEST
                 || base != Rail.Orientation.STRAIGHT_NORTH_SOUTH && base != Rail.Orientation.ASCENDING_NORTH && base != Rail.Orientation.ASCENDING_SOUTH)
@@ -158,7 +157,7 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState? = Com
     }
 
     override fun isActive(): Boolean {
-        return getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.RAIL_DATA_BIT)
+        return getPropertyValue(CommonBlockProperties.RAIL_DATA_BIT)
     }
 
     override fun isRailActive(): OptionalBoolean {
@@ -166,28 +165,21 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState? = Com
     }
 
     override fun setRailActive(active: Boolean) {
-        setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.RAIL_DATA_BIT, active)
+        setPropertyValue(CommonBlockProperties.RAIL_DATA_BIT, active)
     }
 
     override val hardness: Double
         get() = 0.5
 
-    /**
-     * Changes the rail direction.
-     *
-     * @param orientation The new orientation
-     */
-    override fun setRailDirection(orientation: Rail.Orientation) {
-        setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RAIL_DIRECTION_6, orientation.metadata())
+    override fun getOrientation(): Rail.Orientation? {
+        return byMetadata(getPropertyValue(CommonBlockProperties.RAIL_DIRECTION_6))
     }
 
-    override fun getOrientation(): Rail.Orientation? {
-        return byMetadata(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.RAIL_DIRECTION_6))
-    }
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(ACTIVATOR_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
-            get() = Companion.field
+            BlockProperties(BlockID.ACTIVATOR_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
     }
 }

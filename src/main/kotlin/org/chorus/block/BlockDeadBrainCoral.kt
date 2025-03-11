@@ -7,7 +7,7 @@ class BlockDeadBrainCoral @JvmOverloads constructor(blockstate: BlockState? = Co
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEAD_BRAIN_CORAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEAD_BRAIN_CORAL)
+
     }
 }

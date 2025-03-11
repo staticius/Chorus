@@ -29,7 +29,7 @@ import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.*
 import org.chorus.network.protocol.MoveEntityDeltaPacket
 import org.chorus.utils.*
-import lombok.Getter
+
 import java.util.*
 import java.util.concurrent.*
 import java.util.function.Consumer
@@ -126,7 +126,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         namedTag!!.putShort(TAG_AIR, air.toInt())
         namedTag!!.putList(
             TAG_ARMOR, ListTag(
-                Tag.TAG_Compound.toInt(),
+                Tag.TAG_COMPOUND.toInt(),
                 equipment.armor.stream().map { item: Item? -> NBTIO.putItemHelper(item) }.toList()
             )
         )
@@ -146,7 +146,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         namedTag!!.putLong(TAG_LIMITED_LIFE, limitedLife)
         namedTag!!.putList(
             TAG_MAINHAND, ListTag(
-                Tag.TAG_Compound.toInt(), java.util.List.of(
+                Tag.TAG_COMPOUND.toInt(), java.util.List.of(
                     NBTIO.putItemHelper(
                         equipment.mainHand
                     )
@@ -156,7 +156,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         namedTag!!.putBoolean(TAG_NATURAL_SPAWN, naturalSpawn)
         namedTag!!.putList(
             TAG_OFFHAND, ListTag(
-                Tag.TAG_Compound.toInt(), java.util.List.of(
+                Tag.TAG_COMPOUND.toInt(), java.util.List.of(
                     NBTIO.putItemHelper(
                         equipment.offHand
                     )
@@ -222,7 +222,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
             source.setDamage(
                 (-source.finalDamage * min(
-                    NukkitMath.ceilFloat(
+                    ChorusMath.ceilFloat(
                         (min(
                             epf.toDouble(),
                             25.0
@@ -417,7 +417,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
                     TAG_MAINHAND,
                     CompoundTag::class.java
                 ).all.stream(), Stream.generate<CompoundTag?> { null }).limit(1)
-                .map<Item> { tag: CompoundTag? -> NBTIO.getItemHelper(tag) }.toList().getFirst()
+                .map<Item> { tag: CompoundTag? -> NBTIO.getItemHelper(tag) }.toList().first()
         )
         this.naturalSpawn = nbt.getBoolean(TAG_NATURAL_SPAWN)
         equipment.setOffHand(
@@ -426,7 +426,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
                     TAG_OFFHAND,
                     CompoundTag::class.java
                 ).all.stream(), Stream.generate<CompoundTag?> { null }).limit(1)
-                .map<Item> { tag: CompoundTag? -> NBTIO.getItemHelper(tag) }.toList().getFirst()
+                .map<Item> { tag: CompoundTag? -> NBTIO.getItemHelper(tag) }.toList().first()
         )
         if (nbt.contains(TAG_PERSISTING_OFFERS)) this.persistingOffers = nbt.getCompound(TAG_PERSISTING_OFFERS)
         if (nbt.contains(TAG_PERSISTING_RICHES)) this.persistingRiches = nbt.getInt(TAG_PERSISTING_RICHES)

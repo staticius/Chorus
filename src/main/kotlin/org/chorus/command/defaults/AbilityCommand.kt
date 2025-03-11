@@ -1,5 +1,6 @@
 package org.chorus.command.defaults
 
+import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
@@ -16,17 +17,17 @@ class AbilityCommand(name: String) : VanillaCommand(name, "commands.ability.desc
     init {
         this.permission = "nukkit.command.ability"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
-            CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
-            CommandParameter.Companion.newEnum(
+        commandParameters["default"] = arrayOf(
+            CommandParameter.newType("player", false, CommandParamType.TARGET, PlayersNode()),
+            CommandParameter.newEnum(
                 "ability",
                 false,
-                arrayOf<String?>("mayfly", "mute", "worldbuilder")
+                arrayOf("mayfly", "mute", "worldbuilder")
             ),
-            CommandParameter.Companion.newEnum(
+            CommandParameter.newEnum(
                 "value",
                 true,
-                CommandEnum.Companion.ENUM_BOOLEAN,
+                CommandEnum.ENUM_BOOLEAN,
                 BooleanNode()
             )
         )
@@ -52,6 +53,7 @@ class AbilityCommand(name: String) : VanillaCommand(name, "commands.ability.desc
             "worldbuilder" -> AdventureSettings.Type.WORLD_BUILDER
             else -> null
         }
+        if (type == null) return 0
 
         if (list.hasResult(2)) {
             val value = list.getResult<Boolean>(2)!!

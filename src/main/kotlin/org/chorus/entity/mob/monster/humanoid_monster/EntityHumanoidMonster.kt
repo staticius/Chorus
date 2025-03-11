@@ -7,9 +7,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EntityHumanoidMonster(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!!), EntityCanAttack {
     protected var itemInHand: Item? = null
 

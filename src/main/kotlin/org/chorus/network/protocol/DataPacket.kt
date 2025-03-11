@@ -2,9 +2,7 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class DataPacket {
     abstract fun decode(byteBuf: HandleByteBuf)
 

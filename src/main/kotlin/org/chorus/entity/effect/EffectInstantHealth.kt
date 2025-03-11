@@ -7,7 +7,7 @@ import org.chorus.event.entity.EntityRegainHealthEvent
 import java.awt.Color
 
 class EffectInstantHealth :
-    InstantEffect(EffectType.Companion.INSTANT_HEALTH, "%potion.heal", Color(248, 36, 35)) {
+    InstantEffect(EffectType.INSTANT_HEALTH, "%potion.heal", Color(248, 36, 35)) {
     override fun apply(entity: Entity, tickCount: Double) {
         val amount: Double = (4 shl this.getAmplifier()) * tickCount
         if (entity.isUndead()) {

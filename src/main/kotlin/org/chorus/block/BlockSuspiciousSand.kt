@@ -52,10 +52,10 @@ class BlockSuspiciousSand @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.SUSPICIOUS_SAND,
+BlockID.BlockID.SUSPICIOUS_SAND,
             CommonBlockProperties.HANGING,
             CommonBlockProperties.BRUSHED_PROGRESS
         )
-            get() = Companion.field
+
     }
 }

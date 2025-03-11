@@ -24,7 +24,7 @@ class BlockHoneycombBlock : BlockSolid {
         get() = "Honeycomb Block"
 
     companion object {
-        val properties: BlockProperties = BlockProperties(HONEYCOMB_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.HONEYCOMB_BLOCK)
+
     }
 }

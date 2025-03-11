@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
-import lombok.Value
+
 
 /**
  * DropStackRequestActionData is sent by the client when it drops an item out of the inventory when it has its

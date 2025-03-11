@@ -3,7 +3,7 @@ package org.chorus.entity.ai.executor
 import org.chorus.block.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
-import lombok.AllArgsConstructor
+
 
 
 class NearestBlockIncementExecutor : IBehaviorExecutor {

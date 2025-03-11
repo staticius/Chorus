@@ -9,7 +9,7 @@ import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
-import org.chorus.utils.random.NukkitRandom.nextInt
+import org.chorus.utils.random.ChorusRandom.nextInt
 
 /**
  * @author Pub4Game
@@ -97,6 +97,6 @@ class BlockMycelium : BlockDirt {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MYCELIUM)
-            get() = Companion.field
+
     }
 }

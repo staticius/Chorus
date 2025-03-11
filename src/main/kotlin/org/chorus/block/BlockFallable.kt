@@ -21,7 +21,7 @@ abstract class BlockFallable(blockstate: BlockState?) : BlockSolid(blockstate) {
                         (down is BlockBubbleColumn && down.getLevelBlockAtLayer(1) is BlockLiquid))
             ) {
                 val event = BlockFallEvent(this)
-                level.server.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (event.isCancelled) {
                     return type
                 }

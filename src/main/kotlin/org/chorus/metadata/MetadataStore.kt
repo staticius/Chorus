@@ -5,9 +5,7 @@ import org.chorus.utils.PluginException
 import org.chorus.utils.ServerException
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class MetadataStore {
     protected val metadataMap: MutableMap<String, MutableMap<Plugin, MetadataValue?>> = HashMap()
 

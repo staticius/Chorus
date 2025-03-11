@@ -31,7 +31,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
         when (pk.action) {
             PlayerActionPacket.ACTION_START_BREAK -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
@@ -39,7 +39,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_ABORT_BREAK, PlayerActionPacket.ACTION_STOP_BREAK -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
@@ -55,13 +55,13 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 if (blockLectern is BlockFrame && blockLectern.blockEntity != null) {
                     blockLectern.blockEntity!!.dropItem(playerHandle.player)
                 }
-                if (player.getServer().getServerAuthoritativeMovement() > 0) break //ServerAuthorInput not use player
+                if (Server.instance.getServerAuthoritativeMovement() > 0) break //ServerAuthorInput not use player
 
                 playerHandle.onBlockBreakComplete(BlockVector3(pk.x, pk.y, pk.z), face)
             }
 
             PlayerActionPacket.ACTION_CONTINUE_BREAK -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
@@ -85,21 +85,21 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_JUMP -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val playerJumpEvent = PlayerJumpEvent(player)
-                player.getServer().getPluginManager().callEvent(playerJumpEvent)
+                Server.instance.pluginManager.callEvent(playerJumpEvent)
             }
 
             PlayerActionPacket.ACTION_START_SPRINT -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val playerToggleSprintEvent = PlayerToggleSprintEvent(player, true)
-                player.getServer().getPluginManager().callEvent(playerToggleSprintEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSprintEvent)
                 if (playerToggleSprintEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -108,12 +108,12 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_STOP_SPRINT -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val playerToggleSprintEvent = PlayerToggleSprintEvent(player, false)
-                player.getServer().getPluginManager().callEvent(playerToggleSprintEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSprintEvent)
                 if (playerToggleSprintEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -122,12 +122,12 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_START_SNEAK -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val playerToggleSneakEvent = PlayerToggleSneakEvent(player, true)
-                player.getServer().getPluginManager().callEvent(playerToggleSneakEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSneakEvent)
                 if (playerToggleSneakEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -136,12 +136,12 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_STOP_SNEAK -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val playerToggleSneakEvent = PlayerToggleSneakEvent(player, false)
-                player.getServer().getPluginManager().callEvent(playerToggleSneakEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSneakEvent)
                 if (playerToggleSneakEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -157,12 +157,12 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             )
 
             PlayerActionPacket.ACTION_START_GLIDE -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val playerToggleGlideEvent = PlayerToggleGlideEvent(player, true)
-                player.getServer().getPluginManager().callEvent(playerToggleGlideEvent)
+                Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
                 if (playerToggleGlideEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -171,12 +171,12 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_STOP_GLIDE -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val playerToggleGlideEvent = PlayerToggleGlideEvent(player, false)
-                player.getServer().getPluginManager().callEvent(playerToggleGlideEvent)
+                Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
                 if (playerToggleGlideEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -185,12 +185,12 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_START_SWIMMING -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val ptse = PlayerToggleSwimEvent(player, true)
-                player.getServer().getPluginManager().callEvent(ptse)
+                Server.instance.pluginManager.callEvent(ptse)
 
                 if (ptse.isCancelled) {
                     player.sendData(player)
@@ -200,12 +200,12 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_STOP_SWIMMING -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val ev = PlayerToggleSwimEvent(player, false)
-                player.getServer().getPluginManager().callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
 
                 if (ev.isCancelled) {
                     player.sendData(player)
@@ -247,7 +247,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerToggleSpinAttackEvent = PlayerToggleSpinAttackEvent(player, true)
-                player.getServer().getPluginManager().callEvent(playerToggleSpinAttackEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSpinAttackEvent)
 
                 if (playerToggleSpinAttackEvent.isCancelled) {
                     player.sendPosition(
@@ -271,7 +271,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
             PlayerActionPacket.ACTION_STOP_SPIN_ATTACK -> {
                 val playerToggleSpinAttackEvent = PlayerToggleSpinAttackEvent(player, false)
-                player.getServer().getPluginManager().callEvent(playerToggleSpinAttackEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSpinAttackEvent)
 
                 if (playerToggleSpinAttackEvent.isCancelled) {
                     player.sendData(player)
@@ -281,18 +281,17 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_START_FLYING -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
-                if (!player.getServer()
-                        .allowFlight() && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
+                if (!Server.instance.allowFlight && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
                 ) {
                     player.kick(PlayerKickEvent.Reason.FLYING_DISABLED, "Flying is not enabled on this server")
                     break
                 }
                 val playerToggleFlightEvent = PlayerToggleFlightEvent(player, true)
-                player.getServer().getPluginManager().callEvent(playerToggleFlightEvent)
+                Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
                 if (playerToggleFlightEvent.isCancelled) {
                     player.adventureSettings.update()
                 } else {
@@ -301,12 +300,12 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             }
 
             PlayerActionPacket.ACTION_STOP_FLYING -> {
-                if (Server.getInstance().serverAuthoritativeMovement > 0) {
+                if (Server.instance.serverAuthoritativeMovement > 0) {
                     return
                 }
 
                 val playerToggleFlightEvent = PlayerToggleFlightEvent(player, false)
-                player.getServer().getPluginManager().callEvent(playerToggleFlightEvent)
+                Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
                 if (playerToggleFlightEvent.isCancelled) {
                     player.adventureSettings.update()
                 } else {

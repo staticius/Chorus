@@ -1,6 +1,6 @@
 package org.chorus.positiontracking
 
-import org.chorus.math.NukkitMath.clamp
+import org.chorus.math.ChorusMath.clamp
 import com.google.common.base.Preconditions
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder

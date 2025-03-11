@@ -28,6 +28,6 @@ class BlockMossyStoneBrickSlab(blockState: BlockState?) : BlockSlab(blockState, 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MOSSY_STONE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

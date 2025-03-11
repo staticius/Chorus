@@ -11,15 +11,15 @@ import java.io.InputStream
  * An interface what must be implemented by all Nukkit plugins.
  *
  *
- * 对于插件作者，我们建议让插件主类继承[cn.nukkit.plugin.PluginBase]类，而不是实现这个接口。<br></br>
- * For plugin developers: it's recommended to use [cn.nukkit.plugin.PluginBase] for an actual plugin
+ * 对于插件作者，我们建议让插件主类继承[org.chorus.plugin.PluginBase]类，而不是实现这个接口。<br></br>
+ * For plugin developers: it's recommended to use [org.chorus.plugin.PluginBase] for an actual plugin
  * instead of implement this interface.
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @see cn.nukkit.plugin.PluginBase
+ * @see org.chorus.plugin.PluginBase
  *
- * @see cn.nukkit.plugin.PluginDescription
+ * @see org.chorus.plugin.PluginDescription
  *
  * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
@@ -115,7 +115,7 @@ interface Plugin : CommandExecutor {
      * For jar-packed Nukkit plugins, the description is defined in the 'plugin.yml' file.
      *
      * @return 这个插件的描述。<br></br>A description of this plugin.
-     * @see cn.nukkit.plugin.PluginDescription
+     * @see org.chorus.plugin.PluginDescription
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -132,9 +132,9 @@ interface Plugin : CommandExecutor {
      * which is normally named 'resources' and placed in plugin jar file.
      *
      *
-     * 当你需要把一个文件的所有内容读取为字符串，可以使用[cn.nukkit.utils.Utils.readFile]函数，
+     * 当你需要把一个文件的所有内容读取为字符串，可以使用[org.chorus.utils.Utils.readFile]函数，
      * 来从`InputStream`读取所有内容为字符串。例如：<br></br>
-     * When you need to read the whole file content as a String, you can use [cn.nukkit.utils.Utils.readFile]
+     * When you need to read the whole file content as a String, you can use [org.chorus.utils.Utils.readFile]
      * to read from a `InputStream` and get whole content as a String. For example:
      *
      * `String string = Utils.readFile(this.getResource("string.txt"));`
@@ -163,15 +163,15 @@ interface Plugin : CommandExecutor {
      * default resources from the developer and place it manually.
      *
      *
-     * 如果需要替换已存在的资源文件，建议使用[cn.nukkit.plugin.Plugin.saveResource]<br></br>
+     * 如果需要替换已存在的资源文件，建议使用[org.chorus.plugin.Plugin.saveResource]<br></br>
      * If you need to REPLACE an existing resource file, it's recommended
-     * to use [cn.nukkit.plugin.Plugin.saveResource].
+     * to use [org.chorus.plugin.Plugin.saveResource].
      *
      * @param filename 要保存的资源文件名字。<br></br>The name of the resource file to save.
      * @return 保存是否成功。<br></br>true if the saving action is successful.
-     * @see cn.nukkit.plugin.Plugin.saveDefaultConfig
+     * @see org.chorus.plugin.Plugin.saveDefaultConfig
      *
-     * @see cn.nukkit.plugin.Plugin.saveResource
+     * @see org.chorus.plugin.Plugin.saveResource
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
     fun saveResource(filename: String): Boolean
@@ -186,14 +186,14 @@ interface Plugin : CommandExecutor {
      * which is normally named 'resources' and placed in plugin jar file, and copy it into data folder.
      *
      *
-     * 如果需要保存默认的资源文件，建议使用[cn.nukkit.plugin.Plugin.saveResource]<br></br>
+     * 如果需要保存默认的资源文件，建议使用[org.chorus.plugin.Plugin.saveResource]<br></br>
      * If you need to SAVE DEFAULT resource file, it's recommended
-     * to use [cn.nukkit.plugin.Plugin.saveResource].
+     * to use [org.chorus.plugin.Plugin.saveResource].
      *
      * @param filename 要保存的资源文件名字。<br></br>The name of the resource file to save.
      * @param replace  是否替换目标文件。<br></br>if true, Nukkit will replace the target resource file.
      * @return 保存是否成功。<br></br>true if the saving action is successful.
-     * @see cn.nukkit.plugin.Plugin.saveResource
+     * @see org.chorus.plugin.Plugin.saveResource
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
     fun saveResource(filename: String, replace: Boolean): Boolean
@@ -201,15 +201,15 @@ interface Plugin : CommandExecutor {
     fun saveResource(filename: String, outputName: String, replace: Boolean): Boolean
 
     /**
-     * 返回这个Nukkit插件配置文件的[cn.nukkit.utils.Config]对象。<br></br>
-     * The config file this Nukkit plugin as a [cn.nukkit.utils.Config] object.
+     * 返回这个Nukkit插件配置文件的[org.chorus.utils.Config]对象。<br></br>
+     * The config file this Nukkit plugin as a [org.chorus.utils.Config] object.
      *
      *
      * 一般地，插件的配置保存在数据文件夹下的config.yml文件。<br></br>
      * Normally, the plugin config is saved in the 'config.yml' file in its data folder.
      *
      * @return 插件的配置文件。<br></br>The configuration of this plugin.
-     * @see cn.nukkit.plugin.Plugin.getDataFolder
+     * @see org.chorus.plugin.Plugin.getDataFolder
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -219,7 +219,7 @@ interface Plugin : CommandExecutor {
      * 保存这个Nukkit插件的配置文件。<br></br>
      * Saves the plugin config.
      *
-     * @see cn.nukkit.plugin.Plugin.getDataFolder
+     * @see org.chorus.plugin.Plugin.getDataFolder
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -242,9 +242,9 @@ interface Plugin : CommandExecutor {
      * it won't happen to load an empty config when plugin is ENABLED, and plugin users are not required to get
      * default config from the developer and place it manually.
      *
-     * @see cn.nukkit.plugin.Plugin.getDataFolder
+     * @see org.chorus.plugin.Plugin.getDataFolder
      *
-     * @see cn.nukkit.plugin.Plugin.saveResource
+     * @see org.chorus.plugin.Plugin.saveResource
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -260,17 +260,17 @@ interface Plugin : CommandExecutor {
      * By using this, Nukkit will reload the config from 'config.yml' file, then it isn't necessary to restart
      * for plugin user who changes the config and needs to use new config at once.
      *
-     * @see cn.nukkit.plugin.Plugin.getDataFolder
+     * @see org.chorus.plugin.Plugin.getDataFolder
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
     fun reloadConfig()
 
     /**
-     * 返回运行这个插件的服务器的[cn.nukkit.Server]对象。<br></br>
-     * Gets the server which is running this plugin, and returns as a [cn.nukkit.Server] object.
+     * 返回运行这个插件的服务器的[org.chorus.Server]对象。<br></br>
+     * Gets the server which is running this plugin, and returns as a [org.chorus.Server] object.
      *
-     * @see cn.nukkit.Server
+     * @see org.chorus.Server
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -284,7 +284,7 @@ interface Plugin : CommandExecutor {
      * Nukkit会从已经读取的插件描述中获取插件的名字。<br></br>
      * Nukkit will read plugin name from plugin description.
      *
-     * @see cn.nukkit.plugin.Plugin.getDescription
+     * @see org.chorus.plugin.Plugin.getDescription
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
@@ -292,24 +292,24 @@ interface Plugin : CommandExecutor {
     val name: String
 
     /**
-     * 返回这个插件的日志记录器为[cn.nukkit.plugin.PluginLogger]对象。<br></br>
-     * Returns the logger of this plugin as a [cn.nukkit.plugin.PluginLogger] object.
+     * 返回这个插件的日志记录器为[org.chorus.plugin.PluginLogger]对象。<br></br>
+     * Returns the logger of this plugin as a [org.chorus.plugin.PluginLogger] object.
      *
      *
      * 使用日志记录器，你可以在控制台和日志文件输出信息。<br></br>
      * You can use a plugin logger to output messages to the console and log file.
      *
-     * @see cn.nukkit.plugin.PluginLogger
+     * @see org.chorus.plugin.PluginLogger
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
     val logger: PluginLogger?
 
     /**
-     * 返回这个插件的加载器为[cn.nukkit.plugin.PluginLoader]对象。<br></br>
-     * Returns the loader of this plugin as a [cn.nukkit.plugin.PluginLoader] object.
+     * 返回这个插件的加载器为[org.chorus.plugin.PluginLoader]对象。<br></br>
+     * Returns the loader of this plugin as a [org.chorus.plugin.PluginLoader] object.
      *
-     * @see cn.nukkit.plugin.PluginLoader
+     * @see org.chorus.plugin.PluginLoader
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */

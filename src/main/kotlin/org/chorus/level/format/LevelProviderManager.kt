@@ -1,10 +1,8 @@
 package org.chorus.level.format
 
-import lombok.extern.slf4j.Slf4j
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
+
 
 object LevelProviderManager {
     internal val providers: MutableMap<String, Class<out LevelProvider>> = HashMap()

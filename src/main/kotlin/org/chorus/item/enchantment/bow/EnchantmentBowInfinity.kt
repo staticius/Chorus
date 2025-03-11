@@ -2,9 +2,7 @@ package org.chorus.item.enchantment.bow
 
 import org.chorus.item.enchantment.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentBowInfinity :
     EnchantmentBow(Enchantment.Companion.ID_BOW_INFINITY, "arrowInfinite", Rarity.VERY_RARE) {
     override fun checkCompatibility(enchantment: Enchantment): Boolean {

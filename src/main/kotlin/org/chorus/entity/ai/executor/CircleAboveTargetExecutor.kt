@@ -6,7 +6,7 @@ import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.level.*
 import org.chorus.math.*
-import lombok.Getter
+
 import kotlin.math.cos
 import kotlin.math.sin
 

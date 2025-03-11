@@ -28,8 +28,8 @@ import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufAllocator
 import io.netty.buffer.Unpooled
 import io.netty.util.internal.PlatformDependent
-import lombok.*
-import lombok.extern.slf4j.Slf4j
+
+
 import org.jetbrains.annotations.ApiStatus
 import java.net.InetSocketAddress
 import java.net.SocketAddress
@@ -95,7 +95,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             .onExit(Action { this.onServerLoginSuccess() })
             .permitIf(
                 SessionState.ENCRYPTION, SessionState.ENCRYPTION
-            ) { Server.getInstance().enabledNetworkEncryption }
+            ) { Server.instance.enabledNetworkEncryption }
             .permit(SessionState.RESOURCE_PACK, SessionState.RESOURCE_PACK)
 
         cfg.configure(SessionState.ENCRYPTION)
@@ -171,7 +171,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             return
         }
         val ev = DataPacketSendEvent(player!!, packet)
-        Server.getInstance().pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return
         }
@@ -210,7 +210,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             return
         }
         val ev = DataPacketSendEvent(player!!, packet)
-        Server.getInstance().pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return
         }
@@ -223,7 +223,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             return
         }
         val ev = DataPacketSendEvent(player!!, packet)
-        Server.getInstance().pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return
         }
@@ -281,7 +281,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         this.logInbound(packet)
 
         val ev = DataPacketDecodeEvent(player!!, wrapper)
-        Server.getInstance().pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
         val predictMaxBuffer = when (ev.packetId) {
             ProtocolInfo.LOGIN_PACKET -> 10000000
@@ -303,7 +303,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     }
 
     protected fun logOutbound(packet: DataPacket) {
-        if (BedrockSession.log.isTraceEnabled() && !Server.getInstance().isIgnoredPacket(packet.javaClass)) {
+        if (BedrockSession.log.isTraceEnabled() && !Server.instance.isIgnoredPacket(packet.javaClass)) {
             BedrockSession.log.trace(
                 "Outbound {}({}): {}",
                 socketAddress, this.subClientId, packet
@@ -312,7 +312,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     }
 
     protected fun logInbound(packet: DataPacket) {
-        if (BedrockSession.log.isTraceEnabled() && !Server.getInstance().isIgnoredPacket(packet.javaClass)) {
+        if (BedrockSession.log.isTraceEnabled() && !Server.instance.isIgnoredPacket(packet.javaClass)) {
             BedrockSession.log.trace(
                 "Inbound {}({}): {}",
                 socketAddress, this.subClientId, packet
@@ -347,7 +347,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             this.sendPacketImmediately(packet)
         }
 
-        Server.getInstance().scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
+        Server.instance.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
             if (isSubClient) {
                 // FIXME: Do sub-clients send a server-bound DisconnectPacket?
             } else {
@@ -375,7 +375,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         }
         val player = this.player
         player?.close(BedrockDisconnectReasons.DISCONNECTED)
-        Server.getInstance().network.onSessionDisconnect(address)
+        Server.instance.network.onSessionDisconnect(address)
         peer!!.removeSession(this)
     }
 
@@ -392,7 +392,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
 
     fun onPlayerCreated(player: Player) {
         this.handle = PlayerHandle(player)
-        Server.getInstance().onPlayerLogin(address, player)
+        Server.instance.onPlayerLogin(address, player)
     }
 
     fun notifyTerrainReady() {
@@ -409,7 +409,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     private fun createPlayer(): Player? {
         try {
             val event = PlayerCreationEvent(Player::class.java)
-            Server.getInstance().pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             val constructor = event.playerClass.getConstructor(
                 BedrockSession::class.java,
                 PlayerInfo::class.java
@@ -440,7 +440,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
 
     fun handleDataPacket(packet: DataPacket) {
         val ev = DataPacketReceiveEvent(player!!, packet)
-        Server.getInstance().pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
         if (ev.isCancelled) return
 
@@ -472,7 +472,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         val pk = AvailableCommandsPacket()
         val data: MutableMap<String, CommandDataVersions?> = HashMap()
         var count = 0
-        val commands = Server.getInstance().commandMap.commands
+        val commands = Server.instance.commandMap.commands
         synchronized(commands) {
             for (command in commands.values) {
                 if (!command.testPermissionSilent(player!!) || !command.isRegistered || command.isServerSideOnly) {
@@ -526,7 +526,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     }
 
     val server: Server
-        get() = Server.getInstance()
+        get() = Server.instance
 
     val player: Player?
         get() = if (this.handle == null) null else handle!!.player

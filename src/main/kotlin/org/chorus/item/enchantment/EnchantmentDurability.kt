@@ -3,9 +3,7 @@ package org.chorus.item.enchantment
 import org.chorus.item.*
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentDurability :
     Enchantment(Enchantment.Companion.ID_DURABILITY, "durability", Rarity.UNCOMMON, EnchantmentType.BREAKABLE) {
     override fun getMinEnchantAbility(level: Int): Int {

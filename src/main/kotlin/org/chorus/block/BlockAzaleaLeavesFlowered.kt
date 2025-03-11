@@ -7,12 +7,14 @@ class BlockAzaleaLeavesFlowered @JvmOverloads constructor(blockState: BlockState
     override val name: String
         get() = "Azalea Leaves Flowered"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            AZALEA_LEAVES_FLOWERED,
+            BlockID.AZALEA_LEAVES_FLOWERED,
             CommonBlockProperties.PERSISTENT_BIT,
             CommonBlockProperties.UPDATE_BIT
         )
-            get() = Companion.field
     }
 }

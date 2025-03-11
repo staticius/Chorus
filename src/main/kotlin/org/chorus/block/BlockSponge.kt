@@ -114,6 +114,6 @@ class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.prope
     private data class Entry(val block: Block, val distance: Int)
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SPONGE)
-            get() = Companion.field
+
     }
 }

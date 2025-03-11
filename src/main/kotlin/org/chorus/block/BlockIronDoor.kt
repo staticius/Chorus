@@ -48,12 +48,12 @@ class BlockIronDoor @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.IRON_DOOR,
+BlockID.BlockID.Companion.IRON_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-            get() = Companion.field
+
     }
 }

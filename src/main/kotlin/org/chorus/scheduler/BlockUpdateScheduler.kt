@@ -3,7 +3,7 @@ package org.chorus.scheduler
 import org.chorus.block.Block
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
-import org.chorus.math.NukkitMath.floorDouble
+import org.chorus.math.ChorusMath.floorDouble
 import org.chorus.math.Vector3
 import org.chorus.utils.BlockUpdateEntry
 import org.chorus.utils.collection.nb.Long2ObjectNonBlockingMap

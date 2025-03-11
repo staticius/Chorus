@@ -1,6 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-import lombok.Value
+
 
 /**
  * MineBlockStackRequestActionData is sent by the client when it breaks a block.

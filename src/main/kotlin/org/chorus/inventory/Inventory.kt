@@ -9,9 +9,7 @@ import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import org.jetbrains.annotations.ApiStatus
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 interface Inventory {
     /**
      * get the size of inventory

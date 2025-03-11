@@ -11,6 +11,6 @@ class BlockTubeCoralBlock : BlockCoralBlock {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TUBE_CORAL_BLOCK)
-            get() = Companion.field
+
     }
 }

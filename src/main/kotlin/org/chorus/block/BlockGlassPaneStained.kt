@@ -7,5 +7,5 @@ import org.chorus.utils.DyeColor
  * @since 7.8.2017
  */
 abstract class BlockGlassPaneStained(blockState: BlockState?) : BlockGlassPane(blockState) {
-    abstract val dyeColor: DyeColor
+    abstract fun getDyeColor(): DyeColor
 }

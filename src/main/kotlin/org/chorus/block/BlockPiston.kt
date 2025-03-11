@@ -21,6 +21,6 @@ class BlockPiston @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PISTON, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

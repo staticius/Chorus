@@ -13,10 +13,10 @@ open class BlockWoodenButton @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.WOODEN_BUTTON,
+BlockID.BlockID.WOODEN_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
+            
     }
 }

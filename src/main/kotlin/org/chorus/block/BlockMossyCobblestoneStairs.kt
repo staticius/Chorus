@@ -26,10 +26,10 @@ class BlockMossyCobblestoneStairs @JvmOverloads constructor(blockstate: BlockSta
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.MOSSY_COBBLESTONE_STAIRS,
+BlockID.BlockID.MOSSY_COBBLESTONE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

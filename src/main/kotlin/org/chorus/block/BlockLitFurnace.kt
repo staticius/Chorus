@@ -15,15 +15,13 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
 open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityFurnace?> {
+    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityFurnace> {
     override val name: String
         get() = "Burning Furnace"
 
-    override val blockEntityClass: Class<out BlockEntityFurnace>
-        get() = BlockEntityFurnace::class.java
+    override fun getBlockEntityClass(): Class<out BlockEntityFurnace> = BlockEntityFurnace::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.FURNACE
+    override fun getBlockEntityType(): String = BlockEntityID.FURNACE
 
     override fun canBeActivated(): Boolean {
         return true
@@ -58,21 +56,21 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState? = C
         val nbt = CompoundTag().putList("Items", ListTag())
 
         if (item.hasCustomName()) {
-            nbt!!.putString("CustomName", item.customName)
+            nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData: Map<String?, Tag<*>?> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
-                nbt!!.put(key, value)
+                nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
+        return BlockEntityHolder.setBlockAndCreateEntity(this, direct = true, update = true, initialData = nbt) != null
     }
 
     override fun onBreak(item: Item?): Boolean {
-        level.setBlock(this.position, get(BlockID.AIR), true, true)
+        level.setBlock(this.position, get(BlockID.AIR), direct = true, update = true)
         return true
     }
 
@@ -92,7 +90,7 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState? = C
             return false
         }
 
-        val furnace = orCreateBlockEntity!!
+        val furnace = getOrCreateBlockEntity()
         if (furnace.namedTag.contains("Lock") && furnace.namedTag.get("Lock") is StringTag
             && (furnace.namedTag.getString("Lock") != item.customName)
         ) {
@@ -140,9 +138,11 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState? = C
             )
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.LIT_FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-            get() = Companion.field
     }
 }

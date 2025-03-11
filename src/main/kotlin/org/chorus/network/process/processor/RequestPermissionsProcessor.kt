@@ -1,7 +1,6 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.player.PlayerHackDetectedEvent
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ProtocolInfo
@@ -12,7 +11,7 @@ class RequestPermissionsProcessor : DataPacketProcessor<RequestPermissionsPacket
         if (!playerHandle.player.isOp) {
             val event =
                 PlayerHackDetectedEvent(playerHandle.player, PlayerHackDetectedEvent.HackType.PERMISSION_REQUEST)
-            playerHandle.player.getServer().getPluginManager().callEvent(event)
+            playerHandle.Server.instance.pluginManager.callEvent(event)
 
             if (event.isKick) playerHandle.player.kick("Illegal permission operation", true)
 

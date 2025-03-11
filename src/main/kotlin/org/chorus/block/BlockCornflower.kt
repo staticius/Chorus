@@ -6,7 +6,7 @@ class BlockCornflower : BlockFlower {
     constructor(blockstate: BlockState?) : super(blockstate)
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CORNFLOWER)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CORNFLOWER)
+
     }
 }

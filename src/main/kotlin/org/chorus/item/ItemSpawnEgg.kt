@@ -15,9 +15,7 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.registry.Registries
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class ItemSpawnEgg : Item {
     @JvmOverloads
     constructor(meta: Int = 0, count: Int = 1) : super(ItemID.Companion.SPAWN_EGG, meta, count, "Spawn Egg") {
@@ -87,7 +85,7 @@ open class ItemSpawnEgg : Item {
 
         val networkId = entityNetworkId
         val ev = CreatureSpawnEvent(networkId, block, nbt, SpawnReason.SPAWN_EGG)
-        level.server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
         if (ev.isCancelled) {
             return false

@@ -8,8 +8,10 @@ class BlockAcaciaLog @JvmOverloads constructor(blockstate: BlockState? = Compani
         return BlockStrippedAcaciaLog.properties.defaultState
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(ACACIA_LOG, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ACACIA_LOG, CommonBlockProperties.PILLAR_AXIS)
     }
 }

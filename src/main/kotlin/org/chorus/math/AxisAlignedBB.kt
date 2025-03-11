@@ -333,13 +333,13 @@ interface AxisAlignedBB : Cloneable {
     public override fun clone(): AxisAlignedBB
 
     fun forEach(action: BBConsumer<*>) {
-        val minX = NukkitMath.floorDouble(this.minX)
-        val minY = NukkitMath.floorDouble(this.minY)
-        val minZ = NukkitMath.floorDouble(this.minZ)
+        val minX = ChorusMath.floorDouble(this.minX)
+        val minY = ChorusMath.floorDouble(this.minY)
+        val minZ = ChorusMath.floorDouble(this.minZ)
 
-        val maxX = NukkitMath.floorDouble(this.maxX)
-        val maxY = NukkitMath.floorDouble(this.maxY)
-        val maxZ = NukkitMath.floorDouble(this.maxZ)
+        val maxX = ChorusMath.floorDouble(this.maxX)
+        val maxY = ChorusMath.floorDouble(this.maxY)
+        val maxZ = ChorusMath.floorDouble(this.maxZ)
 
         for (x in minX..maxX) {
             for (y in minY..maxY) {

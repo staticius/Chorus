@@ -4,7 +4,7 @@ import org.chorus.Server
 import org.chorus.command.RemoteConsoleCommandSender
 import org.chorus.event.server.RemoteServerCommandEvent
 import org.chorus.utils.TextFormat
-import lombok.extern.slf4j.Slf4j
+
 import java.io.IOException
 
 /**
@@ -33,7 +33,7 @@ class RCON(server: Server, password: String, address: String, port: Int) {
             throw IllegalArgumentException("nukkit.server.rcon.startupError", e)
         }
 
-        RCON.log.info(this.server.language.tr("nukkit.server.rcon.running", *arrayOf<String>(address, port.toString())))
+        RCON.log.info(this.server.baseLang.tr("nukkit.server.rcon.running", *arrayOf<String>(address, port.toString())))
     }
 
     fun check() {

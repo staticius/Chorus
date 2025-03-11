@@ -97,6 +97,6 @@ class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WATERLILY)
-            get() = Companion.field
+
     }
 }

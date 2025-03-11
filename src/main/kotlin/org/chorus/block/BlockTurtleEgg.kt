@@ -73,7 +73,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.getBlock() != null && item.blockId == BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
+        if (item.getBlock() != null && item.BlockID.== BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
             val eggCount = eggCount!!
             if (eggCount == TurtleEggCount.FOUR_EGG) {
                 return false
@@ -160,7 +160,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
                         val newState = clone()
                         newState.cracks = crackState.next()
                         val event = BlockGrowEvent(this, newState)
-                        level.server.pluginManager.callEvent(event)
+                        Server.instance.pluginManager.callEvent(event)
                         if (!event.isCancelled) {
                             level.addSound(
                                 this.position,
@@ -185,7 +185,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
         val turtleEggHatchEvent = TurtleEggHatchEvent(this, eggs.ordinal + 1, newState)
         //TODO Cancelled by default because EntityTurtle doesn't have AI yet, remove it when AI is added
         turtleEggHatchEvent.isCancelled = true
-        level.server.pluginManager.callEvent(turtleEggHatchEvent)
+        Server.instance.pluginManager.callEvent(turtleEggHatchEvent)
         val eggsHatching = turtleEggHatchEvent.eggsHatching
         if (!turtleEggHatchEvent.isCancelled) {
             level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK)
@@ -203,7 +203,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
                     ),
                     CreatureSpawnEvent.SpawnReason.TURTLE_EGG
                 )
-                level.server.pluginManager.callEvent(creatureSpawnEvent)
+                Server.instance.pluginManager.callEvent(creatureSpawnEvent)
 
                 if (!creatureSpawnEvent.isCancelled) {
                     val turtle = createEntity(
@@ -251,7 +251,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
             }
 
             ev.isCancelled = ThreadLocalRandom.current().nextInt(200) > 0
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
                 level.useBreakOn(this.position, null, null, true)
             }
@@ -328,10 +328,10 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.TURTLE_EGG,
+BlockID.BlockID.TURTLE_EGG,
             CommonBlockProperties.CRACKED_STATE,
             CommonBlockProperties.TURTLE_EGG_COUNT
         )
-            get() = Companion.field
+
     }
 }

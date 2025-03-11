@@ -7,6 +7,6 @@ class BlockRedStainedGlass @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RED_STAINED_GLASS)
-            get() = Companion.field
+
     }
 }

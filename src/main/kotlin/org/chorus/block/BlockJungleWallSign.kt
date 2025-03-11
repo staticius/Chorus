@@ -23,6 +23,6 @@ class BlockJungleWallSign @JvmOverloads constructor(blockState: BlockState? = Co
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.Companion.JUNGLE_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

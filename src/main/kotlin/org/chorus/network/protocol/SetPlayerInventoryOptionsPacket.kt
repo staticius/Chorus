@@ -5,7 +5,7 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.inventory.InventoryLayout
 import org.chorus.network.protocol.types.inventory.InventoryTabLeft
 import org.chorus.network.protocol.types.inventory.InventoryTabRight
-import lombok.*
+
 
 
 

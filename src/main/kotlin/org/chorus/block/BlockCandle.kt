@@ -110,7 +110,7 @@ open class BlockCandle @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(CANDLE, CommonBlockProperties.CANDLES, CommonBlockProperties.LIT)
-            get() = Companion.field
+            BlockProperties(BlockID.CANDLE, CommonBlockProperties.CANDLES, CommonBlockProperties.LIT)
+
     }
 }

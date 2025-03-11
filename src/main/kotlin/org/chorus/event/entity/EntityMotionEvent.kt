@@ -5,9 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.math.Vector3
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 open class EntityMotionEvent(entity: Entity?, motion: Vector3) : EntityEvent(), Cancellable {
     val motion: Vector3
 

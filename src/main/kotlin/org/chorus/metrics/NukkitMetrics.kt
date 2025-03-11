@@ -7,7 +7,7 @@ import org.chorus.metrics.Metrics.*
 import org.chorus.utils.Config
 import org.chorus.utils.LoginChainData
 import org.chorus.utils.NukkitCollectors
-import lombok.extern.slf4j.Slf4j
+
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter

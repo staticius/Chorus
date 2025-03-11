@@ -25,6 +25,6 @@ class BlockSmoothRedSandstoneSlab(blockState: BlockState?) :
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SMOOTH_RED_SANDSTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

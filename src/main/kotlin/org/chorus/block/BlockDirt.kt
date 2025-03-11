@@ -67,7 +67,7 @@ open class BlockDirt : BlockSolid, Natural {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DIRT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DIRT)
+
     }
 }

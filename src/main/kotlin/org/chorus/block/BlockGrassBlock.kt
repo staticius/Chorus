@@ -118,7 +118,7 @@ open class BlockGrassBlock(blockstate: BlockState?) : BlockDirt(blockstate) {
         get() = true
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GRASS_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GRASS_BLOCK)
+
     }
 }

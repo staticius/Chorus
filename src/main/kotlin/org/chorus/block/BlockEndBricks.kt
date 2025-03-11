@@ -6,7 +6,7 @@ class BlockEndBricks @JvmOverloads constructor(blockstate: BlockState? = Compani
         get() = "End Stone Bricks"
 
     companion object {
-        val properties: BlockProperties = BlockProperties(END_BRICKS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.END_BRICKS)
+
     }
 }

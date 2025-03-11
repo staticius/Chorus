@@ -161,7 +161,7 @@ class BlazeShootExecutor(
         }
 
         val projectev = ProjectileLaunchEvent(projectile as EntityProjectile, entity)
-        Server.getInstance().pluginManager.callEvent(projectev)
+        Server.instance.pluginManager.callEvent(projectev)
         if (projectev.isCancelled) {
             projectile.kill()
         } else {

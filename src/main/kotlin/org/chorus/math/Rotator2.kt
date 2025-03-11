@@ -1,13 +1,11 @@
 package org.chorus.math
 
-import lombok.SneakyThrows
+
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class Rotator2 @JvmOverloads constructor(@JvmField var pitch: Double = 0.0, @JvmField var yaw: Double = 0.0) : Cloneable {
     val floorX: Int
         get() = kotlin.math.floor(this.pitch).toInt()

@@ -2,6 +2,7 @@ package org.chorus.level.generator.`object`
 
 import org.chorus.block.*
 import org.chorus.math.Vector3
+import org.chorus.utils.random.RandomSourceProvider
 
 abstract class HugeTreesGenerator(
     /**
@@ -32,12 +33,12 @@ abstract class HugeTreesGenerator(
     }
 
     /*
-     * returns whether or not there is space for a tree to grow at a certain position
+     * returns whether there is space for a tree to grow at a certain position
      */
     private fun isSpaceAt(worldIn: BlockManager, leavesPos: Vector3, height: Int): Boolean {
         var flag = true
 
-        if (leavesPos.getY() >= 1 && leavesPos.getY() + height + 1 <= 256) {
+        if (leavesPos.y >= 1 && leavesPos.y + height + 1 <= 256) {
             for (i in 0..1 + height) {
                 var j = 2
 
@@ -52,7 +53,7 @@ abstract class HugeTreesGenerator(
                     var l = -j
                     while (l <= j && flag) {
                         val blockPos = leavesPos.add(k.toDouble(), i.toDouble(), l.toDouble())
-                        if (leavesPos.getY() + i < 0 || leavesPos.getY() + i >= 256 || !this.canGrowInto(
+                        if (leavesPos.y + i < 0 || leavesPos.y + i >= 256 || !this.canGrowInto(
                                 worldIn.getBlockIdAt(
                                     blockPos.x.toInt(),
                                     blockPos.y.toInt(),
@@ -75,14 +76,14 @@ abstract class HugeTreesGenerator(
     }
 
     /*
-     * returns whether or not there is dirt underneath the block where the tree will be grown.
+     * returns whether there is dirt underneath the block where the tree will be grown.
      * It also generates dirt around the block in a 2x2 square if there is dirt underneath the blockpos.
      */
     private fun ensureDirtsUnderneath(pos: Vector3, worldIn: BlockManager): Boolean {
         val blockpos = pos.down()
         val block = worldIn.getBlockIdAt(blockpos.x.toInt(), blockpos.y.toInt(), blockpos.z.toInt())
 
-        if ((block == GRASS_BLOCK || block == DIRT) && pos.getY() >= 2) {
+        if ((block == BlockID.GRASS_BLOCK || block == BlockID.DIRT) && pos.y >= 2) {
             this.setDirtAt(worldIn, blockpos)
             this.setDirtAt(worldIn, blockpos.east())
             this.setDirtAt(worldIn, blockpos.south())
@@ -94,7 +95,7 @@ abstract class HugeTreesGenerator(
     }
 
     /*
-     * returns whether or not a tree can grow at a specific position.
+     * returns whether a tree can grow at a specific position.
      * If it can, it generates surrounding dirt underneath.
      */
     protected fun ensureGrowable(

@@ -10,7 +10,7 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.EntityEnderDragon
 import org.chorus.math.*
 import org.chorus.utils.*
-import lombok.Getter
+
 import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin

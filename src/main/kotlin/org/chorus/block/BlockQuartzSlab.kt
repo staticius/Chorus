@@ -25,6 +25,6 @@ class BlockQuartzSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID.Q
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.QUARTZ_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

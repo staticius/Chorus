@@ -7,7 +7,7 @@ class BlockDeadBubbleCoral @JvmOverloads constructor(blockstate: BlockState? = C
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEAD_BUBBLE_CORAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEAD_BUBBLE_CORAL)
+
     }
 }

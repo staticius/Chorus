@@ -1,10 +1,10 @@
 package org.chorus.block
 
 import org.chorus.math.BlockFace
-import org.chorus.math.Vector3.add
+import java.util.*
 
 interface BlockConnectable {
-    fun getSideAtLayer(layer: Int, face: BlockFace?): Block?
+    fun getSideAtLayer(layer: Int, face: BlockFace): Block?
 
     fun canConnect(block: Block?): Boolean
 
@@ -23,7 +23,7 @@ interface BlockConnectable {
 
     val connections: Set<BlockFace>
         get() {
-            val connections: EnumSet<BlockFace> = EnumSet.noneOf<BlockFace>(BlockFace::class.java)
+            val connections: EnumSet<BlockFace> = EnumSet.noneOf(BlockFace::class.java)
             for (blockFace in BlockFace.Plane.HORIZONTAL) {
                 if (isConnected(blockFace)) {
                     connections.add(blockFace)
@@ -32,7 +32,7 @@ interface BlockConnectable {
             return connections
         }
 
-    fun isConnected(face: BlockFace?): Boolean {
+    fun isConnected(face: BlockFace): Boolean {
         return canConnect(getSideAtLayer(0, face))
     }
 }

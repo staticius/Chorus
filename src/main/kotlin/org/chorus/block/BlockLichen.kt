@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.*
 import org.chorus.math.BlockFace
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 import java.util.*
 
 abstract class BlockLichen(blockState: BlockState?) : BlockTransparent(blockState) {
@@ -152,6 +152,6 @@ abstract class BlockLichen(blockState: BlockState?) : BlockTransparent(blockStat
     }
 
     companion object {
-        val RANDOM: NukkitRandom = NukkitRandom()
+        val RANDOM: ChorusRandom = ChorusRandom()
     }
 }

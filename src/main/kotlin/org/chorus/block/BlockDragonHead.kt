@@ -18,7 +18,7 @@ class BlockDragonHead(blockState: BlockState?) : BlockHead(blockState) {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DRAGON_HEAD, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DRAGON_HEAD, CommonBlockProperties.FACING_DIRECTION)
+            
     }
 }

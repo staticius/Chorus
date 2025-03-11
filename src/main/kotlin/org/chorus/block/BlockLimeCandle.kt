@@ -11,6 +11,6 @@ class BlockLimeCandle @JvmOverloads constructor(blockstate: BlockState? = Compan
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.LIME_CANDLE, CommonBlockProperties.CANDLES, CommonBlockProperties.LIT)
-            get() = Companion.field
+
     }
 }

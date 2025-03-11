@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
-import lombok.*
+
 
 /**
  * @author IWareQ
@@ -61,7 +61,7 @@ class AnimateEntityPacket : DataPacket() {
 
     /**
      * 包含一个实体动画的信息的记录类<br></br>
-     * 用于[cn.nukkit.network.protocol.AnimateEntityPacket]网络包
+     * 用于[org.chorus.network.protocol.AnimateEntityPacket]网络包
      */
 
     class Animation {

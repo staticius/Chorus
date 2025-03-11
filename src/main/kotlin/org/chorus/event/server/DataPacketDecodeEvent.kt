@@ -5,9 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.network.connection.netty.BedrockPacketWrapper
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class DataPacketDecodeEvent(val player: Player, val packetWrapper: BedrockPacketWrapper) : ServerEvent(), Cancellable {
     val packetId: Int
         get() = packetWrapper.packetId

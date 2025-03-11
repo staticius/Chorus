@@ -3,7 +3,7 @@ package org.chorus.entity.ai.memory
 import org.chorus.entity.*
 import org.chorus.entity.ai.memory.codec.IMemoryCodec
 import org.chorus.utils.*
-import lombok.Getter
+
 import java.util.function.Supplier
 
 /**

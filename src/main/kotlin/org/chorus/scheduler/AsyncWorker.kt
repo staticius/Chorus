@@ -3,9 +3,7 @@ package org.chorus.scheduler
 import org.chorus.InterruptibleThread
 import java.util.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class AsyncWorker : Thread(), InterruptibleThread {
     private val stack = LinkedList<AsyncTask>()
 

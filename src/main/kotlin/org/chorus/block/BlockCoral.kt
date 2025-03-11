@@ -2,8 +2,7 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.IntPropertyType
-import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.BlockFadeEvent
 import org.chorus.item.*
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
@@ -11,9 +10,9 @@ import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 abstract class BlockCoral(blockstate: BlockState?) : BlockFlowable(blockstate) {
-    abstract val isDead: Boolean
+    abstract fun isDead(): Boolean
 
-    abstract val deadCoral: Block?
+    abstract fun getDeadCoral(): Block
 
     fun setDead(deadBlock: Block) {
         level.setBlock(this.position, deadBlock, true, true)
@@ -27,13 +26,13 @@ abstract class BlockCoral(blockstate: BlockState?) : BlockFlowable(blockstate) {
             val down = down()
             if (!down!!.isSolid) {
                 level.useBreakOn(this.position)
-            } else if (!isDead) {
+            } else if (!isDead()) {
                 level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40))
             }
             return type
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (!isDead && (getLevelBlockAtLayer(1) !is BlockFlowingWater) && (getLevelBlockAtLayer(1) !is BlockFrostedIce)) {
-                val event: BlockFadeEvent = BlockFadeEvent(this, deadCoral)
+            if (!isDead() && (getLevelBlockAtLayer(1) !is BlockFlowingWater) && (getLevelBlockAtLayer(1) !is BlockFrostedIce)) {
+                val event = BlockFadeEvent(this, getDeadCoral())
                 if (!event.isCancelled) {
                     setDead(event.newState)
                 }
@@ -57,18 +56,18 @@ abstract class BlockCoral(blockstate: BlockState?) : BlockFlowable(blockstate) {
         val layer1 = block.getLevelBlockAtLayer(1)
         val hasWater = layer1 is BlockFlowingWater
         val waterDamage: Int
-        if (!layer1!!.isAir && (!hasWater || ((layer1.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.LIQUID_DEPTH)
+        if (!layer1!!.isAir && (!hasWater || ((layer1.getPropertyValue(CommonBlockProperties.LIQUID_DEPTH)
                 .also { waterDamage = it }) != 0) && waterDamage != 8)
         ) {
             return false
         }
 
-        if (hasWater && layer1.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.LIQUID_DEPTH) == 8) {
-            level.setBlock(this.position, 1, BlockFlowingWater(), true, false)
+        if (hasWater && layer1.getPropertyValue(CommonBlockProperties.LIQUID_DEPTH) == 8) {
+            level.setBlock(this.position, 1, BlockFlowingWater(), direct = true, update = false)
         }
 
         if (down!!.isSolid) {
-            level.setBlock(this.position, 0, this, true, true)
+            level.setBlock(this.position, 0, this, direct = true, update = true)
             return true
         }
         return false

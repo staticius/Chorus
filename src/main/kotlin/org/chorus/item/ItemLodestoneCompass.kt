@@ -18,7 +18,7 @@ class ItemLodestoneCompass @JvmOverloads constructor(meta: Int = 0, count: Int =
             if (trackingHandle == 0) {
                 return null
             }
-            return Server.getInstance().positionTrackingService.getPosition(trackingHandle)
+            return Server.instance.positionTrackingService.getPosition(trackingHandle)
         }
         set(position) {
             if (position == null) {
@@ -26,7 +26,7 @@ class ItemLodestoneCompass @JvmOverloads constructor(meta: Int = 0, count: Int =
                 return
             }
             trackingHandle =
-                Server.getInstance().positionTrackingService.addOrReusePosition(position)
+                Server.instance.positionTrackingService.addOrReusePosition(position)
         }
 
     var trackingHandle: Int

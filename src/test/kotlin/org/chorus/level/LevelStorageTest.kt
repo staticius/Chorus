@@ -9,7 +9,7 @@ import org.chorus.level.format.leveldb.LevelDBProvider
 import org.chorus.level.format.palette.Palette
 import org.chorus.registry.Registries
 import io.netty.buffer.ByteBufAllocator
-import lombok.SneakyThrows
+
 import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.*
 import org.mockito.Mockito

@@ -10,9 +10,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.DataPacket
 import java.util.concurrent.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EntitySnowball @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityThrowable(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {

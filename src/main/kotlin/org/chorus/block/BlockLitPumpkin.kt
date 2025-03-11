@@ -51,6 +51,6 @@ class BlockLitPumpkin @JvmOverloads constructor(blockstate: BlockState? = Compan
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.LIT_PUMPKIN, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-            get() = Companion.field
+
     }
 }

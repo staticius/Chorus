@@ -26,7 +26,7 @@ class FloatTag : NumberTag<Float> {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_Float
+        get() = Tag.Companion.TAG_FLOAT
 
     override fun toString(): String {
         return "FloatTag  (data: $data)"

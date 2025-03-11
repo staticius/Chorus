@@ -3,8 +3,8 @@ package org.chorus.network.protocol
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
-import lombok.*
-import lombok.extern.slf4j.Slf4j
+
+
 import java.io.IOException
 import java.nio.ByteOrder
 

@@ -27,7 +27,7 @@ import org.chorus.network.protocol.types.itemstack.response.ItemStackResponse
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseStatus
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import java.util.function.Function
 import kotlin.collections.ArrayList
@@ -58,7 +58,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
 
                 val event = ItemStackRequestActionEvent(player, action, context)
                 TransferItemEventCaller.call(event)
-                Server.getInstance().pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 val topWindow = player.topWindow
                 if (topWindow.isPresent && topWindow.get() is FakeInventory) {
                     fakeInventory.handle(event)
@@ -159,7 +159,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
                 destinationInventory.orElse(null)
             )
 
-            Server.getInstance().pluginManager.callEvent(transferEvent)
+            Server.instance.pluginManager.callEvent(transferEvent)
             if (transferEvent.isCancelled) {
                 event.isCancelled = true
             }

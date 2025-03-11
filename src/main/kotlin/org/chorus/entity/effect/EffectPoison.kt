@@ -6,7 +6,7 @@ import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import java.awt.Color
 
 class EffectPoison :
-    Effect(EffectType.Companion.POISON, "%potion.poison", Color(135, 163, 99), true) {
+    Effect(EffectType.POISON, "%potion.poison", Color(135, 163, 99), true) {
     override fun canTick(): Boolean {
         val interval: Int = 25 shr this.getAmplifier()
         return interval > 0 && this.getDuration() % interval == 0

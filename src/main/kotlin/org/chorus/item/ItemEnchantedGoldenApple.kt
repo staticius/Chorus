@@ -1,7 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
-import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 import org.chorus.math.*
 

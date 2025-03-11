@@ -5,9 +5,7 @@ import org.chorus.inventory.EnchantInventory
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class BlockEntityEnchantTable(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
     override val isBlockEntityValid: Boolean

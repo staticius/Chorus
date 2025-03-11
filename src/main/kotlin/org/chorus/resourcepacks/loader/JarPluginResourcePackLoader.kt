@@ -4,14 +4,14 @@ import org.chorus.Server
 import org.chorus.resourcepacks.JarPluginResourcePack
 import org.chorus.resourcepacks.ResourcePack
 import com.google.common.io.Files
-import lombok.extern.slf4j.Slf4j
+
 import java.io.File
 import java.util.*
 
 
 class JarPluginResourcePackLoader(protected val jarPath: File) : ResourcePackLoader {
     override fun loadPacks(): List<ResourcePack> {
-        val baseLang = Server.getInstance().language
+        val baseLang = Server.instance.language
         val loadedResourcePacks: MutableList<ResourcePack> = ArrayList()
         for (jar in Objects.requireNonNull<Array<File>>(jarPath.listFiles())) {
             try {

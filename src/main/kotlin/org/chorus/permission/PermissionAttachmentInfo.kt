@@ -1,8 +1,6 @@
 package org.chorus.permission
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class PermissionAttachmentInfo(
     permissible: Permissible?,
     permission: String,

@@ -22,7 +22,7 @@ import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
-import org.chorus.math.NukkitMath.clamp
+import org.chorus.math.ChorusMath.clamp
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.network.protocol.LevelEventPacket
@@ -142,7 +142,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                     this, null,
                     this, item, get(newBucketID, 0, 1, item.compoundTag)
                 )
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
                     replaceBucket(item, player, ev.item)
                     this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMin(), player) // empty
@@ -163,7 +163,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                     this, null,
                     this, item, get(ItemID.BUCKET, 0, 1, item.compoundTag)
                 )
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
                     if (player.isSurvival || player.isAdventure) {
                         replaceBucket(item, player, ev.item)
@@ -454,7 +454,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                         this, null,
                         this, item, get(ItemID.LAVA_BUCKET, 0, 1, bucket.compoundTag)
                     )
-                    level.server.pluginManager.callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         replaceBucket(bucket, player, ev.item)
                         this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMin(), player) //empty
@@ -472,7 +472,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                         this, null,
                         this, item, get(ItemID.BUCKET, 0, 1, bucket.compoundTag)
                     )
-                    level.server.pluginManager.callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         replaceBucket(bucket, player, ev.item)
 
@@ -651,7 +651,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(CAULDRON, CommonBlockProperties.CAULDRON_LIQUID, CommonBlockProperties.FILL_LEVEL)
-            get() = Companion.field
+            BlockProperties(BlockID.CAULDRON, CommonBlockProperties.CAULDRON_LIQUID, CommonBlockProperties.FILL_LEVEL)
+
     }
 }

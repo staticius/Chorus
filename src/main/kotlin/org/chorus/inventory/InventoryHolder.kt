@@ -4,10 +4,9 @@ import org.chorus.level.Level
 import org.chorus.math.Vector3
 
 interface InventoryHolder {
-    @JvmField
     val inventory: Inventory?
 
-    val level: Level
+    val level: Level?
 
     val x: Double
 

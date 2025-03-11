@@ -26,10 +26,10 @@ class BlockDioriteStairs @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            DIORITE_STAIRS,
+BlockID.DIORITE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

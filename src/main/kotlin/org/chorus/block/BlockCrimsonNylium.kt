@@ -6,7 +6,7 @@ class BlockCrimsonNylium @JvmOverloads constructor(blockstate: BlockState? = Com
         get() = "Crimson Nylium"
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRIMSON_NYLIUM)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_NYLIUM)
+
     }
 }

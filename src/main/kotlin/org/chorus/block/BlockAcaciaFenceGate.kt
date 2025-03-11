@@ -7,13 +7,16 @@ class BlockAcaciaFenceGate @JvmOverloads constructor(blockstate: BlockState? = C
     override val name: String
         get() = "Acacia Fence Gate"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            ACACIA_FENCE_GATE,
+            BlockID.ACACIA_FENCE_GATE,
             CommonBlockProperties.IN_WALL_BIT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-            get() = Companion.field
+
     }
 }

@@ -61,6 +61,6 @@ class BlockWheat @JvmOverloads constructor(blockstate: BlockState? = Companion.p
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WHEAT, CommonBlockProperties.GROWTH)
-            get() = Companion.field
+
     }
 }

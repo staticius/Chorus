@@ -1,8 +1,6 @@
 package org.chorus.item.enchantment
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentKnockback :
     Enchantment(Enchantment.Companion.ID_KNOCKBACK, "knockback", Rarity.UNCOMMON, EnchantmentType.SWORD) {
     override fun getMinEnchantAbility(level: Int): Int {

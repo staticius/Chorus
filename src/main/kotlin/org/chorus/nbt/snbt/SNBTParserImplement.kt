@@ -158,7 +158,7 @@ class SNBTParserImplement(
         // Code for ExpansionChoice specified at SNBT.javacc:56:5
         var Value1: Value? = null
         if (isTreeBuildingEnabled) {
-            Value1 = cn.nukkit.nbt.snbt.ast.Value()
+            Value1 = org.chorus.nbt.snbt.ast.Value()
             openNodeScope(Value1)
         }
         var parseException2: ParseException? = null
@@ -247,7 +247,7 @@ class SNBTParserImplement(
         this.currentlyParsedProduction = "KeyValuePair"
         var KeyValuePair2: KeyValuePair? = null
         if (isTreeBuildingEnabled) {
-            KeyValuePair2 = cn.nukkit.nbt.snbt.ast.KeyValuePair()
+            KeyValuePair2 = org.chorus.nbt.snbt.ast.KeyValuePair()
             openNodeScope(KeyValuePair2)
         }
         var parseException102: ParseException? = null
@@ -528,7 +528,7 @@ class SNBTParserImplement(
         this.currentlyParsedProduction = "Root"
         var Root7: Root? = null
         if (isTreeBuildingEnabled) {
-            Root7 = cn.nukkit.nbt.snbt.ast.Root()
+            Root7 = org.chorus.nbt.snbt.ast.Root()
             openNodeScope(Root7)
         }
         var parseException360: ParseException? = null

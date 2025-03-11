@@ -1,7 +1,7 @@
 package org.chorus.utils
 
 import io.netty.buffer.ByteBuf
-import lombok.experimental.UtilityClass
+
 import java.math.BigInteger
 
 @UtilityClass

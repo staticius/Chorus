@@ -5,7 +5,7 @@ import org.chorus.network.process.SessionState
 import org.chorus.network.protocol.*
 import org.chorus.network.protocol.ResourcePackStackPacket.ExperimentData
 import org.chorus.utils.version.Version
-import lombok.extern.slf4j.Slf4j
+
 import java.util.*
 import kotlin.math.ceil
 

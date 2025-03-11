@@ -63,7 +63,7 @@ class CommandLogger(
         var key = key
         if (TextFormat.getLastColors(key).isEmpty()) {
             key =
-                if (Server.getInstance().language.internalGet(key) != null) TextFormat.WHITE.toString() + "%" + key
+                if (Server.instance.language.internalGet(key) != null) TextFormat.WHITE.toString() + "%" + key
                 else TextFormat.WHITE.toString() + key
         }
 
@@ -101,10 +101,10 @@ class CommandLogger(
     }
 
     /**
-     * 添加一条消息，参数可以是纯文本，也可以是客户端，服务端，以及[PluginI18n][cn.nukkit.lang.PluginI18n]中的多语言文本，默认输出颜色红色
+     * 添加一条消息，参数可以是纯文本，也可以是客户端，服务端，以及[PluginI18n][org.chorus.lang.PluginI18n]中的多语言文本，默认输出颜色红色
      *
      *
-     * Add a message, the parameters can be plain text, or client-side, server-side, and multilingual text in [PluginI18n][cn.nukkit.lang.PluginI18n], default output color red
+     * Add a message, the parameters can be plain text, or client-side, server-side, and multilingual text in [PluginI18n][org.chorus.lang.PluginI18n], default output color red
      *
      * @param key the key
      * @return the command logger
@@ -114,10 +114,10 @@ class CommandLogger(
     }
 
     /**
-     * 添加一条消息，参数可以是纯文本，也可以是客户端，服务端，以及[PluginI18n][cn.nukkit.lang.PluginI18n]中的多语言文本，默认输出颜色红色
+     * 添加一条消息，参数可以是纯文本，也可以是客户端，服务端，以及[PluginI18n][org.chorus.lang.PluginI18n]中的多语言文本，默认输出颜色红色
      *
      *
-     * Add a message, the parameters can be plain text, or client-side, server-side, and multilingual text in [PluginI18n][cn.nukkit.lang.PluginI18n], default output color red
+     * Add a message, the parameters can be plain text, or client-side, server-side, and multilingual text in [PluginI18n][org.chorus.lang.PluginI18n], default output color red
      *
      * @param key    the key
      * @param params the params
@@ -130,7 +130,7 @@ class CommandLogger(
                 val text = if (sender.isPlayer) {
                     i18n.tr(sender.asPlayer()!!.languageCode, key, *params)
                 } else {
-                    i18n.tr(Server.getInstance().languageCode, key, *params)
+                    i18n.tr(Server.instance.languageCode, key, *params)
                 }
                 outputContainer.messages.add(CommandOutputMessage(text, *CommandOutputContainer.EMPTY_STRING))
                 return this
@@ -138,7 +138,7 @@ class CommandLogger(
         }
         outputContainer.messages.add(
             CommandOutputMessage(
-                Server.getInstance().language.tr(key, *params),
+                Server.instance.baseLang.tr(key, *params),
                 *CommandOutputContainer.EMPTY_STRING
             )
         )
@@ -369,7 +369,7 @@ class CommandLogger(
     private fun broadcastMessage(key: String, value: Array<String>, target: CommandSender): TranslationContainer {
         val message = TranslationContainer(TextFormat.clean(key), *value)
         val resultStr =
-            "[" + target.name + ": " + (if (message.text != target.server.language[message.text]) "%" else "") + message.text + "]"
+            "[" + target.name + ": " + (if (message.text != target.server.baseLang.message.text]) "%" else "") + message.text + "]"
         val coloredStr = TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + resultStr
         message.text = coloredStr
         return message

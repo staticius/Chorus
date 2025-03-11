@@ -55,6 +55,6 @@ class BlockMuddyMangroveRoots : BlockSolid, Natural {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MUDDY_MANGROVE_ROOTS, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

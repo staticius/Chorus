@@ -5,7 +5,7 @@ import org.chorus.network.protocol.types.*
 import org.chorus.utils.*
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
-import lombok.*
+
 
 
 class ZlibCompression(private val zlib: CompressionProvider) : BatchCompression {

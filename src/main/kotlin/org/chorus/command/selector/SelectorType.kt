@@ -1,7 +1,7 @@
 package org.chorus.command.selector
 
 import org.chorus.command.exceptions.SelectorSyntaxException
-import lombok.Getter
+
 
 /**
  * 所有可能的选择器类型

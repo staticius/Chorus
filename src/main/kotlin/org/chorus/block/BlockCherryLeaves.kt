@@ -20,7 +20,7 @@ class BlockCherryLeaves @JvmOverloads constructor(blockState: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(CHERRY_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.CHERRY_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
+
     }
 }

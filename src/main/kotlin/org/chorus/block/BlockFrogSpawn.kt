@@ -60,7 +60,7 @@ class BlockFrogSpawn : BlockFlowable {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FROG_SPAWN)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FROG_SPAWN)
+            
     }
 }

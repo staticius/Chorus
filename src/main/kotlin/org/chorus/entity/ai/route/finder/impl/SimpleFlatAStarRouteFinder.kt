@@ -11,8 +11,8 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.level.*
 import org.chorus.level.particle.BlockForceFieldParticle
 import org.chorus.math.*
-import lombok.Getter
-import lombok.Setter
+
+
 import java.util.*
 import java.util.function.Consumer
 import kotlin.math.abs
@@ -139,7 +139,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 findingPath.forEach(Consumer { node: Node ->
                     entity.level!!.addParticle(
                         BlockForceFieldParticle(node.vector3),
-                        Server.getInstance().onlinePlayers.values.toArray<Player>(
+                        Server.instance.onlinePlayers.values.toArray<Player>(
                             Player.EMPTY_ARRAY
                         )
                     )

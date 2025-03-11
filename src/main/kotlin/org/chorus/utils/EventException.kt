@@ -1,8 +1,6 @@
 package org.chorus.utils
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EventException : RuntimeException {
     /**
      * If applicable, returns the Exception that triggered this Exception

@@ -13,6 +13,6 @@ open class BlockOxidizedCopper @JvmOverloads constructor(blockstate: BlockState?
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OXIDIZED_COPPER)
-            get() = Companion.field
+
     }
 }

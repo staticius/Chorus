@@ -18,6 +18,6 @@ open class BlockWeatheredCutCopperSlab : BlockCutCopperSlab {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WEATHERED_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

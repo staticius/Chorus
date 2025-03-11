@@ -5,13 +5,11 @@ import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.buffer.ByteBufInputStream
-import lombok.*
+
 import java.io.IOException
 import java.nio.ByteOrder
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 
 
 (exclude = ["namedTag"])

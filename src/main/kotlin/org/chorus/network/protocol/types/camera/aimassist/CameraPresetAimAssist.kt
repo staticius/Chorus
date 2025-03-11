@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types.camera.aimassist
 
 import org.chorus.math.Vector2f
 import org.chorus.utils.OptionalValue
-import lombok.Data
+
 
 
 class CameraPresetAimAssist {

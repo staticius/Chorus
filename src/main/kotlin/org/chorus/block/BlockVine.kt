@@ -277,7 +277,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
         } else {
             BlockGrowEvent(block, vine)
         }
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (!event.isCancelled) {
             level.setBlock(block.position, vine, true)
         }
@@ -336,7 +336,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.VINE, CommonBlockProperties.VINE_DIRECTION_BITS)
-            get() = Companion.field
+
 
         fun getMetaFromFaces(faces: Set<BlockFace>): Int {
             var meta = 0

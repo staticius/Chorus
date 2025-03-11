@@ -1,18 +1,7 @@
 package org.chorus.utils
 
-import org.chorus.math.Vector3.equals
 import java.io.*
 
-
-/**
- * Tool class for VarInt or VarLong operations.
- *
- *
- * Some code from http://wiki.vg/Protocol.
- *
- * @author MagicDroidX
- * @author lmlstarqaq
- */
 object VarInt {
     /**
      * @param v Signed int
@@ -50,13 +39,13 @@ object VarInt {
     private fun read(stream: BinaryStream, maxSize: Int): Long {
         var value: Long = 0
         var size = 0
-        var b: Int
-        while (((stream.byte.also { b = it }) and 0x80) == 0x80) {
-            value = value or ((b and 0x7F).toLong() shl (size++ * 7))
+        var b: Byte
+        while (((stream.byte.also { b = it }).toInt() and 0x80) == 0x80) {
+            value = value or ((b.toInt() and 0x7F).toLong() shl (size++ * 7))
             require(size < maxSize) { "VarLong too big" }
         }
 
-        return value or ((b and 0x7F).toLong() shl (size * 7))
+        return value or ((b.toInt() and 0x7F).toLong() shl (size * 7))
     }
 
     @Throws(IOException::class)
@@ -141,30 +130,28 @@ object VarInt {
     }
 
     private fun write(stream: BinaryStream, value: Long) {
-        var value = value
+        var value1 = value
         do {
-            var temp = (value and 127L).toByte()
-            // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
-            value = value ushr 7
-            if (value != 0L) {
+            var temp = (value1 and 127L).toByte()
+            value1 = value1 ushr 7
+            if (value1 != 0L) {
                 temp = (temp.toInt() or 128).toByte()
             }
             stream.putByte(temp)
-        } while (value != 0L)
+        } while (value1 != 0L)
     }
 
     @Throws(IOException::class)
     private fun write(stream: OutputStream, value: Long) {
-        var value = value
+        var value1 = value
         do {
-            var temp = (value and 127L).toByte()
-            // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
-            value = value ushr 7
-            if (value != 0L) {
+            var temp = (value1 and 127L).toByte()
+            value1 = value1 ushr 7
+            if (value1 != 0L) {
                 temp = (temp.toInt() or 128).toByte()
             }
             stream.write(temp.toInt())
-        } while (value != 0L)
+        } while (value1 != 0L)
     }
 
     /**

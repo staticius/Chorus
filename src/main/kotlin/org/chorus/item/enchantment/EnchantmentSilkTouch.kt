@@ -2,9 +2,7 @@ package org.chorus.item.enchantment
 
 import org.chorus.item.*
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 class EnchantmentSilkTouch :
     Enchantment(Enchantment.Companion.ID_SILK_TOUCH, "untouching", Rarity.VERY_RARE, EnchantmentType.DIGGER) {
     override fun getMinEnchantAbility(level: Int): Int {

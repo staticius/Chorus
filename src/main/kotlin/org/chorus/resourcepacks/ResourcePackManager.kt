@@ -4,7 +4,7 @@ import org.chorus.Server
 import org.chorus.resourcepacks.loader.ResourcePackLoader
 import org.chorus.resourcepacks.loader.ZippedResourcePackLoader
 import com.google.common.collect.Sets
-import lombok.extern.slf4j.Slf4j
+
 import java.io.File
 import java.util.*
 import java.util.function.Consumer
@@ -54,7 +54,7 @@ class ResourcePackManager(private val loaders: MutableSet<ResourcePackLoader>) {
         })
 
         ResourcePackManager.log.info(
-            Server.getInstance().language
+            Server.instance.language
                 .tr("nukkit.resources.success", resourcePacks.size.toString())
         )
     }

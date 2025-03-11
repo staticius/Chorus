@@ -24,8 +24,8 @@ import io.netty.util.internal.EmptyArrays
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import lombok.SneakyThrows
-import lombok.extern.slf4j.Slf4j
+
+
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -380,7 +380,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
     @Throws(RegisterException::class)
     override fun register(key: String, recipe: Recipe) {
         if (recipe is CraftingRecipe) {
-            val item: Item = recipe.results.getFirst()
+            val item: Item = recipe.results.first()
             val id = Utils.dataToUUID(
                 recipeCount.toString(),
                 item.id.toString(),
@@ -621,7 +621,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                                     uuid,
                                     priority,
                                     primaryResult!!.toItem(),
-                                    ingredients.getFirst().toItem(),
+                                    ingredients.first().toItem(),
                                     RecipeUnlockingRequirement(
                                         RecipeUnlockingRequirement.UnlockingContext.ALWAYS_UNLOCKED
                                     )
@@ -913,7 +913,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
         if (outputs!!.size > 1) {
             return null
         }
-        val first: Map<String, Any> = outputs.getFirst()
+        val first: Map<String, Any> = outputs.first()
 
         val priority = if (recipeObject.containsKey("priority")) Utils.toInt(recipeObject["priority"]) else 0
 

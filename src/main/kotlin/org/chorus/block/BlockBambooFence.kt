@@ -6,8 +6,10 @@ class BlockBambooFence @JvmOverloads constructor(blockstate: BlockState? = Compa
     override val name: String
         get() = "Bamboo Fence"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(BAMBOO_FENCE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_FENCE)
     }
 }

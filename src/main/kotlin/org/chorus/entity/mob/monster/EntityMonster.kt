@@ -7,9 +7,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.max
 
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+
 abstract class EntityMonster(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityCanAttack {
     protected var spawnedByNight: Boolean = true
 
@@ -20,7 +18,7 @@ abstract class EntityMonster(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
-        if (getServer()!!.difficulty == 0) {
+        if (Server.instance.difficulty == 0) {
             this.close()
             return true
         } else return super.onUpdate(currentTick)
