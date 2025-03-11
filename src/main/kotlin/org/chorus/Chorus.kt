@@ -214,15 +214,16 @@ object Chorus : Loggable {
 
     private val version: String?
         get() {
-            val resourceAsStream: InputStream?
-            try {
-                resourceAsStream = Chorus::class.java.module.getResourceAsStream("git.properties")
+            val resourceAsStream: InputStream? = try {
+                Chorus::class.java.module.getResourceAsStream("git.properties")
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
+
             if (resourceAsStream == null) {
                 return "Unknown-Chorus-SNAPSHOT"
             }
+
             val properties = Properties()
             try {
                 resourceAsStream.use { `is` ->

@@ -178,7 +178,7 @@ class AdventureSettings : Cloneable {
     fun saveNBT() {
         val nbt = player.namedTag
         val abilityTag = CompoundTag()
-        values.forEach { (type: Type?, bool: Boolean?) ->
+        values.forEach { (type: Type, bool: Boolean) ->
             abilityTag.put(type.name, IntTag(if (bool) 1 else 0))
         }
         nbt!!.put(KEY_ABILITIES, abilityTag)
