@@ -10,7 +10,7 @@ import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.math.*
-import org.chorus.math.NukkitMath.ceilDouble
+import org.chorus.math.ChorusMath.ceilDouble
 import org.chorus.utils.RedstoneComponent
 import java.util.*
 

@@ -47,7 +47,7 @@ class PiglinTransformExecutor : EntityControl, IBehaviorExecutor {
             inventory.clear(i)
         }
         // TODO
-        entityZombiePigman.addEffect(Effect.Companion.get(EffectType.Companion.NAUSEA).setDuration(15))
+        entityZombiePigman.addEffect(Effect.get(EffectType.NAUSEA).setDuration(15))
     }
 }
 

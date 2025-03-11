@@ -3,4 +3,4 @@ package org.chorus.entity.effect
 import java.awt.Color
 
 class EffectBlindness :
-    Effect(EffectType.Companion.BLINDNESS, "%potion.blindness", Color(31, 31, 35))
+    Effect(EffectType.BLINDNESS, "%potion.blindness", Color(31, 31, 35))

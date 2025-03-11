@@ -277,7 +277,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         override fun search(): Boolean {
             val superRes = super.search()
             if (superRes && memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.MOVE_TARGET)) {
-                this.nodes = ArrayList<Node?>(setOf<Node>(nodes.getFirst()))
+                this.nodes = ArrayList<Node?>(setOf<Node>(nodes.first()))
                 nodes.add(Node(memoryStorage!!.get<Vector3>(CoreMemoryTypes.Companion.MOVE_TARGET), null, 0, 0))
             }
             return superRes

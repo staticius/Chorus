@@ -5,7 +5,7 @@ import org.chorus.event.entity.EntityRegainHealthEvent
 import java.awt.Color
 import kotlin.math.min
 
-class EffectRegeneration : Effect(EffectType.Companion.REGENERATION, "%potion.regeneration", Color(205, 92, 171)) {
+class EffectRegeneration : Effect(EffectType.REGENERATION, "%potion.regeneration", Color(205, 92, 171)) {
     override fun canTick(): Boolean {
         val amplifier: Int = min(5.0, getAmplifier().toDouble()).toInt()
         val interval: Int = 50 shr amplifier

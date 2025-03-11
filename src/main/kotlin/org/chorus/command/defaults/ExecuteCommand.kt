@@ -503,7 +503,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     ), max(begin.z, end.z)
                 )
                 val size =
-                    NukkitMath.floorDouble((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
+                    ChorusMath.floorDouble((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
 
                 if (size > 16 * 16 * 256 * 8) {
                     log.addError("commands.fill.tooManyBlocks", size.toString(), (16 * 16 * 256 * 8).toString())
@@ -533,12 +533,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
                 val level = begin.level
 
-                var sourceChunkX = NukkitMath.floorDouble(blocksAABB.minX) shr 4
-                var destinationChunkX = NukkitMath.floorDouble(destinationAABB.minX) shr 4
-                while (sourceChunkX <= NukkitMath.floorDouble(blocksAABB.maxX) shr 4) {
-                    var sourceChunkZ = NukkitMath.floorDouble(blocksAABB.minZ) shr 4
-                    var destinationChunkZ = NukkitMath.floorDouble(destinationAABB.minZ) shr 4
-                    while (sourceChunkZ <= NukkitMath.floorDouble(blocksAABB.maxZ) shr 4) {
+                var sourceChunkX = ChorusMath.floorDouble(blocksAABB.minX) shr 4
+                var destinationChunkX = ChorusMath.floorDouble(destinationAABB.minX) shr 4
+                while (sourceChunkX <= ChorusMath.floorDouble(blocksAABB.maxX) shr 4) {
+                    var sourceChunkZ = ChorusMath.floorDouble(blocksAABB.minZ) shr 4
+                    var destinationChunkZ = ChorusMath.floorDouble(destinationAABB.minZ) shr 4
+                    while (sourceChunkZ <= ChorusMath.floorDouble(blocksAABB.maxZ) shr 4) {
                         if (level.getChunkIfLoaded(sourceChunkX, sourceChunkZ) == null) {
                             log.addError("commands.testforblock.outOfWorld").output()
                             return 0

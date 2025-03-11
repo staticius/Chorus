@@ -43,7 +43,7 @@ open class Palette<V> {
 
     fun get(index: Int): V {
         val i = bitArray!![index]
-        return if (i >= palette.size) palette.getFirst() else palette[i]
+        return if (i >= palette.size) palette.first() else palette[i]
     }
 
     open fun set(index: Int, value: V) {
@@ -70,7 +70,7 @@ open class Palette<V> {
     protected fun writeEmpty(byteBuf: ByteBuf, serializer: RuntimeDataSerializer<V>): Boolean {
         if (this.isEmpty) {
             byteBuf.writeByte(getPaletteHeader(BitArrayVersion.V0, true))
-            byteBuf.writeIntLE(serializer.serialize(palette.getFirst()))
+            byteBuf.writeIntLE(serializer.serialize(palette.first()))
             return true
         }
         return false

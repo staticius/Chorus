@@ -338,7 +338,7 @@ enum class BlockFace(
          * @return block face
          */
         fun fromHorizontalAngle(angle: Double): BlockFace? {
-            return fromHorizontalIndex(NukkitMath.floorDouble(angle / 90.0 + 0.5) and 3)
+            return fromHorizontalIndex(ChorusMath.floorDouble(angle / 90.0 + 0.5) and 3)
         }
 
         fun fromAxis(axisDirection: AxisDirection, axis: Axis): BlockFace {

@@ -285,7 +285,7 @@ class Level(
     }
 
     fun addSound(pos: Vector3, sound: Sound, volume: Float, pitch: Float, players: Collection<Player?>) {
-        this.addSound(pos, sound, volume, pitch, *players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.addSound(pos, sound, volume, pitch, *players.toTypedArray())
     }
 
     fun addSound(pos: Vector3, sound: Sound, volume: Float, pitch: Float, vararg players: Player?) {
@@ -324,7 +324,7 @@ class Level(
         packet.z = z
         packet.data = data
 
-        this.addChunkPacket(NukkitMath.floorFloat(x) shr 4, NukkitMath.floorFloat(z) shr 4, packet)
+        this.addChunkPacket(ChorusMath.floorFloat(x) shr 4, ChorusMath.floorFloat(z) shr 4, packet)
     }
 
     @JvmOverloads
@@ -405,7 +405,7 @@ class Level(
     }
 
     fun addParticle(particle: Particle, players: Collection<Player?>) {
-        this.addParticle(particle, players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.addParticle(particle, players.toTypedArray())
     }
 
     @JvmOverloads
@@ -451,7 +451,7 @@ class Level(
             particleEffect,
             uniqueEntityId,
             dimensionId,
-            *players.toArray<Player>(Player.EMPTY_ARRAY)
+            *players.toTypedArray()
         )
     }
 
@@ -635,7 +635,7 @@ class Level(
     }
 
     fun sendTime() {
-        this.sendTime(*players.values().toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendTime(*players.values().toTypedArray())
     }
 
     fun releaseTickCachedBlocks() {
@@ -669,14 +669,14 @@ class Level(
                         Math.max(baseTickRate + 1, Math.min(autoTickRateLimit, tickMs / 50))
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getName(), NukkitMath.round(tickMs.toDouble(), 2),
+                        this.getName(), ChorusMath.round(tickMs.toDouble(), 2),
                         tickRate
                     )
                 } else if ((tickMs / this.tickRate) >= 50 && this.tickRate < autoTickRateLimit) {
                     this.tickRate = this.tickRate + 1
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getName(), NukkitMath.round(tickMs.toDouble(), 2),
+                        this.getName(), ChorusMath.round(tickMs.toDouble(), 2),
                         tickRate
                     )
                 }
@@ -782,7 +782,7 @@ class Level(
                             } else {
                                 val toSend: Collection<Player> =
                                     getChunkPlayers(chunkX, chunkZ).values()
-                                val playerArray = toSend.toArray<Player>(Player.EMPTY_ARRAY)
+                                val playerArray = toSend.toTypedArray()
                                 val size: Int = blocks.size()
                                 if (isAntiXrayEnabled) {
                                     antiXraySystem!!.obfuscateSendBlocks(index, playerArray, blocks)
@@ -809,7 +809,7 @@ class Level(
                 val chunkX = getHashX(index)
                 val chunkZ = getHashZ(index)
                 val chunkPlayers: Array<Player> =
-                    getChunkPlayers(chunkX, chunkZ).values().toArray<Player>(Player.EMPTY_ARRAY)
+                    getChunkPlayers(chunkX, chunkZ).values().toTypedArray()
                 if (chunkPlayers.size > 0) {
                     for (pk in chunkPackets[index]!!) {
                         Server.instance.broadcastPacket(chunkPlayers, pk)
@@ -821,7 +821,7 @@ class Level(
             if (gameRules!!.isStale) {
                 val packet: GameRulesChangedPacket = GameRulesChangedPacket()
                 packet.gameRules = gameRules
-                Server.instance.broadcastPacket(players.values().toArray<Player>(Player.EMPTY_ARRAY), packet)
+                Server.instance.broadcastPacket(players.values().toTypedArray(), packet)
                 gameRules!!.refresh()
             }
         } catch (e: Exception) {
@@ -1394,14 +1394,14 @@ class Level(
 
     fun scanBlocks(bb: AxisAlignedBB, condition: BiPredicate<BlockVector3?, BlockState?>): List<Block> {
         val min = BlockVector3(
-            NukkitMath.floorDouble(bb.getMinX()),
-            NukkitMath.floorDouble(bb.getMinY()),
-            NukkitMath.floorDouble(bb.getMinZ())
+            ChorusMath.floorDouble(bb.minX),
+            ChorusMath.floorDouble(bb.minY),
+            ChorusMath.floorDouble(bb.minZ)
         )
         val max = BlockVector3(
-            NukkitMath.floorDouble(bb.getMaxX()),
-            NukkitMath.floorDouble(bb.getMaxY()),
-            NukkitMath.floorDouble(bb.getMaxZ())
+            ChorusMath.floorDouble(bb.maxX),
+            ChorusMath.floorDouble(bb.maxY),
+            ChorusMath.floorDouble(bb.maxZ)
         )
         val minChunk: ChunkVector2 = min.chunkVector
         val maxChunk: ChunkVector2 = max.chunkVector
@@ -1462,12 +1462,12 @@ class Level(
         ignoreCollidesCheck: Boolean,
         condition: Predicate<Block>
     ): Array<Block> {
-        val minX = NukkitMath.floorDouble(bb.getMinX())
-        val minY = NukkitMath.floorDouble(bb.getMinY())
-        val minZ = NukkitMath.floorDouble(bb.getMinZ())
-        val maxX = NukkitMath.ceilDouble(bb.getMaxX())
-        val maxY = NukkitMath.ceilDouble(bb.getMaxY())
-        val maxZ = NukkitMath.ceilDouble(bb.getMaxZ())
+        val minX = ChorusMath.floorDouble(bb.minX)
+        val minY = ChorusMath.floorDouble(bb.minY)
+        val minZ = ChorusMath.floorDouble(bb.minZ)
+        val maxX = ChorusMath.ceilDouble(bb.maxX)
+        val maxY = ChorusMath.ceilDouble(bb.maxY)
+        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
 
         val collides: MutableList<Block> = ArrayList()
 
@@ -1538,12 +1538,12 @@ class Level(
         ignoreCollidesCheck: Boolean,
         condition: Predicate<Block>
     ): Array<Block> {
-        val minX = NukkitMath.floorDouble(bb.getMinX())
-        val minY = NukkitMath.floorDouble(bb.getMinY())
-        val minZ = NukkitMath.floorDouble(bb.getMinZ())
-        val maxX = NukkitMath.ceilDouble(bb.getMaxX())
-        val maxY = NukkitMath.ceilDouble(bb.getMaxY())
-        val maxZ = NukkitMath.ceilDouble(bb.getMaxZ())
+        val minX = ChorusMath.floorDouble(bb.minX)
+        val minY = ChorusMath.floorDouble(bb.minY)
+        val minZ = ChorusMath.floorDouble(bb.minZ)
+        val maxX = ChorusMath.ceilDouble(bb.maxX)
+        val maxY = ChorusMath.ceilDouble(bb.maxY)
+        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
 
         val collides: MutableList<Block> = ArrayList()
 
@@ -1600,12 +1600,12 @@ class Level(
         entities: Boolean,
         solidEntities: Boolean
     ): Array<AxisAlignedBB> {
-        val minX = NukkitMath.floorDouble(bb.getMinX())
-        val minY = NukkitMath.floorDouble(bb.getMinY())
-        val minZ = NukkitMath.floorDouble(bb.getMinZ())
-        val maxX = NukkitMath.ceilDouble(bb.getMaxX())
-        val maxY = NukkitMath.ceilDouble(bb.getMaxY())
-        val maxZ = NukkitMath.ceilDouble(bb.getMaxZ())
+        val minX = ChorusMath.floorDouble(bb.minX)
+        val minY = ChorusMath.floorDouble(bb.minY)
+        val minZ = ChorusMath.floorDouble(bb.minZ)
+        val maxX = ChorusMath.ceilDouble(bb.maxX)
+        val maxY = ChorusMath.ceilDouble(bb.maxY)
+        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
 
         val collides: MutableList<AxisAlignedBB> = ArrayList<AxisAlignedBB>()
 
@@ -1643,12 +1643,12 @@ class Level(
         entities: Boolean,
         solidEntities: Boolean
     ): List<AxisAlignedBB> {
-        val minX = NukkitMath.floorDouble(bb.getMinX())
-        val minY = NukkitMath.floorDouble(bb.getMinY())
-        val minZ = NukkitMath.floorDouble(bb.getMinZ())
-        val maxX = NukkitMath.ceilDouble(bb.getMaxX())
-        val maxY = NukkitMath.ceilDouble(bb.getMaxY())
-        val maxZ = NukkitMath.ceilDouble(bb.getMaxZ())
+        val minX = ChorusMath.floorDouble(bb.minX)
+        val minY = ChorusMath.floorDouble(bb.minY)
+        val minZ = ChorusMath.floorDouble(bb.minZ)
+        val maxX = ChorusMath.ceilDouble(bb.maxX)
+        val maxY = ChorusMath.ceilDouble(bb.maxY)
+        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
 
         val collides: MutableList<AxisAlignedBB> = ArrayList<AxisAlignedBB>()
 
@@ -1677,12 +1677,12 @@ class Level(
     }
 
     fun hasCollision(entity: Entity?, bb: AxisAlignedBB, entities: Boolean): Boolean {
-        val minX = NukkitMath.floorDouble(NukkitMath.round(bb.getMinX(), 4))
-        val minY = NukkitMath.floorDouble(NukkitMath.round(bb.getMinY(), 4))
-        val minZ = NukkitMath.floorDouble(NukkitMath.round(bb.getMinZ(), 4))
-        val maxX = NukkitMath.ceilDouble(NukkitMath.round(bb.getMaxX(), 4) - 0.00001)
-        val maxY = NukkitMath.ceilDouble(NukkitMath.round(bb.getMaxY(), 4) - 0.00001)
-        val maxZ = NukkitMath.ceilDouble(NukkitMath.round(bb.getMaxZ(), 4) - 0.00001)
+        val minX = ChorusMath.floorDouble(ChorusMath.round(bb.minX, 4))
+        val minY = ChorusMath.floorDouble(ChorusMath.round(bb.minY, 4))
+        val minZ = ChorusMath.floorDouble(ChorusMath.round(bb.minZ, 4))
+        val maxX = ChorusMath.ceilDouble(ChorusMath.round(bb.maxX, 4) - 0.00001)
+        val maxY = ChorusMath.ceilDouble(ChorusMath.round(bb.maxY, 4) - 0.00001)
+        val maxZ = ChorusMath.ceilDouble(ChorusMath.round(bb.maxZ, 4) - 0.00001)
 
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
@@ -2176,7 +2176,7 @@ class Level(
         if (direct) {
             if (isAntiXrayEnabled && block.isTransparent) {
                 this.sendBlocks(
-                    getChunkPlayers(cx, cz).values().toArray<Player>(Player.EMPTY_ARRAY),
+                    getChunkPlayers(cx, cz).values().toTypedArray(),
                     arrayOf<Vector3?>(
                         block.position.add(-1.0),
                         block.position.add(1.0),
@@ -2189,7 +2189,7 @@ class Level(
                 )
             }
             this.sendBlocks(
-                getChunkPlayers(cx, cz).values().toArray<Player>(Player.EMPTY_ARRAY),
+                getChunkPlayers(cx, cz).values().toTypedArray(),
                 arrayOf<Block?>(block),
                 UpdateBlockPacket.FLAG_ALL_PRIORITY,
                 block.layer
@@ -2886,10 +2886,10 @@ class Level(
         var overflow: ArrayList<Entity>? = null
 
         if (entity == null || entity.canCollide()) {
-            val minX = NukkitMath.floorDouble((bb.getMinX() - 2) / 16)
-            val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) / 16)
-            val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) / 16)
-            val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) / 16)
+            val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
+            val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
+            val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
+            val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
@@ -2916,10 +2916,10 @@ class Level(
         val result = ArrayList<Entity>()
 
         if (entity == null || entity.canCollide()) {
-            val minX = NukkitMath.floorDouble((bb.getMinX() - 2) / 16)
-            val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) / 16)
-            val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) / 16)
-            val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) / 16)
+            val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
+            val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
+            val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
+            val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
@@ -2939,10 +2939,10 @@ class Level(
 
     fun streamCollidingEntities(bb: AxisAlignedBB, entity: Entity?): Stream<Entity?> {
         if (entity == null || entity.canCollide()) {
-            val minX = NukkitMath.floorDouble((bb.getMinX() - 2) / 16)
-            val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) / 16)
-            val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) / 16)
-            val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) / 16)
+            val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
+            val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
+            val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
+            val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
 
             val allEntities = ArrayList<Entity?>()
 
@@ -2990,10 +2990,10 @@ class Level(
     fun getNearbyEntities(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): Array<Entity?> {
         var index = 0
 
-        val minX = NukkitMath.floorDouble((bb.getMinX() - 2) * 0.0625)
-        val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) * 0.0625)
-        val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) * 0.0625)
-        val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) * 0.0625)
+        val minX = ChorusMath.floorDouble((bb.minX - 2) * 0.0625)
+        val maxX = ChorusMath.ceilDouble((bb.maxX + 2) * 0.0625)
+        val minZ = ChorusMath.floorDouble((bb.minZ - 2) * 0.0625)
+        val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) * 0.0625)
 
         var overflow: ArrayList<Entity>? = null
 
@@ -3017,10 +3017,10 @@ class Level(
     }
 
     fun fastNearbyEntities(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): List<Entity> {
-        val minX = NukkitMath.floorDouble((bb.getMinX() - 2) * 0.0625)
-        val maxX = NukkitMath.ceilDouble((bb.getMaxX() + 2) * 0.0625)
-        val minZ = NukkitMath.floorDouble((bb.getMinZ() - 2) * 0.0625)
-        val maxZ = NukkitMath.ceilDouble((bb.getMaxZ() + 2) * 0.0625)
+        val minX = ChorusMath.floorDouble((bb.minX - 2) * 0.0625)
+        val maxX = ChorusMath.ceilDouble((bb.maxX + 2) * 0.0625)
+        val minZ = ChorusMath.floorDouble((bb.minZ - 2) * 0.0625)
+        val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) * 0.0625)
 
         val result = ArrayList<Entity>()
 
@@ -3744,7 +3744,7 @@ class Level(
                 chunk = this.forceLoadChunk(index, chunkX, chunkZ, create)
             }
             chunk
-        }, this.getScheduler().getAsyncTaskThreadPool())
+        }, this.scheduler.getAsyncTaskThreadPool())
     }
 
 
@@ -4281,7 +4281,7 @@ class Level(
     fun sendWeather(players: Array<Player?>?) {
         var players = players
         if (players == null) {
-            players = getPlayers().values().toArray<Player>(Player.EMPTY_ARRAY)
+            players = getPlayers().values().toTypedArray()
         }
 
         val pk = LevelEventPacket()
@@ -4425,13 +4425,13 @@ class Level(
     }
 
     fun isAreaLoaded(bb: AxisAlignedBB): Boolean {
-        if (bb.getMaxY() < (if (isOverWorld) -64 else 0) || bb.getMinY() >= (if (isOverWorld) 320 else 256)) {
+        if (bb.maxY < (if (isOverWorld) -64 else 0) || bb.minY >= (if (isOverWorld) 320 else 256)) {
             return false
         }
-        val minX = NukkitMath.floorDouble(bb.getMinX()) shr 4
-        val minZ = NukkitMath.floorDouble(bb.getMinZ()) shr 4
-        val maxX = NukkitMath.floorDouble(bb.getMaxX()) shr 4
-        val maxZ = NukkitMath.floorDouble(bb.getMaxZ()) shr 4
+        val minX = ChorusMath.floorDouble(bb.minX) shr 4
+        val minZ = ChorusMath.floorDouble(bb.minZ) shr 4
+        val maxX = ChorusMath.floorDouble(bb.maxX) shr 4
+        val maxZ = ChorusMath.floorDouble(bb.maxZ) shr 4
 
         for (x in minX..maxX) {
             for (z in minZ..maxZ) {
@@ -4693,9 +4693,9 @@ class Level(
     }
 
     fun getBlockDensity(source: Vector3, boundingBox: AxisAlignedBB): Float {
-        val diffX: Double = boundingBox.getMaxX() - boundingBox.getMinX()
-        val diffY: Double = boundingBox.getMaxY() - boundingBox.getMinY()
-        val diffZ: Double = boundingBox.getMaxZ() - boundingBox.getMinZ()
+        val diffX: Double = boundingBox.maxX - boundingBox.minX
+        val diffY: Double = boundingBox.maxY - boundingBox.minY
+        val diffZ: Double = boundingBox.maxZ - boundingBox.minZ
         val xInterval = 1 / (diffX * 2 + 1)
         val yInterval = 1 / (diffY * 2 + 1)
         val zInterval = 1 / (diffZ * 2 + 1)
@@ -4705,7 +4705,7 @@ class Level(
         }
 
         val xOffset = (1 - Math.floor(1 / xInterval) * xInterval) / 2
-        val yOffset: Double = boundingBox.getMinY()
+        val yOffset: Double = boundingBox.minY
         val zOffset = (1 - Math.floor(1 / zInterval) * zInterval) / 2
 
         var visibleBlocks = 0

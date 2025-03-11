@@ -62,7 +62,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                 ),
                 Behavior(
                     HoglinTransformExecutor(), all(
-                        IBehaviorEvaluator { entity: EntityMob -> entity.level!!.getDimension() != Level.DIMENSION_NETHER },
+                        IBehaviorEvaluator { entity: EntityMob -> entity.level!!.dimension != Level.DIMENSION_NETHER },
                         IBehaviorEvaluator { entity: EntityMob? -> !isImmobile() },
                         IBehaviorEvaluator { entity: EntityMob -> !entity.namedTag!!.getBoolean("IsImmuneToZombification") }
                     ), 8, 1),

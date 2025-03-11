@@ -3,8 +3,8 @@ package org.chorus.utils
 import org.chorus.block.Block
 import org.chorus.level.Level
 import org.chorus.math.*
-import org.chorus.math.NukkitMath.ceilDouble
-import org.chorus.math.NukkitMath.floorDouble
+import org.chorus.math.ChorusMath.ceilDouble
+import org.chorus.math.ChorusMath.floorDouble
 import io.netty.buffer.ByteBuf
 
 import java.io.*

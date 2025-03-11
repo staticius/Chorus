@@ -1,12 +1,11 @@
 package org.chorus.item.randomitem
 
 import org.chorus.block.BlockID
-import org.chorus.entity.effect.Effect.Companion.get
 import org.chorus.entity.effect.PotionType.Companion.get
 import org.chorus.item.*
 import org.chorus.item.enchantment.*
 import org.chorus.item.randomitem.fishing.FishingEnchantmentItemSelector
-import org.chorus.math.NukkitMath
+import org.chorus.math.ChorusMath
 
 /**
  * @author Snake1999
@@ -52,9 +51,9 @@ object Fishing {
     }
 
     fun getFishingResult(fortuneLevel: Int, lureLevel: Int): Item? {
-        val treasureChance = NukkitMath.clamp(0.05f + 0.01f * fortuneLevel - 0.01f * lureLevel, 0f, 1f)
-        val junkChance = NukkitMath.clamp(0.05f - 0.025f * fortuneLevel - 0.01f * lureLevel, 0f, 1f)
-        val fishChance = NukkitMath.clamp(1 - treasureChance - junkChance, 0f, 1f)
+        val treasureChance = ChorusMath.clamp(0.05f + 0.01f * fortuneLevel - 0.01f * lureLevel, 0f, 1f)
+        val junkChance = ChorusMath.clamp(0.05f - 0.025f * fortuneLevel - 0.01f * lureLevel, 0f, 1f)
+        val fishChance = ChorusMath.clamp(1 - treasureChance - junkChance, 0f, 1f)
         RandomItem.putSelector(FISHES, fishChance)
         RandomItem.putSelector(TREASURES, treasureChance)
         RandomItem.putSelector(JUNKS, junkChance)

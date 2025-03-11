@@ -59,7 +59,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
     }
 
     open fun getResultDamage(): Int {
-        return NukkitMath.ceilDouble(sqrt(motion.x * motion.x + motion.y * motion.y + motion.z * motion.z) * getDamage())
+        return ChorusMath.ceilDouble(sqrt(motion.x * motion.x + motion.y * motion.y + motion.z * motion.z) * getDamage())
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {

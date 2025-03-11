@@ -152,7 +152,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
             val pk = UpdateAttributesPacket()
             pk.entries = arrayOf(attr)
             pk.entityId = this.getId()
-            Server.broadcastPacket(this.viewers.values.toArray<Player>(Player.EMPTY_ARRAY), pk)
+            Server.broadcastPacket(this.viewers.values.toTypedArray(), pk)
         }
     }
 
@@ -166,7 +166,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
             val pk = UpdateAttributesPacket()
             pk.entries = arrayOf(attr)
             pk.entityId = this.getId()
-            Server.broadcastPacket(this.viewers.values.toArray<Player>(Player.EMPTY_ARRAY), pk)
+            Server.broadcastPacket(this.viewers.values.toTypedArray(), pk)
         }
     }
 
@@ -264,7 +264,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
     override fun fall(fallDistance: Float) {
         var fallDistance = fallDistance
-        if (this.hasEffect(EffectType.Companion.SLOW_FALLING)) {
+        if (this.hasEffect(EffectType.SLOW_FALLING)) {
             return
         }
 
@@ -282,7 +282,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
                 .getBoolean(GameRule.FALL_DAMAGE)) && down.useDefaultFallDamage()
         ) {
             val jumpBoost =
-                if (this.hasEffect(EffectType.Companion.JUMP_BOOST)) getEffect(EffectType.Companion.JUMP_BOOST).level else 0
+                if (this.hasEffect(EffectType.JUMP_BOOST)) getEffect(EffectType.JUMP_BOOST).level else 0
             val damage = fallDistance - 3 - jumpBoost - getClientMaxJumpHeight()
 
             if (damage > 0) {

@@ -7,7 +7,7 @@ import org.chorus.block.property.enums.CauldronLiquid
 import org.chorus.block.property.enums.DripstoneThickness
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.entity.Entity
-import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.block.BlockFallEvent
 import org.chorus.event.block.CauldronFilledByDrippingLiquidEvent

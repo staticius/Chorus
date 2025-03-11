@@ -3,7 +3,7 @@ package org.chorus.utils
 import org.chorus.entity.data.EntityDataFormat
 import org.chorus.entity.data.EntityDataMap
 import org.chorus.math.*
-import org.chorus.math.NukkitMath.round
+import org.chorus.math.ChorusMath.round
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import java.io.*

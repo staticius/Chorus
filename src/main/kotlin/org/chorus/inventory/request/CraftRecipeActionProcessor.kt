@@ -222,7 +222,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             if (recipe.results.size == 1) {
                 // 若配方输出物品为1，客户端将不会发送CreateAction，此时我们直接在CraftRecipeAction输出物品到CREATED_OUTPUT
                 // 若配方输出物品为多个，客户端将会发送CreateAction，此时我们将在CreateActionProcessor里面输出物品到CREATED_OUTPUT
-                val output: Item = recipe.results.getFirst().clone()
+                val output: Item = recipe.results.first().clone()
                 output.setCount(output.getCount() * numberOfRequestedCrafts)
                 val createdOutput = player.creativeOutputInventory
                 createdOutput.setItem(0, output.clone().autoAssignStackNetworkId(), false)

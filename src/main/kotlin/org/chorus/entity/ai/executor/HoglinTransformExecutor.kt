@@ -41,7 +41,7 @@ class HoglinTransformExecutor : EntityControl, IBehaviorExecutor {
         zoglin.setBaby(entity.isBaby())
         zoglin.spawnToAll()
         zoglin.level!!.addSound(zoglin.position, Sound.MOB_HOGLIN_CONVERTED_TO_ZOMBIFIED)
-        zoglin.addEffect(Effect.Companion.get(EffectType.Companion.NAUSEA).setDuration(15))
+        zoglin.addEffect(Effect.get(EffectType.NAUSEA).setDuration(15))
     }
 }
 

@@ -178,27 +178,27 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
 
             var bid: String = level!!.getBlockIdAt(
                 position.x.toInt(),
-                boundingBox!!.getMaxY().toInt(), position.z.toInt(), 0
+                boundingBox!!.maxY.toInt(), position.z.toInt(), 0
             )
             if (bid === BlockID.FLOWING_WATER || bid === BlockID.WATER || (level!!.getBlockIdAt(
                     position.x.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 1
+                    boundingBox!!.maxY.toInt(), position.z.toInt(), 1
                 ).also { bid = it }) === BlockID.FLOWING_WATER || bid === BlockID.WATER
             ) {
                 //item is fully in water or in still water
                 motion.y -= this.getGravity() * -0.015
             } else if (lavaResistant && (level!!.getBlockIdAt(
                     position.x.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 0
+                    boundingBox!!.maxY.toInt(), position.z.toInt(), 0
                 ) === BlockID.FLOWING_LAVA || level!!.getBlockIdAt(
                     position.x.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 0
+                    boundingBox!!.maxY.toInt(), position.z.toInt(), 0
                 ) === BlockID.LAVA || level!!.getBlockIdAt(
                     position.x.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 1
+                    boundingBox!!.maxY.toInt(), position.z.toInt(), 1
                 ) === BlockID.FLOWING_LAVA || level!!.getBlockIdAt(
                     position.x.toInt(),
-                    boundingBox!!.getMaxY().toInt(), position.z.toInt(), 1
+                    boundingBox!!.maxY.toInt(), position.z.toInt(), 1
                 ) === BlockID.LAVA
                         )
             ) {

@@ -43,7 +43,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     }
 
     override fun getEyeHeight(): Float {
-        return (boundingBox!!.getMaxY() - boundingBox!!.getMinY() - 0.18).toFloat()
+        return (boundingBox!!.maxY - boundingBox!!.minY - 0.18).toFloat()
     }
 
     /**
@@ -63,7 +63,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
         this.skin = skin
     }
 
-    fun getUuid(): UUID? {
+    override fun getUniqueId(): UUID? {
         return uuid
     }
 
@@ -152,12 +152,12 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             check(skin!!.isValid()) { this.getClass().getSimpleName() + " must have a valid skin set" }
 
             if (this is Player) Server.instance.updatePlayerListData(
-                this.getUuid(),
+                this.getUniqueId(),
                 this.getId(), this.getDisplayName(),
                 this.skin, this.loginChainData.XUID, arrayOf(player)
             )
             else Server.instance.updatePlayerListData(
-                this.getUuid(),
+                this.getUniqueId(),
                 this.getId(),
                 this.getName(),
                 this.skin,
@@ -165,7 +165,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             )
 
             val pk: AddPlayerPacket = AddPlayerPacket()
-            pk.uuid = this.getUuid()
+            pk.uuid = this.getUniqueId()
             pk.username = this.getName()
             pk.entityUniqueId = this.getId()
             pk.entityRuntimeId = this.getId()
@@ -195,7 +195,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             }
 
             if (this !is Player) {
-                Server.instance.removePlayerListData(this.getUuid(), player)
+                Server.instance.removePlayerListData(this.getUniqueId(), player)
             }
         }
     }

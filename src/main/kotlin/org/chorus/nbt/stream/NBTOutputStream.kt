@@ -155,24 +155,24 @@ class NBTOutputStream @JvmOverloads constructor(
     private fun serialize(tag: Tag, type: Int, maxDepth: Int) {
         require(maxDepth >= 0) { "Reached depth limit" }
         when (type) {
-            Tag.Companion.TAG_Byte -> this.writeByte(tag.parseValue()!!)
-            Tag.Companion.TAG_Short -> this.writeShort(tag.parseValue()!!)
-            Tag.Companion.TAG_Int -> this.writeInt(tag.parseValue()!!)
-            Tag.Companion.TAG_Long -> this.writeLong(tag.parseValue()!!)
-            Tag.Companion.TAG_Float -> this.writeFloat(tag.parseValue()!!)
-            Tag.Companion.TAG_Double -> this.writeDouble(tag.parseValue()!!)
-            Tag.Companion.TAG_Byte_Array -> {
+            Tag.Companion.TAG_BYTE -> this.writeByte(tag.parseValue()!!)
+            Tag.Companion.TAG_SHORT -> this.writeShort(tag.parseValue()!!)
+            Tag.Companion.TAG_INT -> this.writeInt(tag.parseValue()!!)
+            Tag.Companion.TAG_LONG -> this.writeLong(tag.parseValue()!!)
+            Tag.Companion.TAG_FLOAT -> this.writeFloat(tag.parseValue()!!)
+            Tag.Companion.TAG_DOUBLE -> this.writeDouble(tag.parseValue()!!)
+            Tag.Companion.TAG_BYTE_ARRAY -> {
                 val byteArray = tag.parseValue<ByteArray>()
                 this.writeInt(byteArray!!.size)
                 this.write(byteArray)
             }
 
-            Tag.Companion.TAG_String -> {
+            Tag.Companion.TAG_STRING -> {
                 val string = tag.parseValue<String>()
                 this.writeUTF(string!!)
             }
 
-            Tag.Companion.TAG_Compound -> {
+            Tag.Companion.TAG_COMPOUND -> {
                 val map = tag as CompoundTag
                 for ((key, value) in map.tags) {
                     this.writeByte(value.id.toInt())
@@ -182,7 +182,7 @@ class NBTOutputStream @JvmOverloads constructor(
                 this.writeByte(0) // End tag
             }
 
-            Tag.Companion.TAG_List -> {
+            Tag.Companion.TAG_LIST -> {
                 val list = tag as ListTag<out Tag>
                 this.writeByte(list.type.toInt())
                 this.writeInt(list.size())

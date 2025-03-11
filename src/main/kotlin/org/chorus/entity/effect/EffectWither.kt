@@ -6,7 +6,7 @@ import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import java.awt.Color
 
 class EffectWither :
-    Effect(EffectType.Companion.WITHER, "%potion.wither", Color(115, 97, 86), true) {
+    Effect(EffectType.WITHER, "%potion.wither", Color(115, 97, 86), true) {
     override fun canTick(): Boolean {
         val interval: Int = 25 shr this.getAmplifier()
         return interval > 0 && this.getDuration() % interval == 0

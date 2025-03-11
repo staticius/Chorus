@@ -369,7 +369,7 @@ object NBTIO {
     @Throws(IOException::class)
     fun readValue(inputStream: InputStream, endianness: ByteOrder, network: Boolean): CompoundTag? {
         val nbtInputStream = NBTInputStream(inputStream, endianness, network)
-        return nbtInputStream.readValue<CompoundTag>(Tag.Companion.TAG_Compound.toInt())
+        return nbtInputStream.readValue<CompoundTag>(Tag.Companion.TAG_COMPOUND.toInt())
     }
 
     @Throws(IOException::class)

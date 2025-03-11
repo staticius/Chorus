@@ -22,7 +22,7 @@ class IntTag : NumberTag<Int> {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_Int
+        get() = Tag.Companion.TAG_INT
 
     override fun toString(): String {
         return "IntTag (data: $data)"

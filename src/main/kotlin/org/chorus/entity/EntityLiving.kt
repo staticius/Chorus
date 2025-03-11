@@ -219,11 +219,11 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
                 this.attack(EntityDamageEvent(this, DamageCause.SUFFOCATION, 1f))
             }
 
-            if (this.isOnLadder() || this.hasEffect(EffectType.Companion.LEVITATION) || this.hasEffect(EffectType.Companion.SLOW_FALLING)) {
+            if (this.isOnLadder() || this.hasEffect(EffectType.LEVITATION) || this.hasEffect(EffectType.SLOW_FALLING)) {
                 this.resetFallDistance()
             }
 
-            if (!this.hasEffect(EffectType.Companion.WATER_BREATHING) && !this.hasEffect(EffectType.Companion.CONDUIT_POWER) && this.isInsideOfWater()) {
+            if (!this.hasEffect(EffectType.WATER_BREATHING) && !this.hasEffect(EffectType.CONDUIT_POWER) && this.isInsideOfWater()) {
                 if (this is EntitySwimmable || (this is Player && (this.isCreative() || this.isSpectator()))) {
                     this.setAirTicks(400)
                 } else {
@@ -387,7 +387,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
      * @param speed 速度大小<br></br>Speed value
      */
     open fun setMovementSpeed(speed: Float) {
-        this.movementSpeed = NukkitMath.round(speed.toDouble(), 2).toFloat()
+        this.movementSpeed = ChorusMath.round(speed.toDouble(), 2).toFloat()
     }
 
     fun getAirTicks(): Int {

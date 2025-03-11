@@ -158,13 +158,13 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
         level.setBlock(this.position, 0, newBlock, true, false)
         level.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
             val target =
-                level.getChunkPlayers(position.chunkX, position.chunkZ).values.toArray<Player>(Player.EMPTY_ARRAY)
+                level.getChunkPlayers(position.chunkX, position.chunkZ).values.toTypedArray()
             val blocks = arrayOf<Vector3?>(this.position)
             level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false)
             level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false)
         }, 10)
 
-        val target = level.getChunkPlayers(position.chunkX, position.chunkZ).values.toArray<Player>(Player.EMPTY_ARRAY)
+        val target = level.getChunkPlayers(position.chunkX, position.chunkZ).values.toTypedArray()
         val blocks = arrayOf<Vector3?>(this.position)
         level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false)
         level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false)

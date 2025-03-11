@@ -1,7 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
-import org.chorus.entity.effect.Effect.Companion.get
+import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 
 class ItemSuspiciousStew @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :

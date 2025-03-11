@@ -49,8 +49,8 @@ class AvailableCommandsPacket : DataPacket() {
 
                 subCommandData.add(subcommand)
                 for (value in subcommand.getValues()) {
-                    if (subCommandValues.contains(value.getFirst())) {
-                        subCommandValues.add(value.getFirst())
+                    if (subCommandValues.contains(value.first())) {
+                        subCommandValues.add(value.first())
                     }
 
                     if (subCommandValues.contains(value.getSecond())) {
@@ -118,8 +118,8 @@ class AvailableCommandsPacket : DataPacket() {
             byteBuf.writeString(chainedSubCommandData.getName())
             byteBuf.writeUnsignedVarInt(chainedSubCommandData.getValues().size())
             for (value in chainedSubCommandData.getValues()) {
-                val first = subCommandValues.indexOf(value.getFirst())
-                Preconditions.checkArgument(first > -1, "Invalid enum value detected: " + value.getFirst())
+                val first = subCommandValues.indexOf(value.first())
+                Preconditions.checkArgument(first > -1, "Invalid enum value detected: " + value.first())
 
                 val second = subCommandValues.indexOf(value.getSecond())
                 Preconditions.checkArgument(second > -1, "Invalid enum value detected: " + value.getSecond())

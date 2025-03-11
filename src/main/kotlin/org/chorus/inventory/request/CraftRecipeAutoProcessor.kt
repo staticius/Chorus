@@ -77,7 +77,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
                 return context.error()
             }
             if (recipe.results.size == 1) {
-                val output: Item = recipe.results.getFirst().clone()
+                val output: Item = recipe.results.first().clone()
                 output.setCount(output.getCount() * action.timesCrafted)
                 val createdOutput = player.creativeOutputInventory
                 createdOutput.setItem(0, output.clone().autoAssignStackNetworkId(), false)

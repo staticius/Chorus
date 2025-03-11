@@ -24,9 +24,9 @@ class BeeAttackExecutor(
                 if (entity1 != null) {
                     this.lookTarget = entity1.position.clone()
                     if (Server.instance.difficulty == 2) {
-                        entity1.addEffect(Effect.Companion.get(EffectType.Companion.POISON).setDuration(200))
+                        entity1.addEffect(Effect.get(EffectType.POISON).setDuration(200))
                     } else if (Server.instance.difficulty == 3) {
-                        entity1.addEffect(Effect.Companion.get(EffectType.Companion.POISON).setDuration(360))
+                        entity1.addEffect(Effect.get(EffectType.POISON).setDuration(360))
                     }
                 }
             }

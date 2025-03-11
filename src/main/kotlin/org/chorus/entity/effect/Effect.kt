@@ -132,11 +132,11 @@ abstract class Effect @JvmOverloads constructor(
         }
 
         fun get(id: String?): Effect {
-            return get(EffectType.Companion.get(id))
+            return get(EffectType.get(id))
         }
 
         fun get(id: Int): Effect {
-            return get(EffectType.Companion.get(id))
+            return get(EffectType.get(id))
         }
     }
 }

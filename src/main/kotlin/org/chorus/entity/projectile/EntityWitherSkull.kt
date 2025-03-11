@@ -46,7 +46,7 @@ open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjecti
     override fun onCollideWithEntity(entity: Entity) {
         if (entity !is EntityWither) {
             explode()
-            entity.addEffect(Effect.Companion.get(EffectType.Companion.WITHER).setDuration(200))
+            entity.addEffect(Effect.get(EffectType.WITHER).setDuration(200))
             super.onCollideWithEntity(entity)
         }
     }

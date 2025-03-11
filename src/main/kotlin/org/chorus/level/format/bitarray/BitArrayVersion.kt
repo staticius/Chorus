@@ -1,6 +1,6 @@
 package org.chorus.level.format.bitarray
 
-import org.chorus.math.NukkitMath
+import org.chorus.math.ChorusMath
 
 /**
  * Allay Project 2023/4/14
@@ -23,13 +23,13 @@ enum class BitArrayVersion(bits: Int, entriesPerWord: Int, val next: BitArrayVer
     val maxEntryValue: Int = (1 shl this.bits.toInt()) - 1
 
     fun getWordsForSize(size: Int): Int {
-        return NukkitMath.ceilFloat(size.toFloat() / this.entriesPerWord)
+        return ChorusMath.ceilFloat(size.toFloat() / this.entriesPerWord)
     }
 
     @JvmOverloads
     fun createArray(
         size: Int,
-        words: IntArray = IntArray(NukkitMath.ceilFloat(size as Float / this.entriesPerWord))
+        words: IntArray = IntArray(ChorusMath.ceilFloat(size as Float / this.entriesPerWord))
     ): BitArray {
         return if (this == V3 || this == V5 || this == V6) PaddedBitArray(
             this, size, words

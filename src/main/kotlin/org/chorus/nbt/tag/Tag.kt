@@ -2,7 +2,7 @@ package org.chorus.nbt.tag
 
 import java.util.*
 
-abstract class Tag protected constructor() {
+abstract class Tag<T> protected constructor() {
     abstract override fun toString(): String
 
     abstract fun toSNBT(): String
@@ -11,15 +11,15 @@ abstract class Tag protected constructor() {
 
     abstract val id: Byte
 
-    abstract fun copy(): Tag
+    abstract fun copy(): Tag<T>
 
-    abstract fun <T> parseValue(): T?
+    abstract fun parseValue(): T?
 
-    override fun equals(obj: Any?): Boolean {
-        if (obj !is Tag) {
+    override fun equals(other: Any?): Boolean {
+        if (other !is Tag<*>) {
             return false
         }
-        return id == obj.id
+        return id == other.id
     }
 
     override fun hashCode(): Int {
@@ -27,82 +27,70 @@ abstract class Tag protected constructor() {
     }
 
     companion object {
-        const val TAG_End: Byte = 0
-        const val TAG_Byte: Byte = 1
-        const val TAG_Short: Byte = 2
-        const val TAG_Int: Byte = 3
-        const val TAG_Long: Byte = 4
-        const val TAG_Float: Byte = 5
-        const val TAG_Double: Byte = 6
-        const val TAG_Byte_Array: Byte = 7
-        const val TAG_String: Byte = 8
-        const val TAG_List: Byte = 9
-        const val TAG_Compound: Byte = 10
-        const val TAG_Int_Array: Byte = 11
+        const val TAG_END: Byte = 0
+        const val TAG_BYTE: Byte = 1
+        const val TAG_SHORT: Byte = 2
+        const val TAG_INT: Byte = 3
+        const val TAG_LONG: Byte = 4
+        const val TAG_FLOAT: Byte = 5
+        const val TAG_DOUBLE: Byte = 6
+        const val TAG_BYTE_ARRAY: Byte = 7
+        const val TAG_STRING: Byte = 8
+        const val TAG_LIST: Byte = 9
+        const val TAG_COMPOUND: Byte = 10
+        const val TAG_INT_ARRAY: Byte = 11
 
-        fun newTag(type: Byte): Tag {
+        fun newTag(type: Byte): Tag<*> {
             return when (type) {
-                TAG_End -> EndTag()
-                TAG_Byte -> ByteTag()
-                TAG_Short -> ShortTag()
-                TAG_Int -> IntTag()
-                TAG_Long -> LongTag()
-                TAG_Float -> FloatTag()
-                TAG_Double -> DoubleTag()
-                TAG_Byte_Array -> ByteArrayTag()
-                TAG_Int_Array -> IntArrayTag()
-                TAG_String -> StringTag()
-                TAG_List -> ListTag<Tag>()
-                TAG_Compound -> CompoundTag()
+                TAG_END -> EndTag()
+                TAG_BYTE -> ByteTag()
+                TAG_SHORT -> ShortTag()
+                TAG_INT -> IntTag()
+                TAG_LONG -> LongTag()
+                TAG_FLOAT -> FloatTag()
+                TAG_DOUBLE -> DoubleTag()
+                TAG_BYTE_ARRAY -> ByteArrayTag()
+                TAG_INT_ARRAY -> IntArrayTag()
+                TAG_STRING -> StringTag()
+                TAG_LIST -> ListTag<Tag<*>>()
+                TAG_COMPOUND -> CompoundTag()
                 else -> EndTag()
             }
         }
 
         fun getTagName(type: Byte): String {
             return when (type) {
-                TAG_End -> "TAG_End"
-                TAG_Byte -> "TAG_Byte"
-                TAG_Short -> "TAG_Short"
-                TAG_Int -> "TAG_Int"
-                TAG_Long -> "TAG_Long"
-                TAG_Float -> "TAG_Float"
-                TAG_Double -> "TAG_Double"
-                TAG_Byte_Array -> "TAG_Byte_Array"
-                TAG_Int_Array -> "TAG_Int_Array"
-                TAG_String -> "TAG_String"
-                TAG_List -> "TAG_List"
-                TAG_Compound -> "TAG_Compound"
+                TAG_END -> "TAG_End"
+                TAG_BYTE -> "TAG_Byte"
+                TAG_SHORT -> "TAG_Short"
+                TAG_INT -> "TAG_Int"
+                TAG_LONG -> "TAG_Long"
+                TAG_FLOAT -> "TAG_Float"
+                TAG_DOUBLE -> "TAG_Double"
+                TAG_BYTE_ARRAY -> "TAG_Byte_Array"
+                TAG_INT_ARRAY -> "TAG_Int_Array"
+                TAG_STRING -> "TAG_String"
+                TAG_LIST -> "TAG_List"
+                TAG_COMPOUND -> "TAG_Compound"
                 else -> "UNKNOWN"
             }
         }
 
         fun getTagType(type: Class<*>): Int {
-            return if (type == ListTag::class.java) {
-                TAG_List.toInt()
-            } else if (type == CompoundTag::class.java) {
-                TAG_Compound.toInt()
-            } else if (type == EndTag::class.java) {
-                TAG_End.toInt()
-            } else if (type == ByteTag::class.java) {
-                TAG_Byte.toInt()
-            } else if (type == ShortTag::class.java) {
-                TAG_Short.toInt()
-            } else if (type == IntTag::class.java) {
-                TAG_Int.toInt()
-            } else if (type == FloatTag::class.java) {
-                TAG_Float.toInt()
-            } else if (type == LongTag::class.java) {
-                TAG_Long.toInt()
-            } else if (type == DoubleTag::class.java) {
-                TAG_Double.toInt()
-            } else if (type == ByteArrayTag::class.java) {
-                TAG_Byte_Array.toInt()
-            } else if (type == IntArrayTag::class.java) {
-                TAG_Int_Array.toInt()
-            } else if (type == StringTag::class.java) {
-                TAG_Int_Array.toInt()
-            } else {
-                throw IllegalArgumentException("Unknown tag type " + type.simpleName)
+            return when (type) {
+                ListTag::class.java -> TAG_LIST.toInt()
+                CompoundTag::class.java -> TAG_COMPOUND.toInt()
+                EndTag::class.java -> TAG_END.toInt()
+                ByteTag::class.java -> TAG_BYTE.toInt()
+                ShortTag::class.java -> TAG_SHORT.toInt()
+                IntTag::class.java -> TAG_INT.toInt()
+                FloatTag::class.java -> TAG_FLOAT.toInt()
+                LongTag::class.java -> TAG_LONG.toInt()
+                DoubleTag::class.java -> TAG_DOUBLE.toInt()
+                ByteArrayTag::class.java -> TAG_BYTE_ARRAY.toInt()
+                IntArrayTag::class.java -> TAG_INT_ARRAY.toInt()
+                StringTag::class.java -> TAG_INT_ARRAY.toInt()
+                else -> throw IllegalArgumentException("Unknown tag type " + type.simpleName)
             }
         }
     }

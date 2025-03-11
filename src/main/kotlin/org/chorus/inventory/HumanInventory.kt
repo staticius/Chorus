@@ -170,7 +170,7 @@ class HumanInventory(human: IHuman?) //9+27+4
     }
 
     fun sendHeldItem(players: Collection<Player?>) {
-        this.sendHeldItem(*players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendHeldItem(*players.toTypedArray())
     }
 
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
@@ -478,7 +478,7 @@ class HumanInventory(human: IHuman?) //9+27+4
      * @param players the players
      */
     fun sendArmorContents(players: Collection<Player?>) {
-        this.sendArmorContents(players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendArmorContents(players.toTypedArray())
     }
 
     /**
@@ -548,7 +548,7 @@ class HumanInventory(human: IHuman?) //9+27+4
      * @param players the players
      */
     fun sendArmorSlot(index: Int, players: Collection<Player?>) {
-        this.sendArmorSlot(index, players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendArmorSlot(index, players.toTypedArray())
     }
 
     /**
@@ -597,7 +597,7 @@ class HumanInventory(human: IHuman?) //9+27+4
     }
 
     override fun sendContents(players: Collection<Player?>) {
-        this.sendContents(*players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendContents(*players.toTypedArray())
     }
 
     override fun sendContents(vararg players: Player) {
@@ -628,7 +628,7 @@ class HumanInventory(human: IHuman?) //9+27+4
     }
 
     override fun sendSlot(index: Int, players: Collection<Player?>) {
-        this.sendSlot(index, *players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendSlot(index, *players.toTypedArray())
     }
 
     override fun sendSlot(index: Int, vararg players: Player) {

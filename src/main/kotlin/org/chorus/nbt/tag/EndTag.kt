@@ -1,8 +1,8 @@
 package org.chorus.nbt.tag
 
-class EndTag : Tag() {
+class EndTag : Tag<Void>() {
     override val id: Byte
-        get() = Tag.Companion.TAG_End
+        get() = Tag.TAG_END
 
     override fun toString(): String {
         return "EndTag"
@@ -16,7 +16,7 @@ class EndTag : Tag() {
         return ""
     }
 
-    override fun copy(): Tag {
+    override fun copy(): Tag<Void> {
         return EndTag()
     }
 

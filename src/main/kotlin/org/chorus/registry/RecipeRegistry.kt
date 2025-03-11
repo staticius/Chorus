@@ -380,7 +380,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
     @Throws(RegisterException::class)
     override fun register(key: String, recipe: Recipe) {
         if (recipe is CraftingRecipe) {
-            val item: Item = recipe.results.getFirst()
+            val item: Item = recipe.results.first()
             val id = Utils.dataToUUID(
                 recipeCount.toString(),
                 item.id.toString(),
@@ -621,7 +621,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                                     uuid,
                                     priority,
                                     primaryResult!!.toItem(),
-                                    ingredients.getFirst().toItem(),
+                                    ingredients.first().toItem(),
                                     RecipeUnlockingRequirement(
                                         RecipeUnlockingRequirement.UnlockingContext.ALWAYS_UNLOCKED
                                     )
@@ -913,7 +913,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
         if (outputs!!.size > 1) {
             return null
         }
-        val first: Map<String, Any> = outputs.getFirst()
+        val first: Map<String, Any> = outputs.first()
 
         val priority = if (recipeObject.containsKey("priority")) Utils.toInt(recipeObject["priority"]) else 0
 

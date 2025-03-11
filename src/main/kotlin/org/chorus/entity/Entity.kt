@@ -6,8 +6,6 @@ import org.chorus.block.*
 import org.chorus.blockentity.BlockEntityPistonArm
 import org.chorus.entity.custom.CustomEntity
 import org.chorus.entity.data.*
-import org.chorus.entity.data.property.EntityProperty
-import org.chorus.entity.data.property.EnumEntityProperty
 import org.chorus.entity.effect.*
 import org.chorus.entity.item.EntityItem
 import org.chorus.entity.mob.EntityArmorStand
@@ -46,8 +44,10 @@ import org.chorus.scheduler.Task
 import org.chorus.tags.ItemTags
 import org.chorus.utils.*
 import com.google.common.collect.Iterables
+import org.chorus.entity.data.property.*
 import java.awt.Color
 import java.util.*
+import java.util.Objects.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicLong
 import java.util.function.Consumer
@@ -124,7 +124,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     @JvmField
     protected val entityDataMap: EntityDataMap = EntityDataMap()
-    val passengers: MutableList<Entity?> = ArrayList()
+    val passengers: MutableList<Entity> = ArrayList()
     val offsetBoundingBox: AxisAlignedBB = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     @JvmField
     protected val hasSpawned: MutableMap<Int, Player> = ConcurrentHashMap()
@@ -151,7 +151,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     var entityCollisionReduction: Double = 0.0 // Higher than 0.9 will result a fast collisions
     @JvmField
-    var boundingBox: AxisAlignedBB? = null
+    var boundingBox: AxisAlignedBB = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     @JvmField
     var positionChanged: Boolean = false
     @JvmField
@@ -225,12 +225,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     protected val attributes: MutableMap<Int, Attribute> = HashMap()
 
     private fun idConvertToName(): String {
-        val path: String = getIdentifier().split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().get(1)
+        val path: String = getIdentifier().split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
         val result: StringBuilder = StringBuilder()
         val parts: Array<String> = path.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         for (part: String in parts) {
-            if (!part.isEmpty()) {
-                result.append(part.get(0).uppercaseChar()).append(part.substring(1)).append(" ")
+            if (part.isNotEmpty()) {
+                result.append(part[0].uppercaseChar()).append(part.substring(1)).append(" ")
             }
         }
         this.name = result.toString().trim { it <= ' ' }.intern()
@@ -273,10 +273,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
 
     fun getCurrentHeight(): Float {
-        if (isSwimming()) {
-            return getSwimmingHeight()
+        return if (isSwimming()) {
+            getSwimmingHeight()
         } else {
-            return getHeight()
+            getHeight()
         }
     }
 
@@ -334,29 +334,29 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 val uid: Long = namedTag!!.getLong(TAG_UNIQUE_ID)
                 this.entityUniqueId = UUID(0L, uid)
             } else {
-                val full_uuid: UUID = UUID.randomUUID()
-                this.entityUniqueId = UUID(0L, full_uuid.getLeastSignificantBits())
+                val fullUuid: UUID = UUID.randomUUID()
+                this.entityUniqueId = UUID(0L, fullUuid.leastSignificantBits)
             }
         }
 
         if (namedTag!!.contains(TAG_CUSTOM_NAME)) {
-            this.setNameTag(namedTag!!.getString(TAG_CUSTOM_NAME))
+            this.setNameTag(namedTag!!.getString(TAG_CUSTOM_NAME)!!)
         }
         if (namedTag!!.contains(TAG_CUSTOM_NAME_VISIBLE)) {
             this.setNameTagAlwaysVisible(namedTag!!.getBoolean(TAG_CUSTOM_NAME_VISIBLE))
         }
 
         entityDataMap.getOrCreateFlags()
-        entityDataMap.put(EntityDataTypes.Companion.AIR_SUPPLY, namedTag!!.getShort("Air"))
-        entityDataMap.put(EntityDataTypes.Companion.AIR_SUPPLY_MAX, 400)
-        entityDataMap.put(EntityDataTypes.Companion.NAME, "")
-        entityDataMap.put(EntityDataTypes.Companion.LEASH_HOLDER, -1)
-        entityDataMap.put(EntityDataTypes.Companion.SCALE, 1f)
-        entityDataMap.put(EntityDataTypes.Companion.HEIGHT, this.getHeight())
-        entityDataMap.put(EntityDataTypes.Companion.WIDTH, this.getWidth())
-        entityDataMap.put(EntityDataTypes.Companion.STRUCTURAL_INTEGRITY, getHealth().toInt())
-        entityDataMap.put(EntityDataTypes.Companion.VARIANT, this.variant)
-        this.sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+        entityDataMap.put(EntityDataTypes.AIR_SUPPLY, namedTag!!.getShort("Air"))
+        entityDataMap.put(EntityDataTypes.AIR_SUPPLY_MAX, 400)
+        entityDataMap.put(EntityDataTypes.NAME, "")
+        entityDataMap.put(EntityDataTypes.LEASH_HOLDER, -1)
+        entityDataMap.put(EntityDataTypes.SCALE, 1f)
+        entityDataMap.put(EntityDataTypes.HEIGHT, this.getHeight())
+        entityDataMap.put(EntityDataTypes.WIDTH, this.getWidth())
+        entityDataMap.put(EntityDataTypes.STRUCTURAL_INTEGRITY, getHealth().toInt())
+        entityDataMap.put(EntityDataTypes.VARIANT, this.variant)
+        this.sendData(hasSpawned.values.toTypedArray(), entityDataMap)
         this.setDataFlags(
             EnumSet.of(
                 EntityFlag.CAN_CLIMB,
@@ -368,7 +368,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     protected fun init(chunk: IChunk, nbt: CompoundTag?) {
-        if ((chunk == null || chunk.provider == null)) {
+        if (chunk.provider.level == null) {
             throw ChunkException("Invalid garbage Chunk given to Entity")
         }
         this.id = entityCount.getAndIncrement()
@@ -377,7 +377,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         this.namedTag = nbt
         this.chunk = chunk
         this.level = (chunk.provider.level)
-        this.boundingBox = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
         this.chested = namedTag!!.getBoolean(TAG_CHESTED)
         this.color = namedTag!!.getByte(TAG_COLOR)
@@ -389,11 +388,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         val posList: ListTag<FloatTag> = namedTag!!.getList(
             TAG_POS,
             FloatTag::class.java
-        )
+        )!!
         val rotationList: ListTag<FloatTag> = namedTag!!.getList(
             TAG_ROTATION,
             FloatTag::class.java
-        )
+        )!!
 
         this.setPositionAndRotation(
             Vector3(
@@ -409,7 +408,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             val motionList: ListTag<FloatTag> = namedTag!!.getList(
                 TAG_MOTION,
                 FloatTag::class.java
-            )
+            )!!
 
             this.setMotion(
                 Vector3(
@@ -451,15 +450,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             this.initialized = true
 
             this.chunk!!.addEntity(this)
-            level.addEntity(this)
+            level!!.addEntity(this)
 
-            val event: EntitySpawnEvent = EntitySpawnEvent(this)
+            val event = EntitySpawnEvent(this)
             Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 this.close(false)
             } else {
                 this.scheduleUpdate()
-                this.lastUpdate = level.getTick()
+                this.lastUpdate = level!!.tick
             }
         } catch (e: Exception) {
             this.close(false)
@@ -468,15 +467,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun hasCustomName(): Boolean {
-        return !getNameTag().isEmpty()
+        return getNameTag().isNotEmpty()
     }
 
     fun getNameTag(): String {
-        return this.getDataProperty<String>(EntityDataTypes.Companion.NAME, "")
+        return this.getDataProperty(EntityDataTypes.NAME, "")
     }
 
     fun setNameTag(name: String) {
-        this.setDataProperty(EntityDataTypes.Companion.NAME, name)
+        this.setDataProperty(EntityDataTypes.NAME, name)
     }
 
     fun isNameTagVisible(): Boolean {
@@ -488,19 +487,19 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun isNameTagAlwaysVisible(): Boolean {
-        return getDataProperty<Byte>(EntityDataTypes.Companion.NAMETAG_ALWAYS_SHOW, 0.toByte()).toInt() == 1
+        return getDataProperty(EntityDataTypes.NAMETAG_ALWAYS_SHOW, 0.toByte()).toInt() == 1
     }
 
     fun setNameTagAlwaysVisible(value: Boolean) {
-        this.setDataProperty(EntityDataTypes.Companion.NAMETAG_ALWAYS_SHOW, if (value) 1 else 0)
+        this.setDataProperty(EntityDataTypes.NAMETAG_ALWAYS_SHOW, if (value) 1 else 0)
     }
 
     fun getScoreTag(): String {
-        return this.getDataProperty<String>(EntityDataTypes.Companion.SCORE, "")
+        return this.getDataProperty(EntityDataTypes.SCORE, "")
     }
 
     fun setScoreTag(score: String) {
-        this.setDataProperty(EntityDataTypes.Companion.SCORE, score)
+        this.setDataProperty(EntityDataTypes.SCORE, score)
     }
 
     fun isSneaking(): Boolean {
@@ -520,7 +519,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             return
         }
         this.setDataFlag(EntityFlag.SWIMMING, value)
-        if (java.lang.Float.compare(getSwimmingHeight(), getHeight()) != 0) {
+        if (getSwimmingHeight().compareTo(getHeight()) != 0) {
             recalculateBoundingBox(true)
         }
     }
@@ -571,7 +570,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun setScale(scale: Float) {
         this.scale = scale
-        this.setDataProperty(EntityDataTypes.Companion.SCALE, this.scale)
+        this.setDataProperty(EntityDataTypes.SCALE, this.scale)
         this.recalculateBoundingBox()
     }
 
@@ -596,7 +595,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun hasControllingPassenger(): Boolean {
-        return !passengers.isEmpty() && isControlling(passengers.getFirst())
+        return passengers.isNotEmpty() && isControlling(passengers.first())
     }
 
     fun getRiding(): Entity? {
@@ -617,7 +616,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         if (effects.containsKey(type)) {
             val effect: Effect = effects[type]!!
 
-            val event: EntityEffectRemoveEvent = EntityEffectRemoveEvent(this, effect)
+            val event = EntityEffectRemoveEvent(this, effect)
             Server.instance.pluginManager.callEvent(event)
 
             if (event.isCancelled) {
@@ -639,8 +638,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         }
     }
 
-    fun getEffect(type: EffectType?): Effect {
-        return effects.getOrDefault(type, null)!!
+    fun getEffect(type: EffectType?): Effect? {
+        return effects.getOrDefault(type, null)
     }
 
     fun hasEffect(type: EffectType?): Boolean {
@@ -654,11 +653,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         val oldEffect: Effect? = this.getEffect(effect.getType())
 
-        val event: EntityEffectUpdateEvent = EntityEffectUpdateEvent(this, oldEffect, effect)
-        Server.instance.pluginManager.callEvent(event)
+        if (oldEffect != null) {
+            val event = EntityEffectUpdateEvent(this, oldEffect, effect)
+            Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
-            return
+            if (event.isCancelled) {
+                return
+            }
         }
 
         if (oldEffect != null && (abs(effect.getAmplifier().toDouble()) < abs(oldEffect.getAmplifier().toDouble()) ||
@@ -669,10 +670,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             return
         }
 
-        if (this is Player && effect.getId() != null) {
-            val packet: MobEffectPacket = MobEffectPacket()
+        if (this is Player) {
+            val packet = MobEffectPacket()
             packet.eid = player.getId()
-            packet.effectId = effect.getId()!!
+            packet.effectId = effect.getId()
             packet.amplifier = effect.getAmplifier()
             packet.particles = effect.isVisible()
             packet.duration = effect.getDuration()
@@ -686,7 +687,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         }
 
         effect.add(this)
-        effects.put(effect.getType(), effect)
+        effects[effect.getType()] = effect
 
         this.recalculateEffectColor()
     }
@@ -696,7 +697,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         val entityHeight: Float = getCurrentHeight()
         val height: Float = entityHeight * this.scale
         val radius: Double = (this.getWidth() * this.scale) / 2.0
-        boundingBox!!.setBounds(
+        boundingBox.setBounds(
             position.x - radius,
             position.y,
             position.z - radius,
@@ -706,33 +707,33 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             position.z + radius
         )
 
-        var change: Boolean = false
-        if (getEntityDataMap().get<Float?>(EntityDataTypes.Companion.HEIGHT) != entityHeight) {
+        var change = false
+        if (getEntityDataMap().get(EntityDataTypes.HEIGHT) != entityHeight) {
             change = true
-            getEntityDataMap().put(EntityDataTypes.Companion.HEIGHT, entityHeight)
+            getEntityDataMap().put(EntityDataTypes.HEIGHT, entityHeight)
         }
-        if (getEntityDataMap().get<Float?>(EntityDataTypes.Companion.WIDTH) != this.getWidth()) {
+        if (getEntityDataMap().get(EntityDataTypes.WIDTH) != this.getWidth()) {
             change = true
-            getEntityDataMap().put(EntityDataTypes.Companion.WIDTH, this.getWidth())
+            getEntityDataMap().put(EntityDataTypes.WIDTH, this.getWidth())
         }
         if (send && change) {
             sendData(
-                hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY),
-                entityDataMap.copy(EntityDataTypes.Companion.WIDTH, EntityDataTypes.Companion.HEIGHT)
+                hasSpawned.values.toTypedArray(),
+                entityDataMap.copy(EntityDataTypes.WIDTH, EntityDataTypes.HEIGHT)
             )
         }
     }
 
     protected fun recalculateEffectColor() {
-        val color: IntArray = IntArray(3)
-        var count: Int = 0
-        var ambient: Boolean = true
+        val color = IntArray(3)
+        var count = 0
+        var ambient = true
         for (effect: Effect in effects.values) {
             if (effect.isVisible()) {
-                val effectColor: Color? = effect.getColor()
-                color.get(0) += effectColor!!.getRed() * effect.getLevel()
-                color.get(1) += effectColor.getGreen() * effect.getLevel()
-                color.get(2) += effectColor.getBlue() * effect.getLevel()
+                val effectColor: Color = effect.getColor()
+                color[0] += effectColor.red * effect.getLevel()
+                color[1] += effectColor.green * effect.getLevel()
+                color[2] += effectColor.blue * effect.getLevel()
                 count += effect.getLevel()
                 if (!effect.isAmbient()) {
                     ambient = false
@@ -741,20 +742,20 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         }
 
         if (count > 0) {
-            val r: Int = (color.get(0) / count) and 0xff
-            val g: Int = (color.get(1) / count) and 0xff
-            val b: Int = (color.get(2) / count) and 0xff
+            val r: Int = (color[0] / count) and 0xff
+            val g: Int = (color[1] / count) and 0xff
+            val b: Int = (color[2] / count) and 0xff
             setDataProperties(
                 java.util.Map.of<EntityDataType<*>, Any>(
-                    EntityDataTypes.Companion.EFFECT_COLOR, (r shl 16) + (g shl 8) + b,
-                    EntityDataTypes.Companion.EFFECT_AMBIENCE, if (ambient) 1 else 0
+                    EntityDataTypes.EFFECT_COLOR, (r shl 16) + (g shl 8) + b,
+                    EntityDataTypes.EFFECT_AMBIENCE, if (ambient) 1 else 0
                 )
             )
         } else {
             setDataProperties(
                 java.util.Map.of<EntityDataType<*>, Any>(
-                    EntityDataTypes.Companion.EFFECT_COLOR, 0,
-                    EntityDataTypes.Companion.EFFECT_AMBIENCE, 0
+                    EntityDataTypes.EFFECT_COLOR, 0,
+                    EntityDataTypes.EFFECT_AMBIENCE, 0
                 )
             )
         }
@@ -763,7 +764,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     open fun saveNBT() {
         if (this !is Player) {
             namedTag!!.putString(TAG_IDENTIFIER, this.getIdentifier())
-            if (!getNameTag().isEmpty()) {
+            if (getNameTag().isNotEmpty()) {
                 namedTag!!.putString(TAG_CUSTOM_NAME, this.getNameTag())
                 namedTag!!.putBoolean(TAG_CUSTOM_NAME_VISIBLE, this.isNameTagAlwaysVisible())
             } else {
@@ -771,12 +772,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 namedTag!!.remove(TAG_CUSTOM_NAME_VISIBLE)
             }
             if (this.entityUniqueId == null) {
-                val full_uuid: UUID = UUID.randomUUID()
-                this.entityUniqueId = UUID(0L, full_uuid.getLeastSignificantBits())
+                val fullUuid: UUID = UUID.randomUUID()
+                this.entityUniqueId = UUID(0L, fullUuid.leastSignificantBits)
             }
             namedTag!!.putLong(
                 TAG_UNIQUE_ID,
-                entityUniqueId!!.getLeastSignificantBits()
+                entityUniqueId!!.leastSignificantBits
             )
         }
 
@@ -818,10 +819,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      */
     fun getVisibleName(): String {
         val name: String = getName()
-        if (!TextFormat.clean(name).trim { it <= ' ' }.isEmpty()) {
-            return name
+        return if (TextFormat.clean(name).trim { it <= ' ' }.isNotEmpty()) {
+            name
         } else {
-            return getOriginalName()
+            getOriginalName()
         }
     }
 
@@ -829,10 +830,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      * The current name used by this entity in the name tag, or the static name if the entity don't have nametag.
      */
     open fun getName(): String {
-        if (this.hasCustomName()) {
-            return this.getNameTag()
+        return if (this.hasCustomName()) {
+            this.getNameTag()
         } else {
-            return this.getOriginalName()
+            this.getOriginalName()
         }
     }
 
@@ -845,20 +846,20 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      * @param player the player
      */
     open fun spawnTo(player: Player) {
-        if (!hasSpawned.containsKey(player.getLoaderId()) && this.chunk != null && player.getUsedChunks().contains(
+        if (!hasSpawned.containsKey(player.loaderId) && this.chunk != null && player.usedChunks.contains(
                 Level.chunkHash(
                     chunk!!.x, chunk!!.z
                 )
             )
         ) {
-            hasSpawned.put(player.getLoaderId(), player)
+            hasSpawned[player.loaderId] = player
             player.dataPacket(createAddEntityPacket())
         }
 
         if (this.riding != null) {
             riding!!.spawnTo(player)
 
-            val pkk: SetEntityLinkPacket = SetEntityLinkPacket()
+            val pkk = SetEntityLinkPacket()
             pkk.vehicleUniqueId = riding!!.getId()
             pkk.riderUniqueId = this.getId()
             pkk.type = EntityLink.Type.RIDER
@@ -869,7 +870,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     protected open fun createAddEntityPacket(): DataPacket {
-        val addEntity: AddEntityPacket = AddEntityPacket()
+        val addEntity = AddEntityPacket()
         addEntity.type = this.getNetworkId()
         addEntity.entityUniqueId = this.getId()
         if (this is CustomEntity) {
@@ -889,12 +890,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         addEntity.links = arrayOfNulls(passengers.size)
         for (i in addEntity.links.indices) {
-            addEntity.links.get(i) = EntityLink(
+            addEntity.links[i] = EntityLink(
                 this.getId(),
-                passengers.get(i)!!.getId(),
+                passengers[i].getId(),
                 if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
-                false,
-                false
+                immediate = false,
+                riderInitiated = false
             )
         }
 
@@ -907,24 +908,22 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun sendPotionEffects(player: Player) {
         for (effect: Effect in effects.values) {
-            if (effect.getId() != null) {
-                val packet: MobEffectPacket = MobEffectPacket()
-                packet.eid = this.getId()
-                packet.effectId = effect.getId()!!
-                packet.amplifier = effect.getAmplifier()
-                packet.particles = effect.isVisible()
-                packet.duration = effect.getDuration()
-                packet.eventId = MobEffectPacket.EVENT_ADD.toInt()
-                player.dataPacket(packet)
-            }
+            val packet = MobEffectPacket()
+            packet.eid = this.getId()
+            packet.effectId = effect.getId()
+            packet.amplifier = effect.getAmplifier()
+            packet.particles = effect.isVisible()
+            packet.duration = effect.getDuration()
+            packet.eventId = MobEffectPacket.EVENT_ADD.toInt()
+            player.dataPacket(packet)
         }
     }
 
     @JvmOverloads
     fun sendData(player: Player, data: EntityDataMap? = null) {
-        val pk: SetEntityDataPacket = SetEntityDataPacket()
+        val pk = SetEntityDataPacket()
         pk.eid = this.getId()
-        pk.entityData = if (data == null) this.entityDataMap else data
+        pk.entityData = data ?: this.entityDataMap
         pk.syncedProperties = this.propertySyncData()
 
         player.dataPacket(pk)
@@ -932,9 +931,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     @JvmOverloads
     fun sendData(players: Array<Player>, data: EntityDataMap? = null) {
-        val pk: SetEntityDataPacket = SetEntityDataPacket()
+        val pk = SetEntityDataPacket()
         pk.eid = this.getId()
-        pk.entityData = if (data == null) this.entityDataMap else data
+        pk.entityData = data ?: this.entityDataMap
         pk.syncedProperties = this.propertySyncData()
 
         for (player: Player in players) {
@@ -949,11 +948,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     open fun despawnFrom(player: Player) {
-        if (hasSpawned.containsKey(player.getLoaderId())) {
-            val pk: RemoveEntityPacket = RemoveEntityPacket()
+        if (hasSpawned.containsKey(player.loaderId)) {
+            val pk = RemoveEntityPacket()
             pk.eid = this.getId()
             player.dataPacket(pk)
-            hasSpawned.remove(player.getLoaderId())
+            hasSpawned.remove(player.loaderId)
         }
     }
 
@@ -968,17 +967,17 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      */
     open fun attack(source: EntityDamageEvent): Boolean {
         //火焰保护附魔实现
-        if (hasEffect(EffectType.Companion.FIRE_RESISTANCE)
+        if (hasEffect(EffectType.FIRE_RESISTANCE)
             && (source.cause == DamageCause.FIRE || source.cause == DamageCause.FIRE_TICK || source.cause == DamageCause.LAVA)
         ) {
             return false
         }
 
         //水生生物免疫溺水
-        if (this is EntitySwimmable && !swimmable.canDrown() && source.cause == DamageCause.DROWNING) return false
+        if (this is EntitySwimmable && !this.canDrown() && source.cause == DamageCause.DROWNING) return false
 
         //飞行生物免疫摔伤
-        if (this is EntityFlyable && !flyable.hasFallingDamage() && source.cause == DamageCause.FALL) return false
+        if (this is EntityFlyable && !this.hasFallingDamage() && source.cause == DamageCause.FALL) return false
 
         //事件回调函数
         Server.instance.pluginManager.callEvent(source)
@@ -988,7 +987,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         // Make fire aspect to set the target in fire before dealing any damage so the target is in fire on death even if killed by the first hit
         if (source is EntityDamageByEntityEvent) {
-            val enchantments: Array<Enchantment>? = source.getWeaponEnchantments()
+            val enchantments: Array<Enchantment>? = source.weaponEnchantments
             if (enchantments != null) {
                 for (enchantment: Enchantment in enchantments) {
                     enchantment.doAttack(source)
@@ -1010,45 +1009,45 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         setLastDamageCause(source)
 
         //计算血量
-        val newHealth: Float = getHealth() - source.getFinalDamage()
+        val newHealth: Float = getHealth() - source.finalDamage
 
         //only player
         if (newHealth < 1 && this is Player) {
             if (source.cause != DamageCause.VOID && source.cause != DamageCause.SUICIDE) {
-                var totem: Boolean = false
-                var isOffhand: Boolean = false
-                if (player.getOffhandInventory().getItem(0) is ItemTotemOfUndying) {
+                var totem = false
+                var isOffhand = false
+                if (player.getOffhandInventory()?.getItem(0) is ItemTotemOfUndying) {
                     totem = true
                     isOffhand = true
-                } else if (player.getInventory().getItemInHand() is ItemTotemOfUndying) {
+                } else if (player.getInventory().itemInHand is ItemTotemOfUndying) {
                     totem = true
                 }
                 //复活图腾实现
                 if (totem) {
-                    level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_TOTEM_USED)
-                    level.addParticleEffect(this.position, ParticleEffect.TOTEM)
+                    level!!.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_TOTEM_USED)
+                    level!!.addParticleEffect(this.position, ParticleEffect.TOTEM)
 
                     this.extinguish()
                     this.removeAllEffects()
                     this.setHealth(1f)
 
                     this.addEffect(
-                        Effect.Companion.get(EffectType.Companion.REGENERATION).setDuration(800).setAmplifier(1)
+                        Effect.get(EffectType.REGENERATION).setDuration(800).setAmplifier(1)
                     )
-                    this.addEffect(Effect.Companion.get(EffectType.Companion.FIRE_RESISTANCE).setDuration(800))
+                    this.addEffect(Effect.get(EffectType.FIRE_RESISTANCE).setDuration(800))
                     this.addEffect(
-                        Effect.Companion.get(EffectType.Companion.ABSORPTION).setDuration(100).setAmplifier(1)
+                        Effect.get(EffectType.ABSORPTION).setDuration(100).setAmplifier(1)
                     )
 
-                    val pk: EntityEventPacket = EntityEventPacket()
+                    val pk = EntityEventPacket()
                     pk.eid = this.getId()
                     pk.event = EntityEventPacket.CONSUME_TOTEM
                     player.dataPacket(pk)
 
                     if (isOffhand) {
-                        player.getOffhandInventory().clear(0, true)
+                        player.getOffhandInventory()?.clear(0, true)
                     } else {
-                        player.getInventory().clear(player.getInventory().getHeldItemIndex(), true)
+                        player.getInventory().clear(player.getInventory().heldItemIndex, true)
                     }
 
                     source.isCancelled = true
@@ -1117,7 +1116,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             this.health = getMaxHealth().toFloat()
         }
 
-        setDataProperty(EntityDataTypes.Companion.STRUCTURAL_INTEGRITY, this.health.toInt())
+        setDataProperty(EntityDataTypes.STRUCTURAL_INTEGRITY, this.health.toInt())
     }
 
     fun isAlive(): Boolean {
@@ -1172,24 +1171,24 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             return false
         }
 
-        val i: Int = NukkitMath.floorDouble(x)
-        val j: Int = NukkitMath.floorDouble(y)
-        val k: Int = NukkitMath.floorDouble(z)
+        val i: Int = ChorusMath.floorDouble(x)
+        val j: Int = ChorusMath.floorDouble(y)
+        val k: Int = ChorusMath.floorDouble(z)
 
         val diffX: Double = x - i
         val diffY: Double = y - j
         val diffZ: Double = z - k
 
-        if (!level!!.getBlock(i, j, k).isTransparent()) {
-            val flag: Boolean = level!!.getBlock(i - 1, j, k).isTransparent()
-            val flag1: Boolean = level!!.getBlock(i + 1, j, k).isTransparent()
-            val flag2: Boolean = level!!.getBlock(i, j - 1, k).isTransparent()
-            val flag3: Boolean = level!!.getBlock(i, j + 1, k).isTransparent()
-            val flag4: Boolean = level!!.getBlock(i, j, k - 1).isTransparent()
-            val flag5: Boolean = level!!.getBlock(i, j, k + 1).isTransparent()
+        if (level!!.getBlock(i, j, k)?.isTransparent == false) {
+            val flag: Boolean = level!!.getBlock(i - 1, j, k)?.isTransparent ?: true
+            val flag1: Boolean = level!!.getBlock(i + 1, j, k)?.isTransparent ?: true
+            val flag2: Boolean = level!!.getBlock(i, j - 1, k)?.isTransparent ?: true
+            val flag3: Boolean = level!!.getBlock(i, j + 1, k)?.isTransparent ?: true
+            val flag4: Boolean = level!!.getBlock(i, j, k - 1)?.isTransparent ?: true
+            val flag5: Boolean = level!!.getBlock(i, j, k + 1)?.isTransparent ?: true
 
             var direction: Int = -1
-            var limit: Double = 9999.0
+            var limit = 9999.0
 
             if (flag) {
                 limit = diffX
@@ -1272,13 +1271,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 this.deadTicks += tickDiff
                 if (this.deadTicks >= 15) {
                     //apply death smoke cloud only if it is a creature
-                    val aabb: AxisAlignedBB? = this.getBoundingBox()
-                    var x: Double = aabb!!.getMinX()
-                    while (x <= aabb.getMaxX()) {
-                        var z: Double = aabb.getMinZ()
-                        while (z <= aabb.getMaxZ()) {
-                            var y: Double = aabb.getMinY()
-                            while (y <= aabb.getMaxY()) {
+                    val aabb: AxisAlignedBB = this.getBoundingBox()
+                    var x: Double = aabb.minX
+                    while (x <= aabb.maxX) {
+                        var z: Double = aabb.minZ
+                        while (z <= aabb.maxZ) {
+                            var y: Double = aabb.minY
+                            while (y <= aabb.maxY) {
                                 level!!.addParticle(ExplodeParticle(Vector3(x, y, z)))
                                 y += 0.5
                             }
@@ -1306,11 +1305,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         this.justCreated = false
 
         if (riding != null && !riding!!.isAlive() && riding is EntityRideable) {
-            riding.dismountEntity(this)
+            riding!!.dismountEntity(this)
         }
         updatePassengers()
 
-        if (!effects.isEmpty()) {
+        if (effects.isNotEmpty()) {
             for (effect: Effect in effects.values) {
                 if (effect.canTick()) {
                     effect.apply(this, 1.0)
@@ -1323,13 +1322,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             }
         }
 
-        var hasUpdate: Boolean = false
+        var hasUpdate = false
 
         this.checkBlockCollision()
 
-        if (position.y < (level!!.getMinHeight() - 18) && this.isAlive()) {
+        if (position.y < (level!!.minHeight - 18) && this.isAlive()) {
             if (this is Player) {
-                if (!player.isCreative()) this.attack(EntityDamageEvent(this, DamageCause.VOID, 10f))
+                if (!player.isCreative) this.attack(EntityDamageEvent(this, DamageCause.VOID, 10f))
             } else {
                 this.attack(EntityDamageEvent(this, DamageCause.VOID, 10f))
                 hasUpdate = true
@@ -1343,14 +1342,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                     this.fireTicks = 0
                 }
             } else {
-                if (!this.hasEffect(EffectType.Companion.FIRE_RESISTANCE) && ((this.fireTicks % 20) == 0 || tickDiff > 20)) {
+                if (!this.hasEffect(EffectType.FIRE_RESISTANCE) && ((this.fireTicks % 20) == 0 || tickDiff > 20)) {
                     this.attack(EntityDamageEvent(this, DamageCause.FIRE_TICK, 1f))
                 }
                 this.fireTicks -= tickDiff
             }
             if (this.fireTicks <= 0) {
                 this.extinguish()
-            } else if (!this.fireProof && (this !is Player || !player.isSpectator())) {
+            } else if (!this.fireProof && (this !is Player || !player.isSpectator)) {
                 this.setDataFlag(EntityFlag.ON_FIRE)
                 hasUpdate = true
             }
@@ -1364,10 +1363,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         }
 
         if (this.inPortalTicks == 80) { //handle portal teleport
-            val ev: EntityPortalEnterEvent = EntityPortalEnterEvent(this, PortalType.NETHER)
+            val ev = EntityPortalEnterEvent(this, PortalType.NETHER)
             Server.instance.pluginManager.callEvent(ev) //call event
 
-            if (!ev.isCancelled && (level!!.getDimension() == Level.DIMENSION_OVERWORLD || level!!.getDimension() == Level.DIMENSION_NETHER)) {
+            if (!ev.isCancelled && (level!!.dimension == Level.DIMENSION_OVERWORLD || level!!.dimension == Level.DIMENSION_NETHER)) {
                 val newPos: Locator? = PortalHelper.convertPosBetweenNetherAndOverworld(
                     Locator(
                         position.x, position.y, position.z,
@@ -1381,7 +1380,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                     } else {
                         val finalPos: Locator = newPos.add(1.5, 1.0, 1.5)
                         if (teleport(finalPos, TeleportCause.NETHER_PORTAL)) {
-                            level!!.getScheduler().scheduleDelayedTask(object : Task() {
+                            level!!.scheduler.scheduleDelayedTask(object : Task() {
                                 override fun onRun(currentTick: Int) {
                                     // dirty hack to make sure chunks are loaded and generated before spawning
                                     // player
@@ -1428,14 +1427,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 if (this.isOnGround()) {
                     level!!.vibrationManager.callVibrationEvent(
                         VibrationEvent(
-                            if (this is EntityProjectile) projectile.shootingEntity else this,
+                            if (this is EntityProjectile) this.shootingEntity else this,
                             position.clone(), VibrationType.STEP
                         )
                     )
                 } else if (this.isTouchingWater()) {
                     level!!.vibrationManager.callVibrationEvent(
                         VibrationEvent(
-                            if (this is EntityProjectile) projectile.shootingEntity else this,
+                            if (this is EntityProjectile) this.shootingEntity else this,
                             position.clone(), VibrationType.SWIM
                         )
                     )
@@ -1473,7 +1472,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      *
      */
     open fun moveDelta() {
-        val pk: MoveEntityDeltaPacket = MoveEntityDeltaPacket()
+        val pk = MoveEntityDeltaPacket()
         pk.runtimeEntityId = this.getId()
         if (prevPosition.x != position.x) {
             pk.x = position.x.toFloat()
@@ -1510,7 +1509,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      * 对于玩家实体，你不应该使用此方法！
      */
     fun addMotion(motionX: Double, motionY: Double, motionZ: Double) {
-        val pk: SetEntityMotionPacket = SetEntityMotionPacket()
+        val pk = SetEntityMotionPacket()
         pk.eid = this.getId()
         pk.motionX = motionX.toFloat()
         pk.motionY = motionY.toFloat()
@@ -1521,7 +1520,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
 
     protected fun broadcastMovement(tp: Boolean) {
-        val pk: MoveEntityAbsolutePacket = MoveEntityAbsolutePacket()
+        val pk = MoveEntityAbsolutePacket()
         pk.eid = this.getId()
         pk.x = position.x
         pk.y = position.y + this.getBaseOffset()
@@ -1553,8 +1552,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         )).normalize()
     }
 
-    fun getHorizontalFacing(): BlockFace {
-        return BlockFace.fromHorizontalIndex(NukkitMath.floorDouble((rotation.yaw * 4.0f / 360.0f) + 0.5) and 3)
+    fun getHorizontalFacing(): BlockFace? {
+        return BlockFace.fromHorizontalIndex(ChorusMath.floorDouble((rotation.yaw * 4.0f / 360.0f) + 0.5) and 3)
     }
 
     open fun onUpdate(currentTick: Int): Boolean {
@@ -1588,14 +1587,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      * @return `true` if the mounting successful
      */
     open fun mountEntity(entity: Entity, mode: EntityLink.Type): Boolean {
-        Objects.requireNonNull(entity, "The target of the mounting entity can't be null")
+        requireNonNull(entity, "The target of the mounting entity can't be null")
 
         if (isPassenger(entity) || entity.riding != null && !entity.riding!!.dismountEntity(entity, false)) {
             return false
         }
 
         // Entity entering a vehicle
-        val ev: EntityVehicleEnterEvent = EntityVehicleEnterEvent(entity, this)
+        val ev = EntityVehicleEnterEvent(entity, this)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
@@ -1619,7 +1618,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     open fun dismountEntity(entity: Entity, sendLinks: Boolean): Boolean {
         // Run the events
-        val ev: EntityVehicleExitEvent = EntityVehicleExitEvent(entity, this)
+        val ev = EntityVehicleExitEvent(entity, this)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             val seatIndex: Int = passengers.indexOf(entity)
@@ -1650,7 +1649,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     protected fun broadcastLinkPacket(rider: Entity, type: EntityLink.Type) {
-        val pk: SetEntityLinkPacket = SetEntityLinkPacket()
+        val pk = SetEntityLinkPacket()
         pk.vehicleUniqueId = getId() // To what?
         pk.riderUniqueId = rider.getId() // From who?
         pk.type = type
@@ -1678,11 +1677,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun getSeatPosition(): Vector3f {
-        return this.getDataProperty<Vector3f>(EntityDataTypes.Companion.SEAT_OFFSET)
+        return this.getDataProperty(EntityDataTypes.SEAT_OFFSET)
     }
 
     fun setSeatPosition(pos: Vector3f) {
-        this.setDataProperty(EntityDataTypes.Companion.SEAT_OFFSET, pos)
+        this.setDataProperty(EntityDataTypes.SEAT_OFFSET, pos)
     }
 
     open fun getMountedOffset(entity: Entity?): Vector3f {
@@ -1715,17 +1714,16 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     open fun syncAttribute(attribute: Attribute) {
-        val pk: UpdateAttributesPacket = UpdateAttributesPacket()
+        val pk = UpdateAttributesPacket()
         pk.entries = arrayOf(attribute)
         pk.entityId = this.getId()
         Server.broadcastPacket(getViewers().values, pk)
     }
 
     open fun syncAttributes() {
-        val pk: UpdateAttributesPacket = UpdateAttributesPacket()
+        val pk = UpdateAttributesPacket()
         pk.entries =
-            attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }
-                .toArray<Attribute> { _Dummy_.__Array__() }
+            attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }.toList().toTypedArray()
         pk.entityId = this.getId()
         Server.broadcastPacket(getViewers().values, pk)
     }
@@ -1740,16 +1738,16 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         if (rotation < 0) {
             rotation += 360.0
         }
-        if ((0 <= rotation && rotation < 45) || (315 <= rotation && rotation < 360)) {
-            return BlockFace.SOUTH
+        return if ((0 <= rotation && rotation < 45) || (315 <= rotation && rotation < 360)) {
+            BlockFace.SOUTH
         } else if (45 <= rotation && rotation < 135) {
-            return BlockFace.WEST
+            BlockFace.WEST
         } else if (135 <= rotation && rotation < 225) {
-            return BlockFace.NORTH
+            BlockFace.NORTH
         } else if (225 <= rotation && rotation < 315) {
-            return BlockFace.EAST
+            BlockFace.EAST
         } else {
-            return null
+            null
         }
     }
 
@@ -1759,7 +1757,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     open fun resetFallDistance() {
-        this.highestPosition = level!!.getMinHeight().toDouble()
+        this.highestPosition = level!!.minHeight.toDouble()
     }
 
     protected open fun updateFallState(onGround: Boolean) {
@@ -1767,17 +1765,17 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             fallDistance = (this.highestPosition - position.y).toFloat()
 
             if (fallDistance > 0) {
-                val pos: Locator = Locator(
+                val pos = Locator(
                     position.x,
                     position.y, position.z,
                     level!!
                 )
                 // check if we fell into at least 1 block of water
-                val lb: Block = pos.getLevelBlock()
-                val lb2: Block = pos.getLevelBlockAtLayer(1)
+                val lb: Block? = pos.levelBlock
+                val lb2: Block? = pos.getLevelBlockAtLayer(1)
                 if (this is EntityLiving && this.riding == null && !(lb is BlockFlowingWater ||
                             lb is BlockFence ||
-                            (lb2 is BlockFlowingWater && lb2.getMaxY() == 1.0))
+                            (lb2 is BlockFlowingWater && lb2.maxY == 1.0))
                 ) {
                     this.fall(fallDistance)
                 }
@@ -1786,38 +1784,38 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         }
     }
 
-    fun getBoundingBox(): AxisAlignedBB? {
+    fun getBoundingBox(): AxisAlignedBB {
         return this.boundingBox
     }
 
     open fun fall(fallDistance: Float) { //todo: check why @param fallDistance always less than the real distance
-        var fallDistance: Float = fallDistance
-        if (this.hasEffect(EffectType.Companion.SLOW_FALLING)) {
+        var fallDistance1: Float = fallDistance
+        if (this.hasEffect(EffectType.SLOW_FALLING)) {
             return
         }
 
         val floorLocation: Vector3 = position.floor()
-        val down: Block = level!!.getBlock(floorLocation.down())
+        val down: Block = level!!.getBlock(floorLocation.down())!!
 
-        val event: EntityFallEvent = EntityFallEvent(this, down, fallDistance)
+        val event = EntityFallEvent(this, down, fallDistance1)
         Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return
         }
-        fallDistance = event.fallDistance
+        fallDistance1 = event.fallDistance
 
-        if ((!this.isPlayer || level!!.gameRules
+        if ((!this.isPlayer || level!!.gameRules!!
                 .getBoolean(GameRule.FALL_DAMAGE)) && down.useDefaultFallDamage()
         ) {
-            val jumpBoost: Int = if (this.hasEffect(EffectType.Companion.JUMP_BOOST)) getEffect(
-                EffectType.Companion.JUMP_BOOST
-            ).getLevel() else 0
-            val damage: Float = fallDistance - 3.255f - jumpBoost
+            val jumpBoost: Int = if (this.hasEffect(EffectType.JUMP_BOOST)) getEffect(
+                EffectType.JUMP_BOOST
+            )!!.getLevel() else 0
+            val damage: Float = fallDistance1 - 3.255f - jumpBoost
 
             if (damage > 0) {
                 if (!this.isSneaking()) {
                     if (this !is EntityItem ||
-                        !ItemTags.getTagSet(item!!.getIdentifier()).contains(ItemTags.WOOL)
+                        !ItemTags.getTagSet(item!!.identifier.toString()).contains(ItemTags.WOOL)
                     ) {
                         level!!.vibrationManager.callVibrationEvent(
                             VibrationEvent(
@@ -1831,22 +1829,22 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             }
         }
 
-        down.onEntityFallOn(this, fallDistance)
+        down.onEntityFallOn(this, fallDistance1)
 
-        if (fallDistance > 0.75) { //todo: moving these into their own classes (method "onEntityFallOn()")
-            if (Block.FARMLAND == down.getId()) {
+        if (fallDistance1 > 0.75) { //todo: moving these into their own classes (method "onEntityFallOn()")
+            if (BlockID.FARMLAND == down.id) {
                 if (onPhysicalInteraction(down, false)) {
                     return
                 }
                 if (this is EntityFlyable) return
-                val farmEvent: FarmLandDecayEvent = FarmLandDecayEvent(this, down)
+                val farmEvent = FarmLandDecayEvent(this, down)
                 Server.instance.pluginManager.callEvent(farmEvent)
                 if (farmEvent.isCancelled) return
-                level!!.setBlock(down.position, Block.get(Block.DIRT), false, true)
+                level!!.setBlock(down.position, Block.get(BlockID.DIRT), direct = false, update = true)
                 return
             }
 
-            val floor: Block = level!!.getBlock(floorLocation)
+            val floor: Block? = level!!.getBlock(floorLocation)
 
             if (floor is BlockTurtleEgg) {
                 if (onPhysicalInteraction(floor, ThreadLocalRandom.current().nextInt(10) >= 3)) {
@@ -1858,25 +1856,24 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     protected fun onPhysicalInteraction(block: Block, cancelled: Boolean): Boolean {
-        val ev: Event
 
-        if (this is Player) {
-            ev = PlayerInteractEvent(this, null, block.position, null, PlayerInteractEvent.Action.PHYSICAL)
+        val ev: Event = if (this is Player) {
+            PlayerInteractEvent(this, null, block.position, null, PlayerInteractEvent.Action.PHYSICAL)
         } else {
-            ev = EntityInteractEvent(this, block)
+            EntityInteractEvent(this, block)
         }
 
-        ev.setCancelled(cancelled)
+        ev.isCancelled = cancelled
 
         Server.instance.pluginManager.callEvent(ev)
-        return ev.isCancelled()
+        return ev.isCancelled
     }
 
     open fun applyEntityCollision(entity: Entity) {
         if (entity.riding !== this && !entity.passengers.contains(this)) {
             var dx: Double = entity.position.x - position.x
             var dy: Double = entity.position.z - position.z
-            var dz: Double = NukkitMath.getDirection(dx, dy)
+            var dz: Double = ChorusMath.getDirection(dx, dy)
 
             if (dz >= 0.009999999776482582) {
                 dz = MathHelper.sqrt(dz.toFloat()).toDouble()
@@ -1927,7 +1924,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             return false
         }
 
-        val ev: EntityLevelChangeEvent = EntityLevelChangeEvent(this, this.level, targetLevel)
+        val ev = EntityLevelChangeEvent(this, this.level!!, targetLevel)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
@@ -1942,7 +1939,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         this.level = targetLevel
         level!!.addEntity(this)
         this.chunk = null
-        this.lastUpdate = level!!.getTick()
+        this.lastUpdate = level!!.tick
         this.blocksAround = null
         this.collisionBlocks = null
         return true
@@ -1974,11 +1971,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
 
     fun isUnderBlock(): Boolean {
-        val x: Int = position.getFloorX()
-        val y: Int = position.getFloorY()
-        val z: Int = position.getFloorZ()
-        for (i in y + 1..level!!.getMaxHeight()) {
-            if (!level!!.getBlock(x, i, z).isAir()) {
+        val x: Int = position.floorX
+        val y: Int = position.floorY
+        val z: Int = position.floorZ
+        for (i in y + 1..level!!.maxHeight) {
+            if (!level!!.getBlock(x, i, z)?.isAir!!) {
                 return true
             }
         }
@@ -1993,17 +1990,17 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     protected fun hasWaterAt(height: Float, tickCached: Boolean): Boolean {
         val y: Double = position.y + height
-        val block: Block = if (tickCached) level!!.getTickCachedBlock(
+        val block: Block? = if (tickCached) level!!.getTickCachedBlock(
             position.floor()
         ) else level!!.getBlock(position.floor())
 
-        var layer1: Boolean = false
-        val block1: Block = if (tickCached) block.getTickCachedLevelBlockAtLayer(1) else block.getLevelBlockAtLayer(1)
+        var layer1 = false
+        val block1: Block? = if (tickCached) block?.getTickCachedLevelBlockAtLayer(1) else block?.getLevelBlockAtLayer(1)
         if (block !is BlockBubbleColumn && (block is BlockFlowingWater
-                    || (block1 is BlockFlowingWater.also { layer1 = it })
+                    || (block1 is BlockFlowingWater).also { layer1 = it }
         )) {
             val water: BlockFlowingWater = (if (layer1) block1 else block) as BlockFlowingWater
-            val f: Double = (block.position.y + 1) - (water.getFluidHeightPercent() - 0.1111111)
+            val f: Double = (block!!.position.y + 1) - (water.fluidHeightPercent - 0.1111111)
             return y < f
         }
 
@@ -2012,13 +2009,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun isInsideOfSolid(): Boolean {
         val y: Double = position.y + this.getEyeHeight()
-        val block: Block = level!!.getBlock(
+        val block: Block? = level!!.getBlock(
             position.clone().setY(y).floor()
         )
 
-        val bb: AxisAlignedBB? = block.getBoundingBox()
+        val bb: AxisAlignedBB? = block?.boundingBox
 
-        return bb != null && block.isSolid() && !block.isTransparent() && bb.intersectsWith(this.getBoundingBox())
+        return bb != null && block.isSolid && !block.isTransparent && bb.intersectsWith(this.getBoundingBox())
     }
 
     fun isInsideOfFire(): Boolean {
@@ -2053,124 +2050,124 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun isOnLadder(): Boolean {
-        val b: Block = getTransform().getLevelBlock()
+        val b: Block? = getTransform().levelBlock
 
-        return Block.LADDER == b.getId()
+        return BlockID.LADDER == b?.id
     }
 
     /**
      * Player do not use
      */
     open fun move(dx: Double, dy: Double, dz: Double): Boolean {
-        var dx: Double = dx
-        var dy: Double = dy
-        var dz: Double = dz
-        if (dx == 0.0 && dz == 0.0 && dy == 0.0) {
+        var dx1: Double = dx
+        var dy1: Double = dy
+        var dz1: Double = dz
+        if (dx1 == 0.0 && dz1 == 0.0 && dy1 == 0.0) {
             val value: Locator = this.getTransform()
             value.position.setComponents(position.down())
-            this.onGround = !value.getTickCachedLevelBlock().canPassThrough()
+            this.onGround = !value.tickCachedLevelBlock!!.canPassThrough()
             return true
         }
 
 
         this.ySize *= 0.4f
 
-        val movX: Double = dx
-        val movY: Double = dy
-        val movZ: Double = dz
+        val movX: Double = dx1
+        val movY: Double = dy1
+        val movZ: Double = dz1
 
-        val axisalignedbb: AxisAlignedBB = boundingBox!!.clone()
+        val axisAlignedBB: AxisAlignedBB = boundingBox.clone()
 
         var list: List<AxisAlignedBB> = if (this.noClip) AxisAlignedBB.EMPTY_LIST else level!!.fastCollisionCubes(
             this,
-            boundingBox!!.addCoord(dx, dy, dz), false
+            boundingBox.addCoord(dx1, dy1, dz1), false
         )
 
         for (bb: AxisAlignedBB in list) {
-            dy = bb.calculateYOffset(this.boundingBox, dy)
+            dy1 = bb.calculateYOffset(this.boundingBox, dy1)
         }
 
-        boundingBox!!.offset(0.0, dy, 0.0)
+        boundingBox.offset(0.0, dy1, 0.0)
 
-        val fallingFlag: Boolean = (this.onGround || (dy != movY && movY < 0))
+        val fallingFlag: Boolean = (this.onGround || (dy1 != movY && movY < 0))
 
         for (bb: AxisAlignedBB in list) {
-            dx = bb.calculateXOffset(this.boundingBox, dx)
+            dx1 = bb.calculateXOffset(this.boundingBox, dx1)
         }
 
-        boundingBox!!.offset(dx, 0.0, 0.0)
+        boundingBox.offset(dx1, 0.0, 0.0)
 
         for (bb: AxisAlignedBB in list) {
-            dz = bb.calculateZOffset(this.boundingBox, dz)
+            dz1 = bb.calculateZOffset(this.boundingBox, dz1)
         }
 
-        boundingBox!!.offset(0.0, 0.0, dz)
+        boundingBox.offset(0.0, 0.0, dz1)
 
-        if (this.getStepHeight() > 0 && fallingFlag && this.ySize < 0.05 && (movX != dx || movZ != dz)) {
-            val cx: Double = dx
-            val cy: Double = dy
-            val cz: Double = dz
-            dx = movX
-            dy = this.getStepHeight()
-            dz = movZ
+        if (this.getStepHeight() > 0 && fallingFlag && this.ySize < 0.05 && (movX != dx1 || movZ != dz1)) {
+            val cx: Double = dx1
+            val cy: Double = dy1
+            val cz: Double = dz1
+            dx1 = movX
+            dy1 = this.getStepHeight()
+            dz1 = movZ
 
-            val axisAlignedBB1: AxisAlignedBB = boundingBox!!.clone()
+            val axisAlignedBB1: AxisAlignedBB = boundingBox.clone()
 
-            boundingBox!!.setBB(axisalignedbb)
+            boundingBox.setBB(axisAlignedBB)
 
             list = level!!.fastCollisionCubes(
                 this,
-                boundingBox!!.addCoord(dx, dy, dz), false
+                boundingBox.addCoord(dx1, dy1, dz1), false
             )
 
             for (bb: AxisAlignedBB in list) {
-                dy = bb.calculateYOffset(this.boundingBox, dy)
+                dy1 = bb.calculateYOffset(this.boundingBox, dy1)
             }
 
-            boundingBox!!.offset(0.0, dy, 0.0)
+            boundingBox.offset(0.0, dy1, 0.0)
 
             for (bb: AxisAlignedBB in list) {
-                dx = bb.calculateXOffset(this.boundingBox, dx)
+                dx1 = bb.calculateXOffset(this.boundingBox, dx1)
             }
 
-            boundingBox!!.offset(dx, 0.0, 0.0)
+            boundingBox.offset(dx1, 0.0, 0.0)
 
             for (bb: AxisAlignedBB in list) {
-                dz = bb.calculateZOffset(this.boundingBox, dz)
+                dz1 = bb.calculateZOffset(this.boundingBox, dz1)
             }
 
-            boundingBox!!.offset(0.0, 0.0, dz)
+            boundingBox.offset(0.0, 0.0, dz1)
 
-            boundingBox!!.offset(0.0, 0.0, dz)
+            boundingBox.offset(0.0, 0.0, dz1)
 
-            if ((cx * cx + cz * cz) >= (dx * dx + dz * dz)) {
-                dx = cx
-                dy = cy
-                dz = cz
-                boundingBox!!.setBB(axisAlignedBB1)
+            if ((cx * cx + cz * cz) >= (dx1 * dx1 + dz1 * dz1)) {
+                dx1 = cx
+                dy1 = cy
+                dz1 = cz
+                boundingBox.setBB(axisAlignedBB1)
             } else {
                 this.ySize += 0.5f
             }
         }
 
-        position.x = (boundingBox!!.getMinX() + boundingBox!!.getMaxX()) / 2
-        position.y = boundingBox!!.getMinY() - this.ySize
-        position.z = (boundingBox!!.getMinZ() + boundingBox!!.getMaxZ()) / 2
+        position.x = (boundingBox.minX + boundingBox.maxX) / 2
+        position.y = boundingBox.minY - this.ySize
+        position.z = (boundingBox.minZ + boundingBox.maxZ) / 2
 
         this.checkChunks()
 
-        this.checkGroundState(movX, movY, movZ, dx, dy, dz)
+        this.checkGroundState(movX, movY, movZ, dx1, dy1, dz1)
         this.updateFallState(this.onGround)
 
-        if (movX != dx) {
+        if (movX != dx1) {
             motion.x = 0.0
         }
 
-        if (movY != dy) {
+        if (movY != dy1) {
             motion.y = 0.0
         }
 
-        if (movZ != dz) {
+        if (movZ != dz1) {
             motion.z = 0.0
         }
 
@@ -2194,24 +2191,24 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun getBlocksAround(): List<Block>? {
         if (this.blocksAround == null) {
-            val minX: Int = NukkitMath.floorDouble(boundingBox!!.getMinX())
-            val minY: Int = NukkitMath.floorDouble(boundingBox!!.getMinY())
-            val minZ: Int = NukkitMath.floorDouble(boundingBox!!.getMinZ())
-            val maxX: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxX())
-            val maxY: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxY())
-            val maxZ: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxZ())
+            val minX: Int = ChorusMath.floorDouble(boundingBox.minX)
+            val minY: Int = ChorusMath.floorDouble(boundingBox.minY)
+            val minZ: Int = ChorusMath.floorDouble(boundingBox.minZ)
+            val maxX: Int = ChorusMath.ceilDouble(boundingBox.maxX)
+            val maxY: Int = ChorusMath.ceilDouble(boundingBox.maxY)
+            val maxZ: Int = ChorusMath.ceilDouble(boundingBox.maxZ)
 
-            this.blocksAround = ArrayList()
+            val blocksAround = ArrayList<Block>()
 
             for (z in minZ..maxZ) {
                 for (x in minX..maxX) {
                     for (y in minY..maxY) {
-                        val block: Block =
-                            level!!.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
-                        blocksAround.add(block)
+                        val block: Block? = level!!.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
+                        if (block != null) blocksAround.add(block)
                     }
                 }
             }
+            this.blocksAround = blocksAround
         }
 
         return this.blocksAround
@@ -2220,22 +2217,24 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun getTickCachedBlocksAround(): List<Block>? {
         if (this.blocksAround == null) {
-            val minX: Int = NukkitMath.floorDouble(boundingBox!!.getMinX())
-            val minY: Int = NukkitMath.floorDouble(boundingBox!!.getMinY())
-            val minZ: Int = NukkitMath.floorDouble(boundingBox!!.getMinZ())
-            val maxX: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxX())
-            val maxY: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxY())
-            val maxZ: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxZ())
+            val minX: Int = ChorusMath.floorDouble(boundingBox.minX)
+            val minY: Int = ChorusMath.floorDouble(boundingBox.minY)
+            val minZ: Int = ChorusMath.floorDouble(boundingBox.minZ)
+            val maxX: Int = ChorusMath.ceilDouble(boundingBox.maxX)
+            val maxY: Int = ChorusMath.ceilDouble(boundingBox.maxY)
+            val maxZ: Int = ChorusMath.ceilDouble(boundingBox.maxZ)
 
-            this.blocksAround = ArrayList()
+            val blocksAround = ArrayList<Block>()
 
             for (z in minZ..maxZ) {
                 for (x in minX..maxX) {
                     for (y in minY..maxY) {
-                        blocksAround.add(level!!.getTickCachedBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble())))
+                        val block = level!!.getTickCachedBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
+                        if (block != null) blocksAround.add(block)
                     }
                 }
             }
+            this.blocksAround = blocksAround
         }
 
         return this.blocksAround
@@ -2243,13 +2242,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun getCollisionBlocks(): List<Block>? {
         if (this.collisionBlocks == null) {
-            this.collisionBlocks = ArrayList()
+            val collisionBlocks = ArrayList<Block>()
 
             for (b: Block in getBlocksAround()!!) {
                 if (b.collidesWithBB(this.getBoundingBox(), true)) {
                     collisionBlocks.add(b)
                 }
             }
+            this.collisionBlocks = collisionBlocks
         }
 
         return this.collisionBlocks
@@ -2258,13 +2258,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun getTickCachedCollisionBlocks(): List<Block>? {
         if (this.collisionBlocks == null) {
-            this.collisionBlocks = ArrayList()
+            val collisionBlocks = ArrayList<Block>()
 
             for (b: Block in getTickCachedBlocksAround()!!) {
                 if (b.collidesWithBB(this.getBoundingBox(), true)) {
                     collisionBlocks.add(b)
                 }
             }
+            this.collisionBlocks = collisionBlocks
         }
 
         return this.collisionBlocks
@@ -2284,43 +2285,43 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             return
         }
 
-        var needsReCalcCurrent: Boolean = true
+        var needsReCalcCurrent = true
         if (this is EntityPhysical) {
-            needsReCalcCurrent = entityPhysical.needsRecalcMovement
+            needsReCalcCurrent = this.needsRecalcMovement
         }
 
-        var vector: Vector3 = Vector3(0.0, 0.0, 0.0)
-        var portal: Boolean = false
-        var scaffolding: Boolean = false
-        var endPortal: Boolean = false
+        var vector = Vector3(0.0, 0.0, 0.0)
+        var portal = false
+        var scaffolding = false
+        var endPortal = false
         for (block: Block in getTickCachedCollisionBlocks()!!) {
-            when (block.getId()) {
-                Block.PORTAL -> portal = true
+            when (block.id) {
+                BlockID.PORTAL -> portal = true
                 BlockID.SCAFFOLDING -> scaffolding = true
                 BlockID.END_PORTAL -> endPortal = true
             }
 
             block.onEntityCollide(this)
-            block.getTickCachedLevelBlockAtLayer(1).onEntityCollide(this)
+            block.getTickCachedLevelBlockAtLayer(1)?.onEntityCollide(this)
             if (needsReCalcCurrent) block.addVelocityToEntity(this, vector)
         }
 
         setDataFlagExtend(EntityFlag.IN_SCAFFOLDING, scaffolding)
 
         if (abs(position.y % 1) > 0.125) {
-            val minX: Int = NukkitMath.floorDouble(boundingBox!!.getMinX())
-            val minZ: Int = NukkitMath.floorDouble(boundingBox!!.getMinZ())
-            val maxX: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxX())
-            val maxZ: Int = NukkitMath.ceilDouble(boundingBox!!.getMaxZ())
-            val Y: Int = position.y.toInt()
+            val minX: Int = ChorusMath.floorDouble(boundingBox.minX)
+            val minZ: Int = ChorusMath.floorDouble(boundingBox.minZ)
+            val maxX: Int = ChorusMath.ceilDouble(boundingBox.maxX)
+            val maxZ: Int = ChorusMath.ceilDouble(boundingBox.maxZ)
+            val y: Int = position.y.toInt()
 
             outerScaffolding@ for (i in minX..maxX) {
                 for (j in minZ..maxZ) {
-                    val transform: Transform = Transform(
-                        i.toDouble(), Y.toDouble(), j.toDouble(),
+                    val transform = Transform(
+                        i.toDouble(), y.toDouble(), j.toDouble(),
                         level!!
                     )
-                    if (BlockID.SCAFFOLDING == transform.getLevelBlock(false).getId()) {
+                    if (BlockID.SCAFFOLDING == transform.getLevelBlock(false)?.id) {
                         setDataFlagExtend(EntityFlag.OVER_SCAFFOLDING, true)
                         break@outerScaffolding
                     }
@@ -2332,15 +2333,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             if (!inEndPortal) {
                 inEndPortal = true
                 if (this.getRiding() == null && getPassengers().isEmpty() && (this !is EntityEnderDragon)) {
-                    val ev: EntityPortalEnterEvent = EntityPortalEnterEvent(this, PortalType.END)
+                    val ev = EntityPortalEnterEvent(this, PortalType.END)
                     Server.instance.pluginManager.callEvent(ev)
 
-                    if (!ev.isCancelled && (level!!.getDimension() == Level.DIMENSION_OVERWORLD || level!!.getDimension() == Level.DIMENSION_THE_END)) {
+                    if (!ev.isCancelled && (level!!.dimension == Level.DIMENSION_OVERWORLD || level!!.dimension == Level.DIMENSION_THE_END)) {
                         val newPos: Locator? = PortalHelper.moveToTheEnd(this.getTransform())
                         if (newPos != null) {
-                            if (newPos.level.getDimension() == Level.DIMENSION_THE_END) {
+                            if (newPos.level.dimension == Level.DIMENSION_THE_END) {
                                 if (teleport(newPos.add(0.5, 1.0, 0.5), TeleportCause.END_PORTAL)) {
-                                    newPos.level.getScheduler().scheduleDelayedTask(object : Task() {
+                                    newPos.level.scheduler.scheduleDelayedTask(object : Task() {
                                         override fun onRun(currentTick: Int) {
                                             // dirty hack to make sure chunks are loaded and generated before spawning player
                                             teleport(newPos.add(0.5, 1.0, 0.5), TeleportCause.END_PORTAL)
@@ -2350,7 +2351,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                                 }
                             } else {
                                 if (teleport(newPos, TeleportCause.END_PORTAL)) {
-                                    newPos.level.getScheduler().scheduleDelayedTask(object : Task() {
+                                    newPos.level.scheduler.scheduleDelayedTask(object : Task() {
                                         override fun onRun(currentTick: Int) {
                                             // dirty hack to make sure chunks are loaded and generated before spawning player
                                             teleport(newPos, TeleportCause.END_PORTAL)
@@ -2377,7 +2378,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         if (needsReCalcCurrent) if (vector.lengthSquared() > 0) {
             vector = vector.normalize()
-            val d: Double = 0.018
+            val d = 0.018
             val dx: Double = vector.x * d
             val dy: Double = vector.y * d
             val dz: Double = vector.z * d
@@ -2385,15 +2386,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             motion.y += dy
             motion.z += dz
             if (this is EntityPhysical) {
-                entityPhysical.previousCurrentMotion.x = dx
-                entityPhysical.previousCurrentMotion.y = dy
-                entityPhysical.previousCurrentMotion.z = dz
+                this.previousCurrentMotion.x = dx
+                this.previousCurrentMotion.y = dy
+                this.previousCurrentMotion.z = dz
             }
         } else {
             if (this is EntityPhysical) {
-                entityPhysical.previousCurrentMotion.x = 0.0
-                entityPhysical.previousCurrentMotion.y = 0.0
-                entityPhysical.previousCurrentMotion.z = 0.0
+                this.previousCurrentMotion.x = 0.0
+                this.previousCurrentMotion.y = 0.0
+                this.previousCurrentMotion.z = 0.0
             }
         }
         else (this as EntityPhysical).addPreviousLiquidMovement()
@@ -2436,12 +2437,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
             if (!this.justCreated) {
                 val newChunk: MutableMap<Int, Player> =
-                    level!!.getChunkPlayers(position.x.toInt() shr 4, position.z.toInt() shr 4)
-                for (player: Player in ArrayList<Player>(hasSpawned.values)) {
-                    if (!newChunk.containsKey(player.getLoaderId())) {
+                    level!!.getChunkPlayers(position.x.toInt() shr 4, position.z.toInt() shr 4).toMutableMap()
+                for (player: Player in ArrayList(hasSpawned.values)) {
+                    if (!newChunk.containsKey(player.loaderId)) {
                         this.despawnFrom(player)
                     } else {
-                        newChunk.remove(player.getLoaderId())
+                        newChunk.remove(player.loaderId)
                     }
                 }
 
@@ -2499,7 +2500,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      */
     open fun setMotion(motion: Vector3): Boolean {
         if (!this.justCreated) {
-            val ev: EntityMotionEvent = EntityMotionEvent(this, motion)
+            val ev = EntityMotionEvent(this, motion)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
@@ -2568,7 +2569,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         val from: Transform = this.getTransform()
         var to: Transform = transform
         if (cause != null) {
-            val ev: EntityTeleportEvent = EntityTeleportEvent(this, from, to, cause)
+            val ev = EntityTeleportEvent(this, from, to, cause)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
@@ -2612,7 +2613,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun respawnToAll() {
-        val players: Array<Player> = hasSpawned.values.toArray(Player.EMPTY_ARRAY)
+        val players: Array<Player> = hasSpawned.values.toTypedArray()
         hasSpawned.clear()
 
         for (player: Player in players) {
@@ -2629,7 +2630,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             chunk!!.x,
             chunk!!.z
         ).values) {
-            if (player.isOnline()) {
+            if (player.isOnline) {
                 this.spawnTo(player)
             }
         }
@@ -2651,7 +2652,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
             if (despawn) {
                 try {
-                    val event: EntityDespawnEvent = EntityDespawnEvent(this)
+                    val event = EntityDespawnEvent(this)
 
                     Server.instance.pluginManager.callEvent(event)
 
@@ -2684,18 +2685,18 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun setDataProperties(maps: Map<EntityDataType<*>, Any>, send: Boolean) {
-        val sendMap: EntityDataMap = EntityDataMap()
+        val sendMap = EntityDataMap()
         for (e: Map.Entry<EntityDataType<*>, Any> in maps.entries) {
             val key: EntityDataType<*> = e.key
             val value: Any = e.value
-            if (getEntityDataMap().containsKey(key) && getEntityDataMap().get(key) == value) {
+            if (getEntityDataMap().contains(key) && getEntityDataMap().get(key) == value) {
                 continue
             }
             getEntityDataMap().put(key, value)
             sendMap.put(key, value)
         }
         if (send) {
-            this.sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), sendMap)
+            this.sendData(hasSpawned.values.toTypedArray(), sendMap)
         }
     }
 
@@ -2704,15 +2705,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun setDataProperty(key: EntityDataType<*>, value: Any, send: Boolean): Boolean {
-        if (getEntityDataMap().containsKey(key) && getEntityDataMap().get(key) == value) {
+        if (getEntityDataMap().contains(key) && getEntityDataMap().get(key) == value) {
             return false
         }
 
         getEntityDataMap().put(key, value)
         if (send) {
-            val map: EntityDataMap = EntityDataMap()
+            val map = EntityDataMap()
             map.put(key, value)
-            this.sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), map)
+            this.sendData(hasSpawned.values.toTypedArray(), map)
         }
         return true
     }
@@ -2722,7 +2723,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun <T> getDataProperty(key: EntityDataType<T>): T {
-        return getEntityDataMap().get<T>(key)
+        return getEntityDataMap().get(key)
     }
 
     fun <T> getDataProperty(key: EntityDataType<T>, d: T): T {
@@ -2736,15 +2737,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     fun setDataFlag(entityFlag: EntityFlag, value: Boolean) {
         if (getEntityDataMap().existFlag(entityFlag) xor value) {
             getEntityDataMap().setFlag(entityFlag, value)
-            val entityDataMap: EntityDataMap = EntityDataMap()
-            entityDataMap.put(EntityDataTypes.Companion.FLAGS, getEntityDataMap().getFlags())
-            sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+            val entityDataMap = EntityDataMap()
+            entityDataMap.put(EntityDataTypes.FLAGS, getEntityDataMap().getFlags())
+            sendData(hasSpawned.values.toTypedArray(), entityDataMap)
         }
     }
 
-    fun setDataFlags(entityFlags: EnumSet<EntityFlag?>) {
-        getEntityDataMap().put(EntityDataTypes.Companion.FLAGS, entityFlags)
-        sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+    fun setDataFlags(entityFlags: EnumSet<EntityFlag>) {
+        getEntityDataMap().put(EntityDataTypes.FLAGS, entityFlags)
+        sendData(hasSpawned.values.toTypedArray(), entityDataMap)
     }
 
     fun setDataFlagExtend(entityFlag: EntityFlag) {
@@ -2754,8 +2755,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     fun setDataFlagExtend(entityFlag: EntityFlag, value: Boolean) {
         if (getEntityDataMap().existFlag(entityFlag) xor value) {
             val entityFlags: EnumSet<EntityFlag> =
-                getEntityDataMap().getOrDefault<EnumSet<EntityFlag>>(
-                    EntityDataTypes.Companion.FLAGS_2, EnumSet.noneOf<EntityFlag>(
+                getEntityDataMap().getOrDefault(
+                    EntityDataTypes.FLAGS_2, EnumSet.noneOf(
                         EntityFlag::class.java
                     )
                 )
@@ -2764,16 +2765,16 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             } else {
                 entityFlags.remove(entityFlag)
             }
-            getEntityDataMap().put(EntityDataTypes.Companion.FLAGS_2, entityFlags)
-            val entityDataMap: EntityDataMap = EntityDataMap()
-            entityDataMap.put(EntityDataTypes.Companion.FLAGS_2, entityFlags)
-            sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+            getEntityDataMap().put(EntityDataTypes.FLAGS_2, entityFlags)
+            val entityDataMap = EntityDataMap()
+            entityDataMap.put(EntityDataTypes.FLAGS_2, entityFlags)
+            sendData(hasSpawned.values.toTypedArray(), entityDataMap)
         }
     }
 
-    fun setDataFlagsExtend(entityFlags: EnumSet<EntityFlag?>) {
-        getEntityDataMap().put(EntityDataTypes.Companion.FLAGS_2, entityFlags)
-        sendData(hasSpawned.values.toArray<Player>(Player.EMPTY_ARRAY), entityDataMap)
+    fun setDataFlagsExtend(entityFlags: EnumSet<EntityFlag>) {
+        getEntityDataMap().put(EntityDataTypes.FLAGS_2, entityFlags)
+        sendData(hasSpawned.values.toTypedArray(), entityDataMap)
     }
 
     fun getDataFlag(id: EntityFlag?): Boolean {
@@ -2782,20 +2783,20 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun setPlayerFlag(entityFlag: PlayerFlag) {
         var flags: Byte =
-            getEntityDataMap().getOrDefault<Byte>(EntityDataTypes.Companion.PLAYER_FLAGS, 0.toByte())
+            getEntityDataMap().getOrDefault(EntityDataTypes.PLAYER_FLAGS, 0.toByte())
         flags = (flags.toInt() xor (1 shl entityFlag.getValue()).toByte().toInt()).toByte()
-        this.setDataProperty(EntityDataTypes.Companion.PLAYER_FLAGS, flags)
+        this.setDataProperty(EntityDataTypes.PLAYER_FLAGS, flags)
     }
 
     override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
         Server.instance.entityMetadata.setMetadata(this, metadataKey, newMetadataValue)
     }
 
-    override fun getMetadata(metadataKey: String): List<MetadataValue> {
+    override fun getMetadata(metadataKey: String): List<MetadataValue?>? {
         return Server.instance.entityMetadata.getMetadata(this, metadataKey)
     }
 
-    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue {
+    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue? {
         return Server.instance.entityMetadata.getMetadata(this, metadataKey, plugin)
     }
 
@@ -2826,19 +2827,18 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         return false
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (obj == null) {
+    override fun equals(other: Any?): Boolean {
+        if (other == null) {
             return false
         }
-        if (javaClass != obj.javaClass) {
+        if (javaClass != other.javaClass) {
             return false
         }
-        val other: Entity = obj as Entity
-        return this.getId() == other.getId()
+        return this.getId() == (other as Entity).getId()
     }
 
     override fun hashCode(): Int {
-        var hash: Int = 7
+        var hash = 7
         hash = (29 * hash + this.getId()).toInt()
         return hash
     }
@@ -2878,13 +2878,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     fun addTag(tag: String) {
         namedTag!!.putList(
             "Tags",
-            namedTag!!.getList("Tags", StringTag::class.java).add(StringTag(tag))
+            namedTag!!.getList("Tags", StringTag::class.java)!!.add(StringTag(tag))
         )
     }
 
 
     fun removeTag(tag: String) {
-        val tags: ListTag<StringTag> = namedTag!!.getList("Tags", StringTag::class.java)
+        val tags: ListTag<StringTag> = namedTag!!.getList("Tags", StringTag::class.java)!!
         tags.remove(StringTag(tag))
         namedTag!!.putList("Tags", tags)
     }
@@ -2894,23 +2894,23 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         return namedTag!!.getList(
             "Tags",
             StringTag::class.java
-        ).getAll().stream().anyMatch { t: StringTag -> t.data == tag }
+        )!!.all.stream().anyMatch { t: StringTag -> t.data == tag }
     }
 
 
     fun getAllTags(): List<StringTag> {
-        return namedTag!!.getList("Tags", StringTag::class.java).getAll()
+        return namedTag!!.getList("Tags", StringTag::class.java)!!.all
     }
 
 
     fun getFreezingEffectStrength(): Float {
-        return this.getDataProperty<Float>(EntityDataTypes.Companion.FREEZING_EFFECT_STRENGTH)
+        return this.getDataProperty(EntityDataTypes.FREEZING_EFFECT_STRENGTH)
     }
 
 
     fun setFreezingEffectStrength(strength: Float) {
         require(!(strength < 0 || strength > 1)) { "Freezing Effect Strength must be between 0 and 1" }
-        this.setDataProperty(EntityDataTypes.Companion.FREEZING_EFFECT_STRENGTH, strength)
+        this.setDataProperty(EntityDataTypes.FREEZING_EFFECT_STRENGTH, strength)
     }
 
 
@@ -2934,12 +2934,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
 
     fun setAmbientSoundInterval(interval: Float) {
-        this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_INTERVAL, interval)
+        this.setDataProperty(EntityDataTypes.AMBIENT_SOUND_INTERVAL, interval)
     }
 
 
     fun setAmbientSoundIntervalRange(range: Float) {
-        this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_INTERVAL, range)
+        this.setDataProperty(EntityDataTypes.AMBIENT_SOUND_INTERVAL, range)
     }
 
 
@@ -2949,7 +2949,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
 
     fun setAmbientSoundEventName(eventName: String) {
-        this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_EVENT_NAME, eventName)
+        this.setDataProperty(EntityDataTypes.AMBIENT_SOUND_EVENT_NAME, eventName)
     }
 
 
@@ -2969,7 +2969,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      * @param players   可视玩家 Visible Player
      */
     fun playAnimation(animation: Animation, players: Collection<Player>) {
-        val pk: AnimateEntityPacket = AnimateEntityPacket()
+        val pk = AnimateEntityPacket()
         pk.parseFromAnimation(animation)
         pk.entityRuntimeIds.add(this.getId())
         Server.broadcastPacket(players, pk)
@@ -2993,7 +2993,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      * @param players    可视玩家 Visible Player
      */
     fun playActionAnimation(action: AnimatePacket.Action?, rowingTime: Float, players: Collection<Player>) {
-        val pk: AnimatePacket = AnimatePacket()
+        val pk = AnimatePacket()
         pk.action = action
         pk.rowingTime = rowingTime
         pk.eid = this.getId()
@@ -3027,7 +3027,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     private fun validateAndSetIntProperty(identifier: String, value: Int): Boolean {
         if (!intProperties.containsKey(identifier)) return false
-        intProperties.put(identifier, value)
+        intProperties[identifier] = value
         return true
     }
 
@@ -3042,13 +3042,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun setFloatEntityProperty(identifier: String?, value: Float): Boolean {
         if (!floatProperties.containsKey(identifier)) return false
-        floatProperties.put(identifier, value)
+        floatProperties[identifier] = value
         return true
     }
 
     fun setEnumEntityProperty(identifier: String, value: String): Boolean {
         if (!intProperties.containsKey(identifier)) return false
-        val entityPropertyList: List<EntityProperty> = EntityProperty.Companion.getEntityProperty(
+        val entityPropertyList: List<EntityProperty> = EntityProperty.getEntityProperty(
             this.getIdentifier()
         )
 
@@ -3059,7 +3059,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             val index: Int = property.findIndex(value)
 
             if (index >= 0) {
-                intProperties.put(identifier, index)
+                intProperties[identifier] = index
                 return true
             }
             return false
@@ -3068,19 +3068,19 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun getIntEntityProperty(identifier: String?): Int {
-        return intProperties.get(identifier)!!
+        return intProperties[identifier]!!
     }
 
     fun getBooleanEntityProperty(identifier: String?): Boolean {
-        return intProperties.get(identifier) == 1
+        return intProperties[identifier] == 1
     }
 
     fun getFloatEntityProperty(identifier: String?): Float {
-        return floatProperties.get(identifier)!!
+        return floatProperties[identifier]!!
     }
 
     fun getEnumEntityProperty(identifier: String): String? {
-        val entityPropertyList: List<EntityProperty> = EntityProperty.Companion.getEntityProperty(
+        val entityPropertyList: List<EntityProperty> = EntityProperty.getEntityProperty(
             this.getIdentifier()
         )
 
@@ -3088,23 +3088,23 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             if (identifier != property.getIdentifier() || property !is EnumEntityProperty) {
                 continue
             }
-            return property.getEnums().get(intProperties.get(identifier)!!)
+            return property.getEnums()[intProperties.get(identifier)!!]
         }
         return null
     }
 
     private fun initEntityProperties(entityIdentifier: String) {
-        val entityPropertyList: List<EntityProperty> = EntityProperty.Companion.getEntityProperty(entityIdentifier)
+        val entityPropertyList: List<EntityProperty> = EntityProperty.getEntityProperty(entityIdentifier)
         if (entityPropertyList.isEmpty()) return
 
         for (property: EntityProperty in entityPropertyList) {
-            val identifier: String? = property.getIdentifier()
+            val identifier: String = property.getIdentifier()
 
             when (property) {
-                -> floatProperties.put(identifier, floatProperty.getDefaultValue())
-                -> intProperties.put(identifier, intProperty.getDefaultValue())
-                -> intProperties.put(identifier, if (booleanProperty.getDefaultValue()) 1 else 0)
-                -> intProperties.put(identifier, enumProperty.findIndex(enumProperty.getDefaultValue()))
+                is FloatEntityProperty -> floatProperties[identifier] = property.getDefaultValue()
+                is IntEntityProperty -> intProperties[identifier] = property.getDefaultValue()
+                is BooleanEntityProperty -> intProperties[identifier] = if (property.getDefaultValue()) 1 else 0
+                is EnumEntityProperty -> intProperties[identifier] = property.findIndex(property.getDefaultValue())
                 else -> {}
             }
         }
@@ -3112,18 +3112,18 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
 
     private fun propertySyncData(): PropertySyncData {
-        val intValues: Collection<Int> = intProperties.values()
-        val intArray: IntArray = IntArray(intValues.size())
-        var i: Int = 0
+        val intValues: Collection<Int> = intProperties.values
+        val intArray = IntArray(intValues.size)
+        var i = 0
         for (value: Int in intValues) {
-            intArray.get(i++) = value
+            intArray[i++] = value
         }
 
-        val floatValues: Collection<Float> = floatProperties.values()
-        val floatArray: FloatArray = FloatArray(floatValues.size())
+        val floatValues: Collection<Float> = floatProperties.values
+        val floatArray = FloatArray(floatValues.size)
         i = 0
         for (value: Float in floatValues) {
-            floatArray.get(i++) = value
+            floatArray[i++] = value
         }
 
         return PropertySyncData(intArray, floatArray)
@@ -3142,11 +3142,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun getChunkX(): Int {
-        return position.getChunkX()
+        return position.chunkX
     }
 
     fun getChunkZ(): Int {
-        return position.getChunkZ()
+        return position.chunkZ
     }
 
     fun getX(): Double {
@@ -3232,7 +3232,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         fun createEntity(identifier: Identifier, pos: Locator, vararg args: Any?): Entity? {
             return createEntity(
                 identifier.toString(),
-                Objects.requireNonNull(pos.getChunk()),
+                requireNonNull(pos.chunk)!!,
                 getDefaultNBT(pos.position),
                 *args
             )
@@ -3251,7 +3251,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
          */
         @JvmStatic
         fun createEntity(name: String, pos: Locator, vararg args: Any?): Entity? {
-            return createEntity(name, Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos.position), *args)
+            return createEntity(name, requireNonNull(pos.chunk)!!, getDefaultNBT(pos.position), *args)
         }
 
         /**
@@ -3267,11 +3267,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
          */
         @JvmStatic
         fun createEntity(type: Int, pos: Locator, vararg args: Any?): Entity? {
-            val entityIdentifier: String? = Registries.ENTITY.getEntityIdentifier(type)
-            if (entityIdentifier == null) return null
+            val entityIdentifier: String = Registries.ENTITY.getEntityIdentifier(type)
             return createEntity(
                 entityIdentifier,
-                Objects.requireNonNull(pos.getChunk()),
+                requireNonNull(pos.chunk)!!,
                 getDefaultNBT(pos.position),
                 *args
             )
@@ -3291,8 +3290,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
          */
         @JvmStatic
         fun createEntity(type: Int, chunk: IChunk, nbt: CompoundTag, vararg args: Any?): Entity? {
-            val entityIdentifier: String? = Registries.ENTITY.getEntityIdentifier(type)
-            if (entityIdentifier == null) return null
+            val entityIdentifier: String = Registries.ENTITY.getEntityIdentifier(type)
             return Registries.ENTITY.provideEntity(entityIdentifier, chunk, nbt, *args)
         }
 
@@ -3311,8 +3309,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
          * @return the identifier
          */
         fun getIdentifier(networkID: Int): Identifier? {
-            val entityIdentifier: String? = Registries.ENTITY.getEntityIdentifier(networkID)
-            if (entityIdentifier == null) return null
+            val entityIdentifier: String = Registries.ENTITY.getEntityIdentifier(networkID)
             return Identifier(entityIdentifier)
         }
 
@@ -3351,9 +3348,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 )
                 .putList(
                     TAG_MOTION, ListTag<FloatTag>()
-                        .add(FloatTag(if (motion != null) motion.x.toFloat() else 0f))
-                        .add(FloatTag(if (motion != null) motion.y.toFloat() else 0f))
-                        .add(FloatTag(if (motion != null) motion.z.toFloat() else 0f))
+                        .add(FloatTag(motion?.x?.toFloat() ?: 0f))
+                        .add(FloatTag(motion?.y?.toFloat() ?: 0f))
+                        .add(FloatTag(motion?.z?.toFloat() ?: 0f))
                 )
                 .putList(
                     TAG_ROTATION, ListTag<FloatTag>()
@@ -3375,7 +3372,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
          * @param players   可视玩家 Visible Player
          */
         fun playAnimationOnEntities(animation: Animation, entities: Collection<Entity>, players: Collection<Player>) {
-            val pk: AnimateEntityPacket = AnimateEntityPacket()
+            val pk = AnimateEntityPacket()
             pk.parseFromAnimation(animation)
             entities.forEach(Consumer { entity: Entity -> pk.entityRuntimeIds.add(entity.getId()) })
             Server.broadcastPacket(players, pk)
@@ -3387,7 +3384,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         fun playAnimationOnEntities(animation: Animation, entities: Collection<Entity>) {
             val viewers: HashSet<Player> = HashSet()
             entities.forEach(Consumer { entity: Entity ->
-                viewers.addAll(entity.getViewers().values())
+                viewers.addAll(entity.getViewers().values)
                 if (entity.isPlayer) viewers.add(entity as Player)
             })
             playAnimationOnEntities(animation, entities, viewers)

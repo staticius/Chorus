@@ -22,7 +22,7 @@ import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
-import org.chorus.math.NukkitMath.clamp
+import org.chorus.math.ChorusMath.clamp
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.network.protocol.LevelEventPacket

@@ -311,7 +311,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
             DamageCause.CONTACT, DamageCause.HUNGER, DamageCause.MAGIC, DamageCause.DROWNING, DamageCause.SUFFOCATION, DamageCause.PROJECTILE -> source.isCancelled =
                 true
 
-            DamageCause.FIRE, DamageCause.FIRE_TICK, DamageCause.LAVA -> if (hasEffect(EffectType.Companion.FIRE_RESISTANCE)) {
+            DamageCause.FIRE, DamageCause.FIRE_TICK, DamageCause.LAVA -> if (hasEffect(EffectType.FIRE_RESISTANCE)) {
                 return false
             }
 

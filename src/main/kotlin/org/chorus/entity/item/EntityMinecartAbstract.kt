@@ -410,12 +410,12 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
      * @return 是否有漏斗被通知
      */
     private fun checkPushHopper(pushArea: AxisAlignedBB, holder: InventoryHolder): Boolean {
-        val minX: Int = NukkitMath.floorDouble(pushArea.getMinX())
-        val minY: Int = NukkitMath.floorDouble(pushArea.getMinY())
-        val minZ: Int = NukkitMath.floorDouble(pushArea.getMinZ())
-        val maxX: Int = NukkitMath.ceilDouble(pushArea.getMaxX())
-        val maxY: Int = NukkitMath.ceilDouble(pushArea.getMaxY())
-        val maxZ: Int = NukkitMath.ceilDouble(pushArea.getMaxZ())
+        val minX: Int = ChorusMath.floorDouble(pushArea.minX)
+        val minY: Int = ChorusMath.floorDouble(pushArea.minY)
+        val minZ: Int = ChorusMath.floorDouble(pushArea.minZ)
+        val maxX: Int = ChorusMath.ceilDouble(pushArea.maxX)
+        val maxY: Int = ChorusMath.ceilDouble(pushArea.maxY)
+        val maxZ: Int = ChorusMath.ceilDouble(pushArea.maxZ)
         val tmpBV: BlockVector3 = BlockVector3()
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
@@ -439,12 +439,12 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
      * @return 是否有漏斗被通知
      */
     private fun checkPickupHopper(pickupArea: AxisAlignedBB, holder: InventoryHolder): Boolean {
-        val minX: Int = NukkitMath.floorDouble(pickupArea.getMinX())
-        val minY: Int = NukkitMath.floorDouble(pickupArea.getMinY())
-        val minZ: Int = NukkitMath.floorDouble(pickupArea.getMinZ())
-        val maxX: Int = NukkitMath.ceilDouble(pickupArea.getMaxX())
-        val maxY: Int = NukkitMath.ceilDouble(pickupArea.getMaxY())
-        val maxZ: Int = NukkitMath.ceilDouble(pickupArea.getMaxZ())
+        val minX: Int = ChorusMath.floorDouble(pickupArea.minX)
+        val minY: Int = ChorusMath.floorDouble(pickupArea.minY)
+        val minZ: Int = ChorusMath.floorDouble(pickupArea.minZ)
+        val maxX: Int = ChorusMath.ceilDouble(pickupArea.maxX)
+        val maxY: Int = ChorusMath.ceilDouble(pickupArea.maxY)
+        val maxZ: Int = ChorusMath.ceilDouble(pickupArea.maxZ)
         val tmpBV: BlockVector3 = BlockVector3()
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
@@ -462,8 +462,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
     }
 
     private fun setFalling() {
-        motion.x = NukkitMath.clamp(motion.x, -getMaxSpeed(), getMaxSpeed())
-        motion.z = NukkitMath.clamp(motion.z, -getMaxSpeed(), getMaxSpeed())
+        motion.x = ChorusMath.clamp(motion.x, -getMaxSpeed(), getMaxSpeed())
+        motion.z = ChorusMath.clamp(motion.z, -getMaxSpeed(), getMaxSpeed())
 
         if (!hasUpdated) {
             for (linked: Entity in passengers) {
@@ -614,8 +614,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             motX *= 0.75
             motZ *= 0.75
         }
-        motX = NukkitMath.clamp(motX, -getMaxSpeed(), getMaxSpeed())
-        motZ = NukkitMath.clamp(motZ, -getMaxSpeed(), getMaxSpeed())
+        motX = ChorusMath.clamp(motX, -getMaxSpeed(), getMaxSpeed())
+        motZ = ChorusMath.clamp(motZ, -getMaxSpeed(), getMaxSpeed())
 
         move(motX, 0.0, motZ)
         if (facing.get(0).get(1) != 0 && MathHelper.floor(position.x) - dx == facing.get(0).get(0) && MathHelper.floor(

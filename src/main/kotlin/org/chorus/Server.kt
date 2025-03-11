@@ -44,7 +44,7 @@ import org.chorus.level.tickingarea.manager.SimpleTickingAreaManager
 import org.chorus.level.tickingarea.manager.TickingAreaManager
 import org.chorus.level.tickingarea.storage.JSONTickingAreaStorage
 import org.chorus.level.updater.block.BlockStateUpdaterBase
-import org.chorus.math.NukkitMath.round
+import org.chorus.math.ChorusMath.round
 import org.chorus.metadata.EntityMetadataStore
 import org.chorus.metadata.LevelMetadataStore
 import org.chorus.metadata.PlayerMetadataStore
@@ -1104,15 +1104,15 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
         players[socketAddress] = player
         if (this.sendUsageTicker > 0) {
-            uniquePlayers.add(player.getUuid()!!)
+            uniquePlayers.add(player.getUniqueId()!!)
         }
     }
 
     @ApiStatus.Internal
     fun addOnlinePlayer(player: Player) {
-        playerList[player.getUuid()!!] = player
+        playerList[player.getUniqueId()!!] = player
         this.updatePlayerListData(
-            player.getUuid()!!,
+            player.getUniqueId()!!,
             player.getId(),
             player.getDisplayName(),
             player.getSkin()!!,
@@ -1124,14 +1124,14 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
     @ApiStatus.Internal
     fun removeOnlinePlayer(player: Player) {
-        if (playerList.containsKey(player.getUuid())) {
-            playerList.remove(player.getUuid())
+        if (playerList.containsKey(player.getUniqueId())) {
+            playerList.remove(player.getUniqueId())
 
             val pk = PlayerListPacket()
             pk.type = PlayerListPacket.TYPE_REMOVE
             pk.entries = arrayOf(
                 PlayerListPacket.Entry(
-                    player.getUuid()!!
+                    player.getUniqueId()!!
                 )
             )
 
@@ -1261,7 +1261,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         pk.entries = playerList.values.stream()
             .map { p: Player ->
                 PlayerListPacket.Entry(
-                    p.getUuid()!!,
+                    p.getUniqueId()!!,
                     p.getId(),
                     p.getDisplayName(),
                     p.getSkin()!!,

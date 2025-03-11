@@ -337,7 +337,7 @@ data class CustomItemDefinition(@JvmField val identifier: String?, @JvmField val
         private val blockTags: MutableList<String> = ArrayList()
         private val diggerRoot: CompoundTag = CompoundTag()
             .putBoolean("use_efficiency", true)
-            .putList("destroy_speeds", ListTag(Tag.TAG_Compound.toInt()))
+            .putList("destroy_speeds", ListTag(Tag.TAG_COMPOUND.toInt()))
         private var speed: Int? = null
 
         init {

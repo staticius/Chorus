@@ -9,16 +9,16 @@ class ByteTag : NumberTag<Int> {
         this.data = data.toByte().toInt()
     }
 
-    override fun getData(): Int {
+    fun getData(): Int {
         return data
     }
 
-    override fun setData(data: Int?) {
+    fun setData(data: Int?) {
         this.data = (data ?: 0).toByte().toInt()
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_Byte
+        get() = Tag.Companion.TAG_BYTE
 
     override fun parseValue(): Int {
         return data
@@ -40,15 +40,16 @@ class ByteTag : NumberTag<Int> {
         return data.toString() + "b"
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (super.equals(obj)) {
-            val byteTag = obj as ByteTag
+    override fun equals(other: Any?): Boolean {
+        if (super.equals(other)) {
+            val byteTag = other as ByteTag
             return data == byteTag.data
         }
         return false
     }
 
-    override fun copy(): Tag {
+    override fun copy(): Tag<Int> {
         return ByteTag(data)
     }
+
 }

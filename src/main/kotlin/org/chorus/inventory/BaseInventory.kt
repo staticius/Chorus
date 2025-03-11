@@ -513,7 +513,7 @@ abstract class BaseInventory(
     }
 
     override fun sendContents(players: Collection<Player?>) {
-        this.sendContents(*players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendContents(*players.toTypedArray())
     }
 
     override fun sendSlot(index: Int, player: Player) {
@@ -542,7 +542,7 @@ abstract class BaseInventory(
     }
 
     override fun sendSlot(index: Int, players: Collection<Player?>) {
-        this.sendSlot(index, *players.toArray<Player>(Player.EMPTY_ARRAY))
+        this.sendSlot(index, *players.toTypedArray())
     }
 
 

@@ -225,11 +225,7 @@ enum class TextFormat(
          */
         @JvmStatic
         @JvmOverloads
-        fun clean(input: String?, recursive: Boolean = false): String? {
-            if (input == null) {
-                return null
-            }
-
+        fun clean(input: String, recursive: Boolean = false): String {
             val result = CLEAN_PATTERN.matcher(input).replaceAll("")
 
             if (recursive && CLEAN_PATTERN.matcher(result).find()) {

@@ -23,13 +23,13 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
     }
 
     val floorX: Int
-        get() = NukkitMath.floorFloat(this.south)
+        get() = ChorusMath.floorFloat(this.south)
 
     val floorY: Int
-        get() = NukkitMath.floorFloat(this.up)
+        get() = ChorusMath.floorFloat(this.up)
 
     val floorZ: Int
-        get() = NukkitMath.floorFloat(this.west)
+        get() = ChorusMath.floorFloat(this.west)
 
     fun add(x: Float): Vector3f {
         return this.add(x, 0f, 0f)

@@ -88,7 +88,7 @@ interface CommandSender : Permissible {
      *
      * @since Nukkit 1.0 | Nukkit API 1.0.0
      */
-    val name: String
+    fun getName(): String
 
     /**
      * @return 发送者是否为玩家<br></br>whether the sender is an player

@@ -127,7 +127,7 @@ class ShapedRecipe @JvmOverloads constructor(
     }
 
     val result: Item
-        get() = results.getFirst()
+        get() = results.first()
 
     fun setIngredient(key: String, item: Item): ShapedRecipe {
         return this.setIngredient(key[0], item)

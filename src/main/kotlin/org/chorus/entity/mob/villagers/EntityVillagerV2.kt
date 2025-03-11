@@ -71,7 +71,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun getRecipes(): ListTag<CompoundTag?> {
         return ListTag<CompoundTag?>(
-            Tag.TAG_Compound.toInt(),
+            Tag.TAG_COMPOUND.toInt(),
             TradeRecipeBuildUtils.RECIPE_MAP.entries.stream()
                 .filter { t: Map.Entry<Int, CompoundTag?> -> getTradeNetIds().contains(t.key) }.toList().stream()
                 .map<CompoundTag?> { java.util.Map.Entry.value }.toList()

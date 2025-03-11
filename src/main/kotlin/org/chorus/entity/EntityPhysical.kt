@@ -302,18 +302,18 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
             }
             // 计算碰撞箱
             val centerXWidth: Double =
-                (targetAABB.getMaxX() + targetAABB.getMinX() - selfAABB.getMaxX() - selfAABB.getMinX()) * 0.5
+                (targetAABB.maxX + targetAABB.minX - selfAABB.maxX - selfAABB.minX) * 0.5
             val centerZWidth: Double =
-                (targetAABB.getMaxZ() + targetAABB.getMinZ() - selfAABB.getMaxZ() - selfAABB.getMinZ()) * 0.5
+                (targetAABB.maxZ + targetAABB.minZ - selfAABB.maxZ - selfAABB.minZ) * 0.5
             if (centerXWidth > 0) {
-                dxPositives.add((targetAABB.getMaxX() - targetAABB.getMinX()) + (selfAABB.getMaxX() - selfAABB.getMinX()) * 0.5 - centerXWidth)
+                dxPositives.add((targetAABB.maxX - targetAABB.minX) + (selfAABB.maxX - selfAABB.minX) * 0.5 - centerXWidth)
             } else {
-                dxNegatives.add((targetAABB.getMaxX() - targetAABB.getMinX()) + (selfAABB.getMaxX() - selfAABB.getMinX()) * 0.5 + centerXWidth)
+                dxNegatives.add((targetAABB.maxX - targetAABB.minX) + (selfAABB.maxX - selfAABB.minX) * 0.5 + centerXWidth)
             }
             if (centerZWidth > 0) {
-                dzPositives.add((targetAABB.getMaxZ() - targetAABB.getMinZ()) + (selfAABB.getMaxZ() - selfAABB.getMinZ()) * 0.5 - centerZWidth)
+                dzPositives.add((targetAABB.maxZ - targetAABB.minZ) + (selfAABB.maxZ - selfAABB.minZ) * 0.5 - centerZWidth)
             } else {
-                dzNegatives.add((targetAABB.getMaxZ() - targetAABB.getMinZ()) + (selfAABB.getMaxZ() - selfAABB.getMinZ()) * 0.5 + centerZWidth)
+                dzNegatives.add((targetAABB.maxZ - targetAABB.minZ) + (selfAABB.maxZ - selfAABB.minZ) * 0.5 + centerZWidth)
             }
         })
         val resultX: Double = (if (size > 4) dxPositives.doubleParallelStream() else dxPositives.doubleStream()).max()

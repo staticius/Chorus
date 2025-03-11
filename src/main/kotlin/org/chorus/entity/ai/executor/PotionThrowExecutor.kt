@@ -171,13 +171,13 @@ class PotionThrowExecutor(
             if (entity.memoryStorage!!.notEmpty(memory)) {
                 val target = entity.memoryStorage!![memory]
                 val distance = target!!.position.distance(entity.position)
-                if (distance > 8 && !target.hasEffect(EffectType.Companion.SLOWNESS)) {
+                if (distance > 8 && !target.hasEffect(EffectType.SLOWNESS)) {
                     return 17 //SLOWNESS
-                } else if (distance < 3 && !target.hasEffect(EffectType.Companion.WEAKNESS) && ThreadLocalRandom.current()
+                } else if (distance < 3 && !target.hasEffect(EffectType.WEAKNESS) && ThreadLocalRandom.current()
                         .nextInt(4) == 0
                 ) {
                     return 34 //WEAKNESS
-                } else if (target.health > 8 && !target.hasEffect(EffectType.Companion.POISON)) {
+                } else if (target.health > 8 && !target.hasEffect(EffectType.POISON)) {
                     return 25 //POISON
                 }
             }
