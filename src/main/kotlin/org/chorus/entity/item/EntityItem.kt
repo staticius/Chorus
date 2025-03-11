@@ -92,7 +92,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
             this.fireProof = true // Netherite items are fireproof
         }
 
-        server!!.pluginManager.callEvent(ItemSpawnEvent(this))
+        Server.instance.pluginManager.callEvent(ItemSpawnEvent(this))
     }
 
 
@@ -241,7 +241,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
 
             if (this.age > 6000) {
                 val ev: ItemDespawnEvent = ItemDespawnEvent(this)
-                server!!.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     this.age = 0
                 } else {

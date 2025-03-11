@@ -47,7 +47,7 @@ class StatusCommand(name: String) :
             sender.sendMessage(TextFormat.GOLD.toString() + "Uptime: " + formatUptime(time))
 
             var tpsColor = TextFormat.GREEN
-            val tps = server!!.ticksPerSecond
+            val tps = Server.instance.ticksPerSecond
             if (tps < 12) {
                 tpsColor = TextFormat.RED
             } else if (tps < 17) {
@@ -122,7 +122,7 @@ class StatusCommand(name: String) :
                 sender.sendMessage(TextFormat.GOLD.toString() + "Uptime: " + formatUptime(time))
                 // TPS
                 var tpsColor = TextFormat.GREEN
-                val tps = server!!.ticksPerSecond
+                val tps = Server.instance.ticksPerSecond
                 if (tps < 12) {
                     tpsColor = TextFormat.RED
                 } else if (tps < 17) {
@@ -186,7 +186,7 @@ class StatusCommand(name: String) :
             }
             // 网络信息
             try {
-                val network = server!!.network
+                val network = Server.instance.network
                 if (network.hardWareNetworkInterfaces != null) {
                     sender.sendMessage(TextFormat.YELLOW.toString() + ">>> " + TextFormat.WHITE + "Network Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET)
                     sender.sendMessage(

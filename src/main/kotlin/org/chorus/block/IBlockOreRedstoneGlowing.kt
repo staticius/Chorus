@@ -19,7 +19,7 @@ interface IBlockOreRedstoneGlowing {
         if (type == Level.BLOCK_UPDATE_SCHEDULED || type == Level.BLOCK_UPDATE_RANDOM) {
             val level = level
             val event = BlockFadeEvent(block, unlitBlock)
-            level.server.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 level.setBlock(block.position, event.newState, true, true)
             }

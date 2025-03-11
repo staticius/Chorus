@@ -36,7 +36,7 @@ class PlayerSkinPacket : DataPacket() {
         byteBuf.writeSkin(skin!!)
         byteBuf.writeString(newSkinName!!)
         byteBuf.writeString(oldSkinName!!)
-        byteBuf.writeBoolean(skin!!.isTrusted() || Server.getInstance().settings.playerSettings().forceSkinTrusted())
+        byteBuf.writeBoolean(skin!!.isTrusted() || Server.instance.settings.playerSettings().forceSkinTrusted())
     }
 
     override fun pid(): Int {

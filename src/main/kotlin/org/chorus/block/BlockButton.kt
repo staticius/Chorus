@@ -80,8 +80,8 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
             position.add(0.5, 0.5, 0.5)!!, LevelSoundEventPacket.SOUND_POWER_ON,
             blockState!!.blockStateHash()
         )
-        if (level.server.settings.levelSettings().enableRedstone()) {
-            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
+        if (Server.instance.settings.levelSettings().enableRedstone()) {
+            Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
 
             updateAroundRedstone()
             updateAroundRedstone(getSide(facing!!.getOpposite()!!)!!, facing)
@@ -108,8 +108,8 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
                     blockState!!.blockStateHash()
                 )
 
-                if (level.server.settings.levelSettings().enableRedstone()) {
-                    level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
+                if (Server.instance.settings.levelSettings().enableRedstone()) {
+                    Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
 
                     updateAroundRedstone()
                     updateAroundRedstone(getSide(facing!!.getOpposite()!!)!!, facing)
@@ -163,7 +163,7 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
 
     override fun onBreak(item: Item?): Boolean {
         if (isActivated) {
-            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
+            Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
         }
 
         return super.onBreak(item)

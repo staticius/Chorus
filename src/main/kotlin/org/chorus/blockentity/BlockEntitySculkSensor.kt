@@ -54,7 +54,7 @@ class BlockEntitySculkSensor(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chun
     }
 
     override fun onVibrationOccur(event: VibrationEvent): Boolean {
-        if (this.isBlockEntityValid && level.server.settings.levelSettings()
+        if (this.isBlockEntityValid && Server.instance.settings.levelSettings()
                 .enableRedstone() && (level.getBlock(event.source) !is BlockSculkSensor)
         ) {
             val canBeActive = (level.tick - lastActiveTime) > 40 && !waitForVibration
@@ -66,7 +66,7 @@ class BlockEntitySculkSensor(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chun
     }
 
     override fun onVibrationArrive(event: VibrationEvent) {
-        if (this.level != null && this.isBlockEntityValid && level.server.settings.levelSettings().enableRedstone()) {
+        if (this.level != null && this.isBlockEntityValid && Server.instance.settings.levelSettings().enableRedstone()) {
             this.lastVibrationEvent = event
             this.updateLastActiveTime()
             waitForVibration = false

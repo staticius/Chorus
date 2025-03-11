@@ -138,7 +138,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 Behavior(
                     WardenMeleeAttackExecutor(
                         CoreMemoryTypes.Companion.ATTACK_TARGET,
-                        when (getServer()!!.difficulty) {
+                        when (Server.instance.difficulty) {
                             1 -> 16
                             2 -> 30
                             3 -> 45

@@ -1,7 +1,6 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.event.player.PlayerDropItemEvent
 import org.chorus.inventory.*
@@ -30,7 +29,7 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
         var item = inventory.getItem(slot)
 
         val ev: PlayerDropItemEvent
-        player.getServer().getPluginManager().callEvent(PlayerDropItemEvent(player, item).also { ev = it })
+        Server.instance.getPluginManager().callEvent(PlayerDropItemEvent(player, item).also { ev = it })
         if (ev.isCancelled) {
             return context.error()
         }

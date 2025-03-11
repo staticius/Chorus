@@ -132,7 +132,7 @@ class PluginI18n(private val plugin: PluginBase) {
         ) {
             fallbackMap[id]
         } else {
-            Server.getInstance().language.internalGet(id)
+            Server.instance.language.internalGet(id)
         }
     }
 
@@ -155,7 +155,7 @@ class PluginI18n(private val plugin: PluginBase) {
             })!!.containsKey(id)) {
             fallbackMap[id]
         } else {
-            Server.getInstance().language[id]
+            Server.instance.language[id]
         }
     }
 

@@ -186,7 +186,7 @@ abstract class SlenderProjectile : EntityProjectile {
             if (block.isAir() && collisionBlock != null) {
                 block = collisionBlock
             }
-            server!!.pluginManager.callEvent(
+            Server.instance.pluginManager.callEvent(
                 ProjectileHitEvent(
                     this, MovingObjectPosition.fromBlock(
                         block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ(), blockFace,

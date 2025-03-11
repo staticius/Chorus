@@ -24,7 +24,7 @@ class Function private constructor(private val fullPath: Path) {
     fun dispatch(sender: CommandSender?): Boolean {
         var success = true
         for (command in commands!!) {
-            if (Server.getInstance().executeCommand(sender, command) <= 0) success = false
+            if (Server.instance.executeCommand(sender, command) <= 0) success = false
         }
         return success
     }

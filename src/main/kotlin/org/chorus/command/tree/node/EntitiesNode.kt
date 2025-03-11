@@ -28,7 +28,7 @@ class EntitiesNode : TargetNode<Entity?>() {
             this.value = entities
         } else {
             entities = Lists.newArrayList()
-            val player = Server.getInstance().getPlayer(arg)
+            val player = Server.instance.getPlayer(arg)
             if (player != null) {
                 entities.add(player)
             }

@@ -205,7 +205,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
         cloned.setCount(1)
         val inventory = campfire.getInventory()
         if (inventory.canAddItem(cloned)) {
-            val recipe = level.server.recipeRegistry.findCampfireRecipe(cloned)
+            val recipe = Server.instance.recipeRegistry.findCampfireRecipe(cloned)
             if (recipe != null) {
                 inventory.addItem(cloned)
                 item.setCount(item.getCount() - 1)

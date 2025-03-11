@@ -27,7 +27,7 @@ class EnchantmentFireAspect :
             val duration = max((entity!!.fireTicks / 20).toDouble(), (getLevel() shl 2).toDouble()).toInt()
 
             val ev = EntityCombustByEntityEvent(attacker, entity, duration)
-            Server.getInstance().pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
 
             if (!ev.isCancelled) {
                 entity.setOnFire(ev.duration)

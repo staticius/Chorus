@@ -24,7 +24,7 @@ class PlayerChatEvent @JvmOverloads constructor(
         this.format = format
 
         if (recipients == null) {
-            for (permissible in Server.getInstance().pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_USERS)) {
+            for (permissible in Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_USERS)) {
                 if (permissible is CommandSender) {
                     this.recipients.add(permissible)
                 }

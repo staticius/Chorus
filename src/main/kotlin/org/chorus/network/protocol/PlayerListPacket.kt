@@ -41,7 +41,7 @@ class PlayerListPacket : DataPacket() {
 
             for (entry in this.entries) {
                 byteBuf.writeBoolean(
-                    entry.trustedSkin || Server.getInstance().settings.playerSettings().forceSkinTrusted()
+                    entry.trustedSkin || Server.instance.settings.playerSettings().forceSkinTrusted()
                 )
             }
         } else {

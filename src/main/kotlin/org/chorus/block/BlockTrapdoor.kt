@@ -88,10 +88,10 @@ open class BlockTrapdoor  //</editor-fold>
         }
 
     override fun onUpdate(type: Int): Int {
-        if (type == Level.BLOCK_UPDATE_REDSTONE && level.server.settings.levelSettings().enableRedstone()) {
+        if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings().enableRedstone()) {
             if ((this.isOpen != this.isGettingPower) && !this.manualOverride) {
                 if (this.isOpen != this.isGettingPower) {
-                    level.server.pluginManager.callEvent(
+                    Server.instance.pluginManager.callEvent(
                         BlockRedstoneEvent(
                             this,
                             if (this.isOpen) 15 else 0,
@@ -142,7 +142,7 @@ open class BlockTrapdoor  //</editor-fold>
             return false
         }
 
-        if (level.server.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
+        if (Server.instance.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
             this.setOpen(null, true)
         }
 
@@ -178,7 +178,7 @@ open class BlockTrapdoor  //</editor-fold>
         }
 
         val event = DoorToggleEvent(this, player)
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             return false

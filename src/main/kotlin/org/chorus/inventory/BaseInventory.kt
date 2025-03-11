@@ -4,7 +4,6 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.blockentity.*
 import org.chorus.entity.Entity
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus.event.inventory.InventoryCloseEvent
 import org.chorus.event.inventory.InventoryOpenEvent
@@ -110,7 +109,7 @@ abstract class BaseInventory(
         val holder = this.holder
         if (holder is Entity) {
             val ev = EntityInventoryChangeEvent(holder, this.getItem(index), item, index)
-            Server.getInstance().pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 this.sendSlot(index, this.getViewers())
                 return false
@@ -357,7 +356,7 @@ abstract class BaseInventory(
                     holder as Entity,
                     old!!, item, index
                 )
-                Server.getInstance().pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     this.sendSlot(index, this.getViewers())
                     return false
@@ -389,7 +388,7 @@ abstract class BaseInventory(
 
     override fun open(who: Player): Boolean {
         val ev = InventoryOpenEvent(this, who)
-        who.getServer().getPluginManager().callEvent(ev)
+        Server.instance.getPluginManager().callEvent(ev)
         if (ev.isCancelled) {
             return false
         }
@@ -400,7 +399,7 @@ abstract class BaseInventory(
 
     override fun close(who: Player) {
         val ev = InventoryCloseEvent(this, who)
-        who.getServer().getPluginManager().callEvent(ev)
+        Server.instance.getPluginManager().callEvent(ev)
         this.onClose(who)
     }
 

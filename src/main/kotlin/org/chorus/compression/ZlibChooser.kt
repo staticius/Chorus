@@ -20,7 +20,7 @@ object ZlibChooser {
     @JvmStatic
     fun setProvider(providerIndex: Int) {
         var providerIndex = providerIndex
-        val lang = if (Server.getInstance() == null) BaseLang("eng") else Server.getInstance().language
+        val lang = if (Server.getInstance() == null) BaseLang("eng") else Server.instance.language
         when (providerIndex) {
             0 -> if (providers[providerIndex] == null) providers[providerIndex] = ZlibOriginal()
             1 -> if (providers[providerIndex] == null) providers[providerIndex] = ZlibSingleThreadLowMem()

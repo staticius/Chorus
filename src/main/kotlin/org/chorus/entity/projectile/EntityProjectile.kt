@@ -68,7 +68,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
 
     open fun onCollideWithEntity(entity: Entity) {
         val projectileHitEvent: ProjectileHitEvent = ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity))
-        server!!.pluginManager.callEvent(projectileHitEvent)
+        Server.instance.pluginManager.callEvent(projectileHitEvent)
 
         if (projectileHitEvent.isCancelled) {
             return
@@ -95,7 +95,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
 
             if (this.fireTicks > 0) {
                 val event: EntityCombustByEntityEvent = EntityCombustByEntityEvent(this, entity, 5)
-                server!!.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     entity.setOnFire(event.duration)
                 }
@@ -234,7 +234,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
                 this.motion.y = 0.0
                 this.motion.z = 0.0
 
-                server!!.pluginManager.callEvent(
+                Server.instance.pluginManager.callEvent(
                     ProjectileHitEvent(
                         this, MovingObjectPosition.fromBlock(
                             position.getFloorX(),

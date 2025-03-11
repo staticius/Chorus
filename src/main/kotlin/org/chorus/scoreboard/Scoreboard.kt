@@ -74,7 +74,7 @@ class Scoreboard @JvmOverloads constructor(
                 line.score,
                 ScoreboardLineChangeEvent.ActionType.ADD_LINE
             )
-            Server.getInstance().pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) return false
             line = event.getLine()
         }
@@ -102,7 +102,7 @@ class Scoreboard @JvmOverloads constructor(
                 removed.score,
                 ScoreboardLineChangeEvent.ActionType.REMOVE_LINE
             )
-            Server.getInstance().pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) return false
         }
         lines.remove(scorer)
@@ -115,7 +115,7 @@ class Scoreboard @JvmOverloads constructor(
         if (shouldCallEvent()) {
             val event =
                 ScoreboardLineChangeEvent(this, null, 0, 0, ScoreboardLineChangeEvent.ActionType.REMOVE_ALL_LINES)
-            Server.getInstance().pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) return false
         }
         if (send) {
@@ -165,7 +165,7 @@ class Scoreboard @JvmOverloads constructor(
     }
 
     override fun shouldCallEvent(): Boolean {
-        val manager = Server.getInstance().scoreboardManager
+        val manager = Server.instance.scoreboardManager
         return manager != null && manager.containScoreboard(this)
     }
 }

@@ -85,7 +85,7 @@ open class ItemSpawnEgg : Item {
 
         val networkId = entityNetworkId
         val ev = CreatureSpawnEvent(networkId, block, nbt, SpawnReason.SPAWN_EGG)
-        level.server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
         if (ev.isCancelled) {
             return false

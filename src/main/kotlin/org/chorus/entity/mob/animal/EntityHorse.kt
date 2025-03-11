@@ -272,7 +272,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         val down = level!!.getBlock(floorLocation.down())
 
         val event = EntityFallEvent(this, down, fallDistance)
-        server!!.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return
         }
@@ -298,7 +298,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
                     return
                 }
                 val farmEvent = FarmLandDecayEvent(this, down)
-                server!!.pluginManager.callEvent(farmEvent)
+                Server.instance.pluginManager.callEvent(farmEvent)
                 if (farmEvent.isCancelled) return
                 level!!.setBlock(down.position, BlockDirt(), false, true)
                 return
@@ -387,7 +387,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     fun getRider(): Entity? {
         val name = memoryStorage.get<String>(CoreMemoryTypes.Companion.RIDER_NAME)
         return if (name != null) {
-            Server.getInstance().getPlayerExact(name)
+            Server.instance.getPlayerExact(name)
         } else null //todo other entity
     }
 

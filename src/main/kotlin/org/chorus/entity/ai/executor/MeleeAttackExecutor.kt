@@ -128,7 +128,7 @@ open class MeleeAttackExecutor(
 
             var defaultDamage = 0f
             if (entity is EntityCanAttack) {
-                defaultDamage = entity.getDiffHandDamage(entity.server!!.difficulty)
+                defaultDamage = entity.getDiffHandDamage(Server.instance.difficulty)
             }
             var itemDamage = item.getAttackDamage(entity) + defaultDamage
 

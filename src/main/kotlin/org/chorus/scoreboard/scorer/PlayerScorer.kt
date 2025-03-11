@@ -29,7 +29,7 @@ class PlayerScorer : IScorer {
     val player: Player?
         get() {
             if (uuid == null) return null
-            return if (Server.getInstance().getPlayer(uuid).isPresent) Server.getInstance()
+            return if (Server.instance.getPlayer(uuid).isPresent) Server.getInstance()
                 .getPlayer(uuid).get() else null
         }
 
@@ -51,17 +51,17 @@ class PlayerScorer : IScorer {
     }
 
     override val name: String
-        get() = if (Server.getInstance().onlinePlayers[uuid] == null) uuid!!.mostSignificantBits
-            .toString() else Server.getInstance().onlinePlayers[uuid].getName()
+        get() = if (Server.instance.onlinePlayers[uuid] == null) uuid!!.mostSignificantBits
+            .toString() else Server.instance.onlinePlayers[uuid].getName()
 
     override fun toNetworkInfo(scoreboard: IScoreboard, line: IScoreboardLine): ScoreInfo? {
         if (uuid == null) return null
-        return if (Server.getInstance().getPlayer(uuid).isPresent) ScoreInfo(
+        return if (Server.instance.getPlayer(uuid).isPresent) ScoreInfo(
             line.lineId,
             scoreboard.objectiveName,
             line.score,
             ScorerType.PLAYER,
-            Server.getInstance().getPlayer(uuid).get().getId()
+            Server.instance.getPlayer(uuid).get().getId()
         ) else null
     }
 }

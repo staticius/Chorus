@@ -4,7 +4,6 @@ import org.chorus.PlayerHandle
 import org.chorus.dialog.response.FormResponseDialog
 import org.chorus.dialog.window.FormWindowDialog
 import org.chorus.entity.Entity.equals
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.mob.EntityNPC
 import org.chorus.entity.mob.EntityNPC.getDialog
 import org.chorus.event.player.PlayerDialogRespondedEvent
@@ -27,7 +26,7 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
             }
 
             val event = PlayerDialogRespondedEvent(player, dialog, response)
-            player.getServer().getPluginManager().callEvent(event)
+            Server.instance.getPluginManager().callEvent(event)
             return
         }
         if (playerHandle.dialogWindows.getIfPresent(pk.sceneName) != null) {
@@ -46,7 +45,7 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
             }
 
             val event = PlayerDialogRespondedEvent(player, dialog, response)
-            player.getServer().getPluginManager().callEvent(event)
+            Server.instance.getPluginManager().callEvent(event)
 
             //close dialog after clicked button (otherwise the client will not be able to close the window)
             if (response.getClickedButton() != null && pk.requestType == NPCRequestPacket.RequestType.EXECUTE_ACTION) {

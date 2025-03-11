@@ -32,7 +32,7 @@ class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     @Throws(IOException::class)
     fun requestTrackingHandler(): Int {
         val opt = trackingHandler
-        val positionTrackingService = level.server.positionTrackingService
+        val positionTrackingService = Server.instance.positionTrackingService
         val floor = this.clone()
         if (opt.isPresent) {
             val handler = opt.asInt
@@ -52,7 +52,7 @@ class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     override fun onBreak(isSilkTouch: Boolean) {
         val handlers: IntList
-        val positionTrackingService = Server.getInstance().positionTrackingService
+        val positionTrackingService = Server.instance.positionTrackingService
         try {
             handlers = positionTrackingService.findTrackingHandlers(this)
             if (handlers.isEmpty()) {

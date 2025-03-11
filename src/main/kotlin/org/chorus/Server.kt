@@ -105,8 +105,6 @@ import org.iq80.leveldb.DB
 import org.iq80.leveldb.Options
 import org.iq80.leveldb.impl.Iq80DBFactory
 import org.jetbrains.annotations.ApiStatus
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileReader
 import java.io.IOException
@@ -1343,7 +1341,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             return result
         }
 
-        return lookupName(name).map { uuid: UUID? -> OfflinePlayer(this, uuid) }
+        return lookupName(name).map { uuid: UUID? -> OfflinePlayer(uuid) }
             .orElse(OfflinePlayer(this, name))
     }
 
@@ -1363,7 +1361,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             return onlinePlayer.get()
         }
 
-        return OfflinePlayer(this, uuid)
+        return OfflinePlayer(uuid)
     }
 
     /**
@@ -2227,8 +2225,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                     return false
                 }
                 level = Level(
-                    this, levelName, pathS, generators.size, provider,
-                    value
+                    levelName, pathS, generators.size, provider, value
                 )
             } catch (e: Exception) {
                 log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName1, e.message!!), e)
@@ -2292,7 +2289,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                     log.warn("level {} has already been loaded!", levelName)
                     continue
                 }
-                level = Level(this, levelName, path, levelConfig1.generators.size, provider, generatorConfig)
+                level = Level(levelName, path, levelConfig1.generators.size, provider, generatorConfig)
 
                 levels[level.id] = level
                 level.initLevel()

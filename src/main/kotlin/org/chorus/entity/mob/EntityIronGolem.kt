@@ -71,7 +71,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
                         not(
                             any(
-                                IBehaviorEvaluator { entity: EntityMob -> entity.getServer()!!.getDifficulty() == 0 },
+                                IBehaviorEvaluator { entity: EntityMob -> entity.Server.instance.getDifficulty() == 0 },
                                 all(
                                     IBehaviorEvaluator { entity: EntityMob? ->
                                         attackingPlayer =
@@ -180,7 +180,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
 
     override fun getDiffHandDamage(difficulty: Int): Float {
         if (attackingPlayer) {
-            when (getServer()!!.getDifficulty()) {
+            when (Server.instance.getDifficulty()) {
                 1 -> return ThreadLocalRandom.current().nextFloat(4.5f, 11.5f)
                 2 -> return ThreadLocalRandom.current().nextFloat(7.5f, 21.5f)
                 3 -> return ThreadLocalRandom.current().nextFloat(11.5f, 32.25f)

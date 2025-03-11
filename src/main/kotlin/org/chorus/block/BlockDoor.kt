@@ -83,7 +83,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
             return type
         }
 
-        if (type == Level.BLOCK_UPDATE_REDSTONE && level.server.settings.levelSettings().enableRedstone()) {
+        if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings().enableRedstone()) {
             this.onRedstoneUpdate()
             return type
         }
@@ -118,7 +118,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
     private fun onRedstoneUpdate() {
         if ((this.isOpen != this.isGettingPower) && !this.manualOverride) {
             if (this.isOpen != this.isGettingPower) {
-                level.server.pluginManager.callEvent(
+                Server.instance.pluginManager.callEvent(
                     BlockRedstoneEvent(
                         this,
                         if (this.isOpen) 15 else 0,
@@ -239,7 +239,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
 
         level.updateAround(block.position)
 
-        if (level.server.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
+        if (Server.instance.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
             this.setOpen(null, true)
         }
 
@@ -317,7 +317,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
         }
 
         val event = DoorToggleEvent(this, player!!)
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             return false

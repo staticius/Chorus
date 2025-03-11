@@ -208,7 +208,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
                     woodType, false
                 )
                 val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return
                 }
@@ -231,7 +231,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
                     woodType, false
                 )
                 val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return
                 }
@@ -255,7 +255,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
         val blockManager: BlockManager = BlockManager(this.level)
         val success: Boolean = generator.generate(blockManager, RandomSourceProvider.create(), vector3)
         val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
-        level.server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled || !success) {
             if (bigTree) {
                 level.setBlock(vector3!!, this, true, false)

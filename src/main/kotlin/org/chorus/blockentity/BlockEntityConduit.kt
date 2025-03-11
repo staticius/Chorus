@@ -90,10 +90,10 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
             this.spawnToAll()
             if (activeBeforeUpdate && !isActive) {
                 level.addSound(position.add(0.0, 0.5, 0.0), Sound.CONDUIT_DEACTIVATE)
-                level.server.pluginManager.callEvent(ConduitDeactivateEvent(block))
+                Server.instance.pluginManager.callEvent(ConduitDeactivateEvent(block))
             } else if (!activeBeforeUpdate && isActive) {
                 level.addSound(position.add(0.0, 0.5, 0.0), Sound.CONDUIT_ACTIVATE)
-                level.server.pluginManager.callEvent(ConduitActivateEvent(block))
+                Server.instance.pluginManager.callEvent(ConduitActivateEvent(block))
             }
         }
 

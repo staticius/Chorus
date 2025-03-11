@@ -33,7 +33,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? = Com
             return false
         }
 
-        if (level.server.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings().enableRedstone()) {
             if (!checkState()) {
                 updateAllAroundRedstone(blockFace!!.getOpposite())
             }
@@ -57,7 +57,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? = Com
             return false
         }
 
-        if (level.server.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings().enableRedstone()) {
             updateAllAroundRedstone(blockFace!!.getOpposite())
         }
         return true
@@ -65,7 +65,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? = Com
 
     override fun onUpdate(type: Int): Int {
         if (super.onUpdate(type) == 0) {
-            if (!level.server.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings().enableRedstone()) {
                 return 0
             }
 
@@ -73,7 +73,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? = Com
                 level.scheduleUpdate(this, tickRate())
             } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
                 val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
 
                 if (ev.isCancelled) {
                     return 0

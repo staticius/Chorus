@@ -41,7 +41,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
         this.state = 2
         this.liveTime = ThreadLocalRandom.current().nextInt(3) + 1
 
-        if (isEffect && level!!.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && (server!!.getDifficulty() >= 2)) {
+        if (isEffect && level!!.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && (Server.instance.getDifficulty() >= 2)) {
             val block: Block = getLocator().getLevelBlock()
             if (block.isAir() || block.getId() == BlockID.TALL_GRASS) {
                 val fire: BlockFire = Block.get(BlockID.FIRE) as BlockFire
@@ -51,7 +51,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                 if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {
                     val e: BlockIgniteEvent =
                         BlockIgniteEvent(block, null, this, BlockIgniteEvent.BlockIgniteCause.LIGHTNING)
-                    getServer()!!.pluginManager.callEvent(e)
+                    Server.instance.pluginManager.callEvent(e)
 
                     if (!e.isCancelled) {
                         level!!.setBlock(fire.position, fire, true)
@@ -146,7 +146,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                     val current: Block = level!!.getBlock(entry.key.position)
                     val next: Block = (current as Oxidizable).getBlockWithOxidizationLevel(entry.value)
                     val event: BlockFadeEvent = BlockFadeEvent(current, next)
-                    getServer()!!.pluginManager.callEvent(event)
+                    Server.instance.pluginManager.callEvent(event)
                     if (event.isCancelled) {
                         break
                     }
@@ -172,7 +172,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                     if (block.isAir() || block.getId() == Block.TALL_GRASS) {
                         val event: BlockIgniteEvent =
                             BlockIgniteEvent(block, null, this, BlockIgniteEvent.BlockIgniteCause.LIGHTNING)
-                        getServer()!!.pluginManager.callEvent(event)
+                        Server.instance.pluginManager.callEvent(event)
 
                         if (!event.isCancelled) {
                             val fire: Block = Block.get(BlockID.FIRE)

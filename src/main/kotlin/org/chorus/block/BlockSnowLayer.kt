@@ -212,7 +212,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
             blockState!!.setPropertyValue(Companion.properties, CommonBlockProperties.HEIGHT, snowHeight)
         )
         val event: BlockFadeEvent = BlockFadeEvent(toMelt, newState)
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return false
         }

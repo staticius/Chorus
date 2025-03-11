@@ -165,7 +165,7 @@ class GameMockExtension : MockitoExtension() {
                 Mockito.`when`(server.scheduler).thenReturn(serverScheduler)
                 Mockito.`when`(banList.entires).thenReturn(LinkedHashMap())
                 Mockito.`when`(server.ipBans).thenReturn(banList)
-                Mockito.`when`(server.language).thenReturn(BaseLang("eng", "src/main/resources/language"))
+                Mockito.`when`(server.baseLang..thenReturn(BaseLang("eng", "src/main/resources/language"))
                 val serverSettings = ConfigManager.create(
                     ServerSettings::class.java
                 ) { it: OkaeriConfig ->
@@ -334,7 +334,6 @@ class GameMockExtension : MockitoExtension() {
                 throw RuntimeException(e)
             }
             level = Level(
-                Server.getInstance(),
                 "newlevel",
                 "src/test/resources/newlevel",
                 1,

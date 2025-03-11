@@ -8,8 +8,6 @@ import org.chorus.block.BlockID
 import org.chorus.blockentity.BlockEntitySpawnable
 import org.chorus.config.ServerProperties.get
 import org.chorus.config.ServerPropertiesKeys
-import org.chorus.entity.Entity.getServer
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.entity.EntityLiving
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityArmorStand
@@ -110,7 +108,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 val playerInteractEntityEvent =
                     PlayerInteractEntityEvent(player, target, item, useItemOnEntityData.clickPos)
                 if (player.isSpectator) playerInteractEntityEvent.setCancelled()
-                player.getServer().getPluginManager().callEvent(playerInteractEntityEvent)
+                Server.instance.getPluginManager().callEvent(playerInteractEntityEvent)
                 if (playerInteractEntityEvent.isCancelled) {
                     return
                 }
@@ -167,7 +165,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 ) return
                 if (target.getId() == player.getId()) {
                     val event = PlayerHackDetectedEvent(player, PlayerHackDetectedEvent.HackType.INVALID_PVP)
-                    player.getServer().getPluginManager().callEvent(event)
+                    Server.instance.getPluginManager().callEvent(event)
 
                     if (event.isKick) player.kick(PlayerKickEvent.Reason.INVALID_PVP, "Attempting to attack yourself")
 
@@ -179,7 +177,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 } else if (target is Player) {
                     if ((target.gamemode and 0x01) > 0) {
                         return
-                    } else if (!player.getServer().getProperties().get(ServerPropertiesKeys.PVP, true)) {
+                    } else if (!Server.instance.getProperties().get(ServerPropertiesKeys.PVP, true)) {
                         return
                     }
                 }
@@ -393,7 +391,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 item = if (player.isCreative) {
                     serverItemInHand
                 } else if (!player.getInventory().itemInHand.equals(useItemDataItem)) {
-                    player.getServer().getLogger().warning("Item received did not match item in hand.")
+                    Server.instance.getLogger().warning("Item received did not match item in hand.")
                     player.getInventory().sendHeldItem(player)
                     return
                 } else {
@@ -401,7 +399,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 }
                 val interactEvent =
                     PlayerInteractEvent(player, item, directionVector, face, PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
-                player.getServer().getPluginManager().callEvent(interactEvent)
+                Server.instance.getPluginManager().callEvent(interactEvent)
                 if (interactEvent.isCancelled) {
                     if (interactEvent.item != null && interactEvent.item.isArmor) {
                         player.getInventory().sendArmorContents(player)
@@ -452,7 +450,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
             if (item.isNull) return
 
             val ev: PlayerDropItemEvent
-            player.getServer().getPluginManager().callEvent(PlayerDropItemEvent(player, item).also { ev = it })
+            Server.instance.getPluginManager().callEvent(PlayerDropItemEvent(player, item).also { ev = it })
             if (ev.isCancelled) {
                 player.getInventory().sendContents(player)
                 return

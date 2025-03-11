@@ -1,7 +1,6 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.item.EntityBoat
 import org.chorus.event.vehicle.VehicleMoveEvent
 import org.chorus.math.Vector3
@@ -30,7 +29,7 @@ class MoveEntityAbsoluteProcessor : DataPacketProcessor<MoveEntityAbsolutePacket
         movedEntity.setPositionAndRotation(pos, pk.headYaw, 0.0)
         val to = movedEntity.getTransform()
         if (from != to) {
-            player.getServer().getPluginManager().callEvent(VehicleMoveEvent(player, from, to))
+            Server.instance.getPluginManager().callEvent(VehicleMoveEvent(player, from, to))
         }
     }
 

@@ -32,7 +32,7 @@ class IPlayersNode : ParamNode<List<IPlayer?>?>() {
             if (!result.isEmpty()) this.value = result
             else error("commands.generic.noTargetMatch")
         } else {
-            val player = Server.getInstance().getOfflinePlayer(arg)
+            val player = Server.instance.getOfflinePlayer(arg)
             if (player != null) {
                 this.value = listOf(player)
             } else error("commands.generic.player.notFound")

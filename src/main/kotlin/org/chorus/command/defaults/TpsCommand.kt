@@ -29,10 +29,10 @@ class TpsCommand(name: String) : Command(name, "get server tps"), CoreCommand {
         }
 
         if (count == 1) {
-            val currentTps = Server.getInstance().ticksPerSecond
+            val currentTps = Server.instance.ticksPerSecond
             sender.sendMessage(getTpsColor(currentTps).toString() + " Current TPS: " + currentTps)
         } else {
-            Server.getInstance().scheduler.scheduleRepeatingTask(TpsTestTask(sender, count), 20)
+            Server.instance.scheduler.scheduleRepeatingTask(TpsTestTask(sender, count), 20)
         }
         return true
     }
@@ -53,7 +53,7 @@ class TpsCommand(name: String) : Command(name, "get server tps"), CoreCommand {
 
         override fun onRun(currentTick: Int) {
             currentCount++
-            val currentTps = Server.getInstance().ticksPerSecond
+            val currentTps = Server.instance.ticksPerSecond
 
             sender.sendMessage("[" + currentCount + "]" + getTpsColor(currentTps) + " Current TPS: " + currentTps)
             tpsSum += currentTps

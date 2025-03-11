@@ -277,7 +277,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
         } else {
             BlockGrowEvent(block, vine)
         }
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (!event.isCancelled) {
             level.setBlock(block.position, vine, true)
         }

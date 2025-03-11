@@ -262,7 +262,7 @@ open class Palette<V> {
         }
 
         if (resultingBlockState === unknownState) {
-            val replaceWithUnknown: Boolean = Server.getInstance().settings.baseSettings().saveUnknownBlock()
+            val replaceWithUnknown: Boolean = Server.instance.settings.baseSettings().saveUnknownBlock()
             if (replaceWithUnknown) {
                 palette.add(resultingBlockState)
             }

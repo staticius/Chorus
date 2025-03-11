@@ -45,7 +45,7 @@ abstract class ItemFood : Item {
         }
 
         val event = PlayerItemConsumeEvent(player, this)
-        Server.getInstance().pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             player.getInventory().sendContents(player)

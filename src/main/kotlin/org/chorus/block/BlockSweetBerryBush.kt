@@ -78,7 +78,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState? = Co
             arrayOf<Item>(ItemSweetBerries(0, amount))
         )
 
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (!event.isCancelled) {
             level.setBlock(this.position, event.newState, true, true)
             val drops: Array<Item> = event.drops

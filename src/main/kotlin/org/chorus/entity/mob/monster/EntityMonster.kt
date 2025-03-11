@@ -18,7 +18,7 @@ abstract class EntityMonster(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
-        if (getServer()!!.difficulty == 0) {
+        if (Server.instance.difficulty == 0) {
             this.close()
             return true
         } else return super.onUpdate(currentTick)

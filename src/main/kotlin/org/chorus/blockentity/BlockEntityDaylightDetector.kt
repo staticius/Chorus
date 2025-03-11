@@ -17,7 +17,7 @@ class BlockEntityDaylightDetector(chunk: IChunk, nbt: CompoundTag) : BlockEntity
         }
 
     override fun onUpdate(): Boolean {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return false
         }
         if (level.currentTick % 20 != 0L) {

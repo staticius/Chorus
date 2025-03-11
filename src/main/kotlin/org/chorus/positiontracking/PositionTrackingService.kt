@@ -241,7 +241,7 @@ class PositionTrackingService(folder: File) : Closeable {
             })
         }
 
-        Server.getInstance().onlinePlayers.values.forEach(Consumer { player: Player -> this.detectNeededUpdates(player) })
+        Server.instance.onlinePlayers.values.forEach(Consumer { player: Player -> this.detectNeededUpdates(player) })
     }
 
     private fun inventories(player: Player): Iterable<Inventory> {

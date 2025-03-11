@@ -135,7 +135,7 @@ interface CoreMemoryTypes {
          */
         val ENTITY_SPAWN_TIME: MemoryType<Int?> = MemoryType(
             "minecraft:entity_spawn_time"
-        ) { Server.getInstance().tick }
+        ) { Server.instance.tick }
 
         /**
          * 目前仅在creeper中使用，控制苦力怕是否应该爆炸
@@ -169,7 +169,7 @@ interface CoreMemoryTypes {
          */
         val LAST_EGG_SPAWN_TIME: MemoryType<Int?> = MemoryType(
             "minecraft:last_egg_spawn_time"
-        ) { Server.getInstance().tick }
+        ) { Server.instance.tick }
 
         /**
          * 最近符合条件的攻击目标
@@ -327,7 +327,7 @@ interface CoreMemoryTypes {
                             entity.setDataFlag(EntityFlag.TAMED, false)
                         } else {
                             entity.setDataFlag(EntityFlag.TAMED, true)
-                            val owner = entity.server!!.getPlayerExact(data)
+                            val owner = Server.instance.getPlayerExact(data)
                             if (owner != null && owner.isOnline) {
                                 entity.setDataProperty(EntityDataTypes.Companion.OWNER_EID, owner.id)
                             }
@@ -338,7 +338,7 @@ interface CoreMemoryTypes {
         /**
          * 代表骑着某个实体的实体
          */
-        val RIDER_NAME: MemoryType<String?> = MemoryType<String>("minecraft:rider_name")
+        val RIDER_NAME: MemoryType<String> = MemoryType<String>("minecraft:rider_name")
             .withCodec(
                 StringMemoryCodec("RiderName")
                     .onInit { data: String?, entity: EntityMob ->

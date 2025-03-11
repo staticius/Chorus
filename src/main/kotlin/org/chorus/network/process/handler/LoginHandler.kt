@@ -30,7 +30,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         val server = session.server
 
         //check the player login time
-        if (pk.issueUnixTime != -1L && Server.getInstance().checkLoginTime && System.currentTimeMillis() - pk.issueUnixTime > 20000) {
+        if (pk.issueUnixTime != -1L && Server.instance.checkLoginTime && System.currentTimeMillis() - pk.issueUnixTime > 20000) {
             val message = "disconnectionScreen.noReason"
             LoginHandler.log.debug("disconnection due to noReason")
             session.sendPlayStatus(PlayStatusPacket.LOGIN_FAILED_CLIENT, true)
@@ -58,7 +58,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         if (server.settings.baseSettings().waterdogpe() && chainData.waterdogIP != null) {
             val oldAddress = session.address
             session.address = InetSocketAddress(chainData.waterdogIP, session.address!!.port)
-            Server.getInstance().network.replaceSessionAddress(oldAddress, session.address, session)
+            Server.instance.network.replaceSessionAddress(oldAddress, session.address, session)
         }
 
         //Verify if the titleId match with DeviceOs
@@ -76,7 +76,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
 
         //Verify if the GameVersion has valid format
         if (chainData.gameVersion.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray().size != 3 && !Server.getInstance().settings.debugSettings().allowBeta()) {
+                .toTypedArray().size != 3 && !Server.instance.settings.debugSettings().allowBeta()) {
             session.close("§cPacket handling error")
             return
         }

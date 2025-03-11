@@ -108,7 +108,7 @@ class LibDeflateThreadLocal(private val zlibThreadLocal: ZlibThreadLocal?) : Zli
             var maximumSizePerChunk: Int = CompressionProvider.Companion.MAX_INFLATE_LEN
             if (Server.getInstance() != null) {
                 maximumSizePerChunk =
-                    Server.getInstance().settings.networkSettings().compressionBufferSize()
+                    Server.instance.settings.networkSettings().compressionBufferSize()
             }
             if (maximumSizePerChunk < 8192 || maximumSizePerChunk > 1024 * 1024 * 16) {
                 return@withInitial null

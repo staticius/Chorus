@@ -1,7 +1,6 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.player.PlayerEditBookEvent
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
@@ -56,7 +55,7 @@ class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
 
         if (success) {
             val editBookEvent = PlayerEditBookEvent(player, oldBook, newBook, pk.action)
-            player.getServer().getPluginManager().callEvent(editBookEvent)
+            Server.instance.getPluginManager().callEvent(editBookEvent)
             if (!editBookEvent.isCancelled) {
                 player.getInventory().setItem(pk.inventorySlot, editBookEvent.newBook)
             }

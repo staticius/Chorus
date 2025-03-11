@@ -1,8 +1,6 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.entity.EntityRideable
 import org.chorus.entity.custom.CustomEntity
 import org.chorus.entity.item.EntityChestBoat
@@ -40,7 +38,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
             }
 
             val event = PlayerHackDetectedEvent(player, PlayerHackDetectedEvent.HackType.INVALID_PVE)
-            player.getServer().getPluginManager().callEvent(event)
+            Server.instance.getPluginManager().callEvent(event)
 
             if (event.isKick) player.kick(
                 PlayerKickEvent.Reason.INVALID_PVE,
@@ -48,7 +46,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
             )
 
             InteractProcessor.log.warn(
-                player.getServer().getLanguage().tr("nukkit.player.invalidEntity", player.getName())
+                Server.instance.getLanguage().tr("nukkit.player.invalidEntity", player.getName())
             )
             return
         }
@@ -58,7 +56,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                 if (pk.target == 0L) {
                     return
                 }
-                player.getServer().getPluginManager().callEvent(PlayerMouseOverEntityEvent(player, targetEntity))
+                Server.instance.getPluginManager().callEvent(PlayerMouseOverEntityEvent(player, targetEntity))
             }
 
             InteractPacket.ACTION_VEHICLE_EXIT -> {

@@ -189,7 +189,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 this.source, affectedBlocksList, yield
             )
             ev.setIgnitions(if (fireIgnitions == null) LinkedHashSet<E>(0) else fireIgnitions)
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
             } else {
@@ -203,7 +203,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 what, this.source, this.affectedBlocks,
                 if (fireIgnitions == null) LinkedHashSet<Block>(0) else fireIgnitions, yield, this.fireChance
             )
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
             } else {
@@ -301,14 +301,14 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 val index = Hash.hashBlock(sideBlock.x.toInt(), sideBlock.y.toInt(), sideBlock.z.toInt())
                 if (!affectedBlocks!!.contains(sideBlock) && !updateBlocks.contains(index)) {
                     var ev: BlockUpdateEvent = BlockUpdateEvent(level.getBlock(sideBlock))
-                    level.server.pluginManager.callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         ev.getBlock().onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
                     }
                     val layer1 = level.getBlock(sideBlock, 1)
                     if (!layer1!!.isAir) {
                         ev = BlockUpdateEvent(layer1)
-                        level.server.pluginManager.callEvent(ev)
+                        Server.instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
                             ev.getBlock().onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
                         }

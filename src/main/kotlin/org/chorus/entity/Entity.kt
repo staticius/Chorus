@@ -210,8 +210,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     protected var ySize: Float = 0f
     @JvmField
     protected var inEndPortal: Boolean = false
-    @JvmField
-    protected var server: Server = Server.instance
     protected var isPlayer: Boolean = this is Player
     private var maxHealth: Int = 20
     protected var name: String? = null
@@ -379,7 +377,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         this.namedTag = nbt
         this.chunk = chunk
         this.level = (chunk.provider.level)
-        this.server = chunk.provider.level.server
         this.boundingBox = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
         this.chested = namedTag!!.getBoolean(TAG_CHESTED)
@@ -457,7 +454,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             level.addEntity(this)
 
             val event: EntitySpawnEvent = EntitySpawnEvent(this)
-            server.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 this.close(false)
             } else {
@@ -621,7 +618,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
             val effect: Effect? = effects.get(type)
 
             val event: EntityEffectRemoveEvent = EntityEffectRemoveEvent(this, effect)
-            Server.getInstance().pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
 
             if (event.isCancelled) {
                 return
@@ -658,7 +655,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         val oldEffect: Effect? = this.getEffect(effect.getType())
 
         val event: EntityEffectUpdateEvent = EntityEffectUpdateEvent(this, oldEffect, effect)
-        Server.getInstance().pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             return
@@ -984,7 +981,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         if (this is EntityFlyable && !flyable.hasFallingDamage() && source.cause == DamageCause.FALL) return false
 
         //事件回调函数
-        getServer()!!.pluginManager.callEvent(source)
+        Server.instance.pluginManager.callEvent(source)
         if (source.isCancelled) {
             return false
         }
@@ -1090,7 +1087,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun heal(source: EntityRegainHealthEvent) {
-        server!!.pluginManager.callEvent(source)
+        Server.instance.pluginManager.callEvent(source)
         if (source.isCancelled) {
             return
         }
@@ -1368,7 +1365,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         if (this.inPortalTicks == 80) { //handle portal teleport
             val ev: EntityPortalEnterEvent = EntityPortalEnterEvent(this, PortalType.NETHER)
-            getServer()!!.pluginManager.callEvent(ev) //call event
+            Server.instance.pluginManager.callEvent(ev) //call event
 
             if (!ev.isCancelled && (level!!.getDimension() == Level.DIMENSION_OVERWORLD || level!!.getDimension() == Level.DIMENSION_NETHER)) {
                 val newPos: Locator? = PortalHelper.convertPosBetweenNetherAndOverworld(
@@ -1599,7 +1596,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         // Entity entering a vehicle
         val ev: EntityVehicleEnterEvent = EntityVehicleEnterEvent(entity, this)
-        server!!.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
         }
@@ -1623,7 +1620,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     open fun dismountEntity(entity: Entity, sendLinks: Boolean): Boolean {
         // Run the events
         val ev: EntityVehicleExitEvent = EntityVehicleExitEvent(entity, this)
-        server!!.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             val seatIndex: Int = passengers.indexOf(entity)
             if (seatIndex == 0) {
@@ -1803,7 +1800,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         val down: Block = level!!.getBlock(floorLocation.down())
 
         val event: EntityFallEvent = EntityFallEvent(this, down, fallDistance)
-        server!!.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return
         }
@@ -1843,7 +1840,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 }
                 if (this is EntityFlyable) return
                 val farmEvent: FarmLandDecayEvent = FarmLandDecayEvent(this, down)
-                server!!.pluginManager.callEvent(farmEvent)
+                Server.instance.pluginManager.callEvent(farmEvent)
                 if (farmEvent.isCancelled) return
                 level!!.setBlock(down.position, Block.get(Block.DIRT), false, true)
                 return
@@ -1871,7 +1868,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
         ev.setCancelled(cancelled)
 
-        server!!.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         return ev.isCancelled()
     }
 
@@ -1931,7 +1928,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         }
 
         val ev: EntityLevelChangeEvent = EntityLevelChangeEvent(this, this.level, targetLevel)
-        server!!.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
         }
@@ -2336,7 +2333,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 inEndPortal = true
                 if (this.getRiding() == null && getPassengers().isEmpty() && (this !is EntityEnderDragon)) {
                     val ev: EntityPortalEnterEvent = EntityPortalEnterEvent(this, PortalType.END)
-                    getServer()!!.pluginManager.callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled && (level!!.getDimension() == Level.DIMENSION_OVERWORLD || level!!.getDimension() == Level.DIMENSION_THE_END)) {
                         val newPos: Locator? = PortalHelper.moveToTheEnd(this.getTransform())
@@ -2503,7 +2500,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     open fun setMotion(motion: Vector3): Boolean {
         if (!this.justCreated) {
             val ev: EntityMotionEvent = EntityMotionEvent(this, motion)
-            server!!.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
             }
@@ -2572,7 +2569,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         var to: Transform = transform
         if (cause != null) {
             val ev: EntityTeleportEvent = EntityTeleportEvent(this, from, to, cause)
-            server!!.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
             }
@@ -2656,7 +2653,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 try {
                     val event: EntityDespawnEvent = EntityDespawnEvent(this)
 
-                    server!!.pluginManager.callEvent(event)
+                    Server.instance.pluginManager.callEvent(event)
 
                     if (event.isCancelled) {
                         this.closed = false
@@ -2791,31 +2788,27 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        server!!.entityMetadata.setMetadata(this, metadataKey, newMetadataValue)
+        Server.instance.entityMetadata.setMetadata(this, metadataKey, newMetadataValue)
     }
 
     override fun getMetadata(metadataKey: String): List<MetadataValue> {
-        return server!!.entityMetadata.getMetadata(this, metadataKey)
+        return Server.instance.entityMetadata.getMetadata(this, metadataKey)
     }
 
     override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue {
-        return server!!.entityMetadata.getMetadata(this, metadataKey, plugin)
+        return Server.instance.entityMetadata.getMetadata(this, metadataKey, plugin)
     }
 
     override fun hasMetadata(metadataKey: String): Boolean {
-        return server!!.entityMetadata.hasMetadata(this, metadataKey)
+        return Server.instance.entityMetadata.hasMetadata(this, metadataKey)
     }
 
     override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
-        return server!!.entityMetadata.hasMetadata(this, metadataKey, plugin)
+        return Server.instance.entityMetadata.hasMetadata(this, metadataKey, plugin)
     }
 
     override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        server!!.entityMetadata.removeMetadata(this, metadataKey, owningPlugin)
-    }
-
-    open fun getServer(): Server? {
-        return server
+        Server.instance.entityMetadata.removeMetadata(this, metadataKey, owningPlugin)
     }
 
 

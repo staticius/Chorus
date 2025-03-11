@@ -100,7 +100,7 @@ object PortalHelper : BlockID {
     }
 
     fun convertPosBetweenNetherAndOverworld(current: Locator): Locator? {
-        val defaultNetherLevel = Server.getInstance().defaultNetherLevel ?: return null
+        val defaultNetherLevel = Server.instance.defaultNetherLevel ?: return null
         val dimensionData: DimensionData
         if (current.level.dimension == Level.DIMENSION_OVERWORLD) {
             dimensionData = DimensionEnum.NETHER.dimensionData
@@ -116,7 +116,7 @@ object PortalHelper : BlockID {
                 (current.position.floorX shl 3).toDouble(),
                 NukkitMath.clamp(current.position.floorY, dimensionData.minHeight, dimensionData.maxHeight).toDouble(),
                 (current.position.floorZ shl 3).toDouble(),
-                Server.getInstance().defaultLevel
+                Server.instance.defaultLevel
             )
         } else {
             throw IllegalArgumentException("Neither overworld nor nether given!")
@@ -125,11 +125,11 @@ object PortalHelper : BlockID {
 
     @JvmStatic
     fun moveToTheEnd(current: Locator): Locator? {
-        val defaultEndLevel = Server.getInstance().defaultEndLevel ?: return null
+        val defaultEndLevel = Server.instance.defaultEndLevel ?: return null
         return if (current.level.dimension == Level.DIMENSION_OVERWORLD) {
             Locator(100.0, 49.0, 0.0, defaultEndLevel)
         } else if (current.level.dimension == Level.DIMENSION_THE_END) {
-            Server.getInstance().defaultLevel.spawnLocation
+            Server.instance.defaultLevel.spawnLocation
         } else {
             throw IllegalArgumentException("Neither overworld nor the end given!")
         }

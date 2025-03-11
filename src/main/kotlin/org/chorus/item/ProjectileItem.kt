@@ -59,7 +59,7 @@ abstract class ProjectileItem(id: String, meta: Int, count: Int, name: String?) 
             if (projectile is EntityProjectile) {
                 val ev = ProjectileLaunchEvent(projectile, player)
 
-                player.getServer().getPluginManager().callEvent(ev)
+                Server.instance.getPluginManager().callEvent(ev)
                 if (ev.isCancelled) {
                     projectile.kill()
                 } else {

@@ -112,7 +112,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             }
             this.addFreezingTicks(1)
             val event: EntityFreezeEvent = EntityFreezeEvent(this)
-            server!!.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 this.setMovementSpeed(Math.max(0.05, getMovementSpeed() - 3.58e-4).toFloat())
             }
@@ -151,12 +151,12 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
 
             check(skin!!.isValid()) { this.getClass().getSimpleName() + " must have a valid skin set" }
 
-            if (this is Player) server.updatePlayerListData(
+            if (this is Player) Server.instance.updatePlayerListData(
                 this.getUniqueId(),
                 this.getId(), this.getDisplayName(),
                 this.skin, this.loginChainData.XUID, arrayOf(player)
             )
-            else server!!.updatePlayerListData(
+            else Server.instance.updatePlayerListData(
                 this.getUniqueId(),
                 this.getId(),
                 this.getName(),
@@ -195,7 +195,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             }
 
             if (this !is Player) {
-                server!!.removePlayerListData(this.getUniqueId(), player)
+                Server.instance.removePlayerListData(this.getUniqueId(), player)
             }
         }
     }

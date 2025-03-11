@@ -65,7 +65,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
         blockFace = facing
 
-        if (level.server.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings().enableRedstone()) {
             val powered = this.isGettingPower
 
             if (powered == this.isEnabled) {
@@ -118,7 +118,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
         }
 
     override fun onUpdate(type: Int): Int {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return 0
         }
 

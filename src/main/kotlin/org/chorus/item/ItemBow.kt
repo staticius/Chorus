@@ -108,7 +108,7 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             entityShootBowEvent.setCancelled()
         }
 
-        Server.getInstance().pluginManager.callEvent(entityShootBowEvent)
+        Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
             entityShootBowEvent.getProjectile().kill()
             player.getInventory().sendContents(player)
@@ -157,7 +157,7 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             }
             if (entityShootBowEvent.getProjectile() != null) {
                 val projectev = ProjectileLaunchEvent(entityShootBowEvent.getProjectile(), player)
-                Server.getInstance().pluginManager.callEvent(projectev)
+                Server.instance.pluginManager.callEvent(projectev)
                 if (projectev.isCancelled) {
                     entityShootBowEvent.getProjectile().kill()
                 } else {

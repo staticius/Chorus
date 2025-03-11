@@ -302,7 +302,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
             "in" -> {
                 val levelName = list!!.getResult<String>(1)
-                val level = Server.getInstance().getLevelByName(levelName) ?: return 0
+                val level = Server.instance.getLevelByName(levelName) ?: return 0
                 val chainCommand = list.getResult<String>(2)
                 val transform = sender.transform
                 transform.setLevel(level)
@@ -634,7 +634,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val matched: Boolean
                 val isIF = list!!.getResult<String>(0)
                 val shouldMatch = isIF == "if"
-                val manager: IScoreboardManager = Server.getInstance().scoreboardManager
+                val manager: IScoreboardManager = Server.instance.scoreboardManager
 
                 val targets = list.getResult<List<Entity>>(2)!!
                 val targetScorers = targets.stream().filter { obj: Entity? -> Objects.nonNull(obj) }.map { t: Entity? ->
@@ -721,7 +721,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val matched: Boolean
                 val isIF = list!!.getResult<String>(0)
                 val shouldMatch = isIF == "if"
-                val manager: IScoreboardManager = Server.getInstance().scoreboardManager
+                val manager: IScoreboardManager = Server.instance.scoreboardManager
 
                 val targets = list.getResult<List<Entity>>(2)!!
                 val targetScorers = targets.stream().filter { obj: Entity? -> Objects.nonNull(obj) }.map { t: Entity? ->

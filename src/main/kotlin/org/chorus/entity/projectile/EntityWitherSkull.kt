@@ -19,7 +19,7 @@ open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjecti
     }
 
     override fun getDamage(): Double {
-        return when (getServer()!!.getDifficulty()) {
+        return when (Server.instance.getDifficulty()) {
             1 -> 5
             2 -> 8
             3 -> 12
@@ -81,7 +81,7 @@ open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjecti
         this.close()
         val ev: EntityExplosionPrimeEvent = EntityExplosionPrimeEvent(this, getStrength().toDouble())
         ev.fireChance = 0.0
-        server!!.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled) {
             val explosion: Explosion =
                 Explosion(this.getLocator(), ev.force.toFloat().toDouble(), this.shootingEntity)

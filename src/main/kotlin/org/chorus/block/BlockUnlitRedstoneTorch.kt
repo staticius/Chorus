@@ -29,7 +29,7 @@ class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? 
 
     override fun onUpdate(type: Int): Int {
         if (super.onUpdate(type) == 0) {
-            if (!level.server.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings().enableRedstone()) {
                 return 0
             }
 
@@ -37,7 +37,7 @@ class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? 
                 level.scheduleUpdate(this, tickRate())
             } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
                 val ev = RedstoneUpdateEvent(this)
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return 0
                 }

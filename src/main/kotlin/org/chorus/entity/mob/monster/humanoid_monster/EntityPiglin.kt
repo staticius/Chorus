@@ -316,7 +316,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
             EntityID.Companion.HOGLIN -> {
                 if (entity is EntityHoglin) {
                     if (!entity.isBaby()) {
-                        if (entity.getHealth() - getDiffHandDamage(getServer()!!.difficulty) <= 0) {
+                        if (entity.getHealth() - getDiffHandDamage(Server.instance.difficulty) <= 0) {
                             val entities = Arrays.stream(
                                 level!!.entities
                             ).filter { entity1: Entity ->

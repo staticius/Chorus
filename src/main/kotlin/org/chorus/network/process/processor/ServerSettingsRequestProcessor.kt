@@ -1,7 +1,6 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.player.PlayerServerSettingsRequestEvent
 import org.chorus.form.window.Form
 import org.chorus.network.process.DataPacketProcessor
@@ -13,7 +12,7 @@ class ServerSettingsRequestProcessor : DataPacketProcessor<ServerSettingsRequest
     override fun handle(playerHandle: PlayerHandle, pk: ServerSettingsRequestPacket) {
         val settingsRequestEvent =
             PlayerServerSettingsRequestEvent(playerHandle.player, HashMap(playerHandle.serverSettings))
-        playerHandle.player.getServer().getPluginManager().callEvent(settingsRequestEvent)
+        playerHandle.Server.instance.getPluginManager().callEvent(settingsRequestEvent)
 
         if (!settingsRequestEvent.isCancelled) {
             settingsRequestEvent.getSettings().forEach { id: Int?, window: Form<*> ->

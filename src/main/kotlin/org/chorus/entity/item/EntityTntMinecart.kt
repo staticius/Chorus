@@ -108,7 +108,7 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
 
         val event: EntityExplosionPrimeEvent =
             EntityExplosionPrimeEvent(this, (4.0 + ThreadLocalRandom.current().nextDouble() * 1.5 * root))
-        server!!.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return
         }

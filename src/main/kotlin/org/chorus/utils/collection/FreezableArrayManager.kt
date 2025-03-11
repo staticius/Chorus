@@ -129,7 +129,7 @@ class FreezableArrayManager(
                     }
                 }
             }
-        }, Server.getInstance().computeThreadPool).thenRun { set.clearDeadReferences() }
+        }, Server.instance.computeThreadPool).thenRun { set.clearDeadReferences() }
     }
 
     companion object {

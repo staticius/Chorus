@@ -9,7 +9,7 @@ class Flat(dimensionData: DimensionData, options: Map<String?, Any>?) :
     Generator(dimensionData, options) {
     override fun stages(builder: GenerateStage.Builder) {
         builder.start(Registries.GENERATE_STAGE.get(FlatGenerateStage.Companion.NAME))
-        if (Server.getInstance().settings.chunkSettings().lightUpdates()) {
+        if (Server.instance.settings.chunkSettings().lightUpdates()) {
             builder.next(Registries.GENERATE_STAGE.get(LightPopulationStage.Companion.NAME))
         }
         builder.next(Registries.GENERATE_STAGE.get(FinishedStage.Companion.NAME))

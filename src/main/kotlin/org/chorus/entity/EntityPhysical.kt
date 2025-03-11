@@ -9,6 +9,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList
+import org.chorus.Server
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
@@ -87,7 +88,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         if (this.getFreezingTicks() < 140 && collidedWithPowderSnow) {
             this.addFreezingTicks(1)
             val event: EntityFreezeEvent = EntityFreezeEvent(this)
-            server!!.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 //this.setMovementSpeed(); //todo 给物理实体添加freeze减速
             }

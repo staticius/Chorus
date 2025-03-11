@@ -15,7 +15,7 @@ class TickingArea(name: String, levelName: String, vararg chunks: ChunkPos) {
         if (!name.isEmpty()) this.name = name
         else {
             var randomName = randomName()
-            val manager: TickingAreaManager = Server.getInstance().tickingAreaManager
+            val manager: TickingAreaManager = Server.instance.tickingAreaManager
             while (manager.containTickingArea(randomName)) randomName = randomName()
             this.name = randomName
         }
@@ -30,8 +30,8 @@ class TickingArea(name: String, levelName: String, vararg chunks: ChunkPos) {
     }
 
     fun loadAllChunk(): Boolean {
-        if (!Server.getInstance().loadLevel(levelName)) return false
-        val level = Server.getInstance().getLevelByName(levelName)
+        if (!Server.instance.loadLevel(levelName)) return false
+        val level = Server.instance.getLevelByName(levelName)
         for (pos in chunks) {
             level.loadChunk(pos.x, pos.z)
         }

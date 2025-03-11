@@ -254,7 +254,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override fun execute(chain: Int): Boolean {
         var chain = chain
-        if (!(getServer().settings.gameplaySettings()
+        if (!(Server.instance.settings.gameplaySettings()
                 .enableCommandBlocks() && level.gameRules.getBoolean(GameRule.COMMAND_BLOCKS_ENABLED))
         ) {
             return false
@@ -284,11 +284,11 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                     } else {
                         this.lastOutput = null
                         val event = CommandBlockExecuteEvent(this.levelBlock, cmd)
-                        Server.getInstance().pluginManager.callEvent(event)
+                        Server.instance.pluginManager.callEvent(event)
                         if (event.isCancelled) {
                             return false
                         }
-                        this.successCount = Server.getInstance().executeCommand(this, cmd)
+                        this.successCount = Server.instance.executeCommand(this, cmd)
                     }
                 }
 
@@ -418,10 +418,6 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         return false
     }
 
-    override fun getServer(): Server {
-        return Server.getInstance()
-    }
-
     override fun sendMessage(message: String) {
         this.sendMessage(TranslationContainer(message))
     }
@@ -440,8 +436,8 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         if (level.gameRules.getBoolean(GameRule.COMMAND_BLOCK_OUTPUT)) {
             message.text =
                 TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "[" + this.getName() + ": " + TextFormat.RESET +
-                        (if (message.text != getServer().language[message.text]) "%" else "") + message.text + "]"
-            val users = getServer().pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
+                        (if (message.text != Server.instance.baseLang.get(message.text)) "%" else "") + message.text + "]"
+            val users = Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
             for (user in users) {
                 if (user is Player || user is ConsoleCommandSender) {
                     (user as CommandSender).sendMessage(message)

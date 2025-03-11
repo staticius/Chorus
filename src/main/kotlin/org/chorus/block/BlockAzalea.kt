@@ -127,7 +127,7 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState? = Compa
         val chunkManager: BlockManager = BlockManager(this.level)
         val success: Boolean = generator.generate(chunkManager, RandomSourceProvider.create(), vector3)
         val ev: StructureGrowEvent = StructureGrowEvent(this, chunkManager.blocks)
-        level.server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled || !success) {
             return
         }

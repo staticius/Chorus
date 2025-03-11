@@ -107,7 +107,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Compan
         if (itemFrame.item!!.isNull) {
             val itemOnFrame: Item = item.clone()
             val event = ItemFrameUseEvent(player, this, itemFrame, itemOnFrame, ItemFrameUseEvent.Action.PUT)
-            level.server.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) return false
             if (player != null && !player.isCreative) {
                 itemOnFrame.setCount(itemOnFrame.getCount() - 1)
@@ -122,7 +122,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Compan
             level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_ITEMFRAME_ITEM_ADD)
         } else {
             val event = ItemFrameUseEvent(player, this, itemFrame, null, ItemFrameUseEvent.Action.ROTATION)
-            level.server.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) return false
             itemFrame.itemRotation = (itemFrame.itemRotation + 1) % 8
             if (isStoringMap) {

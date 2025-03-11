@@ -87,7 +87,7 @@ class JSONTickingAreaStorage(path: String) : TickingAreaStorage {
 
     private fun save() {
         try {
-            for (level in Server.getInstance().levels.values()) {
+            for (level in Server.instance.levels.values()) {
                 if (areaMap.containsRow(level.name)) {
                     Files.writeString(
                         Path.of(filePath.toString(), level.folderName, "tickingarea.json"),

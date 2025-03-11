@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.*
@@ -114,8 +115,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
             return false
         }
         val damage = biteCount
-        if (player != null && (player.foodData!!.isHungry || player.isCreative || player.getServer()!!
-                .getDifficulty() == 0)
+        if (player != null && (player.foodData!!.isHungry || player.isCreative || Server.instance.getDifficulty() == 0)
         ) {
             if (damage < CommonBlockProperties.BITE_COUNTER.getMax()) biteCount = damage + 1
             if (damage >= CommonBlockProperties.BITE_COUNTER.getMax()) {

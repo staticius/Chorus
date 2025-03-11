@@ -45,7 +45,7 @@ open class BlockIce : BlockTransparent {
                     this,
                     if (level.dimension == Level.DIMENSION_NETHER) get(BlockID.Companion.AIR) else get(BlockID.Companion.FLOWING_WATER)
                 )
-                level.server.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     level.setBlock(this.position, event.newState, true)
                 }

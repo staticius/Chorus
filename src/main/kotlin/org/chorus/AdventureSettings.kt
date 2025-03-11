@@ -107,7 +107,7 @@ class AdventureSettings : Cloneable {
     fun update() {
         //Permission to send to all players so they can see each other
         //Make sure it will be sent to yourself (eg: there is no such player among the online players when the player enters the server)
-        val players: MutableCollection<Player> = HashSet<Player>(player.server.onlinePlayers.values)
+        val players: MutableCollection<Player> = HashSet<Player>(Server.instance.onlinePlayers.values)
         players.add(this.player)
         sendAbilities(players)
         updateAdventureSettings()

@@ -42,7 +42,7 @@ class FormattedCommandAlias : Command {
         }
 
         for (command in commands) {
-            result = result or (Server.getInstance().executeCommand(sender, command) > 0)
+            result = result or (Server.instance.executeCommand(sender, command) > 0)
         }
 
         return result

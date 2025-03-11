@@ -134,7 +134,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
         if (isActivated) {
             level.cancelSheduledUpdate(this.position, this)
         } else {
-            level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
+            Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
         }
 
         level.scheduleUpdate(this, this.position, 4)
@@ -157,7 +157,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (isActivated) {
-                level.server.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
+                Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
 
                 isActivated = false
                 level.setBlock(this.position, this, true, false)
@@ -180,7 +180,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
         }
 
         val dropBookEvent = LecternDropBookEvent(player, lectern, book)
-        level.server.pluginManager.callEvent(dropBookEvent)
+        Server.instance.pluginManager.callEvent(dropBookEvent)
         if (dropBookEvent.isCancelled) {
             return
         }

@@ -1,7 +1,6 @@
 package org.chorus.item
 
 import org.chorus.Player
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.effect.PotionType
 import org.chorus.event.player.PlayerItemConsumeEvent
 import org.chorus.level.vibration.VibrationEvent
@@ -42,7 +41,7 @@ class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             return false
         }
         val consumeEvent = PlayerItemConsumeEvent(player, this)
-        player.getServer().getPluginManager().callEvent(consumeEvent)
+        Server.instance.getPluginManager().callEvent(consumeEvent)
         if (consumeEvent.isCancelled) {
             return false
         }

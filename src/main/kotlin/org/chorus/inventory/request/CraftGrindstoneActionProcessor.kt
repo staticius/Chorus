@@ -1,7 +1,6 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.inventory.GrindstoneEvent
 import org.chorus.inventory.GrindstoneInventory
 import org.chorus.item.*
@@ -12,6 +11,7 @@ import org.chorus.network.protocol.types.itemstack.request.action.CraftGrindston
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
+import org.chorus.Server
 
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
@@ -48,7 +48,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
             inventory,
             firstItem ?: Item.AIR, pair.left(), secondItem ?: Item.AIR, exp, player
         )
-        player.getServer().getPluginManager().callEvent(event)
+        Server.instance.getPluginManager().callEvent(event)
         if (event.isCancelled) {
             player.removeAllWindows(false)
             player.sendAllInventories()

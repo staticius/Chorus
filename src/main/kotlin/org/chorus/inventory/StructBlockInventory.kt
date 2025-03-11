@@ -1,8 +1,8 @@
 package org.chorus.inventory
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.blockentity.BlockEntityStructBlock
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.inventory.InventoryCloseEvent
 import org.chorus.event.inventory.InventoryOpenEvent
 import org.chorus.item.*
@@ -140,7 +140,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
         }
 
         val ev = InventoryOpenEvent(this, who)
-        who.getServer().getPluginManager().callEvent(ev)
+        Server.instance.getPluginManager().callEvent(ev)
         if (ev.isCancelled) {
             return false
         }
@@ -150,7 +150,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
 
     override fun close(who: Player) {
         val ev = InventoryCloseEvent(this, who)
-        who.getServer().getPluginManager().callEvent(ev)
+        Server.instance.getPluginManager().callEvent(ev)
         this.onClose(who)
     }
 

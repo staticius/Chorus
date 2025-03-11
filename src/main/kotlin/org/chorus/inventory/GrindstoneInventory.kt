@@ -2,11 +2,11 @@ package org.chorus.inventory
 
 import org.chorus.Player
 import org.chorus.block.BlockGrindstone
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.inventory.InventoryCloseEvent
 import org.chorus.item.*
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import com.google.common.collect.BiMap
+import org.chorus.Server
 
 class GrindstoneInventory(blockGrindstone: BlockGrindstone?) :
     ContainerInventory(blockGrindstone, InventoryType.GRINDSTONE, 3), CraftTypeInventory, SoleInventory {
@@ -28,7 +28,7 @@ class GrindstoneInventory(blockGrindstone: BlockGrindstone?) :
 
     override fun close(who: Player) {
         val ev = InventoryCloseEvent(this, who)
-        who.getServer().getPluginManager().callEvent(ev)
+        Server.instance.getPluginManager().callEvent(ev)
         onClose(who)
     }
 

@@ -257,7 +257,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
             return
         }
 
-        server!!.pluginManager.callEvent(ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity)))
+        Server.instance.pluginManager.callEvent(ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity)))
         var damage: Float = getResultDamage().toFloat()
         if (this.impalingLevel > 0 && (entity.isTouchingWater() || (entity.level!!.isRaining() && entity.level!!.canBlockSeeSky(
                 entity.position

@@ -249,7 +249,7 @@ class BehaviorGroup  constructor(
             //若有路径目标，则计算新路径
             var reSubmit = false
             //         第一次计算                       上一次计算已完成                                         超时，重新提交任务
-            if (routeFindingTask == null || routeFindingTask!!.finished || ((!routeFindingTask!!.started && Server.getInstance().nextTick - routeFindingTask!!.startTime > 8).also {
+            if (routeFindingTask == null || routeFindingTask!!.finished || ((!routeFindingTask!!.started && Server.instance.nextTick - routeFindingTask!!.startTime > 8).also {
                     reSubmit = it
                 })) {
                 if (reSubmit) routeFindingTask!!.cancel(true)

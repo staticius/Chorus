@@ -139,7 +139,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 findingPath.forEach(Consumer { node: Node ->
                     entity.level!!.addParticle(
                         BlockForceFieldParticle(node.vector3),
-                        Server.getInstance().onlinePlayers.values.toArray<Player>(
+                        Server.instance.onlinePlayers.values.toArray<Player>(
                             Player.EMPTY_ARRAY
                         )
                     )

@@ -1142,7 +1142,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
          * @return if the gets powered.
          */
         get() {
-            if (!level.server.settings.levelSettings().enableRedstone()) return false
+            if (!Server.instance.settings.levelSettings().enableRedstone()) return false
 
             for (side in BlockFace.entries) {
                 val b = getSide(side)!!.levelBlock

@@ -59,7 +59,7 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
         log: CommandLogger
     ): Int {
         val list = result.value
-        val manager: TickingAreaManager = Server.getInstance().tickingAreaManager
+        val manager: TickingAreaManager = Server.instance.tickingAreaManager
         val level = sender.locator.level
         when (result.key) {
             "add-pos" -> {

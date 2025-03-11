@@ -1,6 +1,7 @@
 package org.chorus.entity
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 
 /**
@@ -23,7 +24,7 @@ interface EntityOwnable : EntityComponent {
         else {
             val ownerName: String? = getOwnerName()
             if (ownerName == null) return null
-            owner = asEntity()!!.getServer()!!.getPlayerExact(ownerName)
+            owner = Server.instance.getPlayerExact(ownerName)
         }
         return owner
     }

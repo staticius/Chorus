@@ -83,7 +83,7 @@ class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properti
     }
 
     override fun onUpdate(type: Int): Int {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return 0
         }
 

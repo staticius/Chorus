@@ -36,7 +36,7 @@ object TestUtils {
         val loop = GameLoop.builder().loopCountPerSec(100).onTick { d: GameLoop ->
             try {
                 p.level.scheduler.mainThreadHeartbeat(d.tick)
-                Server.getInstance().network.process()
+                Server.instance.network.process()
                 p.level.subTick(d)
                 p.checkNetwork()
             } catch (ignore: Exception) {

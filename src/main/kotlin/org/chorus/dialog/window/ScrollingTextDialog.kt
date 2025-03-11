@@ -35,7 +35,7 @@ class ScrollingTextDialog @JvmOverloads constructor(
 
     fun startScrolling() {
         this.isScrolling = true
-        Server.getInstance().scheduler.scheduleRepeatingTask(this.scrollingTask, this.scrollingSpeed)
+        Server.instance.scheduler.scheduleRepeatingTask(this.scrollingTask, this.scrollingSpeed)
     }
 
     override fun send(p: Player) {

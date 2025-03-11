@@ -1,6 +1,7 @@
 package org.chorus.entity.item
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.blockentity.*
 import org.chorus.entity.*
@@ -179,11 +180,10 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                 level!!
             )
 
-            getServer()!!.pluginManager.callEvent(VehicleUpdateEvent(this))
+            Server.instance.pluginManager.callEvent(VehicleUpdateEvent(this))
 
             if (from != to) {
-                getServer()!!
-                    .pluginManager.callEvent(VehicleMoveEvent(this, from, to))
+                Server.instance.pluginManager.callEvent(VehicleMoveEvent(this, from, to))
             }
 
             // Collisions

@@ -24,7 +24,7 @@ abstract class NukkitRunnable : Runnable {
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
     fun runTask(plugin: Plugin?): Runnable? {
         checkState()
-        this.taskHandler = Server.getInstance().scheduler.scheduleTask(plugin, this)
+        this.taskHandler = Server.instance.scheduler.scheduleTask(plugin, this)
         return taskHandler.getTask()
     }
 
@@ -32,7 +32,7 @@ abstract class NukkitRunnable : Runnable {
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
     fun runTaskAsynchronously(plugin: Plugin?): Runnable? {
         checkState()
-        this.taskHandler = Server.getInstance().scheduler.scheduleTask(plugin, this, true)
+        this.taskHandler = Server.instance.scheduler.scheduleTask(plugin, this, true)
         return taskHandler.getTask()
     }
 
@@ -40,7 +40,7 @@ abstract class NukkitRunnable : Runnable {
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
     fun runTaskLater(plugin: Plugin?, delay: Int): Runnable? {
         checkState()
-        this.taskHandler = Server.getInstance().scheduler.scheduleDelayedTask(plugin, this, delay)
+        this.taskHandler = Server.instance.scheduler.scheduleDelayedTask(plugin, this, delay)
         return taskHandler.getTask()
     }
 
@@ -48,7 +48,7 @@ abstract class NukkitRunnable : Runnable {
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
     fun runTaskLaterAsynchronously(plugin: Plugin?, delay: Int): Runnable? {
         checkState()
-        this.taskHandler = Server.getInstance().scheduler.scheduleDelayedTask(plugin, this, delay, true)
+        this.taskHandler = Server.instance.scheduler.scheduleDelayedTask(plugin, this, delay, true)
         return taskHandler.getTask()
     }
 
@@ -56,7 +56,7 @@ abstract class NukkitRunnable : Runnable {
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
     fun runTaskTimer(plugin: Plugin?, delay: Int, period: Int): Runnable? {
         checkState()
-        this.taskHandler = Server.getInstance().scheduler.scheduleDelayedRepeatingTask(
+        this.taskHandler = Server.instance.scheduler.scheduleDelayedRepeatingTask(
             plugin,
             this, delay, period
         )
@@ -67,7 +67,7 @@ abstract class NukkitRunnable : Runnable {
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
     fun runTaskTimerAsynchronously(plugin: Plugin?, delay: Int, period: Int): Runnable? {
         checkState()
-        this.taskHandler = Server.getInstance().scheduler.scheduleDelayedRepeatingTask(
+        this.taskHandler = Server.instance.scheduler.scheduleDelayedRepeatingTask(
             plugin,
             this, delay, period, true
         )

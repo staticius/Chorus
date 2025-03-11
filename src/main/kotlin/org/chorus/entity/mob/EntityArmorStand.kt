@@ -147,7 +147,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         }
 
         val ev: PlayerChangeArmorStandEvent = PlayerChangeArmorStandEvent(player, this, item, slot)
-        getServer()!!.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) return false
 
         var changed: Boolean = false
@@ -238,7 +238,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         val setEntityDataPacket: SetEntityDataPacket = SetEntityDataPacket()
         setEntityDataPacket.eid = this.getId()
         setEntityDataPacket.entityData = this.getEntityDataMap()
-        Server.getInstance().getOnlinePlayers().values.forEach(Consumer { all: Player ->
+        Server.instance.getOnlinePlayers().values.forEach(Consumer { all: Player ->
             all.dataPacket(
                 setEntityDataPacket
             )
@@ -329,7 +329,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
             return false
         }
 
-        getServer()!!.pluginManager.callEvent(source)
+        Server.instance.pluginManager.callEvent(source)
         if (source.isCancelled) {
             return false
         }

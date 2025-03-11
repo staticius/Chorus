@@ -131,14 +131,14 @@ class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
             if (response.getRequestType() === NPCRequestPacket.RequestType.EXECUTE_ACTION) {
                 val clickedButton: ElementDialogButton? = response.getClickedButton()
                 for (line: CmdLine? in clickedButton.getData()) {
-                    org.chorus.Server.getInstance().executeCommand(NPCCommandSender(this, player), line.cmd_line)
+                    org.chorus.Server.instance.executeCommand(NPCCommandSender(this, player), line.cmd_line)
                 }
             }
             if (response.getRequestType() === NPCRequestPacket.RequestType.EXECUTE_OPENING_COMMANDS) {
                 for (button: ElementDialogButton? in this.dialog.getButtons()) {
                     if (button.getMode() == ElementDialogButton.Mode.ON_ENTER) {
                         for (line: CmdLine? in button.getData()) {
-                            org.chorus.Server.getInstance().executeCommand(NPCCommandSender(this, player), line.cmd_line)
+                            org.chorus.Server.instance.executeCommand(NPCCommandSender(this, player), line.cmd_line)
                         }
                     }
                 }
@@ -147,7 +147,7 @@ class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
                 for (button: ElementDialogButton? in this.dialog.getButtons()) {
                     if (button.getMode() == ElementDialogButton.Mode.ON_EXIT) {
                         for (line: CmdLine? in button.getData()) {
-                            org.chorus.Server.getInstance().executeCommand(NPCCommandSender(this, player), line.cmd_line)
+                            org.chorus.Server.instance.executeCommand(NPCCommandSender(this, player), line.cmd_line)
                         }
                     }
                 }

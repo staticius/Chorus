@@ -50,7 +50,7 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
         }
 
         val event: HopperSearchItemEvent = HopperSearchItemEvent(this, true)
-        server!!.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) return false
 
         this.updatePickupArea()

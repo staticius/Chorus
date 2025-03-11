@@ -44,12 +44,12 @@ class VersionCommand(name: String) : Command(
     private var listVersionCache: JsonArray? = null
 
     init {
-        Server.getInstance().scheduler.scheduleRepeatingTask(null, {
+        Server.instance.scheduler.scheduleRepeatingTask(null, {
             try {
                 for (query in queryQueue.toTypedArray<Query>()) {
                     if (query.jsonArrayFuture.isDone) {
                         val cores = query.jsonArrayFuture.get()
-                        var localCommitInfo = Server.getInstance().gitCommit
+                        var localCommitInfo = Server.instance.gitCommit
                         localCommitInfo = localCommitInfo.substring(4)
                         var versionMissed = -1
                         query.sender.sendMessage("####################")
@@ -184,7 +184,7 @@ class VersionCommand(name: String) : Command(
     private fun listVersion(): CompletableFuture<JsonArray> {
         return CompletableFuture.supplyAsync<JsonArray> {
             if (this.listVersionCache != null) {
-                if (Server.getInstance().tick - this.lastUpdateTick < 7200) { //20 * 60 * 60 一小时
+                if (Server.instance.tick - this.lastUpdateTick < 7200) { //20 * 60 * 60 一小时
                     return@supplyAsync this.listVersionCache
                 }
             }
@@ -205,7 +205,7 @@ class VersionCommand(name: String) : Command(
                     ).body()
                 )
                 if (result.isJsonArray) {
-                    this.lastUpdateTick = Server.getInstance().tick
+                    this.lastUpdateTick = Server.instance.tick
                     this.listVersionCache = result.asJsonArray
                     return@supplyAsync this.listVersionCache
                 }

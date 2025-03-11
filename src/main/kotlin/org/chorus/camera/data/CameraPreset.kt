@@ -118,7 +118,7 @@ class CameraPreset(
             for (preset in presets) {
                 preset.id = id++
             }
-            Server.getInstance().onlinePlayers.values.forEach(Consumer { obj: Player -> obj.sendCameraPresets() })
+            Server.instance.onlinePlayers.values.forEach(Consumer { obj: Player -> obj.sendCameraPresets() })
         }
 
         val FIRST_PERSON: CameraPreset = CameraPreset.builder()

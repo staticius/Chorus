@@ -82,7 +82,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
             if (ent != null) {
                 val ev =
                     CreatureSpawnEvent(ent.networkId, pos, CompoundTag(), CreatureSpawnEvent.SpawnReason.CREAKING_HEART)
-                level.server.pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     ent.close()
                 } else {

@@ -2,7 +2,6 @@ package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
 import org.chorus.Server
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.item.EntityBoat
 import org.chorus.entity.item.EntityBoat.onPaddle
 import org.chorus.event.player.PlayerAnimationEvent
@@ -29,7 +28,7 @@ class AnimateProcessor : DataPacketProcessor<AnimatePacket>() {
         }
 
         val animationEvent = PlayerAnimationEvent(player, pk)
-        player.getServer().getPluginManager().callEvent(animationEvent)
+        Server.instance.getPluginManager().callEvent(animationEvent)
         if (animationEvent.isCancelled) {
             return
         }

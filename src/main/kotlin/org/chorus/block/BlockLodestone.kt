@@ -83,7 +83,7 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
 
         if (added) {
             try {
-                level.server.getPositionTrackingService().startTracking(player, trackingHandle, false)
+                Server.instance.getPositionTrackingService().startTracking(player, trackingHandle, false)
             } catch (e: IOException) {
                 BlockLodestone.log.warn(
                     "Failed to make the player {} track {} at {}",

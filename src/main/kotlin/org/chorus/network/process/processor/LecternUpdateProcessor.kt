@@ -3,7 +3,6 @@ package org.chorus.network.process.processor
 import org.chorus.PlayerHandle
 import org.chorus.block.BlockLectern
 import org.chorus.blockentity.BlockEntityLectern
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.block.LecternPageChangeEvent
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.LecternUpdatePacket
@@ -15,7 +14,7 @@ class LecternUpdateProcessor : DataPacketProcessor<LecternUpdatePacket>() {
         val blockEntityLectern = playerHandle.player.level!!.getBlockEntity(blockPosition)
         if (blockEntityLectern is BlockEntityLectern) {
             val lecternPageChangeEvent = LecternPageChangeEvent(playerHandle.player, blockEntityLectern, pk.page)
-            playerHandle.player.getServer().getPluginManager().callEvent(lecternPageChangeEvent)
+            playerHandle.Server.instance.getPluginManager().callEvent(lecternPageChangeEvent)
             if (!lecternPageChangeEvent.isCancelled) {
                 blockEntityLectern.rawPage = lecternPageChangeEvent.newRawPage
                 blockEntityLectern.spawnToAll()

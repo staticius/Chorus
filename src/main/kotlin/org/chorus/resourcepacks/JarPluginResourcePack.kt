@@ -28,7 +28,7 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
 
     init {
         require(jarPluginFile.exists()) {
-            Server.getInstance().language
+            Server.instance.language
                 .tr("nukkit.resources.zip.not-found", jarPluginFile.name)
         }
 
@@ -40,7 +40,7 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
             val byteArrayOutputStream = ByteArrayOutputStream()
             val zipOutputStream = ZipOutputStream(byteArrayOutputStream)
             val manifest = findManifestInJar(jar)
-            requireNotNull(manifest) { Server.getInstance().language.tr("nukkit.resources.zip.no-manifest") }
+            requireNotNull(manifest) { Server.instance.language.tr("nukkit.resources.zip.no-manifest") }
 
             this.manifest = JsonParser
                 .parseReader(InputStreamReader(jar.getInputStream(manifest), StandardCharsets.UTF_8))
@@ -91,7 +91,7 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
         }
 
         require(this.verifyManifest()) {
-            Server.getInstance().language
+            Server.instance.language
                 .tr("nukkit.resources.zip.invalid-manifest")
         }
     }

@@ -169,7 +169,7 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                         this,
                         source.getEntity(),
                         DamageCause.THORNS,
-                        (if (getServer()!!.difficulty == 3) 2 else 3).toFloat()
+                        (if (Server.instance.difficulty == 3) 2 else 3).toFloat()
                     )
                 )
             }

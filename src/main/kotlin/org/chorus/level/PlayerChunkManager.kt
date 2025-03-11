@@ -2,8 +2,6 @@ package org.chorus.level
 
 import org.chorus.Player
 import org.chorus.entity.Entity.despawnFrom
-import org.chorus.entity.Entity.getLocator
-import org.chorus.entity.Entity.getServer
 import org.chorus.level.format.IChunk
 import org.chorus.math.BlockVector3
 import com.google.common.collect.Sets
@@ -184,7 +182,7 @@ class PlayerChunkManager(private val player: Player) {
                 val chunkX: Int = Level.Companion.getHashX(e.longKey)
                 val chunkZ: Int = Level.Companion.getHashZ(e.longKey)
                 val ev: PlayerChunkRequestEvent = PlayerChunkRequestEvent(player, chunkX, chunkZ)
-                player.getServer().getPluginManager().callEvent(ev)
+                Server.instance.getPluginManager().callEvent(ev)
                 player.level!!.requestChunk(chunkX, chunkZ, player)
             }
             usedChunks.addAll(chunkReadyToSend.keySet())

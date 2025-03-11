@@ -3,7 +3,6 @@ package org.chorus.item
 import org.chorus.Player
 import org.chorus.block.*
 import org.chorus.entity.Entity.Companion.createEntity
-import org.chorus.entity.Entity.getServer
 import org.chorus.entity.EntityID
 import org.chorus.entity.EntityVariant
 import org.chorus.event.player.PlayerBucketEmptyEvent
@@ -181,7 +180,7 @@ open class ItemBucket : Item {
                     get(ItemID.Companion.BUCKET, 8, 1)
                 }
                 val ev: PlayerBucketFillEvent
-                player.getServer().getPluginManager().callEvent(
+                Server.instance.getPluginManager().callEvent(
                     PlayerBucketFillEvent(
                         player, block, face, target,
                         this, result
@@ -265,7 +264,7 @@ open class ItemBucket : Item {
                 nether = !isLava
             }
 
-            player.getServer().getPluginManager().callEvent(ev)
+            Server.instance.getPluginManager().callEvent(ev)
 
             if (!ev.isCancelled) {
                 player.level!!.setBlock(placementBlock.position, placementBlock.layer, targetBlock, true, true)

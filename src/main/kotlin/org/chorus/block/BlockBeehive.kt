@@ -123,7 +123,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     @JvmOverloads
-    fun honeyCollected(player: Player, angerBees: Boolean = level.server.getDifficulty() > 0 && !player.isCreative) {
+    fun honeyCollected(player: Player, angerBees: Boolean = Server.instance.getDifficulty() > 0 && !player.isCreative) {
         getOrCreateBlockEntity().honeyLevel = 0
         if (down()!!.id != CAMPFIRE && angerBees) {
             angerBees(player)

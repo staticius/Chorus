@@ -24,7 +24,7 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState? = Com
                 return 0 // Already broken
             }
 
-            if (!level.server.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings().enableRedstone()) {
                 return 0
             }
 

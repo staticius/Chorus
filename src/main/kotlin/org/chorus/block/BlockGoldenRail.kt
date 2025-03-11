@@ -31,7 +31,7 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Compan
                 return 0 // Already broken
             }
 
-            if (!level.server.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings().enableRedstone()) {
                 return 0
             }
             val wasPowered = isActive

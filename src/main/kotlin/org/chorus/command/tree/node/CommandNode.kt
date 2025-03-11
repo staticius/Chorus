@@ -18,7 +18,7 @@ class CommandNode : ParamNode<String?>() {
         if (arg.contains(" ")) {
             arg = "\"" + arg + "\""
         }
-        if (first && !Server.getInstance().commandMap.commands.containsKey(arg)) {
+        if (first && !Server.instance.commandMap.commands.containsKey(arg)) {
             this.error("commands.generic.unknown", arg)
             return
         }

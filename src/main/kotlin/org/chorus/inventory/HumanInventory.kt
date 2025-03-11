@@ -82,7 +82,7 @@ class HumanInventory(human: IHuman?) //9+27+4
 
         if (holder is Player) {
             val ev = PlayerItemHeldEvent(player, this.getItem(slot), slot)
-            holder.level.server.pluginManager.callEvent(ev)
+            holder.Server.instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
                 this.sendContents(this.getViewers())
@@ -368,7 +368,7 @@ class HumanInventory(human: IHuman?) //9+27+4
         //Armor change
         if (!ignoreArmorEvents && index >= ARMORS_INDEX) {
             val ev = EntityArmorChangeEvent(holder.getEntity(), this.getItem(index), item, index)
-            Server.getInstance().pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled && this.holder != null) {
                 this.sendArmorSlot(index, this.getViewers())
                 return false
@@ -376,7 +376,7 @@ class HumanInventory(human: IHuman?) //9+27+4
             item = ev.newItem
         } else {
             val ev = EntityInventoryChangeEvent(holder.getEntity(), this.getItem(index), item, index)
-            Server.getInstance().pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 this.sendSlot(index, this.getViewers())
                 return false
@@ -398,7 +398,7 @@ class HumanInventory(human: IHuman?) //9+27+4
                     holder.getEntity(),
                     old!!, item, index
                 )
-                Server.getInstance().pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     this.sendSlot(index, this.getViewers())
                     return false
@@ -409,7 +409,7 @@ class HumanInventory(human: IHuman?) //9+27+4
                     holder.getEntity(),
                     old!!, item, index
                 )
-                Server.getInstance().pluginManager.callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     this.sendSlot(index, this.getViewers())
                     return false

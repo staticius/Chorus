@@ -2,7 +2,6 @@ package org.chorus.item
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.Entity.getServer
 import org.chorus.level.Level
 import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
@@ -166,7 +165,7 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
         if (getDamage() == 6) return false
-        val server: Server = player.getServer()
+        val server: Server = Server.instance
         renderMap(server.getLevel(mapWorld), mapStartX, mapStartZ, mapScale)
         player.getInventory().setItemInHand(this)
         sendImage(player, mapScale)

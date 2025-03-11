@@ -34,7 +34,7 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
             throw ChunkException("Invalid garbage Chunk given to Block Entity")
         }
 
-        this.server = chunk.provider.level.server
+        this.server = Server.instance
         this.chunk = chunk
         this.setLevel(chunk.provider.level)
         this.namedTag = nbt

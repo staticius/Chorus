@@ -78,7 +78,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
                     if (block!!.isAir) {
                         if (this.isSurroundingBlockFlammable(block)) {
                             val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
-                            level.server.pluginManager.callEvent(e)
+                            Server.instance.pluginManager.callEvent(e)
 
                             if (!e.isCancelled) {
                                 val fire = get(FIRE)
@@ -100,7 +100,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
 
                     if (block!!.up()!!.isAir && block.burnChance > 0) {
                         val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
-                        level.server.pluginManager.callEvent(e)
+                        Server.instance.pluginManager.callEvent(e)
 
                         if (!e.isCancelled) {
                             val fire = get(FIRE)

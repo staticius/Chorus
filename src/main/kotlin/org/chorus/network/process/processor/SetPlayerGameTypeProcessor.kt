@@ -3,7 +3,6 @@ package org.chorus.network.process.processor
 import org.chorus.PlayerHandle
 import org.chorus.Server
 import org.chorus.command.Command
-import org.chorus.entity.Entity.getServer
 import org.chorus.lang.TranslationContainer
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ProtocolInfo
@@ -16,7 +15,7 @@ class SetPlayerGameTypeProcessor : DataPacketProcessor<SetPlayerGameTypePacket>(
                 when (pk.gamemode) {
                     0, 1, 2 -> pk.gamemode
                     6 -> 3
-                    5 -> playerHandle.player.getServer().getDefaultGamemode()
+                    5 -> playerHandle.Server.instance.getDefaultGamemode()
                     else -> throw IllegalStateException("Unexpected value: " + pk.gamemode)
                 }
             )

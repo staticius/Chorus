@@ -1,7 +1,6 @@
 package org.chorus.level
 
 import org.chorus.GameMockExtension
-import org.chorus.Server
 import org.chorus.TestPlayer
 import org.chorus.TestUtils
 import org.chorus.level.format.LevelConfig
@@ -80,7 +79,6 @@ class TerraTest {
             val objectObjectHashMap = HashMap<String, Any>()
             objectObjectHashMap["pack"] = "overworld"
             level = Level(
-                Server.getInstance(),
                 "terra",
                 "src/test/resources/terra",
                 1,

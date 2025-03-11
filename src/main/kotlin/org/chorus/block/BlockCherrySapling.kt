@@ -59,7 +59,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
         val generate: Boolean = objectCherryTree.generate(blockManager, RandomSourceProvider.create(), this.position)
         if (generate) {
             val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
-            level.server.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return
             }

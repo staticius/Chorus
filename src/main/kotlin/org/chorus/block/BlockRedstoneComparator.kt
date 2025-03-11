@@ -149,7 +149,7 @@ abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneD
     }
 
     private fun onChange() {
-        if (!level.server.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return
         }
 

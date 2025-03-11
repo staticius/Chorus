@@ -37,7 +37,7 @@ class ClearSpawnPointCommand(name: String) : VanillaCommand(name, "commands.clea
             return 0
         }
         for (player in players) {
-            player.setSpawn(Server.getInstance().defaultLevel.spawnLocation, SpawnPointType.WORLD)
+            player.setSpawn(Server.instance.defaultLevel.spawnLocation, SpawnPointType.WORLD)
         }
         val players_str = players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
         if (players.size > 1) {

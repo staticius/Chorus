@@ -1,5 +1,6 @@
 package org.chorus.entity.projectile
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.*
 import org.chorus.event.block.BlockIgniteEvent
@@ -53,7 +54,7 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
 
     override fun onCollideWithEntity(entity: Entity) {
         val projectileHitEvent: ProjectileHitEvent = ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity))
-        server!!.pluginManager.callEvent(projectileHitEvent)
+        Server.instance.pluginManager.callEvent(projectileHitEvent)
         if (projectileHitEvent.isCancelled) return
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
@@ -67,7 +68,7 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
             addHitEffect()
             this.hadCollision = true
             val event: EntityCombustByEntityEvent = EntityCombustByEntityEvent(this, entity, 5)
-            server!!.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) entity.setOnFire(event.duration)
         }
         afterCollisionWithEntity(entity)
@@ -98,7 +99,7 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
                     null,
                     BlockIgniteEvent.BlockIgniteCause.FIREBALL
                 )
-                level!!.server.pluginManager.callEvent(e)
+                Server.instance.pluginManager.callEvent(e)
                 if (!e.isCancelled) {
                     level!!.setBlock(fire.position, fire, true)
                 }

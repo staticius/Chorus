@@ -79,7 +79,7 @@ abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockSt
                     return
                 }
                 val event: SignColorChangeEvent = SignColorChangeEvent(this, player, color)
-                level.server.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (event.isCancelled) {
                     blockEntity.spawnTo(player)
                     return
@@ -97,7 +97,7 @@ abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockSt
                     return
                 }
                 val event: SignGlowEvent = SignGlowEvent(this, player, true)
-                level.server.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (event.isCancelled) {
                     blockEntity.spawnTo(player)
                     return
@@ -111,7 +111,7 @@ abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockSt
                 return
             } else if (item is ItemHoneycomb) {
                 val event: SignWaxedEvent = SignWaxedEvent(this, player, true)
-                level.server.pluginManager.callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (event.isCancelled) {
                     blockEntity.spawnTo(player)
                     return

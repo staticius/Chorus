@@ -312,7 +312,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
             }
         } catch (e: Exception) {
             SimpleCommandMap.log.error(
-                server.language.tr(
+                server.baseLang.tr(
                     "nukkit.command.exception",
                     cmdLine,
                     target.toString(),

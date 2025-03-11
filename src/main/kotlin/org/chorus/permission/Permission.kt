@@ -33,12 +33,12 @@ class Permission @JvmOverloads constructor(
         }
 
     val permissibles: Set<Permissible>
-        get() = Server.getInstance().pluginManager.getPermissionSubscriptions(this.name)
+        get() = Server.instance.pluginManager.getPermissionSubscriptions(this.name)
 
     fun recalculatePermissibles() {
         val perms = this.permissibles
 
-        Server.getInstance().pluginManager.recalculatePermissionDefaults(this)
+        Server.instance.pluginManager.recalculatePermissionDefaults(this)
 
         for (p in perms) {
             p.recalculatePermissions()
@@ -51,10 +51,10 @@ class Permission @JvmOverloads constructor(
     }
 
     fun addParent(name: String, value: Boolean): Permission {
-        var perm = Server.getInstance().pluginManager.getPermission(name)
+        var perm = Server.instance.pluginManager.getPermission(name)
         if (perm == null) {
             perm = Permission(name)
-            Server.getInstance().pluginManager.addPermission(perm)
+            Server.instance.pluginManager.addPermission(perm)
         }
 
         this.addParent(perm, value)

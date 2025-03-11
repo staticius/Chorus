@@ -53,7 +53,7 @@ class WardenRangedAttackExecutor(protected var chargingTime: Int, protected var 
 
             var damage = 0f
             if (entity is EntityCanAttack) {
-                damage = entity.getDiffHandDamage(entity.server!!.difficulty)
+                damage = entity.getDiffHandDamage(Server.instance.difficulty)
             }
             damages[DamageModifier.BASE] = damage
 

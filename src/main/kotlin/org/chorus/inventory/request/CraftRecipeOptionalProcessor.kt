@@ -3,8 +3,6 @@ package org.chorus.inventory.request
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.BlockID
-import org.chorus.entity.Entity.getServer
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.inventory.AnvilInventory
 import org.chorus.inventory.CartographyTableInventory
 import org.chorus.item.*
@@ -270,7 +268,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
         inventory: CartographyTableInventory,
         filterString: String?
     ): Item? {
-        val server: Server = player.getServer()
+        val server: Server = Server.instance
         val input = inventory.input
         val additional = inventory.additional
         var result = Item.AIR

@@ -165,9 +165,9 @@ abstract class PluginBase : Plugin {
      * TODO: FINISH JAVADOC
      */
     fun getCommand(name: String): PluginIdentifiableCommand? {
-        var command = server!!.getPluginCommand(name)
+        var command = Server.instance.getPluginCommand(name)
         if (command == null || !command.plugin!!.equals(this)) {
-            command = server!!.getPluginCommand(description.getName().lowercase() + ":" + name)
+            command = Server.instance.getPluginCommand(description.getName().lowercase() + ":" + name)
         }
 
         return if (command != null && command.plugin!!.equals(this)) {

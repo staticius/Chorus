@@ -1,7 +1,7 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.Entity.getServer
+import org.chorus.Server
 import org.chorus.event.inventory.CraftItemEvent
 import org.chorus.item.*
 import org.chorus.network.protocol.types.itemstack.request.action.AutoCraftRecipeAction
@@ -29,7 +29,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
             .toArray<Item> { _Dummy_.__Array__() }
 
         val craftItemEvent = CraftItemEvent(player, eventItems, recipe, 1)
-        player.getServer().getPluginManager().callEvent(craftItemEvent)
+        Server.instance.getPluginManager().callEvent(craftItemEvent)
         if (craftItemEvent.isCancelled) {
             return context.error()
         }

@@ -226,7 +226,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
                 }
             }
         }
-        getServer()!!.pluginManager.callEvent(VehicleUpdateEvent(this))
+        Server.instance.pluginManager.callEvent(VehicleUpdateEvent(this))
         return hasUpdated
     }
 
@@ -272,7 +272,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         )
 
         if (from != to) {
-            getServer()!!.pluginManager.callEvent(VehicleMoveEvent(this, from, to))
+            Server.instance.pluginManager.callEvent(VehicleMoveEvent(this, from, to))
         }
 
         //TODO: lily pad collision

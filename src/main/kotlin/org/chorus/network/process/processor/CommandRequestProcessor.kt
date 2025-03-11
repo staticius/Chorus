@@ -1,13 +1,13 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getServer
 import org.chorus.event.player.PlayerCommandPreprocessEvent
 import org.chorus.event.player.PlayerHackDetectedEvent
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.CommandRequestPacket
 import org.chorus.network.protocol.ProtocolInfo
 import com.google.common.util.concurrent.RateLimiter
+import org.chorus.Server
 import java.util.concurrent.TimeUnit
 
 class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
@@ -17,7 +17,7 @@ class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
         val length = pk.command.length
         if (!rateLimiter.tryAcquire(length, 300, TimeUnit.MILLISECONDS)) {
             val event = PlayerHackDetectedEvent(playerHandle.player, PlayerHackDetectedEvent.HackType.COMMAND_SPAM)
-            playerHandle.player.getServer().getPluginManager().callEvent(event)
+            playerHandle.Server.instance.getPluginManager().callEvent(event)
 
             if (event.isKick) playerHandle.player.session.close("kick because hack")
             return
@@ -26,12 +26,11 @@ class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
             return
         }
         val playerCommandPreprocessEvent = PlayerCommandPreprocessEvent(playerHandle.player, pk.command)
-        playerHandle.player.getServer().getPluginManager().callEvent(playerCommandPreprocessEvent)
+        Server.instance.getPluginManager().callEvent(playerCommandPreprocessEvent)
         if (playerCommandPreprocessEvent.isCancelled) {
             return
         }
-        playerHandle.player.getServer()
-            .executeCommand(playerCommandPreprocessEvent.player, playerCommandPreprocessEvent.message)
+        Server.instance.executeCommand(playerCommandPreprocessEvent.player, playerCommandPreprocessEvent.message)
     }
 
     override val packetId: Int

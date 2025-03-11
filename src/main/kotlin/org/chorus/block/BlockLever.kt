@@ -65,7 +65,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.p
             if (!player.getAdventureSettings()!!.get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
             if (isNotActivate(player)) return false
         }
-        level.server.pluginManager.callEvent(
+        Server.instance.pluginManager.callEvent(
             BlockRedstoneEvent(
                 this,
                 if (isPowerOn) 15 else 0,
@@ -88,7 +88,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.p
         val orientation = leverOrientation!!
         val face = orientation.facing
 
-        if (level.server.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings().enableRedstone()) {
             updateAroundRedstone()
             updateAroundRedstone(getSide(face.getOpposite()!!)!!, face)
         }
@@ -137,7 +137,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.p
             val face = leverOrientation!!.facing
             level.updateAround(position.getSide(face.getOpposite()!!)!!)
 
-            if (level.server.settings.levelSettings().enableRedstone()) {
+            if (Server.instance.settings.levelSettings().enableRedstone()) {
                 updateAroundRedstone()
                 updateAroundRedstone(getSide(face.getOpposite()!!)!!, face)
             }

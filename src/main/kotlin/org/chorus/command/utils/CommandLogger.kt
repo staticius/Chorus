@@ -63,7 +63,7 @@ class CommandLogger(
         var key = key
         if (TextFormat.getLastColors(key).isEmpty()) {
             key =
-                if (Server.getInstance().language.internalGet(key) != null) TextFormat.WHITE.toString() + "%" + key
+                if (Server.instance.language.internalGet(key) != null) TextFormat.WHITE.toString() + "%" + key
                 else TextFormat.WHITE.toString() + key
         }
 
@@ -130,7 +130,7 @@ class CommandLogger(
                 val text = if (sender.isPlayer) {
                     i18n.tr(sender.asPlayer()!!.languageCode, key, *params)
                 } else {
-                    i18n.tr(Server.getInstance().languageCode, key, *params)
+                    i18n.tr(Server.instance.languageCode, key, *params)
                 }
                 outputContainer.messages.add(CommandOutputMessage(text, *CommandOutputContainer.EMPTY_STRING))
                 return this
@@ -138,7 +138,7 @@ class CommandLogger(
         }
         outputContainer.messages.add(
             CommandOutputMessage(
-                Server.getInstance().language.tr(key, *params),
+                Server.instance.language.tr(key, *params),
                 *CommandOutputContainer.EMPTY_STRING
             )
         )
@@ -369,7 +369,7 @@ class CommandLogger(
     private fun broadcastMessage(key: String, value: Array<String>, target: CommandSender): TranslationContainer {
         val message = TranslationContainer(TextFormat.clean(key), *value)
         val resultStr =
-            "[" + target.name + ": " + (if (message.text != target.server.language[message.text]) "%" else "") + message.text + "]"
+            "[" + target.name + ": " + (if (message.text != target.server.baseLang.message.text]) "%" else "") + message.text + "]"
         val coloredStr = TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + resultStr
         message.text = coloredStr
         return message

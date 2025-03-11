@@ -27,7 +27,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
     override fun loadPlugin(file: File): Plugin? {
         val description = this.getPluginDescription(file)
         if (description != null) {
-            JavaPluginLoader.log.info(server.language.tr("nukkit.plugin.load", description.fullName))
+            JavaPluginLoader.log.info(server.baseLang.tr("nukkit.plugin.load", description.fullName))
             val dataFolder = File(file.parentFile, description.name)
             check(!(dataFolder.exists() && !dataFolder.isDirectory)) { "Projected dataFolder '" + dataFolder + "' for " + description.name + " exists and is not a directory" }
 
@@ -125,7 +125,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
 
     override fun enablePlugin(plugin: Plugin) {
         if (plugin is PluginBase && !plugin.isEnabled()) {
-            JavaPluginLoader.log.info(server.language.tr("nukkit.plugin.enable", plugin.getDescription().fullName))
+            JavaPluginLoader.log.info(server.baseLang.tr("nukkit.plugin.enable", plugin.getDescription().fullName))
             plugin.isEnabled = true
             server.pluginManager.callEvent(PluginEnableEvent(plugin))
         }
@@ -138,7 +138,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                 throw UnsupportedOperationException("The PowerNukkitX Internal Plugin cannot be disabled")
             }
 
-            JavaPluginLoader.log.info(server.language.tr("nukkit.plugin.disable", plugin.getDescription().fullName))
+            JavaPluginLoader.log.info(server.baseLang.tr("nukkit.plugin.disable", plugin.getDescription().fullName))
 
             server.serviceManager.cancel(plugin)
 

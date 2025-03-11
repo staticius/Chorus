@@ -69,7 +69,7 @@ abstract class ItemArmor : Item, ItemDurable {
         get() = super.damage
         set(damage) {
             val event = ItemWearEvent(this, damage)
-            val pluginManager = Server.getInstance().pluginManager
+            val pluginManager = Server.instance.pluginManager
             pluginManager?.callEvent(event) //Method gets called on server start before plugin manager is initiated
 
             if (!event.isCancelled) {

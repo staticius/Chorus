@@ -35,7 +35,7 @@ import org.chorus.event.inventory.InventoryPickupItemEvent
 import org.chorus.event.inventory.InventoryPickupTridentEvent
 import org.chorus.event.player.*
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
-import org.chorus.event.server.DataPacketSendEvent
+import org.chorus.event.Server.instance.DataPacketSendEvent
 import org.chorus.form.window.Form
 import org.chorus.inventory.*
 import org.chorus.inventory.fake.FakeInventory
@@ -521,17 +521,16 @@ open class Player @UsedByReflection constructor(
 
     init {
         this.perm = PermissibleBase(this)
-        this.server = Server.instance
         this.lastBreak = -1
         this.socketAddress = session.address
         this.rawSocketAddress = socketAddress
         this.loaderId = generateChunkLoaderId(this)
-        this.chunkSendCountPerTick = server.settings.chunkSettings().perTickSend()
-        this.spawnThreshold = server.settings.chunkSettings().spawnThreshold()
+        this.chunkSendCountPerTick = Server.instance.settings.chunkSettings().perTickSend()
+        this.spawnThreshold = Server.instance.settings.chunkSettings().spawnThreshold()
         this.spawnPoint = null
-        this.gamemode = server.gamemode
-        this.level = server!!.defaultLevel
-        this.viewDistance = server.viewDistance
+        this.gamemode = Server.instance.gamemode
+        this.level = Server.instance.defaultLevel
+        this.viewDistance = Server.instance.viewDistance
         this.chunkRadius = viewDistance
         this.boundingBox = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         this.lastSkinChange = -1
@@ -595,7 +594,7 @@ open class Player @UsedByReflection constructor(
             inventory!!.itemInHand, target!!.position, face,
             if (target.isAir) PlayerInteractEvent.Action.LEFT_CLICK_AIR else PlayerInteractEvent.Action.LEFT_CLICK_BLOCK
         )
-        getServer().getPluginManager().callEvent(playerInteractEvent)
+        Server.instance.getPluginManager().callEvent(playerInteractEvent)
         if (playerInteractEvent.isCancelled) {
             inventory!!.sendHeldItem(this)
             level.sendBlocks(arrayOf(this), arrayOf<Block?>(target), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0)
@@ -768,7 +767,7 @@ open class Player @UsedByReflection constructor(
     public override fun initEntity() {
         super.initEntity()
         val level = if (namedTag!!.containsString("SpawnLevel")) {
-            server!!.getLevelByName(namedTag!!.getString("SpawnLevel")!!)
+            Server.instance.getLevelByName(namedTag!!.getString("SpawnLevel")!!)
         } else Server.instance.getDefaultLevel()
         if (namedTag!!.containsInt("SpawnX") && namedTag!!.containsInt("SpawnY") && namedTag!!.containsInt("SpawnZ")) {
             this.spawnPoint = Locator(
@@ -853,7 +852,7 @@ open class Player @UsedByReflection constructor(
             food.sendFood()
         }
 
-        val scoreboardManager = getServer().getScoreboardManager()
+        val scoreboardManager = Server.instance.getScoreboardManager()
         scoreboardManager?.onPlayerJoin(this)
 
         if (spawn.second() == null || spawn.second() == SpawnPointType.WORLD) {
@@ -877,7 +876,7 @@ open class Player @UsedByReflection constructor(
 
         //客户端初始化完毕再传送玩家，避免下落 (x)
         //已经设置immobile了所以不用管下落了
-        val pos = if (server.getSettings().baseSettings()
+        val pos = if (Server.instance.getSettings().baseSettings()
                 .safeSpawn() && (this.gamemode and 0x01) == 0
         ) {
             Transform(
@@ -1010,7 +1009,7 @@ open class Player @UsedByReflection constructor(
                 inEndPortal = true
                 if (this.getRiding() == null && getPassengers().isEmpty()) {
                     val ev = EntityPortalEnterEvent(this, PortalType.END)
-                    getServer().getPluginManager().callEvent(ev)
+                    Server.instance.getPluginManager().callEvent(ev)
 
                     if (!ev.isCancelled) {
                         val newPos = moveToTheEnd(this.getLocator())
@@ -1028,7 +1027,7 @@ open class Player @UsedByReflection constructor(
                             } else {
                                 if (!this.hasSeenCredits && !this.showingCredits) {
                                     val playerShowCreditsEvent = PlayerShowCreditsEvent(this)
-                                    getServer().getPluginManager().callEvent(playerShowCreditsEvent)
+                                    Server.instance.getPluginManager().callEvent(playerShowCreditsEvent)
                                     if (!playerShowCreditsEvent.isCancelled) {
                                         this.showCredits()
                                     }
@@ -1110,15 +1109,15 @@ open class Player @UsedByReflection constructor(
         val corrZ = position.z - clientPos.z
         if (this.isCheckingMovement && (abs(corrX) > 0.5 || abs(corrY) > 0.5 || abs(corrZ) > 0.5) && this.riding == null && !this.hasEffect(
                 EffectType.LEVITATION
-            ) && !this.hasEffect(EffectType.SLOW_FALLING) && !server!!.allowFlight
+            ) && !this.hasEffect(EffectType.SLOW_FALLING) && !Server.instance.allowFlight
         ) {
             val diff = corrX * corrX + corrZ * corrZ
             //这里放宽了判断，否则对角穿过脚手架会判断非法移动。
             if (diff > 1.2) {
                 val event = PlayerInvalidMoveEvent(this, true)
-                getServer().getPluginManager().callEvent(event)
+                Server.instance.getPluginManager().callEvent(event)
                 if (!event.isCancelled && (event.isRevert.also { invalidMotion = it })) {
-                    Player.log.warn(getServer().getLanguage().tr("nukkit.player.invalidMove", this.getName()))
+                    Player.log.warn(Server.instance.getLanguage().tr("nukkit.player.invalidMove", this.getName()))
                 }
             }
             if (invalidMotion) {
@@ -1162,7 +1161,7 @@ open class Player @UsedByReflection constructor(
                 this.collisionBlocks = null
             }
             val ev = PlayerMoveEvent(this, last, now)
-            server.getPluginManager().callEvent(ev)
+            Server.instance.getPluginManager().callEvent(ev)
 
             if (!(ev.isCancelled.also { invalidMotion = it })) { //Yes, this is intended
                 if (now != ev.to && this.riding == null) { //If plugins modify the destination
@@ -1267,7 +1266,7 @@ open class Player @UsedByReflection constructor(
     fun handleLogicInMove(invalidMotion: Boolean, distance: Double) {
         if (!invalidMotion) {
             //处理饱食度更新
-            if (foodData!!.isEnabled && getServer()!!.difficulty > 0) {
+            if (foodData!!.isEnabled && Server.instance.difficulty > 0) {
                 //UpdateFoodExpLevel
                 if (distance >= 0.05) {
                     var jump = 0.0
@@ -1308,7 +1307,7 @@ open class Player @UsedByReflection constructor(
                             }
                         }
                         val ev = WaterFrostEvent(block, this)
-                        server.getPluginManager().callEvent(ev)
+                        Server.instance.getPluginManager().callEvent(ev)
                         if (!ev.isCancelled) {
                             level!!.setBlock(block.position, layer, Block.get(Block.FROSTED_ICE), true, false)
                             level!!.scheduleUpdate(
@@ -1368,17 +1367,17 @@ open class Player @UsedByReflection constructor(
      */
     fun processLogin() {
         if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_USERS)) {
-            server.getPluginManager().subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+            Server.instance.getPluginManager().subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
         }
         if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
-            server.getPluginManager().subscribeToPermission(
+            Server.instance.getPluginManager().subscribeToPermission(
                 Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
                 this
             )
         }
 
         var oldPlayer: Player? = null
-        for (p in ArrayList<Player>(server.getOnlinePlayers().values)) {
+        for (p in ArrayList<Player>(Server.instance.getOnlinePlayers().values)) {
             if (p !== this && p.getName()
                     .equals(this.getName(), ignoreCase = true) || this.getUniqueId() == p.getUniqueId()
             ) {
@@ -1394,9 +1393,9 @@ open class Player @UsedByReflection constructor(
         } else {
             val existData: Boolean = Server.instance.hasOfflinePlayerData(this.getName())
             nbt = if (existData) {
-                server!!.getOfflinePlayerData(this.getName(), false)
+                Server.instance.getOfflinePlayerData(this.getName(), false)
             } else {
-                server!!.getOfflinePlayerData(this.uuid, true)
+                Server.instance.getOfflinePlayerData(this.uuid, true)
             }
         }
 
@@ -1405,7 +1404,7 @@ open class Player @UsedByReflection constructor(
             return
         }
 
-        server!!.updateName(this.playerInfo)
+        Server.instance.updateName(this.playerInfo)
 
         this.playedBefore = (nbt.getLong("lastPlayed") - nbt.getLong("firstPlayed")) > 1
 
@@ -1417,16 +1416,16 @@ open class Player @UsedByReflection constructor(
         this.setExperience(exp, expLevel)
 
         this.gamemode = nbt.getInt("playerGameType") and 0x03
-        if (server.forceGamemode) {
-            this.gamemode = server.gamemode
+        if (Server.instance.forceGamemode) {
+            this.gamemode = Server.instance.gamemode
             nbt.putInt("playerGameType", this.gamemode)
         }
 
         adventureSettings!!.init(nbt)
 
         val level: Level
-        if ((server.getLevelByName(nbt.getString("Level")!!).also { level = it!! }) == null) {
-            this.level = server.defaultLevel
+        if ((Server.instance.getLevelByName(nbt.getString("Level")!!).also { level = it!! }) == null) {
+            this.level = Server.instance.defaultLevel
             nbt.putString("Level", this.level!!.getName()!!)
             val spawnLocation = this.level!!.safeSpawn
             nbt.getList<FloatTag?>("Pos", FloatTag::class.java)
@@ -1453,8 +1452,8 @@ open class Player @UsedByReflection constructor(
         nbt.putLong("UUIDLeast", uuid!!.leastSignificantBits)
         nbt.putLong("UUIDMost", uuid.mostSignificantBits)
 
-        if (server.autoSave) {
-            server.saveOfflinePlayerData(this.uuid!!, nbt, true)
+        if (Server.instance.autoSave) {
+            Server.instance.saveOfflinePlayerData(this.uuid!!, nbt, true)
         }
 
         val posList = nbt.getList("Pos", FloatTag::class.java)
@@ -1523,12 +1522,12 @@ open class Player @UsedByReflection constructor(
             )
         }
 
-        if (!server.settings.playerSettings().checkMovement()) {
+        if (!Server.instance.settings.playerSettings().checkMovement()) {
             this.isCheckingMovement = false
         }
 
         Player.log.info(
-            server.language.tr(
+            Server.instance.language.tr(
                 "nukkit.player.logIn",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
                 this.address,
@@ -1545,7 +1544,7 @@ open class Player @UsedByReflection constructor(
     val safeSpawn: Vector3
         get() {
             val worldSpawnPoint = if (this.spawnPoint == null) {
-                server!!.defaultLevel!!.safeSpawn.position
+                Server.instance.defaultLevel!!.safeSpawn.position
             } else {
                 spawnPoint!!.position
             }
@@ -1572,10 +1571,10 @@ open class Player @UsedByReflection constructor(
             )
         )
 
-        server.getPluginManager().callEvent(playerJoinEvent)
+        Server.instance.getPluginManager().callEvent(playerJoinEvent)
 
         if (!playerJoinEvent.joinMessage.toString().trim { it <= ' ' }.isEmpty()) {
-            server!!.broadcastMessage(playerJoinEvent.joinMessage)
+            Server.instance.broadcastMessage(playerJoinEvent.joinMessage)
         }
 
         /*
@@ -1627,19 +1626,19 @@ open class Player @UsedByReflection constructor(
     }
 
     override var isBanned: Boolean
-        get() = server.getNameBans().isBanned(this.getName())
+        get() = Server.instance.getNameBans().isBanned(this.getName())
         set(value) {
             if (value) {
-                server.getNameBans().addBan(this.getName(), null, null, null)
+                Server.instance.getNameBans().addBan(this.getName(), null, null, null)
                 this.kick(PlayerKickEvent.Reason.NAME_BANNED, "Banned by admin")
             } else {
-                server.getNameBans().remove(this.getName())
+                Server.instance.getNameBans().remove(this.getName())
             }
         }
 
     fun respawn() {
         //the player can't respawn if the server is hardcore
-        if (server!!.isHardcore) {
+        if (Server.instance.isHardcore) {
             this.isBanned = true
             return
         }
@@ -1664,7 +1663,7 @@ open class Player @UsedByReflection constructor(
                     }
                 }
             } else { //block not available
-                val defaultSpawn = getServer()!!.defaultLevel!!.spawnLocation
+                val defaultSpawn = Server.instance.defaultLevel!!.spawnLocation
                 this.setSpawn(defaultSpawn, SpawnPointType.WORLD)
                 playerRespawnEvent.respawnPosition = Pair.of(defaultSpawn, SpawnPointType.WORLD)
                 // handle spawn point change when block spawn not available
@@ -1672,7 +1671,7 @@ open class Player @UsedByReflection constructor(
             }
         }
 
-        server.pluginManager.callEvent(playerRespawnEvent)
+        Server.instance.pluginManager.callEvent(playerRespawnEvent)
         val respawnPos = playerRespawnEvent.respawnPosition.first()
 
         this.sendExperience()
@@ -1835,12 +1834,12 @@ open class Player @UsedByReflection constructor(
         )
 
     override var isWhitelisted: Boolean
-        get() = server!!.isWhitelisted(getName().lowercase())
+        get() = Server.instance.isWhitelisted(getName().lowercase())
         set(value) {
             if (value) {
-                server!!.addWhitelist(getName().lowercase())
+                Server.instance.addWhitelist(getName().lowercase())
             } else {
-                server!!.removeWhitelist(getName().lowercase())
+                Server.instance.removeWhitelist(getName().lowercase())
             }
         }
 
@@ -1954,10 +1953,6 @@ open class Player @UsedByReflection constructor(
         }
     }
 
-    override fun getServer(): Server? {
-        return this.server
-    }
-
     fun setRemoveFormat() {
         this.removeFormat = true
     }
@@ -2025,16 +2020,16 @@ open class Player @UsedByReflection constructor(
         get() = connected.get() && this.loggedIn
 
     override var isOp: Boolean
-        get() = server!!.isOp(this.getName())
+        get() = Server.instance.isOp(this.getName())
         set(value) {
             if (value == field) {
                 return
             }
 
             if (value) {
-                server!!.addOp(this.getName())
+                Server.instance.addOp(this.getName())
             } else {
-                server!!.removeOp(this.getName())
+                Server.instance.removeOp(this.getName())
             }
         }
 
@@ -2071,8 +2066,8 @@ open class Player @UsedByReflection constructor(
     }
 
     override fun recalculatePermissions() {
-        server.getPluginManager().unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
-        server.getPluginManager().unsubscribeFromPermission(
+        Server.instance.getPluginManager().unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        Server.instance.getPluginManager().unsubscribeFromPermission(
             Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
             this
         )
@@ -2084,11 +2079,11 @@ open class Player @UsedByReflection constructor(
         perm!!.recalculatePermissions()
 
         if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_USERS)) {
-            server.getPluginManager().subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+            Server.instance.getPluginManager().subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
         }
 
         if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
-            server.getPluginManager().subscribeToPermission(
+            Server.instance.getPluginManager().subscribeToPermission(
                 Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
                 this
             )
@@ -2161,7 +2156,7 @@ open class Player @UsedByReflection constructor(
     fun setDisplayName(displayName: String) {
         this.displayName = displayName
         if (this.spawned) {
-            server!!.updatePlayerListData(
+            Server.instance.updatePlayerListData(
                 getUniqueId()!!, this.getId(), this.getDisplayName(),
                 getSkin()!!,
                 loginChainData.XUID
@@ -2172,7 +2167,7 @@ open class Player @UsedByReflection constructor(
     override fun setSkin(skin: Skin?) {
         super.setSkin(skin)
         if (this.spawned) {
-//            this.server.updatePlayerListData(this.getUniqueId(), this.getId(), this.getDisplayName(), skin, this.getLoginChainData().getXUID());
+//            this.Server.instance.updatePlayerListData(this.getUniqueId(), this.getId(), this.getDisplayName(), skin, this.getLoginChainData().getXUID());
             val skinPacket = PlayerSkinPacket()
             skinPacket.uuid = this.getUniqueId()
             skinPacket.skin = this.getSkin()
@@ -2408,19 +2403,19 @@ open class Player @UsedByReflection constructor(
 
     @JvmOverloads
     fun updateTrackingPositions(delayed: Boolean = false) {
-        val server = getServer()
+        val server = Server.instance
         if (delayed) {
             if (delayedPosTrackingUpdate != null) {
                 delayedPosTrackingUpdate!!.cancel()
             }
-            val scheduler = if (level == null) server.getScheduler() else level!!.scheduler
+            val scheduler = if (level == null) Server.instance.getScheduler() else level!!.scheduler
             delayedPosTrackingUpdate = scheduler!!.scheduleDelayedTask(
                 null,
                 { this.updateTrackingPositions() }, 10
             )
             return
         }
-        val positionTrackingService = server!!.positionTrackingService
+        val positionTrackingService = Server.instance.positionTrackingService
         positionTrackingService.forceRecheck(this)
     }
 
@@ -2457,7 +2452,7 @@ open class Player @UsedByReflection constructor(
         }
 
         val ev: PlayerBedEnterEvent
-        server.getPluginManager().callEvent(
+        Server.instance.getPluginManager().callEvent(
             PlayerBedEnterEvent(
                 this,
                 level!!.getBlock(pos)!!
@@ -2490,7 +2485,7 @@ open class Player @UsedByReflection constructor(
 
     fun stopSleep() {
         if (this.sleeping != null) {
-            server.getPluginManager().callEvent(
+            Server.instance.getPluginManager().callEvent(
                 PlayerBedLeaveEvent(
                     this,
                     level!!.getBlock(
@@ -2530,7 +2525,7 @@ open class Player @UsedByReflection constructor(
             }
         }
         val event = PlayerAchievementAwardedEvent(this, achievementId)
-        server.getPluginManager().callEvent(event)
+        Server.instance.getPluginManager().callEvent(event)
 
         if (event.isCancelled) {
             return false
@@ -2595,7 +2590,7 @@ open class Player @UsedByReflection constructor(
         }
 
         val ev: PlayerGameModeChangeEvent
-        server.getPluginManager().callEvent(PlayerGameModeChangeEvent(this, gamemode, newSettings).also { ev = it })
+        Server.instance.getPluginManager().callEvent(PlayerGameModeChangeEvent(this, gamemode, newSettings).also { ev = it })
 
         if (ev.isCancelled) {
             return false
@@ -2868,7 +2863,7 @@ open class Player @UsedByReflection constructor(
 
             this.entityBaseTick(tickDiff)
 
-            if (getServer()!!.difficulty == 0 && level!!.gameRules!!.getBoolean(GameRule.NATURAL_REGENERATION)) {
+            if (Server.instance.difficulty == 0 && level!!.gameRules!!.getBoolean(GameRule.NATURAL_REGENERATION)) {
                 if (this.getHealth() < this.getMaxHealth() && this.ticksLived % 20 == 0) {
                     this.heal(1f)
                 }
@@ -2897,7 +2892,7 @@ open class Player @UsedByReflection constructor(
                 } else {
                     this.lastInAirTick = level!!.tick
                     //check fly for player
-                    if (this.isCheckingMovement && !this.isGliding() && !server!!.allowFlight && !getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT] && this.inAirTicks > 20 && !this.isSleeping() && !this.isImmobile() && !this.isSwimming() && this.riding == null && !this.hasEffect(
+                    if (this.isCheckingMovement && !this.isGliding() && !Server.instance.allowFlight && !getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT] && this.inAirTicks > 20 && !this.isSleeping() && !this.isImmobile() && !this.isSwimming() && this.riding == null && !this.hasEffect(
                             EffectType.LEVITATION
                         ) && !this.hasEffect(EffectType.SLOW_FALLING)
                     ) {
@@ -2915,7 +2910,7 @@ open class Player @UsedByReflection constructor(
                         if (!this.hasEffect(EffectType.JUMP_BOOST) && diff > 0.6 && expectedVelocity < speed!!.y && !ignore) {
                             if (this.inAirTicks < 150) {
                                 val ev = PlayerInvalidMoveEvent(this, true)
-                                getServer().getPluginManager().callEvent(ev)
+                                Server.instance.getPluginManager().callEvent(ev)
 
                                 if (!ev.isCancelled) {
                                     this.setMotion(Vector3(0.0, expectedVelocity, 0.0))
@@ -2974,7 +2969,7 @@ open class Player @UsedByReflection constructor(
                 timeSinceRest++
             }
 
-            if (server!!.serverAuthoritativeMovement > 0 && this.breakingBlock != null) { //仅服务端权威使用，因为客户端权威continue break是正常的
+            if (Server.instance.serverAuthoritativeMovement > 0 && this.breakingBlock != null) { //仅服务端权威使用，因为客户端权威continue break是正常的
                 onBlockBreakContinue(breakingBlock!!.position, this.breakingBlockFace)
             }
 
@@ -3146,10 +3141,10 @@ open class Player @UsedByReflection constructor(
         for (msg in message.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
             if (!msg.trim { it <= ' ' }.isEmpty() && msg.length <= 512 && messageLimitCounter-- > 0) {
                 val chatEvent = PlayerChatEvent(this, msg)
-                server.getPluginManager().callEvent(chatEvent)
+                Server.instance.getPluginManager().callEvent(chatEvent)
                 if (!chatEvent.isCancelled) {
-                    server.broadcastMessage(
-                        getServer().getLanguage().tr(
+                    Server.instance.broadcastMessage(
+                        Server.instance.getLanguage().tr(
                             chatEvent.format, *arrayOf<String?>(
                                 chatEvent.player!!.getDisplayName(), chatEvent.message
                             )
@@ -3214,7 +3209,7 @@ open class Player @UsedByReflection constructor(
     @JvmOverloads
     fun kick(reason: PlayerKickEvent.Reason, reasonString: String, isAdmin: Boolean = true): Boolean {
         val ev: PlayerKickEvent
-        server.getPluginManager().callEvent(
+        Server.instance.getPluginManager().callEvent(
             PlayerKickEvent(
                 this, reason,
                 leaveMessage
@@ -3274,7 +3269,7 @@ open class Player @UsedByReflection constructor(
     override fun sendMessage(message: String) {
         val pk = TextPacket()
         pk.type = TextPacket.TYPE_RAW
-        pk.message = server.getLanguage().tr(message)
+        pk.message = Server.instance.getLanguage().tr(message)
         this.dataPacket(pk)
     }
 
@@ -3333,14 +3328,14 @@ open class Player @UsedByReflection constructor(
     @JvmOverloads
     fun sendTranslation(message: String, parameters: Array<String?> = EmptyArrays.EMPTY_STRINGS) {
         val pk = TextPacket()
-        if (server.getSettings().baseSettings().forceServerTranslate()) {
+        if (Server.instance.getSettings().baseSettings().forceServerTranslate()) {
             pk.type = TextPacket.TYPE_RAW
-            pk.message = server.getLanguage().tr(message, *parameters)
+            pk.message = Server.instance.getLanguage().tr(message, *parameters)
         } else {
             pk.type = TextPacket.TYPE_TRANSLATION
-            pk.message = server.getLanguage().tr(message, parameters, "nukkit.", true)
+            pk.message = Server.instance.getLanguage().tr(message, parameters, "nukkit.", true)
             for (i in parameters.indices) {
-                parameters[i] = server.getLanguage().tr(parameters[i], parameters, "nukkit.", true)
+                parameters[i] = Server.instance.getLanguage().tr(parameters[i], parameters, "nukkit.", true)
             }
             pk.parameters = parameters
         }
@@ -3366,7 +3361,7 @@ open class Player @UsedByReflection constructor(
         val pk = TextPacket()
         pk.type = TextPacket.TYPE_CHAT
         pk.source = source
-        pk.message = server.getLanguage().tr(message)
+        pk.message = Server.instance.getLanguage().tr(message)
         this.dataPacket(pk)
     }
 
@@ -3623,12 +3618,12 @@ open class Player @UsedByReflection constructor(
         }
         //output logout infomation
         Player.log.info(
-            getServer().getLanguage().tr(
+            Server.instance.getLanguage().tr(
                 "nukkit.player.logOut",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
                 this.address,
                 port.toString(),
-                getServer().getLanguage().tr(reason)
+                Server.instance.getLanguage().tr(reason)
             )
         )
 
@@ -3643,7 +3638,7 @@ open class Player @UsedByReflection constructor(
         }
 
         //handle scoreboardManager#beforePlayerQuit
-        val scoreboardManager = getServer().getScoreboardManager()
+        val scoreboardManager = Server.instance.getScoreboardManager()
         scoreboardManager?.beforePlayerQuit(this)
 
         //dismount horse
@@ -3665,7 +3660,7 @@ open class Player @UsedByReflection constructor(
         //call quit event
         var ev: PlayerQuitEvent? = null
         if (this.getName() != null && !getName().isEmpty()) {
-            server.getPluginManager().callEvent(PlayerQuitEvent(this, message, true, reason).also { ev = it })
+            Server.instance.getPluginManager().callEvent(PlayerQuitEvent(this, message, true, reason).also { ev = it })
             if (this.fishing != null) {
                 this.stopFishing(false)
             }
@@ -3679,15 +3674,15 @@ open class Player @UsedByReflection constructor(
         windows.clear()
         hiddenPlayers.clear()
         //remove player from playerlist
-        server!!.removeOnlinePlayer(this)
+        Server.instance.removeOnlinePlayer(this)
         //remove player from players map
-        server.removePlayer(this)
+        Server.instance.removePlayer(this)
 
-        server.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
-        server.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE, this)
+        Server.instance.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        Server.instance.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE, this)
         // broadcast disconnection message
         if (ev != null && (this.getName() != "") && this.spawned && (ev!!.quitMessage.toString() != "")) {
-            server.broadcastMessage(ev!!.quitMessage)
+            Server.instance.broadcastMessage(ev!!.quitMessage)
         }
 
         hasSpawned.clear()
@@ -3751,7 +3746,7 @@ open class Player @UsedByReflection constructor(
                 }
             }
         } catch (e: Exception) {
-            getServer().getLogger().error("Failed to unload all used chunks.", e)
+            Server.instance.getLogger().error("Failed to unload all used chunks.", e)
         } finally {
             playerChunkManager.usedChunks.clear()
         }
@@ -3775,9 +3770,9 @@ open class Player @UsedByReflection constructor(
             } else {
                 namedTag!!.putString(
                     "SpawnLevel",
-                    server!!.defaultLevel!!.getName()!!
+                    Server.instance.defaultLevel!!.getName()!!
                 )
-                namedTag!!.putInt("SpawnDimension", server.defaultLevel!!.dimension)
+                namedTag!!.putInt("SpawnDimension", Server.instance.defaultLevel!!.dimension)
             }
         }
 
@@ -3820,7 +3815,7 @@ open class Player @UsedByReflection constructor(
             namedTag!!.putInt("TimeSinceRest", this.timeSinceRest)
 
             if (!getName().isBlank() && this.namedTag != null) {
-                server!!.saveOfflinePlayerData(
+                Server.instance.saveOfflinePlayerData(
                     uuid!!,
                     namedTag!!, async
                 )
@@ -3958,7 +3953,7 @@ open class Player @UsedByReflection constructor(
         ev.keepExperience = level!!.gameRules!!.getBoolean(GameRule.KEEP_INVENTORY)
         ev.keepInventory = ev.keepExperience
 
-        server.getPluginManager().callEvent(ev)
+        Server.instance.getPluginManager().callEvent(ev)
 
         if (!ev.isCancelled) {
             if (this.fishing != null) {
@@ -4007,7 +4002,7 @@ open class Player @UsedByReflection constructor(
             this.dataPacket(deathInfo)
 
             if (showMessages && !ev.deathMessage.toString().isEmpty()) {
-                server!!.broadcast(ev.deathMessage, Server.Companion.BROADCAST_CHANNEL_USERS)
+                Server.instance.broadcast(ev.deathMessage, Server.Companion.BROADCAST_CHANNEL_USERS)
             }
             this.setDataProperty(
                 EntityDataTypes.PLAYER_LAST_DEATH_POS, BlockVector3(
@@ -4137,7 +4132,7 @@ open class Player @UsedByReflection constructor(
             experience,
             experienceLevel, exp, level
         )
-        server.getPluginManager().callEvent(expEvent)
+        Server.instance.getPluginManager().callEvent(expEvent)
         if (expEvent.isCancelled) {
             return
         }
@@ -4444,7 +4439,7 @@ open class Player @UsedByReflection constructor(
         //event
         if (cause != null) {
             val event = PlayerTeleportEvent(this, from, to, cause)
-            server.getPluginManager().callEvent(event)
+            Server.instance.getPluginManager().callEvent(event)
             if (event.isCancelled) return false
             to = event.to
         }
@@ -4944,19 +4939,19 @@ open class Player @UsedByReflection constructor(
     }
 
     override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        server.getPlayerMetadata().setMetadata(this, metadataKey, newMetadataValue)
+        Server.instance.getPlayerMetadata().setMetadata(this, metadataKey, newMetadataValue)
     }
 
     override fun getMetadata(metadataKey: String): List<MetadataValue> {
-        return server.getPlayerMetadata().getMetadata(this, metadataKey)
+        return Server.instance.getPlayerMetadata().getMetadata(this, metadataKey)
     }
 
     override fun hasMetadata(metadataKey: String): Boolean {
-        return server.getPlayerMetadata().hasMetadata(this, metadataKey)
+        return Server.instance.getPlayerMetadata().hasMetadata(this, metadataKey)
     }
 
     override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        server.getPlayerMetadata().removeMetadata(this, metadataKey, owningPlugin)
+        Server.instance.getPlayerMetadata().removeMetadata(this, metadataKey, owningPlugin)
     }
 
     override fun onChunkChanged(chunk: IChunk) {
@@ -5097,7 +5092,7 @@ open class Player @UsedByReflection constructor(
                     ev.setCancelled()
                 }
 
-                server.getPluginManager().callEvent(ev)
+                Server.instance.getPluginManager().callEvent(ev)
                 if (ev.isCancelled) {
                     return false
                 }
@@ -5141,7 +5136,7 @@ open class Player @UsedByReflection constructor(
                     ev.setCancelled()
                 }
 
-                server.getPluginManager().callEvent(ev)
+                Server.instance.getPluginManager().callEvent(ev)
                 if (ev.isCancelled) {
                     return false
                 }
@@ -5171,7 +5166,7 @@ open class Player @UsedByReflection constructor(
                         }
 
                         val ev: InventoryPickupItemEvent
-                        server.getPluginManager()
+                        Server.instance.getPluginManager()
                             .callEvent(InventoryPickupItemEvent(inventory!!, entity).also { ev = it })
                         if (ev.isCancelled) {
                             return false
@@ -5335,7 +5330,7 @@ open class Player @UsedByReflection constructor(
             )
         )
         val ev = ProjectileLaunchEvent(fishingHook, this)
-        getServer().getPluginManager().callEvent(ev)
+        Server.instance.getPluginManager().callEvent(ev)
         if (ev.isCancelled) {
             fishingHook.close()
         } else {
@@ -5474,7 +5469,7 @@ open class Player @UsedByReflection constructor(
             return false
         }
         val ev = DataPacketSendEvent(this, packet)
-        server.getPluginManager().callEvent(ev)
+        Server.instance.getPluginManager().callEvent(ev)
         if (ev.isCancelled) {
             return false
         }

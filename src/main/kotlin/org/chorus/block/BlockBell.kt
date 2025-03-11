@@ -205,7 +205,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         }
 
         val event = BellRingEvent(this, cause, causeEntity!!)
-        level.server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return false
         }
@@ -275,7 +275,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
                 level.useBreakOn(this.position)
             }
             return type
-        } else if (type == Level.BLOCK_UPDATE_REDSTONE && level.server.settings.levelSettings().enableRedstone()) {
+        } else if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings().enableRedstone()) {
             if (this.isGettingPower) {
                 if (!isToggled) {
                     isToggled = true

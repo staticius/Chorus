@@ -80,7 +80,7 @@ interface Oxidizable {
         if (random.nextFloat() < chance) {
             val nextBlock = getBlockWithOxidizationLevel(OxidizationLevel.entries[oxiLvl + 1])
             val event = BlockFadeEvent(block, nextBlock)
-            block.level.server.pluginManager.callEvent(event)
+            block.Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 block.level.setBlock(block.position, event.newState)
             }
