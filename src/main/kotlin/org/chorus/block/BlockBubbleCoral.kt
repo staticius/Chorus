@@ -1,7 +1,7 @@
 package org.chorus.block
 
-import org.chorus.event.Event.isCancelled
-import org.chorus.level.*
+import org.chorus.event.block.BlockFadeEvent
+import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
@@ -17,7 +17,7 @@ open class BlockBubbleCoral @JvmOverloads constructor(blockstate: BlockState? = 
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (this.id == BUBBLE_CORAL) {
+            if (this.id == BlockID.BUBBLE_CORAL) {
                 level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40))
             }
             return type
@@ -30,17 +30,19 @@ open class BlockBubbleCoral @JvmOverloads constructor(blockstate: BlockState? = 
                     return type
                 }
             }
-            val event: BlockFadeEvent = BlockFadeEvent(this, deadCoral)
+            val event = BlockFadeEvent(this, getDeadCoral())
             if (!event.isCancelled) {
-                level.setBlock(this.position, event.newState, true, true)
+                level.setBlock(this.position, event.newState, direct = true, update = true)
             }
             return type
         }
         return 0
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BUBBLE_CORAL)
-
     }
 }

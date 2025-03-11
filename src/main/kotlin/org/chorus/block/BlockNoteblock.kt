@@ -95,7 +95,7 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState? = Compani
         }
 
     fun increaseStrength() {
-        orCreateBlockEntity.changePitch()
+        getOrCreateBlockEntity().changePitch()
     }
 
     val instrument: Instrument

@@ -31,7 +31,7 @@ class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Compa
     }
 
     override fun getWeakPower(face: BlockFace): Int {
-        val blockEntity: BlockEntitySculkSensor? = this.orCreateBlockEntity
+        val blockEntity: BlockEntitySculkSensor? = this.getOrCreateBlockEntity()
         return if (getSide(face.getOpposite()!!) is BlockRedstoneComparator) {
             blockEntity.comparatorPower
         } else {
@@ -40,7 +40,7 @@ class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Compa
     }
 
     override fun onUpdate(type: Int): Int {
-        orCreateBlockEntity
+        getOrCreateBlockEntity()
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (Server.instance.settings.levelSettings().enableRedstone()) {
                 blockEntity.calPower()

@@ -2,7 +2,6 @@ package org.chorus.block
 
 import org.chorus.tags.BlockTags
 import org.chorus.utils.DyeColor
-import java.util.Set
 
 class BlockBlackWool @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockWool(blockstate) {
@@ -10,8 +9,10 @@ class BlockBlackWool @JvmOverloads constructor(blockstate: BlockState? = Compani
         return DyeColor.BLACK
     }
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.BLACK_WOOL, Set.of(BlockTags.PNX_WOOL))
+    override val properties: BlockProperties
+        get() = Companion.properties
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.BLACK_WOOL, mutableSetOf(BlockTags.PNX_WOOL))
     }
 }

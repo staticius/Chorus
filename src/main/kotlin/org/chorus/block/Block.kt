@@ -999,8 +999,8 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
                 return this.id == obj.id && this.blockState === obj.blockState
             }
             if (this is BlockEntityHolder<*> && obj is BlockEntityHolder<*>) {
-                val be1: BlockEntity = this.orCreateBlockEntity
-                val be2: BlockEntity = obj.orCreateBlockEntity
+                val be1: BlockEntity = this.getOrCreateBlockEntity()
+                val be2: BlockEntity = obj.getOrCreateBlockEntity()
                 return this.id == obj.id && this.blockState === obj.blockState && be1.cleanedNBT!! == be2.cleanedNBT
             }
         }

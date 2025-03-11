@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import org.chorus.Server
 import org.chorus.event.block.BlockFadeEvent
 import org.chorus.item.*
 import org.chorus.item.enchantment.Enchantment
@@ -20,18 +21,19 @@ open class BlockIce : BlockTransparent {
     override val hardness: Double
         get() = 0.5
 
-    val frictionFactor: Double
-        get() = 0.98
+    open fun getFrictionFactor(): Double = 0.98
 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    override fun onBreak(item: Item): Boolean {
-        if (level.dimension == Level.DIMENSION_NETHER || item.getEnchantmentLevel(Enchantment.ID_SILK_TOUCH) > 0 || down()!!.isAir) {
-            return super.onBreak(item)
+    override fun onBreak(item: Item?): Boolean {
+        if (item != null) {
+            if (level.dimension == Level.DIMENSION_NETHER || item.getEnchantmentLevel(Enchantment.ID_SILK_TOUCH) > 0 || down()!!.isAir) {
+                return super.onBreak(item)
+            }
         }
 
-        return level.setBlock(this.position, get(BlockID.Companion.FLOWING_WATER), true)
+        return level.setBlock(this.position, get(BlockID.FLOWING_WATER), true)
     }
 
     override fun onUpdate(type: Int): Int {
@@ -43,7 +45,7 @@ open class BlockIce : BlockTransparent {
             ) {
                 val event = BlockFadeEvent(
                     this,
-                    if (level.dimension == Level.DIMENSION_NETHER) get(BlockID.Companion.AIR) else get(BlockID.Companion.FLOWING_WATER)
+                    if (level.dimension == Level.DIMENSION_NETHER) get(BlockID.AIR) else get(BlockID.FLOWING_WATER)
                 )
                 Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
@@ -69,8 +71,10 @@ open class BlockIce : BlockTransparent {
     override val lightFilter: Int
         get() = 2
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.Companion.ICE)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.ICE)
     }
 }

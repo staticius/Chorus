@@ -21,12 +21,14 @@ open class BlockBlackstoneStairs @JvmOverloads constructor(blockstate: BlockStat
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BLACKSTONE_STAIRS,
+            BlockID.BLACKSTONE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

@@ -20,7 +20,7 @@ abstract class BlockConcretePowder(blockState: BlockState?) : BlockFallable(bloc
     override val toolType: Int
         get() = ItemTool.TYPE_SHOVEL
 
-    abstract val concrete: BlockConcrete
+    abstract fun getConcrete(): BlockConcrete
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
@@ -28,8 +28,8 @@ abstract class BlockConcretePowder(blockState: BlockState?) : BlockFallable(bloc
 
             for (side in 1..5) {
                 val block = this.getSide(fromIndex(side)!!)
-                if (block!!.id == Block.FLOWING_WATER || block.id == Block.WATER) {
-                    level.setBlock(this.position, concrete, true, true)
+                if (block!!.id == BlockID.FLOWING_WATER || block.id == BlockID.WATER) {
+                    level.setBlock(this.position, getConcrete(), direct = true, update = true)
                 }
             }
 
@@ -52,16 +52,16 @@ abstract class BlockConcretePowder(blockState: BlockState?) : BlockFallable(bloc
 
         for (side in 1..5) {
             val block = this.getSide(fromIndex(side)!!)
-            if (block!!.id == Block.FLOWING_WATER || block.id == Block.WATER) {
+            if (block!!.id == BlockID.FLOWING_WATER || block.id == BlockID.WATER) {
                 concrete = true
                 break
             }
         }
 
         if (concrete) {
-            level.setBlock(this.position, this.concrete, true, true)
+            level.setBlock(this.position, this.getConcrete(), direct = true, update = true)
         } else {
-            level.setBlock(this.position, this, true, true)
+            level.setBlock(this.position, this, direct = true, update = true)
         }
 
         return true

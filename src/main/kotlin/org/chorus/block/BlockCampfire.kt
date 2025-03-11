@@ -110,7 +110,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
 
             createBlockEntity(nbt)
         } catch (e: Exception) {
-            BlockCampfire.log.warn("Failed to create the block entity {} at {}", blockEntityType, locator, e)
+            BlockCampfire.log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), locator, e)
             level.setBlock(layer0!!.position, 0, layer0, true)
             level.setBlock(layer1!!.position, 0, layer1, true)
             return false

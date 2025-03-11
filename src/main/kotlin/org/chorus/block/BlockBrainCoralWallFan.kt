@@ -14,8 +14,10 @@ class BlockBrainCoralWallFan : BlockCoralWallFan {
         return BlockDeadBrainCoralWallFan()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BRAIN_CORAL_WALL_FAN, CommonBlockProperties.CORAL_DIRECTION)
-
     }
 }

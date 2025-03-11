@@ -156,7 +156,7 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
             for (queryX in tileX - powerLevel..tileX + powerLevel) {
                 for (queryZ in tileZ - powerLevel..tileZ + powerLevel) {
-                    val testBlockID.= level.getBlockID.t(queryX, queryY, queryZ)
+                    val testBlockID.= level.getBlockIdAt(queryX, queryY, queryZ)
                     if (testBlockID.!== Block.IRON_BLOCK && testBlockID.!== Block.GOLD_BLOCK && testBlockID.!== Block.EMERALD_BLOCK && testBlockID.!== Block.DIAMOND_BLOCK && testBlockID.!== Block.NETHERITE_BLOCK
                     ) {
                         return powerLevel - 1

@@ -31,8 +31,10 @@ open class BlockGlassPane : BlockThin {
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.GLASS_PANE)
-
     }
 }

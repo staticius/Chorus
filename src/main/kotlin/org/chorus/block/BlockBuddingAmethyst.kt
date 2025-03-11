@@ -1,9 +1,9 @@
 package org.chorus.block
 
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.level.Level
 import org.chorus.math.BlockFace.Companion.fromIndex
-import org.chorus.utils.random.ChorusRandom.nextInt
+import org.chorus.utils.random.ChorusRandom
 
 class BlockBuddingAmethyst : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
@@ -27,7 +27,7 @@ class BlockBuddingAmethyst : BlockSolid {
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 
@@ -51,27 +51,30 @@ class BlockBuddingAmethyst : BlockSolid {
         if (side!!.canBeReplaced()) {
             tmp = BlockSmallAmethystBud()
             tmp.blockFace = face
-            level.setBlock(side.position, tmp, true, true)
+            level.setBlock(side.position, tmp, direct = true, update = true)
         } else if (side is BlockSmallAmethystBud) {
             tmp = BlockMediumAmethystBud()
             tmp.blockFace = face
-            level.setBlock(side.position, tmp, true, true)
+            level.setBlock(side.position, tmp, direct = true, update = true)
         } else if (side is BlockMediumAmethystBud) {
             tmp = BlockLargeAmethystBud()
             tmp.blockFace = face
-            level.setBlock(side.position, tmp, true, true)
+            level.setBlock(side.position, tmp, direct = true, update = true)
         } else if (side is BlockLargeAmethystBud) {
             tmp = BlockAmethystCluster()
             tmp.blockFace = face
-            level.setBlock(side.position, tmp, true, true)
+            level.setBlock(side.position, tmp, direct = true, update = true)
         } else {
             tryGrow(time + 1)
         }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BUDDING_AMETHYST)
 
-        private val RANDOM: NukkitRandom = NukkitRandom()
+        private val RANDOM: ChorusRandom = ChorusRandom()
     }
 }

@@ -16,11 +16,11 @@ class BlockBeetroot @JvmOverloads constructor(blockstate: BlockState? = Companio
     override val name: String
         get() = "Beetroot Block"
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBeetrootSeeds()
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         if (!isFullyGrown) {
             return arrayOf(Item.get(ItemID.BEETROOT_SEEDS))
         }
@@ -38,13 +38,15 @@ class BlockBeetroot @JvmOverloads constructor(blockstate: BlockState? = Companio
         }
 
         return arrayOf(
-            Item.get(BEETROOT),
+            Item.get(BlockID.BEETROOT),
             get(ItemID.BEETROOT_SEEDS, 0, seeds)
         )
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BEETROOT, CommonBlockProperties.GROWTH)
-
     }
 }

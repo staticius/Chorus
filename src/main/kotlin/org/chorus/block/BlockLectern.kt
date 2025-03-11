@@ -100,7 +100,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
         fz: Float
     ): Boolean {
         if (isNotActivate(player)) return false
-        val lectern = orCreateBlockEntity!!
+        val lectern = getOrCreateBlockEntity()!!
         val currentBook = lectern.book
         if (!currentBook.isNull) {
             return true

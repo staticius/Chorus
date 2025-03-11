@@ -12,6 +12,7 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.utils.Faceable
+import org.chorus.utils.Hash
 import org.chorus.utils.OptionalBoolean
 import org.chorus.utils.OptionalBoolean.Companion.empty
 import org.chorus.utils.Rail
@@ -35,15 +36,11 @@ import kotlin.collections.MutableList
 import kotlin.collections.MutableMap
 import kotlin.collections.set
 
-/**
- * @author Snake1999
- * @since 2016/1/11
- */
-open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockState), Faceable {
     // 0x8: Set the block active
     // 0x7: Reset the block to normal
-    // If the rail can be powered. So its a complex rail!
+    // If the rail can be powered. So it's a complex rail!
     protected var canBePowered: Boolean = false
 
     override val name: String
@@ -150,7 +147,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
                     BlockFace.WEST
                 )
             }
-        } else if (!railsAround.isEmpty()) {
+        } else if (railsAround.isNotEmpty()) {
             if (this.isAbstract) {
                 if (railsAround.size == 2) {
                     val rail1 = rails[0]
@@ -183,7 +180,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
                 }
             }
         }
-        level.setBlock(this.position, this, true, true)
+        level.setBlock(this.position, this, direct = true, update = true)
         if (!isAbstract) {
             level.scheduleUpdate(this, this.position, 0)
         }
@@ -251,22 +248,18 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
 
     private fun checkRailsAroundAffected(): Map<BlockRail, BlockFace?> {
         val railsAround =
-            this.checkRailsAround(Arrays.asList(BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH))
-        return railsAround.keys.stream()
-            .filter { r: BlockRail -> r.checkRailsConnected().size != 2 }
-            .collect(
-                Collectors.toMap(
-                    Function { r: BlockRail -> r },
-                    Function { key: BlockRail -> railsAround[key] })
-            )
+            this.checkRailsAround(listOf(BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH))
+        return railsAround.entries
+            .filter { it.key.checkRailsConnected().size != 2 }
+            .associate { it.key to it.value }
     }
 
     private fun checkRailsAround(faces: Collection<BlockFace>): Map<BlockRail, BlockFace> {
         val result: MutableMap<BlockRail, BlockFace> = HashMap()
-        faces.forEach(Consumer<BlockFace> { f: BlockFace ->
+        faces.forEach(Consumer { f: BlockFace ->
             val b = this.getSide(f)
             Stream.of<Block?>(b, b!!.up(), b.down())
-                .filter { obj: Block? -> obj.isRailBlock() }
+                .filter { obj: Block? -> obj is BlockRail }
                 .forEach { block: Block -> result[block as BlockRail] = f }
         })
         return result
@@ -276,13 +269,9 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
         val railsAround = this.checkRailsAround(
             orientation!!.connectingDirections()
         )
-        return railsAround.keys.stream()
-            .filter { r: BlockRail -> r.orientation!!.hasConnectingDirections(railsAround[r]!!.getOpposite()) }
-            .collect(
-                Collectors.toMap(
-                    Function { r: BlockRail -> r },
-                    Function { key: BlockRail -> railsAround[key] })
-            )
+        return railsAround.entries
+            .filter { it.key.orientation!!.hasConnectingDirections(it.value.getOpposite()) }
+            .associate { it.key to it.value }
     }
 
     val isAbstract: Boolean
@@ -306,7 +295,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
             )
         }
 
-    open var orientation: Rail.Orientation?
+    open var orientation: Rail.Orientation? = null
         /**
          * Get the rail orientation.
          *
@@ -329,7 +318,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
         set(o) {
             if (o != field) {
                 railDirection = o!!
-                level.setBlock(this.position, this, true, true)
+                level.setBlock(this.position, this, direct = true, update = true)
             }
         }
 
@@ -402,8 +391,10 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
     override val waterloggingLevel: Int
         get() = 1
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RAIL, CommonBlockProperties.RAIL_DIRECTION_10)
-            
     }
 }

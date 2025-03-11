@@ -1,15 +1,18 @@
 package org.chorus.block
 
+import org.chorus.AdventureSettings
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.IntPropertyType
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.event.block.BlockRedstoneEvent
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.level.Level
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
@@ -47,7 +50,7 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
         }
 
         blockFace = face
-        level.setBlock(block.position, this, true, true)
+        level.setBlock(block.position, this, direct = true, update = true)
         return true
     }
 
@@ -64,7 +67,7 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
         fz: Float
     ): Boolean {
         if (player != null) {
-            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+            if (!player.getAdventureSettings()?.get(AdventureSettings.Type.DOORS_AND_SWITCHED)!!) return false
             val itemInHand = player.getInventory().itemInHand
             if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) return false
         }
@@ -75,12 +78,12 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
         level.scheduleUpdate(this, 30)
 
         setActivated(true, player)
-        level.setBlock(this.position, this, true, false)
+        level.setBlock(this.position, this, direct = true, update = false)
         level.addLevelSoundEvent(
-            position.add(0.5, 0.5, 0.5)!!, LevelSoundEventPacket.SOUND_POWER_ON,
+            position.add(0.5, 0.5, 0.5), LevelSoundEventPacket.SOUND_POWER_ON,
             blockState!!.blockStateHash()
         )
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
 
             updateAroundRedstone()
@@ -95,20 +98,20 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
             val thisFace = facing
             val touchingFace = thisFace!!.getOpposite()
             val side = this.getSide(touchingFace!!)
-            if (!BlockLever.isSupportValid(side, thisFace)) {
-                level.useBreakOn(this.position, Item.get(Item.WOODEN_PICKAXE))
+            if (side != null && !BlockLever.isSupportValid(side, thisFace)) {
+                level.useBreakOn(this.position, Item.get(ItemID.WOODEN_PICKAXE))
                 return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (this.isActivated) {
                 isActivated = false
-                level.setBlock(this.position, this, true, false)
+                level.setBlock(this.position, this, direct = true, update = false)
                 level.addLevelSoundEvent(
-                    position.add(0.5, 0.5, 0.5)!!, LevelSoundEventPacket.SOUND_POWER_OFF,
+                    position.add(0.5, 0.5, 0.5), LevelSoundEventPacket.SOUND_POWER_OFF,
                     blockState!!.blockStateHash()
                 )
 
-                if (Server.instance.settings.levelSettings().enableRedstone()) {
+                if (Server.instance.settings.levelSettings.enableRedstone) {
                     Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
 
                     updateAroundRedstone()
@@ -122,13 +125,13 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
     }
 
     var isActivated: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.BUTTON_PRESSED_BIT)
+        get() = getPropertyValue(CommonBlockProperties.BUTTON_PRESSED_BIT)
         set(activated) {
             setActivated(activated, null)
         }
 
     fun setActivated(activated: Boolean, player: Player?) {
-        setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.BUTTON_PRESSED_BIT, activated)
+        setPropertyValue(CommonBlockProperties.BUTTON_PRESSED_BIT, activated)
         val pos = this.add(0.5, 0.5, 0.5)
         if (activated) {
             level.vibrationManager.callVibrationEvent(
@@ -150,7 +153,7 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
     override val isPowerSource: Boolean
         get() = true
 
-    override fun getWeakPower(side: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace?): Int {
         return if (isActivated) 15 else 0
     }
 
@@ -159,7 +162,7 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
     }
 
     val facing: BlockFace?
-        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        get() = fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
 
     override fun onBreak(item: Item?): Boolean {
         if (isActivated) {
@@ -172,6 +175,6 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
     override var blockFace: BlockFace?
         get() = facing
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face!!.index)
         }
 }

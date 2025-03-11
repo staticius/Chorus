@@ -98,7 +98,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
     }
 
     override val isBlockEntityValid: Boolean
-        get() = level.getBlockID.t(
+        get() = level.getBlockIdAt(
             position.floorX,
             position.floorY,
             position.floorZ

@@ -8,8 +8,10 @@ class BlockBlueStainedGlass @JvmOverloads constructor(blockstate: BlockState? = 
         return DyeColor.BLUE
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BLUE_STAINED_GLASS)
-
     }
 }

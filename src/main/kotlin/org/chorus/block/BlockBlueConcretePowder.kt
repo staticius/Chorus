@@ -6,8 +6,10 @@ class BlockBlueConcretePowder @JvmOverloads constructor(blockstate: BlockState? 
         return BlockBlueConcrete()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BLUE_CONCRETE_POWDER)
-
     }
 }

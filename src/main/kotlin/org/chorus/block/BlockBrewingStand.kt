@@ -12,7 +12,7 @@ import org.chorus.nbt.tag.StringTag
 import org.chorus.nbt.tag.Tag
 
 class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBrewingStand?> {
+    BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBrewingStand> {
     override val name: String
         get() = "Brewing Stand"
 
@@ -45,28 +45,28 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Comp
         fz: Double,
         player: Player?
     ): Boolean {
-        level.setBlock(block.position, this, true, true)
+        level.setBlock(block.position, this, direct = true, update = true)
 
         val nbt = CompoundTag()
-            .putList("Items", ListTag<Tag?>())
-            .putString("id", BlockEntity.BREWING_STAND)
+            .putList("Items", ListTag())
+            .putString("id", BlockEntityID.BREWING_STAND)
             .putInt("x", position.x.toInt())
             .putInt("y", position.y.toInt())
             .putInt("z", position.z.toInt())
 
         if (item.hasCustomName()) {
-            nbt!!.putString("CustomName", item.customName)
+            nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData: Map<String?, Tag<*>?> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
-                nbt!!.put(key, value)
+                nbt.put(key, value)
             }
         }
 
         val brewing = BlockEntity.createBlockEntity(
-            BlockEntity.BREWING_STAND, level.getChunk(
+            BlockEntityID.BREWING_STAND, level.getChunk(
                 position.x.toInt() shr 4, position.z.toInt() shr 4
             ), nbt
         ) as BlockEntityBrewingStand?
@@ -92,13 +92,13 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Comp
                 brewing = t
             } else {
                 val nbt = CompoundTag()
-                    .putList("Items", ListTag<Tag?>())
-                    .putString("id", BlockEntity.BREWING_STAND)
+                    .putList("Items", ListTag())
+                    .putString("id", BlockEntityID.BREWING_STAND)
                     .putInt("x", position.x.toInt())
                     .putInt("y", position.y.toInt())
                     .putInt("z", position.z.toInt())
                 brewing = BlockEntity.createBlockEntity(
-                    BlockEntity.BREWING_STAND,
+                    BlockEntityID.BREWING_STAND,
                     level.getChunk(position.x.toInt() shr 4, position.z.toInt() shr 4), nbt
                 ) as BlockEntityBrewingStand?
                 if (brewing == null) {
@@ -179,16 +179,18 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.BREWING_STAND
+        return BlockEntityID.BREWING_STAND
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BREWING_STAND,
+            BlockID.BREWING_STAND,
             CommonBlockProperties.BREWING_STAND_SLOT_A_BIT,
             CommonBlockProperties.BREWING_STAND_SLOT_B_BIT,
             CommonBlockProperties.BREWING_STAND_SLOT_C_BIT
         )
-
     }
 }

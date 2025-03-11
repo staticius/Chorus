@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.BambooLeafSize
 import org.chorus.block.property.enums.WoodType
@@ -13,10 +14,7 @@ import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockSapling(blockstate) {
-    override fun getWoodType(): WoodType? {
-        return null
-    }
+    BlockFlowable(blockstate) {
 
     override val name: String
         get() = "Bamboo Sapling"
@@ -27,11 +25,11 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Com
                 level.useBreakOn(this.position, null, null, true)
             } else {
                 val up = up()
-                if (up!!.id == BAMBOO) {
+                if (up!!.id == BlockID.BAMBOO) {
                     val upperBamboo = up as BlockBamboo
                     val newState = BlockBamboo()
                     newState.isThick = upperBamboo.isThick
-                    level.setBlock(this.position, newState, true, true)
+                    level.setBlock(this.position, newState, direct = true, update = true)
                 }
             }
             return type
@@ -50,7 +48,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Com
                     newState1.position.x = position.x
                     newState1.position.z = position.z
                     newState1.level = level
-                    newState1.place(toItem()!!, up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null)
+                    newState1.place(toItem(), up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null)
                 }
             }
             return type
@@ -76,7 +74,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Com
             return false
         }
 
-        level.setBlock(this.position, this, true, true)
+        level.setBlock(this.position, this, direct = true, update = true)
         return true
     }
 
@@ -119,7 +117,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Com
 
     private val isSupportInvalid: Boolean
         get() = when (down()!!.id) {
-            BAMBOO, DIRT, GRASS_BLOCK, SAND, GRAVEL, PODZOL, BAMBOO_SAPLING, MOSS_BLOCK -> false
+            BlockID.BAMBOO, BlockID.DIRT, BlockID.GRASS_BLOCK, BlockID.SAND, BlockID.GRAVEL, BlockID.PODZOL, BlockID.BAMBOO_SAPLING, BlockID.MOSS_BLOCK -> false
             else -> true
         }
 
@@ -135,7 +133,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Com
             setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT, isAge)
         }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockBamboo())
     }
 
@@ -169,8 +167,10 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Com
             super.maxY = maxY
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_SAPLING, CommonBlockProperties.AGE_BIT)
-
     }
 }

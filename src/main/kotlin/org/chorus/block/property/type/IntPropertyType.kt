@@ -12,8 +12,8 @@ import java.util.stream.IntStream
  */
 class IntPropertyType private constructor(
     name: String,
-    private val min: Int,
-    private val max: Int,
+    val min: Int,
+    val max: Int,
     defaultData: Int
 ) :
     BaseBlockPropertyType<Int>(

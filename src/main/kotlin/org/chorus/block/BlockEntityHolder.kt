@@ -6,6 +6,7 @@ import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.level.format.IChunk
 import org.chorus.math.BlockVector3
+import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.LevelException
@@ -13,16 +14,14 @@ import org.chorus.utils.LevelException
 interface BlockEntityHolder<E : BlockEntity> {
     val blockEntity: E?
         get() {
-            val level = level ?: throw LevelException("Undefined Level reference")
-            val blockEntity = if (this is Vector3) {
-                level.getBlockEntity(this as Vector3)
-            } else if (this is BlockVector3) {
-                level.getBlockEntity((this as BlockVector3))
-            } else {
-                level.getBlockEntity(BlockVector3(floorX, floorY, floorZ))
+            val level = level
+            val blockEntity = when (this) {
+                is Vector3 -> level.getBlockEntity(this as Vector3)
+                is IVector3 -> level.getBlockEntity((this as IVector3).vector3)
+                else -> level.getBlockEntity(BlockVector3(floorX, floorY, floorZ))
             }
 
-            val blockEntityClass = blockEntityClass
+            val blockEntityClass = getBlockEntityClass()
             if (blockEntityClass.isInstance(blockEntity)) {
                 return blockEntityClass.cast(blockEntity)
             }
@@ -34,13 +33,13 @@ interface BlockEntityHolder<E : BlockEntity> {
     }
 
     fun createBlockEntity(initialData: CompoundTag?, vararg args: Any?): E {
-        var initialData = initialData
-        val typeName = blockEntityType
+        var initialData1 = initialData
+        val typeName = getBlockEntityType()
         val chunk = chunk ?: throw LevelException("Undefined Level or chunk reference")
-        initialData = initialData?.copy() ?: CompoundTag()
+        initialData1 = initialData1?.copy() ?: CompoundTag()
         val created = createBlockEntity(
             typeName, chunk,
-            initialData
+            initialData1
                 .putString("id", typeName)
                 .putInt("x", floorX)
                 .putInt("y", floorY)
@@ -48,7 +47,7 @@ interface BlockEntityHolder<E : BlockEntity> {
             *args
         )
 
-        val entityClass = blockEntityClass
+        val entityClass = getBlockEntityClass()
 
         if (!entityClass.isInstance(created)) {
             val error =
@@ -60,18 +59,17 @@ interface BlockEntityHolder<E : BlockEntity> {
         return entityClass.cast(created)
     }
 
-    val orCreateBlockEntity: E
-        get() {
-            val blockEntity = blockEntity
-            if (blockEntity != null) {
-                return blockEntity
-            }
-            return createBlockEntity()
+    fun getOrCreateBlockEntity(): E {
+        val blockEntity = blockEntity
+        if (blockEntity != null) {
+            return blockEntity
         }
+        return createBlockEntity()
+    }
 
-    val blockEntityClass: Class<out E>
+    fun getBlockEntityClass(): Class<out E>
 
-    val blockEntityType: String
+    fun getBlockEntityType(): String
 
     val chunk: IChunk?
 
@@ -87,29 +85,26 @@ interface BlockEntityHolder<E : BlockEntity> {
 
     val block: Block?
         get() {
-            return if (this is Block) {
-                field
-            } else if (this is Locator) {
-                locator.levelBlock
-            } else if (this is Vector3) {
-                level.getBlock(vector3)
-            } else {
-                level.getBlock(floorX, floorY, floorZ)
+            return when (this) {
+                is Block -> this
+                is Locator -> locator.levelBlock
+                is Vector3 -> level.getBlock(vector3)
+                else -> level.getBlock(floorX, floorY, floorZ)
             }
         }
 
     companion object {
-        fun <E : BlockEntity?, H : BlockEntityHolder<E>?> setBlockAndCreateEntity(holder: H): E? {
-            return setBlockAndCreateEntity(holder, true, true)
+        fun <E : BlockEntity, H : BlockEntityHolder<E>> setBlockAndCreateEntity(holder: H): E? {
+            return setBlockAndCreateEntity(holder, direct = true, update = true)
         }
 
-        fun <E : BlockEntity?, H : BlockEntityHolder<E>?> setBlockAndCreateEntity(
+        fun <E : BlockEntity, H : BlockEntityHolder<E>> setBlockAndCreateEntity(
             holder: H, direct: Boolean, update: Boolean
         ): E? {
             return setBlockAndCreateEntity(holder, direct, update, null)
         }
 
-        fun <E : BlockEntity?, H : BlockEntityHolder<E>> setBlockAndCreateEntity(
+        fun <E : BlockEntity, H : BlockEntityHolder<E>> setBlockAndCreateEntity(
             holder: H, direct: Boolean, update: Boolean, initialData: CompoundTag?,
             vararg args: Any?
         ): E? {
@@ -123,7 +118,7 @@ interface BlockEntityHolder<E : BlockEntity> {
                 } catch (e: Exception) {
                     Loggers.logBlocKEntityHolder.warn(
                         "Failed to create block entity {} at {} at ",
-                        holder.blockEntityType,
+                        holder.getBlockEntityType(),
                         holder.locator, e
                     )
                     level.setBlock(layer0!!.position, 0, layer0, direct, update)

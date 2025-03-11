@@ -48,9 +48,11 @@ class BlockBoneBlock @JvmOverloads constructor(blockstate: BlockState? = Compani
             )
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.BONE_BLOCK, CommonBlockProperties.DEPRECATED, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

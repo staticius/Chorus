@@ -40,7 +40,7 @@ class BlockJukebox @JvmOverloads constructor(blockstate: BlockState? = Companion
         fy: Float,
         fz: Float
     ): Boolean {
-        val jukebox = orCreateBlockEntity!!
+        val jukebox = getOrCreateBlockEntity()!!
         if (!jukebox.getRecordItem()!!.isNull) {
             jukebox.dropItem()
             return true

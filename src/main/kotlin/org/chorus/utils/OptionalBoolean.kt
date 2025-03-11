@@ -41,8 +41,7 @@ enum class OptionalBoolean(private val value: Boolean?) {
         return value ?: other.asBoolean
     }
 
-    @Throws(X::class)
-    fun <X : Throwable?> orElseThrow(exceptionSupplier: Supplier<X>): Boolean {
+    fun <X : Throwable> orElseThrow(exceptionSupplier: Supplier<X>): Boolean {
         if (value != null) {
             return value
         } else {
@@ -60,10 +59,6 @@ enum class OptionalBoolean(private val value: Boolean?) {
     }
 
     companion object {
-        fun of(value: Boolean): OptionalBoolean {
-            return of(Objects.requireNonNull(value))
-        }
-
         fun of(value: Boolean): OptionalBoolean {
             return if (value) TRUE else FALSE
         }

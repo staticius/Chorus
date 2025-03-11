@@ -18,7 +18,7 @@ open class BlockPackedIce @JvmOverloads constructor(blockstate: BlockState? = Co
         return true
     }
 
-    override fun onBreak(item: Item): Boolean {
+    override fun onBreak(item: Item?): Boolean {
         level.setBlock(this.position, get(BlockID.AIR), true) //no water
         return true
     }

@@ -1,10 +1,9 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.*
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.blockentity.*
 import org.chorus.entity.Entity
 import org.chorus.entity.item.EntityItem
@@ -21,7 +20,7 @@ import kotlin.math.abs
 import kotlin.math.max
 
 class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
-    BlockTransparent(blockState), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityBell?> {
+    BlockTransparent(blockState), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityBell> {
     override val name: String
         get() = "Bell"
 
@@ -30,7 +29,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.BELL
+        return BlockEntityID.BELL
     }
 
     private fun isConnectedTo(connectedFace: BlockFace, attachmentType: Attachment, blockFace: BlockFace): Boolean {
@@ -55,13 +54,10 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
             Attachment.MULTIPLE -> {
                 return connectedFace == blockFace || connectedFace == blockFace.getOpposite()
             }
-
-            else -> {}
         }
-        return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val attachmentType = attachment!!
         val blockFace = blockFace
         val north = this.isConnectedTo(BlockFace.NORTH, attachmentType, blockFace!!)
@@ -88,36 +84,38 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         )
     }
 
-    override fun onEntityCollide(entity: Entity) {
-        if (entity.positionChanged) {
-            val boundingBox = entity.getBoundingBox()
-            val blockBoundingBox = this.collisionBoundingBox
-            if (boundingBox!!.intersectsWith(blockBoundingBox!!)) {
-                val entityCenter = Vector3(
-                    (boundingBox.maxX - boundingBox.minX) / 2,
-                    (boundingBox.maxY - boundingBox.minY) / 2,
-                    (boundingBox.maxZ - boundingBox.minZ) / 2
-                )
+    override fun onEntityCollide(entity: Entity?) {
+        if (entity != null) {
+            if (entity.positionChanged) {
+                val boundingBox = entity.getBoundingBox()
+                val blockBoundingBox = this.collisionBoundingBox
+                if (boundingBox.intersectsWith(blockBoundingBox!!)) {
+                    val entityCenter = Vector3(
+                        (boundingBox.maxX - boundingBox.minX) / 2,
+                        (boundingBox.maxY - boundingBox.minY) / 2,
+                        (boundingBox.maxZ - boundingBox.minZ) / 2
+                    )
 
-                val blockCenter = Vector3(
-                    (blockBoundingBox.maxX - blockBoundingBox.minX) / 2,
-                    (blockBoundingBox.maxY - blockBoundingBox.minY) / 2,
-                    (blockBoundingBox.maxZ - blockBoundingBox.minZ) / 2
-                )
-                val entityPos = entity.position.add(entityCenter)
-                val blockPos = position.add(
-                    blockBoundingBox.minX - position.x + blockCenter.x,
-                    blockBoundingBox.minY - position.y + blockCenter.y,
-                    blockBoundingBox.minZ - position.z + blockCenter.z
-                )
+                    val blockCenter = Vector3(
+                        (blockBoundingBox.maxX - blockBoundingBox.minX) / 2,
+                        (blockBoundingBox.maxY - blockBoundingBox.minY) / 2,
+                        (blockBoundingBox.maxZ - blockBoundingBox.minZ) / 2
+                    )
+                    val entityPos = entity.position.add(entityCenter)
+                    val blockPos = position.add(
+                        blockBoundingBox.minX - position.x + blockCenter.x,
+                        blockBoundingBox.minY - position.y + blockCenter.y,
+                        blockBoundingBox.minZ - position.z + blockCenter.z
+                    )
 
 
-                if (ring(entity, RingCause.DROPPED_ITEM)) {
-                    if (entity is EntityItem) {
-                        var entityVector = entityPos!!.subtract(blockPos!!)
-                        entityVector = entityVector!!.normalize().multiply(0.4)
-                        entityVector!!.y = max(0.15, entityVector.y)
-                        entity.setMotion(entityVector)
+                    if (ring(entity, RingCause.DROPPED_ITEM)) {
+                        if (entity is EntityItem) {
+                            var entityVector = entityPos.subtract(blockPos)
+                            entityVector = entityVector.normalize().multiply(0.4)
+                            entityVector.y = max(0.15, entityVector.y)
+                            entity.setMotion(entityVector)
+                        }
                     }
                 }
             }
@@ -128,8 +126,8 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         return true
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
-        return recalculateBoundingBox()!!.expand(0.000001, 0.000001, 0.000001)
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+        return recalculateBoundingBox().expand(0.000001, 0.000001, 0.000001)
     }
 
     override fun canBeActivated(): Boolean {
@@ -150,15 +148,15 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
 
     @JvmOverloads
     fun ring(causeEntity: Entity?, cause: RingCause, hitFace: BlockFace? = null): Boolean {
-        var hitFace = hitFace
+        var hitFace1 = hitFace
         val bell = getOrCreateBlockEntity()
         var addException = true
         val blockFace = blockFace
-        if (hitFace == null) {
+        if (hitFace1 == null) {
             if (causeEntity != null) {
                 if (causeEntity is EntityItem) {
                     val blockMid = add(0.5, 0.5, 0.5)
-                    val vector = causeEntity.position.subtract(blockMid.position)!!.normalize()
+                    val vector = causeEntity.position.subtract(blockMid.position).normalize()
                     var x = if (vector.x < 0) -1 else if (vector.x > 0) 1 else 0
                     var z = if (vector.z < 0) -1 else if (vector.z > 0) 1 else 0
                     if (x != 0 && z != 0) {
@@ -168,35 +166,35 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
                             z = 0
                         }
                     }
-                    hitFace = blockFace
+                    hitFace1 = blockFace
                     for (face in BlockFace.entries) {
                         if (face.xOffset == x && face.zOffset == z) {
-                            hitFace = face
+                            hitFace1 = face
                             break
                         }
                     }
                 } else {
-                    hitFace = causeEntity.getDirection()
+                    hitFace1 = causeEntity.getDirection()
                 }
             } else {
-                hitFace = blockFace
+                hitFace1 = blockFace
             }
         }
         when (attachment) {
             Attachment.STANDING -> {
-                if (hitFace!!.axis != blockFace!!.axis) {
+                if (hitFace1!!.axis != blockFace!!.axis) {
                     return false
                 }
             }
 
             Attachment.MULTIPLE -> {
-                if (hitFace!!.axis == blockFace!!.axis) {
+                if (hitFace1!!.axis == blockFace!!.axis) {
                     return false
                 }
             }
 
             Attachment.SIDE -> {
-                if (hitFace!!.axis == blockFace!!.axis) {
+                if (hitFace1!!.axis == blockFace!!.axis) {
                     addException = false
                 }
             }
@@ -210,7 +208,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
             return false
         }
 
-        bell.direction = hitFace!!.getOpposite()!!.horizontalIndex
+        bell.direction = hitFace1!!.getOpposite()!!.horizontalIndex
         bell.ticks = 0
         bell.setRinging(true)
         if (addException && causeEntity is Player) {
@@ -251,13 +249,15 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     }
 
     private fun checkSupport(support: Block, attachmentFace: BlockFace?): Boolean {
+        if (attachmentFace == null) return false
+
         if (BlockLever.isSupportValid(support, attachmentFace)) {
             return true
         }
 
         if (attachmentFace == BlockFace.DOWN) {
             return when (support.id) {
-                CHAIN, HOPPER, IRON_BARS -> true
+                BlockID.CHAIN, BlockID.HOPPER, BlockID.IRON_BARS -> true
                 else -> support is BlockFence || support is BlockWallBase
             }
         }
@@ -275,16 +275,16 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
                 level.useBreakOn(this.position)
             }
             return type
-        } else if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings().enableRedstone()) {
+        } else if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings.enableRedstone) {
             if (this.isGettingPower) {
                 if (!isToggled) {
                     isToggled = true
-                    level.setBlock(this.position, this, true, true)
+                    level.setBlock(this.position, this, direct = true, update = true)
                     ring(null, RingCause.REDSTONE)
                 }
             } else if (isToggled) {
                 isToggled = false
-                level.setBlock(this.position, this, true, true)
+                level.setBlock(this.position, this, direct = true, update = true)
             }
             return type
         }
@@ -296,7 +296,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
             for (side in BlockFace.entries) {
                 val b = this.getSide(side)
 
-                if (b!!.id == Block.REDSTONE_WIRE && b.blockState!!.getPropertyValue<Int, IntPropertyType>(
+                if (b!!.id == BlockID.REDSTONE_WIRE && b.blockState!!.getPropertyValue(
                         CommonBlockProperties.REDSTONE_SIGNAL
                     ) > 0 && b.position.y >= this.y
                 ) {
@@ -321,12 +321,12 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         fz: Double,
         player: Player?
     ): Boolean {
-        var face = face
-        if (block.canBeReplaced() && block.isAir && (block.id != BUBBLE_COLUMN) && (block !is BlockLiquid)) {
-            face = BlockFace.UP
+        var face1 = face
+        if (block.canBeReplaced() && block.isAir && (block.id != BlockID.BUBBLE_COLUMN) && (block !is BlockLiquid)) {
+            face1 = BlockFace.UP
         }
         val playerDirection = if (player != null) player.getDirection() else BlockFace.EAST
-        when (face) {
+        when (face1) {
             BlockFace.UP -> {
                 attachment = Attachment.STANDING
                 blockFace = playerDirection!!.getOpposite()
@@ -338,11 +338,11 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
             }
 
             else -> {
-                blockFace = face
-                if (checkSupport(block.getSide(face)!!, face.getOpposite())) {
-                    attachment = Attachment.MULTIPLE
+                blockFace = face1
+                attachment = if (checkSupport(block.getSide(face1)!!, face1.getOpposite())) {
+                    Attachment.MULTIPLE
                 } else {
-                    attachment = Attachment.SIDE
+                    Attachment.SIDE
                 }
             }
         }
@@ -357,15 +357,15 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     override fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
         ring(projectile, RingCause.PROJECTILE)
         if (projectile.isOnFire() && projectile is EntityArrow && level.getBlock(projectile.position)!!.isAir) {
-            level.setBlock(projectile.position, get(FIRE), true)
+            level.setBlock(projectile.position, get(BlockID.FIRE), true)
         }
         return true
     }
 
     override var blockFace: BlockFace?
-        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
+        get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION))
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(
+            setPropertyValue(
                 CommonBlockProperties.DIRECTION,
                 face!!.horizontalIndex
             )
@@ -383,12 +383,12 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         }
 
     var isToggled: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.TOGGLE_BIT)
+        get() = getPropertyValue(CommonBlockProperties.TOGGLE_BIT)
         set(toggled) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.TOGGLE_BIT, toggled)
+            setPropertyValue(CommonBlockProperties.TOGGLE_BIT, toggled)
         }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockBell())
     }
 
@@ -411,13 +411,15 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BELL,
+            BlockID.BELL,
             CommonBlockProperties.ATTACHMENT,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.TOGGLE_BIT
         )
-
     }
 }

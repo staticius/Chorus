@@ -2,7 +2,6 @@ package org.chorus.block
 
 import org.chorus.item.*
 import org.chorus.tags.BlockTags
-import java.util.Set
 
 class BlockBlueShulkerBox @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockUndyedShulkerBox(blockstate) {
@@ -10,8 +9,10 @@ class BlockBlueShulkerBox @JvmOverloads constructor(blockstate: BlockState? = Co
         return ItemShulkerBox(11)
     }
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.BLUE_SHULKER_BOX, Set.of(BlockTags.PNX_SHULKERBOX))
+    override val properties: BlockProperties
+        get() = Companion.properties
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.BLUE_SHULKER_BOX, setOf(BlockTags.PNX_SHULKERBOX))
     }
 }

@@ -7,13 +7,15 @@ class BlockBirchFenceGate @JvmOverloads constructor(blockstate: BlockState? = Co
     override val name: String
         get() = "Birch Fence Gate"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BIRCH_FENCE_GATE,
+            BlockID.BIRCH_FENCE_GATE,
             CommonBlockProperties.IN_WALL_BIT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-
     }
 }

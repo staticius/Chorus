@@ -1,21 +1,17 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.BlockFlowerPot.FlowerPotBlock
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.level.StructureGrowEvent.blockList
+import org.chorus.event.level.StructureGrowEvent
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
-import org.chorus.level.generator.`object`.BlockManager.blocks
-import org.chorus.level.generator.`object`.ObjectBigMushroom.generate
-import org.chorus.level.generator.`object`.ObjectMangroveTree.generate
+import org.chorus.level.generator.`object`.BlockManager
+import org.chorus.level.generator.`object`.ObjectBigMushroom
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
-import org.chorus.math.Vector3.floorX
-import org.chorus.math.Vector3.floorY
-import org.chorus.math.Vector3.floorZ
 import org.chorus.utils.random.RandomSourceProvider.Companion.create
 import java.util.concurrent.ThreadLocalRandom
 
@@ -43,7 +39,7 @@ abstract class BlockMushroom(blockState: BlockState?) : BlockFlowable(blockState
         player: Player?
     ): Boolean {
         if (canStay()) {
-            level.setBlock(block.position, this, true, true)
+            level.setBlock(block.position, this, direct = true, update = true)
             return true
         }
         return false
@@ -77,13 +73,13 @@ abstract class BlockMushroom(blockState: BlockState?) : BlockFlowable(blockState
     }
 
     fun grow(): Boolean {
-        level.setBlock(this.position, get(BlockID.AIR), true, false)
+        level.setBlock(this.position, get(BlockID.AIR), direct = true, update = false)
 
-        val generator: ObjectBigMushroom = ObjectBigMushroom(type)
+        val generator = ObjectBigMushroom(getType())
 
-        val chunkManager: BlockManager = BlockManager(this.level)
-        if (generator.generate(chunkManager, RandomSourceProvider.create(), this.position)) {
-            val ev: StructureGrowEvent = StructureGrowEvent(this, chunkManager.blocks)
+        val chunkManager = BlockManager(this.level)
+        if (generator.generate(chunkManager, create(), this.position)) {
+            val ev = StructureGrowEvent(this, chunkManager.blocks)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
@@ -99,7 +95,7 @@ abstract class BlockMushroom(blockState: BlockState?) : BlockFlowable(blockState
             }
             return true
         } else {
-            level.setBlock(this.position, this, true, false)
+            level.setBlock(this.position, this, direct = true, update = false)
             return false
         }
     }
@@ -121,7 +117,7 @@ abstract class BlockMushroom(blockState: BlockState?) : BlockFlowable(blockState
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    protected abstract val type: MushroomType?
+    protected abstract fun getType(): ObjectBigMushroom.MushroomType?
 
     override val isFertilizable: Boolean
         get() = true

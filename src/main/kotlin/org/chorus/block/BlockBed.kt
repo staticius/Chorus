@@ -18,19 +18,20 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.types.SpawnPointType
 import org.chorus.utils.DyeColor
 import org.chorus.utils.Faceable
+import org.chorus.utils.Loggable
 import org.chorus.utils.TextFormat
 
 
 
 
 class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBed?> {
+    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBed>, Loggable {
     override fun getBlockEntityClass(): Class<out BlockEntityBed> {
         return BlockEntityBed::class.java
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.BED
+        return BlockEntityID.BED
     }
 
     override fun canBeActivated(): Boolean {
@@ -99,7 +100,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
                 return true
             }
 
-            level.setBlock(this.position, get(AIR), false, false)
+            level.setBlock(this.position, get(BlockID.AIR), direct = false, update = false)
             onBreak(Item.AIR)
             level.updateAround(this.position)
 
@@ -132,10 +133,10 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
         }
 
         val spawn = fromObject(
-            position.add(0.5, 0.5, 0.5)!!,
-            player.level!!, player.rotation.yaw, player.rotation.pitch
+            position.add(0.5, 0.5, 0.5),
+            player.level!!
         )
-        if (player.spawn != spawn) {
+        if (player.spawn.first() != spawn) {
             player.setSpawn(this, SpawnPointType.BLOCK)
         }
         player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.bed.respawnSet"))
@@ -161,7 +162,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
                 .addCoord(footPart.xOffset.toDouble(), 0.0, footPart.zOffset.toDouble())
 
             for (entity in level.getCollidingEntities(checkMonsterArea)) {
-                if (!entity.isClosed() && entity.isPreventingSleep(player)) {
+                if (entity != null && !entity.isClosed() && entity.isPreventingSleep(player)) {
                     player.sendTranslation(TextFormat.GRAY.toString() + "%tile.bed.notSafe")
                     return true
                 }
@@ -187,7 +188,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
         player: Player?
     ): Boolean {
         val down = this.down()
-        if (!(BlockLever.isSupportValid(down, BlockFace.UP) || down is BlockCauldron)) {
+        if (down != null && !(BlockLever.isSupportValid(down, BlockFace.UP) || down is BlockCauldron)) {
             return false
         }
 
@@ -195,10 +196,10 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
         val next = this.getSide(direction!!)
         val downNext = next!!.down()
 
-        if (!next.canBeReplaced() || !(BlockLever.isSupportValid(
+        if (downNext != null && (!next.canBeReplaced() || !(BlockLever.isSupportValid(
                 downNext,
                 BlockFace.UP
-            ) || downNext is BlockCauldron)
+            ) || downNext is BlockCauldron))
         ) {
             return false
         }
@@ -210,14 +211,14 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
 
         blockFace = direction
 
-        level.setBlock(block.position, this, true, true)
+        level.setBlock(block.position, this, direct = true, update = true)
         if (next is BlockLiquid && next.usesWaterLogging()) {
-            level.setBlock(next.position, 1, next, true, false)
+            level.setBlock(next.position, 1, next, direct = true, update = false)
         }
 
         val head = clone() as BlockBed
         head.isHeadPiece = true
-        level.setBlock(next.position, head, true, true)
+        level.setBlock(next.position, head, direct = true, update = true)
 
         var thisBed: BlockEntityBed? = null
         try {
@@ -225,9 +226,9 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
             val nextBlock = next.levelBlock as BlockEntityHolder<*>?
             nextBlock!!.createBlockEntity(CompoundTag().putByte("color", item.damage))
         } catch (e: Exception) {
-            BlockBed.log.warn(
+            log.warn(
                 "Failed to create the block entity {} at {} and {}",
-                blockEntityType, locator, next.locator, e
+                getBlockEntityType(), locator, next.locator, e
             )
             thisBed?.close()
             level.setBlock(thisLayer0!!.position, 0, thisLayer0, true)
@@ -244,37 +245,34 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
         if (isHeadPiece) { //This is the Top part of bed
             val other = getSide(direction!!.getOpposite()!!)
             if (other!!.id == id && !(other as BlockBed).isHeadPiece && direction == other.blockFace) {
-                level.setBlock(other.position, get(AIR), true, true)
+                level.setBlock(other.position, get(BlockID.AIR), direct = true, update = true)
             }
         } else { //Bottom Part of Bed
             val other = getSide(direction!!)
             if (other!!.id == id && (other as BlockBed).isHeadPiece && direction == other.blockFace) {
-                level.setBlock(other.position, get(AIR), true, true)
+                level.setBlock(other.position, get(BlockID.AIR), direct = true, update = true)
             }
         }
 
         level.setBlock(
             this.position,
-            get(AIR),
-            true,
-            false
+            get(BlockID.AIR),
+            direct = true,
+            update = false
         ) // Do not update both parts to prevent duplication bug if there is two fallable blocks top of the bed
 
         return true
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBed(dyeColor.woolData)
     }
 
     val dyeColor: DyeColor
         get() {
-            if (this.level != null) {
-                val blockEntity = blockEntity
-
-                if (blockEntity != null) {
-                    return blockEntity.dyeColor
-                }
+            val blockEntity = blockEntity
+            if (blockEntity != null) {
+                return blockEntity.dyeColor
             }
 
             return DyeColor.WHITE
@@ -360,9 +358,12 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
             return null
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BED,
+            BlockID.BED,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.HEAD_PIECE_BIT,
             CommonBlockProperties.OCCUPIED_BIT

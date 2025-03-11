@@ -59,7 +59,7 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
 
         val trackingHandle: Int
         try {
-            trackingHandle = orCreateBlockEntity!!.requestTrackingHandler()
+            trackingHandle = getOrCreateBlockEntity()!!.requestTrackingHandler()
             compass.trackingHandle = trackingHandle
         } catch (e: Exception) {
             BlockLodestone.log.warn("Could not create a lodestone compass to {} for {}", locator, player.getName(), e)

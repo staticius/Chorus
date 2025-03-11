@@ -17,12 +17,12 @@ import org.chorus.utils.Faceable
 import kotlin.math.abs
 
 class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
-    BlockSolid(blockState), Faceable, BlockEntityHolder<BlockEntityBarrel?> {
+    BlockSolid(blockState), Faceable, BlockEntityHolder<BlockEntityBarrel> {
     override val name: String
         get() = "Barrel"
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.BARREL
+        return BlockEntityID.BARREL
     }
 
     override fun getBlockEntityClass(): Class<out BlockEntityBarrel> {
@@ -50,32 +50,32 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
                 } else if (position.y - y > 0) {
                     BlockFace.DOWN
                 } else {
-                    player.getHorizontalFacing().getOpposite()
+                    player.getHorizontalFacing()?.getOpposite()
                 }
             } else {
-                blockFace = player.getHorizontalFacing().getOpposite()
+                blockFace = player.getHorizontalFacing()?.getOpposite()
             }
         }
 
         val nbt = CompoundTag().putList("Items", ListTag())
 
         if (item.hasCustomName()) {
-            nbt!!.putString("CustomName", item.customName)
+            nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData: Map<String?, Tag<*>?> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
-                nbt!!.put(key, value)
+                nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
+        return BlockEntityHolder.setBlockAndCreateEntity(this, direct = true, update = true, initialData = nbt) != null
     }
 
     override fun onActivate(
         item: Item,
-        player: Player,
+        player: Player?,
         blockFace: BlockFace?,
         fx: Float,
         fy: Float,
@@ -91,7 +91,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
             return false
         }
 
-        player.addWindow(barrel.getInventory())
+        player?.addWindow(barrel.getInventory())
         return true
     }
 
@@ -108,20 +108,20 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockBarrel())
     }
 
     override var blockFace: BlockFace?
-        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        get() = fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face!!.index)
         }
 
     var isOpen: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT)
+        get() = getPropertyValue(CommonBlockProperties.OPEN_BIT)
         set(open) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
+            setPropertyValue(CommonBlockProperties.OPEN_BIT, open)
         }
 
     override fun hasComparatorInputOverride(): Boolean {
@@ -139,9 +139,11 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
             return super.comparatorInputOverride
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.BARREL, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.OPEN_BIT)
-
     }
 }

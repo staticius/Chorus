@@ -143,7 +143,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Comp
     }
 
     private fun getMaxCurrentStrength(pos: Vector3, maxStrength: Int): Int {
-        if (level.getBlockID.t(pos.floorX, pos.floorY, pos.floorZ) != this.id) {
+        if (level.getBlockIdAt(pos.floorX, pos.floorY, pos.floorZ) != this.id) {
             return maxStrength
         } else {
             val strength = level.getBlockStateAt(pos.floorX, pos.floorY, pos.floorZ)!!.getPropertyValue(

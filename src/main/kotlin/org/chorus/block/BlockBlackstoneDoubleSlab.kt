@@ -19,16 +19,18 @@ class BlockBlackstoneDoubleSlab @JvmOverloads constructor(blockstate: BlockState
         get() = ItemTool.TYPE_PICKAXE
 
     override fun getSingleSlab(): BlockState {
-        return BlockBlackstoneSlab.Companion.PROPERTIES.getDefaultState()
+        return BlockBlackstoneSlab.properties.defaultState
     }
 
     override fun canHarvestWithHand(): Boolean {
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.BLACKSTONE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

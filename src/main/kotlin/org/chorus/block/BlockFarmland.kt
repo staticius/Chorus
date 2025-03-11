@@ -67,13 +67,13 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState? = Companio
                             }
 
                             v.setComponents(x.toDouble(), y.toDouble(), z.toDouble())
-                            var block = level.getBlockID.t(v.floorX, v.floorY, v.floorZ)
+                            var block = level.getBlockIdAt(v.floorX, v.floorY, v.floorZ)
 
                             if (block == FLOWING_WATER || block == WATER || block == FROSTED_ICE) {
                                 found = true
                                 break@end
                             } else {
-                                block = level.getBlockID.t(v.floorX, v.floorY, v.floorZ, 1)
+                                block = level.getBlockIdAt(v.floorX, v.floorY, v.floorZ, 1)
                                 if (block == FLOWING_WATER || block == WATER || block == FROSTED_ICE) {
                                     found = true
                                     break@end

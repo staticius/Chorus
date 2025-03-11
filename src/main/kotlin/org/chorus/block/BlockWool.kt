@@ -1,13 +1,11 @@
 package org.chorus.block
 
-import org.chorus.block.Block.name
-import org.chorus.block.property.enums.WoodType.name
 import org.chorus.item.ItemTool
-import org.chorus.utils.DyeColor.name
+import org.chorus.utils.DyeColor
 
 abstract class BlockWool(blockstate: BlockState?) : BlockSolid(blockstate) {
     override val name: String
-        get() = dyeColor.name + " Wool"
+        get() = getDyeColor().name + " Wool"
 
     override val toolType: Int
         get() = ItemTool.TYPE_SHEARS
@@ -24,6 +22,5 @@ abstract class BlockWool(blockstate: BlockState?) : BlockSolid(blockstate) {
     override val burnAbility: Int
         get() = 60
 
-    open val dyeColor: DyeColor
-        get() = DyeColor.WHITE
+    open fun getDyeColor(): DyeColor = DyeColor.WHITE
 }

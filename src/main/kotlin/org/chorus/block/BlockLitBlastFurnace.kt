@@ -9,11 +9,9 @@ open class BlockLitBlastFurnace @JvmOverloads constructor(blockstate: BlockState
     override val name: String
         get() = "Burning Blast Furnace"
 
-    override val blockEntityType: String
-        get() = BlockEntity.BLAST_FURNACE
+    override fun getBlockEntityType(): String = BlockEntityID.BLAST_FURNACE
 
-    override val blockEntityClass: Class<out BlockEntityFurnace>
-        get() = BlockEntityBlastFurnace::class.java
+    override fun getBlockEntityClass(): Class<out BlockEntityFurnace> = BlockEntityBlastFurnace::class.java
 
     override fun toItem(): Item? {
         return ItemBlock(BlockBlastFurnace())

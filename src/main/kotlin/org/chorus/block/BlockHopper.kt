@@ -87,7 +87,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
     ): Boolean {
         if (isNotActivate(player)) return false
 
-        val blockEntity = orCreateBlockEntity!!
+        val blockEntity = getOrCreateBlockEntity()!!
 
         return player.addWindow(blockEntity.getInventory()) != -1
     }

@@ -1,25 +1,22 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.blockentity.BlockEntityBanner.dyeColor
-import org.chorus.blockentity.BlockEntitySign.getColor
-import org.chorus.blockentity.BlockEntitySign.isGlowing
-import org.chorus.blockentity.BlockEntitySign.isWaxed
-import org.chorus.blockentity.BlockEntitySign.setColor
-import org.chorus.blockentity.BlockEntitySign.setGlowing
-import org.chorus.blockentity.BlockEntitySpawnable.spawnTo
-import org.chorus.blockentity.BlockEntitySpawnable.spawnToAll
-import org.chorus.event.Event.isCancelled
+import org.chorus.blockentity.BlockEntitySign
+import org.chorus.event.block.SignColorChangeEvent
+import org.chorus.event.block.SignGlowEvent
+import org.chorus.event.block.SignWaxedEvent
 import org.chorus.event.player.PlayerInteractEvent
-import org.chorus.item.Item
-import org.chorus.item.ItemDye.dyeColor
-import org.chorus.item.ItemTool
+import org.chorus.item.*
+import org.chorus.level.particle.WaxOnParticle
 import org.chorus.math.BlockFace
-import org.chorus.math.CompassRoseDirection.Companion.from
+import org.chorus.math.CompassRoseDirection
 import org.chorus.math.Vector3
-import org.chorus.utils.BlockColor.equals
-import org.chorus.utils.DyeColor.color
+import org.chorus.network.protocol.LevelEventPacket
+import org.chorus.network.protocol.LevelSoundEventPacket
+import org.chorus.utils.BlockColor
+import org.chorus.utils.Faceable
 import java.util.*
 
 abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockState), Faceable {
@@ -57,12 +54,12 @@ abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockSt
                     .isSneaking() && item.id != BlockID.AIR)
             ) {
                 level.addLevelSoundEvent(
-                    position.add(0.5, 0.5, 0.5)!!,
+                    position.add(0.5, 0.5, 0.5),
                     LevelSoundEventPacket.SOUND_WAXED_SIGN_INTERACT_FAIL
                 )
                 return
             }
-            val front = when (signDirection) {
+            val front = when (getSignDirection()) {
                 CompassRoseDirection.EAST -> face == BlockFace.EAST
                 CompassRoseDirection.SOUTH -> face == BlockFace.SOUTH
                 CompassRoseDirection.WEST -> face == BlockFace.WEST
@@ -72,75 +69,81 @@ abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockSt
                 CompassRoseDirection.SOUTH_EAST, CompassRoseDirection.SOUTH_SOUTH_EAST, CompassRoseDirection.EAST_SOUTH_EAST -> face == BlockFace.EAST || face == BlockFace.SOUTH
                 CompassRoseDirection.SOUTH_WEST, CompassRoseDirection.SOUTH_SOUTH_WEST, CompassRoseDirection.WEST_SOUTH_WEST -> face == BlockFace.WEST || face == BlockFace.SOUTH
             }
-            if (item is ItemDye) {
-                val color: BlockColor = item.dyeColor.color
-                if (color.equals(blockEntity.getColor(front)) || blockEntity.isEmpty(front)) {
-                    player!!.openSignEditor(this.position, front)
+
+            when (item) {
+                is ItemDye -> {
+                    val color: BlockColor = item.dyeColor.color!!
+                    if (color == blockEntity.getColor(front) || blockEntity.isEmpty(front)) {
+                        player!!.openSignEditor(this.position, front)
+                        return
+                    }
+                    val event = SignColorChangeEvent(this, player!!, color)
+                    Server.instance.pluginManager.callEvent(event)
+                    if (event.isCancelled) {
+                        blockEntity.spawnTo(player)
+                        return
+                    }
+                    blockEntity.setColor(front, color)
+                    blockEntity.spawnToAll()
+                    level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_DYE_USED)
+                    if ((player.gamemode and 0x01) == 0) {
+                        item.count--
+                    }
                     return
                 }
-                val event: SignColorChangeEvent = SignColorChangeEvent(this, player, color)
-                Server.instance.pluginManager.callEvent(event)
-                if (event.isCancelled) {
-                    blockEntity.spawnTo(player)
+
+                is ItemGlowInkSac -> {
+                    if (blockEntity.isGlowing(front) || blockEntity.isEmpty(front)) {
+                        player!!.openSignEditor(this.position, front)
+                        return
+                    }
+                    val event = SignGlowEvent(this, player!!, true)
+                    Server.instance.pluginManager.callEvent(event)
+                    if (event.isCancelled) {
+                        blockEntity.spawnTo(player)
+                        return
+                    }
+                    blockEntity.setGlowing(front, true)
+                    blockEntity.spawnToAll()
+                    level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_INK_SACE_USED)
+                    if ((player.gamemode and 0x01) == 0) {
+                        item.count--
+                    }
                     return
                 }
-                blockEntity.setColor(front, color)
-                blockEntity.spawnToAll()
-                level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_DYE_USED)
-                if ((player!!.gamemode and 0x01) == 0) {
-                    item.count--
-                }
-                return
-            } else if (item is ItemGlowInkSac) {
-                if (blockEntity.isGlowing(front) || blockEntity.isEmpty(front)) {
-                    player!!.openSignEditor(this.position, front)
+
+                is ItemHoneycomb -> {
+                    val event = SignWaxedEvent(this, player!!, true)
+                    Server.instance.pluginManager.callEvent(event)
+                    if (event.isCancelled) {
+                        blockEntity.spawnTo(player)
+                        return
+                    }
+                    blockEntity.isWaxed = true
+                    blockEntity.spawnToAll()
+                    level.addParticle(WaxOnParticle(this.position))
+                    if ((player.gamemode and 0x01) == 0) {
+                        item.count--
+                    }
                     return
                 }
-                val event: SignGlowEvent = SignGlowEvent(this, player, true)
-                Server.instance.pluginManager.callEvent(event)
-                if (event.isCancelled) {
-                    blockEntity.spawnTo(player)
-                    return
-                }
-                blockEntity.setGlowing(front, true)
-                blockEntity.spawnToAll()
-                level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_INK_SACE_USED)
-                if ((player!!.gamemode and 0x01) == 0) {
-                    item.count--
-                }
-                return
-            } else if (item is ItemHoneycomb) {
-                val event: SignWaxedEvent = SignWaxedEvent(this, player, true)
-                Server.instance.pluginManager.callEvent(event)
-                if (event.isCancelled) {
-                    blockEntity.spawnTo(player)
-                    return
-                }
-                blockEntity.isWaxed = true
-                blockEntity.spawnToAll()
-                level.addParticle(WaxOnParticle(this.position))
-                if ((player!!.gamemode and 0x01) == 0) {
-                    item.count--
-                }
-                return
+
+                else -> player!!.openSignEditor(this.position, front)
             }
-            player!!.openSignEditor(this.position, front)
         }
     }
 
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    open var signDirection: CompassRoseDirection?
-        get() = CompassRoseDirection.from(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROUND_SIGN_DIRECTION))
-        set(direction) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROUND_SIGN_DIRECTION, direction.index)
-        }
+    open fun getSignDirection(): CompassRoseDirection = CompassRoseDirection.from(getPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION))
 
-    var blockFace: BlockFace?
-        get() = signDirection.closestBlockFace
+    open fun setSignDirection(direction: CompassRoseDirection) = setPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION, direction.index)
+
+    override var blockFace: BlockFace?
+        get() = getSignDirection().closestBlockFace
         set(face) {
-            signDirection = face!!.compassRoseDirection
+            setSignDirection(face!!.compassRoseDirection!!)
         }
 
     override fun breaksWhenMoved(): Boolean {

@@ -66,7 +66,7 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
 
     override val isBlockEntityValid: Boolean
         get() = level
-            .getBlockID.t(floorX, floorY, floorZ) === Block.END_GATEWAY
+            .getBlockIdAt(floorX, floorY, floorZ) === Block.END_GATEWAY
 
     override fun saveNBT() {
         super.saveNBT()

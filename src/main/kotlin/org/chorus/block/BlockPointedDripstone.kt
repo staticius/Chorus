@@ -125,8 +125,8 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
         val placeX = block.position.floorX
         val placeY = block.position.floorY
         val placeZ = block.position.floorZ
-        val upBlockID.= level.getBlockID.t(placeX, placeY + 1, placeZ)
-        val downBlockID.= level.getBlockID.t(placeX, placeY - 1, placeZ)
+        val upBlockID.= level.getBlockIdAt(placeX, placeY + 1, placeZ)
+        val downBlockID.= level.getBlockIdAt(placeX, placeY - 1, placeZ)
         if (upBlockID.== BlockID.AIR && downBlockID.== BlockID.AIR) return false
         /*    "up" define is exist drip stone in block above,"down" is Similarly.
               up   down
@@ -146,7 +146,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
             }
 
             2 -> {
-                if (level.getBlockID.t(placeX, placeY - 1, placeZ) != BlockID.AIR) {
+                if (level.getBlockIdAt(placeX, placeY - 1, placeZ) != BlockID.AIR) {
                     if (face == BlockFace.UP) {
                         setBlockThicknessStateAt(placeX, placeY + 1, placeZ, true, DripstoneThickness.MERGE)
                         setMergeBlock(placeX, placeY, placeZ, false)
@@ -165,7 +165,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
             }
 
             4 -> {
-                if (level.getBlockID.t(placeX, placeY + 1, placeZ) != BlockID.AIR) {
+                if (level.getBlockIdAt(placeX, placeY + 1, placeZ) != BlockID.AIR) {
                     if (face == BlockFace.DOWN) {
                         setMergeBlock(placeX, placeY, placeZ, true)
                         setBlockThicknessStateAt(placeX, placeY - 1, placeZ, false, DripstoneThickness.MERGE)
@@ -261,14 +261,14 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
     protected fun getPointedDripStoneLength(x: Int, y: Int, z: Int, hanging: Boolean): Int {
         if (hanging) {
             for (j in y + 1..<level.dimensionData.maxHeight) {
-                val BlockID.= level.getBlockID.t(x, j, z)
+                val BlockID.= level.getBlockIdAt(x, j, z)
                 if (BlockID.!= BlockID.POINTED_DRIPSTONE) {
                     return j - y - 1
                 }
             }
         } else {
             for (j in y - 1 downTo level.dimensionData.minHeight + 1) {
-                val BlockID.= level.getBlockID.t(x, j, z)
+                val BlockID.= level.getBlockIdAt(x, j, z)
                 if (BlockID.!= BlockID.POINTED_DRIPSTONE) {
                     return y - j - 1
                 }

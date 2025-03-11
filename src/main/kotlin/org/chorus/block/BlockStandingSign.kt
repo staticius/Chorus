@@ -26,11 +26,9 @@ open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState? =
 
     open fun getWallSignId(): String = BlockID.WALL_SIGN
 
-    override val blockEntityClass: Class<out BlockEntitySign>
-        get() = BlockEntitySign::class.java
+    override fun getBlockEntityClass(): Class<out BlockEntitySign> = BlockEntitySign::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntityID.SIGN
+    override fun getBlockEntityType(): String = BlockEntityID.SIGN
 
     override val boundingBox: AxisAlignedBB?
         get() = null
@@ -97,7 +95,7 @@ open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState? =
             player?.openSignEditor(this.position, true)
             return true
         } catch (e: Exception) {
-            log.warn("Failed to create block entity {} at {}", blockEntityType, locator, e)
+            log.warn("Failed to create block entity {} at {}", getBlockEntityType(), locator, e)
             level.setBlock(layer0!!.position, 0, layer0, true)
             level.setBlock(layer1!!.position, 0, layer1, true)
             return false

@@ -39,8 +39,10 @@ open class BlockBookshelf : BlockSolid {
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BOOKSHELF)
-
     }
 }

@@ -25,12 +25,14 @@ class BlockBambooDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = 
         get() = ItemTool.TYPE_AXE
 
     override fun getSingleSlab(): BlockState {
-        return BlockBambooSlab.Companion.PROPERTIES.getDefaultState()
+        return BlockBambooSlab.properties.defaultState
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.BAMBOO_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            
     }
 }

@@ -6,16 +6,18 @@ import org.chorus.item.*
 class BlockBambooStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockStandingSign(blockstate) {
     override fun getWallSignId(): String {
-        return BlockBambooWallSign.Companion.PROPERTIES.getIdentifier()
+        return BlockBambooWallSign.properties.identifier
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBambooSign()
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.BAMBOO_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-
     }
 }

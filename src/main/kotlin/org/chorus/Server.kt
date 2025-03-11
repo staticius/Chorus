@@ -301,7 +301,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     lateinit var settings: ServerSettings
         private set
     private var watchdog: Watchdog? = null
-    private var playerDataDB: DB? = null
+    private lateinit var playerDataDB: DB
 
     lateinit var freezableArrayManager: FreezableArrayManager
         private set
@@ -522,9 +522,10 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
                 this.unloadLevel(level, true)
                 while (level.isThreadRunning) Thread.sleep(1)
             }
-            if (positionTrackingService != null) {
+            val tempPositionTrackingService = positionTrackingService
+            if (tempPositionTrackingService != null) {
                 log.debug("Closing position tracking service")
-                positionTrackingService.close()
+                tempPositionTrackingService.close()
             }
 
             log.debug("Closing console")
@@ -1298,7 +1299,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
      */
     fun lookupName(name: String): Optional<UUID> {
         val nameBytes = name.lowercase().toByteArray(StandardCharsets.UTF_8)
-        val uuidBytes = playerDataDB!![nameBytes] ?: return Optional.empty()
+        val uuidBytes = playerDataDB[nameBytes] ?: return Optional.empty()
 
         if (uuidBytes.size != 16) {
             log.warn("Invalid uuid in name lookup database detected! Removing")
@@ -1328,7 +1329,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         buffer.putLong(uniqueId.mostSignificantBits)
         buffer.putLong(uniqueId.leastSignificantBits)
         val array = buffer.array()
-        val bytes = playerDataDB!![array]
+        val bytes = playerDataDB[array]
         if (bytes == null) {
             playerDataDB.put(nameBytes, array)
         }

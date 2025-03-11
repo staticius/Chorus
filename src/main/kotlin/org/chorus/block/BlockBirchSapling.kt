@@ -12,8 +12,10 @@ class BlockBirchSapling : BlockSapling {
         return WoodType.BIRCH
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BIRCH_SAPLING, CommonBlockProperties.AGE_BIT)
-
     }
 }

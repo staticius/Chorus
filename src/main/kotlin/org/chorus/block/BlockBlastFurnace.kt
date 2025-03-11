@@ -10,9 +10,11 @@ class BlockBlastFurnace @JvmOverloads constructor(blockstate: BlockState? = Comp
     override val lightLevel: Int
         get() = 0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.BLAST_FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-
     }
 }

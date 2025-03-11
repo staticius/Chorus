@@ -47,7 +47,7 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.
             return false
         }
 
-        val target = orCreateBlockEntity!!
+        val target = getOrCreateBlockEntity()!!
         val previous = target.activePower
         level.cancelSheduledUpdate(this.position, this)
         level.scheduleUpdate(this, ticks)

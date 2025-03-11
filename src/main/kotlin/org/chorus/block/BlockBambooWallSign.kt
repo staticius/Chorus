@@ -9,19 +9,21 @@ class BlockBambooWallSign @JvmOverloads constructor(blockState: BlockState? = Co
         get() = "Bamboo Wall Sign"
 
     override fun getStandingSignId(): String {
-        return BAMBOO_STANDING_SIGN
+        return BlockID.BAMBOO_STANDING_SIGN
     }
 
     override fun getWallSignId(): String {
         return BlockAcaciaWallSign.properties.identifier
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBambooSign()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

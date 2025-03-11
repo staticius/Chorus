@@ -40,7 +40,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState? = Companion.p
             var count = 1
 
             for (i in 1..2) {
-                val id = level.getBlockID.t(
+                val id = level.getBlockIdAt(
                     position.floorX,
                     position.floorY - i, position.floorZ
                 )

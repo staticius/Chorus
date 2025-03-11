@@ -1,11 +1,11 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.BlockFlowerPot.FlowerPotBlock
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.BambooLeafSize
 import org.chorus.block.property.enums.BambooStalkThickness
-import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.event.block.BlockGrowEvent
 import org.chorus.item.*
 import org.chorus.level.*
@@ -22,21 +22,25 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
         get() = "Bamboo"
 
     override fun onUpdate(type: Int): Int {
-        if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (isSupportInvalid) {
-                level.scheduleUpdate(this, 0)
+        when (type) {
+            Level.BLOCK_UPDATE_NORMAL -> {
+                if (isSupportInvalid) {
+                    level.scheduleUpdate(this, 0)
+                }
+                return type
             }
-            return type
-        } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            level.useBreakOn(this.position, null, null, true)
-        } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            val up = up()
-            if (age == 0 && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.minimumLightLevel && ThreadLocalRandom.current()
-                    .nextInt(3) == 0
-            ) {
-                grow(up)
+            Level.BLOCK_UPDATE_SCHEDULED -> {
+                level.useBreakOn(this.position, null, null, true)
             }
-            return type
+            Level.BLOCK_UPDATE_RANDOM -> {
+                val up = up()
+                if (age == 0 && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.minimumLightLevel && ThreadLocalRandom.current()
+                        .nextInt(3) == 0
+                ) {
+                    grow(up)
+                }
+                return type
+            }
         }
         return 0
     }
@@ -57,7 +61,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
             newState1.position.y = up.position.y
             newState1.position.z = position.z
             newState1.level = level
-            newState1.place(toItem()!!, up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null)
+            newState1.place(toItem(), up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null)
             return true
         }
         return false
@@ -65,9 +69,9 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
 
     fun countHeight(): Int {
         var count = 0
-        var opt: Optional<Block?>
+        var opt: Optional<Block>
         var down: Block = this
-        while ((down.down()!!.firstInLayers { b: Block? -> b!!.id === BAMBOO }.also { opt = it }).isPresent) {
+        while ((down.down()!!.firstInLayers { b: Block? -> b!!.id === BlockID.BAMBOO }.also { opt = it }).isPresent) {
             down = opt.get()
             if (++count >= 16) {
                 break
@@ -88,7 +92,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
     ): Boolean {
         var down = down()
         val downId = down!!.id
-        if (downId != BAMBOO && downId != BAMBOO_SAPLING) {
+        if (downId != BlockID.BAMBOO && downId != BlockID.BAMBOO_SAPLING) {
             val sampling = BlockBambooSapling()
             sampling.position.x = position.x
             sampling.position.y = position.y
@@ -99,7 +103,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
 
         var canGrow = true
 
-        if (downId == BAMBOO_SAPLING) {
+        if (downId == BlockID.BAMBOO_SAPLING) {
             if (player != null) {
                 val animatePacket = AnimatePacket()
                 animatePacket.action = AnimatePacket.Action.SWING_ARM
@@ -114,7 +118,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
             if (!thick) {
                 var setThick = true
                 for (i in 2..3) {
-                    if (getSide(BlockFace.DOWN, i)!!.id !== BAMBOO) {
+                    if (getSide(BlockFace.DOWN, i)!!.id !== BlockID.BAMBOO) {
                         setThick = false
                     }
                 }
@@ -124,18 +128,21 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
                     down.bambooLeafSize = BambooLeafSize.SMALL_LEAVES
                     down.isThick = true
                     down.age = 1
-                    level.setBlock(down.position, down, false, true)
-                    while ((down!!.down().also { down = it }) is BlockBamboo) {
-                        down = down as BlockBamboo
+                    level.setBlock(down.position, down, direct = false, update = true)
+
+                    down = down.down()
+                    while (down is BlockBamboo) {
                         down.isThick = true
                         down.bambooLeafSize = BambooLeafSize.NO_LEAVES
                         down.age = 1
-                        level.setBlock(down.position, down, false, true)
+                        level.setBlock(down.position, down, direct = false, update = true)
+
+                        down = down.down()
                     }
                 } else {
                     bambooLeafSize = BambooLeafSize.SMALL_LEAVES
                     down.age = 1
-                    level.setBlock(down.position, down, false, true)
+                    level.setBlock(down.position, down, direct = false, update = true)
                 }
             } else {
                 isThick = true
@@ -143,19 +150,17 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
                 age = 0
                 down.bambooLeafSize = BambooLeafSize.LARGE_LEAVES
                 down.age = 1
-                level.setBlock(down.position, down, false, true)
+                level.setBlock(down.position, down, direct = false, update = true)
                 down = down.down()
                 if (down is BlockBamboo) {
-                    down = down as BlockBamboo
                     down.bambooLeafSize = BambooLeafSize.SMALL_LEAVES
                     down.age = 1
-                    level.setBlock(down.position, down, false, true)
+                    level.setBlock(down.position, down, direct = false, update = true)
                     down = down.down()
                     if (down is BlockBamboo) {
-                        down = down as BlockBamboo
                         down.bambooLeafSize = BambooLeafSize.NO_LEAVES
                         down.age = 1
-                        level.setBlock(down.position, down, false, true)
+                        level.setBlock(down.position, down, direct = false, update = true)
                     }
                 }
             }
@@ -168,7 +173,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
             age = 1
         }
 
-        level.setBlock(this.position, this, false, true)
+        level.setBlock(this.position, this, direct = false, update = true)
         return true
     }
 
@@ -179,7 +184,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
             val height = bambooDown.countHeight()
             if (height < 15 && (height < 11 || !(ThreadLocalRandom.current().nextFloat() < 0.25f))) {
                 bambooDown.age = 0
-                level.setBlock(bambooDown.position, bambooDown.layer, bambooDown, false, true)
+                level.setBlock(bambooDown.position, bambooDown.layer, bambooDown, direct = false, update = true)
             }
         }
         return super.onBreak(item)
@@ -191,11 +196,11 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
 
     private val isSupportInvalid: Boolean
         get() = when (down()!!.id) {
-            BAMBOO, DIRT, GRASS_BLOCK, SAND, GRAVEL, PODZOL, BAMBOO_SAPLING, MOSS_BLOCK -> false
+            BlockID.BAMBOO, BlockID.DIRT, BlockID.GRASS_BLOCK, BlockID.SAND, BlockID.GRAVEL, BlockID.PODZOL, BlockID.BAMBOO_SAPLING, BlockID.MOSS_BLOCK -> false
             else -> true
         }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockBamboo())
     }
 
@@ -249,11 +254,11 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
             var count = 1
 
             for (i in 1..16) {
-                val id = level.getBlockID.t(
+                val id = level.getBlockIdAt(
                     position.floorX,
                     position.floorY - i, position.floorZ
                 )
-                if (id == BAMBOO) {
+                if (id == BlockID.BAMBOO) {
                     count++
                 } else {
                     break
@@ -261,11 +266,11 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
             }
 
             for (i in 1..16) {
-                val id = level.getBlockID.t(
+                val id = level.getBlockIdAt(
                     position.floorX,
                     position.floorY + i, position.floorZ
                 )
-                if (id == BAMBOO) {
+                if (id == BlockID.BAMBOO) {
                     top++
                     count++
                 } else {
@@ -281,7 +286,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
             var success = false
 
             val block = this.up(top - position.y.toInt() + 1)
-            if (block!!.id === AIR) {
+            if (block!!.id === BlockID.AIR) {
                 success = grow(block!!)
             }
 
@@ -298,11 +303,11 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
     }
 
     var age: Int
-        get() = if (getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT)) 1 else 0
+        get() = if (getPropertyValue(CommonBlockProperties.AGE_BIT)) 1 else 0
         set(age) {
-            var age = age
-            age = clamp(age, 0, 1)
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT, age == 1)
+            var age1 = age
+            age1 = clamp(age1, 0, 1)
+            setPropertyValue(CommonBlockProperties.AGE_BIT, age1 == 1)
         }
 
     override fun breaksWhenMoved(): Boolean {
@@ -312,9 +317,12 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BAMBOO,
+            BlockID.BAMBOO,
             CommonBlockProperties.AGE_BIT,
             CommonBlockProperties.BAMBOO_LEAF_SIZE,
             CommonBlockProperties.BAMBOO_STALK_THICKNESS

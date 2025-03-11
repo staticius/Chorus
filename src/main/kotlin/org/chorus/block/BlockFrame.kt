@@ -85,7 +85,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Compan
     ) {
         onUpdate(Level.BLOCK_UPDATE_TOUCH)
         if (player != null && action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
-            val blockEntity = orCreateBlockEntity!!
+            val blockEntity = getOrCreateBlockEntity()!!
             if (player.isCreative) {
                 blockEntity.item = Item.AIR
             } else {
@@ -103,7 +103,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Compan
         fz: Float
     ): Boolean {
         if (player != null && player.isSneaking()) return false
-        val itemFrame = orCreateBlockEntity!!
+        val itemFrame = getOrCreateBlockEntity()!!
         if (itemFrame.item!!.isNull) {
             val itemOnFrame: Item = item.clone()
             val event = ItemFrameUseEvent(player, this, itemFrame, itemOnFrame, ItemFrameUseEvent.Action.PUT)
