@@ -133,7 +133,7 @@ class BlockEntityCauldron(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
 
     override val spawnCompound: CompoundTag
         get() {
-            val compoundTag = super.getSpawnCompound()
+            val compoundTag = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
                 .putList("Items", ListTag())
                 .putShort("PotionId", namedTag.getShort("PotionId").toInt())

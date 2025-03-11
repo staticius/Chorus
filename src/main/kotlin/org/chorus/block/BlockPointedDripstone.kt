@@ -20,10 +20,6 @@ import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 import java.util.*
 
-/**
- * @author CoolLoong
- * @since 02.13.2022
- */
 class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFallable(blockstate) {
     override val name: String

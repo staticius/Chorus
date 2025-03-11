@@ -5,9 +5,6 @@ import org.chorus.blockentity.*
 import org.chorus.item.*
 import org.chorus.math.BlockFace
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 class BlockBeacon @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBeacon> {
     override fun getBlockEntityClass(): Class<out BlockEntityBeacon> {

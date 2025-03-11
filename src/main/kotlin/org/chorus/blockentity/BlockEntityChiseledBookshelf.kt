@@ -57,7 +57,7 @@ class BlockEntityChiseledBookshelf(chunk: IChunk, nbt: CompoundTag) : BlockEntit
     override val spawnCompound: CompoundTag
         get() {
             val compoundTag =
-                super.getSpawnCompound().putBoolean("isMovable", this.isMovable)
+                super.spawnCompound.putBoolean("isMovable", this.isMovable)
             addBookshelfNbt(compoundTag)
             return compoundTag
         }

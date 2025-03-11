@@ -586,7 +586,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
                             if (block.equalsBlock(destinationBlock)) {
                                 ++count
-                            } else if (block.id !== Block.AIR) {
+                            } else if (block.id !== BlockID.AIR) {
                                 log.addError("commands.compare.failed").output()
                                 matched = false
                                 break

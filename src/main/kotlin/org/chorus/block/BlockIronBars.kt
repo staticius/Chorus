@@ -2,10 +2,6 @@ package org.chorus.block
 
 import org.chorus.item.*
 
-/**
- * @author xtypr
- * @since 2015/12/6
- */
 class BlockIronBars @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockThin(blockstate) {
     override val name: String

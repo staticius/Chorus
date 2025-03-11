@@ -140,7 +140,7 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
     }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putByte(IStructBlock.Companion.TAG_ANIMATION_MODE, animationMode!!.ordinal)
             .putFloat(IStructBlock.Companion.TAG_ANIMATION_SECONDS, this.animationSeconds)
             .putInt(IStructBlock.Companion.TAG_DATA, data!!.ordinal)

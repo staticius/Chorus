@@ -9,10 +9,6 @@ import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import java.util.*
 
-/**
- * @author Leonidius20
- * @since 22.03.17
- */
 class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override fun place(

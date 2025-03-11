@@ -166,7 +166,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
 
     override val spawnCompound: CompoundTag
         get() {
-            val c = super.getSpawnCompound()
+            val c = super.spawnCompound
 
             for (i in 1..burnTime.size) {
                 val item = inventory!!.getItem(i - 1)

@@ -12,9 +12,6 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author Nukkit Project Team
- */
 class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
     constructor() : super(Companion.properties.defaultState)
 

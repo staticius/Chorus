@@ -6,14 +6,9 @@ import org.chorus.plugin.Plugin
 import java.util.*
 
 /**
- * 描述一个不在线的玩家的类。<br></br>
  * Describes an offline player.
  *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.Player
- *
- * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
 class OfflinePlayer @JvmOverloads constructor(uuid: UUID?, name: String? = null) :
     IPlayer {

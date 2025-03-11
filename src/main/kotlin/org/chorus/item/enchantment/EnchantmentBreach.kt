@@ -16,7 +16,7 @@ class EnchantmentBreach : Enchantment(Enchantment.Companion.ID_BREACH, "breach",
         get() = 4
 
     override fun checkCompatibility(enchantment: Enchantment): Boolean {
-        val id = enchantment.getId()
+        val id = enchantment.id
         return id != Enchantment.Companion.ID_DAMAGE_ALL && id != Enchantment.Companion.ID_DENSITY && id != Enchantment.Companion.ID_DAMAGE_SMITE && id != Enchantment.Companion.ID_DAMAGE_ARTHROPODS
     }
 

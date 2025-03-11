@@ -13,10 +13,6 @@ import kotlin.collections.MutableMap
 import kotlin.collections.set
 import kotlin.collections.toTypedArray
 
-/**
- * @author Gabriel8579
- * @since 2021-06-13
- */
 class BlockGlowLichen : BlockLichen {
     constructor() : super(Companion.properties.defaultState)
 

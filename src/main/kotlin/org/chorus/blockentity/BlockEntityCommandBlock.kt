@@ -184,7 +184,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val spawnCompound: CompoundTag
         get() {
-            val nbt = super.getSpawnCompound()
+            val nbt = super.spawnCompound
                 .putBoolean(ICommandBlock.Companion.TAG_CONDITIONAL_MODE, this.conditionalMode)
                 .putBoolean(ICommandBlock.Companion.TAG_AUTO, this.isAuto)
                 .putLong(ICommandBlock.Companion.TAG_LAST_EXECUTION, this.lastExecution)

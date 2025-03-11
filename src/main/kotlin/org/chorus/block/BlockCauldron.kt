@@ -29,9 +29,6 @@ import org.chorus.network.protocol.LevelEventPacket
 import org.chorus.utils.BlockColor
 import kotlin.math.sqrt
 
-/**
- * @author CreeperFace (Nukkit Project)
- */
 class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
     constructor() : super(Companion.properties.defaultState)
 

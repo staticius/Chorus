@@ -34,7 +34,7 @@ class BlockEntityBed(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chu
     }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound().putByte("color", this.color)
+        get() = super.spawnCompound.putByte("color", this.color)
 
     val dyeColor: DyeColor
         get() = DyeColor.getByWoolData(color)

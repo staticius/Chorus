@@ -3,9 +3,6 @@ package org.chorus.block
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 
-/**
- * @author Nukkit Project Team
- */
 open class BlockBookshelf : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 

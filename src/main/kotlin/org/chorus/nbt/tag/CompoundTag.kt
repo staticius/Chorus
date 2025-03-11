@@ -15,7 +15,7 @@ import kotlin.collections.iterator
 import kotlin.collections.set
 import kotlin.math.max
 
-open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<String?, Tag<*>?>? = HashMap()) :
+open class CompoundTag @JvmOverloads constructor(val tags: MutableMap<String?, Tag<*>?>? = HashMap()) :
     Tag<MutableMap<String?, Tag<*>?>>() {
     open val allTags: Collection<Tag<*>?>
         get() = tags!!.values
@@ -102,7 +102,7 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         return this
     }
 
-    open fun get(name: String?): Tag<*>? {
+    open operator fun get(name: String?): Tag<*>? {
         return tags!![name]
     }
 

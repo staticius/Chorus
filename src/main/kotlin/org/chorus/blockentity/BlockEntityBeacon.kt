@@ -48,7 +48,7 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putString("Lock", namedTag.getString("Lock"))
             .putInt("Levels", namedTag.getInt("Levels"))
             .putInt("primary", namedTag.getInt("Primary"))

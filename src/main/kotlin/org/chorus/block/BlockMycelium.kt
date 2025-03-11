@@ -11,10 +11,6 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.utils.random.ChorusRandom.nextInt
 
-/**
- * @author Pub4Game
- * @since 03.01.2016
- */
 class BlockMycelium : BlockDirt {
     constructor() : super(Companion.properties.defaultState)
 

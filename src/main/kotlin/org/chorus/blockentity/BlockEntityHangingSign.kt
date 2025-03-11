@@ -15,5 +15,5 @@ class BlockEntityHangingSign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySign(
     }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound().putString("id", BlockEntityID.Companion.HANGING_SIGN)
+        get() = super.spawnCompound.putString("id", BlockEntityID.Companion.HANGING_SIGN)
 }

@@ -9,11 +9,6 @@ import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.tags.BlockTags
 
-/**
- * PowerNukkitX Project 2023/7/15
- *
- * @author daoge_cmd
- */
 class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockState) {
     override val name: String

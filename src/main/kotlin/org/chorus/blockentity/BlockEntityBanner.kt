@@ -77,7 +77,7 @@ class BlockEntityBanner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         get() = namedTag.getList("Patterns").size()
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putInt("Base", baseColor)
             .putList("Patterns", namedTag.getList("Patterns"))
             .putInt("Type", type)

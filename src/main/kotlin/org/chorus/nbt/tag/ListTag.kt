@@ -95,7 +95,7 @@ class ListTag<T : Tag<*>> : Tag<MutableList<T>> {
         return value
     }
 
-    fun get(index: Int): T {
+    operator fun get(index: Int): T {
         return list[index]
     }
 

@@ -5,10 +5,6 @@ import org.chorus.item.enchantment.Enchantment
 import org.chorus.math.MathHelper.clamp
 import java.util.*
 
-/**
- * @author xtypr
- * @since 2015/12/6
- */
 class BlockGlowstone : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 

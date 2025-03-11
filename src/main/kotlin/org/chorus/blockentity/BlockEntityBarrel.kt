@@ -15,7 +15,7 @@ class BlockEntityBarrel(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableC
     }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putBoolean("isMovable", this.isMovable)
             .putBoolean("Findable", false)
 

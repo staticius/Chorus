@@ -135,7 +135,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
             if (getLocator().getLevelBlock().isAir()) {
                 val support: Block = getLocator().getLevelBlock().down()
                 if (support.isFullBlock() && !support.isAir()) {
-                    level!!.setBlock(getLocator().getLevelBlock().position, Block.get(Block.SNOW_LAYER))
+                    level!!.setBlock(getLocator().getLevelBlock().position, Block.get(BlockID.SNOW_LAYER))
                 }
             }
         }
@@ -167,7 +167,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                         }
                         for (i in 0..2) {
                             val location: Block = block.getSide(blockFace, i)
-                            block.level.setBlock(location.position, Block.get(Block.AIR))
+                            block.level.setBlock(location.position, Block.get(BlockID.AIR))
                             block.level.addParticle(DestroyBlockParticle(location.position.add(0.5, 0.5, 0.5), block))
                             block.level.vibrationManager.callVibrationEvent(
                                 VibrationEvent(

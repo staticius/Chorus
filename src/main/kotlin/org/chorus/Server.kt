@@ -132,11 +132,7 @@ import kotlin.system.exitProcess
  *
  * is instantiated in [Chorus] and later the instance object is obtained via [Server.instance].
  * The constructor method of [Server] performs a number of operations, including but not limited to initializing configuration files, creating threads, thread pools, start plugins, registering recipes, blocks, entities, items, etc.
- *
- * @author MagicDroidX
- * @author Box
  */
-
 class Server internal constructor(val filePath: String, dataPath: String, pluginPath: String, predefinedLanguage: String?) {
     val dataPath: String = File(dataPath).absolutePath + "/"
     val pluginPath: String = File(pluginPath).absolutePath + "/"

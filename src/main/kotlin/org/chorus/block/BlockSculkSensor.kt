@@ -33,7 +33,7 @@ class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Compa
     override fun getWeakPower(face: BlockFace): Int {
         val blockEntity: BlockEntitySculkSensor? = this.getOrCreateBlockEntity()
         return if (getSide(face.getOpposite()!!) is BlockRedstoneComparator) {
-            blockEntity.comparatorPower
+            BlockEntityID.COMPARATORPower
         } else {
             blockEntity.power
         }

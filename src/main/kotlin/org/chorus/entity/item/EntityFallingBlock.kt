@@ -1,5 +1,6 @@
 package org.chorus.entity.item
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.Damage
@@ -67,7 +68,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
 
         if (namedTag != null) {
             if (namedTag!!.contains("Block")) {
-                val blockState: BlockState? = NBTIO.getBlockStateHelper(namedTag!!.getCompound("Block"))
+                val blockState: BlockState? = NBTIO.getBlockStateHelper(namedTag!!.getCompound("Block")!!)
                 if (blockState == null) {
                     close()
                     return
@@ -146,15 +147,15 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
 
             if (onGround) {
                 close()
-                val block: Block = level!!.getBlock(pos)
+                val block: Block = level!!.getBlock(pos)!!
 
                 val floorPos: Vector3 = (Vector3(
                     position.x - 0.5,
                     position.y, position.z - 0.5
                 )).floor()
-                val floorBlock: Block = level!!.getBlock(floorPos)
+                val floorBlock: Block = level!!.getBlock(floorPos)!!
                 //handle for snow stack
-                if (getBlock().getId() == Block.SNOW_LAYER && floorBlock.getId() == Block.SNOW_LAYER && floorBlock.getPropertyValue(
+                if (getBlock().id == BlockID.SNOW_LAYER && floorBlock.id == BlockID.SNOW_LAYER && floorBlock.getPropertyValue(
                         CommonBlockProperties.HEIGHT
                     ) != 7
                 ) {
@@ -166,18 +167,18 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                         val event: EntityBlockChangeEvent = EntityBlockChangeEvent(
                             this,
                             floorBlock,
-                            Block.get(Block.SNOW_LAYER).setPropertyValue(CommonBlockProperties.HEIGHT, 7)
+                            Block.get(BlockID.SNOW_LAYER).setPropertyValue(CommonBlockProperties.HEIGHT, 7)
                         )
                         Server.instance.pluginManager.callEvent(event)
                         if (!event.isCancelled) {
                             level!!.setBlock(floorPos, event.to, true)
 
                             val abovePos: Vector3 = floorPos.up()
-                            val aboveBlock: Block = level!!.getBlock(abovePos)
-                            if (aboveBlock.isAir()) {
-                                val event2: EntityBlockChangeEvent = EntityBlockChangeEvent(
+                            val aboveBlock: Block = level!!.getBlock(abovePos)!!
+                            if (aboveBlock.isAir) {
+                                val event2 = EntityBlockChangeEvent(
                                     this, aboveBlock, Block.get(
-                                        Block.SNOW_LAYER
+                                        BlockID.SNOW_LAYER
                                     ).setPropertyValue(CommonBlockProperties.HEIGHT, mergedHeight - 8 - 1)
                                 )
                                 Server.instance.pluginManager.callEvent(event2)
@@ -187,17 +188,17 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                             }
                         }
                     } else {
-                        val event: EntityBlockChangeEvent = EntityBlockChangeEvent(
+                        val event = EntityBlockChangeEvent(
                             this, floorBlock,
-                            Block.get(Block.SNOW_LAYER).setPropertyValue(CommonBlockProperties.HEIGHT, mergedHeight - 1)
+                            Block.get(BlockID.SNOW_LAYER).setPropertyValue(CommonBlockProperties.HEIGHT, mergedHeight - 1)
                         )
                         Server.instance.pluginManager.callEvent(event)
                         if (!event.isCancelled) {
                             level!!.setBlock(floorPos, event.to, true)
                         }
                     }
-                } else if (!block.isAir() && block.isTransparent() && !block.canBeReplaced() || getBlock().getId() == Block.SNOW_LAYER && block is BlockLiquid) {
-                    if (if (getBlock().getId() != Block.SNOW_LAYER) level!!.gameRules
+                } else if (!block.isAir && block.isTransparent && !block.canBeReplaced() || getBlock().id == BlockID.SNOW_LAYER && block is BlockLiquid) {
+                    if (if (getBlock().id != BlockID.SNOW_LAYER) level!!.gameRules
                             .getBoolean(GameRule.DO_ENTITY_DROPS) else level!!.gameRules
                             .getBoolean(GameRule.DO_TILE_DROPS)
                     ) {
@@ -215,18 +216,18 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                             }
                             level!!.addParticle(DestroyBlockParticle(pos, Block.get(blockState)))
                         } else {
-                            while (pos.getY() < level!!.getMaxHeight()) {
-                                if (!level!!.getBlock(pos).isAir()) pos.y++ else break
+                            while (pos.y < level!!.maxHeight) {
+                                if (!level!!.getBlock(pos)!!.isAir) pos.y++ else break
                             }
                             level!!.setBlock(pos, eventTo, true)
                         }
 
-                        if (eventTo.getId() == Block.ANVIL) {
-                            val e: Array<Entity> = level!!.getCollidingEntities(
+                        if (eventTo.id == BlockID.ANVIL) {
+                            val e = level!!.getCollidingEntities(
                                 this.getBoundingBox(),
                                 this
                             )
-                            for (entity: Entity in e) {
+                            for (entity in e) {
                                 if (entity is EntityLiving && fallDistance > 0) {
                                     entity.attack(
                                         EntityDamageByBlockEvent(
@@ -242,20 +243,19 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                             //handle anvil broken when fall
                             if (fallDistance > 8) {
                                 val anvil: BlockAnvil = eventTo as BlockAnvil
-                                if (anvil.getAnvilDamage() == Damage.VERY_DAMAGED) {
+                                if (anvil.anvilDamage == Damage.VERY_DAMAGED) {
                                     level!!.setBlock(eventTo.position, BlockAir.STATE.toBlock(), true)
                                 } else {
-                                    anvil.setAnvilDamage(anvil.getAnvilDamage().next())
+                                    anvil.anvilDamage = (anvil.anvilDamage.next())
                                     level!!.setBlock(eventTo.position, anvil, true)
                                 }
                             }
                             level!!.addLevelEvent(eventTo.position, LevelEventPacket.EVENT_SOUND_ANVIL_LAND)
-                        } else if (eventTo.getId() == BlockID.POINTED_DRIPSTONE) {
+                        } else if (eventTo.id == BlockID.POINTED_DRIPSTONE) {
                             level!!.addLevelEvent(block.position, LevelEventPacket.EVENT_SOUND_POINTED_DRIPSTONE_LAND)
 
-                            val e: Array<Entity> =
-                                level!!.getCollidingEntities(SimpleAxisAlignedBB(pos, pos.add(1.0, 1.0, 1.0)))
-                            for (entity: Entity in e) {
+                            val e = level!!.getCollidingEntities(SimpleAxisAlignedBB(pos, pos.add(1.0, 1.0, 1.0)))
+                            for (entity in e) {
                                 if (entity is EntityLiving && fallDistance > 0) {
                                     entity.attack(
                                         EntityDamageByBlockEvent(

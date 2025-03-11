@@ -16,7 +16,7 @@ class EnchantmentDensity : Enchantment(Enchantment.Companion.ID_DENSITY, "densit
         get() = 5
 
     override fun checkCompatibility(enchantment: Enchantment): Boolean {
-        val id = enchantment.getId()
+        val id = enchantment.id
         return id != Enchantment.Companion.ID_DAMAGE_ALL && id != Enchantment.Companion.ID_BREACH && id != Enchantment.Companion.ID_DAMAGE_SMITE && id != Enchantment.Companion.ID_DAMAGE_ARTHROPODS
     }
 

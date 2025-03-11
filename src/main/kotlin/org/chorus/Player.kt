@@ -110,14 +110,8 @@ import kotlin.concurrent.Volatile
 import kotlin.math.*
 
 /**
- * 游戏玩家对象，代表操控的角色
- *
- *
  * Game player object, representing the controlled character
- *
- * @author MagicDroidX &amp; Box (Nukkit Project)
  */
-
 class Player @UsedByReflection constructor(
     val session: BedrockSession,
     val playerInfo: PlayerInfo

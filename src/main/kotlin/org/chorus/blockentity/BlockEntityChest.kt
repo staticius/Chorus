@@ -174,7 +174,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
 
     override val spawnCompound: CompoundTag
         get() {
-            val spawnCompound = super.getSpawnCompound()
+            val spawnCompound = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
             if (this.isPaired) {
                 spawnCompound.putBoolean("pairlead", namedTag.getBoolean("pairlead"))

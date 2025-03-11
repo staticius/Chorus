@@ -3,41 +3,34 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.Block.Companion.get
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonPropertyMap
+import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityComparator
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
-import org.chorus.nbt.tag.CompoundTag.putList
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
-import org.chorus.utils.RedstoneComponent.updateAroundRedstone
 
 import kotlin.math.max
 
-/**
- * @author CreeperFace
- */
-
 abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneDiode(blockstate),
-    BlockEntityHolder<BlockEntityComparator?> {
-    override val blockEntityClass: Class<out Any>
-        get() = BlockEntityComparator::class.java
+    BlockEntityHolder<BlockEntityComparator> {
+    override fun getBlockEntityClass() = BlockEntityComparator::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.COMPARATOR
+    override fun getBlockEntityType(): String = BlockEntityID.COMPARATOR
 
     override val delay: Int
         get() = 2
 
     override val facing: BlockFace?
-        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
-            getPropertyValue<MinecraftCardinalDirection, org.chorus.block.property.type.EnumPropertyType<MinecraftCardinalDirection>>(
-                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-            )
-        )
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue<MinecraftCardinalDirection, org.chorus.block.property.type.EnumPropertyType<MinecraftCardinalDirection>>(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]
 
     var mode: Mode
         get() = if (getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OUTPUT_SUBTRACT_BIT)) Mode.SUBTRACT else Mode.COMPARE

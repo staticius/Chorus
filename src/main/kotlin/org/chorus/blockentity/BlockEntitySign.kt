@@ -259,7 +259,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putBoolean("isMovable", isMovable)
             .putCompound(
                 TAG_FRONT_TEXT, CompoundTag()

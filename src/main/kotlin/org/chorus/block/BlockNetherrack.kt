@@ -6,10 +6,6 @@ import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author Pub4Game
- * @since 2015/12/26
- */
 class BlockNetherrack : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 

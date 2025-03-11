@@ -21,9 +21,6 @@ import java.util.function.Function
 import java.util.function.Supplier
 import java.util.stream.Collectors
 
-/**
- * @author Cool_Loong
- */
 class BlockProperties(identifier: String, blockTags: Set<String?>, vararg properties: BlockPropertyType<*>?) {
     
     val identifier: String

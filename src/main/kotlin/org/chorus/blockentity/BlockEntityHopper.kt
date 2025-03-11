@@ -559,7 +559,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
     override val spawnCompound: CompoundTag
         get() {
-            val c = super.getSpawnCompound().putBoolean("isMovable", this.isMovable)
+            val c = super.spawnCompound.putBoolean("isMovable", this.isMovable)
 
             if (this.hasName()) {
                 c.put("CustomName", namedTag["CustomName"])

@@ -17,9 +17,6 @@ import it.unimi.dsi.fastutil.longs.Long2LongMap
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockState) {
     override val hardness: Double
         get() = 0.2

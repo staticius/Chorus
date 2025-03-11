@@ -20,10 +20,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.set
 
-/**
- * @author CreeperFace
- * @since 27. 10. 2016
- */
 class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable {
     override val name: String

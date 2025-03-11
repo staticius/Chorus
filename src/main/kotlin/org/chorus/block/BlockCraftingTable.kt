@@ -6,10 +6,6 @@ import org.chorus.item.*
 import org.chorus.math.BlockFace
 import java.util.function.Supplier
 
-/**
- * @author xtypr
- * @since 2015/12/5
- */
 class BlockCraftingTable @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockState), BlockInventoryHolder {
     override val name: String

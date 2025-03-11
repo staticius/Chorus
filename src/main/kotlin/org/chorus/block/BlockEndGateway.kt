@@ -8,9 +8,6 @@ import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
-/**
- * @author PikyCZ
- */
 class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
     constructor() : super(Companion.properties.defaultState)
 
@@ -19,11 +16,9 @@ class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
     override val name: String
         get() = "End Gateway"
 
-    override val blockEntityClass: Class<out E>
-        get() = BlockEntityEndGateway::class.java
+    override fun getBlockEntityClass() = BlockEntityEndGateway::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.END_GATEWAY
+    override fun getBlockEntityType(): String = BlockEntityID.END_GATEWAY
 
     override fun place(
         item: Item,

@@ -3,13 +3,8 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.item.*
 import org.chorus.math.BlockFace
-import org.chorus.math.Vector3.equals
 import org.chorus.registry.Registries
 
-/**
- * @author LoboMetalurgico
- * @since 11/06/2021
- */
 abstract class BlockCopperBase(blockState: BlockState?) : BlockSolid(blockState), Oxidizable, Waxable {
     override val hardness: Double
         get() = 3.0

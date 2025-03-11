@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.enums.OxidizationLevel
 import org.chorus.event.block.BlockFadeEvent
 import org.chorus.item.Item
@@ -76,11 +77,11 @@ interface Oxidizable {
 
         var chance = (cons + 1).toFloat() / (cons + odds + 1).toFloat()
         val multiplier = if (oxiLvl == 0) 0.75f else 1.0f
-        chance = chance * chance * multiplier
+        chance *= chance * multiplier
         if (random.nextFloat() < chance) {
             val nextBlock = getBlockWithOxidizationLevel(OxidizationLevel.entries[oxiLvl + 1])
             val event = BlockFadeEvent(block, nextBlock)
-            block.Server.instance.pluginManager.callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 block.level.setBlock(block.position, event.newState)
             }

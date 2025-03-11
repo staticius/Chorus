@@ -11,9 +11,6 @@ import org.chorus.level.vibration.VibrationType
 import org.chorus.math.BlockFace
 import org.chorus.network.protocol.LevelSoundEventPacket
 
-/**
- * @author Nukkit Project Team
- */
 class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockState) {
     override val name: String

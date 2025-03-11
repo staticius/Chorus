@@ -34,7 +34,7 @@ class PlayerInteractEvent @JvmOverloads constructor(
         } else {
             this.touchVector = vector.vector3
             this.block = Block.get(
-                Block.AIR, Locator(
+                BlockID.AIR, Locator(
                     0.0, 0.0, 0.0,
                     player.level!!
                 )

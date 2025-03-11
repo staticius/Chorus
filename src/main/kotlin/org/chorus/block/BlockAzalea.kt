@@ -16,10 +16,6 @@ import org.chorus.utils.random.RandomSourceProvider
 import org.chorus.utils.random.RandomSourceProvider.Companion.create
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author LoboMetalurgico
- * @since 13/06/2021
- */
 open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockstate), FlowerPotBlock {
     override val name: String

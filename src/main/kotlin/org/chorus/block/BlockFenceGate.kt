@@ -17,10 +17,6 @@ import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 import com.google.common.collect.Sets
 
-/**
- * @author xtypr
- * @since 2015/11/23
- */
 open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockState), RedstoneComponent, Faceable {
     override val name: String

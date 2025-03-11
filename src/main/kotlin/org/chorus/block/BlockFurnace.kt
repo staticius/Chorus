@@ -2,9 +2,6 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 class BlockFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockLitFurnace(blockstate) {
     override val name: String

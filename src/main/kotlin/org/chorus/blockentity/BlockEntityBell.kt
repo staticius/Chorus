@@ -103,7 +103,7 @@ class BlockEntityBell(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(ch
     }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putBoolean("isMovable", this.isMovable)
             .putBoolean("Ringing", this.ringing)
             .putInt("Direction", this.direction)

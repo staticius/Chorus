@@ -27,10 +27,6 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 
-/**
- * @author CreeperFace
- * @since 15.4.2017
- */
 open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockstate), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityEjectable?> {
     override fun hasComparatorInputOverride(): Boolean {

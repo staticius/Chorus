@@ -332,7 +332,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val spawnCompound: CompoundTag
         get() {
-            val nbt = super.getSpawnCompound()
+            val nbt = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
                 .putShort("FuelTotal", this.fuelTotal)
                 .putShort("FuelAmount", this.fuel)

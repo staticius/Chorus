@@ -24,7 +24,7 @@ class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityIte
                 this.setItem(ItemBlock(Block.get(BlockID.AIR)), false)
             }
             val item = item
-            val tag = super.getSpawnCompound()
+            val tag = super.spawnCompound
 
             if (!item!!.isNull) {
                 val itemTag = NBTIO.putItemHelper(item)

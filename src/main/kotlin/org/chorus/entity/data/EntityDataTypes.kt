@@ -49,7 +49,7 @@ interface EntityDataTypes {
         val SWELL_DIRECTION: EntityDataType<Int> = EntityDataType(0, "SWELL_DIRECTION", 21)
         val CHARGE_AMOUNT: EntityDataType<Byte> = EntityDataType(0.toByte(), "CHARGE_AMOUNT", 22)
         val CARRY_BLOCK_STATE: EntityDataType<Block?> = EntityDataType(
-            Block.get(Block.AIR), "CARRY_BLOCK_STATE", 23,
+            Block.get(BlockID.AIR), "CARRY_BLOCK_STATE", 23,
             Transformers.BLOCK!!
         )
         val CLIENT_EVENT: EntityDataType<Byte?> = EntityDataType(0.toByte(), "CLIENT_EVENT", 24)

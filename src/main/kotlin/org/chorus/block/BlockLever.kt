@@ -16,9 +16,6 @@ import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-/**
- * @author Nukkit Project Team
- */
 class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockstate), RedstoneComponent, Faceable {
     override val name: String

@@ -22,7 +22,7 @@ class EatGrassExecutor(protected var duration: Int) : IBehaviorExecutor {
             entity.level!!.addParticle(DestroyBlockParticle(entity.position, Block.get(BlockID.TALL_GRASS)))
             if (entity.level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
                 if (entity.transform.levelBlock.id == BlockID.TALL_GRASS) {
-                    entity.level!!.setBlock(entity.position, Block.get(Block.AIR))
+                    entity.level!!.setBlock(entity.position, Block.get(BlockID.AIR))
                 } else {
                     entity.level!!.setBlock(entity.position.add(0.0, -1.0, 0.0), Block.get(Block.DIRT))
                 }

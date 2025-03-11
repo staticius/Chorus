@@ -345,7 +345,7 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
 
     override val spawnCompound: CompoundTag
         get() {
-            val tag = super.getSpawnCompound()
+            val tag = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
                 .putBoolean("Active", this.isActive)
             val targetEntity = this.targetEntity

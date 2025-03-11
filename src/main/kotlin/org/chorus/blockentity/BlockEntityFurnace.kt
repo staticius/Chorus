@@ -360,7 +360,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val spawnCompound: CompoundTag
         get() {
-            val c = super.getSpawnCompound()
+            val c = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
                 .putShort("BurnDuration", burnDuration)
                 .putShort("BurnTime", burnTime)

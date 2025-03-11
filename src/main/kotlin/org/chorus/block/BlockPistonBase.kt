@@ -24,9 +24,6 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.stream.Collectors
 import kotlin.math.abs
 
-/**
- * @author CreeperFace
- */
 abstract class BlockPistonBase(blockstate: BlockState?) : BlockTransparent(blockstate), Faceable,
     RedstoneComponent, BlockEntityHolder<BlockEntityPistonArm?> {
     @JvmField

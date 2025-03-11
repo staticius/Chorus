@@ -18,10 +18,6 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-/**
- * @author Snake1999
- * @since 2016/1/11
- */
 abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(blockState),
     RedstoneComponent {
     @JvmField

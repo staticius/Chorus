@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import org.chorus.Server
 import org.chorus.event.block.BlockFadeEvent
 import org.chorus.item.Item
 import org.chorus.level.Level
@@ -21,7 +22,7 @@ interface IBlockOreRedstoneGlowing {
             val event = BlockFadeEvent(block, unlitBlock)
             Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
-                level.setBlock(block.position, event.newState, true, true)
+                level.setBlock(block.position, event.newState, direct = true, update = true)
             }
 
             return Level.BLOCK_UPDATE_WEAK

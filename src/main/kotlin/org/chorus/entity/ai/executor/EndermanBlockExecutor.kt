@@ -20,7 +20,7 @@ class EndermanBlockExecutor : IBehaviorExecutor {
                     val block = optionalBlock.get()
                     entity.setItemInHand(block.toItem())
                     entity.setDataProperty(EntityDataTypes.Companion.CARRY_BLOCK_STATE, block)
-                    entity.level!!.setBlock(block.position, Block.get(Block.AIR))
+                    entity.level!!.setBlock(block.position, Block.get(BlockID.AIR))
                 }
             } else {
                 if (entity.getItemInHand().isBlock) {

@@ -5,11 +5,6 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.*
 import org.chorus.math.BlockFace
 
-/**
- * Alias STILL LAVA
- *
- * @author Angelic47 (Nukkit Project)
- */
 class BlockLava @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFlowingLava(blockstate) {
     override val name: String

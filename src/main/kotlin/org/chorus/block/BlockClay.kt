@@ -2,9 +2,6 @@ package org.chorus.block
 
 import org.chorus.item.*
 
-/**
- * @author Nukkit Project Team
- */
 class BlockClay : BlockSolid, Natural {
     constructor() : super(Companion.properties.defaultState)
 

@@ -10,10 +10,6 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.utils.Faceable
 
-/**
- * @author Pub4Game
- * @since 26.12.2015
- */
 class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable {
     override val resistance: Double

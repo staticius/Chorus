@@ -31,9 +31,6 @@ import org.chorus.registry.BlockRegistry.get
 import org.chorus.registry.BlockState2ItemMetaRegistry.get
 import org.chorus.utils.Faceable
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityChest?> {
     override fun getBlockEntityClass(): Class<out BlockEntityChest> {

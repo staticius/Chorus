@@ -6,10 +6,6 @@ import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.item.*
 import org.chorus.math.*
 
-/**
- * @author Angelic47 (Nukkit Project)
- * @apiNote Extends BlockSolidMeta instead of BlockSolid only in PowerNukkit
- */
 class BlockBedrock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     var burnIndefinitely: Boolean

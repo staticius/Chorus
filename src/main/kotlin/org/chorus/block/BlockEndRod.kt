@@ -8,11 +8,6 @@ import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.utils.Faceable
 
-/**
- * http://minecraft.wiki/w/End_Rod
- *
- * @author PikyCZ
- */
 class BlockEndRod @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockState), Faceable {
     override val name: String

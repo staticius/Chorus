@@ -16,10 +16,6 @@ import org.chorus.utils.Faceable
 import java.util.function.Supplier
 import kotlin.math.abs
 
-/**
- * @author Pub4Game
- * @since 27.12.2015
- */
 open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFallable(blockstate), Faceable, BlockInventoryHolder {
     var anvilDamage: Damage

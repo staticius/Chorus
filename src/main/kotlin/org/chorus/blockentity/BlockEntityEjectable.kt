@@ -77,7 +77,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
 
     override val spawnCompound: CompoundTag
         get() {
-            val c = super.getSpawnCompound()
+            val c = super.spawnCompound
 
             if (this.hasName()) {
                 c!!.put("CustomName", namedTag["CustomName"])

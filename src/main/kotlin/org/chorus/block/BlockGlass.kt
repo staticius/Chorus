@@ -2,9 +2,6 @@ package org.chorus.block
 
 import org.chorus.item.*
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 open class BlockGlass : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 

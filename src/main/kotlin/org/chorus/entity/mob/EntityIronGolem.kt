@@ -212,7 +212,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                             }
                             for (i in 0..2) {
                                 val location: Block = block.getSide(blockFace, i)
-                                block.level.setBlock(location.position, Block.get(Block.AIR))
+                                block.level.setBlock(location.position, Block.get(BlockID.AIR))
                                 block.level.addParticle(
                                     DestroyBlockParticle(
                                         location.position.add(0.5, 0.5, 0.5),
@@ -229,7 +229,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                             }
                             for (i in -1..1) {
                                 val location: Block = block.getSide(blockFace).getSide(face, i)
-                                block.level.setBlock(location.position, Block.get(Block.AIR))
+                                block.level.setBlock(location.position, Block.get(BlockID.AIR))
                                 block.level.addParticle(
                                     DestroyBlockParticle(
                                         location.position.add(0.5, 0.5, 0.5),

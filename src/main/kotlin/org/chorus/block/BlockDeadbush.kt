@@ -8,10 +8,6 @@ import org.chorus.math.BlockFace
 import org.chorus.tags.BlockTags
 import java.util.*
 
-/**
- * @author xtypr
- * @since 2015/12/2
- */
 class BlockDeadbush @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockState), FlowerPotBlock {
     override val name: String

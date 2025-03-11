@@ -92,7 +92,7 @@ class BlockEntitySkull(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(c
         get() = block is BlockHead
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .put("SkullType", namedTag["SkullType"])
             .put("Rot", namedTag["Rot"])
             .putBoolean("MouthMoving", this.mouthMoving)

@@ -164,7 +164,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
         for (y in position.getFloorY()..level!!.getMaxHeight()) {
             val id: String =
                 level!!.getBlockIdAt(position.getFloorX(), y, position.getFloorZ())
-            if (id == Block.AIR) {
+            if (id == BlockID.AIR) {
                 return y
             }
         }

@@ -143,7 +143,7 @@ class Level(
     @JvmField
     var tickRateOptDelay: Int = 1
     @JvmField
-    var gameRules: GameRules? = null
+    lateinit var gameRules: GameRules
     private var provider: AtomicReference<LevelProvider>? = null
     private var time: Float
     private var nextTimeSendTick = 0
@@ -2237,7 +2237,7 @@ class Level(
 
     fun breakBlock(block: Block) {
         if (block.level === this) {
-            this.setBlock(block.position, Block.get(Block.AIR))
+            this.setBlock(block.position, Block.get(BlockID.AIR))
             val locator = block.add(0.5, 0.5, 0.5)
             this.addParticle(DestroyBlockParticle(locator.position, block))
             vibrationManager.callVibrationEvent(VibrationEvent(null, locator.position, VibrationType.BLOCK_DESTROY))

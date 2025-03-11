@@ -82,7 +82,7 @@ class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
     }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putCompound("RecordItem", NBTIO.putItemHelper(this.recordItem))
 
     override fun onBreak(isSilkTouch: Boolean) {

@@ -115,7 +115,7 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
                     )
                     val block = level.getBlock(pos.position)
                     //Mobs shouldn't spawn in walls and they shouldn't retry to
-                    if ((block.id != Block.AIR) && (block !is BlockFlowable) && (block.id != BlockID.FLOWING_WATER) && (block.id != BlockID.WATER) && (block.id != BlockID.LAVA) && (block.id != BlockID.FLOWING_LAVA)
+                    if ((block.id != BlockID.AIR) && (block !is BlockFlowable) && (block.id != BlockID.FLOWING_WATER) && (block.id != BlockID.WATER) && (block.id != BlockID.LAVA) && (block.id != BlockID.FLOWING_LAVA)
                     ) {
                         continue
                     }
@@ -185,7 +185,7 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
         ) == Block.MOB_SPAWNER
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putString(TAG_ENTITY_IDENTIFIER, this.entityIdentifier)
 
     var spawnEntityType: String?

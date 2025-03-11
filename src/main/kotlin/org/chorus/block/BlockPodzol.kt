@@ -5,10 +5,6 @@ import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 
-/**
- * @author xtypr
- * @since 2015/11/22
- */
 class BlockPodzol : BlockDirt {
     constructor() : super(Companion.properties.defaultState)
 

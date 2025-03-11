@@ -8,10 +8,6 @@ import org.chorus.math.BlockFace
 
 import java.io.IOException
 
-/**
- * @author joserobjr
- */
-
 class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
     constructor() : super(Companion.properties.defaultState)
 

@@ -17,10 +17,6 @@ import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-/**
- * @author CreeperFace
- * @since 27. 11. 2016
- */
 abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneComponent, Faceable {
     override val resistance: Double
         get() = 2.5
