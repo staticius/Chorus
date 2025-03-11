@@ -246,8 +246,8 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     override val isBlockEntityValid: Boolean
         get() {
-            val blockId = block.id
-            return blockId == BlockID.PISTON || blockId == BlockID.STICKY_PISTON
+            val BlockID.= block.id
+            return BlockID.== BlockID.PISTON || BlockID.== BlockID.STICKY_PISTON
         }
 
     override val spawnCompound: CompoundTag

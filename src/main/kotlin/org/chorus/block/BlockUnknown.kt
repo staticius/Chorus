@@ -18,6 +18,6 @@ class BlockUnknown @JvmOverloads constructor(blockstate: BlockState? = Companion
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.UNKNOWN)
-            get() = Companion.field
+
     }
 }

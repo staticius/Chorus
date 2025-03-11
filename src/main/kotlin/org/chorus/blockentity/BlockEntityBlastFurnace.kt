@@ -17,11 +17,11 @@ class BlockEntityBlastFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntityFurn
         get() = BlockEntityID.Companion.BLAST_FURNACE
 
 
-    override val idleBlockId: String
+    override val idleBlockID.String
         get() = Block.BLAST_FURNACE
 
 
-    override val burningBlockId: String
+    override val burningBlockID.String
         get() = Block.LIT_BLAST_FURNACE
 
 

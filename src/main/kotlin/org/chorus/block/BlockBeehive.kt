@@ -190,7 +190,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BEEHIVE, CommonBlockProperties.DIRECTION, CommonBlockProperties.HONEY_LEVEL)
-            get() = Companion.field
+            BlockProperties(BlockID.BEEHIVE, CommonBlockProperties.DIRECTION, CommonBlockProperties.HONEY_LEVEL)
+
     }
 }

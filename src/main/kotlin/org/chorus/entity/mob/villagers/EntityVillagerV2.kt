@@ -39,7 +39,7 @@ import org.chorus.network.protocol.TakeItemEntityPacket
 import org.chorus.network.protocol.UpdateTradePacket
 import org.chorus.registry.Registries
 import org.chorus.utils.*
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import java.util.*
@@ -485,7 +485,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         super.initEntity()
         setTradingPlayer(0L)
         if (!namedTag!!.contains("tradeSeed")) {
-            this.setTradeSeed(NukkitRandom().nextInt(Int.MAX_VALUE - 1))
+            this.setTradeSeed(ChorusRandom().nextInt(Int.MAX_VALUE - 1))
         } else {
             this.tradeSeed = namedTag!!.getInt("tradeSeed")
         }

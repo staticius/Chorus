@@ -176,7 +176,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.p
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.LEVER, CommonBlockProperties.LEVER_DIRECTION, CommonBlockProperties.OPEN_BIT)
-            get() = Companion.field
+
 
         /**
          * Check if the given block and its block face is a valid support for a lever

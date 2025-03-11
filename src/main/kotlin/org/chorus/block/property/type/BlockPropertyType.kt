@@ -1,8 +1,5 @@
 package org.chorus.block.property.type
 
-import org.chorus.block.property.type.IntPropertyType
-
-
 
 /**
  * Allay Project 2023/3/19
@@ -13,7 +10,7 @@ interface BlockPropertyType<DATATYPE> {
     val name: String?
     val defaultValue: DATATYPE
     val validValues: List<DATATYPE>?
-    val type: Type?
+    fun getType(): Type
 
     fun createValue(value: DATATYPE): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>, *>
 
@@ -34,9 +31,9 @@ interface BlockPropertyType<DATATYPE> {
     abstract class BlockPropertyValue<DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>, SERIALIZED_DATATYPE> internal constructor(
         val propertyType: PROPERTY, val value: DATATYPE
     ) {
-        abstract val index: Int
+        abstract fun getIndex(): Int
 
-        abstract val serializedValue: SERIALIZED_DATATYPE
+        abstract fun getSerializedValue(): SERIALIZED_DATATYPE
     }
 
     companion object {

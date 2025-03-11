@@ -44,6 +44,6 @@ class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_FUNGUS)
-            get() = Companion.field
+
     }
 }

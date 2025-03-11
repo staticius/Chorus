@@ -8,7 +8,7 @@ class BlockGreenStainedGlassPane @JvmOverloads constructor(blockstate: BlockStat
         get() = DyeColor.GREEN
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GREEN_STAINED_GLASS_PANE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GREEN_STAINED_GLASS_PANE)
+
     }
 }

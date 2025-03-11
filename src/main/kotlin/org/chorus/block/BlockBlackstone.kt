@@ -24,7 +24,7 @@ open class BlockBlackstone @JvmOverloads constructor(blockState: BlockState? = C
         get() = 6.0
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BLACKSTONE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BLACKSTONE)
+
     }
 }

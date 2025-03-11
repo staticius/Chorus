@@ -26,13 +26,13 @@ open class BlockPolishedBlackstoneWall @JvmOverloads constructor(blockstate: Blo
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.POLISHED_BLACKSTONE_WALL,
+BlockID.BlockID.POLISHED_BLACKSTONE_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-            get() = Companion.field
+
     }
 }

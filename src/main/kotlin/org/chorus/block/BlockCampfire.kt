@@ -300,10 +300,10 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            CAMPFIRE,
+BlockID.CAMPFIRE,
             CommonBlockProperties.EXTINGUISHED,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

@@ -10,12 +10,12 @@ class BlockBambooHangingSign @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BAMBOO_HANGING_SIGN,
+BlockID.BAMBOO_HANGING_SIGN,
             CommonBlockProperties.ATTACHED_BIT,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.GROUND_SIGN_DIRECTION,
             CommonBlockProperties.HANGING
         )
-            get() = Companion.field
+
     }
 }

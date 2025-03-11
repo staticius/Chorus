@@ -18,6 +18,6 @@ class BlockNetherWartBlock @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHER_WART_BLOCK)
-            get() = Companion.field
+
     }
 }

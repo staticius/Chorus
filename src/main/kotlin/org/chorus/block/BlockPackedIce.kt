@@ -38,6 +38,6 @@ open class BlockPackedIce @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PACKED_ICE)
-            get() = Companion.field
+
     }
 }

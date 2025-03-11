@@ -23,7 +23,7 @@ class BlockBrickSlab(blockState: BlockState?) : BlockSlab(blockState, BRICK_DOUB
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            
     }
 }

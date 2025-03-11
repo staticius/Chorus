@@ -44,7 +44,7 @@ class BlockBeetroot @JvmOverloads constructor(blockstate: BlockState? = Companio
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BEETROOT, CommonBlockProperties.GROWTH)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BEETROOT, CommonBlockProperties.GROWTH)
+
     }
 }

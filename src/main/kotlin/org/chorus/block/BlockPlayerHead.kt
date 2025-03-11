@@ -19,6 +19,6 @@ class BlockPlayerHead(blockState: BlockState?) : BlockHead(blockState) {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PLAYER_HEAD, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

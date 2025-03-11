@@ -21,10 +21,10 @@ class BlockBambooMosaicStairs(blockState: BlockState?) : BlockStairs(blockState)
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BAMBOO_MOSAIC_STAIRS,
+BlockID.BAMBOO_MOSAIC_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

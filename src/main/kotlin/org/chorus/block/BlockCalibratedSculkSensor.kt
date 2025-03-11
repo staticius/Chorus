@@ -119,10 +119,10 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            CALIBRATED_SCULK_SENSOR,
+BlockID.CALIBRATED_SCULK_SENSOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.SCULK_SENSOR_PHASE
         )
-            get() = Companion.field
+
     }
 }

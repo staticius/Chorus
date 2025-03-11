@@ -40,7 +40,7 @@ open class BlockBookshelf : BlockSolid {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BOOKSHELF)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BOOKSHELF)
+
     }
 }

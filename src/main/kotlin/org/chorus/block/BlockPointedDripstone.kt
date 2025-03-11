@@ -125,9 +125,9 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
         val placeX = block.position.floorX
         val placeY = block.position.floorY
         val placeZ = block.position.floorZ
-        val upBlockID = level.getBlockIdAt(placeX, placeY + 1, placeZ)
-        val downBlockID = level.getBlockIdAt(placeX, placeY - 1, placeZ)
-        if (upBlockID == BlockID.AIR && downBlockID == BlockID.AIR) return false
+        val upBlockID.= level.getBlockID.t(placeX, placeY + 1, placeZ)
+        val downBlockID.= level.getBlockID.t(placeX, placeY - 1, placeZ)
+        if (upBlockID.== BlockID.AIR && downBlockID.== BlockID.AIR) return false
         /*    "up" define is exist drip stone in block above,"down" is Similarly.
               up   down
           1   yes   yes
@@ -136,7 +136,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
           4   no    yes
         */
         val state =
-            if (upBlockID == BlockID.POINTED_DRIPSTONE) (if (downBlockID == BlockID.POINTED_DRIPSTONE) 1 else 2) else (if (downBlockID != BlockID.POINTED_DRIPSTONE) 3 else 4
+            if (upBlockID.== BlockID.POINTED_DRIPSTONE) (if (downBlockID.== BlockID.POINTED_DRIPSTONE) 1 else 2) else (if (downBlockID.!= BlockID.POINTED_DRIPSTONE) 3 else 4
                     )
         var hanging = false
         when (state) {
@@ -146,7 +146,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
             }
 
             2 -> {
-                if (level.getBlockIdAt(placeX, placeY - 1, placeZ) != BlockID.AIR) {
+                if (level.getBlockID.t(placeX, placeY - 1, placeZ) != BlockID.AIR) {
                     if (face == BlockFace.UP) {
                         setBlockThicknessStateAt(placeX, placeY + 1, placeZ, true, DripstoneThickness.MERGE)
                         setMergeBlock(placeX, placeY, placeZ, false)
@@ -165,7 +165,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
             }
 
             4 -> {
-                if (level.getBlockIdAt(placeX, placeY + 1, placeZ) != BlockID.AIR) {
+                if (level.getBlockID.t(placeX, placeY + 1, placeZ) != BlockID.AIR) {
                     if (face == BlockFace.DOWN) {
                         setMergeBlock(placeX, placeY, placeZ, true)
                         setBlockThicknessStateAt(placeX, placeY - 1, placeZ, false, DripstoneThickness.MERGE)
@@ -261,15 +261,15 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
     protected fun getPointedDripStoneLength(x: Int, y: Int, z: Int, hanging: Boolean): Int {
         if (hanging) {
             for (j in y + 1..<level.dimensionData.maxHeight) {
-                val blockId = level.getBlockIdAt(x, j, z)
-                if (blockId != BlockID.POINTED_DRIPSTONE) {
+                val BlockID.= level.getBlockID.t(x, j, z)
+                if (BlockID.!= BlockID.POINTED_DRIPSTONE) {
                     return j - y - 1
                 }
             }
         } else {
             for (j in y - 1 downTo level.dimensionData.minHeight + 1) {
-                val blockId = level.getBlockIdAt(x, j, z)
-                if (blockId != BlockID.POINTED_DRIPSTONE) {
+                val BlockID.= level.getBlockID.t(x, j, z)
+                if (BlockID.!= BlockID.POINTED_DRIPSTONE) {
                     return y - j - 1
                 }
             }
@@ -373,10 +373,10 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.POINTED_DRIPSTONE,
+BlockID.BlockID.POINTED_DRIPSTONE,
             CommonBlockProperties.DRIPSTONE_THICKNESS,
             CommonBlockProperties.HANGING
         )
-            get() = Companion.field
+
     }
 }

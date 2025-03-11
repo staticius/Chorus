@@ -9,7 +9,7 @@ class BlockBlackStainedGlassPane @JvmOverloads constructor(blockstate: BlockStat
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BLACK_STAINED_GLASS_PANE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BLACK_STAINED_GLASS_PANE)
+
     }
 }

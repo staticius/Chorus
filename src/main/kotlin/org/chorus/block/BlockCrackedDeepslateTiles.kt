@@ -6,7 +6,7 @@ class BlockCrackedDeepslateTiles @JvmOverloads constructor(blockstate: BlockStat
         get() = "Cracked Deepslate Tiles"
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRACKED_DEEPSLATE_TILES)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRACKED_DEEPSLATE_TILES)
+
     }
 }

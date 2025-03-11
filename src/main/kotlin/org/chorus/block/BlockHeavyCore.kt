@@ -73,7 +73,7 @@ class BlockHeavyCore : BlockFlowable {
         get() = 1
 
     companion object {
-        val properties: BlockProperties = BlockProperties(HEAVY_CORE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.HEAVY_CORE)
+
     }
 }

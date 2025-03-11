@@ -49,7 +49,7 @@ class BlockCartographyTable @JvmOverloads constructor(blockstate: BlockState? = 
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CARTOGRAPHY_TABLE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CARTOGRAPHY_TABLE)
+
     }
 }

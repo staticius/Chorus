@@ -21,7 +21,7 @@ class BlockGranite @JvmOverloads constructor(blockstate: BlockState? = Companion
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GRANITE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GRANITE)
+
     }
 }

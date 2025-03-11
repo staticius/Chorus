@@ -223,7 +223,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHORUS_FLOWER, CommonBlockProperties.AGE_6)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHORUS_FLOWER, CommonBlockProperties.AGE_6)
+
     }
 }

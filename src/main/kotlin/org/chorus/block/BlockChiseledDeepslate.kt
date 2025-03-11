@@ -6,7 +6,7 @@ class BlockChiseledDeepslate @JvmOverloads constructor(blockstate: BlockState? =
         get() = "Chiseled Deepslate"
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHISELED_DEEPSLATE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHISELED_DEEPSLATE)
+
     }
 }

@@ -185,7 +185,7 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(ENDER_CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.ENDER_CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+
     }
 }

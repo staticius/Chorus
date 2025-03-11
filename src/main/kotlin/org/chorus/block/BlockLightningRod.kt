@@ -65,6 +65,6 @@ class BlockLightningRod : BlockTransparent, Faceable {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIGHTNING_ROD, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

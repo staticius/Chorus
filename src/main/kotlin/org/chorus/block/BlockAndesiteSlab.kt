@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockAndesiteSlab(blockState: BlockState?) : BlockSlab(blockState, ANDESITE_DOUBLE_SLAB) {
+class BlockAndesiteSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID.ANDESITE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Andesite"
     }
@@ -25,8 +25,10 @@ class BlockAndesiteSlab(blockState: BlockState?) : BlockSlab(blockState, ANDESIT
     override val hardness: Double
         get() = 1.5
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(ANDESITE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ANDESITE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

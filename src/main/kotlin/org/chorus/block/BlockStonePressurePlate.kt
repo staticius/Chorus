@@ -40,6 +40,6 @@ open class BlockStonePressurePlate @JvmOverloads constructor(blockstate: BlockSt
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STONE_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+            
     }
 }

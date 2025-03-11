@@ -13,6 +13,6 @@ class BlockSoulLantern @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SOUL_LANTERN, CommonBlockProperties.HANGING)
-            get() = Companion.field
+
     }
 }

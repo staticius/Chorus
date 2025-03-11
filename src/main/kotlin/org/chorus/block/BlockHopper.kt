@@ -273,7 +273,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(HOPPER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TOGGLE_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.HOPPER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TOGGLE_BIT)
+
     }
 }

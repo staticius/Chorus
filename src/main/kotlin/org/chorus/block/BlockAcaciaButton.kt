@@ -7,12 +7,14 @@ class BlockAcaciaButton @JvmOverloads constructor(blockstate: BlockState? = Comp
     override val name: String
         get() = "Acacia Button"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            ACACIA_BUTTON,
+            BlockID.ACACIA_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
     }
 }

@@ -6,7 +6,7 @@ class BlockDeadHornCoral @JvmOverloads constructor(blockstate: BlockState? = Com
         get() = true
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEAD_HORN_CORAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEAD_HORN_CORAL)
+
     }
 }

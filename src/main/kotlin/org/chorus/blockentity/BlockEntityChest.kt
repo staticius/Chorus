@@ -49,8 +49,8 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
 
     override val isBlockEntityValid: Boolean
         get() {
-            val blockID = this.block.id
-            return blockID == Block.CHEST || blockID == Block.TRAPPED_CHEST
+            val BlockID.= this.block.id
+            return BlockID.== Block.CHEST || BlockID.== Block.TRAPPED_CHEST
         }
 
     val size: Int

@@ -72,7 +72,7 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState? = Compan
             return true
         }
 
-        if (item.blockId == BlockID.PINK_PETALS && getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH) < 3) {
+        if (item.BlockID.== BlockID.PINK_PETALS && getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH) < 3) {
             setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.GROWTH, getPropertyValue<Int, IntPropertyType>(
                     CommonBlockProperties.GROWTH
@@ -88,10 +88,10 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.PINK_PETALS,
+BlockID.BlockID.PINK_PETALS,
             CommonBlockProperties.GROWTH, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )
-            get() = Companion.field
+
 
         private fun isSupportValid(block: Block): Boolean {
             return block.`is`(BlockTags.DIRT)

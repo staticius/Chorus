@@ -47,9 +47,10 @@ abstract class BlockFence(blockState: BlockState?) : BlockTransparent(blockState
     override val burnAbility: Int
         get() = 20
 
-    override fun canConnect(block: Block): Boolean {
+    override fun canConnect(block: Block?): Boolean {
+        if (block == null) return false
         if (block is BlockFence) {
-            if (block.id == NETHER_BRICK_FENCE || this.id == NETHER_BRICK_FENCE) {
+            if (block.id == BlockID.NETHER_BRICK_FENCE || this.id == BlockID.NETHER_BRICK_FENCE) {
                 return block.id == this.id
             }
             return true

@@ -178,7 +178,7 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
     }
 
     override val isBlockEntityValid: Boolean
-        get() = level.getBlockIdAt(
+        get() = level.getBlockID.t(
             position.floorX,
             position.floorY,
             position.floorZ

@@ -10,6 +10,6 @@ class BlockOakLog @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OAK_LOG, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

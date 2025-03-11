@@ -6,7 +6,7 @@ class BlockDarkPrismarine : BlockPrismarine {
     constructor(blockState: BlockState?) : super(blockState)
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DARK_PRISMARINE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DARK_PRISMARINE)
+
     }
 }

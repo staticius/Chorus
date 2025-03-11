@@ -69,10 +69,10 @@ class BlockJigsaw @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.JIGSAW,
+BlockID.BlockID.Companion.JIGSAW,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.ROTATION
         )
-            get() = Companion.field
+
     }
 }

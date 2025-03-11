@@ -255,11 +255,11 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            FRAME,
+BlockID.FRAME,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.ITEM_FRAME_MAP_BIT,
             CommonBlockProperties.ITEM_FRAME_PHOTO_BIT
         )
-            get() = Companion.field
+
     }
 }

@@ -26,10 +26,10 @@ class BlockDeepslateTileStairs @JvmOverloads constructor(blockstate: BlockState?
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            DEEPSLATE_TILE_STAIRS,
+BlockID.DEEPSLATE_TILE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

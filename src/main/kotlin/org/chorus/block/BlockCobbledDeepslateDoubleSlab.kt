@@ -21,7 +21,7 @@ class BlockCobbledDeepslateDoubleSlab @JvmOverloads constructor(blockstate: Bloc
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(COBBLED_DEEPSLATE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.COBBLED_DEEPSLATE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

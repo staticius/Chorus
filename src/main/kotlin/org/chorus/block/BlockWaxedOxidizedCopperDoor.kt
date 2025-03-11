@@ -14,12 +14,12 @@ class BlockWaxedOxidizedCopperDoor @JvmOverloads constructor(blockstate: BlockSt
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.WAXED_OXIDIZED_COPPER_DOOR,
+BlockID.BlockID.WAXED_OXIDIZED_COPPER_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-            get() = Companion.field
+
     }
 }

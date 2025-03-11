@@ -139,6 +139,6 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TARGET)
-            get() = Companion.field
+
     }
 }

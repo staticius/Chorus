@@ -25,6 +25,6 @@ class BlockQuartzBricks @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.QUARTZ_BRICKS)
-            get() = Companion.field
+
     }
 }

@@ -10,6 +10,6 @@ class BlockInfoUpdate : Block {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.Companion.INFO_UPDATE)
-            get() = Companion.field
+
     }
 }

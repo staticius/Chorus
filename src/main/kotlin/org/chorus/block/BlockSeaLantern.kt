@@ -37,6 +37,6 @@ class BlockSeaLantern @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SEA_LANTERN)
-            get() = Companion.field
+
     }
 }

@@ -21,7 +21,7 @@ class BlockAcaciaWallSign @JvmOverloads constructor(blockState: BlockState? = Co
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(ACACIA_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ACACIA_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+
     }
 }

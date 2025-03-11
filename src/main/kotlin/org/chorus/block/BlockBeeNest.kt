@@ -21,7 +21,7 @@ class BlockBeeNest @JvmOverloads constructor(blockstate: BlockState? = Companion
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BEE_NEST, CommonBlockProperties.DIRECTION, CommonBlockProperties.HONEY_LEVEL)
-            get() = Companion.field
+            BlockProperties(BlockID.BEE_NEST, CommonBlockProperties.DIRECTION, CommonBlockProperties.HONEY_LEVEL)
+
     }
 }

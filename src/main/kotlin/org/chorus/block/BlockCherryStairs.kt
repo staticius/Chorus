@@ -21,10 +21,10 @@ class BlockCherryStairs @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            CHERRY_STAIRS,
+BlockID.CHERRY_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+            
     }
 }

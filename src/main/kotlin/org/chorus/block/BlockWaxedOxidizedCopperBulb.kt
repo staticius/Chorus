@@ -17,10 +17,10 @@ class BlockWaxedOxidizedCopperBulb @JvmOverloads constructor(blockstate: BlockSt
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.WAXED_OXIDIZED_COPPER_BULB,
+BlockID.BlockID.WAXED_OXIDIZED_COPPER_BULB,
             CommonBlockProperties.LIT,
             CommonBlockProperties.POWERED_BIT
         )
-            get() = Companion.field
+            
     }
 }

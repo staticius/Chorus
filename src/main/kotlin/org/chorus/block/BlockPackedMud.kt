@@ -16,6 +16,6 @@ class BlockPackedMud : BlockSolid {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PACKED_MUD)
-            get() = Companion.field
+            
     }
 }

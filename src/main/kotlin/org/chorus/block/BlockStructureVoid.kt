@@ -45,6 +45,6 @@ class BlockStructureVoid @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.STRUCTURE_VOID)
-            get() = Companion.field
+
     }
 }

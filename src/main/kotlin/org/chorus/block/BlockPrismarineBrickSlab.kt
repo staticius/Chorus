@@ -25,6 +25,6 @@ class BlockPrismarineBrickSlab(blockState: BlockState?) : BlockSlab(blockState, 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PRISMARINE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            
     }
 }

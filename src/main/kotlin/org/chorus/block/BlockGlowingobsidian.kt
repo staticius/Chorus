@@ -47,7 +47,7 @@ class BlockGlowingobsidian @JvmOverloads constructor(blockstate: BlockState? = C
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GLOWINGOBSIDIAN)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GLOWINGOBSIDIAN)
+
     }
 }

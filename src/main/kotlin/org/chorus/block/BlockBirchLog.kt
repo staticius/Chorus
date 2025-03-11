@@ -9,7 +9,7 @@ class BlockBirchLog @JvmOverloads constructor(blockstate: BlockState? = Companio
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BIRCH_LOG, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BIRCH_LOG, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }

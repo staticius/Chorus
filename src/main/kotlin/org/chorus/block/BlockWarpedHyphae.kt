@@ -10,6 +10,6 @@ class BlockWarpedHyphae @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_HYPHAE, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

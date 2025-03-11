@@ -7,8 +7,11 @@ class BlockAcaciaPressurePlate @JvmOverloads constructor(blockstate: BlockState?
     override val name: String
         get() = "Acacia Pressure Plate"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(ACACIA_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ACACIA_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
+
     }
 }

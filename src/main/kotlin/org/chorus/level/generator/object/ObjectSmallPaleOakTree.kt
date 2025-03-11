@@ -4,7 +4,7 @@ import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 
 class ObjectSmallPaleOakTree(
     /**
@@ -89,7 +89,7 @@ class ObjectSmallPaleOakTree(
 
                                     if (id!!.id == AIR || id is BlockLeaves || id.id == PALE_HANGING_MOSS) {
                                         level.setBlockStateAt(blockpos, metaLeaves)
-                                        val random = NukkitRandom(level.seed + blockpos.x + blockpos.y + blockpos.z)
+                                        val random = ChorusRandom(level.seed + blockpos.x + blockpos.y + blockpos.z)
                                         if (random.nextInt(2) == 0) {
                                             val depth = random.nextInt(1, 6)
                                             val j = 1

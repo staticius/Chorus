@@ -170,7 +170,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Com
         }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BAMBOO_SAPLING, CommonBlockProperties.AGE_BIT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_SAPLING, CommonBlockProperties.AGE_BIT)
+
     }
 }

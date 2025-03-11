@@ -1,16 +1,18 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.BlockFlowerPot.FlowerPotBlock
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.level.StructureGrowEvent.blockList
+import org.chorus.event.level.StructureGrowEvent
 import org.chorus.item.*
 import org.chorus.level.Level
-import org.chorus.level.generator.`object`.BlockManager.blocks
-import org.chorus.level.generator.`object`.ObjectGenerator.generate
+import org.chorus.level.generator.`object`.BlockManager
+import org.chorus.level.generator.`object`.ObjectGenerator
+import org.chorus.level.generator.`object`.ObjectAzaleaTree
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
+import org.chorus.utils.random.RandomSourceProvider
 import org.chorus.utils.random.RandomSourceProvider.Companion.create
 import java.util.concurrent.ThreadLocalRandom
 
@@ -61,13 +63,14 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState? = Compa
         val chance = ThreadLocalRandom.current().nextDouble(1.0)
         val aged = chance > 0.8
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!BlockFlower.isSupportValid(down())) {
+            val down = down()
+            if (down != null && !BlockFlower.isSupportValid(down)) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
             if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && level.getFullLight(
-                    position.add(0.0, 1.0, 0.0)!!
+                    position.add(0.0, 1.0, 0.0)
                 ) >= BlockCrops.minimumLightLevel
             ) {
                 if (aged) {
@@ -93,8 +96,9 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState? = Compa
         fz: Double,
         player: Player?
     ): Boolean {
-        if (BlockFlower.isSupportValid(down())) {
-            level.setBlock(block.position, this, true, true)
+        val down = down()
+        if (down != null && BlockFlower.isSupportValid(down)) {
+            level.setBlock(block.position, this, direct = true, update = true)
             return true
         }
 
@@ -119,14 +123,13 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState? = Compa
     }
 
     private fun grow() {
-        val generator: ObjectGenerator
 
-        generator = ObjectAzaleaTree()
+        val generator: ObjectGenerator = ObjectAzaleaTree()
         val vector3 = position.add(0.0, 0.0, 0.0)
 
-        val chunkManager: BlockManager = BlockManager(this.level)
-        val success: Boolean = generator.generate(chunkManager, RandomSourceProvider.create(), vector3)
-        val ev: StructureGrowEvent = StructureGrowEvent(this, chunkManager.blocks)
+        val chunkManager = BlockManager(this.level)
+        val success: Boolean = generator.generate(chunkManager, create(), vector3)
+        val ev = StructureGrowEvent(this, chunkManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled || !success) {
             return
@@ -136,11 +139,13 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState? = Compa
             level.setBlock(block.position, block)
         }
 
-        level.setBlock(this.position, get(OAK_LOG))
+        level.setBlock(this.position, get(BlockID.OAK_LOG))
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(AZALEA)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.AZALEA)
     }
 }

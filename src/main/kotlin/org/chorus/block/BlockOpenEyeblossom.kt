@@ -7,6 +7,6 @@ class BlockOpenEyeblossom : BlockClosedEyeblossom {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OPEN_EYEBLOSSOM)
-            get() = Companion.field
+
     }
 }

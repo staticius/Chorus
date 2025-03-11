@@ -42,7 +42,7 @@ open class BlockEmeraldOre @JvmOverloads constructor(blockstate: BlockState? = C
         get() = ThreadLocalRandom.current().nextInt(3, 8)
 
     companion object {
-        val properties: BlockProperties = BlockProperties(EMERALD_ORE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.EMERALD_ORE)
+
     }
 }

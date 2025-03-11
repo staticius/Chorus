@@ -16,6 +16,6 @@ class BlockMangroveStandingSign @JvmOverloads constructor(blockstate: BlockState
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MANGROVE_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+
     }
 }

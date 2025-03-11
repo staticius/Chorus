@@ -14,6 +14,6 @@ class BlockSmoker @JvmOverloads constructor(blockstate: BlockState? = Companion.
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SMOKER, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-            get() = Companion.field
+
     }
 }

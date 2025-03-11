@@ -7,6 +7,6 @@ class BlockMangroveFence @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MANGROVE_FENCE)
-            get() = Companion.field
+
     }
 }

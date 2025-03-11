@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.*
 import org.chorus.level.*
 import org.chorus.math.BlockFace.Companion.fromIndex
-import org.chorus.utils.random.NukkitRandom.nextInt
+import org.chorus.utils.random.ChorusRandom.nextInt
 
 class BlockBuddingAmethyst : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
@@ -70,8 +70,8 @@ class BlockBuddingAmethyst : BlockSolid {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BUDDING_AMETHYST)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BUDDING_AMETHYST)
+
         private val RANDOM: NukkitRandom = NukkitRandom()
     }
 }

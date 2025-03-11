@@ -4,6 +4,6 @@ class BlockCamera @JvmOverloads constructor(blockstate: BlockState? = Companion.
     Block(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CAMERA)
-            get() = Companion.field
+
     }
 }

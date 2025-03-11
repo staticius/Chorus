@@ -404,6 +404,6 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RAIL, CommonBlockProperties.RAIL_DIRECTION_10)
-            get() = Companion.field
+            
     }
 }

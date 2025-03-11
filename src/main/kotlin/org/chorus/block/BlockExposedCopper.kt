@@ -9,7 +9,7 @@ open class BlockExposedCopper @JvmOverloads constructor(blockstate: BlockState? 
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(EXPOSED_COPPER)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.EXPOSED_COPPER)
+
     }
 }

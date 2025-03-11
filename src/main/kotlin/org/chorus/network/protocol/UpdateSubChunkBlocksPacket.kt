@@ -1,14 +1,8 @@
 package org.chorus.network.protocol
 
-import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.BlockChangeEntry
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
-
-
-
-
 
 
 class UpdateSubChunkBlocksPacket : DataPacket() {
@@ -16,8 +10,8 @@ class UpdateSubChunkBlocksPacket : DataPacket() {
     var chunkY: Int = 0
     var chunkZ: Int = 0
 
-    val standardBlocks: List<BlockChangeEntry> = ObjectArrayList()
-    val extraBlocks: List<BlockChangeEntry> = ObjectArrayList()
+    val standardBlocks: MutableList<BlockChangeEntry> = ObjectArrayList()
+    val extraBlocks: MutableList<BlockChangeEntry> = ObjectArrayList()
 
     override fun decode(byteBuf: HandleByteBuf) {
     }
@@ -26,21 +20,21 @@ class UpdateSubChunkBlocksPacket : DataPacket() {
         byteBuf.writeVarInt(chunkX)
         byteBuf.writeUnsignedVarInt(chunkY)
         byteBuf.writeVarInt(chunkZ)
-        byteBuf.writeUnsignedVarInt(standardBlocks.size())
+        byteBuf.writeUnsignedVarInt(standardBlocks.size)
         for (each in standardBlocks) {
             byteBuf.writeBlockVector3(each.blockPos)
             byteBuf.writeUnsignedVarInt(each.runtimeID.toInt())
             byteBuf.writeUnsignedVarInt(each.updateFlags)
             byteBuf.writeUnsignedVarLong(each.messageEntityID)
-            byteBuf.writeUnsignedVarInt(each.messageType.ordinal())
+            byteBuf.writeUnsignedVarInt(each.messageType.ordinal)
         }
-        byteBuf.writeUnsignedVarInt(extraBlocks.size())
+        byteBuf.writeUnsignedVarInt(extraBlocks.size)
         for (each in extraBlocks) {
             byteBuf.writeBlockVector3(each.blockPos)
             byteBuf.writeUnsignedVarInt(each.runtimeID.toInt())
             byteBuf.writeUnsignedVarInt(each.updateFlags)
             byteBuf.writeUnsignedVarLong(each.messageEntityID)
-            byteBuf.writeUnsignedVarInt(each.messageType.ordinal())
+            byteBuf.writeUnsignedVarInt(each.messageType.ordinal)
         }
     }
 
@@ -62,7 +56,7 @@ class UpdateSubChunkBlocksPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_SUB_CHUNK_BLOCKS_PACKET
+        return ProtocolInfo.UPDATE_SUB_CHUNK_BLOCKS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

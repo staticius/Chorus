@@ -28,10 +28,11 @@ class BlockProperties(identifier: String, blockTags: Set<String?>, vararg proper
     
     val identifier: String
     private val propertyTypeSet: Set<BlockPropertyType<*>>
-    private var specialValueMap: Map<Short, BlockState>? = null
+    var specialValueMap: Map<Short, BlockState>
+        private set
 
     
-    var defaultState: BlockState? = null
+    var defaultState: BlockState
         private set
     val specialValueBits: Byte
 

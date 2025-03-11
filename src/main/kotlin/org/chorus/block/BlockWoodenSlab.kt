@@ -8,7 +8,7 @@ abstract class BlockWoodenSlab : BlockSlab {
     constructor(blockState: BlockState?, doubleSlab: String) : super(blockState, doubleSlab)
 
     override val name: String
-        get() = (if (isOnTop) "Upper " else "") + slabName + " Wood Slab"
+        get() = (if (isOnTop) "Upper " else "") + getSlabName() + " Wood Slab"
 
     override fun isSameType(slab: BlockSlab): Boolean {
         return slab.id == id

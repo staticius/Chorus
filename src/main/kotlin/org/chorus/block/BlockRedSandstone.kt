@@ -8,6 +8,6 @@ class BlockRedSandstone @JvmOverloads constructor(blockstate: BlockState? = Comp
     BlockSandstone(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RED_SANDSTONE)
-            get() = Companion.field
+
     }
 }

@@ -135,7 +135,7 @@ class BlockGlowLichen : BlockLichen {
         get() = true
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GLOW_LICHEN, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GLOW_LICHEN, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
+
     }
 }

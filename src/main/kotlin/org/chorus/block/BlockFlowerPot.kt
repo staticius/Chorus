@@ -263,7 +263,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FLOWER_POT, CommonBlockProperties.UPDATE_BIT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FLOWER_POT, CommonBlockProperties.UPDATE_BIT)
+
     }
 }

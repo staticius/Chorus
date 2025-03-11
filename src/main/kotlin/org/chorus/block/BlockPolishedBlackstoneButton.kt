@@ -9,10 +9,10 @@ class BlockPolishedBlackstoneButton @JvmOverloads constructor(blockstate: BlockS
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.POLISHED_BLACKSTONE_BUTTON,
+BlockID.BlockID.POLISHED_BLACKSTONE_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

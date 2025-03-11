@@ -18,12 +18,12 @@ class BlockCrimsonDoor @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            CRIMSON_DOOR,
+BlockID.CRIMSON_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-            get() = Companion.field
+
     }
 }

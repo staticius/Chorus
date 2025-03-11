@@ -25,6 +25,6 @@ class BlockLapisBlock @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LAPIS_BLOCK)
-            get() = Companion.field
+
     }
 }

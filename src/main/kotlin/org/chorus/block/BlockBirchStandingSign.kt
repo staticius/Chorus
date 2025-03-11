@@ -19,7 +19,7 @@ class BlockBirchStandingSign @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BIRCH_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.BIRCH_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+
     }
 }

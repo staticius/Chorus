@@ -24,7 +24,7 @@ class BlockCrackedDeepslateBricks @JvmOverloads constructor(blockstate: BlockSta
         get() = ItemTool.TIER_WOODEN
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRACKED_DEEPSLATE_BRICKS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRACKED_DEEPSLATE_BRICKS)
+
     }
 }

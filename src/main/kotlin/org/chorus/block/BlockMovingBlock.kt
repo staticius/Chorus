@@ -51,6 +51,6 @@ class BlockMovingBlock @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MOVING_BLOCK)
-            get() = Companion.field
+
     }
 }

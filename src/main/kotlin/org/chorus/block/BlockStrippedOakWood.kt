@@ -10,6 +10,6 @@ class BlockStrippedOakWood(blockstate: BlockState?) : BlockWoodStripped(blocksta
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.STRIPPED_OAK_WOOD, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

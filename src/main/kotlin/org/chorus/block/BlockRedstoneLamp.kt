@@ -75,6 +75,6 @@ open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_LAMP)
-            get() = Companion.field
+
     }
 }

@@ -21,6 +21,6 @@ class BlockMud : BlockSolid, Natural {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MUD)
-            get() = Companion.field
+
     }
 }

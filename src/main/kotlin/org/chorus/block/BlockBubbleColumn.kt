@@ -208,7 +208,7 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BUBBLE_COLUMN, CommonBlockProperties.DRAG_DOWN)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BUBBLE_COLUMN, CommonBlockProperties.DRAG_DOWN)
+            
     }
 }

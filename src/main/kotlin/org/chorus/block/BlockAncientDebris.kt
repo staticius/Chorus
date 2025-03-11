@@ -26,8 +26,10 @@ class BlockAncientDebris @JvmOverloads constructor(blockstate: BlockState? = Com
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
-        val properties: BlockProperties = BlockProperties(ANCIENT_DEBRIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ANCIENT_DEBRIS)
     }
 }

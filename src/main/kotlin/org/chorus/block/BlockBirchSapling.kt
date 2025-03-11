@@ -13,7 +13,7 @@ class BlockBirchSapling : BlockSapling {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BIRCH_SAPLING, CommonBlockProperties.AGE_BIT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BIRCH_SAPLING, CommonBlockProperties.AGE_BIT)
+
     }
 }

@@ -28,6 +28,6 @@ class BlockPumpkinStem @JvmOverloads constructor(blockstate: BlockState? = Compa
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PUMPKIN_STEM, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.GROWTH)
-            get() = Companion.field
+
     }
 }

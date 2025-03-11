@@ -26,7 +26,7 @@ class BlockDioriteSlab(blockState: BlockState?) : BlockSlab(blockState, DIORITE_
         get() = 1.5
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DIORITE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DIORITE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

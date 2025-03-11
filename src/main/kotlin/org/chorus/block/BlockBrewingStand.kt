@@ -184,11 +184,11 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BREWING_STAND,
+BlockID.BREWING_STAND,
             CommonBlockProperties.BREWING_STAND_SLOT_A_BIT,
             CommonBlockProperties.BREWING_STAND_SLOT_B_BIT,
             CommonBlockProperties.BREWING_STAND_SLOT_C_BIT
         )
-            get() = Companion.field
+
     }
 }

@@ -14,6 +14,6 @@ class BlockSmallAmethystBud @JvmOverloads constructor(blockState: BlockState? = 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SMALL_AMETHYST_BUD, CommonBlockProperties.MINECRAFT_BLOCK_FACE)
-            get() = Companion.field
+
     }
 }

@@ -185,6 +185,6 @@ open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MOSS_BLOCK)
-            get() = Companion.field
+
     }
 }

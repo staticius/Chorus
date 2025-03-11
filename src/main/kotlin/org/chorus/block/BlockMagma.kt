@@ -89,6 +89,6 @@ class BlockMagma : BlockSolid {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MAGMA)
-            get() = Companion.field
+
     }
 }

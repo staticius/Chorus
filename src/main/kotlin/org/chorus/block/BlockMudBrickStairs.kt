@@ -13,10 +13,10 @@ class BlockMudBrickStairs : BlockStairs {
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.MUD_BRICK_STAIRS,
+BlockID.BlockID.MUD_BRICK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

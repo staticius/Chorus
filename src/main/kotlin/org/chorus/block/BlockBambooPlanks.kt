@@ -23,7 +23,7 @@ class BlockBambooPlanks @JvmOverloads constructor(blockstate: BlockState? = Comp
         get() = ItemTool.TYPE_AXE
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BAMBOO_PLANKS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_PLANKS)
+
     }
 }

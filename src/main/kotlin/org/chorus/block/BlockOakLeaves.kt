@@ -15,6 +15,6 @@ class BlockOakLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.OAK_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
-            get() = Companion.field
+
     }
 }

@@ -13,7 +13,7 @@ class BlockBrownMushroom @JvmOverloads constructor(blockstate: BlockState? = Com
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BROWN_MUSHROOM)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BROWN_MUSHROOM)
+
     }
 }

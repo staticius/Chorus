@@ -84,7 +84,7 @@ class BlockBeacon @JvmOverloads constructor(blockstate: BlockState? = Companion.
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BEACON)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BEACON)
+
     }
 }

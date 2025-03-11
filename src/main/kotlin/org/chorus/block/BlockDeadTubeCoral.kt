@@ -6,7 +6,7 @@ class BlockDeadTubeCoral @JvmOverloads constructor(blockstate: BlockState? = Com
         get() = true
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEAD_TUBE_CORAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEAD_TUBE_CORAL)
+
     }
 }

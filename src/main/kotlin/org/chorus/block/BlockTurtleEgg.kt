@@ -73,7 +73,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.getBlock() != null && item.blockId == BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
+        if (item.getBlock() != null && item.BlockID.== BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
             val eggCount = eggCount!!
             if (eggCount == TurtleEggCount.FOUR_EGG) {
                 return false
@@ -328,10 +328,10 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.TURTLE_EGG,
+BlockID.BlockID.TURTLE_EGG,
             CommonBlockProperties.CRACKED_STATE,
             CommonBlockProperties.TURTLE_EGG_COUNT
         )
-            get() = Companion.field
+
     }
 }

@@ -413,11 +413,11 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BELL,
+BlockID.BELL,
             CommonBlockProperties.ATTACHMENT,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.TOGGLE_BIT
         )
-            get() = Companion.field
+
     }
 }

@@ -17,6 +17,6 @@ class BlockSmoothQuartzDoubleSlab @JvmOverloads constructor(blockstate: BlockSta
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SMOOTH_QUARTZ_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

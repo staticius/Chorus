@@ -9,7 +9,7 @@ class BlockCrimsonPlanks @JvmOverloads constructor(blockstate: BlockState? = Com
         get() = 3.0
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRIMSON_PLANKS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_PLANKS)
+
     }
 }

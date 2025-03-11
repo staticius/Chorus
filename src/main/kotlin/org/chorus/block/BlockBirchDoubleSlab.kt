@@ -13,7 +13,7 @@ class BlockBirchDoubleSlab(blockstate: BlockState?) : BlockDoubleWoodenSlab(bloc
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BIRCH_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.BIRCH_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

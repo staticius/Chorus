@@ -155,8 +155,8 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val isBlockEntityValid: Boolean
         get() {
-            val blockID = block.id
-            return blockID === idleBlockId || blockID === burningBlockId
+            val BlockID.= block.id
+            return BlockID.=== idleBlockID.|| BlockID.=== burningBlockId
         }
 
     val size: Int
@@ -203,25 +203,25 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         return inventory!!
     }
 
-    protected open val idleBlockId: String
+    protected open val idleBlockID.String
         get() = Block.FURNACE
 
-    protected open val burningBlockId: String
+    protected open val burningBlockID.String
         get() = Block.LIT_FURNACE
 
     protected fun setBurning(burning: Boolean) {
         if (burning) {
-            if (this.block.id == this.idleBlockId) {
+            if (this.block.id == this.idleBlockID.{
                 level.setBlock(
                     this.position, Block.getWithState(
-                        burningBlockId, this.block.blockState
+                        burningBlockID.this.block.blockState
                     ), true
                 )
             }
-        } else if (this.block.id == this.burningBlockId) {
+        } else if (this.block.id == this.burningBlockID.{
             level.setBlock(
                 this.position, Block.getWithState(
-                    idleBlockId, this.block.blockState
+                    idleBlockID.this.block.blockState
                 ), true
             )
         }

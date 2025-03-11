@@ -23,10 +23,10 @@ class BlockSoulCampfire @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.SOUL_CAMPFIRE,
+BlockID.BlockID.SOUL_CAMPFIRE,
             CommonBlockProperties.EXTINGUISHED,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

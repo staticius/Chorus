@@ -104,7 +104,7 @@ class BlockChorusPlant : BlockTransparent {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHORUS_PLANT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHORUS_PLANT)
+
     }
 }

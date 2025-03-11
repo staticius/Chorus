@@ -347,7 +347,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FIRE, CommonBlockProperties.AGE_16)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FIRE, CommonBlockProperties.AGE_16)
+
     }
 }

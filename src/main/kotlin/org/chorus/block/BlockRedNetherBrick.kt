@@ -7,6 +7,6 @@ class BlockRedNetherBrick @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RED_NETHER_BRICK)
-            get() = Companion.field
+
     }
 }

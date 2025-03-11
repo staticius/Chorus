@@ -40,7 +40,7 @@ open class BlockBubbleCoral @JvmOverloads constructor(blockstate: BlockState? = 
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BUBBLE_CORAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BUBBLE_CORAL)
+
     }
 }

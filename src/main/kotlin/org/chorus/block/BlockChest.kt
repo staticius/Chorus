@@ -275,7 +275,7 @@ open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Compan
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+
     }
 }

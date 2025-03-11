@@ -297,12 +297,12 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            FENCE_GATE,
+BlockID.FENCE_GATE,
             CommonBlockProperties.IN_WALL_BIT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-            get() = Companion.field
+
 
         // Contains a list of positions of fence gates, which have been opened by hand (by a player).
         // It is used to detect on redstone update, if the gate should be closed if redstone is off on the update,

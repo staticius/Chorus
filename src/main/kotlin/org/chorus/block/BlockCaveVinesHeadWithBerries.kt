@@ -20,7 +20,7 @@ class BlockCaveVinesHeadWithBerries @JvmOverloads constructor(blockstate: BlockS
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(CAVE_VINES_HEAD_WITH_BERRIES, CommonBlockProperties.GROWING_PLANT_AGE)
-            get() = Companion.field
+            BlockProperties(BlockID.CAVE_VINES_HEAD_WITH_BERRIES, CommonBlockProperties.GROWING_PLANT_AGE)
+
     }
 }

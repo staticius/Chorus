@@ -17,7 +17,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.RedstoneComponent
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -45,7 +45,7 @@ class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properti
     @JvmOverloads
     fun prime(fuse: Int = 80, source: Entity? = null) {
         level.setBlock(this.position, get(BlockID.AIR), true)
-        val mot = (NukkitRandom()).nextFloat() * Math.PI * 2
+        val mot = (ChorusRandom()).nextFloat() * Math.PI * 2
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag?>()
@@ -138,6 +138,6 @@ class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properti
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TNT, CommonBlockProperties.EXPLODE_BIT)
-            get() = Companion.field
+
     }
 }

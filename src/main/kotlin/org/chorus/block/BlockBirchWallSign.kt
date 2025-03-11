@@ -24,7 +24,7 @@ class BlockBirchWallSign : BlockWallSign {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BIRCH_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BIRCH_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+
     }
 }

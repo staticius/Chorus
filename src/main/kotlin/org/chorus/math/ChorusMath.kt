@@ -1,6 +1,6 @@
 package org.chorus.math
 
-import org.chorus.utils.random.NukkitRandom
+import org.chorus.utils.random.ChorusRandom
 import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.max
@@ -48,11 +48,11 @@ object ChorusMath {
     }
 
     @JvmOverloads
-    fun randomRange(random: NukkitRandom, start: Int = 0): Int {
+    fun randomRange(random: ChorusRandom, start: Int = 0): Int {
         return randomRange(random, 0, 0x7fffffff)
     }
 
-    fun randomRange(random: NukkitRandom, start: Int, end: Int): Int {
+    fun randomRange(random: ChorusRandom, start: Int, end: Int): Int {
         return start + (random.nextInt() % (end + 1 - start))
     }
 

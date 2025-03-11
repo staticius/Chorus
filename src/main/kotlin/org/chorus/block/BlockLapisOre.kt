@@ -43,6 +43,6 @@ open class BlockLapisOre @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LAPIS_ORE)
-            get() = Companion.field
+
     }
 }

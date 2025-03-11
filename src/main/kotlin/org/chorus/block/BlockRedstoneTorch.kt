@@ -126,6 +126,6 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? = Com
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.REDSTONE_TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

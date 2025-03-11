@@ -9,7 +9,7 @@ class BlockBlackCandleCake @JvmOverloads constructor(blockstate: BlockState? = C
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BLACK_CANDLE_CAKE, CommonBlockProperties.LIT)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BLACK_CANDLE_CAKE, CommonBlockProperties.LIT)
+            
     }
 }

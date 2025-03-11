@@ -9,7 +9,7 @@ class BlockDarkOakWood(blockstate: BlockState?) : BlockWood(blockstate) {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DARK_OAK_WOOD, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DARK_OAK_WOOD, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }

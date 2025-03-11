@@ -206,10 +206,10 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            END_PORTAL_FRAME,
+BlockID.END_PORTAL_FRAME,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.END_PORTAL_EYE_BIT
         )
-            get() = Companion.field
+
     }
 }

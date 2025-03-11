@@ -71,6 +71,6 @@ open class BlockIce : BlockTransparent {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.Companion.ICE)
-            get() = Companion.field
+
     }
 }

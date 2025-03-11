@@ -289,9 +289,9 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         const val MAX_TRIPWIRE_CIRCUIT_LENGTH: Int = 42
 
         val properties: BlockProperties = BlockProperties(
-            BlockID.TRIPWIRE_HOOK,
+BlockID.BlockID.TRIPWIRE_HOOK,
             CommonBlockProperties.DIRECTION, CommonBlockProperties.ATTACHED_BIT, CommonBlockProperties.POWERED_BIT
         )
-            get() = Companion.field
+
     }
 }

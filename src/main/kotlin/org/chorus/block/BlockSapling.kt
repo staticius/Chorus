@@ -1,32 +1,22 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.BlockFlower.Companion.isSupportValid
 import org.chorus.block.BlockFlowerPot.FlowerPotBlock
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.level.StructureGrowEvent.blockList
+import org.chorus.event.level.StructureGrowEvent
 import org.chorus.item.Item
 import org.chorus.level.Level
-import org.chorus.level.Locator.floorX
-import org.chorus.level.Locator.floorY
-import org.chorus.level.generator.`object`.BlockManager.applySubChunkUpdate
-import org.chorus.level.generator.`object`.BlockManager.blocks
-import org.chorus.level.generator.`object`.HugeTreesGenerator.ensureGrowable
-import org.chorus.level.generator.`object`.ObjectGenerator.generate
-import org.chorus.level.generator.`object`.legacytree.LegacyBigSpruceTree.placeObject
-import org.chorus.level.generator.`object`.legacytree.LegacyBigSpruceTree.setRandomTreeHeight
-import org.chorus.level.generator.`object`.legacytree.LegacyTreeGenerator.treeHeight
+import org.chorus.level.generator.`object`.*
+import org.chorus.level.generator.`object`.legacytree.LegacyBigSpruceTree
+import org.chorus.level.generator.`object`.legacytree.LegacyTreeGenerator
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector2
-import org.chorus.math.Vector2.floorX
-import org.chorus.math.Vector2.floorY
 import org.chorus.math.Vector3
-import org.chorus.math.Vector3.floorX
-import org.chorus.math.Vector3.floorY
+import org.chorus.utils.random.RandomSourceProvider
 import org.chorus.utils.random.RandomSourceProvider.Companion.create
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
@@ -35,16 +25,16 @@ import java.util.concurrent.ThreadLocalRandom
  * @author Angelic47 (Nukkit Project)
  */
 abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate), FlowerPotBlock {
-    abstract val woodType: WoodType?
+    abstract fun getWoodType(): WoodType
 
     var isAged: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT)
+        get() = getPropertyValue(CommonBlockProperties.AGE_BIT)
         set(aged) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT, aged)
+            setPropertyValue(CommonBlockProperties.AGE_BIT, aged)
         }
 
     override val name: String
-        get() = woodType!!.name + " Sapling"
+        get() = getWoodType().name + " Sapling"
 
     override fun place(
         item: Item,
@@ -101,7 +91,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
             if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && level.getFullLight(
-                    position.add(0.0, 1.0, 0.0)!!
+                    position.add(0.0, 1.0, 0.0)
                 ) >= BlockCrops.minimumLightLevel
             ) {
                 if (isAged) {
@@ -122,12 +112,12 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
         var generator: ObjectGenerator? = null
         var bigTree = false
 
-        var vector3: Vector3? = Vector3(
+        var vector3 = Vector3(
             position.x,
             position.y - 1, position.z
         )
 
-        when (woodType) {
+        when (getWoodType()) {
             WoodType.JUNGLE -> {
                 val vector2: Vector2?
                 if ((findSaplings(WoodType.JUNGLE).also { vector2 = it }) != null) {
@@ -135,7 +125,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
                     generator = ObjectJungleBigTree(
                         10, 20,
                         BlockJungleLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS, BlockFace.Axis.Y),
-                        BlockJungleLeaves.properties.getDefaultState()
+                        BlockJungleLeaves.properties.defaultState
                     )
                     bigTree = true
                 }
@@ -152,8 +142,9 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
             }
 
             WoodType.DARK_OAK -> {
+                val vector2: Vector2?
                 if ((findSaplings(WoodType.DARK_OAK).also { vector2 = it }) != null) {
-                    vector3 = position.add(vector2.floorX.toDouble(), 0.0, vector2.floorY.toDouble())
+                    vector3 = position.add(vector2!!.floorX.toDouble(), 0.0, vector2.floorY.toDouble())
                     generator = ObjectDarkOakTree()
                     bigTree = true
                 }
@@ -164,8 +155,9 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
             }
 
             WoodType.PALE_OAK -> {
+                val vector2: Vector2?
                 if ((findSaplings(WoodType.PALE_OAK).also { vector2 = it }) != null) {
-                    vector3 = position.add(vector2.floorX.toDouble(), 0.0, vector2.floorY.toDouble())
+                    vector3 = position.add(vector2!!.floorX.toDouble(), 0.0, vector2.floorY.toDouble())
                     generator = ObjectPaleOakTree()
                     bigTree = true
                 }
@@ -177,15 +169,18 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
             }
 
             WoodType.SPRUCE -> {
+                val vector2: Vector2?
                 if ((findSaplings(WoodType.SPRUCE).also { vector2 = it }) != null) {
-                    vector3 = position.add(vector2.floorX.toDouble(), 0.0, vector2.floorY.toDouble())
-                    generator = object : HugeTreesGenerator(0, 0, null, null) {
+                    vector3 = position.add(vector2!!.floorX.toDouble(), 0.0, vector2.floorY.toDouble())
+                    generator = object : HugeTreesGenerator(0, 0,
+                        BlockSpruceLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS, BlockFace.Axis.Y),
+                        BlockJungleLeaves.properties.defaultState) {
                         override fun generate(
-                            level: BlockManager?,
-                            rand: RandomSourceProvider?,
+                            level: BlockManager,
+                            rand: RandomSourceProvider,
                             position: Vector3
                         ): Boolean {
-                            val `object`: LegacyBigSpruceTree = LegacyBigSpruceTree(0.75f, 4)
+                            val `object` = LegacyBigSpruceTree(0.75f, 4)
                             `object`.setRandomTreeHeight(rand)
                             if (!this.ensureGrowable(level, rand, position, `object`.treeHeight)) {
                                 return false
@@ -198,21 +193,21 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
                 }
 
                 if (bigTree) {
-                    break
+                    return
                 }
-                val blockManager: BlockManager = BlockManager(this.level)
+                val blockManager = BlockManager(this.level)
                 LegacyTreeGenerator.growTree(
                     blockManager,
                     position.floorX,
-                    position.floorY, position.floorZ, RandomSourceProvider.create(),
-                    woodType, false
+                    position.floorY, position.floorZ, create(),
+                    getWoodType(), false
                 )
-                val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
+                val ev = StructureGrowEvent(this, blockManager.blocks)
                 Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return
                 }
-                if (level.getBlock(vector3!!)!!.id == BlockID.DIRT_WITH_ROOTS) {
+                if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
                     level.setBlock(vector3, get(BlockID.DIRT))
                 }
                 blockManager.applySubChunkUpdate(ev.blockList)
@@ -223,19 +218,19 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
             }
 
             else -> {
-                val blockManager: BlockManager = BlockManager(this.level)
+                val blockManager = BlockManager(this.level)
                 LegacyTreeGenerator.growTree(
                     blockManager,
                     position.floorX,
-                    position.floorY, position.floorZ, RandomSourceProvider.create(),
-                    woodType, false
+                    position.floorY, position.floorZ, create(),
+                    getWoodType(), false
                 )
-                val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
+                val ev = StructureGrowEvent(this, blockManager.blocks)
                 Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return
                 }
-                if (level.getBlock(vector3!!)!!.id == BlockID.DIRT_WITH_ROOTS) {
+                if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
                     level.setBlock(vector3, get(BlockID.DIRT))
                 }
                 blockManager.applySubChunkUpdate(ev.blockList)
@@ -244,31 +239,31 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
         }
 
         if (bigTree) {
-            level.setBlock(vector3!!, get(BlockID.AIR), true, false)
-            level.setBlock(vector3.add(1.0, 0.0, 0.0)!!, get(BlockID.AIR), true, false)
-            level.setBlock(vector3.add(0.0, 0.0, 1.0)!!, get(BlockID.AIR), true, false)
-            level.setBlock(vector3.add(1.0, 0.0, 1.0)!!, get(BlockID.AIR), true, false)
+            level.setBlock(vector3, get(BlockID.AIR), direct = true, update = false)
+            level.setBlock(vector3.add(1.0, 0.0, 0.0), get(BlockID.AIR), direct = true, update = false)
+            level.setBlock(vector3.add(0.0, 0.0, 1.0), get(BlockID.AIR), direct = true, update = false)
+            level.setBlock(vector3.add(1.0, 0.0, 1.0), get(BlockID.AIR), direct = true, update = false)
         } else {
-            level.setBlock(this.position, get(BlockID.AIR), true, false)
+            level.setBlock(this.position, get(BlockID.AIR), direct = true, update = false)
         }
 
-        val blockManager: BlockManager = BlockManager(this.level)
-        val success: Boolean = generator.generate(blockManager, RandomSourceProvider.create(), vector3)
-        val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
+        val blockManager = BlockManager(this.level)
+        val success: Boolean = generator?.generate(blockManager, create(), vector3) == true
+        val ev = StructureGrowEvent(this, blockManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled || !success) {
             if (bigTree) {
-                level.setBlock(vector3!!, this, true, false)
-                level.setBlock(vector3.add(1.0, 0.0, 0.0)!!, this, true, false)
-                level.setBlock(vector3.add(0.0, 0.0, 1.0)!!, this, true, false)
-                level.setBlock(vector3.add(1.0, 0.0, 1.0)!!, this, true, false)
+                level.setBlock(vector3, this, direct = true, update = false)
+                level.setBlock(vector3.add(1.0, 0.0, 0.0), this, direct = true, update = false)
+                level.setBlock(vector3.add(0.0, 0.0, 1.0), this, direct = true, update = false)
+                level.setBlock(vector3.add(1.0, 0.0, 1.0), this, direct = true, update = false)
             } else {
-                level.setBlock(this.position, this, true, false)
+                level.setBlock(this.position, this, direct = true, update = false)
             }
             return
         }
 
-        if (level.getBlock(vector3!!)!!.id == BlockID.DIRT_WITH_ROOTS) {
+        if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
             level.setBlock(vector3, get(BlockID.DIRT))
         }
         blockManager.applySubChunkUpdate(ev.blockList)
@@ -276,9 +271,9 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
 
     private fun findSaplings(type: WoodType): Vector2? {
         val validVectorsList: MutableList<List<Vector2>> = ArrayList()
-        validVectorsList.add(Arrays.asList(Vector2(0.0, 0.0), Vector2(1.0, 0.0), Vector2(0.0, 1.0), Vector2(1.0, 1.0)))
+        validVectorsList.add(listOf(Vector2(0.0, 0.0), Vector2(1.0, 0.0), Vector2(0.0, 1.0), Vector2(1.0, 1.0)))
         validVectorsList.add(
-            Arrays.asList(
+            listOf(
                 Vector2(0.0, 0.0),
                 Vector2(-1.0, 0.0),
                 Vector2(0.0, -1.0),
@@ -286,7 +281,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
             )
         )
         validVectorsList.add(
-            Arrays.asList(
+            listOf(
                 Vector2(0.0, 0.0),
                 Vector2(1.0, 0.0),
                 Vector2(0.0, -1.0),
@@ -294,7 +289,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
             )
         )
         validVectorsList.add(
-            Arrays.asList(
+            listOf(
                 Vector2(0.0, 0.0),
                 Vector2(-1.0, 0.0),
                 Vector2(0.0, 1.0),
@@ -304,7 +299,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
         for (validVectors in validVectorsList) {
             var correct = true
             for (vector2 in validVectors) {
-                if (!this.isSameType(position.add(vector2.x, 0.0, vector2.y)!!, type)) correct = false
+                if (!this.isSameType(position.add(vector2.x, 0.0, vector2.y), type)) correct = false
             }
             if (correct) {
                 var lowestX = 0
@@ -321,7 +316,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
 
     fun isSameType(pos: Vector3, type: WoodType): Boolean {
         val block = level.getBlock(pos)
-        return block!!.id == this.id && (block as BlockSapling).woodType == type
+        return block!!.id == this.id && (block as BlockSapling).getWoodType() == type
     }
 
     override val isFertilizable: Boolean

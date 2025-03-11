@@ -158,7 +158,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CAKE, CommonBlockProperties.BITE_COUNTER)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CAKE, CommonBlockProperties.BITE_COUNTER)
+
     }
 }

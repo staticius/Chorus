@@ -30,6 +30,6 @@ class BlockMonsterEgg @JvmOverloads constructor(blockstate: BlockState? = Compan
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MONSTER_EGG, CommonBlockProperties.MONSTER_EGG_STONE_TYPE)
-            get() = Companion.field
+
     }
 }

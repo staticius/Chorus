@@ -105,7 +105,7 @@ class BlockDragonEgg : BlockFallable {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DRAGON_EGG)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DRAGON_EGG)
+
     }
 }

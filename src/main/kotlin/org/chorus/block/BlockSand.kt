@@ -28,6 +28,6 @@ open class BlockSand : BlockFallable, Natural {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SAND)
-            get() = Companion.field
+
     }
 }

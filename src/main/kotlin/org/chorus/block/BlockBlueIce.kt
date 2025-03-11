@@ -26,7 +26,7 @@ class BlockBlueIce : BlockPackedIce {
         get() = 4
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BLUE_ICE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BLUE_ICE)
+
     }
 }

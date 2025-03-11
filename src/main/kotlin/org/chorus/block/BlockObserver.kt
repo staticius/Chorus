@@ -148,10 +148,10 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.OBSERVER,
+BlockID.BlockID.OBSERVER,
             CommonBlockProperties.MINECRAFT_FACING_DIRECTION,
             CommonBlockProperties.POWERED_BIT
         )
-            get() = Companion.field
+
     }
 }

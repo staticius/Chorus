@@ -176,6 +176,6 @@ open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blo
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.UNDYED_SHULKER_BOX, Set.of(BlockTags.PNX_SHULKERBOX))
-            get() = Companion.field
+
     }
 }

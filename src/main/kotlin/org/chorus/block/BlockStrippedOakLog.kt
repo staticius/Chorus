@@ -15,6 +15,6 @@ class BlockStrippedOakLog @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.STRIPPED_OAK_LOG, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

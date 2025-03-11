@@ -102,6 +102,6 @@ open class BlockPumpkin : BlockSolid, Faceable, Natural {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PUMPKIN, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-            get() = Companion.field
+
     }
 }

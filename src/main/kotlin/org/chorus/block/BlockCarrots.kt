@@ -41,7 +41,7 @@ class BlockCarrots @JvmOverloads constructor(blockstate: BlockState? = Companion
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CARROTS, CommonBlockProperties.GROWTH)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CARROTS, CommonBlockProperties.GROWTH)
+
     }
 }

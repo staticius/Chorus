@@ -24,7 +24,7 @@ open class BlockCutCopper @JvmOverloads constructor(blockstate: BlockState? = Co
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CUT_COPPER)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CUT_COPPER)
+
     }
 }

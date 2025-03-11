@@ -24,7 +24,7 @@ class BlockCrackedNetherBricks @JvmOverloads constructor(blockstate: BlockState?
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRACKED_NETHER_BRICKS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRACKED_NETHER_BRICKS)
+
     }
 }

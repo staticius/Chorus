@@ -651,7 +651,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(CAULDRON, CommonBlockProperties.CAULDRON_LIQUID, CommonBlockProperties.FILL_LEVEL)
-            get() = Companion.field
+            BlockProperties(BlockID.CAULDRON, CommonBlockProperties.CAULDRON_LIQUID, CommonBlockProperties.FILL_LEVEL)
+
     }
 }

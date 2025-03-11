@@ -258,7 +258,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DISPENSER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TRIGGERED_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.DISPENSER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TRIGGERED_BIT)
+            
     }
 }

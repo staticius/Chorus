@@ -24,7 +24,7 @@ class BlockBambooMosaicDoubleSlab @JvmOverloads constructor(blockstate: BlockSta
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BAMBOO_MOSAIC_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.BAMBOO_MOSAIC_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+            
     }
 }

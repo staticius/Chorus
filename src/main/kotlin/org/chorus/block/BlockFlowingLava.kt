@@ -192,7 +192,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
         get() = 0.3
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FLOWING_LAVA, CommonBlockProperties.LIQUID_DEPTH)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FLOWING_LAVA, CommonBlockProperties.LIQUID_DEPTH)
+
     }
 }

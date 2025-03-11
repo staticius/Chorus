@@ -7,6 +7,6 @@ class BlockLightBlock5 @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIGHT_BLOCK_5)
-            get() = Companion.field
+
     }
 }

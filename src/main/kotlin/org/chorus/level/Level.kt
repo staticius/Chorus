@@ -40,6 +40,7 @@ import it.unimi.dsi.fastutil.longs.*
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectIterator
 import org.chorus.api.NonComputationAtomic
+import org.chorus.event.level.ChunkLoadEvent
 import org.chorus.level.vibration.VibrationManager
 import org.chorus.metadata.Metadatable
 import org.chorus.scheduler.BlockUpdateScheduler
@@ -80,7 +81,7 @@ class Level(
     private val blockEntities = Long2ObjectNonBlockingMap<BlockEntity>()
 
     @NonComputationAtomic
-    private val players = Long2ObjectNonBlockingMap<Player>()
+    val players = Long2ObjectNonBlockingMap<Player>()
 
     @NonComputationAtomic
     private val entities = Long2ObjectNonBlockingMap<Entity>()
@@ -551,12 +552,12 @@ class Level(
         return Collections.emptyMap()
     }
 
-    fun getChunkLoaders(chunkX: Int, chunkZ: Int): Array<ChunkLoader?> {
+    fun getChunkLoaders(chunkX: Int, chunkZ: Int): Array<ChunkLoader> {
         val index = chunkHash(chunkX, chunkZ)
         return if (chunkLoaders.containsKey(index)) {
-            chunkLoaders[index].values().toArray<ChunkLoader>(ChunkLoader.Companion.EMPTY_ARRAY)
+            chunkLoaders[index].values.toTypedArray()
         } else {
-            ChunkLoader.Companion.EMPTY_ARRAY
+            ChunkLoader.EMPTY_ARRAY
         }
     }
 
@@ -3711,15 +3712,15 @@ class Level(
         } else false
     }
 
-    fun getChunk(chunkX: Int, chunkZ: Int): IChunk? {
+    fun getChunk(chunkX: Int, chunkZ: Int): IChunk {
         return this.getChunk(chunkX, chunkZ, false)
     }
 
-    fun getChunk(pos: ChunkVector2): IChunk? {
+    fun getChunk(pos: ChunkVector2): IChunk {
         return getChunk(pos.x, pos.z, false)
     }
 
-    fun getChunk(chunkX: Int, chunkZ: Int, create: Boolean): IChunk? {
+    fun getChunk(chunkX: Int, chunkZ: Int, create: Boolean): IChunk {
         val index = chunkHash(chunkX, chunkZ)
         var chunk = requireProvider().getLoadedChunk(index)
         if (chunk == null) {
@@ -3757,20 +3758,13 @@ class Level(
         return forceLoadChunk(index, x, z, generate) != null
     }
 
-    private fun forceLoadChunk(index: Long, x: Int, z: Int, generate: Boolean): IChunk? {
+    private fun forceLoadChunk(index: Long, x: Int, z: Int, generate: Boolean): IChunk {
         val chunk = requireProvider().getChunk(x, z, generate)
-        if (chunk == null) {
-            check(!generate) { "Could not create new Chunk" }
-            return null
+        if (chunk == null && !generate) {
+            throw IllegalStateException("Could not create new Chunk")
         }
 
-        if (chunk.provider != null) {
-            Server.instance.pluginManager.callEvent(ChunkLoadEvent(chunk, !chunk.isGenerated))
-        } else {
-            this.unloadChunk(x, z, false)
-            return chunk
-        }
-
+        Server.instance.pluginManager.callEvent(ChunkLoadEvent(chunk, !chunk.isGenerated))
         chunk.initChunk()
 
         if (this.isChunkInUse(index)) {

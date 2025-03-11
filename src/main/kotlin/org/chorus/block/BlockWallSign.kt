@@ -46,6 +46,6 @@ open class BlockWallSign @JvmOverloads constructor(blockState: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

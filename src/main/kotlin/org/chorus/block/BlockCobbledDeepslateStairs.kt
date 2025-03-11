@@ -26,10 +26,10 @@ class BlockCobbledDeepslateStairs @JvmOverloads constructor(blockstate: BlockSta
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            COBBLED_DEEPSLATE_STAIRS,
+BlockID.COBBLED_DEEPSLATE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+            
     }
 }

@@ -35,6 +35,6 @@ class BlockResinClump @JvmOverloads constructor(blockstate: BlockState? = Compan
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.RESIN_CLUMP, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
-            get() = Companion.field
+
     }
 }

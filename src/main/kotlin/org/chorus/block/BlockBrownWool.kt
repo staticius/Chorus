@@ -11,7 +11,7 @@ class BlockBrownWool @JvmOverloads constructor(blockstate: BlockState? = Compani
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BROWN_WOOL, Set.of(BlockTags.PNX_WOOL))
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BROWN_WOOL, Set.of(BlockTags.PNX_WOOL))
+
     }
 }

@@ -52,7 +52,7 @@ class BlockRespawnAnchor : Block {
         fz: Float
     ): Boolean {
         val charge = charge
-        if (item.blockId == BlockID.GLOWSTONE && charge < CommonBlockProperties.RESPAWN_ANCHOR_CHARGE.getMax()) {
+        if (item.BlockID.== BlockID.GLOWSTONE && charge < CommonBlockProperties.RESPAWN_ANCHOR_CHARGE.getMax()) {
             if (player == null || !player.isCreative) {
                 item.count--
             }
@@ -171,6 +171,6 @@ class BlockRespawnAnchor : Block {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.RESPAWN_ANCHOR, CommonBlockProperties.RESPAWN_ANCHOR_CHARGE)
-            get() = Companion.field
+
     }
 }

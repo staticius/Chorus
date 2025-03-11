@@ -47,6 +47,6 @@ class BlockTallGrass @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TALL_GRASS, CommonBlockProperties.UPPER_BLOCK_BIT)
-            get() = Companion.field
+            
     }
 }

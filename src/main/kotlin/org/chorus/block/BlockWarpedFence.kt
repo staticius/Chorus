@@ -13,6 +13,6 @@ class BlockWarpedFence @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_FENCE)
-            get() = Companion.field
+            
     }
 }

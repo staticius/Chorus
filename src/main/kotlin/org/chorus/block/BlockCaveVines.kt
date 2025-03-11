@@ -147,8 +147,8 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
         }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CAVE_VINES, CommonBlockProperties.GROWING_PLANT_AGE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CAVE_VINES, CommonBlockProperties.GROWING_PLANT_AGE)
+
 
         fun isValidSupport(block: Block): Boolean {
             return if (block is BlockLiquid) false

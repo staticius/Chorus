@@ -21,7 +21,7 @@ class BlockBambooWallSign @JvmOverloads constructor(blockState: BlockState? = Co
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BAMBOO_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+
     }
 }

@@ -31,6 +31,6 @@ open class BlockTuff : BlockSolid {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TUFF)
-            get() = Companion.field
+
     }
 }

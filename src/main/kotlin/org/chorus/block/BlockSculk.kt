@@ -47,6 +47,6 @@ class BlockSculk @JvmOverloads constructor(blockstate: BlockState? = Companion.p
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SCULK)
-            get() = Companion.field
+
     }
 }

@@ -30,7 +30,7 @@ class BlockCoalBlock @JvmOverloads constructor(blockstate: BlockState? = Compani
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(COAL_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.COAL_BLOCK)
+
     }
 }

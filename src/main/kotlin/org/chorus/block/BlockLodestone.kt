@@ -128,6 +128,6 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LODESTONE)
-            get() = Companion.field
+
     }
 }

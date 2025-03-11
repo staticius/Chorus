@@ -12,6 +12,6 @@ class BlockRoseBush : BlockDoublePlant {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.ROSE_BUSH, CommonBlockProperties.UPPER_BLOCK_BIT)
-            get() = Companion.field
+
     }
 }

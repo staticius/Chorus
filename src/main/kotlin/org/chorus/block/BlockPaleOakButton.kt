@@ -9,10 +9,10 @@ class BlockPaleOakButton @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.PALE_OAK_BUTTON,
+BlockID.BlockID.PALE_OAK_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

@@ -7,6 +7,6 @@ class BlockWarpedNylium @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_NYLIUM)
-            get() = Companion.field
+
     }
 }

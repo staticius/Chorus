@@ -40,7 +40,7 @@ class BlockDaylightDetectorInverted @JvmOverloads constructor(blockState: BlockS
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DAYLIGHT_DETECTOR_INVERTED, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+            BlockProperties(BlockID.DAYLIGHT_DETECTOR_INVERTED, CommonBlockProperties.REDSTONE_SIGNAL)
+
     }
 }

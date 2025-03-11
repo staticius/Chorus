@@ -6,7 +6,7 @@ class BlockCherryPlanks @JvmOverloads constructor(blockstate: BlockState? = Comp
         get() = "Cherry Planks"
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CHERRY_PLANKS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CHERRY_PLANKS)
+
     }
 }

@@ -14,10 +14,10 @@ class BlockSpruceLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.SPRUCE_LEAVES,
+BlockID.BlockID.SPRUCE_LEAVES,
             CommonBlockProperties.PERSISTENT_BIT,
             CommonBlockProperties.UPDATE_BIT
         )
-            get() = Companion.field
+
     }
 }

@@ -43,6 +43,6 @@ class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIT_REDSTONE_LAMP)
-            get() = Companion.field
+
     }
 }

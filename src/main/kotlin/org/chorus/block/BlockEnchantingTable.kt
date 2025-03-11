@@ -119,7 +119,7 @@ class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState? = C
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(ENCHANTING_TABLE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.ENCHANTING_TABLE)
+
     }
 }

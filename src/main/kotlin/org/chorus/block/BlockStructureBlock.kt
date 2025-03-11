@@ -94,6 +94,6 @@ class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState? = Co
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STRUCTURE_BLOCK, CommonBlockProperties.STRUCTURE_BLOCK_TYPE)
-            get() = Companion.field
+
     }
 }

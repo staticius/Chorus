@@ -39,6 +39,6 @@ class BlockWallBanner @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WALL_BANNER, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

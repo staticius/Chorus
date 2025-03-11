@@ -22,6 +22,6 @@ class BlockTorchflower @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TORCHFLOWER)
-            get() = Companion.field
+
     }
 }

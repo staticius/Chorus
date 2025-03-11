@@ -336,7 +336,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.VINE, CommonBlockProperties.VINE_DIRECTION_BITS)
-            get() = Companion.field
+
 
         fun getMetaFromFaces(faces: Set<BlockFace>): Int {
             var meta = 0

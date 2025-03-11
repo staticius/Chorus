@@ -240,6 +240,6 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NOTEBLOCK)
-            get() = Companion.field
+
     }
 }

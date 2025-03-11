@@ -73,6 +73,6 @@ class BlockJukebox @JvmOverloads constructor(blockstate: BlockState? = Companion
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.Companion.JUKEBOX)
-            get() = Companion.field
+
     }
 }

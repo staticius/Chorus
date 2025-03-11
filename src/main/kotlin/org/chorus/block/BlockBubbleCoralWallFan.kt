@@ -15,7 +15,7 @@ class BlockBubbleCoralWallFan : BlockCoralWallFan {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BUBBLE_CORAL_WALL_FAN, CommonBlockProperties.CORAL_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BUBBLE_CORAL_WALL_FAN, CommonBlockProperties.CORAL_DIRECTION)
+
     }
 }

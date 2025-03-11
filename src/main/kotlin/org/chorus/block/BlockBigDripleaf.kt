@@ -286,11 +286,11 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BIG_DRIPLEAF,
+BlockID.BIG_DRIPLEAF,
             CommonBlockProperties.BIG_DRIPLEAF_HEAD,
             CommonBlockProperties.BIG_DRIPLEAF_TILT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

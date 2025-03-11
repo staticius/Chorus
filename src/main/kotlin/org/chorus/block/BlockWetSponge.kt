@@ -50,6 +50,6 @@ class BlockWetSponge @JvmOverloads constructor(state: BlockState? = Companion.pr
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WET_SPONGE)
-            get() = Companion.field
+
     }
 }

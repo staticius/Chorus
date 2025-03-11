@@ -19,7 +19,7 @@ class BlockBambooMosaic @JvmOverloads constructor(blockstate: BlockState? = Comp
         get() = 5
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BAMBOO_MOSAIC)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_MOSAIC)
+
     }
 }

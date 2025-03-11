@@ -17,13 +17,13 @@ class BlockPaleMossCarpet @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.PALE_MOSS_CARPET,
+BlockID.BlockID.PALE_MOSS_CARPET,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_EAST,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_NORTH,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_SOUTH,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_WEST,
             CommonBlockProperties.UPPER_BLOCK_BIT
         )
-            get() = Companion.field
+
     }
 }

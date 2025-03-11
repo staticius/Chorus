@@ -10,6 +10,6 @@ class BlockStickyPistonArmCollision @JvmOverloads constructor(blockstate: BlockS
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STICKY_PISTON_ARM_COLLISION, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

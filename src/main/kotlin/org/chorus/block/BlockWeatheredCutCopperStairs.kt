@@ -10,10 +10,10 @@ open class BlockWeatheredCutCopperStairs @JvmOverloads constructor(blockstate: B
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.WEATHERED_CUT_COPPER_STAIRS,
+BlockID.BlockID.WEATHERED_CUT_COPPER_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

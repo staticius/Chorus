@@ -28,6 +28,6 @@ class BlockPolishedDioriteSlab(blockState: BlockState?) : BlockSlab(blockState, 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.POLISHED_DIORITE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

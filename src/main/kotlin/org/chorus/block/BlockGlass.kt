@@ -28,7 +28,7 @@ open class BlockGlass : BlockTransparent {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GLASS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GLASS)
+
     }
 }

@@ -85,6 +85,6 @@ class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Compa
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SCULK_SENSOR, CommonBlockProperties.SCULK_SENSOR_PHASE)
-            get() = Companion.field
+
     }
 }

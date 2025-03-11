@@ -14,7 +14,7 @@ class BlockBrickBlock @JvmOverloads constructor(blockstate: BlockState? = Compan
         get() = ItemTool.TYPE_PICKAXE
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BRICK_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BRICK_BLOCK)
+            
     }
 }

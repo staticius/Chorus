@@ -11,6 +11,6 @@ class BlockWaxedWeatheredCopper @JvmOverloads constructor(blockstate: BlockState
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WAXED_WEATHERED_COPPER)
-            get() = Companion.field
+
     }
 }

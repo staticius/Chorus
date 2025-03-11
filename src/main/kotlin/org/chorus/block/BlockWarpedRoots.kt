@@ -7,6 +7,6 @@ class BlockWarpedRoots @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_ROOTS)
-            get() = Companion.field
+
     }
 }

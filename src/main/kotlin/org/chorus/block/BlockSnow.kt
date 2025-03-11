@@ -62,6 +62,6 @@ class BlockSnow : BlockSolid {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SNOW)
-            get() = Companion.field
+
     }
 }

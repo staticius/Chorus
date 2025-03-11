@@ -120,6 +120,6 @@ abstract class BlockCrops(blockState: BlockState?) : BlockFlowable(blockState) {
 
     companion object {
         val minimumLightLevel: Int = 9
-            get() = Companion.field
+
     }
 }

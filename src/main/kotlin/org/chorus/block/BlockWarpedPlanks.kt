@@ -18,6 +18,6 @@ class BlockWarpedPlanks @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_PLANKS)
-            get() = Companion.field
+            
     }
 }

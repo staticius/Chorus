@@ -23,6 +23,6 @@ open class BlockQuartzBlock @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.QUARTZ_BLOCK, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

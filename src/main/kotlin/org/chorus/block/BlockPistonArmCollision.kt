@@ -84,6 +84,6 @@ open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockSt
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PISTON_ARM_COLLISION, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

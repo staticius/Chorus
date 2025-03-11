@@ -9,10 +9,10 @@ class BlockRepeatingCommandBlock @JvmOverloads constructor(blockstate: BlockStat
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.REPEATING_COMMAND_BLOCK,
+BlockID.BlockID.REPEATING_COMMAND_BLOCK,
             CommonBlockProperties.CONDITIONAL_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

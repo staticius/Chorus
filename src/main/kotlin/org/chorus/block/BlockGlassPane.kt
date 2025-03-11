@@ -32,7 +32,7 @@ open class BlockGlassPane : BlockThin {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GLASS_PANE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GLASS_PANE)
+
     }
 }

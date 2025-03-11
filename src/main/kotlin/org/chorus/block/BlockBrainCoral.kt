@@ -11,7 +11,7 @@ open class BlockBrainCoral @JvmOverloads constructor(blockstate: BlockState? = C
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BRAIN_CORAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BRAIN_CORAL)
+            
     }
 }

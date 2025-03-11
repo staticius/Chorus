@@ -42,7 +42,7 @@ import kotlin.math.pow
 
 
 abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
-    Metadatable, AxisAlignedBB, BlockID, IVector3, Loggable {
+    Metadatable, AxisAlignedBB, BlockID.IVector3, Loggable {
     var blockState: BlockState? = null
     protected var color: BlockColor? = null
     @JvmField
@@ -465,12 +465,12 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         return ItemTool.TYPE_NONE
     }
 
-    private fun toolBreakTimeBonus0(toolType: Int, toolTier: Int, blockId: String): Double {
+    private fun toolBreakTimeBonus0(toolType: Int, toolTier: Int, BlockID.String): Double {
         if (toolType == ItemTool.TYPE_SWORD) {
-            if (blockId == BlockID.WEB) {
+            if (BlockID.== BlockID.WEB) {
                 return 15.0
             }
-            if (blockId == BlockID.BAMBOO) {
+            if (BlockID.== BlockID.BAMBOO) {
                 return 30.0
             }
             return 1.0
@@ -478,7 +478,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         if (toolType == ItemTool.TYPE_SHEARS) {
             if (this is BlockWool || this is BlockLeaves) {
                 return 5.0
-            } else if (blockId == BlockID.WEB) {
+            } else if (BlockID.== BlockID.WEB) {
                 return 15.0
             }
             return 1.0

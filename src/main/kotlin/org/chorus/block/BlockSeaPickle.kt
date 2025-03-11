@@ -216,6 +216,6 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState? = Compani
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SEA_PICKLE, CommonBlockProperties.CLUSTER_COUNT, CommonBlockProperties.DEAD_BIT)
-            get() = Companion.field
+
     }
 }

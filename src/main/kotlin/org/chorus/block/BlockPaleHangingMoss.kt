@@ -25,6 +25,6 @@ class BlockPaleHangingMoss @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PALE_HANGING_MOSS, CommonBlockProperties.TIP)
-            get() = Companion.field
+
     }
 }

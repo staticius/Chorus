@@ -9,7 +9,7 @@ class BlockDeadBubbleCoralBlock : BlockCoralBlock {
         get() = true
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DEAD_BUBBLE_CORAL_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DEAD_BUBBLE_CORAL_BLOCK)
+            
     }
 }

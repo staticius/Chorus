@@ -16,7 +16,7 @@ class BlockDarkPrismarineDoubleSlab @JvmOverloads constructor(blockstate: BlockS
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DARK_PRISMARINE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+            BlockProperties(BlockID.DARK_PRISMARINE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+
     }
 }

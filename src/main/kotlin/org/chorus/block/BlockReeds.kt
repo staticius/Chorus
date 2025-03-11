@@ -40,7 +40,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState? = Companion.p
             var count = 1
 
             for (i in 1..2) {
-                val id = level.getBlockIdAt(
+                val id = level.getBlockID.t(
                     position.floorX,
                     position.floorY - i, position.floorZ
                 )
@@ -187,6 +187,6 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState? = Companion.p
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REEDS, CommonBlockProperties.AGE_16)
-            get() = Companion.field
+
     }
 }

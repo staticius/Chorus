@@ -143,7 +143,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Comp
     }
 
     private fun getMaxCurrentStrength(pos: Vector3, maxStrength: Int): Int {
-        if (level.getBlockIdAt(pos.floorX, pos.floorY, pos.floorZ) != this.id) {
+        if (level.getBlockID.t(pos.floorX, pos.floorY, pos.floorZ) != this.id) {
             return maxStrength
         } else {
             val strength = level.getBlockStateAt(pos.floorX, pos.floorY, pos.floorZ)!!.getPropertyValue(
@@ -321,7 +321,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_WIRE, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+
 
         protected fun canConnectUpwardsTo(level: Level, pos: Vector3): Boolean {
             return canConnectTo(level.getBlock(pos)!!, null)

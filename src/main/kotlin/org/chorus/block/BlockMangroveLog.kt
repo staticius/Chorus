@@ -16,6 +16,6 @@ class BlockMangroveLog : BlockLog {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MANGROVE_LOG, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }

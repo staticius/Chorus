@@ -97,6 +97,6 @@ class BlockPaleMossBlock @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PALE_MOSS_BLOCK)
-            get() = Companion.field
+
     }
 }

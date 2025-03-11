@@ -16,7 +16,7 @@ class BlockDriedKelpBlock : BlockSolid {
         get() = 2.5
 
     companion object {
-        val properties: BlockProperties = BlockProperties(DRIED_KELP_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.DRIED_KELP_BLOCK)
+
     }
 }

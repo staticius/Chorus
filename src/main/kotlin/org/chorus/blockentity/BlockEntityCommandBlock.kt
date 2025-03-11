@@ -217,8 +217,8 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val isBlockEntityValid: Boolean
         get() {
-            val blockId = this.levelBlock.id
-            return blockId == BlockID.COMMAND_BLOCK || blockId == BlockID.CHAIN_COMMAND_BLOCK || blockId == BlockID.REPEATING_COMMAND_BLOCK
+            val BlockID.= this.levelBlock.id
+            return BlockID.== BlockID.COMMAND_BLOCK || BlockID.== BlockID.CHAIN_COMMAND_BLOCK || BlockID.== BlockID.REPEATING_COMMAND_BLOCK
         }
 
     override fun getName(): String {

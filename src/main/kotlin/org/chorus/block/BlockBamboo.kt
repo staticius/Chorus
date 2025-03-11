@@ -249,7 +249,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
             var count = 1
 
             for (i in 1..16) {
-                val id = level.getBlockIdAt(
+                val id = level.getBlockID.t(
                     position.floorX,
                     position.floorY - i, position.floorZ
                 )
@@ -261,7 +261,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
             }
 
             for (i in 1..16) {
-                val id = level.getBlockIdAt(
+                val id = level.getBlockID.t(
                     position.floorX,
                     position.floorY + i, position.floorZ
                 )
@@ -314,11 +314,11 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BAMBOO,
+BlockID.BAMBOO,
             CommonBlockProperties.AGE_BIT,
             CommonBlockProperties.BAMBOO_LEAF_SIZE,
             CommonBlockProperties.BAMBOO_STALK_THICKNESS
         )
-            get() = Companion.field
+
     }
 }

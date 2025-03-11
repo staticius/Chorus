@@ -27,7 +27,7 @@ class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
 
     override val isBlockEntityValid: Boolean
         get() = level
-            .getBlockIdAt(floorX, floorY, floorZ) === Block.JUKEBOX
+            .getBlockID.t(floorX, floorY, floorZ) === Block.JUKEBOX
 
     fun setRecordItem(recordItem: Item) {
         Objects.requireNonNull(recordItem, "Record item cannot be null")

@@ -65,7 +65,7 @@ interface BlockState {
             var specialValue: Short = 0
             for (value in propertyValues) {
                 specialValue =
-                    (specialValue.toInt() or (value.index shl (specialValueBits1 - value.propertyType.bitSize)).toShort()
+                    (specialValue.toInt() or (value.getIndex() shl (specialValueBits1 - value.propertyType.bitSize)).toShort()
                         .toInt()).toShort()
                 specialValueBits1 = (specialValueBits1 - value.propertyType.bitSize).toByte()
             }

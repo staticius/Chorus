@@ -82,6 +82,6 @@ class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.UNLIT_REDSTONE_TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
-            get() = Companion.field
+
     }
 }

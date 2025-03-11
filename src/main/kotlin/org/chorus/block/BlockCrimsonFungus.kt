@@ -43,7 +43,7 @@ class BlockCrimsonFungus @JvmOverloads constructor(blockstate: BlockState? = Com
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRIMSON_FUNGUS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_FUNGUS)
+            
     }
 }

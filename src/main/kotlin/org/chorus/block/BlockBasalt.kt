@@ -49,7 +49,7 @@ open class BlockBasalt @JvmOverloads constructor(blockstate: BlockState? = Compa
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BASALT, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BASALT, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }

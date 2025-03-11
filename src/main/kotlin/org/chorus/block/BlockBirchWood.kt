@@ -9,7 +9,7 @@ class BlockBirchWood(blockstate: BlockState?) : BlockWood(blockstate) {
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BIRCH_WOOD, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BIRCH_WOOD, CommonBlockProperties.PILLAR_AXIS)
+
     }
 }

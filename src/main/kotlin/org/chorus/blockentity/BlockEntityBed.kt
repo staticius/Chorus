@@ -22,7 +22,7 @@ class BlockEntityBed(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chu
     }
 
     override val isBlockEntityValid: Boolean
-        get() = level.getBlockIdAt(
+        get() = level.getBlockID.t(
             position.floorX,
             position.floorY,
             position.floorZ

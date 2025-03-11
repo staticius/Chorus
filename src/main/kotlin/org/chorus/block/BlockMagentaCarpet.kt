@@ -4,6 +4,6 @@ class BlockMagentaCarpet @JvmOverloads constructor(blockstate: BlockState? = Com
     BlockCarpet(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MAGENTA_CARPET)
-            get() = Companion.field
+
     }
 }

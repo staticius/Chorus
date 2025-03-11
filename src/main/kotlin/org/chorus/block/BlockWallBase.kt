@@ -14,13 +14,14 @@ import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.math.VectorMath.calculateAxis
 import org.chorus.math.VectorMath.calculateFace
 import org.chorus.utils.Faceable
+import org.chorus.utils.Loggable
 
 import java.util.*
 import kotlin.collections.Map
 import kotlin.collections.set
 
 
-abstract class BlockWallBase(blockstate: BlockState?) : BlockTransparent(blockstate), BlockConnectable {
+abstract class BlockWallBase(blockstate: BlockState?) : BlockTransparent(blockstate), BlockConnectable, Loggable {
     override val isSolid: Boolean
         get() = false
 
@@ -47,14 +48,21 @@ abstract class BlockWallBase(blockstate: BlockState?) : BlockTransparent(blockst
             }
 
             else -> {
-                if (above is BlockWallBase) {
-                    above.getConnectionType(face) != WallConnectionType.NONE
-                } else if (above is BlockConnectable) {
-                    (above as BlockConnectable).isConnected(face)
-                } else if (above is BlockPressurePlateBase || above is BlockStairs) {
-                    true
+                when (above) {
+                    is BlockWallBase -> {
+                        above.getConnectionType(face) != WallConnectionType.NONE
+                    }
+
+                    is BlockConnectable -> {
+                        (above as BlockConnectable).isConnected(face)
+                    }
+
+                    is BlockPressurePlateBase, is BlockStairs -> {
+                        true
+                    }
+
+                    else -> above.isSolid && !above.isTransparent || shouldBeTallBasedOnBoundingBox(above, face)
                 }
-                above.isSolid && !above.isTransparent || shouldBeTallBasedOnBoundingBox(above, face)
             }
         }
     }
@@ -94,7 +102,7 @@ abstract class BlockWallBase(blockstate: BlockState?) : BlockTransparent(blockst
                 try {
                     connect(blockFace, above!!, false)
                 } catch (e: RuntimeException) {
-                    BlockWallBase.log.error(
+                    log.error(
                         "Failed to connect the block {} at {} to {} which is {} at {}",
                         this, locator, blockFace, side, side!!.locator, e
                     )
@@ -380,28 +388,31 @@ abstract class BlockWallBase(blockstate: BlockState?) : BlockTransparent(blockst
         )
     }
 
-    override fun canConnect(block: Block): Boolean {
-        when (block.id) {
-            BlockID.GLASS_PANE, BlockID.IRON_BARS, BlockID.GLASS -> {
-                return true
-            }
-
-            else -> {
-                if (block is BlockGlassStained || block is BlockGlassPaneStained || block is BlockWallBase) {
+    override fun canConnect(block: Block?): Boolean {
+        if (block != null) {
+            when (block.id) {
+                BlockID.GLASS_PANE, BlockID.IRON_BARS, BlockID.GLASS -> {
                     return true
                 }
-                if (block is BlockFenceGate) {
-                    return block.blockFace!!.axis != calculateAxis(this.position, block.position)
+
+                else -> {
+                    if (block is BlockGlassStained || block is BlockGlassPaneStained || block is BlockWallBase) {
+                        return true
+                    }
+                    if (block is BlockFenceGate) {
+                        return block.blockFace!!.axis != calculateAxis(this.position, block.position)
+                    }
+                    if (block is BlockStairs) {
+                        return block.blockFace!!.getOpposite() == calculateFace(this.position, block.position)
+                    }
+                    if (block is BlockTrapdoor) {
+                        return block.isOpen && block.blockFace == calculateFace(this.position, block.position)
+                    }
+                    return block.isSolid && !block.isTransparent
                 }
-                if (block is BlockStairs) {
-                    return block.blockFace!!.getOpposite() == calculateFace(this.position, block.position)
-                }
-                if (block is BlockTrapdoor) {
-                    return block.isOpen && block.blockFace == calculateFace(this.position, block.position)
-                }
-                return block.isSolid && !block.isTransparent
             }
         }
+        return false
     }
 
     override fun isConnected(face: BlockFace): Boolean {

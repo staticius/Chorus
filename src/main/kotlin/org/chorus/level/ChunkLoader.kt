@@ -23,6 +23,6 @@ interface ChunkLoader {
     fun onChunkUnloaded(chunk: IChunk?)
 
     companion object {
-        val EMPTY_ARRAY: Array<ChunkLoader?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<ChunkLoader> = emptyArray()
     }
 }

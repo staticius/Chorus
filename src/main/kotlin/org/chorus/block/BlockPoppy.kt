@@ -7,6 +7,6 @@ class BlockPoppy : BlockFlower {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.POPPY)
-            get() = Companion.field
+
     }
 }

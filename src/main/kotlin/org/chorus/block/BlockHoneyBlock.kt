@@ -113,7 +113,7 @@ class BlockHoneyBlock @JvmOverloads constructor(blockstate: BlockState? = Compan
     companion object {
         private val RANDOM = Random()
 
-        val properties: BlockProperties = BlockProperties(HONEY_BLOCK)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.HONEY_BLOCK)
+
     }
 }

@@ -41,7 +41,7 @@ class BlockDropper @JvmOverloads constructor(blockstate: BlockState? = Companion
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DROPPER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TRIGGERED_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.DROPPER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TRIGGERED_BIT)
+
     }
 }

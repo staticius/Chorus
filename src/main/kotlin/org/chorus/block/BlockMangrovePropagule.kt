@@ -116,10 +116,10 @@ class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.MANGROVE_PROPAGULE,
+BlockID.BlockID.MANGROVE_PROPAGULE,
             CommonBlockProperties.HANGING,
             CommonBlockProperties.PROPAGULE_STAGE
         )
-            get() = Companion.field
+
     }
 }

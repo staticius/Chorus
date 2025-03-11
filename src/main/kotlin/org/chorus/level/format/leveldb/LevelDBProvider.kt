@@ -63,7 +63,7 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
         }
     }
 
-    fun loadChunk(index: Long, chunkX: Int, chunkZ: Int, create: Boolean): IChunk? {
+    fun loadChunk(index: Long, chunkX: Int, chunkZ: Int, create: Boolean): IChunk {
         var chunk: IChunk?
         try {
             chunk = storage.readChunk(chunkX, chunkZ, this)
@@ -93,11 +93,11 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
         }
     }
 
-    override val loadedChunks: Map<Long, IChunk>
+    override val loadedChunks: MutableMap<Long, IChunk>
         get() = Collections.unmodifiableMap(chunks)
 
-    override fun isChunkLoaded(X: Int, Z: Int): Boolean {
-        return isChunkLoaded(Level.Companion.chunkHash(X, Z))
+    override fun isChunkLoaded(x: Int, z: Int): Boolean {
+        return isChunkLoaded(Level.chunkHash(x, z))
     }
 
     fun putChunk(index: Long, chunk: IChunk?) {

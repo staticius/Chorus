@@ -268,6 +268,6 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SNOW_LAYER, CommonBlockProperties.COVERED_BIT, CommonBlockProperties.HEIGHT)
-            get() = Companion.field
+
     }
 }

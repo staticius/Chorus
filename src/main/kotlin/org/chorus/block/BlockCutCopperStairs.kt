@@ -38,10 +38,10 @@ open class BlockCutCopperStairs @JvmOverloads constructor(blockstate: BlockState
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            CUT_COPPER_STAIRS,
+BlockID.CUT_COPPER_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

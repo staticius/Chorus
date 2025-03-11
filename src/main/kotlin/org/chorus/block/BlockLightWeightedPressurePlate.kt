@@ -47,6 +47,6 @@ class BlockLightWeightedPressurePlate @JvmOverloads constructor(blockstate: Bloc
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.LIGHT_WEIGHTED_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-            get() = Companion.field
+
     }
 }

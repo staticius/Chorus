@@ -141,7 +141,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BARREL, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.OPEN_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.BARREL, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.OPEN_BIT)
+
     }
 }

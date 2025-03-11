@@ -97,7 +97,7 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(DETECTOR_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
-            get() = Companion.field
+            BlockProperties(BlockID.DETECTOR_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
+
     }
 }

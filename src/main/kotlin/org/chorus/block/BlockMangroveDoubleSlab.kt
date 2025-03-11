@@ -23,6 +23,6 @@ class BlockMangroveDoubleSlab @JvmOverloads constructor(blockstate: BlockState? 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MANGROVE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            get() = Companion.field
+
     }
 }

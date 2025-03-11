@@ -186,6 +186,6 @@ open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState?
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STANDING_BANNER, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-            get() = Companion.field
+
     }
 }

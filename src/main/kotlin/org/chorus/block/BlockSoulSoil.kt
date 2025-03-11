@@ -25,6 +25,6 @@ class BlockSoulSoil @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SOUL_SOIL)
-            get() = Companion.field
+
     }
 }

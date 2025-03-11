@@ -27,6 +27,6 @@ class BlockMelonStem @JvmOverloads constructor(blockstate: BlockState? = Compani
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MELON_STEM, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.GROWTH)
-            get() = Companion.field
+
     }
 }

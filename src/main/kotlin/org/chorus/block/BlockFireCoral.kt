@@ -9,7 +9,7 @@ open class BlockFireCoral @JvmOverloads constructor(blockstate: BlockState? = Co
         get() = BlockDeadFireCoral()
 
     companion object {
-        val properties: BlockProperties = BlockProperties(FIRE_CORAL)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.FIRE_CORAL)
+
     }
 }

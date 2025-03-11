@@ -246,12 +246,12 @@ open class BlockTrapdoor  //</editor-fold>
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.TRAPDOOR,
+BlockID.BlockID.TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-            get() = Companion.field
+
 
         private const val THICKNESS = 0.1875
 

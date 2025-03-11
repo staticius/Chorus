@@ -187,7 +187,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SWEET_BERRY_BUSH, CommonBlockProperties.GROWTH)
-            get() = Companion.field
+
 
         fun isSupportValid(block: Block): Boolean {
             return block.`is`(BlockTags.DIRT)

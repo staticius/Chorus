@@ -14,6 +14,6 @@ class BlockPitcherPlant @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PITCHER_PLANT, CommonBlockProperties.UPPER_BLOCK_BIT)
-            get() = Companion.field
+
     }
 }

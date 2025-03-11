@@ -144,8 +144,8 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
             val z = position.z.toInt()
             for (y in position.y.toInt() + 1..254) {
                 val blockAbove = level.getBlock(x, y, z)
-                val blockIdAbove = blockAbove!!.id
-                if (blockIdAbove != BlockID.Companion.KELP) {
+                val BlockID.bove = blockAbove!!.id
+                if (BlockID.bove != BlockID.Companion.KELP) {
                     if (blockAbove is BlockFlowingWater) {
                         if (blockAbove.isSourceOrFlowingDown) {
                             val highestKelp = level.getBlock(x, y - 1, z) as BlockKelp?
@@ -182,6 +182,6 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.Companion.KELP, CommonBlockProperties.KELP_AGE)
-            get() = Companion.field
+
     }
 }

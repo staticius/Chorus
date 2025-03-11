@@ -7,7 +7,7 @@ class BlockBambooFence @JvmOverloads constructor(blockstate: BlockState? = Compa
         get() = "Bamboo Fence"
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BAMBOO_FENCE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_FENCE)
+
     }
 }

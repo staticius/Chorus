@@ -12,7 +12,7 @@ class BlockCrimsonFence @JvmOverloads constructor(blockstate: BlockState? = Comp
         get() = 0
 
     companion object {
-        val properties: BlockProperties = BlockProperties(CRIMSON_FENCE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_FENCE)
+
     }
 }

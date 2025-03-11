@@ -16,7 +16,7 @@ open class BlockGoldOre @JvmOverloads constructor(blockstate: BlockState? = Comp
         get() = ItemTool.TIER_IRON
 
     companion object {
-        val properties: BlockProperties = BlockProperties(GOLD_ORE)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.GOLD_ORE)
+
     }
 }

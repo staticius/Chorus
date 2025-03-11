@@ -217,12 +217,12 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.TRIP_WIRE,
+BlockID.BlockID.TRIP_WIRE,
             CommonBlockProperties.POWERED_BIT,
             CommonBlockProperties.SUSPENDED_BIT,
             CommonBlockProperties.ATTACHED_BIT,
             CommonBlockProperties.DISARMED_BIT
         )
-            get() = Companion.field
+
     }
 }

@@ -203,7 +203,7 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(GRINDSTONE, CommonBlockProperties.ATTACHMENT, CommonBlockProperties.DIRECTION)
-            get() = Companion.field
+            BlockProperties(BlockID.GRINDSTONE, CommonBlockProperties.ATTACHMENT, CommonBlockProperties.DIRECTION)
+
     }
 }

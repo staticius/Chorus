@@ -362,11 +362,11 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BED,
+BlockID.BED,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.HEAD_PIECE_BIT,
             CommonBlockProperties.OCCUPIED_BIT
         )
-            get() = Companion.field
+
     }
 }

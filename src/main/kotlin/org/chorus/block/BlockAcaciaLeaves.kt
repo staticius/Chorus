@@ -10,12 +10,14 @@ class BlockAcaciaLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
     }
 
     override fun toSapling(): Item {
-        return Item.get(ACACIA_SAPLING)
+        return Item.get(Companion.properties.identifier)
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(ACACIA_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
-            get() = Companion.field
+            BlockProperties(BlockID.ACACIA_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
     }
 }

@@ -92,7 +92,7 @@ class BlockEndRod @JvmOverloads constructor(blockState: BlockState? = Companion.
         }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(END_ROD, CommonBlockProperties.FACING_DIRECTION)
-            get() = Companion.field
+        val properties: BlockProperties = BlockProperties(BlockID.END_ROD, CommonBlockProperties.FACING_DIRECTION)
+
     }
 }

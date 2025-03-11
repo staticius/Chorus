@@ -26,10 +26,10 @@ class BlockTuffStairs @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.TUFF_STAIRS,
+BlockID.BlockID.TUFF_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            get() = Companion.field
+
     }
 }

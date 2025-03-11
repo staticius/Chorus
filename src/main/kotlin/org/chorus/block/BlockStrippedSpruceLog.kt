@@ -16,6 +16,6 @@ class BlockStrippedSpruceLog @JvmOverloads constructor(blockstate: BlockState? =
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STRIPPED_SPRUCE_LOG, CommonBlockProperties.PILLAR_AXIS)
-            get() = Companion.field
+
     }
 }
