@@ -48,7 +48,7 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
 
     private val isWaterdog: Boolean
         get() {
-            if (waterdogXUID == null || Server.getInstance() == null) {
+            if (waterdogXUID == null || Server.instance == null) {
                 return false
             }
 

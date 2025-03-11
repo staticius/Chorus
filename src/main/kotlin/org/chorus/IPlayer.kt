@@ -44,7 +44,7 @@ interface IPlayer : ServerOperator, Metadatable {
      */
     val name: String?
 
-    val uniqueId: UUID?
+    val uuid: UUID?
 
     /**
      * 返回这个玩家是否被封禁(ban)。<br></br>

@@ -3161,9 +3161,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         return position.z
     }
 
-    override fun getVector3(): Vector3 {
-        return position.clone()
-    }
+    override val vector3: Vector3
+        get() {
+            return position.clone()
+        }
 
     companion object {
         const val TAG_CHESTED: String = "Chested"

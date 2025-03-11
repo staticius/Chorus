@@ -1104,15 +1104,15 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
         players[socketAddress] = player
         if (this.sendUsageTicker > 0) {
-            uniquePlayers.add(player.getUniqueId()!!)
+            uniquePlayers.add(player.getUuid()!!)
         }
     }
 
     @ApiStatus.Internal
     fun addOnlinePlayer(player: Player) {
-        playerList[player.getUniqueId()!!] = player
+        playerList[player.getUuid()!!] = player
         this.updatePlayerListData(
-            player.getUniqueId()!!,
+            player.getUuid()!!,
             player.getId(),
             player.getDisplayName(),
             player.getSkin()!!,
@@ -1124,14 +1124,14 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
     @ApiStatus.Internal
     fun removeOnlinePlayer(player: Player) {
-        if (playerList.containsKey(player.getUniqueId())) {
-            playerList.remove(player.getUniqueId())
+        if (playerList.containsKey(player.getUuid())) {
+            playerList.remove(player.getUuid())
 
             val pk = PlayerListPacket()
             pk.type = PlayerListPacket.TYPE_REMOVE
             pk.entries = arrayOf(
                 PlayerListPacket.Entry(
-                    player.getUniqueId()!!
+                    player.getUuid()!!
                 )
             )
 
@@ -1261,7 +1261,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         pk.entries = playerList.values.stream()
             .map { p: Player ->
                 PlayerListPacket.Entry(
-                    p.getUniqueId()!!,
+                    p.getUuid()!!,
                     p.getId(),
                     p.getDisplayName(),
                     p.getSkin()!!,

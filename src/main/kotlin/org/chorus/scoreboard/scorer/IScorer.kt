@@ -28,5 +28,5 @@ interface IScorer {
      * @param line 所属行
      * @return network信息
      */
-    fun toNetworkInfo(scoreboard: IScoreboard, line: IScoreboardLine): ScoreInfo
+    fun toNetworkInfo(scoreboard: IScoreboard, line: IScoreboardLine): ScoreInfo?
 }

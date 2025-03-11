@@ -61,7 +61,7 @@ open class ConsoleCommandSender : CommandSender {
         get() = false
 
     override val server: Server?
-        get() = Server.getInstance()
+        get() = Server.instance
 
     override fun sendMessage(message: String) {
         for (line in message.trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {

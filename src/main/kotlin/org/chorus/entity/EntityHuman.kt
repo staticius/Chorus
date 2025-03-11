@@ -63,7 +63,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
         this.skin = skin
     }
 
-    override fun getUniqueId(): UUID? {
+    fun getUuid(): UUID? {
         return uuid
     }
 
@@ -152,12 +152,12 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             check(skin!!.isValid()) { this.getClass().getSimpleName() + " must have a valid skin set" }
 
             if (this is Player) Server.instance.updatePlayerListData(
-                this.getUniqueId(),
+                this.getUuid(),
                 this.getId(), this.getDisplayName(),
                 this.skin, this.loginChainData.XUID, arrayOf(player)
             )
             else Server.instance.updatePlayerListData(
-                this.getUniqueId(),
+                this.getUuid(),
                 this.getId(),
                 this.getName(),
                 this.skin,
@@ -165,7 +165,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             )
 
             val pk: AddPlayerPacket = AddPlayerPacket()
-            pk.uuid = this.getUniqueId()
+            pk.uuid = this.getUuid()
             pk.username = this.getName()
             pk.entityUniqueId = this.getId()
             pk.entityRuntimeId = this.getId()
@@ -195,7 +195,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             }
 
             if (this !is Player) {
-                Server.instance.removePlayerListData(this.getUniqueId(), player)
+                Server.instance.removePlayerListData(this.getUuid(), player)
             }
         }
     }

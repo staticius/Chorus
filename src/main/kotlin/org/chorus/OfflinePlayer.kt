@@ -54,7 +54,7 @@ class OfflinePlayer @JvmOverloads constructor(uuid: UUID?, name: String? = null)
             return null
         }
 
-    override val uniqueId: UUID?
+    override val uuid: UUID?
         get() {
             if (namedTag != null) {
                 val least = namedTag.getLong("UUIDLeast")

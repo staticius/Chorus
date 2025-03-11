@@ -526,7 +526,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     }
 
     val server: Server
-        get() = Server.getInstance()
+        get() = Server.instance
 
     val player: Player?
         get() = if (this.handle == null) null else handle!!.player

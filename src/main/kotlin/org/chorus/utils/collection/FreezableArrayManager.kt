@@ -138,7 +138,7 @@ class FreezableArrayManager(
         val instance: FreezableArrayManager?
             get() {
                 try {
-                    val server = Server.getInstance()
+                    val server = Server.instance
                     if (server != null) {
                         val tmp = server.freezableArrayManager
                         if (tmp != null) {

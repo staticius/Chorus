@@ -12,7 +12,6 @@ interface IScoreboardLine {
      * 获取追踪对象
      * @return 追踪对象
      */
-    @JvmField
     val scorer: IScorer
 
     /**
@@ -26,14 +25,12 @@ interface IScoreboardLine {
      * 获取此计分行所属的计分板
      * @return 所属计分板
      */
-    @JvmField
     val scoreboard: IScoreboard
 
     /**
      * 获取分数
      * @return 分数
      */
-    @JvmField
     val score: Int
 
     /**

@@ -471,7 +471,7 @@ class PositionTrackingService(folder: File) : Closeable {
 
     @Throws(IOException::class)
     private fun handlerEnabled(trackingHandler: Int) {
-        val server = Server.getInstance()
+        val server = Server.instance
         for (player in server.onlinePlayers.values) {
             if (hasTrackingDevice(player, trackingHandler) && !isTracking(player, trackingHandler, false)) {
                 startTracking(player, trackingHandler, false)

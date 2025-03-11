@@ -2,7 +2,6 @@ package org.chorus.scoreboard.scorer
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.network.protocol.SetScorePacket.ScoreInfo
 import org.chorus.scoreboard.IScoreboard
 import org.chorus.scoreboard.IScoreboardLine
@@ -23,14 +22,13 @@ class PlayerScorer : IScorer {
     }
 
     constructor(player: Player) {
-        this.uuid = player.uniqueId
+        this.uuid = player.uuid
     }
 
     val player: Player?
         get() {
             if (uuid == null) return null
-            return if (Server.instance.getPlayer(uuid).isPresent) Server.getInstance()
-                .getPlayer(uuid).get() else null
+            return if (Server.instance.getPlayer(uuid).isPresent) Server.instance.getPlayer(uuid).get() else null
         }
 
     val isOnline: Boolean
@@ -43,16 +41,16 @@ class PlayerScorer : IScorer {
         return uuid?.hashCode() ?: 0
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (obj is PlayerScorer) {
-            return uuid == obj.uuid
+    override fun equals(other: Any?): Boolean {
+        if (other is PlayerScorer) {
+            return uuid == other.uuid
         }
         return false
     }
 
     override val name: String
         get() = if (Server.instance.onlinePlayers[uuid] == null) uuid!!.mostSignificantBits
-            .toString() else Server.instance.onlinePlayers[uuid].getName()
+            .toString() else Server.instance.onlinePlayers[uuid]!!.getName()
 
     override fun toNetworkInfo(scoreboard: IScoreboard, line: IScoreboardLine): ScoreInfo? {
         if (uuid == null) return null

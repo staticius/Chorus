@@ -60,7 +60,7 @@ class GameMockExtension : MockitoExtension() {
 
     override fun beforeEach(context: ExtensionContext) {
         serverMockedStatic = Mockito.mockStatic(Server::class.java)
-        serverMockedStatic.`when`<Any>(Verification { Server.getInstance() }).thenReturn(server)
+        serverMockedStatic.`when`<Any>(Verification { Server.instance }).thenReturn(server)
         super.beforeEach(context)
     }
 
@@ -138,7 +138,7 @@ class GameMockExtension : MockitoExtension() {
 
         init {
             Mockito.mockStatic(Server::class.java).use { serverMockedStatic ->
-                serverMockedStatic.`when`<Any> { Server.getInstance() }.thenReturn(server)
+                serverMockedStatic.`when`<Any> { Server.instance }.thenReturn(server)
                 Registries.PACKET.init()
                 Registries.ENTITY.init()
                 Profession.init()
