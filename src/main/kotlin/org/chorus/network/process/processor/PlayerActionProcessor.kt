@@ -90,7 +90,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerJumpEvent = PlayerJumpEvent(player)
-                Server.instance.getPluginManager().callEvent(playerJumpEvent)
+                Server.instance.pluginManager.callEvent(playerJumpEvent)
             }
 
             PlayerActionPacket.ACTION_START_SPRINT -> {
@@ -99,7 +99,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerToggleSprintEvent = PlayerToggleSprintEvent(player, true)
-                Server.instance.getPluginManager().callEvent(playerToggleSprintEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSprintEvent)
                 if (playerToggleSprintEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -113,7 +113,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerToggleSprintEvent = PlayerToggleSprintEvent(player, false)
-                Server.instance.getPluginManager().callEvent(playerToggleSprintEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSprintEvent)
                 if (playerToggleSprintEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -127,7 +127,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerToggleSneakEvent = PlayerToggleSneakEvent(player, true)
-                Server.instance.getPluginManager().callEvent(playerToggleSneakEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSneakEvent)
                 if (playerToggleSneakEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -141,7 +141,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerToggleSneakEvent = PlayerToggleSneakEvent(player, false)
-                Server.instance.getPluginManager().callEvent(playerToggleSneakEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSneakEvent)
                 if (playerToggleSneakEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -162,7 +162,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerToggleGlideEvent = PlayerToggleGlideEvent(player, true)
-                Server.instance.getPluginManager().callEvent(playerToggleGlideEvent)
+                Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
                 if (playerToggleGlideEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -176,7 +176,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerToggleGlideEvent = PlayerToggleGlideEvent(player, false)
-                Server.instance.getPluginManager().callEvent(playerToggleGlideEvent)
+                Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
                 if (playerToggleGlideEvent.isCancelled) {
                     player.sendData(player)
                 } else {
@@ -190,7 +190,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val ptse = PlayerToggleSwimEvent(player, true)
-                Server.instance.getPluginManager().callEvent(ptse)
+                Server.instance.pluginManager.callEvent(ptse)
 
                 if (ptse.isCancelled) {
                     player.sendData(player)
@@ -205,7 +205,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val ev = PlayerToggleSwimEvent(player, false)
-                Server.instance.getPluginManager().callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
 
                 if (ev.isCancelled) {
                     player.sendData(player)
@@ -247,7 +247,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerToggleSpinAttackEvent = PlayerToggleSpinAttackEvent(player, true)
-                Server.instance.getPluginManager().callEvent(playerToggleSpinAttackEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSpinAttackEvent)
 
                 if (playerToggleSpinAttackEvent.isCancelled) {
                     player.sendPosition(
@@ -271,7 +271,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
             PlayerActionPacket.ACTION_STOP_SPIN_ATTACK -> {
                 val playerToggleSpinAttackEvent = PlayerToggleSpinAttackEvent(player, false)
-                Server.instance.getPluginManager().callEvent(playerToggleSpinAttackEvent)
+                Server.instance.pluginManager.callEvent(playerToggleSpinAttackEvent)
 
                 if (playerToggleSpinAttackEvent.isCancelled) {
                     player.sendData(player)
@@ -291,7 +291,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                     break
                 }
                 val playerToggleFlightEvent = PlayerToggleFlightEvent(player, true)
-                Server.instance.getPluginManager().callEvent(playerToggleFlightEvent)
+                Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
                 if (playerToggleFlightEvent.isCancelled) {
                     player.adventureSettings.update()
                 } else {
@@ -305,7 +305,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 val playerToggleFlightEvent = PlayerToggleFlightEvent(player, false)
-                Server.instance.getPluginManager().callEvent(playerToggleFlightEvent)
+                Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
                 if (playerToggleFlightEvent.isCancelled) {
                     player.adventureSettings.update()
                 } else {

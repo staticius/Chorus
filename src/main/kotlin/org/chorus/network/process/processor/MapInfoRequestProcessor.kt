@@ -47,7 +47,7 @@ class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
 
         if (mapItem != null) {
             val event: PlayerMapInfoRequestEvent
-            Server.instance.getPluginManager()
+            Server.instance.pluginManager
                 .callEvent(PlayerMapInfoRequestEvent(player, mapItem).also { event = it })
 
             if (!event.isCancelled) {

@@ -309,9 +309,12 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     val enabledNetworkEncryption: Boolean = properties.get(ServerPropertiesKeys.NETWORK_ENCRYPTION, true)
 
     /**default levels */
-    private var defaultLevel: Level? = null
-    private var defaultNether: Level? = null
-    private var defaultEnd: Level? = null
+    var defaultLevel: Level? = null
+        private set
+    var defaultNether: Level? = null
+        private set
+    var defaultEnd: Level? = null
+        private set
 
     val allowNether: Boolean = properties.get(ServerPropertiesKeys.ALLOW_NETHER, true)
     val allowEnd: Boolean = properties.get(ServerPropertiesKeys.ALLOW_THE_END, true)

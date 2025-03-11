@@ -176,7 +176,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             Collections.addAll(items, *d)
         }
         val craftItemEvent = CraftItemEvent(player, items.toArray(Item.EMPTY_ARRAY), recipe, numberOfRequestedCrafts)
-        Server.instance.getPluginManager().callEvent(craftItemEvent)
+        Server.instance.pluginManager.callEvent(craftItemEvent)
         if (craftItemEvent.isCancelled) {
             return context.error()
         }

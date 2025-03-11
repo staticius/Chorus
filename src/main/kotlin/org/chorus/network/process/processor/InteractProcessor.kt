@@ -38,7 +38,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
             }
 
             val event = PlayerHackDetectedEvent(player, PlayerHackDetectedEvent.HackType.INVALID_PVE)
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
 
             if (event.isKick) player.kick(
                 PlayerKickEvent.Reason.INVALID_PVE,
@@ -56,7 +56,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                 if (pk.target == 0L) {
                     return
                 }
-                Server.instance.getPluginManager().callEvent(PlayerMouseOverEntityEvent(player, targetEntity))
+                Server.instance.pluginManager.callEvent(PlayerMouseOverEntityEvent(player, targetEntity))
             }
 
             InteractPacket.ACTION_VEHICLE_EXIT -> {

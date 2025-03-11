@@ -70,14 +70,14 @@ open class ConsoleCommandSender : CommandSender {
     }
 
     override fun sendMessage(message: TextContainer) {
-        this.sendMessage(Server.instance.language.tr(message))
+        this.sendMessage(Server.instance.baseLang.tr(message))
     }
 
     override fun sendCommandOutput(container: CommandOutputContainer) {
         if (this.transform.level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             for (msg in container.messages) {
                 var text =
-                    Server.instance.language.tr(TranslationContainer(msg.messageId, *msg.parameters))
+                    Server.instance.baseLang.tr(TranslationContainer(msg.messageId, *msg.parameters))
                 val event: ConsoleCommandOutputEvent = ConsoleCommandOutputEvent(this, text)
                 Server.instance.pluginManager.callEvent(event)
                 if (event.isCancelled()) continue

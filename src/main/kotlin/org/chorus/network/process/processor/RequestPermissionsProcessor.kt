@@ -11,7 +11,7 @@ class RequestPermissionsProcessor : DataPacketProcessor<RequestPermissionsPacket
         if (!playerHandle.player.isOp) {
             val event =
                 PlayerHackDetectedEvent(playerHandle.player, PlayerHackDetectedEvent.HackType.PERMISSION_REQUEST)
-            playerHandle.Server.instance.getPluginManager().callEvent(event)
+            playerHandle.Server.instance.pluginManager.callEvent(event)
 
             if (event.isKick) playerHandle.player.kick("Illegal permission operation", true)
 

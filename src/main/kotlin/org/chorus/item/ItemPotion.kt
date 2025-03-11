@@ -41,7 +41,7 @@ class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             return false
         }
         val consumeEvent = PlayerItemConsumeEvent(player, this)
-        Server.instance.getPluginManager().callEvent(consumeEvent)
+        Server.instance.pluginManager.callEvent(consumeEvent)
         if (consumeEvent.isCancelled) {
             return false
         }

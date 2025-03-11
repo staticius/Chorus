@@ -24,14 +24,14 @@ class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
         if (!Server.instance.allowFlight && pk.boolValue && !player.adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
         ) {
             val pife = PlayerIllegalFlightEvent(player)
-            Server.instance.getPluginManager().callEvent(pife)
+            Server.instance.pluginManager.callEvent(pife)
             if (!pife.isKick) return
             player.kick(PlayerKickEvent.Reason.FLYING_DISABLED, "Flying is not enabled on this server")
             return
         }
 
         val playerToggleFlightEvent = PlayerToggleFlightEvent(player, pk.boolValue)
-        Server.instance.getPluginManager().callEvent(playerToggleFlightEvent)
+        Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
         if (playerToggleFlightEvent.isCancelled) {
             player.adventureSettings.update()
         } else {

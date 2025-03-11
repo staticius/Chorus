@@ -3,11 +3,13 @@ package org.chorus.level
 import org.chorus.block.*
 import org.chorus.blockentity.BlockEntity
 import org.chorus.level.format.IChunk
+import org.chorus.math.BlockFace
+import org.chorus.math.IVector3
 import org.chorus.math.Vector3
+import org.chorus.positiontracking.NamedPosition
 
 
-
-open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) : NamedPosition, Cloneable, IVector3 {
+open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) : NamedPosition, IVector3, Cloneable {
     constructor(level: Level) : this(0.0, 0.0, 0.0, level)
 
     constructor(x: Double, y: Double, z: Double, level: Level) : this(Vector3(x, y, z), level)
@@ -21,15 +23,14 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
     val floorZ: Int
         get() = position.floorZ
 
-    val vector3: Vector3
+    override val vector3: Vector3
         get() = position.clone()
 
     val locator: Locator
         get() = this.clone()
 
-    @SneakyThrows
     override fun clone(): Locator {
-        return super.clone() as Locator
+        return super<Cloneable>.clone() as Locator
     }
 
     fun setLevel(level: Level): Locator {
@@ -100,16 +101,16 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
         return level.getTickCachedBlock(this.position, layer)
     }
 
-    val levelName: String
-        get() = level.name!!
+    override val levelName: String
+        get() = level.name
 
-    val x: Double
+    override val x: Double
         get() = position.x
 
-    val y: Double
+    override val y: Double
         get() = position.y
 
-    val z: Double
+    override val z: Double
         get() = position.z
 
     val chunk: IChunk?

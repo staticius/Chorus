@@ -38,7 +38,7 @@ class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>(
             val response = window.respond(player, pk.data.trim { it <= ' ' })
 
             val event = PlayerFormRespondedEvent(player, pk.formId, window, response!!)
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
         } else if (playerHandle.serverSettings.containsKey(pk.formId)) {
             val window = playerHandle.serverSettings[pk.formId]!!
 
@@ -48,7 +48,7 @@ class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>(
                 player, pk.formId, window,
                 response!!
             )
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
 
             // Apply responses as default settings
             if (!event.isCancelled && window is CustomForm && response != null) {

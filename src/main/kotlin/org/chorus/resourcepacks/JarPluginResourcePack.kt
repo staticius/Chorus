@@ -40,7 +40,7 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
             val byteArrayOutputStream = ByteArrayOutputStream()
             val zipOutputStream = ZipOutputStream(byteArrayOutputStream)
             val manifest = findManifestInJar(jar)
-            requireNotNull(manifest) { Server.instance.language.tr("nukkit.resources.zip.no-manifest") }
+            requireNotNull(manifest) { Server.instance.baseLang.tr("nukkit.resources.zip.no-manifest") }
 
             this.manifest = JsonParser
                 .parseReader(InputStreamReader(jar.getInputStream(manifest), StandardCharsets.UTF_8))

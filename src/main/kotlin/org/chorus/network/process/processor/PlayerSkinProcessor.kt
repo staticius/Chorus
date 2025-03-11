@@ -32,7 +32,7 @@ class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
             playerChangeSkinEvent.isCancelled = true
             PlayerSkinProcessor.log.warn("Player " + playerHandle.username + " change skin too quick!")
         }
-        Server.instance.getPluginManager().callEvent(playerChangeSkinEvent)
+        Server.instance.pluginManager.callEvent(playerChangeSkinEvent)
         if (!playerChangeSkinEvent.isCancelled) {
             player.lastSkinChange = System.currentTimeMillis()
             player.setSkin(skin)

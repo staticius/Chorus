@@ -182,7 +182,7 @@ class PlayerChunkManager(private val player: Player) {
                 val chunkX: Int = Level.Companion.getHashX(e.longKey)
                 val chunkZ: Int = Level.Companion.getHashZ(e.longKey)
                 val ev: PlayerChunkRequestEvent = PlayerChunkRequestEvent(player, chunkX, chunkZ)
-                Server.instance.getPluginManager().callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 player.level!!.requestChunk(chunkX, chunkZ, player)
             }
             usedChunks.addAll(chunkReadyToSend.keySet())

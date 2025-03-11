@@ -17,7 +17,7 @@ class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
         val length = pk.command.length
         if (!rateLimiter.tryAcquire(length, 300, TimeUnit.MILLISECONDS)) {
             val event = PlayerHackDetectedEvent(playerHandle.player, PlayerHackDetectedEvent.HackType.COMMAND_SPAM)
-            playerHandle.Server.instance.getPluginManager().callEvent(event)
+            playerHandle.Server.instance.pluginManager.callEvent(event)
 
             if (event.isKick) playerHandle.player.session.close("kick because hack")
             return
@@ -26,7 +26,7 @@ class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
             return
         }
         val playerCommandPreprocessEvent = PlayerCommandPreprocessEvent(playerHandle.player, pk.command)
-        Server.instance.getPluginManager().callEvent(playerCommandPreprocessEvent)
+        Server.instance.pluginManager.callEvent(playerCommandPreprocessEvent)
         if (playerCommandPreprocessEvent.isCancelled) {
             return
         }

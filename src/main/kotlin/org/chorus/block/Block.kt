@@ -33,6 +33,7 @@ import org.chorus.registry.Registries
 import org.chorus.tags.BlockTags.getTagSet
 import org.chorus.utils.BlockColor
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
+import org.chorus.math.IVector3
 
 import java.util.*
 import java.util.function.Predicate
@@ -41,7 +42,7 @@ import kotlin.math.pow
 
 
 abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
-    Metadatable, AxisAlignedBB, BlockID {
+    Metadatable, AxisAlignedBB, BlockID, IVector3 {
     var blockState: BlockState? = null
     protected var color: BlockColor? = null
     @JvmField

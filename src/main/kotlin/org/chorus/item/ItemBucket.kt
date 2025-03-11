@@ -180,7 +180,7 @@ open class ItemBucket : Item {
                     get(ItemID.Companion.BUCKET, 8, 1)
                 }
                 val ev: PlayerBucketFillEvent
-                Server.instance.getPluginManager().callEvent(
+                Server.instance.pluginManager.callEvent(
                     PlayerBucketFillEvent(
                         player, block, face, target,
                         this, result
@@ -264,7 +264,7 @@ open class ItemBucket : Item {
                 nether = !isLava
             }
 
-            Server.instance.getPluginManager().callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
 
             if (!ev.isCancelled) {
                 player.level!!.setBlock(placementBlock.position, placementBlock.layer, targetBlock, true, true)

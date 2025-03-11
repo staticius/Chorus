@@ -48,7 +48,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
             inventory,
             firstItem ?: Item.AIR, pair.left(), secondItem ?: Item.AIR, exp, player
         )
-        Server.instance.getPluginManager().callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             player.removeAllWindows(false)
             player.sendAllInventories()

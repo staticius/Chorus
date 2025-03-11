@@ -31,7 +31,8 @@ class BlockProperties(identifier: String, blockTags: Set<String?>, vararg proper
     private var specialValueMap: Map<Short, BlockState>? = null
 
     
-    private var defaultState: BlockState? = null
+    var defaultState: BlockState? = null
+        private set
     val specialValueBits: Byte
 
     constructor(identifier: String, vararg properties: BlockPropertyType<*>?) : this(

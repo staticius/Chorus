@@ -77,7 +77,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
 
         if (pk.inputData.contains(AuthInputAction.START_SPRINTING)) {
             val event = PlayerToggleSprintEvent(player, true)
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 player.sendData(player)
             } else {
@@ -86,7 +86,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_SPRINTING)) {
             val event = PlayerToggleSprintEvent(player, false)
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 player.sendData(player)
             } else {
@@ -95,7 +95,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.START_SNEAKING)) {
             val event = PlayerToggleSneakEvent(player, true)
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 player.sendData(player)
             } else {
@@ -104,7 +104,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_SNEAKING)) {
             val event = PlayerToggleSneakEvent(player, false)
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) {
                 player.sendData(player)
             } else {
@@ -116,11 +116,11 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.START_JUMPING)) {
             val playerJumpEvent = PlayerJumpEvent(player)
-            Server.instance.getPluginManager().callEvent(playerJumpEvent)
+            Server.instance.pluginManager.callEvent(playerJumpEvent)
         }
         if (pk.inputData.contains(AuthInputAction.START_SWIMMING)) {
             val playerSwimmingEvent = PlayerToggleSwimEvent(player, true)
-            Server.instance.getPluginManager().callEvent(playerSwimmingEvent)
+            Server.instance.pluginManager.callEvent(playerSwimmingEvent)
             if (playerSwimmingEvent.isCancelled) {
                 player.sendData(player)
             } else {
@@ -129,7 +129,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_SWIMMING)) {
             val playerSwimmingEvent = PlayerToggleSwimEvent(player, false)
-            Server.instance.getPluginManager().callEvent(playerSwimmingEvent)
+            Server.instance.pluginManager.callEvent(playerSwimmingEvent)
             if (playerSwimmingEvent.isCancelled) {
                 player.sendData(player)
             } else {
@@ -138,7 +138,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.START_GLIDING)) {
             val playerToggleGlideEvent = PlayerToggleGlideEvent(player, true)
-            Server.instance.getPluginManager().callEvent(playerToggleGlideEvent)
+            Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
             if (playerToggleGlideEvent.isCancelled) {
                 player.sendData(player)
             } else {
@@ -147,7 +147,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_GLIDING)) {
             val playerToggleGlideEvent = PlayerToggleGlideEvent(player, false)
-            Server.instance.getPluginManager().callEvent(playerToggleGlideEvent)
+            Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
             if (playerToggleGlideEvent.isCancelled) {
                 player.sendData(player)
             } else {
@@ -161,7 +161,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                 return
             }
             val playerToggleFlightEvent = PlayerToggleFlightEvent(player, true)
-            Server.instance.getPluginManager().callEvent(playerToggleFlightEvent)
+            Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
             if (playerToggleFlightEvent.isCancelled) {
                 player.adventureSettings.update()
             } else {
@@ -170,7 +170,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         }
         if (pk.inputData.contains(AuthInputAction.STOP_FLYING)) {
             val playerToggleFlightEvent = PlayerToggleFlightEvent(player, false)
-            Server.instance.getPluginManager().callEvent(playerToggleFlightEvent)
+            Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
             if (playerToggleFlightEvent.isCancelled) {
                 player.adventureSettings.update()
             } else {

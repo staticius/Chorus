@@ -1,5 +1,7 @@
 package org.chorus
 
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import org.chorus.api.UsedByReflection
 import org.chorus.block.*
 import org.chorus.block.customblock.CustomBlock
@@ -35,7 +37,6 @@ import org.chorus.event.inventory.InventoryPickupItemEvent
 import org.chorus.event.inventory.InventoryPickupTridentEvent
 import org.chorus.event.player.*
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
-import org.chorus.event.Server.instance.DataPacketSendEvent
 import org.chorus.form.window.Form
 import org.chorus.inventory.*
 import org.chorus.inventory.fake.FakeInventory
@@ -117,7 +118,7 @@ import kotlin.math.*
  * @author MagicDroidX &amp; Box (Nukkit Project)
  */
 
-open class Player @UsedByReflection constructor(
+class Player @UsedByReflection constructor(
     val session: BedrockSession,
     val playerInfo: PlayerInfo
 ) :
@@ -364,7 +365,7 @@ open class Player @UsedByReflection constructor(
         private set
     private var enchSeed = 0
     private var loadingScreenId = 0
-    override val loaderId: Int
+    override val loaderId: Int  = generateChunkLoaderId(this)
     private var lastBreakPosition = BlockVector3()
     private var hasSeenCredits = false
     private var wasInSoulSandCompatible = false
@@ -524,9 +525,8 @@ open class Player @UsedByReflection constructor(
         this.lastBreak = -1
         this.socketAddress = session.address
         this.rawSocketAddress = socketAddress
-        this.loaderId = generateChunkLoaderId(this)
-        this.chunkSendCountPerTick = Server.instance.settings.chunkSettings().perTickSend()
-        this.spawnThreshold = Server.instance.settings.chunkSettings().spawnThreshold()
+        this.chunkSendCountPerTick = Server.instance.settings.chunkSettings.perTickSend
+        this.spawnThreshold = Server.instance.settings.chunkSettings.spawnThreshold
         this.spawnPoint = null
         this.gamemode = Server.instance.gamemode
         this.level = Server.instance.defaultLevel
@@ -536,19 +536,20 @@ open class Player @UsedByReflection constructor(
         this.lastSkinChange = -1
         this.playerChunkManager = PlayerChunkManager(this)
         this.creationTime = System.currentTimeMillis()
-        this.displayName = playerInfo.getUsername()
-        this.loginChainData = playerInfo.getData()
-        this.uuid = playerInfo.getUniqueId()
-        this.rawUUID = writeUUID(playerInfo.getUniqueId())
-        this.setSkin(playerInfo.getSkin())
+        this.displayName = playerInfo.username
+        this.loginChainData = playerInfo.data
+        this.uuid = playerInfo.uniqueId
+        this.rawUUID = writeUUID(playerInfo.uniqueId)
+        this.setSkin(playerInfo.skin)
     }
 
     fun onBlockBreakContinue(pos: Vector3, face: BlockFace?) {
         if (this.isBreakingBlock()) {
             val time = System.currentTimeMillis()
             val block = level!!.getBlock(pos, false)
-            val miningTimeRequired = if (breakingBlock is CustomBlock) {
-                breakingBlock.breakTime(inventory!!.itemInHand, this)
+            val tempBreakingBlock = breakingBlock
+            val miningTimeRequired = if (tempBreakingBlock is CustomBlock) {
+                tempBreakingBlock.breakTime(inventory!!.itemInHand, this)
             } else breakingBlock!!.calculateBreakTime(
                 inventory!!.itemInHand,
                 this
@@ -594,12 +595,12 @@ open class Player @UsedByReflection constructor(
             inventory!!.itemInHand, target!!.position, face,
             if (target.isAir) PlayerInteractEvent.Action.LEFT_CLICK_AIR else PlayerInteractEvent.Action.LEFT_CLICK_BLOCK
         )
-        Server.instance.getPluginManager().callEvent(playerInteractEvent)
+        Server.instance.pluginManager.callEvent(playerInteractEvent)
         if (playerInteractEvent.isCancelled) {
             inventory!!.sendHeldItem(this)
-            level.sendBlocks(arrayOf(this), arrayOf<Block?>(target), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0)
+            level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), UpdateBlockPacket.FLAG_ALL_PRIORITY, false)
             if (target.getLevelBlockAtLayer(1) is BlockLiquid) {
-                level.sendBlocks(
+                level!!.sendBlocks(
                     arrayOf(this), arrayOf(
                         target.getLevelBlockAtLayer(1)
                     ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 1
@@ -1009,7 +1010,7 @@ open class Player @UsedByReflection constructor(
                 inEndPortal = true
                 if (this.getRiding() == null && getPassengers().isEmpty()) {
                     val ev = EntityPortalEnterEvent(this, PortalType.END)
-                    Server.instance.getPluginManager().callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled) {
                         val newPos = moveToTheEnd(this.getLocator())
@@ -1027,7 +1028,7 @@ open class Player @UsedByReflection constructor(
                             } else {
                                 if (!this.hasSeenCredits && !this.showingCredits) {
                                     val playerShowCreditsEvent = PlayerShowCreditsEvent(this)
-                                    Server.instance.getPluginManager().callEvent(playerShowCreditsEvent)
+                                    Server.instance.pluginManager.callEvent(playerShowCreditsEvent)
                                     if (!playerShowCreditsEvent.isCancelled) {
                                         this.showCredits()
                                     }
@@ -1115,7 +1116,7 @@ open class Player @UsedByReflection constructor(
             //这里放宽了判断，否则对角穿过脚手架会判断非法移动。
             if (diff > 1.2) {
                 val event = PlayerInvalidMoveEvent(this, true)
-                Server.instance.getPluginManager().callEvent(event)
+                Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled && (event.isRevert.also { invalidMotion = it })) {
                     Player.log.warn(Server.instance.getLanguage().tr("nukkit.player.invalidMove", this.getName()))
                 }
@@ -1161,7 +1162,7 @@ open class Player @UsedByReflection constructor(
                 this.collisionBlocks = null
             }
             val ev = PlayerMoveEvent(this, last, now)
-            Server.instance.getPluginManager().callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
 
             if (!(ev.isCancelled.also { invalidMotion = it })) { //Yes, this is intended
                 if (now != ev.to && this.riding == null) { //If plugins modify the destination
@@ -1307,7 +1308,7 @@ open class Player @UsedByReflection constructor(
                             }
                         }
                         val ev = WaterFrostEvent(block, this)
-                        Server.instance.getPluginManager().callEvent(ev)
+                        Server.instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
                             level!!.setBlock(block.position, layer, Block.get(Block.FROSTED_ICE), true, false)
                             level!!.scheduleUpdate(
@@ -1367,10 +1368,10 @@ open class Player @UsedByReflection constructor(
      */
     fun processLogin() {
         if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_USERS)) {
-            Server.instance.getPluginManager().subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+            Server.instance.pluginManager.subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
         }
         if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
-            Server.instance.getPluginManager().subscribeToPermission(
+            Server.instance.pluginManager.subscribeToPermission(
                 Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
                 this
             )
@@ -1527,7 +1528,7 @@ open class Player @UsedByReflection constructor(
         }
 
         Player.log.info(
-            Server.instance.language.tr(
+            Server.instance.baseLang.tr(
                 "nukkit.player.logIn",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
                 this.address,
@@ -1571,7 +1572,7 @@ open class Player @UsedByReflection constructor(
             )
         )
 
-        Server.instance.getPluginManager().callEvent(playerJoinEvent)
+        Server.instance.pluginManager.callEvent(playerJoinEvent)
 
         if (!playerJoinEvent.joinMessage.toString().trim { it <= ' ' }.isEmpty()) {
             Server.instance.broadcastMessage(playerJoinEvent.joinMessage)
@@ -2066,8 +2067,8 @@ open class Player @UsedByReflection constructor(
     }
 
     override fun recalculatePermissions() {
-        Server.instance.getPluginManager().unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
-        Server.instance.getPluginManager().unsubscribeFromPermission(
+        Server.instance.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        Server.instance.pluginManager.unsubscribeFromPermission(
             Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
             this
         )
@@ -2079,11 +2080,11 @@ open class Player @UsedByReflection constructor(
         perm!!.recalculatePermissions()
 
         if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_USERS)) {
-            Server.instance.getPluginManager().subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+            Server.instance.pluginManager.subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
         }
 
         if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
-            Server.instance.getPluginManager().subscribeToPermission(
+            Server.instance.pluginManager.subscribeToPermission(
                 Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
                 this
             )
@@ -2452,7 +2453,7 @@ open class Player @UsedByReflection constructor(
         }
 
         val ev: PlayerBedEnterEvent
-        Server.instance.getPluginManager().callEvent(
+        Server.instance.pluginManager.callEvent(
             PlayerBedEnterEvent(
                 this,
                 level!!.getBlock(pos)!!
@@ -2485,7 +2486,7 @@ open class Player @UsedByReflection constructor(
 
     fun stopSleep() {
         if (this.sleeping != null) {
-            Server.instance.getPluginManager().callEvent(
+            Server.instance.pluginManager.callEvent(
                 PlayerBedLeaveEvent(
                     this,
                     level!!.getBlock(
@@ -2525,7 +2526,7 @@ open class Player @UsedByReflection constructor(
             }
         }
         val event = PlayerAchievementAwardedEvent(this, achievementId)
-        Server.instance.getPluginManager().callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             return false
@@ -2590,7 +2591,7 @@ open class Player @UsedByReflection constructor(
         }
 
         val ev: PlayerGameModeChangeEvent
-        Server.instance.getPluginManager().callEvent(PlayerGameModeChangeEvent(this, gamemode, newSettings).also { ev = it })
+        Server.instance.pluginManager.callEvent(PlayerGameModeChangeEvent(this, gamemode, newSettings).also { ev = it })
 
         if (ev.isCancelled) {
             return false
@@ -2910,7 +2911,7 @@ open class Player @UsedByReflection constructor(
                         if (!this.hasEffect(EffectType.JUMP_BOOST) && diff > 0.6 && expectedVelocity < speed!!.y && !ignore) {
                             if (this.inAirTicks < 150) {
                                 val ev = PlayerInvalidMoveEvent(this, true)
-                                Server.instance.getPluginManager().callEvent(ev)
+                                Server.instance.pluginManager.callEvent(ev)
 
                                 if (!ev.isCancelled) {
                                     this.setMotion(Vector3(0.0, expectedVelocity, 0.0))
@@ -3141,7 +3142,7 @@ open class Player @UsedByReflection constructor(
         for (msg in message.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
             if (!msg.trim { it <= ' ' }.isEmpty() && msg.length <= 512 && messageLimitCounter-- > 0) {
                 val chatEvent = PlayerChatEvent(this, msg)
-                Server.instance.getPluginManager().callEvent(chatEvent)
+                Server.instance.pluginManager.callEvent(chatEvent)
                 if (!chatEvent.isCancelled) {
                     Server.instance.broadcastMessage(
                         Server.instance.getLanguage().tr(
@@ -3209,7 +3210,7 @@ open class Player @UsedByReflection constructor(
     @JvmOverloads
     fun kick(reason: PlayerKickEvent.Reason, reasonString: String, isAdmin: Boolean = true): Boolean {
         val ev: PlayerKickEvent
-        Server.instance.getPluginManager().callEvent(
+        Server.instance.pluginManager.callEvent(
             PlayerKickEvent(
                 this, reason,
                 leaveMessage
@@ -3660,7 +3661,7 @@ open class Player @UsedByReflection constructor(
         //call quit event
         var ev: PlayerQuitEvent? = null
         if (this.getName() != null && !getName().isEmpty()) {
-            Server.instance.getPluginManager().callEvent(PlayerQuitEvent(this, message, true, reason).also { ev = it })
+            Server.instance.pluginManager.callEvent(PlayerQuitEvent(this, message, true, reason).also { ev = it })
             if (this.fishing != null) {
                 this.stopFishing(false)
             }
@@ -3953,7 +3954,7 @@ open class Player @UsedByReflection constructor(
         ev.keepExperience = level!!.gameRules!!.getBoolean(GameRule.KEEP_INVENTORY)
         ev.keepInventory = ev.keepExperience
 
-        Server.instance.getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
 
         if (!ev.isCancelled) {
             if (this.fishing != null) {
@@ -4132,7 +4133,7 @@ open class Player @UsedByReflection constructor(
             experience,
             experienceLevel, exp, level
         )
-        Server.instance.getPluginManager().callEvent(expEvent)
+        Server.instance.pluginManager.callEvent(expEvent)
         if (expEvent.isCancelled) {
             return
         }
@@ -4439,7 +4440,7 @@ open class Player @UsedByReflection constructor(
         //event
         if (cause != null) {
             val event = PlayerTeleportEvent(this, from, to, cause)
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) return false
             to = event.to
         }
@@ -5092,7 +5093,7 @@ open class Player @UsedByReflection constructor(
                     ev.setCancelled()
                 }
 
-                Server.instance.getPluginManager().callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return false
                 }
@@ -5136,7 +5137,7 @@ open class Player @UsedByReflection constructor(
                     ev.setCancelled()
                 }
 
-                Server.instance.getPluginManager().callEvent(ev)
+                Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return false
                 }
@@ -5166,7 +5167,7 @@ open class Player @UsedByReflection constructor(
                         }
 
                         val ev: InventoryPickupItemEvent
-                        Server.instance.getPluginManager()
+                        Server.instance.pluginManager
                             .callEvent(InventoryPickupItemEvent(inventory!!, entity).also { ev = it })
                         if (ev.isCancelled) {
                             return false
@@ -5330,7 +5331,7 @@ open class Player @UsedByReflection constructor(
             )
         )
         val ev = ProjectileLaunchEvent(fishingHook, this)
-        Server.instance.getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             fishingHook.close()
         } else {
@@ -5469,7 +5470,7 @@ open class Player @UsedByReflection constructor(
             return false
         }
         val ev = DataPacketSendEvent(this, packet)
-        Server.instance.getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
         }

@@ -1,6 +1,6 @@
 package org.chorus
 
-import com.google.common.cache.Cache
+import com.github.benmanes.caffeine.cache.Cache
 import org.chorus.block.*
 import org.chorus.dialog.window.FormWindowDialog
 import org.chorus.entity.*
@@ -166,7 +166,7 @@ class PlayerHandle(val player: Player) {
         player.serverSettings = serverSettings
     }
 
-    var dialogWindows: Cache<String?, FormWindowDialog?>
+    var dialogWindows: Cache<String, FormWindowDialog?>
         get() = player.dialogWindows
         set(dialogWindows) {
             player.dialogWindows = dialogWindows

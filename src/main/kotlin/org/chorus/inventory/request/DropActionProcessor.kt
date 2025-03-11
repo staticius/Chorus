@@ -29,7 +29,7 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
         var item = inventory.getItem(slot)
 
         val ev: PlayerDropItemEvent
-        Server.instance.getPluginManager().callEvent(PlayerDropItemEvent(player, item).also { ev = it })
+        Server.instance.pluginManager.callEvent(PlayerDropItemEvent(player, item).also { ev = it })
         if (ev.isCancelled) {
             return context.error()
         }

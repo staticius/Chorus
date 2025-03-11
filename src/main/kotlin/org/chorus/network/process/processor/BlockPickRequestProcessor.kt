@@ -40,7 +40,7 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
             pickEvent.setCancelled()
         }
 
-        Server.instance.getPluginManager().callEvent(pickEvent)
+        Server.instance.pluginManager.callEvent(pickEvent)
 
         if (!pickEvent.isCancelled) {
             var itemExists = false

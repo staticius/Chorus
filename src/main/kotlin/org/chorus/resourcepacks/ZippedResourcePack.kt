@@ -87,7 +87,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
                 .findFirst()
                 .orElseThrow {
                     IllegalArgumentException(
-                        Server.instance.language.tr("nukkit.resources.zip.no-manifest")
+                        Server.instance.baseLang.tr("nukkit.resources.zip.no-manifest")
                     )
                 }
         }

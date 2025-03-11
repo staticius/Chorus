@@ -2,7 +2,6 @@ package org.chorus.level.vibration
 
 import org.chorus.Server
 import org.chorus.entity.Entity
-import org.chorus.event.Event.isCancelled
 import org.chorus.level.*
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag

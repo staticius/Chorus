@@ -55,7 +55,7 @@ class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
 
         if (success) {
             val editBookEvent = PlayerEditBookEvent(player, oldBook, newBook, pk.action)
-            Server.instance.getPluginManager().callEvent(editBookEvent)
+            Server.instance.pluginManager.callEvent(editBookEvent)
             if (!editBookEvent.isCancelled) {
                 player.getInventory().setItem(pk.inventorySlot, editBookEvent.newBook)
             }

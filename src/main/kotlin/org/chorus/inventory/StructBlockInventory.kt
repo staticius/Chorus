@@ -140,7 +140,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
         }
 
         val ev = InventoryOpenEvent(this, who)
-        Server.instance.getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
         }
@@ -150,7 +150,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
 
     override fun close(who: Player) {
         val ev = InventoryCloseEvent(this, who)
-        Server.instance.getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         this.onClose(who)
     }
 

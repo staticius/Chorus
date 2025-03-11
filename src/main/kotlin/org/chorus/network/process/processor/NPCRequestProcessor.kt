@@ -26,7 +26,7 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
             }
 
             val event = PlayerDialogRespondedEvent(player, dialog, response)
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
             return
         }
         if (playerHandle.dialogWindows.getIfPresent(pk.sceneName) != null) {
@@ -45,7 +45,7 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
             }
 
             val event = PlayerDialogRespondedEvent(player, dialog, response)
-            Server.instance.getPluginManager().callEvent(event)
+            Server.instance.pluginManager.callEvent(event)
 
             //close dialog after clicked button (otherwise the client will not be able to close the window)
             if (response.getClickedButton() != null && pk.requestType == NPCRequestPacket.RequestType.EXECUTE_ACTION) {

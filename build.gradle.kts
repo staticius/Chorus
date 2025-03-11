@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.bundles.terminal)
     implementation(libs.graalvm.polyglot)
     implementation(libs.okaeri)
+    implementation(libs.caffeine)
     runtimeOnly(libs.bundles.graalvm.runtime)
 
     testImplementation(libs.bundles.test)

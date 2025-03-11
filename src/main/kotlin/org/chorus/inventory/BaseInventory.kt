@@ -388,7 +388,7 @@ abstract class BaseInventory(
 
     override fun open(who: Player): Boolean {
         val ev = InventoryOpenEvent(this, who)
-        Server.instance.getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return false
         }
@@ -399,7 +399,7 @@ abstract class BaseInventory(
 
     override fun close(who: Player) {
         val ev = InventoryCloseEvent(this, who)
-        Server.instance.getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         this.onClose(who)
     }
 

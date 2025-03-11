@@ -5,34 +5,14 @@ import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntity.close
 import org.chorus.entity.Entity
 import org.chorus.entity.Entity.Companion.createEntity
 import org.chorus.entity.Entity.Companion.getDefaultNBT
-import org.chorus.entity.Entity.close
-import org.chorus.entity.Entity.scheduleUpdate
-import org.chorus.entity.Entity.spawnToAll
-import org.chorus.entity.Entity.teleport
-import org.chorus.entity.EntityAsyncPrepare.asyncPrepare
-import org.chorus.entity.EntityHuman.getName
-import org.chorus.entity.data.EntityDataMap.get
-import org.chorus.entity.data.EntityDataMap.put
 import org.chorus.entity.item.EntityXpOrb.Companion.splitIntoOrbSizes
-import org.chorus.entity.mob.EntityMob.getBehaviorGroup
-import org.chorus.entity.weather.EntityLightningBolt.setEffect
-import org.chorus.entity.weather.EntityLightningBolt.spawnToAll
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.Event.setCancelled
-import org.chorus.event.block.BlockBreakEvent.dropExp
-import org.chorus.event.block.BlockBreakEvent.drops
-import org.chorus.event.block.BlockBreakEvent.isFastBreak
-import org.chorus.event.block.BlockEvent.getBlock
 import org.chorus.event.player.PlayerInteractEvent
 import org.chorus.inventory.BlockInventoryHolder
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
-import org.chorus.item.Item.getBlock
-import org.chorus.item.ItemBucket.isWater
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.format.*
 import org.chorus.level.format.LevelConfig.AntiXrayMode
@@ -60,16 +40,20 @@ import it.unimi.dsi.fastutil.longs.*
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectIterator
 import org.chorus.api.NonComputationAtomic
+import org.chorus.level.vibration.VibrationManager
 import org.chorus.metadata.Metadatable
+import org.chorus.scheduler.BlockUpdateScheduler
+import org.chorus.utils.collection.nb.Int2ObjectNonBlockingMap
+import org.chorus.level.vibration.SimpleVibrationManager
+import org.chorus.metadata.BlockMetadataStore
+import org.chorus.scheduler.ServerScheduler
 
 
 import java.awt.Color
 import java.io.*
 import java.lang.ref.SoftReference
 import java.util.*
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ThreadLocalRandom
+import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.*
 import java.util.function.Function
@@ -88,7 +72,7 @@ class Level(
     provider: Class<out LevelProvider>,
     generatorConfig: GeneratorConfig
 ) :
-    Metadatable {
+    Metadatable, Loggable {
     @NonComputationAtomic
     val updateEntities: Long2ObjectNonBlockingMap<Entity> = Long2ObjectNonBlockingMap()
 
@@ -103,7 +87,7 @@ class Level(
     private val updateBlockEntities: ConcurrentLinkedQueue<BlockEntity> = ConcurrentLinkedQueue<BlockEntity>()
     private val chunkGenerationQueue = ConcurrentHashMap<Long, Boolean?>()
     private var chunkGenerationQueueSize = 8
-    val id: Int
+    val id: Int = levelIdCounter++
 
     // Loaders still remain single-threaded
     private val loaders = Int2ObjectOpenHashMap<ChunkLoader>()
@@ -129,7 +113,7 @@ class Level(
     private val changeBlocksPresent = Any()
 
     // Storing extra blocks past 512 is redundant
-    private val changeBlocksFullMap: Int2ObjectOpenHashMap<Any> = object : Int2ObjectOpenHashMap<Any?>() {
+    private val changeBlocksFullMap: Int2ObjectOpenHashMap<Any> = object : Int2ObjectOpenHashMap<Any>() {
         override fun size(): Int {
             return Character.MAX_VALUE.code
         }
@@ -162,7 +146,7 @@ class Level(
     private var provider: AtomicReference<LevelProvider>? = null
     private var time: Float
     private var nextTimeSendTick = 0
-    private val name: String
+    val name: String
     @JvmField
     val folderPath: String
     private val mutableBlock: Vector3? = null
@@ -227,15 +211,15 @@ class Level(
     fun initLevel() {
         this.gameRules = requireProvider().gamerules
         val spawn = this.spawnLocation
-        if (!getChunk(spawn.position.chunkX, spawn.position.chunkZ, true).getChunkState().canSend()) {
+        if (!getChunk(spawn.position.chunkX, spawn.position.chunkZ, true).chunkState.canSend()) {
             this.generateChunk(spawn.position.chunkX, spawn.position.chunkZ)
         }
         subTickThread.start()
-        if (Server.instance.settings.levelSettings().levelThread()) {
+        if (Server.instance.settings.levelSettings.levelThread) {
             baseTickThread.start()
         }
-        Level.log.info(
-            Server.instance.language.tr(
+        log.info(
+            Server.instance.baseLang.tr(
                 "nukkit.level.init",
                 TextFormat.GREEN.toString() + this.folderName + TextFormat.RESET
             )
@@ -515,19 +499,19 @@ class Level(
             return false
         }
 
-        Level.log.info(
-            Server.instance.language.tr(
+        log.info(
+            Server.instance.baseLang.tr(
                 "nukkit.level.unloading",
                 TextFormat.GREEN.toString() + this.getName() + TextFormat.WHITE
             )
         )
         val defaultLevel = Server.instance.defaultLevel
 
-        for (player in getPlayers().values().toArray<Player>(Player.EMPTY_ARRAY)) {
+        for (player in getPlayers().values) {
             if (this === defaultLevel || defaultLevel == null) {
                 player.close(player.leaveMessage, "Forced default level unload")
             } else {
-                player.teleport(Server.instance.defaultLevel.safeSpawn)
+                player.teleport(Server.instance.defaultLevel!!.safeSpawn)
             }
         }
 
@@ -674,7 +658,7 @@ class Level(
                 if (r > baseTickRate) {
                     this.tickRateCounter = this.tickRate
                 }
-                Level.log.debug(
+                log.debug(
                     "Raising level \"{}\" tick rate to {} ticks", this.getName(),
                     tickRate
                 )
@@ -683,14 +667,14 @@ class Level(
                 if (this.tickRate == baseTickRate) {
                     this.tickRate =
                         Math.max(baseTickRate + 1, Math.min(autoTickRateLimit, tickMs / 50))
-                    Level.log.debug(
+                    log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
                         this.getName(), NukkitMath.round(tickMs.toDouble(), 2),
                         tickRate
                     )
                 } else if ((tickMs / this.tickRate) >= 50 && this.tickRate < autoTickRateLimit) {
                     this.tickRate = this.tickRate + 1
-                    Level.log.debug(
+                    log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
                         this.getName(), NukkitMath.round(tickMs.toDouble(), 2),
                         tickRate
@@ -841,8 +825,8 @@ class Level(
                 gameRules!!.refresh()
             }
         } catch (e: Exception) {
-            Level.log.error(
-                Server.instance.language.tr(
+            log.error(
+                Server.instance.baseLang.tr(
                     "nukkit.level.tickError",
                     this.folderPath, Utils.getExceptionMessage(e)
                 ), e
@@ -3271,7 +3255,6 @@ class Level(
 
     /** */
     init {
-        this.id = levelIdCounter++
         this.blockMetadata = BlockMetadataStore(this)
         this.autoSave = Server.instance.autoSave
         this.generatorClass = Registries.GENERATOR[generatorConfig.name()]
@@ -3302,8 +3285,8 @@ class Level(
         val levelProvider = requireProvider()
         //to be changed later as the Dim0 will be deleted to be put in a config.json file of the world
         val levelNameDim = levelProvider.name.replace(" Dim0", "")
-        Level.log.info(
-            this.Server.instance.language.tr(
+        log.info(
+            this.Server.instance.baseLang.tr(
                 "nukkit.level.preparing",
                 TextFormat.GREEN.toString() + levelNameDim + TextFormat.RESET
             )
@@ -3375,7 +3358,7 @@ class Level(
         }
         subTickGameLoop = GameLoop.builder()
             .onTick(Consumer<GameLoop> { currentTick: GameLoop -> this.subTick(currentTick) })
-            .onStop(Runnable { Level.log.debug("$levelName SubTick is closed!") })
+            .onStop(Runnable { log.debug("$levelName SubTick is closed!") })
             .loopCountPerSec(20)
             .build()
         this.subTickThread = object : Thread() {
@@ -3887,7 +3870,7 @@ class Level(
             }
             levelProvider.unloadChunk(x, z, safe)
         } catch (e: Exception) {
-            Level.log.error(Server.instance.language.tr("nukkit.level.chunkUnloadError", e.toString()), e)
+            log.error(Server.instance.baseLang.tr("nukkit.level.chunkUnloadError", e.toString()), e)
         }
 
         return true
@@ -3960,7 +3943,7 @@ class Level(
             }
         }
 
-        Level.log.warn("cannot find a safe spawn around " + spawn.asBlockVector3() + "!")
+        log.warn("cannot find a safe spawn around " + spawn.asBlockVector3() + "!")
         return Locator.Companion.fromObject(spawn, this)
     }
 

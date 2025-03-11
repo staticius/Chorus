@@ -29,7 +29,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
             .toArray<Item> { _Dummy_.__Array__() }
 
         val craftItemEvent = CraftItemEvent(player, eventItems, recipe, 1)
-        Server.instance.getPluginManager().callEvent(craftItemEvent)
+        Server.instance.pluginManager.callEvent(craftItemEvent)
         if (craftItemEvent.isCancelled) {
             return context.error()
         }

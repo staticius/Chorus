@@ -138,7 +138,7 @@ class CommandLogger(
         }
         outputContainer.messages.add(
             CommandOutputMessage(
-                Server.instance.language.tr(key, *params),
+                Server.instance.baseLang.tr(key, *params),
                 *CommandOutputContainer.EMPTY_STRING
             )
         )

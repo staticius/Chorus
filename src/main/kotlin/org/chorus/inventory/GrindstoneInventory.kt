@@ -28,7 +28,7 @@ class GrindstoneInventory(blockGrindstone: BlockGrindstone?) :
 
     override fun close(who: Player) {
         val ev = InventoryCloseEvent(this, who)
-        Server.instance.getPluginManager().callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         onClose(who)
     }
 
