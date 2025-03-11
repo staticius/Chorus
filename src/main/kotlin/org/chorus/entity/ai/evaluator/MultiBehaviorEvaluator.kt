@@ -7,13 +7,13 @@ package org.chorus.entity.ai.evaluator
  * An abstract class represents multiple behaviors that this evaluator will evaluate.
  */
 abstract class MultiBehaviorEvaluator : IBehaviorEvaluator {
-    protected var evaluators: Set<IBehaviorEvaluator?>
+    protected var evaluators: Set<IBehaviorEvaluator>
 
-    constructor(evaluators: Set<IBehaviorEvaluator?>) {
+    constructor(evaluators: Set<IBehaviorEvaluator>) {
         this.evaluators = evaluators
     }
 
-    constructor(vararg evaluators: IBehaviorEvaluator?) {
-        this.evaluators = java.util.Set.of(*evaluators)
+    constructor(vararg evaluators: IBehaviorEvaluator) {
+        this.evaluators = mutableSetOf(*evaluators)
     }
 }

@@ -615,7 +615,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     fun removeEffect(type: EffectType?) {
         if (effects.containsKey(type)) {
-            val effect: Effect? = effects.get(type)
+            val effect: Effect = effects[type]!!
 
             val event: EntityEffectRemoveEvent = EntityEffectRemoveEvent(this, effect)
             Server.instance.pluginManager.callEvent(event)
@@ -624,15 +624,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                 return
             }
 
-            if (this is Player && effect!!.getId() != null) {
-                val packet: MobEffectPacket = MobEffectPacket()
+            if (this is Player) {
+                val packet = MobEffectPacket()
                 packet.eid = player.getId()
-                packet.effectId = effect.getId()!!
+                packet.effectId = effect.getId()
                 packet.eventId = MobEffectPacket.EVENT_REMOVE.toInt()
                 player.dataPacket(packet)
             }
 
-            effect!!.remove(this)
+            effect.remove(this)
             effects.remove(type)
 
             this.recalculateEffectColor()

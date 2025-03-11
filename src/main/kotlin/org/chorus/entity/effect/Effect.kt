@@ -20,7 +20,7 @@ abstract class Effect @JvmOverloads constructor(
         return type
     }
 
-    fun getId(): Int? {
+    fun getId(): Int {
         return type.id
     }
 

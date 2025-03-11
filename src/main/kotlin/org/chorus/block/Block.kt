@@ -878,35 +878,35 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
             return name.substring(16)
         }
 
-    override fun setMetadata(metadataKey: String?, newMetadataValue: MetadataValue?) {
+    override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
         if (this.level != null) {
             level.getBlockMetadata().setMetadata(this, metadataKey, newMetadataValue)
         }
     }
 
-    override fun getMetadata(metadataKey: String?): List<MetadataValue?>? {
+    override fun getMetadata(metadataKey: String): List<MetadataValue?>? {
         if (this.level != null) {
             return level.getBlockMetadata().getMetadata(this, metadataKey)
         }
         return null
     }
 
-    override fun getMetadata(metadataKey: String?, plugin: Plugin?): MetadataValue? {
+    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue? {
         if (this.level != null) {
             return level.getBlockMetadata().getMetadata(this, metadataKey, plugin)
         }
         return null
     }
 
-    override fun hasMetadata(metadataKey: String?): Boolean {
+    override fun hasMetadata(metadataKey: String): Boolean {
         return this.level != null && level.getBlockMetadata().hasMetadata(this, metadataKey)
     }
 
-    override fun hasMetadata(metadataKey: String?, plugin: Plugin?): Boolean {
+    override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
         return this.level != null && level.getBlockMetadata().hasMetadata(this, metadataKey, plugin)
     }
 
-    override fun removeMetadata(metadataKey: String?, owningPlugin: Plugin?) {
+    override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
         if (this.level != null) {
             level.getBlockMetadata().removeMetadata(this, metadataKey, owningPlugin)
         }

@@ -104,15 +104,6 @@ interface IPlayer : ServerOperator, Metadatable {
     val player: Player
 
     /**
-     * 返回玩家所在的服务器。<br></br>
-     * Returns the server carrying this player.
-     *
-     * @return 玩家所在的服务器。<br></br>the server carrying this player.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
-     */
-    val server: Server
-
-    /**
      * 得到这个玩家第一次游戏的时间。<br></br>
      * Returns the time this player first played in this server.
      *

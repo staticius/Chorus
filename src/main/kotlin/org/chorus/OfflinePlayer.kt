@@ -19,18 +19,8 @@ class OfflinePlayer @JvmOverloads constructor(uuid: UUID?, name: String? = null)
     IPlayer {
     private val namedTag: CompoundTag
 
-    constructor(server: Server, name: String?) : this(server, null, name)
+    constructor(name: String?) : this(null, name)
 
-    /**
-     * 初始化这个`OfflinePlayer`对象。<br></br>
-     * Initializes the object `OfflinePlayer`.
-     *
-     * @param server 这个玩家所在服务器的`Server`对象。<br></br>
-     * The server this player is in, as a `Server` object.
-     * @param uuid   这个玩家的UUID。<br></br>
-     * UUID of this player.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
-     */
     init {
         var nbt: CompoundTag?
         nbt = if (uuid != null) {
@@ -80,10 +70,6 @@ class OfflinePlayer @JvmOverloads constructor(uuid: UUID?, name: String? = null)
     override var isOp: Boolean
         get() = Server.instance.isOp(name!!.lowercase())
         set(value) {
-            if (value == field) {
-                return
-            }
-
             if (value) {
                 Server.instance.addOp(name!!.lowercase())
             } else {
@@ -95,9 +81,9 @@ class OfflinePlayer @JvmOverloads constructor(uuid: UUID?, name: String? = null)
         get() = Server.instance.bannedPlayers.isBanned(this.name)
         set(value) {
             if (value) {
-                Server.instance.bannedPlayers.addBan(this.name, null, null, null)
+                Server.instance.bannedPlayers.addBan(this.name!!, null, null, null)
             } else {
-                Server.instance.bannedPlayers.remove(this.name)
+                Server.instance.bannedPlayers.remove(this.name!!)
             }
         }
 
@@ -114,14 +100,14 @@ class OfflinePlayer @JvmOverloads constructor(uuid: UUID?, name: String? = null)
     override val player: Player
         get() = Server.instance.getPlayerExact(name!!)!!
 
-    override val firstPlayed: Long?
-        get() = if (this.namedTag != null) namedTag.getLong("firstPlayed") else null
+    override val firstPlayed: Long
+        get() = namedTag.getLong("firstPlayed")
 
-    override val lastPlayed: Long?
-        get() = if (this.namedTag != null) namedTag.getLong("lastPlayed") else null
+    override val lastPlayed: Long
+        get() = namedTag.getLong("lastPlayed")
 
     override fun hasPlayedBefore(): Boolean {
-        return this.namedTag != null
+        return true
     }
 
     override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {

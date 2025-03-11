@@ -1342,7 +1342,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         }
 
         return lookupName(name).map { uuid: UUID? -> OfflinePlayer(uuid) }
-            .orElse(OfflinePlayer(this, name))
+            .orElse(OfflinePlayer(name))
     }
 
     /**

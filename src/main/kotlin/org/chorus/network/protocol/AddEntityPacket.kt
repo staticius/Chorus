@@ -62,7 +62,7 @@ class AddEntityPacket : DataPacket() {
         byteBuf.writeFloatLE(this.yaw)
         byteBuf.writeFloatLE(this.headYaw)
         byteBuf.writeFloatLE(if (this.bodyYaw != -1f) this.bodyYaw else this.yaw)
-        byteBuf.writeAttributeList(this.attributes)
+        byteBuf.writeAttributeList(this.attributes.filterNotNull().toTypedArray())
         byteBuf.writeBytes(Binary.writeEntityData(this.entityData))
         byteBuf.writePropertySyncData(syncedProperties)
         byteBuf.writeArray(links) { link: EntityLink? ->

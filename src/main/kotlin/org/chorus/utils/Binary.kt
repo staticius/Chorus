@@ -102,7 +102,7 @@ class Binary {
             return appendBytes(writeLLong(uuid.mostSignificantBits), *writeLLong(uuid.leastSignificantBits))
         }
 
-        fun writeEntityData(entityDataMap: EntityDataMap): ByteArray? {
+        fun writeEntityData(entityDataMap: EntityDataMap): ByteArray {
             val stream = BinaryStream()
             stream.putUnsignedVarInt(entityDataMap.size().toLong()) //size
             for ((key, data) in entityDataMap) {

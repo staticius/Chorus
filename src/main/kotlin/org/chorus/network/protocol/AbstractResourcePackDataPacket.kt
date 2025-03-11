@@ -11,11 +11,11 @@ abstract class AbstractResourcePackDataPacket : DataPacket() {
 
     protected fun decodePackInfo(byteBuf: HandleByteBuf) {
         val packInfo = byteBuf.readString()
-        val packInfoParts: Array<String> = packInfo.split("_", 2)
-        try {
-            packId = UUID.fromString(packInfoParts[0])
+        val packInfoParts = packInfo.split("_", ignoreCase = false, limit = 2)
+        packId = try {
+            UUID.fromString(packInfoParts[0])
         } catch (exception: IllegalArgumentException) {
-            packId = null
+            null
         }
         packVersion = if (packInfoParts.size > 1) Version(packInfoParts[1]) else null
     }
