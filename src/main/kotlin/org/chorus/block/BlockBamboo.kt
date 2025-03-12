@@ -7,8 +7,10 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.BambooLeafSize
 import org.chorus.block.property.enums.BambooStalkThickness
 import org.chorus.event.block.BlockGrowEvent
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.math.MathHelper.clamp
@@ -29,9 +31,11 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
                 }
                 return type
             }
+
             Level.BLOCK_UPDATE_SCHEDULED -> {
                 level.useBreakOn(this.position, null, null, true)
             }
+
             Level.BLOCK_UPDATE_RANDOM -> {
                 val up = up()
                 if (age == 0 && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.minimumLightLevel && ThreadLocalRandom.current()

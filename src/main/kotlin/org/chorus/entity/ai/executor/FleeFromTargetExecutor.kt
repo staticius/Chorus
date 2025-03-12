@@ -7,7 +7,6 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.math.*
 
 
-
 open class FleeFromTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置
     protected var memory: MemoryType<out IVector3?>,
     protected var speed: Float,

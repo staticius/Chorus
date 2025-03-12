@@ -9,8 +9,10 @@ import java.awt.Color
 class BlockColor {
     @JvmField
     val red: Int
+
     @JvmField
     val green: Int
+
     @JvmField
     val blue: Int
     val alpha: Int
@@ -55,6 +57,7 @@ class BlockColor {
 
     companion object {
         val TRANSPARENT_BLOCK_COLOR: BlockColor = BlockColor(0x00, 0x00, 0x00, 0x00)
+
         @JvmField
         val VOID_BLOCK_COLOR: BlockColor = TRANSPARENT_BLOCK_COLOR
         val AIR_BLOCK_COLOR: BlockColor = TRANSPARENT_BLOCK_COLOR

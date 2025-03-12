@@ -1,10 +1,11 @@
 package org.chorus.item.enchantment.loot
 
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.item.enchantment.EnchantmentType
 
 
 class EnchantmentLootFishing : EnchantmentLoot(
-    Enchantment.Companion.ID_FORTUNE_FISHING,
+    ID_FORTUNE_FISHING,
     "lootBonusFishing",
     Rarity.RARE,
     EnchantmentType.FISHING_ROD

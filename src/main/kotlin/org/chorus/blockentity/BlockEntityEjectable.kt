@@ -80,10 +80,10 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
             val c = super.spawnCompound
 
             if (this.hasName()) {
-                c!!.put("CustomName", namedTag["CustomName"])
+                c.put("CustomName", namedTag["CustomName"])
             }
 
-            return c!!
+            return c
         }
 
     override fun saveNBT() {

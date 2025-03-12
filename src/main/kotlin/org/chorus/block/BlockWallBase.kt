@@ -15,9 +15,7 @@ import org.chorus.math.VectorMath.calculateAxis
 import org.chorus.math.VectorMath.calculateFace
 import org.chorus.utils.Faceable
 import org.chorus.utils.Loggable
-
 import java.util.*
-import kotlin.collections.Map
 import kotlin.collections.set
 
 

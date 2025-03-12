@@ -1,13 +1,13 @@
 package org.chorus.recipe
 
+import com.google.common.collect.Lists
+import com.google.common.collect.Maps
+import io.netty.util.collection.CharObjectHashMap
 import org.chorus.item.Item
 import org.chorus.network.protocol.types.RecipeUnlockingRequirement
 import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.recipe.descriptor.ItemDescriptor
 import org.chorus.registry.RecipeRegistry
-import com.google.common.collect.Lists
-import com.google.common.collect.Maps
-import io.netty.util.collection.CharObjectHashMap
 import java.util.*
 
 class ShapedRecipe @JvmOverloads constructor(

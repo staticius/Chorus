@@ -11,7 +11,6 @@ import org.chorus.network.protocol.ContainerOpenPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
-
 class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryType.CONTAINER, 27),
     BlockEntityInventoryNameable {
     private var enderChest: BlockEntityEnderChest? = null
@@ -19,7 +18,7 @@ class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryT
     override fun init() {
         val map = super.slotTypeMap()
         for (i in 0..<getSize()) {
-            map!![i] = ContainerSlotType.LEVEL_ENTITY
+            map[i] = ContainerSlotType.LEVEL_ENTITY
         }
     }
 
@@ -75,7 +74,7 @@ class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryT
 
     override fun slotTypeMap(): MutableMap<Int?, ContainerSlotType?> {
         val map = super.slotTypeMap()
-        map!![SpecialWindowId.CONTAINER_ID_REGISTRY.id] = ContainerSlotType.ANVIL_INPUT
+        map[SpecialWindowId.CONTAINER_ID_REGISTRY.id] = ContainerSlotType.ANVIL_INPUT
         return map
     }
 

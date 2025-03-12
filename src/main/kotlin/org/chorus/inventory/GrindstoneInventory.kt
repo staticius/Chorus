@@ -1,18 +1,18 @@
 package org.chorus.inventory
 
+import com.google.common.collect.BiMap
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.BlockGrindstone
 import org.chorus.event.inventory.InventoryCloseEvent
 import org.chorus.item.*
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import com.google.common.collect.BiMap
-import org.chorus.Server
 
 class GrindstoneInventory(blockGrindstone: BlockGrindstone?) :
     ContainerInventory(blockGrindstone, InventoryType.GRINDSTONE, 3), CraftTypeInventory, SoleInventory {
-    override fun networkSlotMap(): BiMap<Int, Int>? {
+    override fun networkSlotMap(): BiMap<Int, Int> {
         val map = super.networkSlotMap()
-        map!![0] = 16 //INPUT
+        map[0] = 16 //INPUT
         map[1] = 17 //ADDITIONAL
         map[2] = 18 //RESULT
         return map
@@ -20,7 +20,7 @@ class GrindstoneInventory(blockGrindstone: BlockGrindstone?) :
 
     override fun slotTypeMap(): MutableMap<Int?, ContainerSlotType?> {
         val map = super.slotTypeMap()
-        map!![0] = ContainerSlotType.GRINDSTONE_INPUT
+        map[0] = ContainerSlotType.GRINDSTONE_INPUT
         map[1] = ContainerSlotType.GRINDSTONE_ADDITIONAL
         map[2] = ContainerSlotType.GRINDSTONE_RESULT
         return map

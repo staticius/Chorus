@@ -58,7 +58,7 @@ abstract class SlenderProjectile : EntityProjectile {
         val shootEntity: Entity = shootingEntity!!
         val ticks: Int = ticksLived
 
-        val currentAABB: AxisAlignedBB = boundingBox!!.clone()
+        val currentAABB: AxisAlignedBB = boundingBox.clone()
         val dirVector: Vector3 = Vector3(dx, dy, dz).multiply(1 / SPLIT_NUMBER.toDouble())
 
         var collisionEntity: Entity? = null
@@ -100,9 +100,9 @@ abstract class SlenderProjectile : EntityProjectile {
         }
 
         val centerPoint2: Vector3 = Vector3(
-            (boundingBox!!.minX + boundingBox!!.maxX) / 2,
-            (boundingBox!!.minY + boundingBox!!.maxY) / 2,
-            (boundingBox!!.minZ + boundingBox!!.maxZ) / 2
+            (boundingBox.minX + boundingBox.maxX) / 2,
+            (boundingBox.minY + boundingBox.maxY) / 2,
+            (boundingBox.minZ + boundingBox.maxZ) / 2
         )
         val diff: Vector3 = centerPoint1.subtract(centerPoint2)
         if (dy > 0) {
@@ -135,12 +135,12 @@ abstract class SlenderProjectile : EntityProjectile {
                 dz = diff.getZ()
             }
         }
-        boundingBox!!.offset(0.0, dy, 0.0)
-        boundingBox!!.offset(dx, 0.0, 0.0)
-        boundingBox!!.offset(0.0, 0.0, dz)
-        position.x = (boundingBox!!.minX + boundingBox!!.maxX) / 2
-        position.y = boundingBox!!.minY - this.ySize
-        position.z = (boundingBox!!.minZ + boundingBox!!.maxZ) / 2
+        boundingBox.offset(0.0, dy, 0.0)
+        boundingBox.offset(dx, 0.0, 0.0)
+        boundingBox.offset(0.0, 0.0, dz)
+        position.x = (boundingBox.minX + boundingBox.maxX) / 2
+        position.y = boundingBox.minY - this.ySize
+        position.z = (boundingBox.minZ + boundingBox.maxZ) / 2
 
         this.checkChunks()
 

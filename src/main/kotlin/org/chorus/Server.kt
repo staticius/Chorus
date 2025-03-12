@@ -1,5 +1,13 @@
 package org.chorus
 
+import com.google.common.base.Preconditions
+import com.google.common.collect.ImmutableMap
+import eu.okaeri.configs.ConfigManager
+import eu.okaeri.configs.OkaeriConfig
+import it.unimi.dsi.fastutil.longs.LongArrayList
+import it.unimi.dsi.fastutil.longs.LongList
+import it.unimi.dsi.fastutil.longs.LongLists
+import org.apache.commons.io.FileUtils
 import org.chorus.block.BlockComposter
 import org.chorus.command.CommandSender
 import org.chorus.command.ConsoleCommandSender
@@ -15,7 +23,6 @@ import org.chorus.config.YamlSnakeYamlConfigurer
 import org.chorus.console.ChorusConsole
 import org.chorus.dispenser.DispenseBehaviorRegister
 import org.chorus.entity.*
-import org.chorus.entity.Attribute
 import org.chorus.entity.data.Skin
 import org.chorus.entity.data.profession.Profession
 import org.chorus.entity.data.property.EntityProperty
@@ -84,7 +91,6 @@ import org.chorus.tags.ItemTags
 import org.chorus.utils.*
 import org.chorus.utils.JSONUtils.from
 import org.chorus.utils.JSONUtils.toPretty
-import org.chorus.utils.MainLogger
 import org.chorus.utils.SparkInstaller.initSpark
 import org.chorus.utils.StartArgUtils.isShaded
 import org.chorus.utils.StartArgUtils.isValidStart
@@ -92,14 +98,6 @@ import org.chorus.utils.Utils.allThreadDumps
 import org.chorus.utils.Utils.getExceptionMessage
 import org.chorus.utils.Utils.readFile
 import org.chorus.utils.collection.FreezableArrayManager
-import com.google.common.base.Preconditions
-import com.google.common.collect.ImmutableMap
-import eu.okaeri.configs.ConfigManager
-import eu.okaeri.configs.OkaeriConfig
-import it.unimi.dsi.fastutil.longs.LongArrayList
-import it.unimi.dsi.fastutil.longs.LongList
-import it.unimi.dsi.fastutil.longs.LongLists
-import org.apache.commons.io.FileUtils
 import org.iq80.leveldb.CompressionType
 import org.iq80.leveldb.DB
 import org.iq80.leveldb.Options
@@ -133,7 +131,12 @@ import kotlin.system.exitProcess
  * is instantiated in [Chorus] and later the instance object is obtained via [Server.instance].
  * The constructor method of [Server] performs a number of operations, including but not limited to initializing configuration files, creating threads, thread pools, start plugins, registering recipes, blocks, entities, items, etc.
  */
-class Server internal constructor(val filePath: String, dataPath: String, pluginPath: String, predefinedLanguage: String?) {
+class Server internal constructor(
+    val filePath: String,
+    dataPath: String,
+    pluginPath: String,
+    predefinedLanguage: String?
+) {
     val dataPath: String = File(dataPath).absolutePath + "/"
     val pluginPath: String = File(pluginPath).absolutePath + "/"
 
@@ -400,7 +403,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         this.reloadWhitelist()
         operators.reload()
 
-        for (entry in bannedIPs.entires.values) {
+        for (entry in bannedIPs.entries.values) {
             try {
                 network.blockAddress(InetAddress.getByName(entry.name), -1)
             } catch (e: UnknownHostException) {
@@ -529,7 +532,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
 
             log.debug("Stopping network interfaces")
             network.shutdown()
-            playerDataDB!!.close()
+            playerDataDB.close()
             //close watchdog and metrics
             if (this.watchdog != null) {
                 watchdog!!.running = false
@@ -546,7 +549,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
     }
 
     fun start() {
-        for (entry in bannedIPs.entires.values) {
+        for (entry in bannedIPs.entries.values) {
             try {
                 network.blockAddress(InetAddress.getByName(entry.name))
             } catch (ignore: UnknownHostException) {
@@ -1013,8 +1016,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         val revert = ArrayList<Level>()
         val server = instance
         for (level in server.levels.values) {
-            if (level.gameRules!!.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
-                level.gameRules!!.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false)
+            if (level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
+                level.gameRules.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false)
                 revert.add(level)
             }
         }
@@ -1029,7 +1032,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         }
 
         for (level in revert) {
-            level.gameRules!!.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, true)
+            level.gameRules.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, true)
         }
     }
 
@@ -1395,7 +1398,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         val uuid = lookupName(name)
         if (uuid.isEmpty) {
             log.warn("Invalid uuid in name lookup database detected! Removing")
-            playerDataDB!!.delete(name.toByteArray(StandardCharsets.UTF_8))
+            playerDataDB.delete(name.toByteArray(StandardCharsets.UTF_8))
             return null
         }
         return getOfflinePlayerDataInternal(uuid.get(), create)
@@ -1405,7 +1408,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         val uuid = lookupName(name)
         if (uuid.isEmpty) {
             log.warn("Invalid uuid in name lookup database detected! Removing")
-            playerDataDB!!.delete(name.toByteArray(StandardCharsets.UTF_8))
+            playerDataDB.delete(name.toByteArray(StandardCharsets.UTF_8))
             return false
         }
         return hasOfflinePlayerData(uuid.get())
@@ -1415,7 +1418,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         val buffer = ByteBuffer.allocate(16)
         buffer.putLong(uuid.mostSignificantBits)
         buffer.putLong(uuid.leastSignificantBits)
-        val bytes = playerDataDB!![buffer.array()]
+        val bytes = playerDataDB[buffer.array()]
         return bytes != null
     }
 
@@ -1428,7 +1431,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             val buffer = ByteBuffer.allocate(16)
             buffer.putLong(uuid.mostSignificantBits)
             buffer.putLong(uuid.leastSignificantBits)
-            val bytes = playerDataDB!![buffer.array()]
+            val bytes = playerDataDB[buffer.array()]
             if (bytes != null) {
                 return readCompressed(bytes)
             }
@@ -1533,7 +1536,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             val buffer = ByteBuffer.allocate(16)
             buffer.putLong(uuid.mostSignificantBits)
             buffer.putLong(uuid.leastSignificantBits)
-            playerDataDB!!.put(buffer.array(), bytes)
+            playerDataDB.put(buffer.array(), bytes)
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
@@ -1818,7 +1821,7 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
             chooseLanguage = configInstance.getString("settings.language", "eng")
         }
         this.baseLang = BaseLang(chooseLanguage!!)
-        this.baseLangCode= mapInternalLang(chooseLanguage!!)
+        this.baseLangCode = mapInternalLang(chooseLanguage!!)
         log.info("Loading {}...", TextFormat.GREEN.toString() + "nukkit.yml" + TextFormat.RESET)
         this.settings = ConfigManager.create(
             ServerSettings::class.java
@@ -2309,8 +2312,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         val player = this.getPlayerExact(name)
         if (player != null) {
             player.recalculatePermissions()
-            player.getAdventureSettings()!!.onOpChange(true)
-            player.getAdventureSettings()!!.update()
+            player.getAdventureSettings().onOpChange(true)
+            player.getAdventureSettings().update()
             player.session.syncAvailableCommands()
         }
         operators.save(true)
@@ -2321,8 +2324,8 @@ class Server internal constructor(val filePath: String, dataPath: String, plugin
         val player = this.getPlayerExact(name)
         if (player != null) {
             player.recalculatePermissions()
-            player.getAdventureSettings()!!.onOpChange(false)
-            player.getAdventureSettings()!!.update()
+            player.getAdventureSettings().onOpChange(false)
+            player.getAdventureSettings().update()
             player.session.syncAvailableCommands()
         }
         operators.save()

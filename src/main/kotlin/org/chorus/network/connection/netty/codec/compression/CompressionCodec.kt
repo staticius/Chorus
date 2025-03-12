@@ -1,12 +1,12 @@
 package org.chorus.network.connection.netty.codec.compression
 
-import org.chorus.Server
-import org.chorus.network.connection.netty.BedrockBatchWrapper
-import org.chorus.network.protocol.types.*
 import com.google.common.base.Preconditions
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageCodec
+import org.chorus.Server
+import org.chorus.network.connection.netty.BedrockBatchWrapper
+import org.chorus.network.protocol.types.*
 
 class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: Boolean) :
     MessageToMessageCodec<BedrockBatchWrapper, BedrockBatchWrapper>() {
@@ -23,7 +23,7 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
         val compression = strategy.getCompression(msg)
         check(!(!this.prefixed && strategy.defaultCompression.algorithm !== compression.algorithm)) { "Non-default compression algorithm used without prefixing" }
 
-        val compressed = compression!!.encode(ctx, msg.uncompressed)
+        val compressed = compression.encode(ctx, msg.uncompressed)
         try {
             val outBuf: ByteBuf
             if (this.prefixed) {

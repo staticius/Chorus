@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom
 
 class BlockRedMushroomBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
     BlockMushroomBlock(blockstate) {
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return if (ThreadLocalRandom.current().nextInt(1, 20) == 1) {
             arrayOf(
                 Item.get(BlockID.RED_MUSHROOM_BLOCK)

@@ -82,7 +82,7 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, 40),
                         IBehaviorEvaluator { entity: EntityMob ->
                             for (entity1 in entity.level!!.getNearbyEntities(
-                                entity.getBoundingBox()!!.grow(16.0, 16.0, 16.0)
+                                entity.getBoundingBox().grow(16.0, 16.0, 16.0)
                             )) {
                                 if (entity1 is EntitySheep) {
                                     if (entity1.getColor() == DyeColor.BLUE.woolData) {
@@ -109,7 +109,7 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         IBehaviorEvaluator { entity: EntityMob ->
                             var count = 0
                             for (entity1 in entity.level!!.getNearbyEntities(
-                                entity.getBoundingBox()!!.grow(15.0, 15.0, 15.0)
+                                entity.getBoundingBox().grow(15.0, 15.0, 15.0)
                             )) {
                                 if (entity1 is EntityVex) count++
                             }
@@ -173,10 +173,6 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )
-    }
-
-    override fun spawnTo(player: Player) {
-        super.spawnTo(player)
     }
 
     override fun initEntity() {

@@ -62,7 +62,7 @@ class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
         return true
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(get(AIR))
     }
 
@@ -87,7 +87,7 @@ class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
             return
         }
 
-        val endGateway = getOrCreateBlockEntity() ?: return
+        val endGateway = getOrCreateBlockEntity()
 
         if (!endGateway.isTeleportCooldown()) {
             endGateway.teleportEntity(entity)

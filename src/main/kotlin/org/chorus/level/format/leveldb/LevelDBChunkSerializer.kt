@@ -1,5 +1,11 @@
 package org.chorus.level.format.leveldb
 
+import com.google.common.base.Predicates
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufAllocator
+import io.netty.buffer.ByteBufOutputStream
+import io.netty.buffer.Unpooled
+import it.unimi.dsi.fastutil.objects.ReferenceArrayList
 import org.chorus.Player
 import org.chorus.block.BlockAir
 import org.chorus.block.BlockUnknown
@@ -13,12 +19,6 @@ import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.registry.Registries
 import org.chorus.utils.*
-import com.google.common.base.Predicates
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.ByteBufAllocator
-import io.netty.buffer.ByteBufOutputStream
-import io.netty.buffer.Unpooled
-import it.unimi.dsi.fastutil.objects.ReferenceArrayList
 import org.iq80.leveldb.DB
 import org.iq80.leveldb.WriteBatch
 import java.io.BufferedInputStream
@@ -111,10 +111,10 @@ class LevelDBChunkSerializer private constructor() {
             val buffer = ByteBufAllocator.DEFAULT.ioBuffer()
             try {
                 val blockLights = section.blockLights.data
-                buffer.writeInt(blockLights!!.size)
+                buffer.writeInt(blockLights.size)
                 buffer.writeBytes(blockLights)
                 val skyLights = section.skyLights.data
-                buffer.writeInt(skyLights!!.size)
+                buffer.writeInt(skyLights.size)
                 buffer.writeBytes(skyLights)
                 writeBatch.put(
                     LevelDBKeyUtil.PNX_LIGHT.getKey(

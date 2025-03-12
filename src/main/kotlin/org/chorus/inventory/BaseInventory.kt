@@ -1,5 +1,9 @@
 package org.chorus.inventory
 
+import com.google.common.collect.BiMap
+import com.google.common.collect.HashBiMap
+import it.unimi.dsi.fastutil.ints.IntArrayList
+import it.unimi.dsi.fastutil.ints.IntList
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.blockentity.*
@@ -12,11 +16,6 @@ import org.chorus.network.protocol.InventoryContentPacket
 import org.chorus.network.protocol.InventorySlotPacket
 import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.ints.IntList
-
 import org.jetbrains.annotations.ApiStatus
 import java.util.*
 import java.util.function.Consumer
@@ -24,9 +23,8 @@ import kotlin.math.max
 import kotlin.math.min
 
 
-
 abstract class BaseInventory(
-    override var holder: InventoryHolder?,
+    override var holder: InventoryHolder,
     override val type: InventoryType,
     override val size: Int
 ) : Inventory {
@@ -62,30 +60,30 @@ abstract class BaseInventory(
     override var contents: Map<Int, Item>
         get() = HashMap(this.slots)
         set(items) {
-            var items: Map<Int, Item?> = items
-            if (items.size > this.size) {
+            var items1: Map<Int, Item?> = items
+            if (items1.size > this.size) {
                 var newItems =
-                    TreeMap(items)
-                items = newItems
+                    TreeMap(items1)
+                items1 = newItems
                 newItems = TreeMap()
                 var i = 0
-                for ((key, value) in items) {
+                for ((key, value) in items1) {
                     newItems[key] = value
                     i++
                     if (i >= this.size) {
                         break
                     }
                 }
-                items = newItems
+                items1 = newItems
             }
 
             for (i in 0..<this.size) {
-                if (!items.containsKey(i)) {
+                if (!items1.containsKey(i)) {
                     if (slots.containsKey(i)) {
                         this.clear(i)
                     }
                 } else {
-                    if (!this.setItem(i, items[i]!!)) {
+                    if (!this.setItem(i, items1[i]!!)) {
                         this.clear(i)
                     }
                 }
@@ -98,24 +96,24 @@ abstract class BaseInventory(
     }
 
     override fun setItem(index: Int, item: Item, send: Boolean): Boolean {
-        var item = item
+        var item1 = item
         if (index < 0 || index >= this.size) {
             return false
-        } else if (item.isNull) {
+        } else if (item1.isNull) {
             return this.clear(index, send)
         }
 
-        item = item.clone()
+        item1 = item1.clone()
         val holder = this.holder
         if (holder is Entity) {
-            val ev = EntityInventoryChangeEvent(holder, this.getItem(index), item, index)
+            val ev = EntityInventoryChangeEvent(holder, this.getItem(index), item1, index)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 this.sendSlot(index, this.getViewers())
                 return false
             }
 
-            item = ev.newItem
+            item1 = ev.newItem
         }
 
         if (holder is BlockEntity) {
@@ -123,7 +121,7 @@ abstract class BaseInventory(
         }
 
         val old = this.getUnclonedItem(index)
-        slots[index] = item
+        slots[index] = item1
         this.onSlotChange(index, old!!, send)
 
         return true
@@ -132,7 +130,7 @@ abstract class BaseInventory(
     override fun contains(item: Item): Boolean {
         var count = max(1.0, item.getCount().toDouble()).toInt()
         val checkDamage = item.hasMeta() && item.damage >= 0
-        val checkTag = item.compoundTag != null
+        val checkTag = true
         for (i in contents.values) {
             if (item.equals(i, checkDamage, checkTag)) {
                 count -= i.getCount()

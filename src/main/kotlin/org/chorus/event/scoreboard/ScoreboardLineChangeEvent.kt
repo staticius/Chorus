@@ -5,9 +5,6 @@ import org.chorus.scoreboard.IScoreboard
 import org.chorus.scoreboard.IScoreboardLine
 
 
-
-
-
 class ScoreboardLineChangeEvent @JvmOverloads constructor(
     scoreboard: IScoreboard,
     private val line: IScoreboardLine?,

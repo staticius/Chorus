@@ -69,7 +69,7 @@ open class BlockGrassBlock(blockstate: BlockState?) : BlockDirt(blockstate) {
             // and the surrounding area is not otherwise sufficiently lit up.
             if (up()!!.lightFilter > 1) {
                 val ev = BlockFadeEvent(this, get(DIRT))
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
                     level.setBlock(this.position, ev.newState)
                     return type
@@ -81,7 +81,7 @@ open class BlockGrassBlock(blockstate: BlockState?) : BlockDirt(blockstate) {
             // For a dirt block to accept grass from a nearby grass block, the following requirements must be met:
 
             // The source block must have a light level of 9 or brighter directly above it.
-            if (level.getFullLight(position.add(0.0, 1.0, 0.0)!!) >= BlockCrops.minimumLightLevel) {
+            if (level.getFullLight(position.add(0.0, 1.0, 0.0)) >= BlockCrops.minimumLightLevel) {
                 // The dirt block receiving grass must be within a 3×5×3 range of the source block
                 // where the source block is in the center of the second topmost layer of that range.
 
@@ -95,7 +95,7 @@ open class BlockGrassBlock(blockstate: BlockState?) : BlockDirt(blockstate) {
                     && block.up()!!.lightFilter < 2
                 ) {
                     val ev: BlockSpreadEvent = BlockSpreadEvent(block, this, get(GRASS_BLOCK))
-                    instance!!.pluginManager.callEvent(ev)
+                    instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         level.setBlock(block.position, ev.newState)
                     }

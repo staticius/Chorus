@@ -21,7 +21,7 @@ class BlockJukebox @JvmOverloads constructor(blockstate: BlockState? = Companion
         return true
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 

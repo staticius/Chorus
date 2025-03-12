@@ -12,7 +12,7 @@ open class ItemBannerPattern : Item {
     @ApiStatus.Internal
     override fun internalAdjust() {
         val patternType = patternType
-        name = patternType!!.name + " Pattern"
+        name = patternType!!.patternName + " Pattern"
     }
 
     override val maxStackSize: Int

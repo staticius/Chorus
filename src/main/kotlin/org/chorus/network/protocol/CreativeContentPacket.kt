@@ -1,15 +1,11 @@
 package org.chorus.network.protocol
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
 import org.chorus.registry.Registries
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
 import java.util.function.BiConsumer
-
-
-
 
 
 class CreativeContentPacket : DataPacket() {

@@ -3,10 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
 class SubClientLoginPacket : DataPacket() {
     override fun decode(byteBuf: HandleByteBuf) {
     }

@@ -1,12 +1,12 @@
 package org.chorus.inventory
 
+import com.google.common.collect.BiMap
+import com.google.common.collect.HashBiMap
 import org.chorus.Player
 import org.chorus.api.DoNotModify
 import org.chorus.item.Item
 import org.chorus.network.protocol.InventorySlotPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
 import org.jetbrains.annotations.ApiStatus
 
 

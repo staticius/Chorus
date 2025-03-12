@@ -1,16 +1,15 @@
 package org.chorus.network.connection.netty.codec.compression
 
+import io.netty.buffer.ByteBuf
+import io.netty.channel.ChannelHandlerContext
 import org.chorus.compression.CompressionProvider
 import org.chorus.network.protocol.types.*
 import org.chorus.utils.*
-import io.netty.buffer.ByteBuf
-import io.netty.channel.ChannelHandlerContext
-
 
 
 class ZlibCompression(private val zlib: CompressionProvider) : BatchCompression {
-    
-    
+
+
     override val level: Int = 7
 
     @Throws(Exception::class)

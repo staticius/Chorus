@@ -1,16 +1,11 @@
 package org.chorus.network.protocol
 
+import io.netty.handler.codec.EncoderException
 import org.chorus.nbt.NBTIO.writeValue
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
-import io.netty.handler.codec.EncoderException
-
 import java.io.IOException
 import java.nio.ByteOrder
-
-
-
-
 
 
 class LevelEventGenericPacket : DataPacket() {
@@ -23,7 +18,7 @@ class LevelEventGenericPacket : DataPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(eventId)
         try {
-            byteBuf.writeBytes(writeValue(tag!!, ByteOrder.LITTLE_ENDIAN, true)!!)
+            byteBuf.writeBytes(writeValue(tag!!, ByteOrder.LITTLE_ENDIAN, true))
         } catch (e: IOException) {
             throw EncoderException(e)
         }

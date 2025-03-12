@@ -1,13 +1,16 @@
 package org.chorus.block
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.block.BlockGrowEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.AxisAlignedBB
@@ -16,7 +19,6 @@ import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.utils.Faceable
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.set
 
@@ -158,7 +160,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
         val block = this.clone()
         block.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_3, age + 1)
         val ev = BlockGrowEvent(this, block)
-        instance!!.pluginManager.callEvent(ev)
+        instance.pluginManager.callEvent(ev)
         return !ev.isCancelled && level.setBlock(
             this.position,
             ev.newState!!, true, true
@@ -184,11 +186,11 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
     override val itemId: String
         get() = ItemID.COCOA_BEANS
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return Item.get(ItemID.COCOA_BEANS)
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(
             get(
                 ItemID.COCOA_BEANS,

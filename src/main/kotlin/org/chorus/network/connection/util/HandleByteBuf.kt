@@ -1,5 +1,12 @@
 package org.chorus.network.connection.util
 
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufAllocator
+import io.netty.buffer.ByteBufInputStream
+import io.netty.util.ByteProcessor
+import io.netty.util.internal.ObjectUtil
+import io.netty.util.internal.StringUtil
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.block.Block
 import org.chorus.entity.Attribute
 import org.chorus.entity.data.Skin
@@ -33,14 +40,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.*
 import org.chorus.recipe.descriptor.*
 import org.chorus.registry.Registries
 import org.chorus.utils.*
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.ByteBufAllocator
-import io.netty.buffer.ByteBufInputStream
-import io.netty.util.ByteProcessor
-import io.netty.util.internal.ObjectUtil
-import io.netty.util.internal.StringUtil
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -1435,7 +1434,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
 
     @SneakyThrows(IOException::class)
     fun writeTag(tag: CompoundTag) {
-        writeBytes(write(tag)!!)
+        writeBytes(write(tag))
     }
 
 

@@ -26,7 +26,7 @@ class BlockPolishedTuffStairs @JvmOverloads constructor(blockstate: BlockState? 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.POLISHED_TUFF_STAIRS,
+            BlockID.BlockID.POLISHED_TUFF_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

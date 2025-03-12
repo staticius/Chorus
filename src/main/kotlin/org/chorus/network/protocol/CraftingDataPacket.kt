@@ -9,14 +9,11 @@ import org.chorus.recipe.descriptor.DefaultDescriptor
 import java.util.*
 
 
-
-
-
-
 class CraftingDataPacket : DataPacket() {
     private val entries: MutableList<Recipe> = ArrayList()
     private val brewingEntries: List<BrewingRecipe> = ArrayList()
     private val containerEntries: List<ContainerRecipe> = ArrayList()
+
     @JvmField
     var cleanRecipes: Boolean = false
 

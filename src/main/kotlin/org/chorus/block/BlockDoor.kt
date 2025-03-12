@@ -1,5 +1,7 @@
 package org.chorus.block
 
+import com.google.common.collect.BiMap
+import com.google.common.collect.HashBiMap
 import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
@@ -19,11 +21,6 @@ import org.chorus.math.BlockFace.AxisDirection
 import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
-import kotlin.collections.ArrayList
-import kotlin.collections.MutableList
-import kotlin.collections.get
 import kotlin.collections.set
 
 
@@ -349,11 +346,11 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
 
         val source = vector3.add(0.5, 0.5, 0.5)
         val vibrationEvent = if (open) VibrationEvent(
-            player ?: this,
-            source!!, VibrationType.BLOCK_OPEN
+            player,
+            source, VibrationType.BLOCK_OPEN
         ) else VibrationEvent(
-            player ?: this,
-            source!!, VibrationType.BLOCK_CLOSE
+            player,
+            source, VibrationType.BLOCK_CLOSE
         )
         level.vibrationManager.callVibrationEvent(vibrationEvent)
         return true

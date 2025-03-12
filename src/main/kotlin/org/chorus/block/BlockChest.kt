@@ -5,30 +5,15 @@ import org.chorus.block.Block.Companion.get
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.enums.MinecraftCardinalDirection
-import org.chorus.block.property.type.BaseBlockPropertyType.getValidValues
 import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntityCampfire.getInventory
-import org.chorus.blockentity.BlockEntityChest.getInventory
-import org.chorus.blockentity.BlockEntityChest.isPaired
-import org.chorus.blockentity.BlockEntityChest.pairWith
-import org.chorus.blockentity.BlockEntityChest.unpair
-import org.chorus.blockentity.BlockEntityCommandBlock.getInventory
-import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
-import org.chorus.item.Item.namedTag
 import org.chorus.level.Locator
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
-import org.chorus.math.Vector3.equals
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.nbt.tag.CompoundTag.contains
-import org.chorus.nbt.tag.CompoundTag.get
-import org.chorus.nbt.tag.CompoundTag.getString
 import org.chorus.nbt.tag.Tag
-import org.chorus.registry.BlockRegistry.get
-import org.chorus.registry.BlockState2ItemMetaRegistry.get
 import org.chorus.utils.Faceable
 
 open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
@@ -113,13 +98,13 @@ open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Compan
         val nbt = CompoundTag().putList("Items", ListTag<Tag>())
 
         if (item.hasCustomName()) {
-            nbt!!.putString("CustomName", item.customName)
+            nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
             val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
-                nbt!!.put(key, value)
+                nbt.put(key, value)
             }
         }
 
@@ -272,7 +257,8 @@ open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Compan
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
 
     }
 }

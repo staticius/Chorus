@@ -2,7 +2,7 @@ package org.chorus.nbt.tag
 
 class EndTag : Tag<Void>() {
     override val id: Byte
-        get() = Tag.TAG_END
+        get() = TAG_END
 
     override fun toString(): String {
         return "EndTag"

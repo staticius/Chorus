@@ -14,7 +14,6 @@ import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.LevelSoundEventPacketV2
 
 
-
 /**
  * @author PikyCZ
  */

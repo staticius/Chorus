@@ -8,7 +8,7 @@ import org.chorus.network.protocol.LevelEventPacket
  * @author joserobjr
  * @since 2021-06-15
  */
-class ScrapeParticle(pos: Vector3) : GenericParticle(pos, Particle.Companion.TYPE_WAX) {
+class ScrapeParticle(pos: Vector3) : GenericParticle(pos, TYPE_WAX) {
     override fun encode(): Array<DataPacket> {
         val pk = LevelEventPacket()
         pk.evid = LevelEventPacket.EVENT_PARTICLE_SCRAPE

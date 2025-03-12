@@ -45,23 +45,23 @@ interface AxisAlignedBB : Cloneable {
     }
 
     fun expand(x: Double, y: Double, z: Double): AxisAlignedBB {
-        this.minX = this.minX - x
-        this.minY = this.minY - y
-        this.minZ = this.minZ - z
-        this.maxX = this.maxX + x
-        this.maxY = this.maxY + y
-        this.maxZ = this.maxZ + z
+        this.minX -= x
+        this.minY -= y
+        this.minZ -= z
+        this.maxX += x
+        this.maxY += y
+        this.maxZ += z
 
         return this
     }
 
     fun offset(x: Double, y: Double, z: Double): AxisAlignedBB {
-        this.minX = this.minX + x
-        this.minY = this.minY + y
-        this.minZ = this.minZ + z
-        this.maxX = this.maxX + x
-        this.maxY = this.maxY + y
-        this.maxZ = this.maxZ + z
+        this.minX += x
+        this.minY += y
+        this.minZ += z
+        this.maxX += x
+        this.maxY += y
+        this.maxZ += z
 
         return this
     }
@@ -78,12 +78,12 @@ interface AxisAlignedBB : Cloneable {
     }
 
     fun contract(x: Double, y: Double, z: Double): AxisAlignedBB {
-        this.minX = this.minX + x
-        this.minY = this.minY + y
-        this.minZ = this.minZ + z
-        this.maxX = this.maxX - x
-        this.maxY = this.maxY - y
-        this.maxZ = this.maxZ - z
+        this.minX += x
+        this.minY += y
+        this.minZ += z
+        this.maxX -= x
+        this.maxY -= y
+        this.maxZ -= z
 
         return this
     }
@@ -114,75 +114,75 @@ interface AxisAlignedBB : Cloneable {
     }
 
     fun calculateXOffset(bb: AxisAlignedBB, x: Double): Double {
-        var x = x
+        var x3 = x
         if (bb.maxY <= this.minY || bb.minY >= this.maxY) {
-            return x
+            return x3
         }
         if (bb.maxZ <= this.minZ || bb.minZ >= this.maxZ) {
-            return x
+            return x3
         }
-        if (x > 0 && bb.maxX <= this.minX) {
+        if (x3 > 0 && bb.maxX <= this.minX) {
             val x1 = this.minX - bb.maxX
-            if (x1 < x) {
-                x = x1
+            if (x1 < x3) {
+                x3 = x1
             }
         }
-        if (x < 0 && bb.minX >= this.maxX) {
+        if (x3 < 0 && bb.minX >= this.maxX) {
             val x2 = this.maxX - bb.minX
-            if (x2 > x) {
-                x = x2
+            if (x2 > x3) {
+                x3 = x2
             }
         }
 
-        return x
+        return x3
     }
 
     fun calculateYOffset(bb: AxisAlignedBB, y: Double): Double {
-        var y = y
+        var y3 = y
         if (bb.maxX <= this.minX || bb.minX >= this.maxX) {
-            return y
+            return y3
         }
         if (bb.maxZ <= this.minZ || bb.minZ >= this.maxZ) {
-            return y
+            return y3
         }
-        if (y > 0 && bb.maxY <= this.minY) {
+        if (y3 > 0 && bb.maxY <= this.minY) {
             val y1 = this.minY - bb.maxY
-            if (y1 < y) {
-                y = y1
+            if (y1 < y3) {
+                y3 = y1
             }
         }
-        if (y < 0 && bb.minY >= this.maxY) {
+        if (y3 < 0 && bb.minY >= this.maxY) {
             val y2 = this.maxY - bb.minY
-            if (y2 > y) {
-                y = y2
+            if (y2 > y3) {
+                y3 = y2
             }
         }
 
-        return y
+        return y3
     }
 
     fun calculateZOffset(bb: AxisAlignedBB, z: Double): Double {
-        var z = z
+        var z3 = z
         if (bb.maxX <= this.minX || bb.minX >= this.maxX) {
-            return z
+            return z3
         }
         if (bb.maxY <= this.minY || bb.minY >= this.maxY) {
-            return z
+            return z3
         }
-        if (z > 0 && bb.maxZ <= this.minZ) {
+        if (z3 > 0 && bb.maxZ <= this.minZ) {
             val z1 = this.minZ - bb.maxZ
-            if (z1 < z) {
-                z = z1
+            if (z1 < z3) {
+                z3 = z1
             }
         }
-        if (z < 0 && bb.minZ >= this.maxZ) {
+        if (z3 < 0 && bb.minZ >= this.maxZ) {
             val z2 = this.maxZ - bb.minZ
-            if (z2 > z) {
-                z = z2
+            if (z2 > z3) {
+                z3 = z2
             }
         }
 
-        return z
+        return z3
     }
 
     fun intersectsWith(bb: AxisAlignedBB): Boolean {
@@ -281,9 +281,7 @@ interface AxisAlignedBB : Cloneable {
             return null
         }
 
-        var f: BlockFace? = null
-
-        f = if (vector === v1) {
+        val f: BlockFace = if (vector === v1) {
             BlockFace.WEST
         } else if (vector === v2) {
             BlockFace.EAST
@@ -301,34 +299,16 @@ interface AxisAlignedBB : Cloneable {
     }
 
     var minX: Double
-        set(minX) {
-            throw UnsupportedOperationException("Not mutable")
-        }
 
     var minY: Double
-        set(minY) {
-            throw UnsupportedOperationException("Not mutable")
-        }
 
     var minZ: Double
-        set(minZ) {
-            throw UnsupportedOperationException("Not mutable")
-        }
 
     var maxX: Double
-        set(maxX) {
-            throw UnsupportedOperationException("Not mutable")
-        }
 
     var maxY: Double
-        set(maxY) {
-            throw UnsupportedOperationException("Not mutable")
-        }
 
     var maxZ: Double
-        set(maxZ) {
-            throw UnsupportedOperationException("Not mutable")
-        }
 
     public override fun clone(): AxisAlignedBB
 

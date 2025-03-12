@@ -120,13 +120,13 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState? = Co
         val nbt = CompoundTag().putList("Items", ListTag())
 
         if (item.hasCustomName()) {
-            nbt!!.putString("CustomName", item.customName)
+            nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
             val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
-                nbt!!.put(key, value)
+                nbt.put(key, value)
             }
         }
 
@@ -236,7 +236,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState? = Co
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    val dispensePosition: Vector3?
+    val dispensePosition: Vector3
         get() {
             val facing = blockFace
             return position.add(
@@ -254,7 +254,11 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.DISPENSER, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.TRIGGERED_BIT)
-            
+            BlockProperties(
+                BlockID.DISPENSER,
+                CommonBlockProperties.FACING_DIRECTION,
+                CommonBlockProperties.TRIGGERED_BIT
+            )
+
     }
 }

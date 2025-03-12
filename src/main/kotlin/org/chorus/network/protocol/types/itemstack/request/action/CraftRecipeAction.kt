@@ -1,7 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 
-
 /**
  * CraftRecipeStackRequestActionData is sent by the client the moment it begins crafting an item. This is the
  * first action sent, before the Consume and Create item stack request actions.

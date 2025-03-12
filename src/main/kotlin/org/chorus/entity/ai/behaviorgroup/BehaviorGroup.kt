@@ -29,7 +29,7 @@ import kotlin.math.min
  */
 
 
-class BehaviorGroup  constructor(
+class BehaviorGroup(
     /**
      * 记录距离上次路径更新过去的gt数
      */
@@ -365,7 +365,7 @@ class BehaviorGroup  constructor(
         if (EntityAI.checkDebugOption(EntityAI.DebugOption.MEMORY)) {
             val sortedMemory: ArrayList<Map.Entry<MemoryType<*>, Any>> =
                 ArrayList<Map.Entry<MemoryType<*>, Any>>(getMemoryStorage().all.entries)
-            sortedMemory.sort(
+            sortedMemory.sortWith(
                 Comparator.comparing(
                     { s: Map.Entry<MemoryType<*>, Any?> -> s.key.identifier.path },
                     { obj: String, anotherString: String? ->
@@ -388,7 +388,7 @@ class BehaviorGroup  constructor(
         if (EntityAI.checkDebugOption(EntityAI.DebugOption.BEHAVIOR)) {
             if (!coreBehaviors.isEmpty()) {
                 val sortedCoreBehaviors = ArrayList(coreBehaviors)
-                sortedCoreBehaviors.sort(
+                sortedCoreBehaviors.sortWith(
                     Comparator.comparing(
                         { obj: IBehavior -> obj.priority },
                         { obj: Int, anotherInteger: Int? ->
@@ -408,7 +408,7 @@ class BehaviorGroup  constructor(
             }
 
             val sortedBehaviors = ArrayList(behaviors)
-            sortedBehaviors.sort(
+            sortedBehaviors.sortWith(
                 Comparator.comparing(
                     { obj: IBehavior -> obj.priority },
                     { obj: Int, anotherInteger: Int? ->

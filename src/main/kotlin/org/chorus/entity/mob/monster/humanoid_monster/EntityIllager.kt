@@ -1,6 +1,8 @@
 package org.chorus.entity.mob.monster.humanoid_monster
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.mob.villagers.EntityVillager
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag

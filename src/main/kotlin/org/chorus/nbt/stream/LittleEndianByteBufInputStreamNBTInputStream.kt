@@ -4,9 +4,6 @@ import org.chorus.nbt.tag.*
 import org.chorus.utils.LittleEndianByteBufInputStream
 import java.io.DataInput
 import java.io.IOException
-import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.MutableList
 import kotlin.collections.set
 
 class LittleEndianByteBufInputStreamNBTInputStream(private val stream: LittleEndianByteBufInputStream) : DataInput,

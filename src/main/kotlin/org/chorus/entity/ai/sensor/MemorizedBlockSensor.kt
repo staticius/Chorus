@@ -16,7 +16,6 @@ class MemorizedBlockSensor @JvmOverloads constructor(
     override fun sense(entity: EntityMob) {
         val blockClass =
             entity.memoryStorage!!.get<Class<out Block>>(CoreMemoryTypes.Companion.LOOKING_BLOCK)
-                ?: return
         var block: Block? = null
         for (x in -range..range) {
             for (z in -range..range) {

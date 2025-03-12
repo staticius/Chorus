@@ -8,7 +8,8 @@ class BlockDarkOakSlab(blockstate: BlockState?) : BlockWoodenSlab(blockstate, DA
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.DARK_OAK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.DARK_OAK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
 
     }
 }

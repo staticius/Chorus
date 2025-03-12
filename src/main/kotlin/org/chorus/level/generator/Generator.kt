@@ -1,14 +1,12 @@
 package org.chorus.level.generator
 
+import com.google.common.base.Preconditions
 import org.chorus.block.BlockID
 import org.chorus.level.DimensionData
 import org.chorus.level.Level
 import org.chorus.level.format.IChunk
-import com.google.common.base.Preconditions
-
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
-
 
 
 abstract class Generator(val dimensionData: DimensionData, val settings: Map<String?, Any>?) :

@@ -6,7 +6,7 @@ class BlockChemistryTable @JvmOverloads constructor(blockstate: BlockState? = Co
     Block(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.CHEMISTRY_TABLE,
+            BlockID.BlockID.CHEMISTRY_TABLE,
             CommonBlockProperties.CHEMISTRY_TABLE_TYPE,
             CommonBlockProperties.DIRECTION
         )

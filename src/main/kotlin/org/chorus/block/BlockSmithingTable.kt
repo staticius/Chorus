@@ -17,19 +17,6 @@ class BlockSmithingTable @JvmOverloads constructor(blockState: BlockState? = Com
         return true
     }
 
-    override fun place(
-        item: Item,
-        block: Block,
-        target: Block,
-        face: BlockFace,
-        fx: Double,
-        fy: Double,
-        fz: Double,
-        player: Player?
-    ): Boolean {
-        return super.place(item, block, target, face, fx, fy, fz, player)
-    }
-
     override fun onActivate(
         item: Item,
         player: Player?,

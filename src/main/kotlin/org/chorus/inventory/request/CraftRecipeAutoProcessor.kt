@@ -13,7 +13,6 @@ import org.chorus.recipe.descriptor.ItemTagDescriptor
 import org.chorus.registry.Registries
 
 
-
 class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipeAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_RECIPE_AUTO

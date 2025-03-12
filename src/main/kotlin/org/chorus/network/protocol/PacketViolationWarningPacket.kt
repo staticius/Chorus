@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class PacketViolationWarningPacket : DataPacket() {
     var type: PacketViolationType? = null
     var severity: PacketViolationSeverity? = null

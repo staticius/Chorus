@@ -93,7 +93,7 @@ class EntityDataMap : MutableMap<EntityDataType<*>?, Any?> {
             return this.putFlags(value as EnumSet<EntityFlag?>)
         }
         if (Number::class.java.isAssignableFrom(value.javaClass)) {
-            val type: Class<*>? = key.getType()
+            val type: Class<*> = key.getType()
             val number: Number = value as Number
             if (type == Long::class.javaPrimitiveType || type == Long::class.java) {
                 value = number.toLong()

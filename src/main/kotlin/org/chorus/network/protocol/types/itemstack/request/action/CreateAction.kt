@@ -1,7 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 
-
 /**
  * CreateStackRequestActionData is sent by the client when an item is created through being used as part of a
  * recipe. For example, when milk is used to craft a cake, the buckets are leftover. The buckets are moved to

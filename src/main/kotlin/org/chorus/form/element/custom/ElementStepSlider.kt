@@ -8,7 +8,6 @@ import com.google.gson.JsonObject
 import java.util.function.Consumer
 
 
-
 @Accessors(chain = true, fluent = true)
 
 class ElementStepSlider : ElementCustom {
@@ -33,7 +32,7 @@ class ElementStepSlider : ElementCustom {
         return this
     }
 
-    override fun toJson(): JsonObject? {
+    override fun toJson(): JsonObject {
         Preconditions.checkArgument(
             this.defaultStep > -1 && this.defaultStep < steps!!.size(),
             "Default option not within range"

@@ -67,7 +67,7 @@ class GuardianAttackExecutor(
         } else if (tick2 != 0) {
             tick2++
             if (tick2 > attackDelay) {
-                if (entity.getDataProperty<Long>(EntityDataTypes.Companion.TARGET_EID!!, 0L) == target!!.id) {
+                if (entity.getDataProperty<Long>(EntityDataTypes.Companion.TARGET_EID, 0L) == target!!.id) {
                     val event = EntityDamageByEntityEvent(
                         entity,
                         target!!,

@@ -1,10 +1,10 @@
 package org.chorus.level.format
 
+import it.unimi.dsi.fastutil.Pair
 import org.chorus.level.DimensionData
 import org.chorus.level.GameRules
 import org.chorus.level.Level
 import org.chorus.math.Vector3
-import it.unimi.dsi.fastutil.Pair
 
 
 interface LevelProvider {

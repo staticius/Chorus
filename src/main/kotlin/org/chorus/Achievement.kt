@@ -1,7 +1,7 @@
 package org.chorus
 
 import org.chorus.config.ServerPropertiesKeys
-import org.chorus.utils.*
+import org.chorus.utils.TextFormat
 
 class Achievement(val message: String, vararg requires: String) {
     val requires: Array<String>

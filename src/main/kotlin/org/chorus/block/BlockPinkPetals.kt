@@ -59,7 +59,7 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState? = Compan
                 )
                 level.setBlock(this.position, this)
             } else {
-                level.dropItem(this.position, toItem()!!)
+                level.dropItem(this.position, toItem())
             }
 
             level.addParticle(BoneMealParticle(this.position))
@@ -67,7 +67,7 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState? = Compan
             return true
         }
 
-        if (item.BlockID.== BlockID.PINK_PETALS && getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH) < 3) {
+        if (item.BlockID.== BlockID . PINK_PETALS && getPropertyValue < Int, IntPropertyType>(CommonBlockProperties.GROWTH) < 3) {
             setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.GROWTH, getPropertyValue<Int, IntPropertyType>(
                     CommonBlockProperties.GROWTH
@@ -83,7 +83,7 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.PINK_PETALS,
+            BlockID.BlockID.PINK_PETALS,
             CommonBlockProperties.GROWTH, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )
 

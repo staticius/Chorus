@@ -1,14 +1,13 @@
 package org.chorus.registry
 
-import org.chorus.registry.RegisterException
-import org.chorus.utils.BinaryStream
+
 import com.google.gson.JsonParser
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-
-
+import org.chorus.registry.RegisterException
+import org.chorus.utils.BinaryStream
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.concurrent.atomic.AtomicBoolean
@@ -155,7 +154,7 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
 
         private val ID2NAME = Int2ObjectOpenHashMap<String?>()
 
-        
+
         private val ITEMDATA = ObjectOpenHashSet<ItemData>()
 
         private var itemPalette: ByteArray

@@ -15,7 +15,7 @@ class BlockCrimsonStairs @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.CRIMSON_STAIRS,
+            BlockID.CRIMSON_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

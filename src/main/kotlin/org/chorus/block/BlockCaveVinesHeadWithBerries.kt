@@ -1,7 +1,8 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 
 class BlockCaveVinesHeadWithBerries @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockCaveVines(blockstate) {
@@ -14,7 +15,7 @@ class BlockCaveVinesHeadWithBerries @JvmOverloads constructor(blockstate: BlockS
     override val lightLevel: Int
         get() = 14
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(Item.get(ItemID.GLOW_BERRIES))
     }
 

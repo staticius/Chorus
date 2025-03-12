@@ -1,10 +1,10 @@
 package org.chorus.item
 
+import com.google.gson.Gson
+import io.netty.util.internal.EmptyArrays
 import org.chorus.nbt.NBTIO
 import org.chorus.registry.CreativeItemRegistry
 import org.chorus.registry.Registries
-import com.google.gson.Gson
-import io.netty.util.internal.EmptyArrays
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException

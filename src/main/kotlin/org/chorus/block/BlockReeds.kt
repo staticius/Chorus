@@ -58,7 +58,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState? = Companion.p
                     val block = this.up(i)
                     if (block!!.isAir) {
                         val ev: BlockGrowEvent = BlockGrowEvent(block, get(BlockID.REEDS))
-                        instance!!.pluginManager.callEvent(ev)
+                        instance.pluginManager.callEvent(ev)
 
                         if (!ev.isCancelled) {
                             level.setBlock(block.position, ev.newState, true)
@@ -123,7 +123,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState? = Companion.p
             }
 
             val ev: BlockGrowEvent = BlockGrowEvent(up, get(BlockID.REEDS))
-            instance!!.pluginManager.callEvent(ev)
+            instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
                 return type

@@ -1,8 +1,6 @@
 package org.chorus.network.protocol.types
 
 
-
-
 class CommandOutputMessage(
     var internal: Boolean,
     var messageId: String, var parameters: Array<String?>

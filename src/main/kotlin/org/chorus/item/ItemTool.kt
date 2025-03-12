@@ -40,7 +40,7 @@ abstract class ItemTool @JvmOverloads constructor(id: String, meta: Int = 0, cou
         set(damage) {
             val event = ItemWearEvent(this, damage)
             val pluginManager = Server.instance.pluginManager
-            pluginManager?.callEvent(event) //Method gets called on server start before plugin manager is initiated
+            pluginManager.callEvent(event) //Method gets called on server start before plugin manager is initiated
 
             if (!event.isCancelled) {
                 super.setDamage(event.newDurability)

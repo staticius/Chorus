@@ -3,7 +3,9 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.utils.Faceable
@@ -76,7 +78,7 @@ class BlockEndRod @JvmOverloads constructor(blockState: BlockState? = Companion.
         return true
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 

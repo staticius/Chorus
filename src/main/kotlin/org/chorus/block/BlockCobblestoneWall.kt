@@ -1,7 +1,9 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 
 class BlockCobblestoneWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {
@@ -14,13 +16,13 @@ class BlockCobblestoneWall @JvmOverloads constructor(blockstate: BlockState? = C
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(properties.defaultState.toBlock())
     }
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.COBBLESTONE_WALL,
+            BlockID.COBBLESTONE_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,

@@ -1,5 +1,7 @@
 package org.chorus.plugin
 
+
+import io.netty.util.internal.EmptyArrays
 import org.chorus.Server
 import org.chorus.command.PluginCommand
 import org.chorus.command.SimpleCommandMap
@@ -10,9 +12,6 @@ import org.chorus.permission.Permissible
 import org.chorus.permission.Permission
 import org.chorus.utils.PluginException
 import org.chorus.utils.Utils
-import io.netty.util.internal.EmptyArrays
-
-
 import java.io.File
 import java.lang.Deprecated
 import java.lang.reflect.Method
@@ -177,7 +176,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             for (loader in loaders.values) {
                 for (file in Objects.requireNonNull<Array<File>>(dictionary.listFiles { dir: File?, name: String? ->
                     for (pattern in loader.pluginFilters) {
-                        if (pattern!!.matcher(name).matches()) {
+                        if (pattern.matcher(name).matches()) {
                             return@listFiles true
                         }
                     }

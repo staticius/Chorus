@@ -28,7 +28,7 @@ class BlockMycelium : BlockDirt {
     override val resistance: Double
         get() = 2.5
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf<Item?>(
             ItemBlock(get(BlockID.DIRT))
         )
@@ -49,7 +49,7 @@ class BlockMycelium : BlockDirt {
                 ) {
                     if (block.up()!!.isTransparent) {
                         val ev: BlockSpreadEvent = BlockSpreadEvent(block, this, get(BlockID.MYCELIUM))
-                        instance!!.pluginManager.callEvent(ev)
+                        instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
                             level.setBlock(block.position, ev.newState)
                         }

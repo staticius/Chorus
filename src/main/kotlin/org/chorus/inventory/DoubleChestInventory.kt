@@ -42,7 +42,7 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
     override fun init() {
         val map = super.slotTypeMap()
         for (i in 0..<getSize()) {
-            map!![i] = ContainerSlotType.LEVEL_ENTITY
+            map[i] = ContainerSlotType.LEVEL_ENTITY
         }
     }
 

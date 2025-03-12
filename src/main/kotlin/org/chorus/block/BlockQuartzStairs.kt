@@ -26,7 +26,7 @@ class BlockQuartzStairs @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.QUARTZ_STAIRS,
+            BlockID.BlockID.QUARTZ_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

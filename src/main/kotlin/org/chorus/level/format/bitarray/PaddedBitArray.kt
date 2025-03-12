@@ -1,7 +1,7 @@
 package org.chorus.level.format.bitarray
 
-import org.chorus.math.ChorusMath
 import com.google.common.base.Objects
+import org.chorus.math.ChorusMath
 
 /**
  * Allay Project 2023/4/14

@@ -24,7 +24,7 @@ class TurtleEggHatchEvent(turtleEgg: BlockTurtleEgg, @JvmField var eggsHatching:
         }
     }
 
-    override fun getBlock(): BlockTurtleEgg? {
+    override fun getBlock(): BlockTurtleEgg {
         return super.getBlock() as BlockTurtleEgg
     }
 

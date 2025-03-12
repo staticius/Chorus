@@ -1,11 +1,11 @@
 package org.chorus.command.selector.args.impl
 
+import com.google.common.collect.ImmutableMap
 import org.chorus.Player
 import org.chorus.command.CommandSender
 import org.chorus.entity.Entity
 import org.chorus.level.Transform
 import org.chorus.registry.Registries
-import com.google.common.collect.ImmutableMap
 import java.util.function.Predicate
 
 class Type : CachedSimpleSelectorArgument() {

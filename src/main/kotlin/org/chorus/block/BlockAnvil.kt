@@ -7,7 +7,9 @@ import org.chorus.block.property.enums.Damage
 import org.chorus.inventory.AnvilInventory
 import org.chorus.inventory.BlockInventoryHolder
 import org.chorus.inventory.Inventory
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.level.Sound
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
@@ -137,6 +139,7 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Compan
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.ANVIL, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.ANVIL, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
     }
 }

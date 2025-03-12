@@ -11,11 +11,7 @@ import org.chorus.entity.Entity
 import org.chorus.inventory.InventoryHolder
 import org.chorus.item.Item
 import org.chorus.level.Locator
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.listOf
 import kotlin.collections.set
-import kotlin.collections.toTypedArray
 
 class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replaceitem.description") {
     init {

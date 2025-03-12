@@ -1,5 +1,6 @@
 package org.chorus.inventory.fake
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus.Player
 import org.chorus.block.Block
 import org.chorus.blockentity.BlockEntity.Companion.getDefaultCompound
@@ -7,7 +8,6 @@ import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.BlockEntityDataPacket
 import org.chorus.network.protocol.UpdateBlockPacket
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import java.util.function.Consumer
 
 open class SingleFakeBlock : FakeBlock {

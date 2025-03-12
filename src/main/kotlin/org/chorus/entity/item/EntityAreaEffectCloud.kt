@@ -31,7 +31,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     private var lastAge: Int = 0
 
     fun getWaitTime(): Int {
-        return this.getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_WAITING!!, 0)
+        return this.getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_WAITING, 0)
     }
 
     fun setWaitTime(waitTime: Int) {
@@ -43,7 +43,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getPotionId(): Int {
-        return getDataProperty<Short>(EntityDataTypes.Companion.AUX_VALUE_DATA!!).toInt()
+        return getDataProperty<Short>(EntityDataTypes.Companion.AUX_VALUE_DATA).toInt()
     }
 
     fun setPotionId(potionId: Int) {
@@ -70,10 +70,10 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
 
             val potion: PotionType = PotionType.Companion.get(getPotionId())
             for (effect: Effect in potion.getEffects(true)!!) {
-                val effectColor: Color? = effect.getColor()
-                color.get(1) += effectColor!!.getRed() * effect.getLevel()
-                color.get(2) += effectColor.getGreen() * effect.getLevel()
-                color.get(3) += effectColor.getBlue() * effect.getLevel()
+                val effectColor: Color = effect.getColor()
+                color.get(1) += effectColor!!.red * effect.getLevel()
+                color.get(2) += effectColor.green * effect.getLevel()
+                color.get(3) += effectColor.blue * effect.getLevel()
                 count += effect.getLevel()
             }
         }
@@ -87,7 +87,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getPotionColor(): Int {
-        return this.getDataProperty<Int>(EntityDataTypes.Companion.EFFECT_COLOR!!)
+        return this.getDataProperty<Int>(EntityDataTypes.Companion.EFFECT_COLOR)
     }
 
     fun setPotionColor(argp: Int) {
@@ -106,7 +106,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getPickupCount(): Int {
-        return this.getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_PICKUP_COUNT!!)
+        return this.getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_PICKUP_COUNT)
     }
 
     fun setPickupCount(pickupCount: Int) {
@@ -118,7 +118,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getRadiusChangeOnPickup(): Float {
-        return this.getDataProperty<Float>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP!!)
+        return this.getDataProperty<Float>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP)
     }
 
     fun setRadiusChangeOnPickup(radiusChangeOnPickup: Float) {
@@ -130,7 +130,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getRadiusPerTick(): Float {
-        return this.getDataProperty<Float>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_CHANGE_RATE!!)
+        return this.getDataProperty<Float>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_CHANGE_RATE)
     }
 
     fun setRadiusPerTick(radiusPerTick: Float) {
@@ -142,7 +142,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getSpawnTime(): Long {
-        return getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_SPAWN_TIME!!).toLong()
+        return getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_SPAWN_TIME).toLong()
     }
 
     fun setSpawnTime(spawnTime: Long) {
@@ -154,7 +154,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getDuration(): Int {
-        return this.getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_DURATION!!)
+        return this.getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_DURATION)
     }
 
     fun setDuration(duration: Int) {
@@ -166,7 +166,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getRadius(): Float {
-        return this.getDataProperty<Float>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_RADIUS!!)
+        return this.getDataProperty<Float>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_RADIUS)
     }
 
     fun setRadius(radius: Float) {
@@ -183,7 +183,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
 
 
     fun getParticleId(): Int {
-        return this.getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_PARTICLE!!)
+        return this.getDataProperty<Int>(EntityDataTypes.Companion.AREA_EFFECT_CLOUD_PARTICLE)
     }
 
     fun setParticleId(particleId: Int) {
@@ -285,7 +285,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         val effectsTag: ListTag<CompoundTag> = ListTag()
         for (effect: Effect in cloudEffects!!) {
             effectsTag.add(
-                CompoundTag().putByte("Id", effect.getId()!!)
+                CompoundTag().putByte("Id", effect.getId())
                     .putBoolean("Ambient", effect.isAmbient())
                     .putByte("Amplifier", effect.getAmplifier())
                     .putBoolean("DisplayOnScreenTextureAnimation", effect.isVisible())
@@ -356,7 +356,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         }
 
         val height: Float = getHeight()
-        boundingBox!!.setBounds(
+        boundingBox.setBounds(
             position.x - radius,
             position.y - height,
             position.z - radius,

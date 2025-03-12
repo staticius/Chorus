@@ -8,13 +8,8 @@ import org.chorus.command.tree.node.*
 import org.chorus.command.utils.CommandLogger
 import org.chorus.lang.CommandOutputContainer
 import org.chorus.plugin.InternalPlugin
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.Map
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.indices
-import kotlin.collections.iterator
 import kotlin.collections.set
 
 class ParamTree {
@@ -51,7 +46,7 @@ class ParamTree {
         val root = HashMap<String, ParamList>()
         for ((key, value) in command.commandParameters) {
             val paramList = ParamList(this)
-            for (parameter in value!!) {
+            for (parameter in value) {
                 val node = parameter.paramNode
                     ?: if (parameter.enumData == null) {
                         when (parameter.type) {

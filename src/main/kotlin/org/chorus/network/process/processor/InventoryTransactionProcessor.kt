@@ -209,7 +209,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 )
                 entityDamageByEntityEvent.isBreakShield = item.canBreakShield()
                 if (player.isSpectator) entityDamageByEntityEvent.setCancelled()
-                if ((target is Player) && !player.level!!.gameRules!!.getBoolean(GameRule.PVP)) {
+                if ((target is Player) && !player.level!!.gameRules.getBoolean(GameRule.PVP)) {
                     entityDamageByEntityEvent.setCancelled()
                 }
 

@@ -7,7 +7,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.BeaconPaymentA
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 
 
-
 class BeaconPaymentActionProcessor : ItemStackRequestActionProcessor<BeaconPaymentAction> {
     override fun handle(
         action: BeaconPaymentAction,

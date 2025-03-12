@@ -1,7 +1,9 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 
 class BlockPurpurBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
@@ -20,12 +22,12 @@ class BlockPurpurBlock @JvmOverloads constructor(blockstate: BlockState? = Compa
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(properties.defaultState.toBlock())
     }
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PURPUR_BLOCK, CommonBlockProperties.PILLAR_AXIS)
-            
+
     }
 }

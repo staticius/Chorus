@@ -71,7 +71,7 @@ class BlockDirtWithRoots : BlockDirt {
     override val toolType: Int
         get() = ItemTool.TYPE_SHOVEL
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(ItemBlock(get(DIRT_WITH_ROOTS)))
     }
 

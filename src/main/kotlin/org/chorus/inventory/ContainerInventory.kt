@@ -9,20 +9,15 @@ import org.chorus.math.Vector3
 import org.chorus.network.protocol.ContainerOpenPacket
 import kotlin.math.min
 
-abstract class ContainerInventory(holder: InventoryHolder?, type: InventoryType, size: Int) :
+abstract class ContainerInventory(holder: InventoryHolder, type: InventoryType, size: Int) :
     BaseInventory(holder, type, size) {
-    override var holder: InventoryHolder?
-        get() = super.getHolder()
-        set(holder) {
-            super.holder = holder
-        }
 
     override fun onOpen(who: Player) {
         if (!who.adventureSettings[AdventureSettings.Type.OPEN_CONTAINERS]) return
         super.onOpen(who)
         val pk = ContainerOpenPacket()
         pk.windowId = who.getWindowId(this)
-        pk.type = getType().networkType
+        pk.type = type.networkType
         val holder = this.holder
         pk.x = holder.x.toInt()
         pk.y = holder.y.toInt()
@@ -47,7 +42,7 @@ abstract class ContainerInventory(holder: InventoryHolder?, type: InventoryType,
             who.level!!.vibrationManager.callVibrationEvent(
                 VibrationEvent(
                     who,
-                    vector3.add(0.5, 0.5, 0.5),
+                    holder.vector3.add(0.5, 0.5, 0.5),
                     VibrationType.CONTAINER_CLOSE
                 )
             )

@@ -59,7 +59,7 @@ abstract class BlockCropsStem(blockstate: BlockState?) : BlockCrops(blockstate),
             val block = this.clone()
             block.growth = growth + 1
             val ev = BlockGrowEvent(this, block)
-            instance!!.pluginManager.callEvent(ev)
+            instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
                 level.setBlock(this.position, ev.newState!!, true)
             }
@@ -84,7 +84,7 @@ abstract class BlockCropsStem(blockstate: BlockState?) : BlockCrops(blockstate),
         val d = side!!.down()
         if (side.isAir && (d!!.id == FARMLAND || d.id == GRASS_BLOCK || d.id == DIRT)) {
             val ev = BlockGrowEvent(side, get(fruitId))
-            instance!!.pluginManager.callEvent(ev)
+            instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
                 level.setBlock(side.position, ev.newState!!, true)
                 blockFace = sideFace

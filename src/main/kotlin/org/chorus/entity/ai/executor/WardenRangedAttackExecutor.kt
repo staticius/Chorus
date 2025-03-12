@@ -25,7 +25,7 @@ class WardenRangedAttackExecutor(protected var chargingTime: Int, protected var 
         if (currentTick == this.chargingTime) {
             val target = entity.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
 
-            if (!target!!.isAlive) return false
+            if (!target.isAlive) return false
 
             //particle
             sendAttackParticle(
@@ -70,7 +70,7 @@ class WardenRangedAttackExecutor(protected var chargingTime: Int, protected var 
         } else {
             val target = entity.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
             //更新视线target
-            entity.lookTarget = target!!.position.clone()
+            entity.lookTarget = target.position.clone()
             entity.moveTarget = target.position.clone()
             return true
         }

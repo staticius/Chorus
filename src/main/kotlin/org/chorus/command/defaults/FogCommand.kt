@@ -12,11 +12,6 @@ import org.chorus.network.protocol.PlayerFogPacket
 import org.chorus.utils.Identifier
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
-import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.indices
 import kotlin.collections.set
 
 class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description", "commands.fog.usage") {

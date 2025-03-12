@@ -1,8 +1,7 @@
 package org.chorus.utils
 
 import org.chorus.plugin.Plugin
-
-import java.io.*
+import java.io.File
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType

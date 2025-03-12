@@ -1,7 +1,7 @@
 package org.chorus.utils
 
-import org.chorus.entity.data.Skin
 import io.netty.util.internal.EmptyArrays
+import org.chorus.entity.data.Skin
 import java.util.*
 
 class SerializedImage(val width: Int, val height: Int, val data: ByteArray) {

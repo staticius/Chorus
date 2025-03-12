@@ -17,7 +17,7 @@ class Scoreboard @JvmOverloads constructor(
     override var objectiveName: String,
     override var displayName: String,
     override var criteriaName: String = "dummy",
-     override var sortOrder: SortOrder = SortOrder.ASCENDING
+    override var sortOrder: SortOrder = SortOrder.ASCENDING
 ) :
     IScoreboard {
     protected var viewers: MutableMap<DisplaySlot, MutableSet<IScoreboardViewer>> = HashMap()

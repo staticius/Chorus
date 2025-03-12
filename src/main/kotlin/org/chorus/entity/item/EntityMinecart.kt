@@ -50,7 +50,7 @@ class EntityMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(
 
         if (passengers.isEmpty()) {
             for (entity: Entity in level!!.getCollidingEntities(
-                boundingBox!!.grow(0.20000000298023224, 0.0, 0.20000000298023224),
+                boundingBox.grow(0.20000000298023224, 0.0, 0.20000000298023224),
                 this
             )) {
                 if (entity.riding != null || (entity !is EntityLiving) || entity is Player || entity is EntitySwimmable) {

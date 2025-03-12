@@ -1,9 +1,9 @@
 package org.chorus.inventory
 
+import com.google.common.collect.BiMap
 import org.chorus.Player
 import org.chorus.item.Item
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import com.google.common.collect.BiMap
 import kotlin.math.max
 import kotlin.math.min
 

@@ -1,8 +1,8 @@
 package org.chorus.network.connection.netty.codec.packet
 
+import io.netty.buffer.ByteBuf
 import org.chorus.network.connection.netty.BedrockPacketWrapper
 import org.chorus.utils.ByteBufVarInt
-import io.netty.buffer.ByteBuf
 
 class BedrockPacketCodec_v3 : BedrockPacketCodec() {
     override fun encodeHeader(buf: ByteBuf, msg: BedrockPacketWrapper) {

@@ -1,24 +1,24 @@
 package org.chorus.network.protocol
 
-import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.network.protocol.types.*
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.AbilityLayer
+import org.chorus.network.protocol.types.CommandPermission
+import org.chorus.network.protocol.types.PlayerAbility
+import org.chorus.network.protocol.types.PlayerPermission
 import java.util.*
-import java.util.function.BiConsumer
-
-
-
-
 
 
 class UpdateAbilitiesPacket : DataPacket() {
     @JvmField
     var entityId: Long = 0
+
     @JvmField
     var playerPermission: PlayerPermission? = null
+
     @JvmField
     var commandPermission: CommandPermission? = null
+
     @JvmField
     val abilityLayers: MutableList<AbilityLayer> = ObjectArrayList()
 

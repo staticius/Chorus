@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.event.block.BlockFadeEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
@@ -40,6 +40,7 @@ abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate
                 }
                 return type
             }
+
             Level.BLOCK_UPDATE_SCHEDULED -> {
                 val side = getSide(rootsFace!!)
                 if (side!!.id == BlockID.ICE) {
@@ -55,6 +56,7 @@ abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate
                 }
                 return type
             }
+
             Level.BLOCK_UPDATE_RANDOM -> {
                 if (getPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION) == 0) {
                     setPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION, 1)
@@ -64,6 +66,7 @@ abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate
                 level.setBlock(this.position, this, direct = true, update = true)
                 return type
             }
+
             else -> return 0
         }
     }

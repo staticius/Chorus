@@ -7,7 +7,6 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
 import org.chorus.inventory.fake.FakeStructBlock
-import kotlin.collections.Map
 import kotlin.collections.set
 
 class TTCommand(name: String) : TestCommand(name, "tt") {

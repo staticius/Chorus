@@ -45,7 +45,7 @@ class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState? = Compani
             super.maxZ = maxZ
         }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 

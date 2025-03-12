@@ -11,8 +11,7 @@ class ShulkerIdleExecutor : IBehaviorExecutor {
 
     override fun execute(entity: EntityMob?): Boolean {
         tick++
-        if (tick >= stayTicks) return false
-        return true
+        return tick < stayTicks
     }
 
     override fun onStart(entity: EntityMob) {

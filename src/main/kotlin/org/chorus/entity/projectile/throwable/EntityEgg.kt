@@ -1,11 +1,12 @@
 package org.chorus.entity.projectile.throwable
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.item.ItemEgg
 import org.chorus.level.format.IChunk
 import org.chorus.level.particle.ItemBreakParticle
 import org.chorus.nbt.tag.CompoundTag
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 
 class EntityEgg @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :

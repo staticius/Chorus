@@ -3,14 +3,10 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class EntityEventPacket : DataPacket() {
     @JvmField
     var eid: Long = 0
+
     @JvmField
     var event: Int = 0
     var data: Int = 0

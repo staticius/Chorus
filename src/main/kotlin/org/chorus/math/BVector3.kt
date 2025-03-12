@@ -153,7 +153,7 @@ class BVector3 {
      */
     fun add(x: Double, y: Double, z: Double): BVector3 {
         val pos = unclonedDirectionVector!!.multiply(this.length)
-        pos!!.add(x, y, z)
+        pos.add(x, y, z)
         this.yaw = getYawFromVector(pos)
         this.pitch = getPitchFromVector(pos)
         this.unclonedDirectionVector = pos.normalize()
@@ -192,7 +192,7 @@ class BVector3 {
      * @param pos the pos
      * @return the vector 3
      */
-    fun addToPos(pos: Vector3): Vector3? {
+    fun addToPos(pos: Vector3): Vector3 {
         return pos.add(
             unclonedDirectionVector.x * this.length,
             unclonedDirectionVector.y * this.length, unclonedDirectionVector.z * this.length
@@ -225,7 +225,7 @@ class BVector3 {
         return this
     }
 
-    val directionVector: Vector3?
+    val directionVector: Vector3
         /**
          * 获取单位方向向量
          *
@@ -312,7 +312,7 @@ class BVector3 {
          * @param pitch pitch
          * @return Vector3方向向量
          */
-        fun getDirectionVector(yaw: Double, pitch: Double): Vector3? {
+        fun getDirectionVector(yaw: Double, pitch: Double): Vector3 {
             val pitch0 = StrictMath.toRadians(pitch + 90)
             val yaw0 = StrictMath.toRadians(yaw + 90)
             val x = StrictMath.sin(pitch0) * StrictMath.cos(yaw0)

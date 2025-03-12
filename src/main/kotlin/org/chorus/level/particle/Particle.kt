@@ -120,7 +120,7 @@ abstract class Particle : Vector3 {
 
         fun getParticleIdByName(name: String): Int? {
             var name = name
-            name = name.toUpperCase(Locale.ENGLISH)
+            name = name.uppercase(Locale.ENGLISH)
 
             try {
                 val field = Particle::class.java.getDeclaredField(if (name.startsWith("TYPE_")) name else "TYPE_$name")

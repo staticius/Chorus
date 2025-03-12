@@ -88,11 +88,11 @@ class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState? = 
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(toItem())
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockStonecutterBlock())
     }
 

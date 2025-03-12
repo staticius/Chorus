@@ -41,6 +41,7 @@ import java.util.function.Consumer
 import java.util.function.Function
 import kotlin.collections.ArrayList
 import kotlin.collections.MutableList
+import kotlin.collections.forEach
 import kotlin.collections.setOf
 
 open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable {
@@ -192,8 +193,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                             } else {
                                 val entity1 =
                                     memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY)
-                                if (entity1 is EntityWither || entity1 is EntityWitherSkeleton) return@all false
-                                return@all true
+                                return@all !(entity1 is EntityWither || entity1 is EntityWitherSkeleton)
                             }
                         }
                     ), 3, 1),
@@ -350,7 +350,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         if (!isAngry()) {
             if (entity is EntityInventoryHolder) {
                 for (i in entity.level!!.getNearbyEntities(
-                    entity.getBoundingBox()!!.grow(1.0, 0.5, 1.0)
+                    entity.getBoundingBox().grow(1.0, 0.5, 1.0)
                 )) {
                     var pickup = false
                     if (i is EntityItem) {

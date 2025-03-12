@@ -1,10 +1,7 @@
 package org.chorus.form.element.simple
 
-import org.chorus.form.element.Element
 import com.google.gson.JsonObject
-
-
-
+import org.chorus.form.element.Element
 
 
 /**
@@ -28,7 +25,7 @@ class ElementButton : Element {
     @JvmOverloads
     constructor(text: String? = "") : this(text, null)
 
-    override fun toJson(): JsonObject? {
+    override fun toJson(): JsonObject {
         `object`.addProperty("text", this.text)
 
         if (this.image != null) {

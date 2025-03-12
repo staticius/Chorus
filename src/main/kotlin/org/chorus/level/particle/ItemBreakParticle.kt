@@ -19,7 +19,7 @@ class ItemBreakParticle(pos: Vector3, item: Item) :
 
     override fun encode(): Array<DataPacket> {
         val packet = LevelEventPacket()
-        packet.evid = (LevelEventPacket.EVENT_ADD_PARTICLE_MASK or Particle.Companion.TYPE_ICON_CRACK).toShort().toInt()
+        packet.evid = (LevelEventPacket.EVENT_ADD_PARTICLE_MASK or TYPE_ICON_CRACK).toShort().toInt()
         packet.x = x.toFloat()
         packet.y = y.toFloat()
         packet.z = z.toFloat()

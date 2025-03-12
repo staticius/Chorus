@@ -1,17 +1,15 @@
 package org.chorus.form.window
 
+
+import com.google.gson.JsonArray
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus.Player
 import org.chorus.form.element.simple.ButtonImage
 import org.chorus.form.element.simple.ElementButton
 import org.chorus.form.response.SimpleResponse
-import com.google.gson.JsonArray
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
-
-
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.IntFunction
-
 
 
 @Accessors(chain = true, fluent = true)
@@ -73,23 +71,23 @@ class SimpleForm : Form<SimpleResponse?> {
         buttons.remove(elementButton)
     }
 
-    override fun onSubmit(submitted: BiConsumer<Player?, SimpleResponse?>?): SimpleForm? {
+    override fun onSubmit(submitted: BiConsumer<Player?, SimpleResponse?>?): SimpleForm {
         return super.onSubmit(submitted) as SimpleForm
     }
 
-    override fun onClose(closed: Consumer<Player?>?): SimpleForm? {
+    override fun onClose(closed: Consumer<Player?>?): SimpleForm {
         return super.onClose(closed) as SimpleForm
     }
 
-    override fun send(player: Player): SimpleForm? {
+    override fun send(player: Player): SimpleForm {
         return super.send(player) as SimpleForm
     }
 
-    override fun send(player: Player, id: Int): SimpleForm? {
+    override fun send(player: Player, id: Int): SimpleForm {
         return super.send(player, id) as SimpleForm
     }
 
-    override fun sendUpdate(player: Player): SimpleForm? {
+    override fun sendUpdate(player: Player): SimpleForm {
         return super.sendUpdate(player) as SimpleForm
     }
 
@@ -144,7 +142,7 @@ class SimpleForm : Form<SimpleResponse?> {
         return response
     }
 
-    override fun <M> putMeta(key: String, `object`: M): SimpleForm? {
+    override fun <M> putMeta(key: String, `object`: M): SimpleForm {
         return super.putMeta(key, `object`) as SimpleForm
     }
 }

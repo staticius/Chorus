@@ -1,5 +1,7 @@
 package org.chorus.command.defaults
 
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import org.chorus.Server
 import org.chorus.command.*
 import org.chorus.command.data.CommandParamType
@@ -7,8 +9,6 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.lang.TranslationContainer
 import org.chorus.plugin.Plugin
 import org.chorus.utils.TextFormat
-import com.google.gson.JsonArray
-import com.google.gson.JsonParser
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -20,14 +20,9 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutionException
 import java.util.function.Consumer
-import kotlin.collections.List
-import kotlin.collections.MutableList
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.dropLastWhile
-import kotlin.collections.forEach
 import kotlin.collections.set
-import kotlin.collections.toTypedArray
 
 /**
  * @author xtypr

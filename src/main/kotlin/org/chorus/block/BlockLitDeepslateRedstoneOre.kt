@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
 
 class BlockLitDeepslateRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockDeepslateRedstoneOre(blockstate), IBlockOreRedstoneGlowing {

@@ -35,8 +35,7 @@ abstract class EntityProperty(private val identifier: String) {
                             val properties: ListTag<CompoundTag> = uncast.getList("properties", CompoundTag::class.java)
                             for (property: CompoundTag in properties.getAll()) {
                                 val name: String = property.getString("name")
-                                val type: Int = property.getInt("type")
-                                val data: EntityProperty = when (type) {
+                                val data: EntityProperty = when (val type: Int = property.getInt("type")) {
                                     0 -> IntEntityProperty(
                                         name,
                                         property.getInt("min"),

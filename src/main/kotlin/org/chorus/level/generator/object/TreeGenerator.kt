@@ -48,6 +48,7 @@ abstract class TreeGenerator : ObjectGenerator() {
             BlockID.DARK_OAK_SAPLING,
             BlockID.PALE_OAK_SAPLING,
             BlockID.BIRCH_SAPLING -> true
+
             else -> false
         }
     }

@@ -1,15 +1,12 @@
 package org.chorus.network.protocol
 
+import io.netty.buffer.ByteBufInputStream
 import org.chorus.nbt.NBTIO.read
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
-import io.netty.buffer.ByteBufInputStream
-
 import java.io.IOException
 import java.nio.ByteOrder
-
-
 
 
 (exclude = ["namedTag"])
@@ -38,7 +35,7 @@ class BlockEntityDataPacket : DataPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBlockVector3(this.x, this.y, this.z)
         try {
-            byteBuf.writeBytes(write(namedTag!!, ByteOrder.LITTLE_ENDIAN, true)!!)
+            byteBuf.writeBytes(write(namedTag!!, ByteOrder.LITTLE_ENDIAN, true))
         } catch (e: IOException) {
             throw RuntimeException(e)
         }

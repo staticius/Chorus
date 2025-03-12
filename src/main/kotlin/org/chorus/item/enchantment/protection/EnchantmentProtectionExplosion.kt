@@ -6,7 +6,7 @@ import org.chorus.item.enchantment.*
 
 
 class EnchantmentProtectionExplosion :
-    EnchantmentProtection(Enchantment.Companion.ID_PROTECTION_EXPLOSION, "explosion", Rarity.RARE, TYPE.EXPLOSION) {
+    EnchantmentProtection(ID_PROTECTION_EXPLOSION, "explosion", Rarity.RARE, TYPE.EXPLOSION) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 5 + (level - 1) * 8
     }

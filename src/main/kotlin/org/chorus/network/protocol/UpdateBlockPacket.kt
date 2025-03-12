@@ -3,21 +3,19 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
-
 open class UpdateBlockPacket : DataPacket() {
     @JvmField
     var x: Int = 0
+
     @JvmField
     var z: Int = 0
+
     @JvmField
     var y: Int = 0
+
     @JvmField
     var blockRuntimeId: Int = 0
+
     @JvmField
     var flags: Int = 0
     var dataLayer: Int = 0
@@ -37,8 +35,7 @@ open class UpdateBlockPacket : DataPacket() {
         val z: Int,
         val y: Int, val blockId: String, val blockData: Int,
         val flags: Int
-    ) {
-    }
+    )
 
     override fun pid(): Int {
         return ProtocolInfo.Companion.UPDATE_BLOCK_PACKET

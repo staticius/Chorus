@@ -1,6 +1,6 @@
 package org.chorus.item
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.math.ChorusMath
 
 class ItemMace : ItemTool(ItemID.Companion.MACE) {

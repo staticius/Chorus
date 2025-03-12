@@ -20,7 +20,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     private var loadTick = 0
 
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_CROSSBOW
+        get() = DURABILITY_CROSSBOW
 
     override fun onUse(player: Player, ticksUsed: Int): Boolean {
         if (isLoaded) return true

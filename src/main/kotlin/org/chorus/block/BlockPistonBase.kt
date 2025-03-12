@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
@@ -19,7 +20,6 @@ import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
-import com.google.common.collect.Lists
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.stream.Collectors
 import kotlin.math.abs
@@ -259,7 +259,7 @@ abstract class BlockPistonBase(blockstate: BlockState?) : BlockTransparent(block
                 //移动方块实体
                 if (blockEntity != null && blockEntity !is BlockEntityMovingBlock) {
                     blockEntity.saveNBT()
-                    nbt!!.putCompound("movingEntity", CompoundTag(blockEntity.namedTag.getTags()))
+                    nbt.putCompound("movingEntity", CompoundTag(blockEntity.namedTag.getTags()))
                     blockEntity.close()
                 }
                 oldPosList.add(oldPos)
@@ -310,7 +310,7 @@ abstract class BlockPistonBase(blockstate: BlockState?) : BlockTransparent(block
             level.vibrationManager.callVibrationEvent(
                 VibrationEvent(
                     this,
-                    position.add(0.5, 0.5, 0.5)!!, VibrationType.PISTON_EXTEND
+                    position.add(0.5, 0.5, 0.5), VibrationType.PISTON_EXTEND
                 )
             )
         } else {
@@ -318,7 +318,7 @@ abstract class BlockPistonBase(blockstate: BlockState?) : BlockTransparent(block
             level.vibrationManager.callVibrationEvent(
                 VibrationEvent(
                     this,
-                    position.add(0.5, 0.5, 0.5)!!, VibrationType.PISTON_CONTRACT
+                    position.add(0.5, 0.5, 0.5), VibrationType.PISTON_CONTRACT
                 )
             )
         }

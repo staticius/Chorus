@@ -15,7 +15,8 @@ class BlockFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
 
     }
 }

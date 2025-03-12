@@ -1,5 +1,6 @@
 package org.chorus.inventory.request
 
+import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.inventory.SpecialWindowId
 import org.chorus.network.protocol.InventorySlotPacket
@@ -9,8 +10,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import org.chorus.network.protocol.types.itemstack.request.action.MineBlockAction
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import com.google.common.collect.Lists
-
 import java.util.List
 
 
@@ -18,7 +17,7 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.MINE_BLOCK
 
-    override fun handle(action: MineBlockAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
+    override fun handle(action: MineBlockAction, player: Player, context: ItemStackRequestContext): ActionResponse {
         val inventory = player.inventory
         val heldItemIndex = inventory.heldItemIndex
         if (heldItemIndex != action.hotbarSlot) {

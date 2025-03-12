@@ -1,10 +1,10 @@
 package org.chorus.tags
 
-import org.chorus.Server
-import org.chorus.utils.JSONUtils
 import com.google.gson.reflect.TypeToken
 import it.unimi.dsi.fastutil.objects.Object2ObjectFunction
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
+import org.chorus.Server
+import org.chorus.utils.JSONUtils
 import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.io.InputStreamReader

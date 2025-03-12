@@ -8,7 +8,7 @@ abstract class EjectableInventory(holder: InventoryHolder?, type: InventoryType,
     override fun init() {
         val map = super.slotTypeMap()
         for (i in 0..<getSize()) {
-            map!![i] = ContainerSlotType.LEVEL_ENTITY
+            map[i] = ContainerSlotType.LEVEL_ENTITY
         }
     }
 }

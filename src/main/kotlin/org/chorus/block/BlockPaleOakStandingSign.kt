@@ -13,7 +13,7 @@ class BlockPaleOakStandingSign @JvmOverloads constructor(blockstate: BlockState?
         return BlockPaleOakWallSign.Companion.PROPERTIES.getIdentifier()
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemPaleOakSign()
     }
 

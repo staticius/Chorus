@@ -5,7 +5,7 @@ import org.chorus.entity.Entity.Companion.createEntity
 import org.chorus.entity.EntityID
 import org.chorus.entity.item.EntityFallingBlock
 import org.chorus.event.block.BlockFallEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Level
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag

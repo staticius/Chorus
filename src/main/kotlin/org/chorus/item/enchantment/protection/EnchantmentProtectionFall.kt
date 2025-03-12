@@ -6,7 +6,7 @@ import org.chorus.item.enchantment.*
 
 
 class EnchantmentProtectionFall :
-    EnchantmentProtection(Enchantment.Companion.ID_PROTECTION_FALL, "fall", Rarity.UNCOMMON, TYPE.FALL) {
+    EnchantmentProtection(ID_PROTECTION_FALL, "fall", Rarity.UNCOMMON, TYPE.FALL) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 5 + (level - 1) * 6
     }

@@ -4,7 +4,7 @@ import org.chorus.entity.EntityID
 import org.chorus.entity.EntityWalkable
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * @author Erik Miller | EinBexiii

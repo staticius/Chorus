@@ -4,11 +4,11 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.BambooLeafSize
-import org.chorus.block.property.enums.WoodType
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.event.block.BlockGrowEvent
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom

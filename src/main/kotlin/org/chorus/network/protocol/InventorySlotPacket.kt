@@ -6,11 +6,6 @@ import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
-
-
-
-
-
 class InventorySlotPacket : DataPacket() {
     var inventoryId: Int = 0
     var slot: Int = 0

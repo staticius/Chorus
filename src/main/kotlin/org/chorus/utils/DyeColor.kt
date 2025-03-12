@@ -3,13 +3,13 @@ package org.chorus.utils
 import org.chorus.math.MathHelper
 import java.util.*
 
-enum class DyeColor @JvmOverloads constructor(
+enum class DyeColor (
     dyeColorMeta: Int, woolColorMeta: Int,
     /**
      * The `minecraft:dye` meta that actually represents the item dye for that color.
      * Uses black_dye instead of ink_sac, white_dye instead of bone_meal, and so on.
      */
-    val itemDyeMeta: Int, colorName: String,
+    val itemDyeMeta: Int, val colorName: String,
     val dyeName: String, blockColor: BlockColor?,
     @JvmField val leatherColor: BlockColor? = blockColor,
     val signColor: BlockColor? = blockColor
@@ -30,7 +30,7 @@ enum class DyeColor @JvmOverloads constructor(
         1,
         "Red",
         "Red Dye",
-        BlockColor.Companion.RED_BLOCK_COLOR,
+        BlockColor.RED_BLOCK_COLOR,
         BlockColor(0xB02E26),
         BlockColor(0xb0, 0x2e, 0x26)
     ),
@@ -40,7 +40,7 @@ enum class DyeColor @JvmOverloads constructor(
         2,
         "Green",
         "Green Dye",
-        BlockColor.Companion.GREEN_BLOCK_COLOR,
+        BlockColor.GREEN_BLOCK_COLOR,
         BlockColor(0x5E7C16),
         BlockColor(0x5e, 0x7c, 0x16)
     ),
@@ -50,7 +50,7 @@ enum class DyeColor @JvmOverloads constructor(
         17,
         "Brown",
         "Cocoa Beans",
-        BlockColor.Companion.BROWN_BLOCK_COLOR,
+        BlockColor.BROWN_BLOCK_COLOR,
         BlockColor(0x835432),
         BlockColor(0x83, 0x54, 0x32)
     ),
@@ -60,7 +60,7 @@ enum class DyeColor @JvmOverloads constructor(
         18,
         "Blue",
         "Lapis Lazuli",
-        BlockColor.Companion.BLUE_BLOCK_COLOR,
+        BlockColor.BLUE_BLOCK_COLOR,
         BlockColor(0x3C44AA),
         BlockColor(0x3c, 0x44, 0xaa)
     ),
@@ -69,30 +69,58 @@ enum class DyeColor @JvmOverloads constructor(
         10,
         5,
         "Purple",
-        BlockColor.Companion.PURPLE_BLOCK_COLOR,
+        BlockColor.PURPLE_BLOCK_COLOR,
         BlockColor(0x8932B8),
         BlockColor(0x89, 0x32, 0xb8)
     ),
-    CYAN(6, 9, 6, "Cyan", BlockColor.Companion.CYAN_BLOCK_COLOR, BlockColor(0x169C9C), BlockColor(0x16, 0x9c, 0x9c)),
+    CYAN(
+        6,
+        9,
+        6,
+        "Cyan",
+        BlockColor.CYAN_BLOCK_COLOR,
+        BlockColor(0x169C9C),
+        BlockColor(0x16, 0x9c, 0x9c)),
     LIGHT_GRAY(
         7,
         8,
         7,
         "Light Gray",
-        BlockColor.Companion.LIGHT_GRAY_BLOCK_COLOR,
+        BlockColor.LIGHT_GRAY_BLOCK_COLOR,
         BlockColor(0x9D9D97),
         BlockColor(0x9d, 0x9d, 0x97)
     ),
-    GRAY(8, 7, 8, "Gray", BlockColor.Companion.GRAY_BLOCK_COLOR, BlockColor(0x474F52), BlockColor(0x47, 0x4f, 0x52)),
-    PINK(9, 6, 9, "Pink", BlockColor.Companion.PINK_BLOCK_COLOR, BlockColor(0xF38BAA), BlockColor(0xf3, 0x8b, 0xaa)),
-    LIME(10, 5, 10, "Lime", BlockColor.Companion.LIME_BLOCK_COLOR, BlockColor(0x80C71F), BlockColor(0x80, 0xc7, 0x1f)),
+    GRAY(
+        8,
+        7,
+        8,
+        "Gray",
+        BlockColor.GRAY_BLOCK_COLOR,
+        BlockColor(0x474F52),
+        BlockColor(0x47, 0x4f, 0x52)),
+    PINK(
+        9,
+        6,
+        9,
+        "Pink",
+        BlockColor.PINK_BLOCK_COLOR,
+        BlockColor(0xF38BAA),
+        BlockColor(0xf3, 0x8b, 0xaa)),
+    LIME(
+        10,
+        5,
+        10,
+        "Lime",
+        BlockColor.LIME_BLOCK_COLOR,
+        BlockColor(0x80C71F),
+        BlockColor(0x80, 0xc7, 0x1f)),
     YELLOW(
         11,
         4,
         11,
         "Yellow",
         "Yellow Dye",
-        BlockColor.Companion.YELLOW_BLOCK_COLOR,
+        BlockColor.YELLOW_BLOCK_COLOR,
         BlockColor(0xFED83D),
         BlockColor(0xfe, 0xd8, 0x3d)
     ),
@@ -101,7 +129,7 @@ enum class DyeColor @JvmOverloads constructor(
         3,
         12,
         "Light Blue",
-        BlockColor.Companion.LIGHT_BLUE_BLOCK_COLOR,
+        BlockColor.LIGHT_BLUE_BLOCK_COLOR,
         BlockColor(0x3AB3DA),
         BlockColor(0x3a, 0xb3, 0xda)
     ),
@@ -110,7 +138,7 @@ enum class DyeColor @JvmOverloads constructor(
         2,
         13,
         "Magenta",
-        BlockColor.Companion.MAGENTA_BLOCK_COLOR,
+        BlockColor.MAGENTA_BLOCK_COLOR,
         BlockColor(0xC74EBD),
         BlockColor(0xc7, 0x4e, 0xbd)
     ),
@@ -119,7 +147,7 @@ enum class DyeColor @JvmOverloads constructor(
         1,
         14,
         "Orange",
-        BlockColor.Companion.ORANGE_BLOCK_COLOR,
+        BlockColor.ORANGE_BLOCK_COLOR,
         BlockColor(0xFF9801),
         BlockColor(0xf9, 0x80, 0x1d)
     ),
@@ -128,7 +156,7 @@ enum class DyeColor @JvmOverloads constructor(
         0,
         19,
         "White",
-        BlockColor.Companion.WHITE_BLOCK_COLOR,
+        BlockColor.WHITE_BLOCK_COLOR,
         BlockColor(0xF0F0F0),
         BlockColor(0xf0, 0xf0, 0xf0)
     );
@@ -140,7 +168,6 @@ enum class DyeColor @JvmOverloads constructor(
     val dyeData: Int = dyeColorMeta
 
     val woolData: Int = woolColorMeta
-    override val name: String = colorName
     val color: BlockColor? = blockColor
 
 

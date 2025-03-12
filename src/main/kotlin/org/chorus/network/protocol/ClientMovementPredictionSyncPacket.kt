@@ -1,15 +1,10 @@
 package org.chorus.network.protocol
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.chorus.entity.data.EntityFlag
 import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-
 import java.math.BigInteger
-
-
-
-
 
 
 class ClientMovementPredictionSyncPacket : DataPacket() {

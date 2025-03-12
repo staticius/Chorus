@@ -1,5 +1,6 @@
 package org.chorus.entity.item
 
+import com.google.common.collect.Sets
 import org.chorus.Player
 import org.chorus.block.*
 import org.chorus.blockentity.BlockEntityPistonArm
@@ -14,7 +15,6 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.AddPaintingPacket
 import org.chorus.network.protocol.DataPacket
-import com.google.common.collect.Sets
 import java.util.function.BiFunction
 import java.util.function.BinaryOperator
 import java.util.function.Function
@@ -202,10 +202,13 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
 
         @JvmField
         val title: String
+
         @JvmField
         val width: Int
+
         @JvmField
         val height: Int
+
         @JvmField
         val predicate: PaintingPlacePredicate
 
@@ -276,8 +279,8 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
                         })
                 for (e: Entity in entities) {
                     if (e is EntityPainting) {
-                        if (e.getBoundingBox()!!.intersectsWith(side) || e.getBoundingBox()!!
-                                .intersectsWith(up) || e.getBoundingBox()!!
+                        if (e.getBoundingBox().intersectsWith(side) || e.getBoundingBox()
+                                .intersectsWith(up) || e.getBoundingBox()
                                 .intersectsWith(up1)
                         ) {
                             return true

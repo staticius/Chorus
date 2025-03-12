@@ -4,7 +4,6 @@ import org.chorus.math.Vector2f
 import org.chorus.utils.OptionalValue
 
 
-
 class CameraPresetAimAssist {
     var presetId: OptionalValue<String>? = null
     var targetMode: OptionalValue<CameraAimAssist>? = null

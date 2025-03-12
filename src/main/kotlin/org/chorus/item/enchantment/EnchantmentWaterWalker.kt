@@ -2,7 +2,7 @@ package org.chorus.item.enchantment
 
 
 class EnchantmentWaterWalker :
-    Enchantment(Enchantment.Companion.ID_WATER_WALKER, "waterWalker", Rarity.RARE, EnchantmentType.ARMOR_FEET) {
+    Enchantment(ID_WATER_WALKER, "waterWalker", Rarity.RARE, EnchantmentType.ARMOR_FEET) {
     override fun getMinEnchantAbility(level: Int): Int {
         return level * 10
     }

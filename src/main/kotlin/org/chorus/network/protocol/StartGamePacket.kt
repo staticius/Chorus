@@ -17,10 +17,6 @@ import java.util.*
  */
 
 
-
-
-
-
 class StartGamePacket : DataPacket() {
     var entityUniqueId: Long = 0
     var entityRuntimeId: Long = 0
@@ -162,7 +158,7 @@ class StartGamePacket : DataPacket() {
         try {
             for (customBlockDefinition in this.blockProperties) {
                 byteBuf.writeString(customBlockDefinition.identifier)
-                byteBuf.writeBytes(write(customBlockDefinition.nbt, ByteOrder.LITTLE_ENDIAN, true)!!)
+                byteBuf.writeBytes(write(customBlockDefinition.nbt, ByteOrder.LITTLE_ENDIAN, true))
             }
         } catch (e: IOException) {
             StartGamePacket.log.error("Error while encoding NBT data of BlockPropertyData", e)
@@ -172,7 +168,7 @@ class StartGamePacket : DataPacket() {
         byteBuf.writeBoolean(this.isInventoryServerAuthoritative)
         byteBuf.writeString(vanillaVersion) // Server Engine
         try {
-            byteBuf.writeBytes(writeNetwork(playerPropertyData)!!) // playerPropertyData
+            byteBuf.writeBytes(writeNetwork(playerPropertyData)) // playerPropertyData
         } catch (e: IOException) {
             throw RuntimeException(e)
         }

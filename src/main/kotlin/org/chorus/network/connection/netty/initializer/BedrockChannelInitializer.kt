@@ -1,5 +1,6 @@
 package org.chorus.network.connection.netty.initializer
 
+import io.netty.channel.*
 import org.chorus.compression.CompressionProvider
 import org.chorus.network.connection.BedrockPeer
 import org.chorus.network.connection.BedrockSession
@@ -12,8 +13,6 @@ import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodec_v1
 import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodec_v2
 import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodec_v3
 import org.chorus.network.protocol.types.*
-import io.netty.channel.*
-
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
 
 
@@ -53,9 +52,7 @@ abstract class BedrockChannelInitializer<T : BedrockSession?> : ChannelInitializ
 
     @Throws(Exception::class)
     protected fun initPacketCodec(channel: Channel) {
-        val rakVersion = channel.config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION)
-
-        when (rakVersion) {
+        when (val rakVersion = channel.config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION)) {
             11, 10, 9 -> channel.pipeline().addLast(BedrockPacketCodec.Companion.NAME, BedrockPacketCodec_v3())
             8 -> channel.pipeline().addLast(BedrockPacketCodec.Companion.NAME, BedrockPacketCodec_v2())
             7 -> channel.pipeline().addLast(BedrockPacketCodec.Companion.NAME, BedrockPacketCodec_v1())

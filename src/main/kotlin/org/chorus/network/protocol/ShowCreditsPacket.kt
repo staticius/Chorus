@@ -3,14 +3,10 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class ShowCreditsPacket : DataPacket() {
     @JvmField
     var eid: Long = 0
+
     @JvmField
     var status: Int = 0
 

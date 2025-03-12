@@ -1,8 +1,8 @@
 package org.chorus.utils.collection
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.entity.data.EntityDataMap.size
 import org.chorus.nbt.tag.ListTag.size
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
 

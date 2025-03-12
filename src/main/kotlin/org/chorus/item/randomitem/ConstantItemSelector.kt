@@ -1,6 +1,5 @@
 package org.chorus.item.randomitem
 
-import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.PotionType.Companion.get
 import org.chorus.item.*
 

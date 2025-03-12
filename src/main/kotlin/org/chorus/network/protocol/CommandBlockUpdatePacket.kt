@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class CommandBlockUpdatePacket : DataPacket() {
     var isBlock: Boolean = false
     var x: Int = 0

@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class BlockPickRequestPacket : DataPacket() {
     var x: Int = 0
     var y: Int = 0

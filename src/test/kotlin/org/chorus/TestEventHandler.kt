@@ -1,7 +1,7 @@
 package org.chorus
 
-import org.chorus.event.Event
 import com.google.common.base.Preconditions
+import org.chorus.event.Event
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 

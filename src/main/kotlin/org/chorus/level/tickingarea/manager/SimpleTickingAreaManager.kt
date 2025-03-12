@@ -3,9 +3,6 @@ package org.chorus.level.tickingarea.manager
 import org.chorus.entity.EntityHuman.getName
 import org.chorus.level.*
 import java.util.function.Predicate
-import kotlin.collections.HashSet
-import kotlin.collections.MutableMap
-import kotlin.collections.Set
 import kotlin.collections.set
 
 class SimpleTickingAreaManager(storage: TickingAreaStorage) : TickingAreaManager(storage) {

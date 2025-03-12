@@ -7,7 +7,7 @@ class BlockAcaciaDoubleSlab(blockstate: BlockState?) : BlockDoubleWoodenSlab(blo
         return "Acacia"
     }
 
-    override fun getSingleSlab(): BlockState? {
+    override fun getSingleSlab(): BlockState {
         return Companion.properties.defaultState
     }
 

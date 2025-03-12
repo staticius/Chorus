@@ -1,10 +1,9 @@
 package org.chorus.console
 
+import net.minecrell.terminalconsole.SimpleTerminalConsole
 import org.chorus.Server
 import org.chorus.event.server.ServerCommandEvent
 import org.chorus.plugin.InternalPlugin
-
-import net.minecrell.terminalconsole.SimpleTerminalConsole
 import org.jline.reader.LineReader
 import org.jline.reader.LineReaderBuilder
 import java.util.concurrent.BlockingQueue

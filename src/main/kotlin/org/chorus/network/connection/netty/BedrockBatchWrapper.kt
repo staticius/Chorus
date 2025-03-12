@@ -1,8 +1,5 @@
 package org.chorus.network.connection.netty
 
-import org.chorus.network.connection.util.BatchFlag
-import org.chorus.network.protocol.DataPacket
-import org.chorus.network.protocol.types.*
 import io.netty.buffer.ByteBuf
 import io.netty.util.AbstractReferenceCounted
 import io.netty.util.ReferenceCountUtil
@@ -10,7 +7,9 @@ import io.netty.util.ReferenceCounted
 import io.netty.util.internal.ObjectPool
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-
+import org.chorus.network.connection.util.BatchFlag
+import org.chorus.network.protocol.DataPacket
+import org.chorus.network.protocol.types.*
 import java.util.function.Consumer
 
 

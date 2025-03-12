@@ -46,13 +46,13 @@ class BlockSuspiciousSand @JvmOverloads constructor(blockstate: BlockState? = Co
         super.onTouch(vector, item, face, fx, fy, fz, player, action)
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(Item.AIR)
     }
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.SUSPICIOUS_SAND,
+            BlockID.BlockID.SUSPICIOUS_SAND,
             CommonBlockProperties.HANGING,
             CommonBlockProperties.BRUSHED_PROGRESS
         )

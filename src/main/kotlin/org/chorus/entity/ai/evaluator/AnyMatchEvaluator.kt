@@ -3,9 +3,9 @@ package org.chorus.entity.ai.evaluator
 import org.chorus.entity.mob.EntityMob
 
 class AnyMatchEvaluator : MultiBehaviorEvaluator {
-    constructor(evaluators: Set<IBehaviorEvaluator?>) : super(evaluators)
+    constructor(evaluators: Set<IBehaviorEvaluator>) : super(evaluators)
 
-    constructor(vararg evaluators: IBehaviorEvaluator?) : super(*evaluators)
+    constructor(vararg evaluators: IBehaviorEvaluator) : super(*evaluators)
 
     override fun evaluate(entity: EntityMob): Boolean {
         for (evaluator in evaluators) {

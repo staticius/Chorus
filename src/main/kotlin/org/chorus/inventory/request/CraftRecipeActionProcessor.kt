@@ -170,7 +170,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
         val numberOfRequestedCrafts = action.numberOfRequestedCrafts
         val recipe = Registries.RECIPE.getRecipeByNetworkId(action.recipeNetworkId)
         val input = craft.input
-        val data = input!!.data
+        val data = input.data
         val items = ArrayList<Item>()
         for (d in data) {
             Collections.addAll(items, *d)

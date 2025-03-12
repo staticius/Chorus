@@ -4,11 +4,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.ServerboundLoadingScreenPacketType
 
 
-
-
-
-
-
 class ServerboundLoadingScreenPacket : DataPacket() {
     private var type: ServerboundLoadingScreenPacketType? = null
 

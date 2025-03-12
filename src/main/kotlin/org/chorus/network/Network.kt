@@ -1,17 +1,5 @@
 package org.chorus.network
 
-import org.chorus.Player
-import org.chorus.Server
-import org.chorus.config.ServerPropertiesKeys
-import org.chorus.network.connection.BedrockPeer
-import org.chorus.network.connection.BedrockPong
-import org.chorus.network.connection.BedrockSession
-import org.chorus.network.connection.netty.initializer.BedrockServerInitializer
-import org.chorus.network.protocol.ProtocolInfo
-import org.chorus.network.query.codec.QueryPacketCodec
-import org.chorus.network.query.handler.QueryPacketHandler
-import org.chorus.plugin.InternalPlugin
-import org.chorus.utils.Utils
 import com.google.common.base.Strings
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.netty.bootstrap.ServerBootstrap
@@ -27,7 +15,18 @@ import io.netty.channel.kqueue.KQueueEventLoopGroup
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.DatagramChannel
 import io.netty.channel.socket.nio.NioDatagramChannel
-
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.config.ServerPropertiesKeys
+import org.chorus.network.connection.BedrockPeer
+import org.chorus.network.connection.BedrockPong
+import org.chorus.network.connection.BedrockSession
+import org.chorus.network.connection.netty.initializer.BedrockServerInitializer
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.query.codec.QueryPacketCodec
+import org.chorus.network.query.handler.QueryPacketHandler
+import org.chorus.plugin.InternalPlugin
+import org.chorus.utils.Utils
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
@@ -41,7 +40,6 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadFactory
 import java.util.concurrent.atomic.AtomicReference
-
 
 
 class Network @JvmOverloads constructor(
@@ -104,7 +102,7 @@ class Network @JvmOverloads constructor(
 
         this.channel = ServerBootstrap()
             .channelFactory(RakChannelFactory.server(oclass))
-            .option<ByteBuf>(RakChannelOption.RAK_ADVERTISEMENT, pong!!.toByteBuf())
+            .option<ByteBuf>(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
             .option(RakChannelOption.RAK_PACKET_LIMIT, server.settings.networkSettings.packetLimit)
             .option<Boolean>(RakChannelOption.RAK_SEND_COOKIE, true)
             .group(eventloopgroup)
@@ -116,10 +114,6 @@ class Network @JvmOverloads constructor(
                                 "queryPacketHandler",
                                 QueryPacketHandler { address: InetSocketAddress? -> server.queryInformation })
                     }
-                }
-
-                override fun createPeer(channel: Channel): BedrockPeer? {
-                    return super.createPeer(channel)
                 }
 
                 override fun createSession0(peer: BedrockPeer?, subClientId: Int): BedrockSession {
@@ -139,7 +133,7 @@ class Network @JvmOverloads constructor(
             .bind(bindAddress)
             .awaitUninterruptibly()
             .channel() as RakServerChannel
-        pong!!.channel = channel
+        pong.channel = channel
     }
 
     @JvmRecord

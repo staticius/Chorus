@@ -22,7 +22,7 @@ class DoubleTag : NumberTag<Double> {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_DOUBLE
+        get() = TAG_DOUBLE
 
     override fun toString(): String {
         return "DoubleTag  (data: $data)"

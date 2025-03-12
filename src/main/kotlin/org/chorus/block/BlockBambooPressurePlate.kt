@@ -11,6 +11,7 @@ class BlockBambooPressurePlate(blockState: BlockState?) : BlockWoodenPressurePla
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.BAMBOO_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
     }
 }

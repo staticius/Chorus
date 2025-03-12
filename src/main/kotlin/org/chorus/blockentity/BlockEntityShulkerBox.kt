@@ -125,9 +125,9 @@ class BlockEntityShulkerBox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
     override val spawnCompound: CompoundTag
         get() {
             val c: CompoundTag =
-                BlockEntity.Companion.getDefaultCompound(
+                getDefaultCompound(
                     this.position,
-                    BlockEntityID.Companion.SHULKER_BOX
+                    BlockEntityID.SHULKER_BOX
                 )
                     .putBoolean("isMovable", this.isMovable)
                     .putBoolean("Findable", false)

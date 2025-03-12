@@ -1,12 +1,8 @@
 package org.chorus.network.protocol.types.inventory.transaction
 
-import org.chorus.inventory.SpecialWindowId
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-
-
-
-
+import org.chorus.inventory.SpecialWindowId
 
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

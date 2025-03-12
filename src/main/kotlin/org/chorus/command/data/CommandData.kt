@@ -5,12 +5,16 @@ import java.util.*
 class CommandData : Cloneable {
     @JvmField
     var description: String = "description"
+
     @JvmField
     var aliases: CommandEnum? = null
+
     @JvmField
-    var overloads: MutableMap<String?, CommandOverload?> = HashMap()
+    var overloads: MutableMap<String, CommandOverload> = HashMap()
+
     @JvmField
     var flags: EnumSet<Flag> = EnumSet.of(Flag.NOT_CHEAT)
+
     @JvmField
     var permission: Int = 0
 

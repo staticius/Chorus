@@ -1,5 +1,10 @@
 package org.chorus.registry
 
+import com.google.gson.Gson
+import io.netty.util.internal.EmptyArrays
+import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 import org.chorus.item.Item.equals
@@ -8,12 +13,6 @@ import org.chorus.network.protocol.types.inventory.creative.CreativeItemCategory
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
 import org.chorus.registry.RegisterException
-import com.google.gson.Gson
-import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet
-
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.ByteOrder
@@ -186,7 +185,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
         return false
     }
 
-    override fun get(key: Int): Item {
+    override operator fun get(key: Int): Item {
         if (INTERNAL_DIFF_ITEM.containsKey(key)) {
             return INTERNAL_DIFF_ITEM[key]
         }

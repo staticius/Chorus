@@ -1,8 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 
-
-
 class CraftGrindstoneAction : ItemStackRequestAction {
     var recipeNetworkId: Int = 0
     var numberOfRequestedCrafts: Int = 0

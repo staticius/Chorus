@@ -3,15 +3,8 @@ package org.chorus.nbt.tag
 import io.netty.util.internal.EmptyArrays
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
-import kotlin.collections.Collection
-import kotlin.collections.HashMap
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
-import kotlin.collections.MutableSet
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.forEach
-import kotlin.collections.iterator
 import kotlin.collections.set
 import kotlin.math.max
 
@@ -21,7 +14,7 @@ open class CompoundTag @JvmOverloads constructor(val tags: MutableMap<String?, T
         get() = tags!!.values
 
     override val id: Byte
-        get() = Tag.Companion.TAG_COMPOUND
+        get() = TAG_COMPOUND
 
     open fun put(name: String?, tag: Tag<*>?): CompoundTag {
         tags!![name] = tag

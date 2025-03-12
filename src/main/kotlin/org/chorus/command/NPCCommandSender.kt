@@ -23,7 +23,7 @@ class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
 
     override fun sendCommandOutput(container: CommandOutputContainer) {}
 
-    override val server: Server?
+    override val server: Server
         get() = npc.getServer()
 
     override val name: String
@@ -35,7 +35,7 @@ class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
     override val isEntity: Boolean
         get() = true
 
-    override fun asEntity(): Entity? {
+    override fun asEntity(): Entity {
         return npc
     }
 

@@ -1,7 +1,8 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemAcaciaSign
 
 class BlockAcaciaWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockWallSign(blockState) {
@@ -16,7 +17,7 @@ class BlockAcaciaWallSign @JvmOverloads constructor(blockState: BlockState? = Co
     override val name: String
         get() = "Acacia Wall Sign"
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemAcaciaSign()
     }
 
@@ -24,6 +25,7 @@ class BlockAcaciaWallSign @JvmOverloads constructor(blockState: BlockState? = Co
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.ACACIA_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.ACACIA_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
     }
 }

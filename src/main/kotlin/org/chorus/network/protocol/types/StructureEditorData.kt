@@ -3,7 +3,6 @@ package org.chorus.network.protocol.types
 import org.chorus.block.property.enums.StructureBlockType
 
 
-
 class StructureEditorData {
     var name: String? = null
     var filteredName: String? = null

@@ -5,7 +5,7 @@ import org.chorus.utils.DyeColor
 
 abstract class BlockWool(blockstate: BlockState?) : BlockSolid(blockstate) {
     override val name: String
-        get() = getDyeColor().name + " Wool"
+        get() = getDyeColor().colorName + " Wool"
 
     override val toolType: Int
         get() = ItemTool.TYPE_SHEARS

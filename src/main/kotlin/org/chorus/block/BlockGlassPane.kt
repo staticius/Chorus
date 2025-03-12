@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
 
 open class BlockGlassPane : BlockThin {
     constructor() : super(Companion.properties.defaultState)

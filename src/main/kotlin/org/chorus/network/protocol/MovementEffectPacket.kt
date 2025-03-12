@@ -4,11 +4,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.MovementEffectType
 
 
-
-
-
-
-
 class MovementEffectPacket : DataPacket() {
     var targetRuntimeID: Long = 0
     var effectType: MovementEffectType? = null

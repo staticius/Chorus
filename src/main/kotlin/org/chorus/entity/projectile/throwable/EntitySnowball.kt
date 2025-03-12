@@ -1,14 +1,16 @@
 package org.chorus.entity.projectile.throwable
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.mob.monster.EntityBlaze
-import org.chorus.level.*
+import org.chorus.level.Level
 import org.chorus.level.format.IChunk
-import org.chorus.level.particle.*
+import org.chorus.level.particle.GenericParticle
+import org.chorus.level.particle.Particle
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.DataPacket
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 
 class EntitySnowball @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :

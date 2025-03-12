@@ -12,7 +12,7 @@ class BlockPolishedBlackstoneBrickStairs @JvmOverloads constructor(blockstate: B
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.POLISHED_BLACKSTONE_BRICK_STAIRS,
+            BlockID.BlockID.POLISHED_BLACKSTONE_BRICK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

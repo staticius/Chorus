@@ -1,7 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 
-
 /**
  * MineBlockStackRequestActionData is sent by the client when it breaks a block.
  */

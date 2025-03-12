@@ -8,9 +8,6 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class TickSyncPacket : DataPacket() {
     var requestTimestamp: Long = 0
     var responseTimestamp: Long = 0

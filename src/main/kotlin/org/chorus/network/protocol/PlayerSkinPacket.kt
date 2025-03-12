@@ -7,17 +7,16 @@ import org.chorus.network.connection.util.HandleByteBuf
 import java.util.*
 
 
-
-
-
-
 class PlayerSkinPacket : DataPacket() {
     @JvmField
     var uuid: UUID? = null
+
     @JvmField
     var skin: Skin? = null
+
     @JvmField
     var newSkinName: String? = null
+
     @JvmField
     var oldSkinName: String? = null
 

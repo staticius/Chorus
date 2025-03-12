@@ -1,5 +1,7 @@
 package org.chorus.level
 
+import io.netty.buffer.ByteBufAllocator
+import org.apache.commons.io.FileUtils
 import org.chorus.block.BlockAir
 import org.chorus.block.BlockOakLog
 import org.chorus.block.BlockState
@@ -8,9 +10,6 @@ import org.chorus.level.biome.BiomeID
 import org.chorus.level.format.leveldb.LevelDBProvider
 import org.chorus.level.format.palette.Palette
 import org.chorus.registry.Registries
-import io.netty.buffer.ByteBufAllocator
-
-import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.*
 import org.mockito.Mockito
 import java.io.File

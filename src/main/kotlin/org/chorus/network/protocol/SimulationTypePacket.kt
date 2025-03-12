@@ -26,9 +26,6 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class SimulationTypePacket : DataPacket() {
     var type: SimulationType = SimulationType.GAME
 

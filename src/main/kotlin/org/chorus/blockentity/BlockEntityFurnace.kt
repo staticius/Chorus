@@ -28,6 +28,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     var burnDuration: Int = 0
     var cookTime: Int = 0
     var maxTime: Int = 0
+
     @JvmField
     var storedXP: Float = 0f
     private var crackledTime = 0
@@ -155,8 +156,8 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID.= block.id
-            return BlockID.=== idleBlockID.|| BlockID.=== burningBlockId
+            val BlockID. = block.id
+            return BlockID.=== idleBlockID . || BlockID.=== burningBlockId
         }
 
     val size: Int
@@ -212,19 +213,19 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     protected fun setBurning(burning: Boolean) {
         if (burning) {
             if (this.block.id == this.idleBlockID.{
+                    level.setBlock(
+                        this.position, Block.getWithState(
+                            burningBlockID.this.block.blockState
+                        ), true
+                    )
+                }
+        } else if (this.block.id == this.burningBlockID.{
                 level.setBlock(
                     this.position, Block.getWithState(
-                        burningBlockID.this.block.blockState
+                        idleBlockID.this.block.blockState
                     ), true
                 )
             }
-        } else if (this.block.id == this.burningBlockID.{
-            level.setBlock(
-                this.position, Block.getWithState(
-                    idleBlockID.this.block.blockState
-                ), true
-            )
-        }
     }
 
     protected fun checkFuel(fuel: Item) {

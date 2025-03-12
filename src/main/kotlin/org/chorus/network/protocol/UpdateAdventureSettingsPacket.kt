@@ -3,20 +3,19 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class UpdateAdventureSettingsPacket : DataPacket() {
     @JvmField
     var noPvM: Boolean = false
+
     @JvmField
     var noMvP: Boolean = false
+
     @JvmField
     var immutableWorld: Boolean = false
+
     @JvmField
     var showNameTags: Boolean = false
+
     @JvmField
     var autoJump: Boolean = false
 

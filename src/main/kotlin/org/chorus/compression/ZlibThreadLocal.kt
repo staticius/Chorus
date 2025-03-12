@@ -9,7 +9,7 @@ import java.util.zip.Inflater
 
 class ZlibThreadLocal : ZlibProvider {
     @Throws(IOException::class)
-    override fun deflate(data: ByteArray, level: Int, raw: Boolean): ByteArray? {
+    override fun deflate(data: ByteArray, level: Int, raw: Boolean): ByteArray {
         val deflater = if (raw) DEFLATER_RAW.get() else DEFLATER.get()
         val bos = ThreadCache.fbaos.get()
         try {
@@ -31,7 +31,7 @@ class ZlibThreadLocal : ZlibProvider {
     }
 
     @Throws(IOException::class)
-    override fun inflate(data: ByteArray, maxSize: Int, raw: Boolean): ByteArray? {
+    override fun inflate(data: ByteArray, maxSize: Int, raw: Boolean): ByteArray {
         val inflater = if (raw) INFLATER_RAW.get() else INFLATER.get()
         try {
             inflater.reset()

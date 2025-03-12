@@ -117,7 +117,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
         newBook.setCount(1)
         lectern.book = newBook
         lectern.spawnToAll()
-        level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.ITEM_BOOK_PUT)
+        level.addSound(position.add(0.5, 0.5, 0.5), Sound.ITEM_BOOK_PUT)
         return true
     }
 
@@ -140,7 +140,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
         level.scheduleUpdate(this, this.position, 4)
         isActivated = true
         level.setBlock(this.position, this, true, false)
-        level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.ITEM_BOOK_PAGE_TURN)
+        level.addSound(position.add(0.5, 0.5, 0.5), Sound.ITEM_BOOK_PAGE_TURN)
 
         updateAroundRedstone()
         updateAroundRedstone(getSide(BlockFace.DOWN)!!, BlockFace.UP)
@@ -187,12 +187,12 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
 
         lectern.book = Item.AIR
         lectern.spawnToAll()
-        level.dropItem(lectern.position.add(0.5, 0.6, 0.5)!!, dropBookEvent.getBook())
+        level.dropItem(lectern.position.add(0.5, 0.6, 0.5), dropBookEvent.getBook())
     }
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.LECTERN,
+            BlockID.BlockID.LECTERN,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.POWERED_BIT
         )

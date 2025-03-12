@@ -1,10 +1,10 @@
 package org.chorus.inventory.fake
 
+import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.block.Block
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
-import com.google.common.collect.Lists
 
 class DoubleFakeBlock : SingleFakeBlock {
     constructor(blockId: String?) : super(Block.get(blockId), "default")
@@ -15,7 +15,7 @@ class DoubleFakeBlock : SingleFakeBlock {
 
     override fun getPlacePositions(player: Player): List<Vector3?> {
         val blockPosition = this.getOffset(player)
-        if ((blockPosition!!.floorX and 1) == 1) {
+        if ((blockPosition.floorX and 1) == 1) {
             return Lists.newArrayList(blockPosition, blockPosition.east())
         }
         return Lists.newArrayList(blockPosition, blockPosition.west())

@@ -1,5 +1,6 @@
 package org.chorus.form
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.*
 import org.chorus.event.Event
 import org.chorus.event.player.PlayerFormRespondedEvent
@@ -15,7 +16,6 @@ import org.chorus.form.window.CustomForm
 import org.chorus.form.window.ModalForm
 import org.chorus.form.window.SimpleForm
 import org.chorus.network.protocol.ModalFormResponsePacket
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.List

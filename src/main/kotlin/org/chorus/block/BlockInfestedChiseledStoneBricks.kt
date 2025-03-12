@@ -1,6 +1,7 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 
 class BlockInfestedChiseledStoneBricks @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockState) {
@@ -16,7 +17,7 @@ class BlockInfestedChiseledStoneBricks @JvmOverloads constructor(blockState: Blo
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 

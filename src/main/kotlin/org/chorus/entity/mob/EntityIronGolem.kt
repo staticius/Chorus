@@ -158,7 +158,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
 
 
     private fun getHealthAttribute(): Attribute {
-        return Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)!!.setMaxValue(getMaxHealth().toFloat())
+        return Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH).setMaxValue(getMaxHealth().toFloat())
             .setValue(if (this.health < getMaxHealth()) this.health else getMaxHealth().toFloat())
     }
 

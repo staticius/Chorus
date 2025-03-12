@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import java.util.ArrayDeque
+import java.util.*
 
 class RollingFloatAverage(private val maxSize: Int) {
     private val queue: ArrayDeque<Float> = ArrayDeque()

@@ -1,9 +1,9 @@
 package org.chorus.utils.collection.nb
 
-import org.chorus.api.NonComputationAtomic
 import it.unimi.dsi.fastutil.longs.AbstractLongSet
 import it.unimi.dsi.fastutil.longs.LongIterator
 import it.unimi.dsi.fastutil.longs.LongSet
+import org.chorus.api.NonComputationAtomic
 import java.io.*
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.VarHandle

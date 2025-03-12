@@ -1,11 +1,10 @@
 package org.chorus.blockentity
 
+import it.unimi.dsi.fastutil.ints.IntList
 import org.chorus.Server
 import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import it.unimi.dsi.fastutil.ints.IntList
-
 import java.io.IOException
 import java.util.*
 

@@ -2,7 +2,6 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.entity.Entity
-import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 import org.chorus.item.Item
 import org.chorus.math.AxisAlignedBB
@@ -36,7 +35,7 @@ class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState? = Compan
         }
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 

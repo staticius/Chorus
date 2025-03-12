@@ -1,11 +1,11 @@
 package org.chorus.network.connection.netty.codec.batch
 
-import org.chorus.network.connection.netty.BedrockBatchWrapper
-import org.chorus.network.connection.netty.BedrockPacketWrapper
-import org.chorus.utils.ByteBufVarInt
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelOutboundHandlerAdapter
 import io.netty.channel.ChannelPromise
+import org.chorus.network.connection.netty.BedrockBatchWrapper
+import org.chorus.network.connection.netty.BedrockPacketWrapper
+import org.chorus.utils.ByteBufVarInt
 import java.util.*
 
 class BedrockBatchEncoder : ChannelOutboundHandlerAdapter() {

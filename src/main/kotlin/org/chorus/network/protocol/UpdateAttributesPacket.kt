@@ -4,14 +4,10 @@ import org.chorus.entity.Attribute
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class UpdateAttributesPacket : DataPacket() {
     @JvmField
     var entries: Array<Attribute>?
+
     @JvmField
     var entityId: Long = 0
     var frame: Long = 0 //tick

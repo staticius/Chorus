@@ -1,5 +1,6 @@
 package org.chorus.level.format
 
+import com.google.common.base.Preconditions
 import org.chorus.Player
 import org.chorus.block.*
 import org.chorus.blockentity.BlockEntity
@@ -12,8 +13,6 @@ import org.chorus.math.BlockVector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.NumberTag
 import org.chorus.utils.collection.nb.Long2ObjectNonBlockingMap
-import com.google.common.base.Preconditions
-
 import org.jetbrains.annotations.ApiStatus
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicLong
@@ -552,7 +551,7 @@ class Chunk : IChunk {
     }
 
     override fun unload(save: Boolean, safe: Boolean): Boolean {
-        val provider = this.getProvider() ?: return true
+        val provider = this.getProvider()
         if (save && changes.get() != 0L) {
             provider.saveChunk(this.getX(), this.getZ())
         }

@@ -18,7 +18,7 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
     protected var rollingDirection: Boolean = true
 
     fun getRollingAmplitude(): Int {
-        return this.getDataProperty<Int>(EntityDataTypes.Companion.HURT_TICKS!!)
+        return this.getDataProperty<Int>(EntityDataTypes.Companion.HURT_TICKS)
     }
 
     fun setRollingAmplitude(time: Int) {
@@ -26,7 +26,7 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
     }
 
     fun getRollingDirection(): Int {
-        return this.getDataProperty<Int>(EntityDataTypes.Companion.HURT_DIRECTION!!)
+        return this.getDataProperty<Int>(EntityDataTypes.Companion.HURT_DIRECTION)
     }
 
     fun setRollingDirection(direction: Int) {
@@ -34,7 +34,7 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
     }
 
     fun getDamage(): Int {
-        return this.getDataProperty<Int>(EntityDataTypes.Companion.STRUCTURAL_INTEGRITY!!) // false data name (should be DATA_DAMAGE_TAKEN)
+        return this.getDataProperty<Int>(EntityDataTypes.Companion.STRUCTURAL_INTEGRITY) // false data name (should be DATA_DAMAGE_TAKEN)
     }
 
     fun setDamage(damage: Int) {
@@ -69,7 +69,7 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
         //Check riding
         if (this.riding == null) {
             for (entity: Entity in level!!.fastNearbyEntities(
-                boundingBox!!.grow(0.20000000298023224, 0.0, 0.20000000298023224),
+                boundingBox.grow(0.20000000298023224, 0.0, 0.20000000298023224),
                 this
             )) {
                 if (entity is EntityLiving) {

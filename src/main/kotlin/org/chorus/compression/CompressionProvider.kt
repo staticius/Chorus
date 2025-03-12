@@ -27,12 +27,12 @@ interface CompressionProvider {
 
         val NONE: CompressionProvider = object : CompressionProvider {
             @Throws(IOException::class)
-            override fun compress(data: ByteArray, level: Int): ByteArray? {
+            override fun compress(data: ByteArray, level: Int): ByteArray {
                 return data
             }
 
             @Throws(IOException::class)
-            override fun decompress(compressed: ByteArray): ByteArray? {
+            override fun decompress(compressed: ByteArray): ByteArray {
                 return compressed
             }
         }
@@ -40,12 +40,12 @@ interface CompressionProvider {
         @JvmField
         val ZLIB: CompressionProvider = object : CompressionProvider {
             @Throws(IOException::class)
-            override fun compress(data: ByteArray, level: Int): ByteArray? {
+            override fun compress(data: ByteArray, level: Int): ByteArray {
                 return ZlibChooser.getCurrentProvider().deflate(data, level, false)
             }
 
             @Throws(IOException::class)
-            override fun decompress(compressed: ByteArray): ByteArray? {
+            override fun decompress(compressed: ByteArray): ByteArray {
                 return ZlibChooser.getCurrentProvider().inflate(compressed, MAX_INFLATE_LEN, false)
             }
         }
@@ -53,12 +53,12 @@ interface CompressionProvider {
         @JvmField
         val ZLIB_RAW: CompressionProvider = object : CompressionProvider {
             @Throws(IOException::class)
-            override fun compress(data: ByteArray, level: Int): ByteArray? {
+            override fun compress(data: ByteArray, level: Int): ByteArray {
                 return ZlibChooser.getCurrentProvider().deflate(data, level, true)
             }
 
             @Throws(IOException::class)
-            override fun decompress(compressed: ByteArray): ByteArray? {
+            override fun decompress(compressed: ByteArray): ByteArray {
                 return ZlibChooser.getCurrentProvider().inflate(compressed, MAX_INFLATE_LEN, true)
             }
         }

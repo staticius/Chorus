@@ -7,7 +7,7 @@ class ItemChainmailBoots : ItemArmor {
     constructor(meta: Int, count: Int = 1) : super(ItemID.Companion.CHAINMAIL_BOOTS, meta, count, "Chainmail Boots")
 
     override val tier: Int
-        get() = ItemArmor.Companion.TIER_CHAIN
+        get() = TIER_CHAIN
 
     override val isBoots: Boolean
         get() = true

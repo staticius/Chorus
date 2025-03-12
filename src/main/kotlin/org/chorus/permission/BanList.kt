@@ -1,10 +1,10 @@
 package org.chorus.permission
 
-import org.chorus.utils.Utils
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-
+import org.chorus.utils.Loggable
+import org.chorus.utils.Utils
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
@@ -12,20 +12,19 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 
 
-
-class BanList(private val file: String) {
+class BanList(private val file: String) : Loggable {
     private var list = LinkedHashMap<String?, BanEntry>()
 
-    var isEnable: Boolean = true
+    var enabled: Boolean = true
 
-    val entires: LinkedHashMap<String?, BanEntry>
+    val entries: LinkedHashMap<String?, BanEntry>
         get() {
             removeExpired()
             return this.list
         }
 
     fun isBanned(name: String?): Boolean {
-        if (!this.isEnable || name == null) {
+        if (!this.enabled || name == null) {
             return false
         } else {
             this.removeExpired()
@@ -93,7 +92,7 @@ class BanList(private val file: String) {
                 }
             }
         } catch (e: IOException) {
-            BanList.log.error("Could not load ban list: ", e)
+            log.error("Could not load ban list: ", e)
         }
     }
 
@@ -106,7 +105,7 @@ class BanList(private val file: String) {
                 file.createNewFile()
             }
 
-            val list = LinkedList<LinkedHashMap<String?, String?>>()
+            val list = LinkedList<LinkedHashMap<String, String?>>()
             for (entry in this.list.values) {
                 list.add(entry.map)
             }
@@ -118,7 +117,7 @@ class BanList(private val file: String) {
                 )
             )
         } catch (e: IOException) {
-            BanList.log.error("Could not save ban list ", e)
+            log.error("Could not save ban list ", e)
         }
     }
 }

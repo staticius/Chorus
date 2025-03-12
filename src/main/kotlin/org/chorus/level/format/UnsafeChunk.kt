@@ -11,7 +11,7 @@ import org.jetbrains.annotations.ApiStatus
 
 class UnsafeChunk(private val chunk: Chunk) {
     @get:ApiStatus.Internal
-    val sections: Array<ChunkSection?>?
+    val sections: Array<ChunkSection?>
         get() = chunk.sections
 
     val dimensionData: DimensionData?
@@ -231,7 +231,7 @@ class UnsafeChunk(private val chunk: Chunk) {
     val index: Long
         get() = chunk.index
 
-    val provider: LevelProvider?
+    val provider: LevelProvider
         get() = chunk.getProvider()
 
     var isLightPopulated: Boolean
@@ -266,7 +266,7 @@ class UnsafeChunk(private val chunk: Chunk) {
         chunk.removeBlockEntity(blockEntity)
     }
 
-    val entities: Map<Long?, Entity?>?
+    val entities: Map<Long?, Entity?>
         get() = chunk.getEntities()
 
     fun getTile(x: Int, y: Int, z: Int): BlockEntity? {

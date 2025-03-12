@@ -27,7 +27,7 @@ class PassByTimeEvaluator
     IBehaviorEvaluator {
     override fun evaluate(entity: EntityMob): Boolean {
         val time = entity.memoryStorage!!.get(timedMemory)
-        val passByTime = entity.level!!.tick - time!!
+        val passByTime = entity.level!!.tick - time
         return passByTime >= minPassByTimeRange && passByTime <= maxPassByTimeRange
     }
 }

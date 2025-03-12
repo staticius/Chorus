@@ -28,7 +28,7 @@ object ItemUpdaters {
     }
 
     @JvmStatic
-    fun updateItem(tag: CompoundTag, version: Int): CompoundTag? {
+    fun updateItem(tag: CompoundTag, version: Int): CompoundTag {
         return CONTEXT.update(tag, version)
     }
 }

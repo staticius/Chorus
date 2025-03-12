@@ -15,8 +15,8 @@ class BlockEntityFlowerPot(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID.= block.id
-            return BlockID.== Block.FLOWER_POT
+            val BlockID. = block.id
+            return BlockID.== Block . FLOWER_POT
         }
 
     override val spawnCompound: CompoundTag

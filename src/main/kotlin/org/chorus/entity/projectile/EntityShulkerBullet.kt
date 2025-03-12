@@ -1,6 +1,8 @@
 package org.chorus.entity.projectile
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityFlyable
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
@@ -14,7 +16,8 @@ import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.route.finder.impl.SimpleSpaceAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.FlyingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
@@ -68,10 +71,6 @@ class EntityShulkerBullet(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, n
 
     override fun getOriginalName(): String {
         return "Shulker Bullet"
-    }
-
-    override fun onUpdate(currentTick: Int): Boolean {
-        return super.onUpdate(currentTick)
     }
 
     override fun onCollide(currentTick: Int, collidingEntities: List<Entity>): Boolean {

@@ -7,7 +7,6 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.lang.TranslationContainer
 import org.chorus.utils.TextFormat
-import kotlin.collections.Map
 import kotlin.collections.set
 
 /**
@@ -37,7 +36,7 @@ class MeCommand(name: String) : VanillaCommand(name, "commands.me.description", 
             message = result.value!!.getResult(0)
         }
 
-        Command.Companion.broadcastCommandMessage(
+        broadcastCommandMessage(
             sender,
             TranslationContainer("chat.type.emote", name, TextFormat.WHITE.toString() + message),
             true

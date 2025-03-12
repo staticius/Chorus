@@ -52,7 +52,7 @@ class BlockRespawnAnchor : Block {
         fz: Float
     ): Boolean {
         val charge = charge
-        if (item.BlockID.== BlockID.GLOWSTONE && charge < CommonBlockProperties.RESPAWN_ANCHOR_CHARGE.getMax()) {
+        if (item.BlockID.== BlockID . GLOWSTONE && charge < CommonBlockProperties . RESPAWN_ANCHOR_CHARGE . getMax ()) {
             if (player == null || !player.isCreative) {
                 item.count--
             }
@@ -76,7 +76,7 @@ class BlockRespawnAnchor : Block {
 
     protected fun attemptToSetSpawn(player: Player): Boolean {
         if (level.dimension != Level.DIMENSION_NETHER) {
-            if (level.gameRules!!.getBoolean(GameRule.TNT_EXPLODES)) {
+            if (level.gameRules.getBoolean(GameRule.TNT_EXPLODES)) {
                 explode(player)
             }
             return true
@@ -161,7 +161,7 @@ class BlockRespawnAnchor : Block {
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         if (canHarvest(item)) {
             return arrayOf(Item.get(id))
         }

@@ -117,7 +117,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState? = Companio
         return 0
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(get(DIRT))
     }
 

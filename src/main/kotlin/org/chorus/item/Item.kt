@@ -1,5 +1,9 @@
 package org.chorus.item
 
+import com.google.gson.annotations.SerializedName
+import io.netty.util.internal.EmptyArrays
+import it.unimi.dsi.fastutil.ints.Int2IntArrayMap
+import it.unimi.dsi.fastutil.ints.Int2IntMap
 import org.chorus.Player
 import org.chorus.block.*
 import org.chorus.entity.*
@@ -13,17 +17,11 @@ import org.chorus.nbt.tag.*
 import org.chorus.registry.Registries
 import org.chorus.tags.ItemTags
 import org.chorus.utils.*
-import com.google.gson.annotations.SerializedName
-import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.ints.Int2IntArrayMap
-import it.unimi.dsi.fastutil.ints.Int2IntMap
-
 import org.jetbrains.annotations.ApiStatus
 import java.io.IOException
 import java.io.UncheckedIOException
 import java.nio.ByteOrder
 import java.util.*
-
 
 
 abstract class Item : Cloneable, ItemID {
@@ -33,6 +31,7 @@ abstract class Item : Cloneable, ItemID {
         protected set
     protected var name: String? = null
     var meta: Int = 0
+
     @JvmField
     var count: Int
     protected var netId: Int? = null
@@ -712,7 +711,7 @@ abstract class Item : Cloneable, ItemID {
             return EmptyArrays.EMPTY_BYTES
         }
         try {
-            return NBTIO.write(tag, ByteOrder.LITTLE_ENDIAN)!!
+            return NBTIO.write(tag, ByteOrder.LITTLE_ENDIAN)
         } catch (e: IOException) {
             throw UncheckedIOException(e)
         }
@@ -1257,7 +1256,7 @@ abstract class Item : Cloneable, ItemID {
         }
 
         val thisEnchantmentTags = thisTags.getList("ench", CompoundTag::class.java)
-        val otherEnchantmentTags = otherTags!!.getList("ench", CompoundTag::class.java)
+        val otherEnchantmentTags = otherTags.getList("ench", CompoundTag::class.java)
 
         val size = thisEnchantmentTags.size()
         val enchantments: Int2IntMap = Int2IntArrayMap(size)
@@ -1278,18 +1277,14 @@ abstract class Item : Cloneable, ItemID {
         return true
     }
 
-    public override fun clone(): Any {
-        try {
-            var tags = EmptyArrays.EMPTY_BYTES
-            if (this.hasCompoundTag()) {
-                tags = compoundTag.clone()
-            }
-            val item = super.clone() as Item
-            item.setCompoundTag(tags)
-            return item
-        } catch (e: CloneNotSupportedException) {
-            return null
+    public override fun clone(): Item {
+        var tags = EmptyArrays.EMPTY_BYTES
+        if (this.hasCompoundTag()) {
+            tags = compoundTag.clone()
         }
+        val item = super.clone() as Item
+        item.setCompoundTag(tags)
+        return item
     }
 
     /**
@@ -1469,6 +1464,7 @@ abstract class Item : Cloneable, ItemID {
     companion object {
         @JvmField
         val AIR: Item = ConstAirItem()
+
         @JvmField
         val EMPTY_ARRAY: Array<Item?> = arrayOfNulls(0)
 

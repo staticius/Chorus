@@ -1,21 +1,17 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.block.Block.Companion.get
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityComparator
 import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*
-import org.chorus.item.Item.Companion.get
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
-
 import kotlin.math.max
 
 abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneDiode(blockstate),
@@ -120,7 +116,7 @@ abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneD
         }
 
         level.addLevelEvent(
-            position.add(0.5, 0.5, 0.5)!!,
+            position.add(0.5, 0.5, 0.5),
             LevelEventPacket.EVENT_ACTIVATE_BLOCK,
             if (this.mode == Mode.SUBTRACT) 500 else 550
         )
@@ -192,7 +188,12 @@ abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneD
         try {
             createBlockEntity(CompoundTag().putList("Items", ListTag<Tag>()))
         } catch (e: Exception) {
-            BlockRedstoneComparator.log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), locator, e)
+            BlockRedstoneComparator.log.warn(
+                "Failed to create the block entity {} at {}",
+                getBlockEntityType(),
+                locator,
+                e
+            )
             level.setBlock(layer0!!.position, 0, layer0, true)
             level.setBlock(layer1!!.position, 1, layer1, true)
             return false

@@ -3,14 +3,10 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class ModalFormRequestPacket : DataPacket() {
     @JvmField
     var formId: Int = 0
+
     @JvmField
     var data: String? = null
 

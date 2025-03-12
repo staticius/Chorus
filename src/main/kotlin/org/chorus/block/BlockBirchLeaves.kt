@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
-import org.chorus.item.*
+import org.chorus.item.Item
 
 class BlockBirchLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
     override fun getType(): WoodType {
@@ -18,6 +18,10 @@ class BlockBirchLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.BIRCH_LEAVES, CommonBlockProperties.PERSISTENT_BIT, CommonBlockProperties.UPDATE_BIT)
+            BlockProperties(
+                BlockID.BIRCH_LEAVES,
+                CommonBlockProperties.PERSISTENT_BIT,
+                CommonBlockProperties.UPDATE_BIT
+            )
     }
 }

@@ -25,7 +25,7 @@ class DoorExecutor : EntityControl, IBehaviorExecutor {
     override fun onStop(entity: EntityMob) {
         if (entity.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.NEAREST_DOOR)) {
             val door = entity.memoryStorage!!.get<BlockWoodenDoor>(CoreMemoryTypes.Companion.NEAREST_DOOR)
-            if (door!!.levelBlock is BlockWoodenDoor)  //Can fail when the door gets broken
+            if (door.levelBlock is BlockWoodenDoor)  //Can fail when the door gets broken
                 door.toggle(null)
             entity.memoryStorage!!.clear(CoreMemoryTypes.Companion.NEAREST_DOOR)
         }

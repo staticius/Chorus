@@ -1,12 +1,12 @@
 package org.chorus.utils
 
+
 import org.chorus.block.BlockID
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.nbt.NBTIO.write
-import org.chorus.nbt.tag.*
-
-
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.TreeMapCompoundTag
 import java.nio.ByteOrder
 
 object HashUtils {
@@ -19,14 +19,14 @@ object HashUtils {
         val states = TreeMapCompoundTag()
         for (value in propertyValues) {
             when (value.propertyType.getType()) {
-                BlockPropertyType.Type.INT -> states.putInt(value.propertyType.name, value.getSerializedValue() as Int)
+                BlockPropertyType.Type.INT -> states.putInt(value.propertyType.getName(), value.getSerializedValue() as Int)
                 BlockPropertyType.Type.ENUM -> states.putString(
-                    value.propertyType.name,
+                    value.propertyType.getName(),
                     value.getSerializedValue().toString()
                 )
 
                 BlockPropertyType.Type.BOOLEAN -> states.putByte(
-                    value.propertyType.name,
+                    value.propertyType.getName(),
                     (value.getSerializedValue() as Byte).toInt()
                 )
             }
@@ -46,14 +46,14 @@ object HashUtils {
         val states = TreeMapCompoundTag()
         for (value in propertyValues) {
             when (value.propertyType.getType()) {
-                BlockPropertyType.Type.INT -> states.putInt(value.propertyType.name, value.getSerializedValue() as Int)
+                BlockPropertyType.Type.INT -> states.putInt(value.propertyType.getName(), value.getSerializedValue() as Int)
                 BlockPropertyType.Type.ENUM -> states.putString(
-                    value.propertyType.name,
+                    value.propertyType.getName(),
                     value.getSerializedValue().toString()
                 )
 
                 BlockPropertyType.Type.BOOLEAN -> states.putByte(
-                    value.propertyType.name,
+                    value.propertyType.getName(),
                     (value.getSerializedValue() as Byte).toInt()
                 )
             }

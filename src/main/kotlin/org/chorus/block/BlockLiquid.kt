@@ -1,5 +1,7 @@
 package org.chorus.block
 
+import it.unimi.dsi.fastutil.longs.Long2ByteMap
+import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
@@ -15,8 +17,6 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.network.protocol.LevelEventPacket
-import it.unimi.dsi.fastutil.longs.Long2ByteMap
-import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
@@ -557,13 +557,13 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
     protected fun triggerLavaMixEffects(pos: Vector3) {
         val random: Random = ThreadLocalRandom.current()
         level.addLevelEvent(
-            pos.add(0.5, 0.5, 0.5)!!,
+            pos.add(0.5, 0.5, 0.5),
             LevelEventPacket.EVENT_SOUND_FIZZ,
             ((random.nextFloat() - random.nextFloat()) * 800).toInt() + 2600
         )
 
         for (i in 0..7) {
-            level.addParticle(SmokeParticle(pos.add(Math.random(), 1.2, Math.random())!!))
+            level.addParticle(SmokeParticle(pos.add(Math.random(), 1.2, Math.random())))
         }
     }
 
@@ -591,7 +591,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
         }
         level.setBlock(this.position, event.to, true, true)
         level.setBlock(this.position, 1, get(BlockID.AIR), true, true)
-        level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.RANDOM_FIZZ)
+        level.addSound(position.add(0.5, 0.5, 0.5), Sound.RANDOM_FIZZ)
         return true
     }
 

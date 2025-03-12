@@ -11,6 +11,7 @@ class BlockBambooSlab(blockState: BlockState?) : BlockWoodenSlab(blockState, Blo
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.BAMBOO_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.BAMBOO_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

@@ -1,10 +1,10 @@
 package org.chorus.level
 
+import it.unimi.dsi.fastutil.ints.*
 import org.chorus.Player
 import org.chorus.block.*
 import org.chorus.math.Vector3
 import org.chorus.registry.Registries
-import it.unimi.dsi.fastutil.ints.*
 import java.util.List
 
 class AntiXraySystem(private val level: Level) {

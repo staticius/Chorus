@@ -44,7 +44,7 @@ abstract class BlockNylium(blockState: BlockState?) : BlockSolid(blockState), Na
 
         grow()
 
-        level.addParticle(BoneMealParticle(up!!.position))
+        level.addParticle(BoneMealParticle(up.position))
 
         return true
     }

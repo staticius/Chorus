@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class AddPaintingPacket : DataPacket() {
     var entityUniqueId: Long = 0
     var entityRuntimeId: Long = 0

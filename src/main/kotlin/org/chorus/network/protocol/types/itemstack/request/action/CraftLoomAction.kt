@@ -1,8 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 
-
-
 class CraftLoomAction : ItemStackRequestAction {
     var patternId: String? = null
 

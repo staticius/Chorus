@@ -17,13 +17,13 @@ class BlockPrismarineWall @JvmOverloads constructor(blockstate: BlockState? = Co
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(properties.defaultState.toBlock())
     }
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.PRISMARINE_WALL,
+            BlockID.BlockID.PRISMARINE_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,

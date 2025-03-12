@@ -185,6 +185,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
                     setTilt(BigDripleafTilt.NONE)
                     level.setBlock(this.position, this, direct = true, update = false)
                 }
+
                 else -> {}
             }
             return Level.BLOCK_UPDATE_SCHEDULED

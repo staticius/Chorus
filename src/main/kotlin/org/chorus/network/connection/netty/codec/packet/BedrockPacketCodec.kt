@@ -1,13 +1,13 @@
 package org.chorus.network.connection.netty.codec.packet
 
-import org.chorus.network.connection.netty.BedrockPacketWrapper
-import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.registry.Registries
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageCodec
 import io.netty.util.internal.logging.InternalLogger
 import io.netty.util.internal.logging.InternalLoggerFactory
+import org.chorus.network.connection.netty.BedrockPacketWrapper
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.registry.Registries
 
 abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacketWrapper>() {
     @Throws(Exception::class)

@@ -1,5 +1,13 @@
 package org.chorus.network.connection
 
+
+import com.github.oxo42.stateless4j.StateMachine
+import com.github.oxo42.stateless4j.StateMachineConfig
+import com.github.oxo42.stateless4j.delegates.Action
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufAllocator
+import io.netty.buffer.Unpooled
+import io.netty.util.internal.PlatformDependent
 import org.chorus.Player
 import org.chorus.PlayerHandle
 import org.chorus.Server
@@ -21,15 +29,6 @@ import org.chorus.network.protocol.types.PlayerInfo
 import org.chorus.plugin.InternalPlugin
 import org.chorus.registry.Registries
 import org.chorus.utils.ByteBufVarInt
-import com.github.oxo42.stateless4j.StateMachine
-import com.github.oxo42.stateless4j.StateMachineConfig
-import com.github.oxo42.stateless4j.delegates.Action
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.ByteBufAllocator
-import io.netty.buffer.Unpooled
-import io.netty.util.internal.PlatformDependent
-
-
 import org.jetbrains.annotations.ApiStatus
 import java.net.InetSocketAddress
 import java.net.SocketAddress
@@ -38,8 +37,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
 import javax.crypto.SecretKey
-import kotlin.collections.HashMap
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 
@@ -48,16 +45,18 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     private val inbound: Queue<DataPacket> = PlatformDependent.newSpscQueue()
     private val nettyThreadOwned = AtomicBoolean(false)
     private val consumer = AtomicReference<Consumer<DataPacket>?>(null)
+
     @JvmField
     val machine: StateMachine<SessionState, SessionState>
     var handle: PlayerHandle? = null
         private set
     private var info: PlayerInfo? = null
     protected var packetHandler: PacketHandler? = null
+
     @JvmField
     var address: InetSocketAddress?
 
-    
+
     protected var authenticated: Boolean = false
 
 

@@ -1,15 +1,11 @@
 package org.chorus.form.window
 
-import org.chorus.Player
-import org.chorus.form.response.Response
+
 import com.google.gson.JsonObject
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectArraySet
-
-
-
-
-
+import org.chorus.Player
+import org.chorus.form.response.Response
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
@@ -30,15 +26,15 @@ abstract class Form<T : Response?>(title: String) {
 
     protected var title: String = ""
 
-    
+
     protected var closed: Consumer<Player?>? =
         Consumer { player: Player? -> }
 
-    
+
     protected var submitted: BiConsumer<Player?, T>? =
         BiConsumer { player: Player?, response: T -> }
 
-    
+
     protected var response: T? = null
 
     init {

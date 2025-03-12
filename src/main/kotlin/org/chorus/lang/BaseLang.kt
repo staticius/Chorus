@@ -1,15 +1,13 @@
 package org.chorus.lang
 
-import org.chorus.utils.JSONUtils
 import com.google.gson.reflect.TypeToken
 import io.netty.util.internal.EmptyArrays
-
+import org.chorus.utils.JSONUtils
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.util.regex.MatchResult
 import java.util.regex.Pattern
-
 
 
 class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fallback: String = FALLBACK_LANGUAGE) {

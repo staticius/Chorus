@@ -1,6 +1,8 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 
 class BlockIronBars @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockThin(blockstate) {
@@ -19,7 +21,7 @@ class BlockIronBars @JvmOverloads constructor(blockstate: BlockState? = Companio
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -32,6 +34,6 @@ class BlockIronBars @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.Companion.IRON_BARS)
-            
+
     }
 }

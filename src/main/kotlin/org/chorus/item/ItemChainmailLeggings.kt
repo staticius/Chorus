@@ -12,7 +12,7 @@ class ItemChainmailLeggings : ItemArmor {
     )
 
     override val tier: Int
-        get() = ItemArmor.Companion.TIER_CHAIN
+        get() = TIER_CHAIN
 
     override val isLeggings: Boolean
         get() = true

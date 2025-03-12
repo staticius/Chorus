@@ -5,20 +5,19 @@ import org.chorus.scoreboard.data.DisplaySlot
 import org.chorus.scoreboard.data.SortOrder
 
 
-
-
-
-
-
 class SetDisplayObjectivePacket : DataPacket() {
     @JvmField
     var displaySlot: DisplaySlot? = null
+
     @JvmField
     var objectiveName: String? = null
+
     @JvmField
     var displayName: String? = null
+
     @JvmField
     var criteriaName: String? = null
+
     @JvmField
     var sortOrder: SortOrder? = null
 

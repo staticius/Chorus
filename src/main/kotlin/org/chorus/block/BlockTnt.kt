@@ -77,7 +77,7 @@ class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properti
         level.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 source ?: this,
-                position.add(0.5, 0.5, 0.5)!!, VibrationType.PRIME_FUSE
+                position.add(0.5, 0.5, 0.5), VibrationType.PRIME_FUSE
             )
         )
     }

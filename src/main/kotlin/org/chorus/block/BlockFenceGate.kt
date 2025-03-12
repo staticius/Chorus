@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import com.google.common.collect.Sets
 import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
@@ -15,7 +16,6 @@ import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
-import com.google.common.collect.Sets
 
 open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockState), RedstoneComponent, Faceable {
@@ -184,11 +184,11 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
 
         val source = vector3.add(0.5, 0.5, 0.5)
         val vibrationEvent = if (open) VibrationEvent(
-            player ?: this,
-            source!!, VibrationType.BLOCK_OPEN
+            player,
+            source, VibrationType.BLOCK_OPEN
         ) else VibrationEvent(
-            player ?: this,
-            source!!, VibrationType.BLOCK_CLOSE
+            player,
+            source, VibrationType.BLOCK_CLOSE
         )
         level.vibrationManager.callVibrationEvent(vibrationEvent)
         return true
@@ -293,7 +293,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.FENCE_GATE,
+            BlockID.FENCE_GATE,
             CommonBlockProperties.IN_WALL_BIT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT

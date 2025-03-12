@@ -155,7 +155,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         var dropInside = false
         var insideID: String? = "minecraft:air"
         var insideMeta = 0
@@ -177,7 +177,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
         }
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 
@@ -246,7 +246,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
                 val block = this as Block
                 val tag = block.blockState!!.blockStateTag.copy()
                 val item = block.toItem()
-                return tag.putString("itemId", item!!.id)
+                return tag.putString("itemId", item.id)
                     .putInt("itemMeta", item.damage) //only exist in PNX
             }
 

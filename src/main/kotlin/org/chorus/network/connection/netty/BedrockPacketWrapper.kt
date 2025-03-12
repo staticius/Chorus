@@ -1,13 +1,9 @@
 package org.chorus.network.connection.netty
 
-import org.chorus.network.protocol.DataPacket
 import io.netty.buffer.ByteBuf
 import io.netty.util.AbstractReferenceCounted
 import io.netty.util.ReferenceCountUtil
-
-
-
-
+import org.chorus.network.protocol.DataPacket
 
 
 (callSuper = false)

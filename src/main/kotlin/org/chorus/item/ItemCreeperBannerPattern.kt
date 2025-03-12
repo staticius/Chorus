@@ -8,6 +8,6 @@ class ItemCreeperBannerPattern : ItemBannerPattern(ItemID.Companion.CREEPER_BANN
         set(meta) {
         }
 
-    override val patternType: BannerPatternType?
+    override val patternType: BannerPatternType
         get() = BannerPatternType.CREEPER
 }

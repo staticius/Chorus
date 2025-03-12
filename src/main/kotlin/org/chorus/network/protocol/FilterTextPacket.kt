@@ -26,10 +26,6 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
-
 class FilterTextPacket : DataPacket() {
     var text: String? = null
     var isFromServer: Boolean = false

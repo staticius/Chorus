@@ -53,8 +53,7 @@ class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>(
             // Apply responses as default settings
             if (!event.isCancelled && window is CustomForm && response != null) {
                 (response as CustomResponse).responses.forEach { (i: Int?, res: Any?) ->
-                    val e: Element = window.elements().get(i)
-                    when (e) {
+                    when (val e: Element = window.elements().get(i)) {
                         -> dropdown.defaultOption((res as ElementResponse).elementId())
                         -> input.defaultText(String.valueOf(res))
                         -> slider.defaultValue(res as Float)

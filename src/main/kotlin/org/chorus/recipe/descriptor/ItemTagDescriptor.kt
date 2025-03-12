@@ -33,7 +33,7 @@ class ItemTagDescriptor(@JvmField val itemTag: String, override val count: Int) 
         val PRIME = 59
         var result = 1
         val `$itemTag`: Any = this.itemTag
-        result = result * PRIME + (`$itemTag`?.hashCode() ?: 43)
+        result = result * PRIME + `$itemTag`.hashCode()
         result = result * PRIME + this.count
         return result
     }

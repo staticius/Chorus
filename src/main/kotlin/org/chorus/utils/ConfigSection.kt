@@ -37,12 +37,14 @@ class ConfigSection
                         .let { LinkedHashMap(it) }
                     super.put(key, ConfigSection(safeMap))
                 }
+
                 is Map<*, *> -> {
                     val safeMap = value.entries
                         .filter { it.key is String? }
                         .associate { it.key as String? to it.value }
                     super.put(key, ConfigSection(safeMap))
                 }
+
                 is List<*> -> super.put(key, parseList(value))
                 else -> super.put(key, value)
             }
@@ -60,12 +62,14 @@ class ConfigSection
                         .let { LinkedHashMap(it) }
                     super.put(key, ConfigSection(safeMap))
                 }
+
                 is Map<*, *> -> {
                     val safeMap = value.entries
                         .filter { it.key is String? }
                         .associate { it.key as String? to it.value }
                     super.put(key, ConfigSection(safeMap))
                 }
+
                 is List<*> -> super.put(key, parseList(value))
                 else -> super.put(key, value)
             }
@@ -425,7 +429,6 @@ class ConfigSection
      */
     fun getStringList(key: String?): List<String> {
         val value = this.getList(key)
-            ?: return ArrayList(0)
         val result: MutableList<String> = ArrayList()
         for (o in value) {
             if (o is String || o is Number || o is Boolean || o is Char) {
@@ -442,7 +445,7 @@ class ConfigSection
      * @return
      */
     fun getIntegerList(key: String?): List<Int> {
-        val list = getList(key) ?: return ArrayList(0)
+        val list = getList(key)
         val result: MutableList<Int> = ArrayList()
 
         for (`object` in list) {
@@ -470,7 +473,7 @@ class ConfigSection
      * @return
      */
     fun getBooleanList(key: String?): List<Boolean> {
-        val list = getList(key) ?: return ArrayList(0)
+        val list = getList(key)
         val result: MutableList<Boolean> = ArrayList()
         for (`object` in list) {
             if (`object` is Boolean) {
@@ -493,7 +496,7 @@ class ConfigSection
      * @return
      */
     fun getDoubleList(key: String?): List<Double> {
-        val list = getList(key) ?: return ArrayList(0)
+        val list = getList(key)
         val result: MutableList<Double> = ArrayList()
         for (`object` in list) {
             if (`object` is Double) {
@@ -520,7 +523,7 @@ class ConfigSection
      * @return
      */
     fun getFloatList(key: String?): List<Float> {
-        val list = getList(key) ?: return ArrayList(0)
+        val list = getList(key)
         val result: MutableList<Float> = ArrayList()
         for (`object` in list) {
             if (`object` is Float) {
@@ -547,7 +550,7 @@ class ConfigSection
      * @return
      */
     fun getLongList(key: String?): List<Long> {
-        val list = getList(key) ?: return ArrayList(0)
+        val list = getList(key)
         val result: MutableList<Long> = ArrayList()
         for (`object` in list) {
             if (`object` is Long) {
@@ -574,7 +577,7 @@ class ConfigSection
      * @return
      */
     fun getByteList(key: String?): List<Byte> {
-        val list = getList(key) ?: return ArrayList(0)
+        val list = getList(key)
 
         val result: MutableList<Byte> = ArrayList()
 
@@ -604,7 +607,7 @@ class ConfigSection
      * @return
      */
     fun getCharacterList(key: String?): List<Char> {
-        val list = getList(key) ?: return ArrayList(0)
+        val list = getList(key)
 
         val result: MutableList<Char> = ArrayList()
 
@@ -632,7 +635,7 @@ class ConfigSection
      * @return
      */
     fun getShortList(key: String?): List<Short> {
-        val list = getList(key) ?: return ArrayList(0)
+        val list = getList(key)
 
         val result: MutableList<Short> = ArrayList()
 

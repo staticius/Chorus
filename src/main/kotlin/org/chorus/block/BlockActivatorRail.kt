@@ -180,6 +180,10 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.ACTIVATOR_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
+            BlockProperties(
+                BlockID.ACTIVATOR_RAIL,
+                CommonBlockProperties.RAIL_DATA_BIT,
+                CommonBlockProperties.RAIL_DIRECTION_6
+            )
     }
 }

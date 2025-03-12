@@ -10,10 +10,13 @@ import org.chorus.nbt.tag.IntTag
 
 class BlockEntityBell(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     private var ringing = false
+
     @JvmField
     var direction: Int = 0
+
     @JvmField
     var ticks: Int = 0
+
     @JvmField
     val spawnExceptions: MutableList<Player> = ArrayList(2)
 

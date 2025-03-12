@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.Player
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.data.EntityFlag

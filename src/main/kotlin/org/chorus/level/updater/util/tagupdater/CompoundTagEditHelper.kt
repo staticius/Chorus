@@ -1,8 +1,6 @@
 package org.chorus.level.updater.util.tagupdater
 
 import java.util.*
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 class CompoundTagEditHelper(var rootTag: MutableMap<String?, Any?>?) {

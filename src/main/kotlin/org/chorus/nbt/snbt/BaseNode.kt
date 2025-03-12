@@ -2,11 +2,6 @@
 package org.chorus.nbt.snbt
 
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 /**

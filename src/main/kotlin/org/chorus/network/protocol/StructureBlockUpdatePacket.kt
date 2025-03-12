@@ -1,15 +1,9 @@
 package org.chorus.network.protocol
 
 import org.chorus.block.property.enums.StructureBlockType
-import org.chorus.inventory.InventoryType.Companion.from
 import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.*
-
-
-
-
-
 
 
 class StructureBlockUpdatePacket : DataPacket() {

@@ -171,13 +171,13 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
             for (i in 1..burnTime.size) {
                 val item = inventory!!.getItem(i - 1)
                 if (item.isNull) {
-                    c!!.remove("Item$i")
+                    c.remove("Item$i")
                 } else {
-                    c!!.putCompound("Item$i", NBTIO.putItemHelper(item))
+                    c.putCompound("Item$i", NBTIO.putItemHelper(item))
                 }
             }
 
-            return c!!
+            return c
         }
 
     override val isBlockEntityValid: Boolean

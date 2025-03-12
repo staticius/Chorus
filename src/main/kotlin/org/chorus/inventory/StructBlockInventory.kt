@@ -5,7 +5,7 @@ import org.chorus.Server
 import org.chorus.blockentity.BlockEntityStructBlock
 import org.chorus.event.inventory.InventoryCloseEvent
 import org.chorus.event.inventory.InventoryOpenEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.network.protocol.ContainerClosePacket
 import org.chorus.network.protocol.ContainerOpenPacket
 
@@ -110,7 +110,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
     override val type: InventoryType
         get() = InventoryType.STRUCTURE_EDITOR
 
-    override fun getHolder(): BlockEntityStructBlock? {
+    override fun getHolder(): BlockEntityStructBlock {
         return this.holder
     }
 

@@ -73,7 +73,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.getBlock() != null && item.BlockID.== BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
+        if (item.getBlock() != null && item.BlockID.== BlockID . TURTLE_EGG &&(player == null || !player.isSneaking())) {
             val eggCount = eggCount!!
             if (eggCount == TurtleEggCount.FOUR_EGG) {
                 return false
@@ -145,7 +145,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
             super.maxY = maxY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 
@@ -258,7 +258,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
         }
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockTurtleEgg())
     }
 
@@ -303,7 +303,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
         return support.isSolid(BlockFace.UP) || support is BlockWallBase
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 
@@ -328,7 +328,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.TURTLE_EGG,
+            BlockID.BlockID.TURTLE_EGG,
             CommonBlockProperties.CRACKED_STATE,
             CommonBlockProperties.TURTLE_EGG_COUNT
         )

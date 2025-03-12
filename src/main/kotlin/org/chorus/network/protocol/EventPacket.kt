@@ -4,11 +4,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.EventData
 
 
-
-
-
-
-
 class EventPacket : DataPacket() {
     var eid: Long = 0
     var usePlayerId: Byte = 0

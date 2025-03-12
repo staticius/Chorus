@@ -23,7 +23,7 @@ class BlockPolishedDioriteStairs @JvmOverloads constructor(blockstate: BlockStat
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.POLISHED_DIORITE_STAIRS,
+            BlockID.BlockID.POLISHED_DIORITE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

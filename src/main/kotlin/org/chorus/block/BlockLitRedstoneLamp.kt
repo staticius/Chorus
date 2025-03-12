@@ -12,7 +12,7 @@ class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState? = C
     override val lightLevel: Int
         get() = 15
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(get(BlockID.REDSTONE_LAMP))
     }
 

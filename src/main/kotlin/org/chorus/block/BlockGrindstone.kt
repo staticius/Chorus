@@ -30,7 +30,7 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState? = Compan
         return false
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockGrindstone())
     }
 
@@ -146,7 +146,7 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState? = Compan
         return (id != AIR) && (id != BUBBLE_COLUMN) && (support !is BlockLiquid)
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val attachmentType = attachmentType!!
         val blockFace = blockFace
         val south = this.isConnectedTo(BlockFace.SOUTH, attachmentType, blockFace!!)

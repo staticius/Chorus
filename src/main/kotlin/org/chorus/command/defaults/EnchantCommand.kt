@@ -10,8 +10,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.item.Item
 import org.chorus.item.enchantment.Enchantment
-import kotlin.collections.List
-import kotlin.collections.Map
 import kotlin.collections.set
 
 /**

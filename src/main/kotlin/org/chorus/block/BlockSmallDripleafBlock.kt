@@ -70,7 +70,7 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return if (item.isShears) {
             arrayOf(toItem())
         } else {
@@ -80,7 +80,7 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
 
     override fun onBreak(item: Item): Boolean {
         level.setBlock(this.position, BlockAir(), true, true)
-        if (item.isShears) level.dropItem(this.position, toItem()!!)
+        if (item.isShears) level.dropItem(this.position, toItem())
         if (getSide(BlockFace.UP)!!.id == BlockID.SMALL_DRIPLEAF_BLOCK) {
             level.getBlock(getSide(BlockFace.UP)!!.position)!!.onBreak(null)
         }
@@ -93,7 +93,7 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
     override fun onUpdate(type: Int): Int {
         if (!canKeepAlive(this)) {
             level.setBlock(this.position, BlockAir(), true, true)
-            level.dropItem(this.position, toItem()!!)
+            level.dropItem(this.position, toItem())
         }
         return super.onUpdate(type)
     }
@@ -127,11 +127,11 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
             }
 
             for (i in 0..<height) {
-                level.setBlock(buttom.position.add(0.0, i.toDouble(), 0.0)!!, blockBigDripleafDown, true, true)
+                level.setBlock(buttom.position.add(0.0, i.toDouble(), 0.0), blockBigDripleafDown, true, true)
             }
-            level.setBlock(buttom.position.add(0.0, height.toDouble(), 0.0)!!, blockBigDripleafHead, true, true)
+            level.setBlock(buttom.position.add(0.0, height.toDouble(), 0.0), blockBigDripleafHead, true, true)
 
-            level.addParticleEffect(position.add(0.5, 0.5, 0.5)!!, ParticleEffect.CROP_GROWTH)
+            level.addParticleEffect(position.add(0.5, 0.5, 0.5), ParticleEffect.CROP_GROWTH)
             item.count--
             return true
         }
@@ -162,7 +162,7 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.SMALL_DRIPLEAF_BLOCK,
+            BlockID.BlockID.SMALL_DRIPLEAF_BLOCK,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.UPPER_BLOCK_BIT
         )

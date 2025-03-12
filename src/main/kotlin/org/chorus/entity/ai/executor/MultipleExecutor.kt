@@ -45,11 +45,4 @@ class MultipleExecutor : IBehaviorExecutor {
         }
     }
 
-    override fun onInterrupt(entity: EntityMob?) {
-        super.onInterrupt(entity)
-    }
-
-    override fun onStop(entity: EntityMob?) {
-        super.onStop(entity)
-    }
 }

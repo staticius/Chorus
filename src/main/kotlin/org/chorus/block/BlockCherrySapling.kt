@@ -34,7 +34,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
                 return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
-            if (level.getFullLight(position.add(0.0, 1.0, 0.0)!!) >= BlockCrops.Companion.MINIMUM_LIGHT_LEVEL) {
+            if (level.getFullLight(position.add(0.0, 1.0, 0.0)) >= BlockCrops.Companion.MINIMUM_LIGHT_LEVEL) {
                 if (isAged) {
                     this.grow()
                 } else {
@@ -138,7 +138,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
             )
         }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockCherrySapling())
     }
 

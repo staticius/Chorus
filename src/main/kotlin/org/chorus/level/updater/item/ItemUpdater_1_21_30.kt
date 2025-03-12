@@ -5,8 +5,6 @@ import org.chorus.level.updater.Updater
 import org.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
 import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
 import java.util.function.Function
-import kotlin.collections.Map
-import kotlin.collections.get
 import kotlin.collections.set
 
 class ItemUpdater_1_21_30 : Updater {

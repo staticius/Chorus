@@ -1,9 +1,9 @@
 package org.chorus.registry
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.level.generator.Flat
 import org.chorus.level.generator.Generator
 import org.chorus.registry.RegisterException
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
 class GeneratorRegistry :
@@ -30,7 +30,7 @@ class GeneratorRegistry :
     val generatorList: Set<String>
         get() = REGISTRY.keys
 
-    override fun get(key: String): Class<out Generator?>? {
+    override operator fun get(key: String): Class<out Generator?>? {
         return REGISTRY[key.lowercase()]
     }
 

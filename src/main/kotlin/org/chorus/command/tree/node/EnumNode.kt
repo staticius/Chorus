@@ -1,9 +1,9 @@
 package org.chorus.command.tree.node
 
+import com.google.common.collect.Sets
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.tree.ParamList
-import com.google.common.collect.Sets
 
 /**
  * 解析为[String]值

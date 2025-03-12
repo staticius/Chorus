@@ -282,7 +282,7 @@ open class Token : SNBTConstants, Node {
      * Copy the location info from a Node
      */
     override fun copyLocationInfo(from: Node) {
-        super<Node>.copyLocationInfo(from)
+        super.copyLocationInfo(from)
         if (from is Token) {
             val otherTok = from
             appendedToken = otherTok.appendedToken
@@ -292,7 +292,7 @@ open class Token : SNBTConstants, Node {
     }
 
     override fun copyLocationInfo(start: Node, end: Node) {
-        super<Node>.copyLocationInfo(start, end)
+        super.copyLocationInfo(start, end)
         if (start is Token) {
             prependedToken = start.prependedToken
         }

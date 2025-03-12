@@ -1,18 +1,14 @@
 package org.chorus.network.protocol
 
-import org.chorus.network.connection.util.HandleByteBuf
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-
-
-
-
-
+import org.chorus.network.connection.util.HandleByteBuf
 
 
 class AnimatePacket : DataPacket() {
     @JvmField
     var eid: Long = 0
+
     @JvmField
     var action: Action? = null
     var rowingTime: Float = 0f

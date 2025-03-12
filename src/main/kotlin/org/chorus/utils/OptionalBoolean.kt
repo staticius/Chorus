@@ -1,8 +1,8 @@
 package org.chorus.utils
 
-import org.chorus.utils.functional.*
-import java.util.*
-import java.util.function.*
+import org.chorus.utils.functional.BooleanConsumer
+import java.util.function.BooleanSupplier
+import java.util.function.Supplier
 
 /**
  * @author joserobjr

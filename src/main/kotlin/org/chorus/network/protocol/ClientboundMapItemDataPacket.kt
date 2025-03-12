@@ -1,5 +1,7 @@
 package org.chorus.network.protocol
 
+import io.netty.util.internal.EmptyArrays
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.math.*
 import org.chorus.math.Vector3.floorX
 import org.chorus.math.Vector3.floorY
@@ -7,9 +9,6 @@ import org.chorus.math.Vector3.floorZ
 import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.utils.*
-import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
 import java.awt.Color
 import java.awt.image.BufferedImage
 
@@ -17,9 +16,6 @@ import java.awt.image.BufferedImage
  * @author CreeperFace
  * @since 5.3.2017
  */
-
-
-
 
 
 class ClientboundMapItemDataPacket : DataPacket() {
@@ -142,7 +138,7 @@ class ClientboundMapItemDataPacket : DataPacket() {
         }
     }
 
-    
+
     class MapTrackedObject {
         private val type: Type
         private var entityId: Long = 0

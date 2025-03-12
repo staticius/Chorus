@@ -1,5 +1,13 @@
 package org.chorus.network.connection
 
+import io.netty.channel.*
+import io.netty.handler.codec.*
+import io.netty.util.ReferenceCountUtil
+import io.netty.util.concurrent.ScheduledFuture
+import io.netty.util.internal.PlatformDependent
+import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.network.connection.netty.BedrockPacketWrapper
 import org.chorus.network.connection.netty.codec.FrameIdCodec
 import org.chorus.network.connection.netty.codec.batch.BedrockBatchDecoder
@@ -12,15 +20,6 @@ import org.chorus.network.connection.util.EncryptionUtils
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.types.PacketCompressionAlgorithm
-import io.netty.channel.*
-import io.netty.handler.codec.*
-import io.netty.util.ReferenceCountUtil
-import io.netty.util.concurrent.ScheduledFuture
-import io.netty.util.internal.PlatformDependent
-import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-
 import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption

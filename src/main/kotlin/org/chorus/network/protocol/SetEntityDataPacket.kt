@@ -3,17 +3,13 @@ package org.chorus.network.protocol
 import org.chorus.entity.data.EntityDataMap
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.PropertySyncData
-import org.chorus.utils.*
-
-
-
-
-
+import org.chorus.utils.Binary
 
 
 class SetEntityDataPacket : DataPacket() {
     @JvmField
     var eid: Long = 0
+
     @JvmField
     var entityData: EntityDataMap? = null
     var syncedProperties: PropertySyncData = PropertySyncData(intArrayOf(), floatArrayOf())

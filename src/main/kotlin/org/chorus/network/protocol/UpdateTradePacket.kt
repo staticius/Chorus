@@ -9,11 +9,6 @@ import java.io.IOException
 import java.nio.ByteOrder
 
 
-
-
-
-
-
 class UpdateTradePacket : DataPacket() {
     var containerId: Byte = 0
     var containerType: Byte = 15 //trading id
@@ -40,7 +35,7 @@ class UpdateTradePacket : DataPacket() {
         byteBuf.writeBoolean(newTradingUi)
         byteBuf.writeBoolean(usingEconomyTrade)
         try {
-            byteBuf.writeBytes(write(offers!!, ByteOrder.LITTLE_ENDIAN, true)!!)
+            byteBuf.writeBytes(write(offers!!, ByteOrder.LITTLE_ENDIAN, true))
         } catch (e: IOException) {
             UpdateTradePacket.log.error("", e)
         }

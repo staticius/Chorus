@@ -1,7 +1,7 @@
 package org.chorus.command.data
 
-import org.chorus.command.tree.node.IParamNode
 import com.google.common.collect.Lists
+import org.chorus.command.tree.node.IParamNode
 import java.util.*
 
 class CommandParameter private constructor(
@@ -16,7 +16,7 @@ class CommandParameter private constructor(
     var paramOptions: List<CommandParamOption>? = null
 
     companion object {
-        val EMPTY_ARRAY: Array<CommandParameter?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<CommandParameter> = emptyArray()
 
         /**
          * optional = false

@@ -165,7 +165,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Compan
             .putFloat("ItemDropChance", 1.0f)
         if (item.hasCustomBlockData()) {
             for ((key, value) in item.customBlockData!!.entrySet) {
-                nbt!!.put(key, value)
+                nbt.put(key, value)
             }
         }
         level.setBlock(block.position, this, true, true)
@@ -255,7 +255,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.FRAME,
+            BlockID.FRAME,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.ITEM_FRAME_MAP_BIT,
             CommonBlockProperties.ITEM_FRAME_PHOTO_BIT

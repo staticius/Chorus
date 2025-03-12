@@ -1,7 +1,7 @@
 package org.chorus.item.enchantment
 
 class EnchantmentBindingCurse :
-    Enchantment(Enchantment.Companion.ID_BINDING_CURSE, "curse.binding", Rarity.VERY_RARE, EnchantmentType.WEARABLE) {
+    Enchantment(ID_BINDING_CURSE, "curse.binding", Rarity.VERY_RARE, EnchantmentType.WEARABLE) {
     init {
         this.isObtainableFromEnchantingTable = false
     }

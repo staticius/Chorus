@@ -1,20 +1,16 @@
 package org.chorus.scheduler
 
-
+import org.chorus.utils.Loggable
 import java.util.concurrent.*
 
-/**
- * @author Nukkit Project Team
- */
-
 class AsyncPool(size: Int) :
-    ThreadPoolExecutor(size, Int.MAX_VALUE, 60, TimeUnit.MILLISECONDS, SynchronousQueue<Runnable>()) {
+    ThreadPoolExecutor(size, Int.MAX_VALUE, 60, TimeUnit.MILLISECONDS, SynchronousQueue()), Loggable {
     init {
-        this.threadFactory = ThreadFactory { runnable: Runnable? ->
+        this.threadFactory = ThreadFactory { runnable ->
             object : Thread(runnable) {
                 init {
                     isDaemon = true
-                    name = String.format("Nukkit Asynchronous Task Handler #%s", poolSize)
+                    name = "Chorus Async TaskHandler #$poolSize"
                 }
             }
         }
@@ -22,7 +18,7 @@ class AsyncPool(size: Int) :
 
     override fun afterExecute(runnable: Runnable, throwable: Throwable?) {
         if (throwable != null) {
-            AsyncPool.log.error("Exception in asynchronous task", throwable)
+            log.error("Exception in asynchronous task", throwable)
         }
     }
 }

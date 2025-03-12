@@ -44,7 +44,7 @@ class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit?> {
         fz: Double,
         player: Player?
     ): Boolean {
-        if (item.isBlock() && item.BlockID.== CONDUIT && target.id == CONDUIT) {
+        if (item.isBlock() && item.BlockID.== CONDUIT && target . id == CONDUIT) {
             return false
         }
 
@@ -104,6 +104,6 @@ class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit?> {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CONDUIT)
-            
+
     }
 }

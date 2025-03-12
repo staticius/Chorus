@@ -5,9 +5,6 @@ import eu.okaeri.configs.annotation.Comment
 import eu.okaeri.configs.annotation.CustomKey
 
 
-
-
-
 (callSuper = true)
 
 @Accessors(fluent = true)

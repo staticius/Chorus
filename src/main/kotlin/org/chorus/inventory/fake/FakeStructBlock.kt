@@ -3,7 +3,6 @@ package org.chorus.inventory.fake
 import org.chorus.Player
 import org.chorus.block.BlockStructureBlock
 import org.chorus.blockentity.*
-import org.chorus.entity.Entity.getLocator
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag

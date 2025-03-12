@@ -1,13 +1,9 @@
 package org.chorus.network.protocol
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.inventory.FullContainerName
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
 import java.util.function.Consumer
-
-
-
 
 
 class ContainerRegistryCleanupPacket : DataPacket() {

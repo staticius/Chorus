@@ -1,11 +1,11 @@
 package org.chorus.level.format.palette
 
+import io.netty.buffer.ByteBuf
+import it.unimi.dsi.fastutil.Pair
 import org.chorus.nbt.stream.NBTInputStream
 import org.chorus.nbt.tag.*
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.*
-import io.netty.buffer.ByteBuf
-import it.unimi.dsi.fastutil.Pair
 import java.io.IOException
 
 /**

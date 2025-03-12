@@ -1,7 +1,7 @@
 package org.chorus.level.generator
 
-import org.chorus.Server
 import com.google.common.base.Preconditions
+import org.chorus.Server
 import java.util.concurrent.Executor
 
 abstract class GenerateStage {

@@ -1,12 +1,12 @@
 package org.chorus.blockentity
 
+import com.google.common.base.Preconditions
 import org.chorus.api.DoNotModify
 import org.chorus.block.BlockChiseledBookshelf
 import org.chorus.item.Item
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
-import com.google.common.base.Preconditions
 import kotlin.math.pow
 
 class BlockEntityChiseledBookshelf(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {

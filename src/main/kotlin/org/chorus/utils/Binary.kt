@@ -335,13 +335,13 @@ class Binary {
             )
         }
 
-        fun writeVarInt(v: Int): ByteArray? {
+        fun writeVarInt(v: Int): ByteArray {
             val stream = BinaryStream()
             stream.putVarInt(v)
             return stream.buffer
         }
 
-        fun writeUnsignedVarInt(v: Long): ByteArray? {
+        fun writeUnsignedVarInt(v: Long): ByteArray {
             val stream = BinaryStream()
             stream.putUnsignedVarInt(v)
             return stream.buffer

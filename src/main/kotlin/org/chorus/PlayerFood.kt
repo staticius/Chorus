@@ -1,6 +1,6 @@
 package org.chorus
 
-import org.chorus.entity.*
+import org.chorus.entity.Attribute
 import org.chorus.entity.Attribute.Companion.getAttribute
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.entity.EntityDamageEvent

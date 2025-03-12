@@ -27,7 +27,7 @@ class PlayerCursorInventory(player: Player?) : BaseInventory(player, InventoryTy
 
     override fun init() {
         val slotTypeMap = super.slotTypeMap()
-        slotTypeMap!![0] = ContainerSlotType.CURSOR
+        slotTypeMap[0] = ContainerSlotType.CURSOR
     }
 
     override fun sendSlot(index: Int, vararg players: Player) {

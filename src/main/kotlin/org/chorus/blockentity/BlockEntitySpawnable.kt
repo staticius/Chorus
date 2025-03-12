@@ -15,12 +15,12 @@ abstract class BlockEntitySpawnable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
     open val spawnCompound: CompoundTag
         get() = CompoundTag()
             .putString(
-                BlockEntity.Companion.TAG_ID,
-                namedTag.getString(BlockEntity.Companion.TAG_ID)
+                TAG_ID,
+                namedTag.getString(TAG_ID)
             )
-            .putInt(BlockEntity.Companion.TAG_X, floorX)
-            .putInt(BlockEntity.Companion.TAG_Y, floorY)
-            .putInt(BlockEntity.Companion.TAG_Z, floorZ)
+            .putInt(TAG_X, floorX)
+            .putInt(TAG_Y, floorY)
+            .putInt(TAG_Z, floorZ)
 
     fun spawnTo(player: Player) {
         if (this.closed) {

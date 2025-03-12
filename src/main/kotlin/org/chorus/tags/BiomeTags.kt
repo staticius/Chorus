@@ -1,10 +1,10 @@
 package org.chorus.tags
 
-import org.chorus.registry.BiomeRegistry.BiomeDefinition
-import org.chorus.registry.Registries
 import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.objects.Object2ObjectFunction
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
+import org.chorus.registry.BiomeRegistry.BiomeDefinition
+import org.chorus.registry.Registries
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 

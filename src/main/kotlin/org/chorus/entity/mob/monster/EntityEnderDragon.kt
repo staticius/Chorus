@@ -41,6 +41,8 @@ import org.chorus.plugin.InternalPlugin
 import java.util.*
 import java.util.Set
 import kotlin.collections.ArrayList
+import kotlin.collections.first
+import kotlin.collections.iterator
 import kotlin.collections.setOf
 import kotlin.collections.toTypedArray
 import kotlin.math.cos
@@ -116,7 +118,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
         addEntity.attributes = arrayOf<Attribute>(
-            Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)!!.setMaxValue(200f).setValue(200f)
+            Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH).setMaxValue(200f).setValue(200f)
         )
         return addEntity
     }
@@ -311,7 +313,6 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
     protected inner class LookController : IController {
         override fun control(entity: EntityMob): Boolean {
             val target = entity.memoryStorage!!.get<Vector3>(CoreMemoryTypes.Companion.LOOK_TARGET)
-                ?: return false
             val toPlayerVector = Vector3(
                 entity.position.x - target.x,
                 entity.position.y - target.y,

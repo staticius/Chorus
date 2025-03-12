@@ -1,7 +1,6 @@
 package org.chorus.math
 
 
-
 /**
  * Represents a 16 direction compass rose.
  *
@@ -53,6 +52,7 @@ enum class CompassRoseDirection {
      * @since 1.4.0.0-PN
      */
     val yaw: Float
+
     @JvmField
     val index: Int
 

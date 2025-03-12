@@ -1,9 +1,9 @@
 package org.chorus
 
+import com.google.common.base.Preconditions
 import org.chorus.command.SimpleCommandMap
 import org.chorus.event.Event
 import org.chorus.plugin.PluginManager
-import com.google.common.base.Preconditions
 
 class TestPluginManager(server: Server?, commandMap: SimpleCommandMap?) :
     PluginManager(server, commandMap) {

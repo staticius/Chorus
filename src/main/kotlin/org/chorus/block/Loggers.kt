@@ -17,9 +17,9 @@
  */
 package org.chorus.block
 
-import org.chorus.block.BlockEntityHolder
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.chorus.block.BlockEntityHolder
 
 /**
  * @author joserobjr

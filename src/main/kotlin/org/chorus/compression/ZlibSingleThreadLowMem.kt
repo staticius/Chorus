@@ -9,7 +9,7 @@ import java.util.zip.Inflater
 class ZlibSingleThreadLowMem : ZlibProvider {
     @Synchronized
     @Throws(IOException::class)
-    override fun deflate(data: ByteArray, level: Int, raw: Boolean): ByteArray? {
+    override fun deflate(data: ByteArray, level: Int, raw: Boolean): ByteArray {
         if (raw) {
             DEFLATER_RAW.reset()
             DEFLATER_RAW.setLevel(level)
@@ -39,7 +39,7 @@ class ZlibSingleThreadLowMem : ZlibProvider {
 
     @Synchronized
     @Throws(IOException::class)
-    override fun inflate(data: ByteArray, maxSize: Int, raw: Boolean): ByteArray? {
+    override fun inflate(data: ByteArray, maxSize: Int, raw: Boolean): ByteArray {
         if (raw) {
             INFLATER_RAW.reset()
             INFLATER_RAW.setInput(data)

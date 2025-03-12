@@ -1,8 +1,11 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.inventory.*
-import org.chorus.item.*
+import org.chorus.inventory.BlockInventoryHolder
+import org.chorus.inventory.CraftingTableInventory
+import org.chorus.inventory.Inventory
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import java.util.function.Supplier
 

@@ -1,6 +1,5 @@
 package org.chorus.command.defaults
 
-import org.chorus.block.Block
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter

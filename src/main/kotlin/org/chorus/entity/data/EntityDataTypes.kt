@@ -21,6 +21,7 @@ interface EntityDataTypes {
         val STRUCTURAL_INTEGRITY: EntityDataType<Int?> = EntityDataType(0, "STRUCTURAL_INTEGRITY", 1)
         val VARIANT: EntityDataType<Int?> = EntityDataType(0, "VARIANT", 2)
         val COLOR: EntityDataType<Byte?> = EntityDataType(0.toByte(), "COLOR", 3)
+
         @JvmField
         val NAME: EntityDataType<String> = EntityDataType("", "NAME", 4)
 
@@ -29,6 +30,7 @@ interface EntityDataTypes {
          */
         val OWNER_EID: EntityDataType<Long?> = EntityDataType(0L, "OWNER_EID", 5)
         val TARGET_EID: EntityDataType<Long?> = EntityDataType(0L, "TARGET_EID", 6)
+
         @JvmField
         val AIR_SUPPLY: EntityDataType<Short?> = EntityDataType(0.toShort(), "AIR_SUPPLY", 7)
         val EFFECT_COLOR: EntityDataType<Int?> = EntityDataType(0, "EFFECT_COLOR", 8)
@@ -50,15 +52,16 @@ interface EntityDataTypes {
         val CHARGE_AMOUNT: EntityDataType<Byte> = EntityDataType(0.toByte(), "CHARGE_AMOUNT", 22)
         val CARRY_BLOCK_STATE: EntityDataType<Block?> = EntityDataType(
             Block.get(BlockID.AIR), "CARRY_BLOCK_STATE", 23,
-            Transformers.BLOCK!!
+            Transformers.BLOCK
         )
         val CLIENT_EVENT: EntityDataType<Byte?> = EntityDataType(0.toByte(), "CLIENT_EVENT", 24)
         val USING_ITEM: EntityDataType<Boolean?> = EntityDataType(
             false, "USING_ITEM", 25,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
         val PLAYER_FLAGS: EntityDataType<Byte> = EntityDataType(0.toByte(), "PLAYER_FLAGS", 26)
         val PLAYER_INDEX: EntityDataType<Int> = EntityDataType(0, "PLAYER_INDEX", 27)
+
         @JvmField
         val BED_POSITION: EntityDataType<BlockVector3?> = EntityDataType(BlockVector3(), "BED_POSITION", 28)
 
@@ -98,15 +101,19 @@ interface EntityDataTypes {
          */
         @JvmField
         val SCALE: EntityDataType<Float> = EntityDataType(0f, "SCALE", 38)
+
         @JvmField
         val HAS_NPC: EntityDataType<Boolean?> = EntityDataType(
             false, "HAS_NPC", 39,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
+
         @JvmField
         val NPC_DATA: EntityDataType<String> = EntityDataType("", "NPC_DATA", 40)
+
         @JvmField
         val ACTIONS: EntityDataType<String> = EntityDataType("", "ACTIONS", 41)
+
         @JvmField
         val AIR_SUPPLY_MAX: EntityDataType<Short> = EntityDataType(0.toShort(), "AIR_SUPPLY_MAX", 42)
         val MARK_VARIANT: EntityDataType<Int?> = EntityDataType(0, "MARK_VARIANT", 43)
@@ -135,21 +142,23 @@ interface EntityDataTypes {
          */
         val WITHER_TARGET_C: EntityDataType<Long> = EntityDataType(0L, "WITHER_TARGET_C", 51)
         val WITHER_AERIAL_ATTACK: EntityDataType<Short> = EntityDataType(0.toShort(), "WITHER_AERIAL_ATTACK", 52)
+
         @JvmField
         val WIDTH: EntityDataType<Float?> = EntityDataType(0f, "WIDTH", 53)
+
         @JvmField
         val HEIGHT: EntityDataType<Float?> = EntityDataType(0f, "HEIGHT", 54)
         val FUSE_TIME: EntityDataType<Int?> = EntityDataType(0, "FUSE_TIME", 55)
         val SEAT_OFFSET: EntityDataType<Vector3f> = EntityDataType(Vector3f(), "SEAT_OFFSET", 56)
         val SEAT_LOCK_RIDER_ROTATION: EntityDataType<Boolean?> = EntityDataType(
             false, "SEAT_LOCK_RIDER_ROTATION", 57,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
         val SEAT_LOCK_RIDER_ROTATION_DEGREES: EntityDataType<Float> =
             EntityDataType(0f, "SEAT_LOCK_RIDER_ROTATION_DEGREES", 58)
         val SEAT_HAS_ROTATION: EntityDataType<Boolean?> = EntityDataType(
             false, "SEAT_HAS_ROTATION", 59,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
         val SEAT_ROTATION_OFFSET_DEGREES: EntityDataType<Float> = EntityDataType(0f, "SEAT_ROTATION_OFFSET_DEGREES", 60)
 
@@ -163,7 +172,7 @@ interface EntityDataTypes {
         val SHULKER_ATTACH_FACE: EntityDataType<Int> = EntityDataType(0, "SHULKER_ATTACH_FACE", 65)
         val SHULKER_ATTACHED: EntityDataType<Boolean?> = EntityDataType(
             false, "SHULKER_ATTACHED", 66,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
 
         /**
@@ -182,13 +191,13 @@ interface EntityDataTypes {
         val CAREER: EntityDataType<Int> = EntityDataType(0, "CAREER", 69)
         val COMMAND_BLOCK_ENABLED: EntityDataType<Boolean?> = EntityDataType(
             false, "COMMAND_BLOCK_ENABLED", 70,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
         val COMMAND_BLOCK_NAME: EntityDataType<String> = EntityDataType("", "COMMAND_BLOCK_NAME", 71)
         val COMMAND_BLOCK_LAST_OUTPUT: EntityDataType<String> = EntityDataType("", "COMMAND_BLOCK_LAST_OUTPUT", 72)
         val COMMAND_BLOCK_TRACK_OUTPUT: EntityDataType<Boolean?> = EntityDataType(
             false, "COMMAND_BLOCK_TRACK_OUTPUT", 73,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
         val CONTROLLING_RIDER_SEAT_INDEX: EntityDataType<Byte> =
             EntityDataType(0.toByte(), "CONTROLLING_RIDER_SEAT_INDEX", 74)
@@ -198,10 +207,12 @@ interface EntityDataTypes {
         val DATA_LIFETIME_TICKS: EntityDataType<Int?> = EntityDataType(0, "DATA_LIFETIME_TICKS", 78)
         val ARMOR_STAND_POSE_INDEX: EntityDataType<Int> = EntityDataType(0, "ARMOR_STAND_POSE_INDEX", 79)
         val END_CRYSTAL_TICK_OFFSET: EntityDataType<Int> = EntityDataType(0, "END_CRYSTAL_TICK_OFFSET", 80)
+
         @JvmField
         val NAMETAG_ALWAYS_SHOW: EntityDataType<Byte> = EntityDataType(0.toByte(), "NAMETAG_ALWAYS_SHOW", 81)
         val COLOR_2: EntityDataType<Byte?> = EntityDataType(0.toByte(), "COLOR_2", 82)
         val NAME_AUTHOR: EntityDataType<String> = EntityDataType("", "NAME_AUTHOR", 83)
+
         @JvmField
         val SCORE: EntityDataType<String> = EntityDataType("", "SCORE", 84)
 
@@ -223,7 +234,7 @@ interface EntityDataTypes {
         val FLAGS_2: EntityDataType<EnumSet<EntityFlag>> = EntityDataType(
             EnumSet.noneOf(
                 EntityFlag::class.java
-            ), "FLAGS_2", 92, Transformers.FLAGS_EXTEND!!
+            ), "FLAGS_2", 92, Transformers.FLAGS_EXTEND
         )
         val LAYING_AMOUNT: EntityDataType<Float> = EntityDataType(0f, "LAYING_AMOUNT", 93)
         val LAYING_AMOUNT_PREVIOUS: EntityDataType<Float> = EntityDataType(0f, "LAYING_AMOUNT_PREVIOUS", 94)
@@ -235,6 +246,7 @@ interface EntityDataTypes {
             EntityDataType(0f, "AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP", 98)
         val AREA_EFFECT_CLOUD_PICKUP_COUNT: EntityDataType<Int?> =
             EntityDataType(0, "AREA_EFFECT_CLOUD_PICKUP_COUNT", 99)
+
         @JvmField
         val INTERACT_TEXT: EntityDataType<String> = EntityDataType("", "INTERACT_TEXT", 100)
         val TRADE_TIER: EntityDataType<Int> = EntityDataType(0, "TRADE_TIER", 101)
@@ -245,7 +257,7 @@ interface EntityDataTypes {
         val COMMAND_BLOCK_TICK_DELAY: EntityDataType<Int> = EntityDataType(0, "COMMAND_BLOCK_TICK_DELAY", 106)
         val COMMAND_BLOCK_EXECUTE_ON_FIRST_TICK: EntityDataType<Boolean?> = EntityDataType(
             false, "COMMAND_BLOCK_EXECUTE_ON_FIRST_TICK", 107,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
         val AMBIENT_SOUND_INTERVAL: EntityDataType<Float?> = EntityDataType(0f, "AMBIENT_SOUND_INTERVAL", 108)
         val AMBIENT_SOUND_INTERVAL_RANGE: EntityDataType<Float?> =
@@ -255,7 +267,7 @@ interface EntityDataTypes {
         val NAME_RAW_TEXT: EntityDataType<String> = EntityDataType("", "NAME_RAW_TEXT", 112)
         val CAN_RIDE_TARGET: EntityDataType<Boolean?> = EntityDataType(
             false, "CAN_RIDE_TARGET", 113,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
         val LOW_TIER_CURED_TRADE_DISCOUNT: EntityDataType<Int> = EntityDataType(0, "LOW_TIER_CURED_TRADE_DISCOUNT", 114)
         val HIGH_TIER_CURED_TRADE_DISCOUNT: EntityDataType<Int> =
@@ -292,7 +304,7 @@ interface EntityDataTypes {
         val HITBOX: EntityDataType<CompoundTag> = EntityDataType(CompoundTag(), "HITBOX", 118)
         val IS_BUOYANT: EntityDataType<Boolean?> = EntityDataType(
             false, "IS_BUOYANT", 119,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
         val FREEZING_EFFECT_STRENGTH: EntityDataType<Float> = EntityDataType(0f, "FREEZING_EFFECT_STRENGTH", 120)
         val BUOYANCY_DATA: EntityDataType<String> = EntityDataType("", "BUOYANCY_DATA", 121)
@@ -332,7 +344,7 @@ interface EntityDataTypes {
          */
         val PLAYER_HAS_DIED: EntityDataType<Boolean?> = EntityDataType(
             false, "PLAYER_HAS_DIED", 129,
-            Transformers.BOOLEAN_TO_BYTE!!
+            Transformers.BOOLEAN_TO_BYTE
         )
 
         /**

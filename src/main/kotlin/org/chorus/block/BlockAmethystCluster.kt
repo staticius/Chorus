@@ -1,8 +1,10 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.utils.random.ChorusRandom
 
@@ -43,7 +45,7 @@ class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState? = C
                     return when (bound2) {
                         0 -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 16))
                         1 -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 12))
-                        2 ->  arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
+                        2 -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 8))
                         else -> arrayOf(get(ItemID.AMETHYST_SHARD, 0, 4))
                     }
                 }
@@ -59,7 +61,8 @@ class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState? = C
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.AMETHYST_CLUSTER, CommonBlockProperties.MINECRAFT_BLOCK_FACE)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.AMETHYST_CLUSTER, CommonBlockProperties.MINECRAFT_BLOCK_FACE)
 
         private val RANDOM = ChorusRandom()
     }

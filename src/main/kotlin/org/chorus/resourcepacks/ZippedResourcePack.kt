@@ -1,8 +1,7 @@
 package org.chorus.resourcepacks
 
-import org.chorus.Server
 import com.google.gson.JsonParser
-
+import org.chorus.Server
 import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader

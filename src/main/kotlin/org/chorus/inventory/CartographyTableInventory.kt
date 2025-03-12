@@ -11,11 +11,11 @@ class CartographyTableInventory(blockCartographyTable: BlockCartographyTable?) :
     override fun init() {
         val map = super.networkSlotMap()
         for (i in 0..<getSize()) {
-            map!![i] = 12 + i
+            map[i] = 12 + i
         }
 
         val map2 = super.slotTypeMap()
-        map2!![0] = ContainerSlotType.CARTOGRAPHY_INPUT
+        map2[0] = ContainerSlotType.CARTOGRAPHY_INPUT
         map2[1] = ContainerSlotType.CARTOGRAPHY_ADDITIONAL
     }
 

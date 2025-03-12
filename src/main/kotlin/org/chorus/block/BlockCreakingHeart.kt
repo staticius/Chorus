@@ -2,7 +2,6 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.item.*
 import org.chorus.math.*
 import org.chorus.math.Vector3.distance
@@ -71,10 +70,14 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState? = Com
     }
 
     val state: CreakingHeartState
-        get() = getPropertyValue<CreakingHeartState, org.chorus.block.property.type.EnumPropertyType<CreakingHeartState>>(CommonBlockProperties.CREAKING_HEART_STATE)
+        get() = getPropertyValue<CreakingHeartState, org.chorus.block.property.type.EnumPropertyType<CreakingHeartState>>(
+            CommonBlockProperties.CREAKING_HEART_STATE
+        )
 
     val isActive: Boolean
-        get() = getPropertyValue<CreakingHeartState, org.chorus.block.property.type.EnumPropertyType<CreakingHeartState>>(CommonBlockProperties.CREAKING_HEART_STATE) != CreakingHeartState.UPROOTED
+        get() = getPropertyValue<CreakingHeartState, org.chorus.block.property.type.EnumPropertyType<CreakingHeartState>>(
+            CommonBlockProperties.CREAKING_HEART_STATE
+        ) != CreakingHeartState.UPROOTED
 
     var pillarAxis: BlockFace.Axis?
         get() = getPropertyValue(
@@ -125,7 +128,7 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.CREAKING_HEART,
+            BlockID.CREAKING_HEART,
             CommonBlockProperties.NATURAL,
             CommonBlockProperties.CREAKING_HEART_STATE,
             CommonBlockProperties.PILLAR_AXIS

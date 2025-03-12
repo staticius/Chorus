@@ -1,15 +1,13 @@
 package org.chorus.utils
 
-import org.chorus.utils.exception.FormativeRuntimeException
+
 import com.dfsek.terra.lib.commons.lang3.BooleanUtils
-import com.dfsek.terra.lib.commons.lang3.StringUtils
 import com.dfsek.terra.lib.commons.lang3.math.NumberUtils
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-
-
+import org.chorus.utils.exception.FormativeRuntimeException
 import java.io.*
 import java.lang.reflect.Type
 import java.math.BigDecimal
@@ -397,7 +395,7 @@ object JSONUtils {
             return null
         }
         var propertyValue: String
-        val jsonByKey = getAsJsonObject(json, key) ?: return null
+        val jsonByKey = getAsJsonObject(json, key)
         propertyValue = try {
             jsonByKey.asString
         } catch (e: Exception) {
@@ -415,7 +413,7 @@ object JSONUtils {
         if (StringUtils.isEmpty(json)) {
             return 0
         }
-        val jsonByKey = getAsJsonObject(json, key) ?: return 0
+        val jsonByKey = getAsJsonObject(json, key)
         try {
             return jsonByKey.asInt
         } catch (e: Exception) {
@@ -432,7 +430,7 @@ object JSONUtils {
         if (StringUtils.isEmpty(json)) {
             return 0L
         }
-        val jsonByKey = getAsJsonObject(json, key) ?: return 0L
+        val jsonByKey = getAsJsonObject(json, key)
         try {
             return jsonByKey.asLong
         } catch (e: Exception) {
@@ -449,7 +447,7 @@ object JSONUtils {
         if (StringUtils.isEmpty(json)) {
             return 0.0
         }
-        val jsonByKey = getAsJsonObject(json, key) ?: return 0.0
+        val jsonByKey = getAsJsonObject(json, key)
         try {
             return jsonByKey.asDouble
         } catch (e: Exception) {
@@ -467,7 +465,6 @@ object JSONUtils {
             return BigInteger(0.00.toString())
         }
         val jsonByKey = getAsJsonObject(json, key)
-            ?: return BigInteger(0.00.toString())
         try {
             return jsonByKey.asBigInteger
         } catch (e: Exception) {
@@ -485,7 +482,6 @@ object JSONUtils {
             return BigDecimal("0.0")
         }
         val jsonByKey = getAsJsonObject(json, key)
-            ?: return BigDecimal("0.0")
         try {
             return jsonByKey.asBigDecimal
         } catch (e: Exception) {
@@ -503,7 +499,6 @@ object JSONUtils {
             return false
         }
         val jsonByKey = getAsJsonObject(json, key) as JsonPrimitive
-            ?: return false
         try {
             if (jsonByKey.isBoolean) {
                 return jsonByKey.asBoolean
@@ -533,7 +528,7 @@ object JSONUtils {
         if (StringUtils.isEmpty(json)) {
             return 0
         }
-        val jsonByKey = getAsJsonObject(json, key) ?: return 0
+        val jsonByKey = getAsJsonObject(json, key)
         try {
             return jsonByKey.asByte
         } catch (e: Exception) {
@@ -550,7 +545,7 @@ object JSONUtils {
         if (StringUtils.isEmpty(json)) {
             return null
         }
-        val jsonByKey = getAsJsonObject(json, key) ?: return null
+        val jsonByKey = getAsJsonObject(json, key)
         try {
             return from(jsonByKey.asString, type)
         } catch (e: Exception) {
@@ -567,7 +562,7 @@ object JSONUtils {
         if (StringUtils.isEmpty(json)) {
             return null
         }
-        val jsonByKey = getAsJsonObject(json, key) ?: return null
+        val jsonByKey = getAsJsonObject(json, key)
         try {
             val jsonArray = jsonByKey.asJsonArray
             val typeToken = TypeToken.getParameterized(
@@ -735,8 +730,7 @@ object JSONUtils {
         }
     }
 
-    
-    
+
     class GsonException : FormativeRuntimeException {
         constructor() : super()
 

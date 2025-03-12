@@ -1,13 +1,13 @@
 package org.chorus.registry
 
-import org.chorus.nbt.NBTIO.readTreeMapCompoundTag
-import org.chorus.nbt.tag.*
-import org.chorus.registry.BiomeRegistry.BiomeDefinition
-import org.chorus.registry.RegisterException
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
+import org.chorus.nbt.NBTIO.readTreeMapCompoundTag
+import org.chorus.nbt.tag.*
+import org.chorus.registry.BiomeRegistry.BiomeDefinition
+import org.chorus.registry.RegisterException
 import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.io.InputStreamReader
@@ -73,7 +73,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
         }
     }
 
-    override fun get(key: Int): BiomeDefinition? {
+    override operator fun get(key: Int): BiomeDefinition? {
         return DEFINITIONS[key]
     }
 
@@ -148,7 +148,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
             return Collections.unmodifiableSet(tags)
         }
 
-        fun toNBT(): CompoundTag? {
+        fun toNBT(): CompoundTag {
             val stringTagListTag = ListTag<StringTag?>()
             for (s in tags) {
                 stringTagListTag.add(StringTag(s))

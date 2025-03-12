@@ -4,11 +4,6 @@ import org.chorus.level.GameRules
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class GameRulesChangedPacket : DataPacket() {
     @JvmField
     var gameRules: GameRules? = null

@@ -6,9 +6,9 @@ import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.entity.projectile.abstract_arrow.EntityThrownTrident
 import org.chorus.event.entity.EntityShootBowEvent
 import org.chorus.event.entity.ProjectileLaunchEvent
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
@@ -22,7 +22,7 @@ import kotlin.math.sin
 class ItemTrident @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemTool(ItemID.Companion.TRIDENT, meta, count, "Trident") {
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_TRIDENT
+        get() = DURABILITY_TRIDENT
 
     override val attackDamage: Int
         get() = 9

@@ -24,7 +24,7 @@ class BlockQuartzOre @JvmOverloads constructor(blockstate: BlockState? = Compani
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         if (item.isPickaxe && item.tier >= toolTier) {
             var count = 1
             val fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)

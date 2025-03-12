@@ -12,7 +12,7 @@ import org.chorus.nbt.tag.Tag
  */
 @JvmRecord
 data class Pos(val x: Float, val y: Float, val z: Float) : SerializableData {
-    override fun serialize(): CompoundTag? {
+    override fun serialize(): CompoundTag {
         return CompoundTag() //pos
             .putList(
                 "pos", ListTag<Tag>()

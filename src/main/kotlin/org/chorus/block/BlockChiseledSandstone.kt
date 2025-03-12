@@ -4,6 +4,6 @@ class BlockChiseledSandstone @JvmOverloads constructor(blockstate: BlockState? =
     BlockSandstone(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHISELED_SANDSTONE)
-            
+
     }
 }

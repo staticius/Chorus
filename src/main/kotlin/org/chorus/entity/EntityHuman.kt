@@ -22,6 +22,7 @@ import java.util.function.Predicate
 open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk, nbt) {
     @JvmField
     protected var uuid: UUID? = null
+
     @JvmField
     protected var rawUUID: ByteArray
     protected var skin: Skin? = null
@@ -43,7 +44,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     }
 
     override fun getEyeHeight(): Float {
-        return (boundingBox!!.maxY - boundingBox!!.minY - 0.18).toFloat()
+        return (boundingBox.maxY - boundingBox.minY - 0.18).toFloat()
     }
 
     /**

@@ -1,18 +1,13 @@
 package org.chorus.network.protocol
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.LegacySetItemSlotData
 import org.chorus.network.protocol.types.inventory.transaction.*
 import org.chorus.network.protocol.types.inventory.transaction.UseItemData.PredictedResult
 import org.chorus.network.protocol.types.inventory.transaction.UseItemData.TriggerType
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
 import java.util.*
-
-
-
-
 
 
 class InventoryTransactionPacket : DataPacket() {

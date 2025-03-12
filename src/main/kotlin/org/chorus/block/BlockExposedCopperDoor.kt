@@ -11,7 +11,7 @@ class BlockExposedCopperDoor @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.EXPOSED_COPPER_DOOR,
+            BlockID.EXPOSED_COPPER_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,

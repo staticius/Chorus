@@ -62,7 +62,7 @@ class CameraPreset(
     /**
      * Remember to call the registerCameraPresets() method to register!
      */
-    
+
     constructor(
         identifier: String?,
         inheritFrom: String?,

@@ -1,10 +1,11 @@
 package org.chorus.item.enchantment
 
 import org.chorus.block.BlockID
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 
 class EnchantmentVanishingCurse : Enchantment(
-    Enchantment.Companion.ID_VANISHING_CURSE,
+    ID_VANISHING_CURSE,
     "curse.vanishing",
     Rarity.VERY_RARE,
     EnchantmentType.BREAKABLE

@@ -16,13 +16,13 @@ class BlockRedNetherBrickWall @JvmOverloads constructor(blockstate: BlockState? 
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(properties.getDefaultState().toBlock())
     }
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.RED_NETHER_BRICK_WALL,
+            BlockID.BlockID.RED_NETHER_BRICK_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,

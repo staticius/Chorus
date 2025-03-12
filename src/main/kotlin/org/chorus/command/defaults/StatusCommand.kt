@@ -1,11 +1,11 @@
 package org.chorus.command.defaults
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.camera.instruction.impl.ClearInstruction.get
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParameter
 import org.chorus.math.ChorusMath
 import org.chorus.utils.TextFormat
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import oshi.SystemInfo
 import java.io.File
 import java.lang.management.ManagementFactory

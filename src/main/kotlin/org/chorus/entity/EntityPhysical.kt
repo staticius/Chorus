@@ -1,6 +1,8 @@
 package org.chorus.entity
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
@@ -8,8 +10,6 @@ import org.chorus.event.player.EntityFreezeEvent
 import org.chorus.level.format.IChunk
 import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList
-import org.chorus.Server
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
@@ -375,7 +375,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         super.resetFallDistance()
     }
 
-    public override fun getGravity(): Float {
+    override fun getGravity(): Float {
         return super.getGravity()
     }
 

@@ -6,5 +6,6 @@ interface Faceable {
     var blockFace: BlockFace?
         set(face) {
             // Does nothing by default
+            field = face
         }
 }

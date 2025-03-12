@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
@@ -15,7 +16,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.IntTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.*
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -34,6 +34,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     var newState: Byte = 1
 
     var attachedBlocks: MutableList<BlockVector3>? = null
+
     @JvmField
     var powered: Boolean = false
     var progress: Float = 0f
@@ -246,8 +247,8 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID.= block.id
-            return BlockID.== BlockID.PISTON || BlockID.== BlockID.STICKY_PISTON
+            val BlockID. = block.id
+            return BlockID.== BlockID . PISTON || BlockID . == BlockID.STICKY_PISTON
         }
 
     override val spawnCompound: CompoundTag

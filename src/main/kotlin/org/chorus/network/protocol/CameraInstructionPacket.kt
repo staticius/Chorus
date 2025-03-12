@@ -15,10 +15,6 @@ import java.awt.Color
 import java.util.function.Consumer
 
 
-
-
-
-
 class CameraInstructionPacket : DataPacket() {
     var setInstruction: SetInstruction? = null
     var fadeInstruction: FadeInstruction? = null

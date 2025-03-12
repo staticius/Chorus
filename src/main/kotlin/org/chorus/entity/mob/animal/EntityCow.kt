@@ -107,7 +107,7 @@ class EntityCow(chunk: IChunk?, nbt: CompoundTag?) : EntityAnimal(chunk, nbt!!),
         return "Cow"
     }
 
-    override fun getDrops(): Array<out Item>? {
+    override fun getDrops(): Array<out Item> {
         if (!this.isBaby()) {
             return arrayOf(
                 Item.get(Item.LEATHER, 0, Utils.rand(0, 2)),

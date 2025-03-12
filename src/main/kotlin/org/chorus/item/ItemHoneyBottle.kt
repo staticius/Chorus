@@ -2,7 +2,7 @@ package org.chorus.item
 
 import org.chorus.Player
 import org.chorus.entity.effect.EffectType
-import org.chorus.math.*
+import org.chorus.math.Vector3
 
 /**
  * @author joserobjr

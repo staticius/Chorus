@@ -29,12 +29,12 @@ class ListTag<T : Tag<*>> : Tag<MutableList<T>> {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_LIST
+        get() = TAG_LIST
 
     override fun toString(): String {
         val joiner = StringJoiner(",\n\t")
         list.forEach(Consumer { tag: T -> joiner.add(tag.toString().replace("\n", "\n\t")) })
-        return "ListTag (" + list.size + " entries of type " + Tag.Companion.getTagName(type) + ") {\n\t" + joiner + "\n}"
+        return "ListTag (" + list.size + " entries of type " + getTagName(type) + ") {\n\t" + joiner + "\n}"
     }
 
     override fun toSNBT(): String {

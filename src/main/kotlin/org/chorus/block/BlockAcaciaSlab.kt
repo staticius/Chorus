@@ -11,6 +11,7 @@ class BlockAcaciaSlab(blockstate: BlockState?) : BlockWoodenSlab(blockstate, Blo
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.ACACIA_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.ACACIA_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

@@ -36,7 +36,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
     override val boundingBox: AxisAlignedBB?
         get() = null
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemString()
     }
 
@@ -192,7 +192,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
             //todo: initiator should be a entity
             level.vibrationManager.callVibrationEvent(
                 VibrationEvent(
-                    this, position.add(0.5, 0.5, 0.5)!!, VibrationType.SHEAR
+                    this, position.add(0.5, 0.5, 0.5), VibrationType.SHEAR
                 )
             )
             return true
@@ -211,13 +211,13 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
             super.maxY = maxY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.TRIP_WIRE,
+            BlockID.BlockID.TRIP_WIRE,
             CommonBlockProperties.POWERED_BIT,
             CommonBlockProperties.SUSPENDED_BIT,
             CommonBlockProperties.ATTACHED_BIT,

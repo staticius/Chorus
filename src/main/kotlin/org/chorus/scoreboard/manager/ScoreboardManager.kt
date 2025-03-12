@@ -16,7 +16,6 @@ import org.chorus.scoreboard.storage.IScoreboardStorage
 import java.util.function.Consumer
 
 
-
 class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardManager {
     override var scoreboards: MutableMap<String?, IScoreboard?>? = HashMap()
     override var display: MutableMap<DisplaySlot, IScoreboard?> = HashMap()

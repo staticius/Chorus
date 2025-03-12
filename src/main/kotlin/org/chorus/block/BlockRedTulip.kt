@@ -7,6 +7,6 @@ class BlockRedTulip : BlockFlower {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RED_TULIP)
-            
+
     }
 }

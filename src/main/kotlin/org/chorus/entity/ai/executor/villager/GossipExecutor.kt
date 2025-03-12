@@ -58,7 +58,7 @@ class GossipExecutor : EntityControl, IBehaviorExecutor {
                 if (Utils.rand(0, 10) == 0) {
                     Arrays.stream(
                         entity.level!!.getCollidingEntities(
-                            entity.getBoundingBox()!!.grow(2.0, 0.0, 2.0)
+                            entity.getBoundingBox().grow(2.0, 0.0, 2.0)
                         )
                     ).filter { entity2: Entity -> entity2 is EntityVillagerV2 && entity2 !== entity }
                         .map { entity2: Entity -> (entity2 as EntityVillagerV2) }.forEach { entity2: EntityVillagerV2 ->

@@ -3,24 +3,25 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class MoveEntityAbsolutePacket : DataPacket() {
     @JvmField
     var eid: Long = 0
+
     @JvmField
     var x: Double = 0.0
+
     @JvmField
     var y: Double = 0.0
+
     @JvmField
     var z: Double = 0.0
+
     @JvmField
     var yaw: Double = 0.0
+
     @JvmField
     var headYaw: Double = 0.0
+
     @JvmField
     var pitch: Double = 0.0
     var onGround: Boolean = false

@@ -1,20 +1,16 @@
 package org.chorus.level.tickingarea.storage
 
-import org.chorus.Server
-import org.chorus.entity.EntityHuman.getName
-import org.chorus.utils.JSONUtils
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import com.google.gson.reflect.TypeToken
+import org.chorus.Server
+import org.chorus.entity.EntityHuman.getName
+import org.chorus.utils.JSONUtils
 import java.io.*
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
-import kotlin.collections.Map
-import kotlin.collections.Set
 import kotlin.collections.set
 
 class JSONTickingAreaStorage(path: String) : TickingAreaStorage {

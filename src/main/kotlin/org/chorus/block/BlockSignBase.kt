@@ -136,9 +136,11 @@ abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockSt
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    open fun getSignDirection(): CompassRoseDirection = CompassRoseDirection.from(getPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION))
+    open fun getSignDirection(): CompassRoseDirection =
+        CompassRoseDirection.from(getPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION))
 
-    open fun setSignDirection(direction: CompassRoseDirection) = setPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION, direction.index)
+    open fun setSignDirection(direction: CompassRoseDirection) =
+        setPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION, direction.index)
 
     override var blockFace: BlockFace?
         get() = getSignDirection().closestBlockFace

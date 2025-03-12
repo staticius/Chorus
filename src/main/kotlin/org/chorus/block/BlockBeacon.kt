@@ -1,8 +1,10 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.blockentity.*
-import org.chorus.item.*
+import org.chorus.blockentity.BlockEntityBeacon
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
 class BlockBeacon @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :

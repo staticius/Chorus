@@ -155,7 +155,8 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState? = 
         }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.DAYLIGHT_DETECTOR, CommonBlockProperties.REDSTONE_SIGNAL)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.DAYLIGHT_DETECTOR, CommonBlockProperties.REDSTONE_SIGNAL)
 
     }
 }

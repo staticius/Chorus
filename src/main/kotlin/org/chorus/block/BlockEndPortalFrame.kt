@@ -82,7 +82,7 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Co
                     if ((x == -2 || x == 2) && (z == -2 || z == 2)) continue
                     if (x == -2 || x == 2 || z == -2 || z == 2) {
                         if (!this.checkFrame(
-                                level.getBlock(centerSpot.add(x.toDouble(), 0.0, z.toDouble())!!)!!,
+                                level.getBlock(centerSpot.add(x.toDouble(), 0.0, z.toDouble()))!!,
                                 x,
                                 z
                             )
@@ -96,7 +96,7 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Co
             for (x in -1..1) {
                 for (z in -1..1) {
                     val vector3 = centerSpot.add(x.toDouble(), 0.0, z.toDouble())
-                    if (!level.getBlock(vector3!!)!!.isAir) {
+                    if (!level.getBlock(vector3)!!.isAir) {
                         level.useBreakOn(vector3)
                     }
                     level.setBlock(vector3, get(Block.END_PORTAL))
@@ -108,8 +108,8 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Co
     private fun searchCenter(visited: MutableList<Block?>): Vector3? {
         for (x in -2..2) {
             if (x == 0) continue
-            var block = level.getBlock(position.add(x.toDouble(), 0.0, 0.0)!!)
-            val iBlock = level.getBlock(position.add((x * 2).toDouble(), 0.0, 0.0)!!)
+            var block = level.getBlock(position.add(x.toDouble(), 0.0, 0.0))
+            val iBlock = level.getBlock(position.add((x * 2).toDouble(), 0.0, 0.0))
             if (this.checkFrame(block!!) && !visited.contains(block)) {
                 visited.add(block)
                 if ((x == -1 || x == 1) && this.checkFrame(iBlock!!)) return (block as BlockEndPortalFrame).searchCenter(
@@ -117,7 +117,7 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Co
                 )
                 for (z in -4..4) {
                     if (z == 0) continue
-                    block = level.getBlock(position.add(x.toDouble(), 0.0, z.toDouble())!!)
+                    block = level.getBlock(position.add(x.toDouble(), 0.0, z.toDouble()))
                     if (this.checkFrame(block!!)) {
                         return position.add(x.toDouble() / 2, 0.0, z.toDouble() / 2)
                     }
@@ -126,8 +126,8 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Co
         }
         for (z in -2..2) {
             if (z == 0) continue
-            var block = level.getBlock(position.add(0.0, 0.0, z.toDouble())!!)
-            val iBlock = level.getBlock(position.add(0.0, 0.0, (z * 2).toDouble())!!)
+            var block = level.getBlock(position.add(0.0, 0.0, z.toDouble()))
+            val iBlock = level.getBlock(position.add(0.0, 0.0, (z * 2).toDouble()))
             if (this.checkFrame(block!!) && !visited.contains(block)) {
                 visited.add(block)
                 if ((z == -1 || z == 1) && this.checkFrame(iBlock!!)) return (block as BlockEndPortalFrame).searchCenter(
@@ -135,7 +135,7 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Co
                 )
                 for (x in -4..4) {
                     if (x == 0) continue
-                    block = level.getBlock(position.add(x.toDouble(), 0.0, z.toDouble())!!)
+                    block = level.getBlock(position.add(x.toDouble(), 0.0, z.toDouble()))
                     if (this.checkFrame(block!!)) {
                         return position.add(x.toDouble() / 2, 0.0, z.toDouble() / 2)
                     }
@@ -157,7 +157,7 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Co
         return false
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -202,7 +202,7 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.END_PORTAL_FRAME,
+            BlockID.END_PORTAL_FRAME,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.END_PORTAL_EYE_BIT
         )

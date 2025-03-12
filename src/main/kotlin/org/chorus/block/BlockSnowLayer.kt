@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import com.google.common.base.Preconditions
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
@@ -12,7 +13,6 @@ import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.registry.Registries
-import com.google.common.base.Preconditions
 import java.util.*
 import java.util.stream.Stream
 import kotlin.math.min
@@ -59,7 +59,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
         )
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 
@@ -220,7 +220,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
         return level.setBlock(toMelt.position, event.newState, true)
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         if (!item.isShovel || item.tier < ItemTool.TIER_WOODEN) {
             return Item.EMPTY_ARRAY
         }
@@ -261,7 +261,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
         return side == BlockFace.UP && snowHeight == CommonBlockProperties.HEIGHT.getMax()
     }
 
-    override fun toFallingItem(): Item? {
+    override fun toFallingItem(): Item {
         return Item.get(ItemID.SNOWBALL)
     }
 

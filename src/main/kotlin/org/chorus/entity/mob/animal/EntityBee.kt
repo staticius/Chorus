@@ -124,7 +124,7 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         }
         if (source is EntityDamageByEntityEvent) {
             for (entity in level!!.getCollidingEntities(
-                getBoundingBox()!!
+                getBoundingBox()
                     .grow(4.0, 4.0, 4.0)
             )) {
                 if (entity is EntityBee && entity.hasSting()) {
@@ -149,7 +149,7 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
             )
             val blockClass = this.memoryStorage!!.get<Class<out Block>>(CoreMemoryTypes.Companion.LOOKING_BLOCK)
             if (blockClass.isAssignableFrom(BlockFlower::class.java)) {
-                Arrays.stream(level!!.getCollisionBlocks(getBoundingBox()!!.grow(1.5, 1.5, 1.5), false, true))
+                Arrays.stream(level!!.getCollisionBlocks(getBoundingBox().grow(1.5, 1.5, 1.5), false, true))
                     .filter { block: Block? -> block is BlockFlower }
                     .findAny().ifPresent { flower: Block? ->
                         if (flower is BlockWitherRose) {
@@ -161,7 +161,7 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                         stayAtFlower = !stayAtFlower
                     }
             } else if (blockClass.isAssignableFrom(BlockBeehive::class.java)) {
-                Arrays.stream(level!!.getCollisionBlocks(getBoundingBox()!!.grow(1.5, 1.5, 1.5), false, true))
+                Arrays.stream(level!!.getCollisionBlocks(getBoundingBox().grow(1.5, 1.5, 1.5), false, true))
                     .filter { block: Block ->
                         if (block is BlockBeehive) {
                             val hiveEntity = block.getOrCreateBlockEntity()

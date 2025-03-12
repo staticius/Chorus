@@ -8,7 +8,7 @@ class BlockDarkPrismarineDoubleSlab @JvmOverloads constructor(blockstate: BlockS
     override val slabName: String
         get() = "Dark Prismarine"
 
-    override val singleSlab: BlockState?
+    override val singleSlab: BlockState
         get() = BlockDarkPrismarineSlab.Companion.PROPERTIES.getDefaultState()
 
     override val toolType: Int

@@ -62,7 +62,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
         return 0.2f
     }
 
-    public override fun getGravity(): Float {
+    override fun getGravity(): Float {
         return 0.05f
     }
 
@@ -76,13 +76,13 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
 
     override fun onUpdate(currentTick: Int): Boolean {
         var hasUpdate: Boolean
-        val target: Long = getDataProperty<Long>(EntityDataTypes.Companion.TARGET_EID!!)
+        val target: Long = getDataProperty<Long>(EntityDataTypes.Companion.TARGET_EID)
         if (target != 0L) {
             val entity: Entity? = level!!.getEntity(target)
             if (entity == null || !entity.isAlive()) {
                 setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
             } else {
-                val offset: Vector3f? = entity.getMountedOffset(this)
+                val offset: Vector3f = entity.getMountedOffset(this)
                 setPosition(
                     Vector3(
                         entity.position.x + offset!!.south,
@@ -267,7 +267,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
                 }
             }
         } else if (this.shootingEntity != null) {
-            val eid: Long = this.getDataProperty<Long>(EntityDataTypes.Companion.TARGET_EID!!)
+            val eid: Long = this.getDataProperty<Long>(EntityDataTypes.Companion.TARGET_EID)
             val targetEntity: Entity? = level!!.getEntity(eid)
             if (targetEntity != null && targetEntity.isAlive()) { // 钓鱼竿收杆应该牵引被钓生物
                 targetEntity.setMotion(

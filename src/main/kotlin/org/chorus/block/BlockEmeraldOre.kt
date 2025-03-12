@@ -1,6 +1,9 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemEmerald
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 

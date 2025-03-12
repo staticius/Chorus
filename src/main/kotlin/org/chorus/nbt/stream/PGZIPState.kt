@@ -1,6 +1,6 @@
 package org.chorus.nbt.stream
 
-import java.io.*
+import java.io.ByteArrayOutputStream
 import java.util.zip.Deflater
 import java.util.zip.DeflaterOutputStream
 

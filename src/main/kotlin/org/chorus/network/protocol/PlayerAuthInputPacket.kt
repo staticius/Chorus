@@ -1,17 +1,12 @@
 package org.chorus.network.protocol
 
-import org.chorus.inventory.InventoryType.Companion.from
-import org.chorus.math.*
-import org.chorus.nbt.tag.ListTag.size
+import org.chorus.math.Vector2
+import org.chorus.math.Vector2f
+import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.*
 import org.chorus.network.protocol.types.itemstack.request.ItemStackRequest
-
 import java.util.*
-
-
-
-
 
 
 class PlayerAuthInputPacket : DataPacket() {
@@ -85,8 +80,7 @@ class PlayerAuthInputPacket : DataPacket() {
         if (this.inputData.contains(AuthInputAction.PERFORM_BLOCK_ACTIONS)) {
             val arraySize = byteBuf.readVarInt()
             for (i in 0..<arraySize) {
-                val type: PlayerActionType = PlayerActionType.Companion.from(byteBuf.readVarInt())
-                when (type) {
+                when (val type: PlayerActionType = PlayerActionType.Companion.from(byteBuf.readVarInt())) {
                     PlayerActionType.START_DESTROY_BLOCK, PlayerActionType.ABORT_DESTROY_BLOCK, PlayerActionType.CRACK_BLOCK, PlayerActionType.PREDICT_DESTROY_BLOCK, PlayerActionType.CONTINUE_DESTROY_BLOCK -> blockActionData[type] =
                         PlayerBlockActionData(type, byteBuf.readSignedBlockPosition(), byteBuf.readVarInt())
 

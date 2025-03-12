@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class LevelSoundEventPacketV2 : LevelSoundEventPacket() {
     override var sound: Int = 0
     override var x: Float = 0f

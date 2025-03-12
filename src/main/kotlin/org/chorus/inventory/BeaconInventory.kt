@@ -13,10 +13,10 @@ class BeaconInventory(blockBeacon: BlockEntityBeacon?) : BaseInventory(blockBeac
     BlockEntityInventoryNameable {
     override fun init() {
         val map = super.slotTypeMap()
-        map!![0] = ContainerSlotType.BEACON_PAYMENT
+        map[0] = ContainerSlotType.BEACON_PAYMENT
 
         val networkSlotMap = super.networkSlotMap()
-        networkSlotMap!![0] = 27
+        networkSlotMap[0] = 27
     }
 
     override fun onClose(who: Player) {

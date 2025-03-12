@@ -9,10 +9,10 @@ class ItemNetheriteHoe @JvmOverloads constructor(meta: Int = 0, count: Int = 1) 
         get() = 6
 
     override val tier: Int
-        get() = ItemTool.Companion.TIER_NETHERITE
+        get() = TIER_NETHERITE
 
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_NETHERITE
+        get() = DURABILITY_NETHERITE
 
     override val isLavaResistant: Boolean
         get() = true

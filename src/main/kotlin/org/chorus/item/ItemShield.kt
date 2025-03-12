@@ -63,5 +63,5 @@ class ItemShield : ItemTool {
         get() = 1
 
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_SHIELD
+        get() = DURABILITY_SHIELD
 }

@@ -75,7 +75,7 @@ abstract class BlockFlower(blockstate: BlockState?) : BlockFlowable(blockstate),
                     ThreadLocalRandom.current().nextInt(-3, 4).toDouble()
                 )
 
-                if (level.getBlock(vec!!)!!.id == AIR && level.getBlock(vec.down()!!)!!.id == GRASS_BLOCK && vec.y >= level.dimensionData.minHeight && vec.y < level.dimensionData.maxHeight) {
+                if (level.getBlock(vec)!!.id == AIR && level.getBlock(vec.down())!!.id == GRASS_BLOCK && vec.y >= level.dimensionData.minHeight && vec.y < level.dimensionData.maxHeight) {
                     if (ThreadLocalRandom.current().nextInt(10) == 0) {
                         level.setBlock(vec, this.uncommonFlower, true)
                     } else {

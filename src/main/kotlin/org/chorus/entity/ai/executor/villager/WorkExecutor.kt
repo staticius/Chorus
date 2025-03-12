@@ -21,7 +21,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.Companion.SITE
         if (entity is EntityVillagerV2) {
             val site = entity.getMemoryStorage()!!.get<Block>(CoreMemoryTypes.Companion.SITE_BLOCK)
             if (stayTick < 100) {
-                if (site!!.position.distance(entity.position) < 1.5f) {
+                if (site.position.distance(entity.position) < 1.5f) {
                     setLookTarget(entity, site.position)
                     stayTick++
                     if (stayTick == 40 || stayTick == 90) entity.level!!.addSound(
@@ -43,7 +43,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.Companion.SITE
                                 var nearest: Block? = null
                                 for (block in Arrays.stream<Block>(
                                     entity.level!!.getCollisionBlocks(
-                                        entity.getBoundingBox()!!.grow(9.0, 2.0, 9.0), false, true
+                                        entity.getBoundingBox().grow(9.0, 2.0, 9.0), false, true
                                     )
                                 ).filter { block: Block -> block is BlockCrops && block.isFullyGrown }.toList()) {
                                     val distance = block.position.distance(entity.position)
@@ -98,7 +98,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.Companion.SITE
 
     fun setTarget(entity: EntityMob) {
         val site = entity.memoryStorage!!.get<Block>(CoreMemoryTypes.Companion.SITE_BLOCK)
-        var horizontal = Vector2(site!!.position.x - entity.position.x, site.position.z - entity.position.z)
+        var horizontal = Vector2(site.position.x - entity.position.x, site.position.z - entity.position.z)
         horizontal = horizontal.multiply(1 - 1 / horizontal.length())
         val target = Vector3(entity.position.x + horizontal.x, site.position.y, entity.position.z + horizontal.y)
         setLookTarget(entity, target)

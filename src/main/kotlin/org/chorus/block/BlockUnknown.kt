@@ -12,7 +12,7 @@ class BlockUnknown @JvmOverloads constructor(blockstate: BlockState? = Companion
     override val name: String
         get() = "Unknown"
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this.clone())
     }
 

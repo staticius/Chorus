@@ -18,7 +18,7 @@ class ByteTag : NumberTag<Int> {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_BYTE
+        get() = TAG_BYTE
 
     override fun parseValue(): Int {
         return data

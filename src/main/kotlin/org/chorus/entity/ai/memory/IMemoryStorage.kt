@@ -31,7 +31,7 @@ interface IMemoryStorage {
      * @param <D>  数据类型
      * @return 数据
     </D> */
-    fun <D> get(type: MemoryType<D?>?): D
+    operator fun <D> get(type: MemoryType<D?>?): D
 
     /**
      * 获取所有记忆

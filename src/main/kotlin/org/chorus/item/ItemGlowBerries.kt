@@ -1,7 +1,8 @@
 package org.chorus.item
 
 import org.chorus.Player
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockCaveVines
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.level.Level
 import org.chorus.level.Sound

@@ -1,10 +1,11 @@
 package org.chorus.block
 
+import it.unimi.dsi.fastutil.longs.Long2LongMap
+import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap
 import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
-import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.event.block.LeavesDecayEvent
 import org.chorus.item.Item
 import org.chorus.item.ItemID
@@ -13,8 +14,6 @@ import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.utils.Hash.hashBlock
-import it.unimi.dsi.fastutil.longs.Long2LongMap
-import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap
 import java.util.concurrent.ThreadLocalRandom
 
 abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockState) {

@@ -13,12 +13,12 @@ class CraftingTableInventory(table: BlockCraftingTable?) : BaseInventory(table, 
     override fun init() {
         val map = super.networkSlotMap()
         for (i in 0..<getSize()) {
-            map!![i] = 32 + i
+            map[i] = 32 + i
         }
 
         val map2 = super.slotTypeMap()
         for (i in 0..<getSize()) {
-            map2!![i] = ContainerSlotType.CRAFTING_INPUT
+            map2[i] = ContainerSlotType.CRAFTING_INPUT
             map2[i + 32] = ContainerSlotType.CRAFTING_INPUT
         }
     }
@@ -34,10 +34,6 @@ class CraftingTableInventory(table: BlockCraftingTable?) : BaseInventory(table, 
         pk.z = holder.z.toInt()
         who.dataPacket(pk)
         this.sendContents(who)
-    }
-
-    override fun onClose(who: Player) {
-        super.onClose(who)
     }
 
     override var holder: InventoryHolder?

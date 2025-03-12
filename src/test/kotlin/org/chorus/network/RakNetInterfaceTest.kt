@@ -1,12 +1,5 @@
 package org.chorus.network
 
-import org.chorus.GameMockExtension
-import org.chorus.network.connection.netty.initializer.BedrockChannelInitializer
-import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.network.protocol.ProtocolInfo
-import org.chorus.network.protocol.RequestNetworkSettingsPacket
-import org.chorus.registry.Registries
-import org.chorus.utils.ByteBufVarInt
 import io.netty.bootstrap.Bootstrap
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.buffer.Unpooled
@@ -16,7 +9,13 @@ import io.netty.channel.ChannelInitializer
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioDatagramChannel
-
+import org.chorus.GameMockExtension
+import org.chorus.network.connection.netty.initializer.BedrockChannelInitializer
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.network.protocol.RequestNetworkSettingsPacket
+import org.chorus.registry.Registries
+import org.chorus.utils.ByteBufVarInt
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory
 import org.cloudburstmc.netty.channel.raknet.RakChildChannel
 import org.cloudburstmc.netty.channel.raknet.RakClientChannel

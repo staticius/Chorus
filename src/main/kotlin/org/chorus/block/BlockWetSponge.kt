@@ -34,7 +34,7 @@ class BlockWetSponge @JvmOverloads constructor(state: BlockState? = Companion.pr
         if (level.dimension != Level.DIMENSION_NETHER) return true
 
         level.setBlock(block.position, BlockSponge(), true, true)
-        level.addLevelEvent(block.position.add(0.5, 0.875, 0.5)!!, LevelEventPacket.EVENT_CAULDRON_EXPLODE)
+        level.addLevelEvent(block.position.add(0.5, 0.875, 0.5), LevelEventPacket.EVENT_CAULDRON_EXPLODE)
         val random = ThreadLocalRandom.current()
 
         for (i in 0..7) {

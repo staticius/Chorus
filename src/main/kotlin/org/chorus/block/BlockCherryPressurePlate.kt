@@ -8,7 +8,8 @@ class BlockCherryPressurePlate @JvmOverloads constructor(blockstate: BlockState?
         get() = "Cherry Pressure Plate"
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.CHERRY_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.CHERRY_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
 
     }
 }

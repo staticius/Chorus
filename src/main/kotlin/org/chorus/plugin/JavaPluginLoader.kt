@@ -20,7 +20,6 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
     private val classes: MutableMap<String, Class<*>> = HashMap()
 
 
-
     protected val classLoaders: MutableMap<String?, PluginClassLoader> = HashMap()
 
     @Throws(Exception::class)

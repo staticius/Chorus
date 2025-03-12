@@ -12,8 +12,6 @@ import org.chorus.level.Locator
 import org.chorus.utils.TextFormat
 import java.text.DecimalFormat
 import java.util.stream.Collectors
-import kotlin.collections.Map
-import kotlin.collections.listOf
 import kotlin.collections.set
 
 /**

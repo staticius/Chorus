@@ -1,10 +1,10 @@
 package org.chorus.command.tree.node
 
+import com.google.common.collect.Lists
 import org.chorus.Server
 import org.chorus.command.exceptions.SelectorSyntaxException
 import org.chorus.command.selector.EntitySelectorAPI
 import org.chorus.entity.Entity
-import com.google.common.collect.Lists
 
 /**
  * 解析为`List<Entity>`值

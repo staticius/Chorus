@@ -4,11 +4,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.camera.aimassist.ClientCameraAimAssistPacketAction
 
 
-
-
-
-
-
 class ClientCameraAimAssistPacket : DataPacket() {
     private var cameraPresetId: String? = null
     private var action: ClientCameraAimAssistPacketAction? = null

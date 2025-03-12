@@ -4,9 +4,6 @@ import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3f
 
 
-
-
-
 class StructureSettings {
     var paletteName: String? = null
     var ignoringEntities: Boolean = false

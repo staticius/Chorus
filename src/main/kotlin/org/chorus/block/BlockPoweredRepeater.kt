@@ -15,7 +15,7 @@ class BlockPoweredRepeater @JvmOverloads constructor(blockstate: BlockState? = C
         return this
     }
 
-    public override fun getUnpowered(): Block {
+    override fun getUnpowered(): Block {
         val blockUnpoweredRepeater = BlockUnpoweredRepeater()
         return blockUnpoweredRepeater.setPropertyValues(blockState!!.blockPropertyValues)
     }
@@ -25,7 +25,7 @@ class BlockPoweredRepeater @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.POWERED_REPEATER,
+            BlockID.BlockID.POWERED_REPEATER,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.REPEATER_DELAY
         )

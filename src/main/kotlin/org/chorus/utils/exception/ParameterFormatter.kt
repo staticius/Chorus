@@ -198,11 +198,11 @@ internal object ParameterFormatter {
         }
         var previous = 0
         for (i in 0..<argCount) {
-            buffer.append(messagePattern, previous, indices[i])
+            buffer.appendRange(messagePattern, previous, previous + indices[i])
             previous = indices[i] + 2
             recursiveDeepToString(arguments[i], buffer, null)
         }
-        buffer.append(messagePattern, previous, patternLength)
+        buffer.appendRange(messagePattern, previous, previous + patternLength)
     }
 
     /**

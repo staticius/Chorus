@@ -36,7 +36,7 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
     }
 
     override fun setInventories(inventory: Array<Inventory>) {
-        this.inventory = inventory.get(0) as HumanInventory?
+        this.inventory = inventory[0] as HumanInventory?
         this.offhandInventory = inventory.get(1) as HumanOffHandInventory?
         this.enderChestInventory = inventory.get(2) as HumanEnderChestInventory?
     }

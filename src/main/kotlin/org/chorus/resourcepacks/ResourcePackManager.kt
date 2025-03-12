@@ -1,10 +1,9 @@
 package org.chorus.resourcepacks
 
+import com.google.common.collect.Sets
 import org.chorus.Server
 import org.chorus.resourcepacks.loader.ResourcePackLoader
 import org.chorus.resourcepacks.loader.ZippedResourcePackLoader
-import com.google.common.collect.Sets
-
 import java.io.File
 import java.util.*
 import java.util.function.Consumer
@@ -47,7 +46,7 @@ class ResourcePackManager(private val loaders: MutableSet<ResourcePackLoader>) {
         resourcePacks.clear()
         loaders.forEach(Consumer { loader: ResourcePackLoader ->
             val loadedPacks = loader.loadPacks()
-            loadedPacks!!.forEach(Consumer { pack: ResourcePack? ->
+            loadedPacks.forEach(Consumer { pack: ResourcePack? ->
                 resourcePacksById[pack.getPackId()] = pack
             })
             resourcePacks.addAll(loadedPacks)

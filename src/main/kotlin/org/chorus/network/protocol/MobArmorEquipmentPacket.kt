@@ -4,11 +4,6 @@ import org.chorus.item.Item
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class MobArmorEquipmentPacket : DataPacket() {
     var eid: Long = 0
     var slots: Array<Item?> = arrayOfNulls(4)

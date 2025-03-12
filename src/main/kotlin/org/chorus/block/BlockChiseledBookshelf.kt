@@ -23,7 +23,7 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
     override val name: String
         get() = "Chiseled Bookshelf"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         val blockEntity: BlockEntityChiseledBookshelf? = this.blockEntity
         if (blockEntity != null) {
             return blockEntity.items
@@ -142,7 +142,11 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.CHISELED_BOOKSHELF, CommonBlockProperties.BOOKS_STORED, CommonBlockProperties.DIRECTION)
+            BlockProperties(
+                BlockID.CHISELED_BOOKSHELF,
+                CommonBlockProperties.BOOKS_STORED,
+                CommonBlockProperties.DIRECTION
+            )
 
     }
 }

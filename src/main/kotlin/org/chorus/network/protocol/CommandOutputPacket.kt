@@ -1,24 +1,22 @@
 package org.chorus.network.protocol
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.CommandOriginData
 import org.chorus.network.protocol.types.CommandOutputMessage
 import org.chorus.network.protocol.types.CommandOutputType
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
-
-
-
-
 
 
 class CommandOutputPacket : DataPacket() {
     @JvmField
     val messages: List<CommandOutputMessage> = ObjectArrayList()
+
     @JvmField
     var commandOriginData: CommandOriginData? = null
+
     @JvmField
     var type: CommandOutputType? = null
+
     @JvmField
     var successCount: Int = 0
     var data: String? = null

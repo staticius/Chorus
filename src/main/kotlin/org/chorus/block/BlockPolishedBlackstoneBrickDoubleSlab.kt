@@ -10,12 +10,12 @@ class BlockPolishedBlackstoneBrickDoubleSlab @JvmOverloads constructor(blockstat
     override val hardness: Double
         get() = 2.0
 
-    override val singleSlab: BlockState?
+    override val singleSlab: BlockState
         get() = BlockPolishedBlackstoneBrickSlab.Companion.PROPERTIES.getDefaultState()
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB,
+            BlockID.BlockID.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB,
             CommonBlockProperties.MINECRAFT_VERTICAL_HALF
         )
 

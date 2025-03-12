@@ -15,6 +15,6 @@ class BlockJungleSapling : BlockSapling {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.Companion.JUNGLE_SAPLING, CommonBlockProperties.AGE_BIT)
-            
+
     }
 }

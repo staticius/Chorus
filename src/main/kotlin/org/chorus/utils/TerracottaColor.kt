@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-enum class TerracottaColor (
+enum class TerracottaColor(
     dyeColorMeta: Int, terracottaColorMeta: Int, val colorName: String,
     val dyeName: String, blockColor: BlockColor?
 ) {

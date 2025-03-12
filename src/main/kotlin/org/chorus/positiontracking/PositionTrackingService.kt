@@ -1,24 +1,19 @@
 package org.chorus.positiontracking
 
-import org.chorus.Player
-import org.chorus.Server
-import org.chorus.entity.Entity.getLocator
-import org.chorus.entity.EntityHuman.getName
-import org.chorus.inventory.Inventory
-import org.chorus.item.Item
-import org.chorus.item.ItemID
-import org.chorus.item.ItemLodestoneCompass
-import org.chorus.level.Level.getName
-import org.chorus.level.Locator.levelName
-import org.chorus.network.protocol.DataPacket
-import org.chorus.network.protocol.PositionTrackingDBServerBroadcastPacket
 import com.google.common.base.Preconditions
 import com.google.common.collect.MapMaker
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.ints.IntList
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import it.unimi.dsi.fastutil.ints.IntSet
-
+import org.chorus.Player
+import org.chorus.Server
+import org.chorus.inventory.Inventory
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.item.ItemLodestoneCompass
+import org.chorus.network.protocol.DataPacket
+import org.chorus.network.protocol.PositionTrackingDBServerBroadcastPacket
 import java.io.*
 import java.lang.ref.WeakReference
 import java.util.*

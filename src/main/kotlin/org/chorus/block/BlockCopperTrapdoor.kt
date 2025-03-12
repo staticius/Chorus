@@ -9,7 +9,7 @@ open class BlockCopperTrapdoor @JvmOverloads constructor(blockstate: BlockState?
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.COPPER_TRAPDOOR,
+            BlockID.COPPER_TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT

@@ -67,7 +67,7 @@ class BlockDragonEgg : BlockFallable {
                         random.nextInt(-16, 16).toDouble(),
                         random.nextInt(0, 16).toDouble(),
                         random.nextInt(-16, 16).toDouble()
-                    )!!
+                    )
                 )
             if (to!!.isAir) {
                 val event = BlockFromToEvent(this, to)

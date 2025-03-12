@@ -211,7 +211,7 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         fun pickupItems(entity: Entity) {
             if (entity is EntityInventoryHolder) {
                 for (i in entity.level!!.getNearbyEntities(
-                    entity.getBoundingBox()!!.grow(1.0, 0.5, 1.0)
+                    entity.getBoundingBox().grow(1.0, 0.5, 1.0)
                 )) {
                     if (i is EntityItem) {
                         val item = i.item

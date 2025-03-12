@@ -235,12 +235,12 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
                             continue
                         }
 
-                        val BlockID.= level.getBlockIdAt(x + ix, y, z + iz)
+                        val BlockID. = level.getBlockIdAt(x + ix, y, z + iz)
                         //validBlocks++;
                         //level.setBlock(x + ix, y, z + iz, new BlockPlanks(), true, true);
                         if (VALID_STRUCTURE_BLOCKS.contains(BlockID.) {
-                            validBlocks++
-                        }
+                                validBlocks++
+                            }
                     }
                 }
             } else {
@@ -251,12 +251,12 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
                     }
 
                     if (absIY == 2 || abs(ix.toDouble()) == 2.0) {
-                        val BlockID.= level.getBlockIdAt(x + ix, y + iy, z)
+                        val BlockID. = level.getBlockIdAt(x + ix, y + iy, z)
                         //validBlocks++;
                         //level.setBlock(x + ix, y + iy, z, new BlockWood(), true, true);
                         if (VALID_STRUCTURE_BLOCKS.contains(BlockID.) {
-                            validBlocks++
-                        }
+                                validBlocks++
+                            }
                     }
                 }
 
@@ -266,12 +266,12 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
                     }
 
                     if (absIY == 2 && iz != 0 || abs(iz.toDouble()) == 2.0) {
-                        val BlockID.= level.getBlockIdAt(x, y + iy, z + iz)
+                        val BlockID. = level.getBlockIdAt(x, y + iy, z + iz)
                         //validBlocks++;
                         //level.setBlock(x, y + iy, z + iz, new BlockWood(), true, true);
                         if (VALID_STRUCTURE_BLOCKS.contains(BlockID.) {
-                            validBlocks++
-                        }
+                                validBlocks++
+                            }
                     }
                 }
             }

@@ -1,12 +1,15 @@
 package org.chorus.entity
 
+import com.google.common.collect.Iterables
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.blockentity.BlockEntityPistonArm
 import org.chorus.entity.custom.CustomEntity
 import org.chorus.entity.data.*
-import org.chorus.entity.effect.*
+import org.chorus.entity.data.property.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.item.EntityItem
 import org.chorus.entity.mob.EntityArmorStand
 import org.chorus.entity.mob.monster.EntityBoss
@@ -20,7 +23,8 @@ import org.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus.event.entity.EntityPortalEnterEvent.PortalType
 import org.chorus.event.player.PlayerInteractEvent
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTotemOfUndying
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.*
 import org.chorus.level.format.IChunk
@@ -42,13 +46,15 @@ import org.chorus.plugin.Plugin
 import org.chorus.registry.Registries
 import org.chorus.scheduler.Task
 import org.chorus.tags.ItemTags
-import org.chorus.utils.*
-import com.google.common.collect.Iterables
-import org.chorus.entity.data.property.*
+import org.chorus.utils.ChunkException
+import org.chorus.utils.Identifier
+import org.chorus.utils.PortalHelper
+import org.chorus.utils.TextFormat
 import java.awt.Color
 import java.util.*
-import java.util.Objects.*
-import java.util.concurrent.*
+import java.util.Objects.requireNonNull
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicLong
 import java.util.function.Consumer
 import kotlin.concurrent.Volatile
@@ -68,6 +74,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     var fire: Short = 0
     var identifier: String = ""
     var internalComponents: CompoundTag = CompoundTag()
+
     @JvmField
     var invulnerable: Boolean = false
     var isAngry: Boolean = false
@@ -111,13 +118,16 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
 
     @JvmField
     var position: Vector3 = Vector3()
+
     @JvmField
     var rotation: Rotator2 = Rotator2()
+
     @JvmField
     var motion: Vector3 = Vector3()
 
     @JvmField
     var prevPosition: Vector3 = position.clone()
+
     @JvmField
     var prevRotation: Rotator2 = rotation.clone()
     var prevMotion: Vector3 = motion.clone()
@@ -126,6 +136,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     protected val entityDataMap: EntityDataMap = EntityDataMap()
     val passengers: MutableList<Entity> = ArrayList()
     val offsetBoundingBox: AxisAlignedBB = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
     @JvmField
     protected val hasSpawned: MutableMap<Int, Player> = ConcurrentHashMap()
     protected val effects: MutableMap<EffectType?, Effect> = ConcurrentHashMap()
@@ -138,10 +149,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      */
     @JvmField
     var riding: Entity? = null
+
     @JvmField
     var chunk: IChunk? = null
+
     @JvmField
     var blocksAround: MutableList<Block>? = ArrayList()
+
     @JvmField
     var collisionBlocks: MutableList<Block>? = ArrayList()
 
@@ -150,35 +164,48 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     var deadTicks: Int = 0
 
     var entityCollisionReduction: Double = 0.0 // Higher than 0.9 will result a fast collisions
+
     @JvmField
     var boundingBox: AxisAlignedBB = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
     @JvmField
     var positionChanged: Boolean = false
+
     @JvmField
     var motionChanged: Boolean = false
+
     @JvmField
     var ticksLived: Int = 0
+
     @JvmField
     var lastUpdate: Int = 0
+
     @JvmField
     var fireTicks: Int = 0
+
     @JvmField
     var inPortalTicks: Int = 0
     var freezingTicks: Int = 0 //0 - 140
     var scale: Float = 1f
+
     @JvmField
     var namedTag: CompoundTag? = null
+
     @JvmField
     var isCollided: Boolean = false
     var isCollidedHorizontally: Boolean = false
     var isCollidedVertically: Boolean = false
+
     @JvmField
     var noDamageTicks: Int = 0
+
     @JvmField
     var justCreated: Boolean = false
     var fireProof: Boolean = false
+
     @JvmField
     var highestPosition: Double = 0.0
+
     @JvmField
     var closed: Boolean = false
     var noClip: Boolean = false
@@ -197,10 +224,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     @Volatile
     protected var id: Long = 0
     protected var lastDamageCause: EntityDamageEvent? = null
+
     @JvmField
     protected var age: Int = 0
+
     @JvmField
     protected var health: Float = 20f
+
     @JvmField
     protected var absorption: Float = 0f
 
@@ -208,6 +238,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      * Player do not use
      */
     protected var ySize: Float = 0f
+
     @JvmField
     protected var inEndPortal: Boolean = false
     protected var isPlayer: Boolean = this is Player
@@ -221,6 +252,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     protected var saveWithChunk: Boolean = true
     private val intProperties: MutableMap<String?, Int> = LinkedHashMap()
     private val floatProperties: MutableMap<String?, Float> = LinkedHashMap()
+
     @JvmField
     protected val attributes: MutableMap<Int, Attribute> = HashMap()
 
@@ -1804,7 +1836,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         }
         fallDistance1 = event.fallDistance
 
-        if ((!this.isPlayer || level!!.gameRules!!
+        if ((!this.isPlayer || level!!.gameRules
                 .getBoolean(GameRule.FALL_DAMAGE)) && down.useDefaultFallDamage()
         ) {
             val jumpBoost: Int = if (this.hasEffect(EffectType.JUMP_BOOST)) getEffect(
@@ -1995,10 +2027,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         ) else level!!.getBlock(position.floor())
 
         var layer1 = false
-        val block1: Block? = if (tickCached) block?.getTickCachedLevelBlockAtLayer(1) else block?.getLevelBlockAtLayer(1)
+        val block1: Block? =
+            if (tickCached) block?.getTickCachedLevelBlockAtLayer(1) else block?.getLevelBlockAtLayer(1)
         if (block !is BlockBubbleColumn && (block is BlockFlowingWater
                     || (block1 is BlockFlowingWater).also { layer1 = it }
-        )) {
+                    )
+        ) {
             val water: BlockFlowingWater = (if (layer1) block1 else block) as BlockFlowingWater
             val f: Double = (block!!.position.y + 1) - (water.fluidHeightPercent - 0.1111111)
             return y < f
@@ -3308,7 +3342,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
          *
          * @return the identifier
          */
-        fun getIdentifier(networkID: Int): Identifier? {
+        fun getIdentifier(networkID: Int): Identifier {
             val entityIdentifier: String = Registries.ENTITY.getEntityIdentifier(networkID)
             return Identifier(entityIdentifier)
         }

@@ -1,9 +1,9 @@
 package org.chorus.utils
 
+import com.google.common.collect.Sets
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.math.BlockFace
-import com.google.common.collect.Sets
 
 /**
  * Interface, all redstone components implement, containing redstone related methods.

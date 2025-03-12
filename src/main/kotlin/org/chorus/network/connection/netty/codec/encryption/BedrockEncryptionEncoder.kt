@@ -1,12 +1,11 @@
 package org.chorus.network.connection.netty.codec.encryption
 
-import org.chorus.network.connection.netty.BedrockBatchWrapper
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufAllocator
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageEncoder
 import io.netty.util.concurrent.FastThreadLocal
-
+import org.chorus.network.connection.netty.BedrockBatchWrapper
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.util.concurrent.atomic.AtomicLong

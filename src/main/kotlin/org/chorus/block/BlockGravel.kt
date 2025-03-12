@@ -23,7 +23,7 @@ class BlockGravel : BlockFallable, Natural {
     override val name: String
         get() = "Gravel"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         val enchantment = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
         var fortune = 0
         if (enchantment != null) {

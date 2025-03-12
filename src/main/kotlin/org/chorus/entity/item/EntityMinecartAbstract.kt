@@ -187,7 +187,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             }
 
             // Collisions
-            for (entity: Entity in level!!.getNearbyEntities(boundingBox!!.grow(0.2, 0.0, 0.2), this)) {
+            for (entity: Entity in level!!.getNearbyEntities(boundingBox.grow(0.2, 0.0, 0.2), this)) {
                 if (!passengers.contains(entity) && entity is EntityMinecartAbstract) {
                     entity.applyEntityCollision(this)
                 }

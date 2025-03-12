@@ -61,10 +61,6 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
             }
         }
 
-    override fun getStrongPower(side: BlockFace?): Int {
-        return super.getStrongPower(side)
-    }
-
     override fun getWeakPower(face: BlockFace): Int {
         val blockEntity = this.getOrCreateBlockEntity()
         return if (getSide(face.getOpposite()!!) is BlockRedstoneComparator) {
@@ -88,8 +84,8 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
     }
 
     fun setPhase(phase: Int) {
-        if (phase == 1) level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.POWER_ON_SCULK_SENSOR)
-        else level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.POWER_OFF_SCULK_SENSOR)
+        if (phase == 1) level.addSound(position.add(0.5, 0.5, 0.5), Sound.POWER_ON_SCULK_SENSOR)
+        else level.addSound(position.add(0.5, 0.5, 0.5), Sound.POWER_OFF_SCULK_SENSOR)
         this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.SCULK_SENSOR_PHASE, phase)
         level.setBlock(this.position, this, true, false)
     }
@@ -110,7 +106,7 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 
@@ -119,7 +115,7 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.CALIBRATED_SCULK_SENSOR,
+            BlockID.CALIBRATED_SCULK_SENSOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.SCULK_SENSOR_PHASE
         )

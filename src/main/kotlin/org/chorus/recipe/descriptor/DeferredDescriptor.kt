@@ -29,7 +29,7 @@ class DeferredDescriptor(val fullName: String, val auxValue: Int, override val c
         val PRIME = 59
         var result = 1
         val `$fullName`: Any = this.fullName
-        result = result * PRIME + (`$fullName`?.hashCode() ?: 43)
+        result = result * PRIME + `$fullName`.hashCode()
         result = result * PRIME + this.auxValue
         result = result * PRIME + this.count
         return result

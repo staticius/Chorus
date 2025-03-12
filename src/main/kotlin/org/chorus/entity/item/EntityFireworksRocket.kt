@@ -104,7 +104,7 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
             if (this.isCollided && !this.hadCollision) { //collide with block
                 this.hadCollision = true
 
-                for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox()!!.grow(0.1, 0.1, 0.1))) {
+                for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) {
                     collisionBlock.onProjectileHit(this, locator, motion)
                 }
             } else if (!this.isCollided && this.hadCollision) {

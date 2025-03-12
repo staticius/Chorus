@@ -4,11 +4,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.LessonAction
 
 
-
-
-
-
-
 class LessonProgressPacket : DataPacket() {
     var action: LessonAction? = null
     var score: Int = 0

@@ -10,7 +10,7 @@ class BlockJungleHangingSign @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.Companion.JUNGLE_HANGING_SIGN,
+            BlockID.BlockID.Companion.JUNGLE_HANGING_SIGN,
             CommonBlockProperties.ATTACHED_BIT,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.GROUND_SIGN_DIRECTION,

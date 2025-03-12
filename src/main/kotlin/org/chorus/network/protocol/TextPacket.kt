@@ -1,8 +1,7 @@
 package org.chorus.network.protocol
 
-import org.chorus.network.connection.util.HandleByteBuf
 import io.netty.util.internal.EmptyArrays
-
+import org.chorus.network.connection.util.HandleByteBuf
 import java.util.function.Function
 
 /**
@@ -10,16 +9,16 @@ import java.util.function.Function
  */
 
 
-
-
-
 class TextPacket : DataPacket() {
     @JvmField
     var type: Byte = 0
+
     @JvmField
     var source: String = ""
+
     @JvmField
     var message: String = ""
+
     @JvmField
     var parameters: Array<String> = EmptyArrays.EMPTY_STRINGS
     var isLocalized: Boolean = false

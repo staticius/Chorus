@@ -4,14 +4,10 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.scoreboard.data.ScorerType
 
 
-
-
-
-
-
 class SetScorePacket : DataPacket() {
     @JvmField
     var action: Action? = null
+
     @JvmField
     var infos: List<ScoreInfo> = ArrayList()
 

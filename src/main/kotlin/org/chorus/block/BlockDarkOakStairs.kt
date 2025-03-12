@@ -9,10 +9,10 @@ class BlockDarkOakStairs @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.DARK_OAK_STAIRS,
+            BlockID.DARK_OAK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-            
+
     }
 }

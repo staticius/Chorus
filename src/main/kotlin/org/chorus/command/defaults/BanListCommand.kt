@@ -5,9 +5,9 @@ import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
+import org.chorus.permission.BanEntry
+import org.chorus.permission.BanList
 import org.chorus.utils.TextFormat
-import kotlin.collections.Iterator
-import kotlin.collections.Map
 import kotlin.collections.set
 
 /**
@@ -18,8 +18,8 @@ class BanListCommand(name: String) : VanillaCommand(name, "list all the banned p
     init {
         this.permission = "nukkit.command.ban.list"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
-            CommandParameter.Companion.newEnum("type", true, CommandEnum("BanListType", "ips", "players"))
+        commandParameters["default"] = arrayOf(
+            CommandParameter.newEnum("type", true, CommandEnum("BanListType", "ips", "players"))
         )
         this.enableParamTree()
     }
@@ -38,29 +38,29 @@ class BanListCommand(name: String) : VanillaCommand(name, "list all the banned p
             val type = paramList.getResult<String>(0)
             when (type!!.lowercase()) {
                 "ips" -> {
-                    list = sender.server.ipBans
+                    list = sender.server.bannedIPs
                     ips = true
                 }
 
-                "players" -> list = sender.server.nameBans
+                "players" -> list = sender.server.bannedPlayers
                 else -> {
                     log.addSyntaxErrors(0).output()
                     return 0
                 }
             }
         } else {
-            list = sender.server.nameBans
+            list = sender.server.bannedPlayers
         }
 
         val builder = StringBuilder()
-        val itr: Iterator<BanEntry> = list.getEntires().values.iterator()
+        val itr: Iterator<BanEntry> = list.entries.values.iterator()
         while (itr.hasNext()) {
-            builder.append(itr.next().getName())
+            builder.append(itr.next().name)
             if (itr.hasNext()) {
                 builder.append(", ")
             }
         }
-        val size: Int = list.getEntires().size
+        val size: Int = list.entries.size
         if (ips) {
             log.addSuccess("commands.banlist.ips", size.toString())
         } else {

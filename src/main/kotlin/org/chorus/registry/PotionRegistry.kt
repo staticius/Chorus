@@ -1,11 +1,10 @@
 package org.chorus.registry
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.entity.effect.*
 import org.chorus.registry.RegisterException
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.Map
 import kotlin.collections.set
 
 class PotionRegistry : IRegistry<String, PotionType?, PotionType> {

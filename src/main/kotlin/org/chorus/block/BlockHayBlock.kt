@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.entity.Entity
-import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.item.Item

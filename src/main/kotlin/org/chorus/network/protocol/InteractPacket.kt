@@ -8,9 +8,6 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class InteractPacket : DataPacket() {
     var action: Int = 0
     var target: Long = 0

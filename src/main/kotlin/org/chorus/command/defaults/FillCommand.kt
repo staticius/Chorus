@@ -147,7 +147,7 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
                                         )
 
                                     block = if (isBorderX || isBorderZ || isBorderY) {
-                                        tileState!!.toBlock()
+                                        tileState.toBlock()
                                     } else {
                                         Block.get(BlockID.AIR)
                                     }

@@ -8,6 +8,7 @@ import org.chorus.network.protocol.types.CommandOutputMessage
 class CommandOutputContainer : Cloneable {
     @JvmField
     val messages: List<CommandOutputMessage>
+
     @JvmField
     var successCount: Int
 

@@ -1,5 +1,8 @@
 package org.chorus.level
 
+import it.unimi.dsi.fastutil.longs.LongArraySet
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.block.*
 import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntity.onUpdate
@@ -16,9 +19,6 @@ import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventPacket
 import org.chorus.utils.*
-import it.unimi.dsi.fastutil.longs.LongArraySet
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
@@ -31,6 +31,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
 
     private val level = source.getLevel()
     private val size = Math.max(size, 0.0)
+
     @JvmField
     var fireChance: Double = 0.0
 

@@ -8,7 +8,7 @@ import java.util.zip.Inflater
 
 class ZlibOriginal : ZlibProvider {
     @Throws(IOException::class)
-    override fun deflate(data: ByteArray, level: Int, raw: Boolean): ByteArray? {
+    override fun deflate(data: ByteArray, level: Int, raw: Boolean): ByteArray {
         val deflater = Deflater(level, raw)
         deflater.setInput(data)
         deflater.finish()
@@ -27,7 +27,7 @@ class ZlibOriginal : ZlibProvider {
     }
 
     @Throws(IOException::class)
-    override fun inflate(data: ByteArray, maxSize: Int, raw: Boolean): ByteArray? {
+    override fun inflate(data: ByteArray, maxSize: Int, raw: Boolean): ByteArray {
         val inflater = Inflater(raw)
         inflater.setInput(data)
         inflater.finished()

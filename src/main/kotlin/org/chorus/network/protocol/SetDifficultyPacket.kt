@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class SetDifficultyPacket : DataPacket() {
     var difficulty: Int = 0
 

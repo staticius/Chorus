@@ -1,5 +1,9 @@
 package org.chorus
 
+import eu.okaeri.configs.ConfigManager
+import eu.okaeri.configs.OkaeriConfig
+import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.reflect.FieldUtils
 import org.chorus.block.BlockComposter
 import org.chorus.command.SimpleCommandMap
 import org.chorus.config.ServerSettings
@@ -33,11 +37,6 @@ import org.chorus.registry.Registries
 import org.chorus.scheduler.ServerScheduler
 import org.chorus.utils.ClientChainData
 import org.chorus.utils.collection.FreezableArrayManager
-import eu.okaeri.configs.ConfigManager
-import eu.okaeri.configs.OkaeriConfig
-
-import org.apache.commons.io.FileUtils
-import org.apache.commons.lang3.reflect.FieldUtils
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolutionException
@@ -163,12 +162,13 @@ class GameMockExtension : MockitoExtension() {
 
                 serverScheduler = ServerScheduler()
                 Mockito.`when`(server.scheduler).thenReturn(serverScheduler)
-                Mockito.`when`(banList.entires).thenReturn(LinkedHashMap())
+                Mockito.`when`(banList.entries).thenReturn(LinkedHashMap())
                 Mockito.`when`(server.ipBans).thenReturn(banList)
-                Mockito.`when`(server.baseLang..thenReturn(BaseLang("eng", "src/main/resources/language"))
-                val serverSettings = ConfigManager.create(
-                    ServerSettings::class.java
-                ) { it: OkaeriConfig ->
+                Mockito.`when`(
+                    server.baseLang..thenReturn(BaseLang("eng", "src/main/resources/language"))
+                    val serverSettings = ConfigManager . create (
+                        ServerSettings::class.java
+                        ) { it: OkaeriConfig ->
                     it.withConfigurer(YamlSnakeYamlConfigurer())
                     it.withBindFile("nukkit.yml")
                     it.withRemoveOrphans(true)

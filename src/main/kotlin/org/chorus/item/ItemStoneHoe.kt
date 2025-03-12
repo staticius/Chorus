@@ -3,11 +3,11 @@ package org.chorus.item
 class ItemStoneHoe @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemTool(ItemID.Companion.STONE_HOE, meta, count, "Stone Hoe") {
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_STONE
+        get() = DURABILITY_STONE
 
     override val isHoe: Boolean
         get() = true
 
     override val tier: Int
-        get() = ItemTool.Companion.TIER_STONE
+        get() = TIER_STONE
 }

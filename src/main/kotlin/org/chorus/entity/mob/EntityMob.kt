@@ -68,6 +68,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
     @JvmField
     var headYaw: Double = rotation.yaw
+
     @JvmField
     var prevHeadYaw: Double = headYaw
 

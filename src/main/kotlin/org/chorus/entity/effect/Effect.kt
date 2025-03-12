@@ -1,6 +1,6 @@
 package org.chorus.entity.effect
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.registry.Registries
 import java.awt.Color
 

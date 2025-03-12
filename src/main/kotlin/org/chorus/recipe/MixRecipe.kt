@@ -13,10 +13,10 @@ abstract class MixRecipe(recipeId: String?, input: Item, ingredient: Item, outpu
         results.add(output)
     }
 
-    val ingredient: Item?
+    val ingredient: Item
         get() = ingredients[1].toItem()
 
-    val input: Item?
+    val input: Item
         get() = ingredients[0].toItem()
 
     val result: Item

@@ -1,7 +1,7 @@
 package org.chorus.level.format.bitarray
 
-import org.chorus.utils.ByteBufVarInt
 import io.netty.buffer.ByteBuf
+import org.chorus.utils.ByteBufVarInt
 
 /**
  * Allay Project 2023/4/14
@@ -9,9 +9,9 @@ import io.netty.buffer.ByteBuf
  * @author JukeboxMC | daoge_cmd
  */
 interface BitArray {
-    fun set(index: Int, value: Int)
+    operator fun set(index: Int, value: Int)
 
-    fun get(index: Int): Int
+    operator fun get(index: Int): Int
 
     fun writeSizeToNetwork(buffer: ByteBuf?, size: Int) {
         ByteBufVarInt.writeInt(buffer, size)

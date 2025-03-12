@@ -1,8 +1,6 @@
 package org.chorus.entity.ai.behavior
 
 
-
-
 /**
  * AbstractBehavior包含一个[BehaviorState]属性以及它的Getter/Setter
  *

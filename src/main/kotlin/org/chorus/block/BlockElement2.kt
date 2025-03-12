@@ -4,6 +4,6 @@ class BlockElement2 @JvmOverloads constructor(blockstate: BlockState? = Companio
     Block(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID."minecraft:element_2")
-            
+
     }
 }

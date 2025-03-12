@@ -1,8 +1,8 @@
 package org.chorus.level.util
 
+import com.google.common.base.Preconditions
 import org.chorus.utils.collection.ByteArrayWrapper
 import org.chorus.utils.collection.FreezableArrayManager
-import com.google.common.base.Preconditions
 import java.util.*
 
 class NibbleArray : Cloneable {
@@ -19,7 +19,7 @@ class NibbleArray : Cloneable {
         this.length = array.size
     }
 
-    fun get(index: Int): Byte {
+    operator fun get(index: Int): Byte {
         Preconditions.checkElementIndex(index, length * 2)
         val `val` = byteArrayWrapper.getByte(index / 2)
         return if ((index and 1) == 0) {
@@ -29,7 +29,7 @@ class NibbleArray : Cloneable {
         }
     }
 
-    fun set(index: Int, value: Byte) {
+    operator fun set(index: Int, value: Byte) {
         var value = value
         Preconditions.checkArgument(value >= 0 && value < 16, "Nibbles must have a value between 0 and 15.")
         Preconditions.checkElementIndex(index, length * 2)

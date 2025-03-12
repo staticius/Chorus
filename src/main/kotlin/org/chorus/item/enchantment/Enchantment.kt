@@ -1,5 +1,7 @@
 package org.chorus.item.enchantment
 
+import io.netty.util.internal.EmptyArrays
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap
 import org.chorus.entity.*
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
@@ -27,8 +29,6 @@ import org.chorus.plugin.InternalPlugin
 import org.chorus.registry.RegisterException
 import org.chorus.registry.Registries
 import org.chorus.utils.*
-import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
@@ -41,16 +41,8 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
-import kotlin.collections.Collection
-import kotlin.collections.HashSet
-import kotlin.collections.LinkedHashSet
-import kotlin.collections.Map
-import kotlin.collections.MutableCollection
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.forEach
 import kotlin.collections.set
 
 /**
@@ -858,7 +850,7 @@ abstract class Enchantment : Cloneable {
          * @return The enchantment, if no enchantment is found with that id, [UnknownEnchantment] is returned.
          * The UnknownEnchantment will be always a new instance and changes to it does not affects other calls.
          */
-        fun getEnchantment(id: Int): Enchantment? {
+        fun getEnchantment(id: Int): Enchantment {
             var enchantment: Enchantment? = null
             if (id >= 0 && id < enchantments.size) {
                 enchantment = enchantments[id]
@@ -879,7 +871,7 @@ abstract class Enchantment : Cloneable {
          * @return the enchantment
          */
         @JvmStatic
-        fun getEnchantment(name: String?): Enchantment? {
+        fun getEnchantment(name: String?): Enchantment {
             return if (Identifier.isValid(name)) {
                 namedEnchantments[Identifier.tryParse(
                     name
@@ -891,7 +883,7 @@ abstract class Enchantment : Cloneable {
             )]!!.clone()
         }
 
-        fun getEnchantment(name: Identifier): Enchantment? {
+        fun getEnchantment(name: Identifier): Enchantment {
             return namedEnchantments[name]!!.clone()
         }
 

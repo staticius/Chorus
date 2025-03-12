@@ -8,7 +8,6 @@ import com.google.gson.JsonObject
 import java.util.function.Consumer
 
 
-
 @Accessors(chain = true, fluent = true)
 
 class ElementDropdown : ElementCustom {
@@ -33,7 +32,7 @@ class ElementDropdown : ElementCustom {
         return this
     }
 
-    override fun toJson(): JsonObject? {
+    override fun toJson(): JsonObject {
         Preconditions.checkArgument(
             0 > this.defaultOption || this.defaultOption < options!!.size(),
             "Default option not an index"

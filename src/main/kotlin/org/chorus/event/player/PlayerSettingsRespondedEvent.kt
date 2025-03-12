@@ -28,10 +28,6 @@ class PlayerSettingsRespondedEvent(player: Player?, formID: Int, window: Form<*>
         this.response = response
     }
 
-    override fun setCancelled() {
-        super.setCancelled()
-    }
-
     companion object {
         val handlers: HandlerList = HandlerList()
     }

@@ -2,7 +2,8 @@ package org.chorus.block
 
 import org.chorus.Server
 import org.chorus.event.block.BlockFadeEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 

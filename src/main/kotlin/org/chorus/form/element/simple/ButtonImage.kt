@@ -3,7 +3,6 @@ package org.chorus.form.element.simple
 import com.google.gson.JsonObject
 
 
-
 /**
  * The image of a [ElementButton]
  */

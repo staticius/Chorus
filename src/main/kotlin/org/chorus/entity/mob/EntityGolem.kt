@@ -1,6 +1,8 @@
 package org.chorus.entity.mob
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityCanAttack
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.monster.EntityCreeper
 import org.chorus.entity.mob.monster.EntityMonster

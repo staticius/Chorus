@@ -1,6 +1,7 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemGlowstoneDust
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.math.MathHelper.clamp
 import java.util.*
@@ -22,7 +23,7 @@ class BlockGlowstone : BlockTransparent {
     override val lightLevel: Int
         get() = 15
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         val random = Random()
         var count = 2 + random.nextInt(3)
 

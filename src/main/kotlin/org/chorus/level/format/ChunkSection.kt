@@ -1,5 +1,7 @@
 package org.chorus.level.format
 
+import io.netty.buffer.ByteBuf
+import it.unimi.dsi.fastutil.objects.ReferenceArrayList
 import org.chorus.block.*
 import org.chorus.level.*
 import org.chorus.level.biome.BiomeID
@@ -8,8 +10,6 @@ import org.chorus.level.format.palette.*
 import org.chorus.level.util.NibbleArray
 import org.chorus.math.BlockVector3
 import org.chorus.registry.Registries
-import io.netty.buffer.ByteBuf
-import it.unimi.dsi.fastutil.objects.ReferenceArrayList
 import java.util.concurrent.atomic.AtomicLong
 import java.util.function.BiPredicate
 import javax.annotation.concurrent.NotThreadSafe

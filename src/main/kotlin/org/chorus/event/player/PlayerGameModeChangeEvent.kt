@@ -8,6 +8,7 @@ import org.chorus.event.HandlerList
 class PlayerGameModeChangeEvent(player: Player?, newGameMode: Int, newAdventureSettings: AdventureSettings) :
     PlayerEvent(), Cancellable {
     val newGamemode: Int
+
     @JvmField
     var newAdventureSettings: AdventureSettings
 

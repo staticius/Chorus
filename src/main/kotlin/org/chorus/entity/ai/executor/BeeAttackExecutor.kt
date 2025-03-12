@@ -1,10 +1,11 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.animal.EntityBee
 

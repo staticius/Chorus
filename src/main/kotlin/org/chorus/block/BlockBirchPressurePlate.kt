@@ -11,6 +11,7 @@ class BlockBirchPressurePlate @JvmOverloads constructor(blockstate: BlockState? 
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.BIRCH_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.BIRCH_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
     }
 }

@@ -6,7 +6,7 @@ class BlockDarkOakDoubleSlab(blockstate: BlockState?) : BlockDoubleWoodenSlab(bl
     override val slabName: String
         get() = "Dark Oak"
 
-    override val singleSlab: BlockState?
+    override val singleSlab: BlockState
         get() = BlockDarkOakSlab.Companion.PROPERTIES.getDefaultState()
 
     companion object {

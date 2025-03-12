@@ -1,18 +1,13 @@
 package org.chorus.network.protocol
 
-import org.chorus.inventory.InventoryType.Companion.from
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.GameType
-
-
-
-
-
 
 
 class UpdatePlayerGameTypePacket : DataPacket() {
     @JvmField
     var gameType: GameType? = null
+
     @JvmField
     var entityId: Long = 0
     var tick: Long = 0

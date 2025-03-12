@@ -12,6 +12,10 @@ class BlockBirchStairs @JvmOverloads constructor(blockstate: BlockState? = Compa
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.BIRCH_STAIRS, CommonBlockProperties.UPSIDE_DOWN_BIT, CommonBlockProperties.WEIRDO_DIRECTION)
+            BlockProperties(
+                BlockID.BIRCH_STAIRS,
+                CommonBlockProperties.UPSIDE_DOWN_BIT,
+                CommonBlockProperties.WEIRDO_DIRECTION
+            )
     }
 }

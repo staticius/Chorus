@@ -9,7 +9,6 @@ import org.chorus.network.protocol.BookEditPacket
 import org.chorus.network.protocol.ProtocolInfo
 
 
-
 class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: BookEditPacket) {
         val player = playerHandle.player

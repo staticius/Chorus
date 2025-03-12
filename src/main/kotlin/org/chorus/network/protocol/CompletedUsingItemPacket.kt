@@ -3,14 +3,10 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class CompletedUsingItemPacket : DataPacket() {
     @JvmField
     var itemId: Int = 0
+
     @JvmField
     var action: Int = 0
 

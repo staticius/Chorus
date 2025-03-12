@@ -1,11 +1,10 @@
 package org.chorus.utils
 
+
+import io.netty.util.internal.EmptyArrays
 import org.chorus.nbt.NBTIO.read
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
-import io.netty.util.internal.EmptyArrays
-
-
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -13,7 +12,6 @@ import java.util.*
 import java.util.function.*
 import java.util.function.Function
 import kotlin.math.min
-
 
 
 class BinaryStream {
@@ -44,7 +42,7 @@ class BinaryStream {
 
     fun setBuffer(buffer: ByteArray) {
         this.buffer = buffer
-        this.count = buffer?.size ?: -1
+        this.count = buffer.size
     }
 
     fun setBuffer(buffer: ByteArray, offset: Int) {
@@ -57,7 +55,7 @@ class BinaryStream {
     }
 
     @JvmOverloads
-    fun get(len: Int = this.count - this.offset): ByteArray {
+    operator fun get(len: Int = this.count - this.offset): ByteArray {
         var len1 = len
         if (len1 < 0) {
             this.offset = this.count - 1
@@ -303,13 +301,13 @@ class BinaryStream {
     }
 
     fun feof(): Boolean {
-        return this.offset < 0 || this.offset >= buffer!!.size
+        return this.offset < 0 || this.offset >= buffer.size
     }
 
     @get:SneakyThrows(IOException::class)
     val tag: CompoundTag
         get() {
-            val `is` = ByteArrayInputStream(buffer, offset, buffer!!.size)
+            val `is` = ByteArrayInputStream(buffer, offset, buffer.size)
             val initial = `is`.available()
             try {
                 return read(`is`)
@@ -325,14 +323,14 @@ class BinaryStream {
 
     private fun ensureCapacity(minCapacity: Int) {
         // overflow-conscious code
-        if (minCapacity - buffer!!.size > 0) {
+        if (minCapacity - buffer.size > 0) {
             grow(minCapacity)
         }
     }
 
     private fun grow(minCapacity: Int) {
         // overflow-conscious code
-        val oldCapacity = buffer!!.size
+        val oldCapacity = buffer.size
         var newCapacity = oldCapacity shl 1
 
         if (newCapacity - minCapacity < 0) {
@@ -342,7 +340,7 @@ class BinaryStream {
         if (newCapacity - MAX_ARRAY_SIZE > 0) {
             newCapacity = hugeCapacity(minCapacity)
         }
-        this.buffer = buffer!!.copyOf(newCapacity)
+        this.buffer = buffer.copyOf(newCapacity)
     }
 
     companion object {

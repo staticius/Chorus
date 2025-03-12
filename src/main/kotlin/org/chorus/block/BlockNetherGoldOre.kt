@@ -15,7 +15,7 @@ class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState? = Com
     override val name: String
         get() = "Nether Gold Ore"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         if (!item.isPickaxe || item.tier < ItemTool.TIER_WOODEN) {
             return Item.EMPTY_ARRAY
         }
@@ -55,7 +55,7 @@ class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState? = Com
         return arrayOf(get(ItemID.GOLD_NUGGET, 0, count))
     }
 
-    override fun getRawMaterial(): String? {
+    override fun getRawMaterial(): String {
         return ItemID.GOLD_NUGGET
     }
 

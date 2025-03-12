@@ -28,7 +28,7 @@ class FixedMetadataValue
     override fun invalidate() {
     }
 
-    override fun value(): Any? {
+    override fun value(): Any {
         return internalValue
     }
 }

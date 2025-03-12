@@ -95,7 +95,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         return 0
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 
@@ -125,7 +125,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
             level.vibrationManager.callVibrationEvent(
                 VibrationEvent(
                     player,
-                    position.add(0.5, 0.5, 0.5)!!, VibrationType.EAT
+                    position.add(0.5, 0.5, 0.5), VibrationType.EAT
                 )
             )
             return true

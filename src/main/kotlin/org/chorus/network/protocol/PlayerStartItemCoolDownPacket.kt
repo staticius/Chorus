@@ -3,15 +3,10 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
-
 class PlayerStartItemCoolDownPacket : DataPacket() {
     @JvmField
     var itemCategory: String? = null
+
     @JvmField
     var coolDownDuration: Int = 0
 

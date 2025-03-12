@@ -1,6 +1,8 @@
 package org.chorus.block
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.blockentity.BlockEntity
@@ -19,6 +21,7 @@ import org.chorus.level.Locator
 import org.chorus.level.MovingObjectPosition
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
+import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 import org.chorus.metadata.MetadataValue
 import org.chorus.metadata.Metadatable
@@ -30,21 +33,17 @@ import org.chorus.plugin.Plugin
 import org.chorus.registry.Registries
 import org.chorus.tags.BlockTags.getTagSet
 import org.chorus.utils.BlockColor
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
-import org.chorus.Server
-import org.chorus.math.IVector3
 import org.chorus.utils.Loggable
-
 import java.util.*
 import java.util.function.Predicate
 import kotlin.math.pow
-
 
 
 abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     Metadatable, AxisAlignedBB, IVector3, Loggable {
     var blockState: BlockState? = null
     protected var color: BlockColor? = null
+
     @JvmField
     var layer: Int = 0
 
@@ -410,7 +409,8 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
 
     fun setPropertyValues(values: MutableList<BlockPropertyValue<*, *, *>>): Block {
         this.blockState = blockState!!.setPropertyValues(
-            properties, *values.toTypedArray())
+            properties, *values.toTypedArray()
+        )
         return this
     }
 
@@ -1184,6 +1184,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
         val frictionFactor: Double = 0.6
         const val DEFAULT_AIR_FLUID_FRICTION: Double = 0.95
         val VANILLA_BLOCK_COLOR_MAP: Long2ObjectOpenHashMap<BlockColor> = Long2ObjectOpenHashMap()
+
         @JvmStatic
         fun isNotActivate(player: Player?): Boolean {
             if (player == null) {

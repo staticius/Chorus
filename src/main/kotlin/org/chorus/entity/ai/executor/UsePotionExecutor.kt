@@ -87,7 +87,7 @@ class UsePotionExecutor
             return ItemPotion.fromPotion(PotionType.Companion.WATER_BREATHING)
         } else if (!entity.hasEffect(EffectType.FIRE_RESISTANCE) && (entity.isOnFire || Arrays.stream<Block>(
                 entity.level!!.getCollisionBlocks(
-                    entity.getBoundingBox()!!.getOffsetBoundingBox(0.0, -1.0, 0.0)
+                    entity.getBoundingBox().getOffsetBoundingBox(0.0, -1.0, 0.0)
                 )
             ).anyMatch { block: Block? -> block is BlockMagma })
         ) {

@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob

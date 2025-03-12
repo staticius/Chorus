@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class CameraPacket : DataPacket() {
     var cameraUniqueId: Long = 0
     var playerUniqueId: Long = 0

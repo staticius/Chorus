@@ -10,8 +10,6 @@ import org.chorus.entity.Entity
 import org.chorus.level.Locator
 import org.chorus.level.Transform
 import org.chorus.math.*
-import kotlin.collections.List
-import kotlin.collections.Map
 import kotlin.collections.set
 
 /**

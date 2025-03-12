@@ -1,14 +1,13 @@
 package org.chorus.event.server
 
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufAllocator
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.event.HandlerList
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.plugin.Plugin
 import org.chorus.utils.Binary
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.ByteBufAllocator
 import java.nio.charset.StandardCharsets
 
 

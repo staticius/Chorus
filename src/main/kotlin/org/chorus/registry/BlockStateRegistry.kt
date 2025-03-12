@@ -1,13 +1,12 @@
 package org.chorus.registry
 
+import com.google.gson.JsonParser
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.registry.RegisterException
 import org.chorus.utils.BlockColor
-import com.google.gson.JsonParser
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.jetbrains.annotations.ApiStatus
-import org.jetbrains.annotations.UnmodifiableView
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -44,7 +43,8 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
                     Block.VANILLA_BLOCK_COLOR_MAP.put(hash.toLong(), BlockColor(r, g, b, a))
                 }
             }
-        } catch (_: IOException) {}
+        } catch (_: IOException) {
+        }
     }
 
     override operator fun get(key: Int): BlockState? {

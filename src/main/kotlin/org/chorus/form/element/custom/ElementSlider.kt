@@ -4,11 +4,6 @@ import com.google.common.base.Preconditions
 import com.google.gson.JsonObject
 
 
-
-
-
-
-
 @Accessors(chain = true, fluent = true)
 
 class ElementSlider : ElementCustom {
@@ -27,7 +22,7 @@ class ElementSlider : ElementCustom {
         1f
     )
 
-    override fun toJson(): JsonObject? {
+    override fun toJson(): JsonObject {
         Preconditions.checkArgument(this.min < this.max, "Maximum slider value must exceed the minimum value")
         Preconditions.checkArgument(
             this.defaultValue >= this.min && this.defaultValue <= this.max,

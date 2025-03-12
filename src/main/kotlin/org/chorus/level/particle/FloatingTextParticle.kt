@@ -1,5 +1,6 @@
 package org.chorus.level.particle
 
+import com.google.common.base.Strings
 import org.chorus.entity.Entity
 import org.chorus.entity.data.EntityDataMap
 import org.chorus.entity.data.EntityDataTypes
@@ -10,10 +11,8 @@ import org.chorus.level.*
 import org.chorus.math.Vector3
 import org.chorus.network.protocol.*
 import org.chorus.utils.SerializedImage
-import com.google.common.base.Strings
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 /**

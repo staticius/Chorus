@@ -12,7 +12,7 @@ class ByteArrayTag : Tag<ByteArray> {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_BYTE_ARRAY
+        get() = TAG_BYTE_ARRAY
 
     override fun toString(): String {
         return "ByteArrayTag " + " (data: 0x" + Binary.bytesToHexString(data, true) + " [" + data!!.size + " bytes])"

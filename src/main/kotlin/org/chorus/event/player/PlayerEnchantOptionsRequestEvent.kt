@@ -9,6 +9,7 @@ import org.chorus.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
 class PlayerEnchantOptionsRequestEvent(player: Player?, table: EnchantInventory, options: List<EnchantOptionData>) :
     PlayerEvent(), Cancellable {
     val inventory: EnchantInventory
+
     @JvmField
     var options: List<EnchantOptionData>
 

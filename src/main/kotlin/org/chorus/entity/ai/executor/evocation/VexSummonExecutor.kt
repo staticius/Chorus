@@ -22,7 +22,7 @@ class VexSummonExecutor : FangLineExecutor() {
             for (i in 0..<VEX_COUNT) {
                 var count = 0
                 for (entity1 in entity.level!!.getNearbyEntities(
-                    entity.getBoundingBox()!!.grow(15.0, 15.0, 15.0)
+                    entity.getBoundingBox().grow(15.0, 15.0, 15.0)
                 )) {
                     if (entity1 is EntityVex) count++
                 }

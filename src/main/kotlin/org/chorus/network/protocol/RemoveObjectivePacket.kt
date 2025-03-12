@@ -3,12 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
-
 class RemoveObjectivePacket : DataPacket() {
     @JvmField
     var objectiveName: String? = null

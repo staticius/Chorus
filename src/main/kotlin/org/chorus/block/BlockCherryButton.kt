@@ -9,7 +9,7 @@ class BlockCherryButton @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.CHERRY_BUTTON,
+            BlockID.CHERRY_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )

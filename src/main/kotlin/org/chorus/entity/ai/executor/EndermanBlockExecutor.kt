@@ -13,7 +13,7 @@ class EndermanBlockExecutor : IBehaviorExecutor {
             if (entity.getItemInHand().isNull) {
                 val optionalBlock = Arrays.stream(
                     entity.level!!.getCollisionBlocks(
-                        entity.getBoundingBox()!!.grow(3.7, 0.0, 3.7)
+                        entity.getBoundingBox().grow(3.7, 0.0, 3.7)
                     )
                 ).filter { block: Block -> block is Natural && block.canBePickedUp() }.findAny()
                 if (optionalBlock.isPresent) {
@@ -26,7 +26,7 @@ class EndermanBlockExecutor : IBehaviorExecutor {
                 if (entity.getItemInHand().isBlock) {
                     val optionalBlock = Arrays.stream(
                         entity.level!!.getCollisionBlocks(
-                            entity.getBoundingBox()!!.addCoord(0.7, -1.0, 0.7)
+                            entity.getBoundingBox().addCoord(0.7, -1.0, 0.7)
                         )
                     ).filter { block: Block -> block.isSolid && block.up().canBeReplaced() }.findAny()
                     if (optionalBlock.isPresent) {

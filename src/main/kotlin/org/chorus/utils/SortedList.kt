@@ -189,8 +189,8 @@ open class SortedList<T>(// 元素排序比较器
      */
     override val size: Int
         get() {
-        return if (root == null) 0 else 1 + root!!.numChildren
-    }
+            return if (root == null) 0 else 1 + root!!.numChildren
+        }
 
     /**
      * @return 此SortedList的根节点，如果此列表为空，则为空。
@@ -228,10 +228,10 @@ open class SortedList<T>(// 元素排序比较器
             val comparison = comparator.compare(current.value, value)
             if (comparison == 0) {
                 while (current!!.leftChild != null
-                        && comparator.compare(current.leftChild!!.value, value) == 0
-                    ) {
-                        current = current.leftChild
-                    }
+                    && comparator.compare(current.leftChild!!.value, value) == 0
+                ) {
+                    current = current.leftChild
+                }
                 break
             } else if (comparison < 0) {
                 current = current.rightChild

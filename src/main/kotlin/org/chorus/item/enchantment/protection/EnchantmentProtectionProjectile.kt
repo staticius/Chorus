@@ -6,7 +6,7 @@ import org.chorus.item.enchantment.*
 
 
 class EnchantmentProtectionProjectile : EnchantmentProtection(
-    Enchantment.Companion.ID_PROTECTION_PROJECTILE,
+    ID_PROTECTION_PROJECTILE,
     "projectile",
     Rarity.UNCOMMON,
     TYPE.PROJECTILE

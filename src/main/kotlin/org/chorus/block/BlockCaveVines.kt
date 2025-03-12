@@ -45,7 +45,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
                     val block = clone() as BlockCaveVines
                     block.growth = growth + 4
                     val ev = BlockGrowEvent(this, block)
-                    instance!!.pluginManager.callEvent(ev)
+                    instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         level.setBlock(this.position, ev.newState!!, false, true)
                     } else {
@@ -57,7 +57,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
                     } else BlockCaveVinesBodyWithBerries()
                     block.growth = maxGrowth
                     val ev = BlockGrowEvent(this, block)
-                    instance!!.pluginManager.callEvent(ev)
+                    instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         level.setBlock(this.position, ev.newState!!, false, true)
                     } else {
@@ -72,7 +72,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
                 } else BlockCaveVinesBodyWithBerries()
                 block.growth = maxGrowth
                 val ev = BlockGrowEvent(this, block)
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
                     level.setBlock(down()!!.position, ev.newState!!, false, true)
                 } else {
@@ -82,7 +82,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
                 val block = BlockCaveVines()
                 block.growth = 0
                 val ev = BlockGrowEvent(this, block)
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
                     level.setBlock(down()!!.position, ev.newState!!, false, true)
                 }
@@ -109,7 +109,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
             if (growth < max) {
                 block.growth = max
                 val ev = BlockGrowEvent(this, block)
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return false
                 }

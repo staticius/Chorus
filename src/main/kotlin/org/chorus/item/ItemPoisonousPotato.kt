@@ -2,7 +2,6 @@ package org.chorus.item
 
 import org.chorus.Player
 import org.chorus.block.*
-import org.chorus.entity.effect.Effect.get
 import org.chorus.entity.effect.EffectType
 
 class ItemPoisonousPotato @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :

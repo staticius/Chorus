@@ -1,5 +1,8 @@
 package org.chorus.inventory.request
 
+import io.netty.util.internal.StringUtil
+import it.unimi.dsi.fastutil.Pair
+import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.BlockID
@@ -11,10 +14,6 @@ import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.types.itemstack.request.action.CraftRecipeOptionalAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import io.netty.util.internal.StringUtil
-import it.unimi.dsi.fastutil.Pair
-import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
-
 import java.util.*
 import java.util.stream.Stream
 import kotlin.math.max

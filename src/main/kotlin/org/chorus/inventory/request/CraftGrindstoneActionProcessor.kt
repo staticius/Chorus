@@ -1,6 +1,9 @@
 package org.chorus.inventory.request
 
+import it.unimi.dsi.fastutil.Pair
+import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.event.inventory.GrindstoneEvent
 import org.chorus.inventory.GrindstoneInventory
 import org.chorus.item.*
@@ -9,10 +12,6 @@ import org.chorus.math.ChorusMath
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.types.itemstack.request.action.CraftGrindstoneAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import it.unimi.dsi.fastutil.Pair
-import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
-import org.chorus.Server
-
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.stream.Stream
@@ -46,7 +45,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
         val exp = pair.right()
         val event = GrindstoneEvent(
             inventory,
-            firstItem ?: Item.AIR, pair.left(), secondItem ?: Item.AIR, exp, player
+            firstItem, pair.left(), secondItem, exp, player
         )
         Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {

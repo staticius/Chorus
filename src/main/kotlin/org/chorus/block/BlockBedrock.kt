@@ -3,8 +3,9 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.item.*
-import org.chorus.math.*
+import org.chorus.item.Item
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 
 class BlockBedrock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockstate) {

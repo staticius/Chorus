@@ -19,7 +19,6 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.registry.Registries
 
 
-
 /**
  * @author CreeperFace
  * @since 8.5.2017
@@ -37,12 +36,11 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
     private val temporalVector = BlockVector3()
 
     //由容器矿车检测漏斗并通知更新，这样子能大幅优化性能
-    
-    
+
+
     private val minecartInvPickupFrom: InventoryHolder? = null
 
-    
-    
+
     private val minecartInvPushTo: InventoryHolder? = null
 
     override fun initBlockEntity() {
@@ -346,7 +344,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         //Fix for furnace inputs
         if (be is BlockEntityFurnace) {
             val inventory = be.getInventory()
-            if (inventory!!.isFull) {
+            if (inventory.isFull) {
                 return false
             }
 
@@ -426,7 +424,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             return pushedItem
         } else if (be is BlockEntityBrewingStand) {
             val inventory = be.getInventory()
-            if (inventory!!.isFull) {
+            if (inventory.isFull) {
                 return false
             }
 

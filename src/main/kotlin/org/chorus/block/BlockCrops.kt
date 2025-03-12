@@ -64,7 +64,7 @@ abstract class BlockCrops(blockState: BlockState?) : BlockFlowable(blockState) {
                 growth += ThreadLocalRandom.current().nextInt(3) + 2
                 block.growth = min(growth.toDouble(), max.toDouble()).toInt()
                 val ev = BlockGrowEvent(this, block)
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
 
                 if (ev.isCancelled) {
                     return false
@@ -99,7 +99,7 @@ abstract class BlockCrops(blockState: BlockState?) : BlockFlowable(blockState) {
                     val block = clone() as BlockCrops
                     block.growth = growth + 1
                     val ev = BlockGrowEvent(this, block)
-                    instance!!.pluginManager.callEvent(ev)
+                    instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled) {
                         level.setBlock(this.position, ev.newState!!, false, true)

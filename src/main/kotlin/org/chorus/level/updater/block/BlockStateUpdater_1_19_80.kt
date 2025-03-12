@@ -3,7 +3,6 @@ package org.chorus.level.updater.block
 import org.chorus.level.updater.Updater
 import org.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
 import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
-import kotlin.collections.indices
 import kotlin.collections.set
 
 class BlockStateUpdater_1_19_80 : Updater {

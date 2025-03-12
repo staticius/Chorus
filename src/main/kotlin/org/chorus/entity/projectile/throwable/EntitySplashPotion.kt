@@ -102,12 +102,12 @@ open class EntitySplashPotion : EntityThrowable {
         val color: IntArray = IntArray(3)
         var count: Int = 0
 
-        if (!potion.getEffects(true)!!.isEmpty()) {
-            for (effect: Effect in potion.getEffects(true)!!) {
-                val effectColor: Color? = effect.getColor()
-                color.get(0) += effectColor!!.getRed() * effect.getLevel()
-                color.get(1) += effectColor.getGreen() * effect.getLevel()
-                color.get(2) += effectColor.getBlue() * effect.getLevel()
+        if (!potion.getEffects(true).isEmpty()) {
+            for (effect: Effect in potion.getEffects(true)) {
+                val effectColor: Color = effect.getColor()
+                color.get(0) += effectColor!!.red * effect.getLevel()
+                color.get(1) += effectColor.green * effect.getLevel()
+                color.get(2) += effectColor.blue * effect.getLevel()
                 count += effect.getLevel()
             }
         } else {
@@ -127,7 +127,7 @@ open class EntitySplashPotion : EntityThrowable {
         level!!.addSound(this.position, Sound.RANDOM_GLASS)
 
         val entities: Array<Entity> = level!!.getNearbyEntities(
-            getBoundingBox()!!.grow(4.125, 2.125, 4.125)
+            getBoundingBox().grow(4.125, 2.125, 4.125)
         )
         for (anEntity: Entity in entities) {
             val distance: Double = anEntity.position.distanceSquared(this.position)

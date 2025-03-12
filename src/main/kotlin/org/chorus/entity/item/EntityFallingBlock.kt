@@ -4,7 +4,9 @@ import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.Damage
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.event.entity.EntityBlockChangeEvent
@@ -14,7 +16,8 @@ import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.level.GameRule
 import org.chorus.level.format.IChunk
 import org.chorus.level.particle.DestroyBlockParticle
-import org.chorus.math.*
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventPacket
@@ -190,7 +193,8 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                     } else {
                         val event = EntityBlockChangeEvent(
                             this, floorBlock,
-                            Block.get(BlockID.SNOW_LAYER).setPropertyValue(CommonBlockProperties.HEIGHT, mergedHeight - 1)
+                            Block.get(BlockID.SNOW_LAYER)
+                                .setPropertyValue(CommonBlockProperties.HEIGHT, mergedHeight - 1)
                         )
                         Server.instance.pluginManager.callEvent(event)
                         if (!event.isCancelled) {

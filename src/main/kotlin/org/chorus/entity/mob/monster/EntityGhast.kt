@@ -24,6 +24,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
 import java.util.*
 import java.util.Set
+import kotlin.collections.forEach
 
 /**
  * @author PikyCZ

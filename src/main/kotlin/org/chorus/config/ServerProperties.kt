@@ -72,7 +72,7 @@ class ServerProperties(dataPath: String) {
         return properties.rootSection
     }
 
-    fun get(key: ServerPropertiesKeys, defaultValue: Int): Int {
+    operator fun get(key: ServerPropertiesKeys, defaultValue: Int): Int {
         val value = properties[key.toString()]
         return if (value is String) {
             try {
@@ -128,7 +128,7 @@ class ServerProperties(dataPath: String) {
         }
     }
 
-    fun set(key: String?, value: Any?) {
+    operator fun set(key: String?, value: Any?) {
         properties[key] = value
     }
 

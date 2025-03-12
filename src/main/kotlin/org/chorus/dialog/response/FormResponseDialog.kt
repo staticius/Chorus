@@ -5,7 +5,6 @@ import org.chorus.dialog.window.FormWindowDialog
 import org.chorus.network.protocol.NPCRequestPacket
 
 
-
 class FormResponseDialog(packet: NPCRequestPacket, dialog: FormWindowDialog) {
     private val entityRuntimeId = packet.entityRuntimeId
     private val data: String = packet.data

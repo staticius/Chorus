@@ -13,6 +13,7 @@ class PlayerMoveEvent @JvmOverloads constructor(
 ) :
     PlayerEvent(), Cancellable {
     var from: Transform
+
     @JvmField
     var to: Transform
 
@@ -23,10 +24,6 @@ class PlayerMoveEvent @JvmOverloads constructor(
         this.from = from
         this.to = to
         this.isResetBlocksAround = resetBlocks
-    }
-
-    override fun setCancelled() {
-        super.setCancelled()
     }
 
     companion object {

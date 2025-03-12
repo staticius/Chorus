@@ -50,7 +50,7 @@ object Fishing {
         return getFishingResult(fortuneLevel, lureLevel)
     }
 
-    fun getFishingResult(fortuneLevel: Int, lureLevel: Int): Item? {
+    fun getFishingResult(fortuneLevel: Int, lureLevel: Int): Item {
         val treasureChance = ChorusMath.clamp(0.05f + 0.01f * fortuneLevel - 0.01f * lureLevel, 0f, 1f)
         val junkChance = ChorusMath.clamp(0.05f - 0.025f * fortuneLevel - 0.01f * lureLevel, 0f, 1f)
         val fishChance = ChorusMath.clamp(1 - treasureChance - junkChance, 0f, 1f)

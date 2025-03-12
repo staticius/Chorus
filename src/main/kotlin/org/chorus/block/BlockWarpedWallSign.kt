@@ -8,7 +8,7 @@ class BlockWarpedWallSign @JvmOverloads constructor(blockState: BlockState? = Co
     override val wallSignId: String
         get() = BlockID.WARPED_WALL_SIGN
 
-    override val standingSignId: String?
+    override val standingSignId: String
         get() = BlockID.WARPED_STANDING_SIGN
 
     override val name: String

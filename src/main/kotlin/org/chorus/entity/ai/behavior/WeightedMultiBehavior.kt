@@ -31,7 +31,7 @@ class WeightedMultiBehavior : AbstractBehavior {
     override val priority: Int
     protected var behaviors: Set<IBehavior>
 
-    
+
     protected var currentBehavior: IBehavior? = null
 
     constructor(priority: Int, vararg behaviors: IBehavior?) {

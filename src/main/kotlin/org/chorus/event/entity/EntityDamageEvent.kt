@@ -1,11 +1,11 @@
 package org.chorus.event.entity
 
+import com.google.common.collect.ImmutableMap
 import org.chorus.entity.Entity
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.utils.EventException
-import com.google.common.collect.ImmutableMap
 import java.util.*
 
 

@@ -4,14 +4,10 @@ import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class PlayerActionPacket : DataPacket() {
     @JvmField
     var entityId: Long = 0
+
     @JvmField
     var action: Int = 0
     var x: Int = 0

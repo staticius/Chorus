@@ -3,7 +3,7 @@ package org.chorus.network.protocol.types
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 
-enum class BannerPatternType(val typeId: Int, val code: String, override val name: String) {
+enum class BannerPatternType(val typeId: Int, val code: String, val patternName: String) {
     BORDER(0, "bo", "Border"),
     BRICKS(1, "bri", "Bricks"),
     CIRCLE(2, "mc", "Circle"),

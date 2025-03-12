@@ -1,11 +1,11 @@
 package org.chorus.utils
 
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import org.chorus.Server
 import org.chorus.network.connection.util.EncryptionUtils.mojangPublicKey
 import org.chorus.network.connection.util.EncryptionUtils.oldMojangPublicKey
 import org.chorus.network.protocol.LoginPacket
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
 import org.jose4j.jws.JsonWebSignature
 import org.jose4j.lang.JoseException
 import java.nio.charset.StandardCharsets

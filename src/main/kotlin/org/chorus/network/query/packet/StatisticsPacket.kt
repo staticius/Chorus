@@ -1,7 +1,7 @@
 package org.chorus.network.query.packet
 
-import org.chorus.network.query.QueryPacket
 import io.netty.buffer.ByteBuf
+import org.chorus.network.query.QueryPacket
 
 class StatisticsPacket : QueryPacket {
     // Both

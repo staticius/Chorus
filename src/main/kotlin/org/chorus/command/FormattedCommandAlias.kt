@@ -1,11 +1,9 @@
 package org.chorus.command
 
+import io.netty.util.internal.EmptyArrays
 import org.chorus.Server
 import org.chorus.lang.TranslationContainer
 import org.chorus.utils.TextFormat
-import io.netty.util.internal.EmptyArrays
-
-
 
 
 class FormattedCommandAlias : Command {

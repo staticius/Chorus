@@ -8,7 +8,7 @@ import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
  * @author daoge_cmd
  */
 class BooleanPropertyType private constructor(name: String, defaultData: Boolean) :
-    BaseBlockPropertyType<Boolean> (name, listOf(true, false), defaultData, 1.toByte()) {
+    BaseBlockPropertyType<Boolean>(name, listOf(true, false), defaultData, 1.toByte()) {
     private val FALSE = BooleanPropertyValue(false)
     private val TRUE = BooleanPropertyValue(true)
 
@@ -37,7 +37,7 @@ class BooleanPropertyType private constructor(name: String, defaultData: Boolean
             get() = (if (value) 1 else 0).toByte()
 
         override fun toString(): String {
-            return "BoolPropertyValue(name=$name, value=$value)"
+            return "BoolPropertyValue(name=${getName()}, value=${getValue()})"
         }
     }
 

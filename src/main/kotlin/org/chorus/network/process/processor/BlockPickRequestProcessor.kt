@@ -9,7 +9,6 @@ import org.chorus.network.protocol.BlockPickRequestPacket
 import org.chorus.network.protocol.ProtocolInfo
 
 
-
 class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: BlockPickRequestPacket) {
         val player = playerHandle.player

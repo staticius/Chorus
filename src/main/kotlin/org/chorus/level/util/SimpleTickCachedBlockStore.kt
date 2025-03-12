@@ -1,7 +1,7 @@
 package org.chorus.level.util
 
-import org.chorus.block.*
-import org.chorus.level.*
+import org.chorus.block.Block
+import org.chorus.level.Level
 import org.chorus.level.util.TickCachedBlockStore.CachedBlockComputer
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.set

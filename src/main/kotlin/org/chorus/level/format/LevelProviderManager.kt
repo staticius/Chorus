@@ -1,9 +1,6 @@
 package org.chorus.level.format
 
 
-
-
-
 object LevelProviderManager {
     internal val providers: MutableMap<String, Class<out LevelProvider>> = HashMap()
 

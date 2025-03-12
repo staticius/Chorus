@@ -79,6 +79,6 @@ class BlockNetherrack : BlockSolid {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHERRACK)
-            
+
     }
 }

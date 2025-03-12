@@ -14,6 +14,6 @@ open class BlockPolishedBlackstone @JvmOverloads constructor(blockstate: BlockSt
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.POLISHED_BLACKSTONE)
-            
+
     }
 }

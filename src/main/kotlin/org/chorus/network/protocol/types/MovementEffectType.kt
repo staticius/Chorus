@@ -3,7 +3,6 @@ package org.chorus.network.protocol.types
 import org.chorus.entity.Entity.getId
 
 
-
 @RequiredArgsConstructor
 enum class MovementEffectType {
     INVALID(-1),

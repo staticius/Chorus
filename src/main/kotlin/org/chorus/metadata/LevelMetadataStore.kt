@@ -6,6 +6,6 @@ import org.chorus.level.Level
 class LevelMetadataStore : MetadataStore() {
     override fun disambiguate(level: Metadatable, metadataKey: String): String {
         require(level is Level) { "Argument must be a Level instance" }
-        return ((level as Level).getName() + ":" + metadataKey).lowercase()
+        return (level.getName() + ":" + metadataKey).lowercase()
     }
 }

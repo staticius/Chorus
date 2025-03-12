@@ -4,11 +4,6 @@ import org.chorus.math.Vector2f
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class CameraAimAssistPacket : DataPacket() {
     private var presetId: String? = null
     private var viewAngle: Vector2f? = null

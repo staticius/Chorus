@@ -25,7 +25,7 @@ import kotlin.math.sin
 class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemTool(ItemID.Companion.BOW, meta, count, "Bow") {
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_BOW
+        get() = DURABILITY_BOW
 
     override val enchantAbility: Int
         get() = 1

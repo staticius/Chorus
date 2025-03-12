@@ -1,6 +1,6 @@
 package org.chorus.entity.effect
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.event.entity.EntityRegainHealthEvent
 import java.awt.Color
 import kotlin.math.min

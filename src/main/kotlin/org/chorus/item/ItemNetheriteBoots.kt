@@ -3,7 +3,7 @@ package org.chorus.item
 class ItemNetheriteBoots @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemArmor(ItemID.Companion.NETHERITE_BOOTS, meta, count, "Netherite Boots") {
     override val tier: Int
-        get() = ItemArmor.Companion.TIER_NETHERITE
+        get() = TIER_NETHERITE
 
     override val isBoots: Boolean
         get() = true

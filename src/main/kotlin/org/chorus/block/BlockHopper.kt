@@ -191,7 +191,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
                             itemToAdd,
                             InventoryMoveItemEvent.Action.SLOT_CHANGE
                         )
-                        instance!!.pluginManager.callEvent(ev)
+                        instance.pluginManager.callEvent(ev)
 
                         if (ev.isCancelled) continue
 
@@ -246,7 +246,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
                     null, hopperInv, hopperHolder,
                     item, InventoryMoveItemEvent.Action.PICKUP
                 )
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
 
                 if (ev.isCancelled) continue
 

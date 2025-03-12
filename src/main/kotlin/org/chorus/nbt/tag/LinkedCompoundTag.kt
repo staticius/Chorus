@@ -1,12 +1,7 @@
 package org.chorus.nbt.tag
 
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.forEach
-import kotlin.collections.iterator
 import kotlin.collections.set
 
 class LinkedCompoundTag @JvmOverloads constructor(tags: MutableMap<String?, Tag?>? = LinkedHashMap()) :

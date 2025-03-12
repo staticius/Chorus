@@ -9,6 +9,6 @@ class BlockCrimsonRoots @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_ROOTS)
-            
+
     }
 }

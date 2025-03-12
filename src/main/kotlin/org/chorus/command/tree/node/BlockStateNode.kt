@@ -41,7 +41,7 @@ class BlockStateNode : ParamNode<BlockState?>() {
             for (propertyType in propertyTypeSet) {
                 if (properties.identifier == key) {
                     if (propertyType.getType() == BlockPropertyType.Type.ENUM) {
-                        if (propertyType.validValues.contains(value)) {
+                        if (propertyType.getValidValues().contains(value)) {
                             result = result.setPropertyValue(properties, propertyType.tryCreateValue(value))
                             break
                         } else {

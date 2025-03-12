@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class RiderJumpPacket : DataPacket() {
     /**
      * Corresponds to jump progress bars 0-100

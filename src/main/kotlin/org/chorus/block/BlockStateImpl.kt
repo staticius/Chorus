@@ -1,5 +1,8 @@
 package org.chorus.block
 
+import com.google.common.base.Preconditions
+import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.block.property.enums.WoodType.name
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue.propertyType
 import org.chorus.block.property.type.BlockPropertyType.createValue
@@ -10,10 +13,6 @@ import org.chorus.nbt.tag.CompoundTag.putCompound
 import org.chorus.nbt.tag.CompoundTag.putInt
 import org.chorus.nbt.tag.CompoundTag.putString
 import org.chorus.utils.HashUtils
-import org.chorus.utils.HashUtils.computeBlockStateHash
-import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 import java.util.List
@@ -58,7 +57,7 @@ class BlockStateImpl(
         return Integer.toUnsignedLong(this.blockhash)
     }
 
-    override fun getBlockStateTag(): CompoundTagView? {
+    override fun getBlockStateTag(): CompoundTagView {
         return blockStateTag
     }
 

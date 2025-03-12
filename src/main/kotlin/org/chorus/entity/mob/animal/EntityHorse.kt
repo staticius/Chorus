@@ -348,7 +348,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun getOwnerName(): String? {
-        val ownerName = super<EntityOwnable>.getOwnerName()
+        val ownerName = super.getOwnerName()
         if (ownerName == null) {
             this.setDataProperty(EntityDataTypes.Companion.CONTAINER_TYPE, 0)
             this.setDataProperty(EntityDataTypes.Companion.CONTAINER_SIZE, 0)
@@ -473,12 +473,12 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
     protected fun randomizeAttributes(): Array<Attribute?> {
         val attributes = arrayOfNulls<Attribute>(3)
-        attributes[0] = Attribute.Companion.getAttribute(Attribute.Companion.MOVEMENT_SPEED)!!
+        attributes[0] = Attribute.Companion.getAttribute(Attribute.Companion.MOVEMENT_SPEED)
             .setValue(generateRandomSpeed())
         val maxHealth = generateRandomMaxHealth()
-        attributes[1] = Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)!!
+        attributes[1] = Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)
             .setMinValue(0f).setMaxValue(maxHealth).setDefaultValue(maxHealth).setValue(maxHealth)
-        attributes[2] = Attribute.Companion.getAttribute(Attribute.Companion.HORSE_JUMP_STRENGTH)!!
+        attributes[2] = Attribute.Companion.getAttribute(Attribute.Companion.HORSE_JUMP_STRENGTH)
             .setValue(generateRandomJumpStrength())
         val compoundTagListTag = ListTag<CompoundTag>()
         compoundTagListTag.add(Attribute.Companion.toNBT(attributes[0]!!)).add(
@@ -513,7 +513,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         for (i in addEntity.links.indices) {
             addEntity.links[i] = EntityLink(
                 this.getId(),
-                passengers[i]!!.id, if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER, false, false
+                passengers[i].id, if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER, false, false
             )
         }
 

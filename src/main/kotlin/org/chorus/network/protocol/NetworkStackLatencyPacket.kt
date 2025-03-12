@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class NetworkStackLatencyPacket : DataPacket() {
     var timestamp: Long = 0
     var unknownBool: Boolean = false

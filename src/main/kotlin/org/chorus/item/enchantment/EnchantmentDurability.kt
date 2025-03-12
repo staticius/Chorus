@@ -1,6 +1,6 @@
 package org.chorus.item.enchantment
 
-import org.chorus.item.*
+import org.chorus.item.Item
 import java.util.*
 
 

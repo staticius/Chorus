@@ -7,7 +7,7 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.animal.EntityRabbit
 import org.chorus.entity.mob.monster.EntitySlime
 import org.chorus.level.Sound
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import kotlin.math.abs
 import kotlin.math.sqrt
 

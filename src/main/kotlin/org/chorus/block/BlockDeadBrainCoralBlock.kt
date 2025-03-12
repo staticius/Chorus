@@ -10,6 +10,6 @@ class BlockDeadBrainCoralBlock : BlockCoralBlock {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DEAD_BRAIN_CORAL_BLOCK)
-            
+
     }
 }

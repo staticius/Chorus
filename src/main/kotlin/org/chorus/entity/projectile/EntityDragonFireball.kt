@@ -78,7 +78,7 @@ class EntityDragonFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile
                 .putFloat("RadiusPerTick", 0f)
         ) as EntityAreaEffectCloud?
 
-        val effects: List<Effect?>? = PotionType.Companion.get(PotionType.Companion.HARMING_STRONG.id).getEffects(false)
+        val effects: List<Effect?> = PotionType.Companion.get(PotionType.Companion.HARMING_STRONG.id).getEffects(false)
         for (effect: Effect? in effects!!) {
             if (effect != null && entity != null) {
                 entity.cloudEffects!!.add(effect.setVisible(false).setAmbient(false))

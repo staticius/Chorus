@@ -11,6 +11,6 @@ class BlockDeadHornCoralFan : BlockCoralFanDead {
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.DEAD_HORN_CORAL_FAN, CommonBlockProperties.CORAL_FAN_DIRECTION)
-            
+
     }
 }

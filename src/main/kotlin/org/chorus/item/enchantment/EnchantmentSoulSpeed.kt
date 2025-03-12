@@ -2,7 +2,7 @@ package org.chorus.item.enchantment
 
 
 class EnchantmentSoulSpeed :
-    Enchantment(Enchantment.Companion.ID_SOUL_SPEED, "soul_speed", Rarity.VERY_RARE, EnchantmentType.ARMOR_FEET) {
+    Enchantment(ID_SOUL_SPEED, "soul_speed", Rarity.VERY_RARE, EnchantmentType.ARMOR_FEET) {
     init {
         this.isObtainableFromEnchantingTable = false
     }

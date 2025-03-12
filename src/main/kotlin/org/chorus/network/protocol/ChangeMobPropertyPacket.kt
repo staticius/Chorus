@@ -10,9 +10,6 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class ChangeMobPropertyPacket : DataPacket() {
     var uniqueEntityId: Long = 0
     var property: String? = null

@@ -22,7 +22,7 @@ class ShortTag : NumberTag<Int> {
     }
 
     override val id: Byte
-        get() = Tag.Companion.TAG_SHORT
+        get() = TAG_SHORT
 
     override fun toString(): String {
         return "ShortTag (data: $data)"

@@ -6,7 +6,6 @@ import org.chorus.network.protocol.FilterTextPacket
 import org.chorus.network.protocol.ProtocolInfo
 
 
-
 class FilterTextProcessor : DataPacketProcessor<FilterTextPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: FilterTextPacket) {
         val player = playerHandle.player

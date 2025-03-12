@@ -1,7 +1,6 @@
 package org.chorus.lang
 
 
-
 /**
  * 文本容器
  * 通过[.text]存放文本内容

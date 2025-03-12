@@ -3,11 +3,6 @@ package org.chorus.form.element.custom
 import com.google.gson.JsonObject
 
 
-
-
-
-
-
 @Accessors(chain = true, fluent = true)
 
 class ElementLabel : ElementCustom {
@@ -15,7 +10,7 @@ class ElementLabel : ElementCustom {
 
     constructor() : this("")
 
-    override fun toJson(): JsonObject? {
+    override fun toJson(): JsonObject {
         `object`.addProperty("type", "label")
         `object`.addProperty("text", this.text)
 

@@ -171,7 +171,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
                 PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, 0, 1),
                 IBehaviorEvaluator { entity1: EntityMob? ->
                     for (other in entity.level!!.getCollidingEntities(
-                        entity.getBoundingBox()!!.grow(7.0, 2.0, 7.0)
+                        entity.getBoundingBox().grow(7.0, 2.0, 7.0)
                     )) {
                         if (other is EntityMonster) {
                             if (other.isUndead()) return@IBehaviorEvaluator true

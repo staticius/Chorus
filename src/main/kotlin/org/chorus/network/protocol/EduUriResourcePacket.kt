@@ -4,11 +4,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.EduSharedUriResource
 
 
-
-
-
-
-
 class EduUriResourcePacket : DataPacket() {
     var eduSharedUriResource: EduSharedUriResource? = null
 

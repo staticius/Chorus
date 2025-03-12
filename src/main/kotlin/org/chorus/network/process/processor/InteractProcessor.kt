@@ -17,7 +17,6 @@ import org.chorus.network.protocol.InteractPacket
 import org.chorus.network.protocol.ProtocolInfo
 
 
-
 class InteractProcessor : DataPacketProcessor<InteractPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: InteractPacket) {
         val player = playerHandle.player

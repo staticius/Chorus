@@ -21,9 +21,11 @@ class PlayerInteractEvent @JvmOverloads constructor(
     PlayerEvent(), Cancellable {
     var block: Block? = null
     val face: BlockFace?
+
     @JvmField
     val item: Item?
     var touchVector: Vector3? = null
+
     @JvmField
     val action: Action
 

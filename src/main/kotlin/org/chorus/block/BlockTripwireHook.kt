@@ -175,7 +175,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
             val wire = line[steps] ?: continue
             val vc = locator.position.getSide(facing!!, steps)
             wire.isAttached = isConnected
-            level.setBlock(vc!!, wire, true, true)
+            level.setBlock(vc, wire, true, true)
         }
     }
 
@@ -269,7 +269,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         return false
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -289,7 +289,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         const val MAX_TRIPWIRE_CIRCUIT_LENGTH: Int = 42
 
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.TRIPWIRE_HOOK,
+            BlockID.BlockID.TRIPWIRE_HOOK,
             CommonBlockProperties.DIRECTION, CommonBlockProperties.ATTACHED_BIT, CommonBlockProperties.POWERED_BIT
         )
 

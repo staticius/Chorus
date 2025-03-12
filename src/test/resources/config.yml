@@ -1,5 +1,5 @@
 # The position that players will always get teleported to after joining the server
-permaSpawnPos: [0, 100, 0]
+permaSpawnPos: [ 0, 100, 0 ]
 permaSpawnWorld: "world"
 
 opSlots:

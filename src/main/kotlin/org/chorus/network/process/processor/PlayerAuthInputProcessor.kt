@@ -188,7 +188,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
             yaw += 360f
         }
         val clientLoc = fromObject(
-            clientPosition!!,
+            clientPosition,
             player.level!!, yaw.toDouble(), pitch.toDouble(), headYaw.toDouble()
         )
         // Proper player.isPassenger() check may be needed

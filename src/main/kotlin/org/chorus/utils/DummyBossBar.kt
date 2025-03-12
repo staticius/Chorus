@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom
  */
 class DummyBossBar private constructor(builder: Builder) {
     val player: Player = builder.player
+
     @JvmField
     val bossBarId: Long = builder.bossBarId
 
@@ -119,7 +120,7 @@ class DummyBossBar private constructor(builder: Builder) {
         val pkAttributes = UpdateAttributesPacket()
         pkAttributes.entityId = bossBarId
         val attr = getAttribute(Attribute.MAX_HEALTH)
-        attr!!.setMaxValue(100f) // Max value - We need to change the max value first, or else the "setValue" will return a IllegalArgumentException
+        attr.setMaxValue(100f) // Max value - We need to change the max value first, or else the "setValue" will return a IllegalArgumentException
         attr.setValue(length) // Entity health
         pkAttributes.entries = arrayOf<Attribute?>(attr)
         player.dataPacket(pkAttributes)

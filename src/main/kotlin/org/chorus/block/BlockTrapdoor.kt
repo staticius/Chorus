@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import com.google.common.collect.Sets
 import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
@@ -20,7 +21,6 @@ import org.chorus.math.BlockFace.AxisDirection
 import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
-import com.google.common.collect.Sets
 
 /**
  * @author Pub4Game
@@ -197,11 +197,11 @@ open class BlockTrapdoor  //</editor-fold>
 
         val source = vector3.add(0.5, 0.5, 0.5)
         val vibrationEvent = if (open) VibrationEvent(
-            player ?: this,
-            source!!, VibrationType.BLOCK_OPEN
+            player,
+            source, VibrationType.BLOCK_OPEN
         ) else VibrationEvent(
-            player ?: this,
-            source!!, VibrationType.BLOCK_CLOSE
+            player,
+            source, VibrationType.BLOCK_CLOSE
         )
         level.vibrationManager.callVibrationEvent(vibrationEvent)
         return true
@@ -246,7 +246,7 @@ open class BlockTrapdoor  //</editor-fold>
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.TRAPDOOR,
+            BlockID.BlockID.TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT

@@ -1,5 +1,6 @@
 package org.chorus.entity.mob.animal
 
+import it.unimi.dsi.fastutil.Pair
 import org.chorus.Player
 import org.chorus.block.*
 import org.chorus.entity.*
@@ -30,7 +31,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
-import it.unimi.dsi.fastutil.Pair
 import java.util.List
 import java.util.Set
 import java.util.function.Function
@@ -258,7 +258,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
         )]
     }
 
-    override fun getDiffHandDamage(): FloatArray? {
+    override fun getDiffHandDamage(): FloatArray {
         return DIFF_DAMAGE
     }
 

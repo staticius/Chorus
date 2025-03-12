@@ -333,7 +333,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             blocks.add(block)
 
             if (maxLength != 0 && blocks.size() > maxLength) {
-                blocks.remove(0)
+                blocks.removeAt(0)
             }
 
             val id: String = block.getId()
@@ -359,7 +359,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     fun getTargetBlock(maxDistance: Int, transparent: Array<String?>?): Block? {
         try {
             val blocks: Array<Block> = this.getLineOfSight(maxDistance, 1, transparent)
-            val block: Block? = blocks.get(0)
+            val block: Block = blocks.get(0)
             if (block != null) {
                 if (transparent != null && transparent.size != 0) {
                     if (Arrays.binarySearch(transparent, block.getId()) < 0) {
@@ -391,7 +391,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getAirTicks(): Int {
-        return getDataProperty<Short>(EntityDataTypes.Companion.AIR_SUPPLY!!).toInt()
+        return getDataProperty<Short>(EntityDataTypes.Companion.AIR_SUPPLY).toInt()
     }
 
     fun setAirTicks(ticks: Int) {
@@ -410,7 +410,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         }
 
         val entityPos: Vector3 = damager.position
-        val direction: Vector3? = this.getDirectionVector()
+        val direction: Vector3 = this.getDirectionVector()
         val normalizedVector: Vector3 = position.subtract(entityPos).normalize()
         val blocked: Boolean = (normalizedVector.x * direction!!.x) + (normalizedVector.z * direction.z) < 0.0
         val knockBack: Boolean = damager !is EntityProjectile

@@ -1,5 +1,9 @@
 package org.chorus.inventory
 
+import com.google.common.collect.BiMap
+import com.google.common.collect.HashBiMap
+import it.unimi.dsi.fastutil.ints.IntArrayList
+import it.unimi.dsi.fastutil.ints.IntList
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.Entity.getId
@@ -18,10 +22,6 @@ import org.chorus.network.protocol.*
 import org.chorus.network.protocol.PlayerArmorDamagePacket.PlayerArmorDamageFlag
 import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.ints.IntList
 import org.jetbrains.annotations.Range
 import kotlin.math.min
 
@@ -49,10 +49,10 @@ class HumanInventory(human: IHuman?) //9+27+4
     override fun init() {
         val map = super.slotTypeMap()
         for (i in 0..8) {
-            map!![i] = ContainerSlotType.HOTBAR
+            map[i] = ContainerSlotType.HOTBAR
         }
         for (i in 9..35) {
-            map!![i] = ContainerSlotType.INVENTORY
+            map[i] = ContainerSlotType.INVENTORY
         }
         armorInventory = object : InventorySlice(this, ARMORS_INDEX, this.getSize()) {
             init {
@@ -233,7 +233,7 @@ class HumanInventory(human: IHuman?) //9+27+4
         return false
     }
 
-    override fun addItem(vararg slots: Item): Array<Item?> {
+    override fun addItem(vararg slots: Item): Array<Item> {
         val itemSlots: MutableList<Item> = ArrayList()
         for (slot in slots) {
             if (!slot.isNull) {
@@ -298,7 +298,7 @@ class HumanInventory(human: IHuman?) //9+27+4
             }
         }
 
-        return itemSlots.toArray(Item.EMPTY_ARRAY)
+        return itemSlots.toTypedArray()
     }
 
     val hotbarSize: Int
@@ -425,7 +425,7 @@ class HumanInventory(human: IHuman?) //9+27+4
                 slots.remove(index)
             }
 
-            this.onSlotChange(index, old!!, send)
+            this.onSlotChange(index, old, send)
         }
 
         return true

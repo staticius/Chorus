@@ -1,5 +1,6 @@
 package org.chorus.entity.ai.executor
 
+import com.google.common.base.Preconditions
 import org.chorus.Player
 import org.chorus.block.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
@@ -7,7 +8,6 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.animal.EntityHorse
 import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.utils.*
-import com.google.common.base.Preconditions
 
 /**
  * 代表玩家驯服马时，马的行为
@@ -76,7 +76,7 @@ class TameHorseExecutor @JvmOverloads constructor(
                 var blockId: String
                 var time = 0
                 while (time <= maxRetryTime && ((entity.level!!.getTickCachedBlock(
-                        target!!.add(
+                        target.add(
                             0.0,
                             -1.0,
                             0.0

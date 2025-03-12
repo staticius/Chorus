@@ -1,12 +1,12 @@
 package org.chorus.network.query.codec
 
-import org.chorus.network.query.enveloped.DirectAddressedQueryPacket
-import org.chorus.network.query.packet.HandshakePacket
-import org.chorus.network.query.packet.StatisticsPacket
 import io.netty.buffer.ByteBufAllocator
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.socket.DatagramPacket
 import io.netty.handler.codec.MessageToMessageCodec
+import org.chorus.network.query.enveloped.DirectAddressedQueryPacket
+import org.chorus.network.query.packet.HandshakePacket
+import org.chorus.network.query.packet.StatisticsPacket
 
 class QueryPacketCodec : MessageToMessageCodec<DatagramPacket, DirectAddressedQueryPacket>() {
     @Throws(Exception::class)

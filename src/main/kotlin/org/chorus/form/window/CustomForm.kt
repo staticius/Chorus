@@ -1,20 +1,18 @@
 package org.chorus.form.window
 
+
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.Player
 import org.chorus.form.element.custom.ElementCustom
 import org.chorus.form.response.CustomResponse
 import org.chorus.form.response.ElementResponse
 import org.chorus.utils.JSONUtils
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
-
 import java.lang.reflect.Type
 import java.util.function.BiConsumer
 import java.util.function.Consumer
-
 
 
 @Accessors(chain = true, fluent = true)
@@ -27,23 +25,23 @@ class CustomForm(title: String) : Form<CustomResponse?>(title) {
         return this
     }
 
-    override fun onSubmit(submitted: BiConsumer<Player?, CustomResponse?>?): CustomForm? {
+    override fun onSubmit(submitted: BiConsumer<Player?, CustomResponse?>?): CustomForm {
         return super.onSubmit(submitted) as CustomForm
     }
 
-    override fun onClose(callback: Consumer<Player?>?): CustomForm? {
+    override fun onClose(callback: Consumer<Player?>?): CustomForm {
         return super.onClose(callback) as CustomForm
     }
 
-    override fun send(player: Player): CustomForm? {
+    override fun send(player: Player): CustomForm {
         return super.send(player) as CustomForm
     }
 
-    override fun send(player: Player, id: Int): CustomForm? {
+    override fun send(player: Player, id: Int): CustomForm {
         return super.send(player, id) as CustomForm
     }
 
-    override fun sendUpdate(player: Player): CustomForm? {
+    override fun sendUpdate(player: Player): CustomForm {
         return super.sendUpdate(player) as CustomForm
     }
 
@@ -113,7 +111,7 @@ class CustomForm(title: String) : Form<CustomResponse?>(title) {
         return response
     }
 
-    override fun <M> putMeta(key: String, `object`: M): CustomForm? {
+    override fun <M> putMeta(key: String, `object`: M): CustomForm {
         return super.putMeta(key, `object`) as CustomForm
     }
 

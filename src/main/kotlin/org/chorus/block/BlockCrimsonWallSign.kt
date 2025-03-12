@@ -13,12 +13,13 @@ class BlockCrimsonWallSign @JvmOverloads constructor(blockState: BlockState? = C
         return CRIMSON_STANDING_SIGN
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemCrimsonSign()
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.CRIMSON_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
 
     }
 }
