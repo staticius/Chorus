@@ -142,7 +142,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
         beehive?.angerBees(player)
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         val item: Item = ItemBlock(this)
         val beehive = blockEntity
         if (beehive != null) {
