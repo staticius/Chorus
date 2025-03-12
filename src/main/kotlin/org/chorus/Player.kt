@@ -116,7 +116,7 @@ class Player @UsedByReflection constructor(
     val session: BedrockSession,
     val playerInfo: PlayerInfo
 ) :
-    EntityHuman(null, CompoundTag()), CommandSender, ChunkLoader, IPlayer, IScoreboardViewer {
+    EntityHuman(null, CompoundTag()), CommandSender, ChunkLoader, IPlayer, IScoreboardViewer, Loggable {
     var abilities: EntityAbilities = EntityAbilities()
     var timer: EntityTimer = EntityTimer()
     var agentId: Long = 0L
@@ -609,7 +609,7 @@ class Player @UsedByReflection constructor(
         )
 
         val block = target.getSide(face)
-        if (block!!.id == Block.FIRE || block.id == BlockID.SOUL_FIRE) {
+        if (block!!.id == BlockID.FIRE || block.id == BlockID.SOUL_FIRE) {
             level!!.setBlock(block.position, Block.get(BlockID.AIR), true)
             level!!.addLevelSoundEvent(block.position, LevelSoundEventPacket.SOUND_EXTINGUISH_FIRE)
             return
@@ -697,10 +697,10 @@ class Player @UsedByReflection constructor(
                 if (clone.id == handItem.id || handItem.isNull) {
                     inventory!!.setItemInHand(handItem, false)
                 } else {
-                    Player.log.debug("Tried to set item " + handItem.id + " but " + this.getName() + " had item " + clone.id + " in their hand slot")
+                    log.debug("Tried to set item " + handItem.id + " but " + this.getName() + " had item " + clone.id + " in their hand slot")
                 }
                 inventory!!.sendHeldItem(getViewers().values)
-            } else if (handItem == null) level.sendBlocks(
+            } else if (handItem == null) level!!.sendBlocks(
                 arrayOf(this), arrayOf(
                     level!!.getBlock(blockPos.asVector3())
                 ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0
@@ -772,7 +772,7 @@ class Player @UsedByReflection constructor(
             )
         } else {
             this.spawnPoint = level!!.safeSpawn
-            Player.log.info(
+            log.info(
                 "Player {} cannot find the saved spawnpoint, reset the spawnpoint to {} {} {} / {}",
                 this.getName(),
                 spawnPoint!!.position.x,
@@ -866,7 +866,7 @@ class Player @UsedByReflection constructor(
         this.sendFogStack()
         this.sendCameraPresets()
 
-        Player.log.debug("Send Player Spawn Status Packet to {},wait init packet", getName())
+        log.debug("Send Player Spawn Status Packet to {},wait init packet", getName())
         this.sendPlayStatus(PlayStatusPacket.PLAYER_SPAWN)
 
         //客户端初始化完毕再传送玩家，避免下落 (x)
@@ -1112,7 +1112,7 @@ class Player @UsedByReflection constructor(
                 val event = PlayerInvalidMoveEvent(this, true)
                 Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled && (event.isRevert.also { invalidMotion = it })) {
-                    Player.log.warn(Server.instance.getLanguage().tr("nukkit.player.invalidMove", this.getName()))
+                    log.warn(Server.instance.getLanguage().tr("nukkit.player.invalidMove", this.getName()))
                 }
             }
             if (invalidMotion) {
@@ -1521,7 +1521,7 @@ class Player @UsedByReflection constructor(
             this.isCheckingMovement = false
         }
 
-        Player.log.info(
+        log.info(
             Server.instance.baseLang.tr(
                 "nukkit.player.logIn",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
@@ -3612,7 +3612,7 @@ class Player @UsedByReflection constructor(
             return
         }
         //output logout infomation
-        Player.log.info(
+        log.info(
             Server.instance.getLanguage().tr(
                 "nukkit.player.logOut",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
@@ -3708,8 +3708,8 @@ class Player @UsedByReflection constructor(
         }
 
         //close player network session
-        Player.log.debug("Closing player network session")
-        Player.log.debug(reason)
+        log.debug("Closing player network session")
+        log.debug(reason)
         checkNotNull(this.session)
         session.close(null)
     }
@@ -4334,7 +4334,7 @@ class Player @UsedByReflection constructor(
         }
 
         if (item.isNull) {
-            Player.log.debug("{} attempted to drop a null item ({})", this.getName(), item)
+            log.debug("{} attempted to drop a null item ({})", this.getName(), item)
             return true
         }
 
@@ -4361,7 +4361,7 @@ class Player @UsedByReflection constructor(
         }
 
         if (item.isNull) {
-            Player.log.debug("{} attempted to drop a null item ({})", this.getName(), item)
+            log.debug("{} attempted to drop a null item ({})", this.getName(), item)
             return null
         }
 

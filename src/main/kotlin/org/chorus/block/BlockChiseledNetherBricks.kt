@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.ItemTool
 
 class BlockChiseledNetherBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    Block(blockstate) {
+    Block(blockstate,) {
     override val name: String
         get() = "Chiseled Nether Bricks"
 

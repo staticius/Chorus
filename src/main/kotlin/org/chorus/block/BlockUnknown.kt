@@ -4,7 +4,7 @@ import org.chorus.item.*
 
 
 class BlockUnknown @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
-    Block(null) {
+    Block(null,) {
     init {
         this.blockState = blockstate
     }
