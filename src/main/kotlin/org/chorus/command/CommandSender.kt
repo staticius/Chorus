@@ -136,11 +136,11 @@ interface CommandSender : Permissible {
         /**
          * @return 返回发送者的Position<br></br>return the sender's position.
          */
-        get() = Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel)
+        get() = Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!)
 
     val transform: Transform
         /**
          * @return 返回发送者克隆过的Location<br></br>return the sender's location.
          */
-        get() = Transform(0.0, 0.0, 0.0, Server.instance.defaultLevel)
+        get() = Transform(0.0, 0.0, 0.0, Server.instance.defaultLevel!!)
 }

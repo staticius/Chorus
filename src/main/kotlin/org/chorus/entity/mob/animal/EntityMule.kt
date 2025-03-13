@@ -32,7 +32,7 @@ class EntityMule(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, nbt), En
         return EntityID.Companion.MULE
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.LEATHER))
     }
 

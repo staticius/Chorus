@@ -2323,7 +2323,7 @@ class Level(
             }
         }
 
-        if (item.isNull) {
+        if (item.isNothing) {
             return
         }
         val itemEntity: EntityItem? = createEntity(
@@ -2347,7 +2347,7 @@ class Level(
 
     fun dropAndGetItem(source: Vector3, item: Item, motion: Vector3?, dropAround: Boolean, delay: Int): EntityItem? {
         var motion = motion
-        if (item.isNull) {
+        if (item.isNothing) {
             return null
         }
         if (motion == null) {
@@ -2821,7 +2821,7 @@ class Level(
                             continue
                         }
                         val entry = get(v.data)
-                        if (!entry.isNull && entry.getBlock().id == target.id) {
+                        if (!entry.isNothing && entry.getBlock().id == target.id) {
                             canPlace = true
                             break
                         }

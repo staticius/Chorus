@@ -99,7 +99,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         if (namedTag!!.containsList("Inventory")) {
             inventoryTag = namedTag!!.getList("Inventory", CompoundTag::class.java)
             val item0 = NBTIO.getItemHelper(inventoryTag[0])
-            if (item0.isNull) {
+            if (item0.isNothing) {
                 this.setDataFlag(EntityFlag.SADDLED, false)
                 this.setDataFlag(EntityFlag.WASD_CONTROLLED, false)
                 this.setDataFlag(EntityFlag.CAN_POWER_JUMP, false)
@@ -170,7 +170,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         }
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.LEATHER), getHorseArmor(), getSaddle())
     }
 
@@ -231,7 +231,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun asyncPrepare(currentTick: Int) {
-        if (this.getRider() == null || this.owner == null || getSaddle().isNull) {
+        if (this.getRider() == null || this.owner == null || getSaddle().isNothing) {
             isActive = level!!.isHighLightChunk(chunkX, chunkZ)
             if (!this.isImmobile) {
                 val behaviorGroup = getBehaviorGroup() ?: return
@@ -330,7 +330,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     fun onInput(clientLoc: Transform) {
-        if (this.getRider() == null || this.owner == null || getSaddle().isNull) return
+        if (this.getRider() == null || this.owner == null || getSaddle().isNothing) return
         //每次输入乘骑玩家位置之前都要确保motion为0,避免onGround不更新
         motion.x = 0.0
         motion.y = 0.0

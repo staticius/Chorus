@@ -200,7 +200,7 @@ class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), 
         this.sheared = false
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         val woolItem = if (sheared) Item.AIR else this.getWoolItem()
         return arrayOf(Item.get((if (this.isOnFire) Item.COOKED_MUTTON else Item.MUTTON)), woolItem)
     }

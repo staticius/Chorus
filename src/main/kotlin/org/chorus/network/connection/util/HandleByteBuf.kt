@@ -1063,7 +1063,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
 
     @JvmOverloads
     fun writeSlot(item: Item?, instanceItem: Boolean = false) {
-        if (item == null || item.isNull) {
+        if (item == null || item.isNothing) {
             writeByte(0.toByte().toInt())
             return
         }
@@ -1168,7 +1168,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         when (type) {
             ItemDescriptorType.DEFAULT -> {
                 val ingredient = itemDescriptor.toItem()
-                if (ingredient == null || ingredient.isNull) {
+                if (ingredient == null || ingredient.isNothing) {
                     this.writeShortLE(0)
                     this.writeVarInt(0) // item == null ? 0 : item.getCount()
                     return

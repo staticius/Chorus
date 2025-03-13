@@ -78,7 +78,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
                     }) > 0) {
                     item.setCount(item.getCount() - diff)
                 }
-            } else if (slot.isNull) {
+            } else if (slot.isNothing) {
                 item.setCount(
                     (item.getCount() - min(
                         slot.maxStackSize.toDouble(),
@@ -124,7 +124,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
         rawInv.sendContents(*players)
     }
 
-    override fun sendContents(players: Collection<Player?>) {
+    override fun sendContents(players: Collection<Player>) {
         rawInv.sendContents(players)
     }
 
@@ -136,7 +136,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
         rawInv.sendSlot(index + startSlot, *players)
     }
 
-    override fun sendSlot(index: Int, players: Collection<Player?>) {
+    override fun sendSlot(index: Int, players: Collection<Player>) {
         rawInv.sendSlot(index + startSlot, players)
     }
 
@@ -193,7 +193,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
 
     override fun firstEmpty(item: Item?): Int {
         for (i in startSlot..<endSlot) {
-            if (rawInv.getItem(i).isNull) {
+            if (rawInv.getItem(i).isNothing) {
                 return i
             }
         }
@@ -231,7 +231,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
         get() {
             for (i in startSlot..<endSlot) {
                 val item = rawInv.getItem(i)
-                if (item == null || item.isNull || item.getCount() < item.maxStackSize || item.getCount() < this.maxStackSize) {
+                if (item == null || item.isNothing || item.getCount() < item.maxStackSize || item.getCount() < this.maxStackSize) {
                     return false
                 }
             }
@@ -246,7 +246,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
             }
 
             for (item in contents.values) {
-                if (item != null && !item.isNull) {
+                if (item != null && !item.isNothing) {
                     return false
                 }
             }
@@ -254,7 +254,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
             return true
         }
 
-    override val viewers: Set<Player?>
+    override val viewers: MutableSet<Player>
         get() = rawInv.viewers
 
     override val type: InventoryType

@@ -29,7 +29,7 @@ class EntityZombieHorse(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, n
         super.initEntity()
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.ROTTEN_FLESH, 1, 1))
     }
 

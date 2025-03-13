@@ -46,7 +46,7 @@ class GiveCommand(name: String) : VanillaCommand(name, "commands.give.descriptio
         }
 
         val item = list.getResult<Item>(1)
-        if (item!!.isNull) {
+        if (item!!.isNothing) {
             log.addError("commands.give.item.notFound", item.displayName).output()
             return 0
         }
@@ -88,7 +88,7 @@ class GiveCommand(name: String) : VanillaCommand(name, "commands.give.descriptio
                         returned.setCount(returned.getCount() - toDrop)
                         drops.add(drop)
                     }
-                    if (!returned.isNull) {
+                    if (!returned.isNothing) {
                         drops.add(returned)
                     }
                 }

@@ -176,7 +176,7 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         return 0.7
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         val drops = ThreadLocalRandom.current().nextFloat(100f)
         if (drops < 0.83) {
             return when (Utils.rand(0, 2)) {

@@ -55,7 +55,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override fun sendContents(vararg players: Player) {
     }
 
-    override fun sendContents(players: Collection<Player?>) {
+    override fun sendContents(players: Collection<Player>) {
     }
 
     override fun sendSlot(index: Int, player: Player) {
@@ -64,7 +64,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override fun sendSlot(index: Int, vararg players: Player) {
     }
 
-    override fun sendSlot(index: Int, players: Collection<Player?>) {
+    override fun sendSlot(index: Int, players: Collection<Player>) {
     }
 
     override fun getFreeSpace(item: Item): Int {

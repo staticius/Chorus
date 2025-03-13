@@ -31,8 +31,7 @@ interface EntityDataTypes {
         val OWNER_EID: EntityDataType<Long?> = EntityDataType(0L, "OWNER_EID", 5)
         val TARGET_EID: EntityDataType<Long?> = EntityDataType(0L, "TARGET_EID", 6)
 
-        @JvmField
-        val AIR_SUPPLY: EntityDataType<Short?> = EntityDataType(0.toShort(), "AIR_SUPPLY", 7)
+        val AIR_SUPPLY: EntityDataType<Short> = EntityDataType(0.toShort(), "AIR_SUPPLY", 7)
         val EFFECT_COLOR: EntityDataType<Int?> = EntityDataType(0, "EFFECT_COLOR", 8)
         val EFFECT_AMBIENCE: EntityDataType<Byte> = EntityDataType(0.toByte(), "EFFECT_AMBIENCE", 9)
         val JUMP_DURATION: EntityDataType<Byte> = EntityDataType(0.toByte(), "JUMP_DURATION", 10)

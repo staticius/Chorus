@@ -44,7 +44,7 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
         fy: Float,
         fz: Float
     ): Boolean {
-        if (player == null || item.isNull || item.id != ItemID.COMPASS && item.id != ItemID.LODESTONE_COMPASS) {
+        if (player == null || item.isNothing || item.id != ItemID.COMPASS && item.id != ItemID.LODESTONE_COMPASS) {
             return false
         }
 

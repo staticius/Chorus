@@ -60,7 +60,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
 
         val d = NBTIO.putItemHelper(item, index)
 
-        if (item.isNull || item.getCount() <= 0) {
+        if (item.isNothing || item.getCount() <= 0) {
             if (i >= 0) {
                 namedTag.getList("Items").all.removeAt(i)
             }

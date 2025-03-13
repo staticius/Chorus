@@ -71,7 +71,7 @@ abstract class ContainerInventory(holder: InventoryHolder, type: InventoryType, 
                 for (slot in 0..<inv.size) {
                     val item = inv.getItem(slot)
 
-                    if (!item.isNull) {
+                    if (!item.isNothing) {
                         averageCount += item.getCount().toFloat() / min(
                             inv.maxStackSize.toDouble(),
                             item.maxStackSize.toDouble()

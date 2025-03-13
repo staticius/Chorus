@@ -84,7 +84,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         val hasUpdate: Boolean = super.entityBaseTick(tickDiff)
         //handle human entity freeze
         val collidedWithPowderSnow: Boolean = getTickCachedCollisionBlocks()!!.stream().anyMatch(
-            Predicate { block: Block -> block.getId() === Block.POWDER_SNOW })
+            Predicate { block: Block -> block.getId() === BlockID.POWDER_SNOW })
         if (this.getFreezingTicks() < 140 && collidedWithPowderSnow) {
             this.addFreezingTicks(1)
             val event: EntityFreezeEvent = EntityFreezeEvent(this)

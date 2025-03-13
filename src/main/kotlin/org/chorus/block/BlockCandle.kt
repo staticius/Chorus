@@ -61,7 +61,7 @@ open class BlockCandle @JvmOverloads constructor(blockstate: BlockState? = Compa
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.id != ItemID.FLINT_AND_STEEL && !item.isNull) {
+        if (item.id != ItemID.FLINT_AND_STEEL && !item.isNothing) {
             return false
         }
 

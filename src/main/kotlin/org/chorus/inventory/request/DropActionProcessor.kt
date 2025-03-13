@@ -37,7 +37,7 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
             DropActionProcessor.log.warn("mismatch stack network id!")
             return context.error()
         }
-        if (item.isNull) {
+        if (item.isNothing) {
             DropActionProcessor.log.warn("cannot throw an air!")
             return context.error()
         }

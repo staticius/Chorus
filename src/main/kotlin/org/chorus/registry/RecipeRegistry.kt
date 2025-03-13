@@ -22,7 +22,6 @@ import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.recipe.descriptor.ItemDescriptor
 import org.chorus.recipe.descriptor.ItemDescriptorType
 import org.chorus.recipe.descriptor.ItemTagDescriptor
-import org.chorus.registry.RegisterException
 import org.chorus.utils.*
 import java.io.IOException
 import java.util.*
@@ -486,7 +485,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                     val reagentItem = get(reagentId!!, reagentMeta)
                     val outputItem = get(outputId!!, outputMeta)
 
-                    if (inputItem.isNull || reagentItem.isNull || outputItem.isNull) {
+                    if (inputItem.isNothing || reagentItem.isNothing || outputItem.isNothing) {
                         continue
                     }
                     register(

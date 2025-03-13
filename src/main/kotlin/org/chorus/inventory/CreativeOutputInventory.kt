@@ -70,7 +70,7 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
     override fun sendContents(vararg players: Player) {
     }
 
-    override fun sendContents(players: Collection<Player?>) {
+    override fun sendContents(players: Collection<Player>) {
     }
 
     override fun sendSlot(index: Int, player: Player) {
@@ -79,7 +79,7 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
     override fun sendSlot(index: Int, vararg players: Player) {
     }
 
-    override fun sendSlot(index: Int, players: Collection<Player?>) {
+    override fun sendSlot(index: Int, players: Collection<Player>) {
     }
 
     override fun getFreeSpace(item: Item): Int {
@@ -123,7 +123,7 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
     override val isEmpty: Boolean
         get() = false
 
-    override val viewers: Set<Player?>
+    override val viewers: MutableSet<Player>
         get() = null
 
     override val type: InventoryType

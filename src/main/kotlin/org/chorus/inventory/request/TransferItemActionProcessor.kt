@@ -24,7 +24,7 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
         val count = action.count
 
         var sourItem = source.getItem(sourceSlot)
-        if (sourItem.isNull) {
+        if (sourItem.isNothing) {
             TransferItemActionProcessor.log.warn("transfer an air item is not allowed")
             return context.error()
         }
@@ -70,7 +70,7 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
         }
 
         val destItem = destination.getItem(destinationSlot)
-        if (!destItem.isNull && !destItem.equals(sourItem, true, true)) {
+        if (!destItem.isNothing && !destItem.equals(sourItem, true, true)) {
             TransferItemActionProcessor.log.warn("transfer an item to a slot that has a different item is not allowed")
             return context.error()
         }
@@ -92,7 +92,7 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
         if (sourItem.getCount() == count) {
             source.clear(sourceSlot, sendSource)
             resultSourItem = source.getItem(sourceSlot)
-            if (!destItem.isNull) {
+            if (!destItem.isNothing) {
                 //目标物品不为空，直接添加数量，目标物品网络堆栈id不变
                 resultDestItem = destItem
                 resultDestItem.setCount(destItem.getCount() + count)
@@ -110,7 +110,7 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
             resultSourItem = sourItem
             resultSourItem.setCount(resultSourItem.getCount() - count)
             source.setItem(sourceSlot, resultSourItem, sendSource) //减少源库存数量
-            if (!destItem.isNull) { //目标物品不为空
+            if (!destItem.isNothing) { //目标物品不为空
                 resultDestItem = destItem
                 resultDestItem.setCount(destItem.getCount() + count) //增加目的库存数量
                 destination.setItem(destinationSlot, resultDestItem, sendDest)

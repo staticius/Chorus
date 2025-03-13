@@ -89,7 +89,7 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState? = C
             return false
         }
         val itemInHand = player.getInventory().itemInHand
-        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
             return false
         }
 

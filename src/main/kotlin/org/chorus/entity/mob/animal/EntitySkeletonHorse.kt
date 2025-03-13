@@ -29,7 +29,7 @@ class EntitySkeletonHorse(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk,
         super.initEntity()
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.BONE))
     }
 

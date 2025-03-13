@@ -189,7 +189,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
         val d = NBTIO.putItemHelper(item, index)
 
-        if (item.isNull) {
+        if (item.isNothing) {
             if (i >= 0) {
                 namedTag.getList("Items").all.removeAt(i)
             }

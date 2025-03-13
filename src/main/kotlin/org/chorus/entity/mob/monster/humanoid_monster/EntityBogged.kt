@@ -41,7 +41,7 @@ class EntityBogged(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nb
         return "Bogged"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.BONE), Item.get(Item.ARROW)) //TODO: match vanilla drop
     }
 

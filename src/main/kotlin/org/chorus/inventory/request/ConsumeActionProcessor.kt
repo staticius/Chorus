@@ -36,7 +36,7 @@ class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeAction> {
             return context.error()
         }
 
-        if (item.isNull) {
+        if (item.isNothing) {
             ConsumeActionProcessor.log.warn("cannot consume an air!")
 
             return context.error()

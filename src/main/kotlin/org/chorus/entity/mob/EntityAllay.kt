@@ -181,7 +181,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         return true
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return getInventory().contents.values.toArray(Item.EMPTY_ARRAY)
     }
 

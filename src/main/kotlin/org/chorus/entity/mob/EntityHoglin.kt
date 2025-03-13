@@ -163,7 +163,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
         return "Hoglin"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get((if (this.isOnFire()) Item.COOKED_PORKCHOP else Item.PORKCHOP), 0, Utils.rand(1, 3)))
     }
 

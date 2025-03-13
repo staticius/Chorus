@@ -177,7 +177,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.isNull) {
+        if (item.isNothing) {
             return false
         }
 

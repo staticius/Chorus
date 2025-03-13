@@ -56,7 +56,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blo
             val items = ListTag<CompoundTag>()
 
             for (it in 0..<inv.size) {
-                if (!inv.getItem(it).isNull) {
+                if (!inv.getItem(it).isNothing) {
                     val d = putItemHelper(inv.getItem(it), it)
                     items.add(d)
                 }

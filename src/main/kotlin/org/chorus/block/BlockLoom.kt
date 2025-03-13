@@ -49,7 +49,7 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     ): Boolean {
         if (player != null) {
             val itemInHand = player.getInventory().itemInHand
-            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
                 return false
             }
             player.addWindow(inventory!!)

@@ -17,7 +17,7 @@ interface IPlayer : ServerOperator, Metadatable {
 
     val name: String?
 
-    val uuid: UUID?
+    var uuid: UUID
 
     var isBanned: Boolean
 

@@ -77,7 +77,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
         }
 
     fun setFlower(item: Item?): Boolean {
-        if (item == null || item.isNull) {
+        if (item == null || item.isNothing) {
             removeFlower()
             return true
         }
@@ -126,7 +126,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
                 return false
             }
 
-            if (!item.isNull) return false
+            if (!item.isNothing) return false
 
             if (hasFlower()) {
                 val flower = flower
@@ -136,7 +136,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
             }
         }
 
-        if (item.isNull) {
+        if (item.isNothing) {
             return false
         }
 

@@ -302,7 +302,7 @@ class ShapedRecipe @JvmOverloads constructor(
 
         private fun notAllEmptyRow(inputs: Array<Item>): Boolean {
             for (item in inputs) {
-                if (!item.isNull) {
+                if (!item.isNothing) {
                     return true
                 }
             }
@@ -311,7 +311,7 @@ class ShapedRecipe @JvmOverloads constructor(
 
         private fun notAllEmptyColumn(inputs: Array<Array<Item?>>, column: Int): Boolean {
             for (row in inputs) {
-                if (!row[column]!!.isNull) {
+                if (!row[column]!!.isNothing) {
                     return true
                 }
             }

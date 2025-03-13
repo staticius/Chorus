@@ -121,7 +121,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
             }
             return true
         }
-        if (item.isNull) {
+        if (item.isNothing) {
             if (this.growth == 25) {
                 val block = BlockCaveVines()
                 block.growth = 0

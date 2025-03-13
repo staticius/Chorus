@@ -78,7 +78,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 return context.error()
             }
             val first = inventory.getItem(0)
-            if (first.isNull) {
+            if (first.isNothing) {
                 CraftRecipeActionProcessor.log.error("Can't find enchant input!")
                 return context.error()
             }
@@ -118,7 +118,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 reputation = villager.getReputation(player)
             }
             output.setCount(output.getCount() * action.numberOfRequestedCrafts)
-            if (first!!.isNull && second!!.isNull) {
+            if (first!!.isNothing && second!!.isNothing) {
                 CraftRecipeActionProcessor.log.error("Can't find trade input!")
                 return context.error()
             }
@@ -131,7 +131,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 (reputation * (if (tradeRecipe.containsFloat("priceMultiplierB")) tradeRecipe.getFloat("priceMultiplierB") else 0f)).toInt()
 
             if (ca && cb) {
-                if ((first.isNull || second!!.isNull)) {
+                if ((first.isNothing || second!!.isNothing)) {
                     CraftRecipeActionProcessor.log.error("Can't find trade input!")
                     return context.error()
                 } else {
@@ -140,7 +140,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                     player.creativeOutputInventory.setItem(output)
                 }
             } else if (ca) {
-                if (first.isNull) {
+                if (first.isNothing) {
                     CraftRecipeActionProcessor.log.error("Can't find trade input!")
                     return context.error()
                 } else {
@@ -200,7 +200,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             for (slot in itemStackArray.indices) {
                 val ingredient = itemStackArray[slot]
                 // Skip empty slot because we have checked item type above
-                if (ingredient.isNull) continue
+                if (ingredient.isNothing) continue
                 if (ingredient.getCount() < numberOfRequestedCrafts) {
                     CraftRecipeActionProcessor.log.warn(
                         "Not enough ingredients in slot {}! Expected: {}, Actual: {}",
@@ -282,12 +282,12 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
         val ingredient: Item = smithingInventory.getIngredient()
         val template: Item = smithingInventory.getTemplate()
 
-        if (!ingredient.isNull && !template.isNull) {
+        if (!ingredient.isNothing && !template.isNothing) {
             val find1 = TrimData.trimPatterns.stream()
                 .filter { trimPattern: TrimPattern -> template.id == trimPattern.itemName }.findFirst()
             val find2 = TrimData.trimMaterials.stream()
                 .filter { trimMaterial: TrimMaterial -> ingredient.id == trimMaterial.itemName }.findFirst()
-            if (equipment.isNull || find1.isEmpty || find2.isEmpty) {
+            if (equipment.isNothing || find1.isEmpty || find2.isEmpty) {
                 return context.error()
             }
             val trimPattern = find1.get()

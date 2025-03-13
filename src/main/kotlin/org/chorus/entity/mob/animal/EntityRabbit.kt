@@ -104,7 +104,7 @@ class EntityRabbit(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt),
         return "Rabbit"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(
             Item.get((if (this.isOnFire) Item.COOKED_RABBIT else Item.RABBIT)), Item.get(Item.RABBIT_HIDE), Item.get(
                 Item.RABBIT_FOOT

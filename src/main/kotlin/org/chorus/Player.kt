@@ -694,7 +694,7 @@ class Player @UsedByReflection constructor(
                     return
                 }
 
-                if (clone.id == handItem.id || handItem.isNull) {
+                if (clone.id == handItem.id || handItem.isNothing) {
                     inventory!!.setItemInHand(handItem, false)
                 } else {
                     log.debug("Tried to set item " + handItem.id + " but " + this.getName() + " had item " + clone.id + " in their hand slot")
@@ -2159,7 +2159,7 @@ class Player @UsedByReflection constructor(
         }
     }
 
-    override fun setSkin(skin: Skin?) {
+    override fun setSkin(skin: Skin) {
         super.setSkin(skin)
         if (this.spawned) {
 //            this.Server.instance.updatePlayerListData(this.getUniqueId(), this.getId(), this.getDisplayName(), skin, this.getLoginChainData().getXUID());
@@ -2675,7 +2675,7 @@ class Player @UsedByReflection constructor(
          */
         get() = this.gamemode == ADVENTURE
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         if (!this.isCreative && !this.isSpectator) {
             return super.getDrops()
         }
@@ -4333,7 +4333,7 @@ class Player @UsedByReflection constructor(
             return false
         }
 
-        if (item.isNull) {
+        if (item.isNothing) {
             log.debug("{} attempted to drop a null item ({})", this.getName(), item)
             return true
         }
@@ -4360,7 +4360,7 @@ class Player @UsedByReflection constructor(
             return null
         }
 
-        if (item.isNull) {
+        if (item.isNothing) {
             log.debug("{} attempted to drop a null item ({})", this.getName(), item)
             return null
         }
@@ -5143,7 +5143,7 @@ class Player @UsedByReflection constructor(
                 this.dataPacket(pk)
 
                 if (!entity.isCreative()) {
-                    if (inventory!!.getItem(entity.getFavoredSlot()).isNull) {
+                    if (inventory!!.getItem(entity.getFavoredSlot()).isNothing) {
                         inventory.setItem(entity.getFavoredSlot(), item.clone())
                     } else {
                         inventory.addItem(item.clone())

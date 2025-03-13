@@ -132,7 +132,7 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
     }
 
     //掉落剑的概率为8.5% 掉落头的概率为2.5%
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         val drops: MutableList<Item> = ArrayList()
         drops.add(Item.get(Item.BONE, 0, Utils.rand(0, 2)))
         if (Utils.rand(0, 2) == 0) {

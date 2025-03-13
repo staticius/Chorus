@@ -11,9 +11,6 @@ import java.awt.image.BufferedImage
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-
-(exclude = ["geometryData", "animationData"])
-(exclude = ["trusted"])
 class Skin {
     private val animations: MutableList<SkinAnimation?> = ArrayList()
     private val personaPieces: MutableList<PersonaPiece?> = ArrayList()
@@ -43,8 +40,7 @@ class Skin {
     }
 
     private fun isValidSkin(): Boolean {
-        return skinId != null && !skinId!!.trim { it <= ' ' }
-            .isEmpty() && skinId!!.length < 100 && skinData != null && skinData!!.width >= 32 && skinData!!.height >= 32 && skinData!!.data.size >= SINGLE_SKIN_SIZE &&
+        return skinId != null && skinId!!.trim { it <= ' ' }.isNotEmpty() && skinId!!.length < 100 && skinData != null && skinData!!.width >= 32 && skinData!!.height >= 32 && skinData!!.data.size >= SINGLE_SKIN_SIZE &&
                 (playFabId == null || playFabId!!.length < 100) &&
                 (capeId == null || capeId!!.length < 100) &&
                 (skinColor == null || skinColor!!.length < 100) &&
@@ -59,9 +55,9 @@ class Skin {
             return false
         }
         try {
-            val `object`: JSONObject = JSONValue.parse(skinResourcePatch) as JSONObject
-            val geometry: JSONObject = `object`.get("geometry") as JSONObject
-            return geometry.containsKey("default") && geometry.get("default") is String
+            val `object`: JSONObject = JSONValue.parseWithException(skinResourcePatch) as JSONObject
+            val geometry: JSONObject = `object`["geometry"] as JSONObject
+            return geometry.containsKey("default") && geometry["default"] is String
         } catch (e: ClassCastException) {
             return false
         } catch (e: NullPointerException) {
@@ -73,7 +69,7 @@ class Skin {
         if (skinData == null) {
             return SerializedImage.EMPTY
         }
-        return skinData
+        return skinData!!
     }
 
     fun setSkinData(skinData: ByteArray?) {

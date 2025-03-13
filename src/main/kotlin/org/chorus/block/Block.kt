@@ -1076,7 +1076,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
 
             if (player.isAdventure) {
                 val itemInHand = player.getInventory().itemInHand
-                if (itemInHand.isNull) return false
+                if (itemInHand.isNothing) return false
 
                 val tag = itemInHand.getNamedTagEntry("CanDestroy")
                 var canBreak = false
@@ -1086,7 +1086,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
                             continue
                         }
                         val entry = Item.get(v.data!!)
-                        if (!entry.isNull &&
+                        if (!entry.isNothing &&
                             entry.getBlock().id == this.id
                         ) {
                             canBreak = true
@@ -1193,7 +1193,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
                 return true
             }
             val itemInHand = player.getInventory().itemInHand
-            return (player.isSneaking() || player.isFlySneaking) && !(itemInHand.isTool || itemInHand.isNull)
+            return (player.isSneaking() || player.isFlySneaking) && !(itemInHand.isTool || itemInHand.isNothing)
         }
 
         @JvmStatic

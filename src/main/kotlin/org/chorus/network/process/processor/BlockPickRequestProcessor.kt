@@ -57,7 +57,7 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
             }
 
             for (slot in 0..<player.getInventory().hotbarSize) {
-                if (player.getInventory().getItem(slot).isNull) {
+                if (player.getInventory().getItem(slot).isNothing) {
                     if (!itemExists && player.isCreative) {
                         player.getInventory().setHeldItemSlot(slot)
                         player.getInventory().setItemInHand(pickEvent.item)
@@ -76,7 +76,7 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
                 player.getInventory().setItemInHand(pickEvent.item)
                 if (!player.getInventory().isFull) {
                     for (slot in 0..<HumanInventory.ARMORS_INDEX) {
-                        if (player.getInventory().getItem(slot).isNull) {
+                        if (player.getInventory().getItem(slot).isNothing) {
                             player.getInventory().setItem(slot, itemInHand)
                             break
                         }

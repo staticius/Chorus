@@ -34,7 +34,7 @@ class BlockNetherrack : BlockSolid {
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.isNull || !item.isFertilizer || up()!!.id !== BlockID.AIR) {
+        if (item.isNothing || !item.isFertilizer || up()!!.id !== BlockID.AIR) {
             return false
         }
 

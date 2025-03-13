@@ -192,7 +192,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
         return "Drowned"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         var trident = Item.AIR
         if (getItemInHand() is ItemTrident) {
             val event = getLastDamageCause()

@@ -29,8 +29,8 @@ abstract class BaseInventory(
     override val size: Int
 ) : Inventory {
     protected val slots: HashMap<Int, Item> = HashMap()
-    override val viewers: MutableSet<Player?> = HashSet()
-    override var maxStackSize: Int = Inventory.Companion.MAX_STACK
+    override val viewers: MutableSet<Player> = HashSet()
+    override var maxStackSize: Int = Inventory.MAX_STACK
     protected var listeners: MutableList<InventoryListener>? = null
     protected var slotTypeMap: MutableMap<Int?, ContainerSlotType?> =
         HashMap()
@@ -53,7 +53,7 @@ abstract class BaseInventory(
         return if (slots.containsKey(index)) slots[index]!!.clone() else Item.AIR
     }
 
-    override fun getUnclonedItem(index: Int): Item? {
+    override fun getUnclonedItem(index: Int): Item {
         return slots.getOrDefault(index, Item.AIR)
     }
 
@@ -99,7 +99,7 @@ abstract class BaseInventory(
         var item1 = item
         if (index < 0 || index >= this.size) {
             return false
-        } else if (item1.isNull) {
+        } else if (item1.isNothing) {
             return this.clear(index, send)
         }
 
@@ -122,7 +122,7 @@ abstract class BaseInventory(
 
         val old = this.getUnclonedItem(index)
         slots[index] = item1
-        this.onSlotChange(index, old!!, send)
+        this.onSlotChange(index, old, send)
 
         return true
     }
@@ -146,7 +146,7 @@ abstract class BaseInventory(
     override fun all(item: Item): Map<Int, Item> {
         val slots: MutableMap<Int, Item> = HashMap()
         val checkDamage = item.hasMeta() && item.damage >= 0
-        val checkTag = item.compoundTag != null
+        val checkTag = item.compoundTag.isNotEmpty()
         for ((key, value) in this.contents) {
             if (item.equals(value, checkDamage, checkTag)) {
                 slots[key] = value
@@ -158,7 +158,7 @@ abstract class BaseInventory(
 
     override fun remove(item: Item) {
         val checkDamage = item.hasMeta()
-        val checkTag = item.compoundTag != null
+        val checkTag = item.compoundTag.isNotEmpty()
         for ((key, value) in this.contents) {
             if (item.equals(value, checkDamage, checkTag)) {
                 this.clear(key)
@@ -169,7 +169,7 @@ abstract class BaseInventory(
     override fun first(item: Item, exact: Boolean): Int {
         val count = max(1.0, item.getCount().toDouble()).toInt()
         val checkDamage = item.hasMeta()
-        val checkTag = item.compoundTag != null
+        val checkTag = item.compoundTag.isNotEmpty()
         for ((key, value) in this.contents) {
             if (item.equals(
                     value,
@@ -186,7 +186,7 @@ abstract class BaseInventory(
 
     override fun firstEmpty(item: Item?): Int {
         for (i in 0..<this.size) {
-            if (getUnclonedItem(i)!!.isNull) {
+            if (getUnclonedItem(i).isNothing) {
                 return i
             }
         }
@@ -197,7 +197,7 @@ abstract class BaseInventory(
     override fun decreaseCount(slot: Int) {
         var item = this.getUnclonedItem(slot)
 
-        if (item!!.getCount() > 0) {
+        if (item.getCount() > 0) {
             item = item.clone()
             item.count--
             this.setItem(slot, item)
@@ -205,30 +205,30 @@ abstract class BaseInventory(
     }
 
     override fun canAddItem(item: Item): Boolean {
-        var item = item
-        item = item.clone()
-        val checkDamage = item.hasMeta()
-        val checkTag = item.compoundTag != null
+        var item1 = item
+        item1 = item1.clone()
+        val checkDamage = item1.hasMeta()
+        val checkTag = item1.compoundTag.isNotEmpty()
         for (i in 0..<this.size) {
             val slot = this.getUnclonedItem(i)
-            if (item.equals(slot, checkDamage, checkTag)) {
+            if (item1.equals(slot, checkDamage, checkTag)) {
                 val diff: Int
-                if (((min(slot!!.maxStackSize.toDouble(), maxStackSize.toDouble()) - slot.getCount()).also {
+                if (((min(slot.maxStackSize.toDouble(), maxStackSize.toDouble()) - slot.getCount()).also {
                         diff =
                             it.toInt()
                     }) > 0) {
-                    item.setCount(item.getCount() - diff)
+                    item1.setCount(item1.getCount() - diff)
                 }
-            } else if (slot!!.isNull) {
-                item.setCount(
-                    (item.getCount() - min(
+            } else if (slot.isNothing) {
+                item1.setCount(
+                    (item1.getCount() - min(
                         slot.maxStackSize.toDouble(),
                         maxStackSize.toDouble()
                     )).toInt()
                 )
             }
 
-            if (item.getCount() <= 0) {
+            if (item1.getCount() <= 0) {
                 return true
             }
         }
@@ -239,7 +239,7 @@ abstract class BaseInventory(
     override fun addItem(vararg slots: Item): Array<Item?> {
         val itemSlots: MutableList<Item> = ArrayList()
         for (slot in slots) {
-            if (!slot.isNull) {
+            if (!slot.isNothing) {
                 //todo: clone only if necessary
                 itemSlots.add(slot.clone())
             }
@@ -251,7 +251,7 @@ abstract class BaseInventory(
         for (i in 0..<this.size) {
             //获取未克隆Item对象
             var item = this.getUnclonedItem(i)
-            if (item!!.isNull || item.getCount() <= 0) {
+            if (item.isNothing || item.getCount() <= 0) {
                 emptySlots.add(i)
             }
 
@@ -283,9 +283,9 @@ abstract class BaseInventory(
             }
         }
 
-        if (!itemSlots.isEmpty() && !emptySlots.isEmpty()) {
-            for (slotIndex in emptySlots) {
-                if (!itemSlots.isEmpty()) {
+        if (itemSlots.isNotEmpty() && !emptySlots.isEmpty()) {
+            for (slotIndex in emptySlots.iterator()) {
+                if (itemSlots.isNotEmpty()) {
                     val slot = itemSlots[0]
                     val maxStackSize = min(
                         slot.maxStackSize.toDouble(),
@@ -304,27 +304,27 @@ abstract class BaseInventory(
             }
         }
 
-        return itemSlots.toArray(Item.EMPTY_ARRAY)
+        return itemSlots.toTypedArray()
     }
 
     override fun removeItem(vararg slots: Item): Array<Item?> {
         val itemSlots: MutableList<Item> = ArrayList()
         for (slot in slots) {
-            if (!slot.isNull) {
+            if (!slot.isNothing) {
                 itemSlots.add(slot.clone())
             }
         }
 
         for (i in 0..<this.size) {
             var item = this.getUnclonedItem(i)
-            if (item!!.isNull || item.getCount() <= 0) {
+            if (item.isNothing || item.getCount() <= 0) {
                 continue
             }
 
             val iterator = itemSlots.iterator()
             while (iterator.hasNext()) {
                 val slot = iterator.next()
-                if (slot.equals(item, item!!.hasMeta(), item.compoundTag != null)) {
+                if (slot.equals(item, item.hasMeta(), item.compoundTag.isNotEmpty())) {
                     item = item.clone()
                     val amount = min(item.getCount().toDouble(), slot.getCount().toDouble()).toInt()
                     slot.setCount(slot.getCount() - amount)
@@ -341,7 +341,7 @@ abstract class BaseInventory(
             }
         }
 
-        return itemSlots.toArray(Item.EMPTY_ARRAY)
+        return itemSlots.toTypedArray()
     }
 
     override fun clear(index: Int, send: Boolean): Boolean {
@@ -362,7 +362,7 @@ abstract class BaseInventory(
                 item = ev.newItem
             }
 
-            if (!item.isNull) {
+            if (!item.isNothing) {
                 slots[index] = item.clone()
             } else {
                 slots.remove(index)
@@ -380,7 +380,7 @@ abstract class BaseInventory(
         }
     }
 
-    override fun getViewers(): Set<Player?> {
+    override fun getViewers(): Set<Player> {
         return viewers
     }
 
@@ -414,13 +414,15 @@ abstract class BaseInventory(
             this.sendSlot(index, this.getViewers())
         }
 
-        if (holder is BlockEntity) {
-            holder.setDirty()
+        val blockHolder = holder
+        if (blockHolder is BlockEntity) {
+            blockHolder.setDirty()
         }
 
-        if (before.id == ItemID.LODESTONE_COMPASS || getUnclonedItem(index)!!.id == ItemID.LODESTONE_COMPASS) {
-            if (holder is Player) {
-                holder.updateTrackingPositions(true)
+        if (before.id == ItemID.LODESTONE_COMPASS || getUnclonedItem(index).id == ItemID.LODESTONE_COMPASS) {
+            val playerHolder = holder
+            if (playerHolder is Player) {
+                playerHolder.updateTrackingPositions(true)
             }
             getViewers().forEach(Consumer { p: Player? -> p!!.updateTrackingPositions(true) })
         }
@@ -462,7 +464,7 @@ abstract class BaseInventory(
             }
 
             for (item in slots.values) {
-                if (item == null || item.isNull || item.getCount() < item.maxStackSize || item.getCount() < this.maxStackSize) {
+                if (item.isNothing || item.getCount() < item.maxStackSize || item.getCount() < this.maxStackSize) {
                     return false
                 }
             }
@@ -477,7 +479,7 @@ abstract class BaseInventory(
             }
 
             for (item in slots.values) {
-                if (item != null && !item.isNull) {
+                if (!item.isNothing) {
                     return false
                 }
             }
@@ -499,18 +501,18 @@ abstract class BaseInventory(
         var space = (this.size - slots.size) * maxStackSize
 
         for (slot in contents.values) {
-            if (slot.isNull) {
+            if (slot.isNothing) {
                 space += maxStackSize
                 continue
             }
-            if (slot.equals(item, true, true)) {
+            if (slot.equals(item, checkDamage = true, checkCompound = true)) {
                 space += maxStackSize - slot.getCount()
             }
         }
         return space
     }
 
-    override fun sendContents(players: Collection<Player?>) {
+    override fun sendContents(players: Collection<Player>) {
         this.sendContents(*players.toTypedArray())
     }
 
@@ -539,7 +541,7 @@ abstract class BaseInventory(
         }
     }
 
-    override fun sendSlot(index: Int, players: Collection<Player?>) {
+    override fun sendSlot(index: Int, players: Collection<Player>) {
         this.sendSlot(index, *players.toTypedArray())
     }
 

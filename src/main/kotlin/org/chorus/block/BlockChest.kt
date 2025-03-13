@@ -188,7 +188,7 @@ open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Compan
     ): Boolean {
         if (isNotActivate(player)) return false
         val itemInHand = player.getInventory().itemInHand
-        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) return false
+        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) return false
 
         val top = up()
         if (!top!!.isTransparent) {

@@ -178,7 +178,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
                 for (i in 0..<inv.size) {
                     val item = inv.getItem(i)
 
-                    if (!item.isNull) {
+                    if (!item.isNothing) {
                         val itemToAdd: Item = item.clone()
                         itemToAdd.count = 1
 
@@ -213,7 +213,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
                     //Will call BlockComposterEmptyEvent
                     val item = blockSide.empty()
 
-                    if (item == null || item.isNull) return false
+                    if (item == null || item.isNothing) return false
 
                     val itemToAdd: Item = item.clone()
                     itemToAdd.count = 1
@@ -238,7 +238,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
                 val item = entity.getItem()
 
-                if (item!!.isNull || !hopperInv.canAddItem(item)) continue
+                if (item!!.isNothing || !hopperInv.canAddItem(item)) continue
 
                 val originalCount = item.getCount()
 

@@ -57,7 +57,7 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
     }
 
 
-    override fun getUnclonedItem(index: Int): Item? {
+    override fun getUnclonedItem(index: Int): Item {
         return if (index < leftSide.getSize()) leftSide.getUnclonedItem(index) else rightSide.getUnclonedItem(index - rightSide.getSize())
     }
 

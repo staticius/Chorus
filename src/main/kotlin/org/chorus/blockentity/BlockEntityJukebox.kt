@@ -69,7 +69,7 @@ class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
     }
 
     fun dropItem() {
-        if (!recordItem!!.isNull) {
+        if (!recordItem!!.isNothing) {
             stop()
             level.dropItem(position.up(), this.recordItem)
             this.recordItem = Item.AIR

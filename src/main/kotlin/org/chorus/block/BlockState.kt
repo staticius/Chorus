@@ -51,7 +51,7 @@ interface BlockState {
         return get(this, locator)
     }
 
-    fun toItem(): Item? {
+    fun toItem(): Item {
         return toBlock().toItem()
     }
 

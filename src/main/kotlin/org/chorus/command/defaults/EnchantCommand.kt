@@ -83,7 +83,7 @@ class EnchantCommand(name: String) :
             val player = entity as Player
             enchantment.setLevel(enchantLevel, false)
             val item = player.inventory.itemInHand
-            if (item.isNull) {
+            if (item.isNothing) {
                 log.addError("commands.enchant.noItem").output()
                 continue
             }

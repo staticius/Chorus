@@ -5,26 +5,26 @@ import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
 
-open class EntityDeathEvent @JvmOverloads constructor(entity: EntityLiving?, drops: Array<Item>? = Item.EMPTY_ARRAY) :
+open class EntityDeathEvent @JvmOverloads constructor(entity: EntityLiving, drops: Array<Item> = Item.EMPTY_ARRAY) :
     EntityEvent() {
-    private var drops: Array<Item>?
+    private var drops: Array<Item>
 
     init {
         this.entity = entity
         this.drops = drops
     }
 
-    fun getDrops(): Array<Item>? {
+    fun getDrops(): Array<Item> {
         return drops
     }
 
     fun setDrops(drops: Array<Item>?) {
-        var drops = drops
-        if (drops == null) {
-            drops = Item.EMPTY_ARRAY
+        var drops1 = drops
+        if (drops1 == null) {
+            drops1 = Item.EMPTY_ARRAY
         }
 
-        this.drops = drops
+        this.drops = drops1
     }
 
     companion object {

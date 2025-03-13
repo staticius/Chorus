@@ -67,7 +67,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
 
             var consumeActionCountNeeded = 0
             for (item in eventItems) {
-                if (!item.isNull) {
+                if (!item.isNothing) {
                     consumeActionCountNeeded++
                 }
             }

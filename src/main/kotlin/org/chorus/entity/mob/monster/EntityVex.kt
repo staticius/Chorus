@@ -144,7 +144,7 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
         return true
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         if (itemInHand is ItemTool) {
             tool.setDamage(ThreadLocalRandom.current().nextInt(tool.getMaxDurability()))
             return arrayOf<Item?>(

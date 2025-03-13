@@ -48,7 +48,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
         val isLit = block is BlockCampfire && !block.isExtinguished
         for (slot in 0..<inventory!!.size) {
             val item = inventory!!.getItem(slot)
-            if (item.isNull) {
+            if (item.isNothing) {
                 burnTime[slot] = 0
                 recipes[slot] = null
             } else if (!keepItem[slot]) {
@@ -170,7 +170,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
 
             for (i in 1..burnTime.size) {
                 val item = inventory!!.getItem(i - 1)
-                if (item.isNull) {
+                if (item.isNothing) {
                     c.remove("Item$i")
                 } else {
                     c.putCompound("Item$i", NBTIO.putItemHelper(item))

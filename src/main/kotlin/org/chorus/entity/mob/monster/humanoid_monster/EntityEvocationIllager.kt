@@ -200,7 +200,7 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
         return 10
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(
             Item.get(Item.TOTEM_OF_UNDYING),
             Item.get(Item.EMERALD, 0, ThreadLocalRandom.current().nextInt(2))

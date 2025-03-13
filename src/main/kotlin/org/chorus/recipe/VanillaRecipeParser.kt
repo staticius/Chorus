@@ -154,7 +154,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
     private fun parseAndRegisterFurnaceRecipe(recipeData: Map<String, Any>) {
         val input = get(recipeData["input"].toString())
         val output = get(recipeData["output"].toString())
-        if (input.isNull || output.isNull) {
+        if (input.isNothing || output.isNothing) {
             return
         }
         val tags = tags(recipeData)
@@ -178,7 +178,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
             .dropLastWhile { it.isEmpty() }.toTypedArray()[2].lowercase()
         val output: Item = fromPotion(PotionType.get(outputID))
         val reagent = get(recipeData["reagent"].toString())
-        if (input.isNull || output.isNull || reagent.isNull) {
+        if (input.isNothing || output.isNothing || reagent.isNothing) {
             return
         }
         val tags = tags(recipeData)
@@ -191,7 +191,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
         val input = get(recipeData["input"].toString())
         val output = get(recipeData["output"].toString())
         val reagent = get(recipeData["reagent"].toString())
-        if (input.isNull || output.isNull || reagent.isNull) {
+        if (input.isNothing || output.isNothing || reagent.isNothing) {
             return
         }
         val tags = tags(recipeData)
@@ -206,7 +206,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
         val count = v.getOrDefault("count", 1) as Int
         val data = v.getOrDefault("data", 32767) as Int
         var i = get(item!!)
-        if (i.isNull) {
+        if (i.isNothing) {
             throw AssertionError()
         }
         if (data != 0) {

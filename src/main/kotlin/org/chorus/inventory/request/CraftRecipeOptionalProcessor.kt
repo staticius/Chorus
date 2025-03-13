@@ -75,7 +75,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
     fun updateAnvilResult(player: Player, inventory: AnvilInventory, filterString: String?): Pair<Item, Int>? {
         val target = inventory.inputSlot
         val sacrifice = inventory.materialSlot
-        if (target.isNull && sacrifice.isNull) {
+        if (target.isNothing && sacrifice.isNothing) {
             return null
         }
 
@@ -87,7 +87,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
         var result = target.clone()
 
         val enchantments: MutableSet<Enchantment> = LinkedHashSet(Arrays.asList(*target.enchantments))
-        if (!sacrifice.isNull) {
+        if (!sacrifice.isNothing) {
             val enchantedBook = sacrifice.id == Item.ENCHANTED_BOOK && sacrifice.enchantments.size > 0
             var repair: Int
             var repair2: Int
@@ -223,7 +223,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
             result.setCustomName(filterString)
         }
 
-        val levelCost = getRepairCost(result) + (if (sacrifice.isNull) 0 else getRepairCost(sacrifice))
+        val levelCost = getRepairCost(result) + (if (sacrifice.isNothing) 0 else getRepairCost(sacrifice))
         resultPair.right(levelCost + extraCost)
         if (extraCost <= 0) {
             result = Item.AIR
@@ -237,9 +237,9 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
             result = Item.AIR
         }
 
-        if (!result.isNull) {
+        if (!result.isNothing) {
             var repairCost = getRepairCost(result)
-            if (!sacrifice.isNull && repairCost < getRepairCost(sacrifice)) {
+            if (!sacrifice.isNothing && repairCost < getRepairCost(sacrifice)) {
                 repairCost = getRepairCost(sacrifice)
             }
 
@@ -272,15 +272,15 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
         val additional = inventory.additional
         var result = Item.AIR
 
-        if (input.isNull && additional.isNull) {
+        if (input.isNothing && additional.isNothing) {
             return null
         }
 
-        if (input.id == Item.PAPER && additional.isNull) {
+        if (input.id == Item.PAPER && additional.isNothing) {
             result = Item.get(Item.EMPTY_MAP)
         }
 
-        if (input.id == Item.EMPTY_MAP || input.id == Item.FILLED_MAP && additional.isNull) {
+        if (input.id == Item.EMPTY_MAP || input.id == Item.FILLED_MAP && additional.isNothing) {
             result = input.clone()
         }
 

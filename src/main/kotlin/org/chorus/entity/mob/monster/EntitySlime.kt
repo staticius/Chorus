@@ -110,7 +110,7 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
         return "Slime"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         if (getVariant() == SIZE_SMALL) {
             if (getLastDamageCause() != null) {
                 if (lastDamageCause is EntityDamageByEntityEvent) {

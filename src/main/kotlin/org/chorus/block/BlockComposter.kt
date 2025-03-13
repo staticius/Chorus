@@ -69,7 +69,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
         fz: Float
     ): Boolean {
         if (isNotActivate(player)) return false
-        if (item.isNull) {
+        if (item.isNothing) {
             return false
         }
 

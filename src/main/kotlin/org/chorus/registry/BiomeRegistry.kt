@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.nbt.NBTIO.readTreeMapCompoundTag
 import org.chorus.nbt.tag.*
 import org.chorus.registry.BiomeRegistry.BiomeDefinition
-import org.chorus.registry.RegisterException
 import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.io.InputStreamReader

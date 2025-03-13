@@ -39,7 +39,7 @@ class BlockEntityLectern(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
                 .putBoolean("isMovable", this.isMovable)
 
             val book = book
-            if (!book.isNull) {
+            if (!book.isNothing) {
                 c.putCompound("book", NBTIO.putItemHelper(book))
                 c.putBoolean("hasBook", true)
                 c.putInt("page", rawPage)
@@ -102,7 +102,7 @@ class BlockEntityLectern(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
 
     private fun updateTotalPages() {
         val book = book
-        totalPages = if (book.isNull || !book.hasCompoundTag()) {
+        totalPages = if (book.isNothing || !book.hasCompoundTag()) {
             0
         } else {
             book.namedTag!!.getList("pages", CompoundTag::class.java)?.size() ?: 0

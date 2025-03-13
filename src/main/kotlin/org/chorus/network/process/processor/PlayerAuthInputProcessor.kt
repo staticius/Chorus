@@ -14,7 +14,6 @@ import org.chorus.entity.mob.animal.EntityHorse.getHeight
 import org.chorus.entity.mob.animal.EntityHorse.getSaddle
 import org.chorus.entity.mob.animal.EntityHorse.onInput
 import org.chorus.event.player.*
-import org.chorus.item.Item.isNull
 import org.chorus.level.Transform
 import org.chorus.level.Transform.Companion.fromObject
 import org.chorus.math.BlockFace.Companion.fromIndex

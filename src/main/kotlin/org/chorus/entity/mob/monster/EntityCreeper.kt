@@ -192,7 +192,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         return "Creeper"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         if (lastDamageCause is EntityDamageByEntityEvent) {
             return arrayOf(Item.get(Item.GUNPOWDER, 0, ThreadLocalRandom.current().nextInt(2) + 1))
         }

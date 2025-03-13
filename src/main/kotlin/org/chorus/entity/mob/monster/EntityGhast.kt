@@ -89,7 +89,7 @@ class EntityGhast(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
         return "Ghast"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(
             Item.get(Item.GHAST_TEAR, 0, Utils.rand(0, 1)),
             Item.get(Item.GUNPOWDER, 0, Utils.rand(0, 2))

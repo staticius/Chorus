@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.ints.Int2IntMap
 import org.chorus.Player
 import org.chorus.block.*
 import org.chorus.entity.*
-import org.chorus.item.Item.ItemJsonComponents
 import org.chorus.item.Item.ItemJsonComponents.ItemLock
 import org.chorus.item.enchantment.*
 import org.chorus.level.Level
@@ -24,7 +23,7 @@ import java.nio.ByteOrder
 import java.util.*
 
 
-abstract class Item : Cloneable, ItemID {
+abstract class Item : Cloneable, ItemID, Loggable {
     var id: String
         protected set
     var identifier: Identifier
@@ -220,7 +219,7 @@ abstract class Item : Cloneable, ItemID {
             return 0
         }
 
-        for (entry in namedTag!!.getList("ench", CompoundTag::class.java)!!.all) {
+        for (entry in namedTag!!.getList("ench", CompoundTag::class.java).all) {
             if (entry.getShort("id").toInt() == id) {
                 return entry.getShort("lvl").toInt()
             }
@@ -242,7 +241,7 @@ abstract class Item : Cloneable, ItemID {
         if (!this.hasEnchantments()) {
             return 0
         }
-        for (entry in namedTag!!.getList("custom_ench", CompoundTag::class.java)!!.all) {
+        for (entry in namedTag!!.getList("custom_ench", CompoundTag::class.java).all) {
             if (entry.getString("id") == id) {
                 return entry.getShort("lvl").toInt()
             }
@@ -258,7 +257,7 @@ abstract class Item : Cloneable, ItemID {
             return null
         }
 
-        for (entry in namedTag!!.getList<CompoundTag>("custom_ench", CompoundTag::class.java)!!.all) {
+        for (entry in namedTag!!.getList<CompoundTag>("custom_ench", CompoundTag::class.java).all) {
             if (entry.getString("id") == id) {
                 val e = Enchantment.getEnchantment(entry.getString("id"))
                 if (e != null) {
@@ -319,7 +318,7 @@ abstract class Item : Cloneable, ItemID {
             return null
         }
 
-        for (entry in namedTag!!.getList("ench", CompoundTag::class.java)!!.all) {
+        for (entry in namedTag!!.getList("ench", CompoundTag::class.java).all) {
             if (entry.getShort("id") == id) {
                 val e = Enchantment.getEnchantment(entry.getShort("id").toInt())
                 if (e != null) {
@@ -344,14 +343,14 @@ abstract class Item : Cloneable, ItemID {
             ench = ListTag()
             tag.putList("ench", ench)
         } else {
-            ench = tag.getList("ench", CompoundTag::class.java)!!
+            ench = tag.getList("ench", CompoundTag::class.java)
         }
-        val custom_ench: ListTag<CompoundTag>
+        val customEnch: ListTag<CompoundTag>
         if (!tag.contains("custom_ench")) {
-            custom_ench = ListTag()
-            tag.putList("custom_ench", custom_ench)
+            customEnch = ListTag()
+            tag.putList("custom_ench", customEnch)
         } else {
-            custom_ench = tag.getList("custom_ench", CompoundTag::class.java)!!
+            customEnch = tag.getList("custom_ench", CompoundTag::class.java)
         }
 
         for (enchantment in enchantments) {
@@ -377,10 +376,10 @@ abstract class Item : Cloneable, ItemID {
                     )
                 }
             } else {
-                for (k in 0..<custom_ench.size()) {
-                    val entry = custom_ench[k]
+                for (k in 0..<customEnch.size()) {
+                    val entry = customEnch[k]
                     if (entry.getString("id") == enchantment.identifier.toString()) {
-                        custom_ench.add(
+                        customEnch.add(
                             k, CompoundTag()
                                 .putString("id", enchantment.identifier.toString())
                                 .putShort("lvl", enchantment.level)
@@ -390,7 +389,7 @@ abstract class Item : Cloneable, ItemID {
                     }
                 }
                 if (!found) {
-                    custom_ench.add(
+                    customEnch.add(
                         CompoundTag()
                             .putString("id", enchantment.identifier.toString())
                             .putShort("lvl", enchantment.level)
@@ -398,8 +397,8 @@ abstract class Item : Cloneable, ItemID {
                 }
             }
         }
-        if (custom_ench.size() != 0) {
-            val customName = setCustomEnchantDisplay(custom_ench)
+        if (customEnch.size() != 0) {
+            val customName = setCustomEnchantDisplay(customEnch)
             if (tag.contains("display") && tag["display"] is CompoundTag) {
                 tag.getCompound("display")!!.putString("Name", customName)
             } else {
@@ -412,19 +411,18 @@ abstract class Item : Cloneable, ItemID {
         this.setNamedTag(tag)
     }
 
-    private fun setCustomEnchantDisplay(custom_ench: ListTag<CompoundTag>): String {
+    private fun setCustomEnchantDisplay(customEnch: ListTag<CompoundTag>): String {
         val joiner = StringJoiner("\n", TextFormat.RESET.toString() + TextFormat.AQUA + idConvertToName() + "\n", "")
-        for (ench in custom_ench.all) {
-            val enchantment: Enchantment = Enchantment.Companion.getEnchantment(
+        for (ench in customEnch.all) {
+            val enchantment: Enchantment = Enchantment.getEnchantment(
                 ench.getString("id")
-            )!!
-                .setLevel(ench.getShort("lvl").toInt())
+            )!!.setLevel(ench.getShort("lvl").toInt())
             joiner.add(enchantment.lore)
         }
         return joiner.toString()
     }
 
-    val enchantments: Array<Enchantment?>
+    val enchantments: Array<Enchantment>
         /**
          * 获取该物品所带有的全部附魔
          *
@@ -439,9 +437,8 @@ abstract class Item : Cloneable, ItemID {
             }
             val enchantments: MutableList<Enchantment> = ArrayList()
 
-            val ench =
-                namedTag!!.getList("ench", CompoundTag::class.java)
-            for (entry in ench!!.all) {
+            val ench = namedTag!!.getList("ench", CompoundTag::class.java)
+            for (entry in ench.all) {
                 val e = Enchantment.getEnchantment(entry.getShort("id").toInt())
                 if (e != null) {
                     e.setLevel(entry.getShort("lvl").toInt(), false)
@@ -449,11 +446,11 @@ abstract class Item : Cloneable, ItemID {
                 }
             }
             //custom ench
-            val custom_ench = namedTag!!.getList(
+            val customEnch = namedTag!!.getList(
                 "custom_ench",
                 CompoundTag::class.java
             )
-            for (entry in custom_ench!!.all) {
+            for (entry in customEnch.all) {
                 val e = Enchantment.getEnchantment(entry.getString("id"))
                 if (e != null) {
                     e.setLevel(entry.getShort("lvl").toInt(), false)
@@ -605,7 +602,7 @@ abstract class Item : Cloneable, ItemID {
             if (tag is CompoundTag) {
                 val lore = tag.getList("Lore", StringTag::class.java)
 
-                if (lore!!.size() > 0) {
+                if (lore.size() > 0) {
                     for (stringTag in lore.all) {
                         lines.add(stringTag.data!!)
                     }
@@ -753,7 +750,7 @@ abstract class Item : Cloneable, ItemID {
         this.count = count
     }
 
-    open val isNull: Boolean
+    open val isNothing: Boolean
         get() = this.id == BlockID.AIR || this.count <= 0
 
     fun `is`(itemTag: String?): Boolean {
@@ -801,13 +798,13 @@ abstract class Item : Cloneable, ItemID {
 
     val runtimeId: Int
         get() {
-            if (this.isNull) return airRuntimeId
+            if (this.isNothing) return airRuntimeId
             var i = Registries.ITEM_RUNTIMEID.getInt(this.id)
             if (i == Int.MAX_VALUE) {
                 i = Registries.ITEM_RUNTIMEID.getInt(this.blockId)
             }
             if (i == Int.MAX_VALUE) {
-                Item.log.warn(
+                log.warn(
                     "Can't find runtimeId for item {}, will return unknown itemblock!",
                     id
                 )
@@ -1196,11 +1193,11 @@ abstract class Item : Cloneable, ItemID {
      * @return equal
      */
     fun equalsExact(other: Item): Boolean {
-        return this.equals(other, true, true) && this.count == other.count
+        return this.equals(other, checkDamage = true, checkCompound = true) && this.count == other.count
     }
 
-    override fun equals(item: Any?): Boolean {
-        return item is Item && this.equals(item, true)
+    override fun equals(other: Any?): Boolean {
+        return other is Item && this.equals(other, true)
     }
 
     open fun equalItemBlock(item: Item): Boolean {
@@ -1250,7 +1247,7 @@ abstract class Item : Cloneable, ItemID {
 
         if (!thisTags!!.contains("ench") || !otherTags!!.contains("ench") || (thisTags["ench"] !is ListTag<*>) || (otherTags["ench"] !is ListTag<*>) || thisTags.getList(
                 "ench"
-            ).size() != otherTags.getList("ench").size()
+            )!!.size() != otherTags.getList("ench")!!.size()
         ) {
             return false
         }
@@ -1296,7 +1293,7 @@ abstract class Item : Cloneable, ItemID {
     fun addCanPlaceOn(block: Block) {
         val tag = orCreateNamedTag
         val canPlaceOn = tag!!.getList("CanPlaceOn", StringTag::class.java)
-        tag.putList("CanPlaceOn", canPlaceOn.add(StringTag(block.toItem().getId())))
+        tag.putList("CanPlaceOn", canPlaceOn.add(StringTag(block.toItem().id)))
         this.setCompoundTag(tag)
     }
 
@@ -1310,7 +1307,7 @@ abstract class Item : Cloneable, ItemID {
         val tag = orCreateNamedTag
         val canPlaceOn = ListTag<StringTag>()
         for (block in blocks) {
-            canPlaceOn.add(StringTag(block.toItem().getId()))
+            canPlaceOn.add(StringTag(block.toItem().id))
         }
         tag!!.putList("CanPlaceOn", canPlaceOn)
         this.setCompoundTag(tag)
@@ -1331,7 +1328,7 @@ abstract class Item : Cloneable, ItemID {
     fun addCanDestroy(block: Block) {
         val tag = orCreateNamedTag
         val canDestroy = tag!!.getList("CanDestroy", StringTag::class.java)
-        tag.putList("CanDestroy", canDestroy.add(StringTag(block.toItem().getId())))
+        tag.putList("CanDestroy", canDestroy.add(StringTag(block.toItem().id)))
         this.setCompoundTag(tag)
     }
 
@@ -1345,7 +1342,7 @@ abstract class Item : Cloneable, ItemID {
         val tag = orCreateNamedTag
         val canDestroy = ListTag<StringTag>()
         for (block in blocks) {
-            canDestroy.add(StringTag(block.toItem().getId()))
+            canDestroy.add(StringTag(block.toItem().id))
         }
         tag!!.putList("CanDestroy", canDestroy)
         this.setCompoundTag(tag)
@@ -1424,11 +1421,11 @@ abstract class Item : Cloneable, ItemID {
 
     class ItemJsonComponents private constructor() {
         class CanPlaceOn {
-            var blocks: Array<String>
+            lateinit var blocks: Array<String>
         }
 
         class CanDestory {
-            var blocks: Array<String>
+            lateinit var blocks: Array<String>
         }
 
         class ItemLock {
@@ -1466,7 +1463,7 @@ abstract class Item : Cloneable, ItemID {
         val AIR: Item = ConstAirItem()
 
         @JvmField
-        val EMPTY_ARRAY: Array<Item?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<Item> = emptyArray()
 
         var UNKNOWN_STR: String = "Unknown"
         private var STACK_NETWORK_ID_COUNTER = 1
@@ -1479,12 +1476,12 @@ abstract class Item : Cloneable, ItemID {
 
         @JvmStatic
         fun get(id: String, meta: Int, count: Int, tags: ByteArray?, autoAssignStackNetworkId: Boolean): Item {
-            var id = id
-            id = if (id.contains(":")) id else "minecraft:$id"
-            var item = Registries.ITEM[id, meta, count, tags]
+            var id1 = id
+            id1 = if (id1.contains(":")) id1 else "minecraft:$id1"
+            var item = Registries.ITEM[id1, meta, count, tags]
             if (item == null) {
-                val itemBlockState = getItemBlockState(id, meta)
-                if (itemBlockState == null || itemBlockState === BlockAir.STATE) {
+                val itemBlockState = getItemBlockState(id1, meta)
+                if (itemBlockState === BlockAir.STATE) {
                     return AIR
                 }
                 item = itemBlockState.toItem()
@@ -1495,11 +1492,11 @@ abstract class Item : Cloneable, ItemID {
             } else if (autoAssignStackNetworkId) {
                 item.autoAssignStackNetworkId()
             }
-            return item!!
+            return item
         }
 
         fun parseCompoundTag(tag: ByteArray?): CompoundTag? {
-            if (tag == null || tag.size == 0) return null
+            if (tag == null || tag.isEmpty()) return null
             return try {
                 NBTIO.read(tag, ByteOrder.LITTLE_ENDIAN)
             } catch (e: IOException) {
@@ -1511,13 +1508,13 @@ abstract class Item : Cloneable, ItemID {
             }
         }
 
-        protected fun getItemBlockState(id: String?, aux: Int): BlockState {
+        protected fun getItemBlockState(id: String, aux: Int): BlockState {
             val i = Registries.BLOCKSTATE_ITEMMETA[id, aux]
             if (i == 0) {
                 val block = Registries.BLOCK[id] ?: return BlockAir.STATE
                 return block.properties.defaultState
             }
-            return Registries.BLOCKSTATE[i]
+            return Registries.BLOCKSTATE[i]!!
         }
     }
 }

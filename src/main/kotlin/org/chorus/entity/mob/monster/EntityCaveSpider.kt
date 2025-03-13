@@ -120,7 +120,7 @@ class EntityCaveSpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, 
         return entity is EntityGolem
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.STRING, 0, Utils.rand(0, 2)))
     }
 }

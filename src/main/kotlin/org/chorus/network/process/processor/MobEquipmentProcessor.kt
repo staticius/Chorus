@@ -21,7 +21,7 @@ class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
             player.close("§cPacket handling error")
             return
         }
-        if (!pk.item.isNull) {
+        if (!pk.item.isNothing) {
             if (pk.item.enchantments.size > getEnchantments().size) { // Last Enchant Id
                 player.close("§cPacket handling error")
                 return

@@ -106,7 +106,7 @@ class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chu
         return true
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         val itemId = when (ThreadLocalRandom.current().nextInt(7)) {
             0 -> Item.STICK
             1 -> Item.SPIDER_EYE

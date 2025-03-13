@@ -131,7 +131,7 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         return this.getDataFlag(EntityFlag.ANGRY)
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(
             Item.get(Item.ENDER_PEARL, 0, Utils.rand(0, 1)),
             itemInHand

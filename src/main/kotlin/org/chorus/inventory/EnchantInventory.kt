@@ -29,7 +29,7 @@ class EnchantInventory(table: BlockEntityEnchantTable?) : ContainerInventory(tab
 
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
         if (index == 0) {
-            if (before.isNull) {
+            if (before.isNothing) {
                 for (viewer in this.getViewers()) {
                     val options = EnchantmentHelper.getEnchantOptions(
                         holder,

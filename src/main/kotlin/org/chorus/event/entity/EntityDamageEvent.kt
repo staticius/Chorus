@@ -9,7 +9,7 @@ import org.chorus.utils.EventException
 import java.util.*
 
 
-open class EntityDamageEvent(entity: Entity, cause: DamageCause?, modifiers: Map<DamageModifier?, Float?>) :
+open class EntityDamageEvent(entity: Entity, cause: DamageCause, modifiers: Map<DamageModifier, Float>) :
     EntityEvent(), Cancellable {
     @JvmField
     val cause: DamageCause?
@@ -17,10 +17,10 @@ open class EntityDamageEvent(entity: Entity, cause: DamageCause?, modifiers: Map
     private val originals: Map<DamageModifier, Float>
 
     var isBreakShield: Boolean = false
-    var attackCooldown: Int = 10
+    var attackCooldown: Short = 10
     var shieldBreakCoolDown: Int = 100
 
-    constructor(entity: Entity, cause: DamageCause?, damage: Float) : this(
+    constructor(entity: Entity, cause: DamageCause, damage: Float) : this(
         entity,
         cause,
         createDamageModifierMap(damage)
@@ -29,7 +29,7 @@ open class EntityDamageEvent(entity: Entity, cause: DamageCause?, modifiers: Map
     init {
         this.entity = entity
         this.cause = cause
-        this.modifiers = EnumMap<DamageModifier, Float>(modifiers)
+        this.modifiers = EnumMap(modifiers)
 
         this.originals = ImmutableMap.copyOf(this.modifiers)
 
@@ -40,7 +40,7 @@ open class EntityDamageEvent(entity: Entity, cause: DamageCause?, modifiers: Map
         if (entity.hasEffect(EffectType.RESISTANCE)) {
             this.setDamage(
                 -(this.getDamage(DamageModifier.BASE) * 0.20 * entity.getEffect(EffectType.RESISTANCE)
-                    .getLevel()).toFloat(), DamageModifier.RESISTANCE
+                    !!.getLevel()).toFloat(), DamageModifier.RESISTANCE
             )
         }
     }
@@ -82,9 +82,7 @@ open class EntityDamageEvent(entity: Entity, cause: DamageCause?, modifiers: Map
         get() {
             var damage = 0f
             for (d in modifiers.values) {
-                if (d != null) {
-                    damage += d
-                }
+                damage += d
             }
 
             return damage
@@ -284,8 +282,8 @@ open class EntityDamageEvent(entity: Entity, cause: DamageCause?, modifiers: Map
     companion object {
         val handlers: HandlerList = HandlerList()
 
-        private fun createDamageModifierMap(baseDamage: Float): Map<DamageModifier?, Float?> {
-            val modifiers: MutableMap<DamageModifier?, Float?> = EnumMap(
+        private fun createDamageModifierMap(baseDamage: Float): Map<DamageModifier, Float> {
+            val modifiers: MutableMap<DamageModifier, Float> = EnumMap(
                 DamageModifier::class.java
             )
             modifiers[DamageModifier.BASE] = baseDamage

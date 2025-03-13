@@ -15,7 +15,7 @@ class ItemNode : ParamNode<Item?>() {
             arg = "minecraft:$arg"
         }
         val item = Item.get(arg)
-        if (item.isNull) {
+        if (item.isNothing) {
             error()
             return
         }

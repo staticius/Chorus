@@ -284,7 +284,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
 
     //击杀猫会掉落0-2根线
     //击杀小猫不会获得
-    override fun getDrops(): Array<out Item> {
+    override fun getDrops(): Array<Item> {
         if (!this.isBaby()) {
             val catdrops = Utils.rand(0, 2)
             if (catdrops > 0) return arrayOf(Item.get(Item.STRING, 0, catdrops))

@@ -141,7 +141,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
         return super.onInteract(player, item)
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         // Item drops
         val random: ThreadLocalRandom = ThreadLocalRandom.current()
         val flowerAmount: Int = random.nextInt(3)

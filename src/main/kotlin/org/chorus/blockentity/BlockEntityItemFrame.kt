@@ -85,7 +85,7 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
             val item = item
             val tag = super.spawnCompound
 
-            if (!item!!.isNull) {
+            if (!item!!.isNothing) {
                 val itemTag = NBTIO.putItemHelper(item)
                 val networkDamage = item.damage
                 val namespacedId = item.id
@@ -104,11 +104,11 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
         }
 
     val analogOutput: Int
-        get() = if (this.item == null || item!!.isNull) 0 else itemRotation % 8 + 1
+        get() = if (this.item == null || item!!.isNothing) 0 else itemRotation % 8 + 1
 
     fun dropItem(player: Player?): Boolean {
         val before = this.item
-        if (before == null || before.isNull) {
+        if (before == null || before.isNothing) {
             return false
         }
 
@@ -121,13 +121,13 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
             return true
         }
         val after = this.item
-        return after == null || after.isNull
+        return after == null || after.isNothing
     }
 
     fun dropItemAndGetEntity(player: Player?): EntityItem? {
         val level = level
         val drop = item
-        if (drop!!.isNull) {
+        if (drop!!.isNothing) {
             if (player != null) {
                 spawnTo(player)
             }

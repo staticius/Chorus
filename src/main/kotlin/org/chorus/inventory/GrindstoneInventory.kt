@@ -99,7 +99,7 @@ class GrindstoneInventory(blockGrindstone: BlockGrindstone?) :
     }
 
 
-    override fun getUnclonedItem(index: Int): Item? {
+    override fun getUnclonedItem(index: Int): Item {
         if (index < 0 || index > 3) {
             return Item.AIR
         }

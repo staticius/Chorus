@@ -104,7 +104,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Compan
     ): Boolean {
         if (player != null && player.isSneaking()) return false
         val itemFrame = getOrCreateBlockEntity()!!
-        if (itemFrame.item!!.isNull) {
+        if (itemFrame.item!!.isNothing) {
             val itemOnFrame: Item = item.clone()
             val event = ItemFrameUseEvent(player, this, itemFrame, itemOnFrame, ItemFrameUseEvent.Action.PUT)
             Server.instance.pluginManager.callEvent(event)

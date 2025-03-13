@@ -12,7 +12,6 @@ import org.chorus.dispenser.FlintAndSteelDispenseBehavior
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
 import org.chorus.inventory.InventoryHolder
 import org.chorus.item.*
-import org.chorus.item.Item.isNull
 import org.chorus.level.Level
 import org.chorus.level.Sound
 import org.chorus.math.*

@@ -102,7 +102,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
         if (isNotActivate(player)) return false
         val lectern = getOrCreateBlockEntity()!!
         val currentBook = lectern.book
-        if (!currentBook.isNull) {
+        if (!currentBook.isNothing) {
             return true
         }
         if (item.id != ItemID.WRITTEN_BOOK && item.id != ItemID.WRITABLE_BOOK) {
@@ -175,7 +175,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
         val lectern = blockEntity ?: return
 
         val book = lectern.book
-        if (book.isNull) {
+        if (book.isNothing) {
             return
         }
 

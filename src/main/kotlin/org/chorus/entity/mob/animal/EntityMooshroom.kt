@@ -110,7 +110,7 @@ class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
         return "Mooshroom"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.LEATHER), Item.get(Item.BEEF))
     }
 

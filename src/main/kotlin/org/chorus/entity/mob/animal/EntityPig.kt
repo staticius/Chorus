@@ -118,7 +118,7 @@ class EntityPig(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         return "Pig"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get((if (this.isOnFire) Item.COOKED_PORKCHOP else Item.PORKCHOP)))
     }
 

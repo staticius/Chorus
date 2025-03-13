@@ -52,7 +52,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
     override fun sendContents(vararg players: Player) {
     }
 
-    override fun sendContents(players: Collection<Player?>) {
+    override fun sendContents(players: Collection<Player>) {
     }
 
     override fun sendSlot(index: Int, player: Player) {
@@ -61,7 +61,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
     override fun sendSlot(index: Int, vararg players: Player) {
     }
 
-    override fun sendSlot(index: Int, players: Collection<Player?>) {
+    override fun sendSlot(index: Int, players: Collection<Player>) {
     }
 
     override fun getFreeSpace(item: Item): Int {

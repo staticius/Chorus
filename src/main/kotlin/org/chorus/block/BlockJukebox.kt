@@ -37,12 +37,12 @@ class BlockJukebox @JvmOverloads constructor(blockstate: BlockState? = Companion
         fz: Float
     ): Boolean {
         val jukebox = getOrCreateBlockEntity()!!
-        if (!jukebox.getRecordItem()!!.isNull) {
+        if (!jukebox.getRecordItem()!!.isNothing) {
             jukebox.dropItem()
             return true
         }
 
-        if (!item.isNull && item is ItemMusicDisc) {
+        if (!item.isNothing && item is ItemMusicDisc) {
             val record: Item = item.clone()
             record.count = 1
             item.count--

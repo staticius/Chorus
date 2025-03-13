@@ -157,7 +157,7 @@ class EntityGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         return true
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         val secondLoot = ThreadLocalRandom.current().nextInt(6)
         return arrayOf(
             Item.get(Item.PRISMARINE_SHARD, 0, Utils.rand(0, 2)),

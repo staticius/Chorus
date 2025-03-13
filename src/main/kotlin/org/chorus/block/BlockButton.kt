@@ -65,7 +65,7 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
         if (player != null) {
             if (!player.getAdventureSettings()?.get(AdventureSettings.Type.DOORS_AND_SWITCHED)!!) return false
             val itemInHand = player.getInventory().itemInHand
-            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) return false
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) return false
         }
         if (this.isActivated) {
             return false

@@ -54,7 +54,7 @@ open class EntitySquid(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         super.initEntity()
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(ItemID.INK_SAC, 0, 1))
     }
 

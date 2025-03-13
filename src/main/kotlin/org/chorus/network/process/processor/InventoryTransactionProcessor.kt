@@ -148,7 +148,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         }
                     }
 
-                    if (item.isNull || player.getInventory().itemInHand.id == item.id) {
+                    if (item.isNothing || player.getInventory().itemInHand.id == item.id) {
                         player.getInventory().setItemInHand(item)
                     } else {
                         logTriedToSetButHadInHand(playerHandle, item, player.getInventory().itemInHand)
@@ -237,7 +237,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         player.level!!.addSound(player.position, Sound.RANDOM_BREAK)
                         player.getInventory().setItemInHand(Item.AIR)
                     } else {
-                        if (item.isNull || player.getInventory().itemInHand.id === item.id) {
+                        if (item.isNothing || player.getInventory().itemInHand.id === item.id) {
                             player.getInventory().setItemInHand(item)
                         } else {
                             logTriedToSetButHadInHand(playerHandle, item, player.getInventory().itemInHand)
@@ -298,7 +298,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                             ).also { i = it }) != null
                         ) {
                             if (!i!!.equals(oldItem) || i!!.getCount() != oldItem.getCount()) {
-                                if (oldItem.id == i!!.id || i!!.isNull) {
+                                if (oldItem.id == i!!.id || i!!.isNothing) {
                                     player.getInventory().setItemInHand(i!!)
                                 } else {
                                     logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
@@ -346,7 +346,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     ) {
                         player.foodData.exhaust(0.005)
                         if (!i!!.equals(oldItem) || i!!.getCount() != oldItem.getCount()) {
-                            if (oldItem.id == i!!.id || i!!.isNull) {
+                            if (oldItem.id == i!!.id || i!!.isNothing) {
                                 player.getInventory().setItemInHand(i!!)
                             } else {
                                 logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
@@ -409,7 +409,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 }
                 if (item.onClickAir(player, directionVector)) {
                     if (!player.isCreative) {
-                        if (item.isNull || player.getInventory().itemInHand.id == item.id) {
+                        if (item.isNothing || player.getInventory().itemInHand.id == item.id) {
                             player.getInventory().setItemInHand(item)
                         } else {
                             logTriedToSetButHadInHand(playerHandle, item, player.getInventory().itemInHand)
@@ -447,7 +447,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
         private fun dropHotBarItemForPlayer(hotbarSlot: Int, dropCount: Int, player: Player) {
             val inventory = player.getInventory()
             val item = inventory.getItem(hotbarSlot)
-            if (item.isNull) return
+            if (item.isNothing) return
 
             val ev: PlayerDropItemEvent
             Server.instance.pluginManager.callEvent(PlayerDropItemEvent(player, item).also { ev = it })

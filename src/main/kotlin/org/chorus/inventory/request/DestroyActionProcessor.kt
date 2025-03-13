@@ -39,7 +39,7 @@ class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
             DestroyActionProcessor.log.warn("mismatch stack network id!")
             return context.error()
         }
-        if (item.isNull) {
+        if (item.isNothing) {
             DestroyActionProcessor.log.warn("cannot destroy an air!")
             return context.error()
         }

@@ -79,7 +79,7 @@ abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : 
         val d = NBTIO.putItemHelper(item, index)
 
         // If item is air or count less than 0, remove the item from the "Items" list
-        if (item.isNull || item.getCount() <= 0) {
+        if (item.isNothing || item.getCount() <= 0) {
             if (i >= 0) {
                 namedTag.getList("Items").remove(i)
             }

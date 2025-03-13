@@ -216,7 +216,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
      *
      * player's UUID is sent by client,so this value cannot be used in Player
      */
-    protected var entityUniqueId: UUID? = null
+    protected lateinit var entityUniqueId: UUID
 
     /**
      * runtime id (changed after you restart the server)
@@ -2642,7 +2642,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     /**
      * Gets unique id(UUID)
      */
-    open fun getUniqueId(): UUID? {
+    open fun getUniqueId(): UUID {
         return this.entityUniqueId
     }
 

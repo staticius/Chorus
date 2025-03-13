@@ -34,14 +34,14 @@ class BlockEntityChiseledBookshelf(chunk: IChunk, nbt: CompoundTag) : BlockEntit
 
     fun hasBook(index: Int): Boolean {
         Preconditions.checkArgument(index >= 0 && index <= 5)
-        return items[index] != null && !items[index]!!.isNull
+        return items[index] != null && !items[index]!!.isNothing
     }
 
     val booksStoredBit: Int
         get() {
             var sum = 0
             for (i in 0..5) {
-                if (items[i] != null && !items[i]!!.isNull) {
+                if (items[i] != null && !items[i]!!.isNothing) {
                     sum = (sum + 2.0.pow(i.toDouble())).toInt()
                 }
             }
@@ -101,7 +101,7 @@ class BlockEntityChiseledBookshelf(chunk: IChunk, nbt: CompoundTag) : BlockEntit
         }
         val compoundTagListTag = ListTag<CompoundTag>()
         for (item in items) {
-            if (item == null || item.isNull) {
+            if (item == null || item.isNothing) {
                 compoundTagListTag.add(
                     CompoundTag()
                         .putByte("Count", 0)

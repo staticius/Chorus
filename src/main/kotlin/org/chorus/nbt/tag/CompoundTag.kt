@@ -221,9 +221,9 @@ open class CompoundTag @JvmOverloads constructor(val tags: MutableMap<String?, T
         return tags[name] as ListTag<out Tag<*>>?
     }
 
-    open fun <T : Tag<*>> getList(name: String?, type: Class<T>?): ListTag<T>? {
+    open fun <T : Tag<*>> getList(name: String, type: Class<T>): ListTag<T> {
         if (tags!!.containsKey(name)) {
-            return tags[name] as ListTag<T>?
+            return tags[name] as ListTag<T>
         }
         return ListTag()
     }

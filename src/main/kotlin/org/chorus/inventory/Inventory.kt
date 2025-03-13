@@ -14,7 +14,6 @@ interface Inventory {
     /**
      * get the size of inventory
      */
-    @JvmField
     val size: Int
 
     /**
@@ -44,7 +43,7 @@ interface Inventory {
      */
     @ApiStatus.Internal
     @DoNotModify
-    fun getUnclonedItem(index: Int): Item? {
+    fun getUnclonedItem(index: Int): Item {
         //你需要覆写它来实现
         return getItem(index)
     }
@@ -103,7 +102,6 @@ interface Inventory {
      *
      * value = item
      */
-    @JvmField
     var contents: Map<Int, Item>
 
     /**
@@ -121,7 +119,7 @@ interface Inventory {
      *
      * @param players the target players to receive the packet
      */
-    fun sendContents(players: Collection<Player?>)
+    fun sendContents(players: Collection<Player>)
 
     /**
      * @see .sendSlot
@@ -139,7 +137,7 @@ interface Inventory {
      * @param index   the slot index where this item is located
      * @param players the target players to receive the packet
      */
-    fun sendSlot(index: Int, players: Collection<Player?>)
+    fun sendSlot(index: Int, players: Collection<Player>)
 
     /**
      * Get the free space size of this item that can be place in this inventory
@@ -206,14 +204,12 @@ interface Inventory {
      */
     fun clearAll()
 
-    @JvmField
     val isFull: Boolean
 
     val isEmpty: Boolean
 
-    val viewers: Set<Player?>
+    val viewers: MutableSet<Player>
 
-    @JvmField
     val type: InventoryType
 
     val holder: InventoryHolder?
@@ -246,8 +242,7 @@ interface Inventory {
     fun removeListener(listener: InventoryListener)
 
     @ApiStatus.Internal
-    fun init() {
-    }
+    fun init() {}
 
     /**
      * native slot id <---> network slot id
@@ -281,6 +276,8 @@ interface Inventory {
             ?: throw RuntimeException("ContainerSlotType $nativeSlot does not exist!")
         return type
     }
+
+    fun getViewers(): Set<Player>
 
     companion object {
         const val MAX_STACK: Int = 64

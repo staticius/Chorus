@@ -194,7 +194,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             val recipe = recipes[i] ?: continue
 
             val previous = inventory!!.getItem(i + 1)
-            if (!previous.isNull) {
+            if (!previous.isNothing) {
                 val result = recipe.result
                 result.setCount(previous.getCount())
                 if (recipe is ContainerRecipe) {
@@ -245,7 +245,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         val ingredient = inventory!!.ingredient
         for (i in 0..2) {
             val potion = inventory!!.getItem(i + 1)
-            if (potion.isNull) {
+            if (potion.isNothing) {
                 continue
             }
 

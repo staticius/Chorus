@@ -131,7 +131,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
                 .count() * ThreadLocalRandom.current().nextInt(1, 4)))
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         val axe = Item.get(Item.IRON_AXE)
         axe.damage = ThreadLocalRandom.current().nextInt(1, axe.maxDurability)
         return arrayOf(

@@ -130,7 +130,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                 }
                 val oldItemHandling = if (result.key == "block") "destroy" else list.getResult(4)!!
                 val old = holder.inventory.getItem(slotId)
-                if (oldItemHandling == "keep" && !old.isNull) {
+                if (oldItemHandling == "keep" && !old.isNothing) {
                     log.addError("commands.replaceitem.keepFailed", "slot.container", slotId.toString()).output()
                     return 0
                 }
@@ -206,7 +206,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                 "slot.weapon.mainhand" -> {
                     if (entity is Player) {
                         val old = entity.inventory.itemInHand
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -231,7 +231,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         }
                     } else if (entity is EntityInventoryHolder) {
                         val old: Item = entity.getItemInHand()
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -260,7 +260,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                 "slot.weapon.offhand" -> {
                     if (entity is Player) {
                         val old = entity.offhandInventory.getItem(0)
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -285,7 +285,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         }
                     } else if (entity is EntityInventoryHolder) {
                         val old: Item = entity.getItemInOffhand()
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -314,7 +314,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                 "slot.armor.head" -> {
                     if (entity is Player) {
                         val old = entity.inventory.helmet
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -341,7 +341,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                     }
                     if (entity is EntityInventoryHolder) {
                         val old: Item = entity.getHelmet()
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -370,7 +370,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                 "slot.armor.chest" -> {
                     if (entity is Player) {
                         val old = entity.inventory.chestplate
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -397,7 +397,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                     }
                     if (entity is EntityInventoryHolder) {
                         val old: Item = entity.getChestplate()
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -426,7 +426,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                 "slot.armor.legs" -> {
                     if (entity is Player) {
                         val old = entity.inventory.leggings
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -453,7 +453,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                     }
                     if (entity is EntityInventoryHolder) {
                         val old: Item = entity.getLeggings()
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -482,7 +482,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                 "slot.armor.feet" -> {
                     if (entity is Player) {
                         val old = entity.inventory.boots
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -509,7 +509,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                     }
                     if (entity is EntityInventoryHolder) {
                         val old: Item = entity.getBoots()
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -542,7 +542,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                     }
                     if (entity is Player) {
                         val old = entity.getEnderChestInventory().getItem(slotId)
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -583,7 +583,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                     }
                     if (entity is Player) {
                         val old = entity.inventory.getItem(slotId)
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -620,7 +620,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                 "slot.inventory" -> {
                     if (entity is Player) {
                         val old = entity.inventory.getItem(slotId)
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
@@ -654,7 +654,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         }
                     } else if (entity is EntityInventoryHolder) {
                         val old: Item = entity.getInventory().getItem(slotId)
-                        if (oldItemHandling == "keep" && !old.isNull) {
+                        if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }

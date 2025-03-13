@@ -76,7 +76,7 @@ object NBTIO {
         val amount = tag1.getByte("Count").toInt()
         var item = get(name, damage, amount)
         val tagTag = tag1["tag"]
-        if (!item.isNull && tagTag is CompoundTag && !tagTag.isEmpty) {
+        if (!item.isNothing && tagTag is CompoundTag && !tagTag.isEmpty) {
             item.setNamedTag(tagTag)
         }
 
@@ -103,7 +103,7 @@ object NBTIO {
                     item.setCount(amount)
                 }
                 item.blockUnsafe = blockState.toBlock()
-            } else if (item.isNull) { //write unknown block item
+            } else if (item.isNothing) { //write unknown block item
                 item = UnknownItem(BlockID.UNKNOWN, damage, amount)
                 val compoundTag = LinkedCompoundTag()
                     .putString("name", block.getString("name")!!)
@@ -114,7 +114,7 @@ object NBTIO {
                 item.blockUnsafe = BlockUnknown(unknownBlockState)
             }
         } else {
-            if (item.isNull) { //write unknown item
+            if (item.isNothing) { //write unknown item
                 item = UnknownItem(BlockID.UNKNOWN, damage, amount)
                 item.orCreateNamedTag!!.putCompound("Item", CompoundTag().putString("Name", name))
             } else if (item.id == BlockID.UNKNOWN && item.orCreateNamedTag!!.containsCompound("Item")) { //restore unknown item

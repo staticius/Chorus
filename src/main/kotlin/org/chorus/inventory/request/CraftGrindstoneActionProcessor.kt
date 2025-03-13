@@ -38,7 +38,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
         val inventory = topWindow.get() as GrindstoneInventory
         val firstItem = inventory.firstItem
         val secondItem = inventory.secondItem
-        if ((firstItem == null || firstItem.isNull) && (secondItem == null || secondItem.isNull)) {
+        if ((firstItem == null || firstItem.isNothing) && (secondItem == null || secondItem.isNothing)) {
             return context.error()
         }
         val pair = updateGrindstoneResult(player, inventory) ?: return context.error()
@@ -62,22 +62,22 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
         var firstItem = inventory.firstItem
         var secondItem = inventory.secondItem
         val resultPair: Pair<Item, Int> = ObjectIntMutablePair.of(Item.AIR, 0)
-        if (!firstItem.isNull && !secondItem.isNull && (firstItem.id != secondItem.id)) {
+        if (!firstItem.isNothing && !secondItem.isNothing && (firstItem.id != secondItem.id)) {
             return null
         }
 
-        if (firstItem.isNull) {
+        if (firstItem.isNothing) {
             val air = firstItem
             firstItem = secondItem
             secondItem = air
         }
 
-        if (firstItem.isNull) {
+        if (firstItem.isNothing) {
             return null
         }
 
         if (firstItem.id == ItemID.ENCHANTED_BOOK) {
-            if (secondItem.isNull) {
+            if (secondItem.isNothing) {
                 resultPair.left(Item.get(ItemID.BOOK, 0, firstItem.getCount()))
                 resultPair.right(recalculateResultExperience(inventory))
             } else {
@@ -93,7 +93,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
         tag.remove("custom_ench")
         result.setCompoundTag(tag)
 
-        if (!secondItem.isNull && firstItem.maxDurability > 0) {
+        if (!secondItem.isNothing && firstItem.maxDurability > 0) {
             val first = firstItem.maxDurability - firstItem.damage
             val second = secondItem.maxDurability - secondItem.damage
             val reduction = first + second + firstItem.maxDurability * 5 / 100
@@ -115,7 +115,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
         var resultExperience = Stream.of(firstItem, secondItem)
             .flatMap { item: Item ->
                 // Support stacks of enchanted items and skips invalid stacks (e.g. negative stacks, enchanted air)
-                if (item.isNull) {
+                if (item.isNothing) {
                     return@flatMap Stream.empty<Enchantment>()
                 } else if (item.getCount() == 1) {
                     return@flatMap Arrays.stream<Enchantment>(item.enchantments)

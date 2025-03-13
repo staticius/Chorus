@@ -12,7 +12,6 @@ import org.chorus.nbt.NBTIO.read
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemCategory
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
-import org.chorus.registry.RegisterException
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.ByteOrder
@@ -58,7 +57,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
                     if (ItemRegistry.getItemComponents().containsCompound(name)) {
                         item.setNamedTag(ItemRegistry.getItemComponents().getCompound(name).getCompound("components"))
                     }
-                    if (item.isNull || (item.isBlock() && item.blockUnsafe!!.isAir)) {
+                    if (item.isNothing || (item.isBlock() && item.blockUnsafe!!.isAir)) {
                         item = Item.AIR
                         CreativeItemRegistry.log.warn("load creative item {} damage {} is null", name, damage)
                     }
