@@ -254,7 +254,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
     override val isPowerSource: Boolean
         get() = true
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         return if (isPowered) 15 else 0
     }
 

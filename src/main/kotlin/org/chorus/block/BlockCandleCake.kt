@@ -2,8 +2,8 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Level
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
@@ -76,7 +76,7 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState? = C
         player: Player?
     ): Boolean {
         if (!down()!!.isAir) {
-            level.setBlock(block.position, this, true, true)
+            level.setBlock(block.position, this, direct = true, update = true)
             return true
         }
         return false
@@ -85,7 +85,7 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState? = C
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (down()!!.isAir) {
-                level.setBlock(this.position, get(AIR), true)
+                level.setBlock(this.position, get(BlockID.AIR), true)
                 return Level.BLOCK_UPDATE_NORMAL
             }
         }
@@ -109,25 +109,25 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState? = C
         fy: Float,
         fz: Float
     ): Boolean {
-        if (getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT) && item.id != ItemID.FLINT_AND_STEEL) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT, false)
+        if (getPropertyValue(CommonBlockProperties.LIT) && item.id != ItemID.FLINT_AND_STEEL) {
+            setPropertyValue(CommonBlockProperties.LIT, false)
             level.addSound(this.position, Sound.RANDOM_FIZZ)
-            level.setBlock(this.position, this, true, true)
+            level.setBlock(this.position, this, direct = true, update = true)
             return true
-        } else if (!getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT) && item.id == ItemID.FLINT_AND_STEEL) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT, true)
+        } else if (!getPropertyValue(CommonBlockProperties.LIT) && item.id == ItemID.FLINT_AND_STEEL) {
+            setPropertyValue(CommonBlockProperties.LIT, true)
             level.addSound(this.position, Sound.FIRE_IGNITE)
-            level.setBlock(this.position, this, true, true)
+            level.setBlock(this.position, this, direct = true, update = true)
             return true
         } else if (player != null && (player.foodData!!.isHungry || player.isCreative)) {
             val cake: Block = BlockCake()
-            level.setBlock(this.position, cake, true, true)
+            level.setBlock(this.position, cake, direct = true, update = true)
             level.dropItem(
                 position.add(0.5, 0.5, 0.5),
-                getDrops(null)!![0]!!
+                getDrops(Item.AIR)[0]
             )
             return level.getBlock(this.position)!!
-                .onActivate(Item.get(AIR), player, blockFace, fx, fy, fz)
+                .onActivate(Item.get(BlockID.AIR), player, blockFace, fx, fy, fz)
         }
         return false
     }
@@ -147,8 +147,10 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState? = C
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CANDLE_CAKE, CommonBlockProperties.LIT)
-
     }
 }

@@ -903,7 +903,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
         return super.clone() as Block
     }
 
-    open fun getWeakPower(face: BlockFace?): Int {
+    open fun getWeakPower(face: BlockFace): Int {
         return 0
     }
 

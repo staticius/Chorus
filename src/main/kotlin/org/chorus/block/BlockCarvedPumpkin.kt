@@ -41,9 +41,11 @@ class BlockCarvedPumpkin @JvmOverloads constructor(blockstate: BlockState? = Com
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.CARVED_PUMPKIN, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-
     }
 }

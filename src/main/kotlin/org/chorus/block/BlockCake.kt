@@ -76,7 +76,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         player: Player?
     ): Boolean {
         if (!down()!!.isAir) {
-            level.setBlock(block.position, this, true, true)
+            level.setBlock(block.position, this, direct = true, update = true)
 
             return true
         }
@@ -86,7 +86,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (down()!!.isAir) {
-                level.setBlock(this.position, get(AIR), true)
+                level.setBlock(this.position, get(BlockID.AIR), true)
 
                 return Level.BLOCK_UPDATE_NORMAL
             }
@@ -114,9 +114,9 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         val damage = biteCount
         if (player != null && (player.foodData!!.isHungry || player.isCreative || Server.instance.getDifficulty() == 0)
         ) {
-            if (damage < CommonBlockProperties.BITE_COUNTER.getMax()) biteCount = damage + 1
-            if (damage >= CommonBlockProperties.BITE_COUNTER.getMax()) {
-                level.setBlock(this.position, get(AIR), true)
+            if (damage < CommonBlockProperties.BITE_COUNTER.max) biteCount = damage + 1
+            if (damage >= CommonBlockProperties.BITE_COUNTER.max) {
+                level.setBlock(this.position, get(BlockID.AIR), true)
             } else {
                 player.foodData!!.addFood(2, 0.4f)
                 level.setBlock(this.position, this, true)
@@ -149,13 +149,15 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     }
 
     var biteCount: Int
-        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BITE_COUNTER)
+        get() = getPropertyValue(CommonBlockProperties.BITE_COUNTER)
         set(count) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BITE_COUNTER, count)
+            setPropertyValue(CommonBlockProperties.BITE_COUNTER, count)
         }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CAKE, CommonBlockProperties.BITE_COUNTER)
-
     }
 }

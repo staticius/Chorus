@@ -86,7 +86,7 @@ class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState? = Comp
         return true
     }
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         var playerCount = 0
 
         val blockEntity = level.getBlockEntity(this.position)

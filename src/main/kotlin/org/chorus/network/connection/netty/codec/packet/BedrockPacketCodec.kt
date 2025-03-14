@@ -34,7 +34,7 @@ abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacket
 
     @Throws(Exception::class)
     override fun decode(ctx: ChannelHandlerContext, msg: ByteBuf, out: MutableList<Any>) {
-        val wrapper = BedrockPacketWrapper()
+        val wrapper = BedrockPacketWrapper(0, 0, 0, null, null)
         wrapper.packetBuffer = msg.retainedSlice()
         try {
             val index = msg.readerIndex()

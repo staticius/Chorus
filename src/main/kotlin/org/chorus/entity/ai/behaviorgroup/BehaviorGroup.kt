@@ -123,9 +123,9 @@ class BehaviorGroup(
         while (iterator.hasNext()) {
             val coreBehavior = iterator.next()
             if (coreBehavior is Behavior) {
-                if (coreBehavior.isReevaluate && !coreBehavior.evaluate(entity!!)) {
+                if (coreBehavior.reevaluate && !coreBehavior.evaluate(entity)) {
                     coreBehavior.onInterrupt(entity)
-                    coreBehavior.setBehaviorState(BehaviorState.STOP)
+                    coreBehavior.behaviorState = (BehaviorState.STOP)
                     iterator.remove()
                     continue
                 }
@@ -139,29 +139,31 @@ class BehaviorGroup(
     }
 
     override fun collectSensorData(entity: EntityMob) {
-        sensorPeriodTimer.forEach { (sensor: ISensor?, tick: Int?) ->
-            var tick: Int? = tick
+        sensorPeriodTimer.forEach { (sensor, tick) ->
+            var tick1 = tick
+            tick1++
             //刷新gt数
-            sensorPeriodTimer[sensor] = (tick = tick!! + 1)
+            sensorPeriodTimer[sensor] = tick1
             //没到周期就不评估
-            if (sensorPeriodTimer[sensor] < sensor.period) return@forEach
+            if (sensorPeriodTimer[sensor]!! < sensor.period) return@forEach
             sensorPeriodTimer[sensor] = 0
             sensor.sense(entity)
         }
     }
 
     override fun evaluateCoreBehaviors(entity: EntityMob) {
-        coreBehaviorPeriodTimer.forEach { (coreBehavior: IBehavior?, tick: Int?) ->
-            var tick: Int? = tick
+        coreBehaviorPeriodTimer.forEach { (coreBehavior, tick) ->
+            var tick1 = tick
+            tick1++
             //若已经在运行了，就不需要评估了
             if (runningCoreBehaviors.contains(coreBehavior)) return@forEach
-            val nextTick: Int = tick = tick!! + 1
+            val nextTick: Int = tick1
             //刷新gt数
             coreBehaviorPeriodTimer[coreBehavior] = nextTick
             //没到周期就不评估
             if (nextTick < coreBehavior.period) return@forEach
             coreBehaviorPeriodTimer[coreBehavior] = 0
-            if (coreBehavior.evaluate(entity!!)) {
+            if (coreBehavior.evaluate(entity)) {
                 coreBehavior.onStart(entity)
                 coreBehavior.behaviorState = BehaviorState.ACTIVE
                 runningCoreBehaviors.add(coreBehavior)
@@ -206,7 +208,7 @@ class BehaviorGroup(
         var firstEval = true
         if (first != null) {
             if (first is Behavior) {
-                if (first.isReevaluate) {
+                if (first.reevaluate) {
                     firstEval = first.evaluate(entity!!)
                 }
             }
@@ -245,34 +247,36 @@ class BehaviorGroup(
             return
         }
         //到达更新周期时，开始重新计算新路径
-        if (isForceUpdateRoute || (reachUpdateCycle && shouldUpdateRoute(entity))) {
+        if (isForceUpdateRoute() || (reachUpdateCycle && shouldUpdateRoute(entity))) {
             //若有路径目标，则计算新路径
             var reSubmit = false
             //         第一次计算                       上一次计算已完成                                         超时，重新提交任务
-            if (routeFindingTask == null || routeFindingTask!!.finished || ((!routeFindingTask!!.started && Server.instance.nextTick - routeFindingTask!!.startTime > 8).also {
+            if (routeFindingTask == null || routeFindingTask!!.getFinished() || ((!routeFindingTask!!.getStarted() && Server.instance.nextTick - routeFindingTask!!.getStartTime() > 8).also {
                     reSubmit = it
                 })) {
                 if (reSubmit) routeFindingTask!!.cancel(true)
                 //clone防止寻路器潜在的修改
-                RouteFindingManager.Companion.getInstance()
-                    .submit(RouteFindingTask(routeFinder) { task: RouteFindingTask? ->
-                        updateMoveDirection(entity)
-                        entity.isShouldUpdateMoveDirection = false
-                        isForceUpdateRoute = false
-                        //写入section变更记录
-                        cacheSectionBlockChange(
-                            entity.level!!,
-                            calPassByChunkSections(
-                                routeFinder.getRoute().stream()
-                                    .map { obj: Node? -> obj.getVector3() }
-                                    .toList(),
-                                entity.level!!))
-                    }.setStart(entity.position.clone()).setTarget(target).also { routeFindingTask = it })
+                RouteFindingManager.instance
+                    .submit(RouteFindingTask(routeFinder, object : RouteFindingTask.FinishCallback {
+                        override fun onFinish(task: RouteFindingTask?) {
+                            updateMoveDirection(entity)
+                            entity.isShouldUpdateMoveDirection = false
+                            setForceUpdateRoute(false)
+                            //写入section变更记录
+                            cacheSectionBlockChange(
+                                entity.level!!,
+                                calPassByChunkSections(
+                                    routeFinder.route.stream()
+                                        .map { it.getVector3() }
+                                        .toList(),
+                                    entity.level!!))
+                        }
+                    }).setStart(entity.position.clone()).setTarget(target).also { routeFindingTask = it })
             }
         }
-        if (routeFindingTask != null && routeFindingTask!!.finished && !hasNewUnCalMoveTarget(entity)) {
+        if (routeFindingTask != null && routeFindingTask!!.getFinished() && !hasNewUnCalMoveTarget(entity)) {
             //若不能再移动了，且没有正在计算的寻路任务，则清除路径信息
-            val reachableTarget = routeFinder.getReachableTarget()
+            val reachableTarget = routeFinder.reachableTarget
             if (reachableTarget != null && entity.position.floor() == reachableTarget.floor()) {
                 entity.moveTarget = null
                 entity.moveDirectionStart = null
@@ -281,7 +285,7 @@ class BehaviorGroup(
             }
         }
         if (entity.isShouldUpdateMoveDirection) {
-            if (routeFinder!!.hasNext()) {
+            if (routeFinder.hasNext()) {
                 //若有新的移动方向，则更新
                 updateMoveDirection(entity)
                 entity.isShouldUpdateMoveDirection = false
@@ -298,10 +302,10 @@ class BehaviorGroup(
         //此优化只针对处于非active区块的实体
         if (entity.isActive) return true
         //终点发生变化或第一次计算，需要重算
-        if (routeFinder.getTarget() == null || hasNewUnCalMoveTarget(entity)) return true
+        if (routeFinder.target == null || hasNewUnCalMoveTarget(entity)) return true
         val passByChunkSections =
             calPassByChunkSections(
-                routeFinder.getRoute().stream().map { obj: Node? -> obj.getVector3() }.toList(),
+                routeFinder.route.stream().map { it.getVector3() }.toList(),
                 entity.level!!
             )
         val total = passByChunkSections.stream().mapToLong { vector3: ChunkSectionVector ->
@@ -320,7 +324,7 @@ class BehaviorGroup(
      * @return 是否存在新的未计算的寻路目标
      */
     protected fun hasNewUnCalMoveTarget(entity: EntityMob): Boolean {
-        return entity.moveTarget != routeFinder.getTarget()
+        return entity.moveTarget != routeFinder.target
     }
 
     /**
@@ -363,8 +367,7 @@ class BehaviorGroup(
         val strBuilder = StringBuilder()
 
         if (EntityAI.checkDebugOption(EntityAI.DebugOption.MEMORY)) {
-            val sortedMemory: ArrayList<Map.Entry<MemoryType<*>, Any>> =
-                ArrayList<Map.Entry<MemoryType<*>, Any>>(memoryStorage.all.entries)
+            val sortedMemory = ArrayList(memoryStorage.all.entries)
             sortedMemory.sortWith(
                 Comparator.comparing(
                     { s: Map.Entry<MemoryType<*>, Any?> -> s.key.identifier.path },
@@ -374,7 +377,7 @@ class BehaviorGroup(
                         )
                     })
             )
-            Collections.reverse(sortedMemory)
+            sortedMemory.reverse()
 
             for ((key, value) in sortedMemory) {
                 strBuilder.append("§e" + key.identifier.path)
@@ -386,7 +389,7 @@ class BehaviorGroup(
         }
 
         if (EntityAI.checkDebugOption(EntityAI.DebugOption.BEHAVIOR)) {
-            if (!coreBehaviors.isEmpty()) {
+            if (coreBehaviors.isNotEmpty()) {
                 val sortedCoreBehaviors = ArrayList(coreBehaviors)
                 sortedCoreBehaviors.sortWith(
                     Comparator.comparing(
@@ -397,7 +400,7 @@ class BehaviorGroup(
                             )
                         })
                 )
-                Collections.reverse(sortedCoreBehaviors)
+                sortedCoreBehaviors.reverse()
 
                 for (behavior in sortedCoreBehaviors) {
                     strBuilder.append(if (behavior.behaviorState == BehaviorState.ACTIVE) "§b" else "§7")
@@ -417,7 +420,7 @@ class BehaviorGroup(
                         )
                     })
             )
-            Collections.reverse(sortedBehaviors)
+            sortedBehaviors.reverse()
 
             for (behavior in sortedBehaviors) {
                 strBuilder.append(if (behavior.behaviorState == BehaviorState.ACTIVE) "§b" else "§7")
@@ -426,8 +429,8 @@ class BehaviorGroup(
             }
         }
 
-        entity.nameTag = strBuilder.toString()
-        entity.isNameTagAlwaysVisible = true
+        entity.setNameTag(strBuilder.toString())
+        entity.setNameTagAlwaysVisible(true)
     }
 
     /**
@@ -459,10 +462,10 @@ class BehaviorGroup(
         if (end == null) {
             end = entity.position.clone()
         }
-        val next = routeFinder!!.next()
+        val next = routeFinder.next()
         if (next != null) {
             entity.moveDirectionStart = end
-            entity.moveDirectionEnd = next.vector3
+            entity.moveDirectionEnd = next.getVector3()
         }
     }
 
@@ -500,12 +503,12 @@ class BehaviorGroup(
      */
     @JvmRecord
     protected data class ChunkSectionVector(val chunkX: Int, val sectionY: Int, val chunkZ: Int) {
-        override fun equals(obj: Any): Boolean {
-            if (obj !is ChunkSectionVector) {
+        override fun equals(other: Any?): Boolean {
+            if (other !is ChunkSectionVector) {
                 return false
             }
 
-            return this.chunkX == obj.chunkX && this.sectionY == obj.sectionY && this.chunkZ == obj.chunkZ
+            return this.chunkX == other.chunkX && this.sectionY == other.sectionY && this.chunkZ == other.chunkZ
         }
 
         override fun hashCode(): Int {

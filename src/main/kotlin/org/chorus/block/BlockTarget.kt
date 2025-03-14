@@ -31,7 +31,7 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.
     override val isPowerSource: Boolean
         get() = true
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         val target = blockEntity
         return target?.activePower ?: 0
     }

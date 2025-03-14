@@ -53,7 +53,7 @@ class BlockRedstoneBlock @JvmOverloads constructor(blockstate: BlockState? = Com
     override val isPowerSource: Boolean
         get() = true
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         return 15
     }
 

@@ -18,7 +18,7 @@ class Behavior @JvmOverloads constructor(
     override val priority: Int = 1,
     override val weight: Int = 1,
     override val period: Int = 1,
-    protected var reevaluate: Boolean = true
+    var reevaluate: Boolean = true
 ) :
     AbstractBehavior() {
     override fun evaluate(entity: EntityMob): Boolean {

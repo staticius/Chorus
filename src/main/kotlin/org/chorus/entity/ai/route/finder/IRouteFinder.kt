@@ -69,7 +69,7 @@ interface IRouteFinder {
      *
      * @return 一个包含 [Node] 的列表 [List]，应已排序好，第一项为寻路起点，最后一项为寻路终点，之间的为找到的路径点
      */
-    val route: List<Node?>
+    val route: List<Node>
 
     /**
      * @return 是否有下一个节点 [Node]

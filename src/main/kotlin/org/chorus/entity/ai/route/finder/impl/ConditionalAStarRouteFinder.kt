@@ -64,7 +64,7 @@ class ConditionalAStarRouteFinder(
     override val reachableTarget: Vector3?
         get() = routeFinder.map { obj: IRouteFinder -> obj.reachableTarget }.orElse(Vector3.ZERO)
 
-    override val route: List<Node?>
+    override val route: List<Node>
         get() = routeFinder.map { obj: IRouteFinder -> obj.route }
             .orElse(listOf<Node>())
 

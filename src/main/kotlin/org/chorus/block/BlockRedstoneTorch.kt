@@ -44,7 +44,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? = Com
         return true
     }
 
-    override fun getWeakPower(side: BlockFace?): Int {
+    override fun getWeakPower(side: BlockFace): Int {
         return if (blockFace != side) 15 else 0
     }
 
