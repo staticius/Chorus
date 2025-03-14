@@ -15,7 +15,7 @@ open class EntityBreedingExecutor<T : EntityMob?>(
     protected var finded: Boolean = false
     protected var another: T? = null
 
-    override fun execute(uncasted: EntityMob?): Boolean {
+    override fun execute(uncasted: EntityMob): Boolean {
         if (entityClass.isInstance(uncasted)) {
             val entity = entityClass.cast(uncasted)
             if (shouldFindingSpouse(entity)) {

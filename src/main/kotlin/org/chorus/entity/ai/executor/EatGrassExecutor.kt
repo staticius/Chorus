@@ -40,7 +40,7 @@ class EatGrassExecutor(protected var duration: Int) : IBehaviorExecutor {
         return true
     }
 
-    override fun onInterrupt(entity: EntityMob?) {
+    override fun onInterrupt(entity: EntityMob) {
         currentTick = 0
     }
 

@@ -16,7 +16,7 @@ class MultipleExecutor : IBehaviorExecutor {
         this.executors = java.util.Set.of(*executors)
     }
 
-    override fun execute(entity: EntityMob?): Boolean {
+    override fun execute(entity: EntityMob): Boolean {
         val tasks = ArrayList<CompletableFuture<*>>()
         for (executor in executors) {
             tasks.add(CompletableFuture.supplyAsync { executor.execute(entity) })

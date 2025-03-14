@@ -69,14 +69,14 @@ class WeightedMultiBehavior : AbstractBehavior {
         return false
     }
 
-    override fun execute(entity: EntityMob?): Boolean {
+    override fun execute(entity: EntityMob): Boolean {
         if (currentBehavior == null) {
             return false
         }
         return currentBehavior!!.execute(entity)
     }
 
-    override fun onInterrupt(entity: EntityMob?) {
+    override fun onInterrupt(entity: EntityMob) {
         if (currentBehavior == null) {
             return
         }
@@ -92,7 +92,7 @@ class WeightedMultiBehavior : AbstractBehavior {
         currentBehavior.setBehaviorState(BehaviorState.ACTIVE)
     }
 
-    override fun onStop(entity: EntityMob?) {
+    override fun onStop(entity: EntityMob) {
         if (currentBehavior == null) {
             return
         }

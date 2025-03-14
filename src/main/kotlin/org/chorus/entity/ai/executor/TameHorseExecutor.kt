@@ -123,7 +123,7 @@ class TameHorseExecutor @JvmOverloads constructor(
         }
     }
 
-    override fun onStop(entity: EntityMob?) {
+    override fun onStop(entity: EntityMob) {
         super.onStop(entity)
         tick1 = 0
     }

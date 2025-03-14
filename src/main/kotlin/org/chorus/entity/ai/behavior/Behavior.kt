@@ -25,7 +25,7 @@ class Behavior @JvmOverloads constructor(
         return evaluator.evaluate(entity)
     }
 
-    override fun execute(entity: EntityMob?): Boolean {
+    override fun execute(entity: EntityMob): Boolean {
         return executor.execute(entity)
     }
 
@@ -33,11 +33,11 @@ class Behavior @JvmOverloads constructor(
         executor.onStart(entity)
     }
 
-    override fun onInterrupt(entity: EntityMob?) {
+    override fun onInterrupt(entity: EntityMob) {
         executor.onInterrupt(entity)
     }
 
-    override fun onStop(entity: EntityMob?) {
+    override fun onStop(entity: EntityMob) {
         executor.onStop(entity)
     }
 

@@ -9,7 +9,7 @@ import org.chorus.level.Sound
 import org.chorus.utils.*
 
 class ShedExecutor : EntityControl, IBehaviorExecutor {
-    override fun execute(entity: EntityMob?): Boolean {
+    override fun execute(entity: EntityMob): Boolean {
         return false
     }
 
