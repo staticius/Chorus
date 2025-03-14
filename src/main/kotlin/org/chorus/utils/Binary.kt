@@ -11,6 +11,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.charset.StandardCharsets
 import java.util.*
+import java.util.function.Function
 import kotlin.math.min
 
 
@@ -99,15 +100,15 @@ class Binary {
 
         @JvmStatic
         fun writeUUID(uuid: UUID): ByteArray {
-            return appendBytes(writeLLong(uuid.mostSignificantBits), *writeLLong(uuid.leastSignificantBits))
+            return appendBytes(writeLLong(uuid.mostSignificantBits), writeLLong(uuid.leastSignificantBits))
         }
 
         fun writeEntityData(entityDataMap: EntityDataMap): ByteArray {
             val stream = BinaryStream()
-            stream.putUnsignedVarInt(entityDataMap.size().toLong()) //size
+            stream.putUnsignedVarInt(entityDataMap.size.toLong()) //size
             for ((key, data) in entityDataMap) {
                 stream.putUnsignedVarInt(key.getValue().toLong())
-                val transformer = key.getTransformer()
+                val transformer = key.getTransformer() as Function<Any, Any>
                 val applyData = transformer.apply(data)
 
                 val format = EntityDataFormat.from(applyData.javaClass)
@@ -156,8 +157,6 @@ class Binary {
                         stream.putLFloat(y)
                         stream.putLFloat(z)
                     }
-
-                    else -> throw UnsupportedOperationException("Unknown entity data type $format")
                 }
             }
             return stream.buffer
@@ -203,11 +202,11 @@ class Binary {
         }
 
         fun writeLShort(s: Int): ByteArray {
-            var s = s
-            s = s and 0xffff
+            var s1 = s
+            s1 = s1 and 0xffff
             return byteArrayOf(
-                (s and 0xFF).toByte(),
-                ((s ushr 8) and 0xFF).toByte()
+                (s1 and 0xFF).toByte(),
+                ((s1 ushr 8) and 0xFF).toByte()
             )
         }
 
@@ -361,12 +360,12 @@ class Binary {
 
         fun bytesToHexString(src: ByteArray?, blank: Boolean): String? {
             val stringBuilder = StringBuilder()
-            if (src == null || src.size <= 0) {
+            if (src == null || src.isEmpty()) {
                 return null
             }
 
             for (b in src) {
-                if (stringBuilder.length != 0 && blank) {
+                if (stringBuilder.isNotEmpty() && blank) {
                     stringBuilder.append(" ")
                 }
                 val v = b.toInt() and 0xFF
@@ -380,14 +379,14 @@ class Binary {
         }
 
         fun hexStringToBytes(hexString: String?): ByteArray? {
-            var hexString = hexString
-            if (hexString == null || hexString == "") {
+            var hexString1 = hexString
+            if (hexString1 == null || hexString1 == "") {
                 return null
             }
             val str = "0123456789ABCDEF"
-            hexString = hexString.uppercase().replace(" ", "")
-            val length = hexString.length / 2
-            val hexChars = hexString.toCharArray()
+            hexString1 = hexString1.uppercase().replace(" ", "")
+            val length = hexString1.length / 2
+            val hexChars = hexString1.toCharArray()
             val d = ByteArray(length)
             for (i in 0..<length) {
                 val pos = i * 2
@@ -398,7 +397,7 @@ class Binary {
         }
 
         @JvmOverloads
-        fun subBytes(bytes: ByteArray, start: Int, length: Int = bytes.length - start): ByteArray {
+        fun subBytes(bytes: ByteArray, start: Int, length: Int = bytes.size - start): ByteArray {
             val len = min(bytes.size.toDouble(), (start + length).toDouble()).toInt()
             return Arrays.copyOfRange(bytes, start, len)
         }

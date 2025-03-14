@@ -3,28 +3,28 @@ package org.chorus.entity.data
 import com.google.common.base.Preconditions
 import java.util.*
 
-class EntityDataMap : MutableMap<EntityDataType<*>?, Any?> {
-    private val map: MutableMap<EntityDataType<*>, Any> = LinkedHashMap()
+class EntityDataMap : MutableMap<EntityDataType<Any>, Any> {
+    private val map: MutableMap<EntityDataType<Any>, Any> = LinkedHashMap()
 
-    fun getOrCreateFlags(): EnumSet<EntityFlag?> {
-        var flags: EnumSet<EntityFlag?> = get<EnumSet<EntityFlag?>>(EntityDataTypes.Companion.FLAGS)
+    fun getOrCreateFlags(): EnumSet<EntityFlag> {
+        var flags = get(EntityDataTypes.FLAGS) as EnumSet<EntityFlag>?
         if (flags == null) {
-            flags = get<EnumSet<EntityFlag?>>(EntityDataTypes.Companion.FLAGS_2)
+            flags = get(EntityDataTypes.FLAGS_2) as EnumSet<EntityFlag>?
             if (flags == null) {
                 flags = EnumSet.noneOf(EntityFlag::class.java)
             }
-            this.putFlags(flags)
+            this.putFlags(flags!!)
         }
         return flags
     }
 
     fun getFlags(): EnumSet<EntityFlag> {
-        return get<EnumSet<EntityFlag>>(EntityDataTypes.Companion.FLAGS)
+        return get<EnumSet<EntityFlag>>(EntityDataTypes.FLAGS)
     }
 
     fun setFlag(flag: EntityFlag, value: Boolean): EntityFlag {
         Objects.requireNonNull(flag, "flag")
-        val flags: EnumSet<EntityFlag?> = this.getOrCreateFlags()
+        val flags: EnumSet<EntityFlag> = this.getOrCreateFlags()
         if (value) {
             flags.add(flag)
         } else {
@@ -36,44 +36,42 @@ class EntityDataMap : MutableMap<EntityDataType<*>?, Any?> {
 
     fun existFlag(flag: EntityFlag): Boolean {
         Objects.requireNonNull(flag, "flag")
-        val flags: EnumSet<EntityFlag?> = this.getOrCreateFlags()
+        val flags: EnumSet<EntityFlag> = this.getOrCreateFlags()
         return flags.contains(flag)
     }
 
-    fun putFlags(flags: EnumSet<EntityFlag?>): EnumSet<EntityFlag?> {
+    fun putFlags(flags: EnumSet<EntityFlag>): EnumSet<EntityFlag> {
         Objects.requireNonNull(flags, "flags")
-        map.put(EntityDataTypes.Companion.FLAGS, flags)
-        map.put(EntityDataTypes.Companion.FLAGS_2, flags)
+        map[EntityDataTypes.FLAGS] = flags
+        map[EntityDataTypes.FLAGS_2] = flags
         return flags
     }
 
-    fun <T> get(type: EntityDataType<T>): T {
+    fun <T : Any> get(type: EntityDataType<T>): T {
         return map.getOrDefault(type, type.getDefaultValue()) as T
     }
 
-    fun <T> getOrDefault(type: EntityDataType<T>, defaultValue: T): T {
+    fun <T : Any> getOrDefault(type: EntityDataType<T>, defaultValue: T): T {
         Objects.requireNonNull(type, "type")
         val `object`: Any = map.getOrDefault(type, defaultValue)
-        try {
-            return `object` as T
+        return try {
+            `object` as T
         } catch (e: ClassCastException) {
-            return defaultValue
+            defaultValue
         }
     }
 
-    fun <T> putType(type: EntityDataType<T>, value: T) {
-        this.put(type, value)
+    fun <T : Any> putType(type: EntityDataType<T>, value: T) {
+        this[type] = value
     }
 
-    override fun size(): Int {
-        return map.size
-    }
+    override val size: Int = map.size
 
     override fun isEmpty(): Boolean {
         return map.isEmpty()
     }
 
-    override fun containsKey(key: Any): Boolean {
+    override fun containsKey(key: EntityDataType<*>): Boolean {
         return map.containsKey(key)
     }
 
@@ -81,42 +79,49 @@ class EntityDataMap : MutableMap<EntityDataType<*>?, Any?> {
         return map.containsValue(value)
     }
 
-    override fun get(key: Any): Any? {
-        return map.get(key)
+    override fun get(key: EntityDataType<*>): Any? {
+        return map[key]
     }
 
     override fun put(key: EntityDataType<*>, value: Any): Any? {
-        var value: Any = value
+        var value1: Any = value
         Preconditions.checkNotNull(key, "type")
-        Preconditions.checkNotNull(value, "value was null for %s", key)
-        if (key === EntityDataTypes.Companion.FLAGS || key === EntityDataTypes.Companion.FLAGS_2) {
-            return this.putFlags(value as EnumSet<EntityFlag?>)
+        Preconditions.checkNotNull(value1, "value was null for %s", key)
+        if (key === EntityDataTypes.FLAGS || key === EntityDataTypes.FLAGS_2) {
+            return this.putFlags(value1 as EnumSet<EntityFlag>)
         }
-        if (Number::class.java.isAssignableFrom(value.javaClass)) {
-            val type: Class<*> = key.getType()
-            val number: Number = value as Number
-            if (type == Long::class.javaPrimitiveType || type == Long::class.java) {
-                value = number.toLong()
-            } else if (type == Int::class.javaPrimitiveType || type == Int::class.java) {
-                value = number.toInt()
-            } else if (type == Short::class.javaPrimitiveType || type == Short::class.java) {
-                value = number.toShort()
-            } else if (type == Byte::class.javaPrimitiveType || type == Byte::class.java) {
-                value = number.toByte()
-            } else if (type == Float::class.javaPrimitiveType || type == Float::class.java) {
-                value = number.toFloat()
-            } else if (type == Double::class.javaPrimitiveType || type == Double::class.java) {
-                value = number.toDouble()
+        if (Number::class.java.isAssignableFrom(value1.javaClass)) {
+            val type = key.getType()
+            val number: Number = value1 as Number
+            when (type) {
+                Long::class.javaPrimitiveType, Long::class.java -> {
+                    value1 = number.toLong()
+                }
+                Int::class.javaPrimitiveType, Int::class.java -> {
+                    value1 = number.toInt()
+                }
+                Short::class.javaPrimitiveType, Short::class.java -> {
+                    value1 = number.toShort()
+                }
+                Byte::class.javaPrimitiveType, Byte::class.java -> {
+                    value1 = number.toByte()
+                }
+                Float::class.javaPrimitiveType, Float::class.java -> {
+                    value1 = number.toFloat()
+                }
+                Double::class.javaPrimitiveType, Double::class.java -> {
+                    value1 = number.toDouble()
+                }
             }
         }
-        return map.put(key, value)
+        return map.put(key, value1)
     }
 
-    override fun remove(key: Any): Any? {
+    override fun remove(key: EntityDataType<*>): Any? {
         return map.remove(key)
     }
 
-    override fun putAll(map: Map<out EntityDataType<*>, *>) {
+    override fun putAll(from: Map<out EntityDataType<*>, Any>) {
         Preconditions.checkNotNull(map, "map")
         this.map.putAll(map)
     }
@@ -125,22 +130,16 @@ class EntityDataMap : MutableMap<EntityDataType<*>?, Any?> {
         map.clear()
     }
 
-    override fun keySet(): Set<EntityDataType<*>> {
-        return map.keys
-    }
+    override val keys: MutableSet<EntityDataType<*>> = map.keys
 
-    override fun values(): Collection<Any> {
-        return map.values
-    }
+    override val values: MutableCollection<Any> = map.values
 
-    override fun entrySet(): Set<Map.Entry<EntityDataType<*>, Any>> {
-        return map.entries
-    }
+    override val entries: MutableSet<MutableMap.MutableEntry<EntityDataType<*>, Any>> = map.entries
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o == null || javaClass != o.javaClass) return false
-        val that: EntityDataMap = o as EntityDataMap
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+        val that: EntityDataMap = other as EntityDataMap
         return this.map == that.map
     }
 
@@ -149,11 +148,11 @@ class EntityDataMap : MutableMap<EntityDataType<*>?, Any?> {
     }
 
     fun copy(vararg entityDataTypes: EntityDataType<*>): EntityDataMap {
-        val entityDataMap: EntityDataMap = EntityDataMap()
+        val entityDataMap = EntityDataMap()
         for (t: EntityDataType<*> in entityDataTypes) {
-            val o: Any? = this.get(t)
+            val o: Any? = this[t]
             if (o != null) {
-                entityDataMap.put(t, o)
+                entityDataMap[t] = o
             }
         }
         return entityDataMap

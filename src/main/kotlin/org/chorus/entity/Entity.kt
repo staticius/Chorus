@@ -63,7 +63,7 @@ import kotlin.math.*
 /**
  * @author MagicDroidX
  */
-abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID, EntityDataTypes, IVector3 {
+abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDataTypes, IVector3 {
     var chested: Boolean = false
     var color: Byte = 0
     var color2: Byte = 0
@@ -2756,12 +2756,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         return this.entityDataMap
     }
 
-    fun <T> getDataProperty(key: EntityDataType<T>): T {
-        return getEntityDataMap().get(key)
+    fun <T : Any> getDataProperty(key: EntityDataType<T>): T {
+        return getEntityDataMap()[key] as T
     }
 
-    fun <T> getDataProperty(key: EntityDataType<T>, d: T): T {
-        return getEntityDataMap().getOrDefault(key, d)
+    fun <T : Any> getDataProperty(key: EntityDataType<T>, d: T): T {
+        return getEntityDataMap().getOrDefault(key, d) as T
     }
 
     fun setDataFlag(entityFlag: EntityFlag) {
@@ -2772,13 +2772,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
         if (getEntityDataMap().existFlag(entityFlag) xor value) {
             getEntityDataMap().setFlag(entityFlag, value)
             val entityDataMap = EntityDataMap()
-            entityDataMap.put(EntityDataTypes.FLAGS, getEntityDataMap().getFlags())
+            entityDataMap[EntityDataTypes.FLAGS] = getEntityDataMap().getFlags()
             sendData(hasSpawned.values.toTypedArray(), entityDataMap)
         }
     }
 
     fun setDataFlags(entityFlags: EnumSet<EntityFlag>) {
-        getEntityDataMap().put(EntityDataTypes.FLAGS, entityFlags)
+        getEntityDataMap()[EntityDataTypes.FLAGS] = entityFlags
         sendData(hasSpawned.values.toTypedArray(), entityDataMap)
     }
 
@@ -2793,15 +2793,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
                     EntityDataTypes.FLAGS_2, EnumSet.noneOf(
                         EntityFlag::class.java
                     )
-                )
+                ) as EnumSet<EntityFlag>
             if (value) {
                 entityFlags.add(entityFlag)
             } else {
                 entityFlags.remove(entityFlag)
             }
-            getEntityDataMap().put(EntityDataTypes.FLAGS_2, entityFlags)
+            getEntityDataMap()[EntityDataTypes.FLAGS_2] = entityFlags
             val entityDataMap = EntityDataMap()
-            entityDataMap.put(EntityDataTypes.FLAGS_2, entityFlags)
+            entityDataMap[EntityDataTypes.FLAGS_2] = entityFlags
             sendData(hasSpawned.values.toTypedArray(), entityDataMap)
         }
     }
@@ -2816,8 +2816,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityID
     }
 
     fun setPlayerFlag(entityFlag: PlayerFlag) {
-        var flags: Byte =
-            getEntityDataMap().getOrDefault(EntityDataTypes.PLAYER_FLAGS, 0.toByte())
+        var flags: Byte = getEntityDataMap().getOrDefault(EntityDataTypes.PLAYER_FLAGS, 0.toByte()) as Byte
         flags = (flags.toInt() xor (1 shl entityFlag.getValue()).toByte().toInt()).toByte()
         this.setDataProperty(EntityDataTypes.PLAYER_FLAGS, flags)
     }
