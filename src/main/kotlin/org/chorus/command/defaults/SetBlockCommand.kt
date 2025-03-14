@@ -9,7 +9,6 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.item.Item
 import org.chorus.level.Locator
-import kotlin.collections.Map
 import kotlin.collections.set
 
 class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.description") {

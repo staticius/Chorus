@@ -1,6 +1,7 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.level.Locator
 import java.util.*
 import kotlin.math.abs
@@ -91,7 +92,7 @@ class BlockPaleMossBlock @JvmOverloads constructor(blockstate: BlockState? = Com
         }
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(ItemBlock(get(BlockID.PALE_MOSS_BLOCK)))
     }
 

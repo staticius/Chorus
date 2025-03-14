@@ -10,7 +10,7 @@ class BlockSpruceHangingSign @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.SPRUCE_HANGING_SIGN,
+            BlockID.BlockID.SPRUCE_HANGING_SIGN,
             CommonBlockProperties.ATTACHED_BIT,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.GROUND_SIGN_DIRECTION,

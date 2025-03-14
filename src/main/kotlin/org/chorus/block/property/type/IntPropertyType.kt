@@ -49,7 +49,7 @@ class IntPropertyType private constructor(
         }
 
         override fun toString(): String {
-            return "IntPropertyValue(name=$name, value=$value)"
+            return "IntPropertyValue(name=${getName()}, value=${getValue()})"
         }
     }
 

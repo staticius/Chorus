@@ -44,7 +44,7 @@ enum class TorchFacingDirection {
         }
 
     companion object {
-        fun getByTorchDirection(face: BlockFace): TorchFacingDirection? {
+        fun getByTorchDirection(face: BlockFace): TorchFacingDirection {
             return when (face) {
                 BlockFace.UP -> TOP
                 BlockFace.EAST -> WEST
@@ -62,7 +62,7 @@ enum class TorchFacingDirection {
             }
         }
 
-        fun getByAttachedFace(face: BlockFace): TorchFacingDirection? {
+        fun getByAttachedFace(face: BlockFace): TorchFacingDirection {
             return when (face) {
                 BlockFace.DOWN -> TOP
                 BlockFace.SOUTH -> SOUTH

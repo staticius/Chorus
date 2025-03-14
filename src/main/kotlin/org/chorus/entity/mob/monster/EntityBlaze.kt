@@ -102,7 +102,7 @@ class EntityBlaze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
         return 5
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.BLAZE_ROD, 0, Utils.rand(0, 1)))
     }
 

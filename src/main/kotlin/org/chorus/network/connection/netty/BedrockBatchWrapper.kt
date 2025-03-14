@@ -1,8 +1,5 @@
 package org.chorus.network.connection.netty
 
-import org.chorus.network.connection.util.BatchFlag
-import org.chorus.network.protocol.DataPacket
-import org.chorus.network.protocol.types.*
 import io.netty.buffer.ByteBuf
 import io.netty.util.AbstractReferenceCounted
 import io.netty.util.ReferenceCountUtil
@@ -10,17 +7,17 @@ import io.netty.util.ReferenceCounted
 import io.netty.util.internal.ObjectPool
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-
+import org.chorus.network.connection.util.BatchFlag
+import org.chorus.network.protocol.DataPacket
+import org.chorus.network.protocol.types.*
 import java.util.function.Consumer
 
-
-(callSuper = false)
 class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Handle<BedrockBatchWrapper>) :
     AbstractReferenceCounted() {
-    private var compressed: ByteBuf? = null
+    var compressed: ByteBuf? = null
     private var algorithm: CompressionAlgorithm? = null
 
-    private var uncompressed: ByteBuf? = null
+    var uncompressed: ByteBuf? = null
     private val packets: MutableList<BedrockPacketWrapper?> = ObjectArrayList()
 
     private var modified = false
@@ -114,14 +111,14 @@ class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Han
             batch.uncompressed = uncompressed
             batch.setRefCnt(1)
 
-            check(!(!batch.packets.isEmpty() || !batch.flags.isEmpty())) { "Batch was not deallocated" }
+            check(!(batch.packets.isNotEmpty() || batch.flags.isNotEmpty())) { "Batch was not deallocated" }
             return batch
         }
 
         fun create(subClientId: Int, vararg packets: DataPacket?): BedrockBatchWrapper {
             val batch = newInstance()
             for (packet in packets) {
-                batch.getPackets().add(BedrockPacketWrapper(0, subClientId, 0, packet, null))
+                batch.packets.add(BedrockPacketWrapper(0, subClientId, 0, packet, null))
             }
             return batch
         }

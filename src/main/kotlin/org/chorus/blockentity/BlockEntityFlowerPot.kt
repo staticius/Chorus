@@ -15,13 +15,13 @@ class BlockEntityFlowerPot(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID.= block.id
-            return BlockID.== Block.FLOWER_POT
+            val BlockID. = block.id
+            return BlockID.== Block . FLOWER_POT
         }
 
     override val spawnCompound: CompoundTag
         get() {
-            val tag = super.getSpawnCompound()
+            val tag = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
             if (namedTag.containsCompound("PlantBlock")) tag.putCompound(
                 "PlantBlock",

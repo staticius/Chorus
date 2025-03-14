@@ -83,7 +83,7 @@ class EntityPolarBear(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
         super.initEntity()
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.COD), Item.get(Item.SALMON))
     }
 

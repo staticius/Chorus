@@ -1,10 +1,10 @@
 package org.chorus.registry
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.nbt.NBTIO.readCompressed
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.IntTag
 import org.chorus.registry.RegisterException
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -39,7 +39,7 @@ class BlockState2ItemMetaRegistry : IRegistry<String, Int, Int> {
         return MAP[key]!!
     }
 
-    fun get(key: String, meta: Int): Int {
+    operator fun get(key: String, meta: Int): Int {
         return MAP.getInt("$key#$meta")
     }
 

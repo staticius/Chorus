@@ -9,10 +9,6 @@ import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import java.util.*
 
-/**
- * @author Leonidius20
- * @since 22.03.17
- */
 class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override fun place(
@@ -45,7 +41,7 @@ class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState? = Compan
                     val block = clone() as BlockNetherWart
                     block.age = block.age + 1
                     val ev: BlockGrowEvent = BlockGrowEvent(this, block)
-                    instance!!.pluginManager.callEvent(ev)
+                    instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled) {
                         level.setBlock(this.position, ev.newState, true, true)
@@ -64,7 +60,7 @@ class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState? = Compan
     override val name: String
         get() = "Nether Wart Block"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         if (this.age == 0x03) {
             this.age = 0
             return arrayOf<Item?>(

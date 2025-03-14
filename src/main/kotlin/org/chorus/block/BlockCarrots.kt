@@ -1,8 +1,9 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
@@ -12,7 +13,7 @@ class BlockCarrots @JvmOverloads constructor(blockstate: BlockState? = Companion
     override val name: String
         get() = "Carrot Block"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         if (!isFullyGrown) {
             return arrayOf(
                 Item.get(ItemID.CARROT)
@@ -36,7 +37,7 @@ class BlockCarrots @JvmOverloads constructor(blockstate: BlockState? = Companion
         )
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return Item.get(ItemID.CARROT)
     }
 

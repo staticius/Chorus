@@ -30,7 +30,7 @@ open class NearbyFlatRandomRoamExecutor @JvmOverloads constructor(
         currentTargetCalTick++
         durationTick++
 
-        val center = entity.memoryStorage!![memory].vector3 ?: return false
+        val center = entity.memoryStorage!![memory].vector3
 
         if (entity.isEnablePitch) entity.isEnablePitch = false
         if (currentTargetCalTick >= frequency || (calNextTargetImmediately && needUpdateTarget(entity))) {

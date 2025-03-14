@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class ModalFormResponsePacket : DataPacket() {
     var formId: Int = 0
     var data: String = "null"

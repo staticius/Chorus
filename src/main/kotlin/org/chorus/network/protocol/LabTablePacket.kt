@@ -6,11 +6,6 @@ import org.chorus.network.protocol.types.LabTableReactionType
 import org.chorus.network.protocol.types.LabTableType
 
 
-
-
-
-
-
 class LabTablePacket : DataPacket() {
     var actionType: LabTableType? = null
     var blockPosition: BlockVector3? = null

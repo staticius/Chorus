@@ -6,10 +6,6 @@ import org.chorus.level.Sound
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.*
 
-/**
- * @author CoolLoong
- * @since 02.12.2022
- */
 class BlockDirtWithRoots : BlockDirt {
     constructor() : super(Companion.properties.defaultState)
 
@@ -75,7 +71,7 @@ class BlockDirtWithRoots : BlockDirt {
     override val toolType: Int
         get() = ItemTool.TYPE_SHOVEL
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(ItemBlock(get(DIRT_WITH_ROOTS)))
     }
 

@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class UpdateSoftEnumPacket : DataPacket() {
     var values: List<String> = listOf()
     var name: String = ""

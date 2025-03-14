@@ -4,12 +4,8 @@ import org.chorus.Player
 import org.chorus.form.response.ModalResponse
 
 
-
-
-
 import java.util.function.BiConsumer
 import java.util.function.Consumer
-
 
 
 @Accessors(chain = true, fluent = true)
@@ -17,11 +13,11 @@ import java.util.function.Consumer
 class ModalForm : Form<ModalResponse?> {
     protected var content: String = ""
 
-    
+
     protected var yes: Consumer<Player> =
         Consumer { player: Player? -> }
 
-    
+
     protected var no: Consumer<Player> =
         Consumer { player: Player? -> }
 
@@ -74,23 +70,23 @@ class ModalForm : Form<ModalResponse?> {
         no.accept(player)
     }
 
-    override fun onSubmit(submitted: BiConsumer<Player?, ModalResponse?>?): ModalForm? {
+    override fun onSubmit(submitted: BiConsumer<Player?, ModalResponse?>?): ModalForm {
         return super.onSubmit(submitted) as ModalForm
     }
 
-    override fun onClose(callback: Consumer<Player?>?): ModalForm? {
+    override fun onClose(callback: Consumer<Player?>?): ModalForm {
         return super.onClose(callback) as ModalForm
     }
 
-    override fun send(player: Player): ModalForm? {
+    override fun send(player: Player): ModalForm {
         return super.send(player) as ModalForm
     }
 
-    override fun send(player: Player, id: Int): ModalForm? {
+    override fun send(player: Player, id: Int): ModalForm {
         return super.send(player, id) as ModalForm
     }
 
-    override fun sendUpdate(player: Player): ModalForm? {
+    override fun sendUpdate(player: Player): ModalForm {
         return super.sendUpdate(player) as ModalForm
     }
 
@@ -123,7 +119,7 @@ class ModalForm : Form<ModalResponse?> {
         return response
     }
 
-    override fun <M> putMeta(key: String, `object`: M): ModalForm? {
+    override fun <M> putMeta(key: String, `object`: M): ModalForm {
         return super.putMeta(key, `object`) as ModalForm
     }
 }

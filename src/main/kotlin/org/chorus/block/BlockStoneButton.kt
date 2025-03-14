@@ -19,13 +19,9 @@ open class BlockStoneButton @JvmOverloads constructor(blockstate: BlockState? = 
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
-        return super.getDrops(item)
-    }
-
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.STONE_BUTTON,
+            BlockID.BlockID.STONE_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )

@@ -5,7 +5,7 @@ import org.chorus.item.enchantment.*
 
 
 class EnchantmentDamageSmite :
-    EnchantmentDamage(Enchantment.Companion.ID_DAMAGE_SMITE, "undead", Rarity.UNCOMMON, TYPE.SMITE) {
+    EnchantmentDamage(ID_DAMAGE_SMITE, "undead", Rarity.UNCOMMON, TYPE.SMITE) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 5 + (level - 1) * 8
     }

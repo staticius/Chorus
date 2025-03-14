@@ -5,9 +5,10 @@ import org.chorus.blockentity.BlockEntityLectern
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class LecternPageChangeEvent(val player: Player, val lectern: BlockEntityLectern, @JvmField var newRawPage: Int) : BlockEvent(
-    lectern.block
-),
+class LecternPageChangeEvent(val player: Player, val lectern: BlockEntityLectern, @JvmField var newRawPage: Int) :
+    BlockEvent(
+        lectern.block
+    ),
     Cancellable {
     var leftPage: Int
         get() = (newRawPage * 2) + 1

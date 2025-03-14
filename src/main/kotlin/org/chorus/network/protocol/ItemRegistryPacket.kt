@@ -13,9 +13,6 @@ import java.nio.ByteOrder
  */
 
 
-
-
-
 class ItemRegistryPacket : DataPacket() {
     private var entries: Array<Entry?>? = Entry.EMPTY_ARRAY
 
@@ -29,7 +26,7 @@ class ItemRegistryPacket : DataPacket() {
                 byteBuf.writeShortLE(entry.runtimeId)
                 byteBuf.writeBoolean(entry.componentBased)
                 byteBuf.writeVarInt(entry.version)
-                byteBuf.writeBytes(write(entry.data, ByteOrder.LITTLE_ENDIAN, true)!!)
+                byteBuf.writeBytes(write(entry.data, ByteOrder.LITTLE_ENDIAN, true))
             }
         } catch (e: IOException) {
             MainLogger.logger.error("Error while encoding NBT data of ItemRegistryPacket", e)

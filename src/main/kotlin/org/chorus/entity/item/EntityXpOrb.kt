@@ -1,5 +1,6 @@
 package org.chorus.entity.item
 
+import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.chorus.Player
 import org.chorus.entity.*
 import org.chorus.entity.data.EntityDataTypes
@@ -7,7 +8,6 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import it.unimi.dsi.fastutil.ints.IntArrayList
 import kotlin.math.abs
 import kotlin.math.sqrt
 

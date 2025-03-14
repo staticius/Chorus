@@ -2,12 +2,7 @@ package org.chorus.level.updater.util.tagupdater
 
 import org.chorus.level.updater.util.TagUtils
 import org.chorus.nbt.tag.CompoundTag
-import kotlin.collections.ArrayList
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.set
-import kotlin.collections.sort
 
 class CompoundTagUpdaterContext {
     private val updaters: MutableList<CompoundTagUpdater> = ArrayList()
@@ -50,13 +45,13 @@ class CompoundTagUpdaterContext {
             return tag
         } else {
             updated["version"] = latestVersion
-            return TagUtils.toImmutable(updated) as CompoundTag
+            return TagUtils.toImmutable(updated)
         }
     }
 
     fun updateStates(tag: CompoundTag, version: Int): CompoundTag {
         val updated: Map<String?, Any?>? = this.updateStates0(tag, version)
-        return if (updated == null) tag else TagUtils.toImmutable(updated) as CompoundTag
+        return if (updated == null) tag else TagUtils.toImmutable(updated)
     }
 
     private fun updateStates0(tag: CompoundTag, version: Int): MutableMap<String?, Any?>? {

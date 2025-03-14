@@ -1,5 +1,13 @@
 package org.chorus.network.connection
 
+
+import com.github.oxo42.stateless4j.StateMachine
+import com.github.oxo42.stateless4j.StateMachineConfig
+import com.github.oxo42.stateless4j.delegates.Action
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufAllocator
+import io.netty.buffer.Unpooled
+import io.netty.util.internal.PlatformDependent
 import org.chorus.Player
 import org.chorus.PlayerHandle
 import org.chorus.Server
@@ -21,15 +29,7 @@ import org.chorus.network.protocol.types.PlayerInfo
 import org.chorus.plugin.InternalPlugin
 import org.chorus.registry.Registries
 import org.chorus.utils.ByteBufVarInt
-import com.github.oxo42.stateless4j.StateMachine
-import com.github.oxo42.stateless4j.StateMachineConfig
-import com.github.oxo42.stateless4j.delegates.Action
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.ByteBufAllocator
-import io.netty.buffer.Unpooled
-import io.netty.util.internal.PlatformDependent
-
-
+import org.chorus.utils.Loggable
 import org.jetbrains.annotations.ApiStatus
 import java.net.InetSocketAddress
 import java.net.SocketAddress
@@ -38,26 +38,25 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
 import javax.crypto.SecretKey
-import kotlin.collections.HashMap
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
-
-class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
+class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
     private val closed = AtomicBoolean()
     private val inbound: Queue<DataPacket> = PlatformDependent.newSpscQueue()
     private val nettyThreadOwned = AtomicBoolean(false)
     private val consumer = AtomicReference<Consumer<DataPacket>?>(null)
+
     @JvmField
     val machine: StateMachine<SessionState, SessionState>
     var handle: PlayerHandle? = null
         private set
     private var info: PlayerInfo? = null
     protected var packetHandler: PacketHandler? = null
+
     @JvmField
     var address: InetSocketAddress?
 
-    
+
     protected var authenticated: Boolean = false
 
 
@@ -69,7 +68,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             try {
                 this.handleDataPacket(pk)
             } catch (e: Exception) {
-                BedrockSession.log.error(
+                log.error(
                     "An error occurred whilst handling {} for {}", pk.javaClass.simpleName,
                     socketAddress.toString(), e
                 )
@@ -77,7 +76,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         }
 
         this.address = socketAddress as InetSocketAddress?
-        BedrockSession.log.debug("creating session {}", peer.getSocketAddress().toString())
+        log.debug("creating session {}", peer.socketAddress.toString())
         val cfg = StateMachineConfig<SessionState, SessionState>()
 
         cfg.configure(SessionState.START)
@@ -100,14 +99,14 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
 
         cfg.configure(SessionState.ENCRYPTION)
             .onEntry(Action {
-                BedrockSession.log.debug("Player {} enter ENCRYPTION stage", peer.getSocketAddress().toString())
+                log.debug("Player {} enter ENCRYPTION stage", peer.socketAddress.toString())
                 this.setPacketHandler(HandshakePacketHandler(this))
             })
             .permit(SessionState.RESOURCE_PACK, SessionState.RESOURCE_PACK)
 
         cfg.configure(SessionState.RESOURCE_PACK)
             .onEntry(Action {
-                BedrockSession.log.debug("Player {} enter RESOURCE_PACK stage", peer.getSocketAddress().toString())
+                log.debug("Player {} enter RESOURCE_PACK stage", peer.socketAddress.toString())
                 this.setPacketHandler(ResourcePackHandler(this))
             })
             .permit(SessionState.PRE_SPAWN, SessionState.PRE_SPAWN)
@@ -117,12 +116,12 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
                 // now the main thread owns the session
                 this.setNettyThreadOwned(false)
 
-                BedrockSession.log.debug("Creating player")
+                log.debug("Creating player")
 
                 val player = this.createPlayer()
                 if (player == null) {
                     this.close("Failed to create player")
-                    return@onEntry
+                    return@Action
                 }
                 this.onPlayerCreated(player)
                 player.processLogin()
@@ -163,7 +162,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         if (isDisconnected) {
             return
         }
-        peer!!.flush()
+        peer.flush()
     }
 
     fun sendPacket(packet: DataPacket) {
@@ -175,7 +174,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         if (ev.isCancelled) {
             return
         }
-        peer!!.sendPacket(this.subClientId, 0, packet)
+        peer.sendPacket(this.subClientId, 0, packet)
         this.logOutbound(packet)
     }
 
@@ -193,7 +192,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         if (isDisconnected) {
             return
         }
-        val bedrockPacketCodec = peer!!.channel.pipeline().get(
+        val bedrockPacketCodec = peer.channel.pipeline().get(
             BedrockPacketCodec::class.java
         )
         val buf1 = ByteBufAllocator.DEFAULT.ioBuffer(4)
@@ -214,7 +213,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         if (ev.isCancelled) {
             return
         }
-        peer!!.sendPacketImmediately(this.subClientId, 0, packet)
+        peer.sendPacketImmediately(this.subClientId, 0, packet)
         this.logOutbound(packet)
     }
 
@@ -227,12 +226,12 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         if (ev.isCancelled) {
             return
         }
-        peer!!.sendPacketSync(this.subClientId, 0, packet)
+        peer.sendPacketSync(this.subClientId, 0, packet)
         this.logOutbound(packet)
     }
 
     fun sendNetworkSettingsPacket(pk: NetworkSettingsPacket) {
-        val alloc = peer!!.channel.alloc()
+        val alloc = peer.channel.alloc()
         val buf1 = alloc.buffer(16)
         val header = alloc.ioBuffer(5)
         val msg = BedrockPacketWrapper(0, subClientId, 0, pk, null)
@@ -241,11 +240,11 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
                 BedrockPacketCodec::class.java
             )
             val packet = msg.packet
-            msg.packetId = packet.pid()
+            msg.packetId = packet!!.pid()
             bedrockPacketCodec.encodeHeader(buf1, msg)
-            packet.encode(HandleByteBuf.Companion.of(buf1))
+            packet.encode(HandleByteBuf.of(buf1))
 
-            val batch: BedrockBatchWrapper = newInstance()
+            val batch: BedrockBatchWrapper = BedrockBatchWrapper.newInstance()
             val buf2 = alloc.compositeDirectBuffer(2)
             ByteBufVarInt.writeUnsignedInt(header, buf1.readableBytes())
             buf2.addComponent(true, header)
@@ -253,7 +252,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             batch.compressed = buf2
             peer.channel.writeAndFlush(batch)
         } catch (t: Throwable) {
-            BedrockSession.log.error("Error send", t)
+            log.error("Error send", t)
         } finally {
             msg.release()
         }
@@ -263,21 +262,21 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         if (isDisconnected) {
             return
         }
-        peer!!.flushSendQueue()
+        peer.flushSendQueue()
     }
 
     fun setCompression(algorithm: PacketCompressionAlgorithm) {
         check(!isSubClient) { "The compression algorithm can only be set by the primary session" }
-        peer!!.setCompression(algorithm)
+        peer.setCompression(algorithm)
     }
 
     fun enableEncryption(key: SecretKey) {
         check(!isSubClient) { "Encryption can only be enabled by the primary session" }
-        peer!!.enableEncryption(key)
+        peer.enableEncryption(key)
     }
 
     fun onPacket(wrapper: BedrockPacketWrapper) {
-        val packet = wrapper.packet
+        val packet = wrapper.packet!!
         this.logInbound(packet)
 
         val ev = DataPacketDecodeEvent(player!!, wrapper)
@@ -303,8 +302,8 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     }
 
     protected fun logOutbound(packet: DataPacket) {
-        if (BedrockSession.log.isTraceEnabled() && !Server.instance.isIgnoredPacket(packet.javaClass)) {
-            BedrockSession.log.trace(
+        if (log.isTraceEnabled() && !Server.instance.isIgnoredPacket(packet.javaClass)) {
+            log.trace(
                 "Outbound {}({}): {}",
                 socketAddress, this.subClientId, packet
             )
@@ -312,16 +311,16 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     }
 
     protected fun logInbound(packet: DataPacket) {
-        if (BedrockSession.log.isTraceEnabled() && !Server.instance.isIgnoredPacket(packet.javaClass)) {
-            BedrockSession.log.trace(
+        if (log.isTraceEnabled() && !Server.instance.isIgnoredPacket(packet.javaClass)) {
+            log.trace(
                 "Inbound {}({}): {}",
                 socketAddress, this.subClientId, packet
             )
         }
     }
 
-    val socketAddress: SocketAddress?
-        get() = peer.getSocketAddress()
+    val socketAddress: SocketAddress
+        get() = peer.socketAddress
 
     val isSubClient: Boolean
         get() = this.subClientId != 0
@@ -352,7 +351,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
                 // FIXME: Do sub-clients send a server-bound DisconnectPacket?
             } else {
                 // Primary sub-client controls the connection
-                peer!!.close()
+                peer.close()
             }
         }, 5)
     }
@@ -376,7 +375,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
         val player = this.player
         player?.close(BedrockDisconnectReasons.DISCONNECTED)
         Server.instance.network.onSessionDisconnect(address)
-        peer!!.removeSession(this)
+        peer.removeSession(this)
     }
 
     val isConnected: Boolean
@@ -387,7 +386,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             if (isDisconnected) {
                 return -1L
             }
-            return peer.getPing()
+            return peer.ping
         }
 
     fun onPlayerCreated(player: Player) {
@@ -396,14 +395,14 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
     }
 
     fun notifyTerrainReady() {
-        BedrockSession.log.debug("Sending spawn notification, waiting for spawn response")
+        log.debug("Sending spawn notification, waiting for spawn response")
         val state = machine.state
         check(state == SessionState.PRE_SPAWN) { "attempt to notifyTerrainReady when the state is " + state.name }
         handle!!.doFirstSpawn()
     }
 
     fun onSessionStartSuccess() {
-        BedrockSession.log.debug("Waiting for login packet")
+        log.debug("Waiting for login packet")
     }
 
     private fun createPlayer(): Player? {
@@ -416,20 +415,19 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             )
             return constructor.newInstance(this, this.info)
         } catch (e: Exception) {
-            BedrockSession.log.error("Failed to create player", e)
+            log.error("Failed to create player", e)
         }
         return null
     }
 
     private fun onServerLoginSuccess() {
-        BedrockSession.log.debug("Login completed")
+        log.debug("Login completed")
         this.sendPlayStatus(PlayStatusPacket.LOGIN_SUCCESS, false)
     }
 
     private fun onClientSpawned() {
-        BedrockSession.log.debug("Received spawn response, entering in-game phase")
-        Objects.requireNonNull(player)
-            .setImmobile(false) //TODO: HACK: we set this during the spawn sequence to prevent the client sending junk movements
+        log.debug("Received spawn response, entering in-game phase")
+        player!!.setImmobile(false) //TODO: HACK: we set this during the spawn sequence to prevent the client sending junk movements
     }
 
     protected fun onServerDeath() {
@@ -446,10 +444,11 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
 
         if (this.packetHandler == null) return
 
-        if (packetHandler is InGamePacketHandler) {
-            packetHandler.managerHandle(packet)
+        val inGamePacketHandler = packetHandler
+        if (inGamePacketHandler is InGamePacketHandler) {
+            inGamePacketHandler.managerHandle(packet)
         } else {
-            packet.handle(this.packetHandler)
+            packet.handle(this.packetHandler!!)
         }
     }
 
@@ -470,7 +469,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
 
     fun syncAvailableCommands() {
         val pk = AvailableCommandsPacket()
-        val data: MutableMap<String, CommandDataVersions?> = HashMap()
+        val data: MutableMap<String, CommandDataVersions> = HashMap()
         var count = 0
         val commands = Server.instance.commandMap.commands
         synchronized(commands) {
@@ -480,7 +479,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
                 }
                 ++count
                 val data0 = command.generateCustomCommandData(player!!)
-                data[command.name] = data0
+                data[command.name] = data0!!
             }
         }
         if (count > 0) {
@@ -506,7 +505,7 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
             player.getInventory().sendHeldItem(player)
             player.getInventory().sendContents(player)
             player.getInventory().sendArmorContents(player)
-            player.cursorInventory.sendContents(player)
+            player.cursorInventory!!.sendContents(player)
             player.getOffhandInventory()!!.sendContents(player)
             player.getEnderChestInventory()!!.sendContents(player)
         }
@@ -537,8 +536,9 @@ class BedrockSession(val peer: BedrockPeer?, val subClientId: Int) {
 
     val dataPacketManager: DataPacketManager?
         get() {
-            return if (packetHandler != null && packetHandler is InGamePacketHandler) {
-                packetHandler.manager
+            val inGamePacketHandler = this.packetHandler
+            return if (inGamePacketHandler != null && inGamePacketHandler is InGamePacketHandler) {
+                inGamePacketHandler.manager
             } else {
                 null
             }

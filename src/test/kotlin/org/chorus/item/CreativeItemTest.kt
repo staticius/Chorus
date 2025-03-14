@@ -1,10 +1,10 @@
 package org.chorus.item
 
+import com.google.gson.Gson
+import io.netty.util.internal.EmptyArrays
 import org.chorus.nbt.NBTIO
 import org.chorus.registry.CreativeItemRegistry
 import org.chorus.registry.Registries
-import com.google.gson.Gson
-import io.netty.util.internal.EmptyArrays
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -35,7 +35,7 @@ class CreativeItemTest {
                             .decode(tag["nbt_b64"].toString()) else EmptyArrays.EMPTY_BYTES
                         val name = tag["id"].toString()
                         val item = Item.get(name, damage, 1, nbt, false)
-                        require(!(item.isNull || (item.isBlock && item.blockUnsafe.isAir))) { "creative index $i $name" }
+                        require(!(item.isNothing || (item.isBlock && item.blockUnsafe.isAir))) { "creative index $i $name" }
                         val isBlock = tag.containsKey("block_state_b64")
                         if (isBlock) {
                             val blockTag =

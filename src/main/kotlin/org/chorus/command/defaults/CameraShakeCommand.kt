@@ -9,8 +9,6 @@ import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
 import java.util.function.Consumer
 import java.util.stream.Collectors
-import kotlin.collections.List
-import kotlin.collections.Map
 import kotlin.collections.set
 
 class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screenshake.description") {

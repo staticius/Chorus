@@ -8,6 +8,6 @@ class ItemBordureIndentedBannerPattern : ItemBannerPattern(ItemID.Companion.BORD
         set(meta) {
         }
 
-    override val patternType: BannerPatternType?
+    override val patternType: BannerPatternType
         get() = BannerPatternType.BORDER
 }

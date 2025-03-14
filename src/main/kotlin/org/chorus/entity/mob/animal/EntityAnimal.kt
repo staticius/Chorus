@@ -14,13 +14,6 @@ import java.util.concurrent.*
 
 
 abstract class EntityAnimal(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt) {
-    override fun initEntity() {
-        super.initEntity()
-    }
-
-    override fun saveNBT() {
-        super.saveNBT()
-    }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         val superResult = super.onInteract(player, item, clickedPos)

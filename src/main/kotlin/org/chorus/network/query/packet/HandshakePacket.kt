@@ -1,8 +1,8 @@
 package org.chorus.network.query.packet
 
+import io.netty.buffer.ByteBuf
 import org.chorus.network.query.QueryPacket
 import org.chorus.network.query.QueryUtil
-import io.netty.buffer.ByteBuf
 
 class HandshakePacket : QueryPacket {
     // Both

@@ -11,5 +11,4 @@ class XboxLivePlayerInfo(
     skin: Skin,
     data: ClientChainData,
     val xuid: String
-) : PlayerInfo(username, uuid, skin, data) {
-}
+) : PlayerInfo(username, uuid, skin, data)

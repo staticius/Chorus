@@ -9,6 +9,6 @@ class BlockEntityDecoratedPot(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         get() = block.id === Block.DECORATED_POT
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putList("sherds", namedTag.getList("sherds"))
 }

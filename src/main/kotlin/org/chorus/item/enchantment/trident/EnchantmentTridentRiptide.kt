@@ -1,9 +1,9 @@
 package org.chorus.item.enchantment.trident
 
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
 
 class EnchantmentTridentRiptide :
-    EnchantmentTrident(Enchantment.Companion.ID_TRIDENT_RIPTIDE, "tridentRiptide", Rarity.RARE) {
+    EnchantmentTrident(ID_TRIDENT_RIPTIDE, "tridentRiptide", Rarity.RARE) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 7 * level + 10
     }
@@ -13,6 +13,6 @@ class EnchantmentTridentRiptide :
 
     public override fun checkCompatibility(enchantment: Enchantment): Boolean {
         return super.checkCompatibility(enchantment)
-                && enchantment.id != Enchantment.Companion.ID_TRIDENT_LOYALTY && enchantment.id != Enchantment.Companion.ID_TRIDENT_CHANNELING
+                && enchantment.id != ID_TRIDENT_LOYALTY && enchantment.id != ID_TRIDENT_CHANNELING
     }
 }

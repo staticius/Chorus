@@ -1,5 +1,8 @@
 package org.chorus.level.format.palette
 
+import io.netty.buffer.ByteBuf
+import it.unimi.dsi.fastutil.ints.IntSet
+import it.unimi.dsi.fastutil.objects.ReferenceArrayList
 import org.chorus.block.*
 import org.chorus.level.*
 import org.chorus.level.format.ChunkSection
@@ -8,9 +11,6 @@ import org.chorus.level.format.bitarray.BitArrayVersion
 import org.chorus.registry.Registries
 import org.chorus.utils.ByteBufVarInt
 import org.chorus.utils.random.ChorusRandom
-import io.netty.buffer.ByteBuf
-import it.unimi.dsi.fastutil.ints.IntSet
-import it.unimi.dsi.fastutil.objects.ReferenceArrayList
 import java.util.concurrent.atomic.AtomicLong
 
 class BlockPalette : Palette<BlockState?> {
@@ -82,7 +82,7 @@ class BlockPalette : Palette<BlockState?> {
             write = obfuscatePalette!!
         }
 
-        byteBuf.writeByte(Palette.Companion.getPaletteHeader(write.bitArray!!.version(), true))
+        byteBuf.writeByte(getPaletteHeader(write.bitArray!!.version(), true))
         for (word in write.bitArray!!.words()) byteBuf.writeIntLE(word)
         bitArray!!.writeSizeToNetwork(byteBuf, write.palette.size)
         for (value in write.palette) ByteBufVarInt.writeInt(byteBuf, serializer.serialize(value))

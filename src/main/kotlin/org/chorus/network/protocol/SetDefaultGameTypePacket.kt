@@ -3,12 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
-
 class SetDefaultGameTypePacket : DataPacket() {
     var gamemode: Int = 0
 

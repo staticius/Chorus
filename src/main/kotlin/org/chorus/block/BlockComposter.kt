@@ -1,5 +1,7 @@
 package org.chorus.block
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
@@ -11,8 +13,6 @@ import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
-import it.unimi.dsi.fastutil.objects.Object2IntMap
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import java.util.*
 
 class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
@@ -36,7 +36,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
     override val waterloggingLevel: Int
         get() = 1
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -69,7 +69,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
         fz: Float
     ): Boolean {
         if (isNotActivate(player)) return false
-        if (item.isNull) {
+        if (item.isNothing) {
             return false
         }
 
@@ -79,8 +79,8 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
             if (!event.isCancelled) {
                 setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
                 level.setBlock(this.position, this, true, true)
-                level.dropItem(position.add(0.5, 0.85, 0.5)!!, event.getDrop(), event.motion, false, 10)
-                level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_EMPTY)
+                level.dropItem(position.add(0.5, 0.85, 0.5), event.getDrop(), event.motion, false, 10)
+                level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_EMPTY)
             }
             return true
         }
@@ -104,12 +104,12 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
 
         if (event.isSuccess) {
             if (incrementLevel()) {
-                level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_READY)
+                level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_READY)
             } else {
-                level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_FILL_SUCCESS)
+                level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_FILL_SUCCESS)
             }
         } else {
-            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_FILL)
+            level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_FILL)
         }
 
         return true
@@ -126,9 +126,9 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
             level.setBlock(this.position, this, true, true)
             if (item != null) {
-                level.dropItem(position.add(0.5, 0.85, 0.5)!!, event.getDrop(), event.motion, false, 10)
+                level.dropItem(position.add(0.5, 0.85, 0.5), event.getDrop(), event.motion, false, 10)
             }
-            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_COMPOSTER_EMPTY)
+            level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_EMPTY)
             return event.getDrop()
         }
         return null
@@ -165,18 +165,23 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
             }
         }
 
-        fun registerBlocks(chance: Int, vararg BlockID.: String) {
-            for (BlockID.in BlockID.) {
-                registerBlock(chance, BlockID.0)
-            }
+        fun registerBlocks(chance: Int, vararg BlockID.: String)
+        {
+            for (BlockID. in BlockID.) {
+            registerBlock(chance, BlockID.0)
+        }
         }
 
-        fun registerBlock(chance: Int, BlockID.String) {
-            val blockState = Registries.BLOCK.get(BlockID.!!.blockState
-            compostableBlocks.put(blockState, chance)
+        fun registerBlock(chance: Int, BlockID.String)
+        {
+            val blockState = Registries.BLOCK.get(
+                BlockID.!!.blockState
+                        compostableBlocks . put (blockState, chance
+            )
         }
 
-        fun registerBlock(chance: Int, BlockID.String, meta: Int) {
+        fun registerBlock(chance: Int, BlockID.String, meta: Int)
+        {
             val i = Registries.BLOCKSTATE_ITEMMETA.get(BlockID.meta)
             val blockState: BlockState
             if (i == 0) {

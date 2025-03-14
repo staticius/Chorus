@@ -113,7 +113,7 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
         return "Magma Cube"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         if (getLastDamageCause() != null) {
             if (lastDamageCause is EntityDamageByEntityEvent) {
                 if (lastDamageCause.damager is EntityFrog) {

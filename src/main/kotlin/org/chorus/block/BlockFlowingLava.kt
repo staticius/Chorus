@@ -31,7 +31,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
         entity.highestPosition -= (entity.highestPosition - entity.position.y) * 0.5
 
         val ev = EntityCombustByBlockEvent(this, entity, 8)
-        instance!!.pluginManager.callEvent(ev)
+        instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled // Making sure the entity is actually alive and not invulnerable.
             && entity.isAlive()
             && entity.noDamageTicks == 0
@@ -65,7 +65,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
     override fun onUpdate(type: Int): Int {
         val result = super.onUpdate(type)
 
-        if (type == Level.BLOCK_UPDATE_RANDOM && level.gameRules!!.getBoolean(GameRule.DO_FIRE_TICK)) {
+        if (type == Level.BLOCK_UPDATE_RANDOM && level.gameRules.getBoolean(GameRule.DO_FIRE_TICK)) {
             val random: Random = ThreadLocalRandom.current()
 
             val i = random.nextInt(3)
@@ -73,7 +73,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
             if (i > 0) {
                 for (k in 0..<i) {
                     val v = position.add((random.nextInt(3) - 1).toDouble(), 1.0, (random.nextInt(3) - 1).toDouble())
-                    val block = level.getBlock(v!!)
+                    val block = level.getBlock(v)
 
                     if (block!!.isAir) {
                         if (this.isSurroundingBlockFlammable(block)) {
@@ -96,7 +96,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = 
             } else {
                 for (k in 0..2) {
                     val v = position.add((random.nextInt(3) - 1).toDouble(), 0.0, (random.nextInt(3) - 1).toDouble())
-                    val block = level.getBlock(v!!)
+                    val block = level.getBlock(v)
 
                     if (block!!.up()!!.isAir && block.burnChance > 0) {
                         val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)

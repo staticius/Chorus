@@ -1,8 +1,6 @@
 package org.chorus.inventory
 
 
-
-
 @RequiredArgsConstructor
 enum class InventoryType {
     NONE(-9),

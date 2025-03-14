@@ -1,11 +1,6 @@
 package org.chorus.form.response
 
 
-
-
-
-
-
 /**
  * The response of a [org.chorus.form.window.ModalForm]
  */

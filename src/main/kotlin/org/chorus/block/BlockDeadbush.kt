@@ -2,16 +2,13 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.BlockFlowerPot.FlowerPotBlock
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemStick
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.tags.BlockTags
 import java.util.*
 
-/**
- * @author xtypr
- * @since 2015/12/2
- */
 class BlockDeadbush @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockState), FlowerPotBlock {
     override val name: String
@@ -60,7 +57,7 @@ class BlockDeadbush @JvmOverloads constructor(blockState: BlockState? = Companio
         return 0
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return if (item.isShears) {
             arrayOf(
                 toItem()

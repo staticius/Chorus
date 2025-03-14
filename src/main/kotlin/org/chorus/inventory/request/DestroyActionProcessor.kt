@@ -1,5 +1,6 @@
 package org.chorus.inventory.request
 
+import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.inventory.*
@@ -7,8 +8,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.DestroyAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import com.google.common.collect.Lists
-
 import java.util.List
 
 /**
@@ -40,7 +39,7 @@ class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
             DestroyActionProcessor.log.warn("mismatch stack network id!")
             return context.error()
         }
-        if (item.isNull) {
+        if (item.isNothing) {
             DestroyActionProcessor.log.warn("cannot destroy an air!")
             return context.error()
         }

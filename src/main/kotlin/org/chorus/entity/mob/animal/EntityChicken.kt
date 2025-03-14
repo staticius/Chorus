@@ -139,7 +139,7 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
         return "Chicken"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get((if (this.isOnFire) Item.COOKED_CHICKEN else Item.CHICKEN)), Item.get(Item.FEATHER))
     }
 

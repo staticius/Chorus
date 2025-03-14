@@ -1,13 +1,13 @@
 package org.chorus.network.connection.netty.codec.packet
 
-import org.chorus.network.connection.netty.BedrockPacketWrapper
-import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.registry.Registries
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageCodec
 import io.netty.util.internal.logging.InternalLogger
 import io.netty.util.internal.logging.InternalLoggerFactory
+import org.chorus.network.connection.netty.BedrockPacketWrapper
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.registry.Registries
 
 abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacketWrapper>() {
     @Throws(Exception::class)
@@ -19,9 +19,9 @@ abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacket
             val buf = ctx.alloc().buffer(128)
             try {
                 val packet = msg.packet
-                msg.packetId = packet.pid()
+                msg.packetId = packet!!.pid()
                 encodeHeader(buf, msg)
-                packet.encode(HandleByteBuf.Companion.of(buf))
+                packet.encode(HandleByteBuf.of(buf))
                 msg.packetBuffer = buf.retain()
                 out.add(msg.retain())
             } catch (t: Throwable) {

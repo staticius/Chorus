@@ -18,7 +18,6 @@ import org.chorus.math.Vector2
 import org.chorus.math.Vector3
 import org.chorus.utils.random.RandomSourceProvider
 import org.chorus.utils.random.RandomSourceProvider.Companion.create
-import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 /**
@@ -172,9 +171,11 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
                 val vector2: Vector2?
                 if ((findSaplings(WoodType.SPRUCE).also { vector2 = it }) != null) {
                     vector3 = position.add(vector2!!.floorX.toDouble(), 0.0, vector2.floorY.toDouble())
-                    generator = object : HugeTreesGenerator(0, 0,
+                    generator = object : HugeTreesGenerator(
+                        0, 0,
                         BlockSpruceLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS, BlockFace.Axis.Y),
-                        BlockJungleLeaves.properties.defaultState) {
+                        BlockJungleLeaves.properties.defaultState
+                    ) {
                         override fun generate(
                             level: BlockManager,
                             rand: RandomSourceProvider,

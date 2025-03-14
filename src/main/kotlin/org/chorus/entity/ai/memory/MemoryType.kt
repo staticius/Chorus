@@ -13,37 +13,29 @@ import java.util.function.Supplier
  * Entity memory is a class that stores entity data, and if [IMemoryCodec] is implemented, entity memory can also be persistently stored and linked entity metadata
  */
 class MemoryType<Data> @JvmOverloads constructor(
-    @field:Getter private val identifier: Identifier,
-    defaultData: Supplier<Data?> = Supplier { null }
+    val identifier: Identifier,
+    private val defaultData: Supplier<Data?> = Supplier { null }
 ) {
-    private val defaultData: Supplier<Data>
 
 
-    private var codec: IMemoryCodec<Data>? = null
+    var codec: IMemoryCodec<Data>? = null
+        private set
 
     constructor(identifier: Identifier, defaultData: Data) : this(
         identifier,
         Supplier<Data?> { defaultData })
 
-    constructor(identifier: String?) : this(
+    constructor(identifier: String) : this(
         Identifier(identifier),
         Supplier<Data?> { null })
 
-    constructor(identifier: String?, defaultData: Data) : this(
+    constructor(identifier: String, defaultData: Data) : this(
         Identifier(identifier),
         Supplier<Data?> { defaultData })
 
-    constructor(identifier: String?, defaultData: Supplier<Data?>) : this(Identifier(identifier), defaultData)
+    constructor(identifier: String, defaultData: Supplier<Data?>) : this(Identifier(identifier), defaultData)
 
-    /**
-     * @param identifier  此记忆类型的命名空间标识符
-     * @param defaultData 记忆未在实体记忆存储器中找到时返回的默认值
-     */
-    init {
-        this.defaultData = defaultData
-    }
-
-    fun getDefaultData(): Data {
+    fun getDefaultData(): Data? {
         return defaultData.get()
     }
 
@@ -54,9 +46,7 @@ class MemoryType<Data> @JvmOverloads constructor(
     }
 
     fun encode(entity: Entity, data: Data) {
-        if (codec != null) {
-            codec!!.encode(data, entity.namedTag)
-        }
+        codec?.encode(data, entity.namedTag)
     }
 
     /**
@@ -69,9 +59,7 @@ class MemoryType<Data> @JvmOverloads constructor(
      * @param data   数据
      */
     fun forceEncode(entity: Entity, data: Any) {
-        if (codec != null) {
-            codec!!.encode(data as Data, entity.namedTag)
-        }
+        codec?.encode(data as Data, entity.namedTag)
     }
 
     fun decode(entity: Entity): Data? {
@@ -82,10 +70,10 @@ class MemoryType<Data> @JvmOverloads constructor(
         return identifier.hashCode()
     }
 
-    override fun equals(obj: Any): Boolean {
-        if (obj === this) return true
-        if (obj is MemoryType<*>) {
-            return identifier == obj.identifier
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other is MemoryType<*>) {
+            return identifier == other.identifier
         }
         return false
     }

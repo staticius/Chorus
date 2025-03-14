@@ -2,8 +2,10 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
-import org.chorus.math.*
+import org.chorus.item.Item
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 
 class BlockBorderBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {
@@ -51,11 +53,11 @@ class BlockBorderBlock @JvmOverloads constructor(blockstate: BlockState? = Compa
         return super.isBreakable(vector, layer, face, item, player)
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val aabb = super.recalculateBoundingBox()
         aabb!!.minY = Double.MIN_VALUE
         aabb.maxY = Double.MAX_VALUE

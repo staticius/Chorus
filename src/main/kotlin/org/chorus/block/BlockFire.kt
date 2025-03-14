@@ -58,7 +58,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
         if (entity is EntityArrow) {
             ev.setCancelled()
         }
-        instance!!.pluginManager.callEvent(ev)
+        instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled && entity.isAlive() && entity.noDamageTicks == 0) {
             entity.setOnFire(ev.duration)
         }
@@ -91,7 +91,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
                 if (!event.isCancelled) {
                     level.setBlock(this.position, event.newState, true)
                 }
-            } else if (level.gameRules!!.getBoolean(GameRule.DO_FIRE_TICK) && !level.isUpdateScheduled(
+            } else if (level.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && !level.isUpdateScheduled(
                     this.position,
                     this
                 )
@@ -103,7 +103,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
             checkRain()
 
             return Level.BLOCK_UPDATE_NORMAL
-        } else if (type == Level.BLOCK_UPDATE_SCHEDULED && level.gameRules!!.getBoolean(GameRule.DO_FIRE_TICK)) {
+        } else if (type == Level.BLOCK_UPDATE_SCHEDULED && level.gameRules.getBoolean(GameRule.DO_FIRE_TICK)) {
             val down = down()
             val downId = down!!.id
 

@@ -1,13 +1,13 @@
 package org.chorus.network.process.processor
 
+import com.google.common.util.concurrent.RateLimiter
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.event.player.PlayerCommandPreprocessEvent
 import org.chorus.event.player.PlayerHackDetectedEvent
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.CommandRequestPacket
 import org.chorus.network.protocol.ProtocolInfo
-import com.google.common.util.concurrent.RateLimiter
-import org.chorus.Server
 import java.util.concurrent.TimeUnit
 
 class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {

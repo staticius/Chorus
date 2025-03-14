@@ -3,14 +3,12 @@ package org.chorus.command.data
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 
 
-
 class ChainedSubCommandData {
-    private val name: String? = null
-    private val values: List<Value> = ObjectArrayList()
-
+    val name: String? = null
+    val values: List<Value> = ObjectArrayList()
 
     class Value {
-        private val first: String? = null
-        private val second: String? = null
+        val first: String? = null
+        val second: String? = null
     }
 }

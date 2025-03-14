@@ -24,9 +24,9 @@ class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityIte
                 this.setItem(ItemBlock(Block.get(BlockID.AIR)), false)
             }
             val item = item
-            val tag = super.getSpawnCompound()
+            val tag = super.spawnCompound
 
-            if (!item!!.isNull) {
+            if (!item!!.isNothing) {
                 val itemTag = NBTIO.putItemHelper(item)
                 val networkDamage = item.damage
                 val namespacedId = item.id
@@ -38,9 +38,9 @@ class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityIte
                 if (item.isBlock) {
                     itemTag.putCompound("Block", item.blockUnsafe.blockState.blockStateTag)
                 }
-                tag!!.putCompound("Item", itemTag)
+                tag.putCompound("Item", itemTag)
                     .putByte("ItemRotation", this.itemRotation)
             }
-            return tag!!
+            return tag
         }
 }

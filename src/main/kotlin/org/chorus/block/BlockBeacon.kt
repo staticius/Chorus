@@ -1,13 +1,12 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.blockentity.*
-import org.chorus.item.*
+import org.chorus.blockentity.BlockEntityBeacon
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 class BlockBeacon @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBeacon> {
     override fun getBlockEntityClass(): Class<out BlockEntityBeacon> {

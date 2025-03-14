@@ -6,10 +6,6 @@ import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
-/**
- * @author joserobjr
- * @since 2021-06-14
- */
 abstract class BlockDoubleSlabCopperBase(blockstate: BlockState?) : BlockDoubleSlabBase(blockstate),
     Waxable, Oxidizable {
     override val hardness: Double

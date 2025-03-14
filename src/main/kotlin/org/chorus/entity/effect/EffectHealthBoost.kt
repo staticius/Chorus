@@ -1,6 +1,6 @@
 package org.chorus.entity.effect
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import java.awt.Color
 
 class EffectHealthBoost : Effect(EffectType.HEALTH_BOOST, "%potion.healthBoost", Color(248, 125, 35)) {

@@ -1,7 +1,7 @@
 package org.chorus.network.connection.util
 
-import org.chorus.utils.JSONUtils
 import com.google.gson.reflect.TypeToken
+import org.chorus.utils.JSONUtils
 import java.security.NoSuchAlgorithmException
 import java.security.PublicKey
 import java.security.spec.InvalidKeySpecException

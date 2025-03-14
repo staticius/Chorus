@@ -7,9 +7,6 @@ import java.util.List
 import java.util.function.Function
 
 
-
-
-
 class ItemStackRequestPacket : DataPacket() {
     val requests: MutableList<ItemStackRequest> = ArrayList()
 

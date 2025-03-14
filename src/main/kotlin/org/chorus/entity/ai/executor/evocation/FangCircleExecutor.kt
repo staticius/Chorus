@@ -4,7 +4,7 @@ import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager
 import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
-import org.chorus.level.*
+import org.chorus.level.Transform
 import kotlin.math.cos
 import kotlin.math.sin
 

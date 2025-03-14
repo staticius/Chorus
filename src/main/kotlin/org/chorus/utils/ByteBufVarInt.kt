@@ -4,8 +4,7 @@ import io.netty.buffer.ByteBuf
 
 import java.math.BigInteger
 
-@UtilityClass
-class ByteBufVarInt {
+object ByteBufVarInt {
     fun writeInt(buffer: ByteBuf, value: Int) {
         encode(buffer, ((value shl 1) xor (value shr 31)).toLong() and 0xFFFFFFFFL)
     }
@@ -151,38 +150,36 @@ class ByteBufVarInt {
         throw ArithmeticException("VarInt was too large")
     }
 
-    companion object {
-        private val BIG_INTEGER_7F: BigInteger = BigInteger.valueOf(0x7f)
-        private val BIG_INTEGER_80: BigInteger = BigInteger.valueOf(0x80)
+    private val BIG_INTEGER_7F: BigInteger = BigInteger.valueOf(0x7f)
+    private val BIG_INTEGER_80: BigInteger = BigInteger.valueOf(0x80)
 
-        fun writeUnsignedBigVarInt(buffer: ByteBuf, value: BigInteger) {
-            var value = value
-            while (true) {
-                val bits = value.and(BIG_INTEGER_7F)
-                value = value.shiftRight(7)
-                if (value.compareTo(BigInteger.ZERO) == 0) {
-                    buffer.writeByte(bits.toInt())
-                    return
-                }
-                buffer.writeByte(bits.or(BIG_INTEGER_80).toInt())
+    fun writeUnsignedBigVarInt(buffer: ByteBuf, value: BigInteger) {
+        var value1 = value
+        while (true) {
+            val bits = value1.and(BIG_INTEGER_7F)
+            value1 = value1.shiftRight(7)
+            if (value1.compareTo(BigInteger.ZERO) == 0) {
+                buffer.writeByte(bits.toInt())
+                return
             }
+            buffer.writeByte(bits.or(BIG_INTEGER_80).toInt())
         }
+    }
 
-        fun readUnsignedBigVarInt(buffer: ByteBuf, maxBits: Int): BigInteger {
-            var value = BigInteger.ZERO
-            var shift = 0
-            while (true) {
-                if (shift >= maxBits) {
-                    throw ArithmeticException("VarInt was too large")
-                }
-
-                val b = buffer.readByte()
-                value = value.or(BigInteger.valueOf((b.toInt() and 0x7F).toLong()).shiftLeft(shift))
-                if ((b.toInt() and 0x80) == 0) {
-                    return value
-                }
-                shift += 7
+    fun readUnsignedBigVarInt(buffer: ByteBuf, maxBits: Int): BigInteger {
+        var value = BigInteger.ZERO
+        var shift = 0
+        while (true) {
+            if (shift >= maxBits) {
+                throw ArithmeticException("VarInt was too large")
             }
+
+            val b = buffer.readByte()
+            value = value.or(BigInteger.valueOf((b.toInt() and 0x7F).toLong()).shiftLeft(shift))
+            if ((b.toInt() and 0x80) == 0) {
+                return value
+            }
+            shift += 7
         }
     }
 }

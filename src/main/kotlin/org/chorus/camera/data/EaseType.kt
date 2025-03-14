@@ -1,7 +1,6 @@
 package org.chorus.camera.data
 
 
-
 /**
  * @author daoge_cmd
  * @date 2023/6/10

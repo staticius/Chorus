@@ -9,7 +9,6 @@ import java.io.InputStream
 import java.nio.charset.StandardCharsets
 
 
-
 class FileWriteTask : AsyncTask {
     private val file: File
     private val contents: InputStream

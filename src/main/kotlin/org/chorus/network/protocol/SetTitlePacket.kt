@@ -3,20 +3,19 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class SetTitlePacket : DataPacket() {
     @JvmField
     var type: Int = 0
+
     @JvmField
     var text: String = ""
+
     @JvmField
     var fadeInTime: Int = 0
+
     @JvmField
     var stayTime: Int = 0
+
     @JvmField
     var fadeOutTime: Int = 0
     var xuid: String = ""

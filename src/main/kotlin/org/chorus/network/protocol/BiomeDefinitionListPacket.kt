@@ -4,10 +4,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.registry.Registries
 
 
-
-
-
-
 class BiomeDefinitionListPacket : DataPacket() {
     override fun decode(byteBuf: HandleByteBuf) {
     }

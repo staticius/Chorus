@@ -4,6 +4,6 @@ class BlockPinkConcrete @JvmOverloads constructor(blockstate: BlockState? = Comp
     BlockConcrete(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PINK_CONCRETE)
-            
+
     }
 }

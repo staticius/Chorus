@@ -3,7 +3,7 @@ package org.chorus.item
 class ItemNetheriteChestplate @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemArmor(ItemID.Companion.NETHERITE_CHESTPLATE, meta, count, "Netherite Chestplate") {
     override val tier: Int
-        get() = ItemArmor.Companion.TIER_NETHERITE
+        get() = TIER_NETHERITE
 
     override val isChestplate: Boolean
         get() = true

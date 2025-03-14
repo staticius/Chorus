@@ -44,7 +44,7 @@ class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState? = Com
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 

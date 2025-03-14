@@ -99,7 +99,7 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
                     )
                 )
                 val ev = BlockGrowEvent(this, grown)
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
                     this.age = maxValue
                     level.setBlock(this.position, 0, this, true, true)

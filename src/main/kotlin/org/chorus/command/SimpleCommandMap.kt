@@ -1,5 +1,6 @@
 package org.chorus.command
 
+import io.netty.util.internal.EmptyArrays
 import org.chorus.Server
 import org.chorus.command.data.CommandParameter
 import org.chorus.command.defaults.*
@@ -10,22 +11,12 @@ import org.chorus.lang.TranslationContainer
 import org.chorus.plugin.InternalPlugin
 import org.chorus.utils.TextFormat
 import org.chorus.utils.Utils
-import io.netty.util.internal.EmptyArrays
-
 import java.util.*
 import java.util.function.Function
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.iterator
 import kotlin.collections.set
-
 
 
 class SimpleCommandMap(private val server: Server) : CommandMap {
@@ -130,7 +121,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
         if (label == null) {
             label = command.name
         }
-        label = label!!.trim { it <= ' ' }.lowercase()
+        label = label.trim { it <= ' ' }.lowercase()
         fallbackPrefix = fallbackPrefix.trim { it <= ' ' }.lowercase()
 
         val registered = this.registerAlias(command, false, fallbackPrefix, label)

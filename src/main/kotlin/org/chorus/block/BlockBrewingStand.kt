@@ -2,9 +2,12 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.blockentity.*
+import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityBrewingStand
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
@@ -83,7 +86,7 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Comp
     ): Boolean {
         if (player != null) {
             val itemInHand = player.getInventory().itemInHand
-            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
                 return false
             }
             val t = level.getBlockEntity(this.position)

@@ -8,7 +8,7 @@ class BlockSpruceSapling : BlockSapling {
 
     constructor(blockstate: BlockState?) : super(blockstate)
 
-    override val woodType: WoodType?
+    override val woodType: WoodType
         get() = WoodType.SPRUCE
 
     companion object {

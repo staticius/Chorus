@@ -9,7 +9,7 @@ import org.chorus.nbt.tag.CompoundTag
 @JvmRecord
 data class Transformation(val translation: Vector3, val scale: Vector3, val rotation: Vector3) :
     NBTData {
-    override fun toCompoundTag(): CompoundTag? {
+    override fun toCompoundTag(): CompoundTag {
         val rx = (rotation.floorX % 360) / 90
         val ry = (rotation.floorY % 360) / 90
         val rz = (rotation.floorZ % 360) / 90

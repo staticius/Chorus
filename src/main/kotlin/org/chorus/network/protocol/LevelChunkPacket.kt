@@ -3,9 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
 (exclude = ["data"])
 
 
@@ -15,12 +12,14 @@ class LevelChunkPacket : DataPacket() {
 
     @JvmField
     var chunkZ: Int = 0
+
     @JvmField
     var subChunkCount: Int = 0
     var cacheEnabled: Boolean = false
     var requestSubChunks: Boolean = false
     var subChunkLimit: Int = 0
     var blobIds: LongArray
+
     @JvmField
     var data: ByteArray
 

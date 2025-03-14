@@ -1,9 +1,6 @@
 package org.chorus.utils
 
 
-
-
-
 /**
  * @author: MagicDroidX (Nukkit)
  */

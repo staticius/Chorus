@@ -146,7 +146,7 @@ class EntityZombiePigman(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk
     override fun onUpdate(currentTick: Int): Boolean {
         burn(this)
         if (currentTick % 20 == 0) {
-            EntityZombie.Companion.pickupItems(this)
+            pickupItems(this)
         }
         return super.onUpdate(currentTick)
     }

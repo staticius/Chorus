@@ -22,14 +22,15 @@ import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.scoreboard.manager.IScoreboardManager
 import org.chorus.utils.TickCachedBlockIterator
 import java.util.*
+import kotlin.math.sqrt
 
 abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt), EntityDamageable {
-    protected var attackTime: Int = 0
+    protected open var attackTime: Short = 0
     protected var invisible: Boolean = false
     protected var movementSpeed: Float = DEFAULT_SPEED
     protected var turtleTicks: Int = 0
     private var attackTimeByShieldKb: Boolean = false
-    private var attackTimeBefore: Int = 0
+    private var attackTimeBefore: Short = 0
 
     override fun getGravity(): Float {
         return 0.08f
@@ -47,7 +48,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             namedTag!!.remove("HealF")
         }
 
-        if (!namedTag!!.contains("Health") || namedTag!!.get("Health") !is FloatTag) {
+        if (!namedTag!!.contains("Health") || namedTag!!["Health"] !is FloatTag) {
             namedTag!!.putFloat("Health", getMaxHealth().toFloat())
         }
 
@@ -58,10 +59,10 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         val wasAlive: Boolean = this.isAlive()
         super.setHealth(health)
         if (this.isAlive() && !wasAlive) {
-            val pk: EntityEventPacket = EntityEventPacket()
+            val pk = EntityEventPacket()
             pk.eid = this.getId()
             pk.event = EntityEventPacket.RESPAWN
-            Server.broadcastPacket(hasSpawned.values(), pk)
+            Server.broadcastPacket(hasSpawned.values, pk)
         }
     }
 
@@ -85,7 +86,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             return false
         } else if (this.attackTime > 0 && !attackTimeByShieldKb) {
             val lastCause: EntityDamageEvent? = this.getLastDamageCause()
-            if (lastCause != null && lastCause.getDamage() >= source.getDamage()) {
+            if (lastCause != null && lastCause.damage >= source.damage) {
                 return false
             }
         }
@@ -98,7 +99,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             if (source is EntityDamageByEntityEvent) {
                 var damager: Entity = source.damager
                 if (source is EntityDamageByChildEntityEvent) {
-                    damager = source.getChild()
+                    damager = source.child
                 }
 
                 //Critical hit
@@ -110,7 +111,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
                     level!!.addChunkPacket(damager.getChunkX(), damager.getChunkZ(), animate)
                     level!!.addSound(this.position, Sound.GAME_PLAYER_ATTACK_STRONG)
 
-                    source.setDamage(source.getDamage() * 1.5f)
+                    source.damage = (source.damage * 1.5f)
                 }
 
                 if (damager.isOnFire() && damager !is Player) {
@@ -119,14 +120,14 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
 
                 val deltaX: Double = position.x - damager.position.x
                 val deltaZ: Double = position.z - damager.position.z
-                this.knockBack(damager, source.getDamage().toDouble(), deltaX, deltaZ, source.knockBack.toDouble())
+                this.knockBack(damager, source.damage.toDouble(), deltaX, deltaZ, source.knockBack.toDouble())
             }
 
             val pk: EntityEventPacket = EntityEventPacket()
             pk.eid = this.getId()
             pk.event =
                 if (this.getHealth() <= 0) EntityEventPacket.DEATH_ANIMATION else EntityEventPacket.HURT_ANIMATION
-            Server.broadcastPacket(hasSpawned.values(), pk)
+            Server.broadcastPacket(hasSpawned.values, pk)
 
             this.attackTime = source.attackCooldown
             this.attackTimeByShieldKb = false
@@ -143,7 +144,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     open fun knockBack(attacker: Entity?, damage: Double, x: Double, z: Double, base: Double) {
-        var f: Double = Math.sqrt(x * x + z * z)
+        var f: Double = sqrt(x * x + z * z)
         if (f <= 0) {
             return
         }
@@ -182,7 +183,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         manager.onEntityDead(this)
 
         if (level!!.gameRules.getBoolean(GameRule.DO_ENTITY_DROPS)) {
-            for (item: Item? in ev.getDrops()) {
+            for (item in ev.getDrops()) {
                 level!!.dropItem(this.position, item)
             }
             level!!.dropExpOrb(this.position, getExperienceDrops())
@@ -197,14 +198,14 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         var isBreathing: Boolean = !this.isInsideOfWater()
 
         if (this is Player) {
-            if (isBreathing && player.getInventory().getHelmet() is ItemTurtleHelmet) {
+            if (isBreathing && player.getInventory().helmet is ItemTurtleHelmet) {
                 turtleTicks = 200
             } else if (turtleTicks > 0) {
                 isBreathing = true
                 turtleTicks--
             }
 
-            if (player.isCreative() || player.isSpectator()) {
+            if (player.isCreative || player.isSpectator) {
                 isBreathing = true
             }
         }
@@ -224,7 +225,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             }
 
             if (!this.hasEffect(EffectType.WATER_BREATHING) && !this.hasEffect(EffectType.CONDUIT_POWER) && this.isInsideOfWater()) {
-                if (this is EntitySwimmable || (this is Player && (this.isCreative() || this.isSpectator()))) {
+                if (this is EntitySwimmable || (this is Player && (this.isCreative || this.isSpectator))) {
                     this.setAirTicks(400)
                 } else {
                     if (turtleTicks == 0 || turtleTicks == 200) {
@@ -254,14 +255,14 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
                     val airTicks: Int = getAirTicks()
 
                     if (airTicks < 400) {
-                        setAirTicks(Math.min(400, airTicks + tickDiff * 5))
+                        setAirTicks(400.coerceAtMost(airTicks + tickDiff * 5))
                     }
                 }
             }
         }
 
         if (this.attackTime > 0) {
-            this.attackTime -= tickDiff
+            this.attackTime = (this.attackTime.toInt() - tickDiff).toShort()
             if (this.attackTime <= 0) {
                 attackTimeByShieldKb = false
             }
@@ -280,11 +281,11 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
 
         // Used to check collisions with magma / cactus blocks
         // Math.round处理在某些条件下 出现x.999999的坐标条件,这里选择四舍五入
-        val block: Block = level!!.getTickCachedBlock(
-            position.getFloorX(), (Math.round(
+        val block = level!!.getTickCachedBlock(
+            position.floorX, (Math.round(
                 position.y
             ) - 1).toInt(),
-            position.getFloorZ()
+            position.floorZ
         )
         if (block is BlockMagma || block is BlockCactus) block.onEntityCollide(this)
 
@@ -294,7 +295,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     /**
      * Defines the drops after the entity's death
      */
-    open fun getDrops(): Array<Item?> {
+    open fun getDrops(): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 
@@ -311,45 +312,45 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getLineOfSight(maxDistance: Int, maxLength: Int, transparent: Array<String?>?): Array<Block> {
-        var maxDistance: Int = maxDistance
-        var transparent: Array<String?>? = transparent
-        if (maxDistance > 120) {
-            maxDistance = 120
+        var maxDistance1: Int = maxDistance
+        var transparent1: Array<String?>? = transparent
+        if (maxDistance1 > 120) {
+            maxDistance1 = 120
         }
 
-        if (transparent != null && transparent.size == 0) {
-            transparent = null
+        if (transparent1 != null && transparent1.isEmpty()) {
+            transparent1 = null
         }
 
         val blocks: MutableList<Block> = ArrayList()
 
-        val itr: TickCachedBlockIterator = TickCachedBlockIterator(
-            this.level, this.position, this.getDirectionVector(),
-            getEyeHeight().toDouble(), maxDistance
+        val itr = TickCachedBlockIterator(
+            this.level!!, this.position, this.getDirectionVector(),
+            getEyeHeight().toDouble(), maxDistance1
         )
 
         while (itr.hasNext()) {
-            val block: Block = itr.next()
+            val block = itr.next() ?: continue
             blocks.add(block)
 
-            if (maxLength != 0 && blocks.size() > maxLength) {
-                blocks.remove(0)
+            if (maxLength != 0 && blocks.size > maxLength) {
+                blocks.removeAt(0)
             }
 
-            val id: String = block.getId()
+            val id: String = block.id
 
-            if (transparent == null) {
-                if (!block.isAir()) {
+            if (transparent1 == null) {
+                if (!block.isAir) {
                     break
                 }
             } else {
-                if (Arrays.binarySearch(transparent, id) < 0) {
+                if (Arrays.binarySearch(transparent1, id) < 0) {
                     break
                 }
             }
         }
 
-        return blocks.toArray(Block.EMPTY_ARRAY)
+        return blocks.toTypedArray()
     }
 
     fun getTargetBlock(maxDistance: Int): Block? {
@@ -359,15 +360,13 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     fun getTargetBlock(maxDistance: Int, transparent: Array<String?>?): Block? {
         try {
             val blocks: Array<Block> = this.getLineOfSight(maxDistance, 1, transparent)
-            val block: Block? = blocks.get(0)
-            if (block != null) {
-                if (transparent != null && transparent.size != 0) {
-                    if (Arrays.binarySearch(transparent, block.getId()) < 0) {
-                        return block
-                    }
-                } else {
+            val block: Block = blocks[0]
+            if (!transparent.isNullOrEmpty()) {
+                if (Arrays.binarySearch(transparent, block.id) < 0) {
                     return block
                 }
+            } else {
+                return block
             }
         } catch (ignored: Exception) {
         }
@@ -391,17 +390,17 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun getAirTicks(): Int {
-        return getDataProperty<Short>(EntityDataTypes.Companion.AIR_SUPPLY!!).toInt()
+        return getDataProperty(EntityDataTypes.AIR_SUPPLY).toInt()
     }
 
     fun setAirTicks(ticks: Int) {
-        this.setDataProperty(EntityDataTypes.Companion.AIR_SUPPLY, ticks)
+        this.setDataProperty(EntityDataTypes.AIR_SUPPLY, ticks)
     }
 
     protected fun blockedByShield(source: EntityDamageEvent): Boolean {
         var damager: Entity? = null
         if (source is EntityDamageByChildEntityEvent) {
-            damager = source.getChild()
+            damager = source.child
         } else if (source is EntityDamageByEntityEvent) {
             damager = source.damager
         }
@@ -410,11 +409,11 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         }
 
         val entityPos: Vector3 = damager.position
-        val direction: Vector3? = this.getDirectionVector()
+        val direction: Vector3 = this.getDirectionVector()
         val normalizedVector: Vector3 = position.subtract(entityPos).normalize()
-        val blocked: Boolean = (normalizedVector.x * direction!!.x) + (normalizedVector.z * direction.z) < 0.0
+        val blocked: Boolean = (normalizedVector.x * direction.x) + (normalizedVector.z * direction.z) < 0.0
         val knockBack: Boolean = damager !is EntityProjectile
-        val event: EntityDamageBlockedEvent = EntityDamageBlockedEvent(this, source, knockBack, true)
+        val event = EntityDamageBlockedEvent(this, source, knockBack, true)
         if (!blocked || !source.canBeReducedByArmor()) {
             event.setCancelled()
         }
@@ -425,8 +424,8 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         }
 
         if (event.knockBackAttacker && damager is EntityLiving) {
-            val deltaX: Double = damager.position.getX() - position.getX()
-            val deltaZ: Double = damager.position.getZ() - position.getZ()
+            val deltaX: Double = damager.position.x - position.x
+            val deltaZ: Double = damager.position.z - position.z
             damager.knockBack(this, 0.0, deltaX, deltaZ)
             damager.attackTime = 10
             damager.attackTimeByShieldKb = true
@@ -466,12 +465,12 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     }
 
     fun postAttack(player: Player?) {
-        if (attackTimeByShieldKb && attackTime == 0) {
+        if (attackTimeByShieldKb && attackTime == 0.toShort()) {
             attackTime = attackTimeBefore
         }
     }
 
-    fun getAttackTime(): Int {
+    fun getAttackTime(): Short {
         return attackTime
     }
 
@@ -479,7 +478,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         return attackTimeByShieldKb
     }
 
-    fun getAttackTimeBefore(): Int {
+    fun getAttackTimeBefore(): Short {
         return attackTimeBefore
     }
 

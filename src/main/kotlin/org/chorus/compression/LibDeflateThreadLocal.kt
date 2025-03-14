@@ -1,10 +1,10 @@
 package org.chorus.compression
 
+import cn.powernukkitx.libdeflate.CompressionType
 import org.chorus.Server
 import org.chorus.utils.CleanerHandle
 import org.chorus.utils.PNXLibDeflater
 import org.chorus.utils.PNXLibInflater
-import cn.powernukkitx.libdeflate.CompressionType
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -12,7 +12,7 @@ import java.util.zip.DataFormatException
 
 class LibDeflateThreadLocal(private val zlibThreadLocal: ZlibThreadLocal?) : ZlibProvider {
     @Throws(IOException::class)
-    override fun deflate(data: ByteArray, level: Int, raw: Boolean): ByteArray? {
+    override fun deflate(data: ByteArray, level: Int, raw: Boolean): ByteArray {
         val deflater = PNX_DEFLATER.get().resource
         val type = if (raw) CompressionType.DEFLATE else CompressionType.ZLIB
         val buffer =
@@ -83,7 +83,7 @@ class LibDeflateThreadLocal(private val zlibThreadLocal: ZlibThreadLocal?) : Zli
 
     //Fallback
     @Throws(IOException::class)
-    fun inflate0(data: ByteArray, maxSize: Int, type: CompressionType): ByteArray? {
+    fun inflate0(data: ByteArray, maxSize: Int, type: CompressionType): ByteArray {
         return zlibThreadLocal!!.inflate(data, maxSize, type == CompressionType.DEFLATE)
     }
 

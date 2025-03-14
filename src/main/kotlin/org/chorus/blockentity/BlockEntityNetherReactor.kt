@@ -56,7 +56,7 @@ class BlockEntityNetherReactor(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
     override val spawnCompound: CompoundTag
         get() {
             val reactorState = reactorState
-            return super.getSpawnCompound()
+            return super.spawnCompound
                 .putShort("Progress", getProgress())
                 .putBoolean("HasFinished", reactorState == NetherReactorState.FINISHED)
                 .putBoolean("IsInitialized", reactorState == NetherReactorState.INITIALIZED)

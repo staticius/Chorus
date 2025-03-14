@@ -49,8 +49,8 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID.= this.block.id
-            return BlockID.== Block.CHEST || BlockID.== Block.TRAPPED_CHEST
+            val BlockID. = this.block.id
+            return BlockID.== Block . CHEST || BlockID . == Block.TRAPPED_CHEST
         }
 
     val size: Int
@@ -174,7 +174,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
 
     override val spawnCompound: CompoundTag
         get() {
-            val spawnCompound = super.getSpawnCompound()
+            val spawnCompound = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
             if (this.isPaired) {
                 spawnCompound.putBoolean("pairlead", namedTag.getBoolean("pairlead"))
@@ -187,7 +187,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
             return spawnCompound
         }
 
-    override val cleanedNBT: CompoundTag?
+    override val cleanedNBT: CompoundTag
         get() = super.getCleanedNBT().remove("pairx").remove("pairz")
 
     override var name: String

@@ -8,10 +8,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 
-
-
-
-
 class PlayerEnchantOptionsPacket : DataPacket() {
     var options: List<EnchantOptionData> = ArrayList()
 

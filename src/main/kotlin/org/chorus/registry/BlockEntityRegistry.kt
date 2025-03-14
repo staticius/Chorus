@@ -1,9 +1,9 @@
 package org.chorus.registry
 
-import org.chorus.blockentity.*
-import org.chorus.registry.RegisterException
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
+import org.chorus.blockentity.*
+import org.chorus.registry.RegisterException
 import java.util.concurrent.atomic.AtomicBoolean
 
 class BlockEntityRegistry : BlockEntityID,
@@ -60,7 +60,7 @@ class BlockEntityRegistry : BlockEntityID,
         register0(BlockEntityID.DECORATED_POT, BlockEntityDecoratedPot::class.java)
     }
 
-    override fun get(key: String): Class<out BlockEntity?>? {
+    override operator fun get(key: String): Class<out BlockEntity?>? {
         return knownBlockEntities[key]
     }
 

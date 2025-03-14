@@ -31,7 +31,6 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
 
-
 open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityCampfire?> {
     override fun getBlockEntityType(): String {
@@ -141,7 +140,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
         }
 
         val ev = EntityCombustByBlockEvent(this, entity, 8)
-        instance!!.pluginManager.callEvent(ev)
+        instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled && entity.isAlive()) {
             entity.setOnFire(ev.duration)
         }
@@ -178,7 +177,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.isNull) {
+        if (item.isNothing) {
             return false
         }
 
@@ -300,7 +299,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.CAMPFIRE,
+            BlockID.CAMPFIRE,
             CommonBlockProperties.EXTINGUISHED,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )

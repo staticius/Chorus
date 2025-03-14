@@ -9,7 +9,7 @@ import org.chorus.registry.Registries
  */
 abstract class ItemCustomTool(id: String) : ItemTool(id), CustomItem {
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_WOODEN
+        get() = DURABILITY_WOODEN
 
 
     val speed: Int?

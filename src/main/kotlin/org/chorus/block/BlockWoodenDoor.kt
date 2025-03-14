@@ -19,7 +19,7 @@ open class BlockWoodenDoor @JvmOverloads constructor(blockstate: BlockState? = C
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.WOODEN_DOOR,
+            BlockID.BlockID.WOODEN_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,

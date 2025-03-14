@@ -1,7 +1,6 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.network.protocol.types.itemstack.request.action.CraftCreativeAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.registry.Registries

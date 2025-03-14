@@ -1,8 +1,8 @@
 package org.chorus.item.enchantment
 
 class EnchantmentSwiftSneak : Enchantment(
-    Enchantment.Companion.ID_SWIFT_SNEAK,
-    Enchantment.Companion.NAME_SWIFT_SNEAK,
+    ID_SWIFT_SNEAK,
+    NAME_SWIFT_SNEAK,
     Rarity.VERY_RARE,
     EnchantmentType.ARMOR_LEGS
 ) {

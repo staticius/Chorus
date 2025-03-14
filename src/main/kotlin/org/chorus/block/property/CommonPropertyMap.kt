@@ -1,8 +1,8 @@
 package org.chorus.block.property
 
+import com.google.common.collect.ImmutableBiMap
 import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.math.BlockFace
-import com.google.common.collect.ImmutableBiMap
 
 object CommonPropertyMap {
     @JvmField

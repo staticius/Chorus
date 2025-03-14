@@ -492,7 +492,7 @@ class SNBTLexer @JvmOverloads constructor(
     }
 
     companion object {
-        private val nfaFunctions: Array<NfaFunction?>? = SNBTNfaData.getFunctionTableMap(null)
+        private val nfaFunctions: Array<NfaFunction?> = SNBTNfaData.getFunctionTableMap(null)
         const val DEFAULT_TAB_SIZE: Int = 1
 
         // Just a dummy Token value that we put in the tokenLocationTable
@@ -730,7 +730,7 @@ class SNBTLexer @JvmOverloads constructor(
             do {
                 charsRead = reader.read(block)
                 if (charsRead > 0) {
-                    buf.append(block, 0, charsRead)
+                    buf.appendRange(block, 0, charsRead)
                 }
             } while (charsRead == BUF_SIZE)
             reader.close()

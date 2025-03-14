@@ -1,6 +1,8 @@
 package org.chorus.block
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.blockentity.BlockEntity
@@ -19,6 +21,7 @@ import org.chorus.level.Locator
 import org.chorus.level.MovingObjectPosition
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
+import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 import org.chorus.metadata.MetadataValue
 import org.chorus.metadata.Metadatable
@@ -30,30 +33,33 @@ import org.chorus.plugin.Plugin
 import org.chorus.registry.Registries
 import org.chorus.tags.BlockTags.getTagSet
 import org.chorus.utils.BlockColor
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
-import org.chorus.Server
-import org.chorus.math.IVector3
 import org.chorus.utils.Loggable
-
 import java.util.*
 import java.util.function.Predicate
 import kotlin.math.pow
 
 
-
-abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
+abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!),
     Metadatable, AxisAlignedBB, IVector3, Loggable {
-    var blockState: BlockState? = null
+
     protected var color: BlockColor? = null
+
     @JvmField
     var layer: Int = 0
 
+    /**
+     * The properties that fully describe all possible and valid states that this block can have.
+     */
+    abstract val properties: BlockProperties
+
+    var blockState: BlockState? = null
+
+    private val resolvedBlockState: BlockState by lazy {
+        blockState?.takeIf { properties.containBlockState(it) } ?: properties.defaultState
+    }
+
     init {
-        if (blockState != null && properties.containBlockState(blockState)) {
-            this.blockState = blockState
-        } else {
-            this.blockState = properties.defaultState
-        }
+        this.blockState = resolvedBlockState
     }
 
     //http://minecraft.wiki/w/Breaking
@@ -365,11 +371,6 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
             return result.toString().trim { it <= ' ' }
         }
 
-    /**
-     * The properties that fully describe all possible and valid states that this block can have.
-     */
-    abstract val properties: BlockProperties
-
     val id: String
         get() = properties.identifier
 
@@ -410,7 +411,8 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
 
     fun setPropertyValues(values: MutableList<BlockPropertyValue<*, *, *>>): Block {
         this.blockState = blockState!!.setPropertyValues(
-            properties, *values.toTypedArray())
+            properties, *values.toTypedArray()
+        )
         return this
     }
 
@@ -747,37 +749,37 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     override var minX: Double
         get() = position.x
         set(minX) {
-            super.minX = minX
+            throw UnsupportedOperationException("Immutable")
         }
 
     override var minY: Double
         get() = position.y
         set(minY) {
-            super.minY = minY
+            throw UnsupportedOperationException("Immutable")
         }
 
     override var minZ: Double
         get() = position.z
         set(minZ) {
-            super.minZ = minZ
+            throw UnsupportedOperationException("Immutable")
         }
 
     override var maxX: Double
         get() = position.x + 1
         set(maxX) {
-            super.maxX = maxX
+            throw UnsupportedOperationException("Immutable")
         }
 
     override var maxY: Double
         get() = position.y + 1
         set(maxY) {
-            super.maxY = maxY
+            throw UnsupportedOperationException("Immutable")
         }
 
     override var maxZ: Double
         get() = position.z + 1
         set(maxZ) {
-            super.maxZ = maxZ
+            throw UnsupportedOperationException("Immutable")
         }
 
     protected open fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
@@ -1010,8 +1012,8 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     val isDefaultState: Boolean
         get() = this.blockState === properties.defaultState
 
-    open fun toItem(): Item? {
-        return properties.defaultState.let { ItemBlock(it.toBlock()) }
+    open fun toItem(): Item {
+        return ItemBlock(properties.defaultState.toBlock())
     }
 
     /**
@@ -1053,7 +1055,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     }
 
     val isBlockChangeAllowed: Boolean
-        get() = chunk!!.isBlockChangeAllowed(
+        get() = chunk.isBlockChangeAllowed(
             position.floorX and 0xF,
             position.floorY,
             position.floorZ and 0xF
@@ -1074,7 +1076,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
 
             if (player.isAdventure) {
                 val itemInHand = player.getInventory().itemInHand
-                if (itemInHand.isNull) return false
+                if (itemInHand.isNothing) return false
 
                 val tag = itemInHand.getNamedTagEntry("CanDestroy")
                 var canBreak = false
@@ -1084,7 +1086,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
                             continue
                         }
                         val entry = Item.get(v.data!!)
-                        if (!entry.isNull &&
+                        if (!entry.isNothing &&
                             entry.getBlock().id == this.id
                         ) {
                             canBreak = true
@@ -1180,17 +1182,18 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
     }
 
     companion object {
-        val EMPTY_ARRAY: Array<Block?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<Block> = emptyArray()
         val frictionFactor: Double = 0.6
         const val DEFAULT_AIR_FLUID_FRICTION: Double = 0.95
         val VANILLA_BLOCK_COLOR_MAP: Long2ObjectOpenHashMap<BlockColor> = Long2ObjectOpenHashMap()
+
         @JvmStatic
         fun isNotActivate(player: Player?): Boolean {
             if (player == null) {
                 return true
             }
             val itemInHand = player.getInventory().itemInHand
-            return (player.isSneaking() || player.isFlySneaking) && !(itemInHand.isTool || itemInHand.isNull)
+            return (player.isSneaking() || player.isFlySneaking) && !(itemInHand.isTool || itemInHand.isNothing)
         }
 
         @JvmStatic
@@ -1251,7 +1254,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, null),
 
         @JvmStatic
         fun get(blockState: BlockState?): Block {
-            val block = Registries.BLOCK.get(blockState) ?: return BlockAir()
+            val block = Registries.BLOCK[blockState] ?: return BlockAir()
             return block
         }
 

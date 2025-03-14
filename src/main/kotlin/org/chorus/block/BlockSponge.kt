@@ -56,7 +56,7 @@ class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.prope
         return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockSponge())
     }
 

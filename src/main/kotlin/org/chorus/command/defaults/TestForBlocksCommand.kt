@@ -1,6 +1,5 @@
 package org.chorus.command.defaults
 
-import org.chorus.block.Block
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
@@ -129,7 +128,7 @@ class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testfo
 
                     if (block.equalsBlock(destinationBlock)) {
                         ++count
-                    } else if (block.id !== Block.AIR) {
+                    } else if (block.id !== BlockID.AIR) {
                         log.addError("commands.compare.failed").output()
                         return 0
                     }

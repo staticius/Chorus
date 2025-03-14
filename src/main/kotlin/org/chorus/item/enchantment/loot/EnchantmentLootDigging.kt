@@ -1,7 +1,8 @@
 package org.chorus.item.enchantment.loot
 
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.item.enchantment.EnchantmentType
 
 
 class EnchantmentLootDigging :
-    EnchantmentLoot(Enchantment.Companion.ID_FORTUNE_DIGGING, "lootBonusDigger", Rarity.RARE, EnchantmentType.DIGGER)
+    EnchantmentLoot(ID_FORTUNE_DIGGING, "lootBonusDigger", Rarity.RARE, EnchantmentType.DIGGER)

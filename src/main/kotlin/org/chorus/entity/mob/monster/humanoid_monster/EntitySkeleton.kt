@@ -57,7 +57,7 @@ open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMon
         return "Skeleton"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.BONE), Item.get(Item.ARROW))
     }
 

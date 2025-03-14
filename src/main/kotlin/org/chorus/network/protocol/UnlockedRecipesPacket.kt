@@ -1,12 +1,7 @@
 package org.chorus.network.protocol
 
-import org.chorus.network.connection.util.HandleByteBuf
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
-
-
-
-
+import org.chorus.network.connection.util.HandleByteBuf
 
 
 class UnlockedRecipesPacket : DataPacket() {

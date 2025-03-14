@@ -126,7 +126,7 @@ class EntityPhantom(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         return "Phantom"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(ItemID.PHANTOM_MEMBRANE))
     }
 

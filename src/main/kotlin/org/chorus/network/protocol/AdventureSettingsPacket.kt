@@ -4,11 +4,6 @@ import org.chorus.Player
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class AdventureSettingsPacket : DataPacket() {
     var flags: Long = 0
     var commandPermission: Long = PERMISSION_NORMAL.toLong()

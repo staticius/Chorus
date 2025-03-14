@@ -2,9 +2,12 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
-import org.chorus.math.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.math.Vector3
 import org.chorus.utils.Faceable
 
 /**
@@ -29,7 +32,7 @@ class BlockPortal @JvmOverloads constructor(blockstate: BlockState? = Companion.
     override val lightLevel: Int
         get() = 11
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(get(BlockID.AIR))
     }
 
@@ -62,7 +65,7 @@ class BlockPortal @JvmOverloads constructor(blockstate: BlockState? = Companion.
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 

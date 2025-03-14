@@ -226,7 +226,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
         //同步owner eid
         if (hasOwner()) {
             val owner = owner
-            if (owner != null && getDataProperty<Long>(EntityDataTypes.Companion.OWNER_EID!!) != owner.id) {
+            if (owner != null && getDataProperty<Long>(EntityDataTypes.Companion.OWNER_EID) != owner.id) {
                 this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, owner.id)
             }
         }
@@ -326,7 +326,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
         }
     }
 
-    override fun getDiffHandDamage(): FloatArray? {
+    override fun getDiffHandDamage(): FloatArray {
         return diffHandDamage
     }
 }

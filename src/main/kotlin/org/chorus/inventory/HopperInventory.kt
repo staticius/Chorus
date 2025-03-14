@@ -11,16 +11,16 @@ class HopperInventory(hopper: BlockEntityHopper?) : ContainerInventory(hopper, I
     override fun init() {
         val map = super.slotTypeMap()
         for (i in 0..<getSize()) {
-            map!![i] = ContainerSlotType.LEVEL_ENTITY
+            map[i] = ContainerSlotType.LEVEL_ENTITY
         }
     }
 
     override fun slotTypeMap(): MutableMap<Int?, ContainerSlotType?> {
         val map = super.slotTypeMap()
         for (i in 0..<this.getSize()) {
-            map!![i] = ContainerSlotType.INVENTORY
+            map[i] = ContainerSlotType.INVENTORY
         }
-        return map!!
+        return map
     }
 
     override var holder: InventoryHolder?

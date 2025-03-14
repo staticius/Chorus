@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class ContainerSetDataPacket : DataPacket() {
     var windowId: Int = 0
     var property: Int = 0

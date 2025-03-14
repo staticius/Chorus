@@ -8,7 +8,6 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.TextPacket
 
 
-
 class TextProcessor : DataPacketProcessor<TextPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: TextPacket) {
         if (!playerHandle.player.spawned || !playerHandle.player.isAlive()) {

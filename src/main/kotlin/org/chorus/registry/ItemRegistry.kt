@@ -1,5 +1,10 @@
 package org.chorus.registry
 
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.objects.ObjectSet
+import me.sunlan.fastreflection.FastConstructor
+import me.sunlan.fastreflection.FastMemberLoader
 import org.chorus.block.BlockID
 import org.chorus.item.*
 import org.chorus.item.customitem.CustomItem
@@ -9,18 +14,10 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.plugin.Plugin
 import org.chorus.registry.ItemRuntimeIdRegistry.RuntimeEntry
 import org.chorus.registry.RegisterException
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.ObjectSet
-
-
-import me.sunlan.fastreflection.FastConstructor
-import me.sunlan.fastreflection.FastMemberLoader
 import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.HashMap
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 /**
@@ -624,7 +621,7 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
         }
     }
 
-    fun get(id: String?, meta: Int, count: Int, tags: ByteArray?): Item? {
+    operator fun get(id: String?, meta: Int, count: Int, tags: ByteArray?): Item? {
         try {
             val c = CACHE_CONSTRUCTORS[id] ?: return null
             val item = c.invoke() as Item
@@ -733,7 +730,7 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
         private val CUSTOM_ITEM_DEFINITIONS: MutableMap<String?, CustomItemDefinition?> = HashMap()
         private val isLoad = AtomicBoolean(false)
 
-        
+
         private var itemComponents = CompoundTag()
     }
 }

@@ -42,7 +42,7 @@ class EntitySalmon(chunk: IChunk?, nbt: CompoundTag) : EntityFish(chunk, nbt) {
         super.initEntity()
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         val rand = Utils.rand(0, 3)
         if (this.isLarge()) {
             //只有25%获得骨头 来自wiki https://zh.minecraft.wiki/w/%E9%B2%91%E9%B1%BC

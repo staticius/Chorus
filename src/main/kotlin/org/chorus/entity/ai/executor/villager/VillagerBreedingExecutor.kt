@@ -25,7 +25,7 @@ class VillagerBreedingExecutor(entityClass: Class<*>, findingRangeSquared: Int, 
         }
     }
 
-    override fun execute(uncasted: EntityMob?): Boolean {
+    override fun execute(uncasted: EntityMob): Boolean {
         if (another == null) return false
         return super.execute(uncasted)
     }

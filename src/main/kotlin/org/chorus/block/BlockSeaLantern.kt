@@ -20,7 +20,7 @@ class BlockSeaLantern @JvmOverloads constructor(blockstate: BlockState? = Compan
     override val lightLevel: Int
         get() = 15
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         val fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)
         val fortuneLevel = fortune?.level ?: 0
         // it drops 2–3 prismarine crystals

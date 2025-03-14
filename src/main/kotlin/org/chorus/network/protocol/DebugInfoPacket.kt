@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class DebugInfoPacket : DataPacket() {
     var entityId: Long = 0
     var data: String? = null

@@ -1,6 +1,7 @@
 package org.chorus.entity.projectile
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 

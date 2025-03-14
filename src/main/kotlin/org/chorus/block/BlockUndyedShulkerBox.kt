@@ -1,11 +1,12 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityID
 import org.chorus.blockentity.BlockEntityShulkerBox
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.nbt.NBTIO.putItemHelper
@@ -55,7 +56,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blo
             val items = ListTag<CompoundTag>()
 
             for (it in 0..<inv.size) {
-                if (!inv.getItem(it).isNull) {
+                if (!inv.getItem(it).isNothing) {
                     val d = putItemHelper(inv.getItem(it), it)
                     items.add(d)
                 }

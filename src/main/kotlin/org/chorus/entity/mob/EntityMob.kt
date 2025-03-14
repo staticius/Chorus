@@ -12,7 +12,6 @@ import org.chorus.entity.ai.evaluator.LogicalUtils
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.IMemoryStorage
 import org.chorus.entity.ai.memory.MemoryType
-import org.chorus.entity.ai.memory.codec.IMemoryCodec
 import org.chorus.entity.mob.monster.EntityCreeper
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
@@ -30,7 +29,6 @@ import org.chorus.nbt.tag.*
 import org.chorus.network.protocol.MoveEntityDeltaPacket
 import org.chorus.utils.*
 
-import java.util.*
 import java.util.concurrent.*
 import java.util.function.Consumer
 import java.util.stream.Stream
@@ -68,6 +66,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
     @JvmField
     var headYaw: Double = rotation.yaw
+
     @JvmField
     var prevHeadYaw: Double = headYaw
 
@@ -77,10 +76,10 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
      *
      * The damage that can be caused by the entity's empty hand at different difficulties.
      */
-    protected var diffHandDamage: FloatArray
+    protected lateinit var diffHandDamage: FloatArray
 
 
-    private val equipment = EntityEquipment(this)
+    override val equipment = EntityEquipment(this)
 
 
     override fun initEntity() {
@@ -90,11 +89,10 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
         val storage = memoryStorage
         if (storage != null) {
-            storage.put<Int>(CoreMemoryTypes.Companion.ENTITY_SPAWN_TIME, level!!.tick)
-            MemoryType.Companion.getPersistentMemories().forEach(Consumer<MemoryType<*>> { memory: MemoryType<*> ->
+            storage.put<Int>(CoreMemoryTypes.ENTITY_SPAWN_TIME, level!!.tick)
+            MemoryType.persistentMemories.forEach(Consumer { memory ->
                 val mem = memory as MemoryType<Any?>
-                val codec: IMemoryCodec<Any?> = mem.getCodec()
-                val data = Objects.requireNonNull(codec).decoder.apply(this.namedTag)
+                val data = mem.codec!!.decoder.apply(this.namedTag)
                 if (data != null) {
                     storage.put(mem, data)
                 }
@@ -122,12 +120,12 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         super.saveNBT()
         getBehaviorGroup()!!.save(this)
 
-        if (activeEffects != null) namedTag!!.putList(TAG_ACTIVE_EFFECTS, ListTag(activeEffects))
+        if (activeEffects != null) namedTag!!.putList(TAG_ACTIVE_EFFECTS, ListTag(activeEffects!!))
         namedTag!!.putShort(TAG_AIR, air.toInt())
         namedTag!!.putList(
             TAG_ARMOR, ListTag(
                 Tag.TAG_COMPOUND.toInt(),
-                equipment.armor.stream().map { item: Item? -> NBTIO.putItemHelper(item) }.toList()
+                equipment.getArmor().stream().map { NBTIO.putItemHelper(it) }.toList()
             )
         )
         namedTag!!.putShort(TAG_ATTACK_TIME, attackTime.toInt())
@@ -146,9 +144,9 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         namedTag!!.putLong(TAG_LIMITED_LIFE, limitedLife)
         namedTag!!.putList(
             TAG_MAINHAND, ListTag(
-                Tag.TAG_COMPOUND.toInt(), java.util.List.of(
+                Tag.TAG_COMPOUND.toInt(), listOf(
                     NBTIO.putItemHelper(
-                        equipment.mainHand
+                        equipment.getMainHand()
                     )
                 )
             )
@@ -156,9 +154,9 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         namedTag!!.putBoolean(TAG_NATURAL_SPAWN, naturalSpawn)
         namedTag!!.putList(
             TAG_OFFHAND, ListTag(
-                Tag.TAG_COMPOUND.toInt(), java.util.List.of(
+                Tag.TAG_COMPOUND.toInt(), listOf(
                     NBTIO.putItemHelper(
-                        equipment.offHand
+                        equipment.getOffHand()
                     )
                 )
             )
@@ -196,7 +194,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
             storage.put<Int>(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, level!!.tick)
         }
 
-        if (this.isClosed || !this.isAlive) {
+        if (this.isClosed() || !this.isAlive()) {
             return false
         }
 
@@ -210,7 +208,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
             var epf = 0
 
             //            int toughness = 0;
-            for (armor in equipment.armor) {
+            for (armor in equipment.getArmor()) {
                 armorPoints += armor.armorPoints
                 epf += calculateEnchantmentProtectionFactor(armor, source).toInt()
                 //toughness += armor.getToughness();
@@ -243,9 +241,8 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
                 source.damager
             } else null
 
-            val damaged_armor =
-                equipment.armor.stream().map { i: Item -> damageArmor(i, damager) }.toList()
-            equipment.setArmor(damaged_armor)
+            val damagedArmor = equipment.getArmor().stream().map { damageArmor(it, damager) }.toList()
+            equipment.setArmor(damagedArmor)
 
             return true
         } else {
@@ -253,7 +250,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         }
     }
 
-    protected open fun calculateEnchantmentProtectionFactor(item: Item, source: EntityDamageEvent?): Double {
+    protected open fun calculateEnchantmentProtectionFactor(item: Item, source: EntityDamageEvent): Double {
         if (!item.hasEnchantments()) {
             return 0.0
         }
@@ -289,7 +286,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
             return armor
         }
 
-        armor.damage = armor.damage + 1
+        armor.damage += 1
 
         if (armor.damage >= armor.maxDurability) {
             level!!.addSound(this.position, Sound.RANDOM_BREAK)
@@ -311,10 +308,10 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         return entity is Player
     }
 
-    override fun getDrops(): Array<Item?> {
-        return inventory.contents.values.stream()
-            .filter { item: Item -> !item.hasEnchantment(Enchantment.ID_VANISHING_CURSE) }
-            .toArray<Item?> { _Dummy_.__Array__() }
+    override fun getDrops(): Array<Item> {
+        return inventory!!.contents.values.stream()
+            .filter { it.hasEnchantment(Enchantment.ID_VANISHING_CURSE) }
+            .toList().toTypedArray()
     }
 
     override fun hasRotationChanged(threshold: Double): Boolean {
@@ -352,7 +349,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         if (this.onGround) {
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_ON_GROUND.toInt()).toShort()
         }
-        Server.broadcastPacket(this.viewers.values, pk)
+        Server.broadcastPacket(this.getViewers().values, pk)
     }
 
     fun enableHeadYaw(): Boolean {
@@ -412,21 +409,21 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         this.leasherID = nbt.getLong(TAG_LEASHER_ID)
         this.limitedLife = nbt.getLong(TAG_LIMITED_LIFE)
         equipment.setMainHand(
-            Stream.concat<CompoundTag?>(
-                nbt.getList<CompoundTag?>(
+            Stream.concat(
+                nbt.getList(
                     TAG_MAINHAND,
                     CompoundTag::class.java
                 ).all.stream(), Stream.generate<CompoundTag?> { null }).limit(1)
-                .map<Item> { tag: CompoundTag? -> NBTIO.getItemHelper(tag) }.toList().first()
+                .map { NBTIO.getItemHelper(it) }.toList().first()
         )
         this.naturalSpawn = nbt.getBoolean(TAG_NATURAL_SPAWN)
         equipment.setOffHand(
-            Stream.concat<CompoundTag?>(
-                nbt.getList<CompoundTag?>(
+            Stream.concat(
+                nbt.getList(
                     TAG_OFFHAND,
                     CompoundTag::class.java
                 ).all.stream(), Stream.generate<CompoundTag?> { null }).limit(1)
-                .map<Item> { tag: CompoundTag? -> NBTIO.getItemHelper(tag) }.toList().first()
+                .map { NBTIO.getItemHelper(it) }.toList().first()
         )
         if (nbt.contains(TAG_PERSISTING_OFFERS)) this.persistingOffers = nbt.getCompound(TAG_PERSISTING_OFFERS)
         if (nbt.contains(TAG_PERSISTING_RICHES)) this.persistingRiches = nbt.getInt(TAG_PERSISTING_RICHES)
@@ -458,10 +455,10 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     }
 
     override fun asyncPrepare(currentTick: Int) {
-        if (!isAlive) return
+        if (!isAlive()) return
         // 计算是否活跃
-        isActive = level!!.isHighLightChunk(chunkX, chunkZ)
-        if (!this.isImmobile) { // immobile会禁用实体AI
+        isActive = level!!.isHighLightChunk(getChunkX(), getChunkZ())
+        if (!this.isImmobile()) { // immobile会禁用实体AI
             val behaviorGroup = getBehaviorGroup() ?: return
             behaviorGroup.collectSensorData(this)
             behaviorGroup.evaluateCoreBehaviors(this)
@@ -484,15 +481,15 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
                 //Build memory information
                 strBuilder.append("§eMemory:§f\n")
-                val all = memoryStorage.getAll()
-                all!!.forEach { (memory: MemoryType<*>?, value: Any?) ->
+                val all = memoryStorage!!.all
+                all.forEach { (memory: MemoryType<*>?, value: Any?) ->
                     strBuilder.append(memory.identifier)
                     strBuilder.append(" = §b")
                     strBuilder.append(value)
                     strBuilder.append("§f\n")
                 }
 
-                val form = SimpleForm("§f$originalName", strBuilder.toString())
+                val form = SimpleForm("§f${this.getOriginalName()}", strBuilder.toString())
                 form.send(player)
                 return true
             } else return super.onInteract(player, item, clickedPos)
@@ -510,7 +507,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
      * @return 实体要增加的motion y
      */
     fun getJumpingMotion(jumpY: Double): Double {
-        return if (this.isTouchingWater) {
+        return if (this.isTouchingWater()) {
             0.1
         } else {
             if (jumpY > 0 && jumpY < 0.2) {

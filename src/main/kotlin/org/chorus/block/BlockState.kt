@@ -30,9 +30,15 @@ interface BlockState {
         value: DATATYPE
     ): BlockState?
 
-    fun setPropertyValue(properties: BlockProperties, propertyValue: BlockPropertyType.BlockPropertyValue<*, *, *>?): BlockState?
+    fun setPropertyValue(
+        properties: BlockProperties,
+        propertyValue: BlockPropertyType.BlockPropertyValue<*, *, *>?
+    ): BlockState?
 
-    fun setPropertyValues(properties: BlockProperties, vararg values: BlockPropertyType.BlockPropertyValue<*, *, *>?): BlockState?
+    fun setPropertyValues(
+        properties: BlockProperties,
+        vararg values: BlockPropertyType.BlockPropertyValue<*, *, *>?
+    ): BlockState?
 
     val isDefaultState: Boolean
         get() = Registries.BLOCK.getBlockProperties(identifier).defaultState === this
@@ -45,7 +51,7 @@ interface BlockState {
         return get(this, locator)
     }
 
-    fun toItem(): Item? {
+    fun toItem(): Item {
         return toBlock().toItem()
     }
 
@@ -56,18 +62,21 @@ interface BlockState {
 
         fun computeSpecialValue(propertyValues: Array<BlockPropertyType.BlockPropertyValue<*, *, *>>): Short {
             var specialValueBits: Byte = 0
-            for (value in propertyValues) specialValueBits = (specialValueBits + (value.propertyType.bitSize)).toByte()
+            for (value in propertyValues) specialValueBits = (specialValueBits + (value.propertyType.getBitSize())).toByte()
             return computeSpecialValue(specialValueBits, propertyValues)
         }
 
-        fun computeSpecialValue(specialValueBits: Byte, propertyValues: Array<BlockPropertyType.BlockPropertyValue<*, *, *>>): Short {
+        fun computeSpecialValue(
+            specialValueBits: Byte,
+            propertyValues: Array<BlockPropertyType.BlockPropertyValue<*, *, *>>
+        ): Short {
             var specialValueBits1 = specialValueBits
             var specialValue: Short = 0
             for (value in propertyValues) {
                 specialValue =
-                    (specialValue.toInt() or (value.getIndex() shl (specialValueBits1 - value.propertyType.bitSize)).toShort()
+                    (specialValue.toInt() or (value.getIndex() shl (specialValueBits1 - value.propertyType.getBitSize())).toShort()
                         .toInt()).toShort()
-                specialValueBits1 = (specialValueBits1 - value.propertyType.bitSize).toByte()
+                specialValueBits1 = (specialValueBits1 - value.propertyType.getBitSize()).toByte()
             }
             return specialValue
         }

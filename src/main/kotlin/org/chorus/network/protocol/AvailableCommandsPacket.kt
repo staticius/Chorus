@@ -1,45 +1,36 @@
 package org.chorus.network.protocol
 
-import org.chorus.command.data.*
-import org.chorus.command.data.CommandEnum.getValues
-import org.chorus.entity.Attribute.getName
-import org.chorus.nbt.tag.ListTag.size
-import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.network.protocol.types.CommandEnumConstraintData
-import org.chorus.utils.*
 import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-
+import org.chorus.command.data.*
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.CommandEnumConstraintData
+import org.chorus.utils.*
 import java.util.function.ObjIntConsumer
 
 
-
-
-
-
-
 class AvailableCommandsPacket : DataPacket() {
-    var commands: Map<String?, CommandDataVersions>? = null
+    var commands: Map<String, CommandDataVersions>? = null
     val constraints: List<CommandEnumConstraintData> = ObjectArrayList()
 
     override fun decode(byteBuf: HandleByteBuf) {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        val enumValuesSet: MutableSet<String?> = ObjectOpenHashSet()
+        val enumValuesSet: MutableSet<String> = ObjectOpenHashSet()
         val subCommandValues = SequencedHashSet<String>()
         val postfixSet: MutableSet<String> = ObjectOpenHashSet()
         val subCommandData = SequencedHashSet<ChainedSubCommandData>()
-        val enumsSet: MutableSet<CommandEnum?> = ObjectOpenHashSet()
-        val softEnumsSet: MutableSet<CommandEnum?> = ObjectOpenHashSet()
+        val enumsSet: MutableSet<CommandEnum> = ObjectOpenHashSet()
+        val softEnumsSet: MutableSet<CommandEnum> = ObjectOpenHashSet()
 
         // Get all enum values
         for ((_, value1) in commands!!) {
             val data = value1.versions[0]
             if (data.aliases != null) {
                 enumValuesSet.addAll(data.aliases!!.getValues()!!)
-                enumsSet.add(data.aliases)
+                enumsSet.add(data.aliases!!)
             }
 
             for (subcommand in data.subcommands) {
@@ -48,19 +39,19 @@ class AvailableCommandsPacket : DataPacket() {
                 }
 
                 subCommandData.add(subcommand)
-                for (value in subcommand.getValues()) {
-                    if (subCommandValues.contains(value.first())) {
-                        subCommandValues.add(value.first())
+                for (value in subcommand.values) {
+                    if (subCommandValues.contains(value.first)) {
+                        subCommandValues.add(value.first!!)
                     }
 
-                    if (subCommandValues.contains(value.getSecond())) {
-                        subCommandValues.add(value.getSecond())
+                    if (subCommandValues.contains(value.second)) {
+                        subCommandValues.add(value.second!!)
                     }
                 }
             }
 
             for (overload in data.overloads.values.stream()
-                .map<Array<CommandParameter>> { o: CommandOverload -> o.input.parameters }.toList()) {
+                .map { it!!.input.parameters }.toList()) {
                 for (parameter in overload) {
                     val commandEnumData = parameter.enumData
                     if (commandEnumData != null) {
@@ -93,8 +84,8 @@ class AvailableCommandsPacket : DataPacket() {
         }*/
         val enumValues: List<String> = ObjectArrayList(enumValuesSet)
         val postFixes: List<String> = ObjectArrayList(postfixSet)
-        val enums: List<CommandEnum?> = ObjectArrayList(enumsSet)
-        val softEnums: List<CommandEnum?> = ObjectArrayList(softEnumsSet)
+        val enums: List<CommandEnum> = ObjectArrayList(enumsSet)
+        val softEnums: List<CommandEnum> = ObjectArrayList(softEnumsSet)
 
         byteBuf.writeUnsignedVarInt(enumValues.size)
         for (enumValue in enumValues) {
@@ -115,14 +106,14 @@ class AvailableCommandsPacket : DataPacket() {
 
         byteBuf.writeUnsignedVarInt(subCommandData.size)
         for (chainedSubCommandData in subCommandData) {
-            byteBuf.writeString(chainedSubCommandData.getName())
-            byteBuf.writeUnsignedVarInt(chainedSubCommandData.getValues().size())
-            for (value in chainedSubCommandData.getValues()) {
-                val first = subCommandValues.indexOf(value.first())
-                Preconditions.checkArgument(first > -1, "Invalid enum value detected: " + value.first())
+            byteBuf.writeString(chainedSubCommandData.name!!)
+            byteBuf.writeUnsignedVarInt(chainedSubCommandData.values.size)
+            for (value in chainedSubCommandData.values) {
+                val first = subCommandValues.indexOf(value.first)
+                Preconditions.checkArgument(first > -1, "Invalid enum value detected: " + value.first)
 
-                val second = subCommandValues.indexOf(value.getSecond())
-                Preconditions.checkArgument(second > -1, "Invalid enum value detected: " + value.getSecond())
+                val second = subCommandValues.indexOf(value.second)
+                Preconditions.checkArgument(second > -1, "Invalid enum value detected: " + value.second)
 
                 byteBuf.writeShortLE(first)
                 byteBuf.writeShortLE(second)

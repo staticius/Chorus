@@ -8,12 +8,10 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class TakeItemEntityPacket : DataPacket() {
     @JvmField
     var entityId: Long = 0
+
     @JvmField
     var target: Long = 0
 

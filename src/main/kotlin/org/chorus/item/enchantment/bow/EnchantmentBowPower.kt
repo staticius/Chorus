@@ -1,10 +1,10 @@
 package org.chorus.item.enchantment.bow
 
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
 
 
 class EnchantmentBowPower :
-    EnchantmentBow(Enchantment.Companion.ID_BOW_POWER, "arrowDamage", Rarity.COMMON) {
+    EnchantmentBow(ID_BOW_POWER, "arrowDamage", Rarity.COMMON) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 1 + (level - 1) * 10
     }

@@ -78,7 +78,7 @@ class ItemFlintAndSteel @JvmOverloads constructor(meta: Int = 0, count: Int = 1)
     }
 
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_FLINT_STEEL
+        get() = DURABILITY_FLINT_STEEL
 
     override fun useOn(block: Block): Boolean {
         //todo: initiator should be an entity who use it but not null

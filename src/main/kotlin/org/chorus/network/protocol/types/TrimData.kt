@@ -1,7 +1,7 @@
 package org.chorus.network.protocol.types
 
-import org.chorus.utils.JSONUtils
 import com.google.gson.JsonObject
+import org.chorus.utils.JSONUtils
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 

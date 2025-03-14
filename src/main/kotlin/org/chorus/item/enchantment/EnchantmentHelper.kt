@@ -122,7 +122,7 @@ object EnchantmentHelper {
                 if (!resultEnchantments.isEmpty()) {
                     availableEnchantments = availableEnchantments.stream()
                         .filter { e: Enchantment ->
-                            e.getId() != lastEnchantment.get().getId() && e.isCompatibleWith(
+                            e.id != lastEnchantment.get().id && e.isCompatibleWith(
                                 lastEnchantment.get()
                             )
                         }

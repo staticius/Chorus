@@ -3,18 +3,16 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class SetSpawnPositionPacket : DataPacket() {
     @JvmField
     var spawnType: Int = 0
+
     @JvmField
     var y: Int = 0
+
     @JvmField
     var z: Int = 0
+
     @JvmField
     var x: Int = 0
 

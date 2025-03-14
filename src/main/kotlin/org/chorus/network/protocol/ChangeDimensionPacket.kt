@@ -9,20 +9,22 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class ChangeDimensionPacket : DataPacket() {
     @JvmField
     var dimension: Int = 0
+
     @JvmField
     var x: Float = 0f
+
     @JvmField
     var y: Float = 0f
+
     @JvmField
     var z: Float = 0f
+
     @JvmField
     var respawn: Boolean = false
+
     @JvmField
     var loadingScreenId: Int? = null
 

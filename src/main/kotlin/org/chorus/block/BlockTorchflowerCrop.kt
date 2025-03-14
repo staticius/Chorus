@@ -16,7 +16,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState? = C
     override val name: String
         get() = "Torchflower Crop"
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return Item.get(ItemID.TORCHFLOWER_SEEDS)
     }
 
@@ -39,7 +39,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState? = C
             if (growth == 1) {
                 val block = BlockTorchflower()
                 val ev = BlockGrowEvent(this, block)
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
 
 
                 level.setBlock(this.position, ev.newState!!, false, true)
@@ -55,7 +55,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState? = C
                 growth += 1
                 block.growth = min(growth.toDouble(), max.toDouble()).toInt()
                 val ev = BlockGrowEvent(this, block)
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
 
                 if (ev.isCancelled) {
                     return false
@@ -89,7 +89,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState? = C
                 if (growth == 1) {
                     val block = BlockTorchflower()
                     val ev = BlockGrowEvent(this, block)
-                    instance!!.pluginManager.callEvent(ev)
+                    instance.pluginManager.callEvent(ev)
 
                     if (ev.isCancelled) {
                         return 0
@@ -102,7 +102,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState? = C
                     val block = clone() as BlockTorchflowerCrop
                     block.growth = growth + 1
                     val ev = BlockGrowEvent(this, block)
-                    instance!!.pluginManager.callEvent(ev)
+                    instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled) {
                         level.setBlock(this.position, ev.newState!!, false, true)

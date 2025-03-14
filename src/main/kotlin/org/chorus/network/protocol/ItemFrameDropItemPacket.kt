@@ -9,9 +9,6 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class ItemFrameDropItemPacket : DataPacket() {
     var x: Int = 0
     var y: Int = 0

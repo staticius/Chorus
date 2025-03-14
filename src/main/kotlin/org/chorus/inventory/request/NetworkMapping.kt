@@ -8,8 +8,6 @@ import org.chorus.inventory.fake.FakeInventory
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
-
-
 @UtilityClass
 class NetworkMapping {
     fun getInventory(player: Player, containerSlotType: ContainerSlotType): Inventory? {

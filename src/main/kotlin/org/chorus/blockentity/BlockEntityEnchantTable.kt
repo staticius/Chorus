@@ -28,7 +28,7 @@ class BlockEntityEnchantTable(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val spawnCompound: CompoundTag
         get() {
-            val c = super.getSpawnCompound()
+            val c = super.spawnCompound
                 .putBoolean("isMovable", false)
 
             if (this.hasName()) {

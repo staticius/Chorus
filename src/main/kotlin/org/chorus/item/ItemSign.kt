@@ -1,6 +1,7 @@
 package org.chorus.item
 
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
 
 /**
  * 注意做好sign和standing_sign方块的映射关系，物品通过this.block指定，方块通过toItem指定

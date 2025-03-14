@@ -10,8 +10,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.item.Item
 import org.chorus.item.enchantment.Enchantment
-import kotlin.collections.List
-import kotlin.collections.Map
 import kotlin.collections.set
 
 /**
@@ -85,7 +83,7 @@ class EnchantCommand(name: String) :
             val player = entity as Player
             enchantment.setLevel(enchantLevel, false)
             val item = player.inventory.itemInHand
-            if (item.isNull) {
+            if (item.isNothing) {
                 log.addError("commands.enchant.noItem").output()
                 continue
             }

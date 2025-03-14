@@ -1,7 +1,8 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
@@ -35,7 +36,7 @@ class BlockInvisibleBedrock @JvmOverloads constructor(blockstate: BlockState? = 
         return false
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(get(BlockID.Companion.AIR))
     }
 

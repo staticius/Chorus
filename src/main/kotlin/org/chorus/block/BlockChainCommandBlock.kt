@@ -9,7 +9,7 @@ class BlockChainCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.CHAIN_COMMAND_BLOCK,
+            BlockID.CHAIN_COMMAND_BLOCK,
             CommonBlockProperties.CONDITIONAL_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )

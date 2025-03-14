@@ -3,7 +3,6 @@ package org.chorus.entity.ai.evaluator
 import org.chorus.entity.mob.EntityMob
 
 
-
 class NotMatchEvaluator : IBehaviorEvaluator {
     private val evaluator: IBehaviorEvaluator? = null
 

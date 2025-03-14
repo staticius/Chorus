@@ -1,22 +1,18 @@
 package org.chorus.block.customblock
 
+import com.google.common.base.Preconditions
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.block.Block
 import org.chorus.block.customblock.data.*
 import org.chorus.block.customblock.data.Materials.RenderMethod
-import org.chorus.block.property.type.BaseBlockPropertyType.getName
-import org.chorus.block.property.type.BaseBlockPropertyType.getValidValues
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.customitem.data.CreativeCategory
 import org.chorus.item.customitem.data.CreativeGroup
 import org.chorus.math.Vector3
 import org.chorus.math.Vector3f
 import org.chorus.nbt.tag.*
-import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
-
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 
@@ -399,13 +395,13 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
                             for (i in each.getMin()..each.getMax()) {
                                 enumList.add(IntTag(i))
                             }
-                            nbtList.add(CompoundTag().putString("name", each.getName())!!.putList("enum", enumList))
+                            nbtList.add(CompoundTag().putString("name", each.getName()).putList("enum", enumList))
                         } else if (each is org.chorus.block.property.type.EnumPropertyType<*>) {
                             val enumList = ListTag<StringTag?>()
                             for (e in each.getValidValues()) {
                                 enumList.add(StringTag(e.name.lowercase()))
                             }
-                            nbtList.add(CompoundTag().putString("name", each.getName())!!.putList("enum", enumList))
+                            nbtList.add(CompoundTag().putString("name", each.getName()).putList("enum", enumList))
                         }
                     }
                     return nbtList

@@ -1,8 +1,8 @@
 package org.chorus.utils.collection.nb
 
-import org.chorus.api.NonComputationAtomic
 import it.unimi.dsi.fastutil.ints.AbstractIntSet
 import it.unimi.dsi.fastutil.ints.IntIterator
+import org.chorus.api.NonComputationAtomic
 import java.io.*
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.VarHandle
@@ -852,7 +852,6 @@ class Int2ObjectNonBlockingMap<TypeV>
 
         // Simple constructor
         init {
-            _size = _size
             _slots = ConcurrentAutoIntTable()
             _keys = IntArray(1 shl logsize)
             _vals = arrayOfNulls(1 shl logsize)

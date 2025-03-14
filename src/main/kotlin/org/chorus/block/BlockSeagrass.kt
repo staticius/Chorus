@@ -125,7 +125,7 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState? = Companio
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return if (item.isShears) {
             arrayOf(toItem())
         } else {
@@ -143,7 +143,7 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState? = Companio
     override val toolType: Int
         get() = ItemTool.TYPE_SHEARS
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockSeagrass(), 0)
     }
 

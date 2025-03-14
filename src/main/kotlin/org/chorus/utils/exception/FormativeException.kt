@@ -51,7 +51,7 @@ open class FormativeException : Exception {
         this.indices = IntArray(len) // LOG4J2-1542 ensure non-zero array length
         val placeholders = ParameterFormatter.countArgumentPlaceholders2(format, indices)
         initThrowable(arguments, placeholders)
-        this.usedCount = min(placeholders.toDouble(), (arguments?.size ?: 0).toDouble()).toInt()
+        this.usedCount = min(placeholders.toDouble(), arguments.size.toDouble()).toInt()
     }
 
     private fun initThrowable(params: Array<Any>?, usedParams: Int) {

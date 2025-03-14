@@ -34,7 +34,7 @@ class BlockMagma : BlockSolid {
     override val lightLevel: Int
         get() = 3
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return if (item.isPickaxe && item.tier >= ItemTool.TIER_WOODEN) {
             arrayOf(
                 toItem()
@@ -50,7 +50,7 @@ class BlockMagma : BlockSolid {
         }
 
         if (entity is Player) {
-            if (entity.getInventory().boots.getEnchantment(Enchantment.ID_FROST_WALKER) != null || entity.isCreative || entity.isSpectator || entity.isSneaking() || !entity.level!!.gameRules!!.getBoolean(
+            if (entity.getInventory().boots.getEnchantment(Enchantment.ID_FROST_WALKER) != null || entity.isCreative || entity.isSpectator || entity.isSneaking() || !entity.level!!.gameRules.getBoolean(
                     GameRule.FIRE_DAMAGE
                 )
             ) {

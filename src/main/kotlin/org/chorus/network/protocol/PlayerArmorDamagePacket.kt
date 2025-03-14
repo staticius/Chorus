@@ -5,9 +5,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import java.util.*
 
 
-
-
-
 class PlayerArmorDamagePacket : DataPacket() {
     val flags: MutableSet<PlayerArmorDamageFlag> = EnumSet.noneOf(
         PlayerArmorDamageFlag::class.java

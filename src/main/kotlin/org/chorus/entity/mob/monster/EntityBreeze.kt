@@ -107,7 +107,7 @@ class EntityBreeze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
         return 0.6f
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.BREEZE_ROD, 0, Utils.rand(1, 2)))
     }
 

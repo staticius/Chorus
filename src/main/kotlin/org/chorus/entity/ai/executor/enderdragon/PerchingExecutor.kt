@@ -88,7 +88,7 @@ class PerchingExecutor : EntityControl, IBehaviorExecutor {
 
 
     override fun onStart(entity: EntityMob) {
-        val player = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) ?: return
+        val player = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
         setLookTarget(entity, player.position)
         setRouteTarget(entity, player.position)
         stayTick = -1

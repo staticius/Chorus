@@ -10,6 +10,7 @@ class PlayerEditBookEvent(player: Player?, oldBook: Item, newBook: Item, action:
     PlayerEvent(), Cancellable {
     val oldBook: Item
     val action: BookEditPacket.Action
+
     @JvmField
     var newBook: Item
 

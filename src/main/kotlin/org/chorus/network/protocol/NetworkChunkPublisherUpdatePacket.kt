@@ -4,11 +4,6 @@ import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class NetworkChunkPublisherUpdatePacket : DataPacket() {
     var position: BlockVector3? = null
     var radius: Int = 0

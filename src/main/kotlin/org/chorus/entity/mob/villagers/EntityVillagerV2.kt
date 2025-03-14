@@ -1,5 +1,7 @@
 package org.chorus.entity.mob.villagers
 
+import it.unimi.dsi.fastutil.ints.IntArrayList
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
@@ -40,8 +42,6 @@ import org.chorus.network.protocol.UpdateTradePacket
 import org.chorus.registry.Registries
 import org.chorus.utils.*
 import org.chorus.utils.random.ChorusRandom
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import java.util.*
 import java.util.Set
 import java.util.function.Consumer
@@ -283,7 +283,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                     if (level!!.tick % 60 == 0) {
                         val entities = Arrays.stream(
                             entity.level!!.getCollidingEntities(
-                                entity.getBoundingBox()!!.grow(64.0, 3.0, 64.0)
+                                entity.getBoundingBox().grow(64.0, 3.0, 64.0)
                             )
                         ).filter { entity1: Entity -> entity1 is EntityVillagerV2 && entity1 !== this }
                             .map { entity1: Entity -> (entity1 as EntityVillagerV2) }
@@ -334,7 +334,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                             }
                             if (memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.SITE_BLOCK)) {
                                 for (block in level!!.getCollisionBlocks(
-                                    getBoundingBox()!!
+                                    getBoundingBox()
                                         .grow(16.0, 4.0, 16.0)
                                 )) {
                                     if (Arrays.stream<Entity>(level!!.entities).noneMatch { entity1: Entity ->
@@ -436,11 +436,11 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         }
     }
 
-    fun getBed(): BlockBed? {
+    fun getBed(): BlockBed {
         return memoryStorage!!.get<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED)
     }
 
-    fun getSite(): Block? {
+    fun getSite(): Block {
         return memoryStorage!!.get<Block>(CoreMemoryTypes.Companion.SITE_BLOCK)
     }
 
@@ -608,7 +608,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 println("1")
                 Arrays.stream<Entity>(
                     level!!.getCollidingEntities(
-                        getBoundingBox()!!.grow(16.0, 16.0, 16.0)
+                        getBoundingBox().grow(16.0, 16.0, 16.0)
                     )
                 ).filter { entity: Entity? -> entity is EntityVillagerV2 }.forEach { entity: Entity ->
                     (entity as EntityVillagerV2).addGossip(
@@ -640,7 +640,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     fun spreadGossip() {
-        Arrays.stream<Entity>(level!!.getCollidingEntities(getBoundingBox()!!.grow(2.0, 0.0, 2.0)))
+        Arrays.stream<Entity>(level!!.getCollidingEntities(getBoundingBox().grow(2.0, 0.0, 2.0)))
             .filter { entity2: Entity? -> entity2 is EntityVillagerV2 }
             .map<EntityVillagerV2> { entity2: Entity -> (entity2 as EntityVillagerV2) }
             .forEach { target: EntityVillagerV2 ->
@@ -702,7 +702,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         namedTag!!.putInt("maxTradeTier", this.getMaxTradeTier())
         namedTag!!.putInt("tradeExp", this.getTradeExp())
         namedTag!!.putInt("tradeSeed", this.getTradeSeed())
-        namedTag!!.putInt("clothing", this.getDataProperty<Int>(EntityDataTypes.Companion.MARK_VARIANT!!))
+        namedTag!!.putInt("clothing", this.getDataProperty<Int>(EntityDataTypes.Companion.MARK_VARIANT))
         val gossipTag = CompoundTag()
         for ((key, value) in memoryStorage!!.get<Object2ObjectArrayMap<String, IntArrayList>>(CoreMemoryTypes.Companion.GOSSIP)
             .object2ObjectEntrySet()) {
@@ -717,7 +717,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
             val bed = memoryStorage!!.get<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED)
             namedTag!!.putCompound(
                 "bed",
-                CompoundTag().putInt("x", bed!!.position.floorX).putInt("y", bed.position.floorY)
+                CompoundTag().putInt("x", bed.position.floorX).putInt("y", bed.position.floorY)
                     .putInt("z", bed.position.floorZ)
             )
         }
@@ -725,7 +725,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
             val site = memoryStorage!!.get<Block>(CoreMemoryTypes.Companion.SITE_BLOCK)
             namedTag!!.putCompound(
                 "siteBlock",
-                CompoundTag().putInt("x", site!!.position.floorX).putInt("y", site.position.floorY)
+                CompoundTag().putInt("x", site.position.floorX).putInt("y", site.position.floorY)
                     .putInt("z", site.position.floorZ)
             )
         }
@@ -974,7 +974,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         }
 
         if (tick % 20 == 0) {
-            for (i in level!!.getNearbyEntities(getBoundingBox()!!.grow(1.0, 0.5, 1.0))) {
+            for (i in level!!.getNearbyEntities(getBoundingBox().grow(1.0, 0.5, 1.0))) {
                 if (i is EntityItem) {
                     val item = i.item
                     if (when (item!!.id) {

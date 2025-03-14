@@ -3,7 +3,7 @@ package org.chorus.entity.ai.sensor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.item.EntityItem
 import org.chorus.entity.mob.EntityMob
-import org.chorus.item.*
+import org.chorus.item.Item
 
 
 //存储最近的玩家的Memory
@@ -17,7 +17,6 @@ class NearestItemSensor @JvmOverloads constructor(
     override fun sense(entity: EntityMob) {
         val itemClass =
             entity.memoryStorage!!.get<Class<out Item>>(CoreMemoryTypes.Companion.LOOKING_ITEM)
-                ?: return
 
         var item: EntityItem? = null
         val rangeSquared = this.range * this.range

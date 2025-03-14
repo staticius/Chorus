@@ -2,11 +2,12 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.*
+import org.chorus.blockentity.BlockEntityBarrel
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.nbt.tag.CompoundTag

@@ -6,7 +6,6 @@ import org.chorus.scoreboard.IScoreboardLine
 import org.chorus.scoreboard.data.ScorerType
 
 
-
 class FakeScorer(override val name: String) : IScorer {
     override val scorerType: ScorerType
         get() = ScorerType.FAKE

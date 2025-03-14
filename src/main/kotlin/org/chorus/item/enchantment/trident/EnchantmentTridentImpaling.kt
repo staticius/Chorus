@@ -4,7 +4,7 @@ import org.chorus.entity.*
 import org.chorus.item.enchantment.*
 
 class EnchantmentTridentImpaling :
-    EnchantmentTrident(Enchantment.Companion.ID_TRIDENT_IMPALING, "tridentImpaling", Rarity.RARE) {
+    EnchantmentTrident(ID_TRIDENT_IMPALING, "tridentImpaling", Rarity.RARE) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 8 * level - 7
     }

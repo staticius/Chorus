@@ -6,7 +6,6 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.SetLocalPlayerAsInitializedPacket
 
 
-
 class SetLocalPlayerAsInitializedPacketProcessor : DataPacketProcessor<SetLocalPlayerAsInitializedPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: SetLocalPlayerAsInitializedPacket) {
         val player = playerHandle.player

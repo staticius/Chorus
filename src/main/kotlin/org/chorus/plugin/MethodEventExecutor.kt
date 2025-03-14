@@ -14,7 +14,6 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 
-
 class MethodEventExecutor(val method: Method?) : EventExecutor {
     @Throws(EventException::class)
     override fun execute(listener: Listener?, event: Event) {

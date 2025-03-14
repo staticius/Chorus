@@ -15,10 +15,6 @@ import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 import kotlin.math.abs
 
-/**
- * @author Leonidius20, joserobjr
- * @since 18.08.18
- */
 class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockstate), RedstoneComponent, Faceable {
     override val name: String
@@ -148,7 +144,7 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.OBSERVER,
+            BlockID.BlockID.OBSERVER,
             CommonBlockProperties.MINECRAFT_FACING_DIRECTION,
             CommonBlockProperties.POWERED_BIT
         )

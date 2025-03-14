@@ -13,10 +13,10 @@ import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 class HumanOffHandInventory(holder: IHuman?) : BaseInventory(holder, InventoryType.INVENTORY, 1) {
     override fun init() {
         val map = super.networkSlotMap()
-        map!![0] = 1
+        map[0] = 1
 
         val map2 = super.slotTypeMap()
-        map2!![0] = ContainerSlotType.OFFHAND
+        map2[0] = ContainerSlotType.OFFHAND
     }
 
     fun setItem(item: Item) {

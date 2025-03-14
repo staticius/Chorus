@@ -1,9 +1,6 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.Entity.getX
-import org.chorus.entity.Entity.getY
-import org.chorus.entity.Entity.getZ
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.RespawnPacket

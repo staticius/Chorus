@@ -2,7 +2,7 @@ package org.chorus.item.enchantment
 
 
 class EnchantmentLure :
-    Enchantment(Enchantment.Companion.ID_LURE, "fishingSpeed", Rarity.RARE, EnchantmentType.FISHING_ROD) {
+    Enchantment(ID_LURE, "fishingSpeed", Rarity.RARE, EnchantmentType.FISHING_ROD) {
     override fun getMinEnchantAbility(level: Int): Int {
         return level + 8 * level + 6
     }

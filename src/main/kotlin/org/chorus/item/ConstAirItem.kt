@@ -81,7 +81,7 @@ class ConstAirItem : Item("minecraft:air") {
     override fun setKeepOnDeath(keepOnDeath: Boolean) {
     }
 
-    override val isNull: Boolean
+    override val isNothing: Boolean
         get() = true
 
     override fun clone(): Item {

@@ -1,23 +1,22 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.utils.*
-
-
-
-
-
+import org.chorus.utils.Utils
 
 
 class LevelEventPacket : DataPacket() {
     @JvmField
     var evid: Int = 0
+
     @JvmField
     var x: Float = 0f
+
     @JvmField
     var y: Float = 0f
+
     @JvmField
     var z: Float = 0f
+
     @JvmField
     var data: Int = 0
 
@@ -50,6 +49,7 @@ class LevelEventPacket : DataPacket() {
         val EVENT_SOUND_CLICK_FAIL: Int = Utils.dynamic(1001)
         val EVENT_SOUND_LAUNCH: Int = Utils.dynamic(1002)
         val EVENT_SOUND_DOOR_OPEN: Int = Utils.dynamic(1003)
+
         @JvmField
         val EVENT_SOUND_FIZZ: Int = Utils.dynamic(1004)
         val EVENT_SOUND_FUSE: Int = Utils.dynamic(1005)
@@ -67,15 +67,19 @@ class LevelEventPacket : DataPacket() {
         val EVENT_SOUND_ANVIL_LAND: Int = Utils.dynamic(1022)
         val EVENT_SOUND_INFINITY_ARROW_PICKUP: Int = Utils.dynamic(1030)
         val EVENT_SOUND_TELEPORT_ENDERPEARL: Int = Utils.dynamic(1032)
+
         @JvmField
         val EVENT_SOUND_ITEMFRAME_ITEM_ADD: Int = Utils.dynamic(1040)
+
         @JvmField
         val EVENT_SOUND_ITEMFRAME_BREAK: Int = Utils.dynamic(1041)
         val EVENT_SOUND_ITEMFRAME_PLACE: Int = Utils.dynamic(1042)
         val EVENT_SOUND_ITEMFRAME_ITEM_REMOVE: Int = Utils.dynamic(1043)
+
         @JvmField
         val EVENT_SOUND_ITEMFRAME_ITEM_ROTATE: Int = Utils.dynamic(1044)
         val EVENT_SOUND_CAMERA: Int = Utils.dynamic(1050)
+
         @JvmField
         val EVENT_SOUND_EXPERIENCE_ORB_PICKUP: Int = Utils.dynamic(1051)
         val EVENT_SOUND_TOTEM_USED: Int = Utils.dynamic(1052)
@@ -84,13 +88,17 @@ class LevelEventPacket : DataPacket() {
         val EVENT_SOUND_ARMOR_STAND_LAND: Int = Utils.dynamic(1062)
         val EVENT_SOUND_ARMOR_STAND_PLACE: Int = Utils.dynamic(1063)
         val EVENT_SOUND_POINTED_DRIPSTONE_LAND: Int = Utils.dynamic(1064)
+
         @JvmField
         val EVENT_SOUND_DYE_USED: Int = Utils.dynamic(1065)
+
         @JvmField
         val EVENT_SOUND_INK_SACE_USED: Int = Utils.dynamic(1066)
         val EVENT_SOUND_AMETHYST_RESONATE: Int = Utils.dynamic(1067)
+
         @JvmField
         val EVENT_PARTICLE_SHOOT: Int = Utils.dynamic(2000)
+
         @JvmField
         val EVENT_PARTICLE_DESTROY_BLOCK: Int = Utils.dynamic(2001)
         val EVENT_PARTICLE_POTION_SPLASH: Int = Utils.dynamic(2002)
@@ -101,6 +109,7 @@ class LevelEventPacket : DataPacket() {
         val EVENT_PARTICLE_DEATH_SMOKE: Int = Utils.dynamic(2007)
         val EVENT_PARTICLE_DENY_BLOCK: Int = Utils.dynamic(2008)
         val EVENT_PARTICLE_GENERIC_SPAWN: Int = Utils.dynamic(2009)
+
         @JvmField
         val EVENT_PARTICLE_DRAGON_EGG: Int = Utils.dynamic(2010)
         val EVENT_PARTICLE_CROP_EATEN: Int = Utils.dynamic(2011)
@@ -140,17 +149,22 @@ class LevelEventPacket : DataPacket() {
         val EVENT_GLOBAL_PAUSE: Int = Utils.dynamic(3005)
         val EVENT_SIM_TIME_STEP: Int = Utils.dynamic(3006)
         val EVENT_SIM_TIME_SCALE: Int = Utils.dynamic(3007)
+
         @JvmField
         val EVENT_ACTIVATE_BLOCK: Int = Utils.dynamic(3500)
+
         @JvmField
         val EVENT_CAULDRON_EXPLODE: Int = Utils.dynamic(3501)
         val EVENT_CAULDRON_DYE_ARMOR: Int = Utils.dynamic(3502)
         val EVENT_CAULDRON_CLEAN_ARMOR: Int = Utils.dynamic(3503)
+
         @JvmField
         val EVENT_CAULDRON_FILL_POTION: Int = Utils.dynamic(3504)
+
         @JvmField
         val EVENT_CAULDRON_TAKE_POTION: Int = Utils.dynamic(3505)
         val EVENT_CAULDRON_FILL_WATER: Int = Utils.dynamic(3506)
+
         @JvmField
         val EVENT_CAULDRON_TAKE_WATER: Int = Utils.dynamic(3507)
         val EVENT_CAULDRON_ADD_DYE: Int = Utils.dynamic(3508)
@@ -161,10 +175,13 @@ class LevelEventPacket : DataPacket() {
         val EVENT_CAULDRON_TAKE_LAVA: Int = Utils.dynamic(3513)
         val EVENT_CAULDRON_FILL_POWDER_SNOW: Int = Utils.dynamic(3514)
         val EVENT_CAULDRON_TAKE_POWDER_SNOW: Int = Utils.dynamic(3515)
+
         @JvmField
         val EVENT_BLOCK_START_BREAK: Int = Utils.dynamic(3600)
+
         @JvmField
         val EVENT_BLOCK_STOP_BREAK: Int = Utils.dynamic(3601)
+
         @JvmField
         val EVENT_BLOCK_UPDATE_BREAK: Int = Utils.dynamic(3602)
         val EVENT_PARTICLE_BREAK_BLOCK_DOWN: Int = Utils.dynamic(3603)

@@ -1,5 +1,7 @@
 package org.chorus.network.protocol
 
+import io.netty.buffer.ByteBufInputStream
+import io.netty.handler.codec.EncoderException
 import org.chorus.math.*
 import org.chorus.nbt.NBTIO.readNetworkCompressed
 import org.chorus.nbt.NBTIO.writeNetwork
@@ -8,18 +10,12 @@ import org.chorus.nbt.tag.IntTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.network.connection.util.HandleByteBuf
-import io.netty.buffer.ByteBufInputStream
-import io.netty.handler.codec.EncoderException
-
 import java.io.IOException
 import java.lang.String
 
 /**
  * @author joserobjr
  */
-
-
-
 
 
 class PositionTrackingDBServerBroadcastPacket : DataPacket() {
@@ -43,7 +39,7 @@ class PositionTrackingDBServerBroadcastPacket : DataPacket() {
         byteBuf.writeByte(action!!.ordinal().toByte().toInt())
         byteBuf.writeVarInt(trackingId)
         try {
-            byteBuf.writeBytes(writeNetwork((if (tag != null) tag else CompoundTag())!!)!!)
+            byteBuf.writeBytes(writeNetwork((if (tag != null) tag else CompoundTag())!!))
         } catch (e: IOException) {
             throw EncoderException(e)
         }
@@ -78,7 +74,7 @@ class PositionTrackingDBServerBroadcastPacket : DataPacket() {
             if (pos == null || pos.size() != 3) {
                 return null
             }
-            return BlockVector3(pos.get(0)!!.data, pos.get(1)!!.data, pos.get(2)!!.data)
+            return BlockVector3(pos.get(0).data, pos.get(1).data, pos.get(2).data)
         }
         set(position) {
             setPosition(position!!.x, position.y, position.z)

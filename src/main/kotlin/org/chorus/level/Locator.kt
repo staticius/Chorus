@@ -1,6 +1,7 @@
 package org.chorus.level
 
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockState
 import org.chorus.blockentity.BlockEntity
 import org.chorus.level.format.IChunk
 import org.chorus.math.BlockFace
@@ -113,7 +114,7 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
     override val z: Double
         get() = position.z
 
-    val chunk: IChunk?
+    val chunk: IChunk
         get() = level.getChunk(position.chunkX, position.chunkZ)
 
     open fun add(x: Double, y: Double, z: Double): Locator {

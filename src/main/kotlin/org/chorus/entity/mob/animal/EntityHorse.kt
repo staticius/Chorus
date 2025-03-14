@@ -99,7 +99,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         if (namedTag!!.containsList("Inventory")) {
             inventoryTag = namedTag!!.getList("Inventory", CompoundTag::class.java)
             val item0 = NBTIO.getItemHelper(inventoryTag[0])
-            if (item0.isNull) {
+            if (item0.isNothing) {
                 this.setDataFlag(EntityFlag.SADDLED, false)
                 this.setDataFlag(EntityFlag.WASD_CONTROLLED, false)
                 this.setDataFlag(EntityFlag.CAN_POWER_JUMP, false)
@@ -170,7 +170,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         }
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.LEATHER), getHorseArmor(), getSaddle())
     }
 
@@ -231,7 +231,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun asyncPrepare(currentTick: Int) {
-        if (this.getRider() == null || this.owner == null || getSaddle().isNull) {
+        if (this.getRider() == null || this.owner == null || getSaddle().isNothing) {
             isActive = level!!.isHighLightChunk(chunkX, chunkZ)
             if (!this.isImmobile) {
                 val behaviorGroup = getBehaviorGroup() ?: return
@@ -330,7 +330,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     fun onInput(clientLoc: Transform) {
-        if (this.getRider() == null || this.owner == null || getSaddle().isNull) return
+        if (this.getRider() == null || this.owner == null || getSaddle().isNothing) return
         //每次输入乘骑玩家位置之前都要确保motion为0,避免onGround不更新
         motion.x = 0.0
         motion.y = 0.0
@@ -348,7 +348,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun getOwnerName(): String? {
-        val ownerName = super<EntityOwnable>.getOwnerName()
+        val ownerName = super.getOwnerName()
         if (ownerName == null) {
             this.setDataProperty(EntityDataTypes.Companion.CONTAINER_TYPE, 0)
             this.setDataProperty(EntityDataTypes.Companion.CONTAINER_SIZE, 0)
@@ -473,12 +473,12 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
     protected fun randomizeAttributes(): Array<Attribute?> {
         val attributes = arrayOfNulls<Attribute>(3)
-        attributes[0] = Attribute.Companion.getAttribute(Attribute.Companion.MOVEMENT_SPEED)!!
+        attributes[0] = Attribute.Companion.getAttribute(Attribute.Companion.MOVEMENT_SPEED)
             .setValue(generateRandomSpeed())
         val maxHealth = generateRandomMaxHealth()
-        attributes[1] = Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)!!
+        attributes[1] = Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)
             .setMinValue(0f).setMaxValue(maxHealth).setDefaultValue(maxHealth).setValue(maxHealth)
-        attributes[2] = Attribute.Companion.getAttribute(Attribute.Companion.HORSE_JUMP_STRENGTH)!!
+        attributes[2] = Attribute.Companion.getAttribute(Attribute.Companion.HORSE_JUMP_STRENGTH)
             .setValue(generateRandomJumpStrength())
         val compoundTagListTag = ListTag<CompoundTag>()
         compoundTagListTag.add(Attribute.Companion.toNBT(attributes[0]!!)).add(
@@ -513,7 +513,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         for (i in addEntity.links.indices) {
             addEntity.links[i] = EntityLink(
                 this.getId(),
-                passengers[i]!!.id, if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER, false, false
+                passengers[i].id, if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER, false, false
             )
         }
 

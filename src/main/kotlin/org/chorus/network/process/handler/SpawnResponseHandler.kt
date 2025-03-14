@@ -1,5 +1,6 @@
 package org.chorus.network.process.handler
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.data.property.EntityProperty.Companion.getPacketCache
@@ -11,8 +12,6 @@ import org.chorus.network.protocol.types.TrimData
 import org.chorus.registry.ItemRegistry
 import org.chorus.registry.ItemRuntimeIdRegistry
 import org.chorus.registry.Registries
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-
 import java.util.function.Consumer
 import kotlin.math.max
 import kotlin.math.min

@@ -9,8 +9,6 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
 import org.chorus.utils.TextFormat
-import kotlin.collections.List
-import kotlin.collections.Map
 import kotlin.collections.set
 
 /**

@@ -10,10 +10,13 @@ import org.chorus.nbt.tag.IntTag
 
 class BlockEntityBell(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     private var ringing = false
+
     @JvmField
     var direction: Int = 0
+
     @JvmField
     var ticks: Int = 0
+
     @JvmField
     val spawnExceptions: MutableList<Player> = ArrayList(2)
 
@@ -103,7 +106,7 @@ class BlockEntityBell(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(ch
     }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putBoolean("isMovable", this.isMovable)
             .putBoolean("Ringing", this.ringing)
             .putInt("Direction", this.direction)

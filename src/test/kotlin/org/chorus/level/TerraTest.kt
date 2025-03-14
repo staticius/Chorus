@@ -1,5 +1,6 @@
 package org.chorus.level
 
+import org.apache.commons.io.FileUtils
 import org.chorus.GameMockExtension
 import org.chorus.TestPlayer
 import org.chorus.TestUtils
@@ -7,8 +8,6 @@ import org.chorus.level.format.LevelConfig
 import org.chorus.level.format.LevelConfig.GeneratorConfig
 import org.chorus.level.format.leveldb.LevelDBProvider
 import org.chorus.level.generator.terra.PNXPlatform
-
-import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll

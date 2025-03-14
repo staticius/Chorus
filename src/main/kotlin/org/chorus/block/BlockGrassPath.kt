@@ -6,10 +6,6 @@ import org.chorus.level.Level
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 
-/**
- * @author xtypr
- * @since 2015/11/22
- */
 class BlockGrassPath : BlockGrassBlock {
     constructor() : super(Companion.properties.defaultState)
 

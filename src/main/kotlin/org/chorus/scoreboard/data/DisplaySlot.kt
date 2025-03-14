@@ -1,7 +1,6 @@
 package org.chorus.scoreboard.data
 
 
-
 /**
  * 计分板显示槽位枚举
  */

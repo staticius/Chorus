@@ -1,7 +1,5 @@
 package org.chorus.network.protocol.types
 
-import java.util.*
-
 enum class PlayerAbility(//用于RequestPermissionsPacket的特征位
     val bit: Int = 0
 ) {

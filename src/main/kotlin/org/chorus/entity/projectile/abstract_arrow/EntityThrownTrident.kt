@@ -60,7 +60,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         return 0.25f
     }
 
-    public override fun getGravity(): Float {
+    override fun getGravity(): Float {
         return 0.05f
     }
 
@@ -315,7 +315,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
             return
         }
 
-        for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox()!!.grow(0.1, 0.1, 0.1))) {
+        for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) {
             this.setStuckToBlockPos(
                 BlockVector3(
                     collisionBlock.position.getFloorX(),

@@ -13,7 +13,7 @@ class R : ISelectorArgument {
         sender: CommandSender?,
         basePos: Transform,
         vararg arguments: String
-    ): Predicate<Entity>? {
+    ): Predicate<Entity> {
         ParseUtils.singleArgument(arguments, keyName)
         ParseUtils.cannotReversed(arguments[0])
         val r = arguments[0].toDouble()

@@ -1,8 +1,10 @@
 package org.chorus.item
 
 import org.chorus.Player
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockBeehive
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity
 import org.chorus.entity.item.EntityAreaEffectCloud
 import org.chorus.level.Level
 import org.chorus.level.Sound
@@ -31,14 +33,14 @@ class ItemGlassBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         var filled: Item? = null
         if (player != null && Arrays.stream<Entity>(
                 level.getCollidingEntities(
-                    player.getBoundingBox()!!.grow(1.1, 1.1, 1.1)
+                    player.getBoundingBox().grow(1.1, 1.1, 1.1)
                 )
             ).anyMatch { entity: Entity -> entity is EntityAreaEffectCloud && entity.isDragonBreath() }
         ) {
             filled = ItemDragonBreath()
             Arrays.stream(
                 level.getCollidingEntities(
-                    player.getBoundingBox()!!.grow(1.1, 1.1, 1.1)
+                    player.getBoundingBox().grow(1.1, 1.1, 1.1)
                 )
             ).filter { entity: Entity -> entity is EntityAreaEffectCloud && entity.isDragonBreath() }.findAny()
                 .ifPresent { entity: Entity ->

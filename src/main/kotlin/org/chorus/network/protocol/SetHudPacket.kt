@@ -1,14 +1,9 @@
 package org.chorus.network.protocol
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.hud.HudElement
 import org.chorus.network.protocol.types.hud.HudVisibility
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-
-
-
-
-
 
 
 class SetHudPacket : DataPacket() {

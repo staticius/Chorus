@@ -141,7 +141,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
         return super.onInteract(player, item)
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         // Item drops
         val random: ThreadLocalRandom = ThreadLocalRandom.current()
         val flowerAmount: Int = random.nextInt(3)
@@ -158,7 +158,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
 
 
     private fun getHealthAttribute(): Attribute {
-        return Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)!!.setMaxValue(getMaxHealth().toFloat())
+        return Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH).setMaxValue(getMaxHealth().toFloat())
             .setValue(if (this.health < getMaxHealth()) this.health else getMaxHealth().toFloat())
     }
 
@@ -212,7 +212,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                             }
                             for (i in 0..2) {
                                 val location: Block = block.getSide(blockFace, i)
-                                block.level.setBlock(location.position, Block.get(Block.AIR))
+                                block.level.setBlock(location.position, Block.get(BlockID.AIR))
                                 block.level.addParticle(
                                     DestroyBlockParticle(
                                         location.position.add(0.5, 0.5, 0.5),
@@ -229,7 +229,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                             }
                             for (i in -1..1) {
                                 val location: Block = block.getSide(blockFace).getSide(face, i)
-                                block.level.setBlock(location.position, Block.get(Block.AIR))
+                                block.level.setBlock(location.position, Block.get(BlockID.AIR))
                                 block.level.addParticle(
                                     DestroyBlockParticle(
                                         location.position.add(0.5, 0.5, 0.5),

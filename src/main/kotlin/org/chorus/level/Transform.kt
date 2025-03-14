@@ -1,12 +1,13 @@
 package org.chorus.level
 
-import org.chorus.math.Vector3
 import org.chorus.math.Rotator2
+import org.chorus.math.Vector3
 
 
 class Transform : Locator {
     @JvmField
     var rotation: Rotator2
+
     @JvmField
     var headYaw: Double
 
@@ -188,7 +189,7 @@ class Transform : Locator {
         )
     }
 
-    public override fun clone(): Transform {
+    override fun clone(): Transform {
         return super.clone() as Transform
     }
 

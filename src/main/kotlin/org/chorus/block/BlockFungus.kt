@@ -42,7 +42,7 @@ abstract class BlockFungus(blockState: BlockState?) : BlockFlowable(blockState),
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.isNull || !item.isFertilizer) {
+        if (item.isNothing || !item.isFertilizer) {
             return false
         }
 

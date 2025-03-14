@@ -1,8 +1,5 @@
 package org.chorus.block
 
-/**
- * @author Cool_Loong
- */
 interface BlockID {
     companion object {
         const val ACACIA_BUTTON: String = "minecraft:acacia_button"

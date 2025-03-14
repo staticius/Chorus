@@ -1,15 +1,12 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
 
-/**
- * @author CreeperFace
- * @since 2.6.2017
- */
 abstract class BlockConcretePowder(blockState: BlockState?) : BlockFallable(blockState) {
     override val resistance: Double
         get() = 2.5

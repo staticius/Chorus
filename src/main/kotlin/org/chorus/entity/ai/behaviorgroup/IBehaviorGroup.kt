@@ -26,7 +26,7 @@ interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    fun evaluateBehaviors(entity: EntityMob?)
+    fun evaluateBehaviors(entity: EntityMob)
 
     /**
      * 调用行为组内部的所有核心行为[IBehavior]的评估器[org.chorus.entity.ai.evaluator.IBehaviorEvaluator]
@@ -36,7 +36,7 @@ interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    fun evaluateCoreBehaviors(entity: EntityMob?)
+    fun evaluateCoreBehaviors(entity: EntityMob)
 
     /**
      * 调用行为组内部的所有传感器[ISensor]，并将传感器返回的记忆数据写入到记忆存储器中[IMemoryStorage]
@@ -46,7 +46,7 @@ interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    fun collectSensorData(entity: EntityMob?)
+    fun collectSensorData(entity: EntityMob)
 
     /**
      * 调用行为组内部所有被激活的行为[IBehavior]的执行器[org.chorus.entity.ai.executor.IBehaviorExecutor]
@@ -56,7 +56,7 @@ interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    fun tickRunningBehaviors(entity: EntityMob?)
+    fun tickRunningBehaviors(entity: EntityMob)
 
     /**
      * 调用行为组内部所有被激活的核心行为[IBehavior]的执行器[org.chorus.entity.ai.executor.IBehaviorExecutor]
@@ -66,7 +66,7 @@ interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    fun tickRunningCoreBehaviors(entity: EntityMob?)
+    fun tickRunningCoreBehaviors(entity: EntityMob)
 
     /**
      * 应用行为内部所有的控制器[IController]
@@ -76,7 +76,7 @@ interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    fun applyController(entity: EntityMob?)
+    fun applyController(entity: EntityMob)
 
     /**
      * @return 行为组包含的行为 [IBehavior]<br></br>Behaviors contained in Behavior Groups [IBehavior]
@@ -111,7 +111,7 @@ interface IBehaviorGroup {
     /**
      * @return 行为组使用的寻路器 [IRouteFinder]<br></br>Routefinder used by behavior groups [IRouteFinder]
      */
-    fun getRouteFinder(): IRouteFinder
+    fun getRouteFinder(): IRouteFinder?
 
     /**
      * 通过行为组使用的寻路器更新当前位置到目标位置路径
@@ -121,7 +121,7 @@ interface IBehaviorGroup {
      *
      * @param entity 目标实体
      */
-    fun updateRoute(entity: EntityMob?)
+    fun updateRoute(entity: EntityMob)
 
     /**
      * @return 行为组的记忆存储器 [IMemoryStorage]<br></br>Behavior Group Memory Storage [IMemoryStorage]
@@ -149,10 +149,10 @@ interface IBehaviorGroup {
      *
      * When EntityAI.checkDebugOption(BEHAVIOR) == true, this method is called every 1gt to refresh the content related to debug mode
      */
-    fun debugTick(entity: EntityMob?) {
+    fun debugTick(entity: EntityMob) {
     }
 
-    fun save(entity: EntityMob?) {
+    fun save(entity: EntityMob) {
         //EmptyBehaviorGroup will return null
         if (getMemoryStorage() != null) getMemoryStorage()!!.encode()
     }

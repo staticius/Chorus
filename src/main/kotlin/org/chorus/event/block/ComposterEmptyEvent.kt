@@ -18,6 +18,7 @@ class ComposterEmptyEvent(
 ) :
     BlockEvent(block), Cancellable {
     private var newLevel: Int
+
     @JvmField
     var motion: Vector3? = null
 

@@ -41,6 +41,7 @@ import java.util.function.Consumer
 import java.util.function.Function
 import kotlin.collections.ArrayList
 import kotlin.collections.MutableList
+import kotlin.collections.forEach
 import kotlin.collections.setOf
 
 open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable {
@@ -61,7 +62,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                     ), 13, 1),
                 Behavior(
                     PiglinTradeExecutor(), all(
-                        IBehaviorEvaluator { entity: EntityMob? -> !itemInOffhand.isNull },
+                        IBehaviorEvaluator { entity: EntityMob? -> !itemInOffhand.isNothing },
                         IBehaviorEvaluator { entity: EntityMob? -> !isAngry() },
                         not(
                             all(
@@ -124,7 +125,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                             memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && player.getInventory() != null && !Arrays.stream<Item>(
                                 player.getInventory().getArmorContents()
                             )
-                                .anyMatch { item: Item -> !item.isNull && item is ItemArmor && item.getTier() == ItemArmor.TIER_GOLD }
+                                .anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.getTier() == ItemArmor.TIER_GOLD }
                         },
                         IBehaviorEvaluator { entity: EntityMob? -> getItemInHand() is ItemCrossbow }
                     ), 8, 1),
@@ -159,7 +160,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                             memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && player.getInventory() != null && !Arrays.stream<Item>(
                                 player.getInventory().getArmorContents()
                             )
-                                .anyMatch { item: Item -> !item.isNull && item is ItemArmor && item.getTier() == ItemArmor.TIER_GOLD }
+                                .anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.getTier() == ItemArmor.TIER_GOLD }
                         }
                     ), 5, 1),
                 Behavior(
@@ -192,8 +193,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                             } else {
                                 val entity1 =
                                     memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY)
-                                if (entity1 is EntityWither || entity1 is EntityWitherSkeleton) return@all false
-                                return@all true
+                                return@all !(entity1 is EntityWither || entity1 is EntityWitherSkeleton)
                             }
                         }
                     ), 3, 1),
@@ -249,7 +249,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        if (itemInOffhand.isNull && !isAngry()) {
+        if (itemInOffhand.isNothing && !isAngry()) {
             if (item is ItemGoldIngot) {
                 if (player.gamemode != Player.CREATIVE) player.inventory.decreaseCount(player.inventory.heldItemIndex)
                 itemInOffhand = Item.get(Item.GOLD_INGOT)
@@ -300,7 +300,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         return getDataFlag(EntityFlag.ANGRY)
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         val drops: MutableList<Item> = ArrayList()
         if (ThreadLocalRandom.current().nextInt(200) < 17) { // 8.5%
             drops.add(getItemInHand())
@@ -350,7 +350,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         if (!isAngry()) {
             if (entity is EntityInventoryHolder) {
                 for (i in entity.level!!.getNearbyEntities(
-                    entity.getBoundingBox()!!.grow(1.0, 0.5, 1.0)
+                    entity.getBoundingBox().grow(1.0, 0.5, 1.0)
                 )) {
                     var pickup = false
                     if (i is EntityItem) {
@@ -362,7 +362,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         } else if (item is ItemPorkchop) {
                             pickup = true
                         } else if (likesItem(item)) {
-                            if (itemInOffhand.isNull) {
+                            if (itemInOffhand.isNothing) {
                                 itemInOffhand = item
                                 pickup = true
                             }

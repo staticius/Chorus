@@ -8,10 +8,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.nbt.tag.StringTag
 import java.util.stream.Collectors
-import kotlin.collections.HashSet
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableSet
 import kotlin.collections.set
 
 class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description") {

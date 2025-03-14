@@ -6,9 +6,6 @@ import java.io.*
 import java.nio.ByteOrder
 import java.nio.charset.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.MutableList
 import kotlin.collections.set
 
 
@@ -166,7 +163,7 @@ class NBTInputStream @JvmOverloads constructor(
     @Throws(IOException::class)
     fun <T : Tag?> readValue(type: Int, maxDepth: Int): T? {
         check(!closed.get()) { "Trying to read from a closed reader!" }
-        return deserialize(type, maxDepth) as T?
+        return deserialize(type, maxDepth)
     }
 
     @Throws(IOException::class)

@@ -9,6 +9,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 class CreatureSpawnEvent : Event, Cancellable {
     val reason: SpawnReason
+
     @JvmField
     val entityNetworkId: Int
     val position: Locator

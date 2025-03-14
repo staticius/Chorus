@@ -1,7 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.response
 
 
-
 /**
  * ItemEntry holds information on what item stack should be present in a specific slot.
  */

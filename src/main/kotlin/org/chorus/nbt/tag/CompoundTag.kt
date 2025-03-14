@@ -3,25 +3,18 @@ package org.chorus.nbt.tag
 import io.netty.util.internal.EmptyArrays
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
-import kotlin.collections.Collection
-import kotlin.collections.HashMap
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
-import kotlin.collections.MutableSet
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.forEach
-import kotlin.collections.iterator
 import kotlin.collections.set
 import kotlin.math.max
 
-open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<String?, Tag<*>?>? = HashMap()) :
+open class CompoundTag @JvmOverloads constructor(val tags: MutableMap<String?, Tag<*>?>? = HashMap()) :
     Tag<MutableMap<String?, Tag<*>?>>() {
     open val allTags: Collection<Tag<*>?>
         get() = tags!!.values
 
     override val id: Byte
-        get() = Tag.Companion.TAG_COMPOUND
+        get() = TAG_COMPOUND
 
     open fun put(name: String?, tag: Tag<*>?): CompoundTag {
         tags!![name] = tag
@@ -102,7 +95,7 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         return this
     }
 
-    open fun get(name: String?): Tag<*>? {
+    open operator fun get(name: String?): Tag<*>? {
         return tags!![name]
     }
 
@@ -228,9 +221,9 @@ open class CompoundTag @JvmOverloads constructor(protected val tags: MutableMap<
         return tags[name] as ListTag<out Tag<*>>?
     }
 
-    open fun <T : Tag<*>> getList(name: String?, type: Class<T>?): ListTag<T>? {
+    open fun <T : Tag<*>> getList(name: String, type: Class<T>): ListTag<T> {
         if (tags!!.containsKey(name)) {
-            return tags[name] as ListTag<T>?
+            return tags[name] as ListTag<T>
         }
         return ListTag()
     }

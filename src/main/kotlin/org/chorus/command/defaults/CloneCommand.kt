@@ -156,7 +156,7 @@ class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.descript
                     ++count
 
                     if (move) {
-                        level.setBlock(block.position, Block.get(Block.AIR))
+                        level.setBlock(block.position, Block.get(BlockID.AIR))
                     }
                 }
             }
@@ -166,12 +166,12 @@ class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.descript
                     val block = blocks[i]
                     val destinationBlock = destinationBlocks[i]
 
-                    if (block.id !== Block.AIR) {
+                    if (block.id !== BlockID.AIR) {
                         block.cloneTo(destinationBlock)
                         ++count
 
                         if (move) {
-                            level.setBlock(block.position, Block.get(Block.AIR))
+                            level.setBlock(block.position, Block.get(BlockID.AIR))
                         }
                     }
                 }
@@ -187,7 +187,7 @@ class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.descript
                         ++count
 
                         if (move) {
-                            level.setBlock(block.position, Block.get(Block.AIR))
+                            level.setBlock(block.position, Block.get(BlockID.AIR))
                         }
                     }
                 }

@@ -8,10 +8,6 @@ import org.chorus.network.protocol.types.CodeBuilderOperationType
 //EDU exclusive
 
 
-
-
-
-
 class CodeBuilderSourcePacket : DataPacket() {
     var operation: CodeBuilderOperationType? = null
     var category: CodeBuilderCategoryType? = null

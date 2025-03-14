@@ -8,9 +8,6 @@ import org.chorus.item.ItemID
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
-/**
- * @author good777LUCKY
- */
 class BlockNetherreactor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockstate), BlockEntityHolder<BlockEntityNetherReactor?> {
     override val blockEntityType: String
@@ -38,7 +35,7 @@ class BlockNetherreactor @JvmOverloads constructor(blockstate: BlockState? = Com
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return if (item.isPickaxe) {
             arrayOf(
                 get(ItemID.DIAMOND, 0, 3),

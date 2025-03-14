@@ -1,5 +1,6 @@
 package org.chorus.inventory.request
 
+import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.event.player.PlayerDropItemEvent
@@ -8,8 +9,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.DropAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import com.google.common.collect.Lists
-
 import java.util.List
 
 /**
@@ -22,7 +21,7 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.DROP
 
-    override fun handle(action: DropAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
+    override fun handle(action: DropAction, player: Player, context: ItemStackRequestContext): ActionResponse {
         val inventory: Inventory = getInventory(player, action.source.container)
         val count = action.count
         val slot = inventory.fromNetworkSlot(action.source.slot)
@@ -38,7 +37,7 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
             DropActionProcessor.log.warn("mismatch stack network id!")
             return context.error()
         }
-        if (item.isNull) {
+        if (item.isNothing) {
             DropActionProcessor.log.warn("cannot throw an air!")
             return context.error()
         }

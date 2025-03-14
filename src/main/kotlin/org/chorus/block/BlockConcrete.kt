@@ -2,10 +2,6 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-/**
- * @author CreeperFace
- * @since 2.6.2017
- */
 abstract class BlockConcrete(blockState: BlockState?) : BlockSolid(blockState) {
     override val resistance: Double
         get() = 9.0

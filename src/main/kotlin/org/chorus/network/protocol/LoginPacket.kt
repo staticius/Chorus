@@ -1,21 +1,17 @@
 package org.chorus.network.protocol
 
-import org.chorus.entity.data.Skin
-import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.utils.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-
+import org.chorus.entity.data.Skin
+import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.utils.*
 import java.nio.charset.StandardCharsets
 import java.util.*
 
 /**
  * @since on 15-10-13
  */
-
-
-
 
 
 class LoginPacket : DataPacket() {

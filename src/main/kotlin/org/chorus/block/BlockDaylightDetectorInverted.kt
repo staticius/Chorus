@@ -5,17 +5,13 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.*
 import org.chorus.math.BlockFace
 
-/**
- * @author CreeperFace
- * @since 2015/11/22
- */
 class BlockDaylightDetectorInverted @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockDaylightDetector(blockState) {
     override val name: String
         get() = "Daylight Detector Inverted"
 
-    override fun toItem(): Item? {
-        return ItemBlock(get(DAYLIGHT_DETECTOR), 0)
+    override fun toItem(): Item {
+        return ItemBlock(get(BlockID.DAYLIGHT_DETECTOR), 0)
     }
 
     override fun onActivate(

@@ -13,12 +13,13 @@ class BlockCherryWallSign @JvmOverloads constructor(blockState: BlockState? = Co
         return CHERRY_STANDING_SIGN
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemCherrySign()
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.CHERRY_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.CHERRY_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
 
     }
 }

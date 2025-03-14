@@ -9,10 +9,16 @@ import org.chorus.item.Item
 import org.chorus.lang.TextContainer
 import org.chorus.lang.TranslationContainer
 
-class PlayerDeathEvent(player: Player?, drops: Array<Item>?, @JvmField var deathMessage: TextContainer, @JvmField var experience: Int) :
+class PlayerDeathEvent(
+    player: Player?,
+    drops: Array<Item>?,
+    @JvmField var deathMessage: TextContainer,
+    @JvmField var experience: Int
+) :
     EntityDeathEvent(player, drops), Cancellable {
     @JvmField
     var keepInventory: Boolean = false
+
     @JvmField
     var keepExperience: Boolean = false
 

@@ -6,7 +6,7 @@ import org.chorus.utils.ClientChainData
 
 import java.util.*
 
-open class PlayerInfo (
+open class PlayerInfo(
     val username: String,
     val uniqueId: UUID,
     val skin: Skin,

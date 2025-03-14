@@ -67,7 +67,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         var f1 = 1.0
         var f2 = 1.0
         var f3 = 1.0
@@ -143,7 +143,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return if (item.isShears) {
             arrayOf(
                 toItem()
@@ -153,7 +153,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
         }
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 

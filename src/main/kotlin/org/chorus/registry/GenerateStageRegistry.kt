@@ -1,11 +1,11 @@
 package org.chorus.registry
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.level.generator.GenerateStage
 import org.chorus.level.generator.stages.FinishedStage
 import org.chorus.level.generator.stages.FlatGenerateStage
 import org.chorus.level.generator.stages.LightPopulationStage
 import org.chorus.registry.RegisterException
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.atomic.AtomicBoolean
 

@@ -95,12 +95,12 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
                         val block = clone() as BlockChorusFlower
                         block.position.y = position.y + 1
                         val ev = BlockGrowEvent(this, block)
-                        instance!!.pluginManager.callEvent(ev)
+                        instance.pluginManager.callEvent(ev)
 
                         if (!ev.isCancelled) {
                             level.setBlock(this.position, get(CHORUS_PLANT))
                             level.setBlock(block.position, ev.newState!!)
-                            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_CHORUSFLOWER_GROW)
+                            level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW)
                         } else {
                             return Level.BLOCK_UPDATE_RANDOM
                         }
@@ -120,12 +120,12 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
                                 block.position.z = check.position.z
                                 block.age = age + 1
                                 val ev = BlockGrowEvent(this, block)
-                                instance!!.pluginManager.callEvent(ev)
+                                instance.pluginManager.callEvent(ev)
 
                                 if (!ev.isCancelled) {
                                     level.setBlock(this.position, get(CHORUS_PLANT))
                                     level.setBlock(block.position, ev.newState!!)
-                                    level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_CHORUSFLOWER_GROW)
+                                    level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW)
                                 } else {
                                     return Level.BLOCK_UPDATE_RANDOM
                                 }
@@ -136,11 +136,11 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
                         val block = clone() as BlockChorusFlower
                         block.age = maxAge
                         val ev = BlockGrowEvent(this, block)
-                        instance!!.pluginManager.callEvent(ev)
+                        instance.pluginManager.callEvent(ev)
 
                         if (!ev.isCancelled) {
                             level.setBlock(block.position, ev.newState!!)
-                            level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.BLOCK_CHORUSFLOWER_DEATH)
+                            level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_DEATH)
                         } else {
                             return Level.BLOCK_UPDATE_RANDOM
                         }
@@ -170,7 +170,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
         return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(this.toItem())
     }
 

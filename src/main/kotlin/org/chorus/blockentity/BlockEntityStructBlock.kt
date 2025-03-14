@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import com.google.common.base.Strings
 import org.chorus.block.BlockID
 import org.chorus.block.property.enums.StructureBlockType
 import org.chorus.inventory.*
@@ -11,7 +12,6 @@ import org.chorus.network.protocol.types.StructureAnimationMode
 import org.chorus.network.protocol.types.StructureMirror
 import org.chorus.network.protocol.types.StructureRedstoneSaveMode
 import org.chorus.network.protocol.types.StructureRotation
-import com.google.common.base.Strings
 
 class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt), IStructBlock,
     BlockEntityInventoryHolder {
@@ -140,7 +140,7 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
     }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
+        get() = super.spawnCompound
             .putByte(IStructBlock.Companion.TAG_ANIMATION_MODE, animationMode!!.ordinal)
             .putFloat(IStructBlock.Companion.TAG_ANIMATION_SECONDS, this.animationSeconds)
             .putInt(IStructBlock.Companion.TAG_DATA, data!!.ordinal)
@@ -193,8 +193,8 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID.= this.levelBlock.id
-            return BlockID.=== BlockID.STRUCTURE_BLOCK
+            val BlockID. = this.levelBlock.id
+            return BlockID.=== BlockID . STRUCTURE_BLOCK
         }
 
     override var name: String

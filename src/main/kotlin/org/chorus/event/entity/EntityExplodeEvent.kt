@@ -16,6 +16,7 @@ class EntityExplodeEvent(entity: Entity?, locator: Locator, blocks: List<Block>,
 
     @JvmField
     var ignitions: Set<Block>
+
     @JvmField
     var yield: Double
 

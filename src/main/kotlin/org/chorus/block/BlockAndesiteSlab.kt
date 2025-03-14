@@ -29,6 +29,7 @@ class BlockAndesiteSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.ANDESITE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.ANDESITE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

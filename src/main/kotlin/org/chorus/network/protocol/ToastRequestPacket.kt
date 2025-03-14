@@ -3,14 +3,10 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class ToastRequestPacket : DataPacket() {
     @JvmField
     var title: String = ""
+
     @JvmField
     var content: String = ""
 

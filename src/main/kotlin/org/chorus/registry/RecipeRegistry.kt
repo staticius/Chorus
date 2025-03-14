@@ -1,19 +1,6 @@
 package org.chorus.registry
 
-import org.chorus.Server
-import org.chorus.item.*
-import org.chorus.item.Item.Companion.get
-import org.chorus.network.connection.util.HandleByteBuf.Companion.of
-import org.chorus.network.protocol.CraftingDataPacket
-import org.chorus.network.protocol.types.RecipeUnlockingRequirement
-import org.chorus.recipe.*
-import org.chorus.recipe.descriptor.DefaultDescriptor
-import org.chorus.recipe.descriptor.ItemDescriptor
-import org.chorus.recipe.descriptor.ItemDescriptor.toItem
-import org.chorus.recipe.descriptor.ItemDescriptorType
-import org.chorus.recipe.descriptor.ItemTagDescriptor
-import org.chorus.registry.RegisterException
-import org.chorus.utils.*
+
 import com.google.common.collect.Collections2
 import com.google.gson.internal.LinkedTreeMap
 import io.netty.buffer.ByteBuf
@@ -24,8 +11,18 @@ import io.netty.util.internal.EmptyArrays
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-
-
+import org.chorus.Server
+import org.chorus.item.*
+import org.chorus.item.Item.Companion.get
+import org.chorus.network.connection.util.HandleByteBuf.Companion.of
+import org.chorus.network.protocol.CraftingDataPacket
+import org.chorus.network.protocol.types.RecipeUnlockingRequirement
+import org.chorus.recipe.*
+import org.chorus.recipe.descriptor.DefaultDescriptor
+import org.chorus.recipe.descriptor.ItemDescriptor
+import org.chorus.recipe.descriptor.ItemDescriptorType
+import org.chorus.recipe.descriptor.ItemTagDescriptor
+import org.chorus.utils.*
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -488,7 +485,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                     val reagentItem = get(reagentId!!, reagentMeta)
                     val outputItem = get(outputId!!, outputMeta)
 
-                    if (inputItem.isNull || reagentItem.isNull || outputItem.isNull) {
+                    if (inputItem.isNothing || reagentItem.isNothing || outputItem.isNothing) {
                         continue
                     }
                     register(
@@ -817,7 +814,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
      *
      * @return parsed ItemDescriptor
      */
-    private fun parseDescription(data: Map<String, Any>, parseType: ParseType): ItemDescriptor? {
+    private fun parseDescription(data: Map<String, Any>, parseType: ParseType): ItemDescriptor {
         var descriptor: ItemDescriptor? = null
 
         when (parseType) {
@@ -917,10 +914,10 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
 
         val priority = if (recipeObject.containsKey("priority")) Utils.toInt(recipeObject["priority"]) else 0
 
-        val result = parseRecipeItem(first) ?: return null
+        val result = parseRecipeItem(first)
         val resultItem = result.toItem()
         for (ingredient in inputs!!) {
-            val recipeItem = parseRecipeItem(ingredient) ?: return null
+            val recipeItem = parseRecipeItem(ingredient)
             itemDescriptors.add(recipeItem)
         }
 
@@ -978,11 +975,11 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
         val ingredients: MutableMap<Char, ItemDescriptor> = CharObjectHashMap()
 
         val priority = Utils.toInt(recipeObject["priority"])
-        val primaryResult = parseRecipeItem(first) ?: return null
+        val primaryResult = parseRecipeItem(first)
 
         val extraResults: MutableList<Item?> = ArrayList()
         for (data in outputs) {
-            val output = parseRecipeItem(data) ?: return null
+            val output = parseRecipeItem(data)
             extraResults.add(output.toItem())
         }
 
@@ -994,7 +991,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
         val input2 = input as Map<String, Map<String, Any>>
         for ((key, ingredient) in input2) {
             val ingredientChar = key[0]
-            val itemDescriptor = parseRecipeItem(ingredient) ?: return null
+            val itemDescriptor = parseRecipeItem(ingredient)
             ingredients[ingredientChar] = itemDescriptor
         }
 

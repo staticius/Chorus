@@ -9,9 +9,6 @@ import org.chorus.network.protocol.types.AgentActionType
  */
 
 
-
-
-
 class AgentActionEventPacket : DataPacket() {
     var requestId: String? = null
     var actionType: AgentActionType? = null

@@ -16,15 +16,12 @@ import org.chorus.network.protocol.RemoveEntityPacket
 import org.chorus.network.protocol.SetEntityLinkPacket
 import org.chorus.network.protocol.types.EntityLink
 import java.util.*
-import java.util.function.Predicate
 
 
 open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk, nbt) {
-    @JvmField
-    protected var uuid: UUID? = null
-    @JvmField
-    protected var rawUUID: ByteArray
-    protected var skin: Skin? = null
+    protected lateinit var uuid: UUID
+    protected lateinit var rawUUID: ByteArray
+    protected lateinit var skin: Skin
 
     override fun getWidth(): Float {
         return 0.6f
@@ -43,7 +40,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     }
 
     override fun getEyeHeight(): Float {
-        return (boundingBox!!.maxY - boundingBox!!.minY - 0.18).toFloat()
+        return (boundingBox.maxY - boundingBox.minY - 0.18).toFloat()
     }
 
     /**
@@ -55,19 +52,19 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
         return 1.62f
     }
 
-    override fun getSkin(): Skin? {
+    override fun getSkin(): Skin {
         return skin
     }
 
-    override fun setSkin(skin: Skin?) {
+    override fun setSkin(skin: Skin) {
         this.skin = skin
     }
 
-    override fun getUniqueId(): UUID? {
+    override fun getUniqueId(): UUID {
         return uuid
     }
 
-    override fun setUniqueId(uuid: UUID?) {
+    override fun setUniqueId(uuid: UUID) {
         this.uuid = uuid
     }
 
@@ -104,25 +101,24 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     override fun entityBaseTick(tickDiff: Int): Boolean {
         val hasUpdate: Boolean = super.entityBaseTick(tickDiff)
         //handle human entity freeze
-        val collidedWithPowderSnow: Boolean = getTickCachedCollisionBlocks()!!.stream().anyMatch(
-            Predicate { block: Block -> block.getId() == Block.POWDER_SNOW })
+        val collidedWithPowderSnow: Boolean = getTickCachedCollisionBlocks()!!.stream().anyMatch { block: Block -> block.id == BlockID.POWDER_SNOW }
         if (this.getFreezingTicks() < 140 && collidedWithPowderSnow) {
             if (getFreezingTicks() == 0) { //玩家疾跑进来要设置为非疾跑，统一为默认速度0.1
                 this.setSprinting(false)
             }
             this.addFreezingTicks(1)
-            val event: EntityFreezeEvent = EntityFreezeEvent(this)
+            val event = EntityFreezeEvent(this)
             Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
-                this.setMovementSpeed(Math.max(0.05, getMovementSpeed() - 3.58e-4).toFloat())
+                this.setMovementSpeed(0.05.coerceAtLeast(getMovementSpeed() - 3.58e-4).toFloat())
             }
         } else if (this.getFreezingTicks() > 0 && !collidedWithPowderSnow) {
             this.addFreezingTicks(-1)
             this.setMovementSpeed(
-                Math.min(Player.DEFAULT_SPEED.toDouble(), getMovementSpeed() + 3.58e-4).toFloat()
+                Player.DEFAULT_SPEED.toDouble().coerceAtMost(getMovementSpeed() + 3.58e-4).toFloat()
             ) //This magic number is to change the player's 0.05 speed within 140tick
         }
-        if (this.getFreezingTicks() == 140 && level!!.getTick() % 40 == 0) {
+        if (this.getFreezingTicks() == 140 && level!!.tick % 40 == 0) {
             this.attack(EntityDamageEvent(this, DamageCause.FREEZING, getFrostbiteInjury().toFloat()))
         }
         return hasUpdate
@@ -142,14 +138,14 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             pk.mode = MovePlayerPacket.MODE_PITCH
         }
 
-        Server.broadcastPacket(getViewers().values(), pk)
+        Server.broadcastPacket(getViewers().values, pk)
     }
 
     override fun spawnTo(player: Player) {
-        if (this !== player && !hasSpawned.containsKey(player.getLoaderId())) {
-            hasSpawned.put(player.getLoaderId(), player)
+        if (this !== player && !hasSpawned.containsKey(player.loaderId)) {
+            hasSpawned[player.loaderId] = player
 
-            check(skin!!.isValid()) { this.getClass().getSimpleName() + " must have a valid skin set" }
+            check(skin.isValid()) { this.javaClass.getSimpleName() + " must have a valid skin set" }
 
             if (this is Player) Server.instance.updatePlayerListData(
                 this.getUniqueId(),
@@ -177,7 +173,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             pk.speedZ = motion.z.toFloat()
             pk.yaw = rotation.yaw.toFloat()
             pk.pitch = rotation.pitch.toFloat()
-            pk.item = getInventory().getItemInHand()
+            pk.item = getInventory().itemInHand
             pk.entityData = this.entityDataMap
             player.dataPacket(pk)
 
@@ -201,18 +197,18 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     }
 
     override fun despawnFrom(player: Player) {
-        if (hasSpawned.containsKey(player.getLoaderId())) {
+        if (hasSpawned.containsKey(player.loaderId)) {
             val pk: RemoveEntityPacket = RemoveEntityPacket()
             pk.eid = this.getId()
             player.dataPacket(pk)
-            hasSpawned.remove(player.getLoaderId())
+            hasSpawned.remove(player.loaderId)
         }
     }
 
     override fun close() {
         if (!this.closed) {
             if (inventory != null && (this !is Player || this.loggedIn)) {
-                for (viewer: Player in inventory!!.getViewers()) {
+                for (viewer in inventory!!.getViewers()) {
                     viewer.removeWindow(this.inventory)
                 }
             }
@@ -223,7 +219,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
 
     override fun onBlock(entity: Entity?, event: EntityDamageEvent?, animate: Boolean) {
         super.onBlock(entity, event, animate)
-        var shield: Item? = getInventory().getItemInHand()
+        var shield: Item? = getInventory().itemInHand
         var shieldOffhand: Item? = getOffhandInventory()!!.getItem(0)
         if (shield is ItemShield) {
             shield = damageArmor(shield, entity, event!!)

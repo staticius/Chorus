@@ -1,10 +1,10 @@
 package org.chorus.item.enchantment
 
-import org.chorus.item.*
+import org.chorus.item.Item
 
 
 class EnchantmentEfficiency :
-    Enchantment(Enchantment.Companion.ID_EFFICIENCY, "digging", Rarity.COMMON, EnchantmentType.DIGGER) {
+    Enchantment(ID_EFFICIENCY, "digging", Rarity.COMMON, EnchantmentType.DIGGER) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 1 + (level - 1) * 10
     }

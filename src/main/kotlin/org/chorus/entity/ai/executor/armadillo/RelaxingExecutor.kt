@@ -7,7 +7,7 @@ import org.chorus.entity.mob.animal.EntityArmadillo
 import org.chorus.entity.mob.animal.EntityArmadillo.RollState
 
 class RelaxingExecutor : EntityControl, IBehaviorExecutor {
-    override fun execute(entity: EntityMob?): Boolean {
+    override fun execute(entity: EntityMob): Boolean {
         return false
     }
 

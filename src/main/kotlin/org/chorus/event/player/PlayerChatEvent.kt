@@ -14,6 +14,7 @@ class PlayerChatEvent @JvmOverloads constructor(
 ) :
     PlayerMessageEvent(), Cancellable {
     protected var recipients: MutableSet<CommandSender> = HashSet()
+
     @JvmField
     var format: String
 

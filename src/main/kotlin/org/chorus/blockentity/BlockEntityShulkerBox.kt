@@ -92,7 +92,7 @@ class BlockEntityShulkerBox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
 
         val d = NBTIO.putItemHelper(item, index)
 
-        if (item.isNull || item.getCount() <= 0) {
+        if (item.isNothing || item.getCount() <= 0) {
             if (i >= 0) {
                 namedTag.getList("Items").remove(i)
             }
@@ -125,9 +125,9 @@ class BlockEntityShulkerBox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
     override val spawnCompound: CompoundTag
         get() {
             val c: CompoundTag =
-                BlockEntity.Companion.getDefaultCompound(
+                getDefaultCompound(
                     this.position,
-                    BlockEntityID.Companion.SHULKER_BOX
+                    BlockEntityID.SHULKER_BOX
                 )
                     .putBoolean("isMovable", this.isMovable)
                     .putBoolean("Findable", false)

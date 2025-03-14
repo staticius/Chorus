@@ -2,6 +2,17 @@ package org.chorus
 
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
+import com.google.common.base.Preconditions
+import com.google.common.base.Strings
+import com.google.common.collect.BiMap
+import com.google.common.collect.HashBiMap
+import com.google.common.collect.Sets
+import io.netty.util.internal.EmptyArrays
+import io.netty.util.internal.PlatformDependent
+import it.unimi.dsi.fastutil.Pair
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet
+import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap
 import org.chorus.api.UsedByReflection
 import org.chorus.block.*
 import org.chorus.block.customblock.CustomBlock
@@ -86,17 +97,6 @@ import org.chorus.utils.Binary.Companion.writeUUID
 import org.chorus.utils.Identifier.Companion.tryParse
 import org.chorus.utils.PortalHelper.moveToTheEnd
 import org.chorus.utils.TextFormat.Companion.clean
-import com.google.common.base.Preconditions
-import com.google.common.base.Strings
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
-import com.google.common.collect.Sets
-import io.netty.util.internal.EmptyArrays
-import io.netty.util.internal.PlatformDependent
-import it.unimi.dsi.fastutil.Pair
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet
-import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
@@ -110,19 +110,13 @@ import kotlin.concurrent.Volatile
 import kotlin.math.*
 
 /**
- * 游戏玩家对象，代表操控的角色
- *
- *
  * Game player object, representing the controlled character
- *
- * @author MagicDroidX &amp; Box (Nukkit Project)
  */
-
 class Player @UsedByReflection constructor(
     val session: BedrockSession,
     val playerInfo: PlayerInfo
 ) :
-    EntityHuman(null, CompoundTag()), CommandSender, ChunkLoader, IPlayer, IScoreboardViewer {
+    EntityHuman(null, CompoundTag()), CommandSender, ChunkLoader, IPlayer, IScoreboardViewer, Loggable {
     var abilities: EntityAbilities = EntityAbilities()
     var timer: EntityTimer = EntityTimer()
     var agentId: Long = 0L
@@ -365,7 +359,7 @@ class Player @UsedByReflection constructor(
         private set
     private var enchSeed = 0
     private var loadingScreenId = 0
-    override val loaderId: Int  = generateChunkLoaderId(this)
+    override val loaderId: Int = generateChunkLoaderId(this)
     private var lastBreakPosition = BlockVector3()
     private var hasSeenCredits = false
     private var wasInSoulSandCompatible = false
@@ -615,7 +609,7 @@ class Player @UsedByReflection constructor(
         )
 
         val block = target.getSide(face)
-        if (block!!.id == Block.FIRE || block.id == BlockID.SOUL_FIRE) {
+        if (block!!.id == BlockID.FIRE || block.id == BlockID.SOUL_FIRE) {
             level!!.setBlock(block.position, Block.get(BlockID.AIR), true)
             level!!.addLevelSoundEvent(block.position, LevelSoundEventPacket.SOUND_EXTINGUISH_FIRE)
             return
@@ -700,13 +694,13 @@ class Player @UsedByReflection constructor(
                     return
                 }
 
-                if (clone.id == handItem.id || handItem.isNull) {
+                if (clone.id == handItem.id || handItem.isNothing) {
                     inventory!!.setItemInHand(handItem, false)
                 } else {
-                    Player.log.debug("Tried to set item " + handItem.id + " but " + this.getName() + " had item " + clone.id + " in their hand slot")
+                    log.debug("Tried to set item " + handItem.id + " but " + this.getName() + " had item " + clone.id + " in their hand slot")
                 }
                 inventory!!.sendHeldItem(getViewers().values)
-            } else if (handItem == null) level.sendBlocks(
+            } else if (handItem == null) level!!.sendBlocks(
                 arrayOf(this), arrayOf(
                     level!!.getBlock(blockPos.asVector3())
                 ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0
@@ -778,7 +772,7 @@ class Player @UsedByReflection constructor(
             )
         } else {
             this.spawnPoint = level!!.safeSpawn
-            Player.log.info(
+            log.info(
                 "Player {} cannot find the saved spawnpoint, reset the spawnpoint to {} {} {} / {}",
                 this.getName(),
                 spawnPoint!!.position.x,
@@ -872,7 +866,7 @@ class Player @UsedByReflection constructor(
         this.sendFogStack()
         this.sendCameraPresets()
 
-        Player.log.debug("Send Player Spawn Status Packet to {},wait init packet", getName())
+        log.debug("Send Player Spawn Status Packet to {},wait init packet", getName())
         this.sendPlayStatus(PlayStatusPacket.PLAYER_SPAWN)
 
         //客户端初始化完毕再传送玩家，避免下落 (x)
@@ -910,7 +904,7 @@ class Player @UsedByReflection constructor(
         if (!this.onGround || movX != 0.0 || movY != 0.0 || movZ != 0.0) {
             var onGround = false
 
-            val realBB = boundingBox!!.clone()
+            val realBB = boundingBox.clone()
             realBB.maxY = realBB.minY
             realBB.minY = realBB.minY - 0.5
 
@@ -993,8 +987,8 @@ class Player @UsedByReflection constructor(
             block.onEntityCollide(this)
             block.getLevelBlockAtLayer(1)!!.onEntityCollide(this)
         }
-        val scanBoundingBox = boundingBox!!.getOffsetBoundingBox(0.0, -0.125, 0.0)
-        scanBoundingBox.maxY = boundingBox!!.minY
+        val scanBoundingBox = boundingBox.getOffsetBoundingBox(0.0, -0.125, 0.0)
+        scanBoundingBox.maxY = boundingBox.minY
         val scaffoldingUnder = level!!.getCollisionBlocks(
             scanBoundingBox,
             true, true
@@ -1054,7 +1048,7 @@ class Player @UsedByReflection constructor(
     }
 
     fun checkNearEntities() {
-        for (entity in level!!.getNearbyEntities(boundingBox!!.grow(1.0, 0.5, 1.0), this)) {
+        for (entity in level!!.getNearbyEntities(boundingBox.grow(1.0, 0.5, 1.0), this)) {
             if (entity == null) continue
             entity.scheduleUpdate()
 
@@ -1082,7 +1076,7 @@ class Player @UsedByReflection constructor(
             val chunk =
                 level!!.getChunk(clientPos.position.chunkX, clientPos.position.chunkZ, false)
             this.chunk = chunk
-            if (this.chunk == null || !chunk!!.chunkState.canSend()) {
+            if (this.chunk == null || !chunk.chunkState.canSend()) {
                 invalidMotion = true
                 this.nextChunkOrderRun = 0
                 if (this.chunk != null) {
@@ -1118,7 +1112,7 @@ class Player @UsedByReflection constructor(
                 val event = PlayerInvalidMoveEvent(this, true)
                 Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled && (event.isRevert.also { invalidMotion = it })) {
-                    Player.log.warn(Server.instance.getLanguage().tr("nukkit.player.invalidMove", this.getName()))
+                    log.warn(Server.instance.getLanguage().tr("nukkit.player.invalidMove", this.getName()))
                 }
             }
             if (invalidMotion) {
@@ -1354,7 +1348,7 @@ class Player @UsedByReflection constructor(
         prevRotation.pitch = originalPos.pitch
 
         val syncPos = originalPos.position.add(0.0, 0.00001, 0.0)
-        this.sendPosition(syncPos!!, originalPos.yaw, originalPos.pitch, MovePlayerPacket.MODE_RESET)
+        this.sendPosition(syncPos, originalPos.yaw, originalPos.pitch, MovePlayerPacket.MODE_RESET)
 
         if (this.speed == null) {
             this.speed = Vector3(0.0, 0.0, 0.0)
@@ -1422,7 +1416,7 @@ class Player @UsedByReflection constructor(
             nbt.putInt("playerGameType", this.gamemode)
         }
 
-        adventureSettings!!.init(nbt)
+        adventureSettings.init(nbt)
 
         val level: Level
         if ((Server.instance.getLevelByName(nbt.getString("Level")!!).also { level = it!! }) == null) {
@@ -1461,10 +1455,10 @@ class Player @UsedByReflection constructor(
 
         super.init(
             this.level!!.getChunk(
-                posList!!.get(0)!!.data.toInt() shr 4,
-                posList.get(2)!!.data.toInt() shr 4,
+                posList!!.get(0).data.toInt() shr 4,
+                posList.get(2).data.toInt() shr 4,
                 true
-            )!!, nbt
+            ), nbt
         )
 
         if (!namedTag!!.contains("foodLevel")) {
@@ -1517,8 +1511,8 @@ class Player @UsedByReflection constructor(
             fogStack.add(
                 i, PlayerFogPacket.Fog(
                     tryParse(
-                        fogIdentifiers.get(i)!!.data!!
-                    )!!, userProvidedFogIds!!.get(i)!!.data!!
+                        fogIdentifiers.get(i).data!!
+                    )!!, userProvidedFogIds!!.get(i).data!!
                 )
             )
         }
@@ -1527,7 +1521,7 @@ class Player @UsedByReflection constructor(
             this.isCheckingMovement = false
         }
 
-        Player.log.info(
+        log.info(
             Server.instance.baseLang.tr(
                 "nukkit.player.logIn",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
@@ -1703,7 +1697,7 @@ class Player @UsedByReflection constructor(
                 respawnPos.position.add(
                     0.0,
                     getEyeHeight().toDouble(), 0.0
-                )!!, respawnPos.level
+                ), respawnPos.level
             ), TeleportCause.PLAYER_SPAWN
         )
         this.spawnToAll()
@@ -1863,7 +1857,7 @@ class Player @UsedByReflection constructor(
      *
      * Get player permission settings.
      */
-    fun getAdventureSettings(): AdventureSettings? {
+    fun getAdventureSettings(): AdventureSettings {
         return adventureSettings
     }
 
@@ -1877,7 +1871,7 @@ class Player @UsedByReflection constructor(
      */
     fun setAdventureSettings(adventureSettings: AdventureSettings) {
         this.adventureSettings = adventureSettings.clone()
-        this.adventureSettings!!.update()
+        this.adventureSettings.update()
     }
 
 
@@ -2111,14 +2105,14 @@ class Player @UsedByReflection constructor(
         return true
     }
 
-    override fun asPlayer(): Player? {
+    override fun asPlayer(): Player {
         return this
     }
 
     override val isEntity: Boolean
         get() = true
 
-    override fun asEntity(): Entity? {
+    override fun asEntity(): Entity {
         return this
     }
 
@@ -2165,7 +2159,7 @@ class Player @UsedByReflection constructor(
         }
     }
 
-    override fun setSkin(skin: Skin?) {
+    override fun setSkin(skin: Skin) {
         super.setSkin(skin)
         if (this.spawned) {
 //            this.Server.instance.updatePlayerListData(this.getUniqueId(), this.getId(), this.getDisplayName(), skin, this.getLoginChainData().getXUID());
@@ -2410,7 +2404,7 @@ class Player @UsedByReflection constructor(
                 delayedPosTrackingUpdate!!.cancel()
             }
             val scheduler = if (level == null) Server.instance.scheduler else level!!.scheduler
-            delayedPosTrackingUpdate = scheduler!!.scheduleDelayedTask(
+            delayedPosTrackingUpdate = scheduler.scheduleDelayedTask(
                 null,
                 { this.updateTrackingPositions() }, 10
             )
@@ -2444,7 +2438,7 @@ class Player @UsedByReflection constructor(
             return false
         }
 
-        for (p in level!!.getNearbyEntities(boundingBox!!.grow(2.0, 1.0, 2.0), this)) {
+        for (p in level!!.getNearbyEntities(boundingBox.grow(2.0, 1.0, 2.0), this)) {
             if (p is Player) {
                 if (p.sleeping != null && pos.distance(p.sleeping!!) <= 0.1) {
                     return false
@@ -2681,7 +2675,7 @@ class Player @UsedByReflection constructor(
          */
         get() = this.gamemode == ADVENTURE
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         if (!this.isCreative && !this.isSpectator) {
             return super.getDrops()
         }
@@ -2763,16 +2757,16 @@ class Player @UsedByReflection constructor(
         val pk = UpdateAttributesPacket()
         pk.entityId = this.getId()
         pk.entries = arrayOf(
-            getAttribute(Attribute.MAX_HEALTH)!!
+            getAttribute(Attribute.MAX_HEALTH)
                 .setMaxValue(getMaxHealth().toFloat())
                 .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f),
-            getAttribute(Attribute.MAX_HUNGER)!!
+            getAttribute(Attribute.MAX_HUNGER)
                 .setValue(foodData!!.food.toFloat()),
-            getAttribute(Attribute.MOVEMENT_SPEED)!!.setValue(this.getMovementSpeed()),
-            getAttribute(Attribute.EXPERIENCE_LEVEL)!!.setValue(
+            getAttribute(Attribute.MOVEMENT_SPEED).setValue(this.getMovementSpeed()),
+            getAttribute(Attribute.EXPERIENCE_LEVEL).setValue(
                 experienceLevel.toFloat()
             ),
-            getAttribute(Attribute.EXPERIENCE)!!.setValue(
+            getAttribute(Attribute.EXPERIENCE).setValue(
                 (experience.toFloat()) / calculateRequireExperience(
                     experienceLevel
                 )
@@ -2808,8 +2802,8 @@ class Player @UsedByReflection constructor(
 
     override fun setSwimming(value: Boolean) {
         //Stopping a swim at a height of 1 block will still send a STOPSWIMMING ACTION from the client, but the player will still be swimming height,so skip the action
-        if (!value && level!!.getBlock(position.up()!!)!!.isSolid && level!!.getBlock(
-                position.down()!!
+        if (!value && level!!.getBlock(position.up())!!.isSolid && level!!.getBlock(
+                position.down()
             )!!.isSolid
         ) {
             return
@@ -2839,7 +2833,7 @@ class Player @UsedByReflection constructor(
         }
 
         if (!this.isAlive() && this.spawned) {
-            if (level!!.gameRules!!.getBoolean(GameRule.DO_IMMEDIATE_RESPAWN)) {
+            if (level!!.gameRules.getBoolean(GameRule.DO_IMMEDIATE_RESPAWN)) {
                 this.despawnFromAll()
                 return true
             }
@@ -2864,7 +2858,7 @@ class Player @UsedByReflection constructor(
 
             this.entityBaseTick(tickDiff)
 
-            if (Server.instance.difficulty == 0 && level!!.gameRules!!.getBoolean(GameRule.NATURAL_REGENERATION)) {
+            if (Server.instance.difficulty == 0 && level!!.gameRules.getBoolean(GameRule.NATURAL_REGENERATION)) {
                 if (this.getHealth() < this.getMaxHealth() && this.ticksLived % 20 == 0) {
                     this.heal(1f)
                 }
@@ -3047,7 +3041,7 @@ class Player @UsedByReflection constructor(
 
 
         val nearbyEntities = level!!.getNearbyEntities(
-            boundingBox!!.grow(maxDistance.toDouble(), maxDistance.toDouble(), maxDistance.toDouble()),
+            boundingBox.grow(maxDistance.toDouble(), maxDistance.toDouble(), maxDistance.toDouble()),
             this
         )
 
@@ -3136,7 +3130,7 @@ class Player @UsedByReflection constructor(
         this.resetInventory()
 
         if (this.removeFormat) {
-            message = clean(message, true)!!
+            message = clean(message, true)
         }
 
         for (msg in message.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
@@ -3284,7 +3278,7 @@ class Player @UsedByReflection constructor(
 
 
     override fun sendCommandOutput(container: CommandOutputContainer) {
-        if (level!!.gameRules!!.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
+        if (level!!.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             val pk = CommandOutputPacket()
             pk.messages.addAll(container.messages)
             pk.commandOriginData = CommandOriginData(
@@ -3618,7 +3612,7 @@ class Player @UsedByReflection constructor(
             return
         }
         //output logout infomation
-        Player.log.info(
+        log.info(
             Server.instance.getLanguage().tr(
                 "nukkit.player.logOut",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
@@ -3714,8 +3708,8 @@ class Player @UsedByReflection constructor(
         }
 
         //close player network session
-        Player.log.debug("Closing player network session")
-        Player.log.debug(reason)
+        log.debug("Closing player network session")
+        log.debug(reason)
         checkNotNull(this.session)
         session.close(null)
     }
@@ -3777,7 +3771,7 @@ class Player @UsedByReflection constructor(
             }
         }
 
-        adventureSettings!!.saveNBT()
+        adventureSettings.saveNBT()
     }
 
     @JvmOverloads
@@ -3844,7 +3838,7 @@ class Player @UsedByReflection constructor(
             return
         }
 
-        val showMessages = level!!.gameRules!!.getBoolean(GameRule.SHOW_DEATH_MESSAGES)
+        val showMessages = level!!.gameRules.getBoolean(GameRule.SHOW_DEATH_MESSAGES)
         var message = ""
         val params: MutableList<String> = ArrayList()
         val cause = this.getLastDamageCause()
@@ -3951,7 +3945,7 @@ class Player @UsedByReflection constructor(
             this.getDrops(), TranslationContainer(message, *params.toArray<String>(EmptyArrays.EMPTY_STRINGS)),
             this.experienceLevel
         )
-        ev.keepExperience = level!!.gameRules!!.getBoolean(GameRule.KEEP_INVENTORY)
+        ev.keepExperience = level!!.gameRules.getBoolean(GameRule.KEEP_INVENTORY)
         ev.keepInventory = ev.keepExperience
 
         Server.instance.pluginManager.callEvent(ev)
@@ -3964,7 +3958,7 @@ class Player @UsedByReflection constructor(
             this.health = 0f
             this.extinguish()
             this.scheduleUpdate()
-            if (!ev.keepInventory && level!!.gameRules!!.getBoolean(GameRule.DO_ENTITY_DROPS)) {
+            if (!ev.keepInventory && level!!.gameRules.getBoolean(GameRule.DO_ENTITY_DROPS)) {
                 for (item in ev.getDrops()!!) {
                     if (!item.hasEnchantment(Enchantment.ID_VANISHING_CURSE) && item.applyEnchantments()) {
                         level!!.dropItem(this.position, item, null, true, 40)
@@ -3987,7 +3981,7 @@ class Player @UsedByReflection constructor(
                 }
             }
 
-            if (!ev.keepExperience && level!!.gameRules!!.getBoolean(GameRule.DO_ENTITY_DROPS)) {
+            if (!ev.keepExperience && level!!.gameRules.getBoolean(GameRule.DO_ENTITY_DROPS)) {
                 if (this.isSurvival || this.isAdventure) {
                     var exp = ev.experience * 7
                     if (exp > 100) exp = 100
@@ -4291,8 +4285,8 @@ class Player @UsedByReflection constructor(
             return false
         } else if (source.cause == DamageCause.FALL) {
             if (level!!.getBlock(
-                    getLocator().position.floor()!!
-                        .add(0.5, -1.0, 0.5)!!
+                    getLocator().position.floor()
+                        .add(0.5, -1.0, 0.5)
                 )!!
                     .id == Block.SLIME
             ) {
@@ -4339,14 +4333,14 @@ class Player @UsedByReflection constructor(
             return false
         }
 
-        if (item.isNull) {
-            Player.log.debug("{} attempted to drop a null item ({})", this.getName(), item)
+        if (item.isNothing) {
+            log.debug("{} attempted to drop a null item ({})", this.getName(), item)
             return true
         }
 
         val motion = getDirectionVector().multiply(0.4)
 
-        level!!.dropItem(position.add(0.0, 1.3, 0.0)!!, item, motion, 40)
+        level!!.dropItem(position.add(0.0, 1.3, 0.0), item, motion, 40)
 
         this.setDataFlag(EntityFlag.USING_ITEM, false)
         return true
@@ -4366,8 +4360,8 @@ class Player @UsedByReflection constructor(
             return null
         }
 
-        if (item.isNull) {
-            Player.log.debug("{} attempted to drop a null item ({})", this.getName(), item)
+        if (item.isNothing) {
+            log.debug("{} attempted to drop a null item ({})", this.getName(), item)
             return null
         }
 
@@ -4375,7 +4369,7 @@ class Player @UsedByReflection constructor(
 
         this.setDataFlag(EntityFlag.USING_ITEM, false)
 
-        return level!!.dropAndGetItem(position.add(0.0, 1.3, 0.0)!!, item, motion, 40)
+        return level!!.dropAndGetItem(position.add(0.0, 1.3, 0.0), item, motion, 40)
     }
 
     /**
@@ -5149,7 +5143,7 @@ class Player @UsedByReflection constructor(
                 this.dataPacket(pk)
 
                 if (!entity.isCreative()) {
-                    if (inventory!!.getItem(entity.getFavoredSlot()).isNull) {
+                    if (inventory!!.getItem(entity.getFavoredSlot()).isNothing) {
                         inventory.setItem(entity.getFavoredSlot(), item.clone())
                     } else {
                         inventory.addItem(item.clone())
@@ -5194,7 +5188,7 @@ class Player @UsedByReflection constructor(
         }
 
         val tick = level!!.tick
-        if (pickedXPOrb < tick && entity is EntityXpOrb && boundingBox!!.isVectorInside(entity.position)) {
+        if (pickedXPOrb < tick && entity is EntityXpOrb && boundingBox.isVectorInside(entity.position)) {
             if (entity.getPickupDelay() <= 0) {
                 var exp = entity.getExp()
                 entity.kill()

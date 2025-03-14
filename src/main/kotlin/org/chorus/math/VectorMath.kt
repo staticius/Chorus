@@ -3,7 +3,10 @@ package org.chorus.math
 import org.chorus.math.BlockFace.AxisDirection
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.math.*
+import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sin
 
 
 object VectorMath {
@@ -22,7 +25,7 @@ object VectorMath {
         val vector = side.subtract(base)
         val axis =
             if (vector.x != 0.0) BlockFace.Axis.X else if (vector.z != 0.0) BlockFace.Axis.Z else BlockFace.Axis.Y
-        val direction = vector!!.getAxis(axis)
+        val direction = vector.getAxis(axis)
         return BlockFace.Companion.fromAxis(if (direction < 0) AxisDirection.NEGATIVE else AxisDirection.POSITIVE, axis)
     }
 

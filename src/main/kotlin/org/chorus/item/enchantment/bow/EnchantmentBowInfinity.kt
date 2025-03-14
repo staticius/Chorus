@@ -1,12 +1,12 @@
 package org.chorus.item.enchantment.bow
 
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
 
 
 class EnchantmentBowInfinity :
-    EnchantmentBow(Enchantment.Companion.ID_BOW_INFINITY, "arrowInfinite", Rarity.VERY_RARE) {
+    EnchantmentBow(ID_BOW_INFINITY, "arrowInfinite", Rarity.VERY_RARE) {
     override fun checkCompatibility(enchantment: Enchantment): Boolean {
-        return super.checkCompatibility(enchantment) && enchantment.id != Enchantment.Companion.ID_MENDING
+        return super.checkCompatibility(enchantment) && enchantment.id != ID_MENDING
     }
 
     override fun getMinEnchantAbility(level: Int): Int {

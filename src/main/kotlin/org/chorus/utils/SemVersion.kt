@@ -1,8 +1,8 @@
 package org.chorus.utils
 
+import com.google.common.base.Preconditions
 import org.chorus.nbt.tag.IntTag
 import org.chorus.nbt.tag.ListTag
-import com.google.common.base.Preconditions
 
 @JvmRecord
 data class SemVersion(val major: Int, val minor: Int, val patch: Int, val revision: Int, val build: Int) {

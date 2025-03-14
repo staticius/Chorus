@@ -1,7 +1,6 @@
 package org.chorus.level.updater.util
 
 
-
 /**
  * Stores updates from ints to Strings.
  */

@@ -1,10 +1,11 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.animal.EntityBee
 
@@ -16,16 +17,17 @@ class BeeAttackExecutor(
     coolDown: Int
 ) :
     MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
+
     override fun execute(entity: EntityMob): Boolean {
         if (entity is EntityBee) {
             if (entity.getMemoryStorage()!!.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) {
                 if (!entity.isEnablePitch()) entity.setEnablePitch(true)
-                val entity1 = entity.getMemoryStorage()!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
+                val entity1 = entity.getMemoryStorage()!![CoreMemoryTypes.ATTACK_TARGET]
                 if (entity1 != null) {
                     this.lookTarget = entity1.position.clone()
-                    if (Server.instance.difficulty == 2) {
+                    if (Server.instance.getDifficulty() == 2) {
                         entity1.addEffect(Effect.get(EffectType.POISON).setDuration(200))
-                    } else if (Server.instance.difficulty == 3) {
+                    } else if (Server.instance.getDifficulty() == 3) {
                         entity1.addEffect(Effect.get(EffectType.POISON).setDuration(360))
                     }
                 }

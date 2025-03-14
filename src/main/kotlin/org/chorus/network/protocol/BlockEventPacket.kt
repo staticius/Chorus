@@ -3,20 +3,19 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class BlockEventPacket : DataPacket() {
     @JvmField
     var x: Int = 0
+
     @JvmField
     var y: Int = 0
+
     @JvmField
     var z: Int = 0
+
     @JvmField
     var type: Int = 0
+
     @JvmField
     var value: Int = 0
 

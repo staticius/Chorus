@@ -95,7 +95,7 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
     ): Boolean {
         if (player != null) {
             val itemInHand = player.getInventory().itemInHand
-            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull) || !instance!!.settings.gameplaySettings()
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing) || !instance.settings.gameplaySettings()
                     .enableCommandBlocks()
             ) {
                 return false
@@ -142,7 +142,7 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.COMMAND_BLOCK,
+            BlockID.COMMAND_BLOCK,
             CommonBlockProperties.CONDITIONAL_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )

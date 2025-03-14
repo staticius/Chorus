@@ -3,18 +3,16 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class SetEntityMotionPacket : DataPacket() {
     @JvmField
     var eid: Long = 0
+
     @JvmField
     var motionX: Float = 0f
+
     @JvmField
     var motionY: Float = 0f
+
     @JvmField
     var motionZ: Float = 0f
     var tick: Long = 0

@@ -1,10 +1,10 @@
 package org.chorus.item.enchantment
 
-import org.chorus.item.*
+import org.chorus.item.Item
 
 
 class EnchantmentSilkTouch :
-    Enchantment(Enchantment.Companion.ID_SILK_TOUCH, "untouching", Rarity.VERY_RARE, EnchantmentType.DIGGER) {
+    Enchantment(ID_SILK_TOUCH, "untouching", Rarity.VERY_RARE, EnchantmentType.DIGGER) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 15
     }
@@ -14,7 +14,7 @@ class EnchantmentSilkTouch :
     }
 
     public override fun checkCompatibility(enchantment: Enchantment): Boolean {
-        return super.checkCompatibility(enchantment) && enchantment.id != Enchantment.Companion.ID_FORTUNE_DIGGING
+        return super.checkCompatibility(enchantment) && enchantment.id != ID_FORTUNE_DIGGING
     }
 
     override fun canEnchant(item: Item): Boolean {

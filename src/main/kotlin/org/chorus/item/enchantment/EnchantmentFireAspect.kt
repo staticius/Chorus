@@ -8,7 +8,7 @@ import kotlin.math.max
 
 
 class EnchantmentFireAspect :
-    Enchantment(Enchantment.Companion.ID_FIRE_ASPECT, "fire", Rarity.RARE, EnchantmentType.SWORD) {
+    Enchantment(ID_FIRE_ASPECT, "fire", Rarity.RARE, EnchantmentType.SWORD) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 10 + (level - 1) * 20
     }

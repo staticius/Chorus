@@ -9,9 +9,6 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class MapInfoRequestPacket : DataPacket() {
     var mapId: Long = 0
 

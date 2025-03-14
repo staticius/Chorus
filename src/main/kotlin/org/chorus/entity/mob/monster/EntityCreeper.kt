@@ -91,7 +91,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                         IBehaviorEvaluator { entity: EntityMob ->
                             if (entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_PLAYER)) return@all true
                             val player = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
-                            player!!.isSurvival
+                            player.isSurvival
                         }
                     ), 2, 1),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
@@ -149,7 +149,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
     }
 
     fun isPowered(): Boolean {
-        return getDataProperty<Byte>(EntityDataTypes.Companion.HORSE_TYPE!!) > 0
+        return getDataProperty<Byte>(EntityDataTypes.Companion.HORSE_TYPE) > 0
     }
 
     fun setPowered(bolt: EntityLightningStrike?) {
@@ -192,7 +192,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         return "Creeper"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         if (lastDamageCause is EntityDamageByEntityEvent) {
             return arrayOf(Item.get(Item.GUNPOWDER, 0, ThreadLocalRandom.current().nextInt(2) + 1))
         }

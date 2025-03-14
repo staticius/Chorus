@@ -2,7 +2,7 @@ package org.chorus.entity.ai.controller
 
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.IMemoryStorage
-import org.chorus.math.*
+import org.chorus.math.Vector3
 
 /**
  * 一些通用的实体运动控制方法

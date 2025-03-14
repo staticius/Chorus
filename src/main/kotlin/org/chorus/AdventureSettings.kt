@@ -5,7 +5,10 @@ import org.chorus.nbt.tag.IntTag
 import org.chorus.network.protocol.RequestPermissionsPacket
 import org.chorus.network.protocol.UpdateAbilitiesPacket
 import org.chorus.network.protocol.UpdateAdventureSettingsPacket
-import org.chorus.network.protocol.types.*
+import org.chorus.network.protocol.types.AbilityLayer
+import org.chorus.network.protocol.types.CommandPermission
+import org.chorus.network.protocol.types.PlayerAbility
+import org.chorus.network.protocol.types.PlayerPermission
 import java.util.*
 
 /**
@@ -17,11 +20,10 @@ class AdventureSettings : Cloneable {
         Type::class.java
     )
 
-    
+
     private var playerPermission: PlayerPermission? = null
 
-    
-    
+
     private var commandPermission: CommandPermission? = null
 
     private var player: Player
@@ -81,7 +83,7 @@ class AdventureSettings : Cloneable {
         }
     }
 
-    fun set(ability: PlayerAbility, value: Boolean): AdventureSettings {
+    operator fun set(ability: PlayerAbility, value: Boolean): AdventureSettings {
         val type = ability2TypeMap[ability]
         if (type != null) {
             values[type] = value
@@ -89,7 +91,7 @@ class AdventureSettings : Cloneable {
         return this
     }
 
-    fun set(type: Type, value: Boolean): AdventureSettings {
+    operator fun set(type: Type, value: Boolean): AdventureSettings {
         values[type] = value
         return this
     }
@@ -100,7 +102,7 @@ class AdventureSettings : Cloneable {
         return values.getOrDefault(type, type.defaultValue)
     }
 
-    fun get(type: Type): Boolean {
+    operator fun get(type: Type): Boolean {
         return values.getOrDefault(type, type.defaultValue)
     }
 

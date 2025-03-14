@@ -6,7 +6,8 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 
-class Rotator2 @JvmOverloads constructor(@JvmField var pitch: Double = 0.0, @JvmField var yaw: Double = 0.0) : Cloneable {
+class Rotator2 @JvmOverloads constructor(@JvmField var pitch: Double = 0.0, @JvmField var yaw: Double = 0.0) :
+    Cloneable {
     val floorX: Int
         get() = kotlin.math.floor(this.pitch).toInt()
 
@@ -101,7 +102,7 @@ class Rotator2 @JvmOverloads constructor(@JvmField var pitch: Double = 0.0, @Jvm
         return this.pitch * v.pitch + this.yaw * v.yaw
     }
 
-    val directionVector: Vector3?
+    val directionVector: Vector3
         get() {
             val pitch = ((pitch + 90) * Math.PI) / 180
             val yaw = ((yaw + 90) * Math.PI) / 180

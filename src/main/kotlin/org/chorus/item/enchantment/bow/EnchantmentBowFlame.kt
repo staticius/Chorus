@@ -1,10 +1,10 @@
 package org.chorus.item.enchantment.bow
 
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
 
 
 class EnchantmentBowFlame :
-    EnchantmentBow(Enchantment.Companion.ID_BOW_FLAME, "arrowFire", Rarity.RARE) {
+    EnchantmentBow(ID_BOW_FLAME, "arrowFire", Rarity.RARE) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 20
     }

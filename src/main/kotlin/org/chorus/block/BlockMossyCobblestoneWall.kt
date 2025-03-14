@@ -21,7 +21,7 @@ class BlockMossyCobblestoneWall @JvmOverloads constructor(blockstate: BlockState
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.MOSSY_COBBLESTONE_WALL,
+            BlockID.BlockID.MOSSY_COBBLESTONE_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,

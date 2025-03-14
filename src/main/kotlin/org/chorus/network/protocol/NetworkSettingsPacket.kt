@@ -4,11 +4,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.PacketCompressionAlgorithm
 
 
-
-
-
-
-
 class NetworkSettingsPacket : DataPacket() {
     var compressionThreshold: Int = 0
     var compressionAlgorithm: PacketCompressionAlgorithm? = null

@@ -4,11 +4,6 @@ import org.chorus.lang.TranslationContainer
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class DeathInfoPacket : DataPacket() {
     @JvmField
     var translation: TranslationContainer? = null

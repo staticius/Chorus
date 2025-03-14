@@ -14,7 +14,7 @@ class BlockEntityEnderChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
 
     override val spawnCompound: CompoundTag
         get() {
-            val spawnCompound = super.getSpawnCompound()
+            val spawnCompound = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
             if (this.hasName()) {
                 spawnCompound.put("CustomName", namedTag["CustomName"])

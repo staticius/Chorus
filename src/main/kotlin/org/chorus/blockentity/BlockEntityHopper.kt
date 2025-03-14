@@ -19,7 +19,6 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.registry.Registries
 
 
-
 /**
  * @author CreeperFace
  * @since 8.5.2017
@@ -37,12 +36,11 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
     private val temporalVector = BlockVector3()
 
     //由容器矿车检测漏斗并通知更新，这样子能大幅优化性能
-    
-    
+
+
     private val minecartInvPickupFrom: InventoryHolder? = null
 
-    
-    
+
     private val minecartInvPushTo: InventoryHolder? = null
 
     override fun initBlockEntity() {
@@ -155,7 +153,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
         val d = NBTIO.putItemHelper(item, index)
 
-        if (item.isNull || item.getCount() <= 0) {
+        if (item.isNothing || item.getCount() <= 0) {
             if (i >= 0) {
                 namedTag.getList("Items").all.removeAt(i)
             }
@@ -232,7 +230,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             for (i in 0..<inv.size) {
                 val item = inv.getItem(i)
 
-                if (!item.isNull) {
+                if (!item.isNothing) {
                     val itemToAdd = item.clone()
                     itemToAdd.count = 1
                     if (!inventory!!.canAddItem(itemToAdd)) continue
@@ -289,7 +287,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             for (i in 0..<inventory!!.size) {
                 val item = inventory!!.getItem(i)
 
-                if (!item.isNull) {
+                if (!item.isNothing) {
                     val itemToAdd = item.clone()
                     itemToAdd.setCount(1)
 
@@ -346,7 +344,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         //Fix for furnace inputs
         if (be is BlockEntityFurnace) {
             val inventory = be.getInventory()
-            if (inventory!!.isFull) {
+            if (inventory.isFull) {
                 return false
             }
 
@@ -354,14 +352,14 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
             for (i in 0..<this.inventory!!.size) {
                 val item = this.inventory!!.getItem(i)
-                if (!item.isNull) {
+                if (!item.isNothing) {
                     val itemToAdd = item.clone()
                     itemToAdd.setCount(1)
 
                     //Check direction of hopper
                     if (this.block.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION) == 0) {
                         val smelting = inventory.smelting
-                        if (smelting.isNull) {
+                        if (smelting.isNothing) {
                             event = InventoryMoveItemEvent(
                                 this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
@@ -389,7 +387,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                         }
                     } else if (Registries.FUEL.isFuel(itemToAdd)) {
                         val fuel = inventory.fuel
-                        if (fuel.isNull) {
+                        if (fuel.isNothing) {
                             event = InventoryMoveItemEvent(
                                 this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
@@ -426,7 +424,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             return pushedItem
         } else if (be is BlockEntityBrewingStand) {
             val inventory = be.getInventory()
-            if (inventory!!.isFull) {
+            if (inventory.isFull) {
                 return false
             }
 
@@ -434,14 +432,14 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
             for (i in 0..<this.inventory!!.size) {
                 val item = this.inventory!!.getItem(i)
-                if (!item.isNull) {
+                if (!item.isNothing) {
                     val itemToAdd = item.clone()
                     itemToAdd.setCount(1)
 
                     //Check direction of hopper
                     if (this.block.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION) == 0) {
                         val ingredient = inventory.ingredient
-                        if (ingredient.isNull) {
+                        if (ingredient.isNothing) {
                             event = InventoryMoveItemEvent(
                                 this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
@@ -471,7 +469,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                         val productView = be.productView
                         if (productView.canAddItem(itemToAdd)) {
                             for (j in 1..3) {
-                                if (inventory.getItem(j).isNull) {
+                                if (inventory.getItem(j).isNothing) {
                                     inventory.setItem(j, itemToAdd)
                                     item.count--
                                     pushedItem = true
@@ -496,7 +494,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             for (i in 0..<inventory!!.size) {
                 val item = inventory!!.getItem(i)
 
-                if (item.isNull) {
+                if (item.isNothing) {
                     continue
                 }
 
@@ -520,7 +518,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             for (i in 0..<this.inventory!!.size) {
                 val item = this.inventory!!.getItem(i)
 
-                if (!item.isNull) {
+                if (!item.isNothing) {
                     val itemToAdd = item.clone()
                     itemToAdd.setCount(1)
 
@@ -559,7 +557,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
     override val spawnCompound: CompoundTag
         get() {
-            val c = super.getSpawnCompound().putBoolean("isMovable", this.isMovable)
+            val c = super.spawnCompound.putBoolean("isMovable", this.isMovable)
 
             if (this.hasName()) {
                 c.put("CustomName", namedTag["CustomName"])

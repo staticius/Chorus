@@ -1,6 +1,6 @@
 package org.chorus
 
-import org.chorus.entity.*
+import org.chorus.entity.Attribute
 import org.chorus.entity.Attribute.Companion.getAttribute
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.entity.EntityDamageEvent
@@ -11,10 +11,6 @@ import org.chorus.item.ItemFood
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author funcraft
- * @since 2015/11/11
- */
 class PlayerFood(val player: Player, private var food: Int, private var saturation: Float) {
     val maxFood: Int = 20
     var exhaustion: Double = 0.0

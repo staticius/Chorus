@@ -1,10 +1,9 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemClayBall
+import org.chorus.item.ItemTool
 
-/**
- * @author Nukkit Project Team
- */
 class BlockClay : BlockSolid, Natural {
     constructor() : super(Companion.properties.defaultState)
 
@@ -22,7 +21,7 @@ class BlockClay : BlockSolid, Natural {
     override val name: String
         get() = "Clay Block"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         val clayBall: Item = ItemClayBall()
         clayBall.setCount(4)
         return arrayOf(

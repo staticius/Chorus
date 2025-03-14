@@ -6,10 +6,6 @@ import org.chorus.utils.UUIDValidator
 import java.util.*
 
 
-
-
-
-
 class ResourcePackClientResponsePacket : DataPacket() {
     var responseStatus: Byte = 0
     var packEntries: Array<Entry>
@@ -40,9 +36,8 @@ class ResourcePackClientResponsePacket : DataPacket() {
         }
     }
 
-    
-    class Entry(val uuid: UUID, val version: String) {
-    }
+
+    class Entry(val uuid: UUID, val version: String)
 
     override fun pid(): Int {
         return ProtocolInfo.Companion.RESOURCE_PACK_CLIENT_RESPONSE_PACKET

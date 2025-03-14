@@ -5,7 +5,6 @@ import org.chorus.network.protocol.PlayerAuthInputPacket
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestAction
 
 
-
 /**
  * Request represents a single request present in an [ItemStackRequestPacket] or
  * [PlayerAuthInputPacket] sent by the client to

@@ -5,7 +5,7 @@ import org.chorus.item.enchantment.*
 
 
 class EnchantmentDamageAll :
-    EnchantmentDamage(Enchantment.Companion.ID_DAMAGE_ALL, "all", Rarity.COMMON, TYPE.ALL) {
+    EnchantmentDamage(ID_DAMAGE_ALL, "all", Rarity.COMMON, TYPE.ALL) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 1 + (level - 1) * 11
     }

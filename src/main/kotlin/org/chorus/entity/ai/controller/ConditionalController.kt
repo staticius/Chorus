@@ -1,8 +1,8 @@
 package org.chorus.entity.ai.controller
 
-import org.chorus.entity.mob.EntityMob
 import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
+import org.chorus.entity.mob.EntityMob
 import java.util.*
 import java.util.function.Predicate
 

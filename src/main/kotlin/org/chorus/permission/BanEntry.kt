@@ -2,11 +2,11 @@ package org.chorus.permission
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.chorus.utils.Loggable
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 
 class BanEntry(name: String) {
@@ -31,9 +31,9 @@ class BanEntry(name: String) {
             val map =
                 LinkedHashMap<String, String?>()
             map["name"] = name
-            map["creationDate"] = SimpleDateFormat(format).format(creationDate)
+            map["creationDate"] = SimpleDateFormat(FORMAT).format(creationDate)
             map["source"] = source
-            map["expireDate"] = if (expirationDate != null) SimpleDateFormat(format)
+            map["expireDate"] = if (expirationDate != null) SimpleDateFormat(FORMAT)
                 .format(expirationDate) else "Forever"
             map["reason"] = reason
             return map
@@ -42,19 +42,19 @@ class BanEntry(name: String) {
     val string: String
         get() = Gson().toJson(this.map)
 
-    companion object {
-        const val format: String = "yyyy-MM-dd HH:mm:ss Z"
+    companion object : Loggable {
+        const val FORMAT: String = "yyyy-MM-dd HH:mm:ss Z"
 
         fun fromMap(map: Map<String, String>): BanEntry {
             val banEntry = BanEntry(map["name"]!!)
             try {
                 banEntry.creationDate =
-                    SimpleDateFormat(format).parse(map["creationDate"])
+                    SimpleDateFormat(FORMAT).parse(map["creationDate"])
                 banEntry.expirationDate =
-                    if (map["expireDate"] != "Forever") SimpleDateFormat(format)
+                    if (map["expireDate"] != "Forever") SimpleDateFormat(FORMAT)
                         .parse(map["expireDate"]) else null
             } catch (e: ParseException) {
-                BanEntry.log.error("An exception happed while loading the ban list.", e)
+                log.error("An exception happed while loading the ban list.", e)
             }
             banEntry.source = map["source"]
             banEntry.reason = map["reason"]
@@ -67,12 +67,12 @@ class BanEntry(name: String) {
             val banEntry = BanEntry(map["name"]!!)
             try {
                 banEntry.creationDate =
-                    SimpleDateFormat(format).parse(map["creationDate"])
+                    SimpleDateFormat(FORMAT).parse(map["creationDate"])
                 banEntry.expirationDate =
-                    if (map["expireDate"] != "Forever") SimpleDateFormat(format)
+                    if (map["expireDate"] != "Forever") SimpleDateFormat(FORMAT)
                         .parse(map["expireDate"]) else null
             } catch (e: ParseException) {
-                BanEntry.log.error("An exception happened while loading a ban entry from the string {}", str, e)
+                log.error("An exception happened while loading a ban entry from the string {}", str, e)
             }
             banEntry.source = map["source"]
             banEntry.reason = map["reason"]

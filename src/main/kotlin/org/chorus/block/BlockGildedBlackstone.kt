@@ -1,7 +1,9 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 
@@ -13,7 +15,7 @@ class BlockGildedBlackstone @JvmOverloads constructor(blockstate: BlockState? = 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         if (!item.isPickaxe || item.tier < ItemTool.TIER_WOODEN) {
             return Item.EMPTY_ARRAY
         }

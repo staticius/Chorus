@@ -22,7 +22,7 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
         super(name, Arrays.asList(enumClass.getEnumConstants()), defaultData, Utils.computeRequiredBits(0, enumClass.getEnumConstants().length - 1));
         this.enumClass = enumClass;
         var map = new HashMap<T, EnumPropertyValue>();
-        for (var value : validValues) {
+        for (var value : getValidValues()) {
             map.put(value, new EnumPropertyValue(value));
         }
         cachedValues = new EnumMap<>(map);
@@ -62,7 +62,7 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
 
         @Override
         public int getIndex() {
-            return value.ordinal();
+            return getValue().ordinal();
         }
 
         @Override
@@ -72,7 +72,7 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
 
         @Override
         public String toString() {
-            return "EnumPropertyValue(name=" + name + ", value=" + value + ")";
+            return "EnumPropertyValue(name=" + getName() + ", value=" + getValue() + ")";
         }
     }
 }

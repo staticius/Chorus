@@ -3,7 +3,7 @@ package org.chorus.item
 import org.chorus.Player
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
-import org.chorus.math.*
+import org.chorus.math.Vector3
 
 /**
  * @author Snake1999
@@ -32,7 +32,7 @@ class ItemFishingRod @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_FISHING_ROD
+        get() = DURABILITY_FISHING_ROD
 
     override fun noDamageOnAttack(): Boolean {
         return true

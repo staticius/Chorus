@@ -2,13 +2,13 @@ package org.chorus.item
 
 class ItemDiamondAxe : ItemTool(ItemID.Companion.DIAMOND_AXE) {
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_DIAMOND
+        get() = DURABILITY_DIAMOND
 
     override val isAxe: Boolean
         get() = true
 
     override val tier: Int
-        get() = ItemTool.Companion.TIER_DIAMOND
+        get() = TIER_DIAMOND
 
     override val attackDamage: Int
         get() = 6

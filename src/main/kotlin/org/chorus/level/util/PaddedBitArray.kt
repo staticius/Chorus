@@ -1,7 +1,7 @@
 package org.chorus.level.util
 
-import org.chorus.math.MathHelper
 import com.google.common.base.Preconditions
+import org.chorus.math.MathHelper
 
 class PaddedBitArray internal constructor(
     /**

@@ -1,17 +1,15 @@
 package org.chorus.registry
 
+import com.google.gson.JsonParser
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.registry.RegisterException
 import org.chorus.utils.BlockColor
-import com.google.gson.JsonParser
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.jetbrains.annotations.ApiStatus
-import org.jetbrains.annotations.UnmodifiableView
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import java.util.Set
 
 /**
  * Allay Project 12/16/2023
@@ -22,7 +20,7 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
     override fun init() {
         try {
             javaClass.classLoader.getResourceAsStream("block_states.json").use { stream ->
-                val reader = BufferedReader(InputStreamReader(stream))
+                val reader = BufferedReader(InputStreamReader(stream!!))
                 val blockStateData = JsonParser.parseReader(reader).asJsonArray
                 for (i in 0..<blockStateData.size()) {
                     val entry = blockStateData[i].asJsonObject
@@ -45,20 +43,16 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
                     Block.VANILLA_BLOCK_COLOR_MAP.put(hash.toLong(), BlockColor(r, g, b, a))
                 }
             }
-        } catch (e: IOException) {
+        } catch (_: IOException) {
         }
     }
 
-    override fun get(key: Int): BlockState? {
+    override operator fun get(key: Int): BlockState? {
         return REGISTRY[key]
     }
 
-    override fun get(blockHash: Int): BlockState? {
-        return REGISTRY[blockHash]
-    }
-
-    val allState: @UnmodifiableView MutableSet<BlockState?>
-        get() = Set.copyOf(REGISTRY.values)
+    val allState: Set<BlockState>
+        get() = REGISTRY.values.toSet()
 
     override fun trim() {
         REGISTRY.trim()
@@ -70,17 +64,15 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
 
     @Throws(RegisterException::class)
     override fun register(key: Int, value: BlockState) {
-        if (REGISTRY.putIfAbsent(key, value) == null) {
-        } else {
+        if (REGISTRY.putIfAbsent(key, value) != null) {
             throw RegisterException("The blockstate has been registered!")
         }
     }
 
     @Throws(RegisterException::class)
     fun register(value: BlockState) {
-        val now: BlockState
-        if ((REGISTRY.put(value.blockStateHash(), value).also { now = it!! }) == null) {
-        } else {
+        val now: BlockState?
+        if ((REGISTRY.put(value.blockStateHash(), value).also { now = it }) != null) {
             throw RegisterException(
                 """The blockstate ${value}has been registered,
  current value: $now"""
@@ -98,6 +90,6 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
     }
 
     companion object {
-        private val REGISTRY = Int2ObjectOpenHashMap<BlockState?>()
+        private val REGISTRY = Int2ObjectOpenHashMap<BlockState>()
     }
 }

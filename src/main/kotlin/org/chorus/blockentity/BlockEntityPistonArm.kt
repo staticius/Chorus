@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
@@ -15,7 +16,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.IntTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.*
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -34,6 +34,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     var newState: Byte = 1
 
     var attachedBlocks: MutableList<BlockVector3>? = null
+
     @JvmField
     var powered: Boolean = false
     var progress: Float = 0f
@@ -101,7 +102,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         this.newState = (if (extending) 1 else 3).toByte()
         this.state = this.newState // Set current and new states: 1 for extending, 3 for contracting
         this.attachedBlocks = attachedBlocks // Set the attached blocks list
-        this.movable = false // Set the structure as immovable
+        this.isMovable = false // Set the structure as immovable
         // Update moving data immediately to ensure timeliness
         updateMovingData(true)
     }
@@ -177,11 +178,11 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             val pos = getSide(facing)
             if (!extending) {
                 //未伸出的活塞可以被推动
-                this.movable = true
+                this.isMovable = true
                 if (level.getBlock(pos.position) is BlockPistonArmCollision) {
-                    level.setBlock(pos.position, 1, Block.get(Block.AIR), true, false)
+                    level.setBlock(pos.position, 1, Block.get(BlockID.AIR), true, false)
                     //方块更新
-                    level.setBlock(pos.position, Block.get(Block.AIR), true)
+                    level.setBlock(pos.position, Block.get(BlockID.AIR), true)
                 }
             }
             //对和活塞直接接触的观察者进行更新
@@ -246,13 +247,13 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID.= block.id
-            return BlockID.== BlockID.PISTON || BlockID.== BlockID.STICKY_PISTON
+            val BlockID. = block.id
+            return BlockID.== BlockID . PISTON || BlockID . == BlockID.STICKY_PISTON
         }
 
     override val spawnCompound: CompoundTag
-        get() = super.getSpawnCompound()
-            .putBoolean("isMovable", this.movable)
+        get() = super.spawnCompound
+            .putBoolean("isMovable", this.isMovable)
             .putFloat("Progress", this.progress)
             .putFloat("LastProgress", this.lastProgress)
             .putList("AttachedBlocks", getAttachedBlocks())

@@ -19,14 +19,14 @@ class BlockGlowingobsidian @JvmOverloads constructor(blockstate: BlockState? = C
     override val lightLevel: Int
         get() = 12
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(get(OBSIDIAN))
     }
 
     override val toolTier: Int
         get() = ItemTool.TIER_DIAMOND
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return if (item.isPickaxe && item.tier > ItemTool.TIER_DIAMOND) {
             arrayOf(toItem())
         } else {

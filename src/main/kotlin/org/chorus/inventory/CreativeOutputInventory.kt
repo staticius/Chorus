@@ -1,18 +1,18 @@
 package org.chorus.inventory
 
-import org.chorus.Player
-import org.chorus.item.Item
-import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import com.google.common.base.Preconditions
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
+import org.chorus.Player
+import org.chorus.item.Item
+import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class CreativeOutputInventory(private val player: Player) : Inventory {
     private var item: Item? = null
 
     override fun slotTypeMap(): MutableMap<Int?, ContainerSlotType?> {
         val map = super.slotTypeMap()
-        map!![0] = ContainerSlotType.CREATED_OUTPUT
+        map[0] = ContainerSlotType.CREATED_OUTPUT
         return map
     }
 
@@ -70,7 +70,7 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
     override fun sendContents(vararg players: Player) {
     }
 
-    override fun sendContents(players: Collection<Player?>) {
+    override fun sendContents(players: Collection<Player>) {
     }
 
     override fun sendSlot(index: Int, player: Player) {
@@ -79,7 +79,7 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
     override fun sendSlot(index: Int, vararg players: Player) {
     }
 
-    override fun sendSlot(index: Int, players: Collection<Player?>) {
+    override fun sendSlot(index: Int, players: Collection<Player>) {
     }
 
     override fun getFreeSpace(item: Item): Int {
@@ -123,13 +123,13 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
     override val isEmpty: Boolean
         get() = false
 
-    override val viewers: Set<Player?>
+    override val viewers: MutableSet<Player>
         get() = null
 
     override val type: InventoryType
         get() = InventoryType.NONE
 
-    override val holder: InventoryHolder?
+    override val holder: InventoryHolder
         get() = player
 
     override fun onOpen(who: Player) {

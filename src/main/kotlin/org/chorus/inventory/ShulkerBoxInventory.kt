@@ -21,7 +21,7 @@ class ShulkerBoxInventory(box: BlockEntityShulkerBox?) : ContainerInventory(box,
     override fun init() {
         val map = super.slotTypeMap()
         for (i in 0..<getSize()) {
-            map!![i] = ContainerSlotType.SHULKER_BOX
+            map[i] = ContainerSlotType.SHULKER_BOX
         }
     }
 

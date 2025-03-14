@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class SettingsCommandPacket : DataPacket() {
     var command: String? = null
     var suppressOutput: Boolean = false

@@ -3,14 +3,10 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class ServerSettingsResponsePacket : DataPacket() {
     @JvmField
     var formId: Int = 0
+
     @JvmField
     var data: String? = null
 

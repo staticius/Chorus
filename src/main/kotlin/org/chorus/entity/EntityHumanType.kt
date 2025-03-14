@@ -16,15 +16,14 @@ import org.chorus.math.ChorusMath
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
 import java.util.concurrent.*
-import java.util.function.Predicate
 
 abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), IHuman {
-    override var inventory: HumanInventory? = null
+    override lateinit var inventory: HumanInventory
     protected var enderChestInventory: HumanEnderChestInventory? = null
     protected var offhandInventory: HumanOffHandInventory? = null
 
     override fun getInventory(): HumanInventory {
-        return inventory!!
+        return inventory
     }
 
     override fun getOffhandInventory(): HumanOffHandInventory? {
@@ -36,19 +35,19 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
     }
 
     override fun setInventories(inventory: Array<Inventory>) {
-        this.inventory = inventory.get(0) as HumanInventory?
-        this.offhandInventory = inventory.get(1) as HumanOffHandInventory?
-        this.enderChestInventory = inventory.get(2) as HumanEnderChestInventory?
+        this.inventory = inventory[0] as HumanInventory
+        this.offhandInventory = inventory[1] as HumanOffHandInventory?
+        this.enderChestInventory = inventory[2] as HumanEnderChestInventory?
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         if (this.inventory != null) {
-            val drops: MutableList<Item> = ArrayList<Item>(
-                inventory!!.getContents().values()
+            val drops: MutableList<Item> = ArrayList(
+                inventory.contents.values
             )
-            drops.addAll(offhandInventory!!.getContents().values())
-            return drops.stream().filter(Predicate { item: Item -> !item.keepOnDeath() }).toList()
-                .toArray(Item.EMPTY_ARRAY)
+            drops.addAll(offhandInventory!!.contents.values)
+            return drops.stream().filter { item: Item -> !item.keepOnDeath() }.toList()
+                .toTypedArray()
         }
         return Item.EMPTY_ARRAY
     }
@@ -65,29 +64,25 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
             var epf: Int = 0
 
             //            int toughness = 0;
-            for (armor: Item in inventory!!.getArmorContents()) {
-                armorPoints += armor.getArmorPoints()
+            for (armor in inventory.armorContents) {
+                if (armor == null) continue
+                armorPoints += armor.armorPoints
                 epf = (epf + calculateEnchantmentProtectionFactor(armor, source)).toInt()
                 //toughness += armor.getToughness();
             }
 
             if (source.canBeReducedByArmor()) {
-                source.setDamage(-source.getFinalDamage() * armorPoints * 0.04f, DamageModifier.ARMOR)
+                source.setDamage(-source.finalDamage * armorPoints * 0.04f, DamageModifier.ARMOR)
             }
 
             source.setDamage(
-                -source.getFinalDamage() * Math.min(
-                    ChorusMath.ceilFloat(
-                        Math.min(
-                            epf,
-                            25
-                        ) * (ThreadLocalRandom.current().nextInt(50, 100).toFloat() / 100)
-                    ), 20
-                ) * 0.04f,
+                -source.finalDamage * ChorusMath.ceilFloat(
+                    epf.coerceAtMost(25) * (ThreadLocalRandom.current().nextInt(50, 100).toFloat() / 100)
+                ).coerceAtMost(20) * 0.04f,
                 DamageModifier.ARMOR_ENCHANTMENTS
             )
 
-            source.setDamage(-Math.min(this.getAbsorption(), source.getFinalDamage()), DamageModifier.ABSORPTION)
+            source.setDamage(-this.getAbsorption().coerceAtMost(source.finalDamage), DamageModifier.ABSORPTION)
         }
 
         if (super.attack(source)) {
@@ -98,10 +93,10 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
             }
 
             for (slot in 0..3) {
-                val armorOld: Item = inventory!!.getArmorItem(slot)
-                if (armorOld.isArmor()) {
+                val armorOld: Item = inventory.getArmorItem(slot)
+                if (armorOld.isArmor) {
                     val armor: Item = damageArmor(armorOld, damager, source)
-                    inventory!!.setArmorItem(slot, armor, armor.getId() !== BlockID.AIR)
+                    inventory.setArmorItem(slot, armor, armor.id !== BlockID.AIR)
                 }
             }
 
@@ -111,7 +106,7 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
         }
     }
 
-    override fun calculateEnchantmentProtectionFactor(item: Item, source: EntityDamageEvent?): Double {
+    override fun calculateEnchantmentProtectionFactor(item: Item, source: EntityDamageEvent): Double {
         if (!item.hasEnchantments()) {
             return 0.0
         }
@@ -119,7 +114,7 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
         var epf: Double = 0.0
 
         if (item.applyEnchantments()) {
-            for (ench: Enchantment in item.getEnchantments()) {
+            for (ench: Enchantment in item.enchantments) {
                 epf += ench.getProtectionFactor(source).toDouble()
             }
         }
@@ -128,20 +123,21 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
     }
 
     override fun setOnFire(seconds: Int) {
-        var seconds: Int = seconds
+        var seconds1: Int = seconds
         var level: Int = 0
 
-        for (armor: Item in inventory!!.getArmorContents()) {
+        for (armor in inventory!!.armorContents) {
+            if (armor == null) continue
             val fireProtection: Enchantment? = armor.getEnchantment(Enchantment.ID_PROTECTION_FIRE)
 
-            if (fireProtection != null && fireProtection.getLevel() > 0) {
-                level = Math.max(level, fireProtection.getLevel())
+            if (fireProtection != null && fireProtection.level > 0) {
+                level = level.coerceAtLeast(fireProtection.level)
             }
         }
 
-        seconds = (seconds * (1 - level * 0.15)).toInt()
+        seconds1 = (seconds1 * (1 - level * 0.15)).toInt()
 
-        super.setOnFire(seconds)
+        super.setOnFire(seconds1)
     }
 
     override fun playerApplyNameTag(player: Player, item: Item): Boolean {
@@ -152,14 +148,14 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
         if (armor.hasEnchantments()) {
             if (damager != null) {
                 if (armor.applyEnchantments()) {
-                    for (enchantment: Enchantment in armor.getEnchantments()) {
+                    for (enchantment: Enchantment in armor.enchantments) {
                         enchantment.doPostAttack(damager, this)
                     }
                 }
             }
 
             val durability: Enchantment? = armor.getEnchantment(Enchantment.ID_DURABILITY)
-            if (durability != null && durability.getLevel() > 0 && (100 / (durability.getLevel() + 1)) <= Utils.random.nextInt(
+            if (durability != null && durability.level > 0 && (100 / (durability.level + 1)) <= Utils.random.nextInt(
                     100
                 )
             ) {
@@ -169,16 +165,16 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
 
         if (event.cause != DamageCause.VOID && event.cause != DamageCause.MAGIC && event.cause != DamageCause.HUNGER && event.cause != DamageCause.DROWNING && event.cause != DamageCause.SUFFOCATION && event.cause != DamageCause.SUICIDE && event.cause != DamageCause.FIRE_TICK && event.cause != DamageCause.FALL) { // No armor damage
 
-            if (armor.isUnbreakable() || armor.getMaxDurability() < 0) {
+            if (armor.isUnbreakable || armor.maxDurability < 0) {
                 return armor
             }
 
-            if (armor is ItemShield) armor.setDamage(
-                armor.getDamage() + (if (event.getDamage() >= 3) event.getDamage().toInt() + 1 else 0)
+            if (armor is ItemShield) armor.damage = (
+                armor.damage + (if (event.damage >= 3) event.damage.toInt() + 1 else 0)
             )
-            else armor.setDamage(armor.getDamage() + Math.max(1, (event.getDamage() / 4.0f).toInt()))
+            else armor.damage = (armor.damage + 1.coerceAtLeast((event.damage / 4.0f).toInt()))
 
-            if (armor.getDamage() >= armor.getMaxDurability()) {
+            if (armor.damage >= armor.maxDurability) {
                 level!!.addSound(this.position, Sound.RANDOM_BREAK)
                 return Item.get(BlockID.AIR, 0, 0)
             }
@@ -188,10 +184,10 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
     }
 
     override fun getNetworkId(): Int {
-        return IHuman.Companion.NETWORK_ID
+        return IHuman.NETWORK_ID
     }
 
     override fun getIdentifier(): String {
-        return EntityID.Companion.PLAYER
+        return EntityID.PLAYER
     }
 }

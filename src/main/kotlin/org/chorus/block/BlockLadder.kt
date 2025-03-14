@@ -3,17 +3,14 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.utils.Faceable
 
-/**
- * @author xtypr
- * @since 2015/12/8
- */
 class BlockLadder @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable {
     override val name: String
@@ -136,8 +133,8 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState? = Companion.
     ): Boolean {
         if (target is BlockLadder) {
             val opposite = face.getOpposite()
-            val oppositeB = level.getBlock(target.position.add(face.unitVector)!!)
-            val targetBlock = level.getBlock(target.position.add(face.unitVector.multiply(2.0)!!)!!)
+            val oppositeB = level.getBlock(target.position.add(face.unitVector))
+            val targetBlock = level.getBlock(target.position.add(face.unitVector.multiply(2.0)))
             if (isSupportValid(targetBlock!!, opposite)) {
                 //不设置damage是因为level#useItemOn中有逻辑设置
                 level.setBlock(oppositeB!!.position, this, true, false)
@@ -182,7 +179,7 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState? = Companion.
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(
             get(BlockID.LADDER, 0, 1)
         )

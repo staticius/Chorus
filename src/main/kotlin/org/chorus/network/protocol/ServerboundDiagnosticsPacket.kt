@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class ServerboundDiagnosticsPacket : DataPacket() {
     var avgFps: Float = 0f
     var avgServerSimTickTimeMS: Float = 0f

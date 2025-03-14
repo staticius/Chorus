@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntitySculkSensor.calPower
-import org.chorus.blockentity.BlockEntitySculkSensor.comparatorPower
 import org.chorus.blockentity.BlockEntitySculkSensor.power
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
@@ -26,14 +25,10 @@ class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Compa
     override val isPowerSource: Boolean
         get() = true
 
-    override fun getStrongPower(side: BlockFace?): Int {
-        return super.getStrongPower(side)
-    }
-
     override fun getWeakPower(face: BlockFace): Int {
         val blockEntity: BlockEntitySculkSensor? = this.getOrCreateBlockEntity()
         return if (getSide(face.getOpposite()!!) is BlockRedstoneComparator) {
-            blockEntity.comparatorPower
+            BlockEntityID.COMPARATORPower
         } else {
             blockEntity.power
         }
@@ -53,8 +48,8 @@ class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Compa
     }
 
     fun setPhase(phase: Int) {
-        if (phase == 1) level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.POWER_ON_SCULK_SENSOR)
-        else level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.POWER_OFF_SCULK_SENSOR)
+        if (phase == 1) level.addSound(position.add(0.5, 0.5, 0.5), Sound.POWER_ON_SCULK_SENSOR)
+        else level.addSound(position.add(0.5, 0.5, 0.5), Sound.POWER_OFF_SCULK_SENSOR)
         this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.SCULK_SENSOR_PHASE, phase)
         level.setBlock(this.position, this, true, false)
     }
@@ -75,7 +70,7 @@ class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Compa
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 

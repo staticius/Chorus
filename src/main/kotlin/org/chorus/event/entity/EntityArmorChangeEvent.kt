@@ -9,6 +9,7 @@ import org.chorus.item.Item
 class EntityArmorChangeEvent(entity: Entity?, oldItem: Item, newItem: Item, slot: Int) :
     EntityEvent(), Cancellable {
     val oldItem: Item
+
     @JvmField
     var newItem: Item
     val slot: Int

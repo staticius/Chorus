@@ -9,10 +9,6 @@ import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.utils.Faceable
 
-/**
- * @author CreeperFace
- * @since 2.6.2017
- */
 abstract class BlockGlazedTerracotta(blockState: BlockState?) : BlockSolid(blockState), Faceable {
     override val resistance: Double
         get() = 7.0

@@ -10,9 +10,6 @@ import org.chorus.level.Locator
 import org.chorus.math.*
 import org.chorus.utils.TextFormat
 import java.util.stream.Collectors
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.Set
 import kotlin.collections.set
 import kotlin.math.max
 import kotlin.math.min

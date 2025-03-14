@@ -2,9 +2,10 @@ package org.chorus.block
 
 import org.chorus.entity.Entity
 import org.chorus.entity.projectile.EntitySmallFireball
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Locator
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 
 class BlockPowderSnow : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
@@ -34,7 +35,7 @@ class BlockPowderSnow : BlockTransparent {
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 

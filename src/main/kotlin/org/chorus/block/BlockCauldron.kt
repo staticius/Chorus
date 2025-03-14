@@ -29,9 +29,6 @@ import org.chorus.network.protocol.LevelEventPacket
 import org.chorus.utils.BlockColor
 import kotlin.math.sqrt
 
-/**
- * @author CreeperFace (Nukkit Project)
- */
 class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
     constructor() : super(Companion.properties.defaultState)
 
@@ -80,14 +77,14 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
             level.vibrationManager.callVibrationEvent(
                 VibrationEvent(
                     player ?: this,
-                    position.add(0.5, 0.5, 0.5)!!, VibrationType.FLUID_PLACE
+                    position.add(0.5, 0.5, 0.5), VibrationType.FLUID_PLACE
                 )
             )
         } else {
             level.vibrationManager.callVibrationEvent(
                 VibrationEvent(
                     player ?: this,
-                    position.add(0.5, 0.5, 0.5)!!, VibrationType.FLUID_PICKUP
+                    position.add(0.5, 0.5, 0.5), VibrationType.FLUID_PICKUP
                 )
             )
         }
@@ -149,7 +146,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                     level.setBlock(this.position, this, true)
                     cauldron.clearCustomColor()
                     level.addLevelEvent(
-                        position.add(0.5, 0.375 + fillLevel * 0.125, 0.5)!!,
+                        position.add(0.5, 0.375 + fillLevel * 0.125, 0.5),
                         LevelEventPacket.EVENT_CAULDRON_TAKE_WATER
                     )
                 }
@@ -175,7 +172,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                         //default liquid type is water so we don't need to set it
                         cauldron.clearCustomColor()
                         level.setBlock(this.position, this, true)
-                        level.addSound(position.add(0.5, 1.0, 0.5)!!, Sound.CAULDRON_FILLWATER)
+                        level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_FILLWATER)
                     } else if (item.isPowderSnow) { // powder snow bucket
                         this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMax(), player) //fill
                         this.cauldronLiquid = CauldronLiquid.POWDER_SNOW
@@ -189,7 +186,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                             level.setBlock(this.position, this, true)
                             cauldron.clearCustomColor()
                             cauldron.type = BlockEntityCauldron.PotionType.LAVA
-                            level.addSound(position.add(0.5, 1.0, 0.5)!!, Sound.BUCKET_EMPTY_LAVA)
+                            level.addSound(position.add(0.5, 1.0, 0.5), Sound.BUCKET_EMPTY_LAVA)
                         } else {
                             clearWithFizz(cauldron, player)
                         }
@@ -221,7 +218,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                     )
                     cauldron.customColor = mixed
                 }
-                level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.CAULDRON_ADDDYE)
+                level.addSound(position.add(0.5, 0.5, 0.5), Sound.CAULDRON_ADDDYE)
             }
 
             ItemID.LEATHER_HELMET, ItemID.LEATHER_CHESTPLATE, ItemID.LEATHER_LEGGINGS, ItemID.LEATHER_BOOTS, ItemID.LEATHER_HORSE_ARMOR -> {
@@ -242,7 +239,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                         ), player
                     )
                     level.setBlock(this.position, this, true, true)
-                    level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.CAULDRON_DYEARMOR)
+                    level.addSound(position.add(0.5, 0.5, 0.5), Sound.CAULDRON_DYEARMOR)
                 } else {
                     if (!item.hasCompoundTag()) {
                         break
@@ -265,7 +262,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                         ), player
                     )
                     level.setBlock(this.position, this, true, true)
-                    level.addSound(position.add(0.5, 1.0, 0.5)!!, Sound.CAULDRON_TAKEWATER)
+                    level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_TAKEWATER)
                 }
             }
 
@@ -300,7 +297,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                 consumePotion(item, player)
 
                 level.addLevelEvent(
-                    position.add(0.5, 0.375 + fillLevel * 0.125, 0.5)!!,
+                    position.add(0.5, 0.375 + fillLevel * 0.125, 0.5),
                     LevelEventPacket.EVENT_CAULDRON_FILL_POTION
                 )
             }
@@ -347,7 +344,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                         player.getInventory().addItem(potion)
                     } else {
                         player.level!!.dropItem(
-                            player.position.add(0.0, 1.3, 0.0)!!,
+                            player.position.add(0.0, 1.3, 0.0),
                             potion,
                             player.getDirectionVector().multiply(0.4)
                         )
@@ -355,7 +352,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                 }
 
                 level.addLevelEvent(
-                    position.add(0.5, 0.375 + fillLevel * 0.125, 0.5)!!,
+                    position.add(0.5, 0.375 + fillLevel * 0.125, 0.5),
                     LevelEventPacket.EVENT_CAULDRON_TAKE_POTION
                 )
             }
@@ -384,7 +381,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                         player.getInventory().addItem(banner)
                     } else {
                         player.level!!.dropItem(
-                            player.position.add(0.0, 1.3, 0.0)!!,
+                            player.position.add(0.0, 1.3, 0.0),
                             banner,
                             player.getDirectionVector().multiply(0.4)
                         )
@@ -399,7 +396,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                     ), player
                 )
                 level.setBlock(this.position, this, true, true)
-                level.addSound(position.add(0.5, 1.0, 0.5)!!, Sound.CAULDRON_TAKEWATER)
+                level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_TAKEWATER)
             }
 
             else -> if (item is ItemDye) {
@@ -424,7 +421,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                     )
                     cauldron.customColor = mixed
                 }
-                level.addSound(position.add(0.5, 0.5, 0.5)!!, Sound.CAULDRON_ADDDYE)
+                level.addSound(position.add(0.5, 0.5, 0.5), Sound.CAULDRON_ADDDYE)
             } else {
                 return true
             }
@@ -460,7 +457,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                         this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMin(), player) //empty
                         level.setBlock(this.position, BlockCauldron(), true)
                         be.clearCustomColor()
-                        level.addSound(position.add(0.5, 1.0, 0.5)!!, Sound.BUCKET_FILL_LAVA)
+                        level.addSound(position.add(0.5, 1.0, 0.5), Sound.BUCKET_FILL_LAVA)
                     }
                 } else if (bucket.isWater || bucket.isLava) { //water or lava bucket
                     if (isFull && !be.isCustomColor() && !be.hasPotion() && item.damage == 10) {
@@ -482,14 +479,14 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                             this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMax(), player) //fill
                             be.clearCustomColor()
                             level.setBlock(this.position, this, true)
-                            level.addSound(position.add(0.5, 1.0, 0.5)!!, Sound.BUCKET_EMPTY_LAVA)
+                            level.addSound(position.add(0.5, 1.0, 0.5), Sound.BUCKET_EMPTY_LAVA)
                         } else {
                             if (isEmpty) {
                                 val blockCauldron = BlockCauldron()
                                 blockCauldron.fillLevel = 6
                                 level.setBlock(this.position, blockCauldron, true, true)
                                 be.clearCustomColor()
-                                level.addSound(position.add(0.5, 1.0, 0.5)!!, Sound.CAULDRON_FILLWATER)
+                                level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_FILLWATER)
                             } else {
                                 clearWithFizz(be)
                             }
@@ -530,7 +527,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                     player.getInventory().addItem(newBucket)
                 } else {
                     player.level!!.dropItem(
-                        player.position.add(0.0, 1.3, 0.0)!!,
+                        player.position.add(0.0, 1.3, 0.0),
                         newBucket,
                         player.getDirectionVector().multiply(0.4)
                     )
@@ -552,7 +549,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
                     player.getInventory().addItem(bottle)
                 } else {
                     player.level!!.dropItem(
-                        player.position.add(0.0, 1.3, 0.0)!!,
+                        player.position.add(0.0, 1.3, 0.0),
                         bottle,
                         player.getDirectionVector().multiply(0.4)
                     )
@@ -568,9 +565,9 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
         cauldron.type = BlockEntityCauldron.PotionType.NORMAL
         cauldron.clearCustomColor()
         level.setBlock(this.position, BlockCauldron(), true)
-        level.addSound(position.add(0.5, 0.0, 0.5)!!, Sound.RANDOM_FIZZ)
+        level.addSound(position.add(0.5, 0.0, 0.5), Sound.RANDOM_FIZZ)
         for (i in 0..7) {
-            level.addParticle(SmokeParticle(position.add(Math.random(), 1.2, Math.random())!!))
+            level.addParticle(SmokeParticle(position.add(Math.random(), 1.2, Math.random())))
         }
     }
 
@@ -629,13 +626,13 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron?> {
         return true
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return shrink(0.3, 0.3, 0.3)
     }
 
     override fun onEntityCollide(entity: Entity) {
         val ev = EntityCombustByBlockEvent(this, entity, 15)
-        instance!!.pluginManager.callEvent(ev)
+        instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled) {
             // Making sure the entity is actually alive and not invulnerable.
             if (cauldronLiquid == CauldronLiquid.LAVA && entity.isAlive() && entity.noDamageTicks == 0) {

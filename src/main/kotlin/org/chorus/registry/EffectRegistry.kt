@@ -1,12 +1,11 @@
 package org.chorus.registry
 
-import org.chorus.entity.effect.*
-import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import me.sunlan.fastreflection.FastConstructor
+import org.chorus.entity.effect.*
+import org.chorus.registry.RegisterException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.Map
 import kotlin.collections.set
 
 class EffectRegistry :

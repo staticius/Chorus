@@ -68,7 +68,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.prope
             super.maxZ = maxZ
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return SimpleAxisAlignedBB(
             position.x,
             position.y,
@@ -117,7 +117,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.prope
                     continue
                 }
                 val event = BlockGrowEvent(b, get(CACTUS))
-                instance!!.pluginManager.callEvent(event)
+                instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     level.setBlock(b.position, event.newState!!, true)
                 }
@@ -159,7 +159,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.prope
     override val name: String
         get() = "Cactus"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf(
             get(CACTUS, 0, 1)
         )
@@ -184,7 +184,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.prope
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.CACTUS,
+            BlockID.CACTUS,
             CommonBlockProperties.AGE_16
         )
 

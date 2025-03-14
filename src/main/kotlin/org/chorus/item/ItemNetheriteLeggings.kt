@@ -6,7 +6,7 @@ class ItemNetheriteLeggings @JvmOverloads constructor(meta: Int = 0, count: Int 
         get() = true
 
     override val tier: Int
-        get() = ItemArmor.Companion.TIER_NETHERITE
+        get() = TIER_NETHERITE
 
     override val armorPoints: Int
         get() = 6

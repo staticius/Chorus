@@ -29,7 +29,7 @@ abstract class EntityBoss(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
 
     protected fun canBreakBlock(block: Block): Boolean {
         return when (block.id) {
-            Block.BARRIER, Block.BEDROCK, Block.COMMAND_BLOCK, Block.CHAIN_COMMAND_BLOCK, Block.REPEATING_COMMAND_BLOCK, Block.CRYING_OBSIDIAN, Block.END_STONE, Block.END_PORTAL, Block.END_PORTAL_FRAME, Block.END_GATEWAY, Block.FIRE, Block.IRON_BARS, Block.JIGSAW, Block.OBSIDIAN, Block.REINFORCED_DEEPSLATE, Block.RESPAWN_ANCHOR, Block.SOUL_FIRE, Block.STRUCTURE_BLOCK -> false
+            Block.BARRIER, Block.BEDROCK, Block.COMMAND_BLOCK, Block.CHAIN_COMMAND_BLOCK, Block.REPEATING_COMMAND_BLOCK, Block.CRYING_OBSIDIAN, Block.END_STONE, Block.END_PORTAL, Block.END_PORTAL_FRAME, Block.END_GATEWAY, BlockID.FIRE, Block.IRON_BARS, Block.JIGSAW, Block.OBSIDIAN, Block.REINFORCED_DEEPSLATE, Block.RESPAWN_ANCHOR, Block.SOUL_FIRE, Block.STRUCTURE_BLOCK -> false
             else -> true
         }
     }

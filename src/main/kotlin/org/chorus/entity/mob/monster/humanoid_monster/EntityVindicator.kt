@@ -33,6 +33,7 @@ import java.util.List
 import java.util.Set
 import java.util.concurrent.*
 import java.util.function.Function
+import kotlin.collections.forEach
 import kotlin.collections.setOf
 
 /**
@@ -130,7 +131,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
                 .count() * ThreadLocalRandom.current().nextInt(1, 4)))
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         val axe = Item.get(Item.IRON_AXE)
         axe.damage = ThreadLocalRandom.current().nextInt(1, axe.maxDurability)
         return arrayOf(

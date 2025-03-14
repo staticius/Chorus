@@ -3,7 +3,7 @@ package org.chorus.item
 class ItemTurtleHelmet @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemArmor(ItemID.Companion.TURTLE_HELMET, meta, count, "Turtle Shell") {
     override val tier: Int
-        get() = ItemArmor.Companion.TIER_OTHER
+        get() = TIER_OTHER
 
     override val isHelmet: Boolean
         get() = true

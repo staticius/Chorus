@@ -1,7 +1,7 @@
 package org.chorus.math
 
-import org.chorus.utils.random.RandomSourceProvider
 import com.google.common.collect.Iterators
+import org.chorus.utils.random.RandomSourceProvider
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Predicate

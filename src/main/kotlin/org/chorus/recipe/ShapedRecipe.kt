@@ -1,13 +1,13 @@
 package org.chorus.recipe
 
+import com.google.common.collect.Lists
+import com.google.common.collect.Maps
+import io.netty.util.collection.CharObjectHashMap
 import org.chorus.item.Item
 import org.chorus.network.protocol.types.RecipeUnlockingRequirement
 import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.recipe.descriptor.ItemDescriptor
 import org.chorus.registry.RecipeRegistry
-import com.google.common.collect.Lists
-import com.google.common.collect.Maps
-import io.netty.util.collection.CharObjectHashMap
 import java.util.*
 
 class ShapedRecipe @JvmOverloads constructor(
@@ -302,7 +302,7 @@ class ShapedRecipe @JvmOverloads constructor(
 
         private fun notAllEmptyRow(inputs: Array<Item>): Boolean {
             for (item in inputs) {
-                if (!item.isNull) {
+                if (!item.isNothing) {
                     return true
                 }
             }
@@ -311,7 +311,7 @@ class ShapedRecipe @JvmOverloads constructor(
 
         private fun notAllEmptyColumn(inputs: Array<Array<Item?>>, column: Int): Boolean {
             for (row in inputs) {
-                if (!row[column]!!.isNull) {
+                if (!row[column]!!.isNothing) {
                     return true
                 }
             }

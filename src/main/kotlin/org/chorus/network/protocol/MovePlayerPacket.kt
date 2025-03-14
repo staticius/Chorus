@@ -8,28 +8,34 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class MovePlayerPacket : DataPacket() {
     @JvmField
     var eid: Long = 0
+
     @JvmField
     var x: Float = 0f
+
     @JvmField
     var y: Float = 0f
+
     @JvmField
     var z: Float = 0f
+
     @JvmField
     var yaw: Float = 0f
+
     @JvmField
     var headYaw: Float = 0f
+
     @JvmField
     var pitch: Float = 0f
+
     @JvmField
     var mode: Int = MODE_NORMAL
+
     @JvmField
     var onGround: Boolean = false
+
     @JvmField
     var ridingEid: Long = 0
     var teleportationCause: Int = 0

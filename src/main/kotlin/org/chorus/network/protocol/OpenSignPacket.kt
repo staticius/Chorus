@@ -14,6 +14,7 @@ import org.chorus.network.connection.util.HandleByteBuf
 class OpenSignPacket : DataPacket() {
     @JvmField
     var position: BlockVector3? = null
+
     @JvmField
     var frontSide: Boolean = false
 

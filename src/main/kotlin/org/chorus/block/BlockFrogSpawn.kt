@@ -26,7 +26,7 @@ class BlockFrogSpawn : BlockFlowable {
         player: Player?
     ): Boolean {
         if (supportable(block)) {
-            if (block.id == Block.AIR) return super.place(item, block, target, face, fx, fy, fz, player)
+            if (block.id == BlockID.AIR) return super.place(item, block, target, face, fx, fy, fz, player)
         }
         return false
     }
@@ -47,7 +47,7 @@ class BlockFrogSpawn : BlockFlowable {
         )!!.id === WATER
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 
@@ -61,6 +61,6 @@ class BlockFrogSpawn : BlockFlowable {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FROG_SPAWN)
-            
+
     }
 }

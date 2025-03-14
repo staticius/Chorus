@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import com.google.common.base.Strings
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
@@ -19,8 +20,6 @@ import org.chorus.nbt.tag.StringTag
 import org.chorus.permission.*
 import org.chorus.plugin.Plugin
 import org.chorus.utils.*
-import com.google.common.base.Strings
-
 import java.util.function.Consumer
 
 
@@ -184,7 +183,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val spawnCompound: CompoundTag
         get() {
-            val nbt = super.getSpawnCompound()
+            val nbt = super.spawnCompound
                 .putBoolean(ICommandBlock.Companion.TAG_CONDITIONAL_MODE, this.conditionalMode)
                 .putBoolean(ICommandBlock.Companion.TAG_AUTO, this.isAuto)
                 .putLong(ICommandBlock.Companion.TAG_LAST_EXECUTION, this.lastExecution)
@@ -217,8 +216,8 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID.= this.levelBlock.id
-            return BlockID.== BlockID.COMMAND_BLOCK || BlockID.== BlockID.CHAIN_COMMAND_BLOCK || BlockID.== BlockID.REPEATING_COMMAND_BLOCK
+            val BlockID. = this.levelBlock.id
+            return BlockID.== BlockID . COMMAND_BLOCK || BlockID . == BlockID.CHAIN_COMMAND_BLOCK || BlockID.== BlockID . REPEATING_COMMAND_BLOCK
         }
 
     override fun getName(): String {
@@ -437,7 +436,8 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             message.text =
                 TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "[" + this.getName() + ": " + TextFormat.RESET +
                         (if (message.text != Server.instance.baseLang.get(message.text)) "%" else "") + message.text + "]"
-            val users = Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
+            val users =
+                Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
             for (user in users) {
                 if (user is Player || user is ConsoleCommandSender) {
                     (user as CommandSender).sendMessage(message)

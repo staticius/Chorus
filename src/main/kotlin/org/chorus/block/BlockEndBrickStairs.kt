@@ -26,7 +26,7 @@ class BlockEndBrickStairs @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.END_BRICK_STAIRS,
+            BlockID.END_BRICK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

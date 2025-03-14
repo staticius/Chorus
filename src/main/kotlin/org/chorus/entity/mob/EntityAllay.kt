@@ -38,11 +38,10 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         return EntityID.Companion.ALLAY
     }
 
-    
+
     private var lastItemDropTick: Int = -1
 
-    
-    
+
     var dropCollectCooldown: Int = 60
 
 
@@ -142,7 +141,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
 
     override fun onUpdate(currentTick: Int): Boolean {
         if (currentTick % 10 == 0) {
-            val nearestItem: EntityItem? = getMemoryStorage().get<EntityItem>(CoreMemoryTypes.Companion.NEAREST_ITEM)
+            val nearestItem: EntityItem = getMemoryStorage().get<EntityItem>(CoreMemoryTypes.Companion.NEAREST_ITEM)
             if (nearestItem != null && !nearestItem.closed) {
                 if (nearestItem.position.distance(this.position) < 1 && currentTick - lastItemDropTick > dropCollectCooldown) {
                     val item: Item? = nearestItem.getItem()
@@ -182,7 +181,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         return true
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return getInventory().contents.values.toArray(Item.EMPTY_ARRAY)
     }
 

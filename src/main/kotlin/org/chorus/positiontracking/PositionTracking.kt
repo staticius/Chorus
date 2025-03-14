@@ -28,11 +28,11 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return add(x, y, 0.0)
     }
 
-    override fun add(x: Double, y: Double, z: Double): PositionTracking? {
+    override fun add(x: Double, y: Double, z: Double): PositionTracking {
         return PositionTracking(levelName, this.x + x, this.y + y, this.z + z)
     }
 
-    override fun add(v: Vector3): PositionTracking? {
+    override fun add(v: Vector3): PositionTracking {
         return PositionTracking(levelName, x + v.x, y + v.y, z + v.z)
     }
 
@@ -52,7 +52,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return add(-v.x, -v.y, -v.z)
     }
 
-    override fun multiply(number: Double): PositionTracking? {
+    override fun multiply(number: Double): PositionTracking {
         return PositionTracking(levelName, x * number, y * number, z * number)
     }
 
@@ -60,15 +60,15 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return PositionTracking(levelName, x * number, y * number, z * number)
     }
 
-    override fun ceil(): PositionTracking? {
+    override fun ceil(): PositionTracking {
         return PositionTracking(levelName, kotlin.math.ceil(x), kotlin.math.ceil(y), kotlin.math.ceil(z))
     }
 
-    override fun floor(): PositionTracking? {
+    override fun floor(): PositionTracking {
         return PositionTracking(levelName, kotlin.math.floor(x), kotlin.math.floor(y), kotlin.math.floor(z))
     }
 
-    override fun round(): PositionTracking? {
+    override fun round(): PositionTracking {
         return PositionTracking(
             levelName, Math.round(this.x).toDouble(), Math.round(this.y).toDouble(), Math.round(
                 this.z
@@ -76,7 +76,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         )
     }
 
-    override fun abs(): PositionTracking? {
+    override fun abs(): PositionTracking {
         return PositionTracking(
             levelName,
             kotlin.math.abs(this.x),
@@ -89,7 +89,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return getSide(face, 1)
     }
 
-    override fun getSide(face: BlockFace, step: Int): PositionTracking? {
+    override fun getSide(face: BlockFace, step: Int): PositionTracking {
         return PositionTracking(
             levelName,
             x + face.xOffset * step,
@@ -161,7 +161,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return PositionTracking(levelName, intermediateWithZValue)
     }
 
-    override fun setComponents(x: Double, y: Double, z: Double): PositionTracking? {
+    override fun setComponents(x: Double, y: Double, z: Double): PositionTracking {
         super.setComponents(x, y, z)
         return this
     }

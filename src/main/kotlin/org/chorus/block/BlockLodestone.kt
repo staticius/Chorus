@@ -8,10 +8,6 @@ import org.chorus.math.BlockFace
 
 import java.io.IOException
 
-/**
- * @author joserobjr
- */
-
 class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
     constructor() : super(Companion.properties.defaultState)
 
@@ -48,7 +44,7 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
         fy: Float,
         fz: Float
     ): Boolean {
-        if (player == null || item.isNull || item.id != ItemID.COMPASS && item.id != ItemID.LODESTONE_COMPASS) {
+        if (player == null || item.isNothing || item.id != ItemID.COMPASS && item.id != ItemID.LODESTONE_COMPASS) {
             return false
         }
 

@@ -1,5 +1,6 @@
 package org.chorus.command.defaults
 
+import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
@@ -9,7 +10,6 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
-import com.google.common.collect.Lists
 import java.util.*
 
 class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.description") {

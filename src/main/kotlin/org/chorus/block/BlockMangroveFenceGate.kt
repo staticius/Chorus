@@ -9,7 +9,7 @@ class BlockMangroveFenceGate @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.MANGROVE_FENCE_GATE,
+            BlockID.BlockID.MANGROVE_FENCE_GATE,
             CommonBlockProperties.IN_WALL_BIT,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT

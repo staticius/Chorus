@@ -133,7 +133,7 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState? = Compani
             block.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CLUSTER_COUNT, 3)
 
             val blockGrowEvent: BlockGrowEvent = BlockGrowEvent(this, block)
-            instance!!.pluginManager.callEvent(blockGrowEvent)
+            instance.pluginManager.callEvent(blockGrowEvent)
 
             if (blockGrowEvent.isCancelled) {
                 return false
@@ -196,11 +196,11 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState? = Compani
             }
         }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockSeaPickle())
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return arrayOf<Item?>(
             ItemBlock(
                 BlockSeaPickle(), 0, getPropertyValue<Int, IntPropertyType>(

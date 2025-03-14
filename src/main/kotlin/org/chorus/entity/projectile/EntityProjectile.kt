@@ -145,15 +145,12 @@ abstract class EntityProjectile @JvmOverloads constructor(
      * @return the boolean
      */
     protected fun collideEntityFilter(entity: Entity): Boolean {
-        if ((entity === this.shootingEntity && this.ticksLived < 5) ||
-            (entity is Player && entity.gamemode == Player.SPECTATOR)
-            || (shootingEntity is Player && Optional.ofNullable(
-                shootingEntity.riding
-            ).map(
-                Function { e: Entity -> e == entity }).orElse(false))
-        ) {
-            return false
-        } else return true
+        return !((entity === this.shootingEntity && this.ticksLived < 5) ||
+                (entity is Player && entity.gamemode == Player.SPECTATOR)
+                || (shootingEntity is Player && Optional.ofNullable(
+            shootingEntity.riding
+        ).map(
+            Function { e: Entity -> e == entity }).orElse(false)))
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
@@ -182,7 +179,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
             )
 
             val list: Array<Entity> = level!!.getCollidingEntities(
-                getBoundingBox()!!
+                getBoundingBox()
                     .addCoord(motion.x, motion.y, motion.z).expand(1.0, 1.0, 1.0), this
             )
 
@@ -194,7 +191,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
                     continue
                 }
 
-                val axisalignedbb: AxisAlignedBB = entity.getBoundingBox()!!.grow(0.3, 0.3, 0.3)
+                val axisalignedbb: AxisAlignedBB = entity.getBoundingBox().grow(0.3, 0.3, 0.3)
                 val ob: MovingObjectPosition? = axisalignedbb.calculateIntercept(this.position, moveVector)
 
                 if (ob == null) {
@@ -284,7 +281,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
                 this.getVector3(), VibrationType.PROJECTILE_LAND
             )
         )
-        for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox()!!.grow(0.1, 0.1, 0.1))) {
+        for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) {
             onCollideWithBlock(locator, motion, collisionBlock)
         }
     }

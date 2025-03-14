@@ -1,5 +1,8 @@
 package org.chorus.item.customitem
 
+import com.google.common.base.Preconditions
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.block.BlockID
 import org.chorus.item.*
 import org.chorus.item.customitem.data.CreativeCategory
@@ -9,10 +12,6 @@ import org.chorus.item.customitem.data.RenderOffsets
 import org.chorus.nbt.tag.*
 import org.chorus.tags.ItemTags
 import org.chorus.utils.*
-import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
@@ -24,6 +23,7 @@ import kotlin.collections.MutableList
 import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
+import kotlin.collections.containsKey
 import kotlin.collections.forEach
 import kotlin.collections.listOf
 import kotlin.collections.set
@@ -55,7 +55,7 @@ data class CustomItemDefinition(@JvmField val identifier: String?, @JvmField val
         get() = INTERNAL_ALLOCATION_ID_MAP.getInt(identifier)
 
     open class SimpleBuilder(customItem: CustomItem) {
-        protected val identifier: String? = (customItem as Item).id
+        protected val identifier: String = (customItem as Item).id
         protected val nbt: CompoundTag = CompoundTag()
             .putCompound(
                 "components", CompoundTag()

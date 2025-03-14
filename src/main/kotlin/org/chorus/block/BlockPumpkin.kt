@@ -4,7 +4,10 @@ import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.entity.mob.EntitySnowGolem.Companion.checkAndSpawnGolem
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.utils.Faceable
 
@@ -52,7 +55,7 @@ open class BlockPumpkin : BlockSolid, Faceable, Natural {
             item.useOn(this)
             level.setBlock(this.position, carvedPumpkin, true, true)
             level.dropItem(
-                position.add(0.5, 0.5, 0.5)!!,
+                position.add(0.5, 0.5, 0.5),
                 Item.get(ItemID.PUMPKIN_SEEDS)
             ) // TODO: Get correct drop item position
             return true

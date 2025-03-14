@@ -1,7 +1,6 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.entity.data.EntityFlag
 import org.chorus.inventory.HumanInventory
 import org.chorus.item.Item.Companion.get
@@ -9,7 +8,6 @@ import org.chorus.item.enchantment.Enchantment.Companion.getEnchantments
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.MobEquipmentPacket
 import org.chorus.network.protocol.ProtocolInfo
-
 
 
 class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
@@ -23,7 +21,7 @@ class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
             player.close("§cPacket handling error")
             return
         }
-        if (!pk.item.isNull) {
+        if (!pk.item.isNothing) {
             if (pk.item.enchantments.size > getEnchantments().size) { // Last Enchant Id
                 player.close("§cPacket handling error")
                 return

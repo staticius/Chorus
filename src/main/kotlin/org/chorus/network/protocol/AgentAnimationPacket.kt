@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class AgentAnimationPacket : DataPacket() {
     var animation: Byte = 0
     var runtimeEntityId: Long = 0

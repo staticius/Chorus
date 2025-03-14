@@ -20,11 +20,14 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
     @JvmField
     var chunk: IChunk?
     open var name: String
+
     @JvmField
     var id: Long
     var isMovable: Boolean
+
     @JvmField
     var closed: Boolean = false
+
     @JvmField
     var namedTag: CompoundTag
     protected var server: Server
@@ -220,7 +223,7 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
                     }
                     BlockEntity.log.error(
                         "Could not create a block entity of type {} with {} args", type,
-                        args?.size ?: 0, cause
+                        args.size, cause
                     )
                 }
             } else {

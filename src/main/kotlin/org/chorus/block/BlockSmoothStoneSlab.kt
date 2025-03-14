@@ -24,6 +24,6 @@ class BlockSmoothStoneSlab(blockState: BlockState?) : BlockSlab(blockState, Bloc
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SMOOTH_STONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-            
+
     }
 }

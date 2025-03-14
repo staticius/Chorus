@@ -113,7 +113,7 @@ class EntityZoglin(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt!!),
         return true
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.ROTTEN_FLESH, 0, Utils.rand(1, 3)))
     }
 

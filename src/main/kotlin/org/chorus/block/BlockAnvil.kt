@@ -7,7 +7,9 @@ import org.chorus.block.property.enums.Damage
 import org.chorus.inventory.AnvilInventory
 import org.chorus.inventory.BlockInventoryHolder
 import org.chorus.inventory.Inventory
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.level.Sound
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
@@ -16,10 +18,6 @@ import org.chorus.utils.Faceable
 import java.util.function.Supplier
 import kotlin.math.abs
 
-/**
- * @author Pub4Game
- * @since 27.12.2015
- */
 open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFallable(blockstate), Faceable, BlockInventoryHolder {
     var anvilDamage: Damage
@@ -133,7 +131,7 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Compan
         )
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(clone().setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION.createDefaultValue()))
     }
 
@@ -141,6 +139,7 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Compan
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.ANVIL, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.ANVIL, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
     }
 }

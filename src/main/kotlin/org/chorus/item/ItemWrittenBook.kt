@@ -16,7 +16,7 @@ class ItemWrittenBook @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) 
         return writeBook(author, title, pageList)
     }
 
-    fun writeBook(author: String, title: String, pages: ListTag<CompoundTag>): Item? {
+    fun writeBook(author: String, title: String, pages: ListTag<CompoundTag>): Item {
         if (pages.size() > 50 || pages.size() <= 0) return this //Minecraft does not support more than 50 pages
 
         val tag = if (this.hasCompoundTag()) this.namedTag else CompoundTag()

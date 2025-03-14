@@ -8,9 +8,6 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class AnimateEntityPacket : DataPacket() {
     var animation: String? = null
     var nextState: String? = null

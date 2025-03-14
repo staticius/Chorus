@@ -6,7 +6,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
 class BellRingEvent(bell: BlockBell, val cause: RingCause, val entity: Entity) : BlockEvent(bell), Cancellable {
-    override fun getBlock(): BlockBell? {
+    override fun getBlock(): BlockBell {
         return super.getBlock() as BlockBell
     }
 

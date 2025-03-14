@@ -72,7 +72,7 @@ class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.descript
                 }
 
                 val slot: Item = offhand.getItem(0)
-                if (!slot.isNull) {
+                if (!slot.isNothing) {
                     count += slot.getCount()
                     offhand.clear(0)
                 }

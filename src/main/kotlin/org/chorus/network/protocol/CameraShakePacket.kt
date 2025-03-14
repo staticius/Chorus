@@ -3,18 +3,16 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class CameraShakePacket : DataPacket() {
     @JvmField
     var intensity: Float = 0f
+
     @JvmField
     var duration: Float = 0f
+
     @JvmField
     var shakeType: CameraShakeType? = null
+
     @JvmField
     var shakeAction: CameraShakeAction? = null
 

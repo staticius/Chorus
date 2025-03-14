@@ -8,7 +8,7 @@ import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.item.ItemFood
 
 class WillingnessExecutor : EntityControl, IBehaviorExecutor {
-    override fun execute(entity: EntityMob?): Boolean {
+    override fun execute(entity: EntityMob): Boolean {
         return false
     }
 

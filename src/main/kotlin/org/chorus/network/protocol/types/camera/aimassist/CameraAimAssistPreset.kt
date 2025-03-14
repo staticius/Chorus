@@ -1,9 +1,8 @@
 package org.chorus.network.protocol.types.camera.aimassist
 
-import org.chorus.utils.OptionalValue
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
+import org.chorus.utils.OptionalValue
 
 
 class CameraAimAssistPreset {

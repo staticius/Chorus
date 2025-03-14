@@ -2,8 +2,10 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.BlockFlowerPot.FlowerPotBlock
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle

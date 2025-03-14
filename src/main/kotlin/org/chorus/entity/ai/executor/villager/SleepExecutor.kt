@@ -12,7 +12,7 @@ import org.chorus.level.*
 import org.chorus.math.*
 
 class SleepExecutor : EntityControl, IBehaviorExecutor {
-    override fun execute(entity: EntityMob?): Boolean {
+    override fun execute(entity: EntityMob): Boolean {
         return true
     }
 

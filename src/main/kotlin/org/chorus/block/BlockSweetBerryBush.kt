@@ -47,7 +47,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState? = Co
                 block.setGrowth(3)
             }
             val ev: BlockGrowEvent = BlockGrowEvent(this, block)
-            instance!!.pluginManager.callEvent(ev)
+            instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
                 return false
@@ -103,7 +103,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState? = Co
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             if (growth < 3 && ThreadLocalRandom.current().nextInt(5) == 0 && level.getFullLight(
-                    position.add(0.0, 1.0, 0.0)!!
+                    position.add(0.0, 1.0, 0.0)
                 ) >= BlockCrops.minimumLightLevel
             ) {
                 val event: BlockGrowEvent = BlockGrowEvent(
@@ -157,7 +157,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState? = Co
     override val collisionBoundingBox: AxisAlignedBB?
         get() = if (growth > 0) this else null
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         val age: Int = MathHelper.clamp(growth, 0, 3)
 
         var amount = 1

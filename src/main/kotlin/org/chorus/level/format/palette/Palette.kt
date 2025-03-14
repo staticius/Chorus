@@ -1,9 +1,11 @@
 package org.chorus.level.format.palette
 
+import com.google.common.base.Objects
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufInputStream
+import io.netty.buffer.ByteBufOutputStream
 import org.chorus.Server
 import org.chorus.block.*
-import org.chorus.entity.data.EntityDataMap.get
-import org.chorus.item.Item.Companion.get
 import org.chorus.level.format.ChunkSection
 import org.chorus.level.format.bitarray.BitArray
 import org.chorus.level.format.bitarray.BitArrayVersion
@@ -15,11 +17,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.TreeMapCompoundTag
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.*
-import com.google.common.base.Objects
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.ByteBufInputStream
-import io.netty.buffer.ByteBufOutputStream
-
 import java.io.IOException
 import java.nio.ByteOrder
 
@@ -41,12 +38,12 @@ open class Palette<V> {
         this.palette.add(first)
     }
 
-    fun get(index: Int): V {
+    operator fun get(index: Int): V {
         val i = bitArray!![index]
         return if (i >= palette.size) palette.first() else palette[i]
     }
 
-    open fun set(index: Int, value: V) {
+    open operator fun set(index: Int, value: V) {
         val paletteIndex = this.paletteIndexFor(value)
         bitArray!![index] = paletteIndex
     }
@@ -178,7 +175,7 @@ open class Palette<V> {
         palette.add(value)
 
         val version = bitArray!!.version()
-        if (index > version!!.maxEntryValue) {
+        if (index > version.maxEntryValue) {
             val next = version.next
             if (next != null) this.onResize(next)
         }
@@ -219,7 +216,7 @@ open class Palette<V> {
         }
 
         val version: Int =
-            CompoundTagUpdaterContext.Companion.makeVersion(semVersion!!.major, semVersion.minor, semVersion.patch)
+            CompoundTagUpdaterContext.Companion.makeVersion(semVersion.major, semVersion.minor, semVersion.patch)
 
         var isBlockOutdated = false
 

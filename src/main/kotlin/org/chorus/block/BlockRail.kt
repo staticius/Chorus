@@ -18,17 +18,8 @@ import org.chorus.utils.Rail.Orientation.Companion.ascending
 import org.chorus.utils.Rail.Orientation.Companion.curved
 import org.chorus.utils.Rail.Orientation.Companion.straight
 import org.chorus.utils.Rail.Orientation.Companion.straightOrCurved
-import java.util.*
 import java.util.function.Consumer
 import java.util.stream.Stream
-import kotlin.collections.ArrayList
-import kotlin.collections.Collection
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
@@ -128,19 +119,23 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
             this.setRailDirection(this.connect(other, railsAround[other]!!))
         } else if (railsAround.size == 4) {
             if (this.isAbstract) {
-                this.setRailDirection(this.connect(
-                    rails[faces.indexOf(BlockFace.SOUTH)],
-                    BlockFace.SOUTH,
-                    rails[faces.indexOf(BlockFace.EAST)],
-                    BlockFace.EAST
-                ))
+                this.setRailDirection(
+                    this.connect(
+                        rails[faces.indexOf(BlockFace.SOUTH)],
+                        BlockFace.SOUTH,
+                        rails[faces.indexOf(BlockFace.EAST)],
+                        BlockFace.EAST
+                    )
+                )
             } else {
-                this.setRailDirection(this.connect(
-                    rails[faces.indexOf(BlockFace.EAST)],
-                    BlockFace.EAST,
-                    rails[faces.indexOf(BlockFace.WEST)],
-                    BlockFace.WEST
-                ))
+                this.setRailDirection(
+                    this.connect(
+                        rails[faces.indexOf(BlockFace.EAST)],
+                        BlockFace.EAST,
+                        rails[faces.indexOf(BlockFace.WEST)],
+                        BlockFace.WEST
+                    )
+                )
             }
         } else if (railsAround.isNotEmpty()) {
             if (this.isAbstract) {
@@ -229,7 +224,9 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
                     )
                 }
                 return if (delta == -1) ascending(face) else straight(face)
-            } else if (other.getOrientation()!!.hasConnectingDirections(BlockFace.NORTH, BlockFace.SOUTH)) { //North-south
+            } else if (other.getOrientation()!!
+                    .hasConnectingDirections(BlockFace.NORTH, BlockFace.SOUTH)
+            ) { //North-south
                 other.setOrientation(
                     if (delta == 1) ascending(face.getOpposite()!!) else straight(
                         face
@@ -360,6 +357,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Compani
             getPropertyValue(CommonBlockProperties.ACTIVE)
         ) else empty()
     }
+
     /**
      * @throws NoSuchElementException If attempt to set the rail to active but it don't have the [CommonBlockProperties.ACTIVE] property.
      */

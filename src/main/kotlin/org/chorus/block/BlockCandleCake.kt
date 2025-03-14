@@ -123,7 +123,7 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState? = C
             val cake: Block = BlockCake()
             level.setBlock(this.position, cake, true, true)
             level.dropItem(
-                position.add(0.5, 0.5, 0.5)!!,
+                position.add(0.5, 0.5, 0.5),
                 getDrops(null)!![0]!!
             )
             return level.getBlock(this.position)!!

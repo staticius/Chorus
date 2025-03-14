@@ -1,7 +1,9 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 
 class BlockBrickWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {
@@ -14,7 +16,7 @@ class BlockBrickWall @JvmOverloads constructor(blockstate: BlockState? = Compani
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(properties.defaultState.toBlock())
     }
 

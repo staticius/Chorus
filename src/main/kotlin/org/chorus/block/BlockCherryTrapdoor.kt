@@ -18,7 +18,7 @@ class BlockCherryTrapdoor @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.CHERRY_TRAPDOOR,
+            BlockID.CHERRY_TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT

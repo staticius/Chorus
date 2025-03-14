@@ -7,10 +7,6 @@ import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlo
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseStatus
 
 
-
-
-
-
 class ItemStackResponsePacket : DataPacket() {
     val entries: List<ItemStackResponse> = ArrayList()
 

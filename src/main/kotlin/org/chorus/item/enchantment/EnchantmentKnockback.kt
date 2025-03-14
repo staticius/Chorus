@@ -2,7 +2,7 @@ package org.chorus.item.enchantment
 
 
 class EnchantmentKnockback :
-    Enchantment(Enchantment.Companion.ID_KNOCKBACK, "knockback", Rarity.UNCOMMON, EnchantmentType.SWORD) {
+    Enchantment(ID_KNOCKBACK, "knockback", Rarity.UNCOMMON, EnchantmentType.SWORD) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 5 + (level - 1) * 20
     }

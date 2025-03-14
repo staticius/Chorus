@@ -8,7 +8,7 @@ class BlockDioriteDoubleSlab @JvmOverloads constructor(blockstate: BlockState? =
     override val slabName: String
         get() = "Diorite"
 
-    override val singleSlab: BlockState?
+    override val singleSlab: BlockState
         get() = BlockDioriteSlab.Companion.PROPERTIES.getDefaultState()
 
     override val toolType: Int

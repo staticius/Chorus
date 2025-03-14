@@ -8,6 +8,7 @@ import org.chorus.network.protocol.AnimatePacket
 class PlayerAnimationEvent : PlayerEvent, Cancellable {
     @JvmField
     val animationType: AnimatePacket.Action
+
     @JvmField
     val rowingTime: Float
 

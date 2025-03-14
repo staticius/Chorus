@@ -8,9 +8,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 import java.util.concurrent.CancellationException
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.ListIterator
 import kotlin.collections.set
 
 class SNBTParserImplement(
@@ -87,7 +84,7 @@ class SNBTParserImplement(
     // Otherwise, it goes to the token_source, i.e. the Lexer.
     private fun nextToken(tok: Token?): Token {
         var result = token_source.getNextToken(tok)
-        while (result!!.isUnparsed) {
+        while (result.isUnparsed) {
             result = token_source.getNextToken(result)
         }
         nextTokenType = null

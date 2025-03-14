@@ -6,9 +6,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 //EDU exclusive
 
 
-
-
-
 class CodeBuilderPacket : DataPacket() {
     var isOpening: Boolean = false
     var url: String = ""

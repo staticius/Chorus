@@ -1,12 +1,7 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.utils.*
-
-
-
-
-
+import org.chorus.utils.Identifier
 
 
 class PlayerFogPacket : DataPacket() {

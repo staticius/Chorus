@@ -27,14 +27,8 @@ import org.chorus.network.protocol.types.itemstack.response.ItemStackResponse
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseStatus
-
 import java.util.*
 import java.util.function.Function
-import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
-import kotlin.collections.indices
 import kotlin.collections.set
 
 

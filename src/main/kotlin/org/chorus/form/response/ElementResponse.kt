@@ -1,9 +1,6 @@
 package org.chorus.form.response
 
 
-
-
-
 /**
  * The response of a [org.chorus.form.element.custom.ElementDropdown] or [org.chorus.form.element.custom.ElementStepSlider]
  */

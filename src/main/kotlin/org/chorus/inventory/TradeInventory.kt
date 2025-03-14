@@ -14,14 +14,14 @@ class TradeInventory(holder: EntityVillagerV2?) : BaseInventory(holder, Inventor
 
     override fun init() {
         val networkedSlotMap = networkSlotMap()
-        networkedSlotMap!![0] = 4
+        networkedSlotMap[0] = 4
         networkedSlotMap[1] = 5
         val slotTypeMap = slotTypeMap()
-        slotTypeMap!![0] = ContainerSlotType.TRADE2_INGREDIENT_1
+        slotTypeMap[0] = ContainerSlotType.TRADE2_INGREDIENT_1
         slotTypeMap[1] = ContainerSlotType.TRADE2_INGREDIENT_2
     }
 
-    override fun getHolder(): EntityVillagerV2? {
+    override fun getHolder(): EntityVillagerV2 {
         return this.holder
     }
 

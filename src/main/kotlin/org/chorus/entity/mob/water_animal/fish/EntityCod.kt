@@ -32,7 +32,7 @@ class EntityCod(chunk: IChunk?, nbt: CompoundTag) : EntityFish(chunk, nbt) {
         super.initEntity()
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         //只能25%获得骨头
         if (Utils.rand(0, 3) == 1) {
             return arrayOf(

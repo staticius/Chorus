@@ -61,7 +61,7 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState? = Compan
         return super.onUpdate(type)
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return Item.AIR
     }
 

@@ -170,7 +170,7 @@ class PotionThrowExecutor(
         if (entity is EntityMob) {
             if (entity.memoryStorage!!.notEmpty(memory)) {
                 val target = entity.memoryStorage!![memory]
-                val distance = target!!.position.distance(entity.position)
+                val distance = target.position.distance(entity.position)
                 if (distance > 8 && !target.hasEffect(EffectType.SLOWNESS)) {
                     return 17 //SLOWNESS
                 } else if (distance < 3 && !target.hasEffect(EffectType.WEAKNESS) && ThreadLocalRandom.current()

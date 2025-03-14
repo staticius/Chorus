@@ -1,5 +1,6 @@
 package org.chorus.inventory
 
+import com.google.common.collect.BiMap
 import org.chorus.Player
 import org.chorus.blockentity.BlockEntityEnchantTable
 import org.chorus.blockentity.BlockEntityNameable
@@ -8,28 +9,27 @@ import org.chorus.item.Item
 import org.chorus.item.enchantment.EnchantmentHelper
 import org.chorus.network.protocol.PlayerEnchantOptionsPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import com.google.common.collect.BiMap
 
 
 class EnchantInventory(table: BlockEntityEnchantTable?) : ContainerInventory(table, InventoryType.ENCHANTMENT, 2),
     BlockEntityInventoryNameable, CraftTypeInventory, SoleInventory {
-    override fun networkSlotMap(): BiMap<Int, Int>? {
+    override fun networkSlotMap(): BiMap<Int, Int> {
         val map = super.networkSlotMap()
-        map!![0] = 14 //INPUT
+        map[0] = 14 //INPUT
         map[1] = 15 //MATERIAL
         return map
     }
 
     override fun slotTypeMap(): MutableMap<Int?, ContainerSlotType?> {
         val map = super.slotTypeMap()
-        map!![0] = ContainerSlotType.ENCHANTING_INPUT
+        map[0] = ContainerSlotType.ENCHANTING_INPUT
         map[1] = ContainerSlotType.ENCHANTING_MATERIAL
         return map
     }
 
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
         if (index == 0) {
-            if (before.isNull) {
+            if (before.isNothing) {
                 for (viewer in this.getViewers()) {
                     val options = EnchantmentHelper.getEnchantOptions(
                         holder,
@@ -51,10 +51,6 @@ class EnchantInventory(table: BlockEntityEnchantTable?) : ContainerInventory(tab
             }
         }
         super.onSlotChange(index, before, false)
-    }
-
-    override fun onOpen(who: Player) {
-        super.onOpen(who)
     }
 
     override fun onClose(who: Player) {

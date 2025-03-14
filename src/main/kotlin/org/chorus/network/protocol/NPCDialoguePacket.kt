@@ -26,20 +26,22 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class NPCDialoguePacket : DataPacket() {
     @JvmField
     var runtimeEntityId: Long = 0
+
     @JvmField
     var action: NPCDialogAction = NPCDialogAction.OPEN
+
     @JvmField
     var dialogue: String = "" //content
+
     @JvmField
     var sceneName: String = ""
+
     @JvmField
     var npcName: String = ""
+
     @JvmField
     var actionJson: String = ""
 

@@ -1,9 +1,9 @@
 package org.chorus.registry
 
-import org.chorus.network.protocol.*
-import org.chorus.registry.RegisterException
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import me.sunlan.fastreflection.FastConstructor
+import org.chorus.network.protocol.*
+import org.chorus.registry.RegisterException
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.annotation.Nonnegative
 
@@ -27,7 +27,7 @@ class PacketRegistry : IRegistry<Int?, DataPacket?, Class<out DataPacket?>> {
         }
     }
 
-    fun get(key: Int): DataPacket? {
+    operator fun get(key: Int): DataPacket? {
         val fastConstructor = PACKET_POOL[key]
         return if (fastConstructor == null) {
             null

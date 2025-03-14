@@ -64,7 +64,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         return 0
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 
@@ -335,7 +335,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         }
         setLastDamageCause(source)
 
-        if (getDataProperty<Int>(EntityDataTypes.Companion.HURT_TICKS!!) > 0) {
+        if (getDataProperty<Int>(EntityDataTypes.Companion.HURT_TICKS) > 0) {
             setHealth(0f)
             return true
         }
@@ -363,7 +363,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
     override fun entityBaseTick(tickDiff: Int): Boolean {
         var hasUpdate: Boolean = super.entityBaseTick(tickDiff)
 
-        var hurtTime: Int = getDataProperty<Int>(EntityDataTypes.Companion.HURT_TICKS!!)
+        var hurtTime: Int = getDataProperty<Int>(EntityDataTypes.Companion.HURT_TICKS)
         if (hurtTime > 0 && age % 2 == 0) {
             setDataProperty(EntityDataTypes.Companion.HURT_TICKS, hurtTime - 1, true)
             hasUpdate = true

@@ -83,7 +83,7 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
             )
         )
         var affect: Boolean = false
-        for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox()!!.grow(0.1, 0.1, 0.1))) affect =
+        for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) affect =
             onCollideWithBlock(locator, motion, collisionBlock)
         if (!affect && getLocator().getLevelBlock().getId() === BlockID.AIR) {
             val fire: BlockFire = Block.get(BlockID.FIRE) as BlockFire

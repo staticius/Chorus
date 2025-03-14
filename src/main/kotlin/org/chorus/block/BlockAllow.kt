@@ -1,7 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
@@ -56,7 +56,7 @@ class BlockAllow : BlockSolid {
         return super.isBreakable(vector, layer, face, item, player)
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 

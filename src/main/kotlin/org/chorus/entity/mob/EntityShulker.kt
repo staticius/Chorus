@@ -75,7 +75,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     }
 
     fun isPeeking(): Boolean {
-        return getDataProperty<Int>(EntityDataTypes.Companion.SHULKER_PEEK_AMOUNT!!, 0) == 0
+        return getDataProperty<Int>(EntityDataTypes.Companion.SHULKER_PEEK_AMOUNT, 0) == 0
     }
 
     fun setPeeking(height: Int) {
@@ -144,12 +144,12 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
         return "Shulker"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.SHULKER_SHELL, 0, Utils.rand(0, 2)))
     }
 
     fun teleport() {
-        Arrays.stream(level!!.getCollisionBlocks(getBoundingBox()!!.grow(7.0, 7.0, 7.0)))
+        Arrays.stream(level!!.getCollisionBlocks(getBoundingBox().grow(7.0, 7.0, 7.0)))
             .filter { block: Block -> block.isFullBlock() && block.up().isAir() }.findAny().ifPresent(
                 Consumer { block: Block ->
                     val locator: Locator = block.up().getLocator()

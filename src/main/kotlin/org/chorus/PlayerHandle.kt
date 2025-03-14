@@ -1,20 +1,23 @@
 package org.chorus
 
 import com.github.benmanes.caffeine.cache.Cache
-import org.chorus.block.*
+import com.google.common.collect.BiMap
+import org.chorus.block.Block
 import org.chorus.dialog.window.FormWindowDialog
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.form.window.Form
-import org.chorus.inventory.*
-import org.chorus.level.*
-import org.chorus.math.*
+import org.chorus.inventory.Inventory
+import org.chorus.level.Locator
+import org.chorus.level.Transform
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
 import org.chorus.network.protocol.PlayerFogPacket
 import org.chorus.network.protocol.types.PlayerBlockActionData
 import org.chorus.scheduler.AsyncTask
 import org.chorus.utils.DummyBossBar
 import org.chorus.utils.LoginChainData
-import com.google.common.collect.BiMap
 import java.net.InetSocketAddress
 import java.util.*
 

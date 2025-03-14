@@ -106,7 +106,7 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
             val name = perm.name
             permissions[name] = PermissionAttachmentInfo(
                 if (this.parent != null) this.parent else this,
-                name!!, null, true
+                name, null, true
             )
             Server.instance.pluginManager.subscribeToPermission(
                 name,

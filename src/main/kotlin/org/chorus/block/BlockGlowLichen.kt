@@ -5,18 +5,8 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.*
 import org.chorus.math.BlockFace
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
 import kotlin.collections.set
-import kotlin.collections.toTypedArray
 
-/**
- * @author Gabriel8579
- * @since 2021-06-13
- */
 class BlockGlowLichen : BlockLichen {
     constructor() : super(Companion.properties.defaultState)
 
@@ -135,7 +125,8 @@ class BlockGlowLichen : BlockLichen {
         get() = true
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.GLOW_LICHEN, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.GLOW_LICHEN, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
 
     }
 }

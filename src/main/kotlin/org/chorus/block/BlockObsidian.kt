@@ -3,10 +3,6 @@ package org.chorus.block
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
-/**
- * @author xtypr
- * @since 2015/12/2
- */
 class BlockObsidian : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 

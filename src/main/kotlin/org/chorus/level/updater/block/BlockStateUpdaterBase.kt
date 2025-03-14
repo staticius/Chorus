@@ -1,21 +1,15 @@
 package org.chorus.level.updater.block
 
-import org.chorus.level.updater.Updater
-import org.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
-import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
-import org.chorus.utils.JSONUtils
+
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
-
-
+import org.chorus.level.updater.Updater
+import org.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
+import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
+import org.chorus.utils.JSONUtils
 import java.io.IOException
-import kotlin.collections.HashMap
-import kotlin.collections.Iterator
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 (access = AccessLevel.PRIVATE)

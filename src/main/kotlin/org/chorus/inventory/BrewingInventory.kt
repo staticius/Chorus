@@ -12,7 +12,7 @@ class BrewingInventory(brewingStand: BlockEntityBrewingStand?) :
     ContainerInventory(brewingStand, InventoryType.BREWING_STAND, 5), BlockEntityInventoryNameable {
     override fun init() {
         val map = super.slotTypeMap()
-        map!![0] = ContainerSlotType.BREWING_INPUT
+        map[0] = ContainerSlotType.BREWING_INPUT
         map[1] = ContainerSlotType.BREWING_RESULT
         map[2] = ContainerSlotType.BREWING_RESULT
         map[3] = ContainerSlotType.BREWING_RESULT

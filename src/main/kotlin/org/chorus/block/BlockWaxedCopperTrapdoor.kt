@@ -9,11 +9,11 @@ class BlockWaxedCopperTrapdoor @JvmOverloads constructor(blockstate: BlockState?
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.WAXED_COPPER_TRAPDOOR,
+            BlockID.BlockID.WAXED_COPPER_TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-            
+
     }
 }

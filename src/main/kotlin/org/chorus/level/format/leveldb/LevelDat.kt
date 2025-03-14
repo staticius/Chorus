@@ -7,9 +7,6 @@ import org.chorus.network.protocol.types.GameType
 import org.chorus.utils.SemVersion
 
 
-
-
-
 class LevelDat {
 
     var biomeOverride: String = ""
@@ -121,7 +118,6 @@ class LevelDat {
 
 
     var commandsEnabled: Boolean = true
-
 
 
     var gameRules: GameRules? = GameRules.Companion.getDefault()
@@ -285,8 +281,6 @@ class LevelDat {
     }
 
 
-
-
     class Abilities {
 
         var attackMobs: Boolean = true
@@ -335,8 +329,6 @@ class LevelDat {
     }
 
 
-
-
     class Experiments {
 
         var experimentsEverUsed: Boolean = false
@@ -365,8 +357,6 @@ class LevelDat {
 
         var villagerTradesRebalance: Boolean = false
     }
-
-
 
 
     class WorldPolicies

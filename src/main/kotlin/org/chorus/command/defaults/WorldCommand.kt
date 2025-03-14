@@ -9,7 +9,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Level
 import org.chorus.utils.TextFormat
 import java.util.function.Consumer
-import kotlin.collections.Map
 import kotlin.collections.set
 
 class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.description") {

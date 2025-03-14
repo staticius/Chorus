@@ -21,9 +21,11 @@ class PlayerInteractEvent @JvmOverloads constructor(
     PlayerEvent(), Cancellable {
     var block: Block? = null
     val face: BlockFace?
+
     @JvmField
     val item: Item?
     var touchVector: Vector3? = null
+
     @JvmField
     val action: Action
 
@@ -34,7 +36,7 @@ class PlayerInteractEvent @JvmOverloads constructor(
         } else {
             this.touchVector = vector.vector3
             this.block = Block.get(
-                Block.AIR, Locator(
+                BlockID.AIR, Locator(
                     0.0, 0.0, 0.0,
                     player.level!!
                 )

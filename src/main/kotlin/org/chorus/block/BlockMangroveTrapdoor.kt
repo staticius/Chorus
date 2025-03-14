@@ -6,7 +6,7 @@ class BlockMangroveTrapdoor @JvmOverloads constructor(blockstate: BlockState? = 
     BlockTrapdoor(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.MANGROVE_TRAPDOOR,
+            BlockID.BlockID.MANGROVE_TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT

@@ -12,6 +12,6 @@ class BlockRawGoldBlock @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RAW_GOLD_BLOCK)
-            
+
     }
 }

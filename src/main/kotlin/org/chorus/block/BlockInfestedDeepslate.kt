@@ -1,7 +1,8 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 
 class BlockInfestedDeepslate @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockState) {
@@ -14,7 +15,7 @@ class BlockInfestedDeepslate @JvmOverloads constructor(blockState: BlockState? =
     override val resistance: Double
         get() = 0.75
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 

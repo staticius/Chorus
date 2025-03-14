@@ -1,9 +1,9 @@
 package org.chorus.lang
 
-import org.chorus.utils.JSONUtils
 import com.google.gson.reflect.TypeToken
 import io.netty.util.internal.EmptyArrays
-
+import org.chorus.utils.JSONUtils
+import org.chorus.utils.Loggable
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
@@ -11,8 +11,7 @@ import java.util.regex.MatchResult
 import java.util.regex.Pattern
 
 
-
-class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fallback: String = FALLBACK_LANGUAGE) {
+class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fallback: String = FALLBACK_LANGUAGE) : Loggable {
     /**
      * The Lang name.
      */
@@ -75,7 +74,7 @@ class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fal
                 return parseLang(BufferedReader(InputStreamReader(stream, StandardCharsets.UTF_8)))
             }
         } catch (e: IOException) {
-            BaseLang.log.error("Failed to load language at {}", path, e)
+            log.error("Failed to load language at {}", path, e)
             return null
         }
     }
@@ -84,14 +83,14 @@ class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fal
         try {
             return parseLang(BufferedReader(InputStreamReader(stream, StandardCharsets.UTF_8)))
         } catch (e: IOException) {
-            BaseLang.log.error("Failed to parse the language input stream", e)
+            log.error("Failed to parse the language input stream", e)
             return null
         }
     }
 
     @Throws(IOException::class)
     private fun parseLang(reader: BufferedReader): Map<String, String> {
-        return JSONUtils.from<Map<String, String>>(reader, object : TypeToken<Map<String?, String?>?>() {
+        return JSONUtils.from(reader, object : TypeToken<Map<String, String>>() {
         })
     }
 
@@ -139,7 +138,7 @@ class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fal
     }
 
     fun tr(c: TextContainer): String {
-        var baseText = this.parseLanguageText(c.getText())
+        var baseText = this.parseLanguageText(c.text)
         if (c is TranslationContainer) {
             for (i in c.parameters.indices) {
                 baseText = baseText.replace("{%$i}", this.parseLanguageText(c.parameters[i]))

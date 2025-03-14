@@ -1,7 +1,7 @@
 package org.chorus.entity
 
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
+import org.chorus.utils.ServerException
 
 
 /**
@@ -152,6 +152,7 @@ class Attribute private constructor(
         const val LAVA_MOVEMENT_SPEED: Int = 14
 
         protected var attributes: MutableMap<Int, Attribute> = HashMap()
+
         @JvmStatic
         fun init() {
             addAttribute(ABSORPTION, "minecraft:absorption", 0.00f, 340282346638528859811704183484516925440.00f, 0.00f)

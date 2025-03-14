@@ -6,7 +6,7 @@ import org.chorus.event.player.PlayerItemConsumeEvent
 import org.chorus.level.Sound
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.network.protocol.CompletedUsingItemPacket
 
 class ItemMilkBucket : ItemBucket(ItemID.Companion.MILK_BUCKET) {

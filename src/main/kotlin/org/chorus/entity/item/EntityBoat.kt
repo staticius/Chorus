@@ -141,7 +141,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         for (i in addEntity.links.indices) {
             addEntity.links.get(i) = EntityLink(
                 this.getId(),
-                passengers.get(i)!!.getId(),
+                passengers.get(i).getId(),
                 if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
                 false,
                 false
@@ -199,8 +199,8 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             val iterator: MutableIterator<Entity> = ignoreCollision.iterator()
             while (iterator.hasNext()) {
                 val ignored: Entity = iterator.next()
-                if (ignored.isClosed() || !ignored.isAlive() || !ignored.getBoundingBox()!!
-                        .intersectsWith(getBoundingBox()!!.grow(0.5, 0.5, 0.5))
+                if (ignored.isClosed() || !ignored.isAlive() || !ignored.getBoundingBox()
+                        .intersectsWith(getBoundingBox().grow(0.5, 0.5, 0.5))
                 ) {
                     iterator.remove()
                     hasUpdated = true
@@ -222,7 +222,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             ticksInWater += tickDiff
             if (ticksInWater >= 3 * 20) {
                 for (i in passengers.indices.reversed()) {
-                    dismountEntity(passengers.get(i)!!)
+                    dismountEntity(passengers.get(i))
                 }
             }
         }
@@ -285,7 +285,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         }
 
         for (entity: Entity in level!!.getCollidingEntities(
-            boundingBox!!.grow(0.20000000298023224, 0.0, 0.20000000298023224),
+            boundingBox.grow(0.20000000298023224, 0.0, 0.20000000298023224),
             this
         )) {
             if (entity.riding != null || (entity !is EntityLiving) || entity is Player || entity is EntitySwimmable || isPassenger(
@@ -345,15 +345,15 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         var ent: Entity
 
         if (passengers.size == 1) {
-            (passengers.get(0).also { ent = it!! })!!.setSeatPosition(getMountedOffset(ent))
+            (passengers.get(0).also { ent = it }).setSeatPosition(getMountedOffset(ent))
             super.updatePassengerPosition(ent)
 
             if (sendLinks) {
                 broadcastLinkPacket(ent, EntityLink.Type.RIDER)
             }
         } else if (passengers.size == 2) {
-            if ((passengers.get(0).also { ent = it!! }) !is Player) { //swap
-                val passenger2: Entity = passengers.get(1)!!
+            if ((passengers.get(0).also { ent = it }) !is Player) { //swap
+                val passenger2: Entity = passengers.get(1)
 
                 if (passenger2 is Player) {
                     passengers.set(0, passenger2)
@@ -369,7 +369,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
                 broadcastLinkPacket(ent, EntityLink.Type.RIDER)
             }
 
-            (passengers.get(1).also { ent = it!! })!!.setSeatPosition(getMountedOffset(ent).add(PASSENGER_OFFSET))
+            (passengers.get(1).also { ent = it }).setSeatPosition(getMountedOffset(ent).add(PASSENGER_OFFSET))
 
             super.updatePassengerPosition(ent)
 
@@ -388,7 +388,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
     }
 
     fun getWaterLevel(): Double {
-        val maxY: Double = boundingBox!!.minY + getBaseOffset()
+        val maxY: Double = boundingBox.minY + getBaseOffset()
         val consumer: BBConsumer<Double> = object : BBConsumer<Double?> {
             private var diffY: Double = Double.MAX_VALUE
 
@@ -410,7 +410,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             }
         }
 
-        boundingBox!!.forEach(consumer)
+        boundingBox.forEach(consumer)
 
         return consumer.get()
     }
@@ -488,7 +488,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
                 this
             ) && !ignoreCollision.contains(entity)
         ) {
-            if (!entity.boundingBox!!.intersectsWith(boundingBox!!.grow(0.20000000298023224, -0.1, 0.20000000298023224))
+            if (!entity.boundingBox.intersectsWith(boundingBox.grow(0.20000000298023224, -0.1, 0.20000000298023224))
                 || entity is Player && entity.isSpectator()
             ) {
                 return

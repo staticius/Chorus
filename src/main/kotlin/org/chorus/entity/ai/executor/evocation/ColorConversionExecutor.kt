@@ -15,7 +15,7 @@ class ColorConversionExecutor : FangLineExecutor() {
         tick++
         if (tick == CAST_DURATION) {
             for (entity1 in entity.level!!.getNearbyEntities(
-                entity.getBoundingBox()!!.grow(16.0, 16.0, 16.0)
+                entity.getBoundingBox().grow(16.0, 16.0, 16.0)
             )) {
                 if (entity1 is EntitySheep) {
                     if (entity1.getColor() == DyeColor.BLUE.woolData) {

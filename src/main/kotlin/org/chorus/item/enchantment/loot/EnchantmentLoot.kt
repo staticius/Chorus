@@ -1,6 +1,7 @@
 package org.chorus.item.enchantment.loot
 
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
+import org.chorus.item.enchantment.EnchantmentType
 
 
 abstract class EnchantmentLoot protected constructor(id: Int, name: String, rarity: Rarity, type: EnchantmentType) :
@@ -17,6 +18,6 @@ abstract class EnchantmentLoot protected constructor(id: Int, name: String, rari
         get() = 3
 
     public override fun checkCompatibility(enchantment: Enchantment): Boolean {
-        return super.checkCompatibility(enchantment) && enchantment.id != Enchantment.Companion.ID_SILK_TOUCH
+        return super.checkCompatibility(enchantment) && enchantment.id != ID_SILK_TOUCH
     }
 }

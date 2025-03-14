@@ -19,7 +19,7 @@ class Input(
         var count = 0
         for (d in data!!) {
             for (item in d) {
-                if (!item.isNull) {
+                if (!item.isNothing) {
                     count++
                 }
             }

@@ -1,10 +1,10 @@
 package org.chorus.nbt
 
+import com.google.common.primitives.Bytes
+import com.google.common.primitives.Ints
 import org.chorus.nbt.snbt.*
 import org.chorus.nbt.snbt.ast.*
 import org.chorus.nbt.tag.*
-import com.google.common.primitives.Bytes
-import com.google.common.primitives.Ints
 import java.io.*
 import java.util.Map
 
@@ -28,7 +28,7 @@ class SNBTParser private constructor(SNBT: String) {
                 if (child is Token) {
                     val s = child.normalizedText
                     if (isLiteralValue(child)) {
-                        tmp.add(s!!.substring(0, s.length - 1).toByte())
+                        tmp.add(s.substring(0, s.length - 1).toByte())
                     }
                 }
             }
@@ -101,11 +101,11 @@ class SNBTParser private constructor(SNBT: String) {
             val s = token.normalizedText
             return when (token.type) {
                 SNBTConstants.TokenType.FLOAT -> {
-                    FloatTag(s!!.substring(0, s.length - 1).toFloat())
+                    FloatTag(s.substring(0, s.length - 1).toFloat())
                 }
 
                 SNBTConstants.TokenType.DOUBLE -> {
-                    DoubleTag(s!!.substring(0, s.length - 1).toDouble())
+                    DoubleTag(s.substring(0, s.length - 1).toDouble())
                 }
 
                 SNBTConstants.TokenType.BOOLEAN -> {
@@ -113,11 +113,11 @@ class SNBTParser private constructor(SNBT: String) {
                 }
 
                 SNBTConstants.TokenType.BYTE -> {
-                    ByteTag(s!!.substring(0, s.length - 1).toByte().toInt())
+                    ByteTag(s.substring(0, s.length - 1).toByte().toInt())
                 }
 
                 SNBTConstants.TokenType.SHORT -> {
-                    ShortTag(s!!.substring(0, s.length - 1).toShort().toInt())
+                    ShortTag(s.substring(0, s.length - 1).toShort().toInt())
                 }
 
                 SNBTConstants.TokenType.INTEGER -> {
@@ -125,11 +125,11 @@ class SNBTParser private constructor(SNBT: String) {
                 }
 
                 SNBTConstants.TokenType.LONG -> {
-                    LongTag(s!!.substring(0, s.length - 1).toLong())
+                    LongTag(s.substring(0, s.length - 1).toLong())
                 }
 
                 SNBTConstants.TokenType.STRING -> {
-                    StringTag(s!!.substring(1, s.length - 1))
+                    StringTag(s.substring(1, s.length - 1))
                 }
 
                 else -> {

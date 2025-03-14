@@ -8,8 +8,6 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.entity.effect.Effect
-import kotlin.collections.List
-import kotlin.collections.Map
 import kotlin.collections.set
 
 /**

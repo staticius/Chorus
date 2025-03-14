@@ -3,7 +3,7 @@ package org.chorus.item
 class ItemGoldenBoots @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemArmor(ItemID.Companion.GOLDEN_BOOTS, meta, count, "Golden Boots") {
     override val tier: Int
-        get() = ItemArmor.Companion.TIER_GOLD
+        get() = TIER_GOLD
 
     override val isBoots: Boolean
         get() = true

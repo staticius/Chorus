@@ -13,20 +13,20 @@ class EndermanBlockExecutor : IBehaviorExecutor {
             if (entity.getItemInHand().isNull) {
                 val optionalBlock = Arrays.stream(
                     entity.level!!.getCollisionBlocks(
-                        entity.getBoundingBox()!!.grow(3.7, 0.0, 3.7)
+                        entity.getBoundingBox().grow(3.7, 0.0, 3.7)
                     )
                 ).filter { block: Block -> block is Natural && block.canBePickedUp() }.findAny()
                 if (optionalBlock.isPresent) {
                     val block = optionalBlock.get()
                     entity.setItemInHand(block.toItem())
                     entity.setDataProperty(EntityDataTypes.Companion.CARRY_BLOCK_STATE, block)
-                    entity.level!!.setBlock(block.position, Block.get(Block.AIR))
+                    entity.level!!.setBlock(block.position, Block.get(BlockID.AIR))
                 }
             } else {
                 if (entity.getItemInHand().isBlock) {
                     val optionalBlock = Arrays.stream(
                         entity.level!!.getCollisionBlocks(
-                            entity.getBoundingBox()!!.addCoord(0.7, -1.0, 0.7)
+                            entity.getBoundingBox().addCoord(0.7, -1.0, 0.7)
                         )
                     ).filter { block: Block -> block.isSolid && block.up().canBeReplaced() }.findAny()
                     if (optionalBlock.isPresent) {

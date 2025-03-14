@@ -2,7 +2,7 @@ package org.chorus.item
 
 class ItemDiamondHelmet : ItemArmor(ItemID.Companion.DIAMOND_HELMET) {
     override val tier: Int
-        get() = ItemArmor.Companion.TIER_DIAMOND
+        get() = TIER_DIAMOND
 
     override val isHelmet: Boolean
         get() = true

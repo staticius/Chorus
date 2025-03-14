@@ -47,7 +47,6 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
     }
 
 
-
     private val illager: EntityEvocationIllager? = null
     private val start_damage_timer = ThreadLocalRandom.current().nextInt(30, 120)
 
@@ -145,7 +144,7 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
         return true
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         if (itemInHand is ItemTool) {
             tool.setDamage(ThreadLocalRandom.current().nextInt(tool.getMaxDurability()))
             return arrayOf<Item?>(

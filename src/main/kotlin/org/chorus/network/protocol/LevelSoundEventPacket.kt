@@ -1,12 +1,7 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.utils.*
-
-
-
-
-
+import org.chorus.utils.Utils
 
 
 open class LevelSoundEventPacket : DataPacket() {
@@ -55,6 +50,7 @@ open class LevelSoundEventPacket : DataPacket() {
         val SOUND_FLY: Int = Utils.dynamic(3)
         val SOUND_JUMP: Int = Utils.dynamic(4)
         val SOUND_BREAK: Int = Utils.dynamic(5)
+
         @JvmField
         val SOUND_PLACE: Int = Utils.dynamic(6)
         val SOUND_HEAVY_STEP: Int = Utils.dynamic(7)
@@ -112,10 +108,12 @@ open class LevelSoundEventPacket : DataPacket() {
         val SOUND_TWINKLE: Int = Utils.dynamic(59)
         val SOUND_REMEDY: Int = Utils.dynamic(60)
         val SOUND_UNFECT: Int = Utils.dynamic(61)
+
         @JvmField
         val SOUND_LEVELUP: Int = Utils.dynamic(62)
         val SOUND_BOW_HIT: Int = Utils.dynamic(63)
         val SOUND_BULLET_HIT: Int = Utils.dynamic(64)
+
         @JvmField
         val SOUND_EXTINGUISH_FIRE: Int = Utils.dynamic(65)
         val SOUND_ITEM_FIZZ: Int = Utils.dynamic(66)
@@ -125,18 +123,23 @@ open class LevelSoundEventPacket : DataPacket() {
         val SOUND_SHULKERBOX_CLOSED: Int = Utils.dynamic(70)
         val SOUND_ENDERCHEST_OPEN: Int = Utils.dynamic(71)
         val SOUND_ENDERCHEST_CLOSED: Int = Utils.dynamic(72)
+
         @JvmField
         val SOUND_POWER_ON: Int = Utils.dynamic(73)
+
         @JvmField
         val SOUND_POWER_OFF: Int = Utils.dynamic(74)
+
         @JvmField
         val SOUND_ATTACH: Int = Utils.dynamic(75)
+
         @JvmField
         val SOUND_DETACH: Int = Utils.dynamic(76)
         val SOUND_DENY: Int = Utils.dynamic(77)
         val SOUND_TRIPOD: Int = Utils.dynamic(78)
         val SOUND_POP: Int = Utils.dynamic(79)
         val SOUND_DROP_SLOT: Int = Utils.dynamic(80)
+
         @JvmField
         val SOUND_NOTE: Int = Utils.dynamic(81)
         val SOUND_THORNS: Int = Utils.dynamic(82)
@@ -146,6 +149,7 @@ open class LevelSoundEventPacket : DataPacket() {
         val SOUND_WATER: Int = Utils.dynamic(86)
         val SOUND_LAVA_POP: Int = Utils.dynamic(87)
         val SOUND_LAVA: Int = Utils.dynamic(88)
+
         @JvmField
         val SOUND_BURP: Int = Utils.dynamic(89)
         val SOUND_BUCKET_FILL_WATER: Int = Utils.dynamic(90)
@@ -525,6 +529,7 @@ open class LevelSoundEventPacket : DataPacket() {
         val SOUND_BREAK_DECORATED_POD: Int = Utils.dynamic(465)
         val SOUND_SNIFFER_EGG_CRACK: Int = Utils.dynamic(466)
         val SOUND_SNIFFER_EGG_HATCHED: Int = Utils.dynamic(467)
+
         @JvmField
         val SOUND_WAXED_SIGN_INTERACT_FAIL: Int = Utils.dynamic(468)
         val SOUND_RECORD_RELIC: Int = Utils.dynamic(469)

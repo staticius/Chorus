@@ -1,8 +1,8 @@
 package org.chorus.utils.functional
 
-import org.chorus.math.IntIncrementSupplier
-import org.chorus.math.ChorusMath.floorFloat
 import com.google.common.base.Preconditions
+import org.chorus.math.ChorusMath.floorFloat
+import org.chorus.math.IntIncrementSupplier
 
 fun interface BlockPositionConsumer {
     fun accept(x: Int, y: Int, z: Int)

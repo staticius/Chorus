@@ -31,7 +31,7 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState? = Compa
             )
         }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockScaffolding())
     }
 
@@ -191,7 +191,7 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState? = Compa
             super.minY = minY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 
@@ -212,6 +212,6 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState? = Compa
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SCAFFOLDING, CommonBlockProperties.STABILITY, CommonBlockProperties.STABILITY_CHECK)
-            
+
     }
 }

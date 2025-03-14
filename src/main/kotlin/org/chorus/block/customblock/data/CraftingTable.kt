@@ -7,7 +7,7 @@ import java.util.function.Consumer
 
 @JvmRecord
 data class CraftingTable(val tableName: String, val craftingTags: List<String>?) : NBTData {
-    override fun toCompoundTag(): CompoundTag? {
+    override fun toCompoundTag(): CompoundTag {
         val listTag = ListTag<StringTag?>()
         craftingTags?.forEach(Consumer { t: String? ->
             listTag.add(

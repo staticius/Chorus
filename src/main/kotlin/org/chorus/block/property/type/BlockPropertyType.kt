@@ -1,25 +1,19 @@
 package org.chorus.block.property.type
 
-
-/**
- * Allay Project 2023/3/19
- *
- * @author daoge_cmd
- */
 interface BlockPropertyType<DATATYPE> {
-    val name: String?
-    val defaultValue: DATATYPE
-    val validValues: List<DATATYPE>?
+    fun getName(): String
+    fun getDefaultValue(): DATATYPE
+    fun getValidValues(): List<DATATYPE>
     fun getType(): Type
 
     fun createValue(value: DATATYPE): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>, *>
 
     fun tryCreateValue(value: Any?): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>, *>?
 
-    val bitSize: Byte
+    fun getBitSize(): Byte
 
     fun createDefaultValue(): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>, *> {
-        return createValue(defaultValue)
+        return createValue(getDefaultValue())
     }
 
     enum class Type {

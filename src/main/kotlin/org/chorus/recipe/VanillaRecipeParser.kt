@@ -1,5 +1,6 @@
 package org.chorus.recipe
 
+import com.google.gson.reflect.TypeToken
 import org.chorus.entity.effect.PotionType
 import org.chorus.entity.effect.PotionType.Companion.get
 import org.chorus.item.Item
@@ -11,22 +12,10 @@ import org.chorus.recipe.descriptor.ItemTagDescriptor
 import org.chorus.registry.RecipeRegistry
 import org.chorus.registry.Registries
 import org.chorus.utils.JSONUtils
-import com.google.gson.reflect.TypeToken
-
 import java.io.*
 import java.util.function.Consumer
-import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
-import kotlin.collections.dropLastWhile
-import kotlin.collections.forEach
-import kotlin.collections.listOf
 import kotlin.collections.set
-import kotlin.collections.toTypedArray
 import kotlin.math.max
 
 
@@ -165,7 +154,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
     private fun parseAndRegisterFurnaceRecipe(recipeData: Map<String, Any>) {
         val input = get(recipeData["input"].toString())
         val output = get(recipeData["output"].toString())
-        if (input.isNull || output.isNull) {
+        if (input.isNothing || output.isNothing) {
             return
         }
         val tags = tags(recipeData)
@@ -189,7 +178,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
             .dropLastWhile { it.isEmpty() }.toTypedArray()[2].lowercase()
         val output: Item = fromPotion(PotionType.get(outputID))
         val reagent = get(recipeData["reagent"].toString())
-        if (input.isNull || output.isNull || reagent.isNull) {
+        if (input.isNothing || output.isNothing || reagent.isNothing) {
             return
         }
         val tags = tags(recipeData)
@@ -202,7 +191,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
         val input = get(recipeData["input"].toString())
         val output = get(recipeData["output"].toString())
         val reagent = get(recipeData["reagent"].toString())
-        if (input.isNull || output.isNull || reagent.isNull) {
+        if (input.isNothing || output.isNothing || reagent.isNothing) {
             return
         }
         val tags = tags(recipeData)
@@ -217,7 +206,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
         val count = v.getOrDefault("count", 1) as Int
         val data = v.getOrDefault("data", 32767) as Int
         var i = get(item!!)
-        if (i.isNull) {
+        if (i.isNothing) {
             throw AssertionError()
         }
         if (data != 0) {

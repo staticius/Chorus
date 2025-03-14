@@ -24,9 +24,6 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 
-/**
- * @author CreeperFace
- */
 class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityHopper?> {
     override val blockEntityClass: Class<out BlockEntityHopper>
@@ -181,7 +178,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
                 for (i in 0..<inv.size) {
                     val item = inv.getItem(i)
 
-                    if (!item.isNull) {
+                    if (!item.isNothing) {
                         val itemToAdd: Item = item.clone()
                         itemToAdd.count = 1
 
@@ -194,7 +191,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
                             itemToAdd,
                             InventoryMoveItemEvent.Action.SLOT_CHANGE
                         )
-                        instance!!.pluginManager.callEvent(ev)
+                        instance.pluginManager.callEvent(ev)
 
                         if (ev.isCancelled) continue
 
@@ -216,7 +213,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
                     //Will call BlockComposterEmptyEvent
                     val item = blockSide.empty()
 
-                    if (item == null || item.isNull) return false
+                    if (item == null || item.isNothing) return false
 
                     val itemToAdd: Item = item.clone()
                     itemToAdd.count = 1
@@ -241,7 +238,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
 
                 val item = entity.getItem()
 
-                if (item!!.isNull || !hopperInv.canAddItem(item)) continue
+                if (item!!.isNothing || !hopperInv.canAddItem(item)) continue
 
                 val originalCount = item.getCount()
 
@@ -249,7 +246,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.
                     null, hopperInv, hopperHolder,
                     item, InventoryMoveItemEvent.Action.PICKUP
                 )
-                instance!!.pluginManager.callEvent(ev)
+                instance.pluginManager.callEvent(ev)
 
                 if (ev.isCancelled) continue
 

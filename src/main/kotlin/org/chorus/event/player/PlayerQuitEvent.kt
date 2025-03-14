@@ -13,6 +13,7 @@ class PlayerQuitEvent @JvmOverloads constructor(
     PlayerEvent() {
     @JvmField
     var quitMessage: TextContainer? = null
+
     @JvmField
     var autoSave: Boolean = true
     var reason: String? = null

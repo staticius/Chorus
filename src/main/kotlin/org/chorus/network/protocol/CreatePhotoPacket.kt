@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class CreatePhotoPacket : DataPacket() {
     var id: Long = 0
     var photoName: String? = null

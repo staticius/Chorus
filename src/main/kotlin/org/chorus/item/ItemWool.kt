@@ -1,6 +1,7 @@
 package org.chorus.item
 
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
 
 class ItemWool @JvmOverloads constructor(aux: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.WOOL, aux, count) {

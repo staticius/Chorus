@@ -1,6 +1,8 @@
 package org.chorus.entity.item
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityExplosive
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
@@ -8,7 +10,9 @@ import org.chorus.entity.mob.monster.EntityEnderDragon
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.level.*
+import org.chorus.level.Explosion
+import org.chorus.level.GameRule
+import org.chorus.level.Locator
 import org.chorus.level.format.IChunk
 import org.chorus.math.BlockVector3
 import org.chorus.nbt.tag.CompoundTag
@@ -119,7 +123,7 @@ class EntityEnderCrystal(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
     }
 
     fun getBeamTarget(): BlockVector3 {
-        return this.getDataProperty<BlockVector3>(EntityDataTypes.Companion.BLOCK_TARGET_POS!!)
+        return this.getDataProperty<BlockVector3>(EntityDataTypes.Companion.BLOCK_TARGET_POS)
     }
 
     fun setBeamTarget(beamTarget: BlockVector3?) {

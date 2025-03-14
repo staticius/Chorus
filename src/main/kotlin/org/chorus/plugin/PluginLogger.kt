@@ -1,9 +1,9 @@
 package org.chorus.plugin
 
-import org.chorus.utils.LogLevel
-import org.chorus.utils.Logger
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
+import org.chorus.utils.LogLevel
+import org.chorus.utils.Logger
 
 
 class PluginLogger(context: Plugin) : Logger {

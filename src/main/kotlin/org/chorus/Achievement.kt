@@ -1,12 +1,8 @@
 package org.chorus
 
 import org.chorus.config.ServerPropertiesKeys
-import org.chorus.utils.*
+import org.chorus.utils.TextFormat
 
-/**
- * @author CreeperFace
- * @since 9. 11. 2016
- */
 class Achievement(val message: String, vararg requires: String) {
     val requires: Array<String>
 

@@ -298,7 +298,14 @@ class CommandLogger(
      */
     fun outputObjectWhisper(receiver: Player, rawtext: String, vararg params: Any?) {
         if (receiver.level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
-            receiver.sendRawTextMessage(org.chorus.command.utils.RawText.Companion.fromRawText(String.format(rawtext, *params)))
+            receiver.sendRawTextMessage(
+                RawText.fromRawText(
+                    String.format(
+                        rawtext,
+                        *params
+                    )
+                )
+            )
         }
     }
 
@@ -369,7 +376,7 @@ class CommandLogger(
     private fun broadcastMessage(key: String, value: Array<String>, target: CommandSender): TranslationContainer {
         val message = TranslationContainer(TextFormat.clean(key), *value)
         val resultStr =
-            "[" + target.name + ": " + (if (message.text != target.server.baseLang.message.text]) "%" else "") + message.text + "]"
+            "[" + target.name + ": " + (if (message.text != target.server.baseLang.message.text]) "%" else "")+message.text+"]"
         val coloredStr = TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + resultStr
         message.text = coloredStr
         return message

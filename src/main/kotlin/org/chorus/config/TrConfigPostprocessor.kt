@@ -1,13 +1,11 @@
 package org.chorus.config
 
-import org.chorus.Server
+
 import eu.okaeri.configs.postprocessor.ConfigContextManipulator
 import eu.okaeri.configs.postprocessor.ConfigLineFilter
 import eu.okaeri.configs.postprocessor.ConfigLineInfo
 import eu.okaeri.configs.postprocessor.ConfigSectionWalker
-
-
-
+import org.chorus.Server
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.util.*

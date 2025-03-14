@@ -1,14 +1,11 @@
 package org.chorus.utils
 
-import org.chorus.Server
-import org.chorus.plugin.InternalPlugin
-import org.chorus.scheduler.FileWriteTask
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.chorus.Server
+import org.chorus.plugin.InternalPlugin
+import org.chorus.scheduler.FileWriteTask
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
 import java.io.*
@@ -252,7 +249,7 @@ class Config {
         return if (this.isCorrect) rootSection.get(key, defaultValue) else defaultValue
     }
 
-    fun getSection(key: String?): ConfigSection? {
+    fun getSection(key: String?): ConfigSection {
         return if (this.isCorrect) rootSection.getSection(key) else ConfigSection()
     }
 
@@ -264,7 +261,7 @@ class Config {
         return if (this.isCorrect) rootSection.getSections(key) else ConfigSection()
     }
 
-    val sections: ConfigSection?
+    val sections: ConfigSection
         get() = if (this.isCorrect) rootSection.sections else ConfigSection()
 
     fun getInt(key: String?): Int {
@@ -307,7 +304,7 @@ class Config {
         return this.getString(key, "")
     }
 
-    fun getString(key: String?, defaultValue: String): String? {
+    fun getString(key: String?, defaultValue: String): String {
         return if (this.isCorrect) rootSection.getString(key, defaultValue) else defaultValue
     }
 

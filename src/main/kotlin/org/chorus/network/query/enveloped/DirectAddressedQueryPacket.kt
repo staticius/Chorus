@@ -1,7 +1,7 @@
 package org.chorus.network.query.enveloped
 
-import org.chorus.network.query.QueryPacket
 import io.netty.channel.DefaultAddressedEnvelope
+import org.chorus.network.query.QueryPacket
 import java.net.InetSocketAddress
 
 

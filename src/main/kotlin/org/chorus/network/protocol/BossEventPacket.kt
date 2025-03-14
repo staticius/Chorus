@@ -9,21 +9,22 @@ import org.chorus.network.connection.util.HandleByteBuf
  */
 
 
-
-
-
 class BossEventPacket : DataPacket() {
     @JvmField
     var bossEid: Long = 0
+
     @JvmField
     var type: Int = 0
     var playerEid: Long = 0
+
     @JvmField
     var healthPercent: Float = 0f
+
     @JvmField
     var title: String = ""
     var filteredName: String = ""
     var darkenSky: Short = 0
+
     @JvmField
     var color: Int = 0
     var overlay: Int = 0

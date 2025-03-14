@@ -29,7 +29,7 @@ class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState? = Compan
     override val resistance: Double
         get() = 25.0
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         return Item.EMPTY_ARRAY
     }
 

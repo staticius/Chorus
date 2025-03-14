@@ -12,6 +12,6 @@ class BlockSunflower : BlockDoublePlant {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SUNFLOWER, CommonBlockProperties.UPPER_BLOCK_BIT)
-            
+
     }
 }

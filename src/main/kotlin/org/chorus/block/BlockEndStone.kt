@@ -2,10 +2,6 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-/**
- * @author xtypr
- * @since 2015/12/1
- */
 open class BlockEndStone : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 

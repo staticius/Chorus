@@ -3,7 +3,6 @@ package org.chorus.recipe.descriptor
 import org.chorus.item.Item
 
 
-
 class ComplexAliasDescriptor : ItemDescriptor {
     var name: String? = null
 

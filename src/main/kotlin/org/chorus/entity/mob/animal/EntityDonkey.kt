@@ -90,7 +90,7 @@ class EntityDonkey(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, nbt), 
         super.initEntity()
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.LEATHER))
     }
 

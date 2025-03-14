@@ -1,7 +1,7 @@
 package org.chorus.block.customblock.data
 
-import org.chorus.nbt.tag.CompoundTag
 import com.google.common.base.Preconditions
+import org.chorus.nbt.tag.CompoundTag
 
 class Geometry(name: String) : NBTData {
     private val geometryName: String

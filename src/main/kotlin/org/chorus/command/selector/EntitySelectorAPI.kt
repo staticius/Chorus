@@ -1,5 +1,8 @@
 package org.chorus.command.selector
 
+import com.github.benmanes.caffeine.cache.Cache
+import com.google.common.collect.Lists
+import com.google.common.collect.Maps
 import org.chorus.Player
 import org.chorus.command.CommandSender
 import org.chorus.command.exceptions.SelectorSyntaxException
@@ -9,23 +12,13 @@ import org.chorus.command.selector.args.impl.Tag
 import org.chorus.command.selector.args.impl.Type
 import org.chorus.entity.Entity
 import org.chorus.utils.StringUtils
-import com.github.benmanes.caffeine.cache.Cache
-import com.google.common.collect.Lists
-import com.google.common.collect.Maps
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 import java.util.regex.Pattern
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.set
-import kotlin.collections.toTypedArray
 
 /**
  * 目标选择器API

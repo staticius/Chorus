@@ -1,10 +1,9 @@
 package org.chorus.resourcepacks.loader
 
+import com.google.common.io.Files
 import org.chorus.Server
 import org.chorus.resourcepacks.ResourcePack
 import org.chorus.resourcepacks.ZippedResourcePack
-import com.google.common.io.Files
-
 import java.io.File
 
 

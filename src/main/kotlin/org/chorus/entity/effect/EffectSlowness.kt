@@ -1,6 +1,7 @@
 package org.chorus.entity.effect
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityLiving
 import java.awt.Color
 
 class EffectSlowness :

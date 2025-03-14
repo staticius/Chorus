@@ -1,7 +1,8 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemJungleSign
 
 class BlockJungleWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockWallSign(blockState) {
@@ -16,7 +17,7 @@ class BlockJungleWallSign @JvmOverloads constructor(blockState: BlockState? = Co
     override val name: String
         get() = "Jungle Wall Sign"
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemJungleSign()
     }
 

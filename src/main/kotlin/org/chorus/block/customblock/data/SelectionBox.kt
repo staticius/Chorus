@@ -10,7 +10,7 @@ data class SelectionBox(
     val originX: Double, val originY: Double, val originZ: Double, val sizeX: Double, val sizeY: Double,
     val sizeZ: Double
 ) : NBTData {
-    override fun toCompoundTag(): CompoundTag? {
+    override fun toCompoundTag(): CompoundTag {
         return CompoundTag()
             .putBoolean("enabled", true)
             .putList(

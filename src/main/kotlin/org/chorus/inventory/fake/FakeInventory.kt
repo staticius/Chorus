@@ -23,7 +23,7 @@ class FakeInventory @JvmOverloads constructor(
 ) :
     BaseInventory(null, fakeInventoryType.inventoryType, fakeInventoryType.size), InputInventory {
     private val handlers: MutableMap<Int, ItemHandler> = HashMap()
-    private val fakeBlock: FakeBlock? = fakeInventoryType.fakeBlock
+    private val fakeBlock: FakeBlock = fakeInventoryType.fakeBlock
     private var defaultItemHandler: ItemHandler
 
     init {
@@ -34,20 +34,20 @@ class FakeInventory @JvmOverloads constructor(
             FakeInventoryType.CHEST, FakeInventoryType.DOUBLE_CHEST, FakeInventoryType.HOPPER, FakeInventoryType.DISPENSER, FakeInventoryType.DROPPER, FakeInventoryType.ENDER_CHEST -> {
                 val map = super.slotTypeMap()
                 for (i in 0..<getSize()) {
-                    map!![i] = ContainerSlotType.LEVEL_ENTITY
+                    map[i] = ContainerSlotType.LEVEL_ENTITY
                 }
             }
 
             FakeInventoryType.FURNACE -> {
                 val map = super.slotTypeMap()
-                map!![0] = ContainerSlotType.FURNACE_INGREDIENT
+                map[0] = ContainerSlotType.FURNACE_INGREDIENT
                 map[1] = ContainerSlotType.FURNACE_FUEL
                 map[2] = ContainerSlotType.FURNACE_RESULT
             }
 
             FakeInventoryType.BREWING_STAND -> {
                 val map = super.slotTypeMap()
-                map!![0] = ContainerSlotType.BREWING_INPUT
+                map[0] = ContainerSlotType.BREWING_INPUT
                 map[1] = ContainerSlotType.BREWING_RESULT
                 map[2] = ContainerSlotType.BREWING_RESULT
                 map[3] = ContainerSlotType.BREWING_RESULT
@@ -57,18 +57,18 @@ class FakeInventory @JvmOverloads constructor(
             FakeInventoryType.SHULKER_BOX -> {
                 val map = super.slotTypeMap()
                 for (i in 0..<getSize()) {
-                    map!![i] = ContainerSlotType.SHULKER_BOX
+                    map[i] = ContainerSlotType.SHULKER_BOX
                 }
             }
 
             FakeInventoryType.WORKBENCH -> {
                 val map = super.networkSlotMap()
                 for (i in 0..<getSize()) {
-                    map!![i] = 32 + i
+                    map[i] = 32 + i
                 }
                 val map2 = super.slotTypeMap()
                 for (i in 0..<getSize()) {
-                    map2!![i] = ContainerSlotType.CRAFTING_INPUT
+                    map2[i] = ContainerSlotType.CRAFTING_INPUT
                 }
             }
         }

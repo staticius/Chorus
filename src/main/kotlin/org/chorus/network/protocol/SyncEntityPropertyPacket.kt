@@ -1,19 +1,12 @@
 package org.chorus.network.protocol
 
+
+import io.netty.buffer.ByteBufInputStream
 import org.chorus.nbt.NBTIO.read
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
-import io.netty.buffer.ByteBufInputStream
-
-
 import java.nio.ByteOrder
-
-
-
-
-
-
 
 
 class SyncEntityPropertyPacket : DataPacket() {
@@ -31,7 +24,7 @@ class SyncEntityPropertyPacket : DataPacket() {
 
     override fun encode(byteBuf: HandleByteBuf) {
         try {
-            byteBuf.writeBytes(write(data!!, ByteOrder.BIG_ENDIAN, true)!!)
+            byteBuf.writeBytes(write(data!!, ByteOrder.BIG_ENDIAN, true))
         } catch (e: Exception) {
             SyncEntityPropertyPacket.log.error("", e)
         }

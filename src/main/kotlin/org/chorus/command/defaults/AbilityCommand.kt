@@ -7,10 +7,9 @@ import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
-import org.chorus.command.tree.node.*
+import org.chorus.command.tree.node.BooleanNode
+import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
-import kotlin.collections.List
-import kotlin.collections.Map
 import kotlin.collections.set
 
 class AbilityCommand(name: String) : VanillaCommand(name, "commands.ability.description", "%commands.ability.usage") {

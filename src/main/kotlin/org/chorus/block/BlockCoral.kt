@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.event.block.BlockFadeEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 import org.chorus.math.BlockFace

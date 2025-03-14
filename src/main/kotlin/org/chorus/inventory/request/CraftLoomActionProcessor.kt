@@ -30,7 +30,7 @@ class CraftLoomActionProcessor : ItemStackRequestActionProcessor<CraftLoomAction
         }
         val banner: Item = loomInventory.getBanner()
         val dye: Item = loomInventory.getDye()
-        if ((banner == null || banner.isNull) || (dye == null || dye.isNull)) {
+        if ((banner == null || banner.isNothing) || (dye == null || dye.isNothing)) {
             return context.error()
         }
 

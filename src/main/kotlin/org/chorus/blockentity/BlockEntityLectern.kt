@@ -4,6 +4,7 @@ import org.chorus.block.BlockAir
 import org.chorus.block.BlockID
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
@@ -34,11 +35,11 @@ class BlockEntityLectern(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
 
     override val spawnCompound: CompoundTag
         get() {
-            val c = super.getSpawnCompound()
-                .putBoolean("isMovable", this.movable)
+            val c = super.spawnCompound
+                .putBoolean("isMovable", this.isMovable)
 
             val book = book
-            if (!book.isNull) {
+            if (!book.isNothing) {
                 c.putCompound("book", NBTIO.putItemHelper(book))
                 c.putBoolean("hasBook", true)
                 c.putInt("page", rawPage)
@@ -70,7 +71,7 @@ class BlockEntityLectern(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
             }
         }
         set(item) {
-            if (item.id == Item.WRITTEN_BOOK || item.id == Item.WRITABLE_BOOK) {
+            if (item.id == ItemID.WRITTEN_BOOK || item.id == ItemID.WRITABLE_BOOK) {
                 namedTag.putCompound("book", NBTIO.putItemHelper(item))
             } else {
                 namedTag.remove("book")
@@ -101,10 +102,10 @@ class BlockEntityLectern(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
 
     private fun updateTotalPages() {
         val book = book
-        totalPages = if (book.isNull || !book.hasCompoundTag()) {
+        totalPages = if (book.isNothing || !book.hasCompoundTag()) {
             0
         } else {
-            book.namedTag!!.getList("pages", CompoundTag::class.java).size()
+            book.namedTag!!.getList("pages", CompoundTag::class.java)?.size() ?: 0
         }
         RedstoneComponent.updateAroundRedstone(this)
     }

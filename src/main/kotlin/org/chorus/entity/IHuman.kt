@@ -301,7 +301,7 @@ interface IHuman : InventoryHolder {
                 skinTag.putList("PieceTintColors", tintsTag)
             }
 
-            if (!skin.getPlayFabId()!!.isEmpty()) {
+            if (skin.getPlayFabId()!!.isNotEmpty()) {
                 skinTag.putString("PlayFabId", skin.getPlayFabId()!!)
             }
 
@@ -309,13 +309,13 @@ interface IHuman : InventoryHolder {
         }
     }
 
-    fun setSkin(skin: Skin?)
+    fun setSkin(skin: Skin)
 
-    fun getSkin(): Skin?
+    fun getSkin(): Skin
 
-    fun getUniqueId(): UUID?
+    fun getUniqueId(): UUID
 
-    fun setUniqueId(uuid: UUID?)
+    fun setUniqueId(uuid: UUID)
 
     fun setInventories(inventory: Array<Inventory>)
 

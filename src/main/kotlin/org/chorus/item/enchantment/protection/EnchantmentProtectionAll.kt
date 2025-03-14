@@ -6,7 +6,7 @@ import org.chorus.item.enchantment.*
 
 
 class EnchantmentProtectionAll :
-    EnchantmentProtection(Enchantment.Companion.ID_PROTECTION_ALL, "all", Rarity.COMMON, TYPE.ALL) {
+    EnchantmentProtection(ID_PROTECTION_ALL, "all", Rarity.COMMON, TYPE.ALL) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 1 + (level - 1) * 11
     }

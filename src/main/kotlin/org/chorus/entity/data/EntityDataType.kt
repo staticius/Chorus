@@ -2,25 +2,25 @@ package org.chorus.entity.data
 
 import java.util.function.Function
 
-open class EntityDataType<T> {
+open class EntityDataType<out T : Any> {
     private val name: String
-    private val type: Class<*>
+    private val type: Class<out T>
     private val value: Int
-    private val transformer: Function<T?, *>
+    private val transformer: Function<out T, *>
     private val defaultValue: T
 
-    constructor(type: T, name: String, value: Int) {
+    constructor(defaultValue: T, name: String, value: Int) {
         this.name = name
-        this.type = type.javaClass
-        this.defaultValue = type
+        this.type = defaultValue::class.java
+        this.defaultValue = defaultValue
         this.value = value
         this.transformer = Function.identity()
     }
 
-    constructor(type: T, name: String, value: Int, transformer: Function<T?, *>) {
+    constructor(defaultValue: T, name: String, value: Int, transformer: Function<T, *>) {
         this.name = name
-        this.type = type.javaClass
-        this.defaultValue = type
+        this.type = defaultValue::class.java
+        this.defaultValue = defaultValue
         this.value = value
         this.transformer = transformer
     }
@@ -33,7 +33,7 @@ open class EntityDataType<T> {
         return type.getTypeName()
     }
 
-    fun getType(): Class<*> {
+    fun getType(): Class<out T> {
         return type
     }
 
@@ -41,8 +41,8 @@ open class EntityDataType<T> {
         return defaultValue
     }
 
-    fun getTransformer(): Function<Any?, Any> {
-        return transformer as Function<Any?, Any>
+    fun getTransformer(): Function<out T, *> {
+        return transformer
     }
 
     fun getValue(): Int {

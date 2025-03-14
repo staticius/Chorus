@@ -1,10 +1,9 @@
 package org.chorus.network.connection.netty.codec
 
-import org.chorus.network.connection.netty.BedrockBatchWrapper
 import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageCodec
-
+import org.chorus.network.connection.netty.BedrockBatchWrapper
 import org.cloudburstmc.netty.channel.raknet.RakReliability
 import org.cloudburstmc.netty.channel.raknet.packet.RakMessage
 

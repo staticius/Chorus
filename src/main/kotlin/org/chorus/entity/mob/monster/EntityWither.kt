@@ -200,7 +200,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     }
 
     fun isInvulnerable(): Boolean {
-        return getDataProperty<Int>(EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS!!) > 0
+        return getDataProperty<Int>(EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS) > 0
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
@@ -235,7 +235,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
         addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
         addEntity.attributes = arrayOf<Attribute>(
-            Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)!!.setMaxValue(getMaxDiffHealth().toFloat())
+            Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH).setMaxValue(getMaxDiffHealth().toFloat())
                 .setValue(getMaxDiffHealth().toFloat())
         )
         return addEntity
@@ -267,7 +267,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
             if (isInvulnerable()) {
                 this.setDataProperty(
                     EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS, getDataProperty<Int>(
-                        EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS!!
+                        EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS
                     ) - 1
                 )
             }
@@ -314,7 +314,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
         return true
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.NETHER_STAR))
     }
 
@@ -324,7 +324,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
 
     override fun move(dx: Double, dy: Double, dz: Double): Boolean {
         if ((age % 40 == 0 || getDataFlag(EntityFlag.CAN_DASH) && age > 200)) {
-            val blocks = level!!.getCollisionBlocks(getBoundingBox()!!.grow(1.0, 1.0, 1.0))
+            val blocks = level!!.getCollisionBlocks(getBoundingBox().grow(1.0, 1.0, 1.0))
             if (blocks.size > 0) {
                 if (blockBreakSound != null) level!!.addSound(this.position, blockBreakSound)
                 for (collisionBlock in blocks) {
@@ -358,9 +358,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                 for (face in Set.of<BlockFace>(BlockFace.UP, BlockFace.NORTH, BlockFace.EAST)) {
                     val skulls = BooleanArray(5)
                     ints@ for (i in -2..2) {
-                        if (block.getSide(face, i) is BlockWitherSkeletonSkull) {
-                            skulls[i + 2] = true
-                        } else skulls[i + 2] = false
+                        skulls[i + 2] = block.getSide(face, i) is BlockWitherSkeletonSkull
                     }
                     var inrow = 0
                     for (i in skulls.indices) {

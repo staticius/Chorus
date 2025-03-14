@@ -7,7 +7,6 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.UUIDValidator
 
 
-
 class EmoteProcessor : DataPacketProcessor<EmotePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: EmotePacket) {
         if (!playerHandle.player.spawned) {

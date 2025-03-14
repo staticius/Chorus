@@ -18,14 +18,11 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-/**
- * @author Snake1999
- * @since 2016/1/11
- */
 abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(blockState),
     RedstoneComponent {
     @JvmField
     protected var onPitch: Float = 0f
+
     @JvmField
     protected var offPitch: Float = 0f
 
@@ -208,7 +205,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(b
 
     protected fun playOnSound() {
         level.addLevelSoundEvent(
-            position.add(0.5, 0.1, 0.5)!!,
+            position.add(0.5, 0.1, 0.5),
             LevelSoundEventPacket.SOUND_POWER_ON,
             blockState!!.blockStateHash()
         )
@@ -216,7 +213,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(b
 
     protected fun playOffSound() {
         level.addLevelSoundEvent(
-            position.add(0.5, 0.1, 0.5)!!,
+            position.add(0.5, 0.1, 0.5),
             LevelSoundEventPacket.SOUND_POWER_OFF,
             blockState!!.blockStateHash()
         )

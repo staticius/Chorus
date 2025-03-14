@@ -36,7 +36,7 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
             return false
         }
 
-        if (passengers.size >= 1 || getWaterLevel() < -EntityBoat.Companion.SINKING_DEPTH) {
+        if (passengers.size >= 1 || getWaterLevel() < -SINKING_DEPTH) {
             return false
         }
 
@@ -65,7 +65,7 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
         for (i in addEntity.links.indices) {
             addEntity.links.get(i) = EntityLink(
                 this.getId(),
-                passengers.get(i)!!.getId(),
+                passengers.get(i).getId(),
                 if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
                 false,
                 false

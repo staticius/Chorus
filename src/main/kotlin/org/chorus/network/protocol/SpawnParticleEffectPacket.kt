@@ -6,10 +6,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import java.util.*
 
 
-
-
-
-
 class SpawnParticleEffectPacket : DataPacket() {
     var dimensionId: Int = 0
     var uniqueEntityId: Long = -1

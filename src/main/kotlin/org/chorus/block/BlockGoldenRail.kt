@@ -2,10 +2,9 @@ package org.chorus.block
 
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.level.Level
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 import org.chorus.utils.OptionalBoolean
 import org.chorus.utils.Rail
 import org.chorus.utils.Rail.Orientation.Companion.byMetadata
@@ -200,7 +199,11 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.GOLDEN_RAIL, CommonBlockProperties.RAIL_DATA_BIT, CommonBlockProperties.RAIL_DIRECTION_6)
+            BlockProperties(
+                BlockID.GOLDEN_RAIL,
+                CommonBlockProperties.RAIL_DATA_BIT,
+                CommonBlockProperties.RAIL_DIRECTION_6
+            )
 
     }
 }

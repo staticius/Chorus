@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class RemoveEntityPacket : DataPacket() {
     @JvmField
     var eid: Long = 0

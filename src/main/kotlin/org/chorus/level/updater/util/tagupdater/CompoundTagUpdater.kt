@@ -3,11 +3,6 @@ package org.chorus.level.updater.util.tagupdater
 import java.util.function.Consumer
 import java.util.function.Predicate
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {

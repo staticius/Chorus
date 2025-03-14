@@ -6,32 +6,35 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.EntityLink
 import org.chorus.network.protocol.types.PropertySyncData
 import org.chorus.registry.Registries
-import org.chorus.utils.*
-
-
-
-
-
+import org.chorus.utils.Binary
 
 
 class AddEntityPacket : DataPacket() {
     @JvmField
     var entityUniqueId: Long = 0
+
     @JvmField
     var entityRuntimeId: Long = 0
+
     @JvmField
     var type: Int = 0
     var id: String? = null
+
     @JvmField
     var x: Float = 0f
+
     @JvmField
     var y: Float = 0f
+
     @JvmField
     var z: Float = 0f
+
     @JvmField
     var speedX: Float = 0f
+
     @JvmField
     var speedY: Float = 0f
+
     @JvmField
     var speedZ: Float = 0f
     var yaw: Float = 0f
@@ -41,6 +44,7 @@ class AddEntityPacket : DataPacket() {
     //todo: check what's the usage of this
     var bodyYaw: Float = -1f
     var attributes: Array<Attribute?> = Attribute.EMPTY_ARRAY
+
     @JvmField
     var entityData: EntityDataMap = EntityDataMap()
     var syncedProperties: PropertySyncData = PropertySyncData(intArrayOf(), floatArrayOf())

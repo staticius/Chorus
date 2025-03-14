@@ -58,13 +58,13 @@ class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState? = Comp
             .putInt("z", position.z.toInt())
 
         if (item.hasCustomName()) {
-            nbt!!.putString("CustomName", item.customName)
+            nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
             val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
-                nbt!!.put(key, value)
+                nbt.put(key, value)
             }
         }
 

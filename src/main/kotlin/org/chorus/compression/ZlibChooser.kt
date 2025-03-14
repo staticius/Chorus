@@ -1,10 +1,9 @@
 package org.chorus.compression
 
+import cn.powernukkitx.libdeflate.Libdeflate
 import org.chorus.Server
 import org.chorus.lang.BaseLang
 import org.chorus.utils.*
-import cn.powernukkitx.libdeflate.Libdeflate
-
 
 
 object ZlibChooser {

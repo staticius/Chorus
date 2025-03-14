@@ -8,6 +8,7 @@ class PlayerFoodLevelChangeEvent(player: Player?, foodLevel: Int, foodSaturation
     PlayerEvent(), Cancellable {
     @JvmField
     var foodLevel: Int
+
     @JvmField
     var foodSaturationLevel: Float
 

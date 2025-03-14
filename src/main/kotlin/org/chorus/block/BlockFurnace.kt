@@ -2,9 +2,6 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 class BlockFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockLitFurnace(blockstate) {
     override val name: String
@@ -18,7 +15,8 @@ class BlockFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
 
     }
 }

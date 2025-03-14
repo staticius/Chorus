@@ -1,13 +1,12 @@
 package org.chorus.dialog.window
 
+import com.google.common.reflect.TypeToken
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.Player
 import org.chorus.dialog.element.ElementDialogButton
 import org.chorus.dialog.handler.FormDialogHandler
 import org.chorus.entity.Entity
 import org.chorus.utils.JSONUtils
-import com.google.common.reflect.TypeToken
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader

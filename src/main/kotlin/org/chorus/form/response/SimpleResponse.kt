@@ -3,10 +3,6 @@ package org.chorus.form.response
 import org.chorus.form.element.simple.ElementButton
 
 
-
-
-
-
 /**
  * The response of a [org.chorus.form.window.ModalForm]
  */

@@ -15,7 +15,7 @@ class EntityCheckEvaluator(private val memoryType: MemoryType<out Entity?>?) :
             if (e is Player) {
                 return (e.spawned && e.isOnline && (e.isSurvival || e.isAdventure) && e.isAlive())
             }
-            return !e!!.isClosed
+            return !e.isClosed
         }
     }
 }

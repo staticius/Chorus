@@ -38,7 +38,7 @@ class EntityArrow @JvmOverloads constructor(
         return 0.5f
     }
 
-    public override fun getGravity(): Float {
+    override fun getGravity(): Float {
         return 0.05f
     }
 

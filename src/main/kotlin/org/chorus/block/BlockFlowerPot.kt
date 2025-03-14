@@ -12,9 +12,6 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author Nukkit Project Team
- */
 class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
     constructor() : super(Companion.properties.defaultState)
 
@@ -80,7 +77,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
         }
 
     fun setFlower(item: Item?): Boolean {
-        if (item == null || item.isNull) {
+        if (item == null || item.isNothing) {
             removeFlower()
             return true
         }
@@ -129,7 +126,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
                 return false
             }
 
-            if (!item.isNull) return false
+            if (!item.isNothing) return false
 
             if (hasFlower()) {
                 val flower = flower
@@ -139,7 +136,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
             }
         }
 
-        if (item.isNull) {
+        if (item.isNothing) {
             return false
         }
 
@@ -158,7 +155,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item?> {
         var dropInside = false
         var insideID: String? = "minecraft:air"
         var insideMeta = 0
@@ -180,7 +177,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
         }
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 
@@ -249,7 +246,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
                 val block = this as Block
                 val tag = block.blockState!!.blockStateTag.copy()
                 val item = block.toItem()
-                return tag.putString("itemId", item!!.id)
+                return tag.putString("itemId", item.id)
                     .putInt("itemMeta", item.damage) //only exist in PNX
             }
 

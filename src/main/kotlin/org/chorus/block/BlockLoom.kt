@@ -6,7 +6,9 @@ import org.chorus.block.property.type.IntPropertyType
 import org.chorus.inventory.BlockInventoryHolder
 import org.chorus.inventory.Inventory
 import org.chorus.inventory.LoomInventory
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.horizontals
 import org.chorus.utils.Faceable
@@ -20,7 +22,7 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     override val name: String
         get() = "Loom"
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockLoom())
     }
 
@@ -47,7 +49,7 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     ): Boolean {
         if (player != null) {
             val itemInHand = player.getInventory().itemInHand
-            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
                 return false
             }
             player.addWindow(inventory!!)

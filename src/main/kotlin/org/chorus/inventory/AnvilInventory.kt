@@ -1,17 +1,16 @@
 package org.chorus.inventory
 
+import com.google.common.collect.BiMap
 import org.chorus.Player
 import org.chorus.block.BlockAnvil
 import org.chorus.item.Item
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import com.google.common.collect.BiMap
 
-
-class AnvilInventory(anvil: BlockAnvil?) //2 INPUT, 1 OUTPUT
+class AnvilInventory(anvil: BlockAnvil) //2 INPUT, 1 OUTPUT
     : ContainerInventory(anvil, InventoryType.ANVIL, 3), CraftTypeInventory, SoleInventory {
-    override fun networkSlotMap(): BiMap<Int, Int>? {
+    override fun networkSlotMap(): BiMap<Int, Int> {
         val map = super.networkSlotMap()
-        map!![0] = 1 //INPUT
+        map[0] = 1 //INPUT
         map[1] = 2 //MATERIAL
         map[2] = 3 //OUTPUT
         return map
@@ -19,7 +18,7 @@ class AnvilInventory(anvil: BlockAnvil?) //2 INPUT, 1 OUTPUT
 
     override fun slotTypeMap(): MutableMap<Int?, ContainerSlotType?> {
         val map = super.slotTypeMap()
-        map!![0] = ContainerSlotType.ANVIL_INPUT
+        map[0] = ContainerSlotType.ANVIL_INPUT
         map[1] = ContainerSlotType.ANVIL_MATERIAL
         map[2] = ContainerSlotType.ANVIL_RESULT
         return map
@@ -28,14 +27,14 @@ class AnvilInventory(anvil: BlockAnvil?) //2 INPUT, 1 OUTPUT
     override fun onClose(who: Player) {
         super.onClose(who)
 
-        var drops = arrayOf<Item?>(
+        var drops = arrayOf(
             inputSlot,
             materialSlot
         )
-        drops = who.inventory.addItem(*drops)
+        drops = who.inventory!!.addItem(*drops)
         for (drop in drops) {
             if (!who.dropItem(drop)) {
-                getHolder().level.dropItem(getHolder().vector3.add(0.5, 0.5, 0.5), drop)
+                holder.level!!.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
             }
         }
 
@@ -77,7 +76,7 @@ class AnvilInventory(anvil: BlockAnvil?) //2 INPUT, 1 OUTPUT
     }
 
     override fun sendContents(vararg players: Player) {
-        for (slot in 0..<getSize() - 1) {
+        for (slot in 0..< (size- 1)) {
             sendSlot(slot, *players)
         }
     }

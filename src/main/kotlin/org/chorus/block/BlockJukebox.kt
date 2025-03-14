@@ -6,10 +6,6 @@ import org.chorus.blockentity.BlockEntityJukebox
 import org.chorus.item.*
 import org.chorus.math.BlockFace
 
-/**
- * @author CreeperFace
- * @since 7.8.2017
- */
 class BlockJukebox @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockstate), BlockEntityHolder<BlockEntityJukebox?> {
     override val name: String
@@ -25,7 +21,7 @@ class BlockJukebox @JvmOverloads constructor(blockstate: BlockState? = Companion
         return true
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -41,12 +37,12 @@ class BlockJukebox @JvmOverloads constructor(blockstate: BlockState? = Companion
         fz: Float
     ): Boolean {
         val jukebox = getOrCreateBlockEntity()!!
-        if (!jukebox.getRecordItem()!!.isNull) {
+        if (!jukebox.getRecordItem()!!.isNothing) {
             jukebox.dropItem()
             return true
         }
 
-        if (!item.isNull && item is ItemMusicDisc) {
+        if (!item.isNothing && item is ItemMusicDisc) {
             val record: Item = item.clone()
             record.count = 1
             item.count--

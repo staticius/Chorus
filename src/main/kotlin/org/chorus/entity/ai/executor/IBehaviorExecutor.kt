@@ -24,7 +24,7 @@ interface IBehaviorExecutor {
      * @param entity 执行目标实体
      * @return boolean
      */
-    fun execute(entity: EntityMob?): Boolean
+    fun execute(entity: EntityMob): Boolean
 
     /**
      * 行为非正常中断时(例如被更高级行为覆盖)调用
@@ -34,8 +34,7 @@ interface IBehaviorExecutor {
      *
      * @param entity 目标实体
      */
-    fun onInterrupt(entity: EntityMob?) {
-    }
+    fun onInterrupt(entity: EntityMob) {}
 
     /**
      * 行为评估成功后，进入激活状态前调用
@@ -45,8 +44,7 @@ interface IBehaviorExecutor {
      *
      * @param entity 目标实体
      */
-    fun onStart(entity: EntityMob) {
-    }
+    fun onStart(entity: EntityMob) {}
 
     /**
      * 行为正常结束时(execute()方法返回false)调用
@@ -56,6 +54,5 @@ interface IBehaviorExecutor {
      *
      * @param entity 目标实体
      */
-    fun onStop(entity: EntityMob?) {
-    }
+    fun onStop(entity: EntityMob) {}
 }

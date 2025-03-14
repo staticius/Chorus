@@ -1,11 +1,11 @@
 package org.chorus.command.selector.args
 
+import com.github.benmanes.caffeine.cache.Cache
+import com.google.common.collect.Sets
 import org.chorus.command.CommandSender
 import org.chorus.command.exceptions.SelectorSyntaxException
 import org.chorus.entity.Entity
 import org.chorus.level.Transform
-import com.github.benmanes.caffeine.cache.Cache
-import com.google.common.collect.Sets
 import java.util.concurrent.TimeUnit
 import java.util.function.Function
 

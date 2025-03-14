@@ -86,7 +86,7 @@ open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState?
             }
         }
 
-        val nbt: CompoundTag? = getDefaultCompound(this.position, BlockEntity.BANNER)
+        val nbt: CompoundTag = getDefaultCompound(this.position, BlockEntity.BANNER)
             .putInt("Base", item.damage and 0xf)
 
         val type = item.getNamedTagEntry("Type")
@@ -102,7 +102,12 @@ open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState?
             createBlockEntity(nbt)
             return true
         } catch (e: Exception) {
-            BlockStandingBanner.log.error("Failed to create the block entity {} at {}", getBlockEntityType(), locator, e)
+            BlockStandingBanner.log.error(
+                "Failed to create the block entity {} at {}",
+                getBlockEntityType(),
+                locator,
+                e
+            )
             level.setBlock(layer0!!.position, 0, layer0, true)
             level.setBlock(layer0.position, 1, layer1!!, true)
             return false

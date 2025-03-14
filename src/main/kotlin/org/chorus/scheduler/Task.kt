@@ -1,7 +1,6 @@
 package org.chorus.scheduler
 
 
-
 /**
  * 表达一个任务的类。<br></br>A class that describes a task.
  *

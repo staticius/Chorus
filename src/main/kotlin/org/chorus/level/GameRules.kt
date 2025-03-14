@@ -1,13 +1,12 @@
 package org.chorus.level
 
+import com.google.common.base.Preconditions
+import com.google.common.collect.ImmutableMap
 import org.chorus.entity.EntityHuman.getName
 import org.chorus.level.GameRule
 import org.chorus.nbt.tag.*
-import com.google.common.base.Preconditions
-import com.google.common.collect.ImmutableMap
 import java.util.*
 import javax.annotation.Nonnull
-import kotlin.collections.Map
 import kotlin.collections.set
 
 class GameRules private constructor() {

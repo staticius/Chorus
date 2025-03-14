@@ -41,7 +41,7 @@ class StonecutterInventory(blockStonecutterBlock: BlockStonecutterBlock?) :
 
     override fun slotTypeMap(): MutableMap<Int?, ContainerSlotType?> {
         val map = super.slotTypeMap()
-        map!![3] = ContainerSlotType.STONECUTTER_INPUT
+        map[3] = ContainerSlotType.STONECUTTER_INPUT
         map[4] = ContainerSlotType.STONECUTTER_RESULT
         return map
     }

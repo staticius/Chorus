@@ -1,7 +1,8 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemAcaciaSign
 
 class BlockAcaciaStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockStandingSign(blockstate) {
@@ -16,7 +17,7 @@ class BlockAcaciaStandingSign @JvmOverloads constructor(blockstate: BlockState? 
     override val properties: BlockProperties
         get() = Companion.properties
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemAcaciaSign()
     }
 

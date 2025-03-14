@@ -1,5 +1,6 @@
 package org.chorus.command
 
+import io.netty.util.internal.EmptyArrays
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.blockentity.ICommandBlock
@@ -15,19 +16,10 @@ import org.chorus.plugin.InternalPlugin
 import org.chorus.plugin.Plugin
 import org.chorus.plugin.PluginBase
 import org.chorus.utils.TextFormat
-import io.netty.util.internal.EmptyArrays
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
-import kotlin.collections.dropLastWhile
-import kotlin.collections.forEach
 import kotlin.collections.set
-import kotlin.collections.toTypedArray
 import kotlin.math.min
 
 
@@ -45,7 +37,7 @@ abstract class Command @JvmOverloads constructor(
     var label: String?
         private set
 
-    private var aliases: Array<String>
+    var aliases: Array<String>
 
     private var activeAliases: Array<String>
 
@@ -286,10 +278,10 @@ abstract class Command @JvmOverloads constructor(
                             builder.append(" <").append(
                                 commandParameter.enumData.values!!.subList(
                                     0,
-                                    min(commandParameter.enumData.values!!.size.toDouble(), 10.0)
+                                    min(commandParameter.enumData.values.size.toDouble(), 10.0)
                                         .toInt()
                                 ).stream().collect(Collectors.joining("|"))
-                            ).append(if (commandParameter.enumData.values!!.size > 10) "|..." else "").append(">")
+                            ).append(if (commandParameter.enumData.values.size > 10) "|..." else "").append(">")
                         }
                     } else {
                         if (commandParameter.enumData == null) {
@@ -300,10 +292,10 @@ abstract class Command @JvmOverloads constructor(
                             builder.append(" [").append(
                                 commandParameter.enumData.values!!.subList(
                                     0,
-                                    min(commandParameter.enumData.values!!.size.toDouble(), 10.0)
+                                    min(commandParameter.enumData.values.size.toDouble(), 10.0)
                                         .toInt()
                                 ).stream().collect(Collectors.joining("|"))
-                            ).append(if (commandParameter.enumData.values!!.size > 10) "|..." else "").append("]")
+                            ).append(if (commandParameter.enumData.values.size > 10) "|..." else "").append("]")
                         }
                     }
                 }
@@ -374,7 +366,7 @@ abstract class Command @JvmOverloads constructor(
 
             val m: TextContainer = message.clone()
             val resultStr =
-                "[" + source.name + ": " + (if (m.getText() != source.server.baseLang.m.getText()]) "%" else "") + m.getText() + "]"
+                "[" + source.name + ": " + (if (m.getText() != source.server.baseLang.m.getText()]) "%" else "")+m.getText()+"]"
 
             val users = source.server.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
 

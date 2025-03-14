@@ -1,11 +1,11 @@
 package org.chorus.network.query.handler
 
+import io.netty.channel.ChannelHandlerContext
+import io.netty.channel.SimpleChannelInboundHandler
 import org.chorus.network.query.QueryEventListener
 import org.chorus.network.query.enveloped.DirectAddressedQueryPacket
 import org.chorus.network.query.packet.HandshakePacket
 import org.chorus.network.query.packet.StatisticsPacket
-import io.netty.channel.ChannelHandlerContext
-import io.netty.channel.SimpleChannelInboundHandler
 import java.net.InetSocketAddress
 import java.nio.ByteBuffer
 import java.security.MessageDigest

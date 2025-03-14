@@ -1,7 +1,7 @@
 package org.chorus.command.tree.node
 
-import org.chorus.command.data.CommandEnum
 import com.google.common.collect.Sets
+import org.chorus.command.data.CommandEnum
 
 /**
  * 解析对应参数为[Boolean]值

@@ -3,9 +3,6 @@ package org.chorus.form.response
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 
 
-
-
-
 /**
  * The response of a [org.chorus.form.window.CustomForm]
  */

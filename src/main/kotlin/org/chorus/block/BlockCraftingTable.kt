@@ -1,15 +1,14 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.inventory.*
-import org.chorus.item.*
+import org.chorus.inventory.BlockInventoryHolder
+import org.chorus.inventory.CraftingTableInventory
+import org.chorus.inventory.Inventory
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import java.util.function.Supplier
 
-/**
- * @author xtypr
- * @since 2015/12/5
- */
 class BlockCraftingTable @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
     BlockSolid(blockState), BlockInventoryHolder {
     override val name: String
@@ -38,7 +37,7 @@ class BlockCraftingTable @JvmOverloads constructor(blockState: BlockState? = Com
     ): Boolean {
         if (player != null) {
             val itemInHand = player.getInventory().itemInHand
-            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
                 return false
             }
             player.addWindow(inventory!!)

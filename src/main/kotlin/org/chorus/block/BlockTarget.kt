@@ -88,7 +88,7 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.
 
         val intercept = calculateIntercept(
             locator.position,
-            locator.position.add(motion.multiply(2.0)!!)!!
+            locator.position.add(motion.multiply(2.0))
         )
         if (intercept == null) {
             return false
@@ -103,7 +103,7 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.
         val axes: MutableList<BlockFace.Axis?> = ArrayList(Arrays.asList(*BlockFace.Axis.entries.toTypedArray()))
         axes.remove(faceHit.axis)
 
-        val coords = doubleArrayOf(hitVector!!.getAxis(axes[0]!!), hitVector.getAxis(axes[1]!!))
+        val coords = doubleArrayOf(hitVector.getAxis(axes[0]!!), hitVector.getAxis(axes[1]!!))
 
         for (i in 0..1) {
             if (coords[i] == 0.5) {

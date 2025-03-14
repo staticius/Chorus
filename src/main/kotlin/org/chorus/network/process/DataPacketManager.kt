@@ -1,10 +1,10 @@
 package org.chorus.network.process
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.PlayerHandle
 import org.chorus.entity.EntityHuman.getName
 import org.chorus.network.process.processor.*
 import org.chorus.network.protocol.DataPacket
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 
 /**
  * DataPacketManager is a static class to manage DataPacketProcessors and process DataPackets.

@@ -4,11 +4,6 @@ import org.chorus.item.Item
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class MobEquipmentPacket : DataPacket() {
     var eid: Long = 0
     var item: Item? = null

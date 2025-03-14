@@ -1,9 +1,8 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.block.*
+import org.chorus.block.Block
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
-
 
 
 class NearestBlockIncementExecutor : IBehaviorExecutor {

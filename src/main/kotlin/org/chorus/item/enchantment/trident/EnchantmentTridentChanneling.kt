@@ -1,9 +1,9 @@
 package org.chorus.item.enchantment.trident
 
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
 
 class EnchantmentTridentChanneling :
-    EnchantmentTrident(Enchantment.Companion.ID_TRIDENT_CHANNELING, "tridentChanneling", Rarity.VERY_RARE) {
+    EnchantmentTrident(ID_TRIDENT_CHANNELING, "tridentChanneling", Rarity.VERY_RARE) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 25
     }

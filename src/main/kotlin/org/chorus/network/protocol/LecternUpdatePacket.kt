@@ -4,11 +4,6 @@ import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class LecternUpdatePacket : DataPacket() {
     var page: Int = 0
     var totalPages: Int = 0

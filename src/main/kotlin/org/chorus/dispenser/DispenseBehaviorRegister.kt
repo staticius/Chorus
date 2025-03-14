@@ -98,7 +98,7 @@ object DispenseBehaviorRegister {
             override val accuracy: Float
                 get() = 0f
 
-            override fun initMotion(face: BlockFace): Vector3? {
+            override fun initMotion(face: BlockFace): Vector3 {
                 return Vector3(
                     face.xOffset.toDouble(),
                     face.yOffset.toDouble(),  /* + 0.1f*/
@@ -107,7 +107,7 @@ object DispenseBehaviorRegister {
                     .normalize()
             }
 
-            override val shootingSound: Sound?
+            override val shootingSound: Sound
                 get() = Sound.MOB_BLAZE_SHOOT
         })
         registerBehavior(ItemID.EXPERIENCE_BOTTLE, object : ProjectileDispenseBehavior(EntityID.XP_BOTTLE) {
@@ -132,7 +132,7 @@ object DispenseBehaviorRegister {
             override val motion: Double
                 get() = super.getMotion() * 1.25
 
-            override val shootingSound: Sound?
+            override val shootingSound: Sound
                 get() = Sound.ITEM_TRIDENT_THROW
         })
         registerBehavior(ItemID.GLASS_BOTTLE, GlassBottleDispenseBehavior())

@@ -5,7 +5,7 @@ class ItemDiamondLeggings : ItemArmor(ItemID.Companion.DIAMOND_LEGGINGS) {
         get() = true
 
     override val tier: Int
-        get() = ItemArmor.Companion.TIER_DIAMOND
+        get() = TIER_DIAMOND
 
     override val armorPoints: Int
         get() = 6

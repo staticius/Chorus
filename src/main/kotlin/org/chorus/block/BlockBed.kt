@@ -4,13 +4,16 @@ import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.*
+import org.chorus.blockentity.BlockEntityBed
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.block.BlockExplosionPrimeEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBed
 import org.chorus.lang.TranslationContainer
-import org.chorus.level.*
-import org.chorus.level.Transform.Companion.fromObject
+import org.chorus.level.Explosion
+import org.chorus.level.GameRule
+import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.math.SimpleAxisAlignedBB
@@ -20,8 +23,6 @@ import org.chorus.utils.DyeColor
 import org.chorus.utils.Faceable
 import org.chorus.utils.Loggable
 import org.chorus.utils.TextFormat
-
-
 
 
 class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
@@ -45,7 +46,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
         get() = 0.2
 
     override val name: String
-        get() = dyeColor.name + " Bed Block"
+        get() = dyeColor.colorName + " Bed Block"
 
     override var maxY: Double
         get() = position.y + 0.5625
@@ -69,7 +70,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
         val dir = blockFace
 
         val shouldExplode = level.dimension != Level.DIMENSION_OVERWORLD
-        val willExplode = shouldExplode && level.gameRules!!.getBoolean(GameRule.TNT_EXPLODES)
+        val willExplode = shouldExplode && level.gameRules.getBoolean(GameRule.TNT_EXPLODES)
 
         val head: Block?
         if (isHeadPiece) {

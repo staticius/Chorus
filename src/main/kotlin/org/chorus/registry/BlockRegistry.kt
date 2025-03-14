@@ -1,5 +1,8 @@
 package org.chorus.registry
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
+import me.sunlan.fastreflection.FastConstructor
+import me.sunlan.fastreflection.FastMemberLoader
 import org.chorus.block.*
 import org.chorus.block.customblock.CustomBlock
 import org.chorus.block.customblock.CustomBlockDefinition
@@ -7,26 +10,13 @@ import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.plugin.Plugin
 import org.chorus.registry.ItemRuntimeIdRegistry.RuntimeEntry
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-
-import me.sunlan.fastreflection.FastConstructor
-import me.sunlan.fastreflection.FastMemberLoader
 import org.chorus.utils.Loggable
 import org.jetbrains.annotations.UnmodifiableView
 import java.lang.reflect.Modifier
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.List
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
-import kotlin.collections.MutableSet
-import kotlin.collections.Set
 import kotlin.collections.set
-import kotlin.collections.setOf
 
 class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
     override fun init() {
@@ -1296,7 +1286,7 @@ class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
         return properties!!
     }
 
-    override fun get(key: String): Block? {
+    override operator fun get(key: String): Block? {
         val constructor = CACHE_CONSTRUCTORS[key] ?: return null
         try {
             return constructor.invoke(null as Any?) as Block
@@ -1347,7 +1337,7 @@ class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
         }
     }
 
-    fun get(blockState: BlockState?): Block? {
+    operator fun get(blockState: BlockState?): Block? {
         if (blockState == null) return null
 
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
@@ -1372,7 +1362,7 @@ class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
         }
     }
 
-    fun get(blockState: BlockState, x: Int, y: Int, z: Int, level: Level): Block? {
+    operator fun get(blockState: BlockState, x: Int, y: Int, z: Int, level: Level): Block? {
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
         try {
             val b = constructor.invoke(blockState) as Block
@@ -1386,7 +1376,7 @@ class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
         }
     }
 
-    fun get(blockState: BlockState, x: Int, y: Int, z: Int, layer: Int, level: Level): Block? {
+    operator fun get(blockState: BlockState, x: Int, y: Int, z: Int, layer: Int, level: Level): Block? {
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
         try {
             val b = constructor.invoke(blockState) as Block

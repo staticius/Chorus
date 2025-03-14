@@ -29,7 +29,7 @@ class MolangDescriptor(val tagExpression: String, val molangVersion: Int, overri
         val PRIME = 59
         var result = 1
         val `$tagExpression`: Any = this.tagExpression
-        result = result * PRIME + (`$tagExpression`?.hashCode() ?: 43)
+        result = result * PRIME + `$tagExpression`.hashCode()
         result = result * PRIME + this.molangVersion
         result = result * PRIME + this.count
         return result

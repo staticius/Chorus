@@ -1,12 +1,12 @@
 package org.chorus.command.data
 
+import com.google.common.collect.ImmutableList
 import org.chorus.Server
 import org.chorus.camera.data.CameraPreset.Companion.presets
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.network.protocol.UpdateSoftEnumPacket
 import org.chorus.registry.Registries
 import org.chorus.utils.Identifier
-import com.google.common.collect.ImmutableList
 import java.util.*
 import java.util.function.Supplier
 
@@ -16,11 +16,11 @@ import java.util.function.Supplier
 class CommandEnum {
     @JvmField
     val name: String
-    private val values: List<String?>?
+    private val values: List<String>?
 
 
     val isSoft: Boolean
-    private val supplier: Supplier<Collection<String?>>?
+    private val supplier: Supplier<Collection<String>>?
 
 
     constructor(name: String, vararg values: String?) : this(name, Arrays.asList<String?>(*values))
@@ -46,14 +46,14 @@ class CommandEnum {
      * @param name     the name
      * @param supplier the str list supplier
      */
-    constructor(name: String, supplier: Supplier<Collection<String?>>?) {
+    constructor(name: String, supplier: Supplier<Collection<String>>?) {
         this.name = name
         this.values = null
         this.isSoft = true
         this.supplier = supplier
     }
 
-    fun getValues(): List<String?>? {
+    fun getValues(): List<String>? {
         return if (this.supplier == null) {
             values
         } else {

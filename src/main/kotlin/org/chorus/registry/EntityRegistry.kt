@@ -1,5 +1,12 @@
 package org.chorus.registry
 
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
+import it.unimi.dsi.fastutil.ints.IntCollection
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
+import me.sunlan.fastreflection.FastConstructor
+import me.sunlan.fastreflection.FastMemberLoader
 import org.chorus.Chorus
 import org.chorus.entity.Entity
 import org.chorus.entity.EntityID
@@ -28,24 +35,12 @@ import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.plugin.Plugin
 import org.chorus.registry.EntityRegistry.EntityDefinition
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
-import it.unimi.dsi.fastutil.ints.IntCollection
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-
-
-import me.sunlan.fastreflection.FastConstructor
-import me.sunlan.fastreflection.FastMemberLoader
 import org.jetbrains.annotations.UnmodifiableView
 import java.io.BufferedInputStream
 import java.nio.ByteOrder
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.collections.ArrayList
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 
@@ -340,7 +335,7 @@ class EntityRegistry : EntityID,
                     cause.addSuppressed(exceptions[i])
                 }
             }
-            EntityRegistry.log.error("Could not create an entity of type {} with {} args", id, args?.size ?: 0, cause)
+            EntityRegistry.log.error("Could not create an entity of type {} with {} args", id, args.size, cause)
         } else {
             return entity
         }
@@ -476,7 +471,7 @@ class EntityRegistry : EntityID,
         }
     }
 
-    
+
     class CustomEntityDefinition(val id: String, val bid: String, val hasSpawnegg: Boolean, val summonable: Boolean)
 
     @JvmRecord
@@ -487,7 +482,7 @@ class EntityRegistry : EntityID,
         val hasSpawnegg: Boolean,
         val summonable: Boolean
     ) {
-        fun toNBT(): CompoundTag? {
+        fun toNBT(): CompoundTag {
             return CompoundTag()
                 .putString("bid", bid)
                 .putBoolean("hasspawnegg", hasSpawnegg)

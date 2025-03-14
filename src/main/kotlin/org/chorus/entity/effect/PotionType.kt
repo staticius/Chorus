@@ -1,7 +1,7 @@
 package org.chorus.entity.effect
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.event.potion.PotionApplyEvent
 import org.chorus.registry.Registries
 
@@ -18,7 +18,7 @@ data class PotionType(
 ) {
     constructor(name: String?, stringId: String, id: Int, effects: PotionEffects) : this(name, stringId, id, 1, effects)
 
-    fun getEffects(splash: Boolean): List<Effect?>? {
+    fun getEffects(splash: Boolean): List<Effect?> {
         return effects.getEffects(splash)
     }
 
@@ -252,16 +252,21 @@ data class PotionType(
             41,
             PotionEffects.Companion.SLOW_FALLING_LONG
         )
+
         @JvmField
         val SLOWNESS_STRONG: PotionType =
             PotionType("Strong Slowness", "minecraft:strong_slowness", 42, 2, PotionEffects.Companion.SLOWNESS_STRONG)
+
         @JvmField
         val WIND_CHARGED: PotionType =
             PotionType("Wind Charged", "minecraft:wind_charged", 43, PotionEffects.Companion.EMPTY)
+
         @JvmField
         val WEAVING: PotionType = PotionType("Weaving", "minecraft:weaving", 44, PotionEffects.Companion.EMPTY)
+
         @JvmField
         val OOZING: PotionType = PotionType("Oozing", "minecraft:oozing", 45, PotionEffects.Companion.EMPTY)
+
         @JvmField
         val INFESTED: PotionType = PotionType("Infested", "minecraft:infested", 46, PotionEffects.Companion.EMPTY)
 

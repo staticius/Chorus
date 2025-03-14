@@ -4,9 +4,6 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.math.BlockFace
 
-/**
- * @author CreeperFace
- */
 class BlockPiston @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockPistonBase(blockstate) {
     override val name: String

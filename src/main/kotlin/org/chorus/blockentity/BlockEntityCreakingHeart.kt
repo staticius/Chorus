@@ -14,7 +14,7 @@ import org.chorus.utils.*
 
 
 class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
-    
+
     private var linkedCreaking: EntityCreaking? = null
 
     var spawnRangeHorizontal: Double = 16.5
@@ -40,7 +40,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
             super.name = name
         }
 
-    val heart: BlockCreakingHeart?
+    val heart: BlockCreakingHeart
         get() = block as BlockCreakingHeart
 
     fun setLinkedCreaking(creaking: EntityCreaking?) {

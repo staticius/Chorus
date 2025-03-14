@@ -25,6 +25,6 @@ open class BlockCobbledDeepslate @JvmOverloads constructor(blockstate: BlockStat
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.COBBLED_DEEPSLATE)
-            
+
     }
 }

@@ -1,12 +1,12 @@
 package org.chorus.recipe
 
 import org.chorus.item.Item
-import org.chorus.item.Item.clone
 import org.chorus.network.protocol.types.RecipeUnlockingRequirement
 import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.registry.RecipeRegistry
 import java.util.*
 import java.util.List
+import kotlin.collections.first
 
 class StonecutterRecipe(
     recipeId: String?,

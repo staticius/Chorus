@@ -1,7 +1,6 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.block.BlockFlower.Companion.isSupportValid
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
 import org.chorus.item.ItemTool
@@ -111,6 +110,6 @@ class BlockShortGrass : BlockFlowable {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SHORT_GRASS)
-            
+
     }
 }

@@ -10,11 +10,11 @@ class LoomInventory(blockLoom: BlockLoom?) : BaseInventory(blockLoom, InventoryT
     override fun init() {
         val map = super.networkSlotMap()
         for (i in 0..<getSize()) {
-            map!![i] = 9 + i
+            map[i] = 9 + i
         }
 
         val map2 = super.slotTypeMap()
-        map2!![0] = ContainerSlotType.LOOM_INPUT
+        map2[0] = ContainerSlotType.LOOM_INPUT
         map2[1] = ContainerSlotType.LOOM_DYE
         map2[2] = ContainerSlotType.LOOM_MATERIAL
     }

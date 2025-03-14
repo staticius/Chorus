@@ -1,8 +1,11 @@
 package org.chorus.level.generator.`object`
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.level.*
+import org.chorus.block.Block
+import org.chorus.block.BlockState
+import org.chorus.level.Level
 import org.chorus.level.format.IChunk
 import org.chorus.level.format.UnsafeChunk
 import org.chorus.math.BlockVector3
@@ -10,8 +13,6 @@ import org.chorus.math.Vector3
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.UpdateSubChunkBlocksPacket
 import org.chorus.network.protocol.types.BlockChangeEntry
-import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import java.util.function.Consumer
 import java.util.function.Predicate
 

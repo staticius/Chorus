@@ -5,9 +5,6 @@ import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 
-/**
- * @author MagicDroidX (Nukkit Project), kvetinac97
- */
 open class BlockDirt : BlockSolid, Natural {
     constructor() : super(Companion.properties.defaultState)
 

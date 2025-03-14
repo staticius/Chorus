@@ -4,11 +4,6 @@ import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class ServerPostMovePositionPacket : DataPacket() {
     var position: Vector3f? = null
 

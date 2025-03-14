@@ -9,7 +9,7 @@ class BlockCrimsonStandingSign @JvmOverloads constructor(blockstate: BlockState?
         return BlockCrimsonWallSign.Companion.PROPERTIES.getIdentifier()
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemCherrySign()
     }
 

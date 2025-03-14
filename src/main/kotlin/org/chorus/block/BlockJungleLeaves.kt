@@ -15,7 +15,7 @@ class BlockJungleLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.Companion.JUNGLE_LEAVES,
+            BlockID.BlockID.Companion.JUNGLE_LEAVES,
             CommonBlockProperties.PERSISTENT_BIT,
             CommonBlockProperties.UPDATE_BIT
         )

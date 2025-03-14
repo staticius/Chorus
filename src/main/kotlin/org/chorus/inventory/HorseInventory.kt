@@ -40,7 +40,7 @@ class HorseInventory(holder: EntityHorse?) : BaseInventory(holder, InventoryType
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
         super.onSlotChange(index, before, send)
         if (index == 0) {
-            if (saddle!!.isNull) {
+            if (saddle!!.isNothing) {
                 holder.setDataFlag(EntityFlag.SADDLED, false)
                 holder.setDataFlag(EntityFlag.WASD_CONTROLLED, false)
                 holder.setDataFlag(EntityFlag.CAN_POWER_JUMP, false)
@@ -54,7 +54,7 @@ class HorseInventory(holder: EntityHorse?) : BaseInventory(holder, InventoryType
                 holder.setDataFlag(EntityFlag.CAN_POWER_JUMP)
             }
         } else if (index == 1) {
-            if (!horseArmor!!.isNull) {
+            if (!horseArmor!!.isNothing) {
                 holder!!.level.addSound(holder.position, Sound.MOB_HORSE_ARMOR)
             }
             val mobArmorEquipmentPacket = MobArmorEquipmentPacket()
@@ -92,7 +92,7 @@ class HorseInventory(holder: EntityHorse?) : BaseInventory(holder, InventoryType
         val slots = ListTag<CompoundTag>()
         val saddle = saddle!!
         val horseArmor = horseArmor!!
-        if (!saddle.isNull) {
+        if (!saddle.isNothing) {
             slots.add(
                 slot0.copy().putCompound(
                     "item",
@@ -100,7 +100,7 @@ class HorseInventory(holder: EntityHorse?) : BaseInventory(holder, InventoryType
                 )
             )
         } else slots.add(slot0.copy())
-        if (!horseArmor.isNull) {
+        if (!horseArmor.isNothing) {
             slots.add(
                 slot1.copy().putCompound(
                     "item",

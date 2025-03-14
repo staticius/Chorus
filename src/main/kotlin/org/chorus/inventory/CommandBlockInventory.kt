@@ -5,7 +5,7 @@ import org.chorus.Server
 import org.chorus.blockentity.BlockEntityCommandBlock
 import org.chorus.blockentity.BlockEntityNameable
 import org.chorus.event.inventory.InventoryOpenEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.math.Vector3
 import org.chorus.network.protocol.ContainerClosePacket
 import org.chorus.network.protocol.ContainerOpenPacket
@@ -55,7 +55,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override fun sendContents(vararg players: Player) {
     }
 
-    override fun sendContents(players: Collection<Player?>) {
+    override fun sendContents(players: Collection<Player>) {
     }
 
     override fun sendSlot(index: Int, player: Player) {
@@ -64,7 +64,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override fun sendSlot(index: Int, vararg players: Player) {
     }
 
-    override fun sendSlot(index: Int, players: Collection<Player?>) {
+    override fun sendSlot(index: Int, players: Collection<Player>) {
     }
 
     override fun getFreeSpace(item: Item): Int {
@@ -113,7 +113,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override val type: InventoryType
         get() = InventoryType.COMMAND_BLOCK
 
-    override fun getHolder(): BlockEntityCommandBlock? {
+    override fun getHolder(): BlockEntityCommandBlock {
         return this.holder
     }
 

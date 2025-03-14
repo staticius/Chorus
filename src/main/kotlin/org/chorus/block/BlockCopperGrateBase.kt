@@ -48,7 +48,7 @@ abstract class BlockCopperGrateBase(blockState: BlockState?) : BlockFlowable(blo
     ): Boolean {
         for (p in level.getPlayers().values) {
             // Check if a player's position matches the target block's position
-            if (p.position.floor()!!.equals(block.position.floor())) {
+            if (p.position.floor().equals(block.position.floor())) {
                 // Prevent block placement if a player is found at the target position
                 return false
             }

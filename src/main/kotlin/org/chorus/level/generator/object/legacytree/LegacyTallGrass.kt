@@ -32,7 +32,7 @@ object LegacyTallGrass {
             for (z in minz..maxz) {
                 val newY: Int = y + random.nextInt(2) * (if (random.nextBoolean()) -1 else 1)
                 if (random.nextBoolean()) {
-                    if (level.getBlockIdAt(x, newY, z) == Block.AIR && level.getBlockIdAt(
+                    if (level.getBlockIdAt(x, newY, z) == BlockID.AIR && level.getBlockIdAt(
                             x,
                             newY - 1,
                             z

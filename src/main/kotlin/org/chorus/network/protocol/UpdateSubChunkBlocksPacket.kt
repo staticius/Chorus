@@ -1,8 +1,8 @@
 package org.chorus.network.protocol
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.BlockChangeEntry
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 
 
 class UpdateSubChunkBlocksPacket : DataPacket() {

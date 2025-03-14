@@ -1,7 +1,6 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 
-
 /**
  * CraftCreativeStackRequestActionData is sent by the client when it takes an item out of the creative inventory.
  * The item is thus not really crafted, but instantly created.

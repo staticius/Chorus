@@ -16,9 +16,6 @@ import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-/**
- * @author Nukkit Project Team
- */
 class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockFlowable(blockstate), RedstoneComponent, Faceable {
     override val name: String
@@ -34,7 +31,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.p
     override val resistance: Double
         get() = 2.5
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -135,7 +132,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.p
 
         if (isPowerOn) {
             val face = leverOrientation!!.facing
-            level.updateAround(position.getSide(face.getOpposite()!!)!!)
+            level.updateAround(position.getSide(face.getOpposite()!!))
 
             if (Server.instance.settings.levelSettings().enableRedstone()) {
                 updateAroundRedstone()

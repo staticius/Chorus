@@ -3,10 +3,10 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 class BlockCrafter @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    Block(blockstate) {
+    Block(blockstate,) {
     companion object {
         val properties: BlockProperties = BlockProperties(
-BlockID.BlockID.CRAFTER,
+            BlockID.BlockID.CRAFTER,
             CommonBlockProperties.CRAFTING,
             CommonBlockProperties.ORIENTATION,
             CommonBlockProperties.TRIGGERED_BIT

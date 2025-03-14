@@ -31,11 +31,11 @@ class SmithingInventory(blockSmithingTable: BlockSmithingTable?) :
     override fun init() {
         val map = super.networkSlotMap()
         for (i in 0..<getSize()) {
-            map!![i] = 51 + i
+            map[i] = 51 + i
         }
 
         val map2 = super.slotTypeMap()
-        map2!![0] = ContainerSlotType.SMITHING_TABLE_INPUT
+        map2[0] = ContainerSlotType.SMITHING_TABLE_INPUT
         map2[1] = ContainerSlotType.SMITHING_TABLE_MATERIAL
         map2[2] = ContainerSlotType.SMITHING_TABLE_TEMPLATE
     }

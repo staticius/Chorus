@@ -7,4 +7,4 @@ import org.chorus.math.Vector3
  * @since 2015/11/21
  */
 class RedstoneParticle @JvmOverloads constructor(pos: Vector3, lifetime: Int = 1) :
-    GenericParticle(pos, Particle.Companion.TYPE_RED_DUST, lifetime)
+    GenericParticle(pos, TYPE_RED_DUST, lifetime)

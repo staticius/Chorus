@@ -1,9 +1,13 @@
 package org.chorus.entity.ai.memory
 
+import it.unimi.dsi.fastutil.ints.IntArrayList
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockBed
+import org.chorus.block.BlockWoodenDoor
+import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.codec.BooleanMemoryCodec
 import org.chorus.entity.ai.memory.codec.NumberMemoryCodec
 import org.chorus.entity.ai.memory.codec.StringMemoryCodec
@@ -14,10 +18,9 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
 import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.event.entity.EntityDamageEvent
-import org.chorus.item.*
-import org.chorus.math.*
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
+import org.chorus.item.Item
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
 
 /**
  * 核心使用到的记忆类型枚举

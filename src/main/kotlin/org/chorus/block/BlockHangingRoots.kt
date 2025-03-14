@@ -24,6 +24,6 @@ class BlockHangingRoots @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.HANGING_ROOTS)
-            
+
     }
 }

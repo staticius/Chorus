@@ -6,10 +6,6 @@ import org.chorus.utils.version.Version
 import java.util.*
 
 
-
-
-
-
 class ResourcePackChunkRequestPacket : AbstractResourcePackDataPacket() {
     override var packId: UUID? = null
     override var packVersion: Version? = null

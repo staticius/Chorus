@@ -24,7 +24,7 @@ class BlockDeepslateTileDoubleSlab @JvmOverloads constructor(blockstate: BlockSt
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    override val singleSlab: BlockState?
+    override val singleSlab: BlockState
         get() = BlockDeepslateTileSlab.Companion.PROPERTIES.getDefaultState()
 
     companion object {

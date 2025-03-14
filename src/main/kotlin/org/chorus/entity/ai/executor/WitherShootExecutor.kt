@@ -20,7 +20,7 @@ class WitherShootExecutor(protected var targetMemory: MemoryType<out Entity?>) :
     protected var tick: Int = 0
 
     override fun execute(entity: EntityMob): Boolean {
-        val target = entity.memoryStorage!![targetMemory] ?: return false
+        val target = entity.memoryStorage!![targetMemory]
         tick++
         if (tick <= 40) {
             if (tick % 10 == 0) {

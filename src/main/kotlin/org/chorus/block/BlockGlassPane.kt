@@ -1,11 +1,7 @@
 package org.chorus.block
 
-import org.chorus.item.*
+import org.chorus.item.Item
 
-/**
- * @author xtypr
- * @since 2015/12/6
- */
 open class BlockGlassPane : BlockThin {
     constructor() : super(Companion.properties.defaultState)
 

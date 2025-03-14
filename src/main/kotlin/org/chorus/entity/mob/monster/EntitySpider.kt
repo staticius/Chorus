@@ -112,7 +112,7 @@ class EntitySpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
         return "Spider"
     }
 
-    override fun getDrops(): Array<Item?> {
+    override fun getDrops(): Array<Item> {
         return arrayOf(Item.get(Item.STRING), Item.get(Item.SPIDER_EYE))
     }
 

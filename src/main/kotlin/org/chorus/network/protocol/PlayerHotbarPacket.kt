@@ -4,9 +4,6 @@ import org.chorus.inventory.SpecialWindowId
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
 class PlayerHotbarPacket : DataPacket() {
     var selectedHotbarSlot: Int = 0
     var windowId: Int = SpecialWindowId.PLAYER.id

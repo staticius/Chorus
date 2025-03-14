@@ -139,7 +139,7 @@ abstract class BlockVinesNether
         growing.vineAge = min((vineAge + 1).toDouble(), maxVineAge.toDouble()).toInt()
 
         val ev = BlockGrowEvent(this, growing)
-        instance!!.pluginManager.callEvent(ev)
+        instance.pluginManager.callEvent(ev)
 
         if (ev.isCancelled) {
             return false
@@ -179,7 +179,7 @@ abstract class BlockVinesNether
             growing.position.z = pos.position.z
 
             val ev = BlockGrowEvent(this, growing.clone())
-            instance!!.pluginManager.callEvent(ev)
+            instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
                 break

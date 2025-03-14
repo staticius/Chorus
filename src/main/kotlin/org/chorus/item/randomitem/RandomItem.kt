@@ -1,11 +1,8 @@
 package org.chorus.item.randomitem
 
 import java.util.*
-import kotlin.collections.HashMap
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.forEach
 import kotlin.collections.set
 
 /**

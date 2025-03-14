@@ -7,8 +7,10 @@ import kotlin.math.sqrt
 class BlockVector3 : Cloneable {
     @JvmField
     var x: Int = 0
+
     @JvmField
     var y: Int = 0
+
     @JvmField
     var z: Int = 0
 

@@ -1,5 +1,7 @@
 package org.chorus.item.enchantment
 
+import io.netty.util.internal.EmptyArrays
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap
 import org.chorus.entity.*
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
@@ -27,8 +29,6 @@ import org.chorus.plugin.InternalPlugin
 import org.chorus.registry.RegisterException
 import org.chorus.registry.Registries
 import org.chorus.utils.*
-import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
@@ -41,16 +41,8 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
-import kotlin.collections.Collection
-import kotlin.collections.HashSet
-import kotlin.collections.LinkedHashSet
-import kotlin.collections.Map
-import kotlin.collections.MutableCollection
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.forEach
 import kotlin.collections.set
 
 /**
@@ -111,7 +103,7 @@ abstract class Enchantment : Cloneable {
     /**
      * Decides whether this enchantment can be fished ([org.chorus.item.randomitem.fishing.FishingEnchantmentItemSelector]) using a [org.chorus.item.ItemFishingRod]
      *
-     * @param fishable true if it is fishable
+     * @param isFishable true if it is fishable
      */
     var isFishable: Boolean = true
     /**
@@ -334,12 +326,8 @@ abstract class Enchantment : Cloneable {
     open val isMajor: Boolean
         get() = false
 
-    public override fun clone(): Any {
-        return try {
-            super.clone() as Enchantment
-        } catch (e: CloneNotSupportedException) {
-            null
-        }
+    public override fun clone(): Enchantment {
+        return super.clone() as Enchantment
     }
 
     private class UnknownEnchantment(id: Int) :
@@ -375,10 +363,10 @@ abstract class Enchantment : Cloneable {
     }
 
     companion object {
-        val EMPTY_ARRAY: Array<Enchantment?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<Enchantment> = emptyArray()
         val CUSTOM_ENCHANTMENT_ID: Int = Utils.dynamic(256)
-        protected var enchantments: Array<Enchantment?>
-        protected var namedEnchantments: MutableMap<Identifier?, Enchantment?> = Object2ObjectLinkedOpenHashMap()
+        protected lateinit var enchantments: Array<Enchantment?>
+        protected var namedEnchantments: MutableMap<Identifier, Enchantment> = Object2ObjectLinkedOpenHashMap()
 
         const val ID_PROTECTION_ALL: Int = 0
         const val NAME_PROTECTION_ALL: String = "protection"
@@ -510,163 +498,163 @@ abstract class Enchantment : Cloneable {
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_ALL
-            )] = enchantments[0]
+            )] = enchantments[0]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_FIRE
-            )] = enchantments[1]
+            )] = enchantments[1]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_FALL
-            )] = enchantments[2]
+            )] = enchantments[2]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_EXPLOSION
-            )] = enchantments[3]
+            )] = enchantments[3]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_PROJECTILE
-            )] = enchantments[4]
+            )] = enchantments[4]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_THORNS
-            )] = enchantments[5]
+            )] = enchantments[5]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_WATER_BREATHING
-            )] = enchantments[6]
+            )] = enchantments[6]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_WATER_WORKER
-            )] = enchantments[7]
+            )] = enchantments[7]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_WATER_WALKER
-            )] = enchantments[8]
+            )] = enchantments[8]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DAMAGE_ALL
-            )] = enchantments[9]
+            )] = enchantments[9]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DAMAGE_SMITE
-            )] = enchantments[10]
+            )] = enchantments[10]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DAMAGE_ARTHROPODS
-            )] = enchantments[11]
+            )] = enchantments[11]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_KNOCKBACK
-            )] = enchantments[12]
+            )] = enchantments[12]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_FIRE_ASPECT
-            )] = enchantments[13]
+            )] = enchantments[13]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_LOOTING
-            )] = enchantments[14]
+            )] = enchantments[14]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_EFFICIENCY
-            )] = enchantments[15]
+            )] = enchantments[15]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_SILK_TOUCH
-            )] = enchantments[16]
+            )] = enchantments[16]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DURABILITY
-            )] = enchantments[17]
+            )] = enchantments[17]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_FORTUNE_DIGGING
-            )] = enchantments[18]
+            )] = enchantments[18]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BOW_POWER
-            )] = enchantments[19]
+            )] = enchantments[19]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BOW_KNOCKBACK
-            )] = enchantments[20]
+            )] = enchantments[20]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BOW_FLAME
-            )] = enchantments[21]
+            )] = enchantments[21]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BOW_INFINITY
-            )] = enchantments[22]
+            )] = enchantments[22]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_FORTUNE_FISHING
-            )] = enchantments[23]
+            )] = enchantments[23]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_LURE
-            )] = enchantments[24]
+            )] = enchantments[24]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_FROST_WALKER
-            )] = enchantments[25]
+            )] = enchantments[25]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_MENDING
-            )] = enchantments[26]
+            )] = enchantments[26]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BINDING_CURSE
-            )] = enchantments[27]
+            )] = enchantments[27]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_VANISHING_CURSE
-            )] = enchantments[28]
+            )] = enchantments[28]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_TRIDENT_IMPALING
-            )] = enchantments[29]
+            )] = enchantments[29]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_TRIDENT_RIPTIDE
-            )] = enchantments[30]
+            )] = enchantments[30]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_TRIDENT_LOYALTY
-            )] = enchantments[31]
+            )] = enchantments[31]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_TRIDENT_CHANNELING
-            )] = enchantments[32]
+            )] = enchantments[32]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_CROSSBOW_MULTISHOT
-            )] = enchantments[33]
+            )] = enchantments[33]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_CROSSBOW_PIERCING
-            )] = enchantments[34]
+            )] = enchantments[34]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_CROSSBOW_QUICK_CHARGE
-            )] = enchantments[35]
+            )] = enchantments[35]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_SOUL_SPEED
-            )] = enchantments[36]
+            )] = enchantments[36]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_SWIFT_SNEAK
-            )] = enchantments[37]
+            )] = enchantments[37]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DENSITY
-            )] = enchantments[39]
+            )] = enchantments[39]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BREACH
-            )] = enchantments[40]
+            )] = enchantments[40]!!
         }
 
         private fun getLevelString(level: Int): String {
@@ -728,7 +716,7 @@ abstract class Enchantment : Cloneable {
 §7${enchantment.getName()} ${getLevelString(i)}"""
                 val classWriter = ClassWriter(0)
                 val methodVisitor: MethodVisitor
-                val className = "CustomBookEnchanted" + BOOK_NUMBER
+                val className = "CustomBookEnchanted$BOOK_NUMBER"
                 classWriter.visit(
                     Opcodes.V17,
                     Opcodes.ACC_PUBLIC or Opcodes.ACC_SUPER,
@@ -826,9 +814,9 @@ abstract class Enchantment : Cloneable {
             } else {
                 method = defineClassMethodRef.get()
             }
-            Objects.requireNonNull(method).isAccessible = true
+            method!!.isAccessible = true
             val args = arrayOf<Any>(className, b, 0, b.size)
-            clazz = method!!.invoke(loader, *args) as Class<*>
+            clazz = method.invoke(loader, *args) as Class<*>
             return clazz
         }
 
@@ -858,7 +846,7 @@ abstract class Enchantment : Cloneable {
          * @return The enchantment, if no enchantment is found with that id, [UnknownEnchantment] is returned.
          * The UnknownEnchantment will be always a new instance and changes to it does not affects other calls.
          */
-        fun getEnchantment(id: Int): Enchantment? {
+        fun getEnchantment(id: Int): Enchantment {
             var enchantment: Enchantment? = null
             if (id >= 0 && id < enchantments.size) {
                 enchantment = enchantments[id]
@@ -879,7 +867,7 @@ abstract class Enchantment : Cloneable {
          * @return the enchantment
          */
         @JvmStatic
-        fun getEnchantment(name: String?): Enchantment? {
+        fun getEnchantment(name: String): Enchantment {
             return if (Identifier.isValid(name)) {
                 namedEnchantments[Identifier.tryParse(
                     name
@@ -891,7 +879,7 @@ abstract class Enchantment : Cloneable {
             )]!!.clone()
         }
 
-        fun getEnchantment(name: Identifier): Enchantment? {
+        fun getEnchantment(name: Identifier): Enchantment {
             return namedEnchantments[name]!!.clone()
         }
 
@@ -903,7 +891,7 @@ abstract class Enchantment : Cloneable {
          */
         @JvmStatic
         fun getEnchantments(): Array<Enchantment> {
-            return namedEnchantments.values.toArray(EMPTY_ARRAY)
+            return namedEnchantments.values.toTypedArray()
         }
 
         @JvmStatic
@@ -919,8 +907,8 @@ abstract class Enchantment : Cloneable {
             if (!allowCustom) {
                 val enchantments: MutableCollection<Enchantment> = LinkedHashSet()
                 namedEnchantments.forEach { (i: Identifier?, v: Enchantment?) ->
-                    if (i!!.namespace == Identifier.DEFAULT_NAMESPACE) {
-                        enchantments.add(v!!)
+                    if (i.namespace == Identifier.DEFAULT_NAMESPACE) {
+                        enchantments.add(v)
                     }
                 }
 
@@ -932,8 +920,9 @@ abstract class Enchantment : Cloneable {
         val enchantmentName2IDMap: Map<String, Int>
             get() = namedEnchantments.entries.stream().collect(
                 Collectors.toMap<Map.Entry<Identifier?, Enchantment?>, String, Int>(
-                    Function { e: Map.Entry<Identifier?, Enchantment?> -> e.key.toString() },
-                    Function { e: Map.Entry<Identifier?, Enchantment?> -> e.value!!.id })
+                    { it.key.toString() },
+                    { it.value!!.id }
+                )
             )
 
         val words: Array<String> = arrayOf(

@@ -86,7 +86,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
 
     protected fun needUpdateTarget(entity: EntityMob): Boolean {
         entity.recalculateBoundingBox(false)
-        return lastLocation == null || entity.getBoundingBox()!!.grow(10.0, 10.0, 10.0).isVectorInside(lastLocation)
+        return lastLocation == null || entity.getBoundingBox().grow(10.0, 10.0, 10.0).isVectorInside(lastLocation)
     }
 
     protected fun next(entity: EntityMob): Vector3 {

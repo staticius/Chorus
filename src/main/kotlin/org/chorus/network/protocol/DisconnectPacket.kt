@@ -9,13 +9,12 @@ import org.chorus.network.protocol.types.DisconnectFailReason
  */
 
 
-
-
-
 class DisconnectPacket : DataPacket() {
     var reason: DisconnectFailReason = DisconnectFailReason.UNKNOWN
+
     @JvmField
     var hideDisconnectionScreen: Boolean = false
+
     @JvmField
     var message: String? = null
     private var filteredMessage = ""

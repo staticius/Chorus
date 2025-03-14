@@ -8,9 +8,6 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
-import kotlin.collections.ArrayList
-import kotlin.collections.Map
-import kotlin.collections.MutableList
 import kotlin.collections.set
 
 /**

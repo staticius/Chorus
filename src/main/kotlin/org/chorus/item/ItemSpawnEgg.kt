@@ -58,7 +58,7 @@ open class ItemSpawnEgg : Item {
             return false
         }
 
-        val chunk = level.getChunk(block.x.toInt() shr 4, block.z.toInt() shr 4) ?: return false
+        val chunk = level.getChunk(block.x.toInt() shr 4, block.z.toInt() shr 4)
 
         val nbt = CompoundTag()
             .putList(
@@ -116,7 +116,7 @@ open class ItemSpawnEgg : Item {
     open val entityNetworkId: Int
         get() = this.meta
 
-    val entityName: String?
+    val entityName: String
         get() {
             val entityIdentifier =
                 Registries.ENTITY.getEntityIdentifier(entityNetworkId)

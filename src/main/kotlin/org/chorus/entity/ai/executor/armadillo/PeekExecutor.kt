@@ -10,7 +10,7 @@ import org.chorus.entity.mob.animal.EntityArmadillo.RollupEvaluator
 class PeekExecutor : EntityControl, IBehaviorExecutor {
     protected var tick: Int = 0
 
-    override fun execute(entity: EntityMob?): Boolean {
+    override fun execute(entity: EntityMob): Boolean {
         if (tick < STAY_TICKS) {
             tick++
             return true

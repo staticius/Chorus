@@ -1,8 +1,6 @@
 package org.chorus.utils
 
 import org.chorus.Server
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.lang.management.ManagementFactory
 import java.lang.management.ThreadInfo
 import kotlin.concurrent.Volatile

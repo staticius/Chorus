@@ -35,7 +35,7 @@ abstract class SmeltingInventory(holder: InventoryHolder?, type: InventoryType, 
 
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
         super.onSlotChange(index, before, send)
-        if (index == 2 && (before.isNull || before.getCount() > 0)) {
+        if (index == 2 && (before.isNothing || before.getCount() > 0)) {
             val holder: BlockEntityFurnace? = holder
             val xp = holder!!.calculateXpDrop()
             if (xp > 0) {

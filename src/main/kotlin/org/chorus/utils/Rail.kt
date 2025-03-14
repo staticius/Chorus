@@ -82,6 +82,7 @@ object Rail {
 
         companion object {
             private val META_LOOKUP = arrayOfNulls<Orientation>(entries.toTypedArray().length)
+
             @JvmStatic
             fun byMetadata(meta: Int): Orientation? {
                 var meta = meta

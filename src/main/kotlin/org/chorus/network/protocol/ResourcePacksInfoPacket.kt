@@ -6,10 +6,6 @@ import org.chorus.resourcepacks.ResourcePack
 import java.util.*
 
 
-
-
-
-
 class ResourcePacksInfoPacket : DataPacket() {
     var isForcedToAccept: Boolean = false
     var hasAddonPacks: Boolean = false

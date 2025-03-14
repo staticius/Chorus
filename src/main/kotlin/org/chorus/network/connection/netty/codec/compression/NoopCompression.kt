@@ -1,9 +1,8 @@
 package org.chorus.network.connection.netty.codec.compression
 
-import org.chorus.network.protocol.types.*
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
-
+import org.chorus.network.protocol.types.*
 
 
 class NoopCompression : BatchCompression {

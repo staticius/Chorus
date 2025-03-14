@@ -9,9 +9,6 @@ import org.chorus.network.protocol.types.EntityLink
  */
 
 
-
-
-
 class SetEntityLinkPacket : DataPacket() {
     var vehicleUniqueId: Long = 0 //from
     var riderUniqueId: Long = 0 //to

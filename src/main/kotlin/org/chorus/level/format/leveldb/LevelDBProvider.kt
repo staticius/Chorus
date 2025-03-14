@@ -1,5 +1,8 @@
 package org.chorus.level.format.leveldb
 
+import io.netty.buffer.ByteBufAllocator
+import io.netty.buffer.ByteBufOutputStream
+import it.unimi.dsi.fastutil.Pair
 import org.chorus.api.UsedByReflection
 import org.chorus.blockentity.BlockEntitySpawnable
 import org.chorus.level.*
@@ -14,10 +17,6 @@ import org.chorus.nbt.tag.IntTag
 import org.chorus.network.protocol.types.GameType
 import org.chorus.utils.*
 import org.chorus.utils.collection.nb.Long2ObjectNonBlockingMap
-import io.netty.buffer.ByteBufAllocator
-import io.netty.buffer.ByteBufOutputStream
-import it.unimi.dsi.fastutil.Pair
-
 import org.iq80.leveldb.*
 import java.io.*
 import java.lang.ref.WeakReference
@@ -346,7 +345,7 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
         return tmp
     }
 
-    override fun getChunk(chunkX: Int, chunkZ: Int, create: Boolean): IChunk? {
+    override fun getChunk(chunkX: Int, chunkZ: Int, create: Boolean): IChunk {
         val index: Long = Level.Companion.chunkHash(chunkX, chunkZ)
         var tmp = getLoadedChunk(index)
         if (tmp == null) {

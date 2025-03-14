@@ -34,7 +34,7 @@ open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState? = Co
         if (item.isFertilizer && blockFace == BlockFace.UP) {
             convertToMoss(this)
             populateRegion(this)
-            level.addParticleEffect(position.add(0.5, 1.5, 0.5)!!, ParticleEffect.CROP_GROWTH_AREA)
+            level.addParticleEffect(position.add(0.5, 1.5, 0.5), ParticleEffect.CROP_GROWTH_AREA)
             item.count--
             return true
         }

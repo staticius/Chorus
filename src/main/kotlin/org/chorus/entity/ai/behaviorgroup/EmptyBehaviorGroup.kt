@@ -15,22 +15,22 @@ class EmptyBehaviorGroup(protected var entity: EntityMob) : IBehaviorGroup {
     protected var memoryStorage: IMemoryStorage = MemoryStorage(entity)
 
 
-    override fun evaluateBehaviors(entity: EntityMob?) {
+    override fun evaluateBehaviors(entity: EntityMob) {
     }
 
-    override fun evaluateCoreBehaviors(entity: EntityMob?) {
+    override fun evaluateCoreBehaviors(entity: EntityMob) {
     }
 
-    override fun collectSensorData(entity: EntityMob?) {
+    override fun collectSensorData(entity: EntityMob) {
     }
 
-    override fun tickRunningBehaviors(entity: EntityMob?) {
+    override fun tickRunningBehaviors(entity: EntityMob) {
     }
 
-    override fun tickRunningCoreBehaviors(entity: EntityMob?) {
+    override fun tickRunningCoreBehaviors(entity: EntityMob) {
     }
 
-    override fun applyController(entity: EntityMob?) {
+    override fun applyController(entity: EntityMob) {
     }
 
     override fun getBehaviors(): Set<IBehavior>? {
@@ -61,7 +61,7 @@ class EmptyBehaviorGroup(protected var entity: EntityMob) : IBehaviorGroup {
         return null
     }
 
-    override fun updateRoute(entity: EntityMob?) {
+    override fun updateRoute(entity: EntityMob) {
     }
 
     override fun getMemoryStorage(): IMemoryStorage {

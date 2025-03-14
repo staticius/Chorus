@@ -333,7 +333,6 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     fun calHeartBeatDelay(): Int {
         val target =
             this.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
-                ?: return 40
         val anger = this.memoryStorage!!.get<MutableMap<Entity, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
             .getOrDefault(target, 0)
         return (40 - ChorusMath.clamp((anger / 80f), 0f, 1f) * 30f).toInt()

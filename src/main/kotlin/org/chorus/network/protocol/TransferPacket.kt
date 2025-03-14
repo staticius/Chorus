@@ -3,14 +3,10 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class TransferPacket : DataPacket() {
     @JvmField
     var address: String? = null
+
     @JvmField
     var port: Int = 19132
     private var reloadWorld = false

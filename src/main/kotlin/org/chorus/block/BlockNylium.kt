@@ -34,7 +34,7 @@ abstract class BlockNylium(blockState: BlockState?) : BlockSolid(blockState), Na
         fz: Float
     ): Boolean {
         val up = up()
-        if (item.isNull || !item.isFertilizer || !up!!.isAir) {
+        if (item.isNothing || !item.isFertilizer || !up!!.isAir) {
             return false
         }
 
@@ -44,7 +44,7 @@ abstract class BlockNylium(blockState: BlockState?) : BlockSolid(blockState), Na
 
         grow()
 
-        level.addParticle(BoneMealParticle(up!!.position))
+        level.addParticle(BoneMealParticle(up.position))
 
         return true
     }

@@ -27,7 +27,7 @@ class ItemWarpedFungusOnAStick @JvmOverloads constructor(meta: Int = 0, count: I
         get() = 1
 
     override val maxDurability: Int
-        get() = ItemTool.Companion.DURABILITY_WARPED_FUNGUS_ON_A_STICK
+        get() = DURABILITY_WARPED_FUNGUS_ON_A_STICK
 
     override fun noDamageOnBreak(): Boolean {
         return true

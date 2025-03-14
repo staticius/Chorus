@@ -11,12 +11,12 @@ class CraftingGridInventory(holder: Player?) : BaseInventory(holder, InventoryTy
     override fun init() {
         val map2 = super.slotTypeMap()
         for (i in 0..<getSize()) {
-            map2!![i] = ContainerSlotType.CRAFTING_INPUT
+            map2[i] = ContainerSlotType.CRAFTING_INPUT
         }
 
         val map1 = super.networkSlotMap()
         for (i in 0..<getSize()) {
-            map1!![i] = 28 + i
+            map1[i] = 28 + i
         }
     }
 

@@ -8,7 +8,6 @@ import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.min
 
 
-
 class Component : NBTData {
     private val result = CompoundTag()
     var collisionBox: CollisionBox? = null

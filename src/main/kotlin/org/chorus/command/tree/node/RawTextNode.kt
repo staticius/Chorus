@@ -1,8 +1,8 @@
 package org.chorus.command.tree.node
 
+import com.google.gson.JsonSyntaxException
 import org.chorus.command.utils.RawText
 import org.chorus.network.protocol.types.CommandOutputMessage
-import com.google.gson.JsonSyntaxException
 
 /**
  * 解析为[RawText]值
@@ -10,10 +10,10 @@ import com.google.gson.JsonSyntaxException
  *
  * 所有命令参数类型为[RAWTEXT][org.chorus.command.data.CommandParamType.RAWTEXT]如果没有手动指定[IParamNode],则会默认使用这个解析
  */
-class RawTextNode : ParamNode<org.chorus.command.utils.RawText?>() {
+class RawTextNode : ParamNode<RawText?>() {
     override fun fill(arg: String) {
         try {
-            this.value = org.chorus.command.utils.RawText.Companion.fromRawText(arg)
+            this.value = RawText.fromRawText(arg)
         } catch (e: JsonSyntaxException) {
             var index: Int
             var s = e.message

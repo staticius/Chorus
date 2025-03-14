@@ -8,8 +8,6 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
 import org.chorus.event.player.PlayerKickEvent
-import kotlin.collections.List
-import kotlin.collections.Map
 import kotlin.collections.set
 
 /**

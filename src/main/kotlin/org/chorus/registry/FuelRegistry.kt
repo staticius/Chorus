@@ -1,9 +1,8 @@
 package org.chorus.registry
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.block.*
 import org.chorus.item.*
-import org.chorus.registry.RegisterException
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
 class FuelRegistry : IRegistry<Item, Int, Int> {

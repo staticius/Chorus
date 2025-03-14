@@ -4,7 +4,6 @@ import org.chorus.Player
 import org.chorus.block.Block.Companion.get
 import org.chorus.block.BlockLever.Companion.isSupportValid
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.event.Event.isCancelled
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
@@ -150,7 +149,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState?) : BlockFlowable(block
     protected open fun calculateInputStrength(): Int {
         val face = facing
         val pos = position.getSide(face!!)
-        val power = level.getRedstonePower(pos!!, face)
+        val power = level.getRedstonePower(pos, face)
 
         if (power >= 15) {
             return power
@@ -171,8 +170,8 @@ abstract class BlockRedstoneDiode(blockstate: BlockState?) : BlockFlowable(block
             val face1 = face!!.rotateY()
             val face2 = face.rotateYCCW()
             return max(
-                getPowerOnSide(pos.getSide(face1)!!, face1)
-                    .toDouble(), getPowerOnSide(pos.getSide(face2)!!, face2).toDouble()
+                getPowerOnSide(pos.getSide(face1), face1)
+                    .toDouble(), getPowerOnSide(pos.getSide(face2), face2).toDouble()
             ).toInt()
         }
 

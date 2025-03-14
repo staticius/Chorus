@@ -35,7 +35,7 @@ object NBTIO {
         val tag = CompoundTag()
             .putByte("Count", item.getCount())
             .putShort("Damage", item.damage)
-        tag!!.putString("Name", item.id)
+        tag.putString("Name", item.id)
         if (slot != null) {
             tag.putByte("Slot", slot)
         }
@@ -47,41 +47,41 @@ object NBTIO {
         //whereas for `minecraft:potato` item, the corresponding block is `minecraft:potatos`
         //these items do not need to be written
         if (item.isBlock() && item.blockId == item.id) {
-            tag.putCompound("Block", item.blockUnsafe!!.blockState.blockStateTag.copy())
+            tag.putCompound("Block", item.blockUnsafe!!.blockState?.blockStateTag?.copy())
         }
         tag.putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)
         return tag
     }
 
     fun getItemHelper(tag: CompoundTag?): Item {
-        var tag = tag ?: return Item.AIR
+        var tag1 = tag ?: return Item.AIR
 
-        val name = tag.getString("Name")
-        if (name == null || name.isBlank() || name == BlockID.AIR) {
+        val name = tag1.getString("Name")
+        if (name.isNullOrBlank() || name == BlockID.AIR) {
             return Item.AIR
         }
-        if (!tag.containsByte("Count")) {
+        if (!tag1.containsByte("Count")) {
             return Item.AIR
         }
 
         //upgrade item
-        if (tag.contains("version")) {
-            val ver = tag.getInt("version")
+        if (tag1.contains("version")) {
+            val ver = tag1.getInt("version")
             if (ver < ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION) {
-                tag = updateItem(tag, ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)
+                tag1 = updateItem(tag1, ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)!!
             }
         }
 
-        val damage = (if (!tag.containsShort("Damage")) 0 else tag.getShort("Damage")).toInt()
-        val amount = tag.getByte("Count").toInt()
+        val damage = (if (!tag1.containsShort("Damage")) 0 else tag1.getShort("Damage")).toInt()
+        val amount = tag1.getByte("Count").toInt()
         var item = get(name, damage, amount)
-        val tagTag = tag["tag"]
-        if (!item.isNull && tagTag is CompoundTag && !tagTag.isEmpty) {
+        val tagTag = tag1["tag"]
+        if (!item.isNothing && tagTag is CompoundTag && !tagTag.isEmpty) {
             item.setNamedTag(tagTag)
         }
 
-        if (tag.containsCompound("Block")) {
-            var block = tag.getCompound("Block")
+        if (tag1.containsCompound("Block")) {
+            var block = tag1.getCompound("Block")
             val isUnknownBlock = block!!.getString("name") == BlockID.UNKNOWN && block.containsCompound("Block")
             if (isUnknownBlock) {
                 block = block.getCompound("Block") //originBlock
@@ -96,25 +96,25 @@ object NBTIO {
             val blockState = getBlockStateHelper(block!!)
             if (blockState != null) {
                 if (isUnknownBlock) { //restore unknown block item
-                    item = blockState.toItem()
+                    item = blockState.toItem()!!
                     if (damage != 0) {
                         item.damage = damage
                     }
                     item.setCount(amount)
                 }
                 item.blockUnsafe = blockState.toBlock()
-            } else if (item.isNull) { //write unknown block item
+            } else if (item.isNothing) { //write unknown block item
                 item = UnknownItem(BlockID.UNKNOWN, damage, amount)
                 val compoundTag = LinkedCompoundTag()
                     .putString("name", block.getString("name")!!)
                     .putCompound("states", TreeMapCompoundTag(block.getCompound("states")!!.tags))
                 val hash = HashUtils.fnv1a_32_nbt(compoundTag)
-                compoundTag!!.putInt("version", block.getInt("version"))
+                compoundTag.putInt("version", block.getInt("version"))
                 val unknownBlockState = BlockState.makeUnknownBlockState(hash, compoundTag)
                 item.blockUnsafe = BlockUnknown(unknownBlockState)
             }
         } else {
-            if (item.isNull) { //write unknown item
+            if (item.isNothing) { //write unknown item
                 item = UnknownItem(BlockID.UNKNOWN, damage, amount)
                 item.orCreateNamedTag!!.putCompound("Item", CompoundTag().putString("Name", name))
             } else if (item.id == BlockID.UNKNOWN && item.orCreateNamedTag!!.containsCompound("Item")) { //restore unknown item
@@ -128,7 +128,7 @@ object NBTIO {
         return item
     }
 
-    fun getBlockStateHelper(tag: CompoundTag): BlockState {
+    fun getBlockStateHelper(tag: CompoundTag): BlockState? {
         return Registries.BLOCKSTATE[HashUtils.fnv1a_32_nbt_palette(tag)]
     }
 
@@ -216,8 +216,8 @@ object NBTIO {
         tags: Collection<CompoundTag>,
         endianness: ByteOrder = ByteOrder.BIG_ENDIAN,
         network: Boolean = false
-    ): ByteArray? {
-        val baos = ThreadCache.fbaos.get().reset()
+    ): ByteArray {
+        val baos = ThreadCache.fbaos.get()!!.reset()
         NBTOutputStream(baos, endianness, network).use { stream ->
             for (tag in tags) {
                 stream.writeTag(tag)
@@ -228,8 +228,8 @@ object NBTIO {
 
     @JvmOverloads
     @Throws(IOException::class)
-    fun write(tag: CompoundTag, endianness: ByteOrder = ByteOrder.BIG_ENDIAN, network: Boolean = false): ByteArray? {
-        val baos = ThreadCache.fbaos.get().reset()
+    fun write(tag: CompoundTag, endianness: ByteOrder = ByteOrder.BIG_ENDIAN, network: Boolean = false): ByteArray {
+        val baos = ThreadCache.fbaos.get()!!.reset()
         NBTOutputStream(baos, endianness, network).use { stream ->
             stream.writeTag(tag)
             return baos.toByteArray()
@@ -266,8 +266,8 @@ object NBTIO {
     }
 
     @Throws(IOException::class)
-    fun writeNetwork(tag: CompoundTag): ByteArray? {
-        val baos = ThreadCache.fbaos.get().reset()
+    fun writeNetwork(tag: CompoundTag): ByteArray {
+        val baos = ThreadCache.fbaos.get()!!.reset()
         NBTOutputStream(baos, ByteOrder.LITTLE_ENDIAN, true).use { stream ->
             stream.writeTag(tag)
         }
@@ -276,8 +276,8 @@ object NBTIO {
 
     @JvmOverloads
     @Throws(IOException::class)
-    fun writeGZIPCompressed(tag: CompoundTag, endianness: ByteOrder = ByteOrder.BIG_ENDIAN): ByteArray? {
-        val baos = ThreadCache.fbaos.get().reset()
+    fun writeGZIPCompressed(tag: CompoundTag, endianness: ByteOrder = ByteOrder.BIG_ENDIAN): ByteArray {
+        val baos = ThreadCache.fbaos.get()!!.reset()
         writeGZIPCompressed(tag, baos, endianness)
         return baos.toByteArray()
     }
@@ -296,8 +296,8 @@ object NBTIO {
 
     @JvmOverloads
     @Throws(IOException::class)
-    fun writeNetworkGZIPCompressed(tag: CompoundTag, endianness: ByteOrder = ByteOrder.BIG_ENDIAN): ByteArray? {
-        val baos = ThreadCache.fbaos.get().reset()
+    fun writeNetworkGZIPCompressed(tag: CompoundTag, endianness: ByteOrder = ByteOrder.BIG_ENDIAN): ByteArray {
+        val baos = ThreadCache.fbaos.get()!!.reset()
         writeNetworkGZIPCompressed(tag, baos, endianness)
         return baos.toByteArray()
     }
@@ -358,8 +358,8 @@ object NBTIO {
         tag: CompoundTag,
         endianness: ByteOrder = ByteOrder.BIG_ENDIAN,
         network: Boolean = false
-    ): ByteArray? {
-        val baos = ThreadCache.fbaos.get().reset()
+    ): ByteArray {
+        val baos = ThreadCache.fbaos.get()!!.reset()
         NBTOutputStream(baos, endianness, network).use { stream ->
             stream.writeValue(tag)
             return baos.toByteArray()
@@ -367,9 +367,9 @@ object NBTIO {
     }
 
     @Throws(IOException::class)
-    fun readValue(inputStream: InputStream, endianness: ByteOrder, network: Boolean): CompoundTag? {
+    fun readValue(inputStream: InputStream, endianness: ByteOrder, network: Boolean): CompoundTag {
         val nbtInputStream = NBTInputStream(inputStream, endianness, network)
-        return nbtInputStream.readValue<CompoundTag>(Tag.Companion.TAG_COMPOUND.toInt())
+        return nbtInputStream.readValue(Tag.TAG_COMPOUND.toInt())
     }
 
     @Throws(IOException::class)

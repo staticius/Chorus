@@ -3,11 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-
-
-
-
-
 class EmotePacket : DataPacket() {
     var runtimeId: Long = 0
     var xuid: String = ""

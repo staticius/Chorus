@@ -11,6 +11,6 @@ open class BedrockSessionPacketHandler(protected val session: BedrockSession) : 
     protected val handle: PlayerHandle? = session.handle
 
     override fun handle(pk: DisconnectPacket) {
-        player?.close(pk.message)
+        player?.close(pk.message!!)
     }
 }

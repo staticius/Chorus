@@ -8,20 +8,14 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.StringTag
 import org.chorus.nbt.tag.Tag
 
-/**
- * @author CreeperFace
- * @since 2015/11/22
- */
 class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(blockstate), BlockEntityHolder<BlockEntityEnchantTable> {
     override val name: String
         get() = "Enchanting Table"
 
-    override val blockEntityType: String
-        get() = BlockEntity.ENCHANT_TABLE
+    override fun getBlockEntityType(): String = BlockEntityID.ENCHANT_TABLE
 
-    override val blockEntityClass: Class<out E>
-        get() = BlockEntityEnchantTable::class.java
+    override fun getBlockEntityClass(): Class<out BlockEntityEnchantTable> = BlockEntityEnchantTable::class.java
 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
@@ -94,7 +88,7 @@ class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState? = C
             return true
         }
         val itemInHand = player.getInventory().itemInHand
-        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNull)) {
+        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
             return false
         }
 

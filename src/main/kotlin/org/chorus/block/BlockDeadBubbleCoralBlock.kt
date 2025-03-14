@@ -10,6 +10,6 @@ class BlockDeadBubbleCoralBlock : BlockCoralBlock {
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DEAD_BUBBLE_CORAL_BLOCK)
-            
+
     }
 }

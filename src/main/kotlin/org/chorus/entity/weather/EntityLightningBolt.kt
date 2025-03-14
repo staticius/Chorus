@@ -186,7 +186,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
 
         if (this.state >= 0) {
             if (this.isEffect) {
-                val bb: AxisAlignedBB = getBoundingBox()!!.grow(3.0, 3.0, 3.0)
+                val bb: AxisAlignedBB = getBoundingBox().grow(3.0, 3.0, 3.0)
                 bb.setMaxX(bb.maxX + 6)
 
                 for (entity: Entity in level!!.getCollidingEntities(bb, this)) {

@@ -8,8 +8,6 @@ import org.chorus.permission.Permission
 import org.chorus.plugin.Plugin
 
 
-
-
 open class ConsoleCommandSender : CommandSender {
     private val perm: PermissibleBase
 

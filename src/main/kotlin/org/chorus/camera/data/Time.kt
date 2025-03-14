@@ -8,8 +8,9 @@ import org.chorus.nbt.tag.CompoundTag
  * PowerNukkitX Project
  */
 @JvmRecord
-data class Time(@JvmField val fadeIn: Float, @JvmField val hold: Float, @JvmField val fadeOut: Float) : SerializableData {
-    override fun serialize(): CompoundTag? {
+data class Time(@JvmField val fadeIn: Float, @JvmField val hold: Float, @JvmField val fadeOut: Float) :
+    SerializableData {
+    override fun serialize(): CompoundTag {
         return CompoundTag() //time
             .putFloat("fadeIn", fadeIn)
             .putFloat("hold", hold)

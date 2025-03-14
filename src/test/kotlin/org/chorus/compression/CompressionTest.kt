@@ -1,7 +1,7 @@
 package org.chorus.compression
 
-import org.chorus.*
 import org.apache.commons.lang3.reflect.FieldUtils
+import org.chorus.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import java.io.IOException

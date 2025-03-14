@@ -7,13 +7,10 @@ import org.chorus.network.connection.util.HandleByteBuf
 import java.util.*
 
 
-
-
-
-
 class PlayerListPacket : DataPacket() {
     @JvmField
     var type: Byte = 0
+
     @JvmField
     var entries: Array<Entry?> = Entry.EMPTY_ARRAY
 
@@ -51,7 +48,7 @@ class PlayerListPacket : DataPacket() {
         }
     }
 
-    
+
     class Entry {
         val uuid: UUID
 

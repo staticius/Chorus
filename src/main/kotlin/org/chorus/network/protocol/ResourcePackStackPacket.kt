@@ -1,15 +1,10 @@
 package org.chorus.network.protocol
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.entity.Attribute.getName
 import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.resourcepacks.ResourcePack
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
-
-
-
-
 
 
 class ResourcePackStackPacket : DataPacket() {
@@ -50,7 +45,7 @@ class ResourcePackStackPacket : DataPacket() {
         byteBuf.writeBoolean(isHasEditorPacks)
     }
 
-    
+
     class ExperimentData {
         var name: String? = null
         var enabled: Boolean = false
