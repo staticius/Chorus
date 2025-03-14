@@ -3,7 +3,9 @@ package org.chorus.level
 import it.unimi.dsi.fastutil.ints.*
 import org.chorus.Player
 import org.chorus.block.*
+import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
+import org.chorus.network.protocol.UpdateBlockPacket
 import org.chorus.registry.Registries
 import java.util.List
 
@@ -47,18 +49,18 @@ class AntiXraySystem(private val level: Level) {
         get() = this.fakeOreToPutRuntimeIds
 
     fun obfuscateSendBlocks(index: Long, playerArray: Array<Player>, blocks: Int2ObjectOpenHashMap<Any?>) {
-        val size: Int = blocks.size()
+        val size: Int = blocks.size
         val vectorSet = IntOpenHashSet(size * 6)
         val vRidList = ArrayList<Vector3WithRuntimeId>(size * 7)
         var tmpV3Rid: Vector3WithRuntimeId
-        for (blockHash in blocks.keySet()) {
-            var blockHash = blockHash
-            val hash: Vector3 = Level.Companion.getBlockXYZ(index, blockHash, level)
+        for (blockHash in blocks.keys.iterator()) {
+            var blockHash1 = blockHash
+            val hash: Vector3 = Level.Companion.getBlockXYZ(index, blockHash1, level)
             var x = hash.floorX
             var y = hash.floorY
             var z = hash.floorZ
-            if (!vectorSet.contains(blockHash)) {
-                vectorSet.add(blockHash)
+            if (!vectorSet.contains(blockHash1)) {
+                vectorSet.add(blockHash1)
                 try {
                     tmpV3Rid = Vector3WithRuntimeId(
                         x.toDouble(),
@@ -75,9 +77,9 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
             x++
-            blockHash = Level.Companion.localBlockHash(x, y, z, 0, level)
-            if (!vectorSet.contains(blockHash)) {
-                vectorSet.add(blockHash)
+            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            if (!vectorSet.contains(blockHash1)) {
+                vectorSet.add(blockHash1)
                 try {
                     vRidList.add(
                         Vector3WithRuntimeId(
@@ -92,9 +94,9 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
             x -= 2
-            blockHash = Level.Companion.localBlockHash(x, y, z, 0, level)
-            if (!vectorSet.contains(blockHash)) {
-                vectorSet.add(blockHash)
+            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            if (!vectorSet.contains(blockHash1)) {
+                vectorSet.add(blockHash1)
                 try {
                     vRidList.add(
                         Vector3WithRuntimeId(
@@ -110,9 +112,9 @@ class AntiXraySystem(private val level: Level) {
             }
             x++
             y++
-            blockHash = Level.Companion.localBlockHash(x, y, z, 0, level)
-            if (!vectorSet.contains(blockHash)) {
-                vectorSet.add(blockHash)
+            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            if (!vectorSet.contains(blockHash1)) {
+                vectorSet.add(blockHash1)
                 try {
                     vRidList.add(
                         Vector3WithRuntimeId(
@@ -127,9 +129,9 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
             y -= 2
-            blockHash = Level.Companion.localBlockHash(x, y, z, 0, level)
-            if (!vectorSet.contains(blockHash)) {
-                vectorSet.add(blockHash)
+            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            if (!vectorSet.contains(blockHash1)) {
+                vectorSet.add(blockHash1)
                 try {
                     vRidList.add(
                         Vector3WithRuntimeId(
@@ -145,9 +147,9 @@ class AntiXraySystem(private val level: Level) {
             }
             y++
             z++
-            blockHash = Level.Companion.localBlockHash(x, y, z, 0, level)
-            if (!vectorSet.contains(blockHash)) {
-                vectorSet.add(blockHash)
+            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            if (!vectorSet.contains(blockHash1)) {
+                vectorSet.add(blockHash1)
                 try {
                     vRidList.add(
                         Vector3WithRuntimeId(
@@ -162,9 +164,9 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
             z -= 2
-            blockHash = Level.Companion.localBlockHash(x, y, z, 0, level)
-            if (!vectorSet.contains(blockHash)) {
-                vectorSet.add(blockHash)
+            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            if (!vectorSet.contains(blockHash1)) {
+                vectorSet.add(blockHash1)
                 try {
                     vRidList.add(
                         Vector3WithRuntimeId(
@@ -179,7 +181,7 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
         }
-        level.sendBlocks(playerArray, vRidList.toArray<Vector3?> { _Dummy_.__Array__() }, UpdateBlockPacket.FLAG_ALL)
+        level.sendBlocks(playerArray, vRidList.toTypedArray(), UpdateBlockPacket.FLAG_ALL)
     }
 
     fun deObfuscateBlock(player: Player, face: BlockFace, target: Block) {
@@ -187,9 +189,9 @@ class AntiXraySystem(private val level: Level) {
         var tmpVec: Vector3WithRuntimeId
         for (each in BlockFace.entries) {
             if (each == face) continue
-            val tmpX: Int = target.position.floorX + each.getXOffset()
-            val tmpY: Int = target.position.floorY + each.getYOffset()
-            val tmpZ: Int = target.position.floorZ + each.getZOffset()
+            val tmpX: Int = target.position.floorX + each.xOffset
+            val tmpY: Int = target.position.floorY + each.yOffset
+            val tmpZ: Int = target.position.floorZ + each.zOffset
             try {
                 tmpVec = Vector3WithRuntimeId(
                     tmpX.toDouble(),
@@ -205,8 +207,8 @@ class AntiXraySystem(private val level: Level) {
             }
         }
         level.sendBlocks(
-            arrayOf<Player>(player),
-            vecList.toArray<Vector3?> { _Dummy_.__Array__() },
+            arrayOf(player),
+            vecList.toTypedArray(),
             UpdateBlockPacket.FLAG_ALL
         )
     }

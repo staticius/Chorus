@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 
-@RequiredArgsConstructor
 class BedrockEncryptionDecoder : MessageToMessageDecoder<BedrockBatchWrapper>() {
     private val packetCounter = AtomicLong()
     private val key: SecretKey? = null
@@ -16,16 +15,16 @@ class BedrockEncryptionDecoder : MessageToMessageDecoder<BedrockBatchWrapper>() 
 
     @Throws(Exception::class)
     override fun decode(ctx: ChannelHandlerContext, msg: BedrockBatchWrapper, out: MutableList<Any>) {
-        val inBuffer = msg.compressed.nioBuffer()
+        val inBuffer = msg.compressed!!.nioBuffer()
         val outBuffer = inBuffer.duplicate()
 
         // Copy-safe so we can use the same buffer.
         cipher!!.update(inBuffer, outBuffer)
 
-        val output = msg.compressed.readSlice(msg.compressed.readableBytes() - 8)
+        val output = msg.compressed!!.readSlice(msg.compressed!!.readableBytes() - 8)
 
         if (VALIDATE) {
-            val trailer = msg.compressed.readSlice(8)
+            val trailer = msg.compressed!!.readSlice(8)
 
             val actual = ByteArray(8)
             trailer.readBytes(actual)

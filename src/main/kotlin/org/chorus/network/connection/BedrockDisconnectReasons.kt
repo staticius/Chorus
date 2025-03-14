@@ -5,7 +5,6 @@ import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason
 import java.util.*
 import kotlin.collections.set
 
-@UtilityClass
 object BedrockDisconnectReasons {
     const val DISCONNECTED: String = "disconnect.disconnected"
     const val CLOSED: String = "disconnect.closed"

@@ -19,9 +19,9 @@ abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacket
             val buf = ctx.alloc().buffer(128)
             try {
                 val packet = msg.packet
-                msg.packetId = packet.pid()
+                msg.packetId = packet!!.pid()
                 encodeHeader(buf, msg)
-                packet.encode(HandleByteBuf.Companion.of(buf))
+                packet.encode(HandleByteBuf.of(buf))
                 msg.packetBuffer = buf.retain()
                 out.add(msg.retain())
             } catch (t: Throwable) {

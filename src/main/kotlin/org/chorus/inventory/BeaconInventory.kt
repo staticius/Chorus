@@ -9,7 +9,7 @@ import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 /**
  * @author Rover656
  */
-class BeaconInventory(blockBeacon: BlockEntityBeacon?) : BaseInventory(blockBeacon, InventoryType.BEACON, 1),
+class BeaconInventory(blockBeacon: BlockEntityBeacon) : BaseInventory(blockBeacon, InventoryType.BEACON, 1),
     BlockEntityInventoryNameable {
     override fun init() {
         val map = super.slotTypeMap()
@@ -25,7 +25,7 @@ class BeaconInventory(blockBeacon: BlockEntityBeacon?) : BaseInventory(blockBeac
         val drops = who.inventory.addItem(this.getItem(0))
         for (drop in drops) {
             if (!who.dropItem(drop)) {
-                holder.level.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
+                holder.level!!.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
             }
         }
 
@@ -36,7 +36,7 @@ class BeaconInventory(blockBeacon: BlockEntityBeacon?) : BaseInventory(blockBeac
         super.onOpen(who)
         val pk = ContainerOpenPacket()
         pk.windowId = who.getWindowId(this)
-        pk.type = getType().networkType
+        pk.type = type.networkType
         val holder = this.holder
         pk.x = holder.x.toInt()
         pk.y = holder.y.toInt()
@@ -45,12 +45,12 @@ class BeaconInventory(blockBeacon: BlockEntityBeacon?) : BaseInventory(blockBeac
         this.sendContents(who)
     }
 
-    override var holder: InventoryHolder?
-        get() = super.getHolder() as BlockEntityBeacon
+    override var holder: InventoryHolder
+        get() = super.holder as BlockEntityBeacon
         set(holder) {
             super.holder = holder
         }
 
-    override val blockEntityInventoryHolder: BlockEntityNameable?
-        get() = holder
+    override val blockEntityInventoryHolder: BlockEntityNameable
+        get() = holder as BlockEntityNameable
 }

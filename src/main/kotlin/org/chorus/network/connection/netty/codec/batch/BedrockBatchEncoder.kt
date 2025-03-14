@@ -31,13 +31,12 @@ class BedrockBatchEncoder : ChannelOutboundHandlerAdapter() {
         }
 
         val buf = ctx.alloc().compositeDirectBuffer(messages.size * 2)
-        val batch: BedrockBatchWrapper = newInstance()
+        val batch: BedrockBatchWrapper = BedrockBatchWrapper.newInstance()
 
         try {
             var packet: BedrockPacketWrapper
             while ((messages.poll().also { packet = it }) != null) try {
-                val message = packet.packetBuffer
-                requireNotNull(message) { "BedrockPacket is not encoded" }
+                val message = requireNotNull(packet.packetBuffer) { "BedrockPacket is not encoded" }
 
                 val header = ctx.alloc().ioBuffer(5)
                 ByteBufVarInt.writeUnsignedInt(header, message.readableBytes())

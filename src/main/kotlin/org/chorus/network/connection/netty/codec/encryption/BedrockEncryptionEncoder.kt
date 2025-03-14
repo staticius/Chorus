@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 
-@RequiredArgsConstructor
 class BedrockEncryptionEncoder : MessageToMessageEncoder<BedrockBatchWrapper>() {
     private val packetCounter = AtomicLong()
     private val key: SecretKey? = null
@@ -20,16 +19,16 @@ class BedrockEncryptionEncoder : MessageToMessageEncoder<BedrockBatchWrapper>() 
 
     @Throws(Exception::class)
     override fun encode(ctx: ChannelHandlerContext, `in`: BedrockBatchWrapper, out: MutableList<Any>) {
-        val buf = ctx.alloc().ioBuffer(`in`.compressed.readableBytes() + 8)
+        val buf = ctx.alloc().ioBuffer(`in`.compressed!!.readableBytes() + 8)
         try {
             val trailer = ByteBuffer.wrap(
                 generateTrailer(
-                    `in`.compressed,
+                    `in`.compressed!!,
                     key!!, this.packetCounter
                 )
             )
-            val inBuffer = `in`.compressed.nioBuffer()
-            val outBuffer = buf.nioBuffer(0, `in`.compressed.readableBytes() + 8)
+            val inBuffer = `in`.compressed!!.nioBuffer()
+            val outBuffer = buf.nioBuffer(0, `in`.compressed!!.readableBytes() + 8)
 
             var index = cipher!!.update(inBuffer, outBuffer)
             index += cipher.update(trailer, outBuffer)
@@ -44,7 +43,7 @@ class BedrockEncryptionEncoder : MessageToMessageEncoder<BedrockBatchWrapper>() 
 
     companion object {
         const val NAME: String = "bedrock-encryption-encoder"
-        private val DIGEST: FastThreadLocal<MessageDigest> = object : FastThreadLocal<MessageDigest?>() {
+        private val DIGEST: FastThreadLocal<MessageDigest> = object : FastThreadLocal<MessageDigest>() {
             override fun initialValue(): MessageDigest {
                 try {
                     return MessageDigest.getInstance("SHA-256")

@@ -11,7 +11,7 @@ class BedrockBatchDecoder : MessageToMessageDecoder<BedrockBatchWrapper>() {
     override fun decode(ctx: ChannelHandlerContext, msg: BedrockBatchWrapper, out: MutableList<Any>) {
         checkNotNull(msg.uncompressed) { "Batch packet was not decompressed" }
 
-        val buffer = msg.uncompressed.slice()
+        val buffer = msg.uncompressed!!.slice()
         while (buffer.isReadable) {
             val packetLength = ByteBufVarInt.readUnsignedInt(buffer)
             val packetBuf = buffer.readRetainedSlice(packetLength)

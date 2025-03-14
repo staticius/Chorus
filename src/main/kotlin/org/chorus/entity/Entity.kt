@@ -243,7 +243,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     protected var inEndPortal: Boolean = false
     protected var isPlayer: Boolean = this is Player
     private var maxHealth: Int = 20
-    protected var name: String? = null
+    var name: String? = null
+        protected set
 
     @Volatile
     private var initialized: Boolean = false
