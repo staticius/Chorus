@@ -551,7 +551,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 val gossipValues = gossipTag.getList(key, IntTag::class.java)
                 val valueMap = IntArrayList()
                 for (i in 0..<gossipValues.size()) {
-                    valueMap.add(i, gossipValues[i].getData())
+                    valueMap.add(i, gossipValues[i].data)
                 }
                 gossipMap[key] = valueMap
             }

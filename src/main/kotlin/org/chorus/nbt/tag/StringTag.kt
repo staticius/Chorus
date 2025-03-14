@@ -1,18 +1,11 @@
 package org.chorus.nbt.tag
 
-import com.google.common.base.Preconditions
 import java.util.*
 
-class StringTag : Tag<String> {
-    var data: String? = null
+class StringTag(var data: String) : Tag<String>() {
+    constructor(): this("")
 
-    constructor()
-
-    constructor(data: String) {
-        this.data = Preconditions.checkNotNull(data, "Empty string not allowed")
-    }
-
-    override fun parseValue(): String? {
+    override fun parseValue(): String {
         return this.data
     }
 
@@ -32,13 +25,13 @@ class StringTag : Tag<String> {
     }
 
     override fun copy(): Tag<String> {
-        return StringTag(data!!)
+        return StringTag(data)
     }
 
     override fun equals(other: Any?): Boolean {
         if (super.equals(other)) {
             val o = other as StringTag
-            return ((data == null && o.data == null) || (data != null && data == o.data))
+            return (data == o.data)
         }
         return false
     }

@@ -1,6 +1,6 @@
 package org.chorus.nbt.tag
 
-class EndTag : Tag<Void>() {
+class EndTag : Tag<Unit>() {
     override val id: Byte
         get() = TAG_END
 
@@ -16,11 +16,11 @@ class EndTag : Tag<Void>() {
         return ""
     }
 
-    override fun copy(): Tag<Void> {
+    override fun copy(): Tag<Unit> {
         return EndTag()
     }
 
-    override fun parseValue(): Void? {
-        return null
+    override fun parseValue() {
+        return
     }
 }

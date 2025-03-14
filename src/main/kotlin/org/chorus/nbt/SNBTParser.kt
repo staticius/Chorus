@@ -6,49 +6,56 @@ import org.chorus.nbt.snbt.*
 import org.chorus.nbt.snbt.ast.*
 import org.chorus.nbt.tag.*
 import java.io.*
-import java.util.Map
 
-class SNBTParser private constructor(SNBT: String) {
+class SNBTParser private constructor(snbt: String) {
     private val root: Node?
 
     init {
-        val parser = SNBTParserImplement(StringReader(SNBT))
+        val parser = SNBTParserImplement(StringReader(snbt))
         parser.Root()
         root = parser.rootNode()
     }
 
     @Throws(ParseException::class)
-    private fun parseNode(node: Node?): Tag? {
-        var tag: Tag? = null
-        if (node is ByteArrayNBT) {
-            val tmp = ArrayList<Byte>()
-            val it: Iterator<Node?> = node.iterator()
-            while (it.hasNext()) {
-                val child = it.next()
-                if (child is Token) {
-                    val s = child.normalizedText
-                    if (isLiteralValue(child)) {
-                        tmp.add(s.substring(0, s.length - 1).toByte())
+    private fun parseNode(node: Node?): Tag<*>? {
+        var tag: Tag<*>? = null
+        when (node) {
+            is ByteArrayNBT -> {
+                val tmp = ArrayList<Byte>()
+                val it: Iterator<Node?> = node.iterator()
+                while (it.hasNext()) {
+                    val child = it.next()
+                    if (child is Token) {
+                        val s = child.normalizedText
+                        if (isLiteralValue(child)) {
+                            tmp.add(s.substring(0, s.length - 1).toByte())
+                        }
                     }
                 }
+                tag = ByteArrayTag(Bytes.toArray(tmp))
             }
-            tag = ByteArrayTag(Bytes.toArray(tmp))
-        } else if (node is IntArrayNBT) {
-            val tmp = ArrayList<Int>()
-            val it: Iterator<Node?> = node.iterator()
-            while (it.hasNext()) {
-                val child = it.next()
-                if (child is Token) {
-                    if (isLiteralValue(child)) {
-                        tmp.add(child.normalizedText.toInt())
+
+            is IntArrayNBT -> {
+                val tmp = ArrayList<Int>()
+                val it: Iterator<Node?> = node.iterator()
+                while (it.hasNext()) {
+                    val child = it.next()
+                    if (child is Token) {
+                        if (isLiteralValue(child)) {
+                            tmp.add(child.normalizedText.toInt())
+                        }
                     }
                 }
+                tag = IntArrayTag(Ints.toArray(tmp))
             }
-            tag = IntArrayTag(Ints.toArray(tmp))
-        } else if (node is ListNBT) { //only Value
-            tag = parseListTag(node)
-        } else if (node is CompoundNBT) { //only KeyValuePair
-            tag = parseCompoundNBT(node)
+
+            is ListNBT -> { //only Value
+                tag = parseListTag(node)
+            }
+
+            is CompoundNBT -> { //only KeyValuePair
+                tag = parseCompoundNBT(node)
+            }
         }
         return tag
     }
@@ -60,12 +67,12 @@ class SNBTParser private constructor(SNBT: String) {
         while (it.hasNext()) {
             val child = it.next()
             if (child is KeyValuePair) {
-                val s = child.getFirstToken().normalizedText
-                val key = s!!.substring(1, s!!.length - 1) //only STRING TOKEN
-                if (child.getChildCount() == 3) {
+                val s = child.firstToken?.normalizedText
+                val key = s!!.substring(1, s.length - 1) //only STRING TOKEN
+                if (child.childCount == 3) {
                     val value = child.getChild(2)
                     if (value!!.hasChildNodes()) {
-                        result.put(key, parseNode(value))
+                        result.put(key, parseNode(value)!!)
                     } else {
                         val token = value as Token
                         if (isLiteralValue(token)) {
@@ -81,7 +88,7 @@ class SNBTParser private constructor(SNBT: String) {
     }
 
     private fun parseListTag(node: Node): ListTag<*> {
-        val result = ListTag<Tag>()
+        val result = ListTag<Tag<*>>()
         val it: Iterator<Node?> = node.iterator()
         while (it.hasNext()) {
             val child = it.next()
@@ -96,7 +103,7 @@ class SNBTParser private constructor(SNBT: String) {
         return result
     }
 
-    private fun parseToken(token: Token): Tag {
+    private fun parseToken(token: Token): Tag<*> {
         try {
             val s = token.normalizedText
             return when (token.type) {
@@ -151,11 +158,11 @@ class SNBTParser private constructor(SNBT: String) {
 
     companion object {
         @Throws(ParseException::class)
-        fun parse(SNBT: String): CompoundTag {
-            val parser = SNBTParser(SNBT)
-            val tag = parser.parseNode(parser.root.getFirstChild())
+        fun parse(snbt: String): CompoundTag {
+            val parser = SNBTParser(snbt)
+            val tag = parser.parseNode(parser.root?.firstChild!!)
             if (tag is CompoundTag) return tag
-            return CompoundTag(Map.of("", tag))
+            return CompoundTag(mutableMapOf(Pair("", tag!!)))
         }
     }
 }

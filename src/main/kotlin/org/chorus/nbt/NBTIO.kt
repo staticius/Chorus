@@ -40,14 +40,14 @@ object NBTIO {
             tag.putByte("Slot", slot)
         }
         if (item.hasCompoundTag()) {
-            tag.putCompound("tag", item.namedTag)
+            tag.putCompound("tag", item.namedTag!!)
         }
         //ItemID same with blockID, represent this is a pure blockitem,
         //and only blockitem need to be written `Block` to NBT,
         //whereas for `minecraft:potato` item, the corresponding block is `minecraft:potatos`
         //these items do not need to be written
         if (item.isBlock() && item.blockId == item.id) {
-            tag.putCompound("Block", item.blockUnsafe!!.blockState?.blockStateTag?.copy())
+            tag.putCompound("Block", item.blockUnsafe!!.blockState?.blockStateTag?.copy()!!)
         }
         tag.putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)
         return tag
@@ -57,7 +57,7 @@ object NBTIO {
         var tag1 = tag ?: return Item.AIR
 
         val name = tag1.getString("Name")
-        if (name.isNullOrBlank() || name == BlockID.AIR) {
+        if (name.isBlank() || name == BlockID.AIR) {
             return Item.AIR
         }
         if (!tag1.containsByte("Count")) {
@@ -68,7 +68,7 @@ object NBTIO {
         if (tag1.contains("version")) {
             val ver = tag1.getInt("version")
             if (ver < ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION) {
-                tag1 = updateItem(tag1, ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)!!
+                tag1 = updateItem(tag1, ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)
             }
         }
 
@@ -82,21 +82,21 @@ object NBTIO {
 
         if (tag1.containsCompound("Block")) {
             var block = tag1.getCompound("Block")
-            val isUnknownBlock = block!!.getString("name") == BlockID.UNKNOWN && block.containsCompound("Block")
+            val isUnknownBlock = block.getString("name") == BlockID.UNKNOWN && block.containsCompound("Block")
             if (isUnknownBlock) {
                 block = block.getCompound("Block") //originBlock
             }
             //upgrade block
-            if (block!!.contains("version")) {
+            if (block.contains("version")) {
                 val ver = block.getInt("version")
                 if (ver < ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION) {
                     block = updateBlockState(block, ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)
                 }
             }
-            val blockState = getBlockStateHelper(block!!)
+            val blockState = getBlockStateHelper(block)
             if (blockState != null) {
                 if (isUnknownBlock) { //restore unknown block item
-                    item = blockState.toItem()!!
+                    item = blockState.toItem()
                     if (damage != 0) {
                         item.damage = damage
                     }
@@ -106,8 +106,8 @@ object NBTIO {
             } else if (item.isNothing) { //write unknown block item
                 item = UnknownItem(BlockID.UNKNOWN, damage, amount)
                 val compoundTag = LinkedCompoundTag()
-                    .putString("name", block.getString("name")!!)
-                    .putCompound("states", TreeMapCompoundTag(block.getCompound("states")!!.tags))
+                    .putString("name", block.getString("name"))
+                    .putCompound("states", TreeMapCompoundTag(block.getCompound("states").tags))
                 val hash = HashUtils.fnv1a_32_nbt(compoundTag)
                 compoundTag.putInt("version", block.getInt("version"))
                 val unknownBlockState = BlockState.makeUnknownBlockState(hash, compoundTag)
@@ -120,7 +120,7 @@ object NBTIO {
             } else if (item.id == BlockID.UNKNOWN && item.orCreateNamedTag!!.containsCompound("Item")) { //restore unknown item
                 val removeTag = item.namedTag!!.removeAndGet<CompoundTag>("Item")
                 val originItemName = removeTag!!.getString("Name")
-                val originItem = get(originItemName!!, damage, amount)
+                val originItem = get(originItemName, damage, amount)
                 originItem.setNamedTag(item.namedTag)
                 item = originItem
             }

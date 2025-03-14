@@ -1,7 +1,6 @@
 package org.chorus.registry
 
 import com.google.gson.GsonBuilder
-import com.google.gson.stream.JsonReader
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.nbt.NBTIO.readTreeMapCompoundTag
@@ -20,14 +19,15 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
         if (isLoad.getAndSet(true)) return
         try {
             BiomeRegistry::class.java.classLoader.getResourceAsStream("biome_id_and_type.json").use { stream ->
-                val gson = GsonBuilder().setObjectToNumberStrategy { obj: JsonReader -> obj.nextInt() }
-                    .create()
-                val map: Map<String?, *> = gson.fromJson<Map<*, *>>(
+                if (stream == null) throw RuntimeException("Could not load biome_id_and_type.json")
+
+                val gson = GsonBuilder().setObjectToNumberStrategy { it.nextInt() }.create()
+                val map: Map<String, *> = gson.fromJson<Map<String, *>>(
                     InputStreamReader(stream),
                     MutableMap::class.java
                 )
                 for ((key, value) in map) {
-                    NAME2ID.put(key, (value as Map<String?, *>)["id"].toString().toInt())
+                    NAME2ID.put(key, (value as Map<*, *>)["id"].toString().toInt())
                 }
             }
         } catch (e: IOException) {
@@ -36,14 +36,15 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
 
         try {
             BiomeRegistry::class.java.classLoader.getResourceAsStream("biome_definitions.nbt").use { stream ->
+                stream ?: throw RuntimeException("Could not load biome_definitions.nbt")
                 val compoundTag = readTreeMapCompoundTag(stream, ByteOrder.BIG_ENDIAN, true)
-                val tags: Map<String?, Tag?> = compoundTag.getTags()
+                val tags: Map<String, Tag<*>> = compoundTag.getTags()
                 for ((key, value1) in tags) {
                     val id = NAME2ID.getInt(key)
                     val value = value1 as CompoundTag?
                     val tags1 = value!!.getList("tags", StringTag::class.java)
                     val list =
-                        tags1!!.all.stream().map { obj: StringTag? -> obj!!.parseValue() }.collect(Collectors.toSet())
+                        tags1.all.stream().map { obj: StringTag? -> obj!!.parseValue() }.collect(Collectors.toSet())
                     val biomeDefinition = BiomeDefinition(
                         value.getFloat("ash"),
                         value.getFloat("blue_spores"),
@@ -141,16 +142,16 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
         val waterColorG: Float,
         val waterColorR: Float,
         val waterTransparency: Float,
-        val white_ash: Float
+        val whiteAsh: Float
     ) {
-        override fun tags(): @UnmodifiableView MutableSet<String> {
+        fun tags(): @UnmodifiableView MutableSet<String> {
             return Collections.unmodifiableSet(tags)
         }
 
         fun toNBT(): CompoundTag {
-            val stringTagListTag = ListTag<StringTag?>()
+            val stringTags = ListTag<StringTag>()
             for (s in tags) {
-                stringTagListTag.add(StringTag(s))
+                stringTags.add(StringTag(s))
             }
             return CompoundTag()
                 .putFloat("ash", ash)
@@ -161,7 +162,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
                 .putString("name_hash", name_hash!!)
                 .putByte("rain", rain.toInt())
                 .putFloat("red_spores", red_spores)
-                .putList("tags", stringTagListTag)
+                .putList("tags", stringTags)
                 .putFloat("temperature", temperature)
                 .putFloat("waterColorA", waterColorA)
                 .putFloat("waterColorB", waterColorB)
@@ -169,7 +170,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
                 .putFloat("waterColorG", waterColorG)
                 .putFloat("waterColorR", waterColorR)
                 .putFloat("waterTransparency", waterTransparency)
-                .putFloat("white_ash", white_ash)
+                .putFloat("white_ash", whiteAsh)
         }
     }
 

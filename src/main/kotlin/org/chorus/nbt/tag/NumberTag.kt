@@ -2,8 +2,7 @@ package org.chorus.nbt.tag
 
 import java.util.*
 
-
-abstract class NumberTag<T : Number?> : Tag<T>() {
+abstract class NumberTag<T : Number> : Tag<T>() {
     abstract var data: T
 
     override fun hashCode(): Int {
