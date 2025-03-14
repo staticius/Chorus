@@ -12,10 +12,8 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 
-class BedrockEncryptionEncoder : MessageToMessageEncoder<BedrockBatchWrapper>() {
+class BedrockEncryptionEncoder(val key: SecretKey, val cipher: Cipher) : MessageToMessageEncoder<BedrockBatchWrapper>() {
     private val packetCounter = AtomicLong()
-    private val key: SecretKey? = null
-    private val cipher: Cipher? = null
 
     @Throws(Exception::class)
     override fun encode(ctx: ChannelHandlerContext, `in`: BedrockBatchWrapper, out: MutableList<Any>) {
@@ -24,13 +22,13 @@ class BedrockEncryptionEncoder : MessageToMessageEncoder<BedrockBatchWrapper>() 
             val trailer = ByteBuffer.wrap(
                 generateTrailer(
                     `in`.compressed!!,
-                    key!!, this.packetCounter
+                    key, this.packetCounter
                 )
             )
             val inBuffer = `in`.compressed!!.nioBuffer()
             val outBuffer = buf.nioBuffer(0, `in`.compressed!!.readableBytes() + 8)
 
-            var index = cipher!!.update(inBuffer, outBuffer)
+            var index = cipher.update(inBuffer, outBuffer)
             index += cipher.update(trailer, outBuffer)
 
             buf.writerIndex(index)

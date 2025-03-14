@@ -20,6 +20,7 @@ import org.chorus.network.connection.util.EncryptionUtils
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.types.PacketCompressionAlgorithm
+import org.chorus.utils.Loggable
 import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
@@ -37,7 +38,7 @@ import javax.crypto.SecretKey
  */
 
 class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSessionFactory) :
-    ChannelInboundHandlerAdapter() {
+    ChannelInboundHandlerAdapter(), Loggable {
     protected val sessions: Int2ObjectMap<BedrockSession> = Int2ObjectOpenHashMap()
     protected val packetQueue: Queue<BedrockPacketWrapper> = PlatformDependent.newMpscQueue()
     protected var tickFuture: ScheduledFuture<*>? = null
@@ -60,7 +61,7 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
     }
 
     fun removeSession(session: BedrockSession) {
-        sessions.remove(session.subClientId, session)
+        sessions.remove(session.subClientId, session as Any)
     }
 
     protected fun onTick() {
@@ -144,15 +145,15 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
         val useCtr = protocolVersion >= 428
 
         channel.pipeline().addAfter(
-            FrameIdCodec.Companion.NAME, BedrockEncryptionEncoder.Companion.NAME,
+            FrameIdCodec.NAME, BedrockEncryptionEncoder.NAME,
             BedrockEncryptionEncoder(secretKey, EncryptionUtils.createCipher(useCtr, true, secretKey))
         )
         channel.pipeline().addAfter(
-            FrameIdCodec.Companion.NAME, BedrockEncryptionDecoder.Companion.NAME,
+            FrameIdCodec.NAME, BedrockEncryptionDecoder.NAME,
             BedrockEncryptionDecoder(secretKey, EncryptionUtils.createCipher(useCtr, false, secretKey))
         )
 
-        BedrockPeer.log.debug("Encryption enabled for {}", socketAddress)
+        log.debug("Encryption enabled for {}", socketAddress)
     }
 
     fun setCompression(algorithm: PacketCompressionAlgorithm) {
@@ -200,7 +201,7 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
 
     protected fun onClose() {
         if (channel.isOpen) {
-            BedrockPeer.log.warn("Tried to close peer, but channel is open!", Throwable())
+            log.warn("Tried to close peer, but channel is open!", Throwable())
             return
         }
 
@@ -208,7 +209,7 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
             try {
                 session.onClose()
             } catch (e: Exception) {
-                BedrockPeer.log.error("Exception whilst closing session", e)
+                log.error("Exception whilst closing session", e)
             }
         }
 

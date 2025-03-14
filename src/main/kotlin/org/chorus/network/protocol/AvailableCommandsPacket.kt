@@ -11,7 +11,7 @@ import java.util.function.ObjIntConsumer
 
 
 class AvailableCommandsPacket : DataPacket() {
-    var commands: Map<String?, CommandDataVersions>? = null
+    var commands: Map<String, CommandDataVersions>? = null
     val constraints: List<CommandEnumConstraintData> = ObjectArrayList()
 
     override fun decode(byteBuf: HandleByteBuf) {
