@@ -37,23 +37,23 @@ class BehaviorGroup(
     /**
      * 不会被其他行为覆盖的"核心“行为
      */
-    protected val coreBehaviors: Set<IBehavior>,
+    override val coreBehaviors: Set<IBehavior>,
     /**
      * 全部行为
      */
-    protected val behaviors: Set<IBehavior>,
+    override val behaviors: Set<IBehavior>,
     /**
      * 传感器
      */
-    protected val sensors: Set<ISensor>,
+    override val sensors: Set<ISensor>,
     /**
      * 控制器
      */
-    protected val controllers: Set<IController>,
+    override val controllers: Set<IController>,
     /**
      * 寻路器(非异步，因为没必要，生物AI本身就是并行的)
      */
-    protected val routeFinder: IRouteFinder?,
+    override val routeFinder: IRouteFinder,
     /**
      * 此行为组所属实体
      */
@@ -62,12 +62,12 @@ class BehaviorGroup(
     /**
      * 正在运行的”核心“行为
      */
-    protected val runningCoreBehaviors: MutableSet<IBehavior> = HashSet()
+    override val runningCoreBehaviors: MutableSet<IBehavior> = HashSet()
 
     /**
      * 正在运行的行为
      */
-    protected val runningBehaviors: MutableSet<IBehavior> = HashSet()
+    override val runningBehaviors: MutableSet<IBehavior> = HashSet()
 
     /**
      * 用于存储核心行为距离上次评估逝去的gt数
@@ -88,7 +88,7 @@ class BehaviorGroup(
      * 记忆存储器
      */
     //此参数用于错开各个实体路径更新的时间，避免在1gt内提交过多路径更新任务
-    protected val memoryStorage: IMemoryStorage = MemoryStorage(entity)
+    override val memoryStorage: IMemoryStorage = MemoryStorage(entity)
 
     /**
      * 寻路任务
@@ -106,7 +106,7 @@ class BehaviorGroup(
     /**
      * 运行并刷新正在运行的行为
      */
-    override fun tickRunningBehaviors(entity: EntityMob?) {
+    override fun tickRunningBehaviors(entity: EntityMob) {
         val iterator = runningBehaviors.iterator()
         while (iterator.hasNext()) {
             val behavior = iterator.next()
@@ -118,7 +118,7 @@ class BehaviorGroup(
         }
     }
 
-    override fun tickRunningCoreBehaviors(entity: EntityMob?) {
+    override fun tickRunningCoreBehaviors(entity: EntityMob) {
         val iterator = runningCoreBehaviors.iterator()
         while (iterator.hasNext()) {
             val coreBehavior = iterator.next()
@@ -138,7 +138,7 @@ class BehaviorGroup(
         }
     }
 
-    override fun collectSensorData(entity: EntityMob?) {
+    override fun collectSensorData(entity: EntityMob) {
         sensorPeriodTimer.forEach { (sensor: ISensor?, tick: Int?) ->
             var tick: Int? = tick
             //刷新gt数
@@ -150,7 +150,7 @@ class BehaviorGroup(
         }
     }
 
-    override fun evaluateCoreBehaviors(entity: EntityMob?) {
+    override fun evaluateCoreBehaviors(entity: EntityMob) {
         coreBehaviorPeriodTimer.forEach { (coreBehavior: IBehavior?, tick: Int?) ->
             var tick: Int? = tick
             //若已经在运行了，就不需要评估了
@@ -174,7 +174,7 @@ class BehaviorGroup(
      *
      * @param entity 评估的实体对象
      */
-    override fun evaluateBehaviors(entity: EntityMob?) {
+    override fun evaluateBehaviors(entity: EntityMob) {
         //存储评估成功的行为（未过滤优先级）
         val evalSucceed = HashSet<IBehavior>(behaviors.size)
         var highestPriority = Int.MIN_VALUE
@@ -364,7 +364,7 @@ class BehaviorGroup(
 
         if (EntityAI.checkDebugOption(EntityAI.DebugOption.MEMORY)) {
             val sortedMemory: ArrayList<Map.Entry<MemoryType<*>, Any>> =
-                ArrayList<Map.Entry<MemoryType<*>, Any>>(getMemoryStorage().all.entries)
+                ArrayList<Map.Entry<MemoryType<*>, Any>>(memoryStorage.all.entries)
             sortedMemory.sortWith(
                 Comparator.comparing(
                     { s: Map.Entry<MemoryType<*>, Any?> -> s.key.identifier.path },

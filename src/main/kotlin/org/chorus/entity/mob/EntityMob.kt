@@ -497,7 +497,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     }
 
     override fun getMemoryStorage(): IMemoryStorage? {
-        return getBehaviorGroup()!!.getMemoryStorage()
+        return getBehaviorGroup()!!.memoryStorage
     }
 
     /**
