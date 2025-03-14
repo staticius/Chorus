@@ -10,7 +10,7 @@ class BlockWitherSkeletonSkull(blockState: BlockState?) : BlockHead(blockState) 
     override val name: String
         get() = "Wither Skeleton Skull"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
             this.toItem()
         )

@@ -104,7 +104,7 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState? = Compa
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(toItem())
     }
 

@@ -15,7 +15,7 @@ class BlockCaveVinesBodyWithBerries @JvmOverloads constructor(blockstate: BlockS
     override val lightLevel: Int
         get() = 14
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(Item.get(ItemID.GLOW_BERRIES))
     }
 

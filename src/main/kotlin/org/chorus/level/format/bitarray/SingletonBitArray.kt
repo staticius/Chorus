@@ -16,7 +16,7 @@ class SingletonBitArray : BitArray {
         return 0
     }
 
-    override fun writeSizeToNetwork(buffer: ByteBuf?, size: Int) {
+    override fun writeSizeToNetwork(buffer: ByteBuf, size: Int) {
         throw UnsupportedOperationException()
     }
 

@@ -133,7 +133,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

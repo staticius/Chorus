@@ -70,7 +70,7 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isShears) {
             arrayOf(toItem())
         } else {

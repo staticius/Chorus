@@ -20,7 +20,7 @@ class BlockMangroveLeaves : BlockLeaves {
     override val name: String
         get() = "Mangrove Leaves"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isShears) {
             return arrayOf(
                 toItem()

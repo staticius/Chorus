@@ -5,7 +5,7 @@ import org.chorus.item.Item
 
 class BlockMushroomStem @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
     BlockMushroomBlock(blockstate) {
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

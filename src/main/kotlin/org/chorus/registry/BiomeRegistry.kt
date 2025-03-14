@@ -99,7 +99,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
             }
         }
 
-    val biomeDefinitions: @UnmodifiableView MutableSet<BiomeDefinition?>
+    val biomeDefinitions: @UnmodifiableView MutableSet<BiomeDefinition>
         get() = Collections.unmodifiableSet(HashSet(DEFINITIONS.values))
 
     override fun trim() {
@@ -132,10 +132,10 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
         val depth: Float,
         val downfall: Float,
         val height: Float,
-        @JvmField val name_hash: String?,
+        @JvmField val name_hash: String,
         val rain: Byte,
         val red_spores: Float,
-        @JvmField val tags: Set<String>,
+        @JvmField val tags: MutableSet<String>,
         val temperature: Float,
         val waterColorA: Float,
         val waterColorB: Float,

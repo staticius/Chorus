@@ -17,7 +17,7 @@ class BlockMelonBlock @JvmOverloads constructor(blockstate: BlockState? = Compan
     override val resistance: Double
         get() = 5.0
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         val random = Random()
         var count = 3 + random.nextInt(5)
 

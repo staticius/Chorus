@@ -13,7 +13,7 @@ class BlockBreakEvent(
     block: Block,
     val face: BlockFace?,
     val item: Item?,
-    drops: Array<Item?>?,
+    drops: Array<Item>,
     instaBreak: Boolean,
     fastBreak: Boolean
 ) :
@@ -28,7 +28,7 @@ class BlockBreakEvent(
      */
     @JvmField
     var instaBreak: Boolean = false
-    var drops: Array<Item?>? = Item.EMPTY_ARRAY
+    var drops: Array<Item> = Item.EMPTY_ARRAY
     var dropExp: Int = 0
     var isFastBreak: Boolean = false
         protected set
@@ -38,7 +38,7 @@ class BlockBreakEvent(
         player: Player?,
         block: Block,
         item: Item?,
-        drops: Array<Item?>?,
+        drops: Array<Item>,
         instaBreak: Boolean = false,
         fastBreak: Boolean = false
     ) : this(player, block, null, item, drops, instaBreak, fastBreak)

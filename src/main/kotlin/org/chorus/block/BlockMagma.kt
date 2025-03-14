@@ -34,7 +34,7 @@ class BlockMagma : BlockSolid {
     override val lightLevel: Int
         get() = 3
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isPickaxe && item.tier >= ItemTool.TIER_WOODEN) {
             arrayOf(
                 toItem()

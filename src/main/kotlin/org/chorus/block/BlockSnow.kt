@@ -22,7 +22,7 @@ class BlockSnow : BlockSolid {
     override val toolType: Int
         get() = ItemTool.TYPE_SHOVEL
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isShovel && item.tier >= ItemTool.TIER_WOODEN) {
             arrayOf<Item?>(
                 ItemSnowball(0, 4)

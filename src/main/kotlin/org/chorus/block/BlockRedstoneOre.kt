@@ -16,7 +16,7 @@ open class BlockRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = 
     override val name: String
         get() = "Redstone Ore"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isPickaxe && item.tier >= toolTier) {
             var count = Random().nextInt(2) + 4
 

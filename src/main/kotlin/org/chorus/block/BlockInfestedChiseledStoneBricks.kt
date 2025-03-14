@@ -17,7 +17,7 @@ class BlockInfestedChiseledStoneBricks @JvmOverloads constructor(blockState: Blo
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

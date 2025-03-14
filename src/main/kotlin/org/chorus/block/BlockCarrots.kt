@@ -13,7 +13,7 @@ class BlockCarrots @JvmOverloads constructor(blockstate: BlockState? = Companion
     override val name: String
         get() = "Carrot Block"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (!isFullyGrown) {
             return arrayOf(
                 Item.get(ItemID.CARROT)

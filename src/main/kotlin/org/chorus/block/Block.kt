@@ -1021,7 +1021,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
      *
      * @return An array of dropped items
      */
-    open fun getDrops(item: Item): Array<Item?>? {
+    open fun getDrops(item: Item): Array<Item> {
         if (canHarvestWithHand() || canHarvest(item)) {
             return arrayOf(
                 this.toItem()

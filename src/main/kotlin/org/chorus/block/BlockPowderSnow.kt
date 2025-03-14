@@ -35,7 +35,7 @@ class BlockPowderSnow : BlockTransparent {
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

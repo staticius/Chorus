@@ -21,7 +21,7 @@ class BlockClay : BlockSolid, Natural {
     override val name: String
         get() = "Clay Block"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         val clayBall: Item = ItemClayBall()
         clayBall.setCount(4)
         return arrayOf(

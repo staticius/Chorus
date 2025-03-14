@@ -139,7 +139,7 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState? = Compan
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isPickaxe && item.tier >= toolTier) {
             arrayOf(
                 get(get(OBSIDIAN).itemId, 0, 8)

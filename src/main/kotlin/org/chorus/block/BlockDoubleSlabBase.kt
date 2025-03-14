@@ -26,7 +26,7 @@ abstract class BlockDoubleSlabBase(blockState: BlockState?) : BlockSolid(blockSt
         return canHarvestWithHand() || canHarvest(item)
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (isCorrectTool(item)) {
             val slab = toItem()
             slab!!.setCount(2)

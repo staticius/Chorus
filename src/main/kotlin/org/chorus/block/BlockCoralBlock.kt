@@ -53,7 +53,7 @@ abstract class BlockCoralBlock(blockstate: BlockState?) : BlockSolid(blockstate)
         return 0
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isPickaxe && item.tier >= ItemTool.TIER_WOODEN) {
             if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null) {
                 arrayOf(toItem())

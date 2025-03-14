@@ -170,7 +170,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
         return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(this.toItem())
     }
 

@@ -179,7 +179,7 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState? = Companion.
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
             get(BlockID.LADDER, 0, 1)
         )

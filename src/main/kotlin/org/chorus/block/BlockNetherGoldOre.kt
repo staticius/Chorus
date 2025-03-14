@@ -15,7 +15,7 @@ class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState? = Com
     override val name: String
         get() = "Nether Gold Ore"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (!item.isPickaxe || item.tier < ItemTool.TIER_WOODEN) {
             return Item.EMPTY_ARRAY
         }

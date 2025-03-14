@@ -28,7 +28,7 @@ class BlockMycelium : BlockDirt {
     override val resistance: Double
         get() = 2.5
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf<Item?>(
             ItemBlock(get(BlockID.DIRT))
         )

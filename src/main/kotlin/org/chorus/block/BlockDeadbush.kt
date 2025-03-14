@@ -57,7 +57,7 @@ class BlockDeadbush @JvmOverloads constructor(blockState: BlockState? = Companio
         return 0
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isShears) {
             arrayOf(
                 toItem()

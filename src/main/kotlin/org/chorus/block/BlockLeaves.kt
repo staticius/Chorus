@@ -52,7 +52,7 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isShears) {
             return arrayOf(
                 toItem()

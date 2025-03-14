@@ -57,7 +57,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(get(ItemID.CHARCOAL, 0, 2))
     }
 

@@ -159,7 +159,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.prope
     override val name: String
         get() = "Cactus"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
             get(CACTUS, 0, 1)
         )

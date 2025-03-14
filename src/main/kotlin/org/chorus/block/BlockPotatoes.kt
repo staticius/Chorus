@@ -17,7 +17,7 @@ class BlockPotatoes @JvmOverloads constructor(blockstate: BlockState? = Companio
         return Item.get(ItemID.POTATO)
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (!isFullyGrown) {
             return arrayOf(
                 Item.get(ItemID.POTATO)

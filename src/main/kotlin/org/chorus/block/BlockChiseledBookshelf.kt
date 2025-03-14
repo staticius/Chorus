@@ -23,7 +23,7 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
     override val name: String
         get() = "Chiseled Bookshelf"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         val blockEntity: BlockEntityChiseledBookshelf? = this.blockEntity
         if (blockEntity != null) {
             return blockEntity.items

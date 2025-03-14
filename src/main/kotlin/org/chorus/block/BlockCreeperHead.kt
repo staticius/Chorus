@@ -8,7 +8,7 @@ class BlockCreeperHead(blockState: BlockState?) : BlockHead(blockState) {
     override val name: String
         get() = "Creeper Head"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
             this.toItem()
         )

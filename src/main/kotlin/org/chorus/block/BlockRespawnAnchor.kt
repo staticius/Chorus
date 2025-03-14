@@ -161,7 +161,7 @@ class BlockRespawnAnchor : Block {
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (canHarvest(item)) {
             return arrayOf(Item.get(id))
         }

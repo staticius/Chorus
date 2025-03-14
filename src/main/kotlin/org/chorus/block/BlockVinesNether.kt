@@ -298,7 +298,7 @@ abstract class BlockVinesNether
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         // They have a 33% (3/9) chance to drop a single weeping vine when broken, 
         // increased to 55% (5/9) with Fortune I, 
         // 77% (7/9) with Fortune II, 

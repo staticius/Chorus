@@ -155,7 +155,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         var dropInside = false
         var insideID: String? = "minecraft:air"
         var insideMeta = 0

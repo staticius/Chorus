@@ -13,7 +13,7 @@ class BlockSoulCampfire @JvmOverloads constructor(blockstate: BlockState? = Comp
     override val lightLevel: Int
         get() = if (isExtinguished) 0 else 10
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(get(BlockID.SOUL_SOIL, 0, 1))
     }
 

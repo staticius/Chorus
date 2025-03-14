@@ -35,7 +35,7 @@ class BlockNetherreactor @JvmOverloads constructor(blockstate: BlockState? = Com
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isPickaxe) {
             arrayOf(
                 get(ItemID.DIAMOND, 0, 3),

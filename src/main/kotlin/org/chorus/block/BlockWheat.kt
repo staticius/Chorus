@@ -18,7 +18,7 @@ class BlockWheat @JvmOverloads constructor(blockstate: BlockState? = Companion.p
     override val name: String
         get() = "Wheat Block"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         // https://minecraft.wiki/w/Fortune#Seeds
         if (!isFullyGrown) {
             return arrayOf<Item?>(ItemWheatSeeds())

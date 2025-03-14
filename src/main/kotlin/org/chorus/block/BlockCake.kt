@@ -95,7 +95,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         return 0
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

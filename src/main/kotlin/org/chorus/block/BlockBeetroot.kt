@@ -18,7 +18,7 @@ class BlockBeetroot @JvmOverloads constructor(blockstate: BlockState? = Companio
         return ItemBeetrootSeeds()
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (!isFullyGrown) {
             return arrayOf(Item.get(ItemID.BEETROOT_SEEDS))
         }

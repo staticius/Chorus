@@ -190,7 +190,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
         return Item.get(ItemID.COCOA_BEANS)
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
             get(
                 ItemID.COCOA_BEANS,

@@ -161,7 +161,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
                 )
             )
         )
-        if (persistingOffers != null) namedTag!!.putCompound(TAG_PERSISTING_OFFERS, this.persistingOffers)
+        if (persistingOffers != null) namedTag!!.putCompound(TAG_PERSISTING_OFFERS, this.persistingOffers!!)
         if (persistingRiches != null) namedTag!!.putInt(
             TAG_PERSISTING_RICHES,
             persistingRiches!!
@@ -497,7 +497,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     }
 
     override fun getMemoryStorage(): IMemoryStorage? {
-        return getBehaviorGroup()!!.memoryStorage
+        return getBehaviorGroup()!!.getMemoryStorage()
     }
 
     /**

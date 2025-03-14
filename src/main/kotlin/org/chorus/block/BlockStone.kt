@@ -26,7 +26,7 @@ class BlockStone @JvmOverloads constructor(blockState: BlockState? = Companion.p
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(get(BlockID.COBBLESTONE).toItem())
     }
 

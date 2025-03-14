@@ -28,7 +28,7 @@ open class BlockBookshelf : BlockSolid {
     override val burnAbility: Int
         get() = 20
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
             get(ItemID.BOOK, 0, 3)
         )

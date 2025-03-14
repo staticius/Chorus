@@ -47,7 +47,7 @@ class BlockFrogSpawn : BlockFlowable {
         )!!.id === WATER
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

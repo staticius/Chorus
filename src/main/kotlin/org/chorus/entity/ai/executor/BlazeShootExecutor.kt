@@ -21,7 +21,7 @@ import kotlin.math.min
 import kotlin.math.sin
 
 class BlazeShootExecutor(
-    protected var memory: MemoryType<out Entity?>,
+    protected var memory: MemoryType<Entity?>,
     protected var speed: Float,
     maxShootDistance: Int,
     protected var clearDataWhenLose: Boolean,
@@ -45,24 +45,25 @@ class BlazeShootExecutor(
         if (tick2 == 0) {
             tick1++
         }
-        if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (!entity.isEnablePitch()) entity.setEnablePitch(true)
+        if (entity.getBehaviorGroup()!!.getMemoryStorage()!!.isEmpty(memory)) return false
+        val newTarget = entity.getBehaviorGroup()!!.getMemoryStorage()!![memory]
         if (this.target == null) target = newTarget
 
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
 
-        if (target!!.locator != newTarget!!.locator) {
+        if (target!!.getLocator() != newTarget.getLocator()) {
             target = newTarget
         }
 
-        if (entity.movementSpeed != speed) entity.movementSpeed = speed
-        val clone = target!!.transform
+        if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed)
+        val clone = target!!.getTransform()
 
         if (entity.position.distanceSquared(target!!.position) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone.position)
@@ -91,7 +92,7 @@ class BlazeShootExecutor(
                     { stopOnFire(entity) }, 20
                 )
                 tick2 = 0
-                return target!!.health != 0f
+                return target!!.getHealth() != 0f
             }
         }
         return true
@@ -100,11 +101,11 @@ class BlazeShootExecutor(
     override fun onStop(entity: EntityMob) {
         removeRouteTarget(entity)
         removeLookTarget(entity)
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
+        entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.getBehaviorGroup()!!.getMemoryStorage()!!.clear(memory)
         }
-        entity.isEnablePitch = false
+        entity.setEnablePitch(false)
         stopOnFire(entity)
         this.target = null
     }
@@ -112,20 +113,20 @@ class BlazeShootExecutor(
     override fun onInterrupt(entity: EntityMob) {
         removeRouteTarget(entity)
         removeLookTarget(entity)
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
+        entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.getBehaviorGroup()!!.getMemoryStorage()!!.clear(memory)
         }
-        entity.isEnablePitch = false
+        entity.setEnablePitch(false)
         stopOnFire(entity)
         this.target = null
     }
 
     protected fun shootFireball(entity: EntityMob) {
-        val fireballTransform = entity.transform
+        val fireballTransform = entity.getTransform()
         val directionVector =
-            entity.directionVector.multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
-        fireballTransform.setY(entity.position.y + entity.eyeHeight + directionVector.getY())
+            entity.getDirectionVector().multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
+        fireballTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.y)
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
@@ -149,8 +150,8 @@ class BlazeShootExecutor(
         val p = 1.0
         val f = min((p * p + p * 2) / 3, 1.0) * 3
 
-        val projectile: Entity = Entity.Companion.createEntity(
-            EntityID.Companion.SMALL_FIREBALL,
+        val projectile: Entity = Entity.createEntity(
+            EntityID.SMALL_FIREBALL,
             entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
             nbt
         )
@@ -171,12 +172,12 @@ class BlazeShootExecutor(
     }
 
     private fun startOnFire(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.id)
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, target!!.getId())
         entity.setDataFlag(EntityFlag.CHARGED, true)
     }
 
     private fun stopOnFire(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
         entity.setDataFlag(EntityFlag.CHARGED, false)
     }
 }

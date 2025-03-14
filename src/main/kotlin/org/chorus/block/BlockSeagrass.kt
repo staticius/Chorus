@@ -125,7 +125,7 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState? = Companio
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isShears) {
             arrayOf(toItem())
         } else {

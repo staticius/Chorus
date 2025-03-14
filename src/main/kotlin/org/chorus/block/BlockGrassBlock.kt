@@ -110,7 +110,7 @@ open class BlockGrassBlock(blockstate: BlockState?) : BlockDirt(blockstate) {
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(get(DIRT).toItem())
     }
 
