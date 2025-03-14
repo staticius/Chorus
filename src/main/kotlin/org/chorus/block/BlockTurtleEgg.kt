@@ -234,7 +234,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
         }
     }
 
-    override fun onEntityCollide(entity: Entity?) {
+    override fun onEntityCollide(entity: Entity) {
         if (entity is EntityLiving
             && (entity !is EntityChicken) && (entity !is EntityBat) && (entity !is EntityGhast) && (entity !is EntityPhantom) && entity.getY() >= this.maxY
         ) {

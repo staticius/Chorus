@@ -726,10 +726,10 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
         return bb1 != null && bb.intersectsWith(bb1)
     }
 
-    open fun onEntityCollide(entity: Entity?) {
+    open fun onEntityCollide(entity: Entity) {
     }
 
-    open fun onEntityFallOn(entity: Entity?, fallDistance: Float) {
+    open fun onEntityFallOn(entity: Entity, fallDistance: Float) {
     }
 
     open fun useDefaultFallDamage(): Boolean {

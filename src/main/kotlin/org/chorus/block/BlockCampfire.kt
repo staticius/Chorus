@@ -1,12 +1,14 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityCampfire
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.entity.Entity
 import org.chorus.entity.effect.EffectType
 import org.chorus.entity.projectile.EntityProjectile
@@ -29,12 +31,13 @@ import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
+import org.chorus.utils.Loggable
 
 
 open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityCampfire?> {
+    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityCampfire>, Loggable {
     override fun getBlockEntityType(): String {
-        return BlockEntity.CAMPFIRE
+        return BlockEntityID.CAMPFIRE
     }
 
     override fun getBlockEntityClass(): Class<out BlockEntityCampfire> {
@@ -90,18 +93,18 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
             level.addSound(this.position, Sound.RANDOM_FIZZ, 0.5f, 2.2f)
             level.setBlock(
                 this.position, 1,
-                (if (defaultLayerCheck) block else layer1)!!, false, false
+                (if (defaultLayerCheck) block else layer1)!!, direct = false, update = false
             )
         } else {
-            level.setBlock(this.position, 1, get(AIR), false, false)
+            level.setBlock(this.position, 1, get(BlockID.AIR), direct = false, update = false)
         }
 
-        level.setBlock(block.position, this, true, true)
+        level.setBlock(block.position, this, direct = true, update = true)
         try {
             val nbt = CompoundTag()
 
             if (item.hasCustomBlockData()) {
-                val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+                val customData: Map<String, Tag<*>> = item.customBlockData!!.getTags()
                 for ((key, value) in customData) {
                     nbt.put(key, value)
                 }
@@ -109,7 +112,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
 
             createBlockEntity(nbt)
         } catch (e: Exception) {
-            BlockCampfire.log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), locator, e)
+            log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), locator, e)
             level.setBlock(layer0!!.position, 0, layer0, true)
             level.setBlock(layer1!!.position, 0, layer1, true)
             return false
@@ -160,7 +163,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
                 val layer1 = getLevelBlockAtLayer(1)
                 if (layer1 is BlockFlowingWater || layer1 is BlockFrostedIce) {
                     isExtinguished = true
-                    level.setBlock(this.position, this, true, true)
+                    level.setBlock(this.position, this, direct = true, update = true)
                     level.addSound(this.position, Sound.RANDOM_FIZZ, 0.5f, 2.2f)
                 }
             }
@@ -187,14 +190,14 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
         if (!isExtinguished) {
             if (item.isShovel) {
                 isExtinguished = true
-                level.setBlock(this.position, this, true, true)
+                level.setBlock(this.position, this, direct = true, update = true)
                 level.addSound(this.position, Sound.RANDOM_FIZZ, 0.5f, 2.2f)
                 itemUsed = true
             }
         } else if (item.id == ItemID.FLINT_AND_STEEL || item.getEnchantment(Enchantment.ID_FIRE_ASPECT) != null) {
             item.useOn(this)
             isExtinguished = false
-            level.setBlock(this.position, this, true, true)
+            level.setBlock(this.position, this, direct = true, update = true)
             campfire.scheduleUpdate()
             level.addSound(this.position, Sound.FIRE_IGNITE)
             itemUsed = true
@@ -297,12 +300,14 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CAMPFIRE,
             CommonBlockProperties.EXTINGUISHED,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )
-
     }
 }

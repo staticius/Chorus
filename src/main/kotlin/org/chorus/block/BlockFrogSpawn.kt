@@ -36,7 +36,7 @@ class BlockFrogSpawn : BlockFlowable {
         return super.onUpdate(type)
     }
 
-    override fun onEntityCollide(entity: Entity?) {
+    override fun onEntityCollide(entity: Entity) {
         if (entity is EntityFallingBlock) this.onBreak(null)
     }
 

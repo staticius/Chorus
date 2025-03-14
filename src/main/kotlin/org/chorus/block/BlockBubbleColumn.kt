@@ -71,7 +71,7 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState? = Comp
         return null
     }
 
-    override fun onEntityCollide(entity: Entity?) {
+    override fun onEntityCollide(entity: Entity) {
         if (entity != null) {
             if (entity.canBeMovedByCurrents()) {
                 if (up()!!.isAir) {

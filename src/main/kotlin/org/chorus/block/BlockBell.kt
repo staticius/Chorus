@@ -91,7 +91,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         )
     }
 
-    override fun onEntityCollide(entity: Entity?) {
+    override fun onEntityCollide(entity: Entity) {
         if (entity != null) {
             if (entity.positionChanged) {
                 val boundingBox = entity.getBoundingBox()
