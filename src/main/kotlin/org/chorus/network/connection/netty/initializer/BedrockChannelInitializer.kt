@@ -63,16 +63,16 @@ abstract class BedrockChannelInitializer<T : BedrockSession?> : ChannelInitializ
     protected open fun createPeer(channel: Channel): BedrockPeer? {
         return BedrockPeer(
             channel
-        ) { peer: BedrockPeer?, subClientId: Int -> this.createSession(peer, subClientId) }
+        ) { peer, subClientId -> this.createSession(peer, subClientId) }
     }
 
-    protected fun createSession(peer: BedrockPeer?, subClientId: Int): T {
+    protected fun createSession(peer: BedrockPeer, subClientId: Int): T {
         val session = this.createSession0(peer, subClientId)
         this.initSession(session)
         return session
     }
 
-    protected abstract fun createSession0(peer: BedrockPeer?, subClientId: Int): T
+    protected abstract fun createSession0(peer: BedrockPeer, subClientId: Int): T
 
     protected abstract fun initSession(session: T)
 

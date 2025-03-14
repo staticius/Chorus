@@ -116,7 +116,7 @@ class Network @JvmOverloads constructor(
                     }
                 }
 
-                override fun createSession0(peer: BedrockPeer?, subClientId: Int): BedrockSession {
+                override fun createSession0(peer: BedrockPeer, subClientId: Int): BedrockSession {
                     val session = BedrockSession(peer, subClientId)
                     val address = session.socketAddress as InetSocketAddress?
                     if (isAddressBlocked(address!!)) {
