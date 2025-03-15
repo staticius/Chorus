@@ -50,12 +50,6 @@ jobs:
           build-scan-terms-of-service-agree: "yes"
           arguments: buildForGithubAction --scan
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        if: success() && github.repository == 'Chorus-OSS/Chorus' && contains(github.ref_name, 'main')
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
       - name: Read version
         id: read_version
         uses: christian-draeger/read-properties@1.1.1
