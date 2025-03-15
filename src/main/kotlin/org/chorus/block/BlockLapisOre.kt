@@ -11,7 +11,7 @@ open class BlockLapisOre @JvmOverloads constructor(blockstate: BlockState? = Com
     override val name: String
         get() = "Lapis Ore"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isPickaxe && item.tier >= toolTier) {
             val random = ThreadLocalRandom.current()
             var count = 4 + random.nextInt(5)

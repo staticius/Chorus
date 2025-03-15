@@ -2,6 +2,7 @@ package org.chorus.command.selector.args
 
 import org.chorus.command.CommandSender
 import org.chorus.command.exceptions.SelectorSyntaxException
+import org.chorus.command.selector.SelectorType
 import org.chorus.entity.Entity
 import org.chorus.level.Transform
 import java.util.function.Function
@@ -9,8 +10,6 @@ import java.util.function.Predicate
 
 /**
  * 此接口描述了一个选择器参数
- *
- *
  */
 interface ISelectorArgument : Comparable<ISelectorArgument> {
     /**
@@ -61,8 +60,8 @@ interface ISelectorArgument : Comparable<ISelectorArgument> {
         selectorType: SelectorType?,
         sender: CommandSender?,
         basePos: Transform,
-        vararg arguments: String?
-    ): Function<List<Entity?>, List<Entity?>>? {
+        vararg arguments: String
+    ): Function<List<Entity>, List<Entity>>? {
         return null
     }
 
@@ -106,7 +105,7 @@ interface ISelectorArgument : Comparable<ISelectorArgument> {
      * @return 此参数的默认值
      */
     fun getDefaultValue(
-        values: Map<String?, List<String?>?>,
+        values: Map<String, List<String>>,
         selectorType: SelectorType,
         sender: CommandSender?
     ): String? {

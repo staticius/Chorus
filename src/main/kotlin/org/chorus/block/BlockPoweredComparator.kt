@@ -17,7 +17,7 @@ class BlockPoweredComparator @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.POWERED_COMPARATOR,
+            BlockID.POWERED_COMPARATOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OUTPUT_LIT_BIT,
             CommonBlockProperties.OUTPUT_SUBTRACT_BIT

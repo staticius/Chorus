@@ -2,6 +2,7 @@ package org.chorus.entity
 
 import org.chorus.Player
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.math.Vector3
 
 /**
@@ -12,13 +13,13 @@ interface EntityNameable {
     fun setNameTag(nameTag: String?)
 
     fun isNameTagVisible(): Boolean
-    fun setNameTagVisible(visible: Boolean)
+    fun setNameTagVisible(value: Boolean)
 
     fun isPersistent(): Boolean
     fun setPersistent(persistent: Boolean)
 
     fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        if (item.getId() == Item.NAME_TAG && !player.isSpectator() && (this !is Player)) {
+        if (item.id == ItemID.NAME_TAG && !player.isSpectator && (this !is Player)) {
             return playerApplyNameTag(player, item)
         }
         return false
@@ -30,10 +31,10 @@ interface EntityNameable {
 
     fun playerApplyNameTag(player: Player, item: Item, consume: Boolean): Boolean {
         if (item.hasCustomName()) {
-            this.setNameTag(item.getCustomName())
+            this.setNameTag(item.customName)
             this.setNameTagVisible(true)
 
-            if (consume && !player.isCreative()) {
+            if (consume && !player.isCreative) {
                 player.getInventory().removeItem(item)
             }
             // Set entity as persistent.

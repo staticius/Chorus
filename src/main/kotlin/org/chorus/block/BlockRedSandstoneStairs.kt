@@ -26,7 +26,7 @@ class BlockRedSandstoneStairs @JvmOverloads constructor(blockstate: BlockState? 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.RED_SANDSTONE_STAIRS,
+            BlockID.RED_SANDSTONE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

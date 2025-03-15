@@ -17,10 +17,10 @@ class IPlayersNode : ParamNode<List<IPlayer?>?>() {
     override fun fill(arg: String) {
         if (arg.isBlank()) {
             this.error()
-        } else if (EntitySelectorAPI.Companion.getAPI().checkValid(arg)) {
+        } else if (EntitySelectorAPI.api.checkValid(arg)) {
             val entities: List<Entity>
             try {
-                entities = EntitySelectorAPI.Companion.getAPI().matchEntities(paramList.paramTree.sender, arg)
+                entities = EntitySelectorAPI.api.matchEntities(paramList.paramTree.sender!!, arg)
             } catch (exception: SelectorSyntaxException) {
                 error(exception.message)
                 return
@@ -29,7 +29,7 @@ class IPlayersNode : ParamNode<List<IPlayer?>?>() {
                 entities.stream().filter { entity: Entity? -> entity is IPlayer }
                     .map { entity: Entity -> entity as IPlayer }
                     .collect(Collectors.toList())
-            if (!result.isEmpty()) this.value = result
+            if (result.isNotEmpty()) this.value = result
             else error("commands.generic.noTargetMatch")
         } else {
             val player = Server.instance.getOfflinePlayer(arg)

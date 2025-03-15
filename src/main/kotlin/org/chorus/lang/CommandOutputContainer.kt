@@ -7,7 +7,7 @@ import org.chorus.network.protocol.types.CommandOutputMessage
  */
 class CommandOutputContainer : Cloneable {
     @JvmField
-    val messages: List<CommandOutputMessage>
+    val messages: MutableList<CommandOutputMessage>
 
     @JvmField
     var successCount: Int
@@ -19,11 +19,11 @@ class CommandOutputContainer : Cloneable {
 
     constructor(
         messageId: String,
-        parameters: Array<String?>?,
+        parameters: Array<String>,
         successCount: Int
-    ) : this(java.util.List.of<CommandOutputMessage>(CommandOutputMessage(false, messageId, parameters)), successCount)
+    ) : this(mutableListOf<CommandOutputMessage>(CommandOutputMessage(false, messageId, parameters)), successCount)
 
-    constructor(messages: List<CommandOutputMessage>, successCount: Int) {
+    constructor(messages: MutableList<CommandOutputMessage>, successCount: Int) {
         this.messages = messages
         this.successCount = successCount
     }

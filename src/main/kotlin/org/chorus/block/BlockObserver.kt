@@ -56,7 +56,7 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companio
         return if (isPowered && side == blockFace) 15 else 0
     }
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         return getStrongPower(face)
     }
 
@@ -144,7 +144,7 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companio
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.OBSERVER,
+            BlockID.OBSERVER,
             CommonBlockProperties.MINECRAFT_FACING_DIRECTION,
             CommonBlockProperties.POWERED_BIT
         )

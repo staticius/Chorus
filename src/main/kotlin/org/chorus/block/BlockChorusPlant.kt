@@ -85,7 +85,7 @@ class BlockChorusPlant : BlockTransparent {
         return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (ThreadLocalRandom.current().nextBoolean()) arrayOf(
             get(
                 ItemID.CHORUS_FRUIT,

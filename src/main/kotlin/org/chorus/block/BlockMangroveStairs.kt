@@ -9,7 +9,7 @@ class BlockMangroveStairs @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.MANGROVE_STAIRS,
+            BlockID.MANGROVE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

@@ -19,7 +19,7 @@ open class BlockGlassPane : BlockThin {
     override val hardness: Double
         get() = 0.3
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

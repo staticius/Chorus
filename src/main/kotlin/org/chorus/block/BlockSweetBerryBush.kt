@@ -157,7 +157,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState? = Co
     override val collisionBoundingBox: AxisAlignedBB?
         get() = if (growth > 0) this else null
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         val age: Int = MathHelper.clamp(growth, 0, 3)
 
         var amount = 1

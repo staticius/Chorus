@@ -220,7 +220,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState?) : BlockFlowable(block
         return getWeakPower(side)
     }
 
-    override fun getWeakPower(side: BlockFace?): Int {
+    override fun getWeakPower(side: BlockFace): Int {
         return if (!this.isPowered()) 0 else (if (facing == side) redstoneSignal else 0)
     }
 

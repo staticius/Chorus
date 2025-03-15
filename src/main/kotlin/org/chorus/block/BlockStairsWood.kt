@@ -23,7 +23,7 @@ abstract class BlockStairsWood(blockState: BlockState?) : BlockStairs(blockState
     override val burnAbility: Int
         get() = 20
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
             toItem()
         )

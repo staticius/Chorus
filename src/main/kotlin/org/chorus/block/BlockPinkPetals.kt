@@ -83,7 +83,7 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.PINK_PETALS,
+            BlockID.PINK_PETALS,
             CommonBlockProperties.GROWTH, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )
 

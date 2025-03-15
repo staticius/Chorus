@@ -220,7 +220,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Compani
         return level.setBlock(toMelt.position, event.newState, true)
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (!item.isShovel || item.tier < ItemTool.TIER_WOODEN) {
             return Item.EMPTY_ARRAY
         }

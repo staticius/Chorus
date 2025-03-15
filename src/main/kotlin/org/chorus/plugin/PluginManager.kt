@@ -449,9 +449,9 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
         }
     }
 
-    fun getPermissionSubscriptions(permission: String): Set<Permissible> {
+    fun getPermissionSubscriptions(permission: String): MutableSet<Permissible> {
         if (permSubs.containsKey(permission)) {
-            return HashSet(permSubs[permission])
+            return HashSet(permSubs[permission]!!)
         }
         return HashSet()
     }

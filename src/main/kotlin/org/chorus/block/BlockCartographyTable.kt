@@ -51,8 +51,10 @@ class BlockCartographyTable @JvmOverloads constructor(blockstate: BlockState? = 
         return Supplier { CartographyTableInventory(this) }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CARTOGRAPHY_TABLE)
-
     }
 }

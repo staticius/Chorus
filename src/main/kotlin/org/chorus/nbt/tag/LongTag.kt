@@ -1,5 +1,7 @@
 package org.chorus.nbt.tag
 
+import java.util.Objects
+
 class LongTag : NumberTag<Long> {
     override var data: Long = 0
 
@@ -7,14 +9,6 @@ class LongTag : NumberTag<Long> {
 
     constructor(data: Long) {
         this.data = data
-    }
-
-    override fun getData(): Long {
-        return data
-    }
-
-    override fun setData(data: Long?) {
-        this.data = data ?: 0
     }
 
     override fun parseValue(): Long {
@@ -36,15 +30,19 @@ class LongTag : NumberTag<Long> {
         return data.toString() + "L"
     }
 
-    override fun copy(): Tag {
+    override fun copy(): LongTag {
         return LongTag(data)
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (super.equals(obj)) {
-            val o = obj as LongTag
+    override fun equals(other: Any?): Boolean {
+        if (super.equals(other)) {
+            val o = other as LongTag
             return data == o.data
         }
         return false
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(super.hashCode(), data, id)
     }
 }

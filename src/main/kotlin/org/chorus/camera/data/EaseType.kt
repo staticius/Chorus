@@ -1,13 +1,6 @@
 package org.chorus.camera.data
 
-
-/**
- * @author daoge_cmd
- * @date 2023/6/10
- * PowerNukkitX Project
- */
-
-enum class EaseType(private val type: String) {
+enum class EaseType(val type: String) {
     LINEAR("linear"),
     SPRING("spring"),
     IN_SINE("in_sine"),

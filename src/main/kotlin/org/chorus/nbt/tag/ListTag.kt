@@ -89,7 +89,8 @@ class ListTag<T : Tag<*>> : Tag<MutableList<T>> {
         val value: MutableList<T> = ArrayList(list.size)
 
         for (t in this.list) {
-            value.add(t.parseValue() as T)
+            @Suppress("UNCHECKED_CAST")
+            value.add(t.parseValue() as? T ?: continue)
         }
 
         return value
@@ -125,7 +126,8 @@ class ListTag<T : Tag<*>> : Tag<MutableList<T>> {
         val res = ListTag<T>()
         res.type = type
         for (t in list) {
-            val copy: T = t.copy() as T
+            @Suppress("UNCHECKED_CAST")
+            val copy: T = t.copy() as? T ?: continue
             res.list.add(copy)
         }
         return res

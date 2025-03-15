@@ -103,7 +103,7 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState? = 
         return false
     }
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         return level.getBlockStateAt(floorX, floorY, floorZ)!!.getPropertyValue(CommonBlockProperties.REDSTONE_SIGNAL)
     }
 

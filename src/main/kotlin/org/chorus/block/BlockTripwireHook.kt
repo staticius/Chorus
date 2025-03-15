@@ -254,7 +254,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
     override val isPowerSource: Boolean
         get() = true
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         return if (isPowered) 15 else 0
     }
 
@@ -289,7 +289,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         const val MAX_TRIPWIRE_CIRCUIT_LENGTH: Int = 42
 
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.TRIPWIRE_HOOK,
+            BlockID.TRIPWIRE_HOOK,
             CommonBlockProperties.DIRECTION, CommonBlockProperties.ATTACHED_BIT, CommonBlockProperties.POWERED_BIT
         )
 

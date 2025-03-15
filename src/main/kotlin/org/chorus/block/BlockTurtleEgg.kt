@@ -234,7 +234,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
         }
     }
 
-    override fun onEntityCollide(entity: Entity?) {
+    override fun onEntityCollide(entity: Entity) {
         if (entity is EntityLiving
             && (entity !is EntityChicken) && (entity !is EntityBat) && (entity !is EntityGhast) && (entity !is EntityPhantom) && entity.getY() >= this.maxY
         ) {
@@ -303,7 +303,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
         return support.isSolid(BlockFace.UP) || support is BlockWallBase
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 
@@ -328,7 +328,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.TURTLE_EGG,
+            BlockID.TURTLE_EGG,
             CommonBlockProperties.CRACKED_STATE,
             CommonBlockProperties.TURTLE_EGG_COUNT
         )

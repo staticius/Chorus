@@ -19,7 +19,7 @@ class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState? = C
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isPickaxe) {
             val fortuneLvl = item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING)
             when (fortuneLvl) {

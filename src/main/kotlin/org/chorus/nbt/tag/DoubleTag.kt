@@ -1,5 +1,7 @@
 package org.chorus.nbt.tag
 
+import java.util.Objects
+
 class DoubleTag : NumberTag<Double> {
     override var data: Double = 0.0
 
@@ -7,14 +9,6 @@ class DoubleTag : NumberTag<Double> {
 
     constructor(data: Double) {
         this.data = data
-    }
-
-    override fun getData(): Double {
-        return data
-    }
-
-    override fun setData(data: Double?) {
-        this.data = data ?: 0.0
     }
 
     override fun parseValue(): Double {
@@ -36,15 +30,19 @@ class DoubleTag : NumberTag<Double> {
         return data.toString() + "d"
     }
 
-    override fun copy(): Tag {
+    override fun copy(): DoubleTag {
         return DoubleTag(data)
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (super.equals(obj)) {
-            val o = obj as DoubleTag
+    override fun equals(other: Any?): Boolean {
+        if (super.equals(other)) {
+            val o = other as DoubleTag
             return data == o.data
         }
         return false
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(super.hashCode(), data, id)
     }
 }

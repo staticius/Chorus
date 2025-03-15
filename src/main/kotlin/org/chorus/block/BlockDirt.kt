@@ -55,7 +55,7 @@ open class BlockDirt : BlockSolid, Natural {
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(this.toItem())
     }
 

@@ -10,7 +10,7 @@ open class BlockMossCarpet @JvmOverloads constructor(blockstate: BlockState? = C
     override val resistance: Double
         get() = 0.1
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(toItem())
     }
 

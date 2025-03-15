@@ -70,7 +70,7 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isShears) {
             arrayOf(toItem())
         } else {
@@ -162,7 +162,7 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.SMALL_DRIPLEAF_BLOCK,
+            BlockID.SMALL_DRIPLEAF_BLOCK,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.UPPER_BLOCK_BIT
         )

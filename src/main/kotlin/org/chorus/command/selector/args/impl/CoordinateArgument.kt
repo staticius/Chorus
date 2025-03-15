@@ -1,9 +1,11 @@
 package org.chorus.command.selector.args.impl
 
+import org.chorus.command.selector.args.ISelectorArgument
+
 /**
  * args like x,y,z.
  */
 abstract class CoordinateArgument : ISelectorArgument {
-    val priority: Int
+    override val priority: Int
         get() = 1
 }

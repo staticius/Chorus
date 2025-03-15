@@ -77,7 +77,7 @@ abstract class BlockCoral(blockstate: BlockState?) : BlockFlowable(blockstate) {
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null) {
             super.getDrops(item)
         } else {

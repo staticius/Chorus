@@ -11,13 +11,13 @@ class BlockPaleMossCarpet @JvmOverloads constructor(blockstate: BlockState? = Co
     override val resistance: Double
         get() = 0.1
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(toItem())
     }
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.PALE_MOSS_CARPET,
+            BlockID.PALE_MOSS_CARPET,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_EAST,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_NORTH,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_SOUTH,

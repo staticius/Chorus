@@ -15,7 +15,7 @@ class BlockResinClump @JvmOverloads constructor(blockstate: BlockState? = Compan
     override val toolType: Int
         get() = ItemTool.TYPE_NONE
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         val drop = toItem()
         drop!!.setCount(growthSides.size)
         return arrayOf(drop)

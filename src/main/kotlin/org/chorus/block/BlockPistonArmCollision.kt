@@ -23,7 +23,7 @@ open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockSt
     override val hardness: Double
         get() = 1.5
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

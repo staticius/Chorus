@@ -7,12 +7,14 @@ import org.chorus.block.customblock.data.*
 import org.chorus.block.customblock.data.Materials.RenderMethod
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.customitem.data.CreativeCategory
 import org.chorus.item.customitem.data.CreativeGroup
 import org.chorus.math.Vector3
 import org.chorus.math.Vector3f
 import org.chorus.nbt.tag.*
+import org.chorus.utils.Loggable
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 
@@ -39,21 +41,21 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
             val components = nbt!!.getCompound("components")
 
             //设置一些与PNX内部对应的方块属性
-            components!!.putCompound(
+            components.putCompound(
                 "minecraft:friction", CompoundTag()
-                    .putFloat("value", Math.min(0.9, Math.max(0, 1 - b.getFrictionFactor())) as Float)
+                    .putFloat("value", 0.9.coerceAtMost(0.0.coerceAtLeast(1 - b.frictionFactor)).toFloat())
             )
                 .putCompound(
                     "minecraft:destructible_by_explosion", CompoundTag()
-                        .putInt("explosion_resistance", customBlock.getResistance().toInt())
+                        .putInt("explosion_resistance", customBlock.resistance.toInt())
                 )
                 .putCompound(
                     "minecraft:light_dampening", CompoundTag()
-                        .putByte("lightLevel", customBlock.getLightFilter().toByte().toInt())
+                        .putByte("lightLevel", customBlock.lightFilter.toByte().toInt())
                 )
                 .putCompound(
                     "minecraft:light_emission", CompoundTag()
-                        .putByte("emission", customBlock.getLightLevel().toByte().toInt())
+                        .putByte("emission", customBlock.lightLevel.toByte().toInt())
                 )
                 .putCompound(
                     "minecraft:destructible_by_mining", CompoundTag()
@@ -91,29 +93,28 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
                 nbt!!.putList("properties", propertiesNBT)
             }
 
-            var block_id: Int
+            var blockId: Int
             if (!INTERNAL_ALLOCATION_ID_MAP.containsKey(identifier)) {
                 while (INTERNAL_ALLOCATION_ID_MAP.containsValue(
-                        CUSTOM_BLOCK_RUNTIMEID.getAndIncrement().also { block_id = it })
-                ) {
-                }
-                INTERNAL_ALLOCATION_ID_MAP.put(identifier, block_id)
+                        CUSTOM_BLOCK_RUNTIME_ID.getAndIncrement().also { blockId = it })
+                )
+                INTERNAL_ALLOCATION_ID_MAP.put(identifier, blockId)
             } else {
-                block_id = INTERNAL_ALLOCATION_ID_MAP.getInt(identifier)
+                blockId = INTERNAL_ALLOCATION_ID_MAP.getInt(identifier)
             }
             nbt!!.putCompound(
-                "vanilla_block_data", CompoundTag().putInt("block_id", block_id) /*.putString("material", "")*/
+                "vanilla_block_data", CompoundTag().putInt("block_id", blockId) /*.putString("material", "")*/
             ) //todo Figure what is dirt, maybe that corresponds to https://wiki.bedrock.dev/documentation/materials.html
         }
 
         fun texture(texture: String): Builder {
-            this.materials(Materials.Companion.builder().any(RenderMethod.OPAQUE, texture))
+            this.materials(Materials.builder().any(RenderMethod.OPAQUE, texture))
             return this
         }
 
         fun name(name: String): Builder {
-            Preconditions.checkArgument(!name.isBlank(), "name is blank")
-            nbt!!.getCompound("components")!!.putCompound(
+            Preconditions.checkArgument(name.isNotBlank(), "name is blank")
+            nbt!!.getCompound("components").putCompound(
                 "minecraft:display_name", CompoundTag()
                     .putString("value", name)
             )
@@ -121,7 +122,7 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
         }
 
         fun materials(materials: Materials): Builder {
-            nbt!!.getCompound("components")!!.putCompound(
+            nbt!!.getCompound("components").putCompound(
                 "minecraft:material_instances", CompoundTag()
                     .putCompound("mappings", CompoundTag())
                     .putCompound("materials", materials.toCompoundTag())
@@ -170,42 +171,36 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
         }
 
         /**
-         * 控制自定义方块在创造栏中的组。
-         *
-         *
          * Control the grouping of custom blocks in the creation inventory.
          *
-         * @see [wiki.bedrock.dev](https://wiki.bedrock.dev/documentation/creative-categories.html)
+         * [wiki.bedrock.dev](https://wiki.bedrock.dev/documentation/creative-categories.html)
          */
         fun creativeGroup(creativeGroup: String): Builder {
             if (creativeGroup.isBlank()) {
                 CustomBlockDefinition.log.error("creativeGroup has an invalid value!")
                 return this
             }
-            nbt!!.getCompound("components")!!
-                .getCompound("menu_category")!!.putString("group", creativeGroup.lowercase())
+            nbt!!.getCompound("components")
+                .getCompound("menu_category").putString("group", creativeGroup.lowercase())
             return this
         }
 
         /**
-         * 控制自定义方块在创造栏中的组。
-         *
-         *
          * Control the grouping of custom blocks in the creation inventory.
          *
-         * @see [wiki.bedrock.dev](https://wiki.bedrock.dev/documentation/creative-categories.html)
+         * [wiki.bedrock.dev](https://wiki.bedrock.dev/documentation/creative-categories.html)
          */
         fun creativeGroup(creativeGroup: CreativeGroup): Builder {
-            nbt!!.getCompound("components")!!
-                .getCompound("menu_category")!!.putString("group", creativeGroup.groupName)
+            nbt!!.getCompound("components")
+                .getCompound("menu_category").putString("group", creativeGroup.groupName)
             return this
         }
 
         /**
-         * @see [wiki.bedrock.dev](https://wiki.bedrock.dev/blocks/block-components.html.crafting-table)
+         * [wiki.bedrock.dev](https://wiki.bedrock.dev/blocks/block-components.html.crafting-table)
          */
         fun craftingTable(craftingTable: CraftingTable): Builder {
-            nbt!!.getCompound("components")!!.putCompound("minecraft:crafting_table", craftingTable.toCompoundTag())
+            nbt!!.getCompound("components").putCompound("minecraft:crafting_table", craftingTable.toCompoundTag())
             return this
         }
 
@@ -213,7 +208,7 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
          * supports rotation, scaling, and translation. The component can be added to the whole block and/or to individual block permutations. Transformed geometries still have the same restrictions that non-transformed geometries have such as a maximum size of 30/16 units.
          */
         fun transformation(transformation: Transformation): Builder {
-            nbt!!.getCompound("components")!!.putCompound("minecraft:transformation", transformation.toCompoundTag())
+            nbt!!.getCompound("components").putCompound("minecraft:transformation", transformation.toCompoundTag())
             return this
         }
 
@@ -238,7 +233,7 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
             }
             val components = nbt!!.getCompound("components")
             //默认单位立方体方块，如果定义几何模型需要移除
-            if (components!!.contains("minecraft:unit_cube")) components.remove("minecraft:unit_cube")
+            if (components.contains("minecraft:unit_cube")) components.remove("minecraft:unit_cube")
             //设置方块对应的几何模型
             components.putCompound(
                 "minecraft:geometry", CompoundTag()
@@ -257,7 +252,7 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
         fun geometry(geometry: Geometry): Builder {
             val components = nbt!!.getCompound("components")
             //默认单位立方体方块，如果定义几何模型需要移除
-            if (components!!.contains("minecraft:unit_cube")) components.remove("minecraft:unit_cube")
+            if (components.contains("minecraft:unit_cube")) components.remove("minecraft:unit_cube")
             //设置方块对应的几何模型
             components.putCompound("minecraft:geometry", geometry.toCompoundTag())
             return this
@@ -271,13 +266,13 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
          */
         fun permutation(permutation: Permutation): Builder {
             if (!nbt!!.contains("permutations")) {
-                nbt!!.putList("permutations", ListTag<CompoundTag?>())
+                nbt!!.putList("permutations", ListTag<CompoundTag>())
             }
             val permutations = nbt!!.getList(
                 "permutations",
                 CompoundTag::class.java
             )
-            permutations!!.add(permutation.toCompoundTag())
+            permutations.add(permutation.toCompoundTag())
             nbt!!.putList("permutations", permutations)
             return this
         }
@@ -289,7 +284,7 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
          * Control custom block permutation features such as conditional rendering, partial rendering, etc.
          */
         fun permutations(vararg permutations: Permutation): Builder {
-            val per = ListTag<CompoundTag?>()
+            val per = ListTag<CompoundTag>()
             for (permutation in permutations) {
                 per.add(permutation.toCompoundTag())
             }
@@ -312,13 +307,13 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
                     "minecraft:collision_box", CompoundTag()
                         .putBoolean("enabled", true)
                         .putList(
-                            "origin", ListTag<FloatTag?>()
+                            "origin", ListTag<FloatTag>()
                                 .add(FloatTag(origin.south))
                                 .add(FloatTag(origin.up))
                                 .add(FloatTag(origin.west))
                         )
                         .putList(
-                            "size", ListTag<FloatTag?>()
+                            "size", ListTag<FloatTag>()
                                 .add(FloatTag(size.south))
                                 .add(FloatTag(size.up))
                                 .add(FloatTag(size.west))
@@ -342,13 +337,13 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
                     "minecraft:selection_box", CompoundTag()
                         .putBoolean("enabled", true)
                         .putList(
-                            "origin", ListTag<FloatTag?>()
+                            "origin", ListTag<FloatTag>()
                                 .add(FloatTag(origin.south))
                                 .add(FloatTag(origin.up))
                                 .add(FloatTag(origin.west))
                         )
                         .putList(
-                            "size", ListTag<FloatTag?>()
+                            "size", ListTag<FloatTag>()
                                 .add(FloatTag(size.south))
                                 .add(FloatTag(size.up))
                                 .add(FloatTag(size.west))
@@ -358,9 +353,9 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
         }
 
         fun blockTags(vararg tag: String): Builder {
-            Preconditions.checkNotNull<Array<String>>(tag)
-            Preconditions.checkArgument(tag.size > 0)
-            val stringTagListTag = ListTag<StringTag?>()
+            Preconditions.checkNotNull(tag)
+            Preconditions.checkArgument(tag.isNotEmpty())
+            val stringTagListTag = ListTag<StringTag>()
             for (s in tag) {
                 stringTagListTag.add(StringTag(s))
             }
@@ -368,40 +363,46 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
             return this
         }
 
-        private val propertiesNBT: ListTag<CompoundTag?>?
+        private val propertiesNBT: ListTag<CompoundTag>?
             /**
              * @return Block Properties in NBT Tag format
              */
             get() {
                 if (customBlock is Block) {
-                    val properties: Unit = customBlock.properties
+                    val properties = customBlock.properties
                     val propertyTypeSet: Set<BlockPropertyType<*>> = properties.getPropertyTypeSet()
                     if (propertyTypeSet.isEmpty()) {
                         return null
                     }
-                    val nbtList = ListTag<CompoundTag?>()
+                    val nbtList = ListTag<CompoundTag>()
                     for (each in propertyTypeSet) {
-                        if (each is BooleanPropertyType) {
-                            nbtList.add(
-                                CompoundTag().putString("name", each.getName())
-                                    .putList(
-                                        "enum", ListTag<Tag?>()
-                                            .add(ByteTag(0))
-                                            .add(ByteTag(1))
-                                    )
-                            )
-                        } else if (each is IntPropertyType) {
-                            val enumList = ListTag<IntTag?>()
-                            for (i in each.getMin()..each.getMax()) {
-                                enumList.add(IntTag(i))
+                        when (each) {
+                            is BooleanPropertyType -> {
+                                nbtList.add(
+                                    CompoundTag().putString("name", each.getName())
+                                        .putList(
+                                            "enum", ListTag<ByteTag>()
+                                                .add(ByteTag(0))
+                                                .add(ByteTag(1))
+                                        )
+                                )
                             }
-                            nbtList.add(CompoundTag().putString("name", each.getName()).putList("enum", enumList))
-                        } else if (each is org.chorus.block.property.type.EnumPropertyType<*>) {
-                            val enumList = ListTag<StringTag?>()
-                            for (e in each.getValidValues()) {
-                                enumList.add(StringTag(e.name.lowercase()))
+
+                            is IntPropertyType -> {
+                                val enumList = ListTag<IntTag>()
+                                for (i in each.min..each.max) {
+                                    enumList.add(IntTag(i))
+                                }
+                                nbtList.add(CompoundTag().putString("name", each.getName()).putList("enum", enumList))
                             }
-                            nbtList.add(CompoundTag().putString("name", each.getName()).putList("enum", enumList))
+
+                            is EnumPropertyType<*> -> {
+                                val enumList = ListTag<StringTag>()
+                                for (e in each.getValidValues()) {
+                                    enumList.add(StringTag((e as Enum<*>).name.lowercase()))
+                                }
+                                nbtList.add(CompoundTag().putString("name", each.getName()).putList("enum", enumList))
+                            }
                         }
                     }
                     return nbtList
@@ -426,9 +427,9 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
         }
     }
 
-    companion object {
+    companion object : Loggable {
         private val INTERNAL_ALLOCATION_ID_MAP = Object2IntOpenHashMap<String?>()
-        private val CUSTOM_BLOCK_RUNTIMEID = AtomicInteger(10000)
+        private val CUSTOM_BLOCK_RUNTIME_ID = AtomicInteger(10000)
 
         fun getRuntimeId(identifier: String?): Int {
             return INTERNAL_ALLOCATION_ID_MAP.getInt(identifier)

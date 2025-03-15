@@ -246,7 +246,7 @@ open class BlockTrapdoor  //</editor-fold>
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.TRAPDOOR,
+            BlockID.TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT

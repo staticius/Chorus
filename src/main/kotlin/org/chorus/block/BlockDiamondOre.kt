@@ -19,7 +19,7 @@ open class BlockDiamondOre @JvmOverloads constructor(blockstate: BlockState? = C
     override val toolTier: Int
         get() = ItemTool.TIER_IRON
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isPickaxe && item.tier >= toolTier) {
             var count = 1
             val fortune = item.getEnchantment(Enchantment.ID_FORTUNE_DIGGING)

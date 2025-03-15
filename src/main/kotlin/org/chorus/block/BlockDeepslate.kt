@@ -27,7 +27,7 @@ class BlockDeepslate : BlockSolid {
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (!canHarvest(item)) {
             return Item.EMPTY_ARRAY
         }

@@ -1,6 +1,9 @@
 package org.chorus.command.selector.args.impl
 
 import org.chorus.command.CommandSender
+import org.chorus.command.selector.ParseUtils
+import org.chorus.command.selector.SelectorType
+import org.chorus.command.selector.args.CachedSimpleSelectorArgument
 import org.chorus.entity.Entity
 import org.chorus.level.Transform
 import java.util.function.Predicate
@@ -15,22 +18,22 @@ class Tag : CachedSimpleSelectorArgument() {
         val have = ArrayList<String>()
         val dontHave = ArrayList<String>()
         for (tag in arguments) {
-            var tag = tag
-            val reversed: Boolean = ParseUtils.checkReversed(tag)
+            var tag1 = tag
+            val reversed: Boolean = ParseUtils.checkReversed(tag1)
             if (reversed) {
-                tag = tag.substring(1)
-                dontHave.add(tag)
-            } else have.add(tag)
+                tag1 = tag1.substring(1)
+                dontHave.add(tag1)
+            } else have.add(tag1)
         }
         return Predicate { entity: Entity ->
-            have.stream().allMatch { tag: String? -> entity.containTag(tag) } && dontHave.stream()
-                .noneMatch { tag: String? -> entity.containTag(tag) }
+            have.stream().allMatch { tag -> entity.containTag(tag) } && dontHave.stream()
+                .noneMatch { tag -> entity.containTag(tag) }
         }
     }
 
-    val keyName: String
+    override val keyName: String
         get() = "tag"
 
-    val priority: Int
+    override val priority: Int
         get() = 4
 }

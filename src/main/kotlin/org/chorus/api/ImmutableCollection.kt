@@ -2,9 +2,6 @@ package org.chorus.api
 
 /**
  * ImmutableCollection is used to mark a collection as immutable.
- *
- *
- * ImmutableCollection是用来标记一个集合为不可变的。
  */
 @MustBeDocumented
 @Retention(AnnotationRetention.SOURCE)

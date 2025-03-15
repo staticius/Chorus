@@ -2,6 +2,9 @@ package org.chorus.command.selector.args.impl
 
 import org.chorus.command.CommandSender
 import org.chorus.command.exceptions.SelectorSyntaxException
+import org.chorus.command.selector.ParseUtils
+import org.chorus.command.selector.SelectorType
+import org.chorus.command.selector.args.CachedFilterSelectorArgument
 import org.chorus.entity.Entity
 import org.chorus.level.Transform
 import java.util.*
@@ -15,25 +18,25 @@ class C : CachedFilterSelectorArgument() {
         sender: CommandSender?,
         basePos: Transform,
         vararg arguments: String
-    ): Function<List<Entity?>, List<Entity?>> {
-        ParseUtils.singleArgument(arguments, keyName)
+    ): Function<List<Entity>, List<Entity>> {
+        ParseUtils.singleArgument(arguments.toList().toTypedArray(), keyName)
         ParseUtils.cannotReversed(arguments[0])
         val c = arguments[0].toInt()
         if (c == 0) throw SelectorSyntaxException("C cannot be zero!")
-        return Function { entities: List<Entity?> ->
-            entities.sort(Comparator.comparingDouble { e: Entity ->
+        return Function { entities ->
+            val sorted = entities.sortedWith(Comparator.comparingDouble { e ->
                 e.position.distanceSquared(
                     basePos.position
                 )
-            })
-            if (c < 0) Collections.reverse(entities)
-            entities.subList(0, abs(c.toDouble()).toInt())
+            }).toMutableList()
+            if (c < 0) sorted.reverse()
+            sorted.subList(0, abs(c.toDouble()).toInt())
         }
     }
 
-    val keyName: String
+    override val keyName: String
         get() = "c"
 
-    val priority: Int
+    override val priority: Int
         get() = 3
 }

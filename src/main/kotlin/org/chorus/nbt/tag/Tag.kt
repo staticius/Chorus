@@ -2,7 +2,7 @@ package org.chorus.nbt.tag
 
 import java.util.*
 
-abstract class Tag<T> protected constructor() {
+abstract class Tag<T : Any> protected constructor() {
     abstract override fun toString(): String
 
     abstract fun toSNBT(): String
@@ -13,7 +13,7 @@ abstract class Tag<T> protected constructor() {
 
     abstract fun copy(): Tag<T>
 
-    abstract fun parseValue(): T?
+    abstract fun parseValue(): T
 
     override fun equals(other: Any?): Boolean {
         if (other !is Tag<*>) {

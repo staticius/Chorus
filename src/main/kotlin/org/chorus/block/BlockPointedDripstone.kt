@@ -368,7 +368,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.POINTED_DRIPSTONE,
+            BlockID.POINTED_DRIPSTONE,
             CommonBlockProperties.DRIPSTONE_THICKNESS,
             CommonBlockProperties.HANGING
         )

@@ -6,7 +6,6 @@ import org.chorus.nbt.NBTIO.read
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import java.io.ByteArrayInputStream
-import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.function.*
@@ -304,7 +303,6 @@ class BinaryStream {
         return this.offset < 0 || this.offset >= buffer.size
     }
 
-    @get:SneakyThrows(IOException::class)
     val tag: CompoundTag
         get() {
             val `is` = ByteArrayInputStream(buffer, offset, buffer.size)
@@ -316,7 +314,6 @@ class BinaryStream {
             }
         }
 
-    @SneakyThrows(IOException::class)
     fun putTag(tag: CompoundTag) {
         put(write(tag))
     }

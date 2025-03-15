@@ -14,7 +14,7 @@ class BlockWaxedExposedCopperDoor @JvmOverloads constructor(blockstate: BlockSta
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.WAXED_EXPOSED_COPPER_DOOR,
+            BlockID.WAXED_EXPOSED_COPPER_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,

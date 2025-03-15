@@ -2,12 +2,7 @@ package org.chorus.level.format.bitarray
 
 import org.chorus.math.ChorusMath
 
-/**
- * Allay Project 2023/4/14
- *
- * @author JukeboxMC | daoge_cmd
- */
-enum class BitArrayVersion(bits: Int, entriesPerWord: Int, val next: BitArrayVersion) {
+enum class BitArrayVersion(bits: Int, entriesPerWord: Int, val next: BitArrayVersion?) {
     V16(16, 2, null),
     V8(8, 4, V16),
     V6(6, 5, V8),  // 2 bit padding
@@ -29,7 +24,7 @@ enum class BitArrayVersion(bits: Int, entriesPerWord: Int, val next: BitArrayVer
     @JvmOverloads
     fun createArray(
         size: Int,
-        words: IntArray = IntArray(ChorusMath.ceilFloat(size as Float / this.entriesPerWord))
+        words: IntArray = IntArray(ChorusMath.ceilFloat(size.toFloat() / this.entriesPerWord))
     ): BitArray {
         return if (this == V3 || this == V5 || this == V6) PaddedBitArray(
             this, size, words

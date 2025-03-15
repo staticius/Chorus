@@ -3,8 +3,8 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.level.Sound
 
-class BlockCherryDoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockWoodenDoor(blockstate) {
+class BlockCherryDoor @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockWoodenDoor(blockState) {
     override val name: String
         get() = "Cherry Door Block"
 
@@ -16,6 +16,9 @@ class BlockCherryDoor @JvmOverloads constructor(blockstate: BlockState? = Compan
         level.addSound(this.position, Sound.CLOSE_CHERRY_WOOD_DOOR)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CHERRY_DOOR,
@@ -24,6 +27,5 @@ class BlockCherryDoor @JvmOverloads constructor(blockstate: BlockState? = Compan
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-
     }
 }

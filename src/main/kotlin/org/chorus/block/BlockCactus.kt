@@ -116,7 +116,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.prope
                 if (!b!!.isAir) {
                     continue
                 }
-                val event = BlockGrowEvent(b, get(CACTUS))
+                val event = BlockGrowEvent(b, get(BlockID.CACTUS))
                 instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     level.setBlock(b.position, event.newState!!, true)
@@ -159,9 +159,9 @@ class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.prope
     override val name: String
         get() = "Cactus"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
-            get(CACTUS, 0, 1)
+            get(BlockID.CACTUS, 0, 1)
         )
     }
 
@@ -182,17 +182,19 @@ class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.prope
             )
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CACTUS,
             CommonBlockProperties.AGE_16
         )
 
-
         val maxAge: Int
-            get() = CommonBlockProperties.AGE_16.getMax()
+            get() = CommonBlockProperties.AGE_16.max
 
         val minAge: Int
-            get() = CommonBlockProperties.AGE_16.getMin()
+            get() = CommonBlockProperties.AGE_16.min
     }
 }

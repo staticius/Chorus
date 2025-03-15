@@ -1,6 +1,8 @@
 package org.chorus.nbt.tag
 
-class ShortTag : NumberTag<Int> {
+import java.util.Objects
+
+class ShortTag : NumberTag<Short> {
     override var data: Short = 0
 
     constructor()
@@ -9,16 +11,8 @@ class ShortTag : NumberTag<Int> {
         this.data = data.toShort()
     }
 
-    override fun getData(): Int {
-        return data.toInt()
-    }
-
-    override fun setData(data: Int?) {
-        this.data = (data ?: 0).toShort()
-    }
-
-    override fun parseValue(): Int {
-        return data.toInt()
+    override fun parseValue(): Short {
+        return data
     }
 
     override val id: Byte
@@ -36,15 +30,19 @@ class ShortTag : NumberTag<Int> {
         return data.toString() + "s"
     }
 
-    override fun copy(): Tag {
+    override fun copy(): ShortTag {
         return ShortTag(data.toInt())
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (super.equals(obj)) {
-            val o = obj as ShortTag
+    override fun equals(other: Any?): Boolean {
+        if (super.equals(other)) {
+            val o = other as ShortTag
             return data == o.data
         }
         return false
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(super.hashCode(), data, id)
     }
 }

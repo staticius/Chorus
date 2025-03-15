@@ -1,6 +1,5 @@
 package org.chorus.tags
 
-import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.objects.Object2ObjectFunction
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.registry.BiomeRegistry.BiomeDefinition
@@ -75,19 +74,19 @@ object BiomeTags {
     const val WARPED_FOREST: String = "warped_forest"
 
 
-    private val TAG_2_BIOMES = Object2ObjectOpenHashMap<String, MutableSet<String?>>()
+    private val TAG_2_BIOMES = Object2ObjectOpenHashMap<String, MutableSet<String>>()
 
     init {
-        val biomeDefinitions: Set<BiomeDefinition?> = Registries.BIOME.biomeDefinitions
-        val tmpMap = HashMap<String?, Set<String>>()
-        for ((_, _, _, _, _, name_hash, _, _, tags) in biomeDefinitions) {
-            tmpMap[name_hash] = HashSet<String>(tags)
+        val biomeDefinitions: Set<BiomeDefinition> = Registries.BIOME.biomeDefinitions
+        val tmpMap = HashMap<String, Set<String>>()
+        for (def in biomeDefinitions) {
+            tmpMap[def.name_hash] = HashSet(def.tags)
         }
         for ((key, value) in tmpMap) {
             for (biomeTag in value) {
                 val tags = TAG_2_BIOMES.computeIfAbsent(
                     biomeTag,
-                    Object2ObjectFunction<String, MutableSet<String?>> { k: Any? -> HashSet() })
+                    Object2ObjectFunction<String, MutableSet<String>> { HashSet() })
                 tags.add(key)
             }
         }
@@ -101,17 +100,15 @@ object BiomeTags {
         return Registries.BIOME.get(biomeId)!!.tags.contains(tag)
     }
 
-    fun containTag(biomeName: String?, tag: String?): Boolean {
+    fun containTag(biomeName: String, tag: String): Boolean {
         return Registries.BIOME.get(biomeName)!!.tags.contains(tag)
     }
 
-    fun getTagSet(biomeName: String?): @UnmodifiableView MutableSet<String> {
-        val biomeDefinition = Registries.BIOME.get(biomeName)
-        Preconditions.checkNotNull(biomeDefinition)
-        return biomeDefinition!!.tags
+    fun getTagSet(biomeName: String): @UnmodifiableView MutableSet<String> {
+        return Registries.BIOME.get(biomeName)!!.tags
     }
 
-    fun getBiomeSet(tag: String?): @UnmodifiableView MutableSet<String> {
+    fun getBiomeSet(tag: String): @UnmodifiableView MutableSet<String> {
         return Collections.unmodifiableSet(TAG_2_BIOMES.getOrDefault(tag, setOf()))
     }
 
@@ -121,7 +118,7 @@ object BiomeTags {
         for (tag in tags) {
             val itemSet = TAG_2_BIOMES[tag]
             itemSet?.add(name)
-                ?: (TAG_2_BIOMES[tag] = HashSet(setOf(name)))
+                ?: TAG_2_BIOMES.set(tag, HashSet(setOf(name)))
         }
     }
 }

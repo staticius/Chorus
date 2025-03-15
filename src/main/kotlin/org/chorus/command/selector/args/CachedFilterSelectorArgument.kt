@@ -1,9 +1,11 @@
 package org.chorus.command.selector.args
 
 import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.common.collect.Sets
 import org.chorus.command.CommandSender
 import org.chorus.command.exceptions.SelectorSyntaxException
+import org.chorus.command.selector.SelectorType
 import org.chorus.entity.Entity
 import org.chorus.level.Transform
 import java.util.concurrent.TimeUnit
@@ -16,7 +18,7 @@ import java.util.function.Function
  * @see CachedSimpleSelectorArgument
  */
 abstract class CachedFilterSelectorArgument : ISelectorArgument {
-    var cache: Cache<Set<String>, Function<List<Entity?>, List<Entity?>>?>
+    var cache: Cache<Set<String>, Function<List<Entity>, List<Entity>>>
 
     init {
         this.cache = provideCacheService()
@@ -27,8 +29,8 @@ abstract class CachedFilterSelectorArgument : ISelectorArgument {
         selectorType: SelectorType?,
         sender: CommandSender?,
         basePos: Transform,
-        vararg arguments: String?
-    ): Function<List<Entity?>, List<Entity?>>? {
+        vararg arguments: String
+    ): Function<List<Entity>, List<Entity>>? {
         var value = cache.getIfPresent(Sets.newHashSet<String>(*arguments))
         if (value == null) {
             value = cache(selectorType, sender, basePos, *arguments)
@@ -49,7 +51,7 @@ abstract class CachedFilterSelectorArgument : ISelectorArgument {
         sender: CommandSender?,
         basePos: Transform,
         vararg arguments: String
-    ): Function<List<Entity?>, List<Entity?>>
+    ): Function<List<Entity>, List<Entity>>
 
     /**
      * 初始化缓存时调用此方法
@@ -58,8 +60,7 @@ abstract class CachedFilterSelectorArgument : ISelectorArgument {
      * 若需要自己的缓存实现，则可覆写此方法
      * @return `Cache<Set<String>, Function<List<Entity>, List<Entity>>>`
      */
-    protected fun provideCacheService(): Cache<Set<String>, Function<List<Entity?>, List<Entity?>>?> {
-        return Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES)
-            .build<Set<String>, Function<List<Entity>, List<Entity>>>()
+    protected fun provideCacheService(): Cache<Set<String>, Function<List<Entity>, List<Entity>>> {
+        return Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build()
     }
 }

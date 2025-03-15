@@ -14,13 +14,13 @@ data class CollisionBox(
         return CompoundTag()
             .putBoolean("enabled", true)
             .putList(
-                "origin", ListTag<Tag?>()
+                "origin", ListTag<FloatTag>()
                     .add(FloatTag(originX.toFloat()))
                     .add(FloatTag(originY.toFloat()))
                     .add(FloatTag(originZ.toFloat()))
             )
             .putList(
-                "size", ListTag<FloatTag?>()
+                "size", ListTag<FloatTag>()
                     .add(FloatTag(sizeX.toFloat()))
                     .add(FloatTag(sizeY.toFloat()))
                     .add(FloatTag(sizeZ.toFloat()))

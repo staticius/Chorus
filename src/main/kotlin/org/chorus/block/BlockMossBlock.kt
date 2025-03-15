@@ -176,7 +176,7 @@ open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState? = Co
     override val toolType: Int
         get() = ItemTool.TYPE_HOE
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf<Item?>(ItemBlock(get(BlockID.MOSS_BLOCK)))
     }
 

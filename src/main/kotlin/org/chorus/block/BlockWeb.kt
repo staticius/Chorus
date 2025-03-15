@@ -22,7 +22,7 @@ class BlockWeb @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
         entity.resetFallDistance()
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isShears) {
             arrayOf<Item?>(
                 this.toItem()

@@ -7,7 +7,7 @@ import java.util.function.Function
 class NumberMemoryCodec<Data : Number?>(key: String?) : MemoryCodec<Data>(
     Function { tag: CompoundTag ->
         if (tag.contains(key)) (TagReader(
-            tag[key] as NumberTag<Data>
+            tag.get(key) as NumberTag<Data>
         )).data else null
     },
     BiConsumer { data: Data, tag: CompoundTag -> tag.put(key, newTag(data)) }

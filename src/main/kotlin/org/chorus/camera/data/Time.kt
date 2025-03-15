@@ -2,11 +2,6 @@ package org.chorus.camera.data
 
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author daoge_cmd
- * @date 2023/6/11
- * PowerNukkitX Project
- */
 @JvmRecord
 data class Time(@JvmField val fadeIn: Float, @JvmField val hold: Float, @JvmField val fadeOut: Float) :
     SerializableData {

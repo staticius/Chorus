@@ -31,7 +31,7 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState? = Comp
             ) else 0
         }
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         return if (isActive()) 15 else 0
     }
 

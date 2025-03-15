@@ -195,7 +195,7 @@ class AdventureSettings : Cloneable {
         val abilityTag = nbt.getCompound(KEY_ABILITIES)
         for ((key, value) in abilityTag!!.getTags()) {
             if (value is IntTag) {
-                set(Type.valueOf(key!!), value.getData() == 1)
+                set(Type.valueOf(key!!), value.data == 1)
             }
         }
         playerPermission = PlayerPermission.valueOf(nbt.getString(KEY_PLAYER_PERMISSION)!!)

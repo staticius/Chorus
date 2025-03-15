@@ -104,7 +104,7 @@ class Level(
     val players = Long2ObjectNonBlockingMap<Player>()
 
     @NonComputationAtomic
-    private val entities = Long2ObjectNonBlockingMap<Entity>()
+    val entities = Long2ObjectNonBlockingMap<Entity>()
     private val updateBlockEntities: ConcurrentLinkedQueue<BlockEntity> = ConcurrentLinkedQueue<BlockEntity>()
     private val chunkGenerationQueue = ConcurrentHashMap<Long, Boolean?>()
     private var chunkGenerationQueueSize = 8

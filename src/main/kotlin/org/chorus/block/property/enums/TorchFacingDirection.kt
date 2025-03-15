@@ -11,19 +11,13 @@ import org.chorus.math.BlockFace
  *
  * @author daoge_cmd
  */
-@RequiredArgsConstructor
-enum class TorchFacingDirection {
-    UNKNOWN(BlockFace.UP),
+enum class TorchFacingDirection(val torchDirection: BlockFace? = null) {
+    UNKNOWN(null),
     WEST(BlockFace.EAST),
     EAST(BlockFace.WEST),
     NORTH(BlockFace.SOUTH),
     SOUTH(BlockFace.NORTH),
     TOP(BlockFace.UP);
-
-    /**
-     * The direction that the flame is pointing.
-     */
-    val torchDirection: BlockFace? = null
 
     val attachedFace: BlockFace
         /**
@@ -51,14 +45,7 @@ enum class TorchFacingDirection {
                 BlockFace.WEST -> EAST
                 BlockFace.SOUTH -> NORTH
                 BlockFace.NORTH -> SOUTH
-                else -> {
-                    null
-                    TOP
-                    WEST
-                    EAST
-                    NORTH
-                    SOUTH
-                }
+                else -> UNKNOWN
             }
         }
 
@@ -69,14 +56,7 @@ enum class TorchFacingDirection {
                 BlockFace.NORTH -> NORTH
                 BlockFace.EAST -> EAST
                 BlockFace.WEST -> WEST
-                else -> {
-                    null
-                    TOP
-                    SOUTH
-                    NORTH
-                    EAST
-                    WEST
-                }
+                else -> UNKNOWN
             }
         }
     }

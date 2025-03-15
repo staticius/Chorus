@@ -200,7 +200,7 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState? = Compani
         return ItemBlock(BlockSeaPickle())
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf<Item?>(
             ItemBlock(
                 BlockSeaPickle(), 0, getPropertyValue<Int, IntPropertyType>(

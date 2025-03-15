@@ -98,7 +98,7 @@ abstract class BlockCropsStem(blockstate: BlockState?) : BlockCrops(blockstate),
         return Item.get(seedsId!!)
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         val dropChance = dropChances[clamp(
             growth,
             0,

@@ -34,7 +34,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
         return null
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

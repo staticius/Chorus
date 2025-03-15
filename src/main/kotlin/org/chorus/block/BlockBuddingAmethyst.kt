@@ -27,7 +27,7 @@ class BlockBuddingAmethyst : BlockSolid {
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

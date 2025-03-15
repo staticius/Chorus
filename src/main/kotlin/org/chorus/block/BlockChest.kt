@@ -252,7 +252,7 @@ open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Compan
         return blockEntity == null || !blockEntity.isPaired
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(ItemBlock(Companion.properties.defaultState.toBlock(), 0))
     }
 

@@ -33,7 +33,7 @@ abstract class BlockSapling(blockstate: BlockState?) : BlockFlowable(blockstate)
         }
 
     override val name: String
-        get() = getWoodType().name + " Sapling"
+        get() = getWoodType().woodName + " Sapling"
 
     override fun place(
         item: Item,

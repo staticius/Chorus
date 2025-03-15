@@ -64,7 +64,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
         }
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

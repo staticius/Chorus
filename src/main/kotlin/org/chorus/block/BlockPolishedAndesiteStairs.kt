@@ -26,7 +26,7 @@ class BlockPolishedAndesiteStairs @JvmOverloads constructor(blockstate: BlockSta
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.POLISHED_ANDESITE_STAIRS,
+            BlockID.POLISHED_ANDESITE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

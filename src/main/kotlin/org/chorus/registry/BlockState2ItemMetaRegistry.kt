@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.nbt.NBTIO.readCompressed
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.IntTag
-import org.chorus.registry.RegisterException
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -20,7 +19,7 @@ class BlockState2ItemMetaRegistry : IRegistry<String, Int, Int> {
                     val compoundTag = readCompressed(input)
                     for ((key, value) in compoundTag.getTags()) {
                         for ((key1, value1) in (value as CompoundTag).getTags()) {
-                            MAP.put("$key#$key1", (value1 as IntTag).getData().intValue())
+                            MAP.put("$key#$key1", (value1 as IntTag).data)
                         }
                     }
                 }

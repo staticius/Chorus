@@ -29,7 +29,7 @@ annotation class DeprecationDetails(
      */
     val replaceWith: String = "",
     /**
-     * The maintainer party that has added this depreciation. For example: PowerNukkit, Cloudburst Nukkit, and Nukkit
+     * The maintainer party that has added this depreciation.
      */
     val by: String = ""
 )

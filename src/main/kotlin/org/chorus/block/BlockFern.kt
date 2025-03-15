@@ -90,7 +90,7 @@ class BlockFern : BlockFlowable, FlowerPotBlock {
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         // https://minecraft.wiki/w/Fortune#Grass_and_ferns
         val drops: MutableList<Item?> = ArrayList(2)
         if (item.isShears) {

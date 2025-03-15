@@ -1,16 +1,18 @@
 package org.chorus.command.selector.args.impl
 
 import org.chorus.command.CommandSender
+import org.chorus.command.selector.SelectorType
+import org.chorus.command.selector.args.ISelectorArgument
 
 /**
  * args like dx,dy,dz.
  */
 abstract class ScopeArgument : ISelectorArgument {
-    val priority: Int
+    override val priority: Int
         get() = 2
 
     override fun getDefaultValue(
-        values: Map<String?, List<String?>?>,
+        values: Map<String, List<String>>,
         selectorType: SelectorType,
         sender: CommandSender?
     ): String? {

@@ -24,11 +24,11 @@ data class SemVersion(val major: Int, val minor: Int, val patch: Int, val revisi
             Preconditions.checkArgument(versions.size() == 5)
 
             return SemVersion(
-                versions.get(0).getData(),
-                versions.get(1).getData(),
-                versions.get(2).getData(),
-                versions.get(3).getData(),
-                versions.get(4).getData()
+                versions[0].data,
+                versions[1].data,
+                versions[2].data,
+                versions[3].data,
+                versions[4].data
             )
         }
     }

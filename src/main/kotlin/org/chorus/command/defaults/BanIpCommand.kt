@@ -51,7 +51,7 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
                 val player = sender.server.getPlayer(value)
                 if (player != null) {
                     this.processIPBan(player.address, sender, reason)
-                    log.addSuccess("commands.banip.success.players", player.address, player.name).output(true)
+                    log.addSuccess("commands.banip.success.players", player.address, player.name!!).output(true)
                     return 1
                 } else {
                     val name = value.lowercase()
@@ -70,7 +70,7 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
 
                     if (nbt != null && nbt!!.contains("lastIP") && Pattern.matches(
                             "^(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9])$",
-                            (nbt!!.getString("lastIP").also { value = it!! })
+                            (nbt!!.getString("lastIP").also { value = it })
                         )
                     ) {
                         this.processIPBan(value, sender, reason)

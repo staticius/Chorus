@@ -90,8 +90,8 @@ interface CustomBlock {
         val block = this.toBlock()
         var breakTime = block.calculateBreakTime(item, player)
         val comp = definition.nbt!!.getCompound("components")
-        if (comp!!.containsCompound("minecraft:destructible_by_mining")) {
-            var clientBreakTime = comp.getCompound("minecraft:destructible_by_mining")!!.getFloat("value")
+        if (comp.containsCompound("minecraft:destructible_by_mining")) {
+            var clientBreakTime = comp.getCompound("minecraft:destructible_by_mining").getFloat("value")
             if (player != null) {
                 if (player.level!!.tick - player.lastInAirTick < 5) {
                     clientBreakTime *= 6f

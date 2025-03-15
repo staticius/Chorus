@@ -185,7 +185,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Compan
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         val itemFrame = blockEntity
         return if (itemFrame != null && ThreadLocalRandom.current()
                 .nextFloat() <= itemFrame.itemDropChance

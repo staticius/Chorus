@@ -6,7 +6,7 @@ class BlockCrafter @JvmOverloads constructor(blockstate: BlockState? = Companion
     Block(blockstate,) {
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.CRAFTER,
+            BlockID.CRAFTER,
             CommonBlockProperties.CRAFTING,
             CommonBlockProperties.ORIENTATION,
             CommonBlockProperties.TRIGGERED_BIT

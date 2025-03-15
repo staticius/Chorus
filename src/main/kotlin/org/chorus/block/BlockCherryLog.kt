@@ -26,9 +26,11 @@ class BlockCherryLog : BlockLog {
         return BlockStrippedCherryLog.properties.defaultState
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHERRY_LOG, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }
 

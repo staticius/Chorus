@@ -32,7 +32,7 @@ abstract class BlockAmethystBud(blockState: BlockState?) : BlockTransparent(bloc
     override val toolTier: Int
         get() = ItemTool.TIER_IRON
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

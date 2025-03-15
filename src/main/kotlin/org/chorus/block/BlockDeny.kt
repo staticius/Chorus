@@ -54,7 +54,7 @@ class BlockDeny : BlockSolid {
         return super.isBreakable(vector, layer, face, item, player)
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

@@ -1,5 +1,7 @@
 package org.chorus.nbt.tag
 
+import java.util.*
+
 class ByteTag : NumberTag<Int> {
     override var data: Int = 0
 
@@ -46,6 +48,10 @@ class ByteTag : NumberTag<Int> {
             return data == byteTag.data
         }
         return false
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(super.hashCode(), data, id)
     }
 
     override fun copy(): Tag<Int> {

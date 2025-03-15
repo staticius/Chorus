@@ -26,7 +26,7 @@ class BlockMossyStoneBrickStairs @JvmOverloads constructor(blockstate: BlockStat
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.MOSSY_STONE_BRICK_STAIRS,
+            BlockID.MOSSY_STONE_BRICK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

@@ -105,7 +105,7 @@ abstract class BlockDoublePlant(blockstate: BlockState?) : BlockFlowable(blockst
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (isTopHalf) {
             return Item.EMPTY_ARRAY
         }

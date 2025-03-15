@@ -1,6 +1,6 @@
 package org.chorus.level.util
 
-enum class BitArrayVersion(bits: Int, entriesPerWord: Int, val next: BitArrayVersion) {
+enum class BitArrayVersion(bits: Int, entriesPerWord: Int, val next: BitArrayVersion?) {
     V16(16, 2, null),
     V8(8, 4, V16),
     V6(6, 5, V8),  // 2 bit padding
@@ -19,7 +19,7 @@ enum class BitArrayVersion(bits: Int, entriesPerWord: Int, val next: BitArrayVer
         return (size / entriesPerWord) + (if (size % entriesPerWord == 0) 0 else 1)
     }
 
-    fun next(): BitArrayVersion {
+    fun next(): BitArrayVersion? {
         return next
     }
 

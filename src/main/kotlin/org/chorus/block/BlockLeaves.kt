@@ -26,7 +26,7 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
     abstract fun getType(): WoodType
 
     override val name: String
-        get() = getType().name + " Leaves"
+        get() = getType().woodName + " Leaves"
 
     override val burnChance: Int
         get() = 30
@@ -52,7 +52,7 @@ abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockStat
         return true
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isShears) {
             return arrayOf(
                 toItem()

@@ -24,7 +24,7 @@ class BlockTallGrass @JvmOverloads constructor(blockstate: BlockState? = Compani
     override val burnAbility: Int
         get() = 100
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         // https://minecraft.wiki/w/Fortune#Grass_and_ferns
         val drops: MutableList<Item?> = ArrayList(2)
         if (item.isShears) {

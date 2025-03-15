@@ -124,7 +124,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(b
         )
     }
 
-    override fun onEntityCollide(entity: Entity?) {
+    override fun onEntityCollide(entity: Entity) {
         if (!Server.instance.settings.levelSettings().enableRedstone()) {
             return
         }
@@ -189,7 +189,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(b
         return true
     }
 
-    override fun getWeakPower(side: BlockFace?): Int {
+    override fun getWeakPower(side: BlockFace): Int {
         return redstonePower
     }
 

@@ -1,11 +1,11 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
-import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityCalibratedSculkSensor
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*
 import org.chorus.level.Level
 import org.chorus.level.Sound
@@ -15,7 +15,7 @@ import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.utils.RedstoneComponent
 
 class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockFlowable(blockstate), BlockEntityHolder<BlockEntityCalibratedSculkSensor?>, RedstoneComponent {
+    BlockFlowable(blockstate), BlockEntityHolder<BlockEntityCalibratedSculkSensor>, RedstoneComponent {
     override val name: String
         get() = "Calibrated Sculk Sensor"
 
@@ -27,7 +27,7 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
         get() = true
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.CALIBRATED_SCULK_SENSOR
+        return BlockEntityID.CALIBRATED_SCULK_SENSOR
     }
 
     override fun place(
@@ -43,7 +43,7 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
         blockFace =
             if (player != null) fromHorizontalIndex(player.getDirection()!!.horizontalIndex) else BlockFace.SOUTH
 
-        level.setBlock(block.position, this, true, true)
+        level.setBlock(block.position, this, direct = true, update = true)
         return true
     }
 
@@ -64,7 +64,7 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
     override fun getWeakPower(face: BlockFace): Int {
         val blockEntity = this.getOrCreateBlockEntity()
         return if (getSide(face.getOpposite()!!) is BlockRedstoneComparator) {
-            BlockEntityID.COMPARATORPower
+            blockEntity.comparatorPower
         } else {
             blockEntity.power
         }
@@ -73,7 +73,7 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
     override fun onUpdate(type: Int): Int {
         getOrCreateBlockEntity()
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (Server.instance.settings.levelSettings().enableRedstone()) {
+            if (Server.instance.settings.levelSettings.enableRedstone) {
                 this.blockEntity!!.calPower()
                 this.setPhase(0)
                 updateAroundRedstone()
@@ -86,8 +86,8 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
     fun setPhase(phase: Int) {
         if (phase == 1) level.addSound(position.add(0.5, 0.5, 0.5), Sound.POWER_ON_SCULK_SENSOR)
         else level.addSound(position.add(0.5, 0.5, 0.5), Sound.POWER_OFF_SCULK_SENSOR)
-        this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.SCULK_SENSOR_PHASE, phase)
-        level.setBlock(this.position, this, true, false)
+        this.setPropertyValue(CommonBlockProperties.SCULK_SENSOR_PHASE, phase)
+        level.setBlock(this.position, this, direct = true, update = false)
     }
 
     override fun isSolid(side: BlockFace): Boolean {
@@ -113,12 +113,14 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
     override val waterloggingLevel: Int
         get() = 1
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CALIBRATED_SCULK_SENSOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.SCULK_SENSOR_PHASE
         )
-
     }
 }

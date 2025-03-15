@@ -41,7 +41,7 @@ abstract class ConcurrentRouteFinder(blockEvaluator: IPosEvaluator?) : SimpleRou
         }
     }
 
-    override val route: List<Node?>
+    override val route: List<Node>
         /**
          * 线程安全地获取查找到的路径信息（cloned）
          */

@@ -60,7 +60,7 @@ class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState? = Compan
     override val name: String
         get() = "Nether Wart Block"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (this.age == 0x03) {
             this.age = 0
             return arrayOf<Item?>(

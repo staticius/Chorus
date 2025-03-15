@@ -36,7 +36,7 @@ class BlockFrogSpawn : BlockFlowable {
         return super.onUpdate(type)
     }
 
-    override fun onEntityCollide(entity: Entity?) {
+    override fun onEntityCollide(entity: Entity) {
         if (entity is EntityFallingBlock) this.onBreak(null)
     }
 
@@ -47,7 +47,7 @@ class BlockFrogSpawn : BlockFlowable {
         )!!.id === WATER
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

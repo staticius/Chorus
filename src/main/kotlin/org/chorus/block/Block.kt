@@ -43,6 +43,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
     Metadatable, AxisAlignedBB, IVector3, Loggable {
 
     protected var color: BlockColor? = null
+    val frictionFactor: Double = 0.6
 
     @JvmField
     var layer: Int = 0
@@ -726,10 +727,10 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
         return bb1 != null && bb.intersectsWith(bb1)
     }
 
-    open fun onEntityCollide(entity: Entity?) {
+    open fun onEntityCollide(entity: Entity) {
     }
 
-    open fun onEntityFallOn(entity: Entity?, fallDistance: Float) {
+    open fun onEntityFallOn(entity: Entity, fallDistance: Float) {
     }
 
     open fun useDefaultFallDamage(): Boolean {
@@ -903,7 +904,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
         return super.clone() as Block
     }
 
-    open fun getWeakPower(face: BlockFace?): Int {
+    open fun getWeakPower(face: BlockFace): Int {
         return 0
     }
 
@@ -1021,7 +1022,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
      *
      * @return An array of dropped items
      */
-    open fun getDrops(item: Item): Array<Item?>? {
+    open fun getDrops(item: Item): Array<Item> {
         if (canHarvestWithHand() || canHarvest(item)) {
             return arrayOf(
                 this.toItem()
@@ -1183,7 +1184,6 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
 
     companion object {
         val EMPTY_ARRAY: Array<Block> = emptyArray()
-        val frictionFactor: Double = 0.6
         const val DEFAULT_AIR_FLUID_FRICTION: Double = 0.95
         val VANILLA_BLOCK_COLOR_MAP: Long2ObjectOpenHashMap<BlockColor> = Long2ObjectOpenHashMap()
 

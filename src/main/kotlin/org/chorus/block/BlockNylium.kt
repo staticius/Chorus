@@ -62,7 +62,7 @@ abstract class BlockNylium(blockState: BlockState?) : BlockSolid(blockState), Na
     override val hardness: Double
         get() = 0.4
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isPickaxe && item.tier >= ItemTool.TIER_WOODEN) {
             return arrayOf(Item.get(BlockID.NETHERRACK))
         }

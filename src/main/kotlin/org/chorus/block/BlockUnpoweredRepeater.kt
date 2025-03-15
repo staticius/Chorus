@@ -20,7 +20,7 @@ class BlockUnpoweredRepeater @JvmOverloads constructor(blockstate: BlockState? =
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.UNPOWERED_REPEATER,
+            BlockID.UNPOWERED_REPEATER,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.REPEATER_DELAY
         )

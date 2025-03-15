@@ -1,7 +1,7 @@
 package org.chorus.nbt.tag
 
-class IntArrayTag @JvmOverloads constructor(var data: IntArray? = IntArray(0)) : Tag<IntArray>() {
-    fun getData(): IntArray? {
+class IntArrayTag @JvmOverloads constructor(var data: IntArray = IntArray(0)) : Tag<IntArray>() {
+    fun getData(): IntArray {
         return data
     }
 
@@ -9,7 +9,7 @@ class IntArrayTag @JvmOverloads constructor(var data: IntArray? = IntArray(0)) :
         this.data = data ?: IntArray(0)
     }
 
-    override fun parseValue(): IntArray? {
+    override fun parseValue(): IntArray {
         return this.data
     }
 
@@ -17,7 +17,7 @@ class IntArrayTag @JvmOverloads constructor(var data: IntArray? = IntArray(0)) :
         get() = TAG_INT_ARRAY
 
     override fun toString(): String {
-        return "IntArrayTag " + " [" + data!!.size + " bytes]"
+        return "IntArrayTag " + " [" + data.size + " bytes]"
     }
 
     override fun toSNBT(): String {
@@ -31,7 +31,7 @@ class IntArrayTag @JvmOverloads constructor(var data: IntArray? = IntArray(0)) :
     override fun equals(other: Any?): Boolean {
         if (super.equals(other)) {
             val intArrayTag = other as IntArrayTag
-            return ((data == null && intArrayTag.data == null) || (data != null && data.contentEquals(intArrayTag.data)))
+            return (data.contentEquals(intArrayTag.data))
         }
         return false
     }
@@ -43,8 +43,8 @@ class IntArrayTag @JvmOverloads constructor(var data: IntArray? = IntArray(0)) :
     }
 
     override fun copy(): Tag<IntArray> {
-        val cp = IntArray(data!!.size)
-        System.arraycopy(data!!, 0, cp, 0, data!!.size)
+        val cp = IntArray(data.size)
+        System.arraycopy(data, 0, cp, 0, data.size)
         return IntArrayTag(cp)
     }
 }

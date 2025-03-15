@@ -8,7 +8,7 @@ class BlockPlayerHead(blockState: BlockState?) : BlockHead(blockState) {
     override val name: String
         get() = "Player Head"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
             this.toItem()
         )

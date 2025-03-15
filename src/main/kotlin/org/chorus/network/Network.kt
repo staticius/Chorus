@@ -78,7 +78,7 @@ class Network @JvmOverloads constructor(
             try {
                 tmpIfs = SystemInfo().hardware.networkIFs
             } catch (t: Throwable) {
-                Network.log.warn(Server.instance.language.get("nukkit.start.hardwareMonitorDisabled"))
+                Network.log.warn(Server.instance.baseLang.get("nukkit.start.hardwareMonitorDisabled"))
             }
             hardWareNetworkInterfaces.set(tmpIfs)
         }, true)

@@ -146,7 +146,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
         updateAroundRedstone(getSide(BlockFace.DOWN)!!, BlockFace.UP)
     }
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         return if (isActivated) 15 else 0
     }
 
@@ -192,7 +192,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.LECTERN,
+            BlockID.LECTERN,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.POWERED_BIT
         )

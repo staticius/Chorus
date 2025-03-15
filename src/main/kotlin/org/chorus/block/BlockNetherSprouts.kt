@@ -7,7 +7,7 @@ class BlockNetherSprouts @JvmOverloads constructor(blockstate: BlockState? = Com
     override val name: String
         get() = "Nether Sprouts Block"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isShears) {
             return arrayOf(toItem())
         }

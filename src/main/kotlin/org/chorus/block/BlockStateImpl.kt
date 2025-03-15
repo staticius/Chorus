@@ -3,7 +3,6 @@ package org.chorus.block
 import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import org.chorus.block.property.enums.WoodType.name
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue.propertyType
 import org.chorus.block.property.type.BlockPropertyType.createValue
 import org.chorus.block.property.type.BooleanPropertyType.createValue

@@ -33,7 +33,7 @@ abstract class SimpleRouteFinder(//方块评估器
         nodes.clear()
     }
 
-    override val route: List<Node?>
+    override val route: List<Node>
         get() = ArrayList(this.nodes)
 
     override val currentNode: Node?

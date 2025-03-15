@@ -1,25 +1,23 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.BlockFlowerPot.FlowerPotBlock
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.level.StructureGrowEvent.blockList
+import org.chorus.event.level.StructureGrowEvent
 import org.chorus.item.*
 import org.chorus.level.Level
-import org.chorus.level.generator.`object`.BlockManager.applySubChunkUpdate
-import org.chorus.level.generator.`object`.BlockManager.blocks
-import org.chorus.level.generator.`object`.ObjectCherryTree.generate
+import org.chorus.level.generator.`object`.BlockManager
+import org.chorus.level.generator.`object`.ObjectCherryTree
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.*
 import org.chorus.utils.random.RandomSourceProvider.Companion.create
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Predicate
 
-class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockSapling(blockstate), FlowerPotBlock {
+class BlockCherrySapling @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockSapling(blockState), FlowerPotBlock {
     override fun getWoodType(): WoodType {
         return WoodType.CHERRY
     }
@@ -34,7 +32,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
                 return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
-            if (level.getFullLight(position.add(0.0, 1.0, 0.0)) >= BlockCrops.Companion.MINIMUM_LIGHT_LEVEL) {
+            if (level.getFullLight(position.add(0.0, 1.0, 0.0)) >= BlockCrops.minimumLightLevel) {
                 if (isAged) {
                     this.grow()
                 } else {
@@ -50,21 +48,21 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
     }
 
     private fun grow() {
-        val blockManager: BlockManager = BlockManager(this.level)
+        val blockManager = BlockManager(this.level)
         val vector3 = Vector3(
             position.x, position.y - 1,
             position.z
         )
-        val objectCherryTree: ObjectCherryTree = ObjectCherryTree()
-        val generate: Boolean = objectCherryTree.generate(blockManager, RandomSourceProvider.create(), this.position)
+        val objectCherryTree = ObjectCherryTree()
+        val generate: Boolean = objectCherryTree.generate(blockManager, create(), this.position)
         if (generate) {
-            val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
+            val ev = StructureGrowEvent(this, blockManager.blocks)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return
             }
-            if (level.getBlock(vector3)!!.id == DIRT_WITH_ROOTS) {
-                level.setBlock(vector3, get(DIRT))
+            if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
+                level.setBlock(vector3, get(BlockID.DIRT))
             }
             blockManager.applySubChunkUpdate(
                 ev.blockList,
@@ -90,7 +88,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
             return false
         }
 
-        level.setBlock(this.position, this, true, true)
+        level.setBlock(this.position, this, direct = true, update = true)
         return true
     }
 
@@ -126,13 +124,13 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
     private val isSupportInvalid: Boolean
         get() {
             val downId = down()!!.id
-            return !(downId == DIRT || downId == GRASS_BLOCK || downId == SAND || downId == GRAVEL || downId == PODZOL)
+            return !(downId == BlockID.DIRT || downId == BlockID.GRASS_BLOCK || downId == BlockID.SAND || downId == BlockID.GRAVEL || downId == BlockID.PODZOL)
         }
 
     var isAge: Boolean
-        get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.AGE_BIT)
+        get() = this.getPropertyValue(CommonBlockProperties.AGE_BIT)
         set(age) {
-            this.setPropertyValue<Boolean, BooleanPropertyType>(
+            this.setPropertyValue(
                 CommonBlockProperties.AGE_BIT,
                 age
             )
@@ -145,8 +143,10 @@ class BlockCherrySapling @JvmOverloads constructor(blockstate: BlockState? = Com
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHERRY_SAPLING, CommonBlockProperties.AGE_BIT)
-
     }
 }

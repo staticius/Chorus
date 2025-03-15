@@ -20,7 +20,7 @@ class BlockMangroveLeaves : BlockLeaves {
     override val name: String
         get() = "Mangrove Leaves"
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         if (item.isShears) {
             return arrayOf(
                 toItem()
@@ -62,7 +62,7 @@ class BlockMangroveLeaves : BlockLeaves {
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.MANGROVE_LEAVES,
+            BlockID.MANGROVE_LEAVES,
             CommonBlockProperties.PERSISTENT_BIT,
             CommonBlockProperties.UPDATE_BIT
         )

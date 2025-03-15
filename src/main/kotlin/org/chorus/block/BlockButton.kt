@@ -149,7 +149,7 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
     override val isPowerSource: Boolean
         get() = true
 
-    override fun getWeakPower(face: BlockFace?): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         return if (isActivated) 15 else 0
     }
 

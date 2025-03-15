@@ -13,7 +13,7 @@ class BlockSoulCampfire @JvmOverloads constructor(blockstate: BlockState? = Comp
     override val lightLevel: Int
         get() = if (isExtinguished) 0 else 10
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(get(BlockID.SOUL_SOIL, 0, 1))
     }
 
@@ -23,7 +23,7 @@ class BlockSoulCampfire @JvmOverloads constructor(blockstate: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.SOUL_CAMPFIRE,
+            BlockID.SOUL_CAMPFIRE,
             CommonBlockProperties.EXTINGUISHED,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )

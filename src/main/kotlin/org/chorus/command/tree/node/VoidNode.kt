@@ -16,7 +16,7 @@ class VoidNode : IParamNode<Void?> {
     override fun reset() {
     }
 
-    override val paramList: ParamList?
+    override val paramList: ParamList
         get() = null
 
     override fun hasResult(): Boolean {

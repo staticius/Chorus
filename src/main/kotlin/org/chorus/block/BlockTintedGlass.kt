@@ -7,7 +7,7 @@ class BlockTintedGlass @JvmOverloads constructor(blockstate: BlockState? = Compa
     override val name: String
         get() = "Tinted Glass"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(toItem())
     }
 

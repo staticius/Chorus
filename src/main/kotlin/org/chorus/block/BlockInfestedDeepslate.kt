@@ -15,7 +15,7 @@ class BlockInfestedDeepslate @JvmOverloads constructor(blockState: BlockState? =
     override val resistance: Double
         get() = 0.75
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 

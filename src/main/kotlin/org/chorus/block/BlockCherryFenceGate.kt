@@ -3,8 +3,8 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.level.Sound
 
-class BlockCherryFenceGate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockFenceGate(blockstate) {
+class BlockCherryFenceGate @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockFenceGate(blockState) {
     override val name: String
         get() = "Cherry Fence Gate"
 
@@ -16,6 +16,9 @@ class BlockCherryFenceGate @JvmOverloads constructor(blockstate: BlockState? = C
         level.addSound(this.position, Sound.CLOSE_CHERRY_WOOD_FENCE_GATE)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CHERRY_FENCE_GATE,
@@ -23,6 +26,5 @@ class BlockCherryFenceGate @JvmOverloads constructor(blockstate: BlockState? = C
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-
     }
 }

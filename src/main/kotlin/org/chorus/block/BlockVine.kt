@@ -143,7 +143,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState? = Companion.pr
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return if (item.isShears) {
             arrayOf(
                 toItem()

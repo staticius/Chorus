@@ -142,7 +142,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.p
         return true
     }
 
-    override fun getWeakPower(side: BlockFace?): Int {
+    override fun getWeakPower(side: BlockFace): Int {
         return if (isPowerOn) 15 else 0
     }
 

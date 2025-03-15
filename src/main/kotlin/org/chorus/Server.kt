@@ -61,6 +61,7 @@ import org.chorus.nbt.NBTIO.writeGZIPCompressed
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.Tag
 import org.chorus.network.Network
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.PlayerListPacket
@@ -1338,14 +1339,13 @@ class Server internal constructor(
         }
     }
 
-    fun getOfflinePlayer(name: String): IPlayer {
+    fun getOfflinePlayer(name: String): IPlayer? {
         val result: IPlayer? = this.getPlayerExact(name.lowercase())
         if (result != null) {
             return result
         }
 
-        return lookupName(name).map { uuid: UUID? -> OfflinePlayer(uuid) }
-            .orElse(OfflinePlayer(name))
+        return lookupName(name).map { uuid -> OfflinePlayer(uuid) }.orElse(null)
     }
 
     /**
@@ -1454,7 +1454,7 @@ class Server internal constructor(
                         .add(FloatTag(spawn.position.z))
                 )
                 .putString("Level", getDefaultLevel()!!.getName()!!)
-                .putList("Inventory", ListTag())
+                .putList("Inventory", ListTag<Tag<*>>())
                 .putCompound("Achievements", CompoundTag())
                 .putInt("playerGameType", this.gamemode)
                 .putList(

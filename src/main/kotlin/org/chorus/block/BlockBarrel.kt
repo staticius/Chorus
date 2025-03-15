@@ -58,14 +58,14 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
             }
         }
 
-        val nbt = CompoundTag().putList("Items", ListTag())
+        val nbt = CompoundTag().putList("Items", ListTag<Tag<*>>())
 
         if (item.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag<*>?> = item.customBlockData!!.getTags()
+            val customData: Map<String, Tag<*>> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
@@ -86,7 +86,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
 
         val barrel = getOrCreateBlockEntity()
 
-        if (barrel.namedTag.contains("Lock") && barrel.namedTag.get("Lock") is StringTag
+        if (barrel.namedTag.contains("Lock") && barrel.namedTag["Lock"] is StringTag
             && (barrel.namedTag.getString("Lock") != item.customName)
         ) {
             return false

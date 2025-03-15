@@ -4,6 +4,9 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.command.CommandSender
 import org.chorus.command.exceptions.SelectorSyntaxException
+import org.chorus.command.selector.ParseUtils
+import org.chorus.command.selector.SelectorType
+import org.chorus.command.selector.args.CachedSimpleSelectorArgument
 import org.chorus.entity.Entity
 import org.chorus.level.Transform
 import org.chorus.scoreboard.scorer.EntityScorer
@@ -19,7 +22,7 @@ class Scores : CachedSimpleSelectorArgument() {
         basePos: Transform?,
         vararg arguments: String
     ): Predicate<Entity> {
-        ParseUtils.singleArgument(arguments, keyName)
+        ParseUtils.singleArgument(arguments.toList().toTypedArray(), keyName)
         val conditions = ArrayList<ScoreCondition>()
         for (entry in StringUtils.fastSplit(SCORE_SEPARATOR, arguments[0].substring(1, arguments[0].length - 1))) {
             if (entry.isEmpty()) throw SelectorSyntaxException("Empty score entry is not allowed in selector!")
@@ -33,13 +36,13 @@ class Scores : CachedSimpleSelectorArgument() {
                 var min = Int.MIN_VALUE
                 var max = Int.MAX_VALUE
                 val splittedScoreScope = StringUtils.fastSplit(SCORE_SCOPE_SEPARATOR, condition)
-                val min_str = splittedScoreScope[0]
-                if (!min_str.isEmpty()) {
-                    min = min_str.toInt()
+                val minStr = splittedScoreScope[0]
+                if (minStr.isNotEmpty()) {
+                    min = minStr.toInt()
                 }
-                val max_str = splittedScoreScope[1]
-                if (!max_str.isEmpty()) {
-                    max = max_str.toInt()
+                val maxStr = splittedScoreScope[1]
+                if (maxStr.isNotEmpty()) {
+                    max = maxStr.toInt()
                 }
                 conditions.add(ScoreCondition(objectiveName, min, max, reversed))
             } else {
@@ -53,10 +56,10 @@ class Scores : CachedSimpleSelectorArgument() {
         }
     }
 
-    val keyName: String
+    override val keyName: String
         get() = "scores"
 
-    val priority: Int
+    override val priority: Int
         get() = 5
 
     @JvmRecord
@@ -67,7 +70,7 @@ class Scores : CachedSimpleSelectorArgument() {
             val scorer = if (entity is Player) PlayerScorer(entity) else EntityScorer(entity)
             if (!scoreboard.containLine(scorer)) return false
             val value = scoreboard.getLine(scorer)!!.score
-            return (value >= min && value <= max) != reversed
+            return (value in min..max) != reversed
         }
     }
 

@@ -69,7 +69,7 @@ object ParseUtils {
      * @param keyName 参数键名
      */
     @Throws(SelectorSyntaxException::class)
-    fun singleArgument(args: Array<String?>, keyName: String) {
+    fun singleArgument(args: Array<String>, keyName: String) {
         if (args.size > 1) throw SelectorSyntaxException("Multiple arguments is not allow in arg $keyName")
     }
 
@@ -81,7 +81,7 @@ object ParseUtils {
      * @return 给定值是否在给定的两个数之间
      */
     fun checkBetween(bound1: Double, bound2: Double, value: Double): Boolean {
-        return if (bound1 < bound2) (value >= bound1 && value <= bound2) else (value >= bound2 && value <= bound1)
+        return if (bound1 < bound2) (value in bound1..bound2) else (value in bound2..bound1)
     }
 
     /**

@@ -15,8 +15,11 @@ class BlockCherryLeaves @JvmOverloads constructor(blockState: BlockState? = Comp
     }
 
     override fun toSapling(): Item {
-        return Item.get(CHERRY_SAPLING)
+        return Item.get(BlockID.CHERRY_SAPLING)
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
@@ -25,6 +28,5 @@ class BlockCherryLeaves @JvmOverloads constructor(blockState: BlockState? = Comp
                 CommonBlockProperties.PERSISTENT_BIT,
                 CommonBlockProperties.UPDATE_BIT
             )
-
     }
 }

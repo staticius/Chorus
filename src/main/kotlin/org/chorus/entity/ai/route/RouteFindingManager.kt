@@ -42,27 +42,11 @@ class RouteFindingManager protected constructor() {
 
     class RouteFindingPoolThreadFactory : ForkJoinWorkerThreadFactory {
         override fun newThread(pool: ForkJoinPool): ForkJoinWorkerThread {
-            return AccessController.doPrivileged(
-                PrivilegedAction<ForkJoinWorkerThread> { RouteFindingThread(pool) },
-                ACC
-            )
-        }
-
-        companion object {
-            private val ACC = contextWithPermissions(
-                RuntimePermission("getClassLoader"),
-                RuntimePermission("setContextClassLoader")
-            )
-
-            fun contextWithPermissions(vararg perms: Permission?): AccessControlContext {
-                val permissions = Permissions()
-                for (perm in perms) permissions.add(perm)
-                return AccessControlContext(arrayOf(ProtectionDomain(null, permissions)))
-            }
+            return RouteFindingThread(pool)
         }
     }
 
-    class RouteFindingTask(private val routeFinder: IRouteFinder?, private val onFinish: FinishCallback) :
+    class RouteFindingTask(private val routeFinder: IRouteFinder, private val onFinish: FinishCallback) :
         RecursiveAction() {
         private val startTime = AtomicLong(0)
         private val started = AtomicBoolean(false)
@@ -115,9 +99,9 @@ class RouteFindingManager protected constructor() {
 
         override fun compute() {
             setStarted(true)
-            routeFinder.setStart(start)
-            routeFinder.setTarget(target)
-            routeFinder!!.search()
+            routeFinder.start = start
+            routeFinder.target = target
+            routeFinder.search()
             setFinished(true)
             onFinish.onFinish(this)
         }

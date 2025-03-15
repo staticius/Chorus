@@ -51,7 +51,7 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Comp
         level.setBlock(block.position, this, direct = true, update = true)
 
         val nbt = CompoundTag()
-            .putList("Items", ListTag())
+            .putList("Items", ListTag<Tag<*>>())
             .putString("id", BlockEntityID.BREWING_STAND)
             .putInt("x", position.x.toInt())
             .putInt("y", position.y.toInt())
@@ -62,7 +62,7 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Comp
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag<*>?> = item.customBlockData!!.getTags()
+            val customData: Map<String, Tag<*>> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
@@ -95,7 +95,7 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Comp
                 brewing = t
             } else {
                 val nbt = CompoundTag()
-                    .putList("Items", ListTag())
+                    .putList("Items", ListTag<Tag<*>>())
                     .putString("id", BlockEntityID.BREWING_STAND)
                     .putInt("x", position.x.toInt())
                     .putInt("y", position.y.toInt())
@@ -109,7 +109,7 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState? = Comp
                 }
             }
 
-            if (brewing.namedTag.contains("Lock") && brewing.namedTag.get("Lock") is StringTag) {
+            if (brewing.namedTag.contains("Lock") && brewing.namedTag["Lock"] is StringTag) {
                 if (brewing.namedTag.getString("Lock") != item.customName) {
                     return false
                 }

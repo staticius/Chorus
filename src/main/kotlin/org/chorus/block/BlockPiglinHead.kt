@@ -9,7 +9,7 @@ class BlockPiglinHead(blockState: BlockState?) : BlockHead(blockState), ItemHead
     override val name: String
         get() = "Piglin Head"
 
-    override fun getDrops(item: Item): Array<Item?> {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
             this.toItem()
         )

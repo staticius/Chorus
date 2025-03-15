@@ -2,8 +2,6 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
@@ -24,31 +22,32 @@ open class BlockCandle @JvmOverloads constructor(blockstate: BlockState? = Compa
         fz: Double,
         player: Player?
     ): Boolean {
-        var target = target
-        if (target.id == CAKE && target.isDefaultState) { //必须是完整的蛋糕才能插蜡烛
-            target.level.setBlock(target.position, toCakeForm(), true, true)
+        var target1 = target
+        if (target1.id == BlockID.CAKE && target1.isDefaultState) { //必须是完整的蛋糕才能插蜡烛
+            target1.level.setBlock(target1.position, toCakeForm(), direct = true, update = true)
             return true
         }
-        if (target !is BlockCandle && target.up() is BlockCandle) {
-            target = target.up()
+        val up = target1.up()
+        if (target1 !is BlockCandle && up is BlockCandle) {
+            target1 = up
         }
-        if (target.id == id) {
-            if (target.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CANDLES) < 3) {
-                target.setPropertyValue<Int, IntPropertyType>(
-                    CommonBlockProperties.CANDLES, target.getPropertyValue<Int, IntPropertyType>(
+        if (target1.id == id) {
+            if (target1.getPropertyValue(CommonBlockProperties.CANDLES) < 3) {
+                target1.setPropertyValue(
+                    CommonBlockProperties.CANDLES, target1.getPropertyValue(
                         CommonBlockProperties.CANDLES
                     ) + 1
                 )
-                level.setBlock(target.position, target, true, true)
+                level.setBlock(target1.position, target1, direct = true, update = true)
                 return true
             }
             return false
-        } else if (target is BlockCandle) {
+        } else if (target1 is BlockCandle) {
             return false
         }
 
-        setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CANDLES, 0)
-        level.setBlock(this.position, this, true, true)
+        setPropertyValue(CommonBlockProperties.CANDLES, 0)
+        level.setBlock(this.position, this, direct = true, update = true)
 
         return true
     }
@@ -65,24 +64,24 @@ open class BlockCandle @JvmOverloads constructor(blockstate: BlockState? = Compa
             return false
         }
 
-        if (getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT) && item.id != ItemID.FLINT_AND_STEEL) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT, false)
+        if (getPropertyValue(CommonBlockProperties.LIT) && item.id != ItemID.FLINT_AND_STEEL) {
+            setPropertyValue(CommonBlockProperties.LIT, false)
             level.addSound(this.position, Sound.RANDOM_FIZZ)
-            level.setBlock(this.position, this, true, true)
+            level.setBlock(this.position, this, direct = true, update = true)
             return true
-        } else if (!getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT) && item.id == ItemID.FLINT_AND_STEEL) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT, true)
+        } else if (!getPropertyValue(CommonBlockProperties.LIT) && item.id == ItemID.FLINT_AND_STEEL) {
+            setPropertyValue(CommonBlockProperties.LIT, true)
             level.addSound(this.position, Sound.FIRE_IGNITE)
-            level.setBlock(this.position, this, true, true)
+            level.setBlock(this.position, this, direct = true, update = true)
             return true
         }
 
         return false
     }
 
-    override fun getDrops(item: Item): Array<Item?>? {
+    override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
-            ItemBlock(this, 0, getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CANDLES) + 1)
+            ItemBlock(this, 0, getPropertyValue(CommonBlockProperties.CANDLES) + 1)
         )
     }
 
@@ -94,7 +93,7 @@ open class BlockCandle @JvmOverloads constructor(blockstate: BlockState? = Compa
         get() = "Candle"
 
     override val lightLevel: Int
-        get() = if (getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.LIT)) getPropertyValue<Int, IntPropertyType>(
+        get() = if (getPropertyValue(CommonBlockProperties.LIT)) getPropertyValue(
             CommonBlockProperties.CANDLES
         ) * 3 else 0
 
@@ -104,9 +103,11 @@ open class BlockCandle @JvmOverloads constructor(blockstate: BlockState? = Compa
     override val resistance: Double
         get() = 0.1
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.CANDLE, CommonBlockProperties.CANDLES, CommonBlockProperties.LIT)
-
     }
 }
