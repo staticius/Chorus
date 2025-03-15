@@ -8,7 +8,7 @@ package org.chorus.block.property.enums
  *
  * @author daoge_cmd
  */
-enum class CreakingHeartState(override val name: String) {
+enum class CreakingHeartState(val stateName: String) {
     UPROOTED("uprooted"),
     DORMANT("dormant"),
     AWAKE("awake")

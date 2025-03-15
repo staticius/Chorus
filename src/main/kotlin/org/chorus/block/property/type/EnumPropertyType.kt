@@ -1,78 +1,52 @@
-package org.chorus.block.property.type;
+package org.chorus.block.property.type
 
+import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
+import org.chorus.utils.Utils
+import java.util.*
 
-import org.chorus.utils.Utils;
+class EnumPropertyType <T : Enum<T>>(name: String, val enumClass: Class<T>, defaultData: T) : BaseBlockPropertyType<T>(
+    name,
+    enumClass.enumConstants.toList(),
+    defaultData,
+    Utils.computeRequiredBits(0, enumClass.enumConstants.size - 1)
+) {
+    val cachedValues: EnumMap<T, EnumPropertyValue> = EnumMap(getValidValues().associateWith { EnumPropertyValue(it) })
 
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Locale;
+    override fun getType(): BlockPropertyType.Type = BlockPropertyType.Type.ENUM
 
-/**
- * Allay Project 2023/3/19
- *
- * @author daoge_cmd
- */
-public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockPropertyType<T> {
-
-    private final EnumMap<T, EnumPropertyValue> cachedValues;
-    private final Class<T> enumClass;
-
-    private EnumPropertyType(String name, Class<T> enumClass, T defaultData) {
-        super(name, Arrays.asList(enumClass.getEnumConstants()), defaultData, Utils.computeRequiredBits(0, enumClass.getEnumConstants().length - 1));
-        this.enumClass = enumClass;
-        var map = new HashMap<T, EnumPropertyValue>();
-        for (var value : getValidValues()) {
-            map.put(value, new EnumPropertyValue(value));
-        }
-        cachedValues = new EnumMap<>(map);
+    override fun createValue(value: T): EnumPropertyValue {
+        return cachedValues[value]!!
     }
 
-    public static <T extends Enum<T>> EnumPropertyType<T> of(String name, Class<T> enumClass, T defaultData) {
-        return new EnumPropertyType<>(name, enumClass, defaultData);
-    }
-
-    public Type getType() {
-        return Type.ENUM;
-    }
-
-    @Override
-    public EnumPropertyValue createValue(T value) {
-        return cachedValues.get(value);
-    }
-
-    @Override
-    public EnumPropertyValue tryCreateValue(Object value) {
+    override fun tryCreateValue(value: Any?): EnumPropertyValue? {
         if (enumClass.isInstance(value)) {
-            return cachedValues.get(enumClass.cast(value));
-        } else if (value instanceof String str) {
-            return cachedValues.get(Enum.valueOf(enumClass, str.toUpperCase(Locale.ENGLISH)));
+            return cachedValues[enumClass.cast(value)]
+        } else if (value is String) {
+            return cachedValues[enumClass.enumConstants.find { it.name.equals(value, ignoreCase = true) }]
         }
-        throw new IllegalArgumentException("Invalid value for enum property type: " + value);
+        throw IllegalArgumentException("Invalid value for enum property type: $value")
     }
 
-    public final class EnumPropertyValue extends BlockPropertyType.BlockPropertyValue<T, EnumPropertyType<T>, String> {
+    inner class EnumPropertyValue internal constructor(value: T) :
+        BlockPropertyValue<T, EnumPropertyType<T>, String?>(this@EnumPropertyType, value) {
+        private val serializedValue: String = value.name.lowercase()
 
-        private final String serializedValue;
-
-        EnumPropertyValue(T value) {
-            super(EnumPropertyType.this, value);
-            serializedValue = value.name().toLowerCase(Locale.ENGLISH);
+        override fun getIndex(): Int {
+            return value.ordinal
         }
 
-        @Override
-        public int getIndex() {
-            return getValue().ordinal();
+        override fun getSerializedValue(): String {
+            return serializedValue
         }
 
-        @Override
-        public String getSerializedValue() {
-            return serializedValue;
+        override fun toString(): String {
+            return "EnumPropertyValue(name=" + getName() + ", value=" + value + ")"
         }
+    }
 
-        @Override
-        public String toString() {
-            return "EnumPropertyValue(name=" + getName() + ", value=" + getValue() + ")";
+    companion object {
+        fun <T : Enum<T>> of(name: String, enumClass: Class<T>, defaultData: T): EnumPropertyType<T> {
+            return EnumPropertyType(name, enumClass, defaultData)
         }
     }
 }

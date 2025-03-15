@@ -17,7 +17,7 @@ class Materials private constructor() : NBTData {
      * @see .up
      */
     fun up(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("up", true, true, renderMethod, texture)
+        this.process("up", ambientOcclusion = true, faceDimming = true, renderMethod = renderMethod, texture = texture)
         return this
     }
 
@@ -44,7 +44,12 @@ class Materials private constructor() : NBTData {
      * @see .down
      */
     fun down(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("down", true, true, renderMethod, texture)
+        this.process("down",
+            ambientOcclusion = true,
+            faceDimming = true,
+            renderMethod = renderMethod,
+            texture = texture
+        )
         return this
     }
 
@@ -71,7 +76,12 @@ class Materials private constructor() : NBTData {
      * @see .north
      */
     fun north(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("north", true, true, renderMethod, texture)
+        this.process("north",
+            ambientOcclusion = true,
+            faceDimming = true,
+            renderMethod = renderMethod,
+            texture = texture
+        )
         return this
     }
 
@@ -98,7 +108,12 @@ class Materials private constructor() : NBTData {
      * @see .south
      */
     fun south(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("south", true, true, renderMethod, texture)
+        this.process("south",
+            ambientOcclusion = true,
+            faceDimming = true,
+            renderMethod = renderMethod,
+            texture = texture
+        )
         return this
     }
 
@@ -125,7 +140,12 @@ class Materials private constructor() : NBTData {
      * @see .east
      */
     fun east(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("east", true, true, renderMethod, texture)
+        this.process("east",
+            ambientOcclusion = true,
+            faceDimming = true,
+            renderMethod = renderMethod,
+            texture = texture
+        )
         return this
     }
 
@@ -152,7 +172,12 @@ class Materials private constructor() : NBTData {
      * @see .west
      */
     fun west(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("west", true, true, renderMethod, texture)
+        this.process("west",
+            ambientOcclusion = true,
+            faceDimming = true,
+            renderMethod = renderMethod,
+            texture = texture
+        )
         return this
     }
 
@@ -179,7 +204,7 @@ class Materials private constructor() : NBTData {
      * @see .any
      */
     fun any(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("*", true, true, renderMethod, texture)
+        this.process("*", ambientOcclusion = true, faceDimming = true, renderMethod = renderMethod, texture = texture)
         return this
     }
 
@@ -246,12 +271,7 @@ class Materials private constructor() : NBTData {
     }
 
     /**
-     * 渲染方法枚举
-     *
-     *
-     * The enum Render method.
-     *
-     * @see [wiki.bedrock.dev](https://wiki.bedrock.dev/blocks/blocks-16.html.additional-notes)
+     * [wiki.bedrock.dev](https://wiki.bedrock.dev/blocks/blocks-16.html.additional-notes)
      */
     enum class RenderMethod {
         OPAQUE,

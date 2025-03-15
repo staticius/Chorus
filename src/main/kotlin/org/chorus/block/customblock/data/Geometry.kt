@@ -10,7 +10,7 @@ class Geometry(name: String) : NBTData {
 
     init {
         Preconditions.checkNotNull(name)
-        Preconditions.checkArgument(!name.isBlank())
+        Preconditions.checkArgument(name.isNotBlank())
         this.geometryName = name
     }
 
@@ -22,7 +22,7 @@ class Geometry(name: String) : NBTData {
      */
     fun boneVisibility(boneName: String, isVisibility: Boolean): Geometry {
         Preconditions.checkNotNull(boneName)
-        Preconditions.checkArgument(!boneName.isBlank())
+        Preconditions.checkArgument(boneName.isNotBlank())
         boneVisibilities[boneName] = if (isVisibility) "true" else "false"
         return this
     }
@@ -35,7 +35,7 @@ class Geometry(name: String) : NBTData {
      */
     fun boneVisibility(boneName: String, condition: String): Geometry {
         Preconditions.checkNotNull(boneName)
-        Preconditions.checkArgument(!boneName.isBlank())
+        Preconditions.checkArgument(boneName.isNotBlank())
         boneVisibilities[boneName] = condition
         return this
     }
@@ -55,7 +55,7 @@ class Geometry(name: String) : NBTData {
             .putString("identifier", geometryName)
             .putByte("legacyBlockLightAbsorption", 0)
             .putByte("legacyTopRotation", 0)
-        if (!boneVisibilities.isEmpty()) {
+        if (boneVisibilities.isNotEmpty()) {
             compoundTag.putCompound("bone_visibility", boneVisibility)
         }
         return compoundTag

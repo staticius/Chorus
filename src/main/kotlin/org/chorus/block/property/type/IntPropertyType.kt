@@ -5,11 +5,6 @@ import org.chorus.utils.Utils.computeRequiredBits
 
 import java.util.stream.IntStream
 
-/**
- * Allay Project 2023/3/19
- *
- * @author daoge_cmd
- */
 class IntPropertyType private constructor(
     name: String,
     val min: Int,
@@ -49,7 +44,7 @@ class IntPropertyType private constructor(
         }
 
         override fun toString(): String {
-            return "IntPropertyValue(name=${getName()}, value=${getValue()})"
+            return "IntPropertyValue(name=${getName()}, value=${value})"
         }
     }
 

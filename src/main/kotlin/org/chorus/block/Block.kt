@@ -43,6 +43,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
     Metadatable, AxisAlignedBB, IVector3, Loggable {
 
     protected var color: BlockColor? = null
+    val frictionFactor: Double = 0.6
 
     @JvmField
     var layer: Int = 0
@@ -1183,7 +1184,6 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
 
     companion object {
         val EMPTY_ARRAY: Array<Block> = emptyArray()
-        val frictionFactor: Double = 0.6
         const val DEFAULT_AIR_FLUID_FRICTION: Double = 0.95
         val VANILLA_BLOCK_COLOR_MAP: Long2ObjectOpenHashMap<BlockColor> = Long2ObjectOpenHashMap()
 

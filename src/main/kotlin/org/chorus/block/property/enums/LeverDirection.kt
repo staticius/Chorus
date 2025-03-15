@@ -10,7 +10,7 @@ import org.chorus.math.BlockFace
  *
  * @author daoge_cmd
  */
-enum class LeverDirection(val metadata: Int, override val name: String, val facing: BlockFace) {
+enum class LeverDirection(val metadata: Int, val directionName: String, val facing: BlockFace) {
     DOWN_EAST_WEST(0, "down_x", BlockFace.DOWN),
 
     DOWN_NORTH_SOUTH(7, "down_z", BlockFace.DOWN),
@@ -29,11 +29,11 @@ enum class LeverDirection(val metadata: Int, override val name: String, val faci
 
 
     override fun toString(): String {
-        return this.name
+        return this.directionName
     }
 
     companion object {
-        private val META_LOOKUP = arrayOfNulls<LeverDirection>(entries.toTypedArray().length)
+        private val META_LOOKUP = arrayOfNulls<LeverDirection>(entries.toTypedArray().size)
         fun byMetadata(meta: Int): LeverDirection? {
             var meta = meta
             if (meta < 0 || meta >= META_LOOKUP.size) {

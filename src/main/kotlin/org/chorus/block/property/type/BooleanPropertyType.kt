@@ -2,18 +2,12 @@ package org.chorus.block.property.type
 
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 
-/**
- * Allay Project 2023/3/19
- *
- * @author daoge_cmd
- */
 class BooleanPropertyType private constructor(name: String, defaultData: Boolean) :
     BaseBlockPropertyType<Boolean>(name, listOf(true, false), defaultData, 1.toByte()) {
     private val FALSE = BooleanPropertyValue(false)
     private val TRUE = BooleanPropertyValue(true)
 
-    override val type: BlockPropertyType.Type
-        get() = BlockPropertyType.Type.BOOLEAN
+    override fun getType(): BlockPropertyType.Type = BlockPropertyType.Type.BOOLEAN
 
     override fun createValue(value: Boolean): BooleanPropertyValue {
         return if (value) TRUE else FALSE
@@ -31,13 +25,12 @@ class BooleanPropertyType private constructor(name: String, defaultData: Boolean
 
     inner class BooleanPropertyValue internal constructor(value: Boolean) :
         BlockPropertyValue<Boolean, BooleanPropertyType, Byte?>(this@BooleanPropertyType, value) {
-        override val index: Int = if (value) 1 else 0
+        override fun getIndex(): Int = if (value) 1 else 0
 
-        override val serializedValue: Byte
-            get() = (if (value) 1 else 0).toByte()
+        override fun getSerializedValue(): Byte = (if (value) 1 else 0).toByte()
 
         override fun toString(): String {
-            return "BoolPropertyValue(name=${getName()}, value=${getValue()})"
+            return "BoolPropertyValue(name=${getName()}, value=${value})"
         }
     }
 

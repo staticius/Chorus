@@ -8,7 +8,7 @@ abstract class BlockWood(blockstate: BlockState?) : BlockLog(blockstate) {
     abstract fun getWoodType(): WoodType
 
     override val name: String
-        get() = getWoodType().name + " Wood"
+        get() = getWoodType().woodName + " Wood"
 
     override fun getStrippedState(): BlockState {
         val strippedId = when (getWoodType()) {
