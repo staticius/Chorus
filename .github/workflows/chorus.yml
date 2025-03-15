@@ -23,8 +23,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     needs: [ move-tag ]
-    if: | #    event is push and there is a change or push or commit the first message +b +u
-      ((github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository) || (github.event_name == 'push' && (contains(github.event.commits[0].message, '+b') || contains(github.event.commits[0].message, '+u'))))
+    if: ((github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository) || (github.event_name == 'push' && (contains(github.event.commits[0].message, '+b') || contains(github.event.commits[0].message, '+u'))))
 
     steps:
       - uses: actions/checkout@v4
