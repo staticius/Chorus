@@ -131,7 +131,7 @@ class PluginI18n(private val plugin: PluginBase) {
         ) {
             fallbackMap[id]
         } else {
-            Server.instance.language.internalGet(id)
+            Server.instance.baseLang.internalGet(id)
         }
     }
 

@@ -21,7 +21,7 @@ class CommandLogger(
     val command: Command,
     val sender: CommandSender,
     val commandLabel: String?,
-    val args: Array<String?>,
+    val args: Array<String>,
     outputContainer: CommandOutputContainer?,
     val plugin: Plugin?
 ) {
@@ -30,7 +30,7 @@ class CommandLogger(
         command: Command,
         sender: CommandSender,
         commandLabel: String?,
-        args: Array<String?>,
+        args: Array<String>,
         outputContainer: CommandOutputContainer? = CommandOutputContainer()
     ) : this(command, sender, commandLabel, args, outputContainer, InternalPlugin.INSTANCE)
 
@@ -38,7 +38,7 @@ class CommandLogger(
         command: Command,
         sender: CommandSender,
         commandLabel: String?,
-        args: Array<String?>,
+        args: Array<String>,
         plugin: Plugin?
     ) : this(command, sender, commandLabel, args, CommandOutputContainer(), plugin)
 
@@ -46,8 +46,8 @@ class CommandLogger(
         return this.addSuccess(message, *CommandOutputContainer.EMPTY_STRING)
     }
 
-    fun addSuccess(key: String, params: List<String?>): CommandLogger {
-        return this.addSuccess(key, *params.toArray<String>(CommandOutputContainer.EMPTY_STRING))
+    fun addSuccess(key: String, params: List<String>): CommandLogger {
+        return this.addSuccess(key, *params.toTypedArray())
     }
 
     /**
@@ -59,15 +59,15 @@ class CommandLogger(
      * @param key    the key
      * @param params the params
      */
-    fun addSuccess(key: String, vararg params: String?): CommandLogger {
-        var key = key
-        if (TextFormat.getLastColors(key).isEmpty()) {
-            key =
-                if (Server.instance.language.internalGet(key) != null) TextFormat.WHITE.toString() + "%" + key
-                else TextFormat.WHITE.toString() + key
+    fun addSuccess(key: String, vararg params: String): CommandLogger {
+        var key1 = key
+        if (TextFormat.getLastColors(key1).isEmpty()) {
+            key1 =
+                if (Server.instance.baseLang.internalGet(key1) != null) TextFormat.WHITE.toString() + "%" + key1
+                else TextFormat.WHITE.toString() + key1
         }
 
-        outputContainer.messages.add(CommandOutputMessage(key, *params))
+        outputContainer.messages.add(CommandOutputMessage(key1, *params))
         outputContainer.incrementSuccessCount()
         return this
     }
@@ -95,7 +95,7 @@ class CommandLogger(
      * @param params 语言文本参数/空
      * @return the command logger
      */
-    fun addError(key: String, vararg params: String?): CommandLogger {
+    fun addError(key: String, vararg params: String): CommandLogger {
         outputContainer.messages.add(CommandOutputMessage(key, *params))
         return this
     }
@@ -109,7 +109,7 @@ class CommandLogger(
      * @param key the key
      * @return the command logger
      */
-    fun addMessage(key: String?): CommandLogger {
+    fun addMessage(key: String): CommandLogger {
         return this.addMessage(key, *CommandOutputContainer.EMPTY_STRING)
     }
 
@@ -123,14 +123,14 @@ class CommandLogger(
      * @param params the params
      * @return the command logger
      */
-    fun addMessage(key: String?, vararg params: String?): CommandLogger {
+    fun addMessage(key: String, vararg params: String): CommandLogger {
         if (plugin is PluginBase) {
             val i18n = PluginI18nManager.getI18n(plugin)
             if (i18n != null) {
                 val text = if (sender.isPlayer) {
                     i18n.tr(sender.asPlayer()!!.languageCode, key, *params)
                 } else {
-                    i18n.tr(Server.instance.languageCode, key, *params)
+                    i18n.tr(Server.instance.baseLangCode, key, *params)
                 }
                 outputContainer.messages.add(CommandOutputMessage(text, *CommandOutputContainer.EMPTY_STRING))
                 return this
@@ -244,9 +244,6 @@ class CommandLogger(
      *
      * @param broadcast the broadcast
      */
-    /**
-     * 输出[.outputContainer]中的所有信息.
-     */
     @JvmOverloads
     fun output(broadcast: Boolean = false) {
         sender.sendCommandOutput(this.outputContainer)
@@ -280,8 +277,8 @@ class CommandLogger(
      * @param key      the key
      * @param params   给命令目标的反馈信息参数
      */
-    fun outputObjectWhisper(receiver: Player, key: String?, vararg params: String?) {
-        if (receiver.level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
+    fun outputObjectWhisper(receiver: Player, key: String, vararg params: String) {
+        if (receiver.level!!.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             receiver.sendMessage(TranslationContainer(key, *params))
         }
     }
@@ -297,7 +294,7 @@ class CommandLogger(
      * @param params   给命令目标的反馈信息参数
      */
     fun outputObjectWhisper(receiver: Player, rawtext: String, vararg params: Any?) {
-        if (receiver.level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
+        if (receiver.level!!.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             receiver.sendRawTextMessage(
                 RawText.fromRawText(
                     String.format(
@@ -309,7 +306,7 @@ class CommandLogger(
         }
     }
 
-    private fun syntaxErrorsValue(errorIndex: Int): Array<String?> {
+    private fun syntaxErrorsValue(errorIndex: Int): Array<String> {
         val join1 = StringJoiner(" ", "", " ")
         join1.add(commandLabel)
 
@@ -360,7 +357,7 @@ class CommandLogger(
 
     private fun broadcastAdminChannel(key: String, value: Array<String>) {
         var target = sender
-        if (target is ExecutorCommandSender) target = target.executor!!
+        if (target is ExecutorCommandSender) target = target.getExecutor()!!
         if (target is ICommandBlock) return
         val message = broadcastMessage(key, value, target)
 
@@ -376,7 +373,7 @@ class CommandLogger(
     private fun broadcastMessage(key: String, value: Array<String>, target: CommandSender): TranslationContainer {
         val message = TranslationContainer(TextFormat.clean(key), *value)
         val resultStr =
-            "[" + target.name + ": " + (if (message.text != target.server.baseLang.message.text]) "%" else "")+message.text+"]"
+            "[" + target.getName() + ": " + (if (message.text != target.server.baseLang.get(message.text)) "%" else "" ) + message.text +"]"
         val coloredStr = TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + resultStr
         message.text = coloredStr
         return message

@@ -46,13 +46,13 @@ interface IParamNode<T> {
      *
      * @return the parent
      */
-    val paramList: ParamList?
+    val paramList: ParamList
 
     /**
      * 标记该节点的[.fill]出现错误，输出默认错误信息
      */
     fun error() {
-        paramList!!.error()
+        paramList.error()
     }
 
     /**
@@ -72,7 +72,7 @@ interface IParamNode<T> {
      */
     fun error(key: String, vararg params: String?) {
         val list = this.paramList
-        list!!.error()
+        list.error()
         list.addMessage(key, *params)
     }
 
@@ -83,7 +83,7 @@ interface IParamNode<T> {
      */
     fun error(vararg messages: CommandOutputMessage?) {
         val list = this.paramList
-        list!!.error()
+        list.error()
         list.addMessage(*messages)
     }
 
@@ -99,7 +99,7 @@ interface IParamNode<T> {
      * @return the param node
      */
     fun init(
-        parent: ParamList?,
+        parent: ParamList,
         name: String?,
         optional: Boolean,
         type: CommandParamType?,
@@ -114,7 +114,7 @@ interface IParamNode<T> {
          * Retrieves the node before the current node.
          */
         get() {
-            val index = paramList.getNodeIndex()
-            return paramList!![max(0.0, (index - 1).toDouble()).toInt()]
+            val index = paramList.nodeIndex
+            return paramList[max(0.0, (index - 1).toDouble()).toInt()]
         }
 }

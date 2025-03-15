@@ -25,7 +25,7 @@ open class EnumNode : ParamNode<String>() {
     }
 
     override fun init(
-        parent: ParamList?,
+        parent: ParamList,
         name: String?,
         optional: Boolean,
         type: CommandParamType?,

@@ -1,6 +1,9 @@
 package org.chorus.command.selector.args.impl
 
 import org.chorus.command.CommandSender
+import org.chorus.command.selector.ParseUtils
+import org.chorus.command.selector.SelectorType
+import org.chorus.command.selector.args.CachedSimpleSelectorArgument
 import org.chorus.entity.Entity
 import org.chorus.level.Transform
 import java.util.function.Predicate
@@ -15,12 +18,12 @@ class Name : CachedSimpleSelectorArgument() {
         val have = ArrayList<String>()
         val dontHave = ArrayList<String>()
         for (name in arguments) {
-            var name = name
-            val reversed: Boolean = ParseUtils.checkReversed(name)
+            var name1 = name
+            val reversed: Boolean = ParseUtils.checkReversed(name1)
             if (reversed) {
-                name = name.substring(1)
-                dontHave.add(name)
-            } else have.add(name)
+                name1 = name1.substring(1)
+                dontHave.add(name1)
+            } else have.add(name1)
         }
         return Predicate { entity: Entity ->
             have.stream().allMatch { name: String -> entity.name == name } && dontHave.stream()
@@ -28,9 +31,9 @@ class Name : CachedSimpleSelectorArgument() {
         }
     }
 
-    val keyName: String
+    override val keyName: String
         get() = "name"
 
-    val priority: Int
+    override val priority: Int
         get() = 4
 }

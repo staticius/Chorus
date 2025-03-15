@@ -3,7 +3,11 @@ package org.chorus.command.selector.args.impl
 import com.google.common.collect.ImmutableMap
 import org.chorus.Player
 import org.chorus.command.CommandSender
+import org.chorus.command.selector.ParseUtils
+import org.chorus.command.selector.SelectorType
+import org.chorus.command.selector.args.CachedSimpleSelectorArgument
 import org.chorus.entity.Entity
+import org.chorus.entity.custom.CustomEntity
 import org.chorus.level.Transform
 import org.chorus.registry.Registries
 import java.util.function.Predicate
@@ -18,12 +22,12 @@ class Type : CachedSimpleSelectorArgument() {
         val have = ArrayList<String>()
         val dontHave = ArrayList<String>()
         for (type in arguments) {
-            var type = type
-            val reversed: Boolean = ParseUtils.checkReversed(type)
+            var type1 = type
+            val reversed: Boolean = ParseUtils.checkReversed(type1)
             if (reversed) {
-                type = completionPrefix(type.substring(1))
-                dontHave.add(type)
-            } else have.add(completionPrefix(type))
+                type1 = completionPrefix(type1.substring(1))
+                dontHave.add(type1)
+            } else have.add(completionPrefix(type1))
         }
         return Predicate { entity: Entity ->
             have.stream().allMatch { type: String -> isType(entity, type) } && dontHave.stream()
@@ -32,17 +36,17 @@ class Type : CachedSimpleSelectorArgument() {
     }
 
     override fun getDefaultValue(
-        values: Map<String?, List<String?>?>,
+        values: Map<String, List<String>>,
         selectorType: SelectorType,
         sender: CommandSender?
     ): String? {
         return if (selectorType == SelectorType.RANDOM_PLAYER) "minecraft:player" else null
     }
 
-    val keyName: String
+    override val keyName: String
         get() = "type"
 
-    val priority: Int
+    override val priority: Int
         get() = 4
 
     protected fun completionPrefix(type: String): String {
@@ -58,7 +62,7 @@ class Type : CachedSimpleSelectorArgument() {
         return if (entity is Player)  //player需要特判，因为EntityHuman的getNetworkId()返回-1
             type == "minecraft:player"
         else if (entity is CustomEntity) entity.getIdentifier() == type
-        else ENTITY_TYPE2ID.containsKey(type) && entity.networkId == ENTITY_TYPE2ID[type]
+        else ENTITY_TYPE2ID.containsKey(type) && entity.getNetworkId() == ENTITY_TYPE2ID[type]
     }
 
     companion object {

@@ -1838,7 +1838,7 @@ class Player @UsedByReflection constructor(
             }
         }
 
-    override val player: Player
+    override val player: Player?
         get() = this
 
     override val firstPlayed: Long?

@@ -11,7 +11,7 @@ abstract class ParamNode<T> : IParamNode<T> {
     protected var value: T? = null
     override var isOptional: Boolean = false
         protected set
-    override var paramList: ParamList? = null
+    override lateinit var paramList: ParamList
         protected set
 
     override fun <E> get(): E? {
@@ -28,7 +28,7 @@ abstract class ParamNode<T> : IParamNode<T> {
     }
 
     override fun init(
-        parent: ParamList?,
+        parent: ParamList,
         name: String?,
         optional: Boolean,
         type: CommandParamType?,

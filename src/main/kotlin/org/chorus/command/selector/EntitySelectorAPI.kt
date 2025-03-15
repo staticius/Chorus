@@ -1,21 +1,20 @@
 package org.chorus.command.selector
 
 import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import org.chorus.Player
 import org.chorus.command.CommandSender
+import org.chorus.command.NPCCommandSender
 import org.chorus.command.exceptions.SelectorSyntaxException
-import org.chorus.command.selector.args.impl.C
-import org.chorus.command.selector.args.impl.Name
-import org.chorus.command.selector.args.impl.Tag
-import org.chorus.command.selector.args.impl.Type
+import org.chorus.command.selector.args.ISelectorArgument
+import org.chorus.command.selector.args.impl.*
 import org.chorus.entity.Entity
 import org.chorus.utils.StringUtils
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.TimeUnit
-import java.util.function.Predicate
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.collections.set
@@ -58,18 +57,18 @@ class EntitySelectorAPI private constructor() {
         //获取克隆过的执行者位置信息
         val senderLocation = sender.transform
         //获取选择器类型
-        val selectorType: SelectorType = SelectorType.Companion.parseSelectorType(matcher.group(1))
+        val selectorType: SelectorType = SelectorType.parseSelectorType(matcher.group(1))
         //根据选择器类型先确定实体检测范围
         var entities: MutableList<Entity>
         entities = if (selectorType != SelectorType.SELF) {
-            Lists.newArrayList(*senderLocation.level.entities)
+            Lists.newArrayList(senderLocation.level.entities.values())
         } else {
             if (sender.isEntity) Lists.newArrayList(sender.asEntity())
             else return Lists.newArrayList()
         }
         //若是NPC触发选择器，则只处理触发NPC对话的玩家
         if (selectorType == SelectorType.NPC_INITIATOR) {
-            if (sender is NPCCommandSender) entities = Lists.newArrayList<Entity>(sender.getInitiator())
+            if (sender is NPCCommandSender) entities = Lists.newArrayList<Entity>(sender.initiator)
             else return Lists.newArrayList()
         }
         //对于确定的玩家类型选择器，排除掉不是玩家的实体
@@ -82,35 +81,36 @@ class EntitySelectorAPI private constructor() {
         //参照坐标
         for (arg in orderedArgs) {
             try {
-                if (!arg.isFilter()) {
-                    val predicate: Predicate<Entity> = if (arguments.containsKey(arg.getKeyName())) arg.getPredicate(
-                        selectorType, sender, senderLocation, *arguments[arg.getKeyName()]!!
+                if (!arg.isFilter) {
+                    val defaultValue = arg.getDefaultValue(arguments, selectorType, sender)
+                    val predicate = if (arguments.containsKey(arg.keyName)) arg.getPredicate(
+                        selectorType, sender, senderLocation, *arguments[arg.keyName]!!
                             .toTypedArray<String>()
                     )
-                    else if (arg.getDefaultValue(arguments, selectorType, sender) != null) arg.getPredicate(
+                    else if (defaultValue != null) arg.getPredicate(
                         selectorType,
                         sender,
                         senderLocation,
-                        arg.getDefaultValue(arguments, selectorType, sender)
+                        defaultValue
                     )
                     else continue
                     if (predicate == null) continue
                     entities.removeIf { entity: Entity -> !predicate.test(entity) }
                 } else {
-                    if (arguments.containsKey(arg.getKeyName())) entities = arg.getFilter(
-                        selectorType, sender, senderLocation, *arguments[arg.getKeyName()]!!
+                    if (arguments.containsKey(arg.keyName)) entities = arg.getFilter(
+                        selectorType, sender, senderLocation, *arguments[arg.keyName]!!
                             .toTypedArray<String>()
-                    ).apply(entities)
+                    )!!.apply(entities).toMutableList()
                     else continue
                 }
             } catch (t: Throwable) {
-                throw SelectorSyntaxException("Error while parsing selector argument: " + arg.getKeyName(), t)
+                throw SelectorSyntaxException("Error while parsing selector argument: " + arg.keyName, t)
             }
             //没符合条件的实体了，return
             if (entities.isEmpty()) return entities
         }
         //随机选择一个
-        if (selectorType == SelectorType.RANDOM_PLAYER && !entities.isEmpty()) {
+        if (selectorType == SelectorType.RANDOM_PLAYER && entities.isNotEmpty()) {
             val index = ThreadLocalRandom.current().nextInt(entities.size) + 1
             var currentEntity: Entity? = null
             var i = 1
@@ -128,7 +128,7 @@ class EntitySelectorAPI private constructor() {
             var nearest: Entity? = null
             var min = Double.MAX_VALUE
             for (entity in entities) {
-                var distanceSquared = 0.0
+                var distanceSquared: Double
                 if ((senderLocation.position.distanceSquared(entity.position).also { distanceSquared = it }) < min) {
                     min = distanceSquared
                     nearest = entity
@@ -145,7 +145,7 @@ class EntitySelectorAPI private constructor() {
      * @return 是否是合法目标选择器
      */
     fun checkValid(token: String): Boolean {
-        return MATCHES_CACHE[token, { k: String? -> ENTITY_SELECTOR.matcher(token).matches() }]
+        return MATCHES_CACHE[token, { ENTITY_SELECTOR.matcher(token).matches() }]
     }
 
     /**
@@ -154,10 +154,10 @@ class EntitySelectorAPI private constructor() {
      * @return 是否注册成功（若已存在相同key值的选择器参数则注册失败，返回false）
      */
     fun registerArgument(argument: ISelectorArgument): Boolean {
-        if (!registry.containsKey(argument.getKeyName())) {
-            registry[argument.getKeyName()] = argument
+        if (!registry.containsKey(argument.keyName)) {
+            registry[argument.keyName] = argument
             orderedArgs.add(argument)
-            Collections.sort<ISelectorArgument>(orderedArgs)
+            orderedArgs.sort()
             return true
         }
         return false
@@ -189,21 +189,21 @@ class EntitySelectorAPI private constructor() {
     }
 
     protected fun separateArguments(inputArguments: String): List<String> {
-        var go_on = false
+        var goOn = false
         val result: MutableList<String> = ArrayList()
         var start = 0
 
         var i = 0
         while (i < inputArguments.length) {
-            if (inputArguments[i] == ',' && !go_on) {
+            if (inputArguments[i] == ',' && !goOn) {
                 result.add(inputArguments.substring(start, i))
                 start = i + 1
             }
             if (inputArguments[i] == '{') {
-                go_on = true
+                goOn = true
             }
             if (inputArguments[i] == '}') {
-                go_on = false
+                goOn = false
                 i++
                 result.add(inputArguments.substring(start, i))
                 start = i + 1
@@ -213,11 +213,11 @@ class EntitySelectorAPI private constructor() {
 
         if (start < inputArguments.length) result.add(inputArguments.substring(start))
 
-        return result.stream().filter { s: String -> !s.isEmpty() }.collect(Collectors.toList())
+        return result.stream().filter { s: String -> s.isNotEmpty() }.collect(Collectors.toList())
     }
 
     companion object {
-        val aPI: EntitySelectorAPI = EntitySelectorAPI()
+        val api: EntitySelectorAPI = EntitySelectorAPI()
 
         init {
             registerDefaultArguments()
@@ -230,32 +230,31 @@ class EntitySelectorAPI private constructor() {
          * 对目标选择器文本的预解析缓存
          */
         val ARGS_CACHE: Cache<String, Map<String, MutableList<String>>> =
-            Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES)
-                .build<String, Map<String, List<String>>>()
+            Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build()
         val MATCHES_CACHE: Cache<String, Boolean> =
-            Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build<String, Boolean>()
+            Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build()
 
         private fun registerDefaultArguments() {
-            aPI.registerArgument(X())
-            aPI.registerArgument(Y())
-            aPI.registerArgument(Z())
-            aPI.registerArgument(DX())
-            aPI.registerArgument(DY())
-            aPI.registerArgument(DZ())
-            aPI.registerArgument(C())
-            aPI.registerArgument(R())
-            aPI.registerArgument(RM())
-            aPI.registerArgument(Name())
-            aPI.registerArgument(Tag())
-            aPI.registerArgument(L())
-            aPI.registerArgument(LM())
-            aPI.registerArgument(M())
-            aPI.registerArgument(Type())
-            aPI.registerArgument(RX())
-            aPI.registerArgument(RXM())
-            aPI.registerArgument(RY())
-            aPI.registerArgument(RYM())
-            aPI.registerArgument(Scores())
+            api.registerArgument(X())
+            api.registerArgument(Y())
+            api.registerArgument(Z())
+            api.registerArgument(DX())
+            api.registerArgument(DY())
+            api.registerArgument(DZ())
+            api.registerArgument(C())
+            api.registerArgument(R())
+            api.registerArgument(RM())
+            api.registerArgument(Name())
+            api.registerArgument(Tag())
+            api.registerArgument(L())
+            api.registerArgument(LM())
+            api.registerArgument(M())
+            api.registerArgument(Type())
+            api.registerArgument(RX())
+            api.registerArgument(RXM())
+            api.registerArgument(RY())
+            api.registerArgument(RYM())
+            api.registerArgument(Scores())
         }
     }
 }

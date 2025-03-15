@@ -17,7 +17,7 @@ class ParamTree {
     val command: Command
     var sender: CommandSender? = null
         private set
-    var args: Array<String?>
+    lateinit var args: Array<String>
         private set
 
     /**
@@ -69,15 +69,21 @@ class ParamTree {
                             else -> VoidNode()
                         }
                     } else {
-                        if (parameter.enumData == CommandEnum.Companion.ENUM_BOOLEAN) {
-                            BooleanNode()
-                        } else if (parameter.enumData == CommandEnum.Companion.ENUM_ITEM) {
-                            ItemNode()
-                        } else if (parameter.enumData == CommandEnum.Companion.ENUM_BLOCK) {
-                            BlockNode()
-                        } else if (parameter.enumData == CommandEnum.Companion.ENUM_ENTITY) {
-                            StringNode()
-                        } else EnumNode()
+                        when (parameter.enumData) {
+                            CommandEnum.ENUM_BOOLEAN -> {
+                                BooleanNode()
+                            }
+                            CommandEnum.ENUM_ITEM -> {
+                                ItemNode()
+                            }
+                            CommandEnum.ENUM_BLOCK -> {
+                                BlockNode()
+                            }
+                            CommandEnum.ENUM_ENTITY -> {
+                                StringNode()
+                            }
+                            else -> EnumNode()
+                        }
                     }
                 paramList.add(
                     node.init(
@@ -111,7 +117,7 @@ class ParamTree {
     fun matchAndParse(
         sender: CommandSender,
         commandLabel: String?,
-        args: Array<String?>
+        args: Array<String>
     ): Map.Entry<String, ParamList>? {
         this.args = args
         this.sender = sender
@@ -130,7 +136,7 @@ class ParamTree {
                         node.error()
                         break@f2
                     }
-                    node.fill(args[list.indexAndIncrement]!!)
+                    node.fill(args[list.indexAndIncrement])
                     if (list.error != Int.MIN_VALUE) {
                         break@f2
                     }
@@ -161,7 +167,7 @@ class ParamTree {
                 this.command, sender, commandLabel, args, CommandOutputContainer(),
                 if (command is PluginCommand<*>) command.plugin else InternalPlugin.INSTANCE
             )
-            if (!list.messageContainer.messages.isEmpty()) {
+            if (list.messageContainer.messages.isNotEmpty()) {
                 for (message in list.messageContainer.messages) {
                     log.addMessage(message.messageId, *message.parameters)
                 }

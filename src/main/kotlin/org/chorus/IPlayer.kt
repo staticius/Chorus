@@ -23,7 +23,7 @@ interface IPlayer : ServerOperator, Metadatable {
 
     var isWhitelisted: Boolean
 
-    val player: Player
+    val player: Player?
 
     val firstPlayed: Long?
 
