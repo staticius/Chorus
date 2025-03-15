@@ -17,8 +17,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
-  build-server:
-    name: Build PNX server
+  build-chorus:
+    name: Build Chorus
     timeout-minutes: 10
     runs-on: ubuntu-latest
     needs: [ move-tag ]
