@@ -26,7 +26,7 @@ class BlockPrismarineStairs @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.PRISMARINE_STAIRS,
+            BlockID.PRISMARINE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

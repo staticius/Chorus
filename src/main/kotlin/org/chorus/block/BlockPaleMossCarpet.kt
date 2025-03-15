@@ -17,7 +17,7 @@ class BlockPaleMossCarpet @JvmOverloads constructor(blockstate: BlockState? = Co
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.PALE_MOSS_CARPET,
+            BlockID.PALE_MOSS_CARPET,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_EAST,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_NORTH,
             CommonBlockProperties.PALE_MOSS_CARPET_SIDE_SOUTH,

@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.block.BlockGrowEvent
 import org.chorus.item.*
 import org.chorus.level.Level
@@ -12,8 +11,8 @@ import org.chorus.math.BlockFace
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockTransparent(blockstate) {
+open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockState) {
     override val name: String
         get() = "Cave Vines"
 
@@ -47,7 +46,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
-                        level.setBlock(this.position, ev.newState!!, false, true)
+                        level.setBlock(this.position, ev.newState!!, direct = false, update = true)
                     } else {
                         return type
                     }
@@ -59,7 +58,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
-                        level.setBlock(this.position, ev.newState!!, false, true)
+                        level.setBlock(this.position, ev.newState!!, direct = false, update = true)
                     } else {
                         return type
                     }
@@ -74,7 +73,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    level.setBlock(down()!!.position, ev.newState!!, false, true)
+                    level.setBlock(down()!!.position, ev.newState!!, direct = false, update = true)
                 } else {
                     return type
                 }
@@ -84,7 +83,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    level.setBlock(down()!!.position, ev.newState!!, false, true)
+                    level.setBlock(down()!!.position, ev.newState!!, direct = false, update = true)
                 }
             }
             return type
@@ -113,7 +112,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
                 if (ev.isCancelled) {
                     return false
                 }
-                level.setBlock(this.position, ev.newState!!, false, true)
+                level.setBlock(this.position, ev.newState!!, direct = false, update = true)
                 level.addParticle(BoneMealParticle(this.position))
                 if (player != null && !player.isCreative) {
                     item.count--
@@ -125,7 +124,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
             if (this.growth == 25) {
                 val block = BlockCaveVines()
                 block.growth = 0
-                level.setBlock(this.position, block, false, true)
+                level.setBlock(this.position, block, direct = false, update = true)
                 level.dropItem(this.position, Item.get(ItemID.GLOW_BERRIES))
             }
             return true
@@ -138,17 +137,19 @@ open class BlockCaveVines @JvmOverloads constructor(blockstate: BlockState? = Co
     }
 
     private val maxGrowth: Int
-        get() = CommonBlockProperties.GROWING_PLANT_AGE.getMax()
+        get() = CommonBlockProperties.GROWING_PLANT_AGE.max
 
     private var growth: Int
-        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWING_PLANT_AGE)
+        get() = getPropertyValue(CommonBlockProperties.GROWING_PLANT_AGE)
         private set(growth) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWING_PLANT_AGE, growth)
+            setPropertyValue(CommonBlockProperties.GROWING_PLANT_AGE, growth)
         }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CAVE_VINES, CommonBlockProperties.GROWING_PLANT_AGE)
-
 
         fun isValidSupport(block: Block): Boolean {
             return if (block is BlockLiquid) false

@@ -3,8 +3,8 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockCherryDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockDoubleSlabBase(blockstate) {
+class BlockCherryDoubleSlab @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockDoubleSlabBase(blockState) {
     override fun getSlabName(): String {
         return "Cherry"
     }
@@ -25,12 +25,14 @@ class BlockCherryDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = 
         get() = ItemTool.TYPE_AXE
 
     override fun getSingleSlab(): BlockState {
-        return BlockCherrySlab.Companion.PROPERTIES.getDefaultState()
+        return BlockCherrySlab.properties.defaultState
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.CHERRY_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

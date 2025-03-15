@@ -9,7 +9,7 @@ class BlockJungleDoor @JvmOverloads constructor(blockstate: BlockState? = Compan
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.Companion.JUNGLE_DOOR,
+            BlockID.Companion.JUNGLE_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,

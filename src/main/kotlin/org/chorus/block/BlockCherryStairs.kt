@@ -2,8 +2,8 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockCherryStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockStairsWood(blockstate) {
+class BlockCherryStairs @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockStairsWood(blockState) {
     override val name: String
         get() = "Cherry Wood Stairs"
 
@@ -19,12 +19,14 @@ class BlockCherryStairs @JvmOverloads constructor(blockstate: BlockState? = Comp
     override val burnAbility: Int
         get() = 20
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CHERRY_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

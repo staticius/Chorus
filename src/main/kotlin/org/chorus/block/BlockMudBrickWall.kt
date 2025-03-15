@@ -20,7 +20,7 @@ class BlockMudBrickWall @JvmOverloads constructor(blockState: BlockState? = Comp
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.MUD_BRICK_WALL,
+            BlockID.MUD_BRICK_WALL,
             CommonBlockProperties.WALL_CONNECTION_TYPE_EAST,
             CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH,
             CommonBlockProperties.WALL_CONNECTION_TYPE_SOUTH,

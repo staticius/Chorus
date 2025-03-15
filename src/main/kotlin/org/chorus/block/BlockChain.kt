@@ -83,8 +83,10 @@ class BlockChain : BlockTransparent {
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHAIN, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

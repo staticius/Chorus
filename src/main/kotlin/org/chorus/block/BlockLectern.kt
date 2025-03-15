@@ -192,7 +192,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.LECTERN,
+            BlockID.LECTERN,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.POWERED_BIT
         )

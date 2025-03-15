@@ -9,7 +9,7 @@ class BlockVerdantFroglight @JvmOverloads constructor(blockState: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.VERDANT_FROGLIGHT,
+            BlockID.VERDANT_FROGLIGHT,
             CommonBlockProperties.PILLAR_AXIS
         )
 

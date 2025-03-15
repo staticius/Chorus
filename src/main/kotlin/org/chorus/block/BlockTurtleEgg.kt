@@ -328,7 +328,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.TURTLE_EGG,
+            BlockID.TURTLE_EGG,
             CommonBlockProperties.CRACKED_STATE,
             CommonBlockProperties.TURTLE_EGG_COUNT
         )

@@ -10,7 +10,7 @@ class BlockWaxedExposedCutCopperStairs @JvmOverloads constructor(blockstate: Blo
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.WAXED_EXPOSED_CUT_COPPER_STAIRS,
+            BlockID.WAXED_EXPOSED_CUT_COPPER_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

@@ -4,8 +4,8 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemID
 
-class BlockCaveVinesHeadWithBerries @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockCaveVines(blockstate) {
+class BlockCaveVinesHeadWithBerries @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockCaveVines(blockState) {
     override val name: String
         get() = "Cave Vines Head With Berries"
 
@@ -19,9 +19,11 @@ class BlockCaveVinesHeadWithBerries @JvmOverloads constructor(blockstate: BlockS
         return arrayOf(Item.get(ItemID.GLOW_BERRIES))
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.CAVE_VINES_HEAD_WITH_BERRIES, CommonBlockProperties.GROWING_PLANT_AGE)
-
     }
 }

@@ -162,7 +162,7 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.SMALL_DRIPLEAF_BLOCK,
+            BlockID.SMALL_DRIPLEAF_BLOCK,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.UPPER_BLOCK_BIT
         )

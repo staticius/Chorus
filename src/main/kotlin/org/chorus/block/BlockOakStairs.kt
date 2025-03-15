@@ -9,7 +9,7 @@ class BlockOakStairs @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.OAK_STAIRS,
+            BlockID.OAK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

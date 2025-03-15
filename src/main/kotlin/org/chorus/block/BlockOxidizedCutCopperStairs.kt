@@ -11,7 +11,7 @@ open class BlockOxidizedCutCopperStairs @JvmOverloads constructor(blockstate: Bl
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.OXIDIZED_CUT_COPPER_STAIRS,
+            BlockID.OXIDIZED_CUT_COPPER_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )

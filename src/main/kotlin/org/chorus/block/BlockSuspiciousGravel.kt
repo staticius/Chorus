@@ -52,7 +52,7 @@ class BlockSuspiciousGravel @JvmOverloads constructor(blockstate: BlockState? = 
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.BlockID.SUSPICIOUS_GRAVEL,
+            BlockID.SUSPICIOUS_GRAVEL,
             CommonBlockProperties.HANGING,
             CommonBlockProperties.BRUSHED_PROGRESS
         )

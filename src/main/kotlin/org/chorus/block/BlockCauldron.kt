@@ -2,7 +2,6 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.CauldronLiquid
 import org.chorus.blockentity.BlockEntityCauldron
@@ -142,7 +141,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                 Server.instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
                     replaceBucket(item, player, ev.item)
-                    this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMin(), player) // empty
+                    this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) // empty
                     level.setBlock(this.position, this, true)
                     cauldron.clearCustomColor()
                     level.addLevelEvent(
@@ -168,13 +167,13 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     if (cauldron.hasPotion()) { //if has potion
                         clearWithFizz(cauldron, player)
                     } else if (item.isWater) { //water bucket
-                        this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMax(), player) // fill
+                        this.setFillLevel(CommonBlockProperties.FILL_LEVEL.max, player) // fill
                         //default liquid type is water so we don't need to set it
                         cauldron.clearCustomColor()
                         level.setBlock(this.position, this, true)
                         level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_FILLWATER)
                     } else if (item.isPowderSnow) { // powder snow bucket
-                        this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMax(), player) //fill
+                        this.setFillLevel(CommonBlockProperties.FILL_LEVEL.max, player) //fill
                         this.cauldronLiquid = CauldronLiquid.POWDER_SNOW
                         cauldron.clearCustomColor()
                         level.setBlock(this.position, this, true)
@@ -182,7 +181,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     } else { // lava bucket
                         if (isEmpty) {
                             this.cauldronLiquid = CauldronLiquid.LAVA
-                            this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMax(), player)
+                            this.setFillLevel(CommonBlockProperties.FILL_LEVEL.max, player)
                             level.setBlock(this.position, this, true)
                             cauldron.clearCustomColor()
                             cauldron.type = BlockEntityCauldron.PotionType.LAVA
@@ -234,8 +233,8 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     setFillLevel(
                         clamp(
                             fillLevel - 2,
-                            CommonBlockProperties.FILL_LEVEL.getMin(),
-                            CommonBlockProperties.FILL_LEVEL.getMax()
+                            CommonBlockProperties.FILL_LEVEL.min,
+                            CommonBlockProperties.FILL_LEVEL.max
                         ), player
                     )
                     level.setBlock(this.position, this, true, true)
@@ -257,8 +256,8 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     setFillLevel(
                         clamp(
                             fillLevel - 2,
-                            CommonBlockProperties.FILL_LEVEL.getMin(),
-                            CommonBlockProperties.FILL_LEVEL.getMax()
+                            CommonBlockProperties.FILL_LEVEL.min,
+                            CommonBlockProperties.FILL_LEVEL.max
                         ), player
                     )
                     level.setBlock(this.position, this, true, true)
@@ -288,8 +287,8 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                 setFillLevel(
                     clamp(
                         fillLevel + 2,
-                        CommonBlockProperties.FILL_LEVEL.getMin(),
-                        CommonBlockProperties.FILL_LEVEL.getMax()
+                        CommonBlockProperties.FILL_LEVEL.min,
+                        CommonBlockProperties.FILL_LEVEL.max
                     ), player
                 )
                 level.setBlock(this.position, this, true)
@@ -321,8 +320,8 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                 setFillLevel(
                     clamp(
                         fillLevel - 2,
-                        CommonBlockProperties.FILL_LEVEL.getMin(),
-                        CommonBlockProperties.FILL_LEVEL.getMax()
+                        CommonBlockProperties.FILL_LEVEL.min,
+                        CommonBlockProperties.FILL_LEVEL.max
                     ), player
                 )
                 if (isEmpty) {
@@ -391,8 +390,8 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                 setFillLevel(
                     clamp(
                         fillLevel - 2,
-                        CommonBlockProperties.FILL_LEVEL.getMin(),
-                        CommonBlockProperties.FILL_LEVEL.getMax()
+                        CommonBlockProperties.FILL_LEVEL.min,
+                        CommonBlockProperties.FILL_LEVEL.max
                     ), player
                 )
                 level.setBlock(this.position, this, true, true)
@@ -454,7 +453,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     Server.instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         replaceBucket(bucket, player, ev.item)
-                        this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMin(), player) //empty
+                        this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) //empty
                         level.setBlock(this.position, BlockCauldron(), true)
                         be.clearCustomColor()
                         level.addSound(position.add(0.5, 1.0, 0.5), Sound.BUCKET_FILL_LAVA)
@@ -476,7 +475,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                         if (be.hasPotion()) { //if has potion
                             clearWithFizz(be)
                         } else if (bucket.isLava) { //lava bucket
-                            this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMax(), player) //fill
+                            this.setFillLevel(CommonBlockProperties.FILL_LEVEL.max, player) //fill
                             be.clearCustomColor()
                             level.setBlock(this.position, this, true)
                             level.addSound(position.add(0.5, 1.0, 0.5), Sound.BUCKET_EMPTY_LAVA)
@@ -560,7 +559,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
 
     @JvmOverloads
     fun clearWithFizz(cauldron: BlockEntityCauldron, player: Player? = null) {
-        this.setFillLevel(CommonBlockProperties.FILL_LEVEL.getMin(), player) //empty
+        this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) //empty
         cauldron.potionId = -1 //reset potion
         cauldron.type = BlockEntityCauldron.PotionType.NORMAL
         cauldron.clearCustomColor()
