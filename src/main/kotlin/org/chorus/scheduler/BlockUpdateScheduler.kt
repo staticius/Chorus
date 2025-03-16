@@ -30,7 +30,7 @@ class BlockUpdateScheduler(level: Level, currentTick: Long) {
             }
         } else {
             val times = ArrayList(queuedUpdates.keys)
-            Collections.sort(times)
+            times.sort()
             for (tick in times) {
                 if (tick <= currentTick) {
                     perform(tick)
@@ -80,7 +80,7 @@ class BlockUpdateScheduler(level: Level, currentTick: Long) {
             for (update in tickSet) {
                 val pos = update.pos
 
-                if (pos.getX() >= boundingBox.minX && pos.getX() < boundingBox.maxX && pos.getZ() >= boundingBox.minZ && pos.getZ() < boundingBox.maxZ) {
+                if (pos.x >= boundingBox.minX && pos.x < boundingBox.maxX && pos.z >= boundingBox.minZ && pos.z < boundingBox.maxZ) {
                     set.add(update)
                 }
             }
@@ -89,9 +89,9 @@ class BlockUpdateScheduler(level: Level, currentTick: Long) {
         return set
     }
 
-    fun isBlockTickPending(pos: Vector3?, block: Block?): Boolean {
+    fun isBlockTickPending(pos: Vector3, block: Block): Boolean {
         val tmpUpdates: Set<BlockUpdateEntry>? = pendingUpdates
-        if (tmpUpdates == null || tmpUpdates.isEmpty()) return false
+        if (tmpUpdates.isNullOrEmpty()) return false
         return tmpUpdates.contains(BlockUpdateEntry(pos, block))
     }
 

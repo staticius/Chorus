@@ -4,13 +4,14 @@ import com.google.common.io.Files
 import org.chorus.Server
 import org.chorus.resourcepacks.JarPluginResourcePack
 import org.chorus.resourcepacks.ResourcePack
+import org.chorus.utils.Loggable
 import java.io.File
 import java.util.*
 
 
 class JarPluginResourcePackLoader(protected val jarPath: File) : ResourcePackLoader {
     override fun loadPacks(): List<ResourcePack> {
-        val baseLang = Server.instance.language
+        val baseLang = Server.instance.baseLang
         val loadedResourcePacks: MutableList<ResourcePack> = ArrayList()
         for (jar in Objects.requireNonNull<Array<File>>(jarPath.listFiles())) {
             try {
@@ -28,7 +29,7 @@ class JarPluginResourcePackLoader(protected val jarPath: File) : ResourcePackLoa
                         baseLang.tr(
                             "nukkit.resources.plugin.loaded",
                             jar.name,
-                            resourcePack.packName
+                            resourcePack.packName ?: ""
                         )
                     )
                 }
@@ -38,4 +39,6 @@ class JarPluginResourcePackLoader(protected val jarPath: File) : ResourcePackLoa
         }
         return loadedResourcePacks
     }
+
+    companion object : Loggable
 }

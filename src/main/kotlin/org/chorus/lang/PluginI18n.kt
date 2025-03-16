@@ -154,7 +154,7 @@ class PluginI18n(private val plugin: PluginBase) {
             })!!.containsKey(id)) {
             fallbackMap[id]
         } else {
-            Server.instance.language[id]
+            Server.instance.baseLang[id]
         }
     }
 

@@ -1,6 +1,7 @@
 package org.chorus.scheduler
 
 import org.chorus.plugin.Plugin
+import org.chorus.utils.Loggable
 import org.chorus.utils.PluginException
 import org.chorus.utils.Utils
 import org.jetbrains.annotations.ApiStatus
@@ -17,7 +18,7 @@ import kotlin.math.max
 
 class ServerScheduler {
     @get:ApiStatus.Internal
-    val asyncTaskThreadPool: AsyncPool
+    val asyncTaskThreadPool: AsyncPool = AsyncPool(WORKERS)
 
     private val pending: Queue<TaskHandler> =
         ConcurrentLinkedQueue()
@@ -30,10 +31,6 @@ class ServerScheduler {
 
     @Volatile
     private var currentTick = -1
-
-    init {
-        this.asyncTaskThreadPool = AsyncPool(WORKERS)
-    }
 
     /**
      * 设置一个只执行一次的任务 delay=0 period=0 asynchronous=false
@@ -70,10 +67,10 @@ class ServerScheduler {
     }
 
     /**
-     * Schedule a async task
+     * Schedule an async task
      *
      *
-     * the asynctask is executed in other thread(not main thread)
+     * the async task is executed in other thread(not main thread)
      *
      * @param task the async task
      * @return the task handler
@@ -383,11 +380,7 @@ class ServerScheduler {
      * @param plugin the specific plugin.
      */
     fun cancelTask(plugin: Plugin) {
-        if (plugin == null) {
-            throw NullPointerException("Plugin cannot be null!")
-        }
         for ((_, taskHandler) in taskMap) {
-            // TODO: Remove the "taskHandler.getPlugin() == null" check
             // It is only there for backwards compatibility!
             if (taskHandler.plugin == null || plugin == taskHandler.plugin) {
                 try {
@@ -417,7 +410,7 @@ class ServerScheduler {
     }
 
     private fun addTask(task: Task, delay: Int, period: Int, asynchronous: Boolean): TaskHandler {
-        return addTask(if (task is PluginTask<*>) task.getOwner() else null, task, delay, period, asynchronous)
+        return addTask(if (task is PluginTask<*>) task.owner else null, task, delay, period, asynchronous)
     }
 
     private fun addTask(plugin: Plugin?, task: Runnable, delay: Int, period: Int, asynchronous: Boolean): TaskHandler {
@@ -517,7 +510,7 @@ class ServerScheduler {
         asyncTaskThreadPool.shutdownNow()
     }
 
-    companion object {
+    companion object : Loggable {
         @JvmField
         var WORKERS: Int = 4
     }

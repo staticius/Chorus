@@ -1,5 +1,6 @@
 package org.chorus.scheduler
 
+import org.chorus.utils.Loggable
 import org.chorus.utils.Utils
 
 import java.io.ByteArrayInputStream
@@ -44,4 +45,6 @@ class FileWriteTask : AsyncTask {
             FileWriteTask.log.error("An error occurred while writing the file {}", file, e)
         }
     }
+
+    companion object : Loggable
 }

@@ -1,6 +1,7 @@
 package org.chorus.scheduler
 
 import org.chorus.plugin.Plugin
+import org.chorus.utils.Loggable
 
 
 /**
@@ -38,4 +39,6 @@ class TaskHandler(val plugin: Plugin?, val task: Runnable, val taskId: Int, val 
             TaskHandler.log.error("Exception while invoking run", ex)
         }
     }
+
+    companion object : Loggable
 }

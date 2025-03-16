@@ -4,6 +4,7 @@ import com.google.common.collect.Sets
 import org.chorus.Server
 import org.chorus.resourcepacks.loader.ResourcePackLoader
 import org.chorus.resourcepacks.loader.ZippedResourcePackLoader
+import org.chorus.utils.Loggable
 import java.io.File
 import java.util.*
 import java.util.function.Consumer
@@ -12,15 +13,15 @@ import java.util.function.Consumer
 class ResourcePackManager(private val loaders: MutableSet<ResourcePackLoader>) {
     var maxChunkSize: Int = 1024 * 32 // 32kb is default
 
-    private val resourcePacksById: MutableMap<UUID?, ResourcePack?> = HashMap()
-    private val resourcePacks: MutableSet<ResourcePack?> = HashSet()
+    private val resourcePacksById: MutableMap<UUID, ResourcePack> = HashMap()
+    private val resourcePacks: MutableSet<ResourcePack> = HashSet()
 
 
     init {
         reloadPacks()
     }
 
-    constructor(vararg loaders: ResourcePackLoader?) : this(Sets.newHashSet<ResourcePackLoader>(*loaders))
+    constructor(vararg loaders: ResourcePackLoader) : this(Sets.newHashSet<ResourcePackLoader>(*loaders))
 
     /**
      * 保留此方法仅仅为了向后兼容性以及测试
@@ -31,7 +32,7 @@ class ResourcePackManager(private val loaders: MutableSet<ResourcePackLoader>) {
     constructor(resourcePacksDir: File) : this(ZippedResourcePackLoader(resourcePacksDir))
 
     val resourceStack: Array<ResourcePack>
-        get() = resourcePacks.toArray<ResourcePack>(ResourcePack.Companion.EMPTY_ARRAY)
+        get() = resourcePacks.toTypedArray()
 
     fun getPackById(id: UUID?): ResourcePack? {
         return resourcePacksById[id]
@@ -44,17 +45,19 @@ class ResourcePackManager(private val loaders: MutableSet<ResourcePackLoader>) {
     fun reloadPacks() {
         resourcePacksById.clear()
         resourcePacks.clear()
-        loaders.forEach(Consumer { loader: ResourcePackLoader ->
+        loaders.forEach(Consumer { loader ->
             val loadedPacks = loader.loadPacks()
-            loadedPacks.forEach(Consumer { pack: ResourcePack? ->
-                resourcePacksById[pack.getPackId()] = pack
+            loadedPacks.forEach(Consumer { pack ->
+                resourcePacksById[pack.packId] = pack
             })
             resourcePacks.addAll(loadedPacks)
         })
 
         ResourcePackManager.log.info(
-            Server.instance.language
+            Server.instance.baseLang
                 .tr("nukkit.resources.success", resourcePacks.size.toString())
         )
     }
+
+    companion object : Loggable
 }

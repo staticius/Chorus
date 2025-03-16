@@ -1,5 +1,7 @@
 package org.chorus.scheduler
 
+import org.chorus.utils.Loggable
+
 
 /**
  * 表达一个任务的类。<br></br>A class that describes a task.
@@ -33,7 +35,7 @@ abstract class Task : Runnable {
         }
 
     val taskId: Int
-        get() = if (this.taskHandler != null) taskHandler.getTaskId() else -1
+        get() = if (this.taskHandler != null) taskHandler!!.taskId else -1
 
     /**
      * 这个任务被执行时，会调用的过程。<br></br>
@@ -46,7 +48,7 @@ abstract class Task : Runnable {
     abstract fun onRun(currentTick: Int)
 
     override fun run() {
-        this.onRun(taskHandler.getLastRunTick())
+        this.onRun(taskHandler!!.lastRunTick)
     }
 
     open fun onCancel() {
@@ -59,4 +61,6 @@ abstract class Task : Runnable {
             Task.log.error("Exception while invoking onCancel", ex)
         }
     }
+
+    companion object : Loggable
 }

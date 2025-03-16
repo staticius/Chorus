@@ -39,7 +39,7 @@ abstract class AsyncTask : Runnable {
 
     abstract fun onRun()
 
-    abstract fun onCompletion(server: Server?)
+    fun onCompletion(server: Server?) {}
 
     fun cleanObject() {
         this.result = null

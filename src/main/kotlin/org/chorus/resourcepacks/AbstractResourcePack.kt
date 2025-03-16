@@ -50,7 +50,7 @@ abstract class AbstractResourcePack : ResourcePack {
         return id.hashCode()
     }
 
-    override fun equals(obj: Any?): Boolean {
-        return obj is ResourcePack && this.id == obj.packId
+    override fun equals(other: Any?): Boolean {
+        return other is ResourcePack && this.id == other.packId
     }
 }

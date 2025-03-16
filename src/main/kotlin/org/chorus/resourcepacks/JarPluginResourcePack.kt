@@ -2,6 +2,7 @@ package org.chorus.resourcepacks
 
 import com.google.gson.JsonParser
 import org.chorus.Server
+import org.chorus.utils.Loggable
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -18,16 +19,18 @@ import java.util.zip.ZipOutputStream
  */
 
 class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
-    protected var jarPluginFile: File
-    protected var zippedByteBuffer: ByteBuffer? = null
-    override var sha256: ByteArray
-        protected set
+    private var jarPluginFile: File
+    private var zippedByteBuffer: ByteBuffer? = null
+
+    override lateinit var sha256: ByteArray
+        private set
+
     override var encryptionKey: String = ""
-        protected set
+        private set
 
     init {
         require(jarPluginFile.exists()) {
-            Server.instance.language
+            Server.instance.baseLang
                 .tr("nukkit.resources.zip.not-found", jarPluginFile.name)
         }
 
@@ -69,8 +72,8 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
 
             zippedByteBuffer = ByteBuffer.allocateDirect(byteArrayOutputStream.size())
             val bytes = byteArrayOutputStream.toByteArray()
-            zippedByteBuffer.put(bytes)
-            zippedByteBuffer.flip()
+            zippedByteBuffer!!.put(bytes)
+            zippedByteBuffer!!.flip()
 
             try {
                 this.sha256 = MessageDigest.getInstance("SHA-256").digest(bytes)
@@ -90,7 +93,7 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
         }
 
         require(this.verifyManifest()) {
-            Server.instance.language
+            Server.instance.baseLang
                 .tr("nukkit.resources.zip.invalid-manifest")
         }
     }
@@ -124,7 +127,7 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
         return ""
     }
 
-    companion object {
+    companion object : Loggable {
         const val RESOURCE_PACK_PATH: String = "assets/resource_pack/"
         fun hasResourcePack(jarPluginFile: File): Boolean {
             return try {

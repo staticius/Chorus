@@ -2,6 +2,7 @@ package org.chorus.resourcepacks
 
 import com.google.gson.JsonParser
 import org.chorus.Server
+import org.chorus.utils.Loggable
 import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
@@ -16,20 +17,19 @@ import java.util.zip.ZipFile
 
 
 class ZippedResourcePack(file: File) : AbstractResourcePack() {
-    protected var file: File
+    private var file: File
+    private var byteBuffer: ByteBuffer? = null
 
+    override lateinit var sha256: ByteArray
 
-    protected var byteBuffer: ByteBuffer? = null
-    override var sha256: ByteArray
-        protected set
+        private set
     override var encryptionKey: String = ""
-        protected set
+        private set
 
 
     init {
         require(file.exists()) {
-            Server.instance.language
-                .tr("nukkit.resources.zip.not-found", file.name)
+            Server.instance.baseLang.tr("nukkit.resources.zip.not-found", file.name)
         }
 
         this.file = file
@@ -65,7 +65,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
         }
 
         require(this.verifyManifest()) {
-            Server.instance.language
+            Server.instance.baseLang
                 .tr("nukkit.resources.zip.invalid-manifest")
         }
     }
@@ -107,8 +107,8 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
         val bytes = Files.readAllBytes(file.toPath())
         //使用java nio bytebuffer以获得更好性能
         byteBuffer = ByteBuffer.allocateDirect(bytes.size)
-        byteBuffer.put(bytes)
-        byteBuffer.flip()
+        byteBuffer!!.put(bytes)
+        byteBuffer!!.flip()
     }
 
     override fun getPackChunk(off: Int, len: Int): ByteArray {
@@ -139,4 +139,6 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
 
     override val packSize: Int
         get() = file.length().toInt()
+
+    companion object : Loggable
 }

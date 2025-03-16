@@ -4,6 +4,7 @@ import com.google.common.io.Files
 import org.chorus.Server
 import org.chorus.resourcepacks.ResourcePack
 import org.chorus.resourcepacks.ZippedResourcePack
+import org.chorus.utils.Loggable
 import java.io.File
 
 
@@ -14,15 +15,15 @@ class ZippedResourcePackLoader(//资源包文件存放地址
         if (!path.exists()) {
             path.mkdirs()
         } else require(path.isDirectory) {
-            Server.instance.language
+            Server.instance.baseLang
                 .tr("nukkit.resources.invalid-path", path.name)
         }
     }
 
     override fun loadPacks(): List<ResourcePack> {
-        val baseLang = Server.instance.language
+        val baseLang = Server.instance.baseLang
         val loadedResourcePacks: MutableList<ResourcePack> = ArrayList()
-        for (pack in path.listFiles()) {
+        for (pack in path.listFiles()!!) {
             try {
                 var resourcePack: ResourcePack? = null
                 val fileExt = Files.getFileExtension(pack.name)
@@ -47,4 +48,6 @@ class ZippedResourcePackLoader(//资源包文件存放地址
         }
         return loadedResourcePacks
     }
+
+    companion object : Loggable
 }
