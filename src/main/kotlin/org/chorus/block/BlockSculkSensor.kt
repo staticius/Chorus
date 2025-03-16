@@ -19,8 +19,8 @@ class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState = Compan
     override val blockEntityClass: Class<out Any>
         get() = BlockEntitySculkSensor::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.SCULK_SENSOR
+    override fun getBlockEntityType(): String {
+        return BlockEntity.SCULK_SENSOR
 
     override val isPowerSource: Boolean
         get() = true

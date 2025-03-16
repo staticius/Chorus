@@ -16,8 +16,8 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
     override val blockEntityClass: Class<out BlockEntityLodestone>
         get() = BlockEntityLodestone::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.LODESTONE
+    override fun getBlockEntityType(): String {
+        return BlockEntity.LODESTONE
 
     override fun place(
         item: Item,

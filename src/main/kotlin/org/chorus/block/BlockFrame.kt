@@ -45,8 +45,8 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Compani
             )
         }
 
-    override val blockEntityType: String
-        get() = BlockEntity.ITEM_FRAME
+    override fun getBlockEntityType(): String {
+        return BlockEntity.ITEM_FRAME
 
     override val blockEntityClass: Class<out BlockEntityItemFrame>
         get() = BlockEntityItemFrame::class.java

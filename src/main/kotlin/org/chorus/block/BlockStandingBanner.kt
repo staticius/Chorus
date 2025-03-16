@@ -24,8 +24,8 @@ import kotlin.math.floor
 
 open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBanner?> {
-    override val blockEntityType: String
-        get() = BlockEntity.BANNER
+    override fun getBlockEntityType(): String {
+        return BlockEntity.BANNER
 
     override val blockEntityClass: Class<out Any>
         get() = BlockEntityBanner::class.java

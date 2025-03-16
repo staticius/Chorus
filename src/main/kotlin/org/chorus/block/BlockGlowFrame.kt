@@ -8,8 +8,8 @@ class BlockGlowFrame @JvmOverloads constructor(blockstate: BlockState = Companio
     override val name: String
         get() = "Glow Item Frame"
 
-    override val blockEntityType: String
-        get() = BlockEntity.GLOW_ITEM_FRAME
+    override fun getBlockEntityType(): String {
+        return BlockEntity.GLOW_ITEM_FRAME
 
     companion object {
         val properties: BlockProperties = BlockProperties(

@@ -87,8 +87,8 @@ class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = Com
     override val blockEntityClass: Class<out Any>
         get() = BlockEntityStructBlock::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.STRUCTURE_BLOCK
+    override fun getBlockEntityType(): String {
+        return BlockEntity.STRUCTURE_BLOCK
 
     companion object {
         val properties: BlockProperties =

@@ -29,8 +29,8 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
     override val blockEntityClass: Class<out BlockEntityHopper>
         get() = BlockEntityHopper::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.HOPPER
+    override fun getBlockEntityType(): String {
+        return BlockEntity.HOPPER
 
     override val name: String
         get() = "Hopper Block"

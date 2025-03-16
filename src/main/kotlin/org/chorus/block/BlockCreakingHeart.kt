@@ -2,14 +2,14 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.blockentity.BlockEntityCreakingHeart
+import org.chorus.entity.mob.monster.EntityCreaking
 import org.chorus.item.*
 import org.chorus.math.*
-import org.chorus.math.Vector3.distance
-import org.chorus.math.Vector3.equals
 import org.chorus.utils.RedstoneComponent
 
 class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
-    BlockSolid(blockstate), RedstoneComponent, BlockEntityHolder<BlockEntityCreakingHeart?> {
+    BlockSolid(blockstate), RedstoneComponent, BlockEntityHolder<BlockEntityCreakingHeart> {
     override val hardness: Double
         get() = 10.0
 
@@ -48,7 +48,7 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Comp
     }
 
     protected fun testAxis() {
-        if (blockEntity.getLinkedCreaking() == null) {
+        if (blockEntity.linkedCreaking == null) {
             var state: CreakingHeartState = CreakingHeartState.DORMANT
             for (face in BlockFace.entries) {
                 if (pillarAxis!!.test(face)) {
@@ -116,7 +116,7 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Comp
     override val comparatorInputOverride: Int
         get() {
             val entityCreakingHeart: BlockEntityCreakingHeart = getOrCreateBlockEntity()
-            val creaking: EntityCreaking = entityCreakingHeart.getLinkedCreaking()
+            val creaking: EntityCreaking = entityCreakingHeart.link
             return if (creaking != null) {
                 (15 - ((creaking.position.distance(this.position) / 32) * 15)).toInt()
             } else 0
@@ -126,6 +126,9 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Comp
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CREAKING_HEART,
@@ -133,6 +136,5 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Comp
             CommonBlockProperties.CREAKING_HEART_STATE,
             CommonBlockProperties.PILLAR_AXIS
         )
-
     }
 }

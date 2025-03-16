@@ -9,8 +9,8 @@ open class BlockLitSmoker @JvmOverloads constructor(blockstate: BlockState = Com
     override val name: String
         get() = "Burning Smoker"
 
-    override val blockEntityType: String
-        get() = BlockEntity.SMOKER
+    override fun getBlockEntityType(): String {
+        return BlockEntity.SMOKER
 
     override val blockEntityClass: Class<out BlockEntityFurnace>
         get() = BlockEntitySmoker::class.java

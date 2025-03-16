@@ -11,8 +11,8 @@ class BlockMovingBlock @JvmOverloads constructor(blockstate: BlockState = Compan
     override val name: String
         get() = "MovingBlock"
 
-    override val blockEntityType: String
-        get() = BlockEntity.MOVING_BLOCK
+    override fun getBlockEntityType(): String {
+        return BlockEntity.MOVING_BLOCK
 
     override val blockEntityClass: Class<out Any>
         get() = BlockEntityMovingBlock::class.java

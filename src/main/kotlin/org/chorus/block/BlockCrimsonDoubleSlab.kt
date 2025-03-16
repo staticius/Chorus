@@ -29,12 +29,14 @@ class BlockCrimsonDoubleSlab @JvmOverloads constructor(blockstate: BlockState = 
         get() = 0
 
     override fun getSingleSlab(): BlockState {
-        return BlockCrimsonSlab.Companion.PROPERTIES.getDefaultState()
+        return BlockCrimsonSlab.properties.defaultState
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.CRIMSON_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

@@ -10,8 +10,8 @@ import org.chorus.math.BlockFace
 
 class BlockNetherreactor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), BlockEntityHolder<BlockEntityNetherReactor?> {
-    override val blockEntityType: String
-        get() = BlockEntity.NETHER_REACTOR
+    override fun getBlockEntityType(): String {
+        return BlockEntity.NETHER_REACTOR
 
     override val blockEntityClass: Class<out Any>
         get() = BlockEntityNetherReactor::class.java

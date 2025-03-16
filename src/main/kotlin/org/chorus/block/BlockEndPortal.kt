@@ -16,8 +16,8 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = Companio
     override val blockEntityClass: Class<out E>
         get() = BlockEntityEndPortal::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.END_PORTAL
+    override fun getBlockEntityType(): String {
+        return BlockEntity.END_PORTAL
 
     override fun place(
         item: Item,

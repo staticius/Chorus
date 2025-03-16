@@ -23,8 +23,8 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState = Companion.
     override val blockEntityClass: Class<out BlockEntityLectern>
         get() = BlockEntityLectern::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.LECTERN
+    override fun getBlockEntityType(): String {
+        return BlockEntity.LECTERN
 
     override val waterloggingLevel: Int
         get() = 1

@@ -25,8 +25,8 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState = Companion.p
     override val blockEntityClass: Class<out BlockEntityTarget>
         get() = BlockEntityTarget::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.TARGET
+    override fun getBlockEntityType(): String {
+        return BlockEntity.TARGET
 
     override val isPowerSource: Boolean
         get() = true

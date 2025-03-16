@@ -5,8 +5,10 @@ class BlockCrimsonNylium @JvmOverloads constructor(blockstate: BlockState = Comp
     override val name: String
         get() = "Crimson Nylium"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_NYLIUM)
-
     }
 }

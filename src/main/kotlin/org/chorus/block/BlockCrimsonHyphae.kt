@@ -8,8 +8,10 @@ class BlockCrimsonHyphae @JvmOverloads constructor(blockstate: BlockState = Comp
         return BlockStrippedAcaciaLog.properties.defaultState
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_HYPHAE, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

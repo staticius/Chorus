@@ -22,6 +22,9 @@ class BlockCrimsonFenceGate @JvmOverloads constructor(blockstate: BlockState = C
         level.addSound(this.position, Sound.CLOSE_NETHER_WOOD_FENCE_GATE)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CRIMSON_FENCE_GATE,
@@ -29,6 +32,5 @@ class BlockCrimsonFenceGate @JvmOverloads constructor(blockstate: BlockState = C
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-
     }
 }

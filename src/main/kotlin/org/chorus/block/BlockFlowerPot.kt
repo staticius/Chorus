@@ -12,7 +12,7 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 
-class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
+class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
     constructor() : super(Companion.properties.defaultState)
 
     constructor(blockstate: BlockState) :  super(blockstate)
@@ -26,8 +26,9 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
     override val blockEntityClass: Class<out BlockEntityFlowerPot>
         get() = BlockEntityFlowerPot::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.FLOWER_POT
+    override fun getBlockEntityType(): String {
+        return BlockEntity.FLOWER_POT
+    }
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
@@ -264,3 +265,4 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
 
     }
 }
+

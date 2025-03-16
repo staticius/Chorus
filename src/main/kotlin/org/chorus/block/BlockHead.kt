@@ -1,9 +1,11 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.blockentity.BlockEntitySkull
 import org.chorus.event.redstone.RedstoneUpdateEvent
 import org.chorus.item.Item
@@ -19,12 +21,14 @@ import org.chorus.utils.RedstoneComponent
 import kotlin.math.floor
 
 abstract class BlockHead(blockState: BlockState) : BlockTransparent(blockState), RedstoneComponent,
-    BlockEntityHolder<BlockEntitySkull?>, Faceable {
-    override val blockEntityType: String
-        get() = BlockEntity.SKULL
+    BlockEntityHolder<BlockEntitySkull>, Faceable {
+    override fun getBlockEntityType(): String {
+        return BlockEntityID.SKULL
+    }
 
-    override val blockEntityClass: Class<out BlockEntitySkull>
-        get() = BlockEntitySkull::class.java
+    override fun getBlockEntityClass(): Class<out BlockEntitySkull> {
+        return BlockEntitySkull::class.java
+    }
 
     override val hardness: Double
         get() = 1.0
@@ -71,13 +75,12 @@ abstract class BlockHead(blockState: BlockState) : BlockTransparent(blockState),
                 nbt.put(key, value)
             }
         }
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
+        return BlockEntityHolder.setBlockAndCreateEntity(this, direct = true, update = true, initialData = nbt) != null
         // TODO: 2016/2/3 SPAWN WITHER
     }
 
     override fun onUpdate(type: Int): Int {
-        if ((type != Level.BLOCK_UPDATE_REDSTONE && type != Level.BLOCK_UPDATE_NORMAL) || !Server.instance.settings.levelSettings()
-                .enableRedstone()
+        if ((type != Level.BLOCK_UPDATE_REDSTONE && type != Level.BLOCK_UPDATE_NORMAL) || !Server.instance.settings.levelSettings.enableRedstone
         ) {
             return 0
         }
@@ -111,7 +114,7 @@ abstract class BlockHead(blockState: BlockState) : BlockTransparent(blockState),
     override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
     override fun recalculateBoundingBox(): AxisAlignedBB? {

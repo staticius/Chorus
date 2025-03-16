@@ -11,8 +11,10 @@ class BlockCrimsonFence @JvmOverloads constructor(blockstate: BlockState = Compa
     override val burnAbility: Int
         get() = 0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_FENCE)
-
     }
 }

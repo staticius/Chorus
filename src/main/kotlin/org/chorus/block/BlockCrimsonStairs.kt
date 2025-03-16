@@ -13,12 +13,14 @@ class BlockCrimsonStairs @JvmOverloads constructor(blockstate: BlockState = Comp
     override val burnAbility: Int
         get() = 0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CRIMSON_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

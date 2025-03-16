@@ -26,8 +26,8 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState = Companio
     override val blockEntityClass: Class<out Any>
         get() = BlockEntityMusic::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.MUSIC
+    override fun getBlockEntityType(): String {
+        return BlockEntity.MUSIC
 
     override val hardness: Double
         get() = 0.8

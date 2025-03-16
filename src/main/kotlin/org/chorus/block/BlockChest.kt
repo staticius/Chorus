@@ -13,6 +13,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.StringTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
@@ -184,8 +185,10 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
         fz: Float
     ): Boolean {
         if (isNotActivate(player)) return false
-        val itemInHand = player.getInventory().itemInHand
-        if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) return false
+        if (player != null) {
+            val itemInHand = player.getInventory().itemInHand
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) return false
+        }
 
         val top = up()
         if (!top!!.isTransparent) {
@@ -199,7 +202,7 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
             return false
         }
 
-        player.addWindow(chest.getInventory())
+        player?.addWindow(chest.getInventory())
         return true
     }
 
@@ -218,18 +221,18 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
             return super.comparatorInputOverride
         }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
     override var blockFace: BlockFace
         get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-        )]
+        )]!!
         set(face) {
             this.setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]!!
             )
         }
 
@@ -253,9 +256,11 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
         return arrayOf(ItemBlock(Companion.properties.defaultState.toBlock(), 0))
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-
     }
 }

@@ -19,8 +19,8 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Compani
         return true
     }
 
-    override val blockEntityType: String
-        get() = BlockEntity.ENDER_CHEST
+    override fun getBlockEntityType(): String {
+        return BlockEntity.ENDER_CHEST
 
     override val blockEntityClass: Class<out E>
         get() = BlockEntityEnderChest::class.java

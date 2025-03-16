@@ -14,8 +14,8 @@ class BlockJukebox @JvmOverloads constructor(blockstate: BlockState = Companion.
     override val blockEntityClass: Class<out BlockEntityJukebox>
         get() = BlockEntityJukebox::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.JUKEBOX
+    override fun getBlockEntityType(): String {
+        return BlockEntity.JUKEBOX
 
     override fun canBeActivated(): Boolean {
         return true

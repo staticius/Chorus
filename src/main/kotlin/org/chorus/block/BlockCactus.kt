@@ -17,7 +17,7 @@ import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.tags.ItemTags
 import org.chorus.tags.ItemTags.getItemSet
 
-class BlockCactus @JvmOverloads constructor(state: BlockState? = Companion.properties.defaultState) :
+class BlockCactus @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
     BlockTransparent(state), FlowerPotBlock, Natural {
     override val hardness: Double
         get() = 0.4

@@ -49,8 +49,10 @@ class BlockCraftingTable @JvmOverloads constructor(blockState: BlockState = Comp
         return Supplier<Inventory?> { CraftingTableInventory(this) }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CRAFTING_TABLE)
-
     }
 }

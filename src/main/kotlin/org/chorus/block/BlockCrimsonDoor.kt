@@ -16,6 +16,9 @@ class BlockCrimsonDoor @JvmOverloads constructor(blockstate: BlockState = Compan
         level.addSound(this.position, Sound.CLOSE_NETHER_WOOD_DOOR)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CRIMSON_DOOR,
@@ -24,6 +27,5 @@ class BlockCrimsonDoor @JvmOverloads constructor(blockstate: BlockState = Compan
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-
     }
 }

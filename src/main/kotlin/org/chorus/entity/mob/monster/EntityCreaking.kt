@@ -5,8 +5,6 @@ import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntityCreakingHeart
-import org.chorus.blockentity.BlockEntityCreakingHeart.heart
-import org.chorus.blockentity.BlockEntityCreakingHeart.setLinkedCreaking
 import org.chorus.entity.*
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
@@ -42,9 +40,8 @@ import kotlin.collections.setOf
 
 class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.CREAKING
+        return EntityID.CREAKING
     }
-
 
     protected var creakingHeart: BlockEntityCreakingHeart? = null
 
@@ -90,8 +87,9 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         if (namedTag!!.containsCompound("creakingHeart")) {
             val tag = namedTag!!.getCompound("creakingHeart")
             val vec = Vector3(tag.getInt("x").toDouble(), tag.getInt("y").toDouble(), tag.getInt("z").toDouble())
-            if (level!!.getBlock(vec, true) is BlockCreakingHeart) {
-                heart.getOrCreateBlockEntity().setLinkedCreaking(this)
+            val block = level!!.getBlock(vec, true)
+            if (block is BlockCreakingHeart) {
+                block.getOrCreateBlockEntity().setLinkedCreaking(this)
             }
         }
         super.initEntity()
@@ -100,7 +98,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     override fun attack(source: EntityDamageEvent): Boolean {
         if (source.isCancelled) return false
         if (creakingHeart == null) return super.attack(source)
-        if (this.isClosed || !this.isAlive) {
+        if (this.isClosed() || !this.isAlive()) {
             return false
         }
         if (source is EntityDamageByEntityEvent && source.damager !is EntityCreeper) {
@@ -112,18 +110,20 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
             storage.put<Int>(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, level!!.tick)
         }
 
-        val paleLogs = Arrays.stream<Block>(
-            level!!.getCollisionBlocks(
-                creakingHeart!!.levelBlock.boundingBox.grow(2.0, 2.0, 2.0)
-            )
-        ).filter { block: Block? -> block is BlockPaleOakLog }.toArray<Block> { _Dummy_.__Array__() }
+        val paleLogs = Arrays.stream(
+            creakingHeart!!.levelBlock?.boundingBox?.let {
+                level!!.getCollisionBlocks(
+                    it.grow(2.0, 2.0, 2.0)
+                )
+            }
+        ).filter { block: Block? -> block is BlockPaleOakLog }.toList().toTypedArray()
         val maxResinSpawn = ThreadLocalRandom.current().nextInt(1, 3)
         var resinSpawned = 0
         logs@ for (log in paleLogs) {
             for (face in BlockFace.entries) {
                 val side = log.getSide(face)
                 if (side.isAir) {
-                    val clump = Block.get(Block.RESIN_CLUMP) as BlockResinClump
+                    val clump = Block.get(BlockID.RESIN_CLUMP) as BlockResinClump
                     clump.setPropertyValue(
                         CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
                         clump.getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) or (1 shl face.opposite.duswneIndex)
@@ -150,7 +150,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         tag.putFloat("HeartY", creakingHeart!!.position.y.toFloat())
         tag.putFloat("HeartZ", creakingHeart!!.position.z.toFloat())
         packet.tag = tag
-        Server.broadcastPacket(this.viewers.values, packet)
+        Server.broadcastPacket(this.getViewers().values, packet)
     }
 
     fun spawnResin() {
@@ -176,7 +176,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
-        if (!(!level!!.isDay || level!!.isRaining || level!!.isThundering)) {
+        if (!(!level!!.isDay || level!!.isRaining || level!!.isThundering())) {
             this.kill()
         }
         if (creakingHeart != null) {
@@ -208,7 +208,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     override fun updateMovement() {
         super.updateMovement()
         if (creakingHeart != null && creakingHeart!!.isBlockEntityValid) {
-            creakingHeart!!.heart!!.updateAroundRedstone(BlockFace.UP, BlockFace.DOWN)
+            creakingHeart!!.heart.updateAroundRedstone(BlockFace.UP, BlockFace.DOWN)
         } else kill()
     }
 

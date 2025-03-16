@@ -32,8 +32,8 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
     override val blockEntityClass: Class<out BlockEntityPistonArm>
         get() = BlockEntityPistonArm::class.java
 
-    override val blockEntityType: String
-        get() = BlockEntity.PISTON_ARM
+    override fun getBlockEntityType(): String {
+        return BlockEntity.PISTON_ARM
 
     override val resistance: Double
         get() = 1.5

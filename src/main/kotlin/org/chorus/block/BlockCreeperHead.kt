@@ -18,8 +18,10 @@ class BlockCreeperHead(blockState: BlockState) : BlockHead(blockState) {
         return ItemCreeperHead()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CREEPER_HEAD, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

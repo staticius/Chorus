@@ -8,8 +8,10 @@ class BlockCrimsonPlanks @JvmOverloads constructor(blockstate: BlockState = Comp
     override val resistance: Double
         get() = 3.0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CRIMSON_PLANKS)
-
     }
 }
