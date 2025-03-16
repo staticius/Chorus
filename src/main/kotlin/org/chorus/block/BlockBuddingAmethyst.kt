@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.Item
 import org.chorus.level.Level
 import org.chorus.math.BlockFace.Companion.fromIndex
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 
 class BlockBuddingAmethyst : BlockSolid {
     constructor() : super(Companion.properties.defaultState)

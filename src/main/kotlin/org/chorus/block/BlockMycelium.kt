@@ -9,7 +9,7 @@ import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
-import org.chorus.utils.random.ChorusRandom.nextInt
+import org.chorus.utils.ChorusRandom.nextInt
 
 class BlockMycelium : BlockDirt {
     constructor() : super(Companion.properties.defaultState)

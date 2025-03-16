@@ -6,16 +6,11 @@
  */
 package org.chorus.utils
 
-/**
- * 命名空间标识符
- */
-class Identifier protected constructor(id: Array<String>) {
-    val namespace: String
-    val path: String
+class Identifier private constructor(id: Array<String>) {
+    val namespace: String = id[0].ifEmpty { DEFAULT_NAMESPACE }
+    val path: String = id[1]
 
     init {
-        this.namespace = if (id[0].isEmpty()) DEFAULT_NAMESPACE else id[0]
-        this.path = id[1]
         if (!isNamespaceValid(this.namespace)) {
             throw InvalidIdentifierException("Non [a-z0-9_.-] character in namespace of location: " + this.namespace + ":" + this.path)
         }
@@ -32,12 +27,12 @@ class Identifier protected constructor(id: Array<String>) {
         return this.namespace + ":" + this.path
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
             return true
         }
-        if (o is Identifier) {
-            return this.namespace == o.namespace && this.path == o.path
+        if (other is Identifier) {
+            return this.namespace == other.namespace && this.path == other.path
         }
         return false
     }
@@ -78,7 +73,7 @@ class Identifier protected constructor(id: Array<String>) {
             }
         }
 
-        protected fun split(id: String, delimiter: Char): Array<String> {
+        private fun split(id: String, delimiter: Char): Array<String> {
             val strings = arrayOf(DEFAULT_NAMESPACE, id)
             val i = id.indexOf(delimiter)
             if (i >= 0) {
@@ -91,36 +86,36 @@ class Identifier protected constructor(id: Array<String>) {
         }
 
         fun isCharValid(c: Char): Boolean {
-            return c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c == '_' || c == ':' || c == '/' || c == '.' || c == '-'
+            return c in '0'..'9' || c in 'a'..'z' || c == '_' || c == ':' || c == '/' || c == '.' || c == '-'
         }
 
         private fun isPathValid(path: String): Boolean {
-            for (i in 0..<path.length) {
-                if (isPathCharacterValid(path[i])) continue
+            for (element in path) {
+                if (isPathCharacterValid(element)) continue
                 return false
             }
             return true
         }
 
         private fun isNamespaceValid(namespace: String): Boolean {
-            for (i in 0..<namespace.length) {
-                if (isNamespaceCharacterValid(namespace[i])) continue
+            for (element in namespace) {
+                if (isNamespaceCharacterValid(element)) continue
                 return false
             }
             return true
         }
 
-        fun isPathCharacterValid(character: Char): Boolean {
-            return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= '0' && character <= '9' || character == '/' || character == '.'
+        private fun isPathCharacterValid(character: Char): Boolean {
+            return character == '_' || character == '-' || character in 'a'..'z' || character in '0'..'9' || character == '/' || character == '.'
         }
 
         private fun isNamespaceCharacterValid(character: Char): Boolean {
-            return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= '0' && character <= '9' || character == '.'
+            return character == '_' || character == '-' || character in 'a'..'z' || character in '0'..'9' || character == '.'
         }
 
         fun isValid(id: String): Boolean {
             val strings = split(id, ':')
-            return isNamespaceValid(if (strings[0].isEmpty()) DEFAULT_NAMESPACE else strings[0]) && isPathValid(
+            return isNamespaceValid(strings[0].ifEmpty { DEFAULT_NAMESPACE }) && isPathValid(
                 strings[1]
             )
         }
@@ -128,7 +123,7 @@ class Identifier protected constructor(id: Array<String>) {
         @JvmStatic
         fun assertValid(id: String) {
             val strings = split(id, ':')
-            val namespace = if (strings[0].isEmpty()) DEFAULT_NAMESPACE else strings[0]
+            val namespace = strings[0].ifEmpty { DEFAULT_NAMESPACE }
             val path = strings[1]
             if (!isNamespaceValid(namespace)) {
                 throw InvalidIdentifierException("Non [a-z0-9_.-] character in namespace of location: $namespace:$path")

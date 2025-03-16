@@ -14,7 +14,7 @@ import java.io.IOException
  * @author Cool_Loong
  */
 object PaletteUtils {
-    fun fastReadBlockHash(input: NBTInputStream, byteBuf: ByteBuf): Pair<Int?, SemVersion?>? {
+    fun fastReadBlockHash(input: NBTInputStream, byteBuf: ByteBuf): Pair<Int, SemVersion>? {
         try {
             byteBuf.markReaderIndex()
             val typeId = input.readUnsignedByte()
@@ -31,12 +31,10 @@ object PaletteUtils {
         byteBuf: ByteBuf,
         type: Int,
         maxDepth: Int
-    ): Pair<Int?, SemVersion?>? {
+    ): Pair<Int, SemVersion>? {
         require(maxDepth >= 0) { "NBT compound is too deeply nested" }
-        when (type) {
-            Tag.TAG_END -> {
-            }
-
+        when (type.toByte()) {
+            Tag.TAG_END -> {}
             Tag.TAG_BYTE -> input.skipBytes(1)
             Tag.TAG_SHORT -> input.skipBytes(2)
             Tag.TAG_INT, Tag.TAG_FLOAT -> input.skipBytes(4)
@@ -69,7 +67,6 @@ object PaletteUtils {
                     deserialize(input, byteBuf, nbtType, maxDepth - 1)
                 }
             }
-
             Tag.TAG_LIST -> {
                 val typeId = input.readUnsignedByte()
                 val listLength = input.readInt()
@@ -77,7 +74,6 @@ object PaletteUtils {
                     deserialize(input, byteBuf, typeId, maxDepth - 1)
                 }
             }
-
             Tag.TAG_INT_ARRAY -> input.skipBytes(input.readInt() * 4)
         }
         return null

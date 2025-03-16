@@ -5,7 +5,7 @@ import org.chorus.item.Item.Companion.get
 import org.chorus.item.ItemID
 import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.utils.random.ChorusRandom.nextInt
+import org.chorus.utils.ChorusRandom.nextInt
 
 class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockGoldOre(blockstate) {

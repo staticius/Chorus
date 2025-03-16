@@ -11,6 +11,7 @@ import org.chorus.nbt.tag.CompoundTag.putByte
 import org.chorus.nbt.tag.CompoundTag.putCompound
 import org.chorus.nbt.tag.CompoundTag.putInt
 import org.chorus.nbt.tag.CompoundTag.putString
+import org.chorus.nbt.tag.CompoundTagView
 import org.chorus.utils.HashUtils
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*

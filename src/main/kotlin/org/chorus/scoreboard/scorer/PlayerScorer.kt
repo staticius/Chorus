@@ -11,9 +11,9 @@ import java.util.*
 
 
 class PlayerScorer : IScorer {
-    private val uuid: UUID?
+    val uuid: UUID
 
-    constructor(uuid: UUID?) {
+    constructor(uuid: UUID) {
         this.uuid = uuid
     }
 
@@ -27,7 +27,6 @@ class PlayerScorer : IScorer {
 
     val player: Player?
         get() {
-            if (uuid == null) return null
             return if (Server.instance.getPlayer(uuid).isPresent) Server.instance.getPlayer(uuid).get() else null
         }
 
@@ -38,7 +37,7 @@ class PlayerScorer : IScorer {
         get() = ScorerType.PLAYER
 
     override fun hashCode(): Int {
-        return uuid?.hashCode() ?: 0
+        return uuid.hashCode()
     }
 
     override fun equals(other: Any?): Boolean {
@@ -49,11 +48,10 @@ class PlayerScorer : IScorer {
     }
 
     override val name: String
-        get() = if (Server.instance.onlinePlayers[uuid] == null) uuid!!.mostSignificantBits
+        get() = if (Server.instance.onlinePlayers[uuid] == null) uuid.mostSignificantBits
             .toString() else Server.instance.onlinePlayers[uuid]!!.getName()
 
     override fun toNetworkInfo(scoreboard: IScoreboard, line: IScoreboardLine): ScoreInfo? {
-        if (uuid == null) return null
         return if (Server.instance.getPlayer(uuid).isPresent) ScoreInfo(
             line.lineId,
             scoreboard.objectiveName,

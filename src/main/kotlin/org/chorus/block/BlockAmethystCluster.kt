@@ -6,7 +6,7 @@ import org.chorus.item.Item.Companion.get
 import org.chorus.item.ItemID
 import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 
 class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockAmethystBud(blockState) {

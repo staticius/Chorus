@@ -19,7 +19,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.RedstoneComponent
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 import kotlin.math.cos
 import kotlin.math.sin
 

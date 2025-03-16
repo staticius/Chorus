@@ -1,8 +1,5 @@
 package org.chorus.utils
 
-
-import com.dfsek.terra.lib.commons.lang3.BooleanUtils
-import com.dfsek.terra.lib.commons.lang3.math.NumberUtils
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
@@ -26,10 +23,7 @@ import java.util.function.Consumer
  * The API and annotation support are relatively comprehensive, supporting loose parsing
  * <br></br>
  * Supports a wide range of data sources (strings, objects, files, streams, readers)
- *
- * @author duanxinyuan | CoolLoong
  */
-@UtilityClass
 object JSONUtils {
     private val GSON: Gson
     private val PRETTY_GSON: Gson
@@ -128,7 +122,7 @@ object JSONUtils {
     /**
      * JSON deserialization
      */
-    fun <V> from(file: File, type: Class<V>?): V {
+    fun <V> from(file: File, type: Class<V>): V {
         try {
             val reader = JsonReader(FileReader(file))
             return GSON.fromJson(reader, type)
@@ -186,7 +180,7 @@ object JSONUtils {
     }
 
     /**
-     * read inputstream as [JsonObject]
+     * read input stream as [JsonObject]
      */
     fun fromAsJsonTree(inputStream: InputStream?, type: Class<*>?): JsonObject {
         return GSON.toJsonTree(from(inputStream!!, type)).asJsonObject
@@ -205,116 +199,8 @@ object JSONUtils {
     /**
      * JSON deserialization（Map）
      */
-    fun fromMap(json: String?): Map<String, Any> {
-        return GSON.fromJson(json, object : TypeToken<HashMap<String?, Any?>?>() {
-        }.type)
-    }
-
-    /**
-     * Lenient JSON deserialization
-     */
-    fun <V> fromLenient(inputStream: InputStream, type: Class<V>?): V {
-        val reader = JsonReader(InputStreamReader(Objects.requireNonNull(inputStream)))
-        reader.isLenient = true
-        return GSON.fromJson(reader, type)
-    }
-
-    fun <V> fromLenient(inputStream: InputStream, type: TypeToken<V>?): V {
-        val reader = JsonReader(InputStreamReader(Objects.requireNonNull(inputStream)))
-        reader.isLenient = true
-        return GSON.fromJson(reader, type)
-    }
-
-    /**
-     * Lenient JSON deserialization（List）
-     */
-    fun <V> fromListLenient(inputStream: InputStream, type: Class<V>): List<V> {
-        val reader = JsonReader(InputStreamReader(Objects.requireNonNull(inputStream)))
-        reader.isLenient = true
-        val typeToken = TypeToken.getParameterized(
-            ArrayList::class.java, type
-        ) as TypeToken<List<V>>
-        return GSON.fromJson(reader, typeToken.type)
-    }
-
-    /**
-     * Lenient JSON deserialization
-     */
-    fun <V> fromLenient(file: File, type: Class<V>?): V {
-        try {
-            val reader = JsonReader(FileReader(file))
-            reader.isLenient = true
-            return GSON.fromJson(reader, type)
-        } catch (e: FileNotFoundException) {
-            throw GsonException("gson lenient from error, file path: {}, type: {}", file.path, type, e)
-        }
-    }
-
-    /**
-     * Lenient JSON deserialization（List）
-     */
-    fun <V> fromListLenient(file: File, type: Class<V>): List<V> {
-        try {
-            val reader = JsonReader(FileReader(file))
-            reader.isLenient = true
-            val typeToken = TypeToken.getParameterized(
-                ArrayList::class.java, type
-            ) as TypeToken<List<V>>
-            return GSON.fromJson(reader, typeToken.type)
-        } catch (e: FileNotFoundException) {
-            throw GsonException("gson lenient from error, file path: {}, type: {}", file.path, type, e)
-        }
-    }
-
-    /**
-     * Lenient JSON deserialization
-     */
-    fun <V> fromLenient(json: String?, type: Class<V>?): V? {
-        if (StringUtils.isEmpty(json)) {
-            return null
-        }
-        val reader = JsonReader(StringReader(json))
-        reader.isLenient = true
-        return GSON.fromJson(reader, type)
-    }
-
-    /**
-     * Lenient JSON deserialization
-     */
-    fun <V> fromLenient(json: String?, type: Type?): V? {
-        if (StringUtils.isEmpty(json)) {
-            return null
-        }
-        val reader = JsonReader(StringReader(json))
-        reader.isLenient = true
-        return GSON.fromJson(reader, type)
-    }
-
-    /**
-     * Lenient JSON deserialization
-     */
-    fun <V> fromLenient(json: String?, typeToken: TypeToken<V>): V? {
-        if (StringUtils.isEmpty(json)) {
-            return null
-        }
-        val reader = JsonReader(StringReader(json))
-        reader.isLenient = true
-        return GSON.fromJson(reader, typeToken.type)
-    }
-
-    /**
-     * Lenient JSON deserialization (List)
-     */
-    fun <V> fromListLenient(json: String?, type: Class<V>): List<V>? {
-        if (StringUtils.isEmpty(json)) {
-            return null
-        }
-        val reader = JsonReader(StringReader(json))
-        reader.isLenient = true
-        val typeToken = TypeToken.getParameterized(
-            ArrayList::class.java, type
-        ) as TypeToken<List<V>>
-        return GSON.fromJson(reader, typeToken.type)
+    fun fromMap(json: String): Map<String, Any> {
+        return GSON.fromJson(json, object : TypeToken<HashMap<String, Any>>() {}.type)
     }
 
     /**
@@ -348,7 +234,7 @@ object JSONUtils {
     /**
      * Serialize as a file
      */
-    fun <V> toFile(path: String, list: List<V>?) {
+    fun <V> toFile(path: String, list: List<V>) {
         try {
             JsonWriter(FileWriter(path, true)).use { jsonWriter ->
                 GSON.toJson(list, object : TypeToken<List<V>?>() {
@@ -366,18 +252,18 @@ object JSONUtils {
      * @param path the file path
      * @param v    the type v
      */
-    fun <V> toFile(path: String, v: V) {
+    fun <V : Any> toFile(path: String, v: V) {
         toFile(path, v, null)
     }
 
     /**
      * 序列化为JSON文件
      */
-    fun <V> toFile(path: String, v: V, jsonWriterConfigurator: Consumer<JsonWriter?>?) {
+    fun <V : Any> toFile(path: String, v: V, jsonWriterConfigurator: Consumer<JsonWriter?>?) {
         try {
             JsonWriter(FileWriter(path, true)).use { jsonWriter ->
                 jsonWriterConfigurator?.accept(jsonWriter)
-                GSON.toJson(v, v.javaClass, jsonWriter)
+                GSON.toJson(v, v::class.java, jsonWriter)
                 jsonWriter.flush()
             }
         } catch (e: Exception) {
@@ -390,11 +276,11 @@ object JSONUtils {
      *
      * @return String，default is null
      */
-    fun getAsString(json: String, key: String?): String? {
-        if (StringUtils.isEmpty(json)) {
+    fun getAsString(json: String, key: String): String? {
+        if (json.isEmpty()) {
             return null
         }
-        var propertyValue: String
+        val propertyValue: String
         val jsonByKey = getAsJsonObject(json, key)
         propertyValue = try {
             jsonByKey.asString
@@ -409,8 +295,8 @@ object JSONUtils {
      *
      * @return int，default is 0
      */
-    fun getAsInt(json: String, key: String?): Int {
-        if (StringUtils.isEmpty(json)) {
+    fun getAsInt(json: String, key: String): Int {
+        if (json.isEmpty()) {
             return 0
         }
         val jsonByKey = getAsJsonObject(json, key)
@@ -426,8 +312,8 @@ object JSONUtils {
      *
      * @return long，default is 0
      */
-    fun getAsLong(json: String, key: String?): Long {
-        if (StringUtils.isEmpty(json)) {
+    fun getAsLong(json: String, key: String): Long {
+        if (json.isEmpty()) {
             return 0L
         }
         val jsonByKey = getAsJsonObject(json, key)
@@ -443,8 +329,8 @@ object JSONUtils {
      *
      * @return double，default is 0.0
      */
-    fun getAsDouble(json: String, key: String?): Double {
-        if (StringUtils.isEmpty(json)) {
+    fun getAsDouble(json: String, key: String): Double {
+        if (json.isEmpty()) {
             return 0.0
         }
         val jsonByKey = getAsJsonObject(json, key)
@@ -460,8 +346,8 @@ object JSONUtils {
      *
      * @return BigInteger，default 0.0
      */
-    fun getAsBigInteger(json: String, key: String?): BigInteger {
-        if (StringUtils.isEmpty(json)) {
+    fun getAsBigInteger(json: String, key: String): BigInteger {
+        if (json.isEmpty()) {
             return BigInteger(0.00.toString())
         }
         val jsonByKey = getAsJsonObject(json, key)
@@ -477,8 +363,8 @@ object JSONUtils {
      *
      * @return BigDecimal，default 0.0
      */
-    fun getAsBigDecimal(json: String, key: String?): BigDecimal {
-        if (StringUtils.isEmpty(json)) {
+    fun getAsBigDecimal(json: String, key: String): BigDecimal {
+        if (json.isEmpty()) {
             return BigDecimal("0.0")
         }
         val jsonByKey = getAsJsonObject(json, key)
@@ -494,8 +380,8 @@ object JSONUtils {
      *
      * @return boolean, default is false
      */
-    fun getAsBoolean(json: String, key: String?): Boolean {
-        if (StringUtils.isEmpty(json)) {
+    fun getAsBoolean(json: String, key: String): Boolean {
+        if (json.isEmpty()) {
             return false
         }
         val jsonByKey = getAsJsonObject(json, key) as JsonPrimitive
@@ -508,10 +394,10 @@ object JSONUtils {
                     return if ("1" == string) {
                         true
                     } else {
-                        BooleanUtils.toBoolean(string)
+                        string.toBoolean()
                     }
                 } else { // number
-                    return BooleanUtils.toBoolean(jsonByKey.asInt)
+                    return jsonByKey.asInt == 1
                 }
             }
         } catch (e: Exception) {
@@ -524,8 +410,8 @@ object JSONUtils {
      *
      * @return byte, default is 0
      */
-    fun getAsByte(json: String, key: String?): Byte {
-        if (StringUtils.isEmpty(json)) {
+    fun getAsByte(json: String, key: String): Byte {
+        if (json.isEmpty()) {
             return 0
         }
         val jsonByKey = getAsJsonObject(json, key)
@@ -541,8 +427,8 @@ object JSONUtils {
      *
      * @return object, default null
      */
-    fun <V> getAsObject(json: String, key: String?, type: Class<V>?): V? {
-        if (StringUtils.isEmpty(json)) {
+    fun <V> getAsObject(json: String, key: String, type: Class<V>): V? {
+        if (json.isEmpty()) {
             return null
         }
         val jsonByKey = getAsJsonObject(json, key)
@@ -558,8 +444,8 @@ object JSONUtils {
      *
      * @return list, default null
      */
-    fun <V> getAsList(json: String, key: String?, type: Class<V>): List<V>? {
-        if (StringUtils.isEmpty(json)) {
+    fun <V> getAsList(json: String, key: String, type: Class<V>): List<V>? {
+        if (json.isEmpty()) {
             return null
         }
         val jsonByKey = getAsJsonObject(json, key)
@@ -577,7 +463,7 @@ object JSONUtils {
     /**
      * Get a JsonElement field from a JSON string
      */
-    fun getAsJsonObject(json: String, key: String?): JsonElement {
+    fun getAsJsonObject(json: String, key: String): JsonElement {
         try {
             val element = JsonParser.parseString(json)
             val jsonObj = element.asJsonObject
@@ -601,12 +487,10 @@ object JSONUtils {
      * Add element to the json
      */
     private fun <V> add(jsonObject: JsonObject, key: String, value: V) {
-        if (value is String) {
-            jsonObject.addProperty(key, value as String)
-        } else if (value is Number) {
-            jsonObject.addProperty(key, value as Number)
-        } else {
-            jsonObject.addProperty(key, to(value))
+        when (value) {
+            is String -> jsonObject.addProperty(key, value as String)
+            is Number -> jsonObject.addProperty(key, value as Number)
+            else -> jsonObject.addProperty(key, to(value))
         }
     }
 
@@ -615,7 +499,7 @@ object JSONUtils {
      *
      * @return json
      */
-    fun remove(json: String, key: String?): String {
+    fun remove(json: String, key: String): String {
         val element = JsonParser.parseString(json)
         val jsonObj = element.asJsonObject
         jsonObj.remove(key)
@@ -681,48 +565,61 @@ object JSONUtils {
                     return null
                 }
                 val json = jsonReader.nextString()
-                if (c == Short::class.javaPrimitiveType) {
-                    return NumberUtils.toShort(json)
-                } else if (c == Short::class.java) {
-                    if (StringUtils.isEmpty(json)) {
-                        return null
+                when (c) {
+                    Short::class.javaPrimitiveType -> {
+                        return json.toShort()
                     }
-                    return json.toShort()
-                } else if (c == Int::class.javaPrimitiveType) {
-                    return NumberUtils.toInt(json)
-                } else if (c == Int::class.java) {
-                    if (StringUtils.isEmpty(json)) {
-                        return null
+                    Short::class.java -> {
+                        if (json.isEmpty()) {
+                            return null
+                        }
+                        return json.toShort()
                     }
-                    return json.toInt()
-                } else if (c == Long::class.javaPrimitiveType) {
-                    return NumberUtils.toLong(json)
-                } else if (c == Long::class.java) {
-                    if (StringUtils.isEmpty(json)) {
-                        return null
+                    Int::class.javaPrimitiveType -> {
+                        return json.toInt()
                     }
-                    return json.toLong()
-                } else if (c == Float::class.javaPrimitiveType) {
-                    return json.toFloat()
-                } else if (c == Float::class.java) {
-                    if (StringUtils.isEmpty(json)) {
-                        return null
+                    Int::class.java -> {
+                        if (json.isEmpty()) {
+                            return null
+                        }
+                        return json.toInt()
                     }
-                    return NumberUtils.toFloat(json)
-                } else if (c == Double::class.javaPrimitiveType) {
-                    return NumberUtils.toDouble(json)
-                } else if (c == Double::class.java) {
-                    if (StringUtils.isEmpty(json)) {
-                        return null
+                    Long::class.javaPrimitiveType -> {
+                        return json.toLong()
                     }
-                    return json.toDouble()
-                } else if (c == BigDecimal::class.java) {
-                    if (StringUtils.isEmpty(json)) {
-                        return null
+                    Long::class.java -> {
+                        if (json.isEmpty()) {
+                            return null
+                        }
+                        return json.toLong()
                     }
-                    return BigDecimal(json)
-                } else {
-                    return json.toInt()
+                    Float::class.javaPrimitiveType -> {
+                        return json.toFloat()
+                    }
+                    Float::class.java -> {
+                        if (json.isEmpty()) {
+                            return null
+                        }
+                        return json.toFloat()
+                    }
+                    Double::class.javaPrimitiveType -> {
+                        return json.toDouble()
+                    }
+                    Double::class.java -> {
+                        if (json.isEmpty()) {
+                            return null
+                        }
+                        return json.toDouble()
+                    }
+                    BigDecimal::class.java -> {
+                        if (json.isEmpty()) {
+                            return null
+                        }
+                        return BigDecimal(json)
+                    }
+                    else -> {
+                        return json.toInt()
+                    }
                 }
             } catch (e: Exception) {
                 return null
@@ -738,6 +635,6 @@ object JSONUtils {
 
         constructor(cause: Throwable?) : super(cause)
 
-        constructor(format: String?, vararg arguments: Any?) : super(format, *arguments)
+        constructor(format: String, vararg arguments: Any) : super(format, *arguments)
     }
 }

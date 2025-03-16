@@ -4,7 +4,7 @@ import org.chorus.network.connection.BedrockSession
 import org.chorus.network.process.SessionState
 import org.chorus.network.protocol.*
 import org.chorus.network.protocol.ResourcePackStackPacket.ExperimentData
-import org.chorus.utils.version.Version
+import org.chorus.utils.Version
 
 import java.util.*
 import kotlin.math.ceil

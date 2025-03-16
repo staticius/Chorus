@@ -7,10 +7,10 @@ import org.chorus.scoreboard.IScoreboardLine
 
 class ScoreboardLineChangeEvent @JvmOverloads constructor(
     scoreboard: IScoreboard,
-    private val line: IScoreboardLine?,
-    private val newValue: Int,
-    private val oldValue: Int,
-    private val actionType: ActionType = ActionType.SCORE_CHANGE
+    val line: IScoreboardLine?,
+    val newValue: Int,
+    val oldValue: Int,
+    val actionType: ActionType = ActionType.SCORE_CHANGE
 ) :
     ScoreboardEvent(scoreboard) {
     enum class ActionType {

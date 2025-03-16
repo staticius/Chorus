@@ -6,13 +6,12 @@ import org.chorus.entity.Attribute.Companion.getAttribute
 import org.chorus.entity.Entity
 import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataMap
+import org.chorus.entity.data.EntityDataType
+import org.chorus.entity.data.EntityDataTypes
 import org.chorus.network.protocol.*
 import org.chorus.registry.Registries
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author boybook (Nukkit Project)
- */
 class DummyBossBar private constructor(builder: Builder) {
     val player: Player = builder.player
 
@@ -43,7 +42,7 @@ class DummyBossBar private constructor(builder: Builder) {
         }
 
         fun length(length: Float): Builder {
-            if (length >= 0 && length <= 100) this.length = length
+            if (length in 0.0..100.0) this.length = length
             return this
         }
 
@@ -107,11 +106,11 @@ class DummyBossBar private constructor(builder: Builder) {
         pkAdd.speedZ = 0f
         val entityDataMap = EntityDataMap()
         entityDataMap.getOrCreateFlags()
-        entityDataMap.put(Entity.AIR_SUPPLY, 400)
-        entityDataMap.put(Entity.AIR_SUPPLY_MAX, 400)
-        entityDataMap.put(Entity.LEASH_HOLDER, -1)
-        entityDataMap.put(Entity.NAME, text)
-        entityDataMap.put(Entity.SCALE, 0)
+        entityDataMap[EntityDataTypes.AIR_SUPPLY] = 400
+        entityDataMap[EntityDataTypes.AIR_SUPPLY_MAX] = 400
+        entityDataMap[EntityDataTypes.LEASH_HOLDER] = -1
+        entityDataMap[EntityDataTypes.NAME] = text
+        entityDataMap[EntityDataTypes.SCALE] = 0
         pkAdd.entityData = entityDataMap
         player.dataPacket(pkAdd)
     }
@@ -122,7 +121,7 @@ class DummyBossBar private constructor(builder: Builder) {
         val attr = getAttribute(Attribute.MAX_HEALTH)
         attr.setMaxValue(100f) // Max value - We need to change the max value first, or else the "setValue" will return a IllegalArgumentException
         attr.setValue(length) // Entity health
-        pkAttributes.entries = arrayOf<Attribute?>(attr)
+        pkAttributes.entries = arrayOf(attr)
         player.dataPacket(pkAttributes)
     }
 
@@ -187,7 +186,7 @@ class DummyBossBar private constructor(builder: Builder) {
         val pk = SetEntityDataPacket()
         pk.eid = this.bossBarId
         val entityDataMap = EntityDataMap()
-        entityDataMap.put(Entity.NAME, text)
+        entityDataMap[EntityDataTypes.NAME] = text
         pk.entityData = entityDataMap
         player.dataPacket(pk)
     }

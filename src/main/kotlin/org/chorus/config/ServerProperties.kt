@@ -97,7 +97,7 @@ class ServerProperties(dataPath: String) {
         }
     }
 
-    fun get(key: ServerPropertiesKeys, defaultValue: Boolean): Boolean {
+    operator fun get(key: ServerPropertiesKeys, defaultValue: Boolean): Boolean {
         val value = properties[key.toString()]
         return if (value is String) {
             value.toBoolean()

@@ -4,10 +4,6 @@ import eu.okaeri.configs.OkaeriConfig
 import eu.okaeri.configs.annotation.Comment
 import eu.okaeri.configs.annotation.CustomKey
 
-
-(callSuper = true)
-
-@Accessors(fluent = true)
 class ServerSettings : OkaeriConfig() {
     @Comment("nukkit.server.settings.baseSettings")
     @CustomKey("settings")
@@ -29,10 +25,6 @@ class ServerSettings : OkaeriConfig() {
     @CustomKey("chunk-settings")
     val chunkSettings = ChunkSettings()
 
-    @Comment("nukkit.server.settings.freezearray")
-    @CustomKey("memory-settings")
-    val freezeArraySettings = FreezeArraySettings()
-
     @Comment("nukkit.server.settings.playersettings")
     @CustomKey("player-settings")
     val playerSettings = PlayerSettings()
@@ -41,9 +33,6 @@ class ServerSettings : OkaeriConfig() {
     @CustomKey("gameplay-settings")
     val gameplaySettings = GameplaySettings()
 
-    (callSuper = true)
-
-    @Accessors(fluent = true)
     class BaseSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.baseSettings.language")
         var language: String = "eng"
@@ -79,9 +68,6 @@ class ServerSettings : OkaeriConfig() {
         var saveUnknownBlock: Boolean = true
     }
 
-    (callSuper = true)
-
-    @Accessors(fluent = true)
     class NetworkSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.networkSettings.compressionLevel")
         var compressionLevel: Int = 7
@@ -102,9 +88,6 @@ class ServerSettings : OkaeriConfig() {
         var packetLimit: Int = 240
     }
 
-    (callSuper = true)
-
-    @Accessors(fluent = true)
     class DebugSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.debugSettings.level")
         var level: String = "INFO"
@@ -119,9 +102,6 @@ class ServerSettings : OkaeriConfig() {
         var allowBeta: Boolean = false
     }
 
-    (callSuper = true)
-
-    @Accessors(fluent = true)
     class LevelSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.levelSettings.autoTickRate")
         var autoTickRate: Boolean = true
@@ -148,9 +128,6 @@ class ServerSettings : OkaeriConfig() {
         var levelThread: Boolean = false
     }
 
-    (callSuper = true)
-
-    @Accessors(fluent = true)
     class ChunkSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.chunkSettings.perTickSend")
         var perTickSend: Int = 8
@@ -174,25 +151,6 @@ class ServerSettings : OkaeriConfig() {
         var generationQueueSize: Int = 128
     }
 
-    (callSuper = true)
-
-    @Accessors(fluent = true)
-    class FreezeArraySettings : OkaeriConfig() {
-        @Comment("nukkit.server.settings.freezearray.enable")
-        var enable: Boolean = true
-        var slots: Int = 32
-        var defaultTemperature: Int = 32
-        var freezingPoint: Int = 0
-        var boilingPoint: Int = 1024
-        var absoluteZero: Int = -256
-        var melting: Int = 16
-        var singleOperation: Int = 1
-        var batchOperation: Int = 32
-    }
-
-    (callSuper = true)
-
-    @Accessors(fluent = true)
     class PlayerSettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.playersettings.savePlayerData")
         var savePlayerData: Boolean = true
@@ -210,9 +168,6 @@ class ServerSettings : OkaeriConfig() {
         var spawnRadius: Int = 16
     }
 
-    (callSuper = true)
-
-    @Accessors(fluent = true)
     class GameplaySettings : OkaeriConfig() {
         @Comment("nukkit.server.settings.gameplaysettings.enableCommandBlocks")
         var enableCommandBlocks: Boolean = true

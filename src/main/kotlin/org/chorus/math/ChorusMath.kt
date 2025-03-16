@@ -1,6 +1,6 @@
 package org.chorus.math
 
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.max

@@ -7,7 +7,6 @@ import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
 import org.chorus.inventory.InventoryHolder
 import org.chorus.math.BlockFace
 import org.chorus.math.SimpleAxisAlignedBB
-import org.chorus.utils.OptionalBoolean
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
@@ -72,10 +71,6 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState = Compa
 
     override fun isActive(): Boolean {
         return getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.RAIL_DATA_BIT)
-    }
-
-    override fun isRailActive(): OptionalBoolean {
-        return OptionalBoolean.of(getPropertyValue(CommonBlockProperties.RAIL_DATA_BIT))
     }
 
     override fun setRailActive(active: Boolean) {

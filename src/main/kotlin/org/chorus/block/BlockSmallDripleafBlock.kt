@@ -11,7 +11,7 @@ import org.chorus.level.Locator
 import org.chorus.math.BlockFace
 import org.chorus.registry.BiomeRegistry.get
 import org.chorus.registry.BlockRegistry.get
-import org.chorus.utils.random.ChorusRandom.nextInt
+import org.chorus.utils.ChorusRandom.nextInt
 
 class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate), Faceable {

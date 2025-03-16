@@ -27,14 +27,14 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
     }
 
     fun setFood(food: Int, saturation: Float) {
-        var food = food
-        food = max(0.0, min(food.toDouble(), 20.0)).toInt()
+        var food1 = food
+        food1 = max(0.0, min(food1.toDouble(), 20.0)).toInt()
 
-        if (food <= 6 && this.food > 6 && player.isSprinting()) {
+        if (food1 <= 6 && this.food > 6 && player.isSprinting()) {
             player.setSprinting(false)
         }
 
-        val event = PlayerFoodLevelChangeEvent(this.player, food, saturation)
+        val event = PlayerFoodLevelChangeEvent(this.player, food1, saturation)
         Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
@@ -43,7 +43,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
         }
 
         this.food = event.foodLevel
-        this.saturation = min(event.foodSaturationLevel.toDouble(), food.toDouble()).toFloat()
+        this.saturation = min(event.foodSaturationLevel.toDouble(), food1.toDouble()).toFloat()
 
         this.sendFood()
     }
@@ -53,10 +53,10 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
     }
 
     fun setSaturation(saturation: Float) {
-        var saturation = saturation
-        saturation = max(0.0, min(saturation.toDouble(), food.toDouble())).toFloat()
+        var saturation1 = saturation
+        saturation1 = max(0.0, min(saturation1.toDouble(), food.toDouble())).toFloat()
 
-        val event = PlayerFoodLevelChangeEvent(player, food, saturation)
+        val event = PlayerFoodLevelChangeEvent(player, food, saturation1)
         Server.instance.pluginManager.callEvent(event)
 
         if (!event.isCancelled) {
@@ -92,9 +92,9 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
         get() = food < maxFood
 
     fun setExhaustion(exhaustion: Float) {
-        var exhaustion = exhaustion
-        while (exhaustion >= 4.0f) {
-            exhaustion -= 4.0f
+        var exhaustion1 = exhaustion
+        while (exhaustion1 >= 4.0f) {
+            exhaustion1 -= 4.0f
             var saturation = this.saturation
             if (saturation > 0) {
                 saturation = max(0.0, (saturation - 1.0f).toDouble()).toFloat()
@@ -107,7 +107,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
                 }
             }
         }
-        this.exhaustion = exhaustion.toDouble()
+        this.exhaustion = exhaustion1.toDouble()
     }
 
     fun exhaust(amount: Double) {

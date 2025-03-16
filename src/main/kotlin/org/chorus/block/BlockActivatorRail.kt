@@ -5,7 +5,6 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
-import org.chorus.utils.OptionalBoolean
 import org.chorus.utils.Rail
 import org.chorus.utils.Rail.Orientation.Companion.byMetadata
 import org.chorus.utils.Rail.isRailBlock
@@ -158,10 +157,6 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState = Comp
 
     override fun isActive(): Boolean {
         return getPropertyValue(CommonBlockProperties.RAIL_DATA_BIT)
-    }
-
-    override fun isRailActive(): OptionalBoolean {
-        return OptionalBoolean.of(getPropertyValue(CommonBlockProperties.RAIL_DATA_BIT))
     }
 
     override fun setRailActive(active: Boolean) {

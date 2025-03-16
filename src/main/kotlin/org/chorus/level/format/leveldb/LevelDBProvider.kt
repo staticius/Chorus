@@ -16,7 +16,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.IntTag
 import org.chorus.network.protocol.types.GameType
 import org.chorus.utils.*
-import org.chorus.utils.collection.nb.Long2ObjectNonBlockingMap
 import org.iq80.leveldb.*
 import java.io.*
 import java.lang.ref.WeakReference
@@ -25,6 +24,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
     private val lastChunk = ThreadLocal<WeakReference<IChunk?>>()
-    protected val chunks: Long2ObjectNonBlockingMap<IChunk> = Long2ObjectNonBlockingMap()
+    protected val chunks: ConcurrentHashMap<Long, IChunk> = ConcurrentHashMap()
     var levelData: LevelDat? = null
     protected val storage: LevelDBStorage
     override val level: Level?

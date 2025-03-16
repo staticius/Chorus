@@ -29,7 +29,7 @@ class SetDisplayObjectivePacket : DataPacket() {
         byteBuf.writeString(objectiveName!!)
         byteBuf.writeString(displayName!!)
         byteBuf.writeString(criteriaName!!)
-        byteBuf.writeVarInt(sortOrder!!.ordinal())
+        byteBuf.writeVarInt(sortOrder!!.ordinal)
     }
 
     override fun pid(): Int {

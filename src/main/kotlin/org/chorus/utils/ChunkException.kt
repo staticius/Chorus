@@ -1,6 +1,5 @@
 package org.chorus.utils
 
-
 class ChunkException : RuntimeException {
     constructor(message: String?) : super(message)
 

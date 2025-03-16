@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.*
 import org.chorus.math.BlockFace
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 import java.util.*
 
 abstract class BlockLichen(blockState: BlockState) : BlockTransparent(blockState) {

@@ -107,7 +107,7 @@ class StatusCommand(name: String) :
                     ) + "ms" +
                             (" [delayOpt " + (level.tickRateOptDelay - 1) + "]") +
                             (if (level.tickRate > 1) " (tick rate " + (19 - level.tickRate) + ")" else "") +
-                            (if (level.baseTickGameLoop.isRunning) " (" + (if (level.baseTickGameLoop.tps >= 19) TextFormat.GREEN else (if (level.baseTickGameLoop.tps < 5) TextFormat.RED else TextFormat.YELLOW)) + level.baseTickGameLoop.tps + " TPS, " + level.baseTickGameLoop.mspt + " MSPT)" else "")
+                            (if (level.baseTickGameLoop.isRunning) " (" + (if (level.baseTickGameLoop.tps >= 19) TextFormat.GREEN else (if (level.baseTickGameLoop.tps < 5) TextFormat.RED else TextFormat.YELLOW)) + level.baseTickGameLoop.tps + " TPS, " + level.baseTickGameLoop.msPt + " MSPT)" else "")
                 )
             }
         } else {

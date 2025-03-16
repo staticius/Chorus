@@ -16,8 +16,7 @@ import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector2
 import org.chorus.math.Vector3
-import org.chorus.utils.random.RandomSourceProvider
-import org.chorus.utils.random.RandomSourceProvider.Companion.create
+import org.chorus.utils.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 
 /**
@@ -178,7 +177,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
                     ) {
                         override fun generate(
                             level: BlockManager,
-                            rand: RandomSourceProvider,
+                            rand: ChorusRandom,
                             position: Vector3
                         ): Boolean {
                             val `object` = LegacyBigSpruceTree(0.75f, 4)

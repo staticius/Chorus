@@ -7,20 +7,20 @@ import org.chorus.scoreboard.data.SortOrder
 import org.chorus.scoreboard.displayer.IScoreboardViewer
 import org.chorus.scoreboard.scorer.FakeScorer
 import org.chorus.scoreboard.scorer.IScorer
-
-
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 
 class Scoreboard @JvmOverloads constructor(
     override var objectiveName: String,
     override var displayName: String,
     override var criteriaName: String = "dummy",
-    override var sortOrder: SortOrder = SortOrder.ASCENDING
-) :
-    IScoreboard {
-    protected var viewers: MutableMap<DisplaySlot, MutableSet<IScoreboardViewer>> = HashMap()
+    override var sortOrder: SortOrder? = SortOrder.ASCENDING
+) : IScoreboard {
+    private var viewers: MutableMap<DisplaySlot, MutableSet<IScoreboardViewer>> = EnumMap(DisplaySlot::class.java)
     override var lines: MutableMap<IScorer?, IScoreboardLine> = HashMap()
 
     init {
@@ -65,25 +65,25 @@ class Scoreboard @JvmOverloads constructor(
     }
 
     override fun addLine(line: IScoreboardLine): Boolean {
-        var line = line
+        var line1 = line
         if (shouldCallEvent()) {
             val event = ScoreboardLineChangeEvent(
                 this,
-                line,
-                line.score,
-                line.score,
+                line1,
+                line1.score,
+                line1.score,
                 ScoreboardLineChangeEvent.ActionType.ADD_LINE
             )
             Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) return false
-            line = event.getLine()
+            line1 = event.line!!
         }
-        lines[line.scorer] = line
-        updateScore(line)
+        lines[line1.scorer] = line1
+        updateScore(line1)
         return true
     }
 
-    override fun addLine(scorer: IScorer?, score: Int): Boolean {
+    override fun addLine(scorer: IScorer, score: Int): Boolean {
         return addLine(ScoreboardLine(this, scorer, score))
     }
 
@@ -137,7 +137,7 @@ class Scoreboard @JvmOverloads constructor(
     override fun resend() {
         allViewers.forEach(Consumer { viewer: IScoreboardViewer -> viewer.removeScoreboard(this) })
 
-        viewers.forEach { (slot: DisplaySlot?, slotViewers: MutableSet<IScoreboardViewer?>?) ->
+        viewers.forEach { (slot, slotViewers) ->
             slotViewers.forEach(
                 Consumer { slotViewer: IScoreboardViewer ->
                     slotViewer.display(this, slot)
@@ -165,7 +165,6 @@ class Scoreboard @JvmOverloads constructor(
     }
 
     override fun shouldCallEvent(): Boolean {
-        val manager = Server.instance.scoreboardManager
-        return manager != null && manager.containScoreboard(this)
+        return Server.instance.scoreboardManager.containScoreboard(this)
     }
 }

@@ -2,10 +2,10 @@ package org.chorus.level.generator.`object`
 
 import org.chorus.block.BlockID
 import org.chorus.math.Vector3
-import org.chorus.utils.random.RandomSourceProvider
+import org.chorus.utils.ChorusRandom
 
 object ObjectNyliumVegetation {
-    fun growVegetation(level: BlockManager, pos: Vector3, random: RandomSourceProvider) {
+    fun growVegetation(level: BlockManager, pos: Vector3, random: ChorusRandom) {
         for (i in 0..127) {
             var num = 0
 

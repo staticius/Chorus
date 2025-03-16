@@ -110,10 +110,10 @@ class LevelDBChunkSerializer private constructor() {
             }
             val buffer = ByteBufAllocator.DEFAULT.ioBuffer()
             try {
-                val blockLights = section.blockLights.data
+                val blockLights = section.blockLights
                 buffer.writeInt(blockLights.size)
                 buffer.writeBytes(blockLights)
-                val skyLights = section.skyLights.data
+                val skyLights = section.skyLights
                 buffer.writeInt(skyLights.size)
                 buffer.writeBytes(skyLights)
                 writeBatch.put(

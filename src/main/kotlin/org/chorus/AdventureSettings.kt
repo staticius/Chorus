@@ -11,15 +11,10 @@ import org.chorus.network.protocol.types.PlayerAbility
 import org.chorus.network.protocol.types.PlayerPermission
 import java.util.*
 
-/**
- * AdventureSettings class for managing player abilities and permissions.
- * Author: MagicDroidX (Nukkit Project)
- */
 class AdventureSettings : Cloneable {
     private val values: MutableMap<Type, Boolean> = EnumMap(
         Type::class.java
     )
-
 
     private var playerPermission: PlayerPermission? = null
 
@@ -191,18 +186,18 @@ class AdventureSettings : Cloneable {
     /**
      * Read permission data from nbt
      */
-    fun readNBT(nbt: CompoundTag) {
+    private fun readNBT(nbt: CompoundTag) {
         val abilityTag = nbt.getCompound(KEY_ABILITIES)
-        for ((key, value) in abilityTag!!.getTags()) {
+        for ((key, value) in abilityTag.getTags()) {
             if (value is IntTag) {
-                set(Type.valueOf(key!!), value.data == 1)
+                set(Type.valueOf(key), value.data == 1)
             }
         }
-        playerPermission = PlayerPermission.valueOf(nbt.getString(KEY_PLAYER_PERMISSION)!!)
+        playerPermission = PlayerPermission.valueOf(nbt.getString(KEY_PLAYER_PERMISSION))
         commandPermission = CommandPermission.valueOf(
             nbt.getString(
                 KEY_COMMAND_PERMISSION
-            )!!
+            )
         )
     }
 

@@ -22,7 +22,6 @@ object SparkInstaller : Loggable {
                     checkNotNull(`in`)
                     val targetPath = File(server.pluginPath, "spark.jar")
                     if (!targetPath.exists()) {
-                        //Do not remove this try catch block!!!
                         try {
                             Files.copy(`in`, targetPath.toPath())
                             server.pluginManager.enablePlugin(server.pluginManager.loadPlugin(targetPath)!!)

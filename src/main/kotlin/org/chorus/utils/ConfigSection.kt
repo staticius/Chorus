@@ -2,15 +2,7 @@ package org.chorus.utils
 
 import java.util.function.Consumer
 
-/**
- * @author fromgate
- * @since 26.04.2016
- */
-class ConfigSection
-/**
- * Empty ConfigSection constructor
- */
-    () : LinkedHashMap<String?, Any?>() {
+class ConfigSection() : LinkedHashMap<String?, Any?>() {
     /**
      * Constructor of ConfigSection that contains initial key/value data
      *
@@ -82,6 +74,7 @@ class ConfigSection
         for (o in list) {
             if (o == null) continue
             if (o is LinkedHashMap<*, *>) {
+                @Suppress("UNCHECKED_CAST")
                 newList.add(ConfigSection(o as LinkedHashMap<String?, Any?>))
             } else {
                 newList.add(o)
@@ -130,9 +123,11 @@ class ConfigSection
                     val safeMap = value.entries
                         .filter { it.key is String? }
                         .associate { it.key as String? to it.value }
+                    @Suppress("UNCHECKED_CAST")
                     return ConfigSection(safeMap) as T
                 }
             }
+            @Suppress("UNCHECKED_CAST")
             return value as T?
         }
         val keys = key.split("\\.".toRegex(), limit = 2).toTypedArray()
@@ -215,14 +210,13 @@ class ConfigSection
     /**
      * Get sections (and only sections) from provided path
      *
-     * @param key - config section path, if null or empty root path will used.
+     * @param key - config section path, if null or empty root path will be used.
      * @return
      */
     fun getSections(key: String?): ConfigSection {
         val sections = ConfigSection()
-        val parent = if (key == null || key.isEmpty()) this.all else getSection(key)
-        if (parent == null) return sections
-        parent.forEach { (key1: String?, value: Any?) ->
+        val parent = if (key.isNullOrEmpty()) this.all else getSection(key)
+        parent.forEach { (key1, value) ->
             if (value is ConfigSection) sections[key1] = value
         }
         return sections
@@ -242,7 +236,7 @@ class ConfigSection
      * Get int value of config section element
      *
      * @param key          - key (inside) current section
-     * @param defaultValue - default value that will returned if section element is not exists
+     * @param defaultValue - default value that will return if section element is not exists
      * @return
      */
     fun getInt(key: String?, defaultValue: Int): Int {
@@ -274,7 +268,7 @@ class ConfigSection
      * Get long value of config section element
      *
      * @param key          - key (inside) current section
-     * @param defaultValue - default value that will returned if section element is not exists
+     * @param defaultValue - default value that will return if section element is not exists
      * @return
      */
     fun getLong(key: String?, defaultValue: Long): Long {
@@ -306,7 +300,7 @@ class ConfigSection
      * Get double value of config section element
      *
      * @param key          - key (inside) current section
-     * @param defaultValue - default value that will returned if section element is not exists
+     * @param defaultValue - default value that will return if section element is not exists
      * @return
      */
     fun getDouble(key: String?, defaultValue: Double): Double {
@@ -338,7 +332,7 @@ class ConfigSection
      * Get String value of config section element
      *
      * @param key          - key (inside) current section
-     * @param defaultValue - default value that will returned if section element is not exists
+     * @param defaultValue - default value that will return if section element is not exists
      * @return
      */
     fun getString(key: String?, defaultValue: String): String {
@@ -371,7 +365,7 @@ class ConfigSection
      * Get boolean value of config section element
      *
      * @param key          - key (inside) current section
-     * @param defaultValue - default value that will returned if section element is not exists
+     * @param defaultValue - default value that will return if section element is not exists
      * @return
      */
     fun getBoolean(key: String?, defaultValue: Boolean): Boolean {
@@ -403,7 +397,7 @@ class ConfigSection
      * Get List value of config section element
      *
      * @param key         - key (inside) current section
-     * @param defaultList - default value that will returned if section element is not exists
+     * @param defaultList - default value that will return if section element is not exists
      * @return
      */
     fun getList(key: String?, defaultList: List<*>?): List<*> {
@@ -417,8 +411,8 @@ class ConfigSection
      * @return
      */
     fun isList(key: String?): Boolean {
-        val `val` = get(key)
-        return `val` is List<*>
+        val value = get(key)
+        return value is List<*>
     }
 
     /**
@@ -448,19 +442,16 @@ class ConfigSection
         val list = getList(key)
         val result: MutableList<Int> = ArrayList()
 
-        for (`object` in list) {
-            if (`object` is Int) {
-                result.add(`object`)
-            } else if (`object` is String) {
-                try {
-                    result.add(`object`.toInt())
-                } catch (ex: Exception) {
-                    //ignore
+        for (obj in list) {
+            when (obj) {
+                is Int -> result.add(obj)
+                is Number -> result.add(obj.toInt())
+                is Char -> result.add(obj.code)
+                is String -> {
+                    try {
+                        result.add(obj.toInt())
+                    } catch (_: Exception) {}
                 }
-            } else if (`object` is Char) {
-                result.add(`object`.code)
-            } else if (`object` is Number) {
-                result.add(`object`.toInt())
             }
         }
         return result
@@ -475,13 +466,13 @@ class ConfigSection
     fun getBooleanList(key: String?): List<Boolean> {
         val list = getList(key)
         val result: MutableList<Boolean> = ArrayList()
-        for (`object` in list) {
-            if (`object` is Boolean) {
-                result.add(`object`)
-            } else if (`object` is String) {
-                if (java.lang.Boolean.TRUE.toString() == `object`) {
+        for (obj in list) {
+            if (obj is Boolean) {
+                result.add(obj)
+            } else if (obj is String) {
+                if (java.lang.Boolean.TRUE.toString() == obj) {
                     result.add(true)
-                } else if (java.lang.Boolean.FALSE.toString() == `object`) {
+                } else if (java.lang.Boolean.FALSE.toString() == obj) {
                     result.add(false)
                 }
             }
@@ -498,19 +489,16 @@ class ConfigSection
     fun getDoubleList(key: String?): List<Double> {
         val list = getList(key)
         val result: MutableList<Double> = ArrayList()
-        for (`object` in list) {
-            if (`object` is Double) {
-                result.add(`object`)
-            } else if (`object` is String) {
-                try {
-                    result.add(`object`.toDouble())
-                } catch (ex: Exception) {
-                    //ignore
+        for (obj in list) {
+            when (obj) {
+                is Double -> result.add(obj)
+                is Number -> result.add(obj.toDouble())
+                is Char -> result.add(obj.code.toDouble())
+                is String -> {
+                    try {
+                        result.add(obj.toDouble())
+                    } catch (_: Exception) {}
                 }
-            } else if (`object` is Char) {
-                result.add(`object`.code.toDouble())
-            } else if (`object` is Number) {
-                result.add(`object`.toDouble())
             }
         }
         return result
@@ -525,19 +513,16 @@ class ConfigSection
     fun getFloatList(key: String?): List<Float> {
         val list = getList(key)
         val result: MutableList<Float> = ArrayList()
-        for (`object` in list) {
-            if (`object` is Float) {
-                result.add(`object`)
-            } else if (`object` is String) {
-                try {
-                    result.add(`object`.toFloat())
-                } catch (ex: Exception) {
-                    //ignore
+        for (obj in list) {
+            when (obj) {
+                is Float -> result.add(obj)
+                is Number -> result.add(obj.toFloat())
+                is Char -> result.add(obj.code.toFloat())
+                is String -> {
+                    try {
+                        result.add(obj.toFloat())
+                    } catch (_: Exception) { }
                 }
-            } else if (`object` is Char) {
-                result.add(`object`.code.toFloat())
-            } else if (`object` is Number) {
-                result.add(`object`.toFloat())
             }
         }
         return result
@@ -552,19 +537,16 @@ class ConfigSection
     fun getLongList(key: String?): List<Long> {
         val list = getList(key)
         val result: MutableList<Long> = ArrayList()
-        for (`object` in list) {
-            if (`object` is Long) {
-                result.add(`object`)
-            } else if (`object` is String) {
-                try {
-                    result.add(`object`.toLong())
-                } catch (ex: Exception) {
-                    //ignore
+        for (obj in list) {
+            when (obj) {
+                is Long -> result.add(obj)
+                is Number -> result.add(obj.toLong())
+                is Char -> result.add(obj.code.toLong())
+                is String -> {
+                    try {
+                        result.add(obj.toLong())
+                    } catch (_: Exception) {}
                 }
-            } else if (`object` is Char) {
-                result.add(`object`.code.toLong())
-            } else if (`object` is Number) {
-                result.add(`object`.toLong())
             }
         }
         return result
@@ -581,19 +563,16 @@ class ConfigSection
 
         val result: MutableList<Byte> = ArrayList()
 
-        for (`object` in list) {
-            if (`object` is Byte) {
-                result.add(`object`)
-            } else if (`object` is String) {
-                try {
-                    result.add(`object`.toByte())
-                } catch (ex: Exception) {
-                    //ignore
+        for (obj in list) {
+            when (obj) {
+                is Byte -> result.add(obj)
+                is Number -> result.add(obj.toByte())
+                is Char -> result.add(obj.code.toByte())
+                is String -> {
+                    try {
+                        result.add(obj.toByte())
+                    } catch (_: Exception) {}
                 }
-            } else if (`object` is Char) {
-                result.add(`object`.code.toByte())
-            } else if (`object` is Number) {
-                result.add(`object`.toByte())
             }
         }
 
@@ -611,17 +590,15 @@ class ConfigSection
 
         val result: MutableList<Char> = ArrayList()
 
-        for (`object` in list) {
-            if (`object` is Char) {
-                result.add(`object`)
-            } else if (`object` is String) {
-                val str = `object`
-
-                if (str.length == 1) {
-                    result.add(str[0])
+        for (obj in list) {
+            if (obj is Char) {
+                result.add(obj)
+            } else if (obj is String) {
+                if (obj.length == 1) {
+                    result.add(obj[0])
                 }
-            } else if (`object` is Number) {
-                result.add(`object`.toInt().toChar())
+            } else if (obj is Number) {
+                result.add(obj.toInt().toChar())
             }
         }
 
@@ -639,19 +616,16 @@ class ConfigSection
 
         val result: MutableList<Short> = ArrayList()
 
-        for (`object` in list) {
-            if (`object` is Short) {
-                result.add(`object`)
-            } else if (`object` is String) {
-                try {
-                    result.add(`object`.toShort())
-                } catch (ex: Exception) {
-                    //ignore
+        for (obj in list) {
+            when (obj) {
+                is Short -> result.add(obj)
+                is Number -> result.add(obj.toShort())
+                is Char -> result.add(obj.code.toShort())
+                is String -> {
+                    try {
+                        result.add(obj.toShort())
+                    } catch (_: Exception) {}
                 }
-            } else if (`object` is Char) {
-                result.add(`object`.code.toShort())
-            } else if (`object` is Number) {
-                result.add(`object`.toShort())
             }
         }
 
@@ -665,17 +639,12 @@ class ConfigSection
      * @return
      */
     fun getMapList(key: String?): List<Map<*, *>> {
+        @Suppress("UNCHECKED_CAST")
         val list = getList(key) as List<Map<*, *>>
         val result: MutableList<Map<*, *>> = ArrayList()
 
-        if (list == null) {
-            return result
-        }
-
-        for (`object` in list) {
-            if (`object` is Map<*, *>) {
-                result.add(`object`)
-            }
+        for (obj in list) {
+            result.add(obj)
         }
 
         return result
@@ -688,20 +657,14 @@ class ConfigSection
      * @param ignoreCase
      * @return
      */
-    /**
-     * Check existence of config section element
-     *
-     * @param key
-     * @return
-     */
     @JvmOverloads
     fun exists(key: String, ignoreCase: Boolean = false): Boolean {
-        var key = key
-        if (ignoreCase) key = key.lowercase()
+        var key1 = key
+        if (ignoreCase) key1 = key1.lowercase()
         for (existKey in this.getKeys(true)) {
-            var existKey = existKey
-            if (ignoreCase) existKey = existKey.lowercase()
-            if (existKey == key) return true
+            var existKey1 = existKey
+            if (ignoreCase) existKey1 = existKey1.lowercase()
+            if (existKey1 == key1) return true
         }
         return false
     }
@@ -712,7 +675,7 @@ class ConfigSection
      * @param key
      */
     override fun remove(key: String?) {
-        if (key == null || key.isEmpty()) return
+        if (key.isNullOrEmpty()) return
         if (super.containsKey(key)) super.remove(key)
         else if (this.containsKey(".")) {
             val keys = key.split("\\.".toRegex(), limit = 2).toTypedArray()

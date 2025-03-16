@@ -20,7 +20,7 @@ interface BlockState {
 
     val blockPropertyValues: @UnmodifiableView MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>?
 
-    val blockStateTag: @UnmodifiableView CompoundTagView?
+    val blockStateTag: @UnmodifiableView CompoundTagView
 
     fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> getPropertyValue(p: PROPERTY): DATATYPE
 

@@ -13,31 +13,21 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
-/**
- * @author MagicDroidX (Nukkit)
- */
-
 class Config {
-    /**
-     * Get root (main) config section of the Config
-     *
-     * @return
-     */
-    //private LinkedHashMap<String, Object> config = new LinkedHashMap<>();
     var rootSection: ConfigSection = ConfigSection()
         private set
+
     private var file: File? = null
+
     var isCorrect: Boolean = false
         private set
+
     private var type = DETECT
 
     /**
      * Constructor for Config instance with undefined file object
      *
      * @param type - Config type
-     */
-    /**
-     * Constructor for Config (YAML) instance with undefined file object
      */
     @JvmOverloads
     constructor(type: Int = YAML) {
@@ -62,7 +52,6 @@ class Config {
     fun reload() {
         rootSection.clear()
         this.isCorrect = false
-        //this.load(this.file.toString());
         checkNotNull(this.file) { "Failed to reload Config. File object is undefined." }
         this.load(file.toString(), this.type)
     }
@@ -300,7 +289,7 @@ class Config {
         return rootSection.isDouble(key)
     }
 
-    fun getString(key: String?): String? {
+    fun getString(key: String?): String {
         return this.getString(key, "")
     }
 
@@ -412,20 +401,20 @@ class Config {
     private fun fillDefaults(defaultMap: ConfigSection, data: ConfigSection): ConfigSection {
         for (key in defaultMap.keys) {
             if (!data.containsKey(key)) {
-                data.put(key, defaultMap[key])
+                data[key] = defaultMap[key]
             }
         }
         return data
     }
 
     private fun parseList(content: String) {
-        var content = content
-        content = content.replace("\r\n", "\n")
-        for (v in content.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+        var content1 = content
+        content1 = content1.replace("\r\n", "\n")
+        for (v in content1.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
             if (v.trim { it <= ' ' }.isEmpty()) {
                 continue
             }
-            rootSection.put(v, true)
+            rootSection[v] = true
         }
     }
 
@@ -466,9 +455,9 @@ class Config {
                     )
                 }
                 when (valueLower) {
-                    "on", "true", "yes" -> rootSection.put(key, true)
-                    "off", "false", "no" -> rootSection.put(key, false)
-                    else -> rootSection.put(key, value)
+                    "on", "true", "yes" -> rootSection[key] = true
+                    "off", "false", "no" -> rootSection[key] = false
+                    else -> rootSection[key] = value
                 }
             }
         }

@@ -3,9 +3,6 @@ package org.chorus.utils
 import com.google.gson.JsonObject
 import java.util.*
 
-/**
- * @author CreeperFace
- */
 interface LoginChainData {
     val username: String?
 
@@ -29,7 +26,7 @@ interface LoginChainData {
 
     val languageCode: String?
 
-    val XUID: String?
+    val xuid: String?
 
     val isXboxAuthed: Boolean
 

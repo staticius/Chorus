@@ -14,10 +14,8 @@ interface RedstoneComponent {
      *
      * @param ignoredFaces The faces, that shouldn't get updated.
      */
-    fun updateAroundRedstone(vararg ignoredFaces: BlockFace?) {
-        var ignoredFaces = ignoredFaces
-        if (ignoredFaces == null) ignoredFaces = arrayOfNulls<BlockFace>(0)
-        this.updateAroundRedstone(Sets.newHashSet<BlockFace>(*ignoredFaces))
+    fun updateAroundRedstone(vararg ignoredFaces: BlockFace) {
+        this.updateAroundRedstone(Sets.newHashSet(*ignoredFaces))
     }
 
     /**
@@ -34,10 +32,8 @@ interface RedstoneComponent {
      *
      * @param ignoredFaces The faces, that shouldn't get updated.
      */
-    fun updateAllAroundRedstone(vararg ignoredFaces: BlockFace?) {
-        var ignoredFaces = ignoredFaces
-        if (ignoredFaces == null) ignoredFaces = arrayOfNulls<BlockFace>(0)
-        this.updateAllAroundRedstone(Sets.newHashSet<BlockFace>(*ignoredFaces))
+    fun updateAllAroundRedstone(vararg ignoredFaces: BlockFace) {
+        this.updateAllAroundRedstone(Sets.newHashSet(*ignoredFaces))
     }
 
     /**
@@ -46,7 +42,7 @@ interface RedstoneComponent {
      * @param ignoredFaces The faces, that shouldn't get updated.
      */
     fun updateAllAroundRedstone(ignoredFaces: Set<BlockFace>) {
-        if (this is Locator) updateAllAroundRedstone(pos, ignoredFaces)
+        if (this is Locator) updateAllAroundRedstone(this, ignoredFaces)
     }
 
     companion object {
@@ -57,10 +53,8 @@ interface RedstoneComponent {
          * @param ignoredFaces The faces, that shouldn't get updated.
          */
         @JvmStatic
-        fun updateAroundRedstone(pos: Locator, vararg ignoredFaces: BlockFace?) {
-            var ignoredFaces = ignoredFaces
-            if (ignoredFaces == null) ignoredFaces = arrayOfNulls<BlockFace>(0)
-            updateAroundRedstone(pos, Sets.newHashSet<BlockFace>(*ignoredFaces))
+        fun updateAroundRedstone(pos: Locator, vararg ignoredFaces: BlockFace) {
+            updateAroundRedstone(pos, Sets.newHashSet(*ignoredFaces))
         }
 
         /**
@@ -82,9 +76,7 @@ interface RedstoneComponent {
          * @param pos          The middle of the blocks around.
          * @param ignoredFaces The faces, that shouldn't get updated.
          */
-        fun updateAllAroundRedstone(pos: Locator, vararg ignoredFaces: BlockFace?) {
-            var ignoredFaces = ignoredFaces
-            if (ignoredFaces == null) ignoredFaces = arrayOfNulls<BlockFace>(0)
+        fun updateAllAroundRedstone(pos: Locator, vararg ignoredFaces: BlockFace) {
             updateAllAroundRedstone(pos, Sets.newHashSet<BlockFace>(*ignoredFaces))
         }
 

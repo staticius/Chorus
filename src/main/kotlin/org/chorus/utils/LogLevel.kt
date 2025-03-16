@@ -9,8 +9,8 @@ enum class LogLevel(
     private val logThrowableTo: TriConsumer<MainLogger, String?, Throwable?>
 ) {
     NONE(
-        BiConsumer { logger: MainLogger?, message: String? -> },
-        TriConsumer { mainLogger: MainLogger?, s: String?, throwable: Throwable? -> }),
+        BiConsumer { _, _ -> },
+        TriConsumer { _, _, _ -> }),
     EMERGENCY(
         BiConsumer { obj: MainLogger, message: String? -> obj.emergency(message) },
         TriConsumer { obj: MainLogger, message: String?, t: Throwable? -> obj.emergency(message, t) }),

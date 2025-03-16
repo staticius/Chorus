@@ -13,29 +13,21 @@ interface IScoreboard {
     /**
      * @return 此计分板的标识名称
      */
-    @JvmField
     val objectiveName: String
 
     /**
      * @return 此计分板的显示名称
      */
-    @JvmField
     val displayName: String?
 
     /**
      * @return 此计分板的 “准则” (eg: dummy)
      */
-    @JvmField
     val criteriaName: String?
 
     /**
      * @return 此计分板的排序规则
      */
-    /**
-     * 设置计分板的排序规则
-     * @param order 排序规则
-     */
-    @JvmField
     var sortOrder: SortOrder?
 
     /**
@@ -76,7 +68,6 @@ interface IScoreboard {
     /**
      * @return 此计分板的所有行
      */
-    @JvmField
     val lines: Map<IScorer?, IScoreboardLine>
 
     /**
@@ -99,7 +90,7 @@ interface IScoreboard {
      * @param score 分数
      * @return 是否添加成功
      */
-    fun addLine(scorer: IScorer?, score: Int): Boolean
+    fun addLine(scorer: IScorer, score: Int): Boolean
 
     /**
      * 为插件提供的便捷的计分板显示接口

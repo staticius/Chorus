@@ -41,7 +41,7 @@ import org.chorus.network.protocol.TakeItemEntityPacket
 import org.chorus.network.protocol.UpdateTradePacket
 import org.chorus.registry.Registries
 import org.chorus.utils.*
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 import java.util.*
 import java.util.Set
 import java.util.function.Consumer

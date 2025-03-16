@@ -1,13 +1,11 @@
 package org.chorus.level.format
 
 import io.netty.buffer.ByteBuf
-import it.unimi.dsi.fastutil.objects.ReferenceArrayList
 import org.chorus.block.*
 import org.chorus.level.*
 import org.chorus.level.biome.BiomeID
 import org.chorus.level.format.bitarray.BitArrayVersion
 import org.chorus.level.format.palette.*
-import org.chorus.level.util.NibbleArray
 import org.chorus.math.BlockVector3
 import org.chorus.registry.Registries
 import java.util.concurrent.atomic.AtomicLong
@@ -25,74 +23,74 @@ import kotlin.math.min
 @JvmRecord
 data class ChunkSection(
     val y: Byte,
-    val blockLayer: Array<BlockPalette?>,
-    val biomes: Palette<Int?>,
-    val blockLights: NibbleArray,
-    val skyLights: NibbleArray,
+    val blockLayer: Array<BlockPalette>,
+    val biomes: Palette<Int>,
+    val blockLights: ByteArray,
+    val skyLights: ByteArray,
     val blockChanges: AtomicLong
 ) {
     constructor(sectionY: Byte) : this(
         sectionY,
-        arrayOf<BlockPalette?>(
-            BlockPalette(BlockAir.properties.defaultState, ReferenceArrayList<BlockState?>(16), BitArrayVersion.V2),
-            BlockPalette(BlockAir.properties.defaultState, ReferenceArrayList<BlockState?>(16), BitArrayVersion.V2)
+        arrayOf<BlockPalette>(
+            BlockPalette(BlockAir.properties.defaultState, MutableList<BlockState>(16) { BlockAir.STATE }, BitArrayVersion.V2),
+            BlockPalette(BlockAir.properties.defaultState, MutableList<BlockState>(16) { BlockAir.STATE }, BitArrayVersion.V2)
         ),
-        Palette<Int?>(BiomeID.Companion.PLAINS),
-        NibbleArray(SIZE),
-        NibbleArray(SIZE),
+        Palette<Int>(BiomeID.PLAINS),
+        ByteArray(SIZE),
+        ByteArray(SIZE),
         AtomicLong(0)
     )
 
-    constructor(sectionY: Byte, blockLayer: Array<BlockPalette?>) : this(
+    constructor(sectionY: Byte, blockLayer: Array<BlockPalette>) : this(
         sectionY, blockLayer,
-        Palette<Int?>(BiomeID.Companion.PLAINS),
-        NibbleArray(SIZE),
-        NibbleArray(SIZE),
+        Palette<Int>(BiomeID.PLAINS),
+        ByteArray(SIZE),
+        ByteArray(SIZE),
         AtomicLong(0)
     )
 
-    fun getBlockState(x: Int, y: Int, z: Int): BlockState? {
+    fun getBlockState(x: Int, y: Int, z: Int): BlockState {
         return getBlockState(x, y, z, 0)
     }
 
-    fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState? {
-        return blockLayer[layer]!![IChunk.Companion.index(x, y, z)]
+    fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState {
+        return blockLayer[layer][IChunk.index(x, y, z)]
     }
 
-    fun setBlockState(x: Int, y: Int, z: Int, blockState: BlockState?, layer: Int) {
+    fun setBlockState(x: Int, y: Int, z: Int, blockState: BlockState, layer: Int) {
         blockChanges.addAndGet(1)
-        blockLayer[layer]!![IChunk.Companion.index(x, y, z)] = blockState
+        blockLayer[layer][IChunk.index(x, y, z)] = blockState
     }
 
-    fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState?, layer: Int): BlockState? {
+    fun getAndSetBlockState(x: Int, y: Int, z: Int, blockState: BlockState, layer: Int): BlockState {
         blockChanges.addAndGet(1)
-        val result = blockLayer[layer]!![IChunk.Companion.index(x, y, z)]
-        blockLayer[layer]!![IChunk.Companion.index(x, y, z)] = blockstate
+        val result = blockLayer[layer][IChunk.index(x, y, z)]
+        blockLayer[layer][IChunk.index(x, y, z)] = blockState
         return result
     }
 
     fun setBiomeId(x: Int, y: Int, z: Int, biomeId: Int) {
-        biomes[IChunk.Companion.index(x, y, z)] = biomeId
+        biomes[IChunk.index(x, y, z)] = biomeId
     }
 
     fun getBiomeId(x: Int, y: Int, z: Int): Int {
-        return biomes[IChunk.Companion.index(x, y, z)]!!
+        return biomes[IChunk.index(x, y, z)]
     }
 
     fun getBlockLight(x: Int, y: Int, z: Int): Byte {
-        return blockLights[IChunk.Companion.index(x, y, z)]
+        return blockLights[IChunk.index(x, y, z)]
     }
 
     fun getBlockSkyLight(x: Int, y: Int, z: Int): Byte {
-        return skyLights[IChunk.Companion.index(x, y, z)]
+        return skyLights[IChunk.index(x, y, z)]
     }
 
     fun setBlockLight(x: Int, y: Int, z: Int, light: Byte) {
-        blockLights[IChunk.Companion.index(x, y, z)] = light
+        blockLights[IChunk.index(x, y, z)] = light
     }
 
     fun setBlockSkyLight(x: Int, y: Int, z: Int, light: Byte) {
-        skyLights[IChunk.Companion.index(x, y, z)] = light
+        skyLights[IChunk.index(x, y, z)] = light
     }
 
     fun scanBlocks(
@@ -109,15 +107,15 @@ data class ChunkSection(
         val minX = max(0.0, (min.x - offsetX).toDouble()).toInt()
         val minY = max(0.0, (min.y - offsetY).toDouble()).toInt()
         val minZ = max(0.0, (min.z - offsetZ).toDouble()).toInt()
-        for (x in min((max.x - offsetX).toDouble(), 15.0) downTo minX) {
+        for (x in min((max.x - offsetX), 15) downTo minX) {
             current.x = offsetX + x
-            for (z in min((max.z - offsetZ).toDouble(), 15.0) downTo minZ) {
+            for (z in min((max.z - offsetZ), 15) downTo minZ) {
                 current.z = offsetZ + z
-                for (y in min((max.y - offsetY).toDouble(), 15.0) downTo minY) {
+                for (y in min((max.y - offsetY), 15) downTo minY) {
                     current.y = offsetY + y
-                    val state = blockLayer[0]!![IChunk.Companion.index(x, y, z)]
+                    val state = blockLayer[0][IChunk.index(x, y, z)]
                     if (condition.test(current, state)) {
-                        results.add(Registries.BLOCK[state, current.x, current.y, current.z, provider.level])
+                        results.add(Registries.BLOCK[state, current.x, current.y, current.z, provider.level!!]!!)
                     }
                 }
             }
@@ -126,11 +124,11 @@ data class ChunkSection(
     }
 
     val isEmpty: Boolean
-        get() = blockLayer[0].isEmpty() && blockLayer[0]!![0] === BlockAir.properties.defaultState
+        get() = blockLayer[0].isEmpty && blockLayer[0][0] === BlockAir.properties.defaultState
 
     fun setNeedReObfuscate() {
-        blockLayer[0]!!.setNeedReObfuscate()
-        blockLayer[1]!!.setNeedReObfuscate()
+        blockLayer[0].setNeedReObfuscate()
+        blockLayer[1].setNeedReObfuscate()
     }
 
     fun writeToBuf(byteBuf: ByteBuf) {
@@ -139,8 +137,8 @@ data class ChunkSection(
         byteBuf.writeByte(LAYER_COUNT)
         byteBuf.writeByte(y.toInt())
 
-        blockLayer[0]!!.writeToNetwork(byteBuf) { obj: V? -> obj.blockStateHash() }
-        blockLayer[1]!!.writeToNetwork(byteBuf) { obj: V? -> obj.blockStateHash() }
+        blockLayer[0].writeToNetwork(byteBuf) { it.blockStateHash() }
+        blockLayer[1].writeToNetwork(byteBuf) { it.blockStateHash() }
     }
 
     fun writeObfuscatedToBuf(level: Level, byteBuf: ByteBuf) {
@@ -149,12 +147,12 @@ data class ChunkSection(
         byteBuf.writeByte(LAYER_COUNT)
         byteBuf.writeByte(y.toInt())
 
-        blockLayer[0]!!.writeObfuscatedToNetwork(
+        blockLayer[0].writeObfuscatedToNetwork(
             level, blockChanges, byteBuf
-        ) { obj: V? -> obj.blockStateHash() }
-        blockLayer[1]!!.writeObfuscatedToNetwork(
+        ) { it.blockStateHash() }
+        blockLayer[1].writeObfuscatedToNetwork(
             level, blockChanges, byteBuf
-        ) { obj: V? -> obj.blockStateHash() }
+        ) { it.blockStateHash() }
     }
 
     companion object {

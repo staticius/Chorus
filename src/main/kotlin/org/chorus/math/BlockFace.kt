@@ -1,7 +1,7 @@
 package org.chorus.math
 
 import com.google.common.collect.Iterators
-import org.chorus.utils.random.RandomSourceProvider
+import org.chorus.utils.ChorusRandom
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Predicate
@@ -236,7 +236,7 @@ enum class BlockFace(
             return faces[ThreadLocalRandom.current().nextInt(faces.size - 1)]
         }
 
-        fun random(rand: RandomSourceProvider): BlockFace {
+        fun random(rand: ChorusRandom): BlockFace {
             return faces[rand.nextInt(faces.size - 1)]
         }
 

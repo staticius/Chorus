@@ -4,7 +4,7 @@ import org.chorus.block.BlockID
 import org.chorus.block.BlockLeaves
 import org.chorus.block.BlockState
 import org.chorus.math.Vector3
-import org.chorus.utils.random.RandomSourceProvider
+import org.chorus.utils.ChorusRandom
 
 abstract class HugeTreesGenerator(
     /**
@@ -24,7 +24,7 @@ abstract class HugeTreesGenerator(
     /*
        * Calculates the height based on this trees base height and its extra random height
        */
-    protected fun getHeight(rand: RandomSourceProvider): Int {
+    protected fun getHeight(rand: ChorusRandom): Int {
         var i: Int = rand.nextInt(3) + this.baseHeight
 
         if (this.extraRandomHeight > 1) {
@@ -102,7 +102,7 @@ abstract class HugeTreesGenerator(
      */
     protected fun ensureGrowable(
         worldIn: BlockManager,
-        rand: RandomSourceProvider?,
+        rand: ChorusRandom?,
         treePos: Vector3,
         p_175929_4_: Int
     ): Boolean {

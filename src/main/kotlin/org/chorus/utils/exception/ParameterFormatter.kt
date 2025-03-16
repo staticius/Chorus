@@ -504,7 +504,7 @@ internal object ParameterFormatter {
         o: Any, str: StringBuilder, dejaVu: MutableSet<String?>?,
         oClass: Class<*>
     ) {
-        var dejaVu = dejaVu
+        var dejaVu1 = dejaVu
         if (oClass == ByteArray::class.java) {
             str.append((o as ByteArray).contentToString())
         } else if (oClass == ShortArray::class.java) {
@@ -522,25 +522,26 @@ internal object ParameterFormatter {
         } else if (oClass == CharArray::class.java) {
             str.append((o as CharArray).contentToString())
         } else {
-            if (dejaVu == null) {
-                dejaVu = HashSet()
+            if (dejaVu1 == null) {
+                dejaVu1 = HashSet()
             }
             // special handling of container Object[]
             val id = identityToString(o)
-            if (dejaVu.contains(id)) {
+            if (dejaVu1.contains(id)) {
                 str.append(RECURSION_PREFIX).append(id).append(RECURSION_SUFFIX)
             } else {
-                dejaVu.add(id)
-                val oArray = o as Array<Any>
+                dejaVu1.add(id)
+                val oArray = o as Array<*>
                 str.append('[')
                 var first = true
                 for (current in oArray) {
+                    current ?: continue
                     if (first) {
                         first = false
                     } else {
                         str.append(", ")
                     }
-                    recursiveDeepToString(current, str, HashSet(dejaVu))
+                    recursiveDeepToString(current, str, HashSet(dejaVu1))
                 }
                 str.append(']')
             }
@@ -548,17 +549,17 @@ internal object ParameterFormatter {
         }
     }
 
-    private fun appendMap(o: Any, str: StringBuilder, dejaVu: MutableSet<String?>?) {
+    private fun appendMap(o: Map<*, *>, str: StringBuilder, dejaVu: MutableSet<String?>?) {
         // special handling of container Map
-        var dejaVu = dejaVu
-        if (dejaVu == null) {
-            dejaVu = HashSet()
+        var dejaVu1 = dejaVu
+        if (dejaVu1 == null) {
+            dejaVu1 = HashSet()
         }
         val id = identityToString(o)
-        if (dejaVu.contains(id)) {
+        if (dejaVu1.contains(id)) {
             str.append(RECURSION_PREFIX).append(id).append(RECURSION_SUFFIX)
         } else {
-            dejaVu.add(id)
+            dejaVu1.add(id)
             val oMap = o as Map<*, *>
             str.append('{')
             var isFirst = true
@@ -571,35 +572,35 @@ internal object ParameterFormatter {
                 }
                 val key = current.key!!
                 val value = current.value!!
-                recursiveDeepToString(key, str, HashSet(dejaVu))
+                recursiveDeepToString(key, str, HashSet(dejaVu1))
                 str.append('=')
-                recursiveDeepToString(value, str, HashSet(dejaVu))
+                recursiveDeepToString(value, str, HashSet(dejaVu1))
             }
             str.append('}')
         }
     }
 
-    private fun appendCollection(o: Any, str: StringBuilder, dejaVu: MutableSet<String?>?) {
+    private fun appendCollection(o: Collection<*>, str: StringBuilder, dejaVu: MutableSet<String?>?) {
         // special handling of container Collection
-        var dejaVu = dejaVu
-        if (dejaVu == null) {
-            dejaVu = HashSet()
+        var dejaVu1 = dejaVu
+        if (dejaVu1 == null) {
+            dejaVu1 = HashSet()
         }
         val id = identityToString(o)
-        if (dejaVu.contains(id)) {
+        if (dejaVu1.contains(id)) {
             str.append(RECURSION_PREFIX).append(id).append(RECURSION_SUFFIX)
         } else {
-            dejaVu.add(id)
-            val oCol = o as Collection<*>
+            dejaVu1.add(id)
             str.append('[')
             var isFirst = true
-            for (anOCol in oCol) {
+            for (anOCol in o) {
+                anOCol ?: continue
                 if (isFirst) {
                     isFirst = false
                 } else {
                     str.append(", ")
                 }
-                recursiveDeepToString(anOCol, str, HashSet(dejaVu))
+                recursiveDeepToString(anOCol, str, HashSet(dejaVu1))
             }
             str.append(']')
         }

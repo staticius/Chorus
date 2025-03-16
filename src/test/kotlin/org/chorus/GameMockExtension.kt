@@ -36,7 +36,6 @@ import org.chorus.registry.BlockRegistry
 import org.chorus.registry.Registries
 import org.chorus.scheduler.ServerScheduler
 import org.chorus.utils.ClientChainData
-import org.chorus.utils.collection.FreezableArrayManager
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolutionException
@@ -126,7 +125,6 @@ class GameMockExtension : MockitoExtension() {
         var pluginManager: TestPluginManager? = null
         var simpleCommandMap: SimpleCommandMap = Mockito.mock(SimpleCommandMap::class.java)
         var serverScheduler: ServerScheduler? = null
-        var freezableArrayManager: FreezableArrayManager? = null
         var network: Network? = null
         var level: Level? = null
 
@@ -183,19 +181,6 @@ class GameMockExtension : MockitoExtension() {
                 pluginManager!!.registerInterface(JavaPluginLoader::class.java)
                 Mockito.`when`(server.pluginManager).thenReturn(pluginManager)
                 pluginManager!!.loadInternalPlugin()
-
-                freezableArrayManager = FreezableArrayManager(
-                    server.settings.freezeArraySettings().enable(),
-                    server.settings.freezeArraySettings().slots(),
-                    server.settings.freezeArraySettings().defaultTemperature(),
-                    server.settings.freezeArraySettings().freezingPoint(),
-                    server.settings.freezeArraySettings().absoluteZero(),
-                    server.settings.freezeArraySettings().boilingPoint(),
-                    server.settings.freezeArraySettings().melting(),
-                    server.settings.freezeArraySettings().singleOperation(),
-                    server.settings.freezeArraySettings().batchOperation()
-                )
-                Mockito.`when`(server.freezableArrayManager).thenReturn(freezableArrayManager)
 
                 Mockito.`when`(server.motd).thenReturn("PNX")
                 Mockito.`when`(server.onlinePlayers).thenReturn(HashMap())

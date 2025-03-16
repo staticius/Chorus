@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.BlockVector3
 import org.chorus.math.MathHelper
 import org.chorus.math.Vector3
-import org.chorus.utils.random.RandomSourceProvider
+import org.chorus.utils.ChorusRandom
 
 class ObjectJungleBigTree(
     baseHeightIn: Int,
@@ -14,7 +14,7 @@ class ObjectJungleBigTree(
     leavesMetadata: BlockState
 ) :
     HugeTreesGenerator(baseHeightIn, extraRandomHeight, woodMetadata, leavesMetadata) {
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, position: Vector3): Boolean {
+    override fun generate(level: BlockManager, rand: ChorusRandom, position: Vector3): Boolean {
         val height = this.getHeight(rand)
 
         if (!this.ensureGrowable(level, rand, position, height)) {
@@ -130,7 +130,7 @@ class ObjectJungleBigTree(
         }
     }
 
-    private fun placeVine(level: BlockManager, random: RandomSourceProvider, pos: Vector3, meta: Int) {
+    private fun placeVine(level: BlockManager, random: ChorusRandom, pos: Vector3, meta: Int) {
         if (random.nextInt(3) > 0 && level.getBlockIdAt(pos.x.toInt(), pos.y.toInt(), pos.z.toInt()) == AIR) {
             val block: BlockState = BlockVine.properties.getBlockState<Int, IntPropertyType>(
                 CommonBlockProperties.VINE_DIRECTION_BITS,

@@ -10,9 +10,9 @@ import java.util.*
 
 
 class EntityScorer : IScorer {
-    private val entityUuid: UUID?
+    val entityUuid: UUID
 
-    constructor(uuid: UUID?) {
+    constructor(uuid: UUID) {
         this.entityUuid = uuid
     }
 
@@ -27,9 +27,9 @@ class EntityScorer : IScorer {
         return entityUuid.hashCode()
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (obj is EntityScorer) {
-            return entityUuid == obj.entityUuid
+    override fun equals(other: Any?): Boolean {
+        if (other is EntityScorer) {
+            return entityUuid == other.entityUuid
         }
         return false
     }
@@ -43,7 +43,7 @@ class EntityScorer : IScorer {
             scoreboard.objectiveName,
             line.score,
             ScorerType.ENTITY,
-            entityUuid!!.mostSignificantBits
+            entityUuid.mostSignificantBits
         )
     }
 }

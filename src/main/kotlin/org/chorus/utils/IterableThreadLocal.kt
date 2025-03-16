@@ -1,12 +1,10 @@
 package org.chorus.utils
 
-
 import java.lang.ref.Reference
 import java.lang.reflect.Array
 import java.lang.reflect.Method
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedDeque
-
 
 abstract class IterableThreadLocal<T> : ThreadLocal<T?>(), Iterable<T> {
     private val flag: ThreadLocal<T>? = null
@@ -35,7 +33,7 @@ abstract class IterableThreadLocal<T> : ThreadLocal<T?>(), Iterable<T> {
     val all: MutableCollection<T>
         get() = Collections.unmodifiableCollection(allValues)
 
-    companion object {
+    companion object : Loggable {
         fun clean(instance: ThreadLocal<*>?) {
             try {
                 var rootGroup = Thread.currentThread().threadGroup
@@ -44,7 +42,7 @@ abstract class IterableThreadLocal<T> : ThreadLocal<T?>(), Iterable<T> {
                     rootGroup = parentGroup
                 }
                 var threads = arrayOfNulls<Thread>(rootGroup.activeCount())
-                if (threads.size != 0) {
+                if (threads.isNotEmpty()) {
                     while (rootGroup.enumerate(threads, true) == threads.size) {
                         threads = arrayOfNulls(threads.size * 2)
                     }

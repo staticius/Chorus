@@ -12,9 +12,9 @@ import org.chorus.level.biome.BiomeID
 import org.chorus.math.BlockVector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.NumberTag
-import org.chorus.utils.collection.nb.Long2ObjectNonBlockingMap
 import org.jetbrains.annotations.ApiStatus
 import java.io.IOException
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.locks.StampedLock
@@ -45,9 +45,9 @@ class Chunk : IChunk {
     override val heightMapArray: ShortArray //256 size Values start at 0 and are 0-384 for the Overworld range
     override val changes: AtomicLong
 
-    override val entities: Long2ObjectNonBlockingMap<Entity>
-    val tiles: Long2ObjectNonBlockingMap<BlockEntity?> //block entity id -> block entity
-    protected val tileList: Long2ObjectNonBlockingMap<BlockEntity> //block entity position hash index -> block entity
+    override val entities: ConcurrentHashMap<Long, Entity>
+    val tiles: ConcurrentHashMap<Long, BlockEntity?> //block entity id -> block entity
+    protected val tileList: ConcurrentHashMap<Long, BlockEntity> //block entity position hash index -> block entity
 
     //delay load block entity and entity
     override val extraData: CompoundTag
@@ -70,9 +70,9 @@ class Chunk : IChunk {
         this.provider = levelProvider
         this.sections = arrayOfNulls(levelProvider.dimensionData.chunkSectionCount)
         this.heightMapArray = ShortArray(256)
-        this.entities = Long2ObjectNonBlockingMap()
-        this.tiles = Long2ObjectNonBlockingMap()
-        this.tileList = Long2ObjectNonBlockingMap()
+        this.entities = ConcurrentHashMap()
+        this.tiles = ConcurrentHashMap()
+        this.tileList = ConcurrentHashMap()
         this.entityNBT = ArrayList()
         this.blockEntityNBT = ArrayList()
         this.extraData = CompoundTag()
@@ -99,9 +99,9 @@ class Chunk : IChunk {
         this.provider = levelProvider
         this.sections = sections
         this.heightMapArray = heightMap
-        this.entities = Long2ObjectNonBlockingMap()
-        this.tiles = Long2ObjectNonBlockingMap()
-        this.tileList = Long2ObjectNonBlockingMap()
+        this.entities = ConcurrentHashMap()
+        this.tiles = ConcurrentHashMap()
+        this.tileList = ConcurrentHashMap()
         this.entityNBT = entityNBT
         this.blockEntityNBT = blockEntityNBT
         this.extraData = extraData

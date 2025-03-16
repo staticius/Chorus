@@ -1,6 +1,5 @@
 package org.chorus.utils
 
-
 import org.chorus.block.BlockID
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
@@ -80,7 +79,7 @@ object HashUtils {
         } else {
             TreeMapCompoundTag()
         }
-        for ((key, value) in tag.getCompound("states")!!.getTags()) {
+        for ((key, value) in tag.getCompound("states").getTags()) {
             states.put(key, value)
         }
         tag.put("states", states)
@@ -169,7 +168,7 @@ object HashUtils {
         return (encoded ushr 4) and 0xFFFFFF
     }
 
-    //https://gist.github.com/Alemiz112/504d0f79feac7ef57eda174b668dd345
+    // https://gist.github.com/Alemiz112/504d0f79feac7ef57eda174b668dd345
     private const val FNV1_32_INIT = -0x7ee3623b
     private const val FNV1_PRIME_32 = 0x01000193
     private const val FNV1_64_INIT = -0x340d631b7bdddcdbL

@@ -2,10 +2,10 @@ package org.chorus.utils
 
 import java.lang.ref.Cleaner
 
-class CleanerHandle<RESOURCE : AutoCloseable?>(val resource: RESOURCE) {
-    private val cleanable: Cleaner.Cleanable
+class CleanerHandle<R : AutoCloseable?>(val resource: R) {
+    private val cleanable: Cleaner.Cleanable = CLEANER.register(this, CleanerTask(resource))
 
-    private class CleanerTask<RESOURCE : AutoCloseable?>(private val resource: RESOURCE) : Runnable {
+    private class CleanerTask<R : AutoCloseable?>(private val resource: R) : Runnable {
         override fun run() {
             try {
                 resource!!.close()
@@ -13,10 +13,6 @@ class CleanerHandle<RESOURCE : AutoCloseable?>(val resource: RESOURCE) {
                 throw RuntimeException(e)
             }
         }
-    }
-
-    init {
-        this.cleanable = CLEANER.register(this, CleanerTask(resource))
     }
 
     companion object {

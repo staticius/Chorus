@@ -5,7 +5,7 @@ import org.chorus.Server
 import org.chorus.event.level.StructureGrowEvent
 import org.chorus.level.generator.`object`.BlockManager
 import org.chorus.level.generator.`object`.legacytree.LegacyCrimsonTree
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 
 class BlockCrimsonFungus @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFungus(blockstate) {

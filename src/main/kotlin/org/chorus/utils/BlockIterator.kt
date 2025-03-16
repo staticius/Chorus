@@ -95,10 +95,10 @@ class BlockIterator @JvmOverloads constructor(
         val secondd = secondPosition - secondDirection * d
         val thirdd = thirdPosition - thirdDirection * d
 
-        this.secondError = floor(secondd * gridSize).toInt()
-        this.secondStep = Math.round(secondDirection / mainDirection * gridSize).toInt()
-        this.thirdError = floor(thirdd * gridSize).toInt()
-        this.thirdStep = Math.round(thirdDirection / mainDirection * gridSize).toInt()
+        this.secondError = floor(secondd * GRID_SIZE).toInt()
+        this.secondStep = Math.round(secondDirection / mainDirection * GRID_SIZE).toInt()
+        this.thirdError = floor(thirdd * GRID_SIZE).toInt()
+        this.thirdStep = Math.round(thirdDirection / mainDirection * GRID_SIZE).toInt()
 
         if (this.secondError + this.secondStep <= 0) {
             this.secondError = -this.secondStep + 1
@@ -108,20 +108,20 @@ class BlockIterator @JvmOverloads constructor(
             this.thirdError = -this.thirdStep + 1
         }
 
-        var lastBlock = startBlock!!.getSide(mainFace!!.getOpposite()!!)
+        var lastBlock = startBlock!!.getSide(mainFace!!.getOpposite())
 
         if (this.secondError < 0) {
-            this.secondError += gridSize
-            lastBlock = lastBlock!!.getSide(secondFace!!.getOpposite()!!)
+            this.secondError += GRID_SIZE
+            lastBlock = lastBlock!!.getSide(secondFace!!.getOpposite())
         }
 
         if (this.thirdError < 0) {
-            this.thirdError += gridSize
-            lastBlock = lastBlock!!.getSide(thirdFace!!.getOpposite()!!)
+            this.thirdError += GRID_SIZE
+            lastBlock = lastBlock!!.getSide(thirdFace!!.getOpposite())
         }
 
-        this.secondError -= gridSize
-        this.thirdError -= gridSize
+        this.secondError -= GRID_SIZE
+        this.thirdError -= GRID_SIZE
 
         blockQueue[0] = lastBlock
 
@@ -236,18 +236,18 @@ class BlockIterator @JvmOverloads constructor(
                 blockQueue[0] = blockQueue[1]!!.getSide(secondFace!!)
             }
 
-            this.thirdError -= gridSize
-            this.secondError -= gridSize
+            this.thirdError -= GRID_SIZE
+            this.secondError -= GRID_SIZE
             this.currentBlock = 2
         } else if (this.secondError > 0) {
             blockQueue[1] = blockQueue[0]!!.getSide(mainFace!!)
             blockQueue[0] = blockQueue[1]!!.getSide(secondFace!!)
-            this.secondError -= gridSize
+            this.secondError -= GRID_SIZE
             this.currentBlock = 1
         } else if (this.thirdError > 0) {
             blockQueue[1] = blockQueue[0]!!.getSide(mainFace!!)
             blockQueue[0] = blockQueue[1]!!.getSide(thirdFace!!)
-            this.thirdError -= gridSize
+            this.thirdError -= GRID_SIZE
             this.currentBlock = 1
         } else {
             blockQueue[0] = blockQueue[0]!!.getSide(mainFace!!)
@@ -256,6 +256,6 @@ class BlockIterator @JvmOverloads constructor(
     }
 
     companion object {
-        private const val gridSize = 1 shl 24
+        private const val GRID_SIZE = 1 shl 24
     }
 }

@@ -1,7 +1,7 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.utils.version.Version
+import org.chorus.utils.Version
 import java.util.*
 
 abstract class AbstractResourcePackDataPacket : DataPacket() {

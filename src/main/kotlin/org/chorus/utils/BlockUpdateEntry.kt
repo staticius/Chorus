@@ -40,25 +40,25 @@ class BlockUpdateEntry : Comparable<BlockUpdateEntry> {
         this.checkBlockWhenUpdate = checkBlockWhenUpdate
     }
 
-    override fun compareTo(entry: BlockUpdateEntry): Int {
-        return if (this.delay < entry.delay) -1 else (if (this.delay > entry.delay) 1 else (if (this.priority != entry.priority) this.priority - entry.priority else java.lang.Long.compare(
-            this.id, entry.id
+    override fun compareTo(other: BlockUpdateEntry): Int {
+        return if (this.delay < other.delay) -1 else (if (this.delay > other.delay) 1 else (if (this.priority != other.priority) this.priority - other.priority else java.lang.Long.compare(
+            this.id, other.id
         )))
     }
 
-    override fun equals(`object`: Any?): Boolean {
-        if (`object` !is BlockUpdateEntry) {
-            if (`object` is Block) {
-                return `object`.layer == block.layer && pos.equals(`object`)
+    override fun equals(other: Any?): Boolean {
+        if (other !is BlockUpdateEntry) {
+            if (other is Block) {
+                return other.layer == block.layer && pos == other
             }
-            if (`object` is Vector3) {
-                return block.layer == 0 && pos.equals(`object`)
+            if (other is Vector3) {
+                return block.layer == 0 && pos == other
             }
             return false
         } else {
-            return block.layer == `object`.block.layer && pos.equals(`object`.pos) && Block.equals(
+            return block.layer == other.block.layer && pos == other.pos && Block.equals(
                 this.block,
-                `object`.block,
+                other.block,
                 false
             )
         }

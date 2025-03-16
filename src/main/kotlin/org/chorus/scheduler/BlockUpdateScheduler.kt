@@ -6,7 +6,6 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.ChorusMath.floorDouble
 import org.chorus.math.Vector3
 import org.chorus.utils.BlockUpdateEntry
-import org.chorus.utils.collection.nb.Long2ObjectNonBlockingMap
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.max
@@ -14,8 +13,7 @@ import kotlin.math.max
 class BlockUpdateScheduler(level: Level, currentTick: Long) {
     private val level: Level
     private var lastTick: Long
-    private val queuedUpdates =
-        Long2ObjectNonBlockingMap<MutableSet<BlockUpdateEntry>>() // Change to ConcurrentHashMap if this needs to be concurrent
+    private val queuedUpdates = ConcurrentHashMap<Long, MutableSet<BlockUpdateEntry>>()
 
     private var pendingUpdates: MutableSet<BlockUpdateEntry>? = null
 

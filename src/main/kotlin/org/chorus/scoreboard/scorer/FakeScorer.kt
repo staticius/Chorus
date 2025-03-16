@@ -5,7 +5,6 @@ import org.chorus.scoreboard.IScoreboard
 import org.chorus.scoreboard.IScoreboardLine
 import org.chorus.scoreboard.data.ScorerType
 
-
 class FakeScorer(override val name: String) : IScorer {
     override val scorerType: ScorerType
         get() = ScorerType.FAKE
@@ -14,14 +13,14 @@ class FakeScorer(override val name: String) : IScorer {
         return name.hashCode()
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (obj is FakeScorer) {
-            return obj.name == name
+    override fun equals(other: Any?): Boolean {
+        if (other is FakeScorer) {
+            return other.name == name
         }
         return false
     }
 
     override fun toNetworkInfo(scoreboard: IScoreboard, line: IScoreboardLine): ScoreInfo {
-        return ScoreInfo(line.lineId, scoreboard.objectiveName, line.score, getFakeName())
+        return ScoreInfo(line.lineId, scoreboard.objectiveName, line.score, name)
     }
 }

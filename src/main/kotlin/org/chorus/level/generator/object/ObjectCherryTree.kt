@@ -4,7 +4,7 @@ import org.chorus.block.*
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
-import org.chorus.utils.random.RandomSourceProvider
+import org.chorus.utils.ChorusRandom
 
 class ObjectCherryTree : TreeGenerator() {
     protected var LOG_Y_AXIS: BlockState
@@ -12,7 +12,7 @@ class ObjectCherryTree : TreeGenerator() {
     protected var LOG_Z_AXIS: BlockState
     protected var LEAVES: BlockState
 
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, pos: Vector3): Boolean {
+    override fun generate(level: BlockManager, rand: ChorusRandom, pos: Vector3): Boolean {
         val x = pos.floorX
         val y = pos.floorY
         val z = pos.floorZ
@@ -25,7 +25,7 @@ class ObjectCherryTree : TreeGenerator() {
         return generateSmallTree(level, rand, x, y, z)
     }
 
-    protected fun generateBigTree(level: BlockManager, rand: RandomSourceProvider, x: Int, y: Int, z: Int): Boolean {
+    protected fun generateBigTree(level: BlockManager, rand: ChorusRandom, x: Int, y: Int, z: Int): Boolean {
         val mainTrunkHeight = (if (rand.nextBoolean()) 1 else 0) + 10
 
         if (!canPlaceObject(level, mainTrunkHeight, x, y, z)) return false
@@ -183,7 +183,7 @@ class ObjectCherryTree : TreeGenerator() {
         return true
     }
 
-    protected fun generateSmallTree(level: BlockManager, rand: RandomSourceProvider, x: Int, y: Int, z: Int): Boolean {
+    protected fun generateSmallTree(level: BlockManager, rand: ChorusRandom, x: Int, y: Int, z: Int): Boolean {
         val mainTrunkHeight = (if (rand.nextBoolean()) 1 else 0) + 4
         val sideTrunkHeight: Int = rand.nextInt(3, 5)
 
@@ -268,7 +268,7 @@ class ObjectCherryTree : TreeGenerator() {
         this.LEAVES = BlockCherryLeaves().blockState
     }
 
-    fun generateLeaves(level: BlockManager, rand: RandomSourceProvider, x: Int, y: Int, z: Int) {
+    fun generateLeaves(level: BlockManager, rand: ChorusRandom, x: Int, y: Int, z: Int) {
         for (dy in -2..2) {
             for (dx in -LEAVES_RADIUS..LEAVES_RADIUS) {
                 for (dz in -LEAVES_RADIUS..LEAVES_RADIUS) {

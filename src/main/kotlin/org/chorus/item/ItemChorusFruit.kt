@@ -5,7 +5,7 @@ import org.chorus.block.BlockLiquid
 import org.chorus.event.player.PlayerTeleportEvent
 import org.chorus.math.*
 import org.chorus.network.protocol.LevelSoundEventPacket
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 
 /**
  * @author Leonidius20

@@ -1,6 +1,5 @@
 package org.chorus.utils
 
-
 class PersonaPiece(
     val id: String,
     val type: String,

@@ -55,7 +55,6 @@ import org.chorus.math.ChorusMath.round
 import org.chorus.metadata.EntityMetadataStore
 import org.chorus.metadata.LevelMetadataStore
 import org.chorus.metadata.PlayerMetadataStore
-import org.chorus.metrics.NukkitMetrics
 import org.chorus.nbt.NBTIO.readCompressed
 import org.chorus.nbt.NBTIO.writeGZIPCompressed
 import org.chorus.nbt.tag.CompoundTag
@@ -98,7 +97,6 @@ import org.chorus.utils.StartArgUtils.isValidStart
 import org.chorus.utils.Utils.allThreadDumps
 import org.chorus.utils.Utils.getExceptionMessage
 import org.chorus.utils.Utils.readFile
-import org.chorus.utils.collection.FreezableArrayManager
 import org.iq80.leveldb.CompressionType
 import org.iq80.leveldb.DB
 import org.iq80.leveldb.Options
@@ -226,7 +224,7 @@ class Server internal constructor(
         private set
 
     private var serverAuthoritativeMovementMode = 0
-    val allowFlight: Boolean = properties.get(ServerPropertiesKeys.ALLOW_FLIGHT, false)
+    val allowFlight: Boolean = properties[ServerPropertiesKeys.ALLOW_FLIGHT, false]
     private var difficulty = Int.MAX_VALUE
     var defaultGamemode: Int = Int.MAX_VALUE
         /**
@@ -303,10 +301,7 @@ class Server internal constructor(
     private var watchdog: Watchdog? = null
     private lateinit var playerDataDB: DB
 
-    lateinit var freezableArrayManager: FreezableArrayManager
-        private set
-
-    val enabledNetworkEncryption: Boolean = properties.get(ServerPropertiesKeys.NETWORK_ENCRYPTION, true)
+    val enabledNetworkEncryption: Boolean = properties[ServerPropertiesKeys.NETWORK_ENCRYPTION, true]
 
     /**default levels */
     var defaultLevel: Level? = null
@@ -316,8 +311,8 @@ class Server internal constructor(
     var defaultEnd: Level? = null
         private set
 
-    val allowNether: Boolean = properties.get(ServerPropertiesKeys.ALLOW_NETHER, true)
-    val allowEnd: Boolean = properties.get(ServerPropertiesKeys.ALLOW_THE_END, true)
+    val allowNether: Boolean = properties[ServerPropertiesKeys.ALLOW_NETHER, true]
+    val allowEnd: Boolean = properties[ServerPropertiesKeys.ALLOW_THE_END, true]
 
     private fun loadLevels() {
         val file = File(this.dataPath + "/worlds")
@@ -394,9 +389,9 @@ class Server internal constructor(
 
         log.info("Reloading properties...")
         properties.reload()
-        this.maxPlayers = properties.get(ServerPropertiesKeys.MAX_PLAYERS, 20)
-        if (properties.get(ServerPropertiesKeys.HARDCORE, false) && this.getDifficulty() < 3) {
-            properties.get(ServerPropertiesKeys.DIFFICULTY, 3.also { difficulty = it })
+        this.maxPlayers = properties[ServerPropertiesKeys.MAX_PLAYERS, 20]
+        if (properties[ServerPropertiesKeys.HARDCORE, false] && this.getDifficulty() < 3) {
+            properties[ServerPropertiesKeys.DIFFICULTY, 3.also { difficulty = it }]
         }
 
         bannedIPs.load()
@@ -538,14 +533,13 @@ class Server internal constructor(
             if (this.watchdog != null) {
                 watchdog!!.running = false
             }
-            NukkitMetrics.closeNow(this)
             //close threadPool
             ForkJoinPool.commonPool().shutdownNow()
             computeThreadPool.shutdownNow()
             //todo other things
         } catch (e: Exception) {
             log.error("Exception happened while shutting down, exiting the process", e)
-            System.exit(1)
+            exitProcess(1)
         }
     }
 
@@ -754,12 +748,6 @@ class Server internal constructor(
         if (this.sendUsageTicker > 0 && --this.sendUsageTicker == 0) {
             this.sendUsageTicker = 6000
             //todo sendUsage
-        }
-
-        // 处理可冻结数组
-        val freezableArrayCompressTime = (50 - (System.currentTimeMillis() - tickTime)).toInt()
-        if (freezableArrayCompressTime > 4) {
-            freezableArrayManager.setMaxCompressionTime(freezableArrayCompressTime).tick()
         }
 
         val nowNano = System.nanoTime()
@@ -1105,19 +1093,19 @@ class Server internal constructor(
 
         players[socketAddress] = player
         if (this.sendUsageTicker > 0) {
-            uniquePlayers.add(player.getUniqueId()!!)
+            uniquePlayers.add(player.getUniqueId())
         }
     }
 
     @ApiStatus.Internal
     fun addOnlinePlayer(player: Player) {
-        playerList[player.getUniqueId()!!] = player
+        playerList[player.getUniqueId()] = player
         this.updatePlayerListData(
-            player.getUniqueId()!!,
+            player.getUniqueId(),
             player.getId(),
             player.getDisplayName(),
-            player.getSkin()!!,
-            player.loginChainData.XUID
+            player.getSkin(),
+            player.loginChainData.xuid
         )
         network.pong.playerCount = playerList.size
         network.pong.update()
@@ -1132,7 +1120,7 @@ class Server internal constructor(
             pk.type = PlayerListPacket.TYPE_REMOVE
             pk.entries = arrayOf(
                 PlayerListPacket.Entry(
-                    player.getUniqueId()!!
+                    player.getUniqueId()
                 )
             )
 
@@ -1172,7 +1160,6 @@ class Server internal constructor(
     ) {
         // In some circumstances, the game sends confidential data in this string,
         // so under no circumstances should it be sent to all players on the server.
-        // @Zwuiix
         skin.setSkinId("")
 
         val pk = PlayerListPacket()
@@ -1201,7 +1188,6 @@ class Server internal constructor(
     ) {
         // In some circumstances, the game sends confidential data in this string,
         // so under no circumstances should it be sent to all players on the server.
-        // @Zwuiix
         skin.setSkinId("")
         this.updatePlayerListData(
             uuid,
@@ -1262,11 +1248,11 @@ class Server internal constructor(
         pk.entries = playerList.values.stream()
             .map { p: Player ->
                 PlayerListPacket.Entry(
-                    p.getUniqueId()!!,
+                    p.getUniqueId(),
                     p.getId(),
                     p.getDisplayName(),
-                    p.getSkin()!!,
-                    p.loginChainData.XUID
+                    p.getSkin(),
+                    p.loginChainData.xuid
                 )
             }
             .toArray { size -> arrayOfNulls<PlayerListPacket.Entry>(size) }
@@ -1333,7 +1319,7 @@ class Server internal constructor(
         if (bytes == null) {
             playerDataDB.put(nameBytes, array)
         }
-        val xboxAuthEnabled = properties.get(ServerPropertiesKeys.XBOX_AUTH, false)
+        val xboxAuthEnabled = properties[ServerPropertiesKeys.XBOX_AUTH, false]
         if (info is XboxLivePlayerInfo || !xboxAuthEnabled) {
             playerDataDB.put(nameBytes, array)
         }
@@ -1650,7 +1636,7 @@ class Server internal constructor(
         /**
          * @return 服务器名称<br></br>The name of server
          */
-        get() = "PowerNukkitX"
+        get() = "Chorus"
 
     val nukkitVersion: String?
         get() = Chorus.VERSION
@@ -1856,14 +1842,14 @@ class Server internal constructor(
             log.error(this.baseLang.tr("nukkit.start.invalid"))
             throw RuntimeException()
         }
-        if (!properties.get(ServerPropertiesKeys.ALLOW_SHADED, false) && isShaded) {
+        if (!properties[ServerPropertiesKeys.ALLOW_SHADED, false] && isShaded) {
             log.error(this.baseLang.tr("nukkit.start.shaded1"))
             log.error(this.baseLang.tr("nukkit.start.shaded2"))
             log.error(this.baseLang.tr("nukkit.start.shaded3"))
             throw RuntimeException()
         }
 
-        this.checkLoginTime = properties.get(ServerPropertiesKeys.CHECK_LOGIN_TIME, false)
+        this.checkLoginTime = properties[ServerPropertiesKeys.CHECK_LOGIN_TIME, false]
 
         log.info(this.baseLang.tr("language.selected", baseLang.name, baseLang.getLang()))
         log.info(
@@ -1895,7 +1881,7 @@ class Server internal constructor(
             this.checkLoginTime = false
         }
 
-        if (properties.get(ServerPropertiesKeys.ENABLE_RCON, false)) {
+        if (properties[ServerPropertiesKeys.ENABLE_RCON, false]) {
             try {
                 this.rcon = RCON(
                     this,
@@ -1915,10 +1901,10 @@ class Server internal constructor(
         bannedPlayers.load()
         this.bannedIPs = BanList(this.dataPath + "banned-ips.json")
         bannedIPs.load()
-        this.maxPlayers = properties.get(ServerPropertiesKeys.MAX_PLAYERS, 20)
-        this.setAutoSave(properties.get(ServerPropertiesKeys.AUTO_SAVE, true))
-        if (properties.get(ServerPropertiesKeys.HARDCORE, false) && this.getDifficulty() < 3) {
-            properties.get(ServerPropertiesKeys.DIFFICULTY, 3)
+        this.maxPlayers = properties[ServerPropertiesKeys.MAX_PLAYERS, 20]
+        this.setAutoSave(properties[ServerPropertiesKeys.AUTO_SAVE, true])
+        if (properties[ServerPropertiesKeys.HARDCORE, false] && this.getDifficulty() < 3) {
+            properties[ServerPropertiesKeys.DIFFICULTY, 3]
         }
 
         log.info(
@@ -1931,9 +1917,6 @@ class Server internal constructor(
         )
         log.info(this.baseLang.tr("nukkit.server.license"))
         this.consoleSender = ConsoleCommandSender()
-
-        // Initialize metrics
-        NukkitMetrics.startNow(this)
 
         run {
             //init
@@ -1964,17 +1947,6 @@ class Server internal constructor(
             DispenseBehaviorRegister.init()
         }
 
-        freezableArrayManager = FreezableArrayManager(
-            settings.freezeArraySettings.enable,
-            settings.freezeArraySettings.slots,
-            settings.freezeArraySettings.defaultTemperature,
-            settings.freezeArraySettings.freezingPoint,
-            settings.freezeArraySettings.absoluteZero,
-            settings.freezeArraySettings.boilingPoint,
-            settings.freezeArraySettings.melting,
-            settings.freezeArraySettings.singleOperation,
-            settings.freezeArraySettings.batchOperation
-        )
         scoreboardManager = ScoreboardManager(JSONScoreboardStorage("$commandDataPath/scoreboard.json"))
         functionManager = FunctionManager("$commandDataPath/functions")
         tickingAreaManager = SimpleTickingAreaManager(JSONTickingAreaStorage(this.dataPath + "worlds/"))
@@ -2374,13 +2346,13 @@ class Server internal constructor(
         /**
          * @return 服务器端口<br></br>server port
          */
-        get() = properties.get(ServerPropertiesKeys.SERVER_PORT, 19132)
+        get() = properties[ServerPropertiesKeys.SERVER_PORT, 19132]
 
     val viewDistance: Int
         /**
          * @return 可视距离<br></br>server view distance
          */
-        get() = properties.get(ServerPropertiesKeys.VIEW_DISTANCE, 10)
+        get() = properties[ServerPropertiesKeys.VIEW_DISTANCE, 10]
 
     val ip: String
         /**
@@ -2421,7 +2393,7 @@ class Server internal constructor(
          */
         get() {
             return try {
-                properties.get(ServerPropertiesKeys.GAMEMODE, 0) and 3
+                properties[ServerPropertiesKeys.GAMEMODE, 0] and 3
             } catch (exception: NumberFormatException) {
                 getGamemodeFromString(
                     properties.get(
@@ -2433,7 +2405,7 @@ class Server internal constructor(
         }
 
     val forceGamemode: Boolean
-        get() = properties.get(ServerPropertiesKeys.FORCE_GAMEMODE, false)
+        get() = properties[ServerPropertiesKeys.FORCE_GAMEMODE, false]
 
     /**
      * 获得服务器游戏难度
@@ -2463,27 +2435,27 @@ class Server internal constructor(
         if (value < 0) value = 0
         if (value > 3) value = 3
         this.difficulty = value
-        properties.get(ServerPropertiesKeys.DIFFICULTY, value)
+        properties[ServerPropertiesKeys.DIFFICULTY, value]
     }
 
     /**
      * @return 是否开启白名单<br></br>Whether to start server whitelist
      */
     fun hasWhitelist(): Boolean {
-        return properties.get(ServerPropertiesKeys.WHITE_LIST, false)
+        return properties[ServerPropertiesKeys.WHITE_LIST, false]
     }
 
     val spawnRadius: Int
         /**
          * @return 得到服务器出生点保护半径<br></br>Get server birth point protection radius
          */
-        get() = properties.get(ServerPropertiesKeys.SPAWN_PROTECTION, 16)
+        get() = properties[ServerPropertiesKeys.SPAWN_PROTECTION, 16]
 
     val isHardcore: Boolean
         /**
          * @return 服务器是否为硬核模式<br></br>Whether the server is in hardcore mode
          */
-        get() = properties.get(ServerPropertiesKeys.HARDCORE, false)
+        get() = properties[ServerPropertiesKeys.HARDCORE, false]
 
     var motd: String
         /**
@@ -2528,13 +2500,13 @@ class Server internal constructor(
         /**
          * @return 是否强制使用服务器资源包<br></br>Whether to force the use of server resourcepack
          */
-        get() = properties.get(ServerPropertiesKeys.FORCE_RESOURCES, false)
+        get() = properties[ServerPropertiesKeys.FORCE_RESOURCES, false]
 
     val forceResourcesAllowOwnPacks: Boolean
         /**
          * @return 是否强制使用服务器资源包的同时允许加载客户端资源包<br></br>Whether to force the use of server resourcepack while allowing the loading of client resourcepack
          */
-        get() = properties.get(ServerPropertiesKeys.FORCE_RESOURCES_ALLOW_CLIENT_PACKS, false)
+        get() = properties[ServerPropertiesKeys.FORCE_RESOURCES_ALLOW_CLIENT_PACKS, false]
 
     private fun mapInternalLang(langName: String): LangCode {
         return when (langName) {

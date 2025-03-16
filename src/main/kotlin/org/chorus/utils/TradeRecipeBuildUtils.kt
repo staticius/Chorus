@@ -98,10 +98,10 @@ class TradeRecipeBuildUtils(tag: CompoundTag, private val size: Int) {
                 )
                 .putInt("uses", 0) //未知
             if (buyA.hasCompoundTag()) {
-                cmp.getCompound("buyA")!!.putCompound("tag", buyA.namedTag)
+                cmp.getCompound("buyA").putCompound("tag", buyA.namedTag!!)
             }
             if (output.hasCompoundTag()) {
-                cmp.getCompound("sell")!!.putCompound("tag", output.namedTag)
+                cmp.getCompound("sell").putCompound("tag", output.namedTag!!)
             }
             return TradeRecipeBuildUtils(cmp, 2)
         }
@@ -141,13 +141,13 @@ class TradeRecipeBuildUtils(tag: CompoundTag, private val size: Int) {
                 )
                 .putInt("uses", 0) //未知
             if (buyA.hasCompoundTag()) {
-                cmp.getCompound("buyA")!!.putCompound("tag", buyA.namedTag)
+                cmp.getCompound("buyA").putCompound("tag", buyA.namedTag!!)
             }
             if (buyB.hasCompoundTag()) {
-                cmp.getCompound("buyB")!!.putCompound("tag", buyB.namedTag)
+                cmp.getCompound("buyB").putCompound("tag", buyB.namedTag!!)
             }
             if (output.hasCompoundTag()) {
-                cmp.getCompound("sell")!!.putCompound("tag", output.namedTag)
+                cmp.getCompound("sell").putCompound("tag", output.namedTag!!)
             }
             return TradeRecipeBuildUtils(cmp, 3)
         }

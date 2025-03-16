@@ -32,8 +32,8 @@ open class Palette<V> {
         palette.add(first)
     }
 
-    constructor(first: V, palette: MutableList<V?>, version: BitArrayVersion) {
-        this.bitArray = version.createArray(ChunkSection.Companion.SIZE)
+    constructor(first: V, palette: MutableList<V>, version: BitArrayVersion) {
+        this.bitArray = version.createArray(ChunkSection.SIZE)
         this.palette = palette
         this.palette.add(first)
     }
@@ -113,15 +113,15 @@ open class Palette<V> {
         try {
             ByteBufInputStream(byteBuf).use { bufInputStream ->
                 NBTInputStream(bufInputStream, ByteOrder.LITTLE_ENDIAN).use { nbtInputStream ->
-                    val bversion = readBitArrayVersion(byteBuf)
-                    if (bversion == BitArrayVersion.V0) {
-                        this.bitArray = bversion.createArray(ChunkSection.Companion.SIZE, null)
+                    val bVersion = readBitArrayVersion(byteBuf)
+                    if (bVersion == BitArrayVersion.V0) {
+                        this.bitArray = bVersion.createArray(ChunkSection.SIZE)
                         palette.clear()
                         addBlockPalette(byteBuf, deserializer, nbtInputStream)
                         this.onResize(BitArrayVersion.V2)
                         return
                     }
-                    readWords(byteBuf, bversion!!)
+                    readWords(byteBuf, bVersion!!)
                     val paletteSize = byteBuf.readIntLE()
                     for (i in 0..<paletteSize) {
                         addBlockPalette(byteBuf, deserializer, nbtInputStream)
@@ -153,7 +153,7 @@ open class Palette<V> {
 
         val version = getVersionFromPaletteHeader(header)
         if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(ChunkSection.Companion.SIZE, null)
+            this.bitArray = version.createArray(ChunkSection.SIZE)
             palette.clear()
             palette.add(deserializer.deserialize(byteBuf.readIntLE()))
 
@@ -201,6 +201,7 @@ open class Palette<V> {
     ) {
         val p = PaletteUtils.fastReadBlockHash(input, byteBuf) //depend on LinkCompoundTag
 
+        @Suppress("UNCHECKED_CAST")
         val unknownState = BlockUnknown.properties.defaultState as V
 
         if (p == null) {
@@ -236,7 +237,7 @@ open class Palette<V> {
         if (isBlockOutdated) {
             val oldBlockNbt = input.readTag() as CompoundTag
             val newNbtMap = BlockStateUpdaters.updateBlockState(oldBlockNbt, version)
-            val states = TreeMapCompoundTag(newNbtMap!!.getCompound("states").tags)
+            val states = TreeMapCompoundTag(newNbtMap.getCompound("states").tags)
 
             val newBlockNbt = CompoundTag()
                 .putString("name", newNbtMap.getString("name"))
@@ -259,7 +260,7 @@ open class Palette<V> {
         }
 
         if (resultingBlockState === unknownState) {
-            val replaceWithUnknown: Boolean = Server.instance.settings.baseSettings().saveUnknownBlock()
+            val replaceWithUnknown: Boolean = Server.instance.settings.baseSettings.saveUnknownBlock
             if (replaceWithUnknown) {
                 palette.add(resultingBlockState)
             }
@@ -296,31 +297,31 @@ open class Palette<V> {
         palette.palette.addAll(this.palette)
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o !is Palette<*>) return false
-        return Objects.equal(palette, o.palette) && Objects.equal(bitArray, o.bitArray)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Palette<*>) return false
+        return Objects.equal(palette, other.palette) && Objects.equal(bitArray, other.bitArray)
     }
 
     override fun hashCode(): Int {
         return Objects.hashCode(palette, bitArray)
     }
 
-    companion object {
+    companion object : Loggable {
         protected const val COPY_LAST_FLAG_HEADER: Byte = ((0x7F shl 1).toByte().toInt() or 1).toByte()
-        protected fun hasCopyLastFlag(header: Short): Boolean {
+        fun hasCopyLastFlag(header: Short): Boolean {
             return (header.toInt() shr 1) == 0x7F
         }
 
-        protected fun isPersistent(header: Short): Boolean {
+        fun isPersistent(header: Short): Boolean {
             return (header.toInt() and 1) == 0
         }
 
-        protected fun getPaletteHeader(version: BitArrayVersion, runtime: Boolean): Int {
+        fun getPaletteHeader(version: BitArrayVersion, runtime: Boolean): Int {
             return (version.bits.toInt() shl 1) or (if (runtime) 1 else 0)
         }
 
-        protected fun getVersionFromPaletteHeader(header: Short): BitArrayVersion? {
+        fun getVersionFromPaletteHeader(header: Short): BitArrayVersion? {
             return BitArrayVersion.Companion.get(header.toInt() shr 1, true)
         }
     }

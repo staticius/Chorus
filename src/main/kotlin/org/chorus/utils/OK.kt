@@ -3,10 +3,10 @@ package org.chorus.utils
 import java.util.*
 
 /**
- * 可携带异常信息的的结果
+ * RESULTS_THAT_CAN_CARRY_ABNORMAL_INFORMATION
  *
  * @param <E> the error parameter
-</E> */
+ */
 @JvmRecord
 data class OK<E>(val ok: Boolean, val error: E?) {
     constructor(ok: Boolean) : this(ok, null)
@@ -20,9 +20,6 @@ data class OK<E>(val ok: Boolean, val error: E?) {
     }
 
     /**
-     * 断言该结果是否为真，如果不为真则会抛出AssertionError
-     *
-     *
      * Asserts whether the result is true or not, and throws an AssertionError if it is not true
      *
      * @throws AssertionError the assertion error

@@ -11,8 +11,6 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.utils.Faceable
-import org.chorus.utils.OptionalBoolean
-import org.chorus.utils.OptionalBoolean.Companion.empty
 import org.chorus.utils.Rail
 import org.chorus.utils.Rail.Orientation.Companion.ascending
 import org.chorus.utils.Rail.Orientation.Companion.curved
@@ -350,12 +348,6 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
             setRailActive(active)
         }
         level.setBlock(this.position, this, direct = true, update = true)
-    }
-
-    open fun isRailActive(): OptionalBoolean? {
-        return if (properties.containProperty(CommonBlockProperties.ACTIVE)) OptionalBoolean.of(
-            getPropertyValue(CommonBlockProperties.ACTIVE)
-        ) else empty()
     }
 
     /**

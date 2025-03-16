@@ -51,7 +51,7 @@ class JSONScoreboardStorage(path: String) : IScoreboardStorage {
     }
 
     override fun readScoreboard(): MutableMap<String, IScoreboard> {
-        val scoreboards = json!!["scoreboard"] as Map<String, Any>
+        val scoreboards = json!!["scoreboard"] as Map<String, Any>?
         val result: MutableMap<String, IScoreboard> = HashMap()
         if (scoreboards == null) return result
         for ((key, value) in scoreboards) result[key] =
@@ -64,7 +64,7 @@ class JSONScoreboardStorage(path: String) : IScoreboardStorage {
     }
 
     override fun readDisplay(): Map<DisplaySlot, String> {
-        val result: MutableMap<DisplaySlot, String> = HashMap()
+        val result: MutableMap<DisplaySlot, String> = EnumMap(DisplaySlot::class.java)
         if (json!!["display"] == null) return result
         for ((key, value) in (json!!["display"] as Map<String?, String>)) {
             val slot = DisplaySlot.valueOf(key!!)
@@ -92,7 +92,7 @@ class JSONScoreboardStorage(path: String) : IScoreboardStorage {
         map["objectiveName"] = scoreboard.objectiveName
         map["displayName"] = scoreboard.displayName
         map["criteriaName"] = scoreboard.criteriaName
-        map["sortOrder"] = scoreboard.sortOrder.name
+        map["sortOrder"] = scoreboard.sortOrder!!.name
         val lines: MutableList<Map<String, Any>> = ArrayList()
         for (e in scoreboard.lines.values) {
             val line: MutableMap<String, Any> = HashMap()
@@ -101,7 +101,7 @@ class JSONScoreboardStorage(path: String) : IScoreboardStorage {
             line["name"] = when (e.scorer.scorerType) {
                 ScorerType.PLAYER -> (e.scorer as PlayerScorer).uuid.toString()
                 ScorerType.ENTITY -> (e.scorer as EntityScorer).entityUuid.toString()
-                ScorerType.FAKE -> (e.scorer as FakeScorer).fakeName
+                ScorerType.FAKE -> (e.scorer as FakeScorer).name
                 else -> null
             }!!
             lines.add(line)
@@ -118,11 +118,11 @@ class JSONScoreboardStorage(path: String) : IScoreboardStorage {
         val scoreboard: IScoreboard = Scoreboard(objectiveName, displayName, criteriaName, sortOrder)
         for (line in (map["lines"] as List<Map<String, Any>>?)!!) {
             val score = (line["score"] as Double).toInt()
-            var scorer: IScorer? = null
-            when (line["scorerType"].toString()) {
-                "PLAYER" -> scorer = PlayerScorer(UUID.fromString(line["name"] as String?))
-                "ENTITY" -> scorer = EntityScorer(UUID.fromString(line["name"] as String?))
-                "FAKE" -> scorer = FakeScorer((line["name"] as String?)!!)
+            val scorer: IScorer = when (line["scorerType"].toString()) {
+                "PLAYER" -> PlayerScorer(UUID.fromString(line["name"] as String?))
+                "ENTITY" -> EntityScorer(UUID.fromString(line["name"] as String?))
+                "FAKE" -> FakeScorer((line["name"] as String?)!!)
+                else -> throw IllegalArgumentException("Invalid scorerType: ${line["scorerType"]}")
             }
             scoreboard.addLine(ScoreboardLine(scoreboard, scorer, score))
         }

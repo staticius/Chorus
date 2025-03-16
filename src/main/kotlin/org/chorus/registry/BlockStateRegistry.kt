@@ -16,7 +16,7 @@ import java.io.InputStreamReader
  *
  * @author Cool_Loong
  */
-class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
+class BlockStateRegistry : IRegistry<Int, BlockState, BlockState> {
     override fun init() {
         try {
             javaClass.classLoader.getResourceAsStream("block_states.json").use { stream ->
@@ -47,7 +47,7 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
         }
     }
 
-    override operator fun get(key: Int): BlockState? {
+    override operator fun get(key: Int): BlockState {
         return REGISTRY[key]
     }
 

@@ -1,8 +1,5 @@
 package org.chorus.utils
 
-/**
- * @author Kevims
- */
 enum class BossBarColor {
     PINK,
     BLUE,

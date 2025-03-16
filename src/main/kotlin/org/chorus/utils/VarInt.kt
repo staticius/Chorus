@@ -3,36 +3,19 @@ package org.chorus.utils
 import java.io.*
 
 object VarInt {
-    /**
-     * @param v Signed int
-     * @return Unsigned encoded int
-     */
-    fun encodeZigZag32(v: Int): Long {
-        // Note:  the right-shift must be arithmetic
+    private fun encodeZigZag32(v: Int): Long {
         return ((v shl 1) xor (v shr 31)).toLong() and 0xFFFFFFFFL
     }
 
-    /**
-     * @param v Unsigned encoded int
-     * @return Signed decoded int
-     */
-    fun decodeZigZag32(v: Long): Int {
+    private fun decodeZigZag32(v: Long): Int {
         return (v shr 1).toInt() xor -(v and 1L).toInt()
     }
 
-    /**
-     * @param v Signed long
-     * @return Unsigned encoded long
-     */
-    fun encodeZigZag64(v: Long): Long {
+    private fun encodeZigZag64(v: Long): Long {
         return (v shl 1) xor (v shr 63)
     }
 
-    /**
-     * @param v Signed encoded long
-     * @return Unsigned decoded long
-     */
-    fun decodeZigZag64(v: Long): Long {
+    private fun decodeZigZag64(v: Long): Long {
         return (v ushr 1) xor -(v and 1L)
     }
 

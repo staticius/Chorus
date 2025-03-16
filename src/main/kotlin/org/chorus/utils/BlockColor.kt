@@ -2,10 +2,6 @@ package org.chorus.utils
 
 import java.awt.Color
 
-/**
- * @author Snake1999
- * @since 2016/1/10
- */
 class BlockColor {
     @JvmField
     val red: Int

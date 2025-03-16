@@ -12,13 +12,16 @@ import org.chorus.scoreboard.displayer.IScoreboardViewer
 import org.chorus.scoreboard.scorer.EntityScorer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.scoreboard.storage.IScoreboardStorage
+import java.util.*
 
 import java.util.function.Consumer
-
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardManager {
-    override var scoreboards: MutableMap<String?, IScoreboard?>? = HashMap()
-    override var display: MutableMap<DisplaySlot, IScoreboard?> = HashMap()
+    override var scoreboards: MutableMap<String, IScoreboard> = HashMap()
+    override var display: MutableMap<DisplaySlot, IScoreboard?> = EnumMap(DisplaySlot::class.java)
     override var viewers: MutableSet<IScoreboardViewer> = HashSet()
 
     init {
@@ -31,7 +34,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
         if (event.isCancelled) {
             return false
         }
-        scoreboards!![scoreboard.objectiveName] = scoreboard
+        scoreboards[scoreboard.objectiveName] = scoreboard
         CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(UpdateSoftEnumPacket.Type.ADD, scoreboard.objectiveName)
         return true
     }
@@ -41,13 +44,13 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
     }
 
     override fun removeScoreboard(objectiveName: String): Boolean {
-        val removed = scoreboards!![objectiveName] ?: return false
+        val removed = scoreboards[objectiveName] ?: return false
         val event = ScoreboardObjectiveChangeEvent(removed, ScoreboardObjectiveChangeEvent.ActionType.REMOVE)
         Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return false
         }
-        scoreboards!!.remove(objectiveName)
+        scoreboards.remove(objectiveName)
         CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(UpdateSoftEnumPacket.Type.REMOVE, objectiveName)
         viewers.forEach(Consumer { viewer: IScoreboardViewer -> viewer.removeScoreboard(removed) })
         display.forEach { (slot: DisplaySlot?, scoreboard: IScoreboard?) ->
@@ -59,15 +62,15 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
     }
 
     override fun getScoreboard(objectiveName: String?): IScoreboard? {
-        return scoreboards!![objectiveName]
+        return scoreboards[objectiveName]
     }
 
     override fun containScoreboard(scoreboard: IScoreboard): Boolean {
-        return scoreboards!!.containsKey(scoreboard.objectiveName)
+        return scoreboards.containsKey(scoreboard.objectiveName)
     }
 
     override fun containScoreboard(name: String?): Boolean {
-        return scoreboards!!.containsKey(name)
+        return scoreboards.containsKey(name)
     }
 
     override fun getDisplaySlot(slot: DisplaySlot): IScoreboard? {
@@ -95,7 +98,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
 
     override fun removeViewer(viewer: IScoreboardViewer): Boolean {
         val removed = viewers.remove(viewer)
-        if (removed) display.forEach { (slot: DisplaySlot?, scoreboard: IScoreboard?) ->
+        if (removed) display.forEach { (slot, scoreboard) ->
             scoreboard?.removeViewer(viewer, slot)
         }
         return removed
@@ -110,7 +113,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
     override fun onPlayerJoin(player: Player) {
         addViewer(player)
         val scorer = PlayerScorer(player)
-        scoreboards!!.values.forEach(Consumer { scoreboard: IScoreboard? ->
+        scoreboards.values.forEach(Consumer { scoreboard: IScoreboard? ->
             if (scoreboard!!.containLine(scorer)) {
                 viewers.forEach(Consumer { viewer: IScoreboardViewer ->
                     viewer.updateScore(
@@ -123,7 +126,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
 
     override fun beforePlayerQuit(player: Player) {
         val scorer = PlayerScorer(player)
-        scoreboards!!.values.forEach(Consumer { scoreboard: IScoreboard? ->
+        scoreboards.values.forEach(Consumer { scoreboard: IScoreboard? ->
             if (scoreboard!!.containLine(scorer)) {
                 viewers.forEach(Consumer { viewer: IScoreboardViewer ->
                     viewer.removeLine(
@@ -137,26 +140,26 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
 
     override fun onEntityDead(entity: EntityLiving) {
         val scorer = EntityScorer(entity)
-        scoreboards!!.forEach { (s: String?, scoreboard: IScoreboard?) ->
-            if (scoreboard.getLines().isEmpty()) return@forEach
-            scoreboard!!.removeLine(scorer)
+        scoreboards.forEach { (_, scoreboard) ->
+            if (scoreboard.lines.isEmpty()) return@forEach
+            scoreboard.removeLine(scorer)
         }
     }
 
     override fun save() {
         storage.removeAllScoreboard()
-        storage.saveScoreboard(scoreboards!!.values)
+        storage.saveScoreboard(scoreboards.values)
         storage.saveDisplay(display)
     }
 
     override fun read() {
         //新建一个列表避免迭代冲突
-        ArrayList(scoreboards!!.values).forEach(Consumer { scoreboard: IScoreboard? ->
+        ArrayList(scoreboards.values).forEach(Consumer { scoreboard: IScoreboard? ->
             this.removeScoreboard(
                 scoreboard!!
             )
         })
-        display.forEach { (slot: DisplaySlot?, scoreboard: IScoreboard?) -> setDisplay(slot, null) }
+        display.forEach { (slot, _) -> setDisplay(slot, null) }
 
         scoreboards = storage.readScoreboard()
         storage.readDisplay().forEach { (slot: DisplaySlot?, objectiveName: String?) ->

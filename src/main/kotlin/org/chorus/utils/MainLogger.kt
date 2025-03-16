@@ -1,14 +1,5 @@
 package org.chorus.utils
 
-
-/**
- * @author: MagicDroidX (Nukkit)
- */
-/*
-We need to keep this class for backwards compatibility
- */
-
-(access = AccessLevel.PRIVATE)
 class MainLogger : ThreadedLogger() {
     override fun emergency(message: String?) {
         MainLogger.log.error(message)
@@ -94,7 +85,7 @@ class MainLogger : ThreadedLogger() {
         level.log(this, message, t)
     }
 
-    companion object {
+    companion object : Loggable {
         @JvmField
         val logger: MainLogger = MainLogger()
     }

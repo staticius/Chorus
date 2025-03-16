@@ -106,16 +106,16 @@ class TickCachedBlockIterator @JvmOverloads constructor(
             this.thirdError = -this.thirdStep + 1
         }
 
-        var lastBlock = startBlock!!.getTickCachedSide(mainFace.getOpposite()!!)
+        var lastBlock = startBlock!!.getTickCachedSide(mainFace.getOpposite())
 
         if (this.secondError < 0) {
             this.secondError += GRID_SIZE
-            lastBlock = lastBlock?.getTickCachedSide(secondFace.getOpposite()!!)
+            lastBlock = lastBlock?.getTickCachedSide(secondFace.getOpposite())
         }
 
         if (this.thirdError < 0) {
             this.thirdError += GRID_SIZE
-            lastBlock = lastBlock?.getTickCachedSide(thirdFace.getOpposite()!!)
+            lastBlock = lastBlock?.getTickCachedSide(thirdFace.getOpposite())
         }
 
         this.secondError -= GRID_SIZE

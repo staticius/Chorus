@@ -9,6 +9,7 @@ import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.HashSet
 
 object BlockTags {
     const val ACACIA: String = "acacia"
@@ -52,14 +53,12 @@ object BlockTags {
     init {
         try {
             Server::class.java.classLoader.getResourceAsStream("block_tags.json").use { stream ->
-                val typeToken: TypeToken<HashMap<String, HashSet<String>>> =
-                    object : TypeToken<HashMap<String?, HashSet<String?>?>?>() {
-                    }
+                val typeToken: TypeToken<HashMap<String, HashSet<String>>> = object : TypeToken<HashMap<String, HashSet<String>>>() {}
                 checkNotNull(stream)
                 val map = JSONUtils.from(InputStreamReader(stream), typeToken)
                 val map2 = HashMap<String, HashSet<String>>()
-                map.forEach { (key: String?, value: HashSet<String?>?) ->
-                    val handle: HashSet<String> = HashSet<String>(value.size)
+                map.forEach { (key, value) ->
+                    val handle: HashSet<String> = HashSet(value.size)
                     handle.addAll(value)
                     map2[key] = handle
                 }
@@ -68,7 +67,7 @@ object BlockTags {
                     for (block in value) {
                         val tags = BLOCKS_2_TAGS.computeIfAbsent(
                             block,
-                            Object2ObjectFunction<String, MutableSet<String>> { k: Any? -> HashSet() })
+                            Object2ObjectFunction<String, MutableSet<String>> { HashSet() })
                         tags.add(key)
                     }
                 }
@@ -101,12 +100,15 @@ object BlockTags {
      */
     fun register(identifier: String, tags: Collection<String>) {
         val tagSet = BLOCKS_2_TAGS[identifier]
-        tagSet?.addAll(tags) ?: (BLOCKS_2_TAGS[identifier] = HashSet(tags))
+        if (tagSet == null) {
+            BLOCKS_2_TAGS[identifier] = HashSet(tags)
+        } else tagSet.addAll(tags)
+
         for (tag in tags) {
             val itemSet = TAG_2_BLOCKS[tag]
-            itemSet?.add(identifier)
-                ?: (TAG_2_BLOCKS[tag] =
-                    HashSet(setOf(identifier)))
+            if (itemSet == null) {
+                TAG_2_BLOCKS[tag] = HashSet(setOf(identifier))
+            } else itemSet.add(identifier)
         }
     }
 }

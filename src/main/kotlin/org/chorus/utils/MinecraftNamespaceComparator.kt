@@ -29,8 +29,8 @@ object MinecraftNamespaceComparator {
     fun compareFNV(idA: String, idB: String): Int {
         val bytes1 = idA.toByteArray(StandardCharsets.UTF_8)
         val bytes2 = idB.toByteArray(StandardCharsets.UTF_8)
-        val hash1: Long = HashUtils.Companion.fnv164(bytes1)
-        val hash2: Long = HashUtils.Companion.fnv164(bytes2)
+        val hash1: Long = HashUtils.fnv164(bytes1)
+        val hash2: Long = HashUtils.fnv164(bytes2)
         return java.lang.Long.compareUnsigned(hash1, hash2)
     }
 }

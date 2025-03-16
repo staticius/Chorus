@@ -7,11 +7,9 @@ class RollingFloatAverage(private val maxSize: Int) {
     private var sum: Float = 0f
 
     fun add(value: Float) {
-        // Add the new value
         queue.add(value)
         sum += value
 
-        // Remove the oldest value if the queue exceeds the max size
         if (queue.size > maxSize) {
             val removed = queue.removeFirst()
             sum -= removed

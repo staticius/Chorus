@@ -3,7 +3,7 @@ package org.chorus.block
 class BlockElement6 @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     Block(blockstate,) {
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID."minecraft:element_6")
+        val properties: BlockProperties = BlockProperties("minecraft:element_6")
 
     }
 }

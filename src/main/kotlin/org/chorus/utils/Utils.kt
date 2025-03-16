@@ -8,70 +8,14 @@ import org.chorus.math.ChorusMath.ceilDouble
 import org.chorus.math.ChorusMath.floorDouble
 import java.io.*
 import java.lang.management.ManagementFactory
-import java.nio.channels.FileChannel
 import java.nio.charset.StandardCharsets
-import java.nio.file.FileVisitResult
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
-import java.util.function.Consumer
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 import kotlin.math.max
 import kotlin.math.min
 
 object Utils : Loggable {
-    val EMPTY_INTEGERS: Array<Int?> = arrayOfNulls(0)
-
-
     val random: SplittableRandom = SplittableRandom()
 
-
-    @Throws(IOException::class)
-    fun safeWrite(currentFile: File, operation: Consumer<File?>) {
-        val parent = currentFile.parentFile
-        val newFile = File(parent, currentFile.name + "_new")
-        val oldFile = File(parent, currentFile.name + "_old")
-        val olderFile = File(parent, currentFile.name + "_older")
-
-        if (olderFile.isFile && !olderFile.delete()) {
-            Utils.log.error("Could not delete the file {}", olderFile.absolutePath)
-        }
-
-        if (newFile.isFile && !newFile.delete()) {
-            Utils.log.error("Could not delete the file {}", newFile.absolutePath)
-        }
-
-        try {
-            operation.accept(newFile)
-        } catch (e: Exception) {
-            throw IOException(e)
-        }
-
-        if (oldFile.isFile) {
-            if (olderFile.isFile) {
-                copyFile(oldFile, olderFile)
-            } else if (!oldFile.renameTo(olderFile)) {
-                throw IOException("Could not rename the $oldFile to $olderFile")
-            }
-        }
-
-        if (currentFile.isFile && !currentFile.renameTo(oldFile)) {
-            throw IOException("Could not rename the $currentFile to $oldFile")
-        }
-
-        if (!newFile.renameTo(currentFile)) {
-            throw IOException("Could not rename the $newFile to $currentFile")
-        }
-    }
-
-    @Throws(IOException::class)
-    fun writeFile(fileName: String, content: String) {
-        writeFile(fileName, ByteArrayInputStream(content.toByteArray(StandardCharsets.UTF_8)))
-    }
 
     @Throws(IOException::class)
     fun writeFile(fileName: String, content: InputStream) {
@@ -139,35 +83,6 @@ object Utils : Loggable {
         }
     }
 
-    @Throws(IOException::class)
-    fun copyFile(from: File, to: File) {
-        if (!from.exists()) {
-            throw FileNotFoundException()
-        }
-        if (from.isDirectory || to.isDirectory) {
-            throw FileNotFoundException()
-        }
-        var fi: FileInputStream? = null
-        var `in`: FileChannel? = null
-        var fo: FileOutputStream? = null
-        var out: FileChannel? = null
-        try {
-            if (!to.exists()) {
-                to.createNewFile()
-            }
-            fi = FileInputStream(from)
-            `in` = fi.channel
-            fo = FileOutputStream(to)
-            out = fo.channel
-            `in`.transferTo(0, `in`.size(), out)
-        } finally {
-            fi?.close()
-            `in`?.close()
-            fo?.close()
-            out?.close()
-        }
-    }
-
     @JvmStatic
     val allThreadDumps: String
         get() {
@@ -210,109 +125,11 @@ object Utils : Loggable {
         return UUID.nameUUIDFromBytes(stream.toByteArray())
     }
 
-    fun rtrim(s: String, character: Char): String {
-        var i = s.length - 1
-        while (i >= 0 && (s[i]) == character) {
-            i--
-        }
-        return s.substring(0, i + 1)
-    }
-
-    fun isByteArrayEmpty(array: ByteArray): Boolean {
-        var i = 0
-        val len = array.size
-        while (i < len) {
-            if (array[i].toInt() != 0) {
-                return false
-            }
-            ++i
-        }
-        return true
-    }
-
-    fun toRGB(r: Byte, g: Byte, b: Byte, a: Byte): Long {
-        var result = (r.toInt() and 0xff).toLong()
-        result = result or ((g.toInt() and 0xff) shl 8).toLong()
-        result = result or ((b.toInt() and 0xff) shl 16).toLong()
-        result = result or ((a.toInt() and 0xff).toLong() shl 24)
-        return result and 0xFFFFFFFFL
-    }
-
     fun toABGR(argb: Int): Long {
         var result = argb.toLong() and 0xFF00FF00L
         result = result or ((argb shl 16).toLong() and 0x00FF0000L) // B to R
         result = result or ((argb ushr 16).toLong() and 0xFFL) // R to B
         return result and 0xFFFFFFFFL
-    }
-
-    fun splitArray(arrayToSplit: Array<Any>, chunkSize: Int): Array<Array<Any>?>? {
-        if (chunkSize <= 0) {
-            return null
-        }
-
-        val rest = arrayToSplit.size % chunkSize
-        val chunks = arrayToSplit.size / chunkSize + (if (rest > 0) 1 else 0)
-
-        val arrays: Array<Array<Any>?> = arrayOfNulls(chunks)
-        for (i in 0..<(if (rest > 0) chunks - 1 else chunks)) {
-            arrays[i] = Arrays.copyOfRange(arrayToSplit, i * chunkSize, i * chunkSize + chunkSize)
-        }
-        if (rest > 0) {
-            arrays[chunks - 1] =
-                Arrays.copyOfRange(arrayToSplit, (chunks - 1) * chunkSize, (chunks - 1) * chunkSize + rest)
-        }
-        return arrays
-    }
-
-    fun <T> reverseArray(data: Array<T?>) {
-        reverseArray<T>(data, false)
-    }
-
-    inline fun <reified T> concatArray(vararg arrays: Array<T>): Array<T> {
-        return arrays.flatMap { it.asList() }.toTypedArray()
-    }
-
-    fun <T> reverseArray(array: Array<T?>, copy: Boolean): Array<T?> {
-        var data = array
-
-        if (copy) {
-            data = array.copyOf(array.size)
-        }
-
-        var left = 0
-        var right = data.size - 1
-        while (left < right) {
-            // swap the values at the left and right indices
-            val temp = data[left]
-            data[left] = data[right]
-            data[right] = temp
-            left++
-            right--
-        }
-
-        return data
-    }
-
-    fun <T> clone2dArray(array: Array<Array<T?>>): Array<Array<T?>?> {
-        val newArray: Array<Array<T?>?> = array.copyOf(array.size)
-
-        for (i in array.indices) {
-            newArray[i] = array[i].copyOf(array[i].size)
-        }
-
-        return newArray
-    }
-
-    fun <T, U, V> getOrCreate(map: MutableMap<T, Map<U, V>?>, key: T): Map<U, V> {
-        var existing = map[key]
-        if (existing == null) {
-            val toPut = ConcurrentHashMap<U, V>()
-            existing = map.putIfAbsent(key, toPut)
-            if (existing == null) {
-                existing = toPut
-            }
-        }
-        return existing
     }
 
     fun <T, U, V : U> getOrCreate(map: MutableMap<T, U>, clazz: Class<V>, key: T): U {
@@ -340,34 +157,6 @@ object Utils : Loggable {
         }
 
         return Math.round(number as Double).toInt()
-    }
-
-    fun parseHexBinary(s: String): ByteArray {
-        val len = s.length
-
-        // "111" is not a valid hex encoding.
-        require(len % 2 == 0) { "hexBinary needs to be even-length: $s" }
-
-        val out = ByteArray(len / 2)
-
-        var i = 0
-        while (i < len) {
-            val h = hexToBin(s[i])
-            val l = hexToBin(s[i + 1])
-            require(!(h == -1 || l == -1)) { "contains illegal character for hexBinary: $s" }
-
-            out[i / 2] = (h * 16 + l).toByte()
-            i += 2
-        }
-
-        return out
-    }
-
-    private fun hexToBin(ch: Char): Int {
-        if (ch in '0'..'9') return ch.code - '0'.code
-        if (ch in 'A'..'F') return ch.code - 'A'.code + 10
-        if (ch in 'a'..'f') return ch.code - 'a'.code + 10
-        return -1
     }
 
     /**
@@ -430,46 +219,6 @@ object Utils : Loggable {
         return value
     }
 
-    @Throws(IOException::class)
-    fun zipFolder(sourceFolderPath: Path, zipPath: Path) {
-        ZipOutputStream(FileOutputStream(zipPath.toFile())).use { zos ->
-            Files.walkFileTree(sourceFolderPath, object : SimpleFileVisitor<Path>() {
-                @Throws(IOException::class)
-                override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                    zos.putNextEntry(ZipEntry(sourceFolderPath.relativize(file).toString()))
-                    Files.copy(file, zos)
-                    zos.closeEntry()
-                    return FileVisitResult.CONTINUE
-                }
-            })
-        }
-    }
-
-    fun isInteger(str: String?): Boolean {
-        if (str == null) {
-            return false
-        }
-        val length = str.length
-        if (length == 0) {
-            return false
-        }
-        var i = 0
-        if (str[0] == '-') {
-            if (length == 1) {
-                return false
-            }
-            i = 1
-        }
-        while (i < length) {
-            val c = str[i]
-            if (c < '0' || c > '9') {
-                return false
-            }
-            i++
-        }
-        return true
-    }
-
     fun getLevelBlocks(level: Level, bb: AxisAlignedBB): Array<Block?> {
         val minX = floorDouble(min(bb.minX, bb.maxX))
         val minY = floorDouble(min(bb.minY, bb.maxY))
@@ -490,52 +239,6 @@ object Utils : Loggable {
         }
 
         return blocks.toTypedArray()
-    }
-
-    const val ACCORDING_X_OBTAIN_Y: Int = 0
-
-
-    const val ACCORDING_Y_OBTAIN_X: Int = 1
-
-
-    fun calLinearFunction(pos1: Vector3, pos2: Vector3, element: Double, type: Int): Double {
-        if (pos1.floorY != pos2.floorY) return Double.MAX_VALUE
-        return if (pos1.x == pos2.x) {
-            if (type == ACCORDING_Y_OBTAIN_X) pos1.x
-            else Double.MAX_VALUE
-        } else if (pos1.z == pos2.z) {
-            if (type == ACCORDING_X_OBTAIN_Y) pos1.z
-            else Double.MAX_VALUE
-        } else {
-            if (type == ACCORDING_X_OBTAIN_Y) {
-                (element - pos1.x) * (pos1.z - pos2.z) / (pos1.x - pos2.x) + pos1.z
-            } else {
-                (element - pos1.z) * (pos1.x - pos2.x) / (pos1.z - pos2.z) + pos1.x
-            }
-        }
-    }
-
-    fun hasCollisionBlocks(level: Level, bb: AxisAlignedBB): Boolean {
-        val minX = floorDouble(bb.minX)
-        val minY = floorDouble(bb.minY)
-        val minZ = floorDouble(bb.minZ)
-        val maxX = ceilDouble(bb.maxX)
-        val maxY = ceilDouble(bb.maxY)
-        val maxZ = ceilDouble(bb.maxZ)
-
-        for (z in minZ..maxZ) {
-            for (x in minX..maxX) {
-                for (y in minY..maxY) {
-                    val block = level.getBlock(x, y, z, false)
-                    //判断是否和非空气方块有碰撞
-                    if (block != null && !block.canPassThrough() && block.collidesWithBB(bb)) {
-                        return true
-                    }
-                }
-            }
-        }
-
-        return false
     }
 
     fun hasCollisionTickCachedBlocks(level: Level, bb: AxisAlignedBB): Boolean {
@@ -613,23 +316,6 @@ object Utils : Loggable {
         }
 
         return 0
-    }
-
-    fun appendBytes(bytes1: ByteArray, vararg bytes2: ByteArray): ByteArray {
-        var length = bytes1.size
-        for (bytes in bytes2) {
-            length += bytes.size
-        }
-
-        val appendedBytes = ByteArray(length)
-        System.arraycopy(bytes1, 0, appendedBytes, 0, bytes1.size)
-        var index = bytes1.size
-
-        for (b in bytes2) {
-            System.arraycopy(b, 0, appendedBytes, index, b.size)
-            index += b.size
-        }
-        return appendedBytes
     }
 
     @JvmStatic

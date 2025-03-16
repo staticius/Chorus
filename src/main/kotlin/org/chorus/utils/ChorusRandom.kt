@@ -1,4 +1,4 @@
-package org.chorus.utils.random
+package org.chorus.utils
 
 import org.apache.commons.rng.RestorableUniformRandomProvider
 import org.apache.commons.rng.sampling.distribution.ContinuousSampler
@@ -8,7 +8,7 @@ import org.apache.commons.rng.simple.RandomSource
 import kotlin.math.max
 import kotlin.math.min
 
-class ChorusRandom : RandomSourceProvider {
+class ChorusRandom {
     val provider: RestorableUniformRandomProvider
     val sampler: ContinuousSampler
 
@@ -28,11 +28,11 @@ class ChorusRandom : RandomSourceProvider {
         )
     }
 
-    override fun fork(): RandomSourceProvider {
+    fun fork(): ChorusRandom {
         return ChorusRandom(nextLong())
     }
 
-    override fun nextInt(min: Int, max: Int): Int {
+    fun nextInt(min: Int, max: Int): Int {
         return provider.nextInt(min, max + 1)
     }
 
@@ -44,32 +44,43 @@ class ChorusRandom : RandomSourceProvider {
         return nextInt(bound)
     }
 
-    override fun nextInt(max: Int): Int {
+    fun nextInt(max: Int): Int {
         return provider.nextInt(max + 1)
     }
 
-    override fun nextInt(): Int {
+    fun nextInt(): Int {
         return provider.nextInt()
     }
 
-    override fun nextLong(): Long {
+    fun nextLong(): Long {
         return provider.nextLong()
     }
 
-    override fun nextDouble(): Double {
+    fun nextDouble(): Double {
         return provider.nextDouble()
     }
 
-    override fun nextGaussian(): Double {
+    fun nextGaussian(): Double {
         val sample = sampler.sample()
         return min(1.0, max(sample, -1.0))
     }
 
-    override fun nextFloat(): Float {
+    fun nextFloat(): Float {
         return provider.nextFloat()
     }
 
-    override fun nextBoolean(): Boolean {
+    fun nextBoolean(): Boolean {
         return provider.nextBoolean()
+    }
+
+    companion object {
+        @JvmStatic
+        fun create(): ChorusRandom {
+            return ChorusRandom()
+        }
+
+        fun create(seed: Long): ChorusRandom {
+            return ChorusRandom(seed)
+        }
     }
 }

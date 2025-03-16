@@ -1,12 +1,8 @@
 package org.chorus.utils
 
-import org.chorus.utils.functional.BooleanConsumer
 import java.util.function.BooleanSupplier
 import java.util.function.Supplier
 
-/**
- * @author joserobjr
- */
 enum class OptionalBoolean(private val value: Boolean?) {
     TRUE(java.lang.Boolean.TRUE),
 
@@ -26,12 +22,6 @@ enum class OptionalBoolean(private val value: Boolean?) {
 
     val isPresent: Boolean
         get() = value != null
-
-    fun ifPresent(consumer: BooleanConsumer) {
-        if (value != null) {
-            consumer.accept(value)
-        }
-    }
 
     fun orElse(other: Boolean): Boolean {
         return value ?: other

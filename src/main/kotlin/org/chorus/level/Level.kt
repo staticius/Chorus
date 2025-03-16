@@ -47,8 +47,6 @@ import org.chorus.registry.Registries
 import org.chorus.scheduler.BlockUpdateScheduler
 import org.chorus.scheduler.ServerScheduler
 import org.chorus.utils.*
-import org.chorus.utils.collection.nb.Int2ObjectNonBlockingMap
-import org.chorus.utils.collection.nb.Long2ObjectNonBlockingMap
 import java.awt.Color
 import java.io.*
 import java.lang.ref.SoftReference
@@ -95,16 +93,16 @@ class Level(
 ) :
     Metadatable, Loggable {
     @NonComputationAtomic
-    val updateEntities: Long2ObjectNonBlockingMap<Entity> = Long2ObjectNonBlockingMap()
+    val updateEntities: ConcurrentHashMap<Long, Entity> = ConcurrentHashMap()
 
     @NonComputationAtomic
-    private val blockEntities = Long2ObjectNonBlockingMap<BlockEntity>()
+    private val blockEntities = ConcurrentHashMap<Long, BlockEntity>()
 
     @NonComputationAtomic
-    val players = Long2ObjectNonBlockingMap<Player>()
+    val players = ConcurrentHashMap<Long, Player>()
 
     @NonComputationAtomic
-    val entities = Long2ObjectNonBlockingMap<Entity>()
+    val entities = ConcurrentHashMap<Long, Entity>()
     private val updateBlockEntities: ConcurrentLinkedQueue<BlockEntity> = ConcurrentLinkedQueue<BlockEntity>()
     private val chunkGenerationQueue = ConcurrentHashMap<Long, Boolean?>()
     private var chunkGenerationQueueSize = 8
@@ -123,7 +121,7 @@ class Level(
     private val chunkPackets = ConcurrentHashMap<Long, Deque<DataPacket?>>()
 
     @NonComputationAtomic
-    private val unloadQueue = Long2ObjectNonBlockingMap<Long>()
+    private val unloadQueue = ConcurrentHashMap<Long, Long>()
     private val tickCachedBlocks = ConcurrentHashMap<Long, TickCachedBlockStore>()
     private val highLightChunks: LongSet = LongOpenHashSet()
 
@@ -143,8 +141,7 @@ class Level(
     private val normalUpdateQueue: Queue<QueuedUpdate> = ConcurrentLinkedDeque<QueuedUpdate>()
 
     @NonComputationAtomic
-    private val chunkSendQueue: Long2ObjectNonBlockingMap<Int2ObjectNonBlockingMap<Player>> =
-        Long2ObjectNonBlockingMap<Int2ObjectNonBlockingMap<Player>>()
+    private val chunkSendQueue: ConcurrentHashMap<Long, ConcurrentHashMap<Int, Player>> = ConcurrentHashMap()
     private val chunkTickList: Long2IntMap = Long2IntOpenHashMap()
 
     @JvmField
@@ -3558,20 +3555,20 @@ class Level(
         Preconditions.checkArgument(player.loaderId > 0, player.getName() + " has no chunk loader")
         val index = chunkHash(x, z)
         val casLock: AtomicBoolean = AtomicBoolean(false)
-        val playerInt2ObjectMap: Int2ObjectNonBlockingMap<Player>? = chunkSendQueue.computeIfAbsent(
-            index,
-            Function<Long, Int2ObjectNonBlockingMap<Player>> { key: Long? ->
-                if (casLock.weakCompareAndSetVolatile(false, true)) {
-                    return@computeIfAbsent Int2ObjectNonBlockingMap<Player>()
-                } else {
-                    return@computeIfAbsent null
-                }
-            })
-        Objects.requireNonNull<Int2ObjectNonBlockingMap<Player>?>(playerInt2ObjectMap).put(player.loaderId, player)
+        val playerInt2ObjectMap = chunkSendQueue.computeIfAbsent(
+            index
+        ) {
+            if (casLock.weakCompareAndSetVolatile(false, true)) {
+                return@computeIfAbsent ConcurrentHashMap<Int, Player>()
+            } else {
+                return@computeIfAbsent null
+            }
+        }
+        playerInt2ObjectMap.put(player.loaderId, player)
     }
 
     private fun sendChunk(x: Int, z: Int, index: Long, packet: DataPacket) {
-        for (player in chunkSendQueue[index].values()) {
+        for (player in chunkSendQueue[index].values) {
             if (player.isConnected && player.usedChunks.contains(index)) {
                 player.sendChunk(x, z, packet)
             }
@@ -3595,10 +3592,10 @@ class Level(
         for (index in chunkSendQueue.keySet()) {
             val x = getHashX(index)
             val z = getHashZ(index)
-            val players: Int2ObjectNonBlockingMap<Player>? = chunkSendQueue[index]
+            val players = chunkSendQueue[index]
             if (players != null) {
                 val pair = requireProvider().requestChunkData(x, z)
-                for (player in Objects.requireNonNull<Int2ObjectNonBlockingMap<Player>>(players).values()) {
+                for (player in players!!.values()) {
                     if (player.isConnected) {
                         val ncp: NetworkChunkPublisherUpdatePacket = NetworkChunkPublisherUpdatePacket()
                         ncp.position = player.position.asBlockVector3()

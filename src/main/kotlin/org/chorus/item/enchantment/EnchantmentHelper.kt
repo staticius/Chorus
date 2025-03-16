@@ -5,7 +5,7 @@ import org.chorus.entity.effect.PotionType.equals
 import org.chorus.item.*
 import org.chorus.level.Locator
 import org.chorus.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Collectors
 import kotlin.math.abs

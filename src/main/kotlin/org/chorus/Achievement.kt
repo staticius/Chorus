@@ -4,11 +4,7 @@ import org.chorus.config.ServerPropertiesKeys
 import org.chorus.utils.TextFormat
 
 class Achievement(val message: String, vararg requires: String) {
-    val requires: Array<String>
-
-    init {
-        this.requires = arrayOf(*requires)
-    }
+    val requires: Array<String> = arrayOf(*requires)
 
     fun broadcast(player: Player) {
         val translation: String = Server.instance.baseLang

@@ -3,7 +3,7 @@ package org.chorus.level.generator.`object`
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.Vector3
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 
 class ObjectPaleOakTree : TreeGenerator() {
     /**

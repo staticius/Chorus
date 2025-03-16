@@ -44,7 +44,7 @@ interface IScoreboardManager {
      * 获取所有计分板对象
      * @return 所有计分板对象
      */
-    val scoreboards: Map<String?, IScoreboard?>?
+    val scoreboards: MutableMap<String, IScoreboard>
 
     /**
      * 检查是否存在指定计分板
@@ -64,7 +64,7 @@ interface IScoreboardManager {
      * 获取显示槽位信息
      * @return 显示槽位信息
      */
-    val display: Map<DisplaySlot?, IScoreboard?>?
+    val display: MutableMap<DisplaySlot, IScoreboard?>
 
     /**
      * 获取指定显示槽位的计分板（若存在）

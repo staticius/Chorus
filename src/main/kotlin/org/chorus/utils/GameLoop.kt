@@ -1,20 +1,12 @@
 package org.chorus.utils
 
 import com.google.common.base.Preconditions
-
-
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
 import kotlin.math.max
 import kotlin.math.min
-
-/**
- * Allay Project 2023/4/14
- *
- * @author daoge_cmd
- */
 
 class GameLoop private constructor(
     onStart: Runnable,
@@ -30,7 +22,7 @@ class GameLoop private constructor(
 
     private val loopCountPerSec: Int
     private val tickSummary = FloatArray(20)
-    private val MSPTSummary = FloatArray(20)
+    private val msPtSummary = FloatArray(20)
 
 
     private var tick = 0
@@ -42,11 +34,11 @@ class GameLoop private constructor(
         this.onStop = onStop
         this.loopCountPerSec = loopCountPerSec
         Arrays.fill(tickSummary, 20f)
-        Arrays.fill(MSPTSummary, 0f)
+        Arrays.fill(msPtSummary, 0f)
     }
 
     val tickUsage: Float
-        get() = mSPT / (1000f / loopCountPerSec)
+        get() = msPt / (1000f / loopCountPerSec)
 
     val tps: Float
         get() {
@@ -58,11 +50,11 @@ class GameLoop private constructor(
             return sum / count
         }
 
-    val mSPT: Float
+    val msPt: Float
         get() {
             var sum = 0f
-            val count = MSPTSummary.size
-            for (mspt in MSPTSummary) {
+            val count = msPtSummary.size
+            for (mspt in msPtSummary) {
                 sum += mspt
             }
             return sum / count
@@ -79,7 +71,7 @@ class GameLoop private constructor(
             onTick.accept(this)
             tick++
             val timeTakenToTick = System.nanoTime() - startTickTime
-            updateMSTP(timeTakenToTick.toFloat(), MSPTSummary)
+            updateMSTP(timeTakenToTick.toFloat(), msPtSummary)
             updateTPS(timeTakenToTick)
 
             val sumOperateTime = System.nanoTime() - startTickTime
@@ -129,8 +121,7 @@ class GameLoop private constructor(
 
     class GameLoopBuilder {
         private var onStart = Runnable {}
-        private var onTick =
-            Consumer { gameLoop: GameLoop? -> }
+        private var onTick = Consumer<GameLoop> {}
         private var onStop = Runnable {}
         private var loopCountPerSec = 20
 
@@ -150,7 +141,7 @@ class GameLoop private constructor(
         }
 
         fun loopCountPerSec(loopCountPerSec: Int): GameLoopBuilder {
-            Preconditions.checkArgument(loopCountPerSec > 0 && loopCountPerSec <= 1024)
+            Preconditions.checkArgument(loopCountPerSec in 1..1024)
             this.loopCountPerSec = loopCountPerSec
             return this
         }
@@ -160,7 +151,7 @@ class GameLoop private constructor(
         }
     }
 
-    companion object {
+    companion object : Loggable {
         fun builder(): GameLoopBuilder {
             return GameLoopBuilder()
         }

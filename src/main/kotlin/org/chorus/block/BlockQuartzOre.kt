@@ -4,7 +4,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemQuartz
 import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockQuartzOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :

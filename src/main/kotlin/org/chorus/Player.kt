@@ -2154,7 +2154,7 @@ class Player @UsedByReflection constructor(
             Server.instance.updatePlayerListData(
                 getUniqueId()!!, this.getId(), this.getDisplayName(),
                 getSkin()!!,
-                loginChainData.XUID
+                loginChainData.xuid
             )
         }
     }

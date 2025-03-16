@@ -26,20 +26,14 @@ import java.util.*
  *
  *
  * To get chain data, you can use player.getLoginChainData() or read(loginPacket)
- *
- *
- * ===============
- *
- * @author boybook (Nukkit Project)
- * ===============
  */
 class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData {
-    override val XUID: String?
+    override val xuid: String?
         get() {
             return if (this.isWaterdog) {
                 waterdogXUID
             } else {
-                xuid
+                this.xuid
             }
         }
 
@@ -48,30 +42,29 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
 
     private val isWaterdog: Boolean
         get() {
-            if (waterdogXUID == null || Server.instance == null) {
+            if (waterdogXUID == null) {
                 return false
             }
 
-            return Server.instance.settings.baseSettings().waterdogpe()
+            return Server.instance.settings.baseSettings.waterdogpe
         }
 
-    /**//////////////////////////////////////////////////////////////////////// */ // Override
-    /**//////////////////////////////////////////////////////////////////////// */
-    override fun equals(obj: Any?): Boolean {
-        return obj is ClientChainData && bs == obj.bs
+    override fun equals(other: Any?): Boolean {
+        return other is ClientChainData && bs == other.bs
     }
 
     override fun hashCode(): Int {
         return bs.hashCode()
     }
 
-    /**//////////////////////////////////////////////////////////////////////// */ // Internal
-    /**//////////////////////////////////////////////////////////////////////// */
     override var username: String? = null
         private set
+
     override var clientUUID: UUID? = null
         private set
+
     private var xuid: String? = null
+
     var titleId: String? = null
         private set
 
@@ -80,30 +73,43 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
 
     override var clientId: Long = 0
         private set
+
     override var serverAddress: String? = null
         private set
+
     override var deviceModel: String? = null
         private set
+
     override var deviceOS: Int = 0
         private set
+
     override var deviceId: String? = null
         private set
+
     override var gameVersion: String? = null
         private set
+
     override var guiScale: Int = 0
         private set
+
     override var languageCode: String? = null
         private set
+
     override var currentInputMode: Int = 0
         private set
+
     override var defaultInputMode: Int = 0
         private set
+
     override var waterdogIP: String? = null
         private set
+
     override var waterdogXUID: String? = null
         private set
+
     override var maxViewDistance: Int = 0
         private set
+
     override var memoryTier: Int = 0
         private set
 
@@ -119,7 +125,7 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
     private val bs: BinaryStream
 
     init {
-        buffer.setOffset(0)
+        buffer.offset = 0
         bs = buffer
         decodeChainData()
         decodeSkinData()
@@ -171,10 +177,10 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
         val chains = map["chain"]!!
 
         // Validate keys
-        try {
-            isXboxAuthed = verifyChain(chains)
+        isXboxAuthed = try {
+            verifyChain(chains)
         } catch (e: Exception) {
-            isXboxAuthed = false
+            false
         }
 
         for (c in chains) {
@@ -190,7 +196,7 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
         }
 
         if (!isXboxAuthed) {
-            xuid = null
+            this.xuid = null
         }
     }
 
@@ -223,9 +229,7 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
                 mojangKeyVerified = true
             }
 
-            val payload: Map<String, Any> =
-                JSONUtils.from<Map<String, Any>>(jws.payload, object : TypeToken<Map<String?, Any?>?>() {
-                })
+            val payload = JSONUtils.from(jws.payload, object : TypeToken<Map<String, Any>>() {})
 
             // chain expiry check
             val chainExpiresObj = payload["exp"]

@@ -2,7 +2,6 @@ package org.chorus.level.format.palette
 
 import io.netty.buffer.ByteBuf
 import it.unimi.dsi.fastutil.ints.IntSet
-import it.unimi.dsi.fastutil.objects.ReferenceArrayList
 import org.chorus.block.*
 import org.chorus.level.*
 import org.chorus.level.format.ChunkSection
@@ -10,25 +9,25 @@ import org.chorus.level.format.IChunk
 import org.chorus.level.format.bitarray.BitArrayVersion
 import org.chorus.registry.Registries
 import org.chorus.utils.ByteBufVarInt
-import org.chorus.utils.random.ChorusRandom
+import org.chorus.utils.ChorusRandom
 import java.util.concurrent.atomic.AtomicLong
 
-class BlockPalette : Palette<BlockState?> {
+class BlockPalette : Palette<BlockState> {
     private var needReObfuscate = true
     private var obfuscatePalette: BlockPalette? = null
-    protected var blockChangeCache: Long = 0
+    private var blockChangeCache: Long = 0
 
-    constructor(first: BlockState) : super(first, ReferenceArrayList<BlockState?>(16), BitArrayVersion.V2)
+    constructor(first: BlockState) : super(first, MutableList<BlockState>(16) { BlockAir.STATE }, BitArrayVersion.V2)
 
     constructor(first: BlockState, version: BitArrayVersion) : super(first, version)
 
-    constructor(first: BlockState, palette: MutableList<BlockState?>, version: BitArrayVersion) : super(
+    constructor(first: BlockState, palette: MutableList<BlockState>, version: BitArrayVersion) : super(
         first,
         palette,
         version
     )
 
-    override fun set(index: Int, value: BlockState?) {
+    override fun set(index: Int, value: BlockState) {
         super.set(index, value)
         if (obfuscatePalette != null) {
             obfuscatePalette!![index] = value
@@ -39,12 +38,12 @@ class BlockPalette : Palette<BlockState?> {
         level: Level,
         blockChanges: AtomicLong,
         byteBuf: ByteBuf,
-        serializer: RuntimeDataSerializer<BlockState?>
+        serializer: RuntimeDataSerializer<BlockState>
     ) {
-        val realOreToFakeMap = level.antiXraySystem.rawRealOreToReplacedRuntimeIdMap
-        val fakeBlockMap = level.antiXraySystem.rawFakeOreToPutRuntimeIdMap
-        val transparentBlockSet: IntSet = AntiXraySystem.Companion.getRawTransparentBlockRuntimeIds()
-        val XAndDenominator = level.antiXraySystem.fakeOreDenominator - 1
+        val realOreToFakeMap = level.antiXraySystem!!.rawRealOreToReplacedRuntimeIdMap
+        val fakeBlockMap = level.antiXraySystem!!.rawFakeOreToPutRuntimeIdMap
+        val transparentBlockSet: IntSet = AntiXraySystem.rawTransparentBlockRuntimeIds
+        val xAndDenominator = level.antiXraySystem!!.fakeOreDenominator - 1
         val chorusRandom = ChorusRandom(level.seed)
 
         var write = if (obfuscatePalette == null) this else obfuscatePalette!!
@@ -58,14 +57,14 @@ class BlockPalette : Palette<BlockState?> {
                 val x = (i shr 8) and 0xF
                 val z = (i shr 4) and 0xF
                 val y = i and 0xF
-                var rid = get(i)!!.blockStateHash()
+                var rid = get(i).blockStateHash()
                 if (x != 0 && z != 0 && y != 0 && x != 15 && z != 15 && y != 15) {
                     val tmp = realOreToFakeMap.getOrDefault(rid, Int.MAX_VALUE)
                     if (tmp != Int.MAX_VALUE && canBeObfuscated(transparentBlockSet, x, y, z)) {
                         rid = tmp
                     } else {
                         val tmp2 = fakeBlockMap[rid]
-                        if (tmp2 != null && (chorusRandom.nextInt() and XAndDenominator) == 0 && canBeObfuscated(
+                        if (tmp2 != null && (chorusRandom.nextInt() and xAndDenominator) == 0 && canBeObfuscated(
                                 transparentBlockSet,
                                 x,
                                 y,
@@ -95,34 +94,34 @@ class BlockPalette : Palette<BlockState?> {
     private fun canBeObfuscated(transparentBlockSet: IntSet, x: Int, y: Int, z: Int): Boolean {
         return !transparentBlockSet.contains(
             get(
-                IChunk.Companion.index(
+                IChunk.index(
                     x + 1,
                     y,
                     z
                 )
-            )!!.blockStateHash()
+            ).blockStateHash()
         ) && !transparentBlockSet.contains(
-            get(IChunk.Companion.index(x - 1, y, z))!!.blockStateHash()
+            get(IChunk.index(x - 1, y, z)).blockStateHash()
         ) && !transparentBlockSet.contains(
             get(
-                IChunk.Companion.index(
+                IChunk.index(
                     x,
                     y + 1,
                     z
                 )
-            )!!.blockStateHash()
+            ).blockStateHash()
         ) && !transparentBlockSet.contains(
-            get(IChunk.Companion.index(x, y - 1, z))!!.blockStateHash()
+            get(IChunk.index(x, y - 1, z)).blockStateHash()
         ) && !transparentBlockSet.contains(
             get(
-                IChunk.Companion.index(
+                IChunk.index(
                     x,
                     y,
                     z + 1
                 )
-            )!!.blockStateHash()
+            ).blockStateHash()
         ) && !transparentBlockSet.contains(
-            get(IChunk.Companion.index(x, y, z - 1))!!.blockStateHash()
+            get(IChunk.index(x, y, z - 1)).blockStateHash()
         )
     }
 }

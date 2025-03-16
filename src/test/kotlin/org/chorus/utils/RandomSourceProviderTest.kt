@@ -1,6 +1,5 @@
 package org.chorus.utils
 
-import org.chorus.utils.random.RandomSourceProvider
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -33,11 +32,11 @@ class RandomSourceProviderTest {
     }
 
     companion object {
-        var randomSource: RandomSourceProvider? = null
+        var randomSource: ChorusRandom? = null
 
         @BeforeAll
         fun test_create() {
-            randomSource = RandomSourceProvider.create()
+            randomSource = ChorusRandom.create()
         }
     }
 }
