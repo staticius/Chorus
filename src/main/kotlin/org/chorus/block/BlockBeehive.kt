@@ -86,7 +86,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -168,7 +168,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Comp
         return Item.EMPTY_ARRAY
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION))
         set(face) {
             setPropertyValue(CommonBlockProperties.DIRECTION, face!!.horizontalIndex)

@@ -52,7 +52,7 @@ class BlockLightningRod : BlockTransparent, Faceable {
         return true
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
             this.setPropertyValue<Int, IntPropertyType>(

@@ -66,7 +66,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
             return power
         }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )]
@@ -94,7 +94,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState? = Companion
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

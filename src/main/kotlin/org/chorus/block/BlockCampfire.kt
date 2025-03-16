@@ -6,7 +6,6 @@ import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityCampfire
 import org.chorus.blockentity.BlockEntityID
 import org.chorus.entity.Entity
@@ -85,7 +84,10 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
         val layer0 = level.getBlock(this.position, 0)
         val layer1 = level.getBlock(this.position, 1)
 
-        blockFace = if (player != null) player.getDirection()!!.getOpposite() else null
+        if (player != null) {
+            blockFace =  player.getDirection()!!.getOpposite()
+        }
+
         val defaultLayerCheck = (block is BlockFlowingWater && block.isSourceOrFlowingDown) || block is BlockFrostedIce
         val layer1Check = (layer1 is BlockFlowingWater && layer1.isSourceOrFlowingDown) || layer1 is BlockFrostedIce
         if (defaultLayerCheck || layer1Check) {
@@ -175,7 +177,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -257,7 +259,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
             )
         }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(
             getPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
@@ -266,7 +268,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState? = Com
         set(face) {
             setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                MinecraftCardinalDirection.entries[face!!.getOpposite()!!.horizontalIndex]
+                MinecraftCardinalDirection.entries[face.getOpposite().horizontalIndex]
             )
         }
 

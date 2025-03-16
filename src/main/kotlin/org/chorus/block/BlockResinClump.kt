@@ -25,7 +25,7 @@ class BlockResinClump @JvmOverloads constructor(blockstate: BlockState? = Compan
         if (isGrowthToSide(side)) {
             setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
-                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) xor (1 shl side.dUSWNEIndex)
+                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) xor (1 shl side.indexDUSWNE)
             )
             level.setBlock(this.position, this, true, true)
             level.dropItem(this.position, toItem()!!)

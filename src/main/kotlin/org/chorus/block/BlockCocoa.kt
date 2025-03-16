@@ -133,7 +133,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -200,7 +200,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
         )
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() {
             val propertyValue =
                 getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)

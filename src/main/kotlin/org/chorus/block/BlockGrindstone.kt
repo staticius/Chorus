@@ -43,7 +43,7 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState? = Compan
     override val resistance: Double
         get() = 6.0
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
         set(face) {
             if (face!!.horizontalIndex == -1) {
@@ -182,7 +182,7 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState? = Compan
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

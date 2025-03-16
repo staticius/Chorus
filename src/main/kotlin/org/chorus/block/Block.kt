@@ -151,7 +151,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
      * @param fz        the fz at block
      * @return the boolean
      */
-    open fun onActivate(item: Item, player: Player?, blockFace: BlockFace?, fx: Float, fy: Float, fz: Float): Boolean {
+    open fun onActivate(item: Item, player: Player?, blockFace: BlockFace, fx: Float, fy: Float, fz: Float): Boolean {
         return false
     }
 

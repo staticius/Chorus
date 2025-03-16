@@ -20,21 +20,21 @@ abstract class BlockLichen(blockState: BlockState?) : BlockTransparent(blockStat
         if (isGrowthToSide(side)) {
             setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
-                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) xor (1 shl side.dUSWNEIndex)
+                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) xor (1 shl side.indexDUSWNE)
             )
             level.setBlock(this.position, this, true, true)
         }
     }
 
     fun isGrowthToSide(side: BlockFace): Boolean {
-        return ((getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) shr side.dUSWNEIndex) and 0x1) > 0
+        return ((getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) shr side.indexDUSWNE) and 0x1) > 0
     }
 
     fun growToSide(side: BlockFace) {
         if (!isGrowthToSide(side)) {
             setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
-                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) or (1 shl side.dUSWNEIndex)
+                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) or (1 shl side.indexDUSWNE)
             )
             level.setBlock(this.position, this, true, true)
         }
@@ -61,7 +61,7 @@ abstract class BlockLichen(blockState: BlockState?) : BlockTransparent(blockStat
 
         setPropertyValue<Int, IntPropertyType>(
             CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
-            currentMeta or (1 shl face.getOpposite()!!.dUSWNEIndex)
+            currentMeta or (1 shl face.getOpposite()!!.indexDUSWNE)
         )
 
         if (getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) == currentMeta) {

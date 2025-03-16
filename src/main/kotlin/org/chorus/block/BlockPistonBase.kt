@@ -327,7 +327,7 @@ abstract class BlockPistonBase(blockstate: BlockState?) : BlockTransparent(block
 
     protected abstract fun createHead(blockFace: BlockFace): Block
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() {
             val face =
                 fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))

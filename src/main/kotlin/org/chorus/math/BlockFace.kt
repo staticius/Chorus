@@ -22,51 +22,32 @@ enum class BlockFace(
     /**
      * The name of this BlockFace (up, down, north, etc.)
      */
-    override val name: String,
-    /**
-     * Get the AxisDirection of this BlockFace
-     *
-     * @return axis direction
-     */
-    @JvmField val axisDirection: AxisDirection,
-    /**
-     * Normalized vector that points in the direction of this BlockFace
-     */
-    @JvmField val unitVector: Vector3
-) {
-    DOWN(0, 1, -1, "down", AxisDirection.NEGATIVE, Vector3(0.0, -1.0, 0.0)),
-    UP(1, 0, -1, "up", AxisDirection.POSITIVE, Vector3(0.0, 1.0, 0.0)),
-    NORTH(2, 3, 2, "north", AxisDirection.NEGATIVE, Vector3(0.0, 0.0, -1.0)),
-    SOUTH(3, 2, 0, "south", AxisDirection.POSITIVE, Vector3(0.0, 0.0, 1.0)),
-    WEST(4, 5, 1, "west", AxisDirection.NEGATIVE, Vector3(-1.0, 0.0, 0.0)),
-    EAST(5, 4, 3, "east", AxisDirection.POSITIVE, Vector3(1.0, 0.0, 0.0));
-
-    /**
-     * Get the index of this BlockFace (0-5). The order is D-U-N-S-W-E
-     *
-     * @return index
-     */
-
-    /**
-     * Get the horizontal index of this BlockFace (0-3). The order is S-W-N-E
-     *
-     * @return horizontal index
-     */
-
-    /**
-     * Get the name of this BlockFace (up, down, north, etc.)
-     *
-     * @return name
-     */
-
+    val faceName: String,
 
     /**
      * Get the Axis of this BlockFace
      *
      * @return axis
      */
-    var axis: Axis? = null
-        private set
+    val axis: Axis,
+    /**
+     * Get the AxisDirection of this BlockFace
+     *
+     * @return axis direction
+     */
+    @JvmField val axisDirection: AxisDirection,
+
+    /**
+     * Normalized vector that points in the direction of this BlockFace
+     */
+    @JvmField val unitVector: Vector3
+) {
+    DOWN(0, 1, -1, "down", Axis.Y, AxisDirection.NEGATIVE, Vector3(0.0, -1.0, 0.0)),
+    UP(1, 0, -1, "up", Axis.Y, AxisDirection.POSITIVE, Vector3(0.0, 1.0, 0.0)),
+    NORTH(2, 3, 2, "north", Axis.Z, AxisDirection.NEGATIVE, Vector3(0.0, 0.0, -1.0)),
+    SOUTH(3, 2, 0, "south", Axis.Z, AxisDirection.POSITIVE, Vector3(0.0, 0.0, 1.0)),
+    WEST(4, 5, 1, "west", Axis.X, AxisDirection.NEGATIVE, Vector3(-1.0, 0.0, 0.0)),
+    EAST(5, 4, 3, "east", Axis.X, AxisDirection.POSITIVE, Vector3(1.0, 0.0, 0.0));
 
     /**
      * Get the unit vector of this BlockFace
@@ -74,7 +55,7 @@ enum class BlockFace(
      * @return vector
      */
 
-    val dUNESWIndex: Int
+    val indexDUNSEW: Int
         /**
          * Get the index of this BlockFace (0-5). The order is D-U-N-E-S-W
          *
@@ -89,7 +70,7 @@ enum class BlockFace(
             else -> 0
         }
 
-    val dUSWNEIndex: Int
+    val indexDUSWNE: Int
         /**
          * Get the index of this BlockFace (0-5). The order is D-U-S-W-N-E
          *
@@ -141,7 +122,7 @@ enum class BlockFace(
      *
      * @return block face
      */
-    fun getOpposite(): BlockFace? {
+    fun getOpposite(): BlockFace {
         return fromIndex(opposite)
     }
 
@@ -187,7 +168,7 @@ enum class BlockFace(
     val edges: Set<BlockFace>
         get() {
             val blockFaces = EnumSet.noneOf(BlockFace::class.java)
-            if (axis!!.isVertical) {
+            if (axis.isVertical) {
                 Collections.addAll(blockFaces, *Plane.HORIZONTAL.faces)
                 return blockFaces
             }
@@ -200,10 +181,10 @@ enum class BlockFace(
         }
 
     override fun toString(): String {
-        return name
+        return faceName
     }
 
-    enum class Axis(override val name: String) : Predicate<BlockFace?> {
+    enum class Axis(val axisName: String) : Predicate<BlockFace?> {
         Y("y"),
         X("x"),
         Z("z");
@@ -222,7 +203,7 @@ enum class BlockFace(
         }
 
         override fun toString(): String {
-            return name
+            return axisName
         }
 
         companion object {
@@ -248,7 +229,7 @@ enum class BlockFace(
         HORIZONTAL,
         VERTICAL;
 
-        var faces: Array<BlockFace>
+        lateinit var faces: Array<BlockFace>
 
 
         fun random(): BlockFace {
@@ -260,7 +241,7 @@ enum class BlockFace(
         }
 
         override fun test(face: BlockFace?): Boolean {
-            return face != null && face.axis!!.plane == this
+            return face != null && face.axis.plane == this
         }
 
         override fun iterator(): MutableIterator<BlockFace> {
@@ -280,54 +261,46 @@ enum class BlockFace(
         /**
          * All faces in D-U-N-S-W-E order
          */
-        private val VALUES = arrayOfNulls<BlockFace>(6)
+        private val VALUES = Array(entries.maxOf { it.index } + 1) { index -> entries.single { it.index == index } }
 
         /**
          * All faces with horizontal axis in order S-W-N-E
          */
-        private val HORIZONTALS = arrayOfNulls<BlockFace>(4)
+        private val HORIZONTALS = Array(entries.count { it.axis.isHorizontal }) { index -> entries.single { it.axis.isHorizontal && it.horizontalIndex == index} }
 
         init {
-            //Circular dependency
-            DOWN.axis = Axis.Y
-            UP.axis = Axis.Y
-            NORTH.axis = Axis.Z
-            SOUTH.axis = Axis.Z
-            WEST.axis = Axis.X
-            EAST.axis = Axis.X
-
             for (face in entries) {
                 VALUES[face.index] = face
 
-                if (face.axis!!.isHorizontal) {
+                if (face.axis.isHorizontal) {
                     HORIZONTALS[face.horizontalIndex] = face
                 }
             }
         }
 
         @JvmStatic
-        val horizontals: Array<BlockFace?>
+        val horizontals: Array<BlockFace>
             get() = HORIZONTALS.clone()
 
         /**
-         * Get a BlockFace by it's index (0-5). The order is D-U-N-S-W-E
+         * Get a BlockFace by its index (0-5). The order is D-U-N-S-W-E
          *
          * @param index BlockFace index
          * @return block face
          */
         @JvmStatic
-        fun fromIndex(index: Int): BlockFace? {
+        fun fromIndex(index: Int): BlockFace {
             return VALUES[MathHelper.abs(index % VALUES.size)]
         }
 
         /**
-         * Get a BlockFace by it's horizontal index (0-3). The order is S-W-N-E
+         * Get a BlockFace by its horizontal index (0-3). The order is S-W-N-E
          *
          * @param index BlockFace index
          * @return block face
          */
         @JvmStatic
-        fun fromHorizontalIndex(index: Int): BlockFace? {
+        fun fromHorizontalIndex(index: Int): BlockFace {
             return HORIZONTALS[MathHelper.abs(index % HORIZONTALS.size)]
         }
 
@@ -337,7 +310,7 @@ enum class BlockFace(
          * @param angle horizontal angle
          * @return block face
          */
-        fun fromHorizontalAngle(angle: Double): BlockFace? {
+        fun fromHorizontalAngle(angle: Double): BlockFace {
             return fromHorizontalIndex(ChorusMath.floorDouble(angle / 90.0 + 0.5) and 3)
         }
 
@@ -358,7 +331,7 @@ enum class BlockFace(
          * @return block face
          */
         @JvmStatic
-        fun random(rand: Random): BlockFace? {
+        fun random(rand: Random): BlockFace {
             return VALUES[rand.nextInt(VALUES.size)]
         }
     }

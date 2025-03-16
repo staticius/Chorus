@@ -152,7 +152,7 @@ open class BlockTrapdoor  //</editor-fold>
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -235,7 +235,7 @@ open class BlockTrapdoor  //</editor-fold>
             setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPSIDE_DOWN_BIT, top)
         }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = CommonPropertyMap.EWSN_DIRECTION.inverse()[getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)]
         set(face) {
             setPropertyValue<Int, IntPropertyType>(

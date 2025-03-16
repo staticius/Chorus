@@ -38,7 +38,7 @@ class BlockBoneBlock @JvmOverloads constructor(blockstate: BlockState? = Compani
         return true
     }
 
-    var pillarAxis: BlockFace.Axis?
+    var pillarAxis: BlockFace.Axis
         get() = getPropertyValue(
             CommonBlockProperties.PILLAR_AXIS
         )

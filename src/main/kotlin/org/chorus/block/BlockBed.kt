@@ -61,7 +61,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -279,7 +279,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState? = Companion.pro
             return DyeColor.WHITE
         }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
         set(face) {
             setPropertyValue<Int, IntPropertyType>(

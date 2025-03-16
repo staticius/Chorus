@@ -59,7 +59,7 @@ class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntity
         return BlockEntity.DECORATED_POT
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
         set(face) {
             setPropertyValue<Int, IntPropertyType>(

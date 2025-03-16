@@ -69,7 +69,7 @@ class BlockPortal @JvmOverloads constructor(blockstate: BlockState? = Companion.
         return this
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(blockState!!.specialValue().toInt() and 0x07)
         set(blockFace) {
             super.blockFace = blockFace

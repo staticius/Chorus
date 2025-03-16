@@ -144,7 +144,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -369,7 +369,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
         return true
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION))
         set(face) {
             setPropertyValue(
@@ -378,7 +378,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState? = Companion.pr
             )
         }
 
-    var attachment: Attachment?
+    var attachment: Attachment
         get() = getPropertyValue(
             CommonBlockProperties.ATTACHMENT
         )

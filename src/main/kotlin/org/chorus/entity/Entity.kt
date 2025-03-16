@@ -1585,7 +1585,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         )).normalize()
     }
 
-    fun getHorizontalFacing(): BlockFace? {
+    fun getHorizontalFacing(): BlockFace {
         return BlockFace.fromHorizontalIndex(ChorusMath.floorDouble((rotation.yaw * 4.0f / 360.0f) + 0.5) and 3)
     }
 

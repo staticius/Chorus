@@ -7,7 +7,7 @@ class BlockSmoothBasalt @JvmOverloads constructor(blockState: BlockState? = Comp
     override val name: String
         get() = "Smooth Basalt"
 
-    override var pillarAxis: BlockFace.Axis?
+    override var pillarAxis: BlockFace.Axis
         get() =// ignore
             null
         set(axis) {

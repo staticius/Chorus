@@ -51,10 +51,10 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
                 } else if (position.y - y > 0) {
                     BlockFace.DOWN
                 } else {
-                    player.getHorizontalFacing()?.getOpposite()
+                    player.getHorizontalFacing().getOpposite()
                 }
             } else {
-                blockFace = player.getHorizontalFacing()?.getOpposite()
+                blockFace = player.getHorizontalFacing().getOpposite()
             }
         }
 
@@ -77,7 +77,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -113,7 +113,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.
         return ItemBlock(BlockBarrel())
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
             setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face!!.index)

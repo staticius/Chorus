@@ -185,7 +185,7 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState? = Companion.
         )
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
             .getOpposite()
         set(face) {

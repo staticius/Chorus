@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.*
 import org.chorus.level.Level
 import org.chorus.level.vibration.VibrationEvent
@@ -102,7 +101,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState? = Companion.pr
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

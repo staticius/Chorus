@@ -20,7 +20,7 @@ abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate
 
     abstract fun getDeadCoralFan(): Block
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION) + 1)
         set(blockFace) {
             super.blockFace = blockFace

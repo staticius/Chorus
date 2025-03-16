@@ -133,7 +133,7 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState? = Companio
             setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT, powered)
         }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = getPropertyValue(CommonBlockProperties.MINECRAFT_FACING_DIRECTION)
         set(face) {
             setPropertyValue(

@@ -245,7 +245,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState? = Co
             )
         }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)

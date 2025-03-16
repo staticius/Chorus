@@ -57,7 +57,7 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -157,7 +157,7 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
         return if (!isActivated) 0 else (if (facing == side) 15 else 0)
     }
 
-    val facing: BlockFace?
+    val facing: BlockFace
         get() = fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
 
     override fun onBreak(item: Item?): Boolean {
@@ -168,9 +168,9 @@ abstract class BlockButton(meta: BlockState?) : BlockFlowable(meta), RedstoneCom
         return super.onBreak(item)
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = facing
         set(face) {
-            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 }

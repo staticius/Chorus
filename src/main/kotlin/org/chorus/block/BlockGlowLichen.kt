@@ -18,7 +18,7 @@ class BlockGlowLichen : BlockLichen {
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -50,7 +50,7 @@ class BlockGlowLichen : BlockLichen {
 
         newLichen.setPropertyValue<Int, IntPropertyType>(
             CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
-            newLichen.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) or (1 shl candidates[random]!!.dUSWNEIndex)
+            newLichen.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) or (1 shl candidates[random]!!.indexDUSWNE)
         )
 
         level.setBlock(random.position, newLichen, true, true)

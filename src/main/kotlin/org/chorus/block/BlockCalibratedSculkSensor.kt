@@ -56,14 +56,14 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
             if (horizontalIndex > -1) {
                 this.setPropertyValue(
                     CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                    CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[fromHorizontalIndex(horizontalIndex)]
+                    CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[fromHorizontalIndex(horizontalIndex)]!!
                 )
             }
         }
 
     override fun getWeakPower(face: BlockFace): Int {
         val blockEntity = this.getOrCreateBlockEntity()
-        return if (getSide(face.getOpposite()!!) is BlockRedstoneComparator) {
+        return if (getSide(face.getOpposite()) is BlockRedstoneComparator) {
             blockEntity.comparatorPower
         } else {
             blockEntity.power

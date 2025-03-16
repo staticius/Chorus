@@ -264,7 +264,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -374,7 +374,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
             setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.DOOR_HINGE_BIT, rightHinged)
         }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = DOOR_DIRECTION.inverse()[getPropertyValue(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         ).ordinal]

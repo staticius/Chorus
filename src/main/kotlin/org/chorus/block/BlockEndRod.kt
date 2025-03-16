@@ -82,7 +82,7 @@ class BlockEndRod @JvmOverloads constructor(blockState: BlockState? = Companion.
         return ItemBlock(this, 0)
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION) and 0x07)
         set(blockFace) {
             super.blockFace = blockFace

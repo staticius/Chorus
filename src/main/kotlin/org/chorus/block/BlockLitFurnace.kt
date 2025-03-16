@@ -80,7 +80,7 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState? = C
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -130,7 +130,7 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState? = C
         return false
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
         )]

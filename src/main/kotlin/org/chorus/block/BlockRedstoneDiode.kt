@@ -247,7 +247,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState?) : BlockFlowable(block
         )
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
             getPropertyValue<MinecraftCardinalDirection, org.chorus.block.property.type.EnumPropertyType<MinecraftCardinalDirection>>(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION

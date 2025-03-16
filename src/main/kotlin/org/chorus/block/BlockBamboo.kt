@@ -232,7 +232,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    var bambooLeafSize: BambooLeafSize?
+    var bambooLeafSize: BambooLeafSize
         get() = getPropertyValue(CommonBlockProperties.BAMBOO_LEAF_SIZE)
         set(bambooLeafSize) {
             setPropertyValue(
@@ -248,7 +248,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState? = Companion.
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

@@ -68,7 +68,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState? = Compani
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

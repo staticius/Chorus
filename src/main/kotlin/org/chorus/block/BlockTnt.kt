@@ -97,7 +97,7 @@ class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properti
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

@@ -53,7 +53,7 @@ open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockSt
     val facing: BlockFace?
         get() = blockFace
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() {
             val face =
                 fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))

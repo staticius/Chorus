@@ -19,7 +19,7 @@ abstract class BlockDeadCoralWallFan(blockstate: BlockState?) : BlockCoralFanDea
         }
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() {
             val face =
                 getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.CORAL_DIRECTION)

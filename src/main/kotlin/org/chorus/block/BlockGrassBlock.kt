@@ -23,7 +23,7 @@ open class BlockGrassBlock(blockstate: BlockState?) : BlockDirt(blockstate) {
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

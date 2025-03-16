@@ -23,7 +23,7 @@ open class BlockBasalt @JvmOverloads constructor(blockstate: BlockState? = Compa
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    open var pillarAxis: BlockFace.Axis?
+    open var pillarAxis: BlockFace.Axis
         get() = getPropertyValue(
             CommonBlockProperties.PILLAR_AXIS
         )

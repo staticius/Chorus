@@ -33,7 +33,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState? = Co
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

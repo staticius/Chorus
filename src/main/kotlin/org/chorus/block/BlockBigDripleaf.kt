@@ -26,14 +26,14 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
     override val name: String
         get() = "Big Dripleaf"
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-        )]
+        )]!!
         set(face) {
             setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]!!
             )
         }
 
@@ -106,7 +106,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
             level.setBlock(below.position, b, direct = true, update = false)
             blockFace = bf
         } else {
-            blockFace = if (player != null) player.getHorizontalFacing()?.getOpposite() else BlockFace.SOUTH
+            blockFace = player?.getHorizontalFacing()?.getOpposite() ?: BlockFace.SOUTH
         }
         isHead = true
 
@@ -117,7 +117,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState? = Compa
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

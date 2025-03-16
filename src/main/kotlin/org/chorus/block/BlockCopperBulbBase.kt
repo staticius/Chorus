@@ -28,7 +28,7 @@ abstract class BlockCopperBulbBase(blockState: BlockState?) : BlockSolid(blockSt
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

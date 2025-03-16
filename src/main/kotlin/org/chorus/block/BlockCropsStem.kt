@@ -20,7 +20,7 @@ abstract class BlockCropsStem(blockstate: BlockState?) : BlockCrops(blockstate),
 
     abstract val seedsId: String?
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = facing
         set(face) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)

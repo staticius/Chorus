@@ -142,7 +142,7 @@ abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockSt
     open fun setSignDirection(direction: CompassRoseDirection) =
         setPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION, direction.index)
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = getSignDirection().closestBlockFace
         set(face) {
             setSignDirection(face!!.compassRoseDirection!!)

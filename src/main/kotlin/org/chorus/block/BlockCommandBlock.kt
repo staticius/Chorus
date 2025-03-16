@@ -41,7 +41,7 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
         return player != null && player.isCreative
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
@@ -88,7 +88,7 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

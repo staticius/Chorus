@@ -75,7 +75,7 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState? = Compan
         return true
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = torchAttachment!!.torchDirection
         /**
          * Sets the direction that the flame is pointing.

@@ -124,7 +124,7 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
         }
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
         set(face) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face!!.horizontalIndex)

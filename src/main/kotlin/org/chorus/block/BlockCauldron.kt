@@ -91,7 +91,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
         this.setPropertyValue(CommonBlockProperties.FILL_LEVEL, fillLevel)
     }
 
-    var cauldronLiquid: CauldronLiquid?
+    var cauldronLiquid: CauldronLiquid
         get() = this.getPropertyValue(
             CommonBlockProperties.CAULDRON_LIQUID
         )
@@ -105,7 +105,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -135,7 +135,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
 
                 val ev = PlayerBucketFillEvent(
                     player,
-                    this, null,
+                    this, blockFace,
                     this, item, get(newBucketID, 0, 1, item.compoundTag)
                 )
                 Server.instance.pluginManager.callEvent(ev)

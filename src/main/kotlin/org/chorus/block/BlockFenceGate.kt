@@ -101,7 +101,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
     override fun onActivate(
         item: Item,
         player: Player?,
-        blockFace: BlockFace?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -272,7 +272,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState? = Co
             setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.IN_WALL_BIT, inWall)
         }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromHorizontalIndex(
             getPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION

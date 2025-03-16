@@ -39,7 +39,7 @@ abstract class BlockAmethystBud(blockState: BlockState?) : BlockTransparent(bloc
     override val isSolid: Boolean
         get() = false
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = getPropertyValue(CommonBlockProperties.MINECRAFT_BLOCK_FACE)
         set(face) {
             setPropertyValue(
@@ -87,7 +87,7 @@ abstract class BlockAmethystBud(blockState: BlockState?) : BlockTransparent(bloc
     }
 
     override fun onUpdate(type: Int): Int {
-        if ((getSide(blockFace!!.getOpposite()!!)!!.isAir)) {
+        if ((getSide(blockFace.getOpposite())!!.isAir)) {
             this.onBreak(Item.get(ItemID.DIAMOND_PICKAXE))
         }
 
