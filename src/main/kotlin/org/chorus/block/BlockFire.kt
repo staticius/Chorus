@@ -254,7 +254,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Compani
                 }
             }
 
-            if (block is BlockTnt) {
+            if (block is BlockTNT) {
                 block.prime()
             }
         }

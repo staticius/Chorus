@@ -3,9 +3,11 @@ package org.chorus.block
 import it.unimi.dsi.fastutil.objects.Object2IntMap
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.ComposterEmptyEvent
 import org.chorus.event.block.ComposterEmptyEvent.getDrop
 import org.chorus.event.block.ComposterEmptyEvent.getNewLevel
 import org.chorus.event.block.ComposterFillEvent.isSuccess
@@ -62,8 +64,8 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
 
     override fun onActivate(
         item: Item,
-        player: Player,
-        blockFace: BlockFace?,
+        player: Player?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -172,22 +174,21 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
         }
         }
 
-        fun registerBlock(chance: Int, BlockID.String)
+        fun registerBlock(chance: Int, blockId: String)
         {
-            val blockState = Registries.BLOCK.get(
-                BlockID.!!.blockState
-                        compostableBlocks . put (blockState, chance
-            )
+            val blockState = Registries.BLOCK.get(blockId)!!.blockState
+            compostableBlocks.put (blockState, chance)
         }
 
-        fun registerBlock(chance: Int, BlockID.String, meta: Int)
+        fun registerBlock(chance: Int, blockId: String, meta: Int)
         {
-            val i = Registries.BLOCKSTATE_ITEMMETA.get(BlockID.meta)
+            val i = Registries.BLOCKSTATE_ITEMMETA.get(blockId)
             val blockState: BlockState
             if (i == 0) {
-                val block = Registries.BLOCK.get(BlockID.blockState = block!!.properties.defaultState
+                val block = Registries.BLOCK.get(blockId)
+                blockState = block!!.properties.defaultState
             } else {
-                blockState = Registries.BLOCKSTATE.get(i)
+                blockState = Registries.BLOCKSTATE.get(i)!!
             }
             compostableBlocks.put(blockState, chance)
         }
@@ -203,7 +204,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
         private fun registerDefaults() {
             registerItems(
                 30,
-                KELP,
+                BlockID.KELP,
                 ItemID.BEETROOT_SEEDS,
                 ItemID.DRIED_KELP,
                 ItemID.MELON_SEEDS,
@@ -215,96 +216,96 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState? = Compani
                 ItemID.TORCHFLOWER_SEEDS
             )
             registerItems(50, ItemID.MELON_SLICE, ItemID.SUGAR_CANE)
-            registerItems(65, ItemID.APPLE, BEETROOT, ItemID.CARROT, ItemID.COCOA_BEANS, ItemID.POTATO)
+            registerItems(65, ItemID.APPLE, BlockID.BEETROOT, ItemID.CARROT, ItemID.COCOA_BEANS, ItemID.POTATO)
             registerItems(85, ItemID.BAKED_POTATO, ItemID.BREAD, ItemID.COOKIE)
             registerItems(100, ItemID.PUMPKIN_PIE)
 
             registerBlocks(
                 30,
-                GRASS_BLOCK,
-                PINK_PETALS,
-                OAK_LEAVES,
-                SPRUCE_LEAVES,
-                BIRCH_LEAVES,
-                JUNGLE_LEAVES,
-                ACACIA_LEAVES,
-                DARK_OAK_LEAVES,
-                MANGROVE_LEAVES,
-                CHERRY_LEAVES,
-                AZALEA_LEAVES,
-                PALE_OAK_LEAVES,
-                OAK_SAPLING,
-                SPRUCE_SAPLING,
-                BIRCH_SAPLING,
-                JUNGLE_SAPLING,
-                ACACIA_SAPLING,
-                DARK_OAK_SAPLING,
-                CHERRY_SAPLING,
-                PALE_OAK_SAPLING,
-                MANGROVE_ROOTS,
-                MANGROVE_PROPAGULE,
-                SEAGRASS,
-                SHORT_GRASS,
-                SWEET_BERRY_BUSH,
-                MOSS_CARPET, HANGING_ROOTS,
-                SMALL_DRIPLEAF_BLOCK
+                BlockID.GRASS_BLOCK,
+                BlockID.PINK_PETALS,
+                BlockID.OAK_LEAVES,
+                BlockID.SPRUCE_LEAVES,
+                BlockID.BIRCH_LEAVES,
+                BlockID.JUNGLE_LEAVES,
+                BlockID.ACACIA_LEAVES,
+                BlockID.DARK_OAK_LEAVES,
+                BlockID.MANGROVE_LEAVES,
+                BlockID.CHERRY_LEAVES,
+                BlockID.AZALEA_LEAVES,
+                BlockID.PALE_OAK_LEAVES,
+                BlockID.OAK_SAPLING,
+                BlockID.SPRUCE_SAPLING,
+                BlockID.BIRCH_SAPLING,
+                BlockID.JUNGLE_SAPLING,
+                BlockID.ACACIA_SAPLING,
+                BlockID.DARK_OAK_SAPLING,
+                BlockID.CHERRY_SAPLING,
+                BlockID.PALE_OAK_SAPLING,
+                BlockID.MANGROVE_ROOTS,
+                BlockID.MANGROVE_PROPAGULE,
+                BlockID.SEAGRASS,
+                BlockID.SHORT_GRASS,
+                BlockID.SWEET_BERRY_BUSH,
+                BlockID.MOSS_CARPET, BlockID.HANGING_ROOTS,
+                BlockID.SMALL_DRIPLEAF_BLOCK
             )
             registerBlocks(
-                50, GLOW_LICHEN, CACTUS, DRIED_KELP_BLOCK, VINE, NETHER_SPROUTS,
-                TWISTING_VINES, WEEPING_VINES, TALL_GRASS
+                50, BlockID.GLOW_LICHEN, BlockID.CACTUS, BlockID.DRIED_KELP_BLOCK, BlockID.VINE, BlockID.NETHER_SPROUTS,
+                BlockID.TWISTING_VINES, BlockID.WEEPING_VINES, BlockID.TALL_GRASS
             )
             registerBlocks(
                 65,
-                LARGE_FERN,
-                FERN,
-                WITHER_ROSE,
-                WATERLILY,
-                MELON_BLOCK,
-                PUMPKIN,
-                CARVED_PUMPKIN,
-                PALE_MOSS_BLOCK,
-                SEA_PICKLE,
-                BROWN_MUSHROOM,
-                RED_MUSHROOM,
-                MUSHROOM_STEM,
-                CRIMSON_FUNGUS,
-                WARPED_FUNGUS,
-                WARPED_ROOTS,
-                CRIMSON_ROOTS,
-                SHROOMLIGHT,
-                NETHER_WART,
-                AZALEA,
-                BIG_DRIPLEAF,
-                MOSS_BLOCK,
-                SPORE_BLOSSOM,
-                WHEAT,
-                DANDELION,
-                POPPY,
-                BLUE_ORCHID,
-                ALLIUM,
-                AZURE_BLUET,
-                RED_TULIP,
-                ORANGE_TULIP,
-                PINK_TULIP,
-                WHITE_TULIP,
-                OXEYE_DAISY,
-                CORNFLOWER,
-                LILY_OF_THE_VALLEY,
-                CLOSED_EYEBLOSSOM,
-                OPEN_EYEBLOSSOM
+                BlockID.LARGE_FERN,
+                BlockID.FERN,
+                BlockID.WITHER_ROSE,
+                BlockID.WATERLILY,
+                BlockID.MELON_BLOCK,
+                BlockID.PUMPKIN,
+                BlockID.CARVED_PUMPKIN,
+                BlockID.PALE_MOSS_BLOCK,
+                BlockID.SEA_PICKLE,
+                BlockID.BROWN_MUSHROOM,
+                BlockID.RED_MUSHROOM,
+                BlockID.MUSHROOM_STEM,
+                BlockID.CRIMSON_FUNGUS,
+                BlockID.WARPED_FUNGUS,
+                BlockID.WARPED_ROOTS,
+                BlockID.CRIMSON_ROOTS,
+                BlockID.SHROOMLIGHT,
+                BlockID.NETHER_WART,
+                BlockID.AZALEA,
+                BlockID.BIG_DRIPLEAF,
+                BlockID.MOSS_BLOCK,
+                BlockID.SPORE_BLOSSOM,
+                BlockID.WHEAT,
+                BlockID.DANDELION,
+                BlockID.POPPY,
+                BlockID.BLUE_ORCHID,
+                BlockID.ALLIUM,
+                BlockID.AZURE_BLUET,
+                BlockID.RED_TULIP,
+                BlockID.ORANGE_TULIP,
+                BlockID.PINK_TULIP,
+                BlockID.WHITE_TULIP,
+                BlockID.OXEYE_DAISY,
+                BlockID.CORNFLOWER,
+                BlockID.LILY_OF_THE_VALLEY,
+                BlockID.CLOSED_EYEBLOSSOM,
+                BlockID.OPEN_EYEBLOSSOM
             )
             registerBlocks(
                 85,
-                HAY_BLOCK,
-                BROWN_MUSHROOM_BLOCK,
-                RED_MUSHROOM_BLOCK,
-                FLOWERING_AZALEA,
-                NETHER_WART_BLOCK,
-                PITCHER_PLANT,
-                TORCHFLOWER,
-                WARPED_WART_BLOCK
+                BlockID.HAY_BLOCK,
+                BlockID.BROWN_MUSHROOM_BLOCK,
+                BlockID.RED_MUSHROOM_BLOCK,
+                BlockID.FLOWERING_AZALEA,
+                BlockID.NETHER_WART_BLOCK,
+                BlockID.PITCHER_PLANT,
+                BlockID.TORCHFLOWER,
+                BlockID.WARPED_WART_BLOCK
             )
-            registerBlocks(100, CAKE)
+            registerBlocks(100, BlockID.CAKE)
         }
     }
 }

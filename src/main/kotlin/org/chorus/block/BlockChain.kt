@@ -15,7 +15,7 @@ class BlockChain : BlockTransparent {
     override val name: String
         get() = "Chain"
 
-    var pillarAxis: BlockFace.Axis?
+    var pillarAxis: BlockFace.Axis
         get() = getPropertyValue(
             CommonBlockProperties.PILLAR_AXIS
         )

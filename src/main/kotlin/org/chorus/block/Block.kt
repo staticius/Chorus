@@ -53,7 +53,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
      */
     abstract val properties: BlockProperties
 
-    var blockState: BlockState? = null
+    var blockState: BlockState
 
     private val resolvedBlockState: BlockState by lazy {
         blockState?.takeIf { properties.containBlockState(it) } ?: properties.defaultState
@@ -389,7 +389,7 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
     }
 
     fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> getPropertyValue(p: PROPERTY): DATATYPE {
-        return blockState!!.getPropertyValue(p)
+        return blockState.getPropertyValue(p)
     }
 
     fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> setPropertyValue(
@@ -401,24 +401,24 @@ abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.in
     }
 
     fun setPropertyValue(propertyValue: BlockPropertyValue<*, *, *>?): Block {
-        this.blockState = blockState!!.setPropertyValue(properties, propertyValue)
+        this.blockState = blockState.setPropertyValue(properties, propertyValue)
         return this
     }
 
     fun setPropertyValues(vararg values: BlockPropertyValue<*, *, *>?): Block {
-        this.blockState = blockState!!.setPropertyValues(properties, *values)
+        this.blockState = blockState.setPropertyValues(properties, *values)
         return this
     }
 
     fun setPropertyValues(values: MutableList<BlockPropertyValue<*, *, *>>): Block {
-        this.blockState = blockState!!.setPropertyValues(
+        this.blockState = blockState.setPropertyValues(
             properties, *values.toTypedArray()
         )
         return this
     }
 
     val runtimeId: Int
-        get() = blockState!!.blockStateHash()
+        get() = blockState.blockStateHash()
 
     open fun addVelocityToEntity(entity: Entity?, vector: Vector3?) {
     }

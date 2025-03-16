@@ -42,7 +42,7 @@ class BlockHayBlock @JvmOverloads constructor(blockstate: BlockState? = Companio
         return true
     }
 
-    var pillarAxis: BlockFace.Axis?
+    var pillarAxis: BlockFace.Axis
         get() = getPropertyValue(
             CommonBlockProperties.PILLAR_AXIS
         )

@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.Pair
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap
-import org.chorus.block.BlockStateImpl
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.tags.BlockTags.register

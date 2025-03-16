@@ -5279,13 +5279,13 @@ class Player @UsedByReflection constructor(
     fun startFishing(fishingRod: Item?) {
         val nbt = CompoundTag()
             .putList(
-                "Pos", ListTag<FloatTag?>()
+                "Pos", ListTag<FloatTag>()
                     .add(FloatTag(position.x))
                     .add(FloatTag(position.y + this.getEyeHeight()))
                     .add(FloatTag(position.z))
             )
             .putList(
-                "Motion", ListTag<FloatTag?>()
+                "Motion", ListTag<FloatTag>()
                     .add(
                         FloatTag(
                             -sin(rotation.yaw / 180 + Math.PI) * cos(
@@ -5303,7 +5303,7 @@ class Player @UsedByReflection constructor(
                     )
             )
             .putList(
-                "Rotation", ListTag<FloatTag?>()
+                "Rotation", ListTag<FloatTag>()
                     .add(FloatTag(rotation.yaw.toFloat()))
                     .add(FloatTag(rotation.pitch.toFloat()))
             )

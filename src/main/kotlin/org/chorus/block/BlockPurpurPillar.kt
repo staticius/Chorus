@@ -39,7 +39,7 @@ class BlockPurpurPillar @JvmOverloads constructor(blockstate: BlockState? = Comp
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    var pillarAxis: BlockFace.Axis?
+    var pillarAxis: BlockFace.Axis
         get() = getPropertyValue(
             CommonBlockProperties.PILLAR_AXIS
         )

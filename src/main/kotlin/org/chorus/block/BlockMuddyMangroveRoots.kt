@@ -26,7 +26,7 @@ class BlockMuddyMangroveRoots : BlockSolid, Natural {
     override val isTransparent: Boolean
         get() = true
 
-    var pillarAxis: BlockFace.Axis?
+    var pillarAxis: BlockFace.Axis
         get() = getPropertyValue(
             CommonBlockProperties.PILLAR_AXIS
         )

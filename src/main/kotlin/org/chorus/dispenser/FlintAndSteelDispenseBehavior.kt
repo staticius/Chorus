@@ -10,16 +10,16 @@ import org.chorus.math.BlockFace
 
 class FlintAndSteelDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {
-        var item = item
+        var item1 = item
         val target = block.getSide(face)
-        item = item.clone()
+        item1 = item1.clone()
 
         val down = target.down()
         if (down.id === BlockID.OBSIDIAN) {
             if (down.level.dimension != Level.DIMENSION_THE_END) {
                 if (down.level.createPortal(down)) {
-                    item.useOn(target)
-                    return if (item.damage >= item.maxDurability) null else item
+                    item1.useOn(target)
+                    return if (item1.damage >= item1.maxDurability) null else item1
                 }
             }
         }
@@ -27,18 +27,18 @@ class FlintAndSteelDispenseBehavior : DefaultDispenseBehavior() {
         if (target.id === BlockID.AIR) {
             block.level.addSound(block.position, Sound.RANDOM_CLICK, 1.0f, 1.0f)
             block.level.setBlock(target.position, Block.get(BlockID.FIRE))
-            item.useOn(target)
-            return if (item.damage >= item.maxDurability) null else item
+            item1.useOn(target)
+            return if (item1.damage >= item1.maxDurability) null else item1
         } else if (target.id === BlockID.TNT) {
             block.level.addSound(block.position, Sound.RANDOM_CLICK, 1.0f, 1.0f)
-            target.onActivate(item, null, face, 0f, 0f, 0f)
-            item.useOn(target)
-            return if (item.damage >= item.maxDurability) null else item
+            target.onActivate(item1, null, face, 0f, 0f, 0f)
+            item1.useOn(target)
+            return if (item1.damage >= item1.maxDurability) null else item1
         } else {
             this.success = false
         }
 
         block.level.addSound(block.position, Sound.RANDOM_CLICK, 1.0f, 1.2f)
-        return item
+        return item1
     }
 }

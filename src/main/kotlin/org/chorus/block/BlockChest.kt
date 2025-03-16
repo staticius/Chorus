@@ -1,29 +1,29 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.block.Block.Companion.get
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.enums.MinecraftCardinalDirection
-import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityChest
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
 import org.chorus.item.*
-import org.chorus.item.Item.Companion.get
 import org.chorus.level.Locator
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
-open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityChest?> {
+open class BlockChest @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+    BlockTransparent(blockState), Faceable, BlockEntityHolder<BlockEntityChest> {
     override fun getBlockEntityClass(): Class<out BlockEntityChest> {
         return BlockEntityChest::class.java
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.CHEST
+        return BlockEntityID.CHEST
     }
 
     override fun canBeActivated(): Boolean {
@@ -92,24 +92,24 @@ open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Compan
         player: Player?
     ): Boolean {
         blockFace = if (player != null) fromHorizontalIndex(
-            player.getDirection()!!.getOpposite()!!.horizontalIndex
+            player.getDirection()!!.getOpposite().horizontalIndex
         ) else BlockFace.SOUTH
 
-        val nbt = CompoundTag().putList("Items", ListTag<Tag>())
+        val nbt = CompoundTag().putList("Items", ListTag<Tag<*>>())
 
         if (item.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData: Map<String, Tag<*>> = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
         }
 
         val blockEntity: BlockEntityChest =
-            BlockEntityHolder.setBlockAndCreateEntity<BlockEntityChest, BlockChest>(this, true, true, nbt)
+            BlockEntityHolder.setBlockAndCreateEntity(this, true, update = true, initialData = nbt)
                 ?: return false
 
         tryPair()
@@ -169,19 +169,16 @@ open class BlockChest @JvmOverloads constructor(blockstate: BlockState? = Compan
     }
 
     override fun onBreak(item: Item?): Boolean {
-        val chest: BlockEntityChest? = blockEntity
-        if (chest != null) {
-            chest.unpair()
-        }
-        level.setBlock(this.position, get(AIR), true, true)
+        blockEntity?.unpair()
+        level.setBlock(this.position, get(BlockID.AIR), direct = true, update = true)
 
         return true
     }
 
     override fun onActivate(
         item: Item,
-        player: Player,
-        blockFace: BlockFace?,
+        player: Player?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float

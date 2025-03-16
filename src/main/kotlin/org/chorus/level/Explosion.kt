@@ -260,7 +260,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
         val random = ThreadLocalRandom.current()
 
         for (block in affectedBlocks!!) {
-            if (block is BlockTnt) {
+            if (block is BlockTNT) {
                 block.prime(random.nextInt(10, 31), if (what is Entity) what else null)
             } else if ((block.getLevel().getBlockEntity(block.position).also { container = it }) is InventoryHolder) {
                 if (container is BlockEntityShulkerBox) {

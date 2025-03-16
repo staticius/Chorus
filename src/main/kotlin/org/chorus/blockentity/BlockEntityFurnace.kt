@@ -204,10 +204,10 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         return inventory!!
     }
 
-    protected open val idleBlockID.String
+    protected open val idleBlockId: String
         get() = Block.FURNACE
 
-    protected open val burningBlockID.String
+    protected open val burningBlockId: String
         get() = Block.LIT_FURNACE
 
     protected fun setBurning(burning: Boolean) {

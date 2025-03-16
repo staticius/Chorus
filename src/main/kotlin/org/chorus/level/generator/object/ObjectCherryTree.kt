@@ -1,8 +1,10 @@
 package org.chorus.level.generator.`object`
 
 import org.chorus.block.*
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
+import org.chorus.utils.random.RandomSourceProvider
 
 class ObjectCherryTree : TreeGenerator() {
     protected var LOG_Y_AXIS: BlockState
@@ -255,15 +257,15 @@ class ObjectCherryTree : TreeGenerator() {
 
     init {
         val logY: BlockCherryLog = BlockCherryLog()
-        logY.setPillarAxis(BlockFace.Axis.Y)
-        this.LOG_Y_AXIS = logY.getBlockState()
+        logY.pillarAxis = (BlockFace.Axis.Y)
+        this.LOG_Y_AXIS = logY.blockState
         val logX: BlockCherryLog = BlockCherryLog()
-        logX.setPillarAxis(BlockFace.Axis.X)
-        this.LOG_X_AXIS = logX.getBlockState()
+        logX.pillarAxis = (BlockFace.Axis.X)
+        this.LOG_X_AXIS = logX.blockState
         val logZ: BlockCherryLog = BlockCherryLog()
-        logZ.setPillarAxis(BlockFace.Axis.Z)
-        this.LOG_Z_AXIS = logZ.getBlockState()
-        this.LEAVES = BlockCherryLeaves().getBlockState()
+        logZ.pillarAxis = (BlockFace.Axis.Z)
+        this.LOG_Z_AXIS = logZ.blockState
+        this.LEAVES = BlockCherryLeaves().blockState
     }
 
     fun generateLeaves(level: BlockManager, rand: RandomSourceProvider, x: Int, y: Int, z: Int) {
@@ -274,18 +276,18 @@ class ObjectCherryTree : TreeGenerator() {
                     if (dx * dx + dz * dz > currentRadius * currentRadius) continue
                     var block = level.getBlockAt(x + dx, y + dy, z + dz)
                     var blockId = block!!.id
-                    if (blockId == AIR ||
+                    if (blockId == BlockID.AIR ||
                         block is BlockLeaves ||
-                        blockId == AZALEA_LEAVES_FLOWERED
+                        blockId == BlockID.AZALEA_LEAVES_FLOWERED
                     ) {
                         level.setBlockStateAt(x + dx, y + dy, z + dz, LEAVES)
                     }
                     if (dy == -2 && rand.nextInt(0, 2) == 0) {
                         block = level.getBlockAt(x + dx, y + dy - 1, z + dz)
                         blockId = block!!.id
-                        if (blockId == AIR ||
+                        if (blockId == BlockID.AIR ||
                             block is BlockLeaves ||
-                            blockId == AZALEA_LEAVES_FLOWERED
+                            blockId == BlockID.AZALEA_LEAVES_FLOWERED
                         ) {
                             level.setBlockStateAt(x + dx, y + dy - 1, z + dz, LEAVES)
                         }

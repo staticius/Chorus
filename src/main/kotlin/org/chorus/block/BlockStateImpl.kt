@@ -80,7 +80,7 @@ class BlockStateImpl(
     override fun setPropertyValue(
         properties: BlockProperties,
         propertyValue: BlockPropertyValue<*, *, *>
-    ): BlockState? {
+    ): BlockState {
         val blockPropertyValues: Array<BlockPropertyValue<*, *, *>> = blockPropertyValues
         val newPropertyValues: Array<BlockPropertyValue<*, *, *>> =
             arrayOfNulls<BlockPropertyValue<*, *, *>>(blockPropertyValues.size)

@@ -967,7 +967,7 @@ class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
             register(BlockID.TALL_GRASS, BlockTallGrass::class.java)
             register(BlockID.TARGET, BlockTarget::class.java)
             register(BlockID.TINTED_GLASS, BlockTintedGlass::class.java)
-            register(BlockID.TNT, BlockTnt::class.java)
+            register(BlockID.TNT, BlockTNT::class.java)
             register(BlockID.TORCH, BlockTorch::class.java)
             register(BlockID.TORCHFLOWER, BlockTorchflower::class.java)
             register(BlockID.TORCHFLOWER_CROP, BlockTorchflowerCrop::class.java)

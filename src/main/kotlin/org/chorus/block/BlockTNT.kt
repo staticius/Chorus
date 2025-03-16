@@ -1,9 +1,11 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.entity.Entity
 import org.chorus.entity.Entity.Companion.createEntity
+import org.chorus.entity.EntityID
 import org.chorus.entity.projectile.EntitySmallFireball
 import org.chorus.entity.projectile.abstract_arrow.EntityArrow
 import org.chorus.item.*
@@ -21,7 +23,7 @@ import org.chorus.utils.random.ChorusRandom
 import kotlin.math.cos
 import kotlin.math.sin
 
-class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+class BlockTNT @JvmOverloads constructor(state: BlockState? = Companion.properties.defaultState) :
     BlockSolid(state), RedstoneComponent, Natural {
     override val name: String
         get() = "TNT"
@@ -48,25 +50,25 @@ class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properti
         val mot = (ChorusRandom()).nextFloat() * Math.PI * 2
         val nbt = CompoundTag()
             .putList(
-                "Pos", ListTag<FloatTag?>()
+                "Pos", ListTag<FloatTag>()
                     .add(FloatTag(position.x + 0.5))
                     .add(FloatTag(position.y))
                     .add(FloatTag(position.z + 0.5))
             )
             .putList(
-                "Motion", ListTag<FloatTag?>()
+                "Motion", ListTag<FloatTag>()
                     .add(FloatTag(-sin(mot) * 0.02))
                     .add(FloatTag(0.2))
                     .add(FloatTag(-cos(mot) * 0.02))
             )
             .putList(
-                "Rotation", ListTag<FloatTag?>()
+                "Rotation", ListTag<FloatTag>()
                     .add(FloatTag(0f))
                     .add(FloatTag(0f))
             )
             .putShort("Fuse", fuse)
-        val tnt: Entity = createEntity(
-            Entity.TNT,
+        val tnt = createEntity(
+            EntityID.TNT,
             level.getChunk(position.floorX shr 4, position.floorZ shr 4),
             nbt, source
         )
@@ -83,7 +85,7 @@ class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properti
     }
 
     override fun onUpdate(type: Int): Int {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return 0
         }
 
@@ -103,13 +105,13 @@ class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properti
         fz: Float
     ): Boolean {
         when (item.id) {
-            Item.FLINT_AND_STEEL -> {
+            ItemID.FLINT_AND_STEEL -> {
                 item.useOn(this)
                 this.prime(80, player)
                 return true
             }
 
-            Item.FIRE_CHARGE -> {
+            ItemID.FIRE_CHARGE -> {
                 if (player != null && !player.isCreative) {
                     item.count--
                 }
@@ -136,8 +138,10 @@ class BlockTnt @JvmOverloads constructor(state: BlockState? = Companion.properti
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TNT, CommonBlockProperties.EXPLODE_BIT)
-
     }
 }

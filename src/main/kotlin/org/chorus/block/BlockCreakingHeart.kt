@@ -79,7 +79,7 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState? = Com
             CommonBlockProperties.CREAKING_HEART_STATE
         ) != CreakingHeartState.UPROOTED
 
-    var pillarAxis: BlockFace.Axis?
+    var pillarAxis: BlockFace.Axis
         get() = getPropertyValue(
             CommonBlockProperties.PILLAR_AXIS
         )

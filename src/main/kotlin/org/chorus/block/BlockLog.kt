@@ -9,7 +9,7 @@ import org.chorus.math.BlockFace
 abstract class BlockLog(blockState: BlockState?) : BlockSolid(blockState), IBlockWood {
     abstract override fun getStrippedState(): BlockState
 
-    var pillarAxis: BlockFace.Axis?
+    var pillarAxis: BlockFace.Axis
         get() = getPropertyValue(
             CommonBlockProperties.PILLAR_AXIS
         )

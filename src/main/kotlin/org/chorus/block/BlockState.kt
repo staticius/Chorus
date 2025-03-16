@@ -28,17 +28,17 @@ interface BlockState {
         properties: BlockProperties,
         property: PROPERTY,
         value: DATATYPE
-    ): BlockState?
+    ): BlockState
 
     fun setPropertyValue(
         properties: BlockProperties,
         propertyValue: BlockPropertyType.BlockPropertyValue<*, *, *>?
-    ): BlockState?
+    ): BlockState
 
     fun setPropertyValues(
         properties: BlockProperties,
         vararg values: BlockPropertyType.BlockPropertyValue<*, *, *>?
-    ): BlockState?
+    ): BlockState
 
     val isDefaultState: Boolean
         get() = Registries.BLOCK.getBlockProperties(identifier).defaultState === this

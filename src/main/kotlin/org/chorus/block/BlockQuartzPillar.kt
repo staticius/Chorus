@@ -22,7 +22,7 @@ class BlockQuartzPillar @JvmOverloads constructor(blockstate: BlockState? = Comp
         return true
     }
 
-    var pillarAxis: BlockFace.Axis?
+    var pillarAxis: BlockFace.Axis
         get() = getPropertyValue(
             CommonBlockProperties.PILLAR_AXIS
         )
