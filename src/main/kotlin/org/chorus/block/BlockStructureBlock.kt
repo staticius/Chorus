@@ -10,7 +10,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.utils.BlockColor.equals
 
-class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockSolid(blockstate), BlockEntityHolder<BlockEntityStructBlock?> {
     var structureBlockType: StructureBlockType
         get() = getPropertyValue(CommonBlockProperties.STRUCTURE_BLOCK_TYPE)

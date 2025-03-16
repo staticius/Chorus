@@ -9,7 +9,7 @@ import org.chorus.math.BlockFace
 class BlockSnifferEgg : BlockTransparent {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockstate: BlockState?) : super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override val name: String
         get() = "Sniffer Egg"

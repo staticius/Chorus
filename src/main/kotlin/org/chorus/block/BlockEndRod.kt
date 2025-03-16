@@ -10,7 +10,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.utils.Faceable
 
-class BlockEndRod @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockEndRod @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockState), Faceable {
     override val name: String
         get() = "End Rod"

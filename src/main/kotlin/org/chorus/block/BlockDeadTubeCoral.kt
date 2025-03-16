@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockDeadTubeCoral @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockDeadTubeCoral @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTubeCoral(blockstate) {
     override val isDead: Boolean
         get() = true

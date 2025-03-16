@@ -12,7 +12,7 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
 import kotlin.math.min
 
-class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockChest(blockstate) {
     override val name: String
         get() = "Trapped Chest"

@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.OxidizationLevel
 
-open class BlockExposedCutCopperStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockExposedCutCopperStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCutCopperStairs(blockstate) {
     override fun getOxidizationLevel(): OxidizationLevel {
         return OxidizationLevel.EXPOSED

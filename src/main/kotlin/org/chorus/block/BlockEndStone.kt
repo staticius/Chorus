@@ -5,7 +5,7 @@ import org.chorus.item.ItemTool
 open class BlockEndStone : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "End Stone"

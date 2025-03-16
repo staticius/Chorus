@@ -8,7 +8,7 @@ import org.chorus.math.Vector3
 class BlockDeny : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val hardness: Double
         get() = -1.0

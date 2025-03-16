@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-open class BlockHardenedClay @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockHardenedClay @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE

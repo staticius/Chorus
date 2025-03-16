@@ -5,7 +5,7 @@ import org.chorus.item.Item
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
-class BlockBarrier @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockBarrier @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockState) {
     override val name: String
         get() = "Barrier"

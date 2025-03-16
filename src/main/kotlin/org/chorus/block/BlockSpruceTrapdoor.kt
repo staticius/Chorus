@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockSpruceTrapdoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSpruceTrapdoor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockTrapdoor(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(

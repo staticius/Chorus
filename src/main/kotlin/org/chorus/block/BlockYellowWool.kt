@@ -4,7 +4,7 @@ import org.chorus.tags.BlockTags
 import org.chorus.utils.DyeColor
 import java.util.Set
 
-class BlockYellowWool @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockYellowWool @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockWool(blockstate) {
     override val dyeColor: DyeColor
         get() = DyeColor.YELLOW

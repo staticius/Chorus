@@ -5,12 +5,12 @@ import org.chorus.block.property.enums.OxidizationLevel
 
 open class BlockExposedCutCopperSlab : BlockCutCopperSlab {
     @JvmOverloads
-    constructor(blockstate: BlockState? = Companion.properties.defaultState) : super(
+    constructor(blockstate: BlockState = Companion.properties.defaultState) : super(
         blockstate,
         EXPOSED_DOUBLE_CUT_COPPER_SLAB
     )
 
-    protected constructor(blockstate: BlockState?, doubleSlabId: String?) : super(blockstate, doubleSlabId)
+    protected constructor(blockstate: BlockState, doubleSlabId: String?) : super(blockstate, doubleSlabId)
 
     override fun getOxidizationLevel(): OxidizationLevel {
         return OxidizationLevel.EXPOSED

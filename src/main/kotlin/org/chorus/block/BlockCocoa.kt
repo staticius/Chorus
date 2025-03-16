@@ -22,7 +22,7 @@ import org.chorus.utils.Faceable
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.set
 
-class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCocoa @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable {
     override val name: String
         get() = "Cocoa"
@@ -92,11 +92,11 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
     ): Boolean {
         if (target is BlockJungleLog || target is BlockWood && target.getWoodType() == WoodType.JUNGLE) {
             if (face != BlockFace.DOWN && face != BlockFace.UP) {
-                setPropertyValue<Int, IntPropertyType>(
+                setPropertyValue(
                     CommonBlockProperties.DIRECTION,
                     faces[face.index]
                 )
-                level.setBlock(block.position, this, true, true)
+                level.setBlock(block.position, this, direct = true, update = true)
                 return true
             }
         }
@@ -106,7 +106,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val side =
-                this.getSide(fromIndex(faces2[getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)])!!)
+                this.getSide(fromIndex(faces2[getPropertyValue(CommonBlockProperties.DIRECTION)]))
             if (!((side is BlockWood && side.getWoodType() == WoodType.JUNGLE) || side is BlockJungleLog)) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
@@ -158,12 +158,12 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
 
     fun grow(): Boolean {
         val block = this.clone()
-        block.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_3, age + 1)
+        block.setPropertyValue(CommonBlockProperties.AGE_3, age + 1)
         val ev = BlockGrowEvent(this, block)
         instance.pluginManager.callEvent(ev)
         return !ev.isCancelled && level.setBlock(
             this.position,
-            ev.newState!!, true, true
+            ev.newState!!, direct = true, update = true
         )
     }
 
@@ -203,12 +203,12 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
     override var blockFace: BlockFace
         get() {
             val propertyValue =
-                getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)
+                getPropertyValue(CommonBlockProperties.DIRECTION)
             return fromHorizontalIndex(propertyValue)
         }
         set(face) {
-            val horizontalIndex = face!!.horizontalIndex
-            setPropertyValue<Int, IntPropertyType>(
+            val horizontalIndex = face.horizontalIndex
+            setPropertyValue(
                 CommonBlockProperties.DIRECTION,
                 if (horizontalIndex == -1) 0 else horizontalIndex
             )
@@ -228,27 +228,29 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState? = Companion.p
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.COCOA, CommonBlockProperties.AGE_3, CommonBlockProperties.DIRECTION)
 
-
-        protected val EAST: Array<AxisAlignedBB> = arrayOf<SimpleAxisAlignedBB>(
+        protected val EAST: Array<AxisAlignedBB> = arrayOf(
             SimpleAxisAlignedBB(0.6875, 0.4375, 0.375, 0.9375, 0.75, 0.625),
             SimpleAxisAlignedBB(0.5625, 0.3125, 0.3125, 0.9375, 0.75, 0.6875),
             SimpleAxisAlignedBB(0.5625, 0.3125, 0.3125, 0.9375, 0.75, 0.6875)
         )
-        protected val WEST: Array<AxisAlignedBB> = arrayOf<SimpleAxisAlignedBB>(
+        protected val WEST: Array<AxisAlignedBB> = arrayOf(
             SimpleAxisAlignedBB(0.0625, 0.4375, 0.375, 0.3125, 0.75, 0.625),
             SimpleAxisAlignedBB(0.0625, 0.3125, 0.3125, 0.4375, 0.75, 0.6875),
             SimpleAxisAlignedBB(0.0625, 0.3125, 0.3125, 0.4375, 0.75, 0.6875)
         )
-        protected val NORTH: Array<AxisAlignedBB> = arrayOf<SimpleAxisAlignedBB>(
+        protected val NORTH: Array<AxisAlignedBB> = arrayOf(
             SimpleAxisAlignedBB(0.375, 0.4375, 0.0625, 0.625, 0.75, 0.3125),
             SimpleAxisAlignedBB(0.3125, 0.3125, 0.0625, 0.6875, 0.75, 0.4375),
             SimpleAxisAlignedBB(0.3125, 0.3125, 0.0625, 0.6875, 0.75, 0.4375)
         )
-        protected val SOUTH: Array<AxisAlignedBB> = arrayOf<SimpleAxisAlignedBB>(
+        protected val SOUTH: Array<AxisAlignedBB> = arrayOf(
             SimpleAxisAlignedBB(0.375, 0.4375, 0.6875, 0.625, 0.75, 0.9375),
             SimpleAxisAlignedBB(0.3125, 0.3125, 0.5625, 0.6875, 0.75, 0.9375),
             SimpleAxisAlignedBB(0.3125, 0.3125, 0.5625, 0.6875, 0.75, 0.9375)

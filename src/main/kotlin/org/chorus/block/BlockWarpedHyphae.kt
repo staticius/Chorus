@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockWarpedHyphae @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockWarpedHyphae @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockStem(blockstate) {
     override fun getStrippedState(): BlockState {
         return BlockStrippedAcaciaLog.properties.getDefaultState()

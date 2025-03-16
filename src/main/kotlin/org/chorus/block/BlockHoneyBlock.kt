@@ -12,7 +12,7 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.floor
 
-class BlockHoneyBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockHoneyBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Honey Block"

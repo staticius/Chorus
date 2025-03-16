@@ -17,7 +17,7 @@ import java.util.*
 /**
  * @author joserobjr
  */
-class BlockTarget @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+class BlockTarget @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
     BlockTransparent(blockState), RedstoneComponent, BlockEntityHolder<BlockEntityTarget?> {
     override val name: String
         get() = "Target"

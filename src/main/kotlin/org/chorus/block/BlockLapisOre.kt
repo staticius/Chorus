@@ -6,7 +6,7 @@ import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockLapisOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockLapisOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockOre(blockstate) {
     override val name: String
         get() = "Lapis Ore"
@@ -36,8 +36,8 @@ open class BlockLapisOre @JvmOverloads constructor(blockstate: BlockState? = Com
     override val toolTier: Int
         get() = ItemTool.TIER_STONE
 
-    override fun getRawMaterial(): String? {
-        return ItemID.LAPIS_LAZULI
+    override val rawMaterial: String? 
+        get() = ItemID.LAPIS_LAZULI
     }
 
     override val dropExp: Int

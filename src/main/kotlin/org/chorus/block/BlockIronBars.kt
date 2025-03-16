@@ -4,7 +4,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 
-class BlockIronBars @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockIronBars @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockThin(blockstate) {
     override val name: String
         get() = "Iron Bars"

@@ -6,7 +6,7 @@ import org.chorus.dispenser.DispenseBehavior
 import org.chorus.dispenser.DropperDispenseBehavior
 import org.chorus.item.*
 
-class BlockDropper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockDropper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDispenser(blockstate) {
     override val name: String
         get() = "Dropper"

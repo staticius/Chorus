@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockPaleOakLog @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPaleOakLog @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockLog(blockstate) {
     override fun getStrippedState(): BlockState {
         return BlockStrippedPaleOakLog.properties.defaultState

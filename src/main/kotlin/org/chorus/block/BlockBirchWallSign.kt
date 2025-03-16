@@ -7,7 +7,7 @@ import org.chorus.item.ItemBirchSign
 class BlockBirchWallSign : BlockWallSign {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Birch Wall Sign"

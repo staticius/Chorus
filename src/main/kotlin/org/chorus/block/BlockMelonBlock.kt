@@ -6,7 +6,7 @@ import org.chorus.item.enchantment.Enchantment
 import java.util.*
 import kotlin.math.min
 
-class BlockMelonBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockMelonBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), Natural {
     override val name: String
         get() = "Melon Block"

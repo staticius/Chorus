@@ -39,7 +39,7 @@ import java.util.function.Predicate
 import kotlin.math.pow
 
 
-abstract class Block(blockState: BlockState?) : Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!),
+abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!),
     Metadatable, AxisAlignedBB, IVector3, Loggable {
 
     protected var color: BlockColor? = null

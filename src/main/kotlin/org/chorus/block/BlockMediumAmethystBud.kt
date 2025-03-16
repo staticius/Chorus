@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 
-class BlockMediumAmethystBud @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockMediumAmethystBud @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockAmethystBud(blockState) {
     override val namePrefix: String
         get() = "Medium"

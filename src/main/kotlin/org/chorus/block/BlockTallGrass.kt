@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom
 /**
  * @author Angelic47 (Nukkit Project)
  */
-class BlockTallGrass @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockTallGrass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockDoublePlant(blockstate) {
     override val doublePlantType: DoublePlantType
         get() = DoublePlantType.GRASS

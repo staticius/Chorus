@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockCobbledDeepslateStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCobbledDeepslateStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockStairs(blockstate) {
     override val name: String
         get() = "Cobbled Deepslate Stairs"
@@ -24,12 +24,14 @@ class BlockCobbledDeepslateStairs @JvmOverloads constructor(blockstate: BlockSta
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.COBBLED_DEEPSLATE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

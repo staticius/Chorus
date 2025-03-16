@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
-class BlockMossyCobblestoneWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockMossyCobblestoneWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {
     override val name: String
         get() = "Mossy Cobblestone Wall"

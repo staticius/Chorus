@@ -1,7 +1,7 @@
 package org.chorus.block
 
 
-class BlockBambooMosaic @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockBambooMosaic @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Bamboo Mosaic"

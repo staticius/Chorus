@@ -19,7 +19,7 @@ import org.chorus.network.protocol.LevelEventPacket
 import org.chorus.utils.Faceable
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockFrame @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate), BlockEntityHolder<BlockEntityItemFrame?>, Faceable {
     override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))!!

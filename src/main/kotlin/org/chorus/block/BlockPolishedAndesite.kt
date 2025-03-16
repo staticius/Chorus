@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-class BlockPolishedAndesite @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPolishedAndesite @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val hardness: Double
         get() = 1.5

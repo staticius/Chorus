@@ -8,7 +8,7 @@ import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Frosted Ice"

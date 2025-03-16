@@ -11,7 +11,7 @@ import org.chorus.level.Level
 open class BlockIce : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Ice"

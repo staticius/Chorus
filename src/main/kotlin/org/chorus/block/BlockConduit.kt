@@ -1,18 +1,16 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntity.scheduleUpdate
+import org.chorus.blockentity.BlockEntityConduit
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*
-import org.chorus.level.Level.scheduleUpdate
 import org.chorus.math.BlockFace
-import org.chorus.math.Vector3.equals
 import org.chorus.nbt.tag.CompoundTag
 
-class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit?> {
+class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit> {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Conduit"
@@ -22,7 +20,7 @@ class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit?> {
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.CONDUIT
+        return BlockEntityID.CONDUIT
     }
 
     override val waterloggingLevel: Int
@@ -44,13 +42,13 @@ class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit?> {
         fz: Double,
         player: Player?
     ): Boolean {
-        if (item.isBlock() && item.BlockID.== CONDUIT && target . id == CONDUIT) {
+        if (item.isBlock() && item.blockId == BlockID.CONDUIT && target.id == BlockID.CONDUIT) {
             return false
         }
 
-        val conduit: BlockEntityConduit = BlockEntityHolder.setBlockAndCreateEntity<BlockEntityConduit, BlockConduit>(
-            this, true, true,
-            CompoundTag().putBoolean("IsMovable", true)
+        val conduit = BlockEntityHolder.setBlockAndCreateEntity(
+            this, direct = true, update = true,
+            initialData = CompoundTag().putBoolean("IsMovable", true)
         )
         if (conduit != null) {
             conduit.scheduleUpdate()
@@ -102,8 +100,10 @@ class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit?> {
             super.maxZ = maxZ
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CONDUIT)
-
     }
 }

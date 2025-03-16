@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockDeepslateEmeraldOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockDeepslateEmeraldOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockEmeraldOre(blockstate) {
     override val name: String
         get() = "Deepslate Emerald Ore"

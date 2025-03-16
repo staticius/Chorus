@@ -7,7 +7,7 @@ import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 
-open class BlockLitBlastFurnace @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockLitBlastFurnace @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockLitFurnace(blockstate) {
     override val name: String
         get() = "Burning Blast Furnace"

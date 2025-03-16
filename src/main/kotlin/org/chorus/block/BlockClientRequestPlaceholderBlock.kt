@@ -1,9 +1,12 @@
 package org.chorus.block
 
-class BlockClientRequestPlaceholderBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockClientRequestPlaceholderBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     Block(blockstate,) {
+
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CLIENT_REQUEST_PLACEHOLDER_BLOCK)
-
     }
 }

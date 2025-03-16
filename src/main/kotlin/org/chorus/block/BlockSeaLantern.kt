@@ -6,7 +6,7 @@ import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
-class BlockSeaLantern @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSeaLantern @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Sea Lantern"

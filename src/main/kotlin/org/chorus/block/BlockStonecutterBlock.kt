@@ -15,7 +15,7 @@ import org.chorus.registry.BiomeRegistry.get
 import org.chorus.registry.BlockRegistry.get
 import java.util.function.Supplier
 
-class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockTransparent(blockstate), Faceable, BlockInventoryHolder {
     override val name: String
         get() = "Stonecutter"

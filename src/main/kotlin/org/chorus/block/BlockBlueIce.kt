@@ -4,7 +4,7 @@ package org.chorus.block
 class BlockBlueIce : BlockPackedIce {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Blue Ice"

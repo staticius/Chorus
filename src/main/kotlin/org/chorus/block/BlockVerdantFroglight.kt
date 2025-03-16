@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockVerdantFroglight @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+class BlockVerdantFroglight @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
     BlockFroglight(blockState) {
     override val name: String
         get() = "Verdant Froglight"

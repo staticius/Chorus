@@ -6,7 +6,7 @@ import org.chorus.blockentity.BlockEntityJukebox
 import org.chorus.item.*
 import org.chorus.math.BlockFace
 
-class BlockJukebox @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockJukebox @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), BlockEntityHolder<BlockEntityJukebox?> {
     override val name: String
         get() = "Jukebox"

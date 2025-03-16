@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.BlockFace
 
-class BlockStickyPiston @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockStickyPiston @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockPistonBase(blockstate) {
     init {
         sticky = true

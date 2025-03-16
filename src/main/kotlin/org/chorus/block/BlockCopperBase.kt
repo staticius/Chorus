@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.block.property.enums.OxidizationLevel
 import org.chorus.item.*
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
@@ -47,7 +48,7 @@ abstract class BlockCopperBase(blockState: BlockState?) : BlockSolid(blockState)
     }
 
     override fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean {
-        if (oxidizationLevel == oxidizationLevel) {
+        if (this.oxidizationLevel == oxidizationLevel) {
             return true
         }
         return level.setBlock(this.position, get(getCopperId(isWaxed, oxidizationLevel)))
@@ -67,19 +68,18 @@ abstract class BlockCopperBase(blockState: BlockState?) : BlockSolid(blockState)
         )
     }
 
-    override fun isWaxed(): Boolean {
-        return false
-    }
+    override val isWaxed: Boolean
+        get() =  false
 
     protected open fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {
             return id
         }
         return when (oxidizationLevel) {
-            OxidizationLevel.UNAFFECTED -> if (waxed) WAXED_COPPER else COPPER_BLOCK
-            OxidizationLevel.EXPOSED -> if (waxed) WAXED_EXPOSED_COPPER else EXPOSED_COPPER
-            OxidizationLevel.WEATHERED -> if (waxed) WAXED_WEATHERED_COPPER else WEATHERED_COPPER
-            OxidizationLevel.OXIDIZED -> if (waxed) WAXED_OXIDIZED_COPPER else OXIDIZED_COPPER
+            OxidizationLevel.UNAFFECTED -> if (waxed) BlockID.WAXED_COPPER else BlockID.COPPER_BLOCK
+            OxidizationLevel.EXPOSED -> if (waxed) BlockID.WAXED_EXPOSED_COPPER else BlockID.EXPOSED_COPPER
+            OxidizationLevel.WEATHERED -> if (waxed) BlockID.WAXED_WEATHERED_COPPER else BlockID.WEATHERED_COPPER
+            OxidizationLevel.OXIDIZED -> if (waxed) BlockID.WAXED_OXIDIZED_COPPER else BlockID.OXIDIZED_COPPER
         }
     }
 }

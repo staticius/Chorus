@@ -11,7 +11,7 @@ import org.chorus.math.BlockFace
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockState) {
     override val name: String
         get() = "Cave Vines"

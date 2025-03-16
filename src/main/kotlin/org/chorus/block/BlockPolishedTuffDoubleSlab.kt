@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockPolishedTuffDoubleSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPolishedTuffDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
     override val name: String
         get() = "Polished Tuff Double Slab"

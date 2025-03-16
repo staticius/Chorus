@@ -6,7 +6,7 @@ import org.chorus.entity.mob.EntityIronGolem.Companion.checkAndSpawnGolem
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-class BlockCarvedPumpkin @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCarvedPumpkin @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockPumpkin(blockstate) {
     override val name: String
         get() = "Carved Pumpkin"

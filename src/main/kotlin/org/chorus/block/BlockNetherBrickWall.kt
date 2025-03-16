@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
-class BlockNetherBrickWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockNetherBrickWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {
     override val name: String
         get() = "Nether Brick Wall"

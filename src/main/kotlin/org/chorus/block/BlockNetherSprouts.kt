@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.Item
 
-class BlockNetherSprouts @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockNetherSprouts @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockHanging(blockstate) {
     override val name: String
         get() = "Nether Sprouts Block"

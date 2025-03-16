@@ -13,7 +13,7 @@ import org.chorus.utils.Faceable
 /**
  * Alias NetherPortal
  */
-class BlockPortal @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPortal @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate), Faceable {
     override val name: String
         get() = "Nether Portal Block"

@@ -1,6 +1,6 @@
 package org.chorus.block
 
-open class BlockSmoothSandstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+open class BlockSmoothSandstone @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockSandstone(blockstate) {
     override val hardness: Double
         get() = 2.0

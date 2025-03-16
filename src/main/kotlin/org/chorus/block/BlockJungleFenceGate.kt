@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockJungleFenceGate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockJungleFenceGate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFenceGate(blockstate) {
     override val name: String
         get() = "Jungle Fence Gate"

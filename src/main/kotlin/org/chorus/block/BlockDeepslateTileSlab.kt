@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockDeepslateTileSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockDeepslateTileSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSlab(blockstate, DEEPSLATE_TILE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Deepslate Tile"

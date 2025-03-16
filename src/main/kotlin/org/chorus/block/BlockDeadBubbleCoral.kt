@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockDeadBubbleCoral @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockDeadBubbleCoral @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockBubbleCoral(blockstate) {
     override fun isDead(): Boolean {
         return true

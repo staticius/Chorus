@@ -8,7 +8,7 @@ import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import java.util.function.Supplier
 
-class BlockSmithingTable @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSmithingTable @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
     BlockSolid(blockState), BlockInventoryHolder {
     override val name: String
         get() = "Smithing Table"

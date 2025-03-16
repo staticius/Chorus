@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-class BlockLapisBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockLapisBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Lapis Lazuli Block"

@@ -5,7 +5,7 @@ import org.chorus.item.ItemTool
 import org.chorus.math.ChorusMath.ceilFloat
 import kotlin.math.min
 
-class BlockLightWeightedPressurePlate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockLightWeightedPressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockPressurePlateBase(blockstate) {
     init {
         this.onPitch = 0.90000004f

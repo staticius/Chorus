@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.Item
 
-class BlockLitDeepslateRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockLitDeepslateRedstoneOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDeepslateRedstoneOre(blockstate), IBlockOreRedstoneGlowing {
     override val name: String
         get() = "Glowing Deepslate Redstone Ore"

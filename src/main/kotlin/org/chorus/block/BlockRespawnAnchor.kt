@@ -38,7 +38,7 @@ import org.chorus.utils.TextFormat
 class BlockRespawnAnchor : Block {
     constructor() : super(Companion.properties.getDefaultState(),)
 
-    constructor(blockState: BlockState?) : super(blockState,)
+    constructor(blockState: BlockState) : super(blockState,)
 
     override val name: String
         get() = "Respawn Anchor"

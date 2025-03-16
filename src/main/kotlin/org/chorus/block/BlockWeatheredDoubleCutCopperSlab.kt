@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-open class BlockWeatheredDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+open class BlockWeatheredDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockDoubleCutCopperSlab(blockstate) {
     override val singleSlab: BlockState
         get() = BlockWeatheredCutCopperSlab.Companion.PROPERTIES.getDefaultState()

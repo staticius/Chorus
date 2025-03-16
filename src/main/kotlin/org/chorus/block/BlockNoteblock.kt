@@ -15,7 +15,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag.getByte
 
-class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), RedstoneComponent, BlockEntityHolder<BlockEntityMusic?> {
     override val name: String
         get() = "Note Block"

@@ -19,7 +19,7 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 
-open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockLiquid(blockstate) {
     override val lightLevel: Int
         get() = 15

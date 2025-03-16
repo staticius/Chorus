@@ -10,7 +10,7 @@ import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 
-open class BlockLantern @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockLantern @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Lantern"

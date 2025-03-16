@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockChainCommandBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockChainCommandBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCommandBlock(blockstate) {
     override val name: String
         get() = "Chain Command Block"

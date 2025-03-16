@@ -21,7 +21,7 @@ import kotlin.math.min
  * @author xtypr, joserobjr
  * @since 2015/12/6
  */
-class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Top Snow"

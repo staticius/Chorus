@@ -6,9 +6,9 @@ import org.chorus.math.Vector3.equals
 
 open class BlockCutCopperSlab : BlockSlabCopperBase {
     @JvmOverloads
-    constructor(blockstate: BlockState? = Companion.properties.defaultState) : super(blockstate, DOUBLE_CUT_COPPER_SLAB)
+    constructor(blockstate: BlockState = Companion.properties.defaultState) : super(blockstate, DOUBLE_CUT_COPPER_SLAB)
 
-    constructor(blockstate: BlockState?, doubleSlabId: String?) : super(blockstate, doubleSlabId)
+    constructor(blockstate: BlockState, doubleSlabId: String?) : super(blockstate, doubleSlabId)
 
     override fun getSlabName(): String {
         val sb = StringBuilder(30)
@@ -35,9 +35,9 @@ open class BlockCutCopperSlab : BlockSlabCopperBase {
         }
     }
 
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.UNAFFECTED
-    }
+    override val oxidizationLevel: OxidizationLevel 
+        get() = OxidizationLevel.UNAFFECTED
+    
 
     companion object {
         val properties: BlockProperties =

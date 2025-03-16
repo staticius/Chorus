@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockCrafter @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCrafter @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     Block(blockstate,) {
     companion object {
         val properties: BlockProperties = BlockProperties(

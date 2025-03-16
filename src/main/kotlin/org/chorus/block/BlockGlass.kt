@@ -5,7 +5,7 @@ import org.chorus.item.Item
 open class BlockGlass : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Glass"

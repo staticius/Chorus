@@ -6,7 +6,7 @@ import org.chorus.block.property.enums.WoodType
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-class BlockStrippedCherryWood @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockStrippedCherryWood @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockWoodStripped(blockstate) {
     override val name: String
         get() = "Stripped Cherry Wood"

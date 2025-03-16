@@ -27,7 +27,7 @@ import org.chorus.utils.RedstoneComponent
  * @since 26.12.2015
  */
 open class BlockTrapdoor  //</editor-fold>
-@JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+@JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
     BlockTransparent(blockState), RedstoneComponent, Faceable {
     override val name: String
         get() = "Oak Trapdoor"

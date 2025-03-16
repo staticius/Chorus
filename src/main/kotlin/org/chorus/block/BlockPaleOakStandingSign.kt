@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.*
 
-class BlockPaleOakStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPaleOakStandingSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockStandingSign(blockstate) {
     override fun getStandingSignId(): String {
         return Companion.properties.identifier

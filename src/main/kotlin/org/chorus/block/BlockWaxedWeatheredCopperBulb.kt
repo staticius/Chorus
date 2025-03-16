@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockWaxedWeatheredCopperBulb @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockWaxedWeatheredCopperBulb @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockCopperBulbBase(blockstate) {
     override fun getOxidizationLevel(): OxidizationLevel {
         return OxidizationLevel.WEATHERED

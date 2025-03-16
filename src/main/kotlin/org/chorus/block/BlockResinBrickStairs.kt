@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockResinBrickStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockResinBrickStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockStairs(blockstate) {
     override val hardness: Double
         get() = 2.0

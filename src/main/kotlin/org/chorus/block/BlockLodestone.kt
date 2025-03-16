@@ -11,7 +11,7 @@ import java.io.IOException
 class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val blockEntityClass: Class<out BlockEntityLodestone>
         get() = BlockEntityLodestone::class.java

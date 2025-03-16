@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockBambooBlock @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockBambooBlock @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockLog(blockState) {
     override val name: String
         get() = "Bamboo Block"

@@ -3,7 +3,7 @@ package org.chorus.block
 class BlockDeadBubbleCoralBlock : BlockCoralBlock {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState?) : super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override val isDead: Boolean
         get() = true

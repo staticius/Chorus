@@ -8,7 +8,7 @@ import org.chorus.math.Vector3
 /**
  * @author good777LUCKY
  */
-class BlockStructureVoid @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockStructureVoid @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Structure Void"

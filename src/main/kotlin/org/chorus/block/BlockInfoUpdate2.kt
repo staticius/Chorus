@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockInfoUpdate2 @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockInfoUpdate2 @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     Block(blockstate,) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.Companion.INFO_UPDATE2)

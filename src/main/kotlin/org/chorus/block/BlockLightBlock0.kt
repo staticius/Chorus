@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.math.AxisAlignedBB
 
-open class BlockLightBlock0 @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockLightBlock0 @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Light Block"

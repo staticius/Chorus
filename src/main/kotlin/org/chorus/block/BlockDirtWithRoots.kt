@@ -9,7 +9,7 @@ import org.chorus.math.*
 class BlockDirtWithRoots : BlockDirt {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Dirt With Roots"

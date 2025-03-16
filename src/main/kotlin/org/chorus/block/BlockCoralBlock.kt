@@ -1,6 +1,6 @@
 package org.chorus.block
 
-import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.BlockFadeEvent
 import org.chorus.item.*
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
@@ -43,9 +43,9 @@ abstract class BlockCoralBlock(blockstate: BlockState?) : BlockSolid(blockstate)
                         return type
                     }
                 }
-                val event: BlockFadeEvent = BlockFadeEvent(this, toDead())
+                val event = BlockFadeEvent(this, toDead())
                 if (!event.isCancelled) {
-                    level.setBlock(this.position, event.newState, true, true)
+                    level.setBlock(this.position, event.newState, direct = true, update = true)
                 }
             }
             return type
@@ -65,7 +65,7 @@ abstract class BlockCoralBlock(blockstate: BlockState?) : BlockSolid(blockstate)
         }
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this)
     }
 }

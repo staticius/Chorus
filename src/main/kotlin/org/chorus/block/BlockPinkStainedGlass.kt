@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.utils.DyeColor
 
-class BlockPinkStainedGlass @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPinkStainedGlass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockGlassStained(blockstate) {
     override val dyeColor: DyeColor
         get() = DyeColor.PINK

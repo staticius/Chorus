@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 import kotlin.math.min
 
-class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Bubble Column"

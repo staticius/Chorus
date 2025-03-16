@@ -9,7 +9,7 @@ import org.chorus.math.BlockFace
 class BlockGrassPath : BlockGrassBlock {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Dirt Path"

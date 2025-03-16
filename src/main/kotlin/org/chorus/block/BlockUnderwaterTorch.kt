@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockUnderwaterTorch @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockUnderwaterTorch @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     Block(blockstate,) {
     companion object {
         val properties: BlockProperties =

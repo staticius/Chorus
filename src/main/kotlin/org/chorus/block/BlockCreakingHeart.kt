@@ -8,7 +8,7 @@ import org.chorus.math.Vector3.distance
 import org.chorus.math.Vector3.equals
 import org.chorus.utils.RedstoneComponent
 
-class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), RedstoneComponent, BlockEntityHolder<BlockEntityCreakingHeart?> {
     override val hardness: Double
         get() = 10.0

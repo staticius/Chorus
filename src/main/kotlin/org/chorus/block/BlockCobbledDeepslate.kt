@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-open class BlockCobbledDeepslate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockCobbledDeepslate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Cobbled Deepslate"
@@ -23,8 +23,10 @@ open class BlockCobbledDeepslate @JvmOverloads constructor(blockstate: BlockStat
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.COBBLED_DEEPSLATE)
-
     }
 }

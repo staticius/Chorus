@@ -13,7 +13,7 @@ import kotlin.math.min
  * @author xtypr
  * @since 2015/12/2
  */
-class BlockWheat @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockWheat @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockCrops(blockstate) {
     override val name: String
         get() = "Wheat Block"

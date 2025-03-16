@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockMagentaConcretePowder @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockMagentaConcretePowder @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockConcretePowder(blockstate) {
     override val concrete: BlockConcrete
         get() = BlockMagentaConcrete()

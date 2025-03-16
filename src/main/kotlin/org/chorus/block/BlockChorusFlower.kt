@@ -3,10 +3,10 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.entity.Entity
 import org.chorus.entity.projectile.EntitySmallFireball
 import org.chorus.entity.projectile.abstract_arrow.EntityArrow
+import org.chorus.entity.projectile.throwable.EntitySnowball
 import org.chorus.event.block.BlockGrowEvent
 import org.chorus.item.*
 import org.chorus.level.Level
@@ -15,7 +15,7 @@ import org.chorus.level.Sound
 import org.chorus.math.*
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Chorus Flower"
@@ -34,7 +34,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
             // Chorus flowers must be above end stone or chorus plant, or be above air and horizontally adjacent to exactly one chorus plant.
             // If these conditions are not met, the block breaks without dropping anything.
             val down = down()
-            if (down!!.id == CHORUS_PLANT || down.id == END_STONE) {
+            if (down!!.id == BlockID.CHORUS_PLANT || down.id == BlockID.END_STONE) {
                 return true
             }
             if (!down.isAir) {
@@ -43,7 +43,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
             var foundPlant = false
             for (face in BlockFace.Plane.HORIZONTAL) {
                 val side = getSide(face)
-                if (side!!.id == CHORUS_PLANT) {
+                if (side!!.id == BlockID.CHORUS_PLANT) {
                     if (foundPlant) {
                         return false
                     }
@@ -69,15 +69,15 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
                 if (!isFullyAged) {
                     var growUp = false // Grow upward?
                     var ground = false // Is on the ground directly?
-                    if (down()!!.isAir || down()!!.id == END_STONE) {
+                    if (down()!!.isAir || down()!!.id == BlockID.END_STONE) {
                         growUp = true
-                    } else if (down()!!.id == CHORUS_PLANT) {
+                    } else if (down()!!.id == BlockID.CHORUS_PLANT) {
                         var height = 1
                         for (y in 2..5) {
-                            if (down(y)!!.id == CHORUS_PLANT) {
+                            if (down(y)!!.id == BlockID.CHORUS_PLANT) {
                                 height++
                             } else {
-                                if (down(y)!!.id == END_STONE) {
+                                if (down(y)!!.id == BlockID.END_STONE) {
                                     ground = true
                                 }
                                 break
@@ -98,7 +98,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
                         instance.pluginManager.callEvent(ev)
 
                         if (!ev.isCancelled) {
-                            level.setBlock(this.position, get(CHORUS_PLANT))
+                            level.setBlock(this.position, get(BlockID.CHORUS_PLANT))
                             level.setBlock(block.position, ev.newState!!)
                             level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW)
                         } else {
@@ -123,7 +123,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
                                 instance.pluginManager.callEvent(ev)
 
                                 if (!ev.isCancelled) {
-                                    level.setBlock(this.position, get(CHORUS_PLANT))
+                                    level.setBlock(this.position, get(BlockID.CHORUS_PLANT))
                                     level.setBlock(block.position, ev.newState!!)
                                     level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW)
                                 } else {
@@ -191,12 +191,12 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
     }
 
     val maxAge: Int
-        get() = CommonBlockProperties.AGE_6.getMax()
+        get() = CommonBlockProperties.AGE_6.max
 
     var age: Int
-        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_6)
+        get() = getPropertyValue(CommonBlockProperties.AGE_6)
         set(age) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_6, age)
+            setPropertyValue(CommonBlockProperties.AGE_6, age)
         }
 
     val isFullyAged: Boolean
@@ -222,8 +222,10 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState? = Comp
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHORUS_FLOWER, CommonBlockProperties.AGE_6)
-
     }
 }

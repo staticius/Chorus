@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockCobbledDeepslateWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCobbledDeepslateWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {
     override val name: String
         get() = "Cobbled Deepslate Wall"
@@ -17,6 +17,9 @@ class BlockCobbledDeepslateWall @JvmOverloads constructor(blockstate: BlockState
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.COBBLED_DEEPSLATE_WALL,
@@ -26,6 +29,5 @@ class BlockCobbledDeepslateWall @JvmOverloads constructor(blockstate: BlockState
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

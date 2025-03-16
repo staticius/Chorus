@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.*
 import org.chorus.math.BlockFace
 
-class BlockDaylightDetectorInverted @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockDaylightDetectorInverted @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockDaylightDetector(blockState) {
     override val name: String
         get() = "Daylight Detector Inverted"

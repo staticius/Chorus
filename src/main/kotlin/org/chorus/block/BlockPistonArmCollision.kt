@@ -12,7 +12,7 @@ import org.chorus.utils.Faceable
 /**
  * Alias piston head
  */
-open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable {
     override val name: String
         get() = "Piston Head"

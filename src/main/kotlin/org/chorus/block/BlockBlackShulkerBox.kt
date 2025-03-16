@@ -5,7 +5,7 @@ import org.chorus.item.ItemShulkerBox
 import org.chorus.tags.BlockTags
 import java.util.Set
 
-class BlockBlackShulkerBox @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockBlackShulkerBox @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockUndyedShulkerBox(blockstate) {
 
     override fun getShulkerBox(): Item {

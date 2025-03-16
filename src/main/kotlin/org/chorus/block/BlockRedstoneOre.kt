@@ -8,7 +8,7 @@ import org.chorus.level.Level
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockRedstoneOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+open class BlockRedstoneOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockOre(blockstate) {
     override val toolTier: Int
         get() = ItemTool.TIER_IRON

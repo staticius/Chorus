@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-class BlockCrackedDeepslateBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCrackedDeepslateBricks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Cracked Deepslate Bricks"

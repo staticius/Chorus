@@ -16,7 +16,7 @@ import org.chorus.utils.random.RandomSourceProvider.Companion.create
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Predicate
 
-class BlockCherrySapling @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockCherrySapling @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockSapling(blockState), FlowerPotBlock {
     override fun getWoodType(): WoodType {
         return WoodType.CHERRY

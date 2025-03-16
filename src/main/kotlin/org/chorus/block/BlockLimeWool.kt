@@ -4,7 +4,7 @@ import org.chorus.tags.BlockTags
 import org.chorus.utils.DyeColor
 import java.util.Set
 
-class BlockLimeWool @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockLimeWool @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWool(blockstate) {
     override fun getDyeColor(): DyeColor {
         return DyeColor.LIME

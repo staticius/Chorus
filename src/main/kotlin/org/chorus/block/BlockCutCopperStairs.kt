@@ -4,7 +4,7 @@ import org.chorus.block.Block.name
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.Vector3.equals
 
-open class BlockCutCopperStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockCutCopperStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockStairsCopperBase(blockstate) {
     override val name: String
         get() {
@@ -32,9 +32,9 @@ open class BlockCutCopperStairs @JvmOverloads constructor(blockstate: BlockState
         }
     }
 
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.UNAFFECTED
-    }
+    override val oxidizationLevel: OxidizationLevel 
+        get() = OxidizationLevel.UNAFFECTED
+    
 
     companion object {
         val properties: BlockProperties = BlockProperties(

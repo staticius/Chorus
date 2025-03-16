@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockCherryDoubleSlab @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockCherryDoubleSlab @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockState) {
     override fun getSlabName(): String {
         return "Cherry"

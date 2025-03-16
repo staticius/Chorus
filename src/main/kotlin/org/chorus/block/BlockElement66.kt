@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockElement66 @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockElement66 @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     Block(blockstate,) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID."minecraft:element_66")

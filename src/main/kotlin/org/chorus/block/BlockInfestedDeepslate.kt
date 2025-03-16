@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
-class BlockInfestedDeepslate @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockInfestedDeepslate @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockState) {
     override val name: String
         get() = "Infested Deepslate"

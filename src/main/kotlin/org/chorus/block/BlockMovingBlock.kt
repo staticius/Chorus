@@ -6,7 +6,7 @@ import org.chorus.item.Item
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
-class BlockMovingBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockMovingBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate), BlockEntityHolder<BlockEntityMovingBlock?> {
     override val name: String
         get() = "MovingBlock"

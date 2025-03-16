@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom
 class BlockChorusPlant : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Chorus Plant"
@@ -33,16 +33,16 @@ class BlockChorusPlant : BlockTransparent {
             val down = down()
             for (face in BlockFace.Plane.HORIZONTAL) {
                 val side = getSide(face)
-                if (side!!.id == CHORUS_PLANT) {
+                if (side!!.id == BlockID.CHORUS_PLANT) {
                     if (!horizontal) {
-                        if (up()!!.id != AIR && down!!.id != AIR) {
+                        if (up()!!.id != BlockID.AIR && down!!.id != BlockID.AIR) {
                             return false
                         }
                         horizontal = true
                     }
 
                     val sideSupport = side.down()
-                    if (sideSupport!!.id == CHORUS_PLANT || sideSupport.id == END_STONE) {
+                    if (sideSupport!!.id == BlockID.CHORUS_PLANT || sideSupport.id == BlockID.END_STONE) {
                         horizontalSupported = true
                     }
                 }
@@ -52,7 +52,7 @@ class BlockChorusPlant : BlockTransparent {
                 return true
             }
 
-            return down!!.id == CHORUS_PLANT || down.id == END_STONE
+            return down!!.id == BlockID.CHORUS_PLANT || down.id == BlockID.END_STONE
         }
 
     override fun onUpdate(type: Int): Int {
@@ -103,8 +103,10 @@ class BlockChorusPlant : BlockTransparent {
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHORUS_PLANT)
-
     }
 }

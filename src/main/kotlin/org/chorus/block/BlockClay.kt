@@ -7,7 +7,7 @@ import org.chorus.item.ItemTool
 class BlockClay : BlockSolid, Natural {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val hardness: Double
         get() = 0.6
@@ -33,8 +33,10 @@ class BlockClay : BlockSolid, Natural {
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CLAY)
-
     }
 }

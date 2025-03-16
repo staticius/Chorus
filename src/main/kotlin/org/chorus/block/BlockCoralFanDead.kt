@@ -21,6 +21,7 @@ abstract class BlockCoralFanDead(blockstate: BlockState?) : BlockCoralFan(blocks
         return 0
     }
 
-    override val deadCoralFan: Block
-        get() = this
+    override fun getDeadCoralFan(): Block {
+        return this
+    }
 }

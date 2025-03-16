@@ -19,7 +19,7 @@ import kotlin.math.floor
  * Alias post sign
  */
 
-open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSignBase(blockstate), BlockEntityHolder<BlockEntitySign>, Loggable {
 
     open fun getStandingSignId(): String? = id

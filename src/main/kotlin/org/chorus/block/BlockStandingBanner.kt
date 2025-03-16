@@ -22,7 +22,7 @@ import org.chorus.utils.BlockColor.equals
 import kotlin.math.floor
 
 
-open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBanner?> {
     override val blockEntityType: String
         get() = BlockEntity.BANNER

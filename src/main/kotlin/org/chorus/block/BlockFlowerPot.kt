@@ -15,7 +15,7 @@ import org.chorus.nbt.tag.CompoundTag
 class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot?> {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState?) : super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override val waterloggingLevel: Int
         get() = 1

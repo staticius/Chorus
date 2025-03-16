@@ -8,7 +8,7 @@ import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
-class BlockCarrots @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCarrots @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCrops(blockstate) {
     override val name: String
         get() = "Carrot Block"

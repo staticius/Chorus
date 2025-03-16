@@ -15,7 +15,7 @@ import org.chorus.math.Vector3
 import org.chorus.utils.random.RandomSourceProvider.Companion.create
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), FlowerPotBlock {
     override val name: String
         get() = "Azalea"

@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom
 class BlockNetherrack : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val resistance: Double
         get() = 0.4

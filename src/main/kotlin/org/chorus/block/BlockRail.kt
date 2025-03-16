@@ -22,7 +22,7 @@ import java.util.function.Consumer
 import java.util.stream.Stream
 import kotlin.collections.set
 
-open class BlockRail @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockState), Faceable {
     // 0x8: Set the block active
     // 0x7: Reset the block to normal

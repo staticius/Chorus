@@ -15,7 +15,7 @@ import org.chorus.math.BlockFace
 interface Waxable {
     val locator: Locator
 
-    fun onActivate(item: Item, player: Player?, blockFace: BlockFace?, fx: Float, fy: Float, fz: Float): Boolean {
+    fun onActivate(item: Item, player: Player?, blockFace: BlockFace, fx: Float, fy: Float, fz: Float): Boolean {
         var waxed = isWaxed
         if ((item.id !== ItemID.HONEYCOMB || waxed) && (!item.isAxe || !waxed)) {
             return false

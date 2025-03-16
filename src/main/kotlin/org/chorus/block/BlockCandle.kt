@@ -6,7 +6,7 @@ import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 
-open class BlockCandle @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockCandle @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     open fun toCakeForm(): Block {
         return BlockCandleCake()

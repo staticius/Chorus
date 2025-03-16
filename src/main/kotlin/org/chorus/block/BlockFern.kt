@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom
 class BlockFern : BlockFlowable, FlowerPotBlock {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState?) : super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override fun canBeReplaced(): Boolean {
         return true

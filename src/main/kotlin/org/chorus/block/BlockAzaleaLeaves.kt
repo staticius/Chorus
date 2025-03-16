@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
 import org.chorus.item.Item
 
-open class BlockAzaleaLeaves @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+open class BlockAzaleaLeaves @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockLeaves(blockState) {
     override val name: String
         get() = "Azalea Leaves"

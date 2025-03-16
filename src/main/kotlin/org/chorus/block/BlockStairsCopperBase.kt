@@ -76,9 +76,9 @@ abstract class BlockStairsCopperBase(blockstate: BlockState?) : BlockStairs(bloc
         )
     }
 
-    override fun isWaxed(): Boolean {
-        return false
-    }
+    override val isWaxed: Boolean 
+        get() = false
+    
 
     protected abstract fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String?
 }

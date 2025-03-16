@@ -6,7 +6,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
-open class BlockBasalt @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockBasalt @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Basalt"

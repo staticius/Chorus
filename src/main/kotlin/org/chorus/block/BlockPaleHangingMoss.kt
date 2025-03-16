@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-class BlockPaleHangingMoss @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPaleHangingMoss @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockHanging(blockstate) {
     override fun place(
         item: Item,

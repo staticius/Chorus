@@ -11,7 +11,7 @@ import org.chorus.utils.RedstoneComponent.updateAllAroundRedstone
 /**
  * @author Angelic47 (Nukkit Project)
  */
-class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockTorch(blockstate), RedstoneComponent {
     override val name: String
         get() = "Redstone Torch"

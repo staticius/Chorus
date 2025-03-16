@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockAcaciaLog @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockAcaciaLog @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockLog(blockstate) {
     override fun getStrippedState(): BlockState {
         return BlockStrippedAcaciaLog.properties.defaultState

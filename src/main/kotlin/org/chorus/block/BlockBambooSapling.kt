@@ -13,7 +13,7 @@ import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
 
     override val name: String

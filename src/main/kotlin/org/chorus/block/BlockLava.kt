@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-class BlockLava @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockLava @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowingLava(blockstate) {
     override val name: String
         get() = "Still Lava"

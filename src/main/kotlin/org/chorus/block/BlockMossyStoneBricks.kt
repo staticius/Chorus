@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockMossyStoneBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockMossyStoneBricks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockStoneBricks(blockstate) {
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MOSSY_STONE_BRICKS)

@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockRedMushroom @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockRedMushroom @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockMushroom(blockstate) {
     override val name: String
         get() = "Red Mushroom"

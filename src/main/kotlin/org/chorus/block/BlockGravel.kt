@@ -9,7 +9,7 @@ import org.chorus.utils.random.ChorusRandom.nextInt
 class BlockGravel : BlockFallable, Natural {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val hardness: Double
         get() = 0.6

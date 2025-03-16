@@ -22,11 +22,9 @@ abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate
 
     override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION) + 1)
-        set(blockFace) {
-            super.blockFace = blockFace
-        }
+        set(blockFace) {}
 
-    open val rootsFace: BlockFace?
+    open val rootsFace: BlockFace
         get() = BlockFace.DOWN
 
     override fun onUpdate(type: Int): Int {

@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
-open class BlockPackedIce @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockPackedIce @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockIce(blockstate) {
     override val name: String
         get() = "Packed Ice"

@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.*
 
-class BlockGlowingobsidian @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockGlowingobsidian @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Glowing Obsidian"

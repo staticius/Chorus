@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
-open class BlockStoneButton @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+open class BlockStoneButton @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockButton(blockstate) {
     override val name: String
         get() = "Stone Button"

@@ -1,13 +1,17 @@
 package org.chorus.block
 
-class BlockCopperGrate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+import org.chorus.block.property.enums.OxidizationLevel
+
+class BlockCopperGrate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCopperGrateBase(blockstate) {
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.UNAFFECTED
-    }
+
+    override val oxidizationLevel: OxidizationLevel
+        get() = OxidizationLevel.UNAFFECTED
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.COPPER_GRATE)
-
     }
 }

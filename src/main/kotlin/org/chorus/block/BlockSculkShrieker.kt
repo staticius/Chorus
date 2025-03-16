@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
 import org.chorus.item.ItemTool
 
-class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate), BlockEntityHolder<BlockEntitySculkShrieker?> {
     override val name: String
         get() = "Sculk Shrieker"

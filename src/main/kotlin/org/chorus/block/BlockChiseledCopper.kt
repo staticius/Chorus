@@ -1,13 +1,16 @@
 package org.chorus.block
 
-class BlockChiseledCopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockChiseledCopperBase(blockstate) {
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.UNAFFECTED
-    }
+import org.chorus.block.property.enums.OxidizationLevel
+
+class BlockChiseledCopper @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+    BlockChiseledCopperBase(blockState) {
+    override val oxidizationLevel: OxidizationLevel
+        get() = OxidizationLevel.UNAFFECTED
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHISELED_COPPER)
-
     }
 }

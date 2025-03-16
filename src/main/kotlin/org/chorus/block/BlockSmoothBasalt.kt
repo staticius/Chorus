@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.math.BlockFace
 
-class BlockSmoothBasalt @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSmoothBasalt @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
     BlockBasalt(blockState) {
     override val name: String
         get() = "Smooth Basalt"

@@ -5,7 +5,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 
-class BlockDioriteWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockDioriteWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {
     override val name: String
         get() = "Diorite Wall"

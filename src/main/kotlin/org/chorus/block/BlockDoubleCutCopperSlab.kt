@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.OxidizationLevel
 
-open class BlockDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabCopperBase(blockstate) {
     override val slabName: String
         get() {
@@ -34,9 +34,9 @@ open class BlockDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockS
         }
     }
 
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.UNAFFECTED
-    }
+    override val oxidizationLevel: OxidizationLevel 
+        get() = OxidizationLevel.UNAFFECTED
+    
 
     companion object {
         val properties: BlockProperties =

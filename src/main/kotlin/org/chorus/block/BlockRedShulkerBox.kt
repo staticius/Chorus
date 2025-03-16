@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.Item
 import java.util.Set
 
-class BlockRedShulkerBox @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockRedShulkerBox @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockUndyedShulkerBox(blockstate) {
     override fun getShulkerBox(): Item {
         return ItemShulkerBox(14)

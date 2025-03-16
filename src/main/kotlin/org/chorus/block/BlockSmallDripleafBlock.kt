@@ -13,7 +13,7 @@ import org.chorus.registry.BiomeRegistry.get
 import org.chorus.registry.BlockRegistry.get
 import org.chorus.utils.random.ChorusRandom.nextInt
 
-class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate), Faceable {
     override val name: String
         get() = "Small Dripleaf"

@@ -8,7 +8,7 @@ import org.chorus.item.ItemTool
 open class BlockTuff : BlockSolid {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Tuff"

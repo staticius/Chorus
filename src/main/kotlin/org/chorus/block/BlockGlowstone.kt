@@ -9,7 +9,7 @@ import java.util.*
 class BlockGlowstone : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Glowstone"

@@ -19,7 +19,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate), FlowerPotBlock {
     override val name: String
         get() = "Mangrove Propaugle"

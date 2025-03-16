@@ -16,7 +16,7 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
-open class BlockChest @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+open class BlockChest @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockState), Faceable, BlockEntityHolder<BlockEntityChest> {
     override fun getBlockEntityClass(): Class<out BlockEntityChest> {
         return BlockEntityChest::class.java

@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom
 /**
  * The default is red flower, but there are other flower variants
  */
-abstract class BlockFlower(blockstate: BlockState?) : BlockFlowable(blockstate), FlowerPotBlock,
+abstract class BlockFlower(blockstate: BlockState) : BlockFlowable(blockstate), FlowerPotBlock,
     Natural {
     open fun canPlantOn(block: Block): Boolean {
         return isSupportValid(block)
@@ -75,7 +75,7 @@ abstract class BlockFlower(blockstate: BlockState?) : BlockFlowable(blockstate),
                     ThreadLocalRandom.current().nextInt(-3, 4).toDouble()
                 )
 
-                if (level.getBlock(vec)!!.id == AIR && level.getBlock(vec.down())!!.id == GRASS_BLOCK && vec.y >= level.dimensionData.minHeight && vec.y < level.dimensionData.maxHeight) {
+                if (level.getBlock(vec)!!.id == BlockID.AIR && level.getBlock(vec.down())!!.id == BlockID.GRASS_BLOCK && vec.y >= level.dimensionData.minHeight && vec.y < level.dimensionData.maxHeight) {
                     if (ThreadLocalRandom.current().nextInt(10) == 0) {
                         level.setBlock(vec, this.uncommonFlower, true)
                     } else {
@@ -91,7 +91,7 @@ abstract class BlockFlower(blockstate: BlockState?) : BlockFlowable(blockstate),
     }
 
     open val uncommonFlower: Block
-        get() = get(DANDELION)
+        get() = get(BlockID.DANDELION)
 
     companion object {
         @JvmStatic

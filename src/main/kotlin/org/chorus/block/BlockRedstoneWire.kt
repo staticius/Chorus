@@ -18,7 +18,7 @@ import kotlin.math.max
 /**
  * @author Angelic47 (Nukkit Project)
  */
-class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
     BlockFlowable(blockState), RedstoneComponent {
     override val name: String
         get() = "Redstone Wire"

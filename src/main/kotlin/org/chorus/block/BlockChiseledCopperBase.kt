@@ -1,9 +1,9 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.block.property.enums.OxidizationLevel
 import org.chorus.item.*
 import org.chorus.math.BlockFace
-import org.chorus.math.Vector3.equals
 import org.chorus.registry.Registries
 
 abstract class BlockChiseledCopperBase(blockState: BlockState?) : BlockSolid(blockState), Oxidizable,
@@ -49,7 +49,7 @@ abstract class BlockChiseledCopperBase(blockState: BlockState?) : BlockSolid(blo
     }
 
     override fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean {
-        if (oxidizationLevel == oxidizationLevel) {
+        if (this.oxidizationLevel == oxidizationLevel) {
             return true
         }
         return level.setBlock(this.position, get(getCopperId(isWaxed, oxidizationLevel)))
@@ -69,19 +69,18 @@ abstract class BlockChiseledCopperBase(blockState: BlockState?) : BlockSolid(blo
         )
     }
 
-    override fun isWaxed(): Boolean {
-        return false
-    }
+    override val isWaxed: Boolean
+        get() = false
 
     protected fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {
             return id
         }
         return when (oxidizationLevel) {
-            OxidizationLevel.UNAFFECTED -> if (waxed) WAXED_CHISELED_COPPER else CHISELED_COPPER
-            OxidizationLevel.EXPOSED -> if (waxed) WAXED_EXPOSED_CHISELED_COPPER else EXPOSED_CHISELED_COPPER
-            OxidizationLevel.WEATHERED -> if (waxed) WAXED_WEATHERED_CHISELED_COPPER else WEATHERED_CHISELED_COPPER
-            OxidizationLevel.OXIDIZED -> if (waxed) WAXED_OXIDIZED_CHISELED_COPPER else OXIDIZED_CHISELED_COPPER
+            OxidizationLevel.UNAFFECTED -> if (waxed) BlockID.WAXED_CHISELED_COPPER else BlockID.CHISELED_COPPER
+            OxidizationLevel.EXPOSED -> if (waxed) BlockID.WAXED_EXPOSED_CHISELED_COPPER else BlockID.EXPOSED_CHISELED_COPPER
+            OxidizationLevel.WEATHERED -> if (waxed) BlockID.WAXED_WEATHERED_CHISELED_COPPER else BlockID.WEATHERED_CHISELED_COPPER
+            OxidizationLevel.OXIDIZED -> if (waxed) BlockID.WAXED_OXIDIZED_CHISELED_COPPER else BlockID.OXIDIZED_CHISELED_COPPER
         }
     }
 }

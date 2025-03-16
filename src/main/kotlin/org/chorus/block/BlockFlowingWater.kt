@@ -7,7 +7,7 @@ import org.chorus.item.*
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 
-open class BlockFlowingWater @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockFlowingWater @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockLiquid(blockstate) {
     override val name: String
         get() = "Flowing Water"

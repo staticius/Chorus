@@ -11,7 +11,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.nbt.tag.CompoundTag.putBoolean
 
-class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Scaffolding"

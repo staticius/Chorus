@@ -2,7 +2,7 @@ package org.chorus.block
 
 import java.util.Set
 
-class BlockRedWool @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockRedWool @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockWool(blockstate) {
     override fun getDyeColor(): DyeColor {
         return DyeColor.RED

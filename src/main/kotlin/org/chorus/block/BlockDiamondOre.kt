@@ -7,10 +7,10 @@ import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockDiamondOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockDiamondOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockOre(blockstate) {
-    override fun getRawMaterial(): String? {
-        return ItemID.DIAMOND
+    override val rawMaterial: String? 
+        get() = ItemID.DIAMOND
     }
 
     override val name: String

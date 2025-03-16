@@ -1,12 +1,11 @@
 package org.chorus.block
 
-class BlockCornflower : BlockFlower {
-    constructor() : super(Companion.properties.defaultState)
+class BlockCornflower(blockstate: BlockState = Companion.properties.defaultState) : BlockFlower(blockstate) {
 
-    constructor(blockstate: BlockState?) : super(blockstate)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CORNFLOWER)
-
     }
 }

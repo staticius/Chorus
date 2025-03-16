@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockPoweredComparator @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPoweredComparator @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockRedstoneComparator(blockstate) {
     init {
         this.isPowered = true

@@ -12,7 +12,7 @@ import org.chorus.utils.Faceable
 class BlockLightningRod : BlockTransparent, Faceable {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "LightningRod"

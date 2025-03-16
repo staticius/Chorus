@@ -9,7 +9,7 @@ import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.tags.BlockTags
 
-class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockState) {
     override val name: String
         get() = "Pink Petals"

@@ -6,7 +6,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
-class BlockResinClump @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockResinClump @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockLichen(blockstate) {
     override fun canHarvestWithHand(): Boolean {
         return true

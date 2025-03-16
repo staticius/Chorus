@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockCrackedDeepslateTiles @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCrackedDeepslateTiles @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDeepslateTiles(blockstate) {
     override val name: String
         get() = "Cracked Deepslate Tiles"

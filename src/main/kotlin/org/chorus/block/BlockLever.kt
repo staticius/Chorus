@@ -16,7 +16,7 @@ import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-class BlockLever @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate), RedstoneComponent, Faceable {
     override val name: String
         get() = "Lever"

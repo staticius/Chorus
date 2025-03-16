@@ -7,7 +7,7 @@ import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.utils.random.ChorusRandom.nextInt
 
-class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockGoldOre(blockstate) {
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN

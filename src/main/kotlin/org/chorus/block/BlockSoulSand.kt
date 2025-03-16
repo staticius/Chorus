@@ -10,7 +10,7 @@ import org.chorus.level.Level
  * @author Pub4Game
  * @since 27.12.2015
  */
-class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Soul Sand"

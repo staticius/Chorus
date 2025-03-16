@@ -8,7 +8,7 @@ import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.utils.random.ChorusRandom
 
-class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockAmethystCluster @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockAmethystBud(blockState) {
     override val namePrefix: String
         get() = "Cluster"

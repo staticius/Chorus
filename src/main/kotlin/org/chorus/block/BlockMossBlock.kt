@@ -8,7 +8,7 @@ import org.chorus.math.BlockFace
 import java.util.*
 import kotlin.math.abs
 
-open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), Natural {
     override val name: String
         get() = "Moss"

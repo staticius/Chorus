@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-class BlockSporeBlossom @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSporeBlossom @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Spore Blossom"

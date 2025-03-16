@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockWaxedCutCopperStairs @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockWaxedCutCopperStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockCutCopperStairs(blockstate) {
     override fun isWaxed(): Boolean {
         return true

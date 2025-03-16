@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockStrippedWarpedStem @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockStrippedWarpedStem @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockStemStripped(blockstate) {
     override val name: String
         get() = "Stripped Warped Stem"

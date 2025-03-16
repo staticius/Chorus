@@ -10,7 +10,7 @@ import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.utils.BlockColor.equals
 
-class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Seagrass"

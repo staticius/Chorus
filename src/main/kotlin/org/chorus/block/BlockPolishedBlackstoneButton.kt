@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockPolishedBlackstoneButton @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPolishedBlackstoneButton @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockStoneButton(blockstate) {
     override val name: String
         get() = "Polished Blackstone Button"

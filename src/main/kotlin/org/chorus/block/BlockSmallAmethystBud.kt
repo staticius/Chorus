@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 
-class BlockSmallAmethystBud @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSmallAmethystBud @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
     BlockAmethystBud(blockState) {
     override val namePrefix: String
         get() = "Small"

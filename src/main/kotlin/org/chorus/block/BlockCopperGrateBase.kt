@@ -1,9 +1,9 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.block.property.enums.OxidizationLevel
 import org.chorus.item.*
 import org.chorus.math.BlockFace
-import org.chorus.math.Vector3.equals
 import org.chorus.registry.Registries
 
 abstract class BlockCopperGrateBase(blockState: BlockState?) : BlockFlowable(blockState), Oxidizable,
@@ -94,7 +94,7 @@ abstract class BlockCopperGrateBase(blockState: BlockState?) : BlockFlowable(blo
     }
 
     override fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean {
-        if (oxidizationLevel == oxidizationLevel) {
+        if (this.oxidizationLevel == oxidizationLevel) {
             return true
         }
         return level.setBlock(this.position, get(getCopperId(isWaxed, oxidizationLevel)))
@@ -114,19 +114,19 @@ abstract class BlockCopperGrateBase(blockState: BlockState?) : BlockFlowable(blo
         )
     }
 
-    override fun isWaxed(): Boolean {
-        return false
-    }
+    override val isWaxed: Boolean 
+        get() = false
+    
 
     protected fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {
             return id
         }
         return when (oxidizationLevel) {
-            OxidizationLevel.UNAFFECTED -> if (waxed) WAXED_COPPER_GRATE else COPPER_GRATE
-            OxidizationLevel.EXPOSED -> if (waxed) WAXED_EXPOSED_COPPER_GRATE else EXPOSED_COPPER_GRATE
-            OxidizationLevel.WEATHERED -> if (waxed) WAXED_WEATHERED_COPPER_GRATE else WEATHERED_COPPER_GRATE
-            OxidizationLevel.OXIDIZED -> if (waxed) WAXED_OXIDIZED_COPPER_GRATE else OXIDIZED_COPPER_GRATE
+            OxidizationLevel.UNAFFECTED -> if (waxed) BlockID.WAXED_COPPER_GRATE else BlockID.COPPER_GRATE
+            OxidizationLevel.EXPOSED -> if (waxed) BlockID.WAXED_EXPOSED_COPPER_GRATE else BlockID.EXPOSED_COPPER_GRATE
+            OxidizationLevel.WEATHERED -> if (waxed) BlockID.WAXED_WEATHERED_COPPER_GRATE else BlockID.WEATHERED_COPPER_GRATE
+            OxidizationLevel.OXIDIZED -> if (waxed) BlockID.WAXED_OXIDIZED_COPPER_GRATE else BlockID.OXIDIZED_COPPER_GRATE
         }
     }
 }

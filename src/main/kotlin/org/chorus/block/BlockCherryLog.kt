@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 class BlockCherryLog : BlockLog {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val hardness: Double
         get() = 2.0

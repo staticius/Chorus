@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockCrimsonPlanks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCrimsonPlanks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockPlanks(blockstate) {
     override val name: String
         get() = "Crimson Planks"

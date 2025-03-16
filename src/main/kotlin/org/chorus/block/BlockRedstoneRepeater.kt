@@ -9,7 +9,7 @@ import org.chorus.item.Item.Companion.get
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 
-abstract class BlockRedstoneRepeater(blockState: BlockState?) : BlockRedstoneDiode(blockState) {
+abstract class BlockRedstoneRepeater(blockState: BlockState) : BlockRedstoneDiode(blockState) {
     override fun onActivate(
         item: Item,
         player: Player?,

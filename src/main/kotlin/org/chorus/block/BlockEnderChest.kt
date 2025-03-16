@@ -13,7 +13,7 @@ import org.chorus.nbt.tag.StringTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
-class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityEnderChest?> {
     override fun canBeActivated(): Boolean {
         return true

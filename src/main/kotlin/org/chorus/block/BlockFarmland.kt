@@ -7,7 +7,7 @@ import org.chorus.item.*
 import org.chorus.level.Level
 import org.chorus.math.*
 
-class BlockFarmland @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Farmland"

@@ -13,7 +13,7 @@ class BlockEntityChiseledBookshelf(chunk: IChunk, nbt: CompoundTag) : BlockEntit
     private var lastInteractedSlot: Int? = null
 
     @get:DoNotModify
-    var items: Array<Item?>
+    lateinit var items: Array<Item>
         private set
 
     override val isBlockEntityValid: Boolean
@@ -24,32 +24,32 @@ class BlockEntityChiseledBookshelf(chunk: IChunk, nbt: CompoundTag) : BlockEntit
         addBookshelfNbt(namedTag)
     }
 
-    fun removeBook(index: Int): Item? {
-        Preconditions.checkArgument(index >= 0 && index <= 5)
+    fun removeBook(index: Int): Item {
+        Preconditions.checkArgument(index in 0..5)
         val remove = items[index]
         lastInteractedSlot = index
-        setBook(null, index)
+        setBook(Item.AIR, index)
         return remove
     }
 
     fun hasBook(index: Int): Boolean {
-        Preconditions.checkArgument(index >= 0 && index <= 5)
-        return items[index] != null && !items[index]!!.isNothing
+        Preconditions.checkArgument(index in 0..5)
+        return !items[index].isNothing
     }
 
     val booksStoredBit: Int
         get() {
             var sum = 0
             for (i in 0..5) {
-                if (items[i] != null && !items[i]!!.isNothing) {
+                if (!items[i].isNothing) {
                     sum = (sum + 2.0.pow(i.toDouble())).toInt()
                 }
             }
             return sum
         }
 
-    fun setBook(item: Item?, index: Int) {
-        Preconditions.checkArgument(index >= 0 && index <= 5)
+    fun setBook(item: Item, index: Int) {
+        Preconditions.checkArgument(index in 0..5)
         items[index] = item
         setDirty()
     }
@@ -81,7 +81,7 @@ class BlockEntityChiseledBookshelf(chunk: IChunk, nbt: CompoundTag) : BlockEntit
                 val compoundTag = all[i]
                 val name = compoundTag.getString("Name")
                 if (name == "") {
-                    this.items[i] = null
+                    this.items[i] = Item.AIR
                     continue
                 }
                 val item = Item.get(name)
@@ -101,7 +101,7 @@ class BlockEntityChiseledBookshelf(chunk: IChunk, nbt: CompoundTag) : BlockEntit
         }
         val compoundTagListTag = ListTag<CompoundTag>()
         for (item in items) {
-            if (item == null || item.isNothing) {
+            if (item.isNothing) {
                 compoundTagListTag.add(
                     CompoundTag()
                         .putByte("Count", 0)
@@ -116,7 +116,7 @@ class BlockEntityChiseledBookshelf(chunk: IChunk, nbt: CompoundTag) : BlockEntit
                     .putByte("Damage", item.damage)
                     .putBoolean("WasPickedUp", false)
                 if (item.hasCompoundTag()) {
-                    compoundTag.putCompound("tag", item.namedTag)
+                    compoundTag.putCompound("tag", item.namedTag!!)
                 }
                 compoundTagListTag.add(compoundTag)
             }

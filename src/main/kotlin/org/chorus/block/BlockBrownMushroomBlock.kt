@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockBrownMushroomBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockBrownMushroomBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockMushroomBlock(blockstate) {
     override fun getDrops(item: Item): Array<Item> {
         return if (ThreadLocalRandom.current().nextInt(1, 20) == 1) {

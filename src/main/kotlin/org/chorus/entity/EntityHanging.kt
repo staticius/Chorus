@@ -35,7 +35,7 @@ abstract class EntityHanging(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
         namedTag!!.putInt("TileZ", position.z.toInt())
     }
 
-    override fun getDirection(): BlockFace? {
+    override fun getDirection(): BlockFace {
         return BlockFace.fromIndex(this.direction)
     }
 

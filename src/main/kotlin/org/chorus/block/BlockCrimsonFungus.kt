@@ -7,7 +7,7 @@ import org.chorus.level.generator.`object`.BlockManager.applySubChunkUpdate
 import org.chorus.level.generator.`object`.BlockManager.blocks
 import org.chorus.level.generator.`object`.legacytree.LegacyNetherTree.placeObject
 
-class BlockCrimsonFungus @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCrimsonFungus @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFungus(blockstate) {
     private val feature: LegacyCrimsonTree = LegacyCrimsonTree()
 

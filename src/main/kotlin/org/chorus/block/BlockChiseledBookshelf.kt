@@ -4,22 +4,18 @@ import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntityChiseledBookshelf.booksStoredBit
-import org.chorus.blockentity.BlockEntityChiseledBookshelf.hasBook
-import org.chorus.blockentity.BlockEntityChiseledBookshelf.items
-import org.chorus.blockentity.BlockEntityChiseledBookshelf.removeBook
-import org.chorus.blockentity.BlockEntityChiseledBookshelf.setBook
+import org.chorus.blockentity.BlockEntityChiseledBookshelf
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.event.player.PlayerInteractEvent
 import org.chorus.item.*
 import org.chorus.math.*
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
-import org.chorus.math.Vector3.equals
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
-class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockBookshelf(blockstate), BlockEntityHolder<BlockEntityChiseledBookshelf?>, Faceable {
+class BlockChiseledBookshelf @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+    BlockBookshelf(blockState), BlockEntityHolder<BlockEntityChiseledBookshelf>, Faceable {
     override val name: String
         get() = "Chiseled Bookshelf"
 
@@ -41,26 +37,22 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
         fz: Double,
         player: Player?
     ): Boolean {
-        blockFace = if (player != null) {
-            player.getHorizontalFacing().getOpposite()
-        } else {
-            BlockFace.SOUTH
-        }
+        blockFace = player?.getHorizontalFacing()?.getOpposite() ?: BlockFace.SOUTH
         val nbt = CompoundTag()
         if (item.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
-            for ((key, value): Map.Entry<String?, Tag?> in customData) {
+            val customData = item.customBlockData!!.getTags()
+            for ((key, value) in customData) {
                 nbt.put(key, value)
             }
         }
-        return BlockEntityHolder.setBlockAndCreateEntity<BlockEntityChiseledBookshelf?, BlockChiseledBookshelf>(
+        return BlockEntityHolder.setBlockAndCreateEntity(
             this,
-            true,
-            true,
-            nbt
+            direct = true,
+            update = true,
+            initialData = nbt
         ) != null
     }
 
@@ -69,7 +61,7 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.CHISELED_BOOKSHELF
+        return BlockEntityID.CHISELED_BOOKSHELF
     }
 
     override fun onTouch(
@@ -114,7 +106,7 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
                         itemClone.setCount(1)
                         blockEntity.setBook(itemClone, index)
                     }
-                    this.setPropertyValue<Int, IntPropertyType>(
+                    this.setPropertyValue(
                         CommonBlockProperties.BOOKS_STORED,
                         blockEntity.booksStoredBit
                     )
@@ -125,9 +117,9 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
     }
 
     override var blockFace: BlockFace
-        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
+        get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION))
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face!!.horizontalIndex)
+            setPropertyValue(CommonBlockProperties.DIRECTION, face.horizontalIndex)
         }
 
     private fun getRegion(clickPos: Vector2): Int {
@@ -140,6 +132,9 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
         }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(
@@ -147,6 +142,5 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockstate: BlockState? =
                 CommonBlockProperties.BOOKS_STORED,
                 CommonBlockProperties.DIRECTION
             )
-
     }
 }

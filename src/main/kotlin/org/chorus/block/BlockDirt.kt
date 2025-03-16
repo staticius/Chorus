@@ -8,7 +8,7 @@ import org.chorus.math.BlockFace
 open class BlockDirt : BlockSolid, Natural {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override fun canBeActivated(): Boolean {
         return true

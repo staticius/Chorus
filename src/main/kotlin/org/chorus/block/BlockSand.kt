@@ -6,7 +6,7 @@ import org.chorus.item.ItemTool
 open class BlockSand : BlockFallable, Natural {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val hardness: Double
         get() = 0.5

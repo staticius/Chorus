@@ -9,7 +9,7 @@ import org.chorus.item.Item
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 
-class BlockReeds @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Reeds"

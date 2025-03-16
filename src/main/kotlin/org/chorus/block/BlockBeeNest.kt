@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockBeeNest @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockBeeNest @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockBeehive(blockstate) {
     override val name: String
         get() = "Bee Nest"

@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 
-class BlockJungleHangingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockJungleHangingSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockHangingSign(blockstate) {
     override val name: String
         get() = "Jungle Hanging Sign"

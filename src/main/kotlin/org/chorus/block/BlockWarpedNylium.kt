@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockWarpedNylium @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockWarpedNylium @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockNylium(blockstate) {
     override val name: String
         get() = "Warped Nylium"

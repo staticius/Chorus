@@ -3,8 +3,8 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockCobbledDeepslateSlab @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockSlab(blockstate, COBBLED_DEEPSLATE_DOUBLE_SLAB) {
+class BlockCobbledDeepslateSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+    BlockSlab(blockstate, BlockID.COBBLED_DEEPSLATE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Cobbled Deepslate"
     }
@@ -26,9 +26,11 @@ class BlockCobbledDeepslateSlab @JvmOverloads constructor(blockstate: BlockState
         return id == slab.id
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.COBBLED_DEEPSLATE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

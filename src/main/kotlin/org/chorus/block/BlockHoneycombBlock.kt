@@ -5,7 +5,7 @@ import org.chorus.item.ItemTool
 class BlockHoneycombBlock : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val hardness: Double
         get() = 0.6

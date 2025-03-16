@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemPaleOakSign
 
-class BlockPaleOakWallSign @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockPaleOakWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockWallSign(blockState) {
     override fun getWallSignId(): String {
         return BlockID.PALE_OAK_WALL_SIGN

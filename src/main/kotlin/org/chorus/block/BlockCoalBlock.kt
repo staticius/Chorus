@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-class BlockCoalBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCoalBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val hardness: Double
         get() = 5.0
@@ -28,9 +28,11 @@ class BlockCoalBlock @JvmOverloads constructor(blockstate: BlockState? = Compani
     override fun canHarvestWithHand(): Boolean {
         return false
     }
+    
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.COAL_BLOCK)
-
     }
 }

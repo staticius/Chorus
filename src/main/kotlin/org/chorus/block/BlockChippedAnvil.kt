@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockChippedAnvil @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockChippedAnvil @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockAnvil(blockstate) {
     companion object {
         val properties: BlockProperties =

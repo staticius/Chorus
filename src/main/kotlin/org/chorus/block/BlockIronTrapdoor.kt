@@ -6,7 +6,7 @@ import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 
-class BlockIronTrapdoor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockIronTrapdoor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTrapdoor(blockstate) {
     override val name: String
         get() = "Iron Trapdoor"

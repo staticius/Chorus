@@ -11,7 +11,7 @@ import org.chorus.math.BlockFace
 /**
  * @author Nukkit Project Team
  */
-open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState? = Companion.properties.getDefaultState()) :
+open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
     BlockSolid(blockState), RedstoneComponent {
     override val name: String
         get() = "Redstone Lamp"

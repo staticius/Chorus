@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 class BlockTubeCoralFan : BlockCoralFan {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockstate: BlockState?) : super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override val name: String
         get() = "Tube Coral Fan"

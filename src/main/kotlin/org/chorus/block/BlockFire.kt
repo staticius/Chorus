@@ -23,7 +23,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 
-open class BlockFire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     var age: Int
         get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_16)

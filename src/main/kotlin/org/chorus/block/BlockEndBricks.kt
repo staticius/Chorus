@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockEndBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockEndBricks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockEndStone(blockstate) {
     override val name: String
         get() = "End Stone Bricks"

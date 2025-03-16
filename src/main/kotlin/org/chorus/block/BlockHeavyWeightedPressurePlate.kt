@@ -6,7 +6,7 @@ import org.chorus.math.ChorusMath.ceilFloat
 import kotlin.math.max
 import kotlin.math.min
 
-class BlockHeavyWeightedPressurePlate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockHeavyWeightedPressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockPressurePlateBase(blockstate) {
     init {
         this.onPitch = 0.90000004f

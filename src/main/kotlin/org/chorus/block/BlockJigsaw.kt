@@ -10,7 +10,7 @@ import org.chorus.math.Vector3
 import org.chorus.utils.Faceable
 import kotlin.math.abs
 
-class BlockJigsaw @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockJigsaw @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), Faceable {
     override val name: String
         get() = "Jigsaw"

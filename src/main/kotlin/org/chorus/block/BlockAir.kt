@@ -9,7 +9,7 @@ import org.chorus.math.Vector3
 class BlockAir : BlockTransparent {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Air"

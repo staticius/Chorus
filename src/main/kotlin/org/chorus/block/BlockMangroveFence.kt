@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockMangroveFence @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockMangroveFence @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFence(blockstate) {
     override val name: String
         get() = "Mangrove Fence"

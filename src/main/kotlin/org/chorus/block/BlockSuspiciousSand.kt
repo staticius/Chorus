@@ -8,7 +8,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag.putBoolean
 
-class BlockSuspiciousSand @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSuspiciousSand @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Suspicious Sand"

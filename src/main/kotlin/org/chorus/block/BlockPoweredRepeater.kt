@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockPoweredRepeater @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockPoweredRepeater @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockRedstoneRepeater(blockstate) {
     init {
         isPowered = true

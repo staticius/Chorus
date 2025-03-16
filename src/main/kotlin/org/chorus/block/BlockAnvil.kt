@@ -18,7 +18,7 @@ import org.chorus.utils.Faceable
 import java.util.function.Supplier
 import kotlin.math.abs
 
-open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFallable(blockstate), Faceable, BlockInventoryHolder {
     var anvilDamage: Damage
         get() = when (this) {

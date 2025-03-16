@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-class BlockQuartzPillar @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockQuartzPillar @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockQuartzBlock(blockstate) {
     override fun place(
         item: Item,

@@ -3,9 +3,9 @@ package org.chorus.block
 import org.chorus.item.ItemTool
 
 abstract class BlockWoodenSlab : BlockSlab {
-    constructor(blockState: BlockState?, doubleSlab: BlockState?) : super(blockState, doubleSlab)
+    constructor(blockState: BlockState, doubleSlab: BlockState?) : super(blockState, doubleSlab)
 
-    constructor(blockState: BlockState?, doubleSlab: String) : super(blockState, doubleSlab)
+    constructor(blockState: BlockState, doubleSlab: String) : super(blockState, doubleSlab)
 
     override val name: String
         get() = (if (isOnTop) "Upper " else "") + getSlabName() + " Wood Slab"

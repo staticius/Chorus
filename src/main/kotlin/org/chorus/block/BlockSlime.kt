@@ -9,7 +9,7 @@ import org.chorus.math.BlockFace
 class BlockSlime : BlockTransparent {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val hardness: Double
         get() = 0.0

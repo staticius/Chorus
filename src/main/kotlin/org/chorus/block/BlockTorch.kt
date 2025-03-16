@@ -13,7 +13,7 @@ import org.chorus.utils.Faceable
  * @author xtypr
  * @since 2015/12/2
  */
-open class BlockTorch @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate), Faceable {
     override val name: String
         get() = "Torch"

@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockAcaciaPressurePlate @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockAcaciaPressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWoodenPressurePlate(blockstate) {
     override val name: String
         get() = "Acacia Pressure Plate"

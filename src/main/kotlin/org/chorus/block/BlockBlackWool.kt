@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.tags.BlockTags
 import org.chorus.utils.DyeColor
 
-class BlockBlackWool @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockBlackWool @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWool(blockstate) {
     override fun getDyeColor(): DyeColor {
         return DyeColor.BLACK

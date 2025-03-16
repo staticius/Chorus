@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.level.Level
 
-class BlockSoulFire @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSoulFire @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFire(blockstate) {
     override val name: String
         get() = "Soul Fire Block"

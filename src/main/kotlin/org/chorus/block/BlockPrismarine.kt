@@ -6,7 +6,7 @@ import org.chorus.item.*
 open class BlockPrismarine : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val hardness: Double
         get() = 1.5

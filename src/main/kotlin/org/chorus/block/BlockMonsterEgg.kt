@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 
-class BlockMonsterEgg @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockMonsterEgg @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     var monsterEggStoneType: MonsterEggStoneType
         get() = getPropertyValue(CommonBlockProperties.MONSTER_EGG_STONE_TYPE)

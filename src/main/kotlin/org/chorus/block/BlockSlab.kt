@@ -11,11 +11,11 @@ import org.chorus.registry.Registries
 abstract class BlockSlab : BlockTransparent {
     protected val doubleSlab: BlockState?
 
-    constructor(blockState: BlockState?, doubleSlab: BlockState?) : super(blockState) {
+    constructor(blockState: BlockState, doubleSlab: BlockState?) : super(blockState) {
         this.doubleSlab = doubleSlab
     }
 
-    constructor(blockState: BlockState?, doubleSlab: String) : super(blockState) {
+    constructor(blockState: BlockState, doubleSlab: String) : super(blockState) {
         this.doubleSlab = Registries.BLOCK.get(doubleSlab)!!.blockState
     }
 

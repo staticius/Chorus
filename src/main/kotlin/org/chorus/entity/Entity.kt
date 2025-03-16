@@ -1766,21 +1766,17 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return true
     }
 
-    open fun getDirection(): BlockFace? {
+    open fun getDirection(): BlockFace {
         var rotation: Double = rotation.yaw % 360
         if (rotation < 0) {
             rotation += 360.0
         }
-        return if ((0 <= rotation && rotation < 45) || (315 <= rotation && rotation < 360)) {
-            BlockFace.SOUTH
-        } else if (45 <= rotation && rotation < 135) {
-            BlockFace.WEST
-        } else if (135 <= rotation && rotation < 225) {
-            BlockFace.NORTH
-        } else if (225 <= rotation && rotation < 315) {
-            BlockFace.EAST
-        } else {
-            null
+        return when {
+            (0 <= rotation && rotation < 45) || (315 <= rotation && rotation < 360) -> BlockFace.SOUTH
+            45 <= rotation && rotation < 135 -> BlockFace.WEST
+            135 <= rotation && rotation < 225 -> BlockFace.NORTH
+            225 <= rotation && rotation < 315 -> BlockFace.EAST
+            else -> BlockFace.SOUTH
         }
     }
 

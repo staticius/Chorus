@@ -16,7 +16,7 @@ import java.util.*
 class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntityDecoratedPot?> {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState?) : super(blockState)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Decorated Pot"

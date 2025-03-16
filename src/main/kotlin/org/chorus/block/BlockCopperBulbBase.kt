@@ -1,13 +1,14 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.OxidizationLevel
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.event.Event.isCancelled
+import org.chorus.event.redstone.RedstoneUpdateEvent
 import org.chorus.item.*
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
-import org.chorus.math.Vector3.equals
 import org.chorus.registry.Registries
 import org.chorus.utils.RedstoneComponent
 
@@ -45,7 +46,7 @@ abstract class BlockCopperBulbBase(blockState: BlockState?) : BlockSolid(blockSt
         super<Oxidizable>.onUpdate(type)
 
         if (type == Level.BLOCK_UPDATE_REDSTONE) {
-            val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+            val ev = RedstoneUpdateEvent(this)
             Server.instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
@@ -56,7 +57,7 @@ abstract class BlockCopperBulbBase(blockState: BlockState?) : BlockSolid(blockSt
                 this.lit = !(lit)
 
                 this.powered = true
-                level.setBlock(this.position, this, true, true)
+                level.setBlock(this.position, this, direct = true, update = true)
                 return 1
             }
 
@@ -83,9 +84,9 @@ abstract class BlockCopperBulbBase(blockState: BlockState?) : BlockSolid(blockSt
         }
 
     var powered: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT)
+        get() = getPropertyValue(CommonBlockProperties.POWERED_BIT)
         set(powered) {
-            this.setPropertyValue<Boolean, BooleanPropertyType>(
+            this.setPropertyValue(
                 CommonBlockProperties.POWERED_BIT,
                 powered
             )
@@ -96,7 +97,7 @@ abstract class BlockCopperBulbBase(blockState: BlockState?) : BlockSolid(blockSt
     }
 
     override fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean {
-        if (oxidizationLevel == oxidizationLevel) {
+        if (this.oxidizationLevel == oxidizationLevel) {
             return true
         }
         return level.setBlock(this.position, get(getCopperId(isWaxed, oxidizationLevel)))
@@ -116,19 +117,19 @@ abstract class BlockCopperBulbBase(blockState: BlockState?) : BlockSolid(blockSt
         )
     }
 
-    override fun isWaxed(): Boolean {
-        return false
-    }
+    override val isWaxed: Boolean
+        get() = false
+    
 
     protected fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {
             return id
         }
         return when (oxidizationLevel) {
-            OxidizationLevel.UNAFFECTED -> if (waxed) WAXED_COPPER_BULB else COPPER_BULB
-            OxidizationLevel.EXPOSED -> if (waxed) WAXED_EXPOSED_COPPER_BULB else EXPOSED_COPPER_BULB
-            OxidizationLevel.WEATHERED -> if (waxed) WAXED_WEATHERED_COPPER_BULB else WEATHERED_COPPER_BULB
-            OxidizationLevel.OXIDIZED -> if (waxed) WAXED_OXIDIZED_COPPER_BULB else OXIDIZED_COPPER_BULB
+            OxidizationLevel.UNAFFECTED -> if (waxed) BlockID.WAXED_COPPER_BULB else BlockID.COPPER_BULB
+            OxidizationLevel.EXPOSED -> if (waxed) BlockID.WAXED_EXPOSED_COPPER_BULB else BlockID.EXPOSED_COPPER_BULB
+            OxidizationLevel.WEATHERED -> if (waxed) BlockID.WAXED_WEATHERED_COPPER_BULB else BlockID.WEATHERED_COPPER_BULB
+            OxidizationLevel.OXIDIZED -> if (waxed) BlockID.WAXED_OXIDIZED_COPPER_BULB else BlockID.OXIDIZED_COPPER_BULB
         }
     }
 }

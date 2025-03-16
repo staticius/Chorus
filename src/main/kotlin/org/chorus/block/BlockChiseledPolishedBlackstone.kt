@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockChiseledPolishedBlackstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockChiseledPolishedBlackstone @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockBlackstone(blockstate) {
     override val name: String
         get() = "Chiseled Polished Blackstone"

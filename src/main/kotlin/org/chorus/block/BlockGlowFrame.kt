@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
 
-class BlockGlowFrame @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockGlowFrame @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFrame(blockstate) {
     override val name: String
         get() = "Glow Item Frame"

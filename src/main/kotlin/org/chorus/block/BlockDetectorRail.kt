@@ -11,7 +11,7 @@ import org.chorus.utils.OptionalBoolean
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockRail(blockstate), RedstoneComponent {
     override val name: String
         get() = "Detector Rail"

@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockTuffWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockTuffWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockWallBase(blockstate) {
     override val name: String
         get() = "Tuff Wall"

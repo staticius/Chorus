@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import org.chorus.AdventureSettings
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
@@ -24,7 +25,7 @@ import org.chorus.utils.RedstoneComponent
 import kotlin.collections.set
 
 
-abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState), RedstoneComponent,
+abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState), RedstoneComponent,
     Faceable {
     override fun canBeActivated(): Boolean {
         return true
@@ -41,14 +42,14 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
     }
 
     override fun recalculateBoundingBox(): AxisAlignedBB? {
-        val position = blockFace!!.getOpposite()
+        val position = blockFace.getOpposite()
         val isOpen = isOpen
         val isRight = isRightHinged
 
         return if (isOpen) {
-            recalculateBoundingBoxWithPos(if (isRight) position!!.rotateYCCW() else position!!.rotateY())
+            recalculateBoundingBoxWithPos(if (isRight) position.rotateYCCW() else position.rotateY())
         } else {
-            recalculateBoundingBoxWithPos(position!!)
+            recalculateBoundingBoxWithPos(position)
         }
     }
 
@@ -80,7 +81,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
             return type
         }
 
-        if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings().enableRedstone()) {
+        if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings.enableRedstone) {
             this.onRedstoneUpdate()
             return type
         }
@@ -92,7 +93,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
         val down = this.down()
         if (isTop) {
             if (down!!.id != this.id || down.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPPER_BLOCK_BIT)) {
-                level.setBlock(this.position, get(AIR), false)
+                level.setBlock(this.position, get(BlockID.AIR), false)
             }
 
             /* Doesn't work with redstone
@@ -104,7 +105,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
             return
         }
 
-        if (down!!.id == AIR) {
+        if (down!!.id == BlockID.AIR) {
             level.useBreakOn(
                 this.position,
                 if (toolType == ItemTool.TYPE_PICKAXE) Item.get(ItemID.DIAMOND_PICKAXE) else null
@@ -146,7 +147,7 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
                 down
             )
         }
-        set(val) {
+        set(`val`) {
             val down: Locator
             val up: Locator
             if (this.isTop) {
@@ -212,10 +213,10 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
             return false
         }
 
-        val direction = if (player != null) player.getDirection() else BlockFace.SOUTH
+        val direction = player?.getDirection() ?: BlockFace.SOUTH
         blockFace = direction
 
-        val left = this.getSide(direction!!.rotateYCCW())
+        val left = this.getSide(direction.rotateYCCW())
         val right = this.getSide(direction.rotateY())
         if (left!!.id == this.id || (!right!!.isTransparent && left.isTransparent)) { //Door hinge
             isRightHinged = true
@@ -223,20 +224,20 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
 
         isTop = false
 
-        level.setBlock(block.position, this, true, false) //Bottom
+        level.setBlock(block.position, this, direct = true, update = false) //Bottom
 
         if (blockUp is BlockLiquid && blockUp.usesWaterLogging()) {
-            level.setBlock(blockUp.position, 1, blockUp, true, false)
+            level.setBlock(blockUp.position, 1, blockUp, direct = true, update = false)
         }
 
         val doorTop = clone() as BlockDoor
         doorTop.position.y++
         doorTop.isTop = true
-        level.setBlock(doorTop.position, doorTop, true, true) //Top
+        level.setBlock(doorTop.position, doorTop, direct = true, update = true) //Top
 
         level.updateAround(block.position)
 
-        if (Server.instance.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
+        if (Server.instance.settings.levelSettings.enableRedstone && !this.isOpen && this.isGettingPower) {
             this.setOpen(null, true)
         }
 
@@ -247,16 +248,16 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
         this.manualOverride = false
         if (isTop) {
             val down = this.down()
-            if (down!!.id == this.id && !down.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPPER_BLOCK_BIT)) {
-                level.setBlock(down.position, get(AIR), true)
+            if (down!!.id == this.id && !down.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)) {
+                level.setBlock(down.position, get(BlockID.AIR), true)
             }
         } else {
             val up = this.up()
-            if (up!!.id == this.id && up.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPPER_BLOCK_BIT)) {
-                level.setBlock(up.position, get(AIR), true)
+            if (up!!.id == this.id && up.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)) {
+                level.setBlock(up.position, get(BlockID.AIR), true)
             }
         }
-        level.setBlock(this.position, get(AIR), true)
+        level.setBlock(this.position, get(BlockID.AIR), true)
 
         return true
     }
@@ -302,25 +303,25 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
 
     fun toggle(player: Player?): Boolean {
         if (player != null) {
-            if (!player.getAdventureSettings()!!.get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
         }
         return this.setOpen(player, !this.isOpen)
     }
 
     fun setOpen(player: Player?, open: Boolean): Boolean {
-        var player = player
+        var player1 = player
         if (open == this.isOpen) {
             return false
         }
 
-        val event = DoorToggleEvent(this, player!!)
+        val event = DoorToggleEvent(this, player1!!)
         Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
             return false
         }
 
-        player = event.player
+        player1 = event.player
 
         val down: Block?
         val up: Block?
@@ -333,23 +334,21 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
         }
 
         up!!.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
-        up.level.setBlock(up.position, up, true, true)
+        up.level.setBlock(up.position, up, direct = true, update = true)
 
         down!!.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
-        down.level.setBlock(down.position, down, true, true)
+        down.level.setBlock(down.position, down, direct = true, update = true)
 
-        if (player != null) {
-            this.manualOverride = this.isGettingPower || this.isOpen
-        }
+        this.manualOverride = this.isGettingPower || this.isOpen
 
         playOpenCloseSound()
 
         val source = vector3.add(0.5, 0.5, 0.5)
         val vibrationEvent = if (open) VibrationEvent(
-            player,
+            player1,
             source, VibrationType.BLOCK_OPEN
         ) else VibrationEvent(
-            player,
+            player1,
             source, VibrationType.BLOCK_CLOSE
         )
         level.vibrationManager.callVibrationEvent(vibrationEvent)
@@ -357,27 +356,27 @@ abstract class BlockDoor(blockState: BlockState?) : BlockTransparent(blockState)
     }
 
     var isOpen: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT)
+        get() = getPropertyValue(CommonBlockProperties.OPEN_BIT)
         set(open) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
+            setPropertyValue(CommonBlockProperties.OPEN_BIT, open)
         }
 
     var isTop: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPPER_BLOCK_BIT)
+        get() = getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)
         set(top) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPPER_BLOCK_BIT, top)
+            setPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT, top)
         }
 
     var isRightHinged: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.DOOR_HINGE_BIT)
+        get() = getPropertyValue(CommonBlockProperties.DOOR_HINGE_BIT)
         set(rightHinged) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.DOOR_HINGE_BIT, rightHinged)
+            setPropertyValue(CommonBlockProperties.DOOR_HINGE_BIT, rightHinged)
         }
 
     override var blockFace: BlockFace
         get() = DOOR_DIRECTION.inverse()[getPropertyValue(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-        ).ordinal]
+        ).ordinal]!!
         set(face) {
             setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,

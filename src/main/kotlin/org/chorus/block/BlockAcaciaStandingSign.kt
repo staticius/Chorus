@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemAcaciaSign
 
-class BlockAcaciaStandingSign @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockAcaciaStandingSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockStandingSign(blockstate) {
     override fun getStandingSignId(): String {
         return Companion.properties.identifier

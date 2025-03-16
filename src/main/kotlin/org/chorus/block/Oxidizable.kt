@@ -89,7 +89,7 @@ interface Oxidizable {
         return type
     }
 
-    fun onActivate(item: Item, player: Player?, blockFace: BlockFace?, fx: Float, fy: Float, fz: Float): Boolean {
+    fun onActivate(item: Item, player: Player?, blockFace: BlockFace, fx: Float, fy: Float, fz: Float): Boolean {
         if (!item.isAxe) {
             return false
         }

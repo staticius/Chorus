@@ -15,7 +15,7 @@ import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.utils.Faceable
 import java.util.function.Supplier
 
-class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockInventoryHolder {
     override val name: String
         get() = "Grindstone"

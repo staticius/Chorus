@@ -14,7 +14,7 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 import kotlin.math.max
 
-abstract class BlockRedstoneComparator(blockstate: BlockState?) : BlockRedstoneDiode(blockstate),
+abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDiode(blockstate),
     BlockEntityHolder<BlockEntityComparator> {
     override fun getBlockEntityClass() = BlockEntityComparator::class.java
 

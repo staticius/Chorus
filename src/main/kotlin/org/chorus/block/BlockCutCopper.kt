@@ -2,14 +2,14 @@ package org.chorus.block
 
 import org.chorus.math.Vector3.equals
 
-open class BlockCutCopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockCutCopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCopperBase(blockstate) {
     override val name: String
         get() = "Cut Copper"
 
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.UNAFFECTED
-    }
+    override val oxidizationLevel: OxidizationLevel 
+        get() = OxidizationLevel.UNAFFECTED
+    
 
     override fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {

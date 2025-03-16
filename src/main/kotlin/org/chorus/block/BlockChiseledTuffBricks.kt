@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-class BlockChiseledTuffBricks @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockChiseledTuffBricks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Chiseled Tuff Bricks"
@@ -23,8 +23,10 @@ class BlockChiseledTuffBricks @JvmOverloads constructor(blockstate: BlockState? 
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHISELED_TUFF_BRICKS)
-
     }
 }

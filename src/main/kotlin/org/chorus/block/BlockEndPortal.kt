@@ -8,7 +8,7 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
-class BlockEndPortal @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockState), BlockEntityHolder<BlockEntityEndPortal> {
     override val name: String
         get() = "End Portal Block"

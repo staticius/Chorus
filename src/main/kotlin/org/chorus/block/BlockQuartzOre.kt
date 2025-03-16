@@ -7,7 +7,7 @@ import org.chorus.item.enchantment.Enchantment
 import org.chorus.utils.random.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockQuartzOre @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockQuartzOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Quartz Ore"

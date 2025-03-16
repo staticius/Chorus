@@ -34,7 +34,7 @@ abstract class BlockDeadCoralWallFan(blockstate: BlockState?) : BlockCoralFanDea
             super.blockFace = blockFace
         }
 
-    override val rootsFace: BlockFace?
+    override val rootsFace: BlockFace
         get() = blockFace?.getOpposite()
 
     override fun toItem(): Item? {

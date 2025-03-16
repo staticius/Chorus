@@ -10,7 +10,7 @@ import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import kotlin.math.floor
 
-class BlockHayBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockHayBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val hardness: Double
         get() = 0.5

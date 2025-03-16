@@ -10,7 +10,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.utils.Faceable
 
-class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable {
     override val resistance: Double
         get() = 3600000.0

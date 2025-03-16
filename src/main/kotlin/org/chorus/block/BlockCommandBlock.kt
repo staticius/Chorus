@@ -5,27 +5,19 @@ import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntityCampfire.getInventory
-import org.chorus.blockentity.BlockEntityChest.getInventory
-import org.chorus.blockentity.BlockEntityCommandBlock.getInventory
-import org.chorus.blockentity.BlockEntityCommandBlock.isPowered
-import org.chorus.blockentity.BlockEntityCommandBlock.successCount
-import org.chorus.blockentity.BlockEntitySpawnable.spawnTo
-import org.chorus.blockentity.ICommandBlock.setPowered
-import org.chorus.blockentity.ICommandBlock.trigger
-import org.chorus.entity.EntityHumanType.getInventory
+import org.chorus.blockentity.BlockEntityCommandBlock
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*
 import org.chorus.level.Level
 import org.chorus.math.*
 import org.chorus.math.BlockFace.Companion.fromIndex
-import org.chorus.math.Vector3.equals
 import org.chorus.utils.Faceable
 import kotlin.math.abs
 import kotlin.math.min
 
 //special thanks to wode
-open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
-    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityCommandBlock?> {
+open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+    BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityCommandBlock> {
     override val resistance: Double
         get() = 6000000.0
 
@@ -42,9 +34,9 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
     }
 
     override var blockFace: BlockFace
-        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        get() = fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
     override fun place(
@@ -74,10 +66,10 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
         } else {
             this.blockFace = BlockFace.DOWN
         }
-        return BlockEntityHolder.setBlockAndCreateEntity<BlockEntityCommandBlock?, BlockCommandBlock>(
+        return BlockEntityHolder.setBlockAndCreateEntity(
             this,
-            true,
-            true
+            direct = true,
+            update = true
         ) != null
     }
 
@@ -95,8 +87,7 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
     ): Boolean {
         if (player != null) {
             val itemInHand = player.getInventory().itemInHand
-            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing) || !instance.settings.gameplaySettings()
-                    .enableCommandBlocks()
+            if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing) || !instance.settings.gameplaySettings.enableCommandBlocks
             ) {
                 return false
             }
@@ -128,17 +119,20 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
 
     override val comparatorInputOverride: Int
         get() = min(
-            getOrCreateBlockEntity().successCount.toDouble(),
-            TODO("Could not convert double literal '0xf' to Kotlin")
-        ).toInt()
+            getOrCreateBlockEntity().successCount,
+            0xf
+        )
 
     override fun getBlockEntityClass(): Class<out BlockEntityCommandBlock> {
         return BlockEntityCommandBlock::class.java
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.COMMAND_BLOCK
+        return BlockEntityID.COMMAND_BLOCK
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -146,6 +140,5 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState? =
             CommonBlockProperties.CONDITIONAL_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-
     }
 }

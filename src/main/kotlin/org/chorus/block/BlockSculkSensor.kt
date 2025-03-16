@@ -11,7 +11,7 @@ import org.chorus.utils.RedstoneComponent.updateAroundRedstone
 /**
  * @author LT_Name
  */
-class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockFlowable(blockstate), BlockEntityHolder<BlockEntitySculkSensor?>, RedstoneComponent {
     override val name: String
         get() = "Sculk Sensor"

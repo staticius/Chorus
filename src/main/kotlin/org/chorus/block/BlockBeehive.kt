@@ -18,7 +18,7 @@ import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.math.Vector3
 import org.chorus.utils.Faceable
 
-open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityBeehive> {
     override val name: String
         get() = "Beehive"

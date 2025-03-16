@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.math.AxisAlignedBB
 
 
-abstract class BlockFlowable(blockState: BlockState?) : BlockTransparent(blockState) {
+abstract class BlockFlowable(blockState: BlockState) : BlockTransparent(blockState) {
     override fun canBeFlowedInto(): Boolean {
         return true
     }

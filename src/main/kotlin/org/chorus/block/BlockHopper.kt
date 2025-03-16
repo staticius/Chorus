@@ -24,7 +24,7 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 
-class BlockHopper @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityHopper?> {
     override val blockEntityClass: Class<out BlockEntityHopper>
         get() = BlockEntityHopper::class.java

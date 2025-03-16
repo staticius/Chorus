@@ -5,7 +5,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 
-class BlockCobblestoneWall @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.defaultState) :
+class BlockCobblestoneWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {
     override val name: String
         get() = "Cobblestone Wall"
@@ -20,6 +20,9 @@ class BlockCobblestoneWall @JvmOverloads constructor(blockstate: BlockState? = C
         return ItemBlock(properties.defaultState.toBlock())
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.COBBLESTONE_WALL,
@@ -29,6 +32,5 @@ class BlockCobblestoneWall @JvmOverloads constructor(blockstate: BlockState? = C
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

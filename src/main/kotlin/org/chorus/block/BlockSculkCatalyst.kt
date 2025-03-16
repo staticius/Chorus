@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
 import org.chorus.item.ItemTool
 
-class BlockSculkCatalyst @JvmOverloads constructor(blockstate: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSculkCatalyst @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockSolid(blockstate), BlockEntityHolder<BlockEntitySculkCatalyst?> {
     override val name: String
         get() = "Sculk Catalyst"

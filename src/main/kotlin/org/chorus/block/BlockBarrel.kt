@@ -17,7 +17,7 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 import kotlin.math.abs
 
-class BlockBarrel @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockBarrel @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockState), Faceable, BlockEntityHolder<BlockEntityBarrel> {
     override val name: String
         get() = "Barrel"

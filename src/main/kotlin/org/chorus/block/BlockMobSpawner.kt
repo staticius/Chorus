@@ -12,7 +12,7 @@ import org.chorus.nbt.tag.CompoundTag.putInt
 import org.chorus.nbt.tag.CompoundTag.putString
 import org.chorus.registry.Registries
 
-class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState? = Companion.properties.defaultState) :
+class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockState) {
     override val name: String
         get() = "Monster Spawner"
