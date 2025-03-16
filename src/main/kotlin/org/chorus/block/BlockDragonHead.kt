@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemDragonHead
 
-class BlockDragonHead(blockState: BlockState?) : BlockHead(blockState) {
+class BlockDragonHead(blockState: BlockState) : BlockHead(blockState) {
     override val name: String
         get() = "Dragon Head"
 

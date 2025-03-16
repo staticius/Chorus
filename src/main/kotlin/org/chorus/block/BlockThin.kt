@@ -11,7 +11,7 @@ import org.chorus.utils.LevelException
  * @since 2015/12/6
  * @apiNote Implements BlockConnectable only in PowerNukkit
  */
-abstract class BlockThin(blockState: BlockState?) : BlockTransparent(blockState), BlockConnectable {
+abstract class BlockThin(blockState: BlockState) : BlockTransparent(blockState), BlockConnectable {
     override val isSolid: Boolean
         get() = false
 

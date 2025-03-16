@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.ItemTool
 import org.chorus.utils.DyeColor
 
-abstract class BlockWool(blockstate: BlockState?) : BlockSolid(blockstate) {
+abstract class BlockWool(blockstate: BlockState) : BlockSolid(blockstate) {
     override val name: String
         get() = getDyeColor().colorName + " Wool"
 

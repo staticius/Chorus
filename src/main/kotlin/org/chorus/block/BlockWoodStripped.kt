@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-abstract class BlockWoodStripped(blockstate: BlockState?) : BlockWood(blockstate) {
+abstract class BlockWoodStripped(blockstate: BlockState) : BlockWood(blockstate) {
     override fun getStrippedState(): BlockState {
         return blockState!!
     }

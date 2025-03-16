@@ -6,7 +6,7 @@ import org.chorus.entity.mob.monster.EntityWither.Companion.checkAndSpawnWither
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-class BlockWitherSkeletonSkull(blockState: BlockState?) : BlockHead(blockState) {
+class BlockWitherSkeletonSkull(blockState: BlockState) : BlockHead(blockState) {
     override val name: String
         get() = "Wither Skeleton Skull"
 

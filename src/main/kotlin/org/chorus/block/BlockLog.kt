@@ -6,7 +6,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
-abstract class BlockLog(blockState: BlockState?) : BlockSolid(blockState), IBlockWood {
+abstract class BlockLog(blockState: BlockState) : BlockSolid(blockState), IBlockWood {
     abstract override fun getStrippedState(): BlockState
 
     var pillarAxis: BlockFace.Axis

@@ -13,7 +13,7 @@ import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.*
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockGrassBlock(blockstate: BlockState?) : BlockDirt(blockstate) {
+open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
     override val resistance: Double
         get() = 0.6
 

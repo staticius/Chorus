@@ -11,7 +11,7 @@ import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.utils.Faceable
 import java.util.concurrent.ThreadLocalRandom
 
-abstract class BlockCoralFan(blockstate: BlockState?) : BlockFlowable(blockstate), Faceable {
+abstract class BlockCoralFan(blockstate: BlockState) : BlockFlowable(blockstate), Faceable {
     override val waterloggingLevel: Int
         get() = 1
 

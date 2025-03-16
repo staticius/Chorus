@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
 import org.chorus.item.*
 
-class BlockDarkOakLeaves(blockstate: BlockState?) : BlockLeaves(blockstate) {
+class BlockDarkOakLeaves(blockstate: BlockState) : BlockLeaves(blockstate) {
     override fun getType(): WoodType {
         return WoodType.DARK_OAK
     }

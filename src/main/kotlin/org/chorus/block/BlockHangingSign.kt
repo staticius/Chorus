@@ -19,7 +19,7 @@ import org.chorus.utils.Loggable
 import kotlin.math.floor
 
 
-abstract class BlockHangingSign(blockState: BlockState?) : BlockSignBase(blockState),
+abstract class BlockHangingSign(blockState: BlockState) : BlockSignBase(blockState),
     BlockEntityHolder<BlockEntityHangingSign>, Loggable {
     override fun getBlockEntityClass(): Class<out BlockEntityHangingSign> = BlockEntityHangingSign::class.java
 

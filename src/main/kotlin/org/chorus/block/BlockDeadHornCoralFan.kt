@@ -6,7 +6,7 @@ class BlockDeadHornCoralFan : BlockCoralFanDead {
     constructor() : super(Companion.properties.defaultState)
 
 
-    constructor(blockstate: BlockState) : super(blockstate)
+    constructor(blockstate: BlockState) :  super(blockstate)
 
     companion object {
         val properties: BlockProperties =

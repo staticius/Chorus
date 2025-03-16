@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-abstract class BlockRaw(blockstate: BlockState?) : BlockSolid(blockstate) {
+abstract class BlockRaw(blockstate: BlockState) : BlockSolid(blockstate) {
     override val hardness: Double
         get() = 5.0
 

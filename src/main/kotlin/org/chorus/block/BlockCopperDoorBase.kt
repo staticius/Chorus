@@ -6,7 +6,7 @@ import org.chorus.item.*
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
 
-abstract class BlockCopperDoorBase(blockState: BlockState?) : BlockDoor(blockState), Oxidizable,
+abstract class BlockCopperDoorBase(blockState: BlockState) : BlockDoor(blockState), Oxidizable,
     Waxable {
     override val hardness: Double
         get() = 3.0

@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
 
-abstract class BlockCrops(blockState: BlockState?) : BlockFlowable(blockState) {
+abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
     val maxGrowth: Int
         get() = CommonBlockProperties.GROWTH.getMax()
 

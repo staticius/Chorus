@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-abstract class BlockConcrete(blockState: BlockState?) : BlockSolid(blockState) {
+abstract class BlockConcrete(blockState: BlockState) : BlockSolid(blockState) {
     override val resistance: Double
         get() = 9.0
 

@@ -5,7 +5,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemHead
 import org.chorus.item.ItemPiglinHead
 
-class BlockPiglinHead(blockState: BlockState?) : BlockHead(blockState), ItemHead {
+class BlockPiglinHead(blockState: BlockState) : BlockHead(blockState), ItemHead {
     override val name: String
         get() = "Piglin Head"
 

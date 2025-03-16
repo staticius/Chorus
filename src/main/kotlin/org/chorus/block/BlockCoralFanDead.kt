@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.level.Level
 
-abstract class BlockCoralFanDead(blockstate: BlockState?) : BlockCoralFan(blockstate) {
+abstract class BlockCoralFanDead(blockstate: BlockState) : BlockCoralFan(blockstate) {
     override val name: String
         get() = "Dead " + super.name
 

@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
-abstract class BlockDoubleSlabBase(blockState: BlockState?) : BlockSolid(blockState) {
+abstract class BlockDoubleSlabBase(blockState: BlockState) : BlockSolid(blockState) {
     override val name: String
         get() = "Double ${getSlabName()} Slab"
 

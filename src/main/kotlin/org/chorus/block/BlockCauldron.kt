@@ -31,7 +31,7 @@ import kotlin.math.sqrt
 class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) : super(blockstate)
+    constructor(blockstate: BlockState) :  super(blockstate)
 
     override fun getBlockEntityType(): String {
         return BlockEntityID.CAULDRON

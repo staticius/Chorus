@@ -18,7 +18,7 @@ import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 import kotlin.math.floor
 
-abstract class BlockHead(blockState: BlockState?) : BlockTransparent(blockState), RedstoneComponent,
+abstract class BlockHead(blockState: BlockState) : BlockTransparent(blockState), RedstoneComponent,
     BlockEntityHolder<BlockEntitySkull?>, Faceable {
     override val blockEntityType: String
         get() = BlockEntity.SKULL

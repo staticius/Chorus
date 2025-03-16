@@ -16,7 +16,7 @@ import org.chorus.math.BlockFace
 import org.chorus.utils.Hash.hashBlock
 import java.util.concurrent.ThreadLocalRandom
 
-abstract class BlockLeaves(blockState: BlockState?) : BlockTransparent(blockState) {
+abstract class BlockLeaves(blockState: BlockState) : BlockTransparent(blockState) {
     override val hardness: Double
         get() = 0.2
 

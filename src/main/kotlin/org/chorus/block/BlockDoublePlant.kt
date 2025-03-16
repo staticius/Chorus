@@ -13,7 +13,7 @@ import org.chorus.math.BlockFace
 import org.chorus.tags.BlockTags
 import java.util.concurrent.ThreadLocalRandom
 
-abstract class BlockDoublePlant(blockstate: BlockState?) : BlockFlowable(blockstate) {
+abstract class BlockDoublePlant(blockstate: BlockState) : BlockFlowable(blockstate) {
     abstract val doublePlantType: DoublePlantType
 
     var isTopHalf: Boolean

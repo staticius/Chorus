@@ -6,7 +6,7 @@ import org.chorus.item.enchantment.Enchantment
 import org.chorus.math.ChorusMath.clamp
 import java.util.concurrent.ThreadLocalRandom
 
-abstract class BlockOre(blockState: BlockState?) : BlockSolid(blockState) {
+abstract class BlockOre(blockState: BlockState) : BlockSolid(blockState) {
     override fun getDrops(item: Item): Array<Item> {
         if (!canHarvest(item)) {
             return Item.EMPTY_ARRAY

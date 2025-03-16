@@ -15,7 +15,7 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.tags.BlockTags
 
-open class BlockUndyedShulkerBox(blockState: BlockState?) : BlockTransparent(blockState),
+open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(blockState),
     BlockEntityHolder<BlockEntityShulkerBox> {
 
     override fun getBlockEntityClass(): Class<out BlockEntityShulkerBox> = BlockEntityShulkerBox::class.java

@@ -6,7 +6,7 @@ import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.tags.BlockTags
 
-abstract class BlockHanging(blockState: BlockState?) : BlockFlowable(blockState) {
+abstract class BlockHanging(blockState: BlockState) : BlockFlowable(blockState) {
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL && !isSupportValid) {
             level.useBreakOn(this.position)

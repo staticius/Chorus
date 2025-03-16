@@ -19,7 +19,7 @@ import org.chorus.utils.BlockColor
 import org.chorus.utils.Faceable
 import java.util.*
 
-abstract class BlockSignBase(blockState: BlockState?) : BlockTransparent(blockState), Faceable {
+abstract class BlockSignBase(blockState: BlockState) : BlockTransparent(blockState), Faceable {
     override val hardness: Double
         get() = 1.0
 

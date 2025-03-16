@@ -12,7 +12,7 @@ import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
 import org.chorus.utils.RedstoneComponent
 
-abstract class BlockCopperBulbBase(blockState: BlockState?) : BlockSolid(blockState), RedstoneComponent,
+abstract class BlockCopperBulbBase(blockState: BlockState) : BlockSolid(blockState), RedstoneComponent,
     Oxidizable, Waxable {
     override val hardness: Double
         get() = 3.0

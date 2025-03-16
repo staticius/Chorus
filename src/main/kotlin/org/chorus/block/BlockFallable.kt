@@ -11,7 +11,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 
-abstract class BlockFallable(blockstate: BlockState?) : BlockSolid(blockstate) {
+abstract class BlockFallable(blockstate: BlockState) : BlockSolid(blockstate) {
     override fun onUpdate(type: Int): Int {
         val down = this.down()
         if (type == Level.BLOCK_UPDATE_NORMAL) {

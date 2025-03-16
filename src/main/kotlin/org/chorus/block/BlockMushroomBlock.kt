@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-abstract class BlockMushroomBlock(blockState: BlockState?) : BlockSolid(blockState) {
+abstract class BlockMushroomBlock(blockState: BlockState) : BlockSolid(blockState) {
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 

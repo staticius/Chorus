@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 
-class BlockBambooPressurePlate(blockState: BlockState?) : BlockWoodenPressurePlate(blockState) {
+class BlockBambooPressurePlate(blockState: BlockState) : BlockWoodenPressurePlate(blockState) {
     override val name: String
         get() = "Bamboo Pressure Plate"
 

@@ -7,7 +7,7 @@ import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 
-abstract class BlockFungus(blockState: BlockState?) : BlockFlowable(blockState), FlowerPotBlock,
+abstract class BlockFungus(blockState: BlockState) : BlockFlowable(blockState), FlowerPotBlock,
     Natural {
     override fun place(
         item: Item,

@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 
-class BlockBambooMosaicStairs(blockState: BlockState?) : BlockStairs(blockState) {
+class BlockBambooMosaicStairs(blockState: BlockState) : BlockStairs(blockState) {
     override val name: String
         get() = "Bamboo Mosaic Stairs"
 

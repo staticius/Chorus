@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom
 class BlockMangroveLeaves : BlockLeaves {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) : super(blockstate)
+    constructor(blockstate: BlockState) :  super(blockstate)
 
     override val type: WoodType
         get() = null

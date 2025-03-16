@@ -6,7 +6,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
-abstract class BlockDoubleSlabCopperBase(blockstate: BlockState?) : BlockDoubleSlabBase(blockstate),
+abstract class BlockDoubleSlabCopperBase(blockstate: BlockState) : BlockDoubleSlabBase(blockstate),
     Waxable, Oxidizable {
     override val hardness: Double
         get() = 3.0

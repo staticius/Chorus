@@ -7,7 +7,7 @@ import org.chorus.item.ItemTool
  * @author xtypr
  * @since 2015/11/25
  */
-abstract class BlockStairsWood(blockState: BlockState?) : BlockStairs(blockState) {
+abstract class BlockStairsWood(blockState: BlockState) : BlockStairs(blockState) {
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 

@@ -12,7 +12,7 @@ import org.chorus.registry.BiomeRegistry.get
 import org.chorus.registry.BlockRegistry.get
 
 
-abstract class BlockStairs(blockState: BlockState?) : BlockTransparent(blockState), Faceable {
+abstract class BlockStairs(blockState: BlockState) : BlockTransparent(blockState), Faceable {
     override var minY: Double
         get() = position.y + (if (isUpsideDown) 0.5 else 0.0)
         set(minY) {

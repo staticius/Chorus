@@ -9,7 +9,7 @@ import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-abstract class BlockCoral(blockstate: BlockState?) : BlockFlowable(blockstate) {
+abstract class BlockCoral(blockstate: BlockState) : BlockFlowable(blockstate) {
     abstract fun isDead(): Boolean
 
     abstract fun getDeadCoral(): Block

@@ -6,7 +6,7 @@ import org.chorus.item.*
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
 
-abstract class BlockChiseledCopperBase(blockState: BlockState?) : BlockSolid(blockState), Oxidizable,
+abstract class BlockChiseledCopperBase(blockState: BlockState) : BlockSolid(blockState), Oxidizable,
     Waxable {
     override val hardness: Double
         get() = 3.0

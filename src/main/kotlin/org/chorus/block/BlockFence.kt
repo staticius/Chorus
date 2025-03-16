@@ -5,7 +5,7 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.math.VectorMath.calculateFace
 
-abstract class BlockFence(blockState: BlockState?) : BlockTransparent(blockState), BlockConnectable {
+abstract class BlockFence(blockState: BlockState) : BlockTransparent(blockState), BlockConnectable {
     override val hardness: Double
         get() = 2.0
 

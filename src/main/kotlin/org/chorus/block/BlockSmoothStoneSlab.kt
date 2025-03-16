@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockSmoothStoneSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID.SMOOTH_STONE_DOUBLE_SLAB) {
+class BlockSmoothStoneSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.SMOOTH_STONE_DOUBLE_SLAB) {
     override val slabName: String
         get() = "Smooth Stone"
 

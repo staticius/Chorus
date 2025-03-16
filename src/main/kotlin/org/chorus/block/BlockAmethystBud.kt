@@ -9,7 +9,7 @@ import org.chorus.math.BlockFace
 import org.chorus.utils.Faceable
 import java.util.*
 
-abstract class BlockAmethystBud(blockState: BlockState?) : BlockTransparent(blockState), Faceable {
+abstract class BlockAmethystBud(blockState: BlockState) : BlockTransparent(blockState), Faceable {
     override val name: String
         get() = "$namePrefix Amethyst Bud"
 

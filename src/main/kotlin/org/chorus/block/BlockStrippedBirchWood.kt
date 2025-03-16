@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
 
-class BlockStrippedBirchWood(blockstate: BlockState?) : BlockWoodStripped(blockstate) {
+class BlockStrippedBirchWood(blockstate: BlockState) : BlockWoodStripped(blockstate) {
     override fun getWoodType(): WoodType {
         return WoodType.BIRCH
     }

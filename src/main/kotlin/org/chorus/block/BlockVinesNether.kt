@@ -23,7 +23,7 @@ abstract class BlockVinesNether
 /**
  * Creates a nether vine from a meta compatible with [.getProperties].
  */
-    (blockstate: BlockState?) : BlockTransparent(blockstate) {
+    (blockstate: BlockState) : BlockTransparent(blockstate) {
     /**
      * The direction that the vine will grow, vertical direction is expected but future implementations
      * may also add horizontal directions.

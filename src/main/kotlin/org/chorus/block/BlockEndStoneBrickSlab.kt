@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockEndStoneBrickSlab(blockState: BlockState?) : BlockSlab(blockState, END_STONE_BRICK_DOUBLE_SLAB) {
+class BlockEndStoneBrickSlab(blockState: BlockState) : BlockSlab(blockState, END_STONE_BRICK_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "End Stone Brick"
     }

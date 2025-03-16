@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockPolishedGraniteSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID.POLISHED_GRANITE_DOUBLE_SLAB) {
+class BlockPolishedGraniteSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.POLISHED_GRANITE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Polished Granite"
     }

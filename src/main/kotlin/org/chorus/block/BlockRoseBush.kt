@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 class BlockRoseBush : BlockDoublePlant {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockstate: BlockState) : super(blockstate)
+    constructor(blockstate: BlockState) :  super(blockstate)
 
     override val doublePlantType: DoublePlantType
         get() = DoublePlantType.ROSE

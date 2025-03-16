@@ -9,7 +9,7 @@ import org.chorus.math.BlockFace
  * @author joserobjr
  * @since 2021-06-15
  */
-abstract class BlockStairsCopperBase(blockstate: BlockState?) : BlockStairs(blockstate), Waxable,
+abstract class BlockStairsCopperBase(blockstate: BlockState) : BlockStairs(blockstate), Waxable,
     Oxidizable {
     override fun onActivate(
         item: Item,

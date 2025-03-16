@@ -14,7 +14,7 @@ import org.chorus.utils.Faceable
 open class BlockPumpkin : BlockSolid, Faceable, Natural {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) : super(blockstate)
+    constructor(blockstate: BlockState) :  super(blockstate)
 
     override val name: String
         get() = "Pumpkin"

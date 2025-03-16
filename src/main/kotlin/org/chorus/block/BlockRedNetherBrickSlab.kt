@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockRedNetherBrickSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID.RED_NETHER_BRICK_DOUBLE_SLAB) {
+class BlockRedNetherBrickSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.RED_NETHER_BRICK_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Red Nether Brick"
     }

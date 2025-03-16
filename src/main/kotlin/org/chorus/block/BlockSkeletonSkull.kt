@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 
-class BlockSkeletonSkull(blockState: BlockState?) : BlockHead(blockState) {
+class BlockSkeletonSkull(blockState: BlockState) : BlockHead(blockState) {
     override val name: String
         get() = "Skeleton Skull"
 

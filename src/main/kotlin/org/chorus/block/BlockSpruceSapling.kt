@@ -6,7 +6,7 @@ import org.chorus.block.property.enums.WoodType
 class BlockSpruceSapling : BlockSapling {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockstate: BlockState) : super(blockstate)
+    constructor(blockstate: BlockState) :  super(blockstate)
 
     override val woodType: WoodType
         get() = WoodType.SPRUCE

@@ -18,7 +18,7 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-abstract class BlockPressurePlateBase(blockState: BlockState?) : BlockFlowable(blockState),
+abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(blockState),
     RedstoneComponent {
     @JvmField
     protected var onPitch: Float = 0f

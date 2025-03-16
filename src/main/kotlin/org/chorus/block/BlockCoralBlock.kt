@@ -7,7 +7,7 @@ import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-abstract class BlockCoralBlock(blockstate: BlockState?) : BlockSolid(blockstate) {
+abstract class BlockCoralBlock(blockstate: BlockState) : BlockSolid(blockstate) {
     open val isDead: Boolean
         get() = false
 

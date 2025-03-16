@@ -13,7 +13,7 @@ import org.chorus.math.ChorusMath.clamp
 import org.chorus.utils.Faceable
 import java.util.concurrent.ThreadLocalRandom
 
-abstract class BlockCropsStem(blockstate: BlockState?) : BlockCrops(blockstate), Faceable {
+abstract class BlockCropsStem(blockstate: BlockState) : BlockCrops(blockstate), Faceable {
     abstract val strippedState: BlockState?
 
     abstract val fruitId: String

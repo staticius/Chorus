@@ -7,7 +7,7 @@ import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 
-abstract class BlockCoralWallFan(blockstate: BlockState?) : BlockCoralFan(blockstate) {
+abstract class BlockCoralWallFan(blockstate: BlockState) : BlockCoralFan(blockstate) {
     override val name: String
         get() = super.name + " Wall Fan"
 

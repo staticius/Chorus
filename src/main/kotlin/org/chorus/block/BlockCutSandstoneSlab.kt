@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockCutSandstoneSlab(blockState: BlockState?) : BlockSlab(blockState, CUT_SANDSTONE_DOUBLE_SLAB) {
+class BlockCutSandstoneSlab(blockState: BlockState) : BlockSlab(blockState, CUT_SANDSTONE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Cut Sandstone"
     }

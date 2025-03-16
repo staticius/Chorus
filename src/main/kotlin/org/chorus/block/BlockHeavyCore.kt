@@ -6,7 +6,7 @@ import org.chorus.math.AxisAlignedBB
 class BlockHeavyCore : BlockFlowable {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) : super(blockstate)
+    constructor(blockstate: BlockState) :  super(blockstate)
 
     override fun recalculateBoundingBox(): AxisAlignedBB {
         return this

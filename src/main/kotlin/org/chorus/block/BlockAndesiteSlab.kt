@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockAndesiteSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID.ANDESITE_DOUBLE_SLAB) {
+class BlockAndesiteSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.ANDESITE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Andesite"
     }

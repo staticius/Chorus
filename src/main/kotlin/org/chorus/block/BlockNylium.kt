@@ -9,7 +9,7 @@ import org.chorus.level.generator.`object`.ObjectNyliumVegetation.growVegetation
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 
-abstract class BlockNylium(blockState: BlockState?) : BlockSolid(blockState), Natural {
+abstract class BlockNylium(blockState: BlockState) : BlockSolid(blockState), Natural {
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 

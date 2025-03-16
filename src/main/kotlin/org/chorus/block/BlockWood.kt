@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
 import org.chorus.registry.Registries
 
-abstract class BlockWood(blockstate: BlockState?) : BlockLog(blockstate) {
+abstract class BlockWood(blockstate: BlockState) : BlockLog(blockstate) {
     abstract fun getWoodType(): WoodType
 
     override val name: String

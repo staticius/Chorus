@@ -24,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.stream.Collectors
 import kotlin.math.abs
 
-abstract class BlockPistonBase(blockstate: BlockState?) : BlockTransparent(blockstate), Faceable,
+abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blockstate), Faceable,
     RedstoneComponent, BlockEntityHolder<BlockEntityPistonArm?> {
     @JvmField
     var sticky: Boolean = false

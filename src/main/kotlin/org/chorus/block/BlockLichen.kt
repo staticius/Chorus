@@ -8,7 +8,7 @@ import org.chorus.math.BlockFace
 import org.chorus.utils.random.ChorusRandom
 import java.util.*
 
-abstract class BlockLichen(blockState: BlockState?) : BlockTransparent(blockState) {
+abstract class BlockLichen(blockState: BlockState) : BlockTransparent(blockState) {
     val growthSides: Array<BlockFace>
         get() {
             val returns =

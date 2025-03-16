@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemZombieHead
 
-class BlockZombieHead(blockState: BlockState?) : BlockHead(blockState) {
+class BlockZombieHead(blockState: BlockState) : BlockHead(blockState) {
     override val name: String
         get() = "Zombie Head"
 

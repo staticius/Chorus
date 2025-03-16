@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockCobblestoneSlab(blockState: BlockState?) : BlockSlab(blockState, BlockID.COBBLESTONE_DOUBLE_SLAB) {
+class BlockCobblestoneSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.COBBLESTONE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Cobblestone"
     }

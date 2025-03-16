@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom
 /**
  * The default is red flower, but there are other flower variants
  */
-abstract class BlockFlower(blockstate: BlockState) : BlockFlowable(blockstate), FlowerPotBlock,
+abstract class BlockFlower(blockstate: BlockState) :  BlockFlowable(blockstate), FlowerPotBlock,
     Natural {
     open fun canPlantOn(block: Block): Boolean {
         return isSupportValid(block)

@@ -1,6 +1,6 @@
 package org.chorus.block
 
-open class BlockClosedEyeblossom(blockstate: BlockState? = Companion.properties.defaultState) : BlockFlower(blockstate) {
+open class BlockClosedEyeblossom(blockstate: BlockState = Companion.properties.defaultState) : BlockFlower(blockstate) {
 
     override val properties: BlockProperties
         get() = Companion.properties

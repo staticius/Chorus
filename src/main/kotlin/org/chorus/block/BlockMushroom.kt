@@ -15,7 +15,7 @@ import org.chorus.math.Vector3
 import org.chorus.utils.random.RandomSourceProvider.Companion.create
 import java.util.concurrent.ThreadLocalRandom
 
-abstract class BlockMushroom(blockState: BlockState?) : BlockFlowable(blockState), FlowerPotBlock,
+abstract class BlockMushroom(blockState: BlockState) : BlockFlowable(blockState), FlowerPotBlock,
     Natural {
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {

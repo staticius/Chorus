@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom
 class BlockShortGrass : BlockFlowable {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockstate: BlockState) : super(blockstate)
+    constructor(blockstate: BlockState) :  super(blockstate)
 
     override fun canBeReplaced(): Boolean {
         return true

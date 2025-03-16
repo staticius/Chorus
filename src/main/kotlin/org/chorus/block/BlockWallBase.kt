@@ -19,7 +19,7 @@ import java.util.*
 import kotlin.collections.set
 
 
-abstract class BlockWallBase(blockstate: BlockState?) : BlockTransparent(blockstate), BlockConnectable, Loggable {
+abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blockstate), BlockConnectable, Loggable {
     override val isSolid: Boolean
         get() = false
 

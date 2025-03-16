@@ -6,7 +6,7 @@ import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 
-abstract class BlockCarpet(blockState: BlockState?) : BlockFlowable(blockState) {
+abstract class BlockCarpet(blockState: BlockState) : BlockFlowable(blockState) {
     override val hardness: Double
         get() = 0.1
 

@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockBambooMosaicSlab(blockState: BlockState?) : BlockWoodenSlab(blockState, BlockID.BAMBOO_MOSAIC_DOUBLE_SLAB) {
+class BlockBambooMosaicSlab(blockState: BlockState) : BlockWoodenSlab(blockState, BlockID.BAMBOO_MOSAIC_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Bamboo Mosaic"
     }

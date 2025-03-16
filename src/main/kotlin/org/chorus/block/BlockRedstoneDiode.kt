@@ -20,7 +20,7 @@ import kotlin.math.max
 /**
  * @author CreeperFace
  */
-abstract class BlockRedstoneDiode(blockstate: BlockState?) : BlockFlowable(blockstate),
+abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blockstate),
     RedstoneComponent, Faceable {
     @JvmField
     protected var isPowered: Boolean = false

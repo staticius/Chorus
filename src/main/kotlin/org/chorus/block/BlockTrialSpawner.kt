@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockTrialSpawner(blockstate: BlockState) : Block(blockstate,) {
+class BlockTrialSpawner(blockstate: BlockState) :  Block(blockstate,) {
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.TRIAL_SPAWNER,

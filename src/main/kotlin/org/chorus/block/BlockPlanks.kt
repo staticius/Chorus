@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.ItemTool
 
 
-abstract class BlockPlanks(blockState: BlockState?) : BlockSolid(blockState) {
+abstract class BlockPlanks(blockState: BlockState) : BlockSolid(blockState) {
     override val hardness: Double
         get() = 2.0
 

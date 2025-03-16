@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 class BlockBrainCoralWallFan : BlockCoralWallFan {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) : super(blockstate)
+    constructor(blockstate: BlockState) :  super(blockstate)
 
     override val name: String
         get() = "Brain Coral"
