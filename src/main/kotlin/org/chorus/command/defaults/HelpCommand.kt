@@ -66,7 +66,7 @@ class HelpCommand(name: String) :
 
         if (command.toString() == "") {
             val commands: MutableMap<String?, Command> = TreeMap<String, Command>()
-            for (cmd in sender.server.commandMap.commands.values) {
+            for (cmd in Server.instance.commandMap.commands.values) {
                 if (cmd.testPermissionSilent(sender)) {
                     commands[cmd.name] = cmd
                 }
@@ -100,7 +100,7 @@ class HelpCommand(name: String) :
 
             return true
         } else {
-            val cmd = sender.server.commandMap.getCommand(command.toString().lowercase())
+            val cmd = Server.instance.commandMap.getCommand(command.toString().lowercase())
             if (cmd != null) {
                 if (cmd.testPermissionSilent(sender)) {
                     sender.sendMessage(TextFormat.YELLOW.toString() + cmd.name)

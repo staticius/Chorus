@@ -41,7 +41,7 @@ class SummonCommand(name: String) : VanillaCommand(name, "commands.summon.descri
             return 0
         }
         val entityId: Int = Type.Companion.ENTITY_TYPE2ID.get(entityType)
-        var pos: Locator? = sender.locator
+        var pos: Locator? = sender.getLocator()
         if (list.hasResult(1)) {
             pos = list.getResult(1)
         }

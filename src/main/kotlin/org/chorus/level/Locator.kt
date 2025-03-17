@@ -105,13 +105,13 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
     override val levelName: String
         get() = level.name
 
-    override val x: Double
+    val x: Double
         get() = position.x
 
-    override val y: Double
+    val y: Double
         get() = position.y
 
-    override val z: Double
+    val z: Double
         get() = position.z
 
     val chunk: IChunk

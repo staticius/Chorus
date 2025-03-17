@@ -19,7 +19,7 @@ package org.chorus.event
  *
  * @see org.chorus.event.Event
  *
- * @since Nukkit 1.0 | Nukkit API 1.0.0
+ * 
  */
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
 @Retention(

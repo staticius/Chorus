@@ -22,9 +22,9 @@ interface BlockState {
 
     val blockStateTag: @UnmodifiableView CompoundTagView
 
-    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> getPropertyValue(p: PROPERTY): DATATYPE
+    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> getPropertyValue(p: PROPERTY): DATATYPE
 
-    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> setPropertyValue(
+    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> setPropertyValue(
         properties: BlockProperties,
         property: PROPERTY,
         value: DATATYPE
@@ -32,12 +32,12 @@ interface BlockState {
 
     fun setPropertyValue(
         properties: BlockProperties,
-        propertyValue: BlockPropertyType.BlockPropertyValue<*, *, *>?
+        propertyValue: BlockPropertyType.BlockPropertyValue<*, *, *>
     ): BlockState
 
     fun setPropertyValues(
         properties: BlockProperties,
-        vararg values: BlockPropertyType.BlockPropertyValue<*, *, *>?
+        vararg values: BlockPropertyType.BlockPropertyValue<*, *, *>
     ): BlockState
 
     val isDefaultState: Boolean
@@ -56,11 +56,11 @@ interface BlockState {
     }
 
     companion object {
-        fun makeUnknownBlockState(hash: Int, blockTag: CompoundTag?): BlockState {
+        fun makeUnknownBlockState(hash: Int, blockTag: CompoundTag): BlockState {
             return BlockStateImpl.makeUnknownBlockState(hash, blockTag)
         }
 
-        fun computeSpecialValue(propertyValues: Array<BlockPropertyType.BlockPropertyValue<*, *, *>>): Short {
+        fun computeSpecialValue(propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>): Short {
             var specialValueBits: Byte = 0
             for (value in propertyValues) specialValueBits = (specialValueBits + (value.propertyType.getBitSize())).toByte()
             return computeSpecialValue(specialValueBits, propertyValues)
@@ -68,7 +68,7 @@ interface BlockState {
 
         fun computeSpecialValue(
             specialValueBits: Byte,
-            propertyValues: Array<BlockPropertyType.BlockPropertyValue<*, *, *>>
+            propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
         ): Short {
             var specialValueBits1 = specialValueBits
             var specialValue: Short = 0

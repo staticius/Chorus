@@ -329,7 +329,7 @@ abstract class Command @JvmOverloads constructor(
     companion object {
         @JvmOverloads
         fun broadcastCommandMessage(source: CommandSender, message: String?, sendToSource: Boolean = true) {
-            val users = source.server.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
+            val users = Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
 
             val result = TranslationContainer("chat.type.admin", source.name, message)
 
@@ -366,9 +366,9 @@ abstract class Command @JvmOverloads constructor(
 
             val m: TextContainer = message.clone()
             val resultStr =
-                "[" + source.name + ": " + (if (m.getText() != source.server.baseLang.m.getText()]) "%" else "")+m.getText()+"]"
+                "[" + source.name + ": " + (if (m.getText() != Server.instance.baseLang.m.getText()]) "%" else "")+m.getText()+"]"
 
-            val users = source.server.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
+            val users = Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
 
             val coloredStr = TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + resultStr
 

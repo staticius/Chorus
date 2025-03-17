@@ -125,10 +125,10 @@ class VersionCommand(name: String) : Command(
         if (args.size == 0) {
             sender.sendMessage(
                 TranslationContainer(
-                    "nukkit.server.info.extended", sender.server.name,
-                    sender.server.nukkitVersion + " (" + sender.server.gitCommit + ")",
-                    sender.server.apiVersion,
-                    sender.server.version,
+                    "nukkit.server.info.extended", Server.instance.name,
+                    Server.instance.nukkitVersion + " (" + Server.instance.gitCommit + ")",
+                    Server.instance.apiVersion,
+                    Server.instance.version,
                     ProtocolInfo.CURRENT_PROTOCOL.toString()
                 )
             )
@@ -137,12 +137,12 @@ class VersionCommand(name: String) : Command(
             for (arg in args) pluginName.append(arg).append(" ")
             pluginName = StringBuilder(pluginName.toString().trim { it <= ' ' })
             val found = booleanArrayOf(false)
-            val exactPlugin = arrayOf(sender.server.pluginManager.getPlugin(pluginName.toString()))
+            val exactPlugin = arrayOf(Server.instance.pluginManager.getPlugin(pluginName.toString()))
 
             if (exactPlugin[0] == null) {
                 pluginName = StringBuilder(pluginName.toString().lowercase())
                 val finalPluginName = pluginName.toString()
-                sender.server.pluginManager.plugins.forEach { (s: String?, p: Plugin?) ->
+                Server.instance.pluginManager.plugins.forEach { (s: String?, p: Plugin?) ->
                     if (s.lowercase().contains(finalPluginName)) {
                         exactPlugin[0] = p
                         found[0] = true

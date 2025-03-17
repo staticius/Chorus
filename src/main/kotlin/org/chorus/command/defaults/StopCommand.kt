@@ -22,7 +22,7 @@ class StopCommand(name: String) : VanillaCommand(name, "commands.stop.descriptio
         log: CommandLogger
     ): Int {
         log.addSuccess("commands.stop.start").output(true)
-        sender.server.shutdown()
+        Server.instance.shutdown()
         return 1
     }
 }

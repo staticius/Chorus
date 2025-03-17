@@ -24,7 +24,7 @@ class SaveOffCommand(name: String) : VanillaCommand(name, "Disable auto saving")
         result: Map.Entry<String, ParamList?>,
         log: CommandLogger
     ): Int {
-        sender.server.autoSave = false
+        Server.instance.autoSave = false
         log.addSuccess("commands.save.disabled").output(true)
         return 1
     }

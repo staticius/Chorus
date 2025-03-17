@@ -37,7 +37,7 @@ class StatusCommand(name: String) :
         }
 
         val simpleMode = args.size == 0 || !args[0].equals("full", ignoreCase = true)
-        val server = sender.server
+        val server = Server.instance
 
         if (simpleMode) {
             sender.sendMessage(TextFormat.GREEN.toString() + "---- " + TextFormat.WHITE + "Server status" + TextFormat.GREEN + " ----")

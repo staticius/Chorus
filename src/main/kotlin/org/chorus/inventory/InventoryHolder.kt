@@ -8,11 +8,5 @@ interface InventoryHolder {
 
     val level: Level?
 
-    val x: Double
-
-    val y: Double
-
-    val z: Double
-
     val vector3: Vector3
 }

@@ -37,7 +37,7 @@ class PluginsCommand(name: String) : Command(
 
     private fun sendPluginList(sender: CommandSender, log: CommandLogger) {
         val list = StringBuilder()
-        val plugins = sender.server.pluginManager.plugins
+        val plugins = Server.instance.pluginManager.plugins
         for (plugin in plugins.values) {
             if (list.length > 0) {
                 list.append(TextFormat.WHITE.toString() + ", ")

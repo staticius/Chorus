@@ -32,8 +32,8 @@ class DayLockCommand(name: String) :
 
         if (list!!.hasResult(0)) lock = list.getResult(0)!!
 
-        var level: Level? = sender.locator.level
-        level = level ?: sender.server.defaultLevel
+        var level: Level? = sender.getLocator().level
+        level = level ?: Server.instance.defaultLevel
         val rules: GameRules = level.gameRules
 
         if (lock) {

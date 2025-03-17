@@ -41,6 +41,7 @@ import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.*
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelEventPacket
+import org.chorus.network.protocol.UpdateBlockPacket
 import org.chorus.plugin.InternalPlugin
 import org.chorus.plugin.Plugin
 import org.chorus.registry.Registries
@@ -1079,17 +1080,17 @@ class Level(
         Server.instance.broadcastPacket(players, pk)
     }
 
-    fun sendBlocks(target: Array<Player>, blocks: Array<IVector3?>) {
+    fun sendBlocks(target: Array<Player>, blocks: Array<out IVector3?>) {
         this.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_NONE, 0)
         this.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_NONE, 1)
     }
 
-    fun sendBlocks(target: Array<Player>, blocks: Array<IVector3?>, flags: Int) {
+    fun sendBlocks(target: Array<Player>, blocks: Array<out IVector3?>, flags: Int) {
         this.sendBlocks(target, blocks, flags, 0)
         this.sendBlocks(target, blocks, flags, 1)
     }
 
-    fun sendBlocks(target: Array<Player>, blocks: Array<IVector3?>, flags: Int, optimizeRebuilds: Boolean) {
+    fun sendBlocks(target: Array<Player>, blocks: Array<out IVector3?>, flags: Int, optimizeRebuilds: Boolean) {
         this.sendBlocks(target, blocks, flags, 0, optimizeRebuilds)
         this.sendBlocks(target, blocks, flags, 1, optimizeRebuilds)
     }
@@ -1097,7 +1098,7 @@ class Level(
     @JvmOverloads
     fun sendBlocks(
         target: Array<Player>,
-        blocks: Array<IVector3?>,
+        blocks: Array<out IVector3?>,
         flags: Int,
         dataLayer: Int,
         optimizeRebuilds: Boolean = false

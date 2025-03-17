@@ -1,64 +1,50 @@
 package org.chorus.level
 
 import com.google.common.collect.Sets
-import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.longs.LongComparator
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet
 import org.chorus.Player
-import org.chorus.entity.Entity.despawnFrom
+import org.chorus.Server
+import org.chorus.event.player.PlayerChunkRequestEvent
 import org.chorus.level.format.IChunk
 import org.chorus.math.BlockVector3
+import org.chorus.network.protocol.NetworkChunkPublisherUpdatePacket
+import org.chorus.utils.Loggable
 import org.jetbrains.annotations.ApiStatus
+import java.util.PriorityQueue
 import java.util.concurrent.*
 
 
 class PlayerChunkManager(private val player: Player) {
-    private val chunkDistanceComparator: LongComparator = object : LongComparator {
-        override fun compare(chunkHash1: Long, chunkHash2: Long): Int {
-            val floor: BlockVector3 = player.getLocator().position.asBlockVector3()
-            val loaderChunkX = floor.x shr 4
-            val loaderChunkZ = floor.z shr 4
-            val chunkDX1: Int = loaderChunkX - Level.Companion.getHashX(chunkHash1)
-            val chunkDZ1: Int = loaderChunkZ - Level.Companion.getHashZ(chunkHash1)
-            val chunkDX2: Int = loaderChunkX - Level.Companion.getHashX(chunkHash2)
-            val chunkDZ2: Int = loaderChunkZ - Level.Companion.getHashZ(chunkHash2)
-            //Compare distance to loader
-            return Integer.compare(
-                chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1,
-                chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2
-            )
-        }
+    private val chunkDistanceComparator = Comparator<Long> { chunkHash1, chunkHash2 ->
+        val floor: BlockVector3 = player.getLocator().position.asBlockVector3()
+        val loaderChunkX = floor.x shr 4
+        val loaderChunkZ = floor.z shr 4
+        val chunkDX1: Int = loaderChunkX - Level.getHashX(chunkHash1)
+        val chunkDZ1: Int = loaderChunkZ - Level.getHashZ(chunkHash1)
+        val chunkDX2: Int = loaderChunkX - Level.getHashX(chunkHash2)
+        val chunkDZ2: Int = loaderChunkZ - Level.getHashZ(chunkHash2)
+        //Compare distance to loader
+        (chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1).compareTo(chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2)
     }
 
     //保存着上tick已经发送的全部区块hash值
     @get:ApiStatus.Internal
-    val usedChunks: LongOpenHashSet = LongOpenHashSet()
+    val usedChunks: HashSet<Long> = HashSet()
 
     //保存着这tick将要发送的全部区块hash值
     @get:ApiStatus.Internal
-    val inRadiusChunks: LongOpenHashSet = LongOpenHashSet()
-    private val trySendChunkCountPerTick: Int
-    private val chunkSendQueue: LongArrayPriorityQueue
-    private val chunkLoadingQueue: Long2ObjectOpenHashMap<CompletableFuture<IChunk?>?>
-    private val chunkReadyToSend: Long2ObjectOpenHashMap<IChunk>
+    val inRadiusChunks: HashSet<Long> = HashSet()
+    private val trySendChunkCountPerTick: Int = player.chunkSendCountPerTick
+    private val chunkSendQueue: PriorityQueue<Long> = PriorityQueue(player.viewDistance * player.viewDistance, chunkDistanceComparator)
+    private val chunkLoadingQueue: HashMap<Long, CompletableFuture<IChunk?>?> = HashMap(player.viewDistance * player.viewDistance)
+    private val chunkReadyToSend: HashMap<Long, IChunk> = HashMap()
     private var lastLoaderChunkPosHashed = java.lang.Long.MAX_VALUE
-
-    init {
-        this.chunkSendQueue = LongArrayPriorityQueue(player.viewDistance * player.viewDistance, chunkDistanceComparator)
-        this.chunkLoadingQueue = Long2ObjectOpenHashMap(
-            player.viewDistance * player.viewDistance
-        )
-        this.trySendChunkCountPerTick = player.chunkSendCountPerTick
-        this.chunkReadyToSend = Long2ObjectOpenHashMap()
-    }
 
     /**
      * Handle chunk loading when the player teleported
      */
     @Synchronized
     fun handleTeleport() {
-        if (!player.isConnected) return
+        if (!player.isConnected()) return
         val floor = player.position.asBlockVector3()
         updateInRadiusChunks(1, floor)
         removeOutOfRadiusChunks()
@@ -69,7 +55,7 @@ class PlayerChunkManager(private val player: Player) {
 
     @Synchronized
     fun tick() {
-        if (!player.isConnected) return
+        if (!player.isConnected()) return
         val currentLoaderChunkPosHashed: Long
         val floor = player.position.asBlockVector3()
         if ((Level.Companion.chunkHash(floor.x shr 4, floor.z shr 4)
@@ -86,7 +72,7 @@ class PlayerChunkManager(private val player: Player) {
 
     @ApiStatus.Internal
     fun addSendChunk(x: Int, z: Int) {
-        chunkSendQueue.enqueue(Level.Companion.chunkHash(x, z))
+        chunkSendQueue.add(Level.Companion.chunkHash(x, z))
     }
 
     private fun updateChunkSendingQueue() {
@@ -97,7 +83,7 @@ class PlayerChunkManager(private val player: Player) {
             usedChunks
         )
         for (v in difference) {
-            chunkSendQueue.enqueue(v)
+            chunkSendQueue.add(v)
         }
     }
 
@@ -127,9 +113,9 @@ class PlayerChunkManager(private val player: Player) {
             val x: Int = Level.Companion.getHashX(hash)
             val z: Int = Level.Companion.getHashZ(hash)
             if (player.level!!.unregisterChunkLoader(player, x, z)) {
-                for (entity in player.level!!.getChunkEntities(x, z)!!.values()) {
+                for (entity in player.level!!.getChunkEntities(x, z)!!.values) {
                     if (entity !== player) {
-                        entity.despawnFrom(player)
+                        entity?.despawnFrom(player)
                     }
                 }
             }
@@ -143,48 +129,48 @@ class PlayerChunkManager(private val player: Player) {
         var triedSendChunkCount = 0
         do {
             triedSendChunkCount++
-            val chunkHash: Long = chunkSendQueue.dequeueLong()
-            val chunkX: Int = Level.Companion.getHashX(chunkHash)
-            val chunkZ: Int = Level.Companion.getHashZ(chunkHash)
+            val chunkHash: Long = chunkSendQueue.poll()
+            val chunkX: Int = Level.getHashX(chunkHash)
+            val chunkZ: Int = Level.getHashZ(chunkHash)
             val chunkTask = chunkLoadingQueue.computeIfAbsent(
-                chunkHash,
-                Long2ObjectFunction { hash: Long -> player.level!!.getChunkAsync(chunkX, chunkZ) })
+                chunkHash
+            ) { player.level!!.getChunkAsync(chunkX, chunkZ) }
             if (chunkTask!!.isDone) {
                 try {
                     val chunk = chunkTask[10, TimeUnit.MICROSECONDS]
                     if (chunk == null || !chunk.chunkState.canSend()) {
                         player.level!!.generateChunk(chunkX, chunkZ, force)
-                        chunkSendQueue.enqueue(chunkHash)
+                        chunkSendQueue.add(chunkHash)
                         continue
                     }
                     chunkLoadingQueue.remove(chunkHash)
                     player.level!!.registerChunkLoader(player, chunkX, chunkZ, false)
-                    chunkReadyToSend.put(chunkHash, chunk)
+                    chunkReadyToSend[chunkHash] = chunk
                 } catch (ignore: InterruptedException) {
                 } catch (ignore: ExecutionException) {
                 } catch (e: TimeoutException) {
                     PlayerChunkManager.log.warn("read chunk timeout {} {}", chunkX, chunkZ)
                 }
             } else {
-                chunkSendQueue.enqueue(chunkHash)
+                chunkSendQueue.add(chunkHash)
             }
         } while (!chunkSendQueue.isEmpty() && triedSendChunkCount < trySendChunkCountPerTick)
     }
 
     private fun sendChunk() {
-        if (!chunkReadyToSend.isEmpty()) {
-            val ncp: NetworkChunkPublisherUpdatePacket = NetworkChunkPublisherUpdatePacket()
+        if (chunkReadyToSend.isNotEmpty()) {
+            val ncp = NetworkChunkPublisherUpdatePacket()
             ncp.position = player.position.asBlockVector3()
             ncp.radius = player.viewDistance shl 4
             player.dataPacket(ncp)
-            for (e in chunkReadyToSend.long2ObjectEntrySet()) {
-                val chunkX: Int = Level.Companion.getHashX(e.longKey)
-                val chunkZ: Int = Level.Companion.getHashZ(e.longKey)
-                val ev: PlayerChunkRequestEvent = PlayerChunkRequestEvent(player, chunkX, chunkZ)
+            for (e in chunkReadyToSend.keys) {
+                val chunkX: Int = Level.getHashX(e)
+                val chunkZ: Int = Level.getHashZ(e)
+                val ev = PlayerChunkRequestEvent(player, chunkX, chunkZ)
                 Server.instance.pluginManager.callEvent(ev)
                 player.level!!.requestChunk(chunkX, chunkZ, player)
             }
-            usedChunks.addAll(chunkReadyToSend.keySet())
+            usedChunks.addAll(chunkReadyToSend.keys)
         }
         chunkReadyToSend.clear()
     }
@@ -192,4 +178,6 @@ class PlayerChunkManager(private val player: Player) {
     private fun ifChunkNotInRadius(chunkX: Int, chunkZ: Int, radius: Int): Boolean {
         return chunkX * chunkX + chunkZ * chunkZ > radius * radius
     }
+
+    companion object : Loggable
 }

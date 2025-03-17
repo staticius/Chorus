@@ -30,7 +30,7 @@ class SayCommand(name: String) : VanillaCommand(name, "commands.say.description"
     ): Int {
         val senderString = sender.name
         val message = result.value!!.getResult<String>(0)
-        sender.server.broadcastMessage(TranslationContainer("%chat.type.announcement", senderString, message))
+        Server.instance.broadcastMessage(TranslationContainer("%chat.type.announcement", senderString, message))
         return 1
     }
 }

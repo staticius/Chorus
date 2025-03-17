@@ -38,9 +38,9 @@ class BeaconInventory(blockBeacon: BlockEntityBeacon) : BaseInventory(blockBeaco
         pk.windowId = who.getWindowId(this)
         pk.type = type.networkType
         val holder = this.holder
-        pk.x = holder.x.toInt()
-        pk.y = holder.y.toInt()
-        pk.z = holder.z.toInt()
+        pk.x = holder.vector3.x.toInt()
+        pk.y = holder.vector3.y.toInt()
+        pk.z = holder.vector3.z.toInt()
         who.dataPacket(pk)
         this.sendContents(who)
     }

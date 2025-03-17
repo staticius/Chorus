@@ -37,32 +37,6 @@ object HashUtils {
         return fnv1a_32_nbt(tag)
     }
 
-    fun computeBlockStateHash(identifier: String, propertyValues: Array<BlockPropertyValue<*, *, *>>): Int {
-        if (identifier == BlockID.UNKNOWN) {
-            return -2 // This is special case
-        }
-
-        val states = TreeMapCompoundTag()
-        for (value in propertyValues) {
-            when (value.propertyType.getType()) {
-                BlockPropertyType.Type.INT -> states.putInt(value.propertyType.getName(), value.getSerializedValue() as Int)
-                BlockPropertyType.Type.ENUM -> states.putString(
-                    value.propertyType.getName(),
-                    value.getSerializedValue().toString()
-                )
-
-                BlockPropertyType.Type.BOOLEAN -> states.putByte(
-                    value.propertyType.getName(),
-                    (value.getSerializedValue() as Byte).toInt()
-                )
-            }
-        }
-        val tag = CompoundTag()
-            .putString("name", identifier)
-            .putCompound("states", states)
-        return fnv1a_32_nbt(tag)
-    }
-
     fun fnv1a_32_nbt(tag: CompoundTag): Int {
         if (tag.getString("name") == "minecraft:unknown") {
             return -2 // This is special case

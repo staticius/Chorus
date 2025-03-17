@@ -33,7 +33,7 @@ class SetMaxPlayersCommand(name: String) : VanillaCommand(name, "commands.setmax
             lowerBound = true
         }
 
-        sender.server.maxPlayers = maxPlayers
+        Server.instance.maxPlayers = maxPlayers
         log.addSuccess("commands.setmaxplayers.success", maxPlayers.toString())
         if (lowerBound) {
             log.addSuccess("commands.setmaxplayers.success.lowerbound")

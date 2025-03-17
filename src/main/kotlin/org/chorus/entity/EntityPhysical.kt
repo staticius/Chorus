@@ -19,41 +19,30 @@ import java.util.stream.Stream
 
 abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreature(chunk, nbt), EntityAsyncPrepare {
     /**
-     * 时间泛播延迟，用于缓解在同一时间大量提交任务挤占cpu的情况
+     * Time-wide broadcast delay is used to alleviate the situation of squeezing CPUs by a large number of tasks submitted at the same time.
      */
-    val tickSpread: Int
+    val tickSpread: Int = globalCycleTickSpread.getAndIncrement() and 0xf
+
+    protected val previousCollideMotion: Vector3 = Vector3()
+    val previousCurrentMotion: Vector3 = Vector3()
 
     /**
-     * 提供实时最新碰撞箱位置
+     * timeForPhysicalFreeFallMovement
      */
-    override val offsetBoundingBox: AxisAlignedBB
-    protected val previousCollideMotion: Vector3
-    val previousCurrentMotion: Vector3
-
-    /**
-     * 实体自由落体运动的时间
-     */
-    protected var fallingTick: Int = 0
-    var needsRecalcMovement: Boolean = true
+    private var fallingTick: Int = 0
+    var needsReCalcMovement: Boolean = true
     private var needsCollisionDamage: Boolean = false
-
-    init {
-        this.tickSpread = globalCycleTickSpread.getAndIncrement() and 0xf
-        this.offsetBoundingBox = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        previousCollideMotion = Vector3()
-        previousCurrentMotion = Vector3()
-    }
 
     override fun asyncPrepare(currentTick: Int) {
         // 计算是否需要重新计算高开销实体运动
-        this.needsRecalcMovement =
+        this.needsReCalcMovement =
             level!!.tickRateOptDelay == 1 || ((currentTick + tickSpread) and (level!!.tickRateOptDelay - 1)) == 0
         // 重新计算绝对位置碰撞箱
         this.calculateOffsetBoundingBox()
         if (!this.isImmobile()) {
             // 处理重力
             handleGravity()
-            if (needsRecalcMovement) {
+            if (needsReCalcMovement) {
                 // 处理碰撞箱挤压运动
                 handleCollideMovement(currentTick)
             }

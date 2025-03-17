@@ -57,7 +57,7 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
     ): Int {
         val list = result.value
         val manager: TickingAreaManager = Server.instance.tickingAreaManager
-        val level = sender.locator.level
+        val level = sender.getLocator().level
         when (result.key) {
             "add-pos" -> {
                 val from = list!!.getResult<Locator>(1)

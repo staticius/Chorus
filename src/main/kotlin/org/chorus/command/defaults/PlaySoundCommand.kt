@@ -68,7 +68,7 @@ class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.
             }
         }
         if (locator == null) {
-            locator = targets!![0].locator
+            locator = targets!![0].getLocator()
         }
 
         val maxDistance = (if (volume > 1) volume * 16 else 16f).toDouble()

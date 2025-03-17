@@ -74,11 +74,11 @@ class CommandParameter private constructor(
             optional: Boolean,
             type: CommandParamType?,
             paramNode: IParamNode<*>?,
-            vararg options: CommandParamOption?
+            vararg options: CommandParamOption
         ): CommandParameter {
             val result = CommandParameter(name, optional, type, null, null, paramNode)
-            if (options.size != 0) {
-                result.paramOptions = Lists.newArrayList<CommandParamOption>(*options)
+            if (options.isNotEmpty()) {
+                result.paramOptions = listOf(*options)
             }
             return result
         }
@@ -108,7 +108,7 @@ class CommandParameter private constructor(
          * @see .newEnum
          */
         fun newEnum(name: String, optional: Boolean, values: Array<String>, soft: Boolean): CommandParameter {
-            return newEnum(name, optional, CommandEnum(name + "Enums", Arrays.asList(*values), soft))
+            return newEnum(name, optional, CommandEnum(name + "Enums", listOf(*values), soft))
         }
 
         /**
@@ -185,11 +185,11 @@ class CommandParameter private constructor(
             optional: Boolean,
             data: CommandEnum?,
             paramNode: IParamNode<*>?,
-            vararg options: CommandParamOption?
+            vararg options: CommandParamOption
         ): CommandParameter {
             val result = CommandParameter(name, optional, null, data, null, paramNode)
-            if (options.size != 0) {
-                result.paramOptions = Lists.newArrayList<CommandParamOption>(*options)
+            if (options.isNotEmpty()) {
+                result.paramOptions = listOf(*options)
             }
             return result
         }

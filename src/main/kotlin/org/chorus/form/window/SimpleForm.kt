@@ -1,8 +1,6 @@
 package org.chorus.form.window
 
-
 import com.google.gson.JsonArray
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus.Player
 import org.chorus.form.element.simple.ButtonImage
 import org.chorus.form.element.simple.ElementButton
@@ -11,13 +9,10 @@ import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.IntFunction
 
-
-@Accessors(chain = true, fluent = true)
-
 class SimpleForm : Form<SimpleResponse?> {
     protected var content: String = ""
 
-    protected var buttons: Object2ObjectArrayMap<ElementButton, Consumer<Player>?> = Object2ObjectArrayMap()
+    protected var buttons: MutableMap<ElementButton, Consumer<Player>?> = LinkedHashMap()
 
     constructor(title: String) : super(title)
 

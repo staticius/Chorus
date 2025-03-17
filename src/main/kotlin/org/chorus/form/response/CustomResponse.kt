@@ -1,17 +1,11 @@
 package org.chorus.form.response
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-
 
 /**
  * The response of a [org.chorus.form.window.CustomForm]
  */
-
-
-@Accessors(chain = true)
-
 class CustomResponse : Response() {
-    val responses: Int2ObjectOpenHashMap<Any> = Int2ObjectOpenHashMap()
+    val responses: MutableMap<Int, Any> = HashMap()
 
     /**
      * Set a response for an element (internal)
@@ -20,8 +14,8 @@ class CustomResponse : Response() {
      * @param response The value of the response
      * @param <T>      Any
     </T> */
-    fun <T> setResponse(index: Int, response: T) {
-        responses.put(index, response)
+    fun <T : Any> setResponse(index: Int, response: T) {
+        responses[index] = response
     }
 
     /**
@@ -31,7 +25,7 @@ class CustomResponse : Response() {
      * @return The response corresponding to the index
      * @param <T> Any valid response
     </T> */
-    fun <T> getResponse(index: Int): T {
+    fun <T : Any> getResponse(index: Int): T {
         return responses[index] as T
     }
 

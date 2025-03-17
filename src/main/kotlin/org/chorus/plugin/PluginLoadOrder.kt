@@ -14,7 +14,7 @@ package org.chorus.plugin
  * @author MagicDroidX(code) @ Nukkit Project
  * @author iNevet(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @since Nukkit 1.0 | Nukkit API 1.0.0
+ * 
  */
 enum class PluginLoadOrder {
     /**
@@ -23,7 +23,7 @@ enum class PluginLoadOrder {
      *
      * @see org.chorus.plugin.PluginLoadOrder
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     STARTUP,
 
@@ -33,7 +33,7 @@ enum class PluginLoadOrder {
      *
      * @see org.chorus.plugin.PluginLoadOrder
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     POSTWORLD
 }

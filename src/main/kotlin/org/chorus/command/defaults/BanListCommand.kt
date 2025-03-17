@@ -38,18 +38,18 @@ class BanListCommand(name: String) : VanillaCommand(name, "list all the banned p
             val type = paramList.getResult<String>(0)
             when (type!!.lowercase()) {
                 "ips" -> {
-                    list = sender.server.bannedIPs
+                    list = Server.instance.bannedIPs
                     ips = true
                 }
 
-                "players" -> list = sender.server.bannedPlayers
+                "players" -> list = Server.instance.bannedPlayers
                 else -> {
                     log.addSyntaxErrors(0).output()
                     return 0
                 }
             }
         } else {
-            list = sender.server.bannedPlayers
+            list = Server.instance.bannedPlayers
         }
 
         val builder = StringBuilder()

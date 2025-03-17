@@ -52,14 +52,14 @@ class DifficultyCommand(name: String) :
                 return 0
             }
         }
-        if (sender.server.isHardcore) {
+        if (Server.instance.isHardcore) {
             difficulty = 3
         }
         if (difficulty != -1) {
-            sender.server.difficulty = difficulty
+            Server.instance.difficulty = difficulty
             val pk: SetDifficultyPacket = SetDifficultyPacket()
-            pk.difficulty = sender.server.difficulty
-            Server.broadcastPacket(ArrayList(sender.server.onlinePlayers.values), pk)
+            pk.difficulty = Server.instance.difficulty
+            Server.broadcastPacket(ArrayList(Server.instance.onlinePlayers.values), pk)
             log.addSuccess("commands.difficulty.success", difficulty.toString()).output(true)
             return 1
         } else {

@@ -57,7 +57,7 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                         log.addMessage("nukkit.command.generic.permission").output()
                         return 0
                     }
-                    for (level in sender.server.levels.values) {
+                    for (level in Server.instance.levels.values) {
                         level.checkTime()
                         level.startTime()
                         level.checkTime()
@@ -68,7 +68,7 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                         log.addMessage("nukkit.command.generic.permission").output()
                         return 0
                     }
-                    for (level in sender.server.levels.values) {
+                    for (level in Server.instance.levels.values) {
                         level.checkTime()
                         level.stopTime()
                         level.checkTime()
@@ -82,7 +82,7 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                     val level = if (sender is Player) {
                         sender.level
                     } else {
-                        sender.server.defaultLevel
+                        Server.instance.defaultLevel
                     }
                     log.addSuccess("commands.time.query.gametime", level.time.toString()).output(true)
                 }
@@ -99,7 +99,7 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                     log.addNumTooSmall(1, 0).output()
                     return 0
                 }
-                for (level in sender.server.levels.values) {
+                for (level in Server.instance.levels.values) {
                     level.checkTime()
                     level.time = level.time + value
                     level.checkTime()
@@ -118,7 +118,7 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                     log.addNumTooSmall(1, 0).output()
                     return 0
                 }
-                for (level in sender.server.levels.values) {
+                for (level in Server.instance.levels.values) {
                     level.checkTime()
                     level.time = value
                     level.checkTime()
@@ -147,7 +147,7 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                 } else if ("sunset" == str) {
                     value = Level.TIME_SUNSET
                 }
-                for (level in sender.server.levels.values) {
+                for (level in Server.instance.levels.values) {
                     level.checkTime()
                     level.time = value
                     level.checkTime()

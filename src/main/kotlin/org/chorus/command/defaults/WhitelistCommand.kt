@@ -60,19 +60,19 @@ class WhitelistCommand(name: String) :
                 }
                 when (action.lowercase()) {
                     "reload" -> {
-                        sender.server.reloadWhitelist()
+                        Server.instance.reloadWhitelist()
                         log.addSuccess("commands.allowlist.reloaded").output(true)
                         return 1
                     }
 
                     "on" -> {
-                        sender.server.properties[ServerPropertiesKeys.WHITE_LIST.toString()] = true
+                        Server.instance.properties[ServerPropertiesKeys.WHITE_LIST.toString()] = true
                         log.addSuccess("commands.allowlist.enabled").output(true)
                         return 1
                     }
 
                     "off" -> {
-                        sender.server.properties[ServerPropertiesKeys.WHITE_LIST.toString()] = false
+                        Server.instance.properties[ServerPropertiesKeys.WHITE_LIST.toString()] = false
                         log.addSuccess("commands.allowlist.disabled").output(true)
                         return 1
                     }
@@ -80,7 +80,7 @@ class WhitelistCommand(name: String) :
                     "list" -> {
                         val re = StringBuilder()
                         var count = 0
-                        for (player in sender.server.whitelist.all.keys) {
+                        for (player in Server.instance.whitelist.all.keys) {
                             re.append(player).append(", ")
                             ++count
                         }
@@ -99,13 +99,13 @@ class WhitelistCommand(name: String) :
                 }
                 when (action.lowercase()) {
                     "add" -> {
-                        sender.server.getOfflinePlayer(name).isWhitelisted = true
+                        Server.instance.getOfflinePlayer(name).isWhitelisted = true
                         log.addSuccess("commands.allowlist.add.success", name).output(true)
                         return 1
                     }
 
                     "remove" -> {
-                        sender.server.getOfflinePlayer(name).isWhitelisted = false
+                        Server.instance.getOfflinePlayer(name).isWhitelisted = false
                         log.addSuccess("commands.allowlist.remove.success", name).output(true)
                         return 1
                     }

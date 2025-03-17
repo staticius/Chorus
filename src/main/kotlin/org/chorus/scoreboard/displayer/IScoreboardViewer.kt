@@ -14,7 +14,7 @@ interface IScoreboardViewer {
      * @param scoreboard 目标计分板
      * @param slot 目标槽位
      */
-    fun display(scoreboard: IScoreboard?, slot: DisplaySlot?)
+    fun display(scoreboard: IScoreboard, slot: DisplaySlot?)
 
     /**
      * 清除指定槽位的显示内容
@@ -26,17 +26,17 @@ interface IScoreboardViewer {
      * 通知观察者计分板已删除（若计分板在任意显示槽位中，则会一并清除槽位）
      * @param scoreboard 目标计分板
      */
-    fun removeScoreboard(scoreboard: IScoreboard?)
+    fun removeScoreboard(scoreboard: IScoreboard)
 
     /**
      * 通知观察者指定计分板上的指定行已删除
      * @param line 目标行
      */
-    fun removeLine(line: IScoreboardLine?)
+    fun removeLine(line: IScoreboardLine)
 
     /**
      * 向观察者发送指定行的新分数
      * @param line 目标行
      */
-    fun updateScore(line: IScoreboardLine?)
+    fun updateScore(line: IScoreboardLine)
 }

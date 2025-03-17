@@ -1,14 +1,13 @@
 package org.chorus.tags
 
 import com.google.gson.reflect.TypeToken
-import it.unimi.dsi.fastutil.objects.Object2ObjectFunction
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.Server
 import org.chorus.utils.JSONUtils
 import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.HashMap
 
 object ItemTags {
     const val ARROW: String = "minecraft:arrow"
@@ -60,23 +59,21 @@ object ItemTags {
     const val WOODEN_TIER: String = "minecraft:wooden_tier"
     const val WOOL: String = "minecraft:wool"
 
-    private val TAG_2_ITEMS = Object2ObjectOpenHashMap<String, MutableSet<String>>()
-    private val ITEM_2_TAGS = Object2ObjectOpenHashMap<String, MutableSet<String>>()
+    private val TAG_2_ITEMS = HashMap<String, MutableSet<String>>()
+    private val ITEM_2_TAGS = HashMap<String, MutableSet<String>>()
 
     init {
         try {
             Server::class.java.classLoader.getResourceAsStream("item_tags.json").use { stream ->
-                val typeToken: TypeToken<HashMap<String, HashSet<String>>> =
-                    object : TypeToken<HashMap<String?, HashSet<String?>?>?>() {
-                    }
+                val typeToken: TypeToken<HashMap<String, HashSet<String>>> = object : TypeToken<HashMap<String, HashSet<String>>>() {}
                 checkNotNull(stream)
                 val map = JSONUtils.from(InputStreamReader(stream), typeToken)
                 TAG_2_ITEMS.putAll(map)
                 for ((key, value) in TAG_2_ITEMS) {
                     for (item in value) {
                         val tags = ITEM_2_TAGS.computeIfAbsent(
-                            item,
-                            Object2ObjectFunction<String, MutableSet<String>> { k: Any? -> HashSet() })
+                            item
+                        ) { HashSet() }
                         tags.add(key)
                     }
                 }
@@ -84,11 +81,6 @@ object ItemTags {
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
-    }
-
-    fun trim() {
-        TAG_2_ITEMS.trim()
-        ITEM_2_TAGS.trim()
     }
 
     fun getTagSet(identifier: String?): @UnmodifiableView MutableSet<String> {
@@ -109,11 +101,15 @@ object ItemTags {
      */
     fun register(identifier: String, tags: Collection<String>) {
         val tagSet = ITEM_2_TAGS[identifier]
-        tagSet?.addAll(tags) ?: (ITEM_2_TAGS[identifier] = HashSet(tags))
+        if (tagSet != null) {
+            tagSet.addAll(tags)
+        } else ITEM_2_TAGS[identifier] = HashSet(tags)
+
         for (tag in tags) {
             val itemSet = TAG_2_ITEMS[tag]
-            itemSet?.add(identifier)
-                ?: (TAG_2_ITEMS[tag] = HashSet(setOf(identifier)))
+            if (itemSet != null) {
+                itemSet.add(identifier)
+            } else TAG_2_ITEMS[tag] = HashSet(setOf(identifier))
         }
     }
 }

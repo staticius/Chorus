@@ -58,9 +58,6 @@ open class ConsoleCommandSender : CommandSender {
     override val isPlayer: Boolean
         get() = false
 
-    override val server: Server?
-        get() = Server.instance
-
     override fun sendMessage(message: String) {
         for (line in message.trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
             ConsoleCommandSender.log.info(line)
@@ -72,7 +69,7 @@ open class ConsoleCommandSender : CommandSender {
     }
 
     override fun sendCommandOutput(container: CommandOutputContainer) {
-        if (this.transform.level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
+        if (this.getTransform().level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             for (msg in container.messages) {
                 var text =
                     Server.instance.baseLang.tr(TranslationContainer(msg.messageId, *msg.parameters))

@@ -47,7 +47,7 @@ class LevelTest {
 
         p.level.autoSave = true
         p.setPosition(Vector3(0.0, 100.0, 0.0))
-        val chunk = p.locator.chunk
+        val chunk = p.getLocator().chunk
         chunk.setBlockState(0, 3, 0, BlockDirt.properties.defaultState)
         Assertions.assertEquals(chunk.getBlockState(0, 3, 0), BlockDirt.properties.defaultState)
         chunk.setBlockState(0, 3, 0, BlockDiamondBlock.properties.defaultState)
@@ -89,7 +89,7 @@ class LevelTest {
             Assertions.fail<Any>("Chunk cannot be regenerate in 10s")
         }
 
-        Assertions.assertEquals(BlockDirt.properties.defaultState, p.locator.chunk.getBlockState(0, 3, 0))
+        Assertions.assertEquals(BlockDirt.properties.defaultState, p.getLocator().chunk.getBlockState(0, 3, 0))
         p.level.autoSave = false
 
         gameLoop.stop()

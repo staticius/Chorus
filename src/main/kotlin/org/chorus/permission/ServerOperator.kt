@@ -8,7 +8,7 @@ package org.chorus.permission
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.permission.Permissible
  *
- * @since Nukkit 1.0 | Nukkit API 1.0.0
+ * 
  */
 interface ServerOperator {
     /**
@@ -16,7 +16,7 @@ interface ServerOperator {
      * Returns if this object is an operator.
      *
      * @return 这个对象是不是服务器管理员。<br></br>if this object is an operator.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     /**
      * 把这个对象设置成服务器管理员。<br></br>
@@ -24,7 +24,7 @@ interface ServerOperator {
      *
      * @param value `true`为授予管理员，`false`为取消管理员。<br></br>
      * `true` for giving this operator or `false` for cancelling.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     var isOp: Boolean
 }

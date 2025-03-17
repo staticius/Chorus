@@ -10,7 +10,7 @@ package org.chorus.command
  *
  * @see org.chorus.command.CommandExecutor.onCommand
  *
- * @since Nukkit 1.0 | Nukkit API 1.0.0
+ * 
  */
 interface CommandExecutor {
     /**
@@ -48,7 +48,7 @@ interface CommandExecutor {
      * @param args    这个命令的参数列表。<br></br>
      * Arguments of this command.
      * @return 这个命令执行是否执行成功。<br></br>whether this command is executed successfully.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun onCommand(sender: CommandSender?, command: Command?, label: String?, args: Array<String?>?): Boolean
 }

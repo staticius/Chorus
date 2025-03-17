@@ -1,10 +1,8 @@
 package org.chorus.command
 
 import org.chorus.Player
-import org.chorus.Server
 import org.chorus.entity.Entity
 import org.chorus.lang.CommandOutputContainer
-import org.chorus.level.Locator
 import org.chorus.level.Transform
 import org.chorus.permission.Permission
 import org.chorus.plugin.Plugin
@@ -38,9 +36,6 @@ class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTra
         executor!!.sendCommandOutput(container)
     }
 
-    override val server: Server?
-        get() = executor.getServer()
-
     override val name: String
         get() = entity!!.name
 
@@ -58,12 +53,6 @@ class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTra
     override fun asPlayer(): Player? {
         return if (isPlayer) entity as Player? else null
     }
-
-    override val locator: Locator
-        get() = (executeTransform ?: entity!!.locator).clone()
-
-    override val transform: Transform
-        get() = (executeTransform ?: entity!!.transform).clone()
 
     override fun isOp(): Boolean {
         return executor!!.isOp

@@ -361,12 +361,8 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         return getPickupMode() == EntityProjectile.Companion.PICKUP_CREATIVE
     }
 
-    fun isPlayer(): Boolean {
+    fun hasPlayer(): Boolean {
         return player
-    }
-
-    fun setPlayer(player: Boolean) {
-        this.player = player
     }
 
     fun getLoyaltyLevel(): Int {

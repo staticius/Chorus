@@ -35,7 +35,7 @@ class ReloadCommand(name: String) : VanillaCommand(name, "Reload the server/plug
             "default" -> {
                 log.addMessage(TextFormat.YELLOW.toString() + "%nukkit.command.reload.reloading" + TextFormat.WHITE)
                     .output(true)
-                sender.server.reload()
+                Server.instance.reload()
                 log.addMessage(TextFormat.YELLOW.toString() + "%nukkit.command.reload.reloaded" + TextFormat.WHITE)
                     .output(true)
                 return 1
@@ -44,7 +44,7 @@ class ReloadCommand(name: String) : VanillaCommand(name, "Reload the server/plug
             "function" -> {
                 log.addMessage(TextFormat.YELLOW.toString() + "%nukkit.command.reload.reloading" + TextFormat.WHITE)
                     .output(true)
-                sender.server.functionManager.reload()
+                Server.instance.functionManager.reload()
                 log.addMessage(TextFormat.YELLOW.toString() + "%nukkit.command.reload.reloaded" + TextFormat.WHITE)
                     .output(true)
                 return 1
@@ -53,7 +53,7 @@ class ReloadCommand(name: String) : VanillaCommand(name, "Reload the server/plug
             "plugin" -> {
                 log.addMessage(TextFormat.YELLOW.toString() + "%nukkit.command.reload.reloading" + TextFormat.WHITE)
                     .output(true)
-                val pluginManager = sender.server.pluginManager
+                val pluginManager = Server.instance.pluginManager
                 val str = list!!.getResult<String>(1)
                 var plugin = pluginManager.getPlugin(str)
                 //todo: 多语言

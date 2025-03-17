@@ -9,10 +9,6 @@ import com.google.common.collect.HashBiMap
 import com.google.common.collect.Sets
 import io.netty.util.internal.EmptyArrays
 import io.netty.util.internal.PlatformDependent
-import it.unimi.dsi.fastutil.Pair
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet
-import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap
 import org.chorus.api.UsedByReflection
 import org.chorus.block.*
 import org.chorus.block.customblock.CustomBlock
@@ -106,6 +102,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
 import java.util.stream.Collectors
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
+import kotlin.collections.LinkedHashMap
 import kotlin.concurrent.Volatile
 import kotlin.math.*
 
@@ -247,7 +246,7 @@ class Player @UsedByReflection constructor(
     var nextChunkOrderRun: Int = 1
     var newPosition: Vector3? = null
     var chunkRadius: Int
-    protected var viewDistance: Int
+    var viewDistance: Int
     var spawnPoint: Locator?
     protected var spawnPointType: SpawnPointType? = null
     /**
@@ -280,8 +279,8 @@ class Player @UsedByReflection constructor(
     var foodData: PlayerFood? = null
     protected var enableClientCommand: Boolean = true
     var formWindowCount: Int = 0
-    var formWindows: MutableMap<Int, Form<*>> = Int2ObjectOpenHashMap()
-    var serverSettings: MutableMap<Int, Form<*>> = Int2ObjectOpenHashMap()
+    var formWindows: MutableMap<Int, Form<*>> = HashMap()
+    var serverSettings: MutableMap<Int, Form<*>> = HashMap()
 
     /**
      * 我们使用google的cache来存储NPC对话框发送信息
@@ -295,7 +294,7 @@ class Player @UsedByReflection constructor(
      */
     var dialogWindows: Cache<String, FormWindowDialog?> =
         Caffeine.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build()
-    var dummyBossBars: MutableMap<Long, DummyBossBar?> = Long2ObjectLinkedOpenHashMap()
+    var dummyBossBars: MutableMap<Long, DummyBossBar?> = LinkedHashMap()
     var lastRightClickTime: Double = 0.0
     var lastRightClickPos: Vector3? = null
 
@@ -469,7 +468,7 @@ class Player @UsedByReflection constructor(
     var closingWindowId: Int = Int.MIN_VALUE
     val windows: BiMap<Inventory, Int> = HashBiMap.create()
     val windowIndex: BiMap<Int, Inventory> = windows.inverse()
-    protected val permanentWindows: MutableSet<Int?> = IntOpenHashSet()
+    protected val permanentWindows: MutableSet<Int?> = HashSet()
 
     /**
      * 获取该玩家的[CraftingGridInventory]
@@ -507,7 +506,7 @@ class Player @UsedByReflection constructor(
     var fakeInventoryOpen: Boolean = false
 
     /** */
-    /**todo hack for receive a error position after teleport */
+    /**todo hack for receive an error position after teleport */
     private var lastTeleportMessage: Pair<Transform, Long>? = null
 
     /**
@@ -2100,10 +2099,6 @@ class Player @UsedByReflection constructor(
 
     override val effectivePermissions: Map<String?, PermissionAttachmentInfo>
         get() = perm!!.effectivePermissions
-
-    override fun isPlayer(): Boolean {
-        return true
-    }
 
     override fun asPlayer(): Player {
         return this
@@ -4953,7 +4948,7 @@ class Player @UsedByReflection constructor(
         playerChunkManager.addSendChunk(chunk.x, chunk.z)
     }
 
-    override fun onChunkLoaded(chunk: IChunk?) {
+    override fun onChunkLoaded(chunk: IChunk) {
     }
 
 
@@ -5107,7 +5102,7 @@ class Player @UsedByReflection constructor(
                 // Check Trident is returning to shooter
                 if (!entity.hadCollision) {
                     if (entity.isNoClip()) {
-                        if (!(entity as EntityProjectile).shootingEntity!!.equals(this)) {
+                        if ((entity as EntityProjectile).shootingEntity!! != this) {
                             return false
                         }
                     } else {
@@ -5115,7 +5110,7 @@ class Player @UsedByReflection constructor(
                     }
                 }
 
-                if (!entity.isPlayer()) {
+                if (!entity.hasPlayer()) {
                     return false
                 }
 

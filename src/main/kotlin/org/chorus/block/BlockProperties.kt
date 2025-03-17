@@ -2,10 +2,6 @@ package org.chorus.block
 
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.Sets
-import it.unimi.dsi.fastutil.Pair
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.tags.BlockTags.register
@@ -13,12 +9,11 @@ import org.chorus.utils.HashUtils
 import org.chorus.utils.Identifier.Companion.assertValid
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
-import java.util.function.BinaryOperator
 import java.util.function.Function
-import java.util.function.Supplier
 import java.util.stream.Collectors
+import kotlin.collections.HashMap
 
-class BlockProperties(identifier: String, blockTags: Set<String?>, vararg properties: BlockPropertyType<*>?) {
+class BlockProperties(identifier: String, blockTags: Set<String>, vararg properties: BlockPropertyType<*>) {
 
     val identifier: String
     private val propertyTypeSet: Set<BlockPropertyType<*>>
@@ -30,7 +25,7 @@ class BlockProperties(identifier: String, blockTags: Set<String?>, vararg proper
         private set
     val specialValueBits: Byte
 
-    constructor(identifier: String, vararg properties: BlockPropertyType<*>?) : this(
+    constructor(identifier: String, vararg properties: BlockPropertyType<*>) : this(
         identifier,
         setOf<String>(),
         *properties
@@ -43,20 +38,23 @@ class BlockProperties(identifier: String, blockTags: Set<String?>, vararg proper
         this.propertyTypeSet = Sets.newHashSet<BlockPropertyType<*>>(*properties)
 
         var specialValueBits: Byte = 0
-        for (value in this.propertyTypeSet) (specialValueBits += value.getBitSize()).toByte()
+        for (value in this.propertyTypeSet) {
+            specialValueBits = (specialValueBits + value.getBitSize()).toByte()
+        }
         this.specialValueBits = specialValueBits
+
         if (this.specialValueBits <= 16) {
             val mapBlockStatePair = initStates()
-            val blockStateHashMap = mapBlockStatePair.left()
-            this.defaultState = mapBlockStatePair.right()
+            val blockStateHashMap = mapBlockStatePair.first
+            this.defaultState = mapBlockStatePair.second
             this.specialValueMap = blockStateHashMap
                 .values
                 .stream()
                 .collect(
                     Collectors.toMap(
                         BlockStateImpl::specialValue, Function.identity(),
-                        BinaryOperator { v1: BlockState, v2: BlockState? -> v1 },
-                        Supplier { Short2ObjectOpenHashMap() })
+                        { v1: BlockState, _: BlockState? -> v1 },
+                        { HashMap() })
                 )
         } else {
             throw IllegalArgumentException()
@@ -67,10 +65,10 @@ class BlockProperties(identifier: String, blockTags: Set<String?>, vararg proper
         val propertyTypeList = propertyTypeSet.stream().toList()
         val size = propertyTypeList.size
         if (size == 0) {
-            val blockState = BlockStateImpl(identifier, arrayOf())
-            return Pair.of(Int2ObjectArrayMap(intArrayOf(blockState.blockStateHash()), arrayOf(blockState)), blockState)
+            val blockState = BlockStateImpl(identifier, mutableListOf())
+            return Pair(hashMapOf(blockState.blockStateHash() to blockState), blockState)
         }
-        val blockStates = Int2ObjectOpenHashMap<BlockStateImpl>()
+        val blockStates = HashMap<Int, BlockStateImpl>()
 
         // to keep track of next element in each of
         // the n arrays
@@ -84,17 +82,16 @@ class BlockProperties(identifier: String, blockTags: Set<String?>, vararg proper
             val values = ImmutableList.builder<BlockPropertyValue<*, *, *>?>()
             for (i in 0..<size) {
                 val type = propertyTypeList[i]
-                values.add(type.tryCreateValue(type.getValidValues()!![indices[i]]))
+                values.add(type.tryCreateValue(type.getValidValues()[indices[i]])!!)
             }
-            val state =
-                BlockStateImpl(identifier, values.build().toArray<BlockPropertyValue<*, *, *>> { _Dummy_.__Array__() })
-            blockStates.put(state.blockStateHash(), state)
+            val state = BlockStateImpl(identifier, values.build().toMutableList())
+            blockStates[state.blockStateHash()] = state
 
             // find the rightmost array that has more
             // elements left after the current element
             // in that array
             var next = size - 1
-            while (next >= 0 && (indices[next] + 1 >= propertyTypeList[next].getValidValues()!!.size())) {
+            while (next >= 0 && (indices[next] + 1 >= propertyTypeList[next].getValidValues().size)) {
                 next--
             }
 
@@ -115,9 +112,7 @@ class BlockProperties(identifier: String, blockTags: Set<String?>, vararg proper
         }
         val defaultStateHash: Int = HashUtils.computeBlockStateHash(
             this.identifier,
-            propertyTypeSet.stream().map { p: BlockPropertyType<*> -> p.tryCreateValue(p.getDefaultValue()) }.collect(
-                Collectors.toList()
-            )
+            propertyTypeSet.stream().map { p: BlockPropertyType<*> -> p.tryCreateValue(p.getDefaultValue())!! }.toList()
         )
         var defaultState: BlockStateImpl? = null
         for (s in blockStates.values) {
@@ -127,25 +122,25 @@ class BlockProperties(identifier: String, blockTags: Set<String?>, vararg proper
             }
         }
         requireNotNull(defaultState) { "Can't find default block state for block: $identifier" }
-        return Pair.of(blockStates, defaultState)
+        return Pair(blockStates, defaultState)
     }
 
     fun getBlockState(specialValue: Short): BlockState? {
         return specialValueMap[specialValue]
     }
 
-    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> getBlockState(
+    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> getBlockState(
         property: PROPERTY,
         value: DATATYPE
     ): BlockState {
         return defaultState.setPropertyValue(this, property, value)
     }
 
-    fun getBlockState(propertyValue: BlockPropertyValue<*, *, *>?): BlockState {
+    fun getBlockState(propertyValue: BlockPropertyValue<*, *, *>): BlockState {
         return defaultState.setPropertyValue(this, propertyValue)
     }
 
-    fun getBlockState(vararg values: BlockPropertyValue<*, *, *>?): BlockState {
+    fun getBlockState(vararg values: BlockPropertyValue<*, *, *>): BlockState {
         return defaultState.setPropertyValues(this, *values)
     }
 
@@ -157,11 +152,11 @@ class BlockProperties(identifier: String, blockTags: Set<String?>, vararg proper
         return specialValueMap.containsKey(specialValue)
     }
 
-    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> containProperty(property: PROPERTY): Boolean {
+    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> containProperty(property: PROPERTY): Boolean {
         return propertyTypeSet.contains(property)
     }
 
-    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> getPropertyValue(specialValue: Int, p: PROPERTY): DATATYPE {
+    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> getPropertyValue(specialValue: Int, p: PROPERTY): DATATYPE {
         return getBlockState(specialValue.toShort())!!.getPropertyValue(p)
     }
 

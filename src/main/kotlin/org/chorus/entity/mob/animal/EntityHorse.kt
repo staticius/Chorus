@@ -246,12 +246,12 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
                     this
                 )
             }
-            this.needsRecalcMovement =
+            this.needsReCalcMovement =
                 level!!.tickRateOptDelay == 1 || ((currentTick + tickSpread) and (level!!.tickRateOptDelay - 1)) == 0
             this.calculateOffsetBoundingBox()
             if (!this.isImmobile) {
                 handleGravity()
-                if (needsRecalcMovement) {
+                if (needsReCalcMovement) {
                     handleCollideMovement(currentTick)
                 }
                 addTmpMoveMotionXZ(previousCollideMotion)

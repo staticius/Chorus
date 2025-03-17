@@ -1,144 +1,120 @@
 package org.chorus.block
 
 import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue.propertyType
-import org.chorus.block.property.type.BlockPropertyType.createValue
-import org.chorus.block.property.type.BooleanPropertyType.createValue
-import org.chorus.block.property.type.IntPropertyType.createValue
-import org.chorus.nbt.tag.CompoundTag.putByte
-import org.chorus.nbt.tag.CompoundTag.putCompound
-import org.chorus.nbt.tag.CompoundTag.putInt
-import org.chorus.nbt.tag.CompoundTag.putString
+import org.chorus.block.property.type.BlockPropertyType
+import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.CompoundTagView
+import org.chorus.nbt.tag.LinkedCompoundTag
+import org.chorus.nbt.tag.TreeMapCompoundTag
+import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.HashUtils
-import org.jetbrains.annotations.UnmodifiableView
-import java.util.*
-import java.util.List
-import kotlin.collections.MutableList
-import kotlin.collections.indices
+import javax.xml.crypto.Data
 
-/**
- * Allay Project 12/15/2023
- *
- * @author Cool_Loong
- */
 class BlockStateImpl(
     override val identifier: String,
-    val blockhash: Int,
-    val specialValue: Short,
-    blockPropertyValues: Array<BlockPropertyValue<*, *, *>>,
-    blockStateTag: CompoundTagView
+    val blockHash: Int,
+    private val inSpecialValue: Short,
+    override val blockPropertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>,
+    override val blockStateTag: CompoundTagView
 ) : BlockState {
-    constructor(identifier: String, blockStateHash: Int, propertyValues: Array<BlockPropertyValue<*, *, *>>) : this(
+    constructor(identifier: String, blockStateHash: Int, propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>) : this(
         identifier.intern(),
         blockStateHash,
-        BlockState.Companion.computeSpecialValue(propertyValues),
+        BlockState.computeSpecialValue(propertyValues),
         propertyValues,
         buildBlockStateTag(identifier, propertyValues)
     )
 
-    constructor(identifier: String, propertyValues: Array<BlockPropertyValue<*, *, *>>) : this(
+    constructor(identifier: String, propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>) : this(
         identifier,
         HashUtils.computeBlockStateHash(identifier, propertyValues),
         propertyValues
     )
 
-    override fun getBlockPropertyValues(): @UnmodifiableView MutableList<BlockPropertyValue<*, *, *>> {
-        return List.of<BlockPropertyValue<*, *, *>>(*blockPropertyValues)
-    }
-
     override fun blockStateHash(): Int {
-        return this.blockhash
+        return this.blockHash
     }
 
     override fun unsignedBlockStateHash(): Long {
-        return Integer.toUnsignedLong(this.blockhash)
+        return Integer.toUnsignedLong(this.blockHash)
     }
 
-    override fun getBlockStateTag(): CompoundTagView {
-        return blockStateTag
+    override fun specialValue(): Short {
+        return inSpecialValue
     }
 
-    override fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> getPropertyValue(p: PROPERTY): DATATYPE {
+    override fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> getPropertyValue(p: PROPERTY): DATATYPE {
         for (property in this.blockPropertyValues) {
             if (property.propertyType === p) {
-                return property.getValue()
+                @Suppress("UNCHECKED_CAST")
+                return property.value as DATATYPE
             }
         }
         throw IllegalArgumentException("Property " + p + " is not supported by this block " + this.identifier)
     }
 
-    override fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> setPropertyValue(
+    override fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> setPropertyValue(
         properties: BlockProperties,
         property: PROPERTY,
         value: DATATYPE
-    ): BlockState? {
+    ): BlockState {
         return setPropertyValue(properties, property.createValue(value))
     }
 
     override fun setPropertyValue(
         properties: BlockProperties,
-        propertyValue: BlockPropertyValue<*, *, *>
+        propertyValue: BlockPropertyType.BlockPropertyValue<*, *, *>
     ): BlockState {
-        val blockPropertyValues: Array<BlockPropertyValue<*, *, *>> = blockPropertyValues
-        val newPropertyValues: Array<BlockPropertyValue<*, *, *>> =
-            arrayOfNulls<BlockPropertyValue<*, *, *>>(blockPropertyValues.size)
         var succeed = false
-        for (i in blockPropertyValues.indices) {
-            val v: BlockPropertyValue<*, out BlockPropertyType<*>?, *> = blockPropertyValues[i]
-            if (v.propertyType === propertyValue.propertyType) {
+
+        val newPropertyValues = blockPropertyValues.map {
+            if (it.propertyType === propertyValue.propertyType) {
                 succeed = true
-                newPropertyValues[i] = propertyValue
-            } else newPropertyValues[i] = v
-        }
+                propertyValue
+            } else it
+        }.toMutableList()
+
         require(succeed) { "Property " + propertyValue.propertyType + " is not supported by this block " + this.identifier }
-        return getNewBlockState(properties, newPropertyValues)
+        return getNewBlockState(properties, newPropertyValues)!!
     }
 
     override fun setPropertyValues(
         properties: BlockProperties,
-        vararg values: BlockPropertyValue<*, *, *>
-    ): BlockState? {
-        val newPropertyValues: Array<BlockPropertyValue<*, *, *>> = arrayOfNulls<BlockPropertyValue<*, *, *>>(
-            blockPropertyValues.size
-        )
+        vararg values: BlockPropertyType.BlockPropertyValue<*, *, *>
+    ): BlockState {
         val succeed = BooleanArray(values.size)
         var succeedCount = 0
-        for (i in blockPropertyValues.indices) {
-            var index = -1
+
+        val newPropertyValues = blockPropertyValues.map { value ->
             for (j in values.indices) {
-                if (values[j].propertyType === blockPropertyValues[i].propertyType) {
-                    index = j
+                if (values[j].propertyType === value.propertyType) {
                     succeedCount++
-                    succeed[index] = true
-                    newPropertyValues[i] = values[j]
+                    succeed[j] = true
+                    return@map values[j]
                 }
             }
-            if (index == -1) {
-                newPropertyValues[i] = blockPropertyValues[i]
-            }
-        }
+            value
+        }.toMutableList()
+
         if (succeedCount != values.size) {
             val errorMsgBuilder = StringBuilder("Properties ")
             for (i in values.indices) {
                 if (!succeed[i]) {
-                    errorMsgBuilder.append(values[i].propertyType.name)
+                    errorMsgBuilder.append(values[i].propertyType.getName())
                     if (i != values.size - 1) errorMsgBuilder.append(", ")
                 }
             }
             errorMsgBuilder.append(" are not supported by this block ").append(this.identifier)
             throw IllegalArgumentException(errorMsgBuilder.toString())
         }
-        return getNewBlockState(properties, newPropertyValues)
+        return getNewBlockState(properties, newPropertyValues)!!
     }
 
-    private fun getNewBlockState(properties: BlockProperties, values: Array<BlockPropertyValue<*, *, *>>): BlockState? {
+    private fun getNewBlockState(properties: BlockProperties, values: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>): BlockState? {
         Preconditions.checkNotNull(properties)
         val bits = properties.specialValueBits
         if (bits <= 16) {
-            return properties.getBlockState(BlockState.Companion.computeSpecialValue(bits, values))
+            return properties.getBlockState(BlockState.computeSpecialValue(bits, values))
         } else {
             throw IllegalArgumentException()
         }
@@ -147,44 +123,43 @@ class BlockStateImpl(
     override fun toString(): String {
         return "BlockStateImpl{" +
                 "identifier='" + identifier + '\'' +
-                ", blockPropertyValues=" + Arrays.stream<BlockPropertyValue<*, *, *>>(blockPropertyValues)
-            .map<Any>(BlockPropertyType.BlockPropertyValue::getValue).toList() +
+                ", blockPropertyValues=" + blockPropertyValues.stream().map { it.value }.toList() +
                 '}'
     }
 
-    override val blockPropertyValues: Array<BlockPropertyValue<*, *, *>> = blockPropertyValues
-    override val blockStateTag: CompoundTagView = blockStateTag
-
     companion object {
-        var UNKNOWN_BLOCK_STATE_CACHE: Int2ObjectOpenHashMap<BlockStateImpl> = Int2ObjectOpenHashMap()
+        private var UNKNOWN_BLOCK_STATE_CACHE: MutableMap<Int, BlockStateImpl> = HashMap()
 
-        fun makeUnknownBlockState(hash: Int, blockTag: CompoundTag?): BlockStateImpl {
+        fun makeUnknownBlockState(hash: Int, blockTag: CompoundTag): BlockStateImpl {
             return UNKNOWN_BLOCK_STATE_CACHE.computeIfAbsent(
-                hash,
-                Int2ObjectFunction<BlockStateImpl> { h: Int ->
-                    BlockStateImpl(
-                        BlockID.UNKNOWN, -2, 0.toShort(), arrayOfNulls<BlockPropertyValue<*, *, *>>(0), CompoundTagView(
-                            LinkedCompoundTag()
-                                .putString("name", BlockID.UNKNOWN)
-                                .putCompound("states", CompoundTag())
-                                .putCompound("Block", blockTag)
-                                .putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)
-                        )
+                hash
+            ) {
+                BlockStateImpl(
+                    BlockID.UNKNOWN,
+                    -2,
+                    0.toShort(),
+                    mutableListOf(),
+                    CompoundTagView(
+                        LinkedCompoundTag()
+                            .putString("name", BlockID.UNKNOWN)
+                            .putCompound("states", CompoundTag())
+                            .putCompound("Block", blockTag)
+                            .putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)
                     )
-                })
+                )
+            }
         }
 
         private fun buildBlockStateTag(
             identifier: String,
-            propertyValues: Array<BlockPropertyValue<*, *, *>>
+            propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
         ): CompoundTagView {
-            //build block state tag
-            val states: TreeMapCompoundTag = TreeMapCompoundTag()
+            val states = TreeMapCompoundTag()
             for (value in propertyValues) {
-                when (value.propertyType.type) {
-                    INT -> states.putInt(value.propertyType.name, value.serializedValue as Int)
-                    ENUM -> states.putString(value.propertyType.name, value.serializedValue.toString())
-                    BOOLEAN -> states.putByte(value.propertyType.name, (value.serializedValue as Byte).toInt())
+                when (value.propertyType.getType()) {
+                    BlockPropertyType.Type.INT -> states.putInt(value.propertyType.getName(), value.getSerializedValue() as Int)
+                    BlockPropertyType.Type.ENUM -> states.putString(value.propertyType.getName(), value.getSerializedValue().toString())
+                    BlockPropertyType.Type.BOOLEAN -> states.putByte(value.propertyType.getName(), (value.getSerializedValue() as Byte).toInt())
                 }
             }
             return CompoundTagView(

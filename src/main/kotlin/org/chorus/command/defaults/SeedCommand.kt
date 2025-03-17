@@ -25,7 +25,7 @@ class SeedCommand(name: String) : VanillaCommand(name, "Show the level's seed") 
         val seed = if (sender is Player) {
             sender.level.seed
         } else {
-            sender.server.defaultLevel.seed
+            Server.instance.defaultLevel.seed
         }
         log.addSuccess("commands.seed.success", seed.toString()).output()
         return 1

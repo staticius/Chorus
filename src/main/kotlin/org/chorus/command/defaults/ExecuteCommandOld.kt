@@ -56,7 +56,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
                             pos!!.position, pos.level
                         )
                     )
-                    val n = executeSender.server.executeCommand(executeSender, command)
+                    val n = Server.instance.executeCommand(executeSender, command)
                     if (n == 0) {
                         log.addError("commands.execute.failed", command, entity.name)
                     } else num += n
@@ -80,7 +80,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
                                 pos.position, pos.level
                             )
                         )
-                        val n = executeSender.server.executeCommand(executeSender, command)
+                        val n = Server.instance.executeCommand(executeSender, command)
                         if (n == 0) {
                             log.addError("commands.execute.failed", command, entity.name)
                         } else num += n

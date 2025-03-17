@@ -21,7 +21,7 @@ import java.io.InputStream
  *
  * @see org.chorus.plugin.PluginDescription
  *
- * @since Nukkit 1.0 | Nukkit API 1.0.0
+ * 
  */
 interface Plugin : CommandExecutor {
     /**
@@ -32,7 +32,7 @@ interface Plugin : CommandExecutor {
      * 应该填写加载插件时需要作出的动作。例如：初始化数组、初始化数据库连接。<br></br>
      * Use this to init a Nukkit plugin, such as init arrays or init database connections.
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun onLoad()
 
@@ -49,7 +49,7 @@ interface Plugin : CommandExecutor {
      * Notes that there may be plugin manager plugins,
      * this method can be called many times when a plugin is restarted many times.
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun onEnable()
 
@@ -58,7 +58,7 @@ interface Plugin : CommandExecutor {
      * Whether this Nukkit plugin is enabled.
      *
      * @return 这个插件是否已经启用。<br></br>Whether this plugin is enabled.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     @JvmField
     val isEnabled: Boolean
@@ -77,7 +77,7 @@ interface Plugin : CommandExecutor {
      * Notes that there may be plugin manager plugins,
      * this method can be called many times when a plugin is restarted many times.
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun onDisable()
 
@@ -86,7 +86,7 @@ interface Plugin : CommandExecutor {
      * Whether this Nukkit plugin is disabled.
      *
      * @return 这个插件是否已经停用。<br></br>Whether this plugin is disabled.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     @JvmField
     val isDisabled: Boolean
@@ -101,7 +101,7 @@ interface Plugin : CommandExecutor {
      * and is placed in the 'plugins' folder inside the nukkit installation directory.
      *
      * @return 这个插件的数据文件夹。<br></br>The data folder of this plugin.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     @JvmField
     val dataFolder: File?
@@ -117,7 +117,7 @@ interface Plugin : CommandExecutor {
      * @return 这个插件的描述。<br></br>A description of this plugin.
      * @see org.chorus.plugin.PluginDescription
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     @JvmField
     val description: PluginDescription?
@@ -142,7 +142,7 @@ interface Plugin : CommandExecutor {
      * @param filename 要读取的资源文件名字。<br></br>The name of the resource file to read.
      * @return 读取的资源文件的 `InputStream`对象。若错误会返回`null`<br></br>
      * The resource as an `InputStream` object, or `null` when an error occurred.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun getResource(filename: String): InputStream
 
@@ -172,7 +172,7 @@ interface Plugin : CommandExecutor {
      * @see org.chorus.plugin.Plugin.saveDefaultConfig
      *
      * @see org.chorus.plugin.Plugin.saveResource
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun saveResource(filename: String): Boolean
 
@@ -194,7 +194,7 @@ interface Plugin : CommandExecutor {
      * @param replace  是否替换目标文件。<br></br>if true, Nukkit will replace the target resource file.
      * @return 保存是否成功。<br></br>true if the saving action is successful.
      * @see org.chorus.plugin.Plugin.saveResource
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun saveResource(filename: String, replace: Boolean): Boolean
 
@@ -211,7 +211,7 @@ interface Plugin : CommandExecutor {
      * @return 插件的配置文件。<br></br>The configuration of this plugin.
      * @see org.chorus.plugin.Plugin.getDataFolder
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     val config: Config?
 
@@ -221,7 +221,7 @@ interface Plugin : CommandExecutor {
      *
      * @see org.chorus.plugin.Plugin.getDataFolder
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun saveConfig()
 
@@ -246,7 +246,7 @@ interface Plugin : CommandExecutor {
      *
      * @see org.chorus.plugin.Plugin.saveResource
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun saveDefaultConfig()
 
@@ -262,7 +262,7 @@ interface Plugin : CommandExecutor {
      *
      * @see org.chorus.plugin.Plugin.getDataFolder
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun reloadConfig()
 
@@ -272,7 +272,7 @@ interface Plugin : CommandExecutor {
      *
      * @see org.chorus.Server
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     val server: Server?
 
@@ -286,7 +286,7 @@ interface Plugin : CommandExecutor {
      *
      * @see org.chorus.plugin.Plugin.getDescription
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     @JvmField
     val name: String
@@ -301,7 +301,7 @@ interface Plugin : CommandExecutor {
      *
      * @see org.chorus.plugin.PluginLogger
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     val logger: PluginLogger?
 
@@ -311,7 +311,7 @@ interface Plugin : CommandExecutor {
      *
      * @see org.chorus.plugin.PluginLoader
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     val pluginLoader: PluginLoader?
 

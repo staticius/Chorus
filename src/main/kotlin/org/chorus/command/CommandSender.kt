@@ -1,7 +1,6 @@
 package org.chorus.command
 
 import org.chorus.Player
-import org.chorus.Server
 import org.chorus.entity.Entity
 import org.chorus.lang.CommandOutputContainer
 import org.chorus.lang.TextContainer
@@ -10,19 +9,10 @@ import org.chorus.level.Transform
 import org.chorus.permission.Permissible
 
 /**
- * 能发送命令的对象.<br></br>
- * 可以是一个玩家或者一个控制台或者一个实体或者其他.
- *
- *
- * Who sends commands.<br></br>
+ * Who sends commands.
  * That can be a player or a console.
  *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @author smartcmd(code) @ PowerNukkitX Project
  * @see org.chorus.command.CommandExecutor.onCommand
- *
- * @since Nukkit 1.0 | Nukkit API 1.0.0
  */
 interface CommandSender : Permissible {
     /**
@@ -34,7 +24,7 @@ interface CommandSender : Permissible {
      * @param message 要发送的信息.<br></br>Message to send.
      * @see org.chorus.utils.TextFormat
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun sendMessage(message: String)
 
@@ -45,7 +35,7 @@ interface CommandSender : Permissible {
      * Sends a message to the command sender.
      *
      * @param message 要发送的信息.<br></br>Message to send.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     * 
      */
     fun sendMessage(message: TextContainer)
 
@@ -55,17 +45,6 @@ interface CommandSender : Permissible {
      * @param container the container
      */
     fun sendCommandOutput(container: CommandOutputContainer)
-
-    /**
-     * 返回命令发送者所在的服务器.
-     *
-     *
-     * Returns the server of the command sender.
-     *
-     * @return 命令发送者所在的服务器.<br></br>the server of the command sender.
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
-     */
-    val server: Server
 
     /**
      * 返回命令发送者的名称.<br></br>
@@ -86,12 +65,12 @@ interface CommandSender : Permissible {
      * @see org.chorus.command.ConsoleCommandSender.getName
      * @see org.chorus.plugin.PluginDescription
      *
-     * @since Nukkit 1.0 | Nukkit API 1.0.0
+     *
      */
     fun getName(): String
 
     /**
-     * @return 发送者是否为玩家<br></br>whether the sender is an player
+     * @return 发送者是否为玩家<br></br>whether the sender is a player
      */
     val isPlayer: Boolean
 
@@ -132,15 +111,7 @@ interface CommandSender : Permissible {
         return null
     }
 
-    val locator: Locator
-        /**
-         * @return 返回发送者的Position<br></br>return the sender's position.
-         */
-        get() = Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!)
+    fun getLocator(): Locator
 
-    val transform: Transform
-        /**
-         * @return 返回发送者克隆过的Location<br></br>return the sender's location.
-         */
-        get() = Transform(0.0, 0.0, 0.0, Server.instance.defaultLevel!!)
+    fun getTransform(): Transform
 }

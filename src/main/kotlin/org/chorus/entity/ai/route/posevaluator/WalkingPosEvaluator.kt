@@ -18,7 +18,7 @@ class WalkingPosEvaluator : IPosEvaluator {
         val blockCenter = block.add(0.5, 1.0, 0.5)
         //检查是否可到达
         if (!isPassable(entity, blockCenter.position)) return false
-        if (entity.hasWaterAt(0f) && blockCenter.y - entity.y > 1)  //实体在水中不能移动到一格高以上的方块
+        if (entity.hasWaterAt(0f) && blockCenter.y - entity.position.y > 1)  //实体在水中不能移动到一格高以上的方块
             return false
         //TODO: 检查碰头
         //脚下不能是伤害性方块

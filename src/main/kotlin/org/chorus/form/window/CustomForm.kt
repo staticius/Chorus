@@ -4,7 +4,6 @@ package org.chorus.form.window
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.Player
 import org.chorus.form.element.custom.ElementCustom
 import org.chorus.form.response.CustomResponse
@@ -14,11 +13,8 @@ import java.lang.reflect.Type
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
-
-@Accessors(chain = true, fluent = true)
-
 class CustomForm(title: String) : Form<CustomResponse?>(title) {
-    var elements: ObjectArrayList<ElementCustom> = ObjectArrayList()
+    var elements: MutableList<ElementCustom> = mutableListOf()
 
     fun addElement(element: ElementCustom): CustomForm {
         elements.add(element)
@@ -55,7 +51,7 @@ class CustomForm(title: String) : Form<CustomResponse?>(title) {
         `object`.addProperty("title", this.title)
 
         val elementArray = JsonArray()
-        this.elements().forEach(Consumer { element: ElementCustom -> elementArray.add(element.toJson()) })
+        this.elements.forEach(Consumer { element: ElementCustom -> elementArray.add(element.toJson()) })
 
         `object`.add("content", elementArray)
         return `object`.toString()

@@ -1,7 +1,6 @@
 package org.chorus.item.enchantment
 
 import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap
 import org.chorus.entity.*
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
@@ -41,6 +40,7 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 import java.util.stream.Collectors
+import kotlin.collections.LinkedHashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -366,7 +366,7 @@ abstract class Enchantment : Cloneable {
         val EMPTY_ARRAY: Array<Enchantment> = emptyArray()
         val CUSTOM_ENCHANTMENT_ID: Int = Utils.dynamic(256)
         protected lateinit var enchantments: Array<Enchantment?>
-        protected var namedEnchantments: MutableMap<Identifier, Enchantment> = Object2ObjectLinkedOpenHashMap()
+        protected var namedEnchantments: MutableMap<Identifier, Enchantment> = LinkedHashMap()
 
         const val ID_PROTECTION_ALL: Int = 0
         const val NAME_PROTECTION_ALL: String = "protection"

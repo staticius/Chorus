@@ -11,18 +11,18 @@ import org.chorus.network.protocol.ContainerOpenPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
-class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryType.CONTAINER, 27),
+class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryType.CONTAINER, 27),
     BlockEntityInventoryNameable {
     private var enderChest: BlockEntityEnderChest? = null
 
     override fun init() {
         val map = super.slotTypeMap()
-        for (i in 0..<getSize()) {
+        for (i in 0..< size) {
             map[i] = ContainerSlotType.LEVEL_ENTITY
         }
     }
 
-    override var holder: InventoryHolder?
+    override var holder: InventoryHolder
         get() = holder as IHuman
         set(holder) {
             super.holder = holder
@@ -47,7 +47,7 @@ class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryT
         }
         val containerOpenPacket = ContainerOpenPacket()
         containerOpenPacket.windowId = who.getWindowId(this)
-        containerOpenPacket.type = getType().networkType
+        containerOpenPacket.type = type.networkType
         containerOpenPacket.x = enderChest!!.x.toInt()
         containerOpenPacket.y = enderChest!!.y.toInt()
         containerOpenPacket.z = enderChest!!.z.toInt()
@@ -62,12 +62,13 @@ class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryT
         blockEventPacket.type = 1
         blockEventPacket.value = 2
 
-        val level = holder.level
+        val level = who.level
         if (level != null) {
-            level.addSound(holder.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_ENDERCHESTOPEN)
+            level.addSound(who.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_ENDERCHESTOPEN)
             level.addChunkPacket(
-                holder.x.toInt() shr 4,
-                holder.z.toInt() shr 4, blockEventPacket
+                who.position.chunkX,
+                who.position.chunkZ,
+                blockEventPacket
             )
         }
     }
@@ -89,7 +90,7 @@ class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryT
         val containerClosePacket = ContainerClosePacket()
         containerClosePacket.windowId = who.getWindowId(this)
         containerClosePacket.wasServerInitiated = who.closingWindowId != containerClosePacket.windowId
-        containerClosePacket.type = getType()
+        containerClosePacket.type = type
         who.dataPacket(containerClosePacket)
 
         val blockEventPacket = BlockEventPacket()
@@ -99,12 +100,13 @@ class HumanEnderChestInventory(human: IHuman?) : BaseInventory(human, InventoryT
         blockEventPacket.type = 1
         blockEventPacket.value = 0
 
-        val level = holder.level
+        val level = who.level
         if (level != null) {
-            level.addSound(holder.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_ENDERCHESTCLOSED)
+            level.addSound(who.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_ENDERCHESTCLOSED)
             level.addChunkPacket(
-                holder.x.toInt() shr 4,
-                holder.z.toInt() shr 4, blockEventPacket
+                who.position.chunkX,
+                who.position.chunkZ,
+                blockEventPacket
             )
         }
         setBlockEntityEnderChest(who, null)

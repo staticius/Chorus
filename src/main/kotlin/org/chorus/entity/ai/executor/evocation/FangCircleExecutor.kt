@@ -30,8 +30,8 @@ class FangCircleExecutor : FangLineExecutor() {
         val angleIncrement = 360.0 / amount
         for (i in 0..<amount) {
             val angle = Math.toRadians((i * angleIncrement) + origin.headYaw)
-            val particleX = origin.x + cos(angle) * size
-            val particleZ = origin.z + sin(angle) * size
+            val particleX = origin.vector3.x + cos(angle) * size
+            val particleZ = origin.vector3.z + sin(angle) * size
             spawn(origin, Transform(particleX, origin.position.y, particleZ, angle, 0.0, origin.level!!))
         }
     }

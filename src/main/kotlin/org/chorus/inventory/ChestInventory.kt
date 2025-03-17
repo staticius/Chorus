@@ -44,9 +44,9 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
 
         if (getViewers().size == 1) {
             val pk = BlockEventPacket()
-            pk.x = holder.x.toInt()
-            pk.y = holder.y.toInt()
-            pk.z = holder.z.toInt()
+            pk.x = holder.vector3.x.toInt()
+            pk.y = holder.vector3.y.toInt()
+            pk.z = holder.vector3.z.toInt()
             pk.type = 1
             pk.value = 2
 
@@ -54,8 +54,8 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
             if (level != null) {
                 level.addSound(holder.position.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTOPEN)
                 level.addChunkPacket(
-                    holder.x.toInt() shr 4,
-                    holder.z.toInt() shr 4, pk
+                    holder.vector3.x.toInt() shr 4,
+                    holder.vector3.z.toInt() shr 4, pk
                 )
             }
         }
@@ -74,9 +74,9 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
     override fun onClose(who: Player) {
         if (getViewers().size == 1) {
             val pk = BlockEventPacket()
-            pk.x = holder.x.toInt()
-            pk.y = holder.y.toInt()
-            pk.z = holder.z.toInt()
+            pk.x = holder.vector3.x.toInt()
+            pk.y = holder.vector3.y.toInt()
+            pk.z = holder.vector3.z.toInt()
             pk.type = 1
             pk.value = 0
 
@@ -84,8 +84,8 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
             if (level != null) {
                 level.addSound(holder.position.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTCLOSED)
                 level.addChunkPacket(
-                    holder.x.toInt() shr 4,
-                    holder.z.toInt() shr 4, pk
+                    holder.vector3.x.toInt() shr 4,
+                    holder.vector3.z.toInt() shr 4, pk
                 )
             }
         }

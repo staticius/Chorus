@@ -361,7 +361,7 @@ class CommandLogger(
         if (target is ICommandBlock) return
         val message = broadcastMessage(key, value, target)
 
-        val users = target.server.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
+        val users = Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
         users.remove(target)
         for (user in users) {
             if (user is CommandSender) {
@@ -373,7 +373,7 @@ class CommandLogger(
     private fun broadcastMessage(key: String, value: Array<String>, target: CommandSender): TranslationContainer {
         val message = TranslationContainer(TextFormat.clean(key), *value)
         val resultStr =
-            "[" + target.getName() + ": " + (if (message.text != target.server.baseLang.get(message.text)) "%" else "" ) + message.text +"]"
+            "[" + target.getName() + ": " + (if (message.text != Server.instance.baseLang.get(message.text)) "%" else "" ) + message.text +"]"
         val coloredStr = TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + resultStr
         message.text = coloredStr
         return message

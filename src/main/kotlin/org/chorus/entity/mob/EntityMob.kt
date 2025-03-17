@@ -81,6 +81,9 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
     override val equipment = EntityEquipment(this)
 
+    override val memoryStorage: IMemoryStorage?
+        get() = this.behaviorGroup?.getMemoryStorage()
+
 
     override fun initEntity() {
         super.initEntity()

@@ -10,12 +10,12 @@ class RemoteConsoleCommandSender : ConsoleCommandSender() {
 
     override fun sendMessage(message: String) {
         var message = message
-        message = this.server.baseLang.tr(message)
+        message = Server.instance.baseLang.tr(message)
         messages.append(message.trim { it <= ' ' }).append("\n")
     }
 
     override fun sendMessage(message: TextContainer) {
-        this.sendMessage(this.server.baseLang.tr(message))
+        this.sendMessage(Server.instance.baseLang.tr(message))
     }
 
     fun getMessages(): String {

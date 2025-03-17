@@ -1,6 +1,7 @@
 package org.chorus.command.defaults
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
@@ -28,7 +29,7 @@ class ListCommand(name: String) : VanillaCommand(name, "commands.list.descriptio
     ): Int {
         var online = StringBuilder()
         var onlineCount = 0
-        for (player in sender.server.onlinePlayers.values) {
+        for (player in Server.instance.onlinePlayers.values) {
             if (player.isOnline && (sender !is Player || sender.canSee(player))) {
                 online.append(player.displayName).append(", ")
                 ++onlineCount
@@ -40,7 +41,7 @@ class ListCommand(name: String) : VanillaCommand(name, "commands.list.descriptio
         sender.sendMessage(
             TranslationContainer(
                 "commands.players.list",
-                onlineCount.toString(), sender.server.maxPlayers.toString()
+                onlineCount.toString(), Server.instance.maxPlayers.toString()
             )
         )
         sender.sendMessage(online.toString())

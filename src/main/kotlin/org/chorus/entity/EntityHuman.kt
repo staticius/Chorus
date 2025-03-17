@@ -19,7 +19,7 @@ import java.util.*
 
 
 open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk, nbt) {
-    protected lateinit var uuid: UUID
+    lateinit var uuid: UUID
     protected lateinit var rawUUID: ByteArray
     protected lateinit var skin: Skin
 

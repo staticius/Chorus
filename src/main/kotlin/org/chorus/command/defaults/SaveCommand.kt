@@ -25,10 +25,10 @@ class SaveCommand(name: String) : VanillaCommand(name, "Save the server (levels 
         log: CommandLogger
     ): Int {
         log.addSuccess("commands.save.start").output(true)
-        for (player in sender.server.onlinePlayers.values) {
+        for (player in Server.instance.onlinePlayers.values) {
             player.save()
         }
-        for (level in sender.server.levels.values) {
+        for (level in Server.instance.levels.values) {
             level.save(true)
         }
         log.addSuccess("commands.save.success").output(true)

@@ -74,7 +74,7 @@ open class WalkController : IController {
                             anotherDouble!!
                         )
                     }.orElse(0.0)
-                val diffY = maxY - entity.y
+                val diffY = maxY - entity.position.y
                 dy += entity.getJumpingMotion(diffY)
                 currentJumpCoolDown = 0
             }

@@ -1,6 +1,5 @@
 package org.chorus.block
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
@@ -255,7 +254,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState = Companion.pr
             SimpleAxisAlignedBB(0.3125, 0.3125, 0.5625, 0.6875, 0.75, 0.9375),
             SimpleAxisAlignedBB(0.3125, 0.3125, 0.5625, 0.6875, 0.75, 0.9375)
         )
-        protected val ALL: Object2ObjectArrayMap<BlockFace?, Array<AxisAlignedBB>> = Object2ObjectArrayMap(4)
+        protected val ALL: MutableMap<BlockFace?, Array<AxisAlignedBB>> = HashMap(4)
 
         val faces: IntArray = intArrayOf(
             0,

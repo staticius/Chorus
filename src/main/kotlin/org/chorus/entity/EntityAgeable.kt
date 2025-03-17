@@ -5,7 +5,7 @@ import org.chorus.entity.data.EntityFlag
 
 interface EntityAgeable {
     fun getDataFlag(id: EntityFlag?): Boolean
-    fun setDataFlag(entityFlag: EntityFlag?, value: Boolean)
+    fun setDataFlag(entityFlag: EntityFlag, value: Boolean)
     fun setScale(scale: Float)
 
     fun isBaby(): Boolean {

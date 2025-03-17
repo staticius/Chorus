@@ -1,11 +1,11 @@
 package org.chorus.command
 
 import org.chorus.Player
-import org.chorus.Server
 import org.chorus.entity.Entity
+import org.chorus.entity.mob.EntityNPC
 import org.chorus.lang.CommandOutputContainer
-import org.chorus.level.Locator
-import org.chorus.level.Transform
+import org.chorus.lang.TextContainer
+import org.chorus.permission.PermissibleBase
 import org.chorus.permission.Permission
 import org.chorus.plugin.Plugin
 
@@ -23,9 +23,6 @@ class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
 
     override fun sendCommandOutput(container: CommandOutputContainer) {}
 
-    override val server: Server
-        get() = npc.getServer()
-
     override val name: String
         get() = npc.getName()
 
@@ -42,12 +39,6 @@ class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
     override fun asPlayer(): Player? {
         return null
     }
-
-    override val locator: Locator
-        get() = npc.getLocator()
-
-    override val transform: Transform
-        get() = npc.getTransform()
 
     override fun isPermissionSet(name: String): Boolean {
         return perm.isPermissionSet(name)

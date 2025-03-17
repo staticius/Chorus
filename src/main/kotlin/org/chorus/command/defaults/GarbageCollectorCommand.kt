@@ -27,7 +27,7 @@ class GarbageCollectorCommand(name: String) :
         val runtime = Runtime.getRuntime()
         val usedMemory = runtime.totalMemory() - runtime.freeMemory()
 
-        for (level in sender.server.levels.values) {
+        for (level in Server.instance.levels.values) {
             val chunksCount = level.chunks.size
             val entitiesCount = level.entities.size
             val tilesCount = level.blockEntities.size

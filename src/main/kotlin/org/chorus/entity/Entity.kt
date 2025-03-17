@@ -241,7 +241,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     protected var inEndPortal: Boolean = false
-    protected var isPlayer: Boolean = this is Player
+    val isPlayer: Boolean = this is Player
     private var maxHealth: Int = 20
     var name: String? = null
         protected set
@@ -405,7 +405,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             throw ChunkException("Invalid garbage Chunk given to Entity")
         }
         this.id = entityCount.getAndIncrement()
-        this.isPlayer = this is Player
         this.justCreated = true
         this.namedTag = nbt
         this.chunk = chunk
@@ -2318,7 +2317,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
         var needsReCalcCurrent = true
         if (this is EntityPhysical) {
-            needsReCalcCurrent = this.needsRecalcMovement
+            needsReCalcCurrent = this.needsReCalcMovement
         }
 
         var vector = Vector3(0.0, 0.0, 0.0)

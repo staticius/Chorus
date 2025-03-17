@@ -15,14 +15,14 @@ class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.de
     init {
         this.permission = "nukkit.command.setblock"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
-            CommandParameter.Companion.newType("position", CommandParamType.POSITION),
-            CommandParameter.Companion.newEnum("tileName", false, CommandEnum.Companion.ENUM_BLOCK),
-            CommandParameter.Companion.newType("tileData", true, CommandParamType.INT),
-            CommandParameter.Companion.newEnum(
+        commandParameters["default"] = arrayOf(
+            CommandParameter.newType("position", CommandParamType.POSITION),
+            CommandParameter.newEnum("tileName", false, CommandEnum.ENUM_BLOCK),
+            CommandParameter.newType("tileData", true, CommandParamType.INT),
+            CommandParameter.newEnum(
                 "oldBlockHandling",
                 true,
-                arrayOf<String?>("destroy", "keep", "replace")
+                arrayOf("destroy", "keep", "replace")
             )
         )
         this.enableParamTree()
@@ -40,7 +40,7 @@ class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.de
         try {
             if (list.hasResult(2)) {
                 val data = list.getResult<Int>(2)!!
-                block = block!!.properties.getBlockState(data.toShort()).toBlock()
+                block = block!!.properties.getBlockState(data.toShort())?.toBlock()
             }
         } catch (e: IndexOutOfBoundsException) {
             log.addError("commands.setblock.notFound", block!!.id).output()
@@ -50,12 +50,12 @@ class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.de
         if (list.hasResult(3)) {
             oldBlockHandling = list.getResult(3)
         }
-        if (!sender.locator.level.isYInRange(locator!!.position.y.toInt())) {
+        if (!sender.getLocator().level.isYInRange(locator!!.position.y.toInt())) {
             log.addError("commands.setblock.outOfWorld").output()
             return 0
         }
 
-        val level = sender.locator.level
+        val level = sender.getLocator().level
         val current = level.getBlock(locator.position)
         if (current.id == block!!.id && current.blockState === block.blockState) {
             log.addError("commands.setblock.noChange").output()

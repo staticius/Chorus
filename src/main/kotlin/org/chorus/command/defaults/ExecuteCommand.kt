@@ -257,7 +257,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             "run" -> {
                 val command = list!!.getResult<String>(1)
                 if (command!!.isBlank()) return 0
-                return sender.server.executeCommand(sender, command)
+                return Server.instance.executeCommand(sender, command)
             }
 
             "as" -> {
@@ -269,7 +269,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val chainCommand = list.getResult<String>(2)
                 for (executor in executors) {
                     val executorCommandSender = ExecutorCommandSender(sender, executor, executor.transform)
-                    val n = executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                    val n = Server.instance.executeCommand(executorCommandSender, chainCommand)
                     if (n == 0) {
                         val names = ArrayList<String?>()
                         val match = ERROR_COMMAND_NAME.matcher(chainCommand)
@@ -295,7 +295,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val chainCommand = list.getResult<String>(2)
                 for (transform in locations.stream().map<Transform> { obj: Entity -> obj.transform }.toList()) {
                     val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
-                    num += executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                    num += Server.instance.executeCommand(executorCommandSender, chainCommand)
                 }
                 return num
             }
@@ -304,22 +304,22 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val levelName = list!!.getResult<String>(1)
                 val level = Server.instance.getLevelByName(levelName) ?: return 0
                 val chainCommand = list.getResult<String>(2)
-                val transform = sender.transform
+                val transform = sender.getTransform()
                 transform.setLevel(level)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
-                return executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                return Server.instance.executeCommand(executorCommandSender, chainCommand)
             }
 
             "facing" -> {
                 val pos = list!!.getResult<Vector3>(1)
                 val chainCommand = list.getResult<String>(2)
-                val source = sender.transform
+                val source = sender.getTransform()
                 val bv =
                     BVector3.fromPos(pos!!.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z)
                 source.setPitch(bv.pitch)
                 source.setYaw(bv.yaw)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), source)
-                return executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                return Server.instance.executeCommand(executorCommandSender, chainCommand)
             }
 
             "facing-entity" -> {
@@ -332,7 +332,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val anchorAtEyes = anchor == "eyes"
                 val chainCommand = list.getResult<String>(4)
                 for (target in targets) {
-                    val source = sender.transform
+                    val source = sender.getTransform()
                     val bv = BVector3.fromPos(
                         target.position.x - source.position.x,
                         target.position.y + (if (anchorAtEyes) target.eyeHeight else 0f) - source.position.y,
@@ -341,22 +341,22 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     source.setPitch(bv.pitch)
                     source.setYaw(bv.yaw)
                     val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), source)
-                    num += executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                    num += Server.instance.executeCommand(executorCommandSender, chainCommand)
                 }
                 return num
             }
 
             "rotated" -> {
-                var yaw = sender.transform.rotation.yaw
+                var yaw = sender.getTransform().rotation.yaw
                 if (list!!.hasResult(1)) yaw = list.getResult(1)!!
-                var pitch = sender.transform.rotation.pitch
+                var pitch = sender.getTransform().rotation.pitch
                 if (list.hasResult(2)) pitch = list.getResult(2)!!
                 val chainCommand = list.getResult<String>(3)
-                val transform = sender.transform
+                val transform = sender.getTransform()
                 transform.setYaw(yaw)
                 transform.setPitch(pitch)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
-                return executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                return Server.instance.executeCommand(executorCommandSender, chainCommand)
             }
 
             "rotated as" -> {
@@ -367,11 +367,11 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 }
                 val chainCommand = list.getResult<String>(3)
                 for (executor in executors) {
-                    val transform = sender.transform
+                    val transform = sender.getTransform()
                     transform.setYaw(executor.rotation.yaw)
                     transform.setPitch(executor.rotation.pitch)
                     val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
-                    num += executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                    num += Server.instance.executeCommand(executorCommandSender, chainCommand)
                 }
                 return num
             }
@@ -379,7 +379,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             "align" -> {
                 val axes = list!!.getResult<String>(1)
                 val chainCommand = list.getResult<String>(2)
-                val transform = sender.transform
+                val transform = sender.getTransform()
                 for (c in axes!!.toCharArray()) {
                     when (c) {
                         'x' -> transform.position.x = transform.position.floorX.toDouble()
@@ -388,12 +388,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     }
                 }
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
-                return executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                return Server.instance.executeCommand(executorCommandSender, chainCommand)
             }
 
             "anchored" -> {
                 if (!sender.isEntity) return 0
-                var transform = sender.transform
+                var transform = sender.getTransform()
                 val anchor = list!!.getResult<String>(1)
                 val chainCommand = list.getResult<String>(2)
                 when (anchor) {
@@ -404,18 +404,18 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     "eyes" -> transform = transform.add(0.0, sender.asEntity()!!.eyeHeight.toDouble(), 0.0)
                 }
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
-                return executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                return Server.instance.executeCommand(executorCommandSender, chainCommand)
             }
 
             "positioned" -> {
                 val vec = list!!.getResult<Vector3>(1)
-                val newLoc = sender.transform
+                val newLoc = sender.getTransform()
                 newLoc.setX(vec!!.getX())
                 newLoc.setY(vec.getY())
                 newLoc.setZ(vec.getZ())
                 val chainCommand = list.getResult<String>(2)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), newLoc)
-                return executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                return Server.instance.executeCommand(executorCommandSender, chainCommand)
             }
 
             "positioned as" -> {
@@ -426,12 +426,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 }
                 val chainCommand = list.getResult<String>(3)
                 for (vec in targets.stream().map<Vector3> { e: Entity -> e.position }.toList()) {
-                    val newLoc = sender.transform
+                    val newLoc = sender.getTransform()
                     newLoc.setX(vec.getX())
                     newLoc.setY(vec.getY())
                     newLoc.setZ(vec.getZ())
                     val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), newLoc)
-                    num += executorCommandSender.server.executeCommand(executorCommandSender, chainCommand)
+                    num += Server.instance.executeCommand(executorCommandSender, chainCommand)
                 }
                 return num
             }
@@ -449,7 +449,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
                 if (list.hasResult(4) && condition) {
                     val chainCommand = list.getResult<String>(4)
-                    return sender.server.executeCommand(sender, chainCommand)
+                    return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()
                     return 1
@@ -473,7 +473,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
                 if (list.hasResult(5) && condition) {
                     val chainCommand = list.getResult<String>(5)
-                    return sender.server.executeCommand(sender, chainCommand)
+                    return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()
                     return 1
@@ -602,7 +602,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val condition = (matched && shouldMatch) || (!matched && !shouldMatch)
                 if (list.hasResult(6) && condition) {
                     val chainCommand = list.getResult<String>(6)
-                    return sender.server.executeCommand(sender, chainCommand)
+                    return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueConditionWithCount", count.toString()).output()
                     return count
@@ -620,7 +620,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val condition = (found && shouldMatch) || (!found && !shouldMatch)
                 if (list.hasResult(3) && condition) {
                     val chainCommand = list.getResult<String>(3)
-                    return sender.server.executeCommand(sender, chainCommand)
+                    return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()
                     return 1
@@ -707,7 +707,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val condition = (matched && shouldMatch) || (!matched && !shouldMatch)
                 if (list.hasResult(7) && condition) {
                     val chainCommand = list.getResult<String>(7)
-                    return sender.server.executeCommand(sender, chainCommand)
+                    return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()
                     return 1
@@ -771,7 +771,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val condition = (matched && shouldMatch) || (!matched && !shouldMatch)
                 if (list.hasResult(6) && condition) {
                     val chainCommand = list.getResult<String>(6)
-                    return sender.server.executeCommand(sender, chainCommand)
+                    return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()
                     return 1

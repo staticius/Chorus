@@ -2,8 +2,6 @@ package org.chorus.form.window
 
 
 import com.google.gson.JsonObject
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.ObjectArraySet
 import org.chorus.Player
 import org.chorus.form.response.Response
 import java.util.function.BiConsumer
@@ -14,15 +12,11 @@ import java.util.function.Consumer
  *
  * @param <T> A response object
 </T> */
-
-
-@Accessors(chain = true, fluent = true)
-
 abstract class Form<T : Response?>(title: String) {
     protected val `object`: JsonObject = JsonObject()
-    protected val meta: Object2ObjectOpenHashMap<String, Any> = Object2ObjectOpenHashMap()
+    protected val meta: MutableMap<String, Any> = HashMap()
 
-    var viewers: ObjectArraySet<Player> = ObjectArraySet()
+    var viewers: MutableSet<Player> = HashSet()
 
     protected var title: String = ""
 
@@ -171,7 +165,7 @@ abstract class Form<T : Response?>(title: String) {
      * @param object The value
      * @param <M> Any
     </M> */
-    open fun <M> putMeta(key: String, `object`: M): Form<*>? {
+    open fun <M : Any> putMeta(key: String, `object`: M): Form<*>? {
         meta[key] = `object`
         return this
     }

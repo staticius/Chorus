@@ -24,7 +24,7 @@ class SaveOnCommand(name: String) : VanillaCommand(name, "Enable auto saving") {
         result: Map.Entry<String, ParamList?>,
         log: CommandLogger
     ): Int {
-        sender.server.autoSave = true
+        Server.instance.autoSave = true
         log.addSuccess("commands.save.enabled").output(true)
         return 1
     }

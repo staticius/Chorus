@@ -126,7 +126,7 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
         var seconds1: Int = seconds
         var level: Int = 0
 
-        for (armor in inventory!!.armorContents) {
+        for (armor in inventory.armorContents) {
             if (armor == null) continue
             val fireProtection: Enchantment? = armor.getEnchantment(Enchantment.ID_PROTECTION_FIRE)
 

@@ -9,8 +9,8 @@ import org.chorus.math.Vector3
  * An entity which can be named by name tags.
  */
 interface EntityNameable {
-    fun getNameTag(): String?
-    fun setNameTag(nameTag: String?)
+    fun getNameTag(): String
+    fun setNameTag(name: String)
 
     fun isNameTagVisible(): Boolean
     fun setNameTagVisible(value: Boolean)

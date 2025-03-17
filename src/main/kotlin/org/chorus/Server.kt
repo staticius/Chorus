@@ -4,9 +4,6 @@ import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
 import eu.okaeri.configs.ConfigManager
 import eu.okaeri.configs.OkaeriConfig
-import it.unimi.dsi.fastutil.longs.LongArrayList
-import it.unimi.dsi.fastutil.longs.LongList
-import it.unimi.dsi.fastutil.longs.LongLists
 import org.apache.commons.io.FileUtils
 import org.chorus.block.BlockComposter
 import org.chorus.command.CommandSender
@@ -154,7 +151,7 @@ class Server internal constructor(
         private set
 
     private val isRunning = AtomicBoolean(true)
-    private val busyingTime: LongList = LongLists.synchronize(LongArrayList(0))
+    private val busyingTime: MutableList<Long> = Collections.synchronizedList(mutableListOf())
     private var hasStopped = false
 
     lateinit var pluginManager: PluginManager
@@ -205,7 +202,8 @@ class Server internal constructor(
     lateinit var tickingAreaManager: TickingAreaManager
         private set
 
-    private var maxPlayers: Int = 0
+    var maxPlayers: Int = 0
+        private set
     private var autoSave = true
 
     /**
@@ -830,14 +828,14 @@ class Server internal constructor(
     }
 
     fun removeBusying(index: Int) {
-        busyingTime.removeLong(index)
+        busyingTime.removeAt(index)
     }
 
     fun getBusyingTime(): Long {
         if (busyingTime.isEmpty()) {
             return -1
         }
-        return busyingTime.getLong(busyingTime.size - 1)
+        return busyingTime[busyingTime.size - 1]
     }
 
     // endregion

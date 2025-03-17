@@ -48,7 +48,7 @@ class DefaultGamemodeCommand(name: String) : VanillaCommand(name, "commands.defa
 
         val valid = gameMode >= 0 && gameMode <= 3
         if (valid) {
-            sender.server.properties[ServerPropertiesKeys.GAMEMODE, gameMode]
+            Server.instance.properties[ServerPropertiesKeys.GAMEMODE, gameMode]
             log.addSuccess("commands.defaultgamemode.success", Server.getGamemodeString(gameMode)).output()
             return 1
         } else {

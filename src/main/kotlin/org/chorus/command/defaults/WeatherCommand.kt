@@ -31,7 +31,7 @@ class WeatherCommand(name: String) : VanillaCommand(name, "commands.weather.desc
     ): Int {
         val list = result.value
         val weather = list!!.getResult<String>(0)
-        val level = sender.locator.level
+        val level = sender.getLocator().level
         val seconds = if (list.hasResult(1)) {
             list.getResult(1)!!
         } else {

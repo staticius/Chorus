@@ -15,7 +15,7 @@ abstract class PositionNode(private val pattern: Pattern) : ParamNode<Locator?>(
     protected var index: Byte = 0
 
     override fun <E> get(): E? {
-        return this.get<E>(paramList.paramTree.sender.locator)
+        return this.get<E>(paramList.paramTree.sender.getLocator())
     }
 
     fun <E> get(basePos: Locator): E? {
@@ -45,7 +45,7 @@ abstract class PositionNode(private val pattern: Pattern) : ParamNode<Locator?>(
         else {
             //parse
             try {
-                val loc = paramList.paramTree.sender.transform
+                val loc = paramList.paramTree.sender.getTransform()
                 for (s in TMP) {
                     if (s[0] == '~') {
                         this.setRelative(index)

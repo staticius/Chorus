@@ -48,14 +48,14 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
             "default" -> {
                 var value = list!!.getResult<String>(0)!!
                 if (list.hasResult(1)) reason = list.getResult(1)!!
-                val player = sender.server.getPlayer(value)
+                val player = Server.instance.getPlayer(value)
                 if (player != null) {
                     this.processIPBan(player.address, sender, reason)
                     log.addSuccess("commands.banip.success.players", player.address, player.name!!).output(true)
                     return 1
                 } else {
                     val name = value.lowercase()
-                    val path = sender.server.dataPath + "players/"
+                    val path = Server.instance.dataPath + "players/"
                     val file = File("$path$name.dat")
                     var nbt: CompoundTag? = null
                     if (file.exists()) {
@@ -98,16 +98,16 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
     }
 
     private fun processIPBan(ip: String, sender: CommandSender, reason: String) {
-        sender.server.bannedIPs.addBan(ip, reason, null, sender.getName())
+        Server.instance.bannedIPs.addBan(ip, reason, null, sender.getName())
 
-        for (player in ArrayList(sender.server.onlinePlayers.values)) {
+        for (player in ArrayList(Server.instance.onlinePlayers.values)) {
             if (player.address == ip) {
                 player.kick(PlayerKickEvent.Reason.IP_BANNED, reason.ifEmpty { "IP banned" })
             }
         }
 
         try {
-            sender.server.network.blockAddress(InetAddress.getByName(ip), -1)
+            Server.instance.network.blockAddress(InetAddress.getByName(ip), -1)
         } catch (e: UnknownHostException) {
             // ignore
         }

@@ -11,7 +11,6 @@ import org.chorus.entity.ai.memory.MemoryStorage
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.RouteFindingManager
 import org.chorus.entity.ai.route.RouteFindingManager.RouteFindingTask
-import org.chorus.entity.ai.route.data.Node
 import org.chorus.entity.ai.route.finder.IRouteFinder
 import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.mob.EntityMob
