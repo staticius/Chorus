@@ -29,7 +29,7 @@ interface IChunkBuilder {
 
     fun heightMap(heightMap: ShortArray?): IChunkBuilder
 
-    fun entities(entities: List<CompoundTag?>?): IChunkBuilder
+    fun entities(entities: List<CompoundTag>?): IChunkBuilder
 
     fun blockEntities(blockEntities: List<CompoundTag>?): IChunkBuilder
 

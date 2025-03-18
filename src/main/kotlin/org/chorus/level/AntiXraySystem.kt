@@ -48,14 +48,14 @@ class AntiXraySystem(private val level: Level) {
     val rawFakeOreToPutRuntimeIdMap: Int2ObjectMap<IntList>
         get() = this.fakeOreToPutRuntimeIds
 
-    fun obfuscateSendBlocks(index: Long, playerArray: Array<Player>, blocks: Int2ObjectOpenHashMap<Any?>) {
+    fun obfuscateSendBlocks(index: Long, playerArray: Array<Player>, blocks: Int2ObjectOpenHashMap<Any>) {
         val size: Int = blocks.size
         val vectorSet = IntOpenHashSet(size * 6)
         val vRidList = ArrayList<Vector3WithRuntimeId>(size * 7)
         var tmpV3Rid: Vector3WithRuntimeId
         for (blockHash in blocks.keys.iterator()) {
             var blockHash1 = blockHash
-            val hash: Vector3 = Level.Companion.getBlockXYZ(index, blockHash1, level)
+            val hash: Vector3 = Level.getBlockXYZ(index, blockHash1, level)
             var x = hash.floorX
             var y = hash.floorY
             var z = hash.floorZ
@@ -77,7 +77,7 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
             x++
-            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            blockHash1 = Level.localBlockHash(x, y, z, 0, level)
             if (!vectorSet.contains(blockHash1)) {
                 vectorSet.add(blockHash1)
                 try {
@@ -94,7 +94,7 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
             x -= 2
-            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            blockHash1 = Level.localBlockHash(x, y, z, 0, level)
             if (!vectorSet.contains(blockHash1)) {
                 vectorSet.add(blockHash1)
                 try {
@@ -112,7 +112,7 @@ class AntiXraySystem(private val level: Level) {
             }
             x++
             y++
-            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            blockHash1 = Level.localBlockHash(x, y, z, 0, level)
             if (!vectorSet.contains(blockHash1)) {
                 vectorSet.add(blockHash1)
                 try {
@@ -129,7 +129,7 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
             y -= 2
-            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            blockHash1 = Level.localBlockHash(x, y, z, 0, level)
             if (!vectorSet.contains(blockHash1)) {
                 vectorSet.add(blockHash1)
                 try {
@@ -147,7 +147,7 @@ class AntiXraySystem(private val level: Level) {
             }
             y++
             z++
-            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            blockHash1 = Level.localBlockHash(x, y, z, 0, level)
             if (!vectorSet.contains(blockHash1)) {
                 vectorSet.add(blockHash1)
                 try {
@@ -164,7 +164,7 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
             z -= 2
-            blockHash1 = Level.Companion.localBlockHash(x, y, z, 0, level)
+            blockHash1 = Level.localBlockHash(x, y, z, 0, level)
             if (!vectorSet.contains(blockHash1)) {
                 vectorSet.add(blockHash1)
                 try {

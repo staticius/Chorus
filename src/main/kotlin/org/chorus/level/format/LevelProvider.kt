@@ -70,8 +70,7 @@ interface LevelProvider {
 
     val loadedChunks: Map<Long, IChunk>
 
-    @JvmField
-    val level: Level?
+    val level: Level
 
     fun close()
 
@@ -79,7 +78,7 @@ interface LevelProvider {
 
     fun updateLevelName(name: String)
 
-    val gamerules: GameRules?
+    val gamerules: GameRules
 
     fun setGameRules(rules: GameRules?)
 

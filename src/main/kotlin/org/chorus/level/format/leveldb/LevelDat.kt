@@ -102,7 +102,7 @@ class LevelDat {
     var XBLBroadcastIntent: Int = 0
 
 
-    var abilities: Abilities = Abilities.builder().build()
+    var abilities: Abilities = Abilities()
 
 
     var baseGameVersion: String = "*"
@@ -120,7 +120,7 @@ class LevelDat {
     var commandsEnabled: Boolean = true
 
 
-    var gameRules: GameRules? = GameRules.Companion.getDefault()
+    var gameRules: GameRules = GameRules.default
 
 
     var currentTick: Long = 0L
@@ -138,7 +138,7 @@ class LevelDat {
     var educationFeaturesEnabled: Boolean = false
 
 
-    var experiments: Experiments = Experiments.builder().build()
+    var experiments: Experiments = Experiments()
 
 
     var hasBeenLoadedInCreative: Boolean = true

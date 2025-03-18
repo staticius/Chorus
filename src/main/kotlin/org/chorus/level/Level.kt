@@ -2,11 +2,8 @@ package org.chorus.level
 
 
 import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.ints.Int2IntMap
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.longs.*
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectIterator
 import org.chorus.Player
 import org.chorus.Server
@@ -29,11 +26,13 @@ import org.chorus.level.format.LevelConfig.AntiXrayMode
 import org.chorus.level.format.LevelConfig.GeneratorConfig
 import org.chorus.level.generator.ChunkGenerateContext
 import org.chorus.level.generator.Generator
+import org.chorus.level.particle.DestroyBlockParticle
 import org.chorus.level.particle.Particle
 import org.chorus.level.util.TickCachedBlockStore
 import org.chorus.level.vibration.SimpleVibrationManager
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationManager
+import org.chorus.level.vibration.VibrationType
 import org.chorus.math.*
 import org.chorus.metadata.BlockMetadataStore
 import org.chorus.metadata.Metadatable
@@ -110,40 +109,41 @@ class Level(
     val id: Int = levelIdCounter++
 
     // Loaders still remain single-threaded
-    private val loaders = Int2ObjectOpenHashMap<ChunkLoader>()
-    private val loaderCounter: Int2IntMap = Int2IntOpenHashMap()
+    private val loaders = HashMap<Int, ChunkLoader>()
+    private val loaderCounter: MutableMap<Int, Int> = HashMap<Int, Int>()
 
     /*
      * <ChunkIndex,<ChunkLoader ID,ChunkLoader>>
      */
-    private val chunkLoaders = Long2ObjectOpenHashMap<Map<Int, ChunkLoader>>()
+    private val chunkLoaders = HashMap<Long, Map<Int, ChunkLoader>>()
 
     // Computation atomicity may be required in addChunkPacket(int, int, DataPacket)
-    private val chunkPackets = ConcurrentHashMap<Long, Deque<DataPacket?>>()
+    private val chunkPackets = ConcurrentHashMap<Long, Deque<DataPacket>>()
 
     @NonComputationAtomic
     private val unloadQueue = ConcurrentHashMap<Long, Long>()
     private val tickCachedBlocks = ConcurrentHashMap<Long, TickCachedBlockStore>()
-    private val highLightChunks: LongSet = LongOpenHashSet()
+    private val highLightChunks: MutableSet<Long> = HashSet()
 
     // Avoid OOM, gc'd references result in whole chunk being sent (possibly higher cpu)
-    private val changedBlocks = Long2ObjectOpenHashMap<SoftReference<Int2ObjectOpenHashMap<Any>>>()
+    private val changedBlocks = HashMap<Long, SoftReference<HashMap<Int, Any>>>()
 
     // Storing the vector is redundant
     private val changeBlocksPresent = Any()
 
     // Storing extra blocks past 512 is redundant
-    private val changeBlocksFullMap: Int2ObjectOpenHashMap<Any> = object : Int2ObjectOpenHashMap<Any>() {
-        override fun size(): Int {
-            return Character.MAX_VALUE.code
-        }
+    private val changeBlocksFullMap: MutableMap<Int, Any> = object : HashMap<Int, Any>() {
+        override val size: Int
+            get() = Character.MAX_VALUE.code
     }
+
     private val updateQueue: BlockUpdateScheduler
-    private val normalUpdateQueue: Queue<QueuedUpdate> = ConcurrentLinkedDeque<QueuedUpdate>()
+    private val normalUpdateQueue: Queue<QueuedUpdate> = ConcurrentLinkedDeque()
 
     @NonComputationAtomic
     private val chunkSendQueue: ConcurrentHashMap<Long, ConcurrentHashMap<Int, Player>> = ConcurrentHashMap()
-    private val chunkTickList: Long2IntMap = Long2IntOpenHashMap()
+
+    private val chunkTickList: MutableMap<Long, Int> = HashMap()
 
     @JvmField
     val vibrationManager: VibrationManager = SimpleVibrationManager(this)
@@ -165,7 +165,6 @@ class Level(
     @JvmField
     var tickRateOptDelay: Int = 1
 
-    @JvmField
     lateinit var gameRules: GameRules
     private var provider: AtomicReference<LevelProvider>? = null
     private var time: Float
@@ -185,14 +184,15 @@ class Level(
     private val clearChunksOnTick: Boolean
     var generator: Generator? = null
     private val generatorClass: Class<out Generator>?
-    var updateLCG: Int = ThreadLocalRandom.current().nextInt()
+
+    private var updateLCG: Int = ThreadLocalRandom.current().nextInt()
         get() = (((field * 3) xor LCG_CONSTANT).also { field = it })
-        private set
 
     @JvmField
     var tickRate: Int
     var currentTick: Long = 0
         private set
+
     private val lightQueue: Map<Long, MutableMap<Int, Any>> = ConcurrentHashMap(8, 0.9f, 1)
 
     /**base tick system */
@@ -219,11 +219,12 @@ class Level(
     var rainTime: Int = 0
     private var thundering = false
     var thunderTime: Int = 0
-    private val playerWeatherShowMap = Object2IntOpenHashMap<String>()
+
+    private val playerWeatherShowMap = HashMap<String, Int>()
 
     fun recalcTickOptDelay(): Int {
         return if (tickRateTime > 40) {
-            Math.min(tickRateOptDelay shl 1, 8)
+            (tickRateOptDelay shl 1).coerceAtMost(8)
         } else if (tickRateOptDelay == 1) {
             1
         } else {
@@ -330,7 +331,7 @@ class Level(
         if (players == null || players.size == 0) {
             addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, packet)
         } else {
-            Server.instance.broadcastPacket(players, packet)
+            Server.broadcastPacket(players, packet)
         }
     }
 
@@ -448,7 +449,7 @@ class Level(
         } else {
             if (packets != null) {
                 for (p in packets) {
-                    Server.instance.broadcastPacket(players, p)
+                    Server.broadcastPacket(players, p)
                 }
             }
         }
@@ -508,7 +509,7 @@ class Level(
         if (players == null || players.size == 0) {
             addChunkPacket(pos.getFloorX() shr 4, pos.getFloorZ() shr 4, pk)
         } else {
-            Server.instance.broadcastPacket(players, pk)
+            Server.broadcastPacket(players, pk)
         }
     }
 
@@ -658,7 +659,7 @@ class Level(
         val pk: SetTimePacket = SetTimePacket()
         pk.time = time.toInt()
 
-        Server.instance.broadcastPacket(players, pk)
+        Server.broadcastPacket(players, pk)
     }
 
     fun sendTime() {
@@ -787,7 +788,7 @@ class Level(
                     }
                 }
             }
-            updateBlockEntities.removeIf(Predicate { blockEntity: BlockEntity -> !(!blockEntity.closed && blockEntity.onUpdate()) })
+            updateBlockEntities.removeIf { blockEntity: BlockEntity -> !(!blockEntity.closed && blockEntity.onUpdate()) }
 
             this.tickChunks()
             synchronized(changedBlocks) {
@@ -797,20 +798,20 @@ class Level(
                         while (iter.hasNext()) {
                             val entry = iter.next()
                             val index = entry.longKey
-                            val blocks: Int2ObjectOpenHashMap<Any?> = entry.getValue().get()
+                            val blocks = entry.value.get()
                             val chunkX = getHashX(index)
                             val chunkZ = getHashZ(index)
-                            if (blocks == null || blocks.size() > MAX_BLOCK_CACHE) {
+                            if (blocks == null || blocks.size > MAX_BLOCK_CACHE) {
                                 val chunk = this.getChunk(chunkX, chunkZ)
                                 chunk.reObfuscateChunk()
-                                for (p in getChunkPlayers(chunkX, chunkZ).values()) {
+                                for (p in getChunkPlayers(chunkX, chunkZ).values) {
                                     p.onChunkChanged(chunk)
                                 }
                             } else {
                                 val toSend: Collection<Player> =
-                                    getChunkPlayers(chunkX, chunkZ).values()
+                                    getChunkPlayers(chunkX, chunkZ).values
                                 val playerArray = toSend.toTypedArray()
-                                val size: Int = blocks.size()
+                                val size: Int = blocks.size
                                 if (isAntiXrayEnabled) {
                                     antiXraySystem!!.obfuscateSendBlocks(index, playerArray, blocks)
                                 } else {
@@ -839,7 +840,7 @@ class Level(
                     getChunkPlayers(chunkX, chunkZ).values().toTypedArray()
                 if (chunkPlayers.size > 0) {
                     for (pk in chunkPackets[index]!!) {
-                        Server.instance.broadcastPacket(chunkPlayers, pk)
+                        Server.broadcastPacket(chunkPlayers, pk)
                     }
                 }
             }
@@ -848,7 +849,7 @@ class Level(
             if (gameRules.isStale) {
                 val packet: GameRulesChangedPacket = GameRulesChangedPacket()
                 packet.gameRules = gameRules
-                Server.instance.broadcastPacket(players.values().toTypedArray(), packet)
+                Server.broadcastPacket(players.values().toTypedArray(), packet)
                 gameRules.refresh()
             }
         } catch (e: Exception) {
@@ -956,7 +957,7 @@ class Level(
             )
 
             val biome = this.getBiomeId(vector.floorX, 70, vector.floorZ)
-            if (Registries.BIOME[biome].rain <= 0) {
+            if (Registries.BIOME[biome]!!.rain <= 0) {
                 return
             }
 
@@ -1064,12 +1065,12 @@ class Level(
         z: Int,
         id: Int,
         data: Int,
-        players: Collection<Player?> = getChunkPlayers(x shr 4, z shr 4).values()
+        players: Collection<Player> = getChunkPlayers(x shr 4, z shr 4).values
     ) {
-        sendBlockExtraData(x, y, z, id, data, players.toArray<Player?>(Player.EMPTY_ARRAY))
+        sendBlockExtraData(x, y, z, id, data, players.toTypedArray())
     }
 
-    fun sendBlockExtraData(x: Int, y: Int, z: Int, id: Int, data: Int, players: Array<Player?>) {
+    fun sendBlockExtraData(x: Int, y: Int, z: Int, id: Int, data: Int, players: Array<Player>) {
         val pk = LevelEventPacket()
         pk.evid = LevelEventPacket.EVENT_SET_DATA
         pk.x = x + 0.5f
@@ -1077,10 +1078,10 @@ class Level(
         pk.z = z + 0.5f
         pk.data = (data shl 8) or id
 
-        Server.instance.broadcastPacket(players, pk)
+        Server.broadcastPacket(players, pk)
     }
 
-    fun sendBlocks(target: Array<Player>, blocks: Array<out IVector3?>) {
+    fun sendBlocks(target: Array<Player>, blocks: Array<out IVector3>) {
         this.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_NONE, 0)
         this.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_NONE, 1)
     }
@@ -1154,7 +1155,7 @@ class Level(
             packets.add(updateBlockPacket)
         }
         for (p in packets) {
-            Server.instance.broadcastPacket(target, p)
+            Server.broadcastPacket(target, p)
         }
     }
 
@@ -2279,10 +2280,10 @@ class Level(
         synchronized(changedBlocks) {
             val current = changedBlocks.computeIfAbsent(
                 index,
-                Long2ObjectFunction { k: Long -> SoftReference(Int2ObjectOpenHashMap()) })
+                Long2ObjectFunction { SoftReference(Int2ObjectOpenHashMap()) })
             val currentMap = current.get()
             if (currentMap !== changeBlocksFullMap && currentMap != null) {
-                if (currentMap.size() > MAX_BLOCK_CACHE) {
+                if (currentMap.size > MAX_BLOCK_CACHE) {
                     changedBlocks.put(index, SoftReference(changeBlocksFullMap))
                 } else {
                     currentMap.put(
@@ -3133,13 +3134,13 @@ class Level(
         return null
     }
 
-    fun getChunkEntities(X: Int, Z: Int): Map<Long?, Entity?>? {
-        return getChunkEntities(X, Z, true)
+    fun getChunkEntities(x: Int, z: Int): Map<Long, Entity> {
+        return getChunkEntities(x, z, true)
     }
 
-    fun getChunkEntities(X: Int, Z: Int, loadChunks: Boolean): Map<Long?, Entity?>? {
-        val chunk = if (loadChunks) this.getChunk(X, Z) else this.getChunkIfLoaded(X, Z)
-        return if (chunk != null) chunk.entities else Collections.emptyMap()
+    fun getChunkEntities(x: Int, z: Int, loadChunks: Boolean): Map<Long, Entity> {
+        val chunk = if (loadChunks) this.getChunk(x, z) else this.getChunkIfLoaded(x, z)
+        return chunk?.entities ?: mapOf()
     }
 
     fun getChunkBlockEntities(X: Int, Z: Int): Map<Long?, BlockEntity?>? {
@@ -4315,7 +4316,7 @@ class Level(
             pk.evid = LevelEventPacket.EVENT_STOP_RAINING
         }
 
-        Server.instance.broadcastPacket(players, pk)
+        Server.broadcastPacket(players, pk)
 
         if (this.isThundering()) {
             pk.evid = LevelEventPacket.EVENT_START_THUNDERSTORM
@@ -4324,7 +4325,7 @@ class Level(
             pk.evid = LevelEventPacket.EVENT_STOP_THUNDERSTORM
         }
 
-        Server.instance.broadcastPacket(players, pk)
+        Server.broadcastPacket(players, pk)
     }
 
     fun sendWeather(player: Player?) {

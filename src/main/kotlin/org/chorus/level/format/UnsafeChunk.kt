@@ -14,22 +14,18 @@ class UnsafeChunk(private val chunk: Chunk) {
     val sections: Array<ChunkSection?>
         get() = chunk.sections
 
-    val dimensionData: DimensionData?
+    val dimensionData: DimensionData
         get() = chunk.dimensionData
 
-    val blockEntities: Map<Long?, BlockEntity>
+    val blockEntities: Map<Long, BlockEntity>
         get() = chunk.tiles
 
     private fun setChanged() {
-        chunk.changes.incrementAndGet()
+        chunk.setChanged()
     }
 
     private fun setChanged(changed: Boolean) {
-        if (changed) {
-            setChanged()
-        } else {
-            chunk.changes.set(0)
-        }
+        chunk.setChanged(changed)
     }
 
     fun populateSkyLight() {
@@ -37,7 +33,7 @@ class UnsafeChunk(private val chunk: Chunk) {
         for (z in 0..15) {
             for (x in 0..15) { // iterating over all columns in chunk
                 val top = this.getHeightMap(x, z) // top-most block
-                var y = dimensionData.getMaxHeight()
+                var y = dimensionData.maxHeight
                 while (y > top) {
                     // all the blocks above & including the top-most block in a column are exposed to sun and
                     // thus have a skylight value of 15
@@ -49,7 +45,7 @@ class UnsafeChunk(private val chunk: Chunk) {
                 var nextDecrease = 0 // decrease that that will be applied starting with the next block
 
                 y = top
-                while (y >= dimensionData.getMinHeight()) {
+                while (y >= dimensionData.minHeight) {
                     // going under the top-most block
                     light -= nextDecrease // this light value will be applied for this block. The following checks are all about the next blocks
 
@@ -92,7 +88,7 @@ class UnsafeChunk(private val chunk: Chunk) {
      * @return the or create section
      */
     private fun getOrCreateSection(sectionY: Int): ChunkSection? {
-        val minSectionY = dimensionData.getMinSectionY()
+        val minSectionY = dimensionData.minSectionY
         val offsetY = sectionY - minSectionY
         if (offsetY < 0) return null
         for (i in 0..offsetY) {
@@ -104,15 +100,15 @@ class UnsafeChunk(private val chunk: Chunk) {
     }
 
     fun getSection(fY: Int): ChunkSection? {
-        return chunk.sections[fY - dimensionData.getMinSectionY()]
+        return chunk.sections[fY - dimensionData.minSectionY]
     }
 
     fun setSection(fY: Int, section: ChunkSection?) {
-        chunk.sections[fY - dimensionData.getMinSectionY()] = section
+        chunk.sections[fY - dimensionData.minSectionY] = section
         setChanged()
     }
 
-    fun getBlockState(x: Int, y: Int, z: Int): BlockState? {
+    fun getBlockState(x: Int, y: Int, z: Int): BlockState {
         val section = getSection(y shr 4) ?: return BlockAir.STATE
         return section.getBlockState(x, y and 0x0f, z, 0)
     }
@@ -122,11 +118,11 @@ class UnsafeChunk(private val chunk: Chunk) {
         return section.getBlockState(x, y and 0x0f, z, layer)
     }
 
-    fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState?, layer: Int): BlockState? {
+    fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState, layer: Int): BlockState {
         return getOrCreateSection(y shr 4)!!.getAndSetBlockState(x, y and 0x0f, z, blockstate, layer)
     }
 
-    fun setBlockState(x: Int, y: Int, z: Int, blockstate: BlockState?, layer: Int) {
+    fun setBlockState(x: Int, y: Int, z: Int, blockstate: BlockState, layer: Int) {
         getOrCreateSection(y shr 4)!!.setBlockState(x, y and 0x0f, z, blockstate, layer)
     }
 
@@ -156,13 +152,13 @@ class UnsafeChunk(private val chunk: Chunk) {
      * @param z the z 0~15
      */
     fun getHighestBlockAt(x: Int, z: Int): Int {
-        for (y in dimensionData.getMaxHeight() downTo dimensionData.getMinHeight()) {
+        for (y in dimensionData.maxHeight downTo dimensionData.minHeight) {
             if (getBlockState(x, y, z) !== BlockAir.properties.getBlockState()) {
                 this.setHeightMap(x, z, y)
                 return y
             }
         }
-        return dimensionData.getMinHeight()
+        return dimensionData.minHeight
     }
 
     /**
@@ -192,11 +188,11 @@ class UnsafeChunk(private val chunk: Chunk) {
     }
 
     fun getHeightMap(x: Int, z: Int): Int {
-        return chunk.heightMap[(z shl 4) or x] + dimensionData.getMinHeight()
+        return chunk.heightMapArray[(z shl 4) or x] + dimensionData.minHeight
     }
 
     fun setHeightMap(x: Int, z: Int, value: Int) {
-        chunk.heightMap[(z shl 4) or x] = (value - dimensionData.getMinHeight()).toShort()
+        chunk.heightMapArray[(z shl 4) or x] = (value - dimensionData.minHeight).toShort()
     }
 
     fun getBiomeId(x: Int, y: Int, z: Int): Int {
@@ -209,11 +205,11 @@ class UnsafeChunk(private val chunk: Chunk) {
         getOrCreateSection(y shr 4)!!.setBiomeId(x, y and 0x0f, z, biomeId)
     }
 
-    val heightMapArray: ShortArray?
-        get() = chunk.heightMap
+    val heightMapArray: ShortArray
+        get() = chunk.heightMapArray
 
     fun isSectionEmpty(fY: Int): Boolean {
-        return chunk.sections[fY - dimensionData.getMinSectionY()].isEmpty
+        return chunk.sections[fY - dimensionData.minSectionY]?.isEmpty ?: true
     }
 
     var x: Int
@@ -232,7 +228,7 @@ class UnsafeChunk(private val chunk: Chunk) {
         get() = chunk.index
 
     val provider: LevelProvider
-        get() = chunk.getProvider()
+        get() = chunk.provider
 
     var isLightPopulated: Boolean
         get() = chunk.isLightPopulated
@@ -244,10 +240,10 @@ class UnsafeChunk(private val chunk: Chunk) {
         chunk.setLightPopulated()
     }
 
-    var chunkState: ChunkState?
-        get() = chunk.getChunkState()
+    var chunkState: ChunkState
+        get() = chunk.chunkState
         set(chunkState) {
-            chunk.setChunkState(chunkState!!)
+            chunk.chunkState = chunkState
         }
 
     fun addEntity(entity: Entity) {
@@ -266,22 +262,22 @@ class UnsafeChunk(private val chunk: Chunk) {
         chunk.removeBlockEntity(blockEntity)
     }
 
-    val entities: Map<Long?, Entity?>
-        get() = chunk.getEntities()
+    val entities: Map<Long, Entity>
+        get() = chunk.entities
 
     fun getTile(x: Int, y: Int, z: Int): BlockEntity? {
         return chunk.getTile(x, y, z)
     }
 
-    val extraData: CompoundTag?
-        get() = chunk.getExtraData()
+    val extraData: CompoundTag
+        get() = chunk.extraData
 
     fun hasChanged(): Boolean {
         return chunk.hasChanged()
     }
 
     val changes: Long
-        get() = chunk.getChanges()
+        get() = chunk.changes
 
     fun setPosition(x: Int, z: Int) {
         chunk.setPosition(x, z)

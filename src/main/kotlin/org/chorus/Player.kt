@@ -820,7 +820,7 @@ class Player @UsedByReflection constructor(
         for (index in playerChunkManager.usedChunks) {
             val chunkX = getHashX(index)
             val chunkZ = getHashZ(index)
-            for (entity in level!!.getChunkEntities(chunkX, chunkZ)!!.values) {
+            for (entity in level!!.getChunkEntities(chunkX, chunkZ).values) {
                 if (this !== entity && !entity.closed && entity.isAlive()) {
                     entity.spawnTo(this)
                 }

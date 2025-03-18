@@ -43,10 +43,8 @@ interface IChunk {
 
     val sections: Array<ChunkSection?>
 
-    @JvmField
     var x: Int
 
-    @JvmField
     var z: Int
 
     fun setPosition(x: Int, z: Int) {
@@ -56,10 +54,9 @@ interface IChunk {
 
     val index: Long
 
-    @JvmField
     val provider: LevelProvider
 
-    val dimensionData: DimensionData?
+    val dimensionData: DimensionData
         get() = provider.dimensionData
 
     fun getBlockState(x: Int, y: Int, z: Int): BlockState? {
@@ -77,15 +74,15 @@ interface IChunk {
      */
     fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState?
 
-    fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState?, layer: Int): BlockState?
+    fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState, layer: Int): BlockState?
 
-    fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState?): BlockState? {
+    fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState): BlockState? {
         return getAndSetBlockState(x, y, z, blockstate, 0)
     }
 
-    fun setBlockState(x: Int, y: Int, z: Int, blockstate: BlockState?, layer: Int)
+    fun setBlockState(x: Int, y: Int, z: Int, blockstate: BlockState, layer: Int)
 
-    fun setBlockState(x: Int, y: Int, z: Int, blockstate: BlockState?) {
+    fun setBlockState(x: Int, y: Int, z: Int, blockstate: BlockState) {
         setBlockState(x, y, z, blockstate, 0)
     }
 
@@ -162,7 +159,6 @@ interface IChunk {
 
     fun setLightPopulated()
 
-    @JvmField
     var chunkState: ChunkState
 
     fun addEntity(entity: Entity)
@@ -175,7 +171,7 @@ interface IChunk {
 
     val entities: Map<Long, Entity>
 
-    val blockEntities: Map<Long?, BlockEntity>
+    val blockEntities: Map<Long, BlockEntity>
 
     fun getTile(x: Int, y: Int, z: Int): BlockEntity?
 

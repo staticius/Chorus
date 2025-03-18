@@ -31,12 +31,15 @@ import java.util.concurrent.atomic.AtomicReference
  * @author CoolLoong (PNX Project)
  */
 
-class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
-    private val lastChunk = ThreadLocal<WeakReference<IChunk?>>()
+class LevelDBProvider(override val level: Level, override val path: String) : LevelProvider {
+    private val lastChunk: ThreadLocal<WeakReference<IChunk>?> = ThreadLocal()
     protected val chunks: ConcurrentHashMap<Long, IChunk> = ConcurrentHashMap()
-    var levelData: LevelDat? = null
     protected val storage: LevelDBStorage
-    override val level: Level?
+
+    val levelData: LevelDat = readLevelDat() ?: LevelDat().also {
+        this.levelData = it
+        saveLevelData()
+    }
 
     init {
         this.storage = CACHE.computeIfAbsent(path) { p: String ->
@@ -50,15 +53,6 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
-        }
-        this.level = level
-        var levelDat = readLevelDat()
-        if (levelDat == null) {
-            levelDat = LevelDat.builder().build()
-            this.levelData = levelDat
-            saveLevelData()
-        } else {
-            this.levelData = levelDat
         }
     }
 
@@ -109,7 +103,7 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
 
     override fun setChunk(chunkX: Int, chunkZ: Int, chunk: IChunk) {
         chunk.setPosition(chunkX, chunkZ)
-        val index: Long = Level.Companion.chunkHash(chunkX, chunkZ)
+        val index: Long = Level.chunkHash(chunkX, chunkZ)
         if (chunks.containsKey(index) && chunks[index] != chunk) {
             this.unloadChunk(chunkX, chunkZ, false)
         }
@@ -118,10 +112,10 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
     }
 
     override val dimensionData: DimensionData
-        get() = level.getDimensionData()
+        get() = level.dimensionData
 
     override fun requestChunkData(x: Int, z: Int): Pair<ByteArray, Int> {
-        val chunk = this.getChunk(x, z, false) ?: throw ChunkException("Invalid Chunk Set")
+        val chunk = this.getChunk(x, z, false)
         val data = AtomicReference<ByteArray>()
         val subChunkCountRef = AtomicReference<Int>()
         chunk.batchProcess { unsafeChunk: UnsafeChunk ->
@@ -130,15 +124,15 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
                 val sections = unsafeChunk.sections
                 var subChunkCount = unsafeChunk.dimensionData.chunkSectionCount
                 while (subChunkCount-- != 0) {
-                    if (sections!![subChunkCount] != null) {
+                    if (sections[subChunkCount] != null) {
                         break
                     }
                 }
                 val total = subChunkCount + 1
                 //write block
-                if (level != null && level.isAntiXrayEnabled) {
+                if (level.isAntiXrayEnabled) {
                     for (i in 0..<total) {
-                        if (sections!![i] == null) {
+                        if (sections[i] == null) {
                             sections[i] = ChunkSection((i + dimensionData.minSectionY).toByte())
                         }
                         checkNotNull(sections[i])
@@ -146,7 +140,7 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
                     }
                 } else {
                     for (i in 0..<total) {
-                        if (sections!![i] == null) {
+                        if (sections[i] == null) {
                             sections[i] = ChunkSection((i + dimensionData.minSectionY).toByte())
                         }
                         checkNotNull(sections[i])
@@ -156,7 +150,7 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
 
                 // Write biomes
                 for (i in 0..<total) {
-                    sections!![i]!!.biomes.writeToNetwork(byteBuf) { obj: V? -> obj.toInt() }
+                    sections[i]!!.biomes.writeToNetwork(byteBuf) { it }
                 }
 
                 byteBuf.writeByte(0) // edu- border blocks
@@ -242,8 +236,8 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
             levelData.setSpawnPoint(BlockVector3(pos!!.x.toInt(), pos.y.toInt(), pos.z.toInt()))
         }
 
-    override val gamerules: GameRules?
-        get() = levelData.getGameRules()
+    override val gamerules: GameRules
+        get() = levelData.gameRules
 
     override fun setGameRules(rules: GameRules?) {
         levelData.setGameRules(rules)
@@ -280,7 +274,7 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
     }
 
     override fun saveLevelData() {
-        writeLevelDat(path, dimensionData, levelData!!)
+        writeLevelDat(path, dimensionData, levelData)
     }
 
     override fun updateLevelName(name: String) {
@@ -326,12 +320,12 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
             return ref.get()
         }
 
-    override fun getLoadedChunk(chunkX: Int, chunkZ: Int): IChunk? {
+    override fun getLoadedChunk(x: Int, z: Int): IChunk? {
         var tmp = threadLastChunk
-        if (tmp != null && tmp.x == chunkX && tmp.z == chunkZ) {
+        if (tmp != null && tmp.x == x && tmp.z == z) {
             return tmp
         }
-        val index: Long = Level.Companion.chunkHash(chunkX, chunkZ)
+        val index: Long = Level.chunkHash(x, z)
         lastChunk.set(WeakReference(chunks[index].also { tmp = it }))
         return tmp
     }
@@ -346,7 +340,7 @@ class LevelDBProvider(level: Level, override val path: String) : LevelProvider {
     }
 
     override fun getChunk(chunkX: Int, chunkZ: Int, create: Boolean): IChunk {
-        val index: Long = Level.Companion.chunkHash(chunkX, chunkZ)
+        val index: Long = Level.chunkHash(chunkX, chunkZ)
         var tmp = getLoadedChunk(index)
         if (tmp == null) {
             tmp = this.loadChunk(index, chunkX, chunkZ, create)

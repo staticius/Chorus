@@ -12,7 +12,8 @@ import org.chorus.level.biome.BiomeID
 import org.chorus.math.BlockVector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.NumberTag
-import org.jetbrains.annotations.ApiStatus
+import org.chorus.utils.Loggable
+import sun.jvm.hotspot.oops.CellTypeState.value
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
@@ -32,21 +33,44 @@ import kotlin.math.min
 
 class Chunk : IChunk {
     @Volatile
-    override var x: Int
+    override var x: Int = 0
+        set(value) {
+            field = value
+            this.index = Level.chunkHash(x, z)
+        }
 
     @Volatile
     override var z: Int = 0
+        set(value) {
+            field = value
+            this.index = Level.chunkHash(x, z)
+        }
 
     @Volatile
     override var index: Long = 0
         private set
-    override val chunkState: AtomicReference<ChunkState>
+
+    override var chunkState: ChunkState
+        get() = atomicChunkState.get()
+        set(value) = atomicChunkState.set(value)
+
+    private var atomicChunkState = AtomicReference(ChunkState.NEW)
+
     override val sections: Array<ChunkSection?>
+        get() {
+            val stamp = blockLock.readLock()
+            return field.also { blockLock.unlockRead(stamp) }
+        }
+
     override val heightMapArray: ShortArray //256 size Values start at 0 and are 0-384 for the Overworld range
-    override val changes: AtomicLong
+
+    override val changes: Long
+        get() = atomicChanges.get()
+
+    private val atomicChanges = AtomicLong()
 
     override val entities: ConcurrentHashMap<Long, Entity>
-    val tiles: ConcurrentHashMap<Long, BlockEntity?> //block entity id -> block entity
+    val tiles: ConcurrentHashMap<Long, BlockEntity> //block entity id -> block entity
     protected val tileList: ConcurrentHashMap<Long, BlockEntity> //block entity position hash index -> block entity
 
     //delay load block entity and entity
@@ -54,7 +78,7 @@ class Chunk : IChunk {
     protected val blockLock: StampedLock
     protected val heightAndBiomeLock: StampedLock
     protected val lightLock: StampedLock
-    override val provider: LevelProvider?
+    override val provider: LevelProvider
     protected var isInit: Boolean = false
     protected var blockEntityNBT: List<CompoundTag>?
     protected var entityNBT: List<CompoundTag>?
@@ -64,9 +88,8 @@ class Chunk : IChunk {
         chunkZ: Int,
         levelProvider: LevelProvider
     ) {
-        this.chunkState = AtomicReference(ChunkState.NEW)
         this.x = chunkX
-        setZ(chunkZ)
+        this.z = chunkZ
         this.provider = levelProvider
         this.sections = arrayOfNulls(levelProvider.dimensionData.chunkSectionCount)
         this.heightMapArray = ShortArray(256)
@@ -76,7 +99,6 @@ class Chunk : IChunk {
         this.entityNBT = ArrayList()
         this.blockEntityNBT = ArrayList()
         this.extraData = CompoundTag()
-        this.changes = AtomicLong()
         this.blockLock = StampedLock()
         this.heightAndBiomeLock = StampedLock()
         this.lightLock = StampedLock()
@@ -86,16 +108,16 @@ class Chunk : IChunk {
         state: ChunkState,
         chunkX: Int,
         chunkZ: Int,
-        levelProvider: LevelProvider?,
+        levelProvider: LevelProvider,
         sections: Array<ChunkSection?>,
         heightMap: ShortArray,
         entityNBT: List<CompoundTag>,
         blockEntityNBT: List<CompoundTag>,
         extraData: CompoundTag
     ) {
-        this.chunkState = AtomicReference(state)
+        this.atomicChunkState = AtomicReference(state)
         this.x = chunkX
-        setZ(chunkZ)
+        this.z = chunkZ
         this.provider = levelProvider
         this.sections = sections
         this.heightMapArray = heightMap
@@ -105,7 +127,6 @@ class Chunk : IChunk {
         this.entityNBT = entityNBT
         this.blockEntityNBT = blockEntityNBT
         this.extraData = extraData
-        this.changes = AtomicLong()
         this.blockLock = StampedLock()
         this.heightAndBiomeLock = StampedLock()
         this.lightLock = StampedLock()
@@ -129,8 +150,7 @@ class Chunk : IChunk {
                     stamp = blockLock.readLock()
                     continue
                 }
-                return section
-                stamp = blockLock.readLock()
+                return section.also { stamp = blockLock.readLock() }
             }
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) blockLock.unlockRead(stamp)
@@ -151,39 +171,7 @@ class Chunk : IChunk {
         }
     }
 
-    @ApiStatus.Internal
-    override fun getSections(): Array<ChunkSection?> {
-        val stamp = blockLock.readLock()
-        try {
-            return this.sections
-        } finally {
-            blockLock.unlockRead(stamp)
-        }
-    }
-
-    override fun getX(): Int {
-        return x
-    }
-
-    override fun setX(x: Int) {
-        this.x = x
-        this.index = Level.Companion.chunkHash(x, getZ())
-    }
-
-    override fun getZ(): Int {
-        return z
-    }
-
-    override fun setZ(z: Int) {
-        this.z = z
-        this.index = Level.Companion.chunkHash(getX(), z)
-    }
-
-    override fun getProvider(): LevelProvider {
-        return provider!!
-    }
-
-    override fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState? {
+    override fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState {
         var stamp = blockLock.tryOptimisticRead()
         try {
             while (true) {
@@ -197,15 +185,14 @@ class Chunk : IChunk {
                     stamp = blockLock.readLock()
                     continue
                 }
-                return result
-                stamp = blockLock.readLock()
+                return result.also { stamp = blockLock.readLock() }
             }
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) blockLock.unlockRead(stamp)
         }
     }
 
-    override fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState?, layer: Int): BlockState? {
+    override fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState, layer: Int): BlockState {
         val stamp = blockLock.writeLock()
         try {
             setChanged()
@@ -216,7 +203,7 @@ class Chunk : IChunk {
         }
     }
 
-    override fun setBlockState(x: Int, y: Int, z: Int, blockstate: BlockState?, layer: Int) {
+    override fun setBlockState(x: Int, y: Int, z: Int, blockstate: BlockState, layer: Int) {
         val stamp = blockLock.writeLock()
         try {
             setChanged()
@@ -241,8 +228,8 @@ class Chunk : IChunk {
                     stamp = lightLock.readLock()
                     continue
                 }
-                return result
-                stamp = lightLock.readLock()
+                return result.also { stamp = lightLock.readLock() }
+
             }
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) lightLock.unlockRead(stamp)
@@ -273,8 +260,7 @@ class Chunk : IChunk {
                     stamp = lightLock.readLock()
                     continue
                 }
-                return result
-                stamp = lightLock.readLock()
+                return result.also { stamp = lightLock.readLock() }
             }
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) lightLock.unlockRead(stamp)
@@ -304,8 +290,7 @@ class Chunk : IChunk {
                     stamp = heightAndBiomeLock.readLock()
                     continue
                 }
-                return result
-                stamp = heightAndBiomeLock.readLock()
+                return result.also { stamp = heightAndBiomeLock.readLock() }
             }
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) heightAndBiomeLock.unlockRead(stamp)
@@ -429,14 +414,13 @@ class Chunk : IChunk {
                     stamp = heightAndBiomeLock.readLock()
                     continue
                 }
-                val sectionInternal = getSectionInternal(y shr 4) ?: return BiomeID.Companion.PLAINS
+                val sectionInternal = getSectionInternal(y shr 4) ?: return BiomeID.PLAINS
                 val result = sectionInternal.getBiomeId(x, y and 0x0f, z)
                 if (!heightAndBiomeLock.validate(stamp)) {
                     stamp = heightAndBiomeLock.readLock()
                     continue
                 }
-                return result
-                stamp = heightAndBiomeLock.readLock()
+                return result.also { stamp = heightAndBiomeLock.readLock() }
             }
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) heightAndBiomeLock.unlockRead(stamp)
@@ -463,32 +447,22 @@ class Chunk : IChunk {
         extraData.putBoolean("LightPopulated", true)
     }
 
-    override fun getChunkState(): ChunkState {
-        return chunkState.get()
-    }
-
-    override fun setChunkState(chunkState: ChunkState) {
-        this.chunkState.set(chunkState)
-    }
-
     override fun addEntity(entity: Entity) {
-        entities.put(entity.getId(), entity)
+        entities[entity.getId()] = entity
         if (entity !is Player && this.isInit) {
             this.setChanged()
         }
     }
 
     override fun removeEntity(entity: Entity) {
-        if (this.entities != null) {
-            entities.remove(entity.getId())
-            if (entity !is Player && this.isInit) {
-                this.setChanged()
-            }
+        entities.remove(entity.getId())
+        if (entity !is Player && this.isInit) {
+            this.setChanged()
         }
     }
 
     override fun addBlockEntity(blockEntity: BlockEntity) {
-        tiles.put(blockEntity.id, blockEntity)
+        tiles[blockEntity.id] = blockEntity
         val index =
             ((blockEntity.position.floorZ and 0x0f) shl 16) or ((blockEntity.position.floorX and 0x0f) shl 12) or (ensureY(
                 blockEntity.position.floorY
@@ -498,31 +472,25 @@ class Chunk : IChunk {
             tiles.remove(entity!!.id)
             entity.close()
         }
-        tileList.put(index.toLong(), blockEntity)
+        tileList[index.toLong()] = blockEntity
         if (this.isInit) {
             this.setChanged()
         }
     }
 
     override fun removeBlockEntity(blockEntity: BlockEntity) {
-        if (this.tiles != null) {
-            tiles.remove(blockEntity.id)
-            val index =
-                ((blockEntity.position.floorZ and 0x0f) shl 16) or ((blockEntity.position.floorX and 0x0f) shl 12) or (ensureY(
-                    blockEntity.position.floorY
-                ) + 64)
-            tileList.remove(index.toLong())
-            if (this.isInit) {
-                this.setChanged()
-            }
+        tiles.remove(blockEntity.id)
+        val index =
+            ((blockEntity.position.floorZ and 0x0f) shl 16) or ((blockEntity.position.floorX and 0x0f) shl 12) or (ensureY(
+                blockEntity.position.floorY
+            ) + 64)
+        tileList.remove(index.toLong())
+        if (this.isInit) {
+            this.setChanged()
         }
     }
 
-    override fun getEntities(): Map<Long, Entity> {
-        return entities
-    }
-
-    override val blockEntities: Map<Long?, BlockEntity>
+    override val blockEntities: Map<Long, BlockEntity>
         get() = tiles
 
     override fun getTile(x: Int, y: Int, z: Int): BlockEntity? {
@@ -530,7 +498,7 @@ class Chunk : IChunk {
     }
 
     override val isLoaded: Boolean
-        get() = this.getProvider() != null && getProvider().isChunkLoaded(this.getX(), this.getZ())
+        get() = provider.isChunkLoaded(this.x, this.z)
 
     @Throws(IOException::class)
     override fun load(): Boolean {
@@ -539,11 +507,11 @@ class Chunk : IChunk {
 
     @Throws(IOException::class)
     override fun load(generate: Boolean): Boolean {
-        return this.getProvider() != null && getProvider().getChunk(this.getX(), this.getZ(), true) != null
+        return provider.getChunk(this.x, this.z, true) != null
     }
 
     override fun unload(): Boolean {
-        return this.unload(true, true)
+        return this.unload(save = true, safe = true)
     }
 
     override fun unload(save: Boolean): Boolean {
@@ -551,18 +519,18 @@ class Chunk : IChunk {
     }
 
     override fun unload(save: Boolean, safe: Boolean): Boolean {
-        val provider = this.getProvider()
-        if (save && changes.get() != 0L) {
-            provider.saveChunk(this.getX(), this.getZ())
+        val provider = this.provider
+        if (save && changes != 0L) {
+            provider.saveChunk(this.x, this.z)
         }
         if (safe) {
-            for (entity in getEntities().values) {
+            for (entity in entities.values) {
                 if (entity is Player) {
                     return false
                 }
             }
         }
-        for (entity in ArrayList(getEntities().values)) {
+        for (entity in ArrayList(entities.values)) {
             if (entity is Player) {
                 continue
             }
@@ -578,7 +546,7 @@ class Chunk : IChunk {
     }
 
     override fun initChunk() {
-        if (this.getProvider() != null && !this.isInit) {
+        if (!this.isInit) {
             var changed = false
             if (this.entityNBT != null) {
                 for (nbt in entityNBT!!) {
@@ -587,7 +555,7 @@ class Chunk : IChunk {
                         continue
                     }
                     val pos = nbt.getList("Pos")
-                    if (((pos[0] as NumberTag<*>).data.toInt() shr 4) != this.getX() || (((pos[2] as NumberTag<*>).data.toInt() shr 4) != this.getZ())) {
+                    if (((pos[0] as NumberTag<*>).data.toInt() shr 4) != this.x || (((pos[2] as NumberTag<*>).data.toInt() shr 4) != this.z)) {
                         changed = true
                         continue
                     }
@@ -601,22 +569,20 @@ class Chunk : IChunk {
 
             if (this.blockEntityNBT != null) {
                 for (nbt in blockEntityNBT!!) {
-                    if (nbt != null) {
-                        if (!nbt.contains("id")) {
-                            changed = true
-                            continue
-                        }
-                        if ((nbt.getInt("x") shr 4) != this.getX() || ((nbt.getInt("z") shr 4) != this.getZ())) {
-                            changed = true
-                            continue
-                        }
-                        val blockEntity = createBlockEntity(
-                            nbt.getString("id"),
-                            this, nbt
-                        )
-                        if (blockEntity == null) {
-                            changed = true
-                        }
+                    if (!nbt.contains("id")) {
+                        changed = true
+                        continue
+                    }
+                    if ((nbt.getInt("x") shr 4) != this.x || ((nbt.getInt("z") shr 4) != this.z)) {
+                        changed = true
+                        continue
+                    }
+                    val blockEntity = createBlockEntity(
+                        nbt.getString("id"),
+                        this, nbt
+                    )
+                    if (blockEntity == null) {
+                        changed = true
                     }
                 }
                 this.blockEntityNBT = null
@@ -631,23 +597,19 @@ class Chunk : IChunk {
     }
 
     override fun hasChanged(): Boolean {
-        return changes.get() != 0L
+        return changes != 0L
     }
 
     override fun setChanged() {
-        changes.incrementAndGet()
+        atomicChanges.incrementAndGet()
     }
 
     override fun setChanged(changed: Boolean) {
         if (changed) {
             setChanged()
         } else {
-            changes.set(0)
+            atomicChanges.set(0)
         }
-    }
-
-    override fun getChanges(): Long {
-        return changes.get()
     }
 
     override fun getSectionBlockChanges(sectionY: Int): Long {
@@ -664,14 +626,14 @@ class Chunk : IChunk {
         max: BlockVector3,
         condition: BiPredicate<BlockVector3?, BlockState?>
     ): Stream<Block?>? {
-        val offsetX = getX() shl 4
-        val offsetZ = getZ() shl 4
+        val offsetX = x shl 4
+        val offsetZ = z shl 4
         return IntStream.rangeClosed(0, dimensionData.chunkSectionCount - 1)
             .mapToObj { sectionY: Int -> sections[sectionY] }
             .filter { section: ChunkSection? -> section != null && !section.isEmpty }.parallel()
             .map { section: ChunkSection? ->
                 section!!.scanBlocks(
-                    getProvider(),
+                    provider,
                     offsetX,
                     offsetZ,
                     min,
@@ -711,7 +673,7 @@ class Chunk : IChunk {
                     Chunk.log.warn(
                         "Block entity validation of {} at {}, {} {} {} failed, removing as invalid.",
                         entity.javaClass.name,
-                        getProvider().level.name,
+                        provider.level.name,
                         entity.position.x,
                         entity.position.y,
                         entity.position.z,
@@ -727,7 +689,7 @@ class Chunk : IChunk {
     }
 
     override fun reObfuscateChunk() {
-        for (section in getSections()) {
+        for (section in sections) {
             section?.setNeedReObfuscate()
         }
     }
@@ -751,8 +713,8 @@ class Chunk : IChunk {
         override var chunkZ: Int = 0
         override var chunkX: Int = 0
         var levelProvider: LevelProvider? = null
-        override var sections: Array<ChunkSection?>?
-        var heightMap: ShortArray?
+        override var sections: Array<ChunkSection?>? = null
+        var heightMap: ShortArray? = null
         var entities: List<CompoundTag>? = null
         var blockEntities: List<CompoundTag>? = null
         var extraData: CompoundTag? = null
@@ -777,10 +739,9 @@ class Chunk : IChunk {
             return this
         }
 
-        override val dimensionData: DimensionData?
+        override val dimensionData: DimensionData
             get() {
-                Preconditions.checkNotNull(levelProvider)
-                return levelProvider.getDimensionData()
+                return levelProvider!!.dimensionData
             }
 
         override fun sections(sections: Array<ChunkSection?>?): Builder {
@@ -793,7 +754,7 @@ class Chunk : IChunk {
             return this
         }
 
-        override fun entities(entities: List<CompoundTag?>?): Builder {
+        override fun entities(entities: List<CompoundTag>?): Builder {
             this.entities = entities
             return this
         }
@@ -811,7 +772,7 @@ class Chunk : IChunk {
         override fun build(): Chunk {
             Preconditions.checkNotNull(levelProvider)
             if (state == null) state = ChunkState.NEW
-            if (sections == null) sections = arrayOfNulls(levelProvider.getDimensionData().chunkSectionCount)
+            if (sections == null) sections = arrayOfNulls(levelProvider!!.dimensionData.chunkSectionCount)
             if (heightMap == null) heightMap = ShortArray(256)
             if (entities == null) entities = ArrayList()
             if (blockEntities == null) blockEntities = ArrayList()
@@ -820,7 +781,7 @@ class Chunk : IChunk {
                 state!!,
                 chunkX,
                 chunkZ,
-                levelProvider,
+                levelProvider!!,
                 sections!!,
                 heightMap!!,
                 entities!!,
@@ -835,7 +796,7 @@ class Chunk : IChunk {
         }
     }
 
-    companion object {
+    companion object : Loggable {
         fun builder(): Builder {
             return Builder()
         }
