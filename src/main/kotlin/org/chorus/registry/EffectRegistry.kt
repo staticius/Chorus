@@ -1,11 +1,10 @@
 package org.chorus.registry
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import me.sunlan.fastreflection.FastConstructor
 import org.chorus.entity.effect.*
-import org.chorus.registry.RegisterException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.collections.HashMap
 import kotlin.collections.set
 
 class EffectRegistry :
@@ -68,10 +67,6 @@ class EffectRegistry :
     val effectId2TypeMap: Map<Int, EffectType>
         get() = Collections.unmodifiableMap(INT_ID_2_TYPE)
 
-    override fun trim() {
-        CACHE_CONSTRUCTORS.trim()
-    }
-
     override fun reload() {
         isLoad.set(false)
         INT_ID_2_TYPE.clear()
@@ -81,16 +76,14 @@ class EffectRegistry :
     }
 
     @Throws(RegisterException::class)
-    override fun register(type: EffectType, effect: Class<out Effect?>) {
+    override fun register(key: EffectType, value: Class<out Effect?>) {
         try {
-            val c = FastConstructor.create(effect.getConstructor())
-            if (CACHE_CONSTRUCTORS.putIfAbsent(type, c) == null) {
-                STRING_ID_2_TYPE[type.stringId] = type
-                if (type.id != null) {
-                    INT_ID_2_TYPE[type.id] = type
-                }
+            val c = FastConstructor.create(value.getConstructor())
+            if (CACHE_CONSTRUCTORS.putIfAbsent(key, c) == null) {
+                STRING_ID_2_TYPE[key.stringId] = key
+                INT_ID_2_TYPE[key.id] = key
             } else {
-                throw RegisterException("This effect has already been registered with the identifier: $type")
+                throw RegisterException("This effect has already been registered with the identifier: $key")
             }
         } catch (e: NoSuchMethodException) {
             throw RegisterException(e)
@@ -108,9 +101,9 @@ class EffectRegistry :
     }
 
     companion object {
-        private val CACHE_CONSTRUCTORS = Object2ObjectOpenHashMap<EffectType, FastConstructor<out Effect>?>()
-        private val STRING_ID_2_TYPE = Object2ObjectOpenHashMap<String, EffectType>()
-        private val INT_ID_2_TYPE = Object2ObjectOpenHashMap<Int, EffectType>()
+        private val CACHE_CONSTRUCTORS = HashMap<EffectType, FastConstructor<out Effect>>()
+        private val STRING_ID_2_TYPE = HashMap<String, EffectType>()
+        private val INT_ID_2_TYPE = HashMap<Int, EffectType>()
         private val isLoad = AtomicBoolean(false)
     }
 }

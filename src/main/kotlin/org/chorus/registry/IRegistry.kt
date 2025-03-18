@@ -1,15 +1,12 @@
 package org.chorus.registry
 
 import me.sunlan.fastreflection.FastMemberLoader
-import org.chorus.registry.RegisterException
 import org.jetbrains.annotations.ApiStatus
 
 interface IRegistry<K, V, R> {
     fun init()
 
     fun get(key: K): V
-
-    fun trim()
 
     fun reload()
 

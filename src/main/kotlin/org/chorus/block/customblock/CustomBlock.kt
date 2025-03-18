@@ -52,7 +52,7 @@ interface CustomBlock {
      */
     val hardness: Double
 
-    val id: String?
+    val id: String
 
     /**
      * 一般不需要被覆写,继承父类会提供

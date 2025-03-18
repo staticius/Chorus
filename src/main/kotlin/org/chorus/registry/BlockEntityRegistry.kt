@@ -3,11 +3,10 @@ package org.chorus.registry
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import org.chorus.blockentity.*
-import org.chorus.registry.RegisterException
 import java.util.concurrent.atomic.AtomicBoolean
 
 class BlockEntityRegistry : BlockEntityID,
-    IRegistry<String, Class<out BlockEntity?>?, Class<out BlockEntity?>?> {
+    IRegistry<String, Class<out BlockEntity>?, Class<out BlockEntity>> {
     override fun init() {
         if (isLoad.getAndSet(true)) return
         register0(BlockEntityID.FURNACE, BlockEntityFurnace::class.java)
@@ -68,7 +67,7 @@ class BlockEntityRegistry : BlockEntityID,
         return knownBlockEntities.inverse()[c]
     }
 
-    override fun trim() {
+    fun trim() {
     }
 
     override fun reload() {
@@ -78,9 +77,8 @@ class BlockEntityRegistry : BlockEntityID,
     }
 
     @Throws(RegisterException::class)
-    override fun register(key: String, value: Class<out BlockEntity?>?) {
-        if (knownBlockEntities.putIfAbsent(key, value) == null) {
-        } else {
+    override fun register(key: String, value: Class<out BlockEntity>) {
+        if (knownBlockEntities.putIfAbsent(key, value) != null) {
             throw RegisterException("This BlockEntity has already been registered with the identifier: $key")
         }
     }
@@ -94,7 +92,7 @@ class BlockEntityRegistry : BlockEntityID,
     }
 
     companion object {
-        private val knownBlockEntities: BiMap<String, Class<out BlockEntity?>?> = HashBiMap.create(35)
+        private val knownBlockEntities: BiMap<String, Class<out BlockEntity>> = HashBiMap.create(35)
         private val isLoad = AtomicBoolean(false)
     }
 }

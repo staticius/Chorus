@@ -2,7 +2,6 @@ package org.chorus.registry
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.entity.effect.*
-import org.chorus.registry.RegisterException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.set
@@ -73,7 +72,7 @@ class PotionRegistry : IRegistry<String, PotionType?, PotionType> {
     val potionId2TypeMap: Map<Int, PotionType>
         get() = Collections.unmodifiableMap(ID_2_POTION)
 
-    override fun trim() {
+    fun trim() {
         REGISTRY.trim()
     }
 

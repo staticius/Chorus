@@ -9,9 +9,8 @@ import io.netty.util.ReferenceCountUtil
 import io.netty.util.collection.CharObjectHashMap
 import io.netty.util.internal.EmptyArrays
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
-import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.Server
+import org.chorus.block.BlockID
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 import org.chorus.network.connection.util.HandleByteBuf.Companion.of
@@ -27,27 +26,29 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 
 class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
     val vanillaRecipeParser: VanillaRecipeParser = VanillaRecipeParser(this)
-    private val recipeMaps = EnumMap<RecipeType, Int2ObjectArrayMap<Set<Recipe>>>(
+    private val recipeMaps = EnumMap<RecipeType, MutableMap<Int, MutableSet<Recipe>>>(
         RecipeType::class.java
     )
-    private val allRecipeMaps = Object2ObjectOpenHashMap<String, Recipe?>()
-    val recipeXpMap: Object2DoubleOpenHashMap<Recipe> = Object2DoubleOpenHashMap()
-    private val networkIdRecipeList: MutableList<Recipe> = ArrayList()
+    private val allRecipeMaps = HashMap<String, Recipe?>()
+    val recipeXpMap: MutableMap<Recipe, Double> = HashMap()
+    private val networkIdRecipeList: MutableList<Recipe> = mutableListOf()
 
     fun getNetworkIdRecipeList(): List<Recipe> {
         return networkIdRecipeList
     }
 
-    fun getRecipeXp(recipe: Recipe?): Double {
+    fun getRecipeXp(recipe: Recipe): Double {
         return recipeXpMap.getOrDefault(recipe, 0.0)
     }
 
     fun setRecipeXp(recipe: Recipe, xp: Double) {
-        recipeXpMap.put(recipe, xp)
+        recipeXpMap[recipe] = xp
     }
 
     val shapelessRecipeMap: Set<ShapelessRecipe>
@@ -62,7 +63,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findShapelessRecipe(vararg items: Item?): ShapelessRecipe? {
+    fun findShapelessRecipe(vararg items: Item): ShapelessRecipe? {
         val recipes = recipeMaps[RecipeType.SHAPELESS]!![items.size]
         if (recipes != null) {
             for (r in recipes) {
@@ -84,7 +85,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findShapedRecipe(vararg items: Item?): ShapedRecipe? {
+    fun findShapedRecipe(vararg items: Item): ShapedRecipe? {
         val recipes = recipeMaps[RecipeType.SHAPED]!![items.size]
         if (recipes != null) {
             for (r in recipes) {
@@ -109,7 +110,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findFurnaceRecipe(vararg items: Item?): FurnaceRecipe? {
+    fun findFurnaceRecipe(vararg items: Item): FurnaceRecipe? {
         val map1 = recipeMaps[RecipeType.FURNACE]!!
         val recipes = map1[items.size]
         if (recipes != null) {
@@ -135,7 +136,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findBlastFurnaceRecipe(vararg items: Item?): BlastFurnaceRecipe? {
+    fun findBlastFurnaceRecipe(vararg items: Item): BlastFurnaceRecipe? {
         val map1 = recipeMaps[RecipeType.BLAST_FURNACE]!!
         val recipes = map1[items.size]
         if (recipes != null) {
@@ -161,10 +162,11 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findSmokerRecipe(vararg items: Item?): SmokerRecipe? {
+    fun findSmokerRecipe(vararg items: Item): SmokerRecipe? {
         val map1 = recipeMaps[RecipeType.SMOKER]
         if (map1 != null) {
             val recipes = map1[items.size]
+            recipes ?: return null
             for (r in recipes) {
                 if (r.fastCheck(*items)) return r as SmokerRecipe
             }
@@ -196,7 +198,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findCampfireRecipe(vararg items: Item?): CampfireRecipe? {
+    fun findCampfireRecipe(vararg items: Item): CampfireRecipe? {
         val recipes = recipeMaps[RecipeType.CAMPFIRE]!![items.size]
         if (recipes != null) {
             for (r in recipes) {
@@ -218,7 +220,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findMultiRecipe(vararg items: Item?): MultiRecipe? {
+    fun findMultiRecipe(vararg items: Item): MultiRecipe? {
         val recipes = recipeMaps[RecipeType.MULTI]!![items.size]
         if (recipes != null) {
             for (r in recipes) {
@@ -240,7 +242,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findStonecutterRecipe(vararg items: Item?): StonecutterRecipe? {
+    fun findStonecutterRecipe(vararg items: Item): StonecutterRecipe? {
         val recipes = recipeMaps[RecipeType.STONECUTTER]!![items.size]
         if (recipes != null) {
             for (r in recipes) {
@@ -262,10 +264,15 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findCartographyRecipe(vararg items: Item?): CartographyRecipe? {
-        val recipes = recipeMaps[RecipeType.CARTOGRAPHY]!![items.size]
-        for (r in recipes) {
-            if (r.fastCheck(*items)) return r as CartographyRecipe
+    fun findCartographyRecipe(vararg items: Item): CartographyRecipe? {
+        val recipes = recipeMaps[RecipeType.CARTOGRAPHY]
+        if (recipes != null) {
+            val map1 = recipes[items.size]
+            if (map1 != null) {
+                for (r in map1) {
+                    if (r.fastCheck(*items)) return r as CartographyRecipe
+                }
+            }
         }
         return null
     }
@@ -282,7 +289,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findSmithingTransform(vararg items: Item?): SmithingTransformRecipe? {
+    fun findSmithingTransform(vararg items: Item): SmithingTransformRecipe? {
         val recipes = recipeMaps[RecipeType.SMITHING_TRANSFORM]!![items.size]
         if (recipes != null) {
             for (r in recipes) {
@@ -304,7 +311,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findBrewingRecipe(vararg items: Item?): BrewingRecipe? {
+    fun findBrewingRecipe(vararg items: Item): BrewingRecipe? {
         val recipes = recipeMaps[RecipeType.BREWING]!![items.size]
         if (recipes != null) {
             for (r in recipes) {
@@ -326,7 +333,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             return result
         }
 
-    fun findContainerRecipe(vararg items: Item?): ContainerRecipe? {
+    fun findContainerRecipe(vararg items: Item): ContainerRecipe? {
         val recipes = recipeMaps[RecipeType.CONTAINER]!![items.size]
         if (recipes != null) {
             for (r in recipes) {
@@ -348,16 +355,11 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
         RecipeRegistry.log.info("Loading recipes...")
         this.loadRecipes()
         this.rebuildPacket()
-        RecipeRegistry.log.info("Loaded {} recipes.", this.recipeCount)
+        RecipeRegistry.log.info("Loaded {} recipes.", recipeCount)
     }
 
     override fun get(key: String): Recipe? {
         return allRecipeMaps[key]
-    }
-
-    override fun trim() {
-        recipeXpMap.trim()
-        allRecipeMaps.trim()
     }
 
     override fun reload() {
@@ -380,7 +382,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             val item: Item = recipe.results.first()
             val id = Utils.dataToUUID(
                 recipeCount.toString(),
-                item.id.toString(),
+                item.id,
                 item.damage.toString(),
                 item.getCount().toString(),
                 item.compoundTag.contentToString()
@@ -388,16 +390,24 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             if (recipe.uUID == null) recipe.uUID = id
         }
         if (allRecipeMaps.putIfAbsent(recipe.recipeId, recipe) != null) {
-            throw RegisterException("Duplicate recipe %s type %s".formatted(recipe.recipeId, recipe.type))
+            throw RegisterException("Duplicate recipe ${recipe.recipeId} type ${recipe.type}")
         }
-        val recipeMap = recipeMaps.computeIfAbsent(recipe.type) { t: RecipeType? -> Int2ObjectArrayMap() }
-        val r: MutableSet<Recipe> = recipeMap.computeIfAbsent(recipe.ingredients.size()) { i -> HashSet<E>() }
+        val recipeMap = recipeMaps.computeIfAbsent(recipe.type) { HashMap() }
+        val r: MutableSet<Recipe> = recipeMap.computeIfAbsent(recipe.ingredients.size) { HashSet() }
         r.add(recipe)
         ++recipeCount
         when (recipe.type) {
-            STONECUTTER, SHAPELESS, CARTOGRAPHY, USER_DATA_SHAPELESS_RECIPE, SMITHING_TRANSFORM, SMITHING_TRIM, SHAPED, MULTI -> networkIdRecipeList.add(
+            RecipeType.STONECUTTER,
+            RecipeType.SHAPELESS,
+            RecipeType.CARTOGRAPHY,
+            RecipeType.USER_DATA_SHAPELESS_RECIPE,
+            RecipeType.SMITHING_TRANSFORM,
+            RecipeType.SMITHING_TRIM,
+            RecipeType.SHAPED,
+            RecipeType.MULTI -> networkIdRecipeList.add(
                 recipe
             )
+            else -> {}
         }
     }
 
@@ -412,7 +422,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
     fun cleanAllRecipes() {
         recipeXpMap.clear()
         networkIdRecipeList.clear()
-        recipeMaps.values.forEach(Consumer { obj: Int2ObjectArrayMap<Set<Recipe>> -> obj.clear() })
+        recipeMaps.values.forEach { obj -> obj.clear() }
         allRecipeMaps.clear()
         recipeCount = 0
         ReferenceCountUtil.safeRelease(buffer)
@@ -448,7 +458,6 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
         buffer = buf
     }
 
-    @SneakyThrows
     private fun loadRecipes() {
         //load xp config
         val furnaceXpConfig = Config(Config.JSON)
@@ -470,7 +479,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             Server::class.java.classLoader.getResourceAsStream("recipes.json").use { r ->
                 recipeConfig.load(r)
                 //load potionMixes
-                val potionMixes: List<Map<String, Any>> = recipeConfig.getList("potionMixes") as List<Map<String, Any>?>
+                val potionMixes: List<Map<String, Any>> = recipeConfig.getList("potionMixes") as List<Map<String, Any>>
                 for (recipe in potionMixes) {
                     val inputId = recipe["inputId"] as String?
                     val inputMeta = (recipe["inputMeta"] as Double).toInt()
@@ -523,8 +532,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                 }
 
                 //load containerMixes
-                val containerMixes: List<Map<String, Any>> =
-                    recipeConfig.getList("containerMixes") as List<Map<String, Any>?>
+                val containerMixes: List<Map<String, Any>> = recipeConfig.getList("containerMixes") as List<Map<String, Any>>
                 for (containerMix in containerMixes) {
                     val inputId = containerMix["inputId"] as String?
                     val reagentId = containerMix["reagentId"] as String?
@@ -546,7 +554,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                 }
 
                 //load all other recipes (Not Endstone Reader)
-                val recipes: List<Map<String, Any>> = recipeConfig.getList("recipes") as List<Map<String, Any>?>
+                val recipes: List<Map<String, Any>> = recipeConfig.getList("recipes") as List<Map<String, Any>>
                 for (recipe in recipes) {
                     val block = recipe["block"] as String? ?: continue
 
@@ -555,21 +563,21 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                             val recipeId = recipe["id"] as String?
 
                             val baseDescriptor = parseDescription(
-                                (recipe["base"] as Map<String, Any>?)!!,
+                                (recipe["base"] as Map<String, Any>),
                                 ParseType.SMITHING_TABLE
                             )
                             val additionDescriptor = parseDescription(
-                                (recipe["addition"] as Map<String, Any>?)!!,
+                                (recipe["addition"] as Map<String, Any>),
                                 ParseType.SMITHING_TABLE
                             )
                             val templateDescriptor = parseDescription(
-                                (recipe["template"] as Map<String, Any>?)!!,
+                                (recipe["template"] as Map<String, Any>),
                                 ParseType.SMITHING_TABLE
                             )
 
                             if (recipe.containsKey("result")) { // is smithing transform recipe
-                                val result = recipe["result"] as Map<String, Any>?
-                                val itemId = result!!["id"] as String?
+                                val result = recipe["result"] as Map<String, Any>
+                                val itemId = result["id"] as String?
                                 val count = (result["count"] as Double).toInt()
                                 this.register(
                                     SmithingTransformRecipe(
@@ -601,14 +609,14 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                             val uuid = UUID.fromString(recipe["uuid"] as String?)
                             val priority = (recipe["priority"] as Double).toInt()
 
-                            val outputs = recipe["output"] as MutableList<Map<String, Any>>?
-                            val primaryResultData = outputs!!.removeFirst()
+                            val outputs = recipe["output"] as MutableList<Map<String, Any>>
+                            val primaryResultData = outputs.removeFirst()
                             val primaryResult = parseDescription(primaryResultData, outputParseType)
 
-                            val ingredients: MutableList<ItemDescriptor?> = ArrayList()
-                            val inputs = recipe["input"] as List<Map<String, Any>>?
+                            val ingredients: MutableList<ItemDescriptor> = ArrayList()
+                            val inputs = recipe["input"] as List<Map<String, Any>>
 
-                            for (input in inputs!!) {
+                            for (input in inputs) {
                                 ingredients.add(parseDescription(input, inputParseType))
                             }
 
@@ -617,7 +625,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                                     recipeId,
                                     uuid,
                                     priority,
-                                    primaryResult!!.toItem(),
+                                    primaryResult.toItem(),
                                     ingredients.first().toItem(),
                                     RecipeUnlockingRequirement(
                                         RecipeUnlockingRequirement.UnlockingContext.ALWAYS_UNLOCKED
@@ -634,14 +642,14 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                             val uuid = UUID.fromString(recipe["uuid"] as String?)
                             val priority = (recipe["priority"] as Double).toInt()
 
-                            val outputs = recipe["output"] as MutableList<Map<String, Any>>?
-                            val primaryResultData = outputs!!.removeFirst()
+                            val outputs = recipe["output"] as MutableList<Map<String, Any>>
+                            val primaryResultData = outputs.removeFirst()
                             val primaryResult = parseDescription(primaryResultData, outputParseType)
 
-                            val ingredients: MutableList<ItemDescriptor?> = ArrayList()
-                            val inputs = recipe["input"] as List<Map<String, Any>>?
+                            val ingredients: MutableList<ItemDescriptor> = ArrayList()
+                            val inputs = recipe["input"] as List<Map<String, Any>>
 
-                            for (input in inputs!!) {
+                            for (input in inputs) {
                                 ingredients.add(parseDescription(input, inputParseType))
                             }
 
@@ -650,7 +658,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                                     recipeId,
                                     uuid,
                                     priority,
-                                    primaryResult!!.toItem(),
+                                    primaryResult.toItem(),
                                     ingredients,
                                     RecipeUnlockingRequirement(
                                         RecipeUnlockingRequirement.UnlockingContext.ALWAYS_UNLOCKED
@@ -674,23 +682,23 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                             val uuid = UUID.fromString(recipe["uuid"] as String?)
                             val priority = (recipe["priority"] as Double).toInt()
 
-                            val outputs = recipe["output"] as MutableList<Map<String, Any>>?
-                            val primaryResultData = outputs!!.removeFirst()
+                            val outputs = recipe["output"] as MutableList<Map<String, Any>>
+                            val primaryResultData = outputs.removeFirst()
                             val primaryResult = parseDescription(primaryResultData, outputParseType)
 
                             if (recipe.containsKey("shape")) {
-                                val extraResults: MutableList<Item?> = ArrayList()
+                                val extraResults: MutableList<Item> = ArrayList()
                                 for (output in outputs) {
-                                    extraResults.add(parseDescription(output, outputParseType)!!.toItem())
+                                    extraResults.add(parseDescription(output, outputParseType).toItem())
                                 }
 
-                                val shape = (recipe["shape"] as List<String>).toArray<String> { _Dummy_.__Array__() }
+                                val shape = (recipe["shape"] as List<String>).toTypedArray()
 
-                                val ingredients: MutableMap<Char, ItemDescriptor?> = CharObjectHashMap()
+                                val ingredients: MutableMap<Char, ItemDescriptor> = CharObjectHashMap()
 
-                                val inputs = recipe["input"] as LinkedTreeMap<String, Any>?
+                                val inputs = recipe["input"] as LinkedTreeMap<String, Any>
 
-                                for ((key, value) in inputs!!) {
+                                for ((key, value) in inputs) {
                                     val patternKey = key[0]
                                     val ingredientData = value as Map<String, Any>
 
@@ -705,7 +713,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                                         recipeId,
                                         uuid,
                                         priority,
-                                        primaryResult!!.toItem(),
+                                        primaryResult.toItem(),
                                         shape,
                                         ingredients,
                                         extraResults,
@@ -717,10 +725,10 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                                 )
                             } else {    // is shapeless recipe
 
-                                val ingredients: MutableList<ItemDescriptor?> = ArrayList()
-                                val inputs = recipe["input"] as List<Map<String, Any>>?
+                                val ingredients: MutableList<ItemDescriptor> = ArrayList()
+                                val inputs = recipe["input"] as List<Map<String, Any>>
 
-                                for (input in inputs!!) {
+                                for (input in inputs) {
                                     ingredients.add(parseDescription(input, inputParseType))
                                 }
 
@@ -729,7 +737,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                                         recipeId,
                                         uuid,
                                         priority,
-                                        primaryResult!!.toItem(),
+                                        primaryResult.toItem(),
                                         ingredients,
                                         RecipeUnlockingRequirement(
                                             RecipeUnlockingRequirement.UnlockingContext.ALWAYS_UNLOCKED
@@ -740,10 +748,10 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                         }
 
                         "furnace", "blast_furnace", "smoker", "campfire", "soul_campfire" -> {
-                            val inputData = recipe["input"] as Map<String, Any>?
-                            val outputData = recipe["output"] as Map<String, Any>?
-                            val inputItem = parseDescription(inputData!!, ParseType.FURNACE_INPUT)!!.toItem()
-                            val outputItem = parseDescription(outputData!!, ParseType.FURNACE_OUTPUT)!!.toItem()
+                            val inputData = recipe["input"] as Map<String, Any>
+                            val outputData = recipe["output"] as Map<String, Any>
+                            val inputItem = parseDescription(inputData, ParseType.FURNACE_INPUT).toItem()
+                            val outputItem = parseDescription(outputData, ParseType.FURNACE_OUTPUT).toItem()
 
                             val smeltingRecipe = when (block) {
                                 "blast_furnace" -> BlastFurnaceRecipe(outputItem, inputItem)
@@ -821,7 +829,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             ParseType.SMITHING_TABLE, ParseType.CRAFTING_TABLE_INPUT, ParseType.CARTOGRAPHY_TABLE_INPUT, ParseType.STONECUTTER_INPUT -> {
                 if (data["type"] == "item_tag") {
                     val itemTag = data["itemTag"] as String?
-                    val count = if (data.containsKey("count")) Utils.toInt(data["count"]) else 1
+                    val count = if (data.containsKey("count")) Utils.toInt(data["count"]!!) else 1
                     descriptor = ItemTagDescriptor(itemTag!!, count)
                 } else if (data["type"] == "complex_alias") {
                     val itemId = data["name"] as String?
@@ -831,7 +839,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                     descriptor = DefaultDescriptor(item)
                 } else {    // only other possibility is the "default" type
                     val itemId = data["itemId"] as String?
-                    val count = if (data.containsKey("count")) Utils.toInt(data["count"]) else 1
+                    val count = if (data.containsKey("count")) Utils.toInt(data["count"]!!) else 1
                     val meta = (data["auxValue"] as Double).toInt().toShort()
                     val item: Item
                     if (meta == Short.MAX_VALUE || meta.toInt() == -1) {
@@ -890,33 +898,30 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
     private fun parseShapelessRecipe(recipeObject: Map<String, Any>, craftingBlock: String): Recipe? {
         val id = recipeObject["id"].toString()
         if (craftingBlock == "smithing_table") {
-            val base = recipeObject["base"] as Map<String, Any>?
-            val baseItem = parseRecipeItem(base!!)
-            val addition = recipeObject["addition"] as Map<String, Any>?
-            val additionItem = parseRecipeItem(addition!!)
-            val template = recipeObject["template"] as Map<String, Any>?
-            val templateItem = parseRecipeItem(template!!)
-            val output = recipeObject["output"] as ArrayList<Map<String, Any>>?
-            val outputItem = parseRecipeItem(output!![0])
-            if (additionItem == null || baseItem == null || outputItem == null || templateItem == null) {
-                return null
-            }
+            val base = recipeObject["base"] as Map<String, Any>
+            val baseItem = parseRecipeItem(base)
+            val addition = recipeObject["addition"] as Map<String, Any>
+            val additionItem = parseRecipeItem(addition)
+            val template = recipeObject["template"] as Map<String, Any>
+            val templateItem = parseRecipeItem(template)
+            val output = recipeObject["output"] as ArrayList<Map<String, Any>>
+            val outputItem = parseRecipeItem(output[0])
             return SmithingTransformRecipe(id, outputItem.toItem(), baseItem, additionItem, templateItem)
         }
         val uuid = UUID.fromString(recipeObject["uuid"].toString())
         val itemDescriptors: MutableList<ItemDescriptor> = ArrayList()
-        val inputs = (recipeObject["input"] as List<Map<String, Any>>?)
-        val outputs = (recipeObject["output"] as List<Map<String, Any>>?)
+        val inputs = (recipeObject["input"] as List<Map<String, Any>>)
+        val outputs = (recipeObject["output"] as List<Map<String, Any>>)
         if (outputs!!.size > 1) {
             return null
         }
         val first: Map<String, Any> = outputs.first()
 
-        val priority = if (recipeObject.containsKey("priority")) Utils.toInt(recipeObject["priority"]) else 0
+        val priority = if (recipeObject.containsKey("priority")) Utils.toInt(recipeObject["priority"]!!) else 0
 
         val result = parseRecipeItem(first)
         val resultItem = result.toItem()
-        for (ingredient in inputs!!) {
+        for (ingredient in inputs) {
             val recipeItem = parseRecipeItem(ingredient)
             itemDescriptors.add(recipeItem)
         }
@@ -968,13 +973,13 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
     private fun parseShapeRecipe(recipeObject: Map<String, Any>): Recipe {
         val id = recipeObject["id"].toString()
         val uuid = UUID.fromString(recipeObject["uuid"].toString())
-        val outputs = recipeObject["output"] as MutableList<Map<String, Any>>?
+        val outputs = recipeObject["output"] as MutableList<Map<String, Any>>
 
-        val first = outputs!!.removeFirst()
-        val shape = (recipeObject["pattern"] as List<String?>).toArray<String>(EmptyArrays.EMPTY_STRINGS)
+        val first = outputs.removeFirst()
+        val shape = (recipeObject["pattern"] as List<String>).toTypedArray()
         val ingredients: MutableMap<Char, ItemDescriptor> = CharObjectHashMap()
 
-        val priority = Utils.toInt(recipeObject["priority"])
+        val priority = Utils.toInt(recipeObject["priority"]!!)
         val primaryResult = parseRecipeItem(first)
 
         val extraResults: MutableList<Item?> = ArrayList()
@@ -983,7 +988,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             extraResults.add(output.toItem())
         }
 
-        val input = (recipeObject["input"] as Map<*, *>?)!!
+        val input = (recipeObject["input"] as MutableMap<String, Any>)
         var mirror = false
         if (input.containsKey("assumeSymetry")) {
             mirror = input.remove("assumeSymetry").toString().toBoolean()
@@ -1017,15 +1022,13 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                 val item: Item
                 val name = data["item"].toString()
 
-                val count = if (data.containsKey("count")) Utils.toInt(data["count"]) else 1
+                val count = if (data.containsKey("count")) Utils.toInt(data["count"]!!) else 1
 
                 val nbt = data["nbt"] as String?
-                var nbtBytes: ByteArray? = null
-                nbtBytes = if (nbt != null) Base64.getDecoder()
-                    .decode(nbt) else EmptyArrays.EMPTY_BYTES //TODO: idk how to fix nbt, cuz we don't use Cloudburst NBT
+                val nbtBytes: ByteArray? = if (nbt != null) Base64.getDecoder().decode(nbt) else EmptyArrays.EMPTY_BYTES //TODO: idk how to fix nbt, cuz we don't use Cloudburst NBT
 
                 var meta: Int? = null
-                if (data.containsKey("data")) meta = Utils.toInt(data["data"])
+                if (data.containsKey("data")) meta = Utils.toInt(data["data"]!!)
 
                 //normal item
                 if (meta != null) {
@@ -1043,7 +1046,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
 
             ItemDescriptorType.ITEM_TAG -> {
                 val itemTag = data["tag"].toString()
-                val count = if (data.containsKey("count")) Utils.toInt(data["count"]) else 1
+                val count = if (data.containsKey("count")) Utils.toInt(data["count"]!!) else 1
                 ItemTagDescriptor(itemTag, count)
             }
 
@@ -1060,10 +1063,9 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
         val resultAmount: Int
     )
 
-    companion object {
+    companion object : Loggable {
         private val isLoad = AtomicBoolean(false)
         var recipeCount: Int = 0
-            get() = Companion.field
             private set
         val recipeComparator: Comparator<Item> = Comparator { i1: Item, i2: Item ->
             val i = MinecraftNamespaceComparator.compareFNV(i1.id, i2.id)
@@ -1072,7 +1074,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                     return@Comparator 1
                 } else if (i1.damage < i2.damage) {
                     return@Comparator -1
-                } else return@Comparator Integer.compare(i1.getCount(), i2.getCount())
+                } else return@Comparator i1.getCount().compareTo(i2.getCount())
             } else return@Comparator i
         }
 

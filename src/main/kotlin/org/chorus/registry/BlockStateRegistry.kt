@@ -1,10 +1,8 @@
 package org.chorus.registry
 
 import com.google.gson.JsonParser
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.Server
 import org.chorus.block.*
-import org.chorus.registry.RegisterException
 import org.chorus.utils.BlockColor
 import org.jetbrains.annotations.ApiStatus
 import java.io.BufferedReader
@@ -16,7 +14,7 @@ import java.io.InputStreamReader
  *
  * @author Cool_Loong
  */
-class BlockStateRegistry : IRegistry<Int, BlockState, BlockState> {
+class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
     override fun init() {
         try {
             javaClass.classLoader.getResourceAsStream("block_states.json").use { stream ->
@@ -47,16 +45,12 @@ class BlockStateRegistry : IRegistry<Int, BlockState, BlockState> {
         }
     }
 
-    override operator fun get(key: Int): BlockState {
+    override operator fun get(key: Int): BlockState? {
         return REGISTRY[key]
     }
 
     val allState: Set<BlockState>
         get() = REGISTRY.values.toSet()
-
-    override fun trim() {
-        REGISTRY.trim()
-    }
 
     override fun reload() {
         REGISTRY.clear()
@@ -90,6 +84,6 @@ class BlockStateRegistry : IRegistry<Int, BlockState, BlockState> {
     }
 
     companion object {
-        private val REGISTRY = Int2ObjectOpenHashMap<BlockState>()
+        private val REGISTRY = HashMap<Int, BlockState>()
     }
 }

@@ -1,11 +1,10 @@
 package org.chorus.tags
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectFunction
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.registry.BiomeRegistry.BiomeDefinition
 import org.chorus.registry.Registries
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
+import kotlin.collections.HashMap
 
 object BiomeTags {
     const val ANIMAL: String = "animal"
@@ -74,26 +73,22 @@ object BiomeTags {
     const val WARPED_FOREST: String = "warped_forest"
 
 
-    private val TAG_2_BIOMES = Object2ObjectOpenHashMap<String, MutableSet<String>>()
+    private val TAG_2_BIOMES = HashMap<String, MutableSet<String>>()
 
     init {
         val biomeDefinitions: Set<BiomeDefinition> = Registries.BIOME.biomeDefinitions
         val tmpMap = HashMap<String, Set<String>>()
         for (def in biomeDefinitions) {
-            tmpMap[def.name_hash] = HashSet(def.tags)
+            tmpMap[def.nameHash] = HashSet(def.tags)
         }
         for ((key, value) in tmpMap) {
             for (biomeTag in value) {
                 val tags = TAG_2_BIOMES.computeIfAbsent(
-                    biomeTag,
-                    Object2ObjectFunction<String, MutableSet<String>> { HashSet() })
+                    biomeTag
+                ) { HashSet() }
                 tags.add(key)
             }
         }
-    }
-
-    fun trim() {
-        TAG_2_BIOMES.trim()
     }
 
     fun containTag(biomeId: Int, tag: String?): Boolean {
@@ -113,7 +108,7 @@ object BiomeTags {
     }
 
     fun register(definition: BiomeDefinition) {
-        val name = definition.name_hash
+        val name = definition.nameHash
         val tags = definition.tags
         for (tag in tags) {
             val itemSet = TAG_2_BIOMES[tag]

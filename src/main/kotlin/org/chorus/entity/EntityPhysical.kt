@@ -1,6 +1,5 @@
 package org.chorus.entity
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
@@ -271,10 +270,10 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
                 return
             }
         }
-        val dxPositives: DoubleArrayList = DoubleArrayList(size)
-        val dxNegatives: DoubleArrayList = DoubleArrayList(size)
-        val dzPositives: DoubleArrayList = DoubleArrayList(size)
-        val dzNegatives: DoubleArrayList = DoubleArrayList(size)
+        val dxPositives = ArrayList<Double>(size)
+        val dxNegatives = ArrayList<Double>(size)
+        val dzPositives = ArrayList<Double>(size)
+        val dzNegatives = ArrayList<Double>(size)
 
         var stream: Stream<Entity> = collidingEntities.stream()
         if (size > 4) {

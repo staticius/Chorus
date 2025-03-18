@@ -4,8 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.recipe.descriptor.ItemDescriptor
 
 
-class RecipeUnlockingRequirement {
-    var context: UnlockingContext? = null
+class RecipeUnlockingRequirement(var context: UnlockingContext) {
     var ingredients: List<ItemDescriptor> = ObjectArrayList()
 
     enum class UnlockingContext {

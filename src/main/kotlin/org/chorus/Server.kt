@@ -437,24 +437,6 @@ class Server internal constructor(
         functionManager.reload()
 
         this.enablePlugins(PluginLoadOrder.STARTUP)
-        run {
-            Registries.POTION.trim()
-            Registries.PACKET.trim()
-            Registries.ENTITY.trim()
-            Registries.BLOCKENTITY.trim()
-            Registries.BLOCKSTATE_ITEMMETA.trim()
-            Registries.BLOCKSTATE.trim()
-            Registries.ITEM_RUNTIMEID.trim()
-            Registries.BLOCK.trim()
-            Registries.ITEM.trim()
-            Registries.CREATIVE.trim()
-            Registries.BIOME.trim()
-            Registries.FUEL.trim()
-            Registries.GENERATOR.trim()
-            Registries.GENERATE_STAGE.trim()
-            Registries.EFFECT.trim()
-            Registries.RECIPE.trim()
-        }
         this.enablePlugins(PluginLoadOrder.POSTWORLD)
         pluginManager.callEvent(ServerStartedEvent)
     }
@@ -1981,25 +1963,6 @@ class Server internal constructor(
 
         this.serverID = UUID.randomUUID()
         pluginManager.loadPlugins(this.pluginPath)
-        run {
-            //trim
-            Registries.POTION.trim()
-            Registries.PACKET.trim()
-            Registries.ENTITY.trim()
-            Registries.BLOCKENTITY.trim()
-            Registries.BLOCKSTATE_ITEMMETA.trim()
-            Registries.BLOCKSTATE.trim()
-            Registries.ITEM_RUNTIMEID.trim()
-            Registries.BLOCK.trim()
-            Registries.ITEM.trim()
-            Registries.CREATIVE.trim()
-            Registries.BIOME.trim()
-            Registries.FUEL.trim()
-            Registries.GENERATOR.trim()
-            Registries.GENERATE_STAGE.trim()
-            Registries.EFFECT.trim()
-            Registries.RECIPE.trim()
-        }
 
         this.enablePlugins(PluginLoadOrder.STARTUP)
 

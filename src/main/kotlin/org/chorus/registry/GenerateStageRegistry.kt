@@ -1,16 +1,14 @@
 package org.chorus.registry
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.level.generator.GenerateStage
 import org.chorus.level.generator.stages.FinishedStage
 import org.chorus.level.generator.stages.FlatGenerateStage
 import org.chorus.level.generator.stages.LightPopulationStage
-import org.chorus.registry.RegisterException
 import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.atomic.AtomicBoolean
 
 class GenerateStageRegistry :
-    IRegistry<String, GenerateStage, Class<out GenerateStage>?> {
+    IRegistry<String, GenerateStage, Class<out GenerateStage>> {
     override fun init() {
         if (isLoad.getAndSet(true)) return
         try {
@@ -59,10 +57,6 @@ class GenerateStageRegistry :
         return REGISTRY[key.lowercase()]
     }
 
-    override fun trim() {
-        REGISTRY.trim()
-    }
-
     override fun reload() {
         isLoad.set(false)
         REGISTRY.clear()
@@ -70,14 +64,14 @@ class GenerateStageRegistry :
     }
 
     @Throws(RegisterException::class)
-    override fun register(key: String, value: Class<out GenerateStage>?) {
+    override fun register(key: String, value: Class<out GenerateStage>) {
         if (REGISTRY.putIfAbsent(key.lowercase(), value) != null) {
             throw RegisterException("This generator has already been registered with the key: $key")
         }
     }
 
     companion object {
-        private val REGISTRY = Object2ObjectOpenHashMap<String?, Class<out GenerateStage>?>()
+        private val REGISTRY = HashMap<String, Class<out GenerateStage>>()
         private val isLoad = AtomicBoolean(false)
     }
 }

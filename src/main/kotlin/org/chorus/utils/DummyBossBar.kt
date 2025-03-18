@@ -3,10 +3,8 @@ package org.chorus.utils
 import org.chorus.Player
 import org.chorus.entity.Attribute
 import org.chorus.entity.Attribute.Companion.getAttribute
-import org.chorus.entity.Entity
 import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataMap
-import org.chorus.entity.data.EntityDataType
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.network.protocol.*
 import org.chorus.registry.Registries

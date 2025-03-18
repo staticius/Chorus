@@ -5,8 +5,6 @@ package org.chorus.item.customitem
  *
  *
  * Inherit this class to implement a custom item, override the methods in the [Item] to control the feature of the item.
- *
- * @author lt_name
  */
 interface CustomItem {
     /**
@@ -15,6 +13,5 @@ interface CustomItem {
      *
      * This method sets the definition of custom item
      */
-    @JvmField
-    val definition: CustomItemDefinition?
+    val definition: CustomItemDefinition
 }

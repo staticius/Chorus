@@ -1,7 +1,6 @@
 package org.chorus.block.customblock
 
 import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.block.Block
 import org.chorus.block.customblock.data.*
 import org.chorus.block.customblock.data.Materials.RenderMethod
@@ -28,7 +27,7 @@ import java.util.function.Consumer
 @JvmRecord
 data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?) {
     val runtimeId: Int
-        get() = INTERNAL_ALLOCATION_ID_MAP.getInt(identifier)
+        get() = INTERNAL_ALLOCATION_ID_MAP[identifier]!!
 
     class Builder(protected val customBlock: CustomBlock) {
         protected val identifier: String? = customBlock.id
@@ -98,9 +97,9 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
                 while (INTERNAL_ALLOCATION_ID_MAP.containsValue(
                         CUSTOM_BLOCK_RUNTIME_ID.getAndIncrement().also { blockId = it })
                 )
-                INTERNAL_ALLOCATION_ID_MAP.put(identifier, blockId)
+                    INTERNAL_ALLOCATION_ID_MAP[identifier] = blockId
             } else {
-                blockId = INTERNAL_ALLOCATION_ID_MAP.getInt(identifier)
+                blockId = INTERNAL_ALLOCATION_ID_MAP[identifier]!!
             }
             nbt!!.putCompound(
                 "vanilla_block_data", CompoundTag().putInt("block_id", blockId) /*.putString("material", "")*/
@@ -399,7 +398,7 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
                             is EnumPropertyType<*> -> {
                                 val enumList = ListTag<StringTag>()
                                 for (e in each.getValidValues()) {
-                                    enumList.add(StringTag((e as Enum<*>).name.lowercase()))
+                                    enumList.add(StringTag(e.name.lowercase()))
                                 }
                                 nbtList.add(CompoundTag().putString("name", each.getName()).putList("enum", enumList))
                             }
@@ -428,11 +427,11 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
     }
 
     companion object : Loggable {
-        private val INTERNAL_ALLOCATION_ID_MAP = Object2IntOpenHashMap<String?>()
+        private val INTERNAL_ALLOCATION_ID_MAP = HashMap<String?, Int>()
         private val CUSTOM_BLOCK_RUNTIME_ID = AtomicInteger(10000)
 
         fun getRuntimeId(identifier: String?): Int {
-            return INTERNAL_ALLOCATION_ID_MAP.getInt(identifier)
+            return INTERNAL_ALLOCATION_ID_MAP[identifier]!!
         }
 
         /**

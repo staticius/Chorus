@@ -18,7 +18,7 @@ class JarPluginResourcePackLoader(protected val jarPath: File) : ResourcePackLoa
                 var resourcePack: ResourcePack? = null
                 val fileExt = Files.getFileExtension(jar.name)
                 if (!jar.isDirectory) {
-                    if (fileExt == "jar" && JarPluginResourcePack.Companion.hasResourcePack(jar)) {
+                    if (fileExt == "jar" && JarPluginResourcePack.hasResourcePack(jar)) {
                         JarPluginResourcePackLoader.log.info(baseLang.tr("nukkit.resources.plugin.loading", jar.name))
                         resourcePack = JarPluginResourcePack(jar)
                     }

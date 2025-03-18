@@ -1,14 +1,13 @@
 package org.chorus.tags
 
 import com.google.gson.reflect.TypeToken
-import it.unimi.dsi.fastutil.objects.Object2ObjectFunction
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.Server
 import org.chorus.utils.JSONUtils
 import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
 object BlockTags {
@@ -47,8 +46,8 @@ object BlockTags {
     const val PNX_SHULKERBOX: String = "pnx:shulkerbox"
 
 
-    private val TAG_2_BLOCKS = Object2ObjectOpenHashMap<String, MutableSet<String>>()
-    private val BLOCKS_2_TAGS = Object2ObjectOpenHashMap<String, MutableSet<String>>()
+    private val TAG_2_BLOCKS = HashMap<String, MutableSet<String>>()
+    private val BLOCKS_2_TAGS = HashMap<String, MutableSet<String>>()
 
     init {
         try {
@@ -66,8 +65,8 @@ object BlockTags {
                 for ((key, value) in TAG_2_BLOCKS) {
                     for (block in value) {
                         val tags = BLOCKS_2_TAGS.computeIfAbsent(
-                            block,
-                            Object2ObjectFunction<String, MutableSet<String>> { HashSet() })
+                            block
+                        ) { HashSet() }
                         tags.add(key)
                     }
                 }
@@ -75,11 +74,6 @@ object BlockTags {
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
-    }
-
-    fun trim() {
-        TAG_2_BLOCKS.trim()
-        BLOCKS_2_TAGS.trim()
     }
 
     @JvmStatic

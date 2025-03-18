@@ -1,8 +1,6 @@
 package org.chorus.registry
 
 import com.google.gson.GsonBuilder
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.nbt.NBTIO.readTreeMapCompoundTag
 import org.chorus.nbt.tag.*
 import org.chorus.registry.BiomeRegistry.BiomeDefinition
@@ -13,6 +11,7 @@ import java.nio.ByteOrder
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.stream.Collectors
+import kotlin.collections.HashMap
 
 class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
     override fun init() {
@@ -27,7 +26,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
                     MutableMap::class.java
                 )
                 for ((key, value) in map) {
-                    NAME2ID.put(key, (value as Map<*, *>)["id"].toString().toInt())
+                    NAME2ID[key] = (value as Map<*, *>)["id"].toString().toInt()
                 }
             }
         } catch (e: IOException) {
@@ -40,7 +39,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
                 val compoundTag = readTreeMapCompoundTag(stream, ByteOrder.BIG_ENDIAN, true)
                 val tags: Map<String, Tag<*>> = compoundTag.getTags()
                 for ((key, value1) in tags) {
-                    val id = NAME2ID.getInt(key)
+                    val id = NAME2ID[key]!!
                     val value = value1 as CompoundTag?
                     val tags1 = value!!.getList("tags", StringTag::class.java)
                     val list =
@@ -77,12 +76,12 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
         return DEFINITIONS[key]
     }
 
-    fun get(biomeName: String?): BiomeDefinition? {
-        return get(NAME2ID.getInt(biomeName))
+    fun get(biomeName: String): BiomeDefinition? {
+        return get(NAME2ID[biomeName] ?: return null)
     }
 
-    fun getBiomeId(biomeName: String?): Int {
-        return NAME2ID.getInt(biomeName)
+    fun getBiomeId(biomeName: String): Int? {
+        return NAME2ID[biomeName]
     }
 
     val biomeDefinitionListPacketData: ByteArray
@@ -102,11 +101,6 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
     val biomeDefinitions: @UnmodifiableView MutableSet<BiomeDefinition>
         get() = Collections.unmodifiableSet(HashSet(DEFINITIONS.values))
 
-    override fun trim() {
-        DEFINITIONS.trim()
-        NAME2ID.trim()
-    }
-
     override fun reload() {
         isLoad.set(false)
         DEFINITIONS.clear()
@@ -118,7 +112,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
     @Throws(RegisterException::class)
     override fun register(key: Int, value: BiomeDefinition) {
         if (DEFINITIONS.putIfAbsent(key, value) == null) {
-            NAME2ID.put(value.name_hash, key)
+            NAME2ID[value.nameHash] = key
             REGISTRY.add(value.toNBT())
         } else {
             throw RegisterException("This biome has already been registered with the id: $key")
@@ -128,13 +122,13 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
     @JvmRecord
     data class BiomeDefinition(
         val ash: Float,
-        val blue_spores: Float,
+        val blueSpores: Float,
         val depth: Float,
         val downfall: Float,
         val height: Float,
-        @JvmField val name_hash: String,
+        @JvmField val nameHash: String,
         val rain: Byte,
-        val red_spores: Float,
+        val redSpores: Float,
         @JvmField val tags: MutableSet<String>,
         val temperature: Float,
         val waterColorA: Float,
@@ -155,13 +149,13 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
             }
             return CompoundTag()
                 .putFloat("ash", ash)
-                .putFloat("blue_spores", blue_spores)
+                .putFloat("blue_spores", blueSpores)
                 .putFloat("depth", depth)
                 .putFloat("downfall", downfall)
                 .putFloat("height", height)
-                .putString("name_hash", name_hash!!)
+                .putString("name_hash", nameHash)
                 .putByte("rain", rain.toInt())
-                .putFloat("red_spores", red_spores)
+                .putFloat("red_spores", redSpores)
                 .putList("tags", stringTags)
                 .putFloat("temperature", temperature)
                 .putFloat("waterColorA", waterColorA)
@@ -175,9 +169,9 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
     }
 
     companion object {
-        private val DEFINITIONS = Int2ObjectOpenHashMap<BiomeDefinition?>(0xFF)
-        private val NAME2ID = Object2IntOpenHashMap<String?>(0xFF)
-        private val REGISTRY: MutableList<CompoundTag?> = ArrayList(0xFF)
+        private val DEFINITIONS = HashMap<Int, BiomeDefinition>(0xFF)
+        private val NAME2ID = HashMap<String, Int>(0xFF)
+        private val REGISTRY: MutableList<CompoundTag> = mutableListOf()
         private val isLoad = AtomicBoolean(false)
     }
 }

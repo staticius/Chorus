@@ -2,34 +2,31 @@ package org.chorus.registry
 
 import com.google.gson.Gson
 import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
-import org.chorus.item.Item.equals
 import org.chorus.nbt.NBTIO.read
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemCategory
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
+import org.chorus.utils.Loggable
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.ByteOrder
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.collections.HashMap
+import kotlin.collections.LinkedHashMap
+import kotlin.collections.LinkedHashSet
 
-/**
- * Allay Project 12/21/2023
- *
- * @author Cool_Loong
- */
-
-class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
+class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
     override fun init() {
         if (isLoad.getAndSet(true)) return
 
         try {
             CreativeItemRegistry::class.java.classLoader.getResourceAsStream("creative_items.json").use { input ->
+                if (input == null) {
+                    throw RuntimeException("Could not load creative_items.json")
+                }
                 val data = Gson().fromJson<Map<*, *>>(
                     InputStreamReader(input),
                     MutableMap::class.java
@@ -54,8 +51,8 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
                     val name = tag["id"].toString()
                     var item = get(name, damage, 1, nbt, false)
                     item.setCompoundTag(nbt)
-                    if (ItemRegistry.getItemComponents().containsCompound(name)) {
-                        item.setNamedTag(ItemRegistry.getItemComponents().getCompound(name).getCompound("components"))
+                    if (ItemRegistry.itemComponents.containsCompound(name)) {
+                        item.setNamedTag(ItemRegistry.itemComponents.getCompound(name).getCompound("components"))
                     }
                     if (item.isNothing || (item.isBlock() && item.blockUnsafe!!.isAir)) {
                         item = Item.AIR
@@ -78,7 +75,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
                             }
                         }
                     } else {
-                        INTERNAL_DIFF_ITEM.put(i, item.clone())
+                        INTERNAL_DIFF_ITEM[i] = item.clone()
                         item.blockUnsafe = null
                     }
                     creativeItemData.add(CreativeItemData(item, groupIndex))
@@ -102,19 +99,19 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
      * @return Unable to find return -1
      */
     fun getCreativeItemIndex(item: Item): Int {
-        for (i in 0..<MAP.size()) {
-            if (item.equals(MAP[i], !item.isTool)) {
+        for (i in 0..<MAP.size) {
+            if (item.equals(MAP[i]!!, !item.isTool)) {
                 return i
             }
         }
         return -1
     }
 
-    fun getCreativeItem(index: Int): Item {
+    fun getCreativeItem(index: Int): Item? {
         if (INTERNAL_DIFF_ITEM.containsKey(index)) {
             return INTERNAL_DIFF_ITEM[index]
         }
-        return if (index >= 0 && index < MAP.size()) MAP[index] else Item.AIR
+        return if (index >= 0 && index < MAP.size) MAP[index] else Item.AIR
     }
 
     /**
@@ -132,13 +129,13 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
         /**
          * Get all creative items
          */
-        get() = MAP.values.toArray<Item> { _Dummy_.__Array__() }
+        get() = MAP.values.toTypedArray()
 
     /**
      * Add an item to [CreativeItemRegistry]
      */
     fun addCreativeItem(item: Item) {
-        val i = MAP.lastIntKey()
+        val i = MAP.size - 1
         try {
             this.register(i + 1, item.clone())
         } catch (e: RegisterException) {
@@ -155,9 +152,9 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
     fun removeCreativeItem(item: Item) {
         val index = getCreativeItemIndex(item)
         if (index != -1) {
-            val lastIntKey = MAP.lastIntKey()
+            val lastIntKey = MAP.size - 1
             for (i in index..<lastIntKey) {
-                MAP.put(i, MAP[i + 1])
+                MAP[i] = MAP[i + 1]!!
             }
             MAP.remove(lastIntKey)
             INTERNAL_DIFF_ITEM.remove(index)
@@ -184,16 +181,11 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
         return false
     }
 
-    override operator fun get(key: Int): Item {
+    override operator fun get(key: Int): Item? {
         if (INTERNAL_DIFF_ITEM.containsKey(key)) {
             return INTERNAL_DIFF_ITEM[key]
         }
         return MAP[key]
-    }
-
-    override fun trim() {
-        MAP.trim()
-        INTERNAL_DIFF_ITEM.trim()
     }
 
     override fun reload() {
@@ -205,9 +197,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
 
     @Throws(RegisterException::class)
     override fun register(key: Int, value: Item) {
-        if (MAP.putIfAbsent(key, value) != null || creativeItemData.stream()
-                .anyMatch { data: CreativeItemData -> data.getItem().equals(value) }
-        ) {
+        if (MAP.putIfAbsent(key, value) != null || creativeItemData.stream().anyMatch { it.item == value }) {
             return
             //throw new RegisterException("This creative item has already been registered with the identifier: " + key);
         } else {
@@ -215,14 +205,12 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item, Item> {
         }
     }
 
-    companion object {
-        val MAP: Int2ObjectLinkedOpenHashMap<Item> = Int2ObjectLinkedOpenHashMap()
-        val INTERNAL_DIFF_ITEM: Int2ObjectOpenHashMap<Item> = Int2ObjectOpenHashMap()
+    companion object : Loggable {
+        val MAP: MutableMap<Int, Item> = LinkedHashMap()
+        val INTERNAL_DIFF_ITEM: MutableMap<Int, Item> = HashMap()
         val isLoad: AtomicBoolean = AtomicBoolean(false)
 
-        val creativeGroups: ObjectLinkedOpenHashSet<CreativeItemGroup> = ObjectLinkedOpenHashSet()
-            get() = Companion.field
-        val creativeItemData: ObjectLinkedOpenHashSet<CreativeItemData> = ObjectLinkedOpenHashSet()
-            get() = Companion.field
+        val creativeGroups: MutableSet<CreativeItemGroup> = LinkedHashSet()
+        val creativeItemData: MutableSet<CreativeItemData> = LinkedHashSet()
     }
 }

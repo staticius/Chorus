@@ -2,8 +2,7 @@ package org.chorus.network.protocol.types.inventory.creative
 
 import org.chorus.item.Item
 
-
-class CreativeItemData {
-    private val item: Item? = null
-    private val groupId = 0
-}
+data class CreativeItemData (
+    val item: Item,
+    val groupId: Int
+)

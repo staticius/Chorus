@@ -1,8 +1,5 @@
 package org.chorus.registry
 
-
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.ObjectSet
 import me.sunlan.fastreflection.FastConstructor
 import me.sunlan.fastreflection.FastMemberLoader
 import org.chorus.block.BlockID
@@ -13,16 +10,12 @@ import org.chorus.nbt.NBTIO.readCompressed
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.plugin.Plugin
 import org.chorus.registry.ItemRuntimeIdRegistry.RuntimeEntry
-import org.chorus.registry.RegisterException
 import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.collections.HashMap
 import kotlin.collections.set
-
-/**
- * @author Cool_Loong
- */
 
 class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
     val customItemDefinition: @UnmodifiableView MutableMap<String?, CustomItemDefinition?>
@@ -552,6 +545,9 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
     private fun loadItemComponents() {
         try {
             ItemRegistry::class.java.classLoader.getResourceAsStream("item_components.nbt").use { stream ->
+                if (stream == null) {
+                    throw RuntimeException("Couldn't load item_components.nbt")
+                }
                 itemComponents = readCompressed(stream)
             }
         } catch (e: IOException) {
@@ -636,17 +632,12 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
         }
     }
 
-    val all: ObjectSet<String?>
+    val all: MutableSet<String>
         get() {
-            val ids =
-                CACHE_CONSTRUCTORS.keys
+            val ids = CACHE_CONSTRUCTORS.keys
             ids.addAll(CUSTOM_ITEM_DEFINITIONS.keys)
             return ids
         }
-
-    override fun trim() {
-        CACHE_CONSTRUCTORS.trim()
-    }
 
     override fun reload() {
         isLoad.set(false)
@@ -686,18 +677,18 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
         try {
             if (CustomItem::class.java.isAssignableFrom(value)) {
                 val memberLoader: FastMemberLoader =
-                    IRegistry.Companion.fastMemberLoaderCache.computeIfAbsent(plugin.name) { p: String? ->
+                    IRegistry.fastMemberLoaderCache.computeIfAbsent(plugin.name) {
                         FastMemberLoader(plugin.pluginClassLoader)
                     }
                 val c = FastConstructor.create(value.getConstructor(), memberLoader, false)
                 val customItem = c.invoke(null as Any?) as CustomItem
-                val key = customItem.definition!!.identifier
+                val key = customItem.definition.identifier
                 if (CACHE_CONSTRUCTORS.putIfAbsent(key, c) == null) {
                     CUSTOM_ITEM_DEFINITIONS[key] = customItem.definition
                     Registries.ITEM_RUNTIMEID.registerCustomRuntimeItem(
                         RuntimeEntry(
                             key,
-                            customItem.definition.getRuntimeId(),
+                            customItem.definition.runtimeId,
                             true
                         )
                     )
@@ -726,11 +717,11 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
     }
 
     companion object {
-        private val CACHE_CONSTRUCTORS = Object2ObjectOpenHashMap<String?, FastConstructor<out Item>?>()
-        private val CUSTOM_ITEM_DEFINITIONS: MutableMap<String?, CustomItemDefinition?> = HashMap()
+        private val CACHE_CONSTRUCTORS = HashMap<String, FastConstructor<out Item>>()
+        private val CUSTOM_ITEM_DEFINITIONS: MutableMap<String, CustomItemDefinition> = HashMap()
         private val isLoad = AtomicBoolean(false)
 
-
-        private var itemComponents = CompoundTag()
+        var itemComponents = CompoundTag()
+            private set
     }
 }

@@ -1,6 +1,5 @@
 package org.chorus.registry
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import me.sunlan.fastreflection.FastConstructor
 import me.sunlan.fastreflection.FastMemberLoader
 import org.chorus.block.*
@@ -16,6 +15,7 @@ import java.lang.reflect.Modifier
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
+import kotlin.collections.HashMap
 import kotlin.collections.set
 
 class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
@@ -1111,11 +1111,6 @@ class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
         }
     }
 
-    override fun trim() {
-        CACHE_CONSTRUCTORS.trim()
-        PROPERTIES.trim()
-    }
-
     val keySet: @UnmodifiableView MutableSet<String>
         get() = Collections.unmodifiableSet(KEYSET)
 
@@ -1394,9 +1389,9 @@ class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
     companion object {
         private val isLoad = AtomicBoolean(false)
         private val KEYSET: MutableSet<String> = HashSet()
-        private val CACHE_CONSTRUCTORS = Object2ObjectOpenHashMap<String, FastConstructor<out Block>?>()
-        private val PROPERTIES = Object2ObjectOpenHashMap<String, BlockProperties>()
-        private val CUSTOM_BLOCK_DEFINITIONS: MutableMap<Plugin, MutableList<CustomBlockDefinition?>> = LinkedHashMap()
+        private val CACHE_CONSTRUCTORS = HashMap<String, FastConstructor<out Block>>()
+        private val PROPERTIES = HashMap<String, BlockProperties>()
+        private val CUSTOM_BLOCK_DEFINITIONS: MutableMap<Plugin, MutableList<CustomBlockDefinition>> = LinkedHashMap()
 
         val skipBlockSet: Set<String> = setOf(
             "minecraft:camera",

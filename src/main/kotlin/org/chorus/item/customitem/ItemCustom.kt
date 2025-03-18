@@ -17,7 +17,7 @@ abstract class ItemCustom(id: String) : Item(id), CustomItem {
      *
      * This method sets the definition of custom item
      */
-    abstract override val definition: CustomItemDefinition?
+    abstract override val definition: CustomItemDefinition
 
     override fun clone(): Item {
         return super.clone() as ItemCustom

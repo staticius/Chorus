@@ -1,21 +1,19 @@
 package org.chorus.registry
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import me.sunlan.fastreflection.FastConstructor
 import org.chorus.network.protocol.*
-import org.chorus.registry.RegisterException
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.annotation.Nonnegative
 
-class PacketRegistry : IRegistry<Int?, DataPacket?, Class<out DataPacket?>> {
-    private val PACKET_POOL = Int2ObjectOpenHashMap<FastConstructor<out DataPacket>?>(256)
+class PacketRegistry : IRegistry<Int, DataPacket?, Class<out DataPacket>> {
+    private val packetPool = HashMap<Int, FastConstructor<out DataPacket>>(256)
     override fun init() {
         if (isLoad.getAndSet(true)) return
         registerPackets()
     }
 
-    override fun get(key: Int?): DataPacket? {
-        val fastConstructor = PACKET_POOL[key]
+    override operator fun get(key: Int): DataPacket? {
+        val fastConstructor = packetPool[key]
         return if (fastConstructor == null) {
             null
         } else {
@@ -25,41 +23,24 @@ class PacketRegistry : IRegistry<Int?, DataPacket?, Class<out DataPacket?>> {
                 throw RuntimeException(e)
             }
         }
-    }
-
-    operator fun get(key: Int): DataPacket? {
-        val fastConstructor = PACKET_POOL[key]
-        return if (fastConstructor == null) {
-            null
-        } else {
-            try {
-                fastConstructor.invoke() as DataPacket
-            } catch (e: Throwable) {
-                throw RuntimeException(e)
-            }
-        }
-    }
-
-    override fun trim() {
-        PACKET_POOL.trim()
     }
 
     override fun reload() {
         isLoad.set(false)
-        PACKET_POOL.clear()
+        packetPool.clear()
         init()
     }
 
     /**
      * Register a packet to the pool. Using from 1.19.70.
      *
-     * @param id    The packet id, non-negative int
-     * @param clazz The packet class
+     * @param key    The packet id, non-negative int
+     * @param value The packet class
      */
     @Throws(RegisterException::class)
-    override fun register(id: Int?, clazz: Class<out DataPacket?>) {
+    override fun register(key: Int, value: Class<out DataPacket>) {
         try {
-            if (PACKET_POOL.putIfAbsent(id, FastConstructor.create(clazz.getConstructor())) != null) {
+            if (packetPool.putIfAbsent(key, FastConstructor.create(value.getConstructor())) != null) {
                 throw RegisterException("The packet has been registered!")
             }
         } catch (e: NoSuchMethodException) {
@@ -69,7 +50,7 @@ class PacketRegistry : IRegistry<Int?, DataPacket?, Class<out DataPacket?>> {
 
     private fun register0(@Nonnegative id: Int, clazz: Class<out DataPacket>) {
         try {
-            if (PACKET_POOL.putIfAbsent(id, FastConstructor.create(clazz.getConstructor())) != null) {
+            if (packetPool.putIfAbsent(id, FastConstructor.create(clazz.getConstructor())) != null) {
                 throw RegisterException("The packet has been registered!")
             }
         } catch (ignored: NoSuchMethodException) {
@@ -78,7 +59,7 @@ class PacketRegistry : IRegistry<Int?, DataPacket?, Class<out DataPacket?>> {
     }
 
     private fun registerPackets() {
-        PACKET_POOL.clear()
+        packetPool.clear()
 
         this.register0(ProtocolInfo.SERVER_TO_CLIENT_HANDSHAKE_PACKET, ServerToClientHandshakePacket::class.java)
         this.register0(ProtocolInfo.CLIENT_TO_SERVER_HANDSHAKE_PACKET, ClientToServerHandshakePacket::class.java)
@@ -265,8 +246,6 @@ class PacketRegistry : IRegistry<Int?, DataPacket?, Class<out DataPacket?>> {
         this.register0(ProtocolInfo.SERVERBOUND_DIAGNOSTICS_PACKET, ServerboundDiagnosticsPacket::class.java)
         this.register0(ProtocolInfo.CAMERA_AIM_ASSIST_PRESETS_PACKET, CameraAimAssistPresetsPacket::class.java)
         this.register0(ProtocolInfo.CLIENT_CAMERA_AIM_ASSIST_PACKET, ClientCameraAimAssistPacket::class.java)
-
-        PACKET_POOL.trim()
     }
 
     companion object {

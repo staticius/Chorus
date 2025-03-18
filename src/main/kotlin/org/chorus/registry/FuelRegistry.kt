@@ -1,11 +1,10 @@
 package org.chorus.registry
 
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.block.*
 import org.chorus.item.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-class FuelRegistry : IRegistry<Item, Int, Int> {
+class FuelRegistry : IRegistry<Item, Int?, Int> {
     override fun init() {
         if (isLoad.getAndSet(true)) return
         register0(BlockID.COAL_BLOCK, 16000)
@@ -124,16 +123,16 @@ class FuelRegistry : IRegistry<Item, Int, Int> {
         register0(ItemID.OAK_SIGN, 200)
 
 
-        register0(Block.ACACIA_HANGING_SIGN, 200)
-        register0(Block.BAMBOO_HANGING_SIGN, 200)
-        register0(Block.BIRCH_HANGING_SIGN, 200)
-        register0(Block.CHERRY_HANGING_SIGN, 200)
-        register0(Block.JUNGLE_HANGING_SIGN, 200)
-        register0(Block.MANGROVE_HANGING_SIGN, 200)
-        register0(Block.SPRUCE_HANGING_SIGN, 200)
-        register0(Block.DARK_OAK_HANGING_SIGN, 200)
+        register0(BlockID.ACACIA_HANGING_SIGN, 200)
+        register0(BlockID.BAMBOO_HANGING_SIGN, 200)
+        register0(BlockID.BIRCH_HANGING_SIGN, 200)
+        register0(BlockID.CHERRY_HANGING_SIGN, 200)
+        register0(BlockID.JUNGLE_HANGING_SIGN, 200)
+        register0(BlockID.MANGROVE_HANGING_SIGN, 200)
+        register0(BlockID.SPRUCE_HANGING_SIGN, 200)
+        register0(BlockID.DARK_OAK_HANGING_SIGN, 200)
         register0(ItemID.PALE_OAK_HANGING_SIGN, 200)
-        register0(Block.OAK_HANGING_SIGN, 200)
+        register0(BlockID.OAK_HANGING_SIGN, 200)
 
         register0(BlockID.WOODEN_PRESSURE_PLATE, 300)
         register0(BlockID.SPRUCE_PRESSURE_PLATE, 300)
@@ -288,20 +287,20 @@ class FuelRegistry : IRegistry<Item, Int, Int> {
         register0(BlockID.BARREL, 300)
     }
 
-    override fun get(key: Item): Int {
+    override fun get(key: Item): Int? {
         val hash = if (key.isBlock()) key.blockUnsafe!!.runtimeId.toString()
         else key.id + "#" + key.damage
-        return REGISTRY.getInt(hash)
+        return REGISTRY[hash]
     }
 
     /**
      * @param item item
      * @return fuel duration, if it cannot be used as fuel, return -1.
      */
-    fun getFuelDuration(item: Item): Int {
-        var id = REGISTRY.getInt(item.id + "#" + item.damage)
+    fun getFuelDuration(item: Item): Int? {
+        var id = REGISTRY[item.id + "#" + item.damage]
         if (id == 0 && item.isBlock()) {
-            id = REGISTRY.getInt(item.blockId + "#" + item.damage)
+            id = REGISTRY[item.blockId + "#" + item.damage]
         }
         return id
     }
@@ -314,10 +313,6 @@ class FuelRegistry : IRegistry<Item, Int, Int> {
         return b
     }
 
-    override fun trim() {
-        REGISTRY.trim()
-    }
-
     override fun reload() {
         isLoad.set(false)
         REGISTRY.clear()
@@ -328,8 +323,7 @@ class FuelRegistry : IRegistry<Item, Int, Int> {
     override fun register(key: Item, value: Int) {
         val hash = if (key.isBlock()) key.blockUnsafe!!.runtimeId.toString()
         else key.id + "#" + key.damage
-        if (REGISTRY.putIfAbsent(hash, value) == 0) {
-        } else {
+        if (REGISTRY.putIfAbsent(hash, value) != 0) {
             throw RegisterException("This Fuel has already been registered with the key: $key")
         }
     }
@@ -344,8 +338,7 @@ class FuelRegistry : IRegistry<Item, Int, Int> {
 
     private fun register0(key: String, value: Int) {
         try {
-            if (REGISTRY.putIfAbsent("$key#0", value) == 0) {
-            } else {
+            if (REGISTRY.putIfAbsent("$key#0", value) != 0) {
                 throw RegisterException("This Fuel has already been registered with the key: $key")
             }
         } catch (e: RegisterException) {
@@ -355,8 +348,7 @@ class FuelRegistry : IRegistry<Item, Int, Int> {
 
     private fun register1(key: String, meta: Int, value: Int) {
         try {
-            if (REGISTRY.putIfAbsent("$key#$meta", value) == 0) {
-            } else {
+            if (REGISTRY.putIfAbsent("$key#$meta", value) != 0) {
                 throw RegisterException("This Fuel has already been registered with the key: $key")
             }
         } catch (e: RegisterException) {
@@ -365,7 +357,7 @@ class FuelRegistry : IRegistry<Item, Int, Int> {
     }
 
     companion object {
-        private val REGISTRY = Object2IntOpenHashMap<String>()
+        private val REGISTRY = HashMap<String, Int>()
         private val isLoad = AtomicBoolean(false)
     }
 }

@@ -1,8 +1,6 @@
 package org.chorus.item.customitem
 
 import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus.block.BlockID
 import org.chorus.item.*
 import org.chorus.item.customitem.data.CreativeCategory
@@ -35,7 +33,7 @@ import kotlin.collections.set
  */
 
 @JvmRecord
-data class CustomItemDefinition(@JvmField val identifier: String?, @JvmField val nbt: CompoundTag) : BlockID {
+data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val nbt: CompoundTag) : BlockID {
     val displayName: String?
         get() {
             if (!nbt.getCompound("components").contains("minecraft:display_name")) return null
@@ -615,12 +613,12 @@ data class CustomItemDefinition(@JvmField val identifier: String?, @JvmField val
             var toolBlocks: MutableMap<String, Map<String, DigProperty>> = HashMap()
 
             init {
-                val pickaxeBlocks = Object2ObjectOpenHashMap<String, DigProperty>()
-                val axeBlocks = Object2ObjectOpenHashMap<String, DigProperty>()
-                val shovelBlocks = Object2ObjectOpenHashMap<String, DigProperty>()
-                val hoeBlocks = Object2ObjectOpenHashMap<String, DigProperty>()
-                val swordBlocks = Object2ObjectOpenHashMap<String, DigProperty>()
-                for (name in java.util.List.of<String>(
+                val pickaxeBlocks = HashMap<String, DigProperty>()
+                val axeBlocks = HashMap<String, DigProperty>()
+                val shovelBlocks = HashMap<String, DigProperty>()
+                val hoeBlocks = HashMap<String, DigProperty>()
+                val swordBlocks = HashMap<String, DigProperty>()
+                for (name in listOf<String>(
                     BlockID.ACACIA_SLAB,
                     BlockID.BAMBOO_MOSAIC_SLAB,
                     BlockID.BAMBOO_SLAB,
@@ -1230,7 +1228,7 @@ data class CustomItemDefinition(@JvmField val identifier: String?, @JvmField val
     }
 
     companion object {
-        private val INTERNAL_ALLOCATION_ID_MAP = Object2IntOpenHashMap<String?>()
+        private val INTERNAL_ALLOCATION_ID_MAP = HashMap<String?, Int>()
         private val nextRuntimeId = AtomicInteger(10000)
 
         /**

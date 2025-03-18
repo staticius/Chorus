@@ -1,39 +1,26 @@
 package org.chorus.registry
 
-
 import com.google.gson.JsonParser
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
-import org.chorus.registry.RegisterException
 import org.chorus.utils.BinaryStream
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
- * @author Cool_Loong
- */
-
 class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
-    val itemPalette: ByteArray
-        get() = Companion.itemPalette
-
     private fun generatePalette() {
         val paletteBuffer = BinaryStream()
         val verify = HashMap<Int, Boolean?>()
-        paletteBuffer.putUnsignedVarInt((REGISTRY.size() + CUSTOM_REGISTRY.size()).toLong())
-        for (entry in REGISTRY.object2IntEntrySet()) {
+        paletteBuffer.putUnsignedVarInt((REGISTRY.size + CUSTOM_REGISTRY.size).toLong())
+        for (entry in REGISTRY.entries) {
             paletteBuffer.putString(entry.key)
-            val rid = entry.intValue
+            val rid = entry.value
             paletteBuffer.putLShort(rid)
             require(verify.putIfAbsent(rid, true) == null) { "Runtime ID is already registered: $rid" }
             paletteBuffer.putBoolean(false) //Vanilla Item doesnt component item
         }
-        for ((key, value) in CUSTOM_REGISTRY.object2ObjectEntrySet()) {
+        for ((key, value) in CUSTOM_REGISTRY.entries) {
             paletteBuffer.putString(key)
-            val rid = value!!.runtimeId
+            val rid = value.runtimeId
             paletteBuffer.putLShort(rid)
             require(verify.putIfAbsent(rid, true) == null) { "Runtime ID is already registered: $rid" }
             paletteBuffer.putBoolean(value.isComponent)
@@ -63,7 +50,7 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
                         )
                     )
                 }
-                trim()
+                generatePalette()
             }
         } catch (e: IOException) {
             throw RuntimeException(e)
@@ -71,8 +58,8 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
     }
 
     override fun get(key: String): Int {
-        val i = REGISTRY.getInt(key)
-        if (i == Int.MAX_VALUE) {
+        val i = REGISTRY[key]
+        if (i == null) {
             val runtimeEntry = CUSTOM_REGISTRY[key]
             return runtimeEntry?.runtimeId ?: Int.MAX_VALUE
         }
@@ -80,8 +67,8 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
     }
 
     fun getInt(key: String?): Int {
-        val i = REGISTRY.getInt(key)
-        if (i == Int.MAX_VALUE) {
+        val i = REGISTRY.get(key = key)
+        if (i == null) {
             val runtimeEntry = CUSTOM_REGISTRY[key]
             return runtimeEntry?.runtimeId ?: Int.MAX_VALUE
         }
@@ -90,12 +77,6 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
 
     fun getIdentifier(runtimeId: Int): String? {
         return ID2NAME[runtimeId]
-    }
-
-    override fun trim() {
-        REGISTRY.trim()
-        CUSTOM_REGISTRY.trim()
-        generatePalette()
     }
 
     override fun reload() {
@@ -108,7 +89,7 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
     @Throws(RegisterException::class)
     override fun register(key: String, value: Int) {
         if (REGISTRY.putIfAbsent(key, value) == Int.MAX_VALUE) {
-            ID2NAME.put(value, key)
+            ID2NAME[value] = key
         } else {
             throw RegisterException("The item: " + key + "runtime id has been registered!")
         }
@@ -117,46 +98,42 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
     @Throws(RegisterException::class)
     fun registerCustomRuntimeItem(entry: RuntimeEntry) {
         if (CUSTOM_REGISTRY.putIfAbsent(entry.identifier, entry) == null) {
-            ID2NAME.put(entry.runtimeId, entry.identifier)
-            ITEMDATA.add(ItemData(entry.identifier, entry.runtimeId, 1, entry.isComponent))
+            ID2NAME[entry.runtimeId] = entry.identifier
+            ITEM_DATA.add(ItemData(entry.identifier, entry.runtimeId, 1, entry.isComponent))
         } else {
             throw RegisterException("The item: " + entry.identifier + " runtime id has been registered!")
         }
     }
 
-    private fun register0(key: String?, value: Int) {
+    private fun register0(key: String, value: Int) {
         if (REGISTRY.putIfAbsent(key, value) == Int.MAX_VALUE) {
-            ID2NAME.put(value, key)
+            ID2NAME[value] = key
         }
     }
 
-    fun register1(entry: ItemData) {
-        if (!ITEMDATA.contains(entry)) {
-            ITEMDATA.add(entry)
+    private fun register1(entry: ItemData) {
+        if (!ITEM_DATA.contains(entry)) {
+            ITEM_DATA.add(entry)
             register0(entry.identifier, entry.runtimeId)
         }
     }
 
     @JvmRecord
-    data class RuntimeEntry(val identifier: String?, val runtimeId: Int, val isComponent: Boolean)
+    data class RuntimeEntry(val identifier: String, val runtimeId: Int, val isComponent: Boolean)
 
     @JvmRecord
-    data class ItemData(val identifier: String?, val runtimeId: Int, val version: Int, val componentBased: Boolean)
+    data class ItemData(val identifier: String, val runtimeId: Int, val version: Int, val componentBased: Boolean)
     companion object {
         private val isLoad = AtomicBoolean(false)
 
-        private val REGISTRY = Object2IntOpenHashMap<String?>()
-        private val CUSTOM_REGISTRY = Object2ObjectOpenHashMap<String?, RuntimeEntry?>()
+        private val REGISTRY = HashMap<String, Int>()
+        private val CUSTOM_REGISTRY = HashMap<String, RuntimeEntry>()
 
-        init {
-            REGISTRY.defaultReturnValue(Int.MAX_VALUE)
-        }
-
-        private val ID2NAME = Int2ObjectOpenHashMap<String?>()
+        private val ID2NAME = HashMap<Int, String>()
 
 
-        private val ITEMDATA = ObjectOpenHashSet<ItemData>()
+        private val ITEM_DATA = HashSet<ItemData>()
 
-        private var itemPalette: ByteArray
+        private lateinit var itemPalette: ByteArray
     }
 }

@@ -1,21 +1,16 @@
 package org.chorus.block
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.event.Event.isCancelled
 import org.chorus.event.block.ComposterEmptyEvent
-import org.chorus.event.block.ComposterEmptyEvent.getDrop
-import org.chorus.event.block.ComposterEmptyEvent.getNewLevel
-import org.chorus.event.block.ComposterFillEvent.isSuccess
 import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
 import java.util.*
+import kotlin.collections.HashMap
 
 class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
@@ -142,8 +137,8 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.COMPOSTER, CommonBlockProperties.COMPOSTER_FILL_LEVEL)
 
-        private val compostableItems: Object2IntMap<String> = Object2IntOpenHashMap()
-        private val compostableBlocks: Object2IntMap<BlockState?> = Object2IntOpenHashMap()
+        private val compostableItems: MutableMap<String, Int> = HashMap()
+        private val compostableBlocks: MutableMap<BlockState, Int> = HashMap()
         val OUTPUT_ITEM: Item = ItemBoneMeal()
 
         fun init() {
