@@ -7,10 +7,6 @@ import org.chorus.recipe.descriptor.ItemDescriptor
 import org.chorus.registry.RecipeRegistry
 import java.util.*
 
-/**
- * @author joserobjr
- * @since 2021-09-25
- */
 class UserDataShapelessRecipe(
     recipeId: String?,
     uuid: UUID?,

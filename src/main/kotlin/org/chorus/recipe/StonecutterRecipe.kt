@@ -5,12 +5,11 @@ import org.chorus.network.protocol.types.RecipeUnlockingRequirement
 import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.registry.RecipeRegistry
 import java.util.*
-import java.util.List
 import kotlin.collections.first
 
 class StonecutterRecipe(
     recipeId: String?,
-    uuid: UUID?,
+    val uuid: UUID?,
     priority: Int,
     result: Item,
     ingredient: Item,
@@ -19,8 +18,8 @@ class StonecutterRecipe(
     CraftingRecipe(
         recipeId
             ?: RecipeRegistry.computeRecipeIdWithItem(
-                List.of<Item>(result),
-                List.of<Item>(ingredient),
+                listOf(result),
+                listOf(ingredient),
                 RecipeType.STONECUTTER
             ), priority, recipeUnlockingRequirement
     ) {
@@ -44,7 +43,6 @@ class StonecutterRecipe(
     )
 
     init {
-        this.uuid = uuid
         results.add(result.clone())
         require(ingredient.getCount() >= 1) { "Recipe '" + recipeId + "' Ingredient amount was not 1 (value: " + ingredient.getCount() + ")" }
         ingredients.add(DefaultDescriptor(ingredient.clone()))

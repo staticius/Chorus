@@ -2,7 +2,6 @@ package org.chorus.recipe
 
 import com.google.gson.reflect.TypeToken
 import org.chorus.entity.effect.PotionType
-import org.chorus.entity.effect.PotionType.Companion.get
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
 import org.chorus.item.ItemPotion.Companion.fromPotion
@@ -12,12 +11,12 @@ import org.chorus.recipe.descriptor.ItemTagDescriptor
 import org.chorus.registry.RecipeRegistry
 import org.chorus.registry.Registries
 import org.chorus.utils.JSONUtils
+import org.chorus.utils.Loggable
 import java.io.*
 import java.util.function.Consumer
 import kotlin.collections.component1
 import kotlin.collections.set
 import kotlin.math.max
-
 
 class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
     fun parseAndRegisterRecipe(file: File) {
@@ -41,7 +40,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
     }
 
     private fun matchAndParse(reader: InputStreamReader) {
-        val map: Map<String, Any> = JSONUtils.from<Map<String, Any>>(reader, object : TypeToken<Map<String?, Any?>?>() {
+        val map: Map<String, Any> = JSONUtils.from(reader, object : TypeToken<Map<String, Any>>() {
         })
         if (map.containsKey(SHAPED_KEY)) {
             parseAndRegisterShapedRecipe((map[SHAPED_KEY] as Map<String, Any>?)!!)
@@ -64,28 +63,25 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
             val shapes: Array<String>
             if (pattern!!.size > 1) {
                 val maxWidth = pattern.stream().map { s: String -> s.toCharArray().size }.max { x: Int?, y: Int? ->
-                    Integer.compare(
-                        x!!,
-                        y!!
-                    )
+                    x!!.compareTo(y!!)
                 }.get()
-                shapes = pattern.stream().map<String> { shape: String ->
+                shapes = pattern.stream().map { shape: String ->
                     val builder = StringBuilder()
                     val charArray = shape.toCharArray()
                     for (c in charArray) {
                         builder.append(c)
                     }
                     builder.append(" ".repeat(max(0.0, (maxWidth - charArray.size).toDouble()).toInt())).toString()
-                }.toArray<String> { _Dummy_.__Array__() }
+                }.toList().toTypedArray()
             } else {
-                shapes = pattern.toArray<String> { _Dummy_.__Array__() }
+                shapes = pattern.toTypedArray()
             }
             val key = recipeData["key"] as Map<String, Map<String, Any>>?
             val ingredients: MutableMap<Char, ItemDescriptor> = LinkedHashMap()
             try {
-                key!!.forEach { (k: String?, v: MutableMap<String?, Any?>?) ->
+                key!!.forEach { (k, v) ->
                     if (v.containsKey("tag")) {
-                        val tag: String = v.get("tag").toString()
+                        val tag: String = v["tag"].toString()
                         val count = v.getOrDefault("count", 1) as Int
                         ingredients[k[0]] = ItemTagDescriptor(tag, count)
                     } else {
@@ -116,10 +112,10 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
 
     private fun parseAndRegisterShapeLessRecipe(recipeData: Map<String, Any>) {
         val prior = recipeData.getOrDefault("priority", 0) as Int
-        val ingredients = recipeData["ingredients"] as List<Map<String?, Any>>?
+        val ingredients = recipeData["ingredients"] as List<Map<String, Any>>?
         val itemDescriptors: MutableList<ItemDescriptor> = ArrayList()
         try {
-            ingredients!!.forEach(Consumer { v: Map<String?, Any> ->
+            ingredients!!.forEach(Consumer { v ->
                 if (v.containsKey("tag")) {
                     val tag = v["tag"].toString()
                     val count = v.getOrDefault("count", 1) as Int
@@ -128,7 +124,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
                     itemDescriptors.add(DefaultDescriptor(parseItem(v)))
                 }
             })
-            val result = recipeData["result"] as Map<String?, Any>?
+            val result = recipeData["result"] as Map<String, Any>?
             val re = parseItem(result!!)
             val tags = tags(recipeData)
             for (tag in tags!!) {
@@ -201,7 +197,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
     }
 
     @Throws(AssertionError::class)
-    private fun parseItem(v: Map<String?, Any>): Item {
+    private fun parseItem(v: Map<String, Any>): Item {
         val item = v["item"] as String?
         val count = v.getOrDefault("count", 1) as Int
         val data = v.getOrDefault("data", 32767) as Int
@@ -229,7 +225,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
         return recipeData["tags"] as List<String>?
     }
 
-    companion object {
+    companion object : Loggable {
         private const val SHAPED_KEY = "minecraft:recipe_shaped"
         private const val SHAPELESS_KEY = "minecraft:recipe_shapeless"
         private const val FURNACE_KEY = "minecraft:recipe_furnace"
