@@ -3,14 +3,16 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
-import org.chorus.blockentity.*
-import org.chorus.item.*
+import org.chorus.blockentity.BlockEntityEnderChest
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.StringTag
-import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
 class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :

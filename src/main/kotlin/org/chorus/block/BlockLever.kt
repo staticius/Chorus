@@ -59,7 +59,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         fz: Float
     ): Boolean {
         if (player != null) {
-            if (!player.getAdventureSettings()!!.get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
             if (isNotActivate(player)) return false
         }
         Server.instance.pluginManager.callEvent(
@@ -87,7 +87,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
 
         if (Server.instance.settings.levelSettings().enableRedstone()) {
             updateAroundRedstone()
-            updateAroundRedstone(getSide(face.getOpposite()!!)!!, face)
+            updateAroundRedstone(getSide(face.getOpposite()), face)
         }
         return true
     }
@@ -95,8 +95,8 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val blockFace = leverOrientation!!.facing.getOpposite()
-            val side = this.getSide(blockFace!!)
-            if (!isSupportValid(side!!, blockFace.getOpposite()!!)) {
+            val side = this.getSide(blockFace)
+            if (!isSupportValid(side, blockFace.getOpposite())) {
                 level.useBreakOn(this.position)
             }
         }
@@ -116,7 +116,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         var target = target
         var face = face
         if (target.canBeReplaced()) {
-            target = target.down()!!
+            target = target.down()
             face = BlockFace.UP
         }
 
@@ -132,11 +132,11 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
 
         if (isPowerOn) {
             val face = leverOrientation!!.facing
-            level.updateAround(position.getSide(face.getOpposite()!!))
+            level.updateAround(position.getSide(face.getOpposite()))
 
             if (Server.instance.settings.levelSettings().enableRedstone()) {
                 updateAroundRedstone()
-                updateAroundRedstone(getSide(face.getOpposite()!!)!!, face)
+                updateAroundRedstone(getSide(face.getOpposite()), face)
             }
         }
         return true

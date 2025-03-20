@@ -75,8 +75,8 @@ abstract class BlockVinesNether
         fz: Double,
         player: Player?
     ): Boolean {
-        val support = getSide(growthDirection.getOpposite()!!)
-        if (!isSupportValid(support!!)) {
+        val support = getSide(growthDirection.getOpposite())
+        if (!isSupportValid(support)) {
             return false
         }
 
@@ -128,7 +128,7 @@ abstract class BlockVinesNether
      */
     fun grow(): Boolean {
         val pos = getSide(growthDirection)
-        if (!pos!!.isAir || pos.position.y < 0 || 255 < pos.position.y) {
+        if (!pos.isAir || pos.position.y < 0 || 255 < pos.position.y) {
             return false
         }
 
@@ -169,7 +169,7 @@ abstract class BlockVinesNether
         var grew = 0
         for (distance in 1..blocksToGrow) {
             val pos = getSide(growthDirection, distance)
-            if (!pos!!.isAir || pos.position.y < 0 || 255 < pos.position.y) {
+            if (!pos.isAir || pos.position.y < 0 || 255 < pos.position.y) {
                 break
             }
 
@@ -242,7 +242,7 @@ abstract class BlockVinesNether
         var limit = 256
         while (--limit > 0) {
             val next = result.getSide(supportFace)
-            if (next!!.levelBlockState.identifier == id) {
+            if (next.levelBlockState.identifier == id) {
                 result = next
             } else {
                 break
@@ -326,7 +326,7 @@ abstract class BlockVinesNether
     }
 
     val isSupportValid: Boolean
-        get() = isSupportValid(getSide(growthDirection.getOpposite()!!)!!)
+        get() = isSupportValid(getSide(growthDirection.getOpposite()))
 
     override fun onEntityCollide(entity: Entity) {
         entity.resetFallDistance()

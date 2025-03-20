@@ -10,7 +10,9 @@ import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.event.block.BlockRedstoneEvent
 import org.chorus.event.block.DoorToggleEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.level.Sound
@@ -92,7 +94,7 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
     private fun onNormalUpdate() {
         val down = this.down()
         if (isTop) {
-            if (down!!.id != this.id || down.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPPER_BLOCK_BIT)) {
+            if (down.id != this.id || down.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPPER_BLOCK_BIT)) {
                 level.setBlock(this.position, get(BlockID.AIR), false)
             }
 
@@ -105,7 +107,7 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
             return
         }
 
-        if (down!!.id == BlockID.AIR) {
+        if (down.id == BlockID.AIR) {
             level.useBreakOn(
                 this.position,
                 if (toolType == ItemTool.TYPE_PICKAXE) Item.get(ItemID.DIAMOND_PICKAXE) else null
@@ -136,11 +138,11 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
             val down: Locator
             val up: Locator
             if (this.isTop) {
-                down = down()!!.locator
+                down = down().locator
                 up = locator
             } else {
                 down = locator
-                up = up()!!.locator
+                up = up().locator
             }
 
             return manualOverrides.contains(up) || manualOverrides.contains(
@@ -151,11 +153,11 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
             val down: Locator
             val up: Locator
             if (this.isTop) {
-                down = down()!!.locator
+                down = down().locator
                 up = locator
             } else {
                 down = locator
-                up = up()!!.locator
+                up = up().locator
             }
 
             if (`val`) {
@@ -172,19 +174,19 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
             val down: Locator
             val up: Locator
             if (this.isTop) {
-                down = down()!!.locator
+                down = down().locator
                 up = locator
             } else {
                 down = locator
-                up = up()!!.locator
+                up = up().locator
             }
 
             for (side in BlockFace.entries) {
-                val blockDown = down.getSide(side)!!.levelBlock
-                val blockUp = up.getSide(side)!!.levelBlock
+                val blockDown = down.getSide(side).levelBlock
+                val blockUp = up.getSide(side).levelBlock
 
-                if (level.isSidePowered(blockDown!!.position, side)
-                    || level.isSidePowered(blockUp!!.position, side)
+                if (level.isSidePowered(blockDown.position, side)
+                    || level.isSidePowered(blockUp.position, side)
                 ) {
                     return true
                 }
@@ -209,7 +211,7 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
 
         val blockUp = this.up()
         val blockDown = this.down()
-        if (!blockUp!!.canBeReplaced() || !blockDown!!.isSolid(BlockFace.UP) && blockDown !is BlockCauldron) {
+        if (!blockUp.canBeReplaced() || !blockDown.isSolid(BlockFace.UP) && blockDown !is BlockCauldron) {
             return false
         }
 
@@ -218,7 +220,7 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
 
         val left = this.getSide(direction.rotateYCCW())
         val right = this.getSide(direction.rotateY())
-        if (left!!.id == this.id || (!right!!.isTransparent && left.isTransparent)) { //Door hinge
+        if (left.id == this.id || (!right.isTransparent && left.isTransparent)) { //Door hinge
             isRightHinged = true
         }
 
@@ -248,12 +250,12 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
         this.manualOverride = false
         if (isTop) {
             val down = this.down()
-            if (down!!.id == this.id && !down.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)) {
+            if (down.id == this.id && !down.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)) {
                 level.setBlock(down.position, get(BlockID.AIR), true)
             }
         } else {
             val up = this.up()
-            if (up!!.id == this.id && up.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)) {
+            if (up.id == this.id && up.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)) {
                 level.setBlock(up.position, get(BlockID.AIR), true)
             }
         }
@@ -333,10 +335,10 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
             up = up()
         }
 
-        up!!.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
+        up.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
         up.level.setBlock(up.position, up, direct = true, update = true)
 
-        down!!.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
+        down.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, open)
         down.level.setBlock(down.position, down, direct = true, update = true)
 
         this.manualOverride = this.isGettingPower || this.isOpen

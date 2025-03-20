@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom
 open class BlockDiamondOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockOre(blockstate) {
 
-    override val rawMaterial: String? 
+    override val rawMaterial: String?
         get() = ItemID.DIAMOND
 
     override val name: String

@@ -4,7 +4,7 @@ import org.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus.utils.Utils
 import java.util.*
 
-class EnumPropertyType <T : Enum<T>>(name: String, val enumClass: Class<T>, defaultData: T) : BaseBlockPropertyType<T>(
+class EnumPropertyType<T : Enum<T>>(name: String, val enumClass: Class<T>, defaultData: T) : BaseBlockPropertyType<T>(
     name,
     enumClass.enumConstants.toList(),
     defaultData,

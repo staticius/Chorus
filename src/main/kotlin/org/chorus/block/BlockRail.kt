@@ -64,7 +64,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
             val connect = checkRailsConnected().values
             val railFace: MutableList<BlockFace?> = ArrayList()
             for (face in connect) {
-                if (getSide(face.getOpposite()!!) is BlockRail) {
+                if (getSide(face.getOpposite()) is BlockRail) {
                     railFace.add(face.getOpposite())
                 } else {
                     railFace.add(face)
@@ -159,7 +159,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
                     .get()
                 val fo = f.getOpposite()
                 if (faces.contains(fo)) { //Opposite connectable
-                    this.setRailDirection(this.connect(rails[faces.indexOf(f)], f, rails[faces.indexOf(fo)], fo!!))
+                    this.setRailDirection(this.connect(rails[faces.indexOf(f)], f, rails[faces.indexOf(fo)], fo))
                 } else {
                     this.setRailDirection(this.connect(rails[faces.indexOf(f)], f))
                 }
@@ -202,7 +202,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
         val rails = other.checkRailsConnected()
         if (rails.isEmpty()) { //Only one
             other.setOrientation(
-                if (delta == 1) ascending(face.getOpposite()!!) else straight(
+                if (delta == 1) ascending(face.getOpposite()) else straight(
                     face
                 )
             )
@@ -211,12 +211,12 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
             val faceConnected = rails.values.iterator().next()
 
             if (other.isAbstract && faceConnected != face) { //Curve!
-                other.setOrientation(curved(face.getOpposite()!!, faceConnected))
+                other.setOrientation(curved(face.getOpposite(), faceConnected))
                 return if (delta == -1) ascending(face) else straight(face)
             } else if (faceConnected == face) { //Turn!
                 if (!other.getOrientation()!!.isAscending) {
                     other.setOrientation(
-                        if (delta == 1) ascending(face.getOpposite()!!) else straight(
+                        if (delta == 1) ascending(face.getOpposite()) else straight(
                             face
                         )
                     )
@@ -226,7 +226,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
                     .hasConnectingDirections(BlockFace.NORTH, BlockFace.SOUTH)
             ) { //North-south
                 other.setOrientation(
-                    if (delta == 1) ascending(face.getOpposite()!!) else straight(
+                    if (delta == 1) ascending(face.getOpposite()) else straight(
                         face
                     )
                 )
@@ -248,7 +248,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
         val result: MutableMap<BlockRail, BlockFace> = HashMap()
         faces.forEach(Consumer { f: BlockFace ->
             val b = this.getSide(f)
-            Stream.of<Block?>(b, b!!.up(), b.down())
+            Stream.of<Block?>(b, b.up(), b.down())
                 .filter { obj: Block? -> obj is BlockRail }
                 .forEach { block: Block -> result[block as BlockRail] = f }
         })
@@ -318,10 +318,10 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
             // Reason: When the rail is curved, the meta will return STRAIGHT_NORTH_SOUTH.
             // OR Null Pointer Exception
             if (!isAbstract) {
-                return blockState!!.specialValue().toInt() and 0x7
+                return blockState.specialValue().toInt() and 0x7
             }
             // Return the default: This meta
-            return blockState!!.specialValue().toInt()
+            return blockState.specialValue().toInt()
         }
 
     open fun isActive(): Boolean {
@@ -365,7 +365,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
     }
 
     override var blockFace: BlockFace
-        get() = fromHorizontalIndex(blockState!!.specialValue().toInt() and 0x07)
+        get() = fromHorizontalIndex(blockState.specialValue().toInt() and 0x07)
         set(blockFace) {
             super.blockFace = blockFace
         }

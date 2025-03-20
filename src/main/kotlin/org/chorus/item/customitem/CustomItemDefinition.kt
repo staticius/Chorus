@@ -263,7 +263,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
             } else {
                 id = INTERNAL_ALLOCATION_ID_MAP.getInt(result.identifier)
             }
-            result.nbt.putString("name", result.identifier!!)
+            result.nbt.putString("name", result.identifier)
             result.nbt.putInt("id", id)
             return result
         }

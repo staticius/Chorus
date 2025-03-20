@@ -1,9 +1,11 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.blockentity.*
+import org.chorus.blockentity.BlockEntityEndGateway
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.entity.Entity
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3

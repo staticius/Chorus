@@ -34,7 +34,7 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
     ): Boolean {
         val down = down()
         val layer1Block = block.getLevelBlockAtLayer(1)
-        if ((down!!.id == BlockID.Companion.KELP || down.isSolid) && (down.id != BlockID.Companion.MAGMA) && (down.id != BlockID.Companion.ICE) && (down.id != BlockID.Companion.SOUL_SAND) &&
+        if ((down.id == BlockID.Companion.KELP || down.isSolid) && (down.id != BlockID.Companion.MAGMA) && (down.id != BlockID.Companion.ICE) && (down.id != BlockID.Companion.SOUL_SAND) &&
             (layer1Block is BlockFlowingWater && layer1Block.isSourceOrFlowingDown)
         ) {
             if (layer1Block.isFlowingDown) {
@@ -67,7 +67,7 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
             }
 
             val down = down()
-            if ((!down!!.isSolid && down.id != BlockID.Companion.KELP) || down.id == BlockID.Companion.MAGMA || down.id == BlockID.Companion.ICE || down.id == BlockID.Companion.SOUL_SAND) {
+            if ((!down.isSolid && down.id != BlockID.Companion.KELP) || down.id == BlockID.Companion.MAGMA || down.id == BlockID.Companion.ICE || down.id == BlockID.Companion.SOUL_SAND) {
                 level.useBreakOn(this.position)
                 return type
             }
@@ -92,7 +92,7 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
             val up = up()
             if (up is BlockFlowingWater && up.isSourceOrFlowingDown) {
                 val grown: Block = BlockKelp(
-                    blockState!!.setPropertyValue(
+                    blockState.setPropertyValue(
                         Companion.properties, CommonBlockProperties.KELP_AGE.createValue(
                             this.age + 1
                         )
@@ -114,9 +114,9 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
 
     override fun onBreak(item: Item?): Boolean {
         val down = down()
-        if (down!!.id == BlockID.Companion.KELP) {
+        if (down.id == BlockID.Companion.KELP) {
             val blockKelp = BlockKelp(
-                blockState!!.setPropertyValue(
+                blockState.setPropertyValue(
                     Companion.properties, CommonBlockProperties.KELP_AGE.createValue(
                         ThreadLocalRandom.current().nextInt(
                             CommonBlockProperties.KELP_AGE.getMax()
@@ -144,7 +144,7 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
             val z = position.z.toInt()
             for (y in position.y.toInt() + 1..254) {
                 val blockAbove = level.getBlock(x, y, z)
-                val BlockID.bove = blockAbove!!.id
+                val BlockID.bove = blockAbove.id
                 if (BlockID.bove != BlockID.Companion.KELP) {
                     if (blockAbove is BlockFlowingWater) {
                         if (blockAbove.isSourceOrFlowingDown) {

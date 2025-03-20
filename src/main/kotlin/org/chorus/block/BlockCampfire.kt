@@ -19,14 +19,19 @@ import org.chorus.event.entity.EntityDamageByBlockEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.level.Sound
-import org.chorus.math.*
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
@@ -77,7 +82,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
         fz: Double,
         player: Player?
     ): Boolean {
-        if (down()!!.properties === Companion.properties) {
+        if (down().properties === Companion.properties) {
             return false
         }
 
@@ -85,7 +90,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
         val layer1 = level.getBlock(this.position, 1)
 
         if (player != null) {
-            blockFace =  player.getDirection()!!.getOpposite()
+            blockFace = player.getDirection().getOpposite()
         }
 
         val defaultLayerCheck = (block is BlockFlowingWater && block.isSourceOrFlowingDown) || block is BlockFrostedIce
@@ -95,7 +100,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
             level.addSound(this.position, Sound.RANDOM_FIZZ, 0.5f, 2.2f)
             level.setBlock(
                 this.position, 1,
-                (if (defaultLayerCheck) block else layer1)!!, direct = false, update = false
+                (if (defaultLayerCheck) block else layer1), direct = false, update = false
             )
         } else {
             level.setBlock(this.position, 1, get(BlockID.AIR), direct = false, update = false)
@@ -115,8 +120,8 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
             createBlockEntity(nbt)
         } catch (e: Exception) {
             log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), locator, e)
-            level.setBlock(layer0!!.position, 0, layer0, true)
-            level.setBlock(layer1!!.position, 0, layer1, true)
+            level.setBlock(layer0.position, 0, layer0, true)
+            level.setBlock(layer1.position, 0, layer1, true)
             return false
         }
 
@@ -209,7 +214,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
         cloned.setCount(1)
         val inventory = campfire.getInventory()
         if (inventory.canAddItem(cloned)) {
-            val recipe = Server.instance.recipeRegistry.findCampfireRecipe(cloned)
+            val recipe = instance.recipeRegistry.findCampfireRecipe(cloned)
             if (recipe != null) {
                 inventory.addItem(cloned)
                 item.setCount(item.getCount() - 1)

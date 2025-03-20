@@ -135,9 +135,9 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState = Companion.p
             val opposite = face.getOpposite()
             val oppositeB = level.getBlock(target.position.add(face.unitVector))
             val targetBlock = level.getBlock(target.position.add(face.unitVector.multiply(2.0)))
-            if (isSupportValid(targetBlock!!, opposite)) {
+            if (isSupportValid(targetBlock, opposite)) {
                 //不设置damage是因为level#useItemOn中有逻辑设置
-                level.setBlock(oppositeB!!.position, this, true, false)
+                level.setBlock(oppositeB.position, this, true, false)
                 return true
             }
         }
@@ -168,7 +168,7 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState = Companion.p
         }*/
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val face = blockFace
-            if (!isSupportValid(getSide(face!!)!!, face.getOpposite())) {
+            if (!isSupportValid(getSide(face), face.getOpposite())) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
@@ -189,7 +189,7 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState = Companion.p
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
             .getOpposite()
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
             calculateOffsets()
         }
 

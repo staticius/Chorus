@@ -53,23 +53,23 @@ open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState = Com
     }
 
     fun canBePopulated(pos: Locator): Boolean {
-        return pos.add(0.0, -1.0, 0.0).levelBlock!!.isSolid && (pos.add(
+        return pos.add(0.0, -1.0, 0.0).levelBlock.isSolid && (pos.add(
             0.0,
             -1.0,
             0.0
-        ).levelBlock!!.id != BlockID.MOSS_CARPET) && pos.levelBlock!!.id === BlockID.AIR
+        ).levelBlock.id != BlockID.MOSS_CARPET) && pos.levelBlock.id === BlockID.AIR
     }
 
     fun canBePopulated2BlockAir(pos: Locator): Boolean {
-        return pos.add(0.0, -1.0, 0.0).levelBlock!!.isSolid && (pos.add(
+        return pos.add(0.0, -1.0, 0.0).levelBlock.isSolid && (pos.add(
             0.0,
             -1.0,
             0.0
-        ).levelBlock!!.id != BlockID.MOSS_CARPET) && pos.levelBlock!!.id === BlockID.AIR && pos.add(
+        ).levelBlock.id != BlockID.MOSS_CARPET) && pos.levelBlock.id === BlockID.AIR && pos.add(
             0.0,
             1.0,
             0.0
-        ).levelBlock!!.id === BlockID.AIR
+        ).levelBlock.id === BlockID.AIR
     }
 
     open fun convertToMoss(pos: Locator) {
@@ -88,7 +88,7 @@ open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState = Com
                                     z,
                                     pos.level
                                 ).position
-                            )!!
+                            )
                         ) && (random.nextDouble() < 0.6 || abs(x - pos.position.x) < 3 && abs(z - pos.position.z) < 3)
                     ) {
                         pos.level.setBlock(Locator(x, y, z, pos.level).position, get(BlockID.MOSS_BLOCK))
@@ -167,7 +167,7 @@ open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState = Com
     }
 
     fun canGrowPlant(pos: Locator): Boolean {
-        return when (pos.add(0.0, -1.0, 0.0).levelBlock!!.id) {
+        return when (pos.add(0.0, -1.0, 0.0).levelBlock.id) {
             BlockID.GRASS_BLOCK, BlockID.DIRT, BlockID.PODZOL, BlockID.FARMLAND, BlockID.MYCELIUM, BlockID.DIRT_WITH_ROOTS, BlockID.MOSS_BLOCK, BlockID.PALE_MOSS_BLOCK -> true
             else -> false
         }

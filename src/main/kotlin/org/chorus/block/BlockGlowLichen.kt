@@ -69,20 +69,20 @@ class BlockGlowLichen : BlockLichen {
                     val supportSides = side.edges.toTypedArray<BlockFace>()
 
                     for (supportSide in supportSides) {
-                        val supportNeighbor = support!!.getSide(supportSide)
+                        val supportNeighbor = support.getSide(supportSide)
 
-                        if (!isSupportNeighborAdded(candidates, supportSide.getOpposite()!!, supportNeighbor!!)) {
+                        if (!isSupportNeighborAdded(candidates, supportSide.getOpposite(), supportNeighbor)) {
                             continue
                         }
 
                         val supportNeighborOppositeSide =
-                            supportNeighbor.getSide(side.getOpposite()!!)
-                        if (shouldAddSupportNeighborOppositeSide(side, supportNeighborOppositeSide!!)) {
+                            supportNeighbor.getSide(side.getOpposite())
+                        if (shouldAddSupportNeighborOppositeSide(side, supportNeighborOppositeSide)) {
                             candidates[supportNeighborOppositeSide] = side
                         }
                     }
                 } else {
-                    if (support!!.isSolid) {
+                    if (support.isSolid) {
                         candidates[this] = side
                     }
                 }
@@ -116,7 +116,7 @@ class BlockGlowLichen : BlockLichen {
             return supportNeighborOppositeSide.id != GLOW_LICHEN ||
                     (!(supportNeighborOppositeSide as BlockGlowLichen).isGrowthToSide(side) && supportNeighborOppositeSide.getSide(
                         side
-                    )!!.id != AIR)
+                    ).id != AIR)
         }
         return false
     }

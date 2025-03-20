@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Level
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
@@ -74,7 +74,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState = Companion.pro
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!down()!!.isAir) {
+        if (!down().isAir) {
             level.setBlock(block.position, this, direct = true, update = true)
 
             return true
@@ -84,7 +84,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState = Companion.pro
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down()!!.isAir) {
+            if (down().isAir) {
                 level.setBlock(this.position, get(BlockID.AIR), true)
 
                 return Level.BLOCK_UPDATE_NORMAL

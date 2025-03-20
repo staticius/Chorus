@@ -53,7 +53,7 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState = Co
         player: Player?
     ): Boolean {
         blockFace = if (player != null) fromHorizontalIndex(
-            player.getDirection()!!.getOpposite()!!.horizontalIndex
+            player.getDirection().getOpposite().horizontalIndex
         ) else BlockFace.SOUTH
 
         val nbt = CompoundTag().putList("Items", ListTag())

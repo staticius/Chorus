@@ -28,7 +28,7 @@ class BlockCoalBlock @JvmOverloads constructor(blockstate: BlockState = Companio
     override fun canHarvestWithHand(): Boolean {
         return false
     }
-    
+
     override val properties: BlockProperties
         get() = Companion.properties
 

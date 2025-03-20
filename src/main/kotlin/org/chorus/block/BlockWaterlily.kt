@@ -61,7 +61,7 @@ class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companio
     ): Boolean {
         if (target is BlockFlowingWater || target.getLevelBlockAtLayer(1) is BlockFlowingWater) {
             val up = target.up()
-            if (up!!.isAir) {
+            if (up.isAir) {
                 level.setBlock(up.position, this, true, true)
                 return true
             }
@@ -72,7 +72,7 @@ class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companio
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val down = this.down()
-            if ((down !is BlockFlowingWater) && (down!!.getLevelBlockAtLayer(1) !is BlockFlowingWater) && (down !is BlockFrostedIce) && (down!!.getLevelBlockAtLayer(
+            if ((down !is BlockFlowingWater) && (down.getLevelBlockAtLayer(1) !is BlockFlowingWater) && (down !is BlockFrostedIce) && (down.getLevelBlockAtLayer(
                     1
                 ) !is BlockFrostedIce)
             ) {

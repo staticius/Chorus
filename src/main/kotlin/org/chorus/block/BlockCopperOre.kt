@@ -15,7 +15,7 @@ open class BlockCopperOre @JvmOverloads constructor(blockstate: BlockState = Com
         get() = ItemID.RAW_COPPER
 
     override val dropMultiplier: Float
-        get() =  3f
+        get() = 3f
 
     override val hardness: Double
         get() = 3.0

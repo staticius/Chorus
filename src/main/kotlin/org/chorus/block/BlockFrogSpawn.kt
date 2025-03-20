@@ -41,10 +41,10 @@ class BlockFrogSpawn : BlockFlowable {
     }
 
     fun supportable(pos: Locator): Boolean {
-        val under = pos.getSide(BlockFace.DOWN)!!.levelBlock
-        return under!!.id === FLOWING_WATER || under!!.id === WATER || under!!.getLevelBlockAtLayer(1)!!.id === FLOWING_WATER || under!!.getLevelBlockAtLayer(
+        val under = pos.getSide(BlockFace.DOWN).levelBlock
+        return under.id === FLOWING_WATER || under.id === WATER || under.getLevelBlockAtLayer(1).id === FLOWING_WATER || under.getLevelBlockAtLayer(
             1
-        )!!.id === WATER
+        ).id === WATER
     }
 
     override fun getDrops(item: Item): Array<Item> {

@@ -1,8 +1,10 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
@@ -33,16 +35,16 @@ class BlockChorusPlant : BlockTransparent {
             val down = down()
             for (face in BlockFace.Plane.HORIZONTAL) {
                 val side = getSide(face)
-                if (side!!.id == BlockID.CHORUS_PLANT) {
+                if (side.id == BlockID.CHORUS_PLANT) {
                     if (!horizontal) {
-                        if (up()!!.id != BlockID.AIR && down!!.id != BlockID.AIR) {
+                        if (up().id != BlockID.AIR && down.id != BlockID.AIR) {
                             return false
                         }
                         horizontal = true
                     }
 
                     val sideSupport = side.down()
-                    if (sideSupport!!.id == BlockID.CHORUS_PLANT || sideSupport.id == BlockID.END_STONE) {
+                    if (sideSupport.id == BlockID.CHORUS_PLANT || sideSupport.id == BlockID.END_STONE) {
                         horizontalSupported = true
                     }
                 }
@@ -52,7 +54,7 @@ class BlockChorusPlant : BlockTransparent {
                 return true
             }
 
-            return down!!.id == BlockID.CHORUS_PLANT || down.id == BlockID.END_STONE
+            return down.id == BlockID.CHORUS_PLANT || down.id == BlockID.END_STONE
         }
 
     override fun onUpdate(type: Int): Int {

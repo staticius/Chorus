@@ -20,7 +20,7 @@ class BlockHangingRoots @JvmOverloads constructor(blockstate: BlockState = Compa
     }
 
     override val isSupportValid: Boolean
-        get() = up()!!.isSolid
+        get() = up().isSolid
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.HANGING_ROOTS)

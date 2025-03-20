@@ -145,7 +145,7 @@ abstract class BlockSignBase(blockState: BlockState) : BlockTransparent(blockSta
     override var blockFace: BlockFace
         get() = getSignDirection().closestBlockFace
         set(face) {
-            setSignDirection(face!!.compassRoseDirection!!)
+            setSignDirection(face.compassRoseDirection!!)
         }
 
     override fun breaksWhenMoved(): Boolean {

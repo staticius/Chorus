@@ -75,7 +75,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
                     val v = position.add((random.nextInt(3) - 1).toDouble(), 1.0, (random.nextInt(3) - 1).toDouble())
                     val block = level.getBlock(v)
 
-                    if (block!!.isAir) {
+                    if (block.isAir) {
                         if (this.isSurroundingBlockFlammable(block)) {
                             val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
                             Server.instance.pluginManager.callEvent(e)
@@ -98,7 +98,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
                     val v = position.add((random.nextInt(3) - 1).toDouble(), 0.0, (random.nextInt(3) - 1).toDouble())
                     val block = level.getBlock(v)
 
-                    if (block!!.up()!!.isAir && block.burnChance > 0) {
+                    if (block.up().isAir && block.burnChance > 0) {
                         val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
                         Server.instance.pluginManager.callEvent(e)
 
@@ -118,7 +118,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
     protected fun isSurroundingBlockFlammable(block: Block): Boolean {
         for (face in BlockFace.entries) {
             val b = block.getSide(face)
-            if (b!!.burnChance > 0) {
+            if (b.burnChance > 0) {
                 return true
             }
         }
@@ -128,7 +128,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
 
     override fun getLiquidWithNewDepth(depth: Int): BlockLiquid {
         return BlockFlowingLava(
-            blockState!!.setPropertyValue(
+            blockState.setPropertyValue(
                 Companion.properties,
                 CommonBlockProperties.LIQUID_DEPTH.createValue(depth)
             )
@@ -153,8 +153,8 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
         var colliding: Block? = null
         val down = this.getSide(BlockFace.DOWN)
         for (side in 1..5) { //don't check downwards side
-            val blockSide = this.getSide(fromIndex(side)!!)
-            if (blockSide is BlockFlowingWater || blockSide!!.getLevelBlockAtLayer(1) is BlockFlowingWater) {
+            val blockSide = this.getSide(fromIndex(side))
+            if (blockSide is BlockFlowingWater || blockSide.getLevelBlockAtLayer(1) is BlockFlowingWater) {
                 colliding = blockSide
                 break
             }

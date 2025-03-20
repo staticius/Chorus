@@ -56,7 +56,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.pr
 
                 for (i in 1..toGrow) {
                     val block = this.up(i)
-                    if (block!!.isAir) {
+                    if (block.isAir) {
                         val ev: BlockGrowEvent = BlockGrowEvent(block, get(BlockID.REEDS))
                         instance.pluginManager.callEvent(ev)
 
@@ -108,7 +108,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.pr
                 return type
             }
             val up = up()
-            if (!up!!.isAir) {
+            if (!up.isAir) {
                 return type
             }
 
@@ -163,7 +163,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.pr
     private val isSupportValid: Boolean
         get() {
             val down = this.down()
-            val downId = down!!.id
+            val downId = down.id
             if (downId == BlockID.REEDS) {
                 return true
             }
@@ -174,7 +174,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.pr
                 val possibleWater = down.getSide(face)
                 if (possibleWater is BlockFlowingWater
                     || possibleWater is BlockFrostedIce
-                    || possibleWater!!.getLevelBlockAtLayer(1) is BlockFlowingWater
+                    || possibleWater.getLevelBlockAtLayer(1) is BlockFlowingWater
                 ) {
                     return true
                 }

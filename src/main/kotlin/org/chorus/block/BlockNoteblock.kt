@@ -29,72 +29,72 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState = Companio
     override fun getBlockEntityType(): String {
         return BlockEntity.MUSIC
 
-    override val hardness: Double
+        override val hardness: Double
         get() = 0.8
 
-    override val resistance: Double
+        override val resistance: Double
         get() = 0.8
 
-    override fun canBeActivated(): Boolean {
-        return true
-    }
-
-    override fun onActivate(
-        item: Item,
-        player: Player?,
-        blockFace: BlockFace,
-        fx: Float,
-        fy: Float,
-        fz: Float
-    ): Boolean {
-        if (player != null && player.isSneaking() || (up()!!.isAir && blockFace == BlockFace.UP && item.isBlock() && item.getBlock() is BlockHead)) {
-            return false
+        override fun canBeActivated(): Boolean {
+            return true
         }
-        this.increaseStrength()
-        this.emitSound(player)
-        return true
-    }
 
-    override fun place(
-        item: Item,
-        block: Block,
-        target: Block,
-        face: BlockFace,
-        fx: Double,
-        fy: Double,
-        fz: Double,
-        player: Player?
-    ): Boolean {
-        return BlockEntityHolder.setBlockAndCreateEntity(this) != null
-    }
-
-    override fun onTouch(
-        vector: Vector3,
-        item: Item,
-        face: BlockFace,
-        fx: Float,
-        fy: Float,
-        fz: Float,
-        player: Player?,
-        action: PlayerInteractEvent.Action
-    ) {
-        onUpdate(Level.BLOCK_UPDATE_TOUCH)
-        if (player != null && action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && player.isSurvival) {
+        override fun onActivate(
+            item: Item,
+            player: Player?,
+            blockFace: BlockFace,
+            fx: Float,
+            fy: Float,
+            fz: Float
+        ): Boolean {
+            if (player != null && player.isSneaking() || (up().isAir && blockFace == BlockFace.UP && item.isBlock() && item.getBlock() is BlockHead)) {
+                return false
+            }
+            this.increaseStrength()
             this.emitSound(player)
+            return true
         }
-    }
 
-    val strength: Int
+        override fun place(
+            item: Item,
+            block: Block,
+            target: Block,
+            face: BlockFace,
+            fx: Double,
+            fy: Double,
+            fz: Double,
+            player: Player?
+        ): Boolean {
+            return BlockEntityHolder.setBlockAndCreateEntity(this) != null
+        }
+
+        override fun onTouch(
+            vector: Vector3,
+            item: Item,
+            face: BlockFace,
+            fx: Float,
+            fy: Float,
+            fz: Float,
+            player: Player?,
+            action: PlayerInteractEvent.Action
+        ) {
+            onUpdate(Level.BLOCK_UPDATE_TOUCH)
+            if (player != null && action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && player.isSurvival) {
+                this.emitSound(player)
+            }
+        }
+
+        val strength: Int
         get() {
             val blockEntity: BlockEntityMusic? = this.blockEntity
             return if (blockEntity != null) blockEntity.pitch else 0
         }
 
-    fun increaseStrength() {
-        getOrCreateBlockEntity().changePitch()
-    }
+        fun increaseStrength() {
+            getOrCreateBlockEntity().changePitch()
+        }
 
-    val instrument: Instrument
+        val instrument: Instrument
         get() = when (this.down()) {
             -> Instrument.GUITAR
             -> Instrument.SNARE_DRUM
@@ -158,84 +158,84 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState = Companio
             }
         }
 
-    @JvmOverloads
-    fun emitSound(player: Player? = null) {
-        level.vibrationManager.callVibrationEvent(
-            VibrationEvent(
-                player
-                    ?: this, add(0.5, 0.5, 0.5).position, VibrationType.BLOCK_CHANGE
+        @JvmOverloads
+        fun emitSound(player: Player? = null) {
+            level.vibrationManager.callVibrationEvent(
+                VibrationEvent(
+                    player
+                        ?: this, add(0.5, 0.5, 0.5).position, VibrationType.BLOCK_CHANGE
+                )
             )
-        )
 
-        val instrument = this.instrument
+            val instrument = this.instrument
 
-        level.addLevelSoundEvent(
-            this.position,
-            LevelSoundEventPacket.SOUND_NOTE,
-            instrument.ordinal shl 8 or this.strength
-        )
+            level.addLevelSoundEvent(
+                this.position,
+                LevelSoundEventPacket.SOUND_NOTE,
+                instrument.ordinal shl 8 or this.strength
+            )
 
-        val pk: BlockEventPacket = BlockEventPacket()
-        pk.x = position.floorX
-        pk.y = position.floorY
-        pk.z = position.floorZ
-        pk.type = instrument.ordinal
-        pk.value = this.strength
-        level.addChunkPacket(position.floorX shr 4, position.floorZ shr 4, pk)
-    }
+            val pk: BlockEventPacket = BlockEventPacket()
+            pk.x = position.floorX
+            pk.y = position.floorY
+            pk.z = position.floorZ
+            pk.type = instrument.ordinal
+            pk.value = this.strength
+            level.addChunkPacket(position.floorX shr 4, position.floorZ shr 4, pk)
+        }
 
-    override fun onUpdate(type: Int): Int {
-        if (type == Level.BLOCK_UPDATE_REDSTONE) {
-            // We can't use getOrCreateBlockEntity(), because the update method is called on block place,
-            // before the "real" BlockEntity is set. That means, if we'd use the other method here,
-            // it would create two BlockEntities.
-            val music: BlockEntityMusic = blockEntity ?: return 0
+        override fun onUpdate(type: Int): Int {
+            if (type == Level.BLOCK_UPDATE_REDSTONE) {
+                // We can't use getOrCreateBlockEntity(), because the update method is called on block place,
+                // before the "real" BlockEntity is set. That means, if we'd use the other method here,
+                // it would create two BlockEntities.
+                val music: BlockEntityMusic = blockEntity ?: return 0
 
-            if (this.isGettingPower) {
-                if (!music.isPowered) {
-                    this.emitSound()
+                if (this.isGettingPower) {
+                    if (!music.isPowered) {
+                        this.emitSound()
+                    }
+                    music.isPowered = true
+                } else {
+                    music.isPowered = false
                 }
-                music.isPowered = true
-            } else {
-                music.isPowered = false
+            }
+            return super.onUpdate(type)
+        }
+
+        enum class Instrument(sound: Sound) {
+            HARP(Sound.NOTE_HARP),
+            BASS_DRUM(Sound.NOTE_BD),
+            SNARE_DRUM(Sound.NOTE_SNARE),
+            CLICKS_AND_STICKS(Sound.NOTE_HAT),
+            BASS(Sound.NOTE_BASS),
+            BELLS(Sound.NOTE_BELL),
+            FLUTE(Sound.NOTE_FLUTE),
+            CHIMES(Sound.NOTE_CHIME),
+            GUITAR(Sound.NOTE_GUITAR),
+            XYLOPHONE(Sound.NOTE_XYLOPHONE),
+            IRON_XYLOPHONE(Sound.NOTE_IRON_XYLOPHONE),
+            COW_BELL(Sound.NOTE_COW_BELL),
+            DIDGERIDOO(Sound.NOTE_DIDGERIDOO),
+            BIT(Sound.NOTE_BIT),
+            BANJO(Sound.NOTE_BANJO),
+            PLING(Sound.NOTE_PLING),
+            SKELETON(Sound.NOTE_SKELETON),
+            WITHER_SKELETON(Sound.NOTE_WITHERSKELETON),
+            ZOMBIE(Sound.NOTE_ZOMBIE),
+            CREEPER(Sound.NOTE_CREEPER),
+            ENDER_DRAGON(Sound.NOTE_ENDERDRAGON),
+            PIGLIN(Sound.NOTE_PIGLIN);
+
+            private val sound: Sound = sound
+
+            fun getSound(): Sound {
+                return sound
             }
         }
-        return super.onUpdate(type)
-    }
 
-    enum class Instrument(sound: Sound) {
-        HARP(Sound.NOTE_HARP),
-        BASS_DRUM(Sound.NOTE_BD),
-        SNARE_DRUM(Sound.NOTE_SNARE),
-        CLICKS_AND_STICKS(Sound.NOTE_HAT),
-        BASS(Sound.NOTE_BASS),
-        BELLS(Sound.NOTE_BELL),
-        FLUTE(Sound.NOTE_FLUTE),
-        CHIMES(Sound.NOTE_CHIME),
-        GUITAR(Sound.NOTE_GUITAR),
-        XYLOPHONE(Sound.NOTE_XYLOPHONE),
-        IRON_XYLOPHONE(Sound.NOTE_IRON_XYLOPHONE),
-        COW_BELL(Sound.NOTE_COW_BELL),
-        DIDGERIDOO(Sound.NOTE_DIDGERIDOO),
-        BIT(Sound.NOTE_BIT),
-        BANJO(Sound.NOTE_BANJO),
-        PLING(Sound.NOTE_PLING),
-        SKELETON(Sound.NOTE_SKELETON),
-        WITHER_SKELETON(Sound.NOTE_WITHERSKELETON),
-        ZOMBIE(Sound.NOTE_ZOMBIE),
-        CREEPER(Sound.NOTE_CREEPER),
-        ENDER_DRAGON(Sound.NOTE_ENDERDRAGON),
-        PIGLIN(Sound.NOTE_PIGLIN);
+        companion object {
+            val properties: BlockProperties = BlockProperties(BlockID.NOTEBLOCK)
 
-        private val sound: Sound = sound
-
-        fun getSound(): Sound {
-            return sound
         }
     }
-
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.NOTEBLOCK)
-
-    }
-}

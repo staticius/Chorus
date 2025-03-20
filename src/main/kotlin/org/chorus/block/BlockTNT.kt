@@ -8,18 +8,20 @@ import org.chorus.entity.Entity.Companion.createEntity
 import org.chorus.entity.EntityID
 import org.chorus.entity.projectile.EntitySmallFireball
 import org.chorus.entity.projectile.abstract_arrow.EntityArrow
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.ChorusRandom
+import org.chorus.utils.RedstoneComponent
 import kotlin.math.cos
 import kotlin.math.sin
 

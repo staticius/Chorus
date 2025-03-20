@@ -7,7 +7,6 @@ import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
-import kotlin.collections.HashMap
 
 object ItemTags {
     const val ARROW: String = "minecraft:arrow"
@@ -65,7 +64,8 @@ object ItemTags {
     init {
         try {
             Server::class.java.classLoader.getResourceAsStream("item_tags.json").use { stream ->
-                val typeToken: TypeToken<HashMap<String, HashSet<String>>> = object : TypeToken<HashMap<String, HashSet<String>>>() {}
+                val typeToken: TypeToken<HashMap<String, HashSet<String>>> =
+                    object : TypeToken<HashMap<String, HashSet<String>>>() {}
                 checkNotNull(stream)
                 val map = JSONUtils.from(InputStreamReader(stream), typeToken)
                 TAG_2_ITEMS.putAll(map)

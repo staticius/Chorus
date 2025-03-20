@@ -62,7 +62,8 @@ interface BlockState {
 
         fun computeSpecialValue(propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>): Short {
             var specialValueBits: Byte = 0
-            for (value in propertyValues) specialValueBits = (specialValueBits + (value.propertyType.getBitSize())).toByte()
+            for (value in propertyValues) specialValueBits =
+                (specialValueBits + (value.propertyType.getBitSize())).toByte()
             return computeSpecialValue(specialValueBits, propertyValues)
         }
 

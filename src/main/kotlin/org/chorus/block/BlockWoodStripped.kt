@@ -6,7 +6,7 @@ import org.chorus.math.BlockFace
 
 abstract class BlockWoodStripped(blockstate: BlockState) : BlockWood(blockstate) {
     override fun getStrippedState(): BlockState {
-        return blockState!!
+        return blockState
     }
 
     override val name: String

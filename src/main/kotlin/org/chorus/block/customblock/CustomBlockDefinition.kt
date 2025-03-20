@@ -30,7 +30,7 @@ data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?)
         get() = INTERNAL_ALLOCATION_ID_MAP[identifier]!!
 
     class Builder(protected val customBlock: CustomBlock) {
-        protected val identifier: String? = customBlock.id
+        protected val identifier: String = customBlock.id
 
         protected var nbt: CompoundTag? = CompoundTag()
             .putCompound("components", CompoundTag())

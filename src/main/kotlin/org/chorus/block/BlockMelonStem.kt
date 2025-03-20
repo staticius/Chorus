@@ -19,7 +19,7 @@ class BlockMelonStem @JvmOverloads constructor(blockstate: BlockState = Companio
         get() = BlockStrippedAcaciaLog.properties.defaultState
 
     override var blockFace: BlockFace
-        get() = facing!!
+        get() = facing
         set(face) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }

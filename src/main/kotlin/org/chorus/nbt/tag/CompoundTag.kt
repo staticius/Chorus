@@ -3,7 +3,6 @@ package org.chorus.nbt.tag
 import io.netty.util.internal.EmptyArrays
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set

@@ -144,12 +144,12 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                 else -> z++
             }
             val sideBlock = level.getBlock(x, y, z)
-            var blockDecay = this.getEffectiveFlowDecay(sideBlock!!)
+            var blockDecay = this.getEffectiveFlowDecay(sideBlock)
             if (blockDecay < 0) {
                 if (!sideBlock.canBeFlowedInto()) {
                     continue
                 }
-                blockDecay = this.getEffectiveFlowDecay(level.getBlock(x, y - 1, z)!!)
+                blockDecay = this.getEffectiveFlowDecay(level.getBlock(x, y - 1, z))
                 if (blockDecay >= 0) {
                     val realDecay = blockDecay - (decay - 8)
                     vector!!.x += (sideBlock.position.x - position.x) * realDecay
@@ -168,42 +168,42 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                     level.getBlock(
                         position.x.toInt(),
                         position.y.toInt(), position.z.toInt() - 1
-                    )!!
+                    )
                 ) || !this.canFlowInto(
                     level.getBlock(
                         position.x.toInt(),
                         position.y.toInt(), position.z.toInt() + 1
-                    )!!
+                    )
                 ) || !this.canFlowInto(
                     level.getBlock(
                         position.x.toInt() - 1,
                         position.y.toInt(), position.z.toInt()
-                    )!!
+                    )
                 ) || !this.canFlowInto(
                     level.getBlock(
                         position.x.toInt() + 1,
                         position.y.toInt(), position.z.toInt()
-                    )!!
+                    )
                 ) || !this.canFlowInto(
                     level.getBlock(
                         position.x.toInt(),
                         position.y.toInt() + 1, position.z.toInt() - 1
-                    )!!
+                    )
                 ) || !this.canFlowInto(
                     level.getBlock(
                         position.x.toInt(),
                         position.y.toInt() + 1, position.z.toInt() + 1
-                    )!!
+                    )
                 ) || !this.canFlowInto(
                     level.getBlock(
                         position.x.toInt() - 1,
                         position.y.toInt() + 1, position.z.toInt()
-                    )!!
+                    )
                 ) || !this.canFlowInto(
                     level.getBlock(
                         position.x.toInt() + 1,
                         position.y.toInt() + 1, position.z.toInt()
-                    )!!
+                    )
                 )
             ) {
                 vector = vector!!.normalize().add(0.0, -6.0, 0.0)
@@ -232,7 +232,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
             this.checkForMixing()
             if (usesWaterLogging() && layer > 0) {
                 val layer0 = level.getBlock(this.position, 0)
-                if (layer0!!.isAir) {
+                if (layer0.isAir) {
                     level.setBlock(this.position, 1, get(BlockID.AIR), false, false)
                     level.setBlock(this.position, 0, this, false, false)
                 } else if (layer0.waterloggingLevel <= 0 || layer0.waterloggingLevel == 1 && liquidDepth > 0) {
@@ -250,22 +250,22 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                 smallestFlowDecay = this.getSmallestFlowDecay(
                     level.getBlock(
                         position.x.toInt(), position.y.toInt(), position.z.toInt() - 1
-                    )!!, smallestFlowDecay
+                    ), smallestFlowDecay
                 )
                 smallestFlowDecay = this.getSmallestFlowDecay(
                     level.getBlock(
                         position.x.toInt(), position.y.toInt(), position.z.toInt() + 1
-                    )!!, smallestFlowDecay
+                    ), smallestFlowDecay
                 )
                 smallestFlowDecay = this.getSmallestFlowDecay(
                     level.getBlock(
                         position.x.toInt() - 1, position.y.toInt(), position.z.toInt()
-                    )!!, smallestFlowDecay
+                    ), smallestFlowDecay
                 )
                 smallestFlowDecay = this.getSmallestFlowDecay(
                     level.getBlock(
                         position.x.toInt() + 1, position.y.toInt(), position.z.toInt()
-                    )!!, smallestFlowDecay
+                    ), smallestFlowDecay
                 )
                 var newDecay = smallestFlowDecay + multiplier
                 if (newDecay >= 8 || smallestFlowDecay < 0) {
@@ -275,7 +275,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                     level.getBlock(
                         position.x.toInt(),
                         position.y.toInt() + 1, position.z.toInt()
-                    )!!
+                    )
                 )
                 if (topFlowDecay >= 0) {
                     newDecay = topFlowDecay or 0x08
@@ -285,7 +285,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                         position.x.toInt(),
                         position.y.toInt() - 1, position.z.toInt()
                     )
-                    if (bottomBlock!!.isSolid) {
+                    if (bottomBlock.isSolid) {
                         newDecay = 0
                     } else if (bottomBlock is BlockFlowingWater && bottomBlock.liquidDepth == 0) {
                         newDecay = 0
@@ -319,7 +319,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                     position.x.toInt(),
                     position.y.toInt() - 1, position.z.toInt()
                 )
-                this.flowIntoBlock(bottomBlock!!, decay or 0x08)
+                this.flowIntoBlock(bottomBlock, decay or 0x08)
                 if (decay == 0 || !(if (usesWaterLogging()) bottomBlock.canWaterloggingFlowInto() else bottomBlock.canBeFlowedInto())) {
                     val adjacentDecay = if (decay >= 8) {
                         1
@@ -333,7 +333,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                                 level.getBlock(
                                     position.x.toInt() - 1,
                                     position.y.toInt(), position.z.toInt()
-                                )!!, adjacentDecay
+                                ), adjacentDecay
                             )
                         }
                         if (flags[1]) {
@@ -341,7 +341,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                                 level.getBlock(
                                     position.x.toInt() + 1,
                                     position.y.toInt(), position.z.toInt()
-                                )!!, adjacentDecay
+                                ), adjacentDecay
                             )
                         }
                         if (flags[2]) {
@@ -349,7 +349,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                                 level.getBlock(
                                     position.x.toInt(),
                                     position.y.toInt(), position.z.toInt() - 1
-                                )!!, adjacentDecay
+                                ), adjacentDecay
                             )
                         }
                         if (flags[3]) {
@@ -357,7 +357,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                                 level.getBlock(
                                     position.x.toInt(),
                                     position.y.toInt(), position.z.toInt() + 1
-                                )!!, adjacentDecay
+                                ), adjacentDecay
                             )
                         }
                     }
@@ -378,7 +378,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                 }
 
                 if (block.waterloggingLevel > 1) {
-                    block = layer1!!
+                    block = layer1
                 }
             }
 
@@ -423,14 +423,14 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
             val hash = blockHash(x, y, z, this.level)
             if (!flowCostVisited.containsKey(hash)) {
                 val blockSide = level.getBlock(x, y, z)
-                if (!this.canFlowInto(blockSide!!)) {
+                if (!this.canFlowInto(blockSide)) {
                     flowCostVisited.put(hash, BLOCKED)
-                } else if (if (usesWaterLogging()) level.getBlock(x, y - 1, z)!!
+                } else if (if (usesWaterLogging()) level.getBlock(x, y - 1, z)
                         .canWaterloggingFlowInto() else level.getBlock(
                         x,
                         y - 1,
                         z
-                    )!!
+                    )
                         .canBeFlowedInto()
                 ) {
                     flowCostVisited.put(hash, CAN_FLOW_DOWN)
@@ -484,7 +484,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
                     ++z
                 }
                 val block = level.getBlock(x, y, z)
-                if (!this.canFlowInto(block!!)) {
+                if (!this.canFlowInto(block)) {
                     flowCostVisited.put(
                         blockHash(
                             x,

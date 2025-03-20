@@ -36,15 +36,15 @@ open class BlockLapisOre @JvmOverloads constructor(blockstate: BlockState = Comp
     override val toolTier: Int
         get() = ItemTool.TIER_STONE
 
-    override val rawMaterial: String? 
+    override val rawMaterial: String?
         get() = ItemID.LAPIS_LAZULI
-    }
+}
 
-    override val dropExp: Int
-        get() = ThreadLocalRandom.current().nextInt(2, 6)
+override val dropExp: Int
+    get() = ThreadLocalRandom.current().nextInt(2, 6)
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.LAPIS_ORE)
+companion object {
+    val properties: BlockProperties = BlockProperties(BlockID.LAPIS_ORE)
 
-    }
+}
 }

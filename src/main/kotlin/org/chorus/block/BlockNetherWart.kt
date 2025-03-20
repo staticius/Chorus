@@ -22,7 +22,7 @@ class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState = Compani
         player: Player?
     ): Boolean {
         val down = this.down()
-        if (down!!.id == BlockID.SOUL_SAND) {
+        if (down.id == BlockID.SOUL_SAND) {
             level.setBlock(block.position, this, true, true)
             return true
         }
@@ -31,7 +31,7 @@ class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState = Compani
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down()!!.id != BlockID.SOUL_SAND) {
+            if (down().id != BlockID.SOUL_SAND) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }

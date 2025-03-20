@@ -6,7 +6,7 @@ import org.chorus.block.property.enums.WoodType
 class BlockBirchSapling : BlockSapling {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) :  super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override fun getWoodType(): WoodType {
         return WoodType.BIRCH

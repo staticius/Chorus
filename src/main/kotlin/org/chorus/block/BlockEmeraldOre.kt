@@ -12,7 +12,7 @@ open class BlockEmeraldOre @JvmOverloads constructor(blockstate: BlockState = Co
     override val name: String
         get() = "Emerald Ore"
 
-    override val rawMaterial: String? 
+    override val rawMaterial: String?
         get() = ItemID.EMERALD
 
     override val toolTier: Int

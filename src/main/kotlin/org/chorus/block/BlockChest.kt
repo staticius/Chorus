@@ -7,7 +7,9 @@ import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.blockentity.BlockEntityChest
 import org.chorus.blockentity.BlockEntityID
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.level.Locator
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
@@ -93,7 +95,7 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
         player: Player?
     ): Boolean {
         blockFace = if (player != null) fromHorizontalIndex(
-            player.getDirection()!!.getOpposite().horizontalIndex
+            player.getDirection().getOpposite().horizontalIndex
         ) else BlockFace.SOUTH
 
         val nbt = CompoundTag().putList("Items", ListTag<Tag<*>>())
@@ -191,7 +193,7 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
         }
 
         val top = up()
-        if (!top!!.isTransparent) {
+        if (!top.isTransparent) {
             return false
         }
 

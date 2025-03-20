@@ -19,111 +19,116 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone?> {
     override fun getBlockEntityType(): String {
         return BlockEntity.LODESTONE
 
-    override fun place(
-        item: Item,
-        block: Block,
-        target: Block,
-        face: BlockFace,
-        fx: Double,
-        fy: Double,
-        fz: Double,
-        player: Player?
-    ): Boolean {
-        return BlockEntityHolder.setBlockAndCreateEntity(this) != null
-    }
-
-    override fun canBeActivated(): Boolean {
-        return true
-    }
-
-    override fun onActivate(
-        item: Item,
-        player: Player?,
-        blockFace: BlockFace,
-        fx: Float,
-        fy: Float,
-        fz: Float
-    ): Boolean {
-        if (player == null || item.isNothing || item.id != ItemID.COMPASS && item.id != ItemID.LODESTONE_COMPASS) {
-            return false
+        override fun place(
+            item: Item,
+            block: Block,
+            target: Block,
+            face: BlockFace,
+            fx: Double,
+            fy: Double,
+            fz: Double,
+            player: Player?
+        ): Boolean {
+            return BlockEntityHolder.setBlockAndCreateEntity(this) != null
         }
 
-        val compass = Item.get(ItemID.LODESTONE_COMPASS) as ItemLodestoneCompass
-        if (item.hasCompoundTag()) {
-            compass.setCompoundTag(item.compoundTag.clone())
+        override fun canBeActivated(): Boolean {
+            return true
         }
 
-        val trackingHandle: Int
-        try {
-            trackingHandle = getOrCreateBlockEntity()!!.requestTrackingHandler()
-            compass.trackingHandle = trackingHandle
-        } catch (e: Exception) {
-            BlockLodestone.log.warn("Could not create a lodestone compass to {} for {}", locator, player.getName(), e)
-            return false
-        }
-
-        var added = true
-        if (item.getCount() == 1) {
-            player.getInventory().setItemInHand(compass)
-        } else {
-            val clone: Item = item.clone()
-            clone.count--
-            player.getInventory().setItemInHand(clone)
-            for (failed in player.getInventory().addItem(compass)) {
-                added = false
-                player.level!!.dropItem(player.getLocator().position, failed)
+        override fun onActivate(
+            item: Item,
+            player: Player?,
+            blockFace: BlockFace,
+            fx: Float,
+            fy: Float,
+            fz: Float
+        ): Boolean {
+            if (player == null || item.isNothing || item.id != ItemID.COMPASS && item.id != ItemID.LODESTONE_COMPASS) {
+                return false
             }
-        }
 
-        level.addSound(player.getLocator().position, Sound.LODESTONE_COMPASS_LINK_COMPASS_TO_LODESTONE)
+            val compass = Item.get(ItemID.LODESTONE_COMPASS) as ItemLodestoneCompass
+            if (item.hasCompoundTag()) {
+                compass.setCompoundTag(item.compoundTag.clone())
+            }
 
-        if (added) {
+            val trackingHandle: Int
             try {
-                Server.instance.getPositionTrackingService().startTracking(player, trackingHandle, false)
-            } catch (e: IOException) {
+                trackingHandle = getOrCreateBlockEntity()!!.requestTrackingHandler()
+                compass.trackingHandle = trackingHandle
+            } catch (e: Exception) {
                 BlockLodestone.log.warn(
-                    "Failed to make the player {} track {} at {}",
-                    player.getName(),
-                    trackingHandle,
+                    "Could not create a lodestone compass to {} for {}",
                     locator,
+                    player.getName(),
                     e
                 )
+                return false
             }
-            level.scheduler.scheduleTask(null, player::updateTrackingPositions)
+
+            var added = true
+            if (item.getCount() == 1) {
+                player.getInventory().setItemInHand(compass)
+            } else {
+                val clone: Item = item.clone()
+                clone.count--
+                player.getInventory().setItemInHand(clone)
+                for (failed in player.getInventory().addItem(compass)) {
+                    added = false
+                    player.level!!.dropItem(player.getLocator().position, failed)
+                }
+            }
+
+            level.addSound(player.getLocator().position, Sound.LODESTONE_COMPASS_LINK_COMPASS_TO_LODESTONE)
+
+            if (added) {
+                try {
+                    Server.instance.getPositionTrackingService().startTracking(player, trackingHandle, false)
+                } catch (e: IOException) {
+                    BlockLodestone.log.warn(
+                        "Failed to make the player {} track {} at {}",
+                        player.getName(),
+                        trackingHandle,
+                        locator,
+                        e
+                    )
+                }
+                level.scheduler.scheduleTask(null, player::updateTrackingPositions)
+            }
+
+            return true
         }
 
-        return true
-    }
-
-    override val name: String
+        override val name: String
         get() = "Lodestone"
 
-    override val hardness: Double
+        override val hardness: Double
         get() = 2.0
 
-    override val resistance: Double
+        override val resistance: Double
         get() = 3.5
 
-    override val toolType: Int
+        override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    override val toolTier: Int
+        override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun canHarvestWithHand(): Boolean {
-        return false
-    }
+        override fun canHarvestWithHand(): Boolean {
+            return false
+        }
 
-    override fun sticksToPiston(): Boolean {
-        return false
-    }
+        override fun sticksToPiston(): Boolean {
+            return false
+        }
 
-    override fun canBePushed(): Boolean {
-        return false
-    }
+        override fun canBePushed(): Boolean {
+            return false
+        }
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.LODESTONE)
+        companion object {
+            val properties: BlockProperties = BlockProperties(BlockID.LODESTONE)
 
+        }
     }
-}

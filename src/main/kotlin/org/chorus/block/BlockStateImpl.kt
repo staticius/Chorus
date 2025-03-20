@@ -8,7 +8,6 @@ import org.chorus.nbt.tag.LinkedCompoundTag
 import org.chorus.nbt.tag.TreeMapCompoundTag
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.HashUtils
-import javax.xml.crypto.Data
 
 class BlockStateImpl(
     override val identifier: String,
@@ -17,7 +16,11 @@ class BlockStateImpl(
     override val blockPropertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>,
     override val blockStateTag: CompoundTagView
 ) : BlockState {
-    constructor(identifier: String, blockStateHash: Int, propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>) : this(
+    constructor(
+        identifier: String,
+        blockStateHash: Int,
+        propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
+    ) : this(
         identifier.intern(),
         blockStateHash,
         BlockState.computeSpecialValue(propertyValues),
@@ -110,7 +113,10 @@ class BlockStateImpl(
         return getNewBlockState(properties, newPropertyValues)!!
     }
 
-    private fun getNewBlockState(properties: BlockProperties, values: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>): BlockState? {
+    private fun getNewBlockState(
+        properties: BlockProperties,
+        values: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
+    ): BlockState? {
         Preconditions.checkNotNull(properties)
         val bits = properties.specialValueBits
         if (bits <= 16) {
@@ -157,9 +163,20 @@ class BlockStateImpl(
             val states = TreeMapCompoundTag()
             for (value in propertyValues) {
                 when (value.propertyType.getType()) {
-                    BlockPropertyType.Type.INT -> states.putInt(value.propertyType.getName(), value.getSerializedValue() as Int)
-                    BlockPropertyType.Type.ENUM -> states.putString(value.propertyType.getName(), value.getSerializedValue().toString())
-                    BlockPropertyType.Type.BOOLEAN -> states.putByte(value.propertyType.getName(), (value.getSerializedValue() as Byte).toInt())
+                    BlockPropertyType.Type.INT -> states.putInt(
+                        value.propertyType.getName(),
+                        value.getSerializedValue() as Int
+                    )
+
+                    BlockPropertyType.Type.ENUM -> states.putString(
+                        value.propertyType.getName(),
+                        value.getSerializedValue().toString()
+                    )
+
+                    BlockPropertyType.Type.BOOLEAN -> states.putByte(
+                        value.propertyType.getName(),
+                        (value.getSerializedValue() as Byte).toInt()
+                    )
                 }
             }
             return CompoundTagView(

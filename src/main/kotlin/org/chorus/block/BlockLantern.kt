@@ -18,7 +18,7 @@ open class BlockLantern @JvmOverloads constructor(blockstate: BlockState = Compa
     private val isBlockAboveValid: Boolean
         get() {
             val support = up()
-            when (support!!.id) {
+            when (support.id) {
                 BlockID.CHAIN, BlockID.IRON_BARS, BlockID.HOPPER -> {
                     return true
                 }
@@ -41,7 +41,7 @@ open class BlockLantern @JvmOverloads constructor(blockstate: BlockState = Compa
     private val isBlockUnderValid: Boolean
         get() {
             val support = down()
-            if (support!!.id == BlockID.HOPPER) {
+            if (support.id == BlockID.HOPPER) {
                 return true
             }
             if (support is BlockWallBase || support is BlockFence) {

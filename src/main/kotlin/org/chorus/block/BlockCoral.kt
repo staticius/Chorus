@@ -24,7 +24,7 @@ abstract class BlockCoral(blockstate: BlockState) : BlockFlowable(blockstate) {
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val down = down()
-            if (!down!!.isSolid) {
+            if (!down.isSolid) {
                 level.useBreakOn(this.position)
             } else if (!isDead()) {
                 level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40))
@@ -56,7 +56,7 @@ abstract class BlockCoral(blockstate: BlockState) : BlockFlowable(blockstate) {
         val layer1 = block.getLevelBlockAtLayer(1)
         val hasWater = layer1 is BlockFlowingWater
         val waterDamage: Int
-        if (!layer1!!.isAir && (!hasWater || ((layer1.getPropertyValue(CommonBlockProperties.LIQUID_DEPTH)
+        if (!layer1.isAir && (!hasWater || ((layer1.getPropertyValue(CommonBlockProperties.LIQUID_DEPTH)
                 .also { waterDamage = it }) != 0) && waterDamage != 8)
         ) {
             return false
@@ -66,7 +66,7 @@ abstract class BlockCoral(blockstate: BlockState) : BlockFlowable(blockstate) {
             level.setBlock(this.position, 1, BlockFlowingWater(), direct = true, update = false)
         }
 
-        if (down!!.isSolid) {
+        if (down.isSolid) {
             level.setBlock(this.position, 0, this, direct = true, update = true)
             return true
         }

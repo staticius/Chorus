@@ -28,7 +28,7 @@ class BlockWater @JvmOverloads constructor(blockstate: BlockState = Companion.pr
 
     override fun getLiquidWithNewDepth(depth: Int): BlockLiquid {
         return BlockWater(
-            blockState!!.setPropertyValue(
+            blockState.setPropertyValue(
                 Companion.properties,
                 CommonBlockProperties.LIQUID_DEPTH.createValue(depth)
             )

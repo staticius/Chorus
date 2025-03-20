@@ -8,11 +8,13 @@ import org.chorus.entity.projectile.EntitySmallFireball
 import org.chorus.entity.projectile.abstract_arrow.EntityArrow
 import org.chorus.entity.projectile.throwable.EntitySnowball
 import org.chorus.event.block.BlockGrowEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.level.Sound
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
@@ -34,7 +36,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
             // Chorus flowers must be above end stone or chorus plant, or be above air and horizontally adjacent to exactly one chorus plant.
             // If these conditions are not met, the block breaks without dropping anything.
             val down = down()
-            if (down!!.id == BlockID.CHORUS_PLANT || down.id == BlockID.END_STONE) {
+            if (down.id == BlockID.CHORUS_PLANT || down.id == BlockID.END_STONE) {
                 return true
             }
             if (!down.isAir) {
@@ -43,7 +45,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
             var foundPlant = false
             for (face in BlockFace.Plane.HORIZONTAL) {
                 val side = getSide(face)
-                if (side!!.id == BlockID.CHORUS_PLANT) {
+                if (side.id == BlockID.CHORUS_PLANT) {
                     if (foundPlant) {
                         return false
                     }
@@ -65,19 +67,19 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
             return type
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             // Check limit
-            if (up()!!.isAir && up()!!.y <= level.maxHeight) {
+            if (up().isAir && up().y <= level.maxHeight) {
                 if (!isFullyAged) {
                     var growUp = false // Grow upward?
                     var ground = false // Is on the ground directly?
-                    if (down()!!.isAir || down()!!.id == BlockID.END_STONE) {
+                    if (down().isAir || down().id == BlockID.END_STONE) {
                         growUp = true
-                    } else if (down()!!.id == BlockID.CHORUS_PLANT) {
+                    } else if (down().id == BlockID.CHORUS_PLANT) {
                         var height = 1
                         for (y in 2..5) {
-                            if (down(y)!!.id == BlockID.CHORUS_PLANT) {
+                            if (down(y).id == BlockID.CHORUS_PLANT) {
                                 height++
                             } else {
-                                if (down(y)!!.id == BlockID.END_STONE) {
+                                if (down(y).id == BlockID.END_STONE) {
                                     ground = true
                                 }
                                 break
@@ -91,7 +93,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
 
 
                     // Grow Upward
-                    if (growUp && up(2)!!.isAir && isHorizontalAir(up()!!)) {
+                    if (growUp && up(2).isAir && isHorizontalAir(up())) {
                         val block = clone() as BlockChorusFlower
                         block.position.y = position.y + 1
                         val ev = BlockGrowEvent(this, block)
@@ -109,7 +111,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
                         for (i in 0..<ThreadLocalRandom.current().nextInt(if (ground) 5 else 4)) {
                             val face = BlockFace.Plane.HORIZONTAL.random()
                             val check = this.getSide(face)
-                            if (check!!.isAir && check.down()!!.isAir && isHorizontalAirExcept(
+                            if (check.isAir && check.down().isAir && isHorizontalAirExcept(
                                     check,
                                     face.getOpposite()
                                 )
@@ -204,7 +206,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
 
     private fun isHorizontalAir(block: Block): Boolean {
         for (face in BlockFace.Plane.HORIZONTAL) {
-            if (!block.getSide(face)!!.isAir) {
+            if (!block.getSide(face).isAir) {
                 return false
             }
         }
@@ -214,7 +216,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
     private fun isHorizontalAirExcept(block: Block, except: BlockFace?): Boolean {
         for (face in BlockFace.Plane.HORIZONTAL) {
             if (face != except) {
-                if (!block.getSide(face)!!.isAir) {
+                if (!block.getSide(face).isAir) {
                     return false
                 }
             }

@@ -1,7 +1,8 @@
 package org.chorus.utils
 
 import java.util.*
-import java.util.function.*
+import java.util.function.Consumer
+import java.util.function.Supplier
 
 class OptionalValue<T> internal constructor(private val value: T?) {
     val isPresent: Boolean
@@ -25,8 +26,7 @@ class OptionalValue<T> internal constructor(private val value: T?) {
         return value ?: other.get()
     }
 
-    @Throws(X::class)
-    fun <X : Throwable?> orElseThrow(exceptionSupplier: Supplier<X>): T {
+    fun <X : Throwable> orElseThrow(exceptionSupplier: Supplier<X>): T {
         if (value != null) {
             return value
         } else {

@@ -6,7 +6,7 @@ import org.chorus.math.BlockFace
 
 abstract class BlockStemStripped(blockstate: BlockState) : BlockStem(blockstate) {
     override fun getStrippedState(): BlockState {
-        return blockState!!
+        return blockState
     }
 
     override fun canBeActivated(): Boolean {

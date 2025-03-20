@@ -26,7 +26,7 @@ class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState = Compani
 
     override fun onEntityCollide(entity: Entity) {
         if (Server.instance.getDifficulty() != 0 && entity is EntityLiving) {
-            if (!entity!!.invulnerable && !entity.hasEffect(EffectType.WITHER) && (entity !is Player || !entity.isCreative && !entity.isSpectator)) {
+            if (!entity.invulnerable && !entity.hasEffect(EffectType.WITHER) && (entity !is Player || !entity.isCreative && !entity.isSpectator)) {
                 val effect = get(EffectType.WITHER)
                 effect.setDuration(40)
                 effect.setAmplifier(1)

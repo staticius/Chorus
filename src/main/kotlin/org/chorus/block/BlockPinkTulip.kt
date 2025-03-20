@@ -3,7 +3,7 @@ package org.chorus.block
 class BlockPinkTulip : BlockFlower {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) :  super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PINK_TULIP)

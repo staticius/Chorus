@@ -26,8 +26,8 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
     override fun onUpdate(type: Int): Int {
         when (type) {
             Level.BLOCK_UPDATE_NORMAL -> {
-                val supportBlock = this.getSide(facing!!.getOpposite()!!)
-                if (!supportBlock!!.isNormalBlock && supportBlock !is BlockGlass) {
+                val supportBlock = this.getSide(facing!!.getOpposite())
+                if (!supportBlock.isNormalBlock && supportBlock !is BlockGlass) {
                     level.useBreakOn(this.position)
                 }
                 return type
@@ -51,14 +51,14 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         fz: Double,
         player: Player?
     ): Boolean {
-        val supportBlock = this.getSide(face.getOpposite()!!)
+        val supportBlock = this.getSide(face.getOpposite())
         if (face == BlockFace.DOWN || face == BlockFace.UP ||
-            (!supportBlock!!.isNormalBlock && supportBlock !is BlockGlass)
+            (!supportBlock.isNormalBlock && supportBlock !is BlockGlass)
         ) {
             return false
         }
 
-        if (face.axis!!.isHorizontal) {
+        if (face.axis.isHorizontal) {
             this.setFace(face)
         }
 
@@ -81,7 +81,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
 
         if (powered) {
             updateAroundRedstone()
-            updateAroundRedstone(getSide(facing!!.getOpposite()!!)!!)
+            updateAroundRedstone(getSide(facing!!.getOpposite()))
         }
 
         return true
@@ -108,7 +108,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         val line = arrayOfNulls<BlockTripWire>(MAX_TRIPWIRE_CIRCUIT_LENGTH)
         //Skip the starting hook in potential circuit
         for (steps in 1..<MAX_TRIPWIRE_CIRCUIT_LENGTH) {
-            var b = level.getBlock(locator.getSide(facing, steps)!!.position)
+            var b = level.getBlock(locator.getSide(facing, steps).position)
 
             if (b is BlockTripwireHook) {
                 if (b.facing == facing!!.getOpposite()) {
@@ -149,10 +149,10 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         if (foundPairedHook) {
             val pairedPos = locator.getSide(facing, pairedHookDistance)
             val pairedFace = facing!!.getOpposite()
-            updatedHook.setFace(pairedFace!!)
-            level.setBlock(pairedPos!!.position, updatedHook, true, true)
+            updatedHook.setFace(pairedFace)
+            level.setBlock(pairedPos.position, updatedHook, true, true)
             updateAroundRedstone(pairedPos)
-            updateAroundRedstone(pairedPos.getSide(pairedFace.getOpposite())!!)
+            updateAroundRedstone(pairedPos.getSide(pairedFace.getOpposite()))
             this.addSound(pairedPos.position, isConnected, isPowered, wasConnected, wasPowered)
         }
 
@@ -164,7 +164,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
 
             if (doUpdateAroundHook) {
                 updateAroundRedstone()
-                updateAroundRedstone(locator.getSide(facing.getOpposite())!!)
+                updateAroundRedstone(locator.getSide(facing.getOpposite()))
             }
         }
 
@@ -193,7 +193,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         }
     }
 
-    val facing: BlockFace?
+    val facing: BlockFace
         get() = fromHorizontalIndex(this.direction)
 
     val direction: Int

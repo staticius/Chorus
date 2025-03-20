@@ -266,7 +266,8 @@ enum class BlockFace(
         /**
          * All faces with horizontal axis in order S-W-N-E
          */
-        private val HORIZONTALS = Array(entries.count { it.axis.isHorizontal }) { index -> entries.single { it.axis.isHorizontal && it.horizontalIndex == index} }
+        private val HORIZONTALS =
+            Array(entries.count { it.axis.isHorizontal }) { index -> entries.single { it.axis.isHorizontal && it.horizontalIndex == index } }
 
         init {
             for (face in entries) {

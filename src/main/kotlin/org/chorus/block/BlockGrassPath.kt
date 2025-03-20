@@ -22,7 +22,7 @@ class BlockGrassPath : BlockGrassBlock {
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (up()!!.isSolid) {
+            if (up().isSolid) {
                 level.setBlock(this.position, get(DIRT), false, true)
             }
 

@@ -31,7 +31,7 @@ interface Waxable {
             if (waxed) {
                 item.count--
             } else {
-                item.useOn((if (this is Block) this else location.levelBlock)!!)
+                item.useOn((if (this is Block) this else location.levelBlock))
             }
         }
         location.level.addParticle(if (waxed) WaxOnParticle(location.position) else WaxOffParticle(location.position))

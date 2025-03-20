@@ -74,7 +74,7 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState = Compani
         if (age < 3) {
             this.age = age + 1
             level.setBlock(this.position, layer, this, true)
-            level.scheduleUpdate(level.getBlock(this.position)!!, ThreadLocalRandom.current().nextInt(20, 40))
+            level.scheduleUpdate(level.getBlock(this.position), ThreadLocalRandom.current().nextInt(20, 40))
         } else {
             level.setBlock(this.position, layer, get(FLOWING_WATER), true)
             if (isSource) {
@@ -91,7 +91,7 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState = Compani
     private fun countNeighbors(): Int {
         var neighbors = 0
         for (face in BlockFace.entries) {
-            if (getSide(face)!!.id == FROSTED_ICE && ++neighbors >= 4) {
+            if (getSide(face).id == FROSTED_ICE && ++neighbors >= 4) {
                 return neighbors
             }
         }

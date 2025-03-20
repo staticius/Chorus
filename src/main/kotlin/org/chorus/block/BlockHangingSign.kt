@@ -31,7 +31,7 @@ abstract class BlockHangingSign(blockState: BlockState) : BlockSignBase(blockSta
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (isHanging) {
-                if (up()!!.isAir) {
+                if (up().isAir) {
                     level.useBreakOn(this.position)
                     return Level.BLOCK_UPDATE_NORMAL
                 }
@@ -55,7 +55,7 @@ abstract class BlockHangingSign(blockState: BlockState) : BlockSignBase(blockSta
         return if (isHanging && isAttached) {
             from(getPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION))
         } else {
-            fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))!!.compassRoseDirection!!
+            fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION)).compassRoseDirection!!
         }
     }
 
@@ -121,17 +121,17 @@ abstract class BlockHangingSign(blockState: BlockState) : BlockSignBase(blockSta
             return true
         } catch (e: Exception) {
             log.warn("Failed to create block entity {} at {}", getBlockEntityType(), locator, e)
-            level.setBlock(layer0!!.position, 0, layer0, true)
-            level.setBlock(layer1!!.position, 0, layer1, true)
+            level.setBlock(layer0.position, 0, layer0, true)
+            level.setBlock(layer1.position, 0, layer1, true)
             return false
         }
     }
 
     private fun checkGroundBlock(): BlockFace? {
-        if (getSide(BlockFace.NORTH, 1)!!.canBePlaced()) return BlockFace.NORTH
-        if (getSide(BlockFace.SOUTH, 1)!!.canBePlaced()) return BlockFace.SOUTH
-        if (getSide(BlockFace.WEST, 1)!!.canBePlaced()) return BlockFace.WEST
-        if (getSide(BlockFace.EAST, 1)!!.canBePlaced()) return BlockFace.EAST
+        if (getSide(BlockFace.NORTH, 1).canBePlaced()) return BlockFace.NORTH
+        if (getSide(BlockFace.SOUTH, 1).canBePlaced()) return BlockFace.SOUTH
+        if (getSide(BlockFace.WEST, 1).canBePlaced()) return BlockFace.WEST
+        if (getSide(BlockFace.EAST, 1).canBePlaced()) return BlockFace.EAST
         return null
     }
 }

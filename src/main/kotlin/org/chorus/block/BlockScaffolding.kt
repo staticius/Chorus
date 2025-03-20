@@ -50,13 +50,13 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
         }
 
         val down = down()
-        if ((target.id != BlockID.SCAFFOLDING) && (down!!.id != BlockID.SCAFFOLDING) && !down.isAir && !down.isSolid) {
+        if ((target.id != BlockID.SCAFFOLDING) && (down.id != BlockID.SCAFFOLDING) && !down.isAir && !down.isSolid) {
             var scaffoldOnSide = false
             for (i in 0..3) {
                 val sideFace = fromHorizontalIndex(i)
                 if (sideFace != face) {
-                    val side = getSide(sideFace!!)
-                    if (side!!.id == BlockID.SCAFFOLDING) {
+                    val side = getSide(sideFace)
+                    if (side.id == BlockID.SCAFFOLDING) {
                         scaffoldOnSide = true
                         break
                     }
@@ -75,7 +75,7 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val down = down()
-            if (down!!.isSolid) {
+            if (down.isSolid) {
                 if (!isDefaultState) {
                     setPropertyValues(
                         CommonBlockProperties.STABILITY.createValue(0),
@@ -93,7 +93,7 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
                 }
 
                 val otherBlock = getSide(face)
-                if (otherBlock!!.id == BlockID.SCAFFOLDING) {
+                if (otherBlock.id == BlockID.SCAFFOLDING) {
                     val other = otherBlock as BlockScaffolding
                     val otherStability = other.stability
                     if (otherStability < stability) {

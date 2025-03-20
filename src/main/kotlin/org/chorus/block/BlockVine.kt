@@ -74,8 +74,8 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
         var f4 = 0.0
         var f5 = 0.0
         var f6 = 0.0
-        var flag = blockState!!.specialValue() > 0
-        if ((blockState!!.specialValue().toInt() and 0x02) > 0) {
+        var flag = blockState.specialValue() > 0
+        if ((blockState.specialValue().toInt() and 0x02) > 0) {
             f4 = max(f4, 0.0625)
             f1 = 0.0
             f2 = 0.0
@@ -84,7 +84,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
             f6 = 1.0
             flag = true
         }
-        if ((blockState!!.specialValue().toInt() and 0x08) > 0) {
+        if ((blockState.specialValue().toInt() and 0x08) > 0) {
             f1 = min(f1, 0.9375)
             f4 = 1.0
             f2 = 0.0
@@ -93,7 +93,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
             f6 = 1.0
             flag = true
         }
-        if ((blockState!!.specialValue().toInt() and 0x01) > 0) {
+        if ((blockState.specialValue().toInt() and 0x01) > 0) {
             f3 = min(f3, 0.9375)
             f6 = 1.0
             f1 = 0.0
@@ -102,7 +102,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
             f5 = 1.0
             flag = true
         }
-        if (!flag && up()!!.isSolid) {
+        if (!flag && up().isSolid) {
             f2 = min(f2, 0.9375)
             f5 = 1.0
             f1 = 0.0
@@ -133,7 +133,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
         if ((block.id != BlockID.VINE) && target.isSolid && face.horizontalIndex != -1) {
             this.setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.VINE_DIRECTION_BITS, getMetaFromFace(
-                    face.getOpposite()!!
+                    face.getOpposite()
                 )
             )
             level.setBlock(block.position, this, true, true)
@@ -163,16 +163,16 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
             val upFaces: Set<BlockFace>? = if (up is BlockVine) up.faces else null
             val faces = this.faces
             for (face in BlockFace.Plane.HORIZONTAL) {
-                if (!getSide(face)!!.isSolid && (upFaces == null || !upFaces.contains(face))) {
+                if (!getSide(face).isSolid && (upFaces == null || !upFaces.contains(face))) {
                     faces.remove(face)
                 }
             }
-            if (faces.isEmpty() && !up!!.isSolid) {
+            if (faces.isEmpty() && !up.isSolid) {
                 level.useBreakOn(this.position, null, null, true)
                 return Level.BLOCK_UPDATE_NORMAL
             }
             val meta = getMetaFromFaces(faces)
-            if (meta != blockState!!.specialValue().toInt()) {
+            if (meta != blockState.specialValue().toInt()) {
                 level.setBlock(
                     this.position,
                     get(BlockID.VINE).setPropertyValue<Int, IntPropertyType>(
@@ -187,14 +187,14 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
             val random: Random = ThreadLocalRandom.current()
             if (random.nextInt(4) == 0) {
                 val face = random(random)
-                val block = this.getSide(face!!)
+                val block = this.getSide(face)
                 val faceMeta = getMetaFromFace(face)
-                var meta = blockState!!.specialValue().toInt()
+                var meta = blockState.specialValue().toInt()
 
-                if (position.y < 255 && face == BlockFace.UP && block!!.isAir) {
+                if (position.y < 255 && face == BlockFace.UP && block.isAir) {
                     if (this.canSpread()) {
                         for (horizontalFace in BlockFace.Plane.HORIZONTAL) {
-                            if (random.nextBoolean() || !getSide(horizontalFace)!!.getSide(face)!!.isSolid) {
+                            if (random.nextBoolean() || !getSide(horizontalFace).getSide(face).isSolid) {
                                 meta = meta and getMetaFromFace(horizontalFace).inv()
                             }
                         }
@@ -202,7 +202,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
                     }
                 } else if (face.horizontalIndex != -1 && (meta and faceMeta) != faceMeta) {
                     if (this.canSpread()) {
-                        if (block!!.isAir) {
+                        if (block.isAir) {
                             val cwFace = face.rotateY()
                             val ccwFace = face.rotateYCCW()
                             val cwBlock = block.getSide(cwFace)
@@ -212,15 +212,15 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
                             val onCw = (meta and cwMeta) == cwMeta
                             val onCcw = (meta and ccwMeta) == ccwMeta
 
-                            if (onCw && cwBlock!!.isSolid) {
+                            if (onCw && cwBlock.isSolid) {
                                 putVine(block, getMetaFromFace(cwFace), this)
-                            } else if (onCcw && ccwBlock!!.isSolid) {
+                            } else if (onCcw && ccwBlock.isSolid) {
                                 putVine(block, getMetaFromFace(ccwFace), this)
-                            } else if (onCw && cwBlock!!.isAir && getSide(cwFace)!!.isSolid) {
-                                putVine(cwBlock, getMetaFromFace(face.getOpposite()!!), this)
-                            } else if (onCcw && ccwBlock!!.isAir && getSide(ccwFace)!!.isSolid) {
-                                putVine(ccwBlock, getMetaFromFace(face.getOpposite()!!), this)
-                            } else if (block.up()!!.isSolid) {
+                            } else if (onCw && cwBlock.isAir && getSide(cwFace).isSolid) {
+                                putVine(cwBlock, getMetaFromFace(face.getOpposite()), this)
+                            } else if (onCcw && ccwBlock.isAir && getSide(ccwFace).isSolid) {
+                                putVine(ccwBlock, getMetaFromFace(face.getOpposite()), this)
+                            } else if (block.up().isSolid) {
                                 putVine(block, 0, this)
                             }
                         } else if (!block.isTransparent) {
@@ -230,7 +230,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
                     }
                 } else if (position.y > 0) {
                     val below = this.down()
-                    val id = below!!.id
+                    val id = below.id
                     if (id == BlockID.AIR || id == BlockID.VINE) {
                         for (horizontalFace in BlockFace.Plane.HORIZONTAL) {
                             if (random.nextBoolean()) {
@@ -239,7 +239,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
                         }
                         putVineOnHorizontalFace(
                             below,
-                            below.blockState!!.specialValue().toInt() or meta,
+                            below.blockState.specialValue().toInt() or meta,
                             if (id == BlockID.AIR) this else null
                         )
                     }
@@ -259,7 +259,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
         for (x in blockX - 4..blockX + 4) {
             for (z in blockZ - 4..blockZ + 4) {
                 for (y in blockY - 1..blockY + 1) {
-                    if (level.getBlock(x, y, z)!!.id == BlockID.VINE) {
+                    if (level.getBlock(x, y, z).id == BlockID.VINE) {
                         if (++count >= 5) return false
                     }
                 }
@@ -269,7 +269,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
     }
 
     private fun putVine(block: Block, meta: Int, source: Block?) {
-        if (block.id == BlockID.VINE && block.blockState!!.specialValue().toInt() == meta) return
+        if (block.id == BlockID.VINE && block.blockState.specialValue().toInt() == meta) return
         val vine =
             get(BlockID.VINE).setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.VINE_DIRECTION_BITS, meta)
         val event = if (source != null) {
@@ -284,7 +284,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
     }
 
     private fun putVineOnHorizontalFace(block: Block, meta: Int, source: Block?) {
-        if (block.id == BlockID.VINE && block.blockState!!.specialValue().toInt() == meta) return
+        if (block.id == BlockID.VINE && block.blockState.specialValue().toInt() == meta) return
         var isOnHorizontalFace = false
         for (face in BlockFace.Plane.HORIZONTAL) {
             val faceMeta = getMetaFromFace(face)
@@ -302,7 +302,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
         get() {
             val faces: MutableSet<BlockFace> = EnumSet.noneOf(BlockFace::class.java)
 
-            val meta = blockState!!.specialValue().toInt()
+            val meta = blockState.specialValue().toInt()
             if ((meta and 1) > 0) {
                 faces.add(BlockFace.SOUTH)
             }

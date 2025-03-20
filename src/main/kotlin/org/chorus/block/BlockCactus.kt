@@ -9,11 +9,14 @@ import org.chorus.entity.Entity
 import org.chorus.event.block.BlockGrowEvent
 import org.chorus.event.entity.EntityDamageByBlockEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
 import org.chorus.level.Level
-import org.chorus.math.*
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.tags.ItemTags
 import org.chorus.tags.ItemTags.getItemSet
 
@@ -83,15 +86,15 @@ class BlockCactus @JvmOverloads constructor(state: BlockState = Companion.proper
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val down = down()
-            if (!getItemSet(ItemTags.SAND).contains(down!!.id)
+            if (!getItemSet(ItemTags.SAND).contains(down.id)
                 && down !is BlockCactus
             ) {
                 level.useBreakOn(this.position)
                 return 0
             }
             for (side in 2..5) {
-                val block = getSide(fromIndex(side)!!)
-                if (!block!!.canBeFlowedInto()) {
+                val block = getSide(fromIndex(side))
+                if (!block.canBeFlowedInto()) {
                     level.useBreakOn(this.position)
                 }
             }
@@ -113,7 +116,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState = Companion.proper
                         position.y + y, position.z
                     )
                 )
-                if (!b!!.isAir) {
+                if (!b.isAir) {
                     continue
                 }
                 val event = BlockGrowEvent(b, get(BlockID.CACTUS))
@@ -140,7 +143,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState = Companion.proper
         player: Player?
     ): Boolean {
         val down = this.down()
-        if (!getItemSet(ItemTags.SAND.toString()).contains(down!!.id)
+        if (!getItemSet(ItemTags.SAND.toString()).contains(down.id)
             && down !is BlockCactus
         ) {
             return false
@@ -149,7 +152,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState = Companion.proper
         val block1 = south()
         val block2 = west()
         val block3 = east()
-        if (block0!!.canBeFlowedInto() && block1!!.canBeFlowedInto() && block2!!.canBeFlowedInto() && block3!!.canBeFlowedInto()) {
+        if (block0.canBeFlowedInto() && block1.canBeFlowedInto() && block2.canBeFlowedInto() && block3.canBeFlowedInto()) {
             level.setBlock(this.position, this, true)
             return true
         }

@@ -68,14 +68,14 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState = Companion.pro
         player: Player?
     ): Boolean {
         if (player != null) {
-            blockFace = player.getDirection()!!.getOpposite()!!
+            blockFace = player.getDirection().getOpposite()
         }
         level.setBlock(this.position, this, true, true)
         return true
     }
 
     override var blockFace: BlockFace
-        get() = horizontals[getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)]!!
+        get() = horizontals[getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)]
         set(face) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face.horizontalIndex)
         }

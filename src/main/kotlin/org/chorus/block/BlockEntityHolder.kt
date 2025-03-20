@@ -121,8 +121,8 @@ interface BlockEntityHolder<E : BlockEntity> {
                         holder.getBlockEntityType(),
                         holder.locator, e
                     )
-                    level.setBlock(layer0!!.position, 0, layer0, direct, update)
-                    level.setBlock(layer1!!.position, 1, layer1, direct, update)
+                    level.setBlock(layer0.position, 0, layer0, direct, update)
+                    level.setBlock(layer1.position, 1, layer1, direct, update)
                     throw e
                 }
             }

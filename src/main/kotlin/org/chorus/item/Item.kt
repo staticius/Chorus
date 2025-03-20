@@ -5,12 +5,16 @@ import io.netty.util.internal.EmptyArrays
 import it.unimi.dsi.fastutil.ints.Int2IntArrayMap
 import it.unimi.dsi.fastutil.ints.Int2IntMap
 import org.chorus.Player
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockAir
+import org.chorus.block.BlockID
+import org.chorus.block.BlockState
+import org.chorus.entity.Entity
 import org.chorus.item.Item.ItemJsonComponents.ItemLock
-import org.chorus.item.enchantment.*
+import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.*
 import org.chorus.registry.Registries
@@ -400,7 +404,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         if (customEnch.size() != 0) {
             val customName = setCustomEnchantDisplay(customEnch)
             if (tag.contains("display") && tag["display"] is CompoundTag) {
-                tag.getCompound("display")!!.putString("Name", customName)
+                tag.getCompound("display").putString("Name", customName)
             } else {
                 tag.putCompound(
                     "display", CompoundTag()
@@ -416,7 +420,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         for (ench in customEnch.all) {
             val enchantment: Enchantment = Enchantment.getEnchantment(
                 ench.getString("id")
-            )!!.setLevel(ench.getShort("lvl").toInt())
+            ).setLevel(ench.getShort("lvl").toInt())
             joiner.add(enchantment.lore)
         }
         return joiner.toString()
@@ -522,7 +526,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
             if (tag!!.contains("display")) {
                 val tag1 = tag["display"]
                 if (tag1 is CompoundTag && tag1.contains("Name") && tag1["Name"] is StringTag) {
-                    return tag1.getString("Name")!!
+                    return tag1.getString("Name")
                 }
             }
 
@@ -548,7 +552,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
             namedTag
         }
         if (tag!!.contains("display") && tag["display"] is CompoundTag) {
-            tag.getCompound("display")!!.putString("Name", name!!)
+            tag.getCompound("display").putString("Name", name!!)
         } else {
             tag.putCompound(
                 "display", CompoundTag()
@@ -575,8 +579,8 @@ abstract class Item : Cloneable, ItemID, Loggable {
         val tag = this.namedTag
 
         if (tag!!.contains("display") && tag["display"] is CompoundTag) {
-            tag.getCompound("display")!!.remove("Name")
-            if (tag.getCompound("display")!!.isEmpty) {
+            tag.getCompound("display").remove("Name")
+            if (tag.getCompound("display").isEmpty) {
                 tag.remove("display")
             }
 
@@ -604,7 +608,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
 
                 if (lore.size() > 0) {
                     for (stringTag in lore.all) {
-                        lines.add(stringTag.data!!)
+                        lines.add(stringTag.data)
                     }
                 }
             }
@@ -636,7 +640,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         if (!tag!!.contains("display")) {
             tag.putCompound("display", CompoundTag().putList("Lore", lore))
         } else {
-            tag.getCompound("display")!!.putList("Lore", lore)
+            tag.getCompound("display").putList("Lore", lore)
         }
 
         this.setNamedTag(tag)
@@ -1247,7 +1251,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
 
         if (!thisTags!!.contains("ench") || !otherTags!!.contains("ench") || (thisTags["ench"] !is ListTag<*>) || (otherTags["ench"] !is ListTag<*>) || thisTags.getList(
                 "ench"
-            )!!.size() != otherTags.getList("ench")!!.size()
+            ).size() != otherTags.getList("ench").size()
         ) {
             return false
         }

@@ -28,14 +28,15 @@ import java.util.*
  * To get chain data, you can use player.getLoginChainData() or read(loginPacket)
  */
 class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData {
-    override val xuid: String?
+    override var xuid: String? = null
         get() {
             return if (this.isWaterdog) {
                 waterdogXUID
             } else {
-                this.xuid
+                field
             }
         }
+        private set
 
     override var isXboxAuthed: Boolean = false
         private set
@@ -62,8 +63,6 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
 
     override var clientUUID: UUID? = null
         private set
-
-    private var xuid: String? = null
 
     var titleId: String? = null
         private set

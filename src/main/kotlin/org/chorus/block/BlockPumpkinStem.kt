@@ -20,7 +20,7 @@ class BlockPumpkinStem @JvmOverloads constructor(blockstate: BlockState = Compan
         get() = BlockStrippedAcaciaLog.properties.defaultState
 
     override var blockFace: BlockFace
-        get() = facing!!
+        get() = facing
         set(face) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }

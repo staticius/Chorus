@@ -14,7 +14,7 @@ abstract class BlockNylium(blockState: BlockState) : BlockSolid(blockState), Nat
         get() = ItemTool.TYPE_PICKAXE
 
     override fun onUpdate(type: Int): Int {
-        if (type == Level.BLOCK_UPDATE_RANDOM && !up()!!.isTransparent) {
+        if (type == Level.BLOCK_UPDATE_RANDOM && !up().isTransparent) {
             level.setBlock(this.position, get(BlockID.NETHERRACK), false)
             return type
         }
@@ -34,7 +34,7 @@ abstract class BlockNylium(blockState: BlockState) : BlockSolid(blockState), Nat
         fz: Float
     ): Boolean {
         val up = up()
-        if (item.isNothing || !item.isFertilizer || !up!!.isAir) {
+        if (item.isNothing || !item.isFertilizer || !up.isAir) {
             return false
         }
 

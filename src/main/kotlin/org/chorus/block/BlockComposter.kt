@@ -10,7 +10,6 @@ import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
 import java.util.*
-import kotlin.collections.HashMap
 
 class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
@@ -169,14 +168,12 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
         }
         }
 
-        fun registerBlock(chance: Int, blockId: String)
-        {
+        fun registerBlock(chance: Int, blockId: String) {
             val blockState = Registries.BLOCK.get(blockId)!!.blockState
-            compostableBlocks.put (blockState, chance)
+            compostableBlocks.put(blockState, chance)
         }
 
-        fun registerBlock(chance: Int, blockId: String, meta: Int)
-        {
+        fun registerBlock(chance: Int, blockId: String, meta: Int) {
             val i = Registries.BLOCKSTATE_ITEMMETA.get(blockId)
             val blockState: BlockState
             if (i == 0) {

@@ -38,7 +38,7 @@ interface Oxidizable {
         }
 
         val block = if (this is Block) this else locator.levelBlock
-        val mutableLocator = block!!.locator
+        val mutableLocator = block.locator
 
         var odds = 0
         var cons = 0
@@ -106,7 +106,7 @@ interface Oxidizable {
 
         val location = if (this is Block) this else locator
         if (player == null || !player.isCreative) {
-            item.useOn((if (this is Block) this else location.levelBlock)!!)
+            item.useOn((if (this is Block) this else location.levelBlock))
         }
         location.level.addParticle(ScrapeParticle(location.position))
         return true

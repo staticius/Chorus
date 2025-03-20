@@ -42,7 +42,7 @@ class BlockDeadbush @JvmOverloads constructor(blockState: BlockState = Companion
         get() {
             val down = down()
             if (down is BlockHardenedClay) return true
-            return down!!.`is`(BlockTags.DIRT) || down.`is`(BlockTags.SAND)
+            return down.`is`(BlockTags.DIRT) || down.`is`(BlockTags.SAND)
         }
 
     override fun onUpdate(type: Int): Int {

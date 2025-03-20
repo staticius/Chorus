@@ -47,7 +47,7 @@ object NBTIO {
         //whereas for `minecraft:potato` item, the corresponding block is `minecraft:potatos`
         //these items do not need to be written
         if (item.isBlock() && item.blockId == item.id) {
-            tag.putCompound("Block", item.blockUnsafe!!.blockState?.blockStateTag?.copy()!!)
+            tag.putCompound("Block", item.blockUnsafe!!.blockState.blockStateTag?.copy()!!)
         }
         tag.putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)
         return tag

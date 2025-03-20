@@ -7,8 +7,6 @@ import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 object BlockTags {
     const val ACACIA: String = "acacia"
@@ -52,7 +50,8 @@ object BlockTags {
     init {
         try {
             Server::class.java.classLoader.getResourceAsStream("block_tags.json").use { stream ->
-                val typeToken: TypeToken<HashMap<String, HashSet<String>>> = object : TypeToken<HashMap<String, HashSet<String>>>() {}
+                val typeToken: TypeToken<HashMap<String, HashSet<String>>> =
+                    object : TypeToken<HashMap<String, HashSet<String>>>() {}
                 checkNotNull(stream)
                 val map = JSONUtils.from(InputStreamReader(stream), typeToken)
                 val map2 = HashMap<String, HashSet<String>>()

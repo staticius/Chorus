@@ -604,11 +604,11 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         return this.hardness != -1.0
     }
 
-    fun getTickCachedSide(face: BlockFace): Block? {
+    fun getTickCachedSide(face: BlockFace): Block {
         return getTickCachedSideAtLayer(layer, face)
     }
 
-    fun getTickCachedSide(face: BlockFace, step: Int): Block? {
+    fun getTickCachedSide(face: BlockFace, step: Int): Block {
         return getTickCachedSideAtLayer(layer, face, step)
     }
 

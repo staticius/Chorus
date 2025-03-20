@@ -3,14 +3,13 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityCommandBlock
 import org.chorus.blockentity.BlockEntityID
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Level
-import org.chorus.math.*
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.math.Vector3
 import org.chorus.utils.Faceable
 import kotlin.math.abs
 import kotlin.math.min

@@ -101,7 +101,7 @@ abstract class BlockMushroom(blockState: BlockState) : BlockFlowable(blockState)
 
     fun canStay(): Boolean {
         val block = this.down()
-        return block!!.id == BlockID.MYCELIUM || block.id == BlockID.PODZOL || block is BlockNylium || (!block.isTransparent && level.getFullLight(
+        return block.id == BlockID.MYCELIUM || block.id == BlockID.PODZOL || block is BlockNylium || (!block.isTransparent && level.getFullLight(
             this.position
         ) < 13)
     }

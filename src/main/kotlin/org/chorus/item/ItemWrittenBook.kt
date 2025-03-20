@@ -8,7 +8,7 @@ class ItemWrittenBook @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) 
     override val maxStackSize: Int
         get() = 16
 
-    fun writeBook(author: String, title: String, pages: Array<String>): Item? {
+    fun writeBook(author: String, title: String, pages: Array<String>): Item {
         val pageList = ListTag<CompoundTag>()
         for (page in pages) {
             pageList.add(ItemBookWritable.Companion.createPageTag(page))

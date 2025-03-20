@@ -207,7 +207,7 @@ class SNBTLexer @JvmOverloads constructor(
                 nextStates.clear()
                 var nextActive = if (codeUnitsRead == 0) 0 else currentStates.nextSetBit(0)
                 do {
-                    val returnedType = nfaFunctions!![nextActive]!!
+                    val returnedType = nfaFunctions[nextActive]!!
                         .apply(curChar, nextStates, activeTokenTypes)
                     if (returnedType != null && (newType == null || returnedType.ordinal < newType.ordinal)) {
                         newType = returnedType

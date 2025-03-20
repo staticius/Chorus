@@ -17,7 +17,7 @@ class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState = Compa
     override fun canGrowOn(support: Block): Boolean {
         if (support.id == BlockID.WARPED_NYLIUM) {
             for (i in 1..feature.getTreeHeight()) {
-                if (!up(i)!!.isAir) {
+                if (!up(i).isAir) {
                     return false
                 }
             }

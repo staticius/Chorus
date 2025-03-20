@@ -9,7 +9,7 @@ open class BlockCutCopper @JvmOverloads constructor(blockstate: BlockState = Com
 
     override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.UNAFFECTED
-    
+
 
     override fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {

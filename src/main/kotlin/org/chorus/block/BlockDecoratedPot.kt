@@ -3,13 +3,13 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.*
-import org.chorus.item.*
+import org.chorus.blockentity.BlockEntityDecoratedPot
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.item.Item
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 import java.util.*
 

@@ -59,7 +59,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState = Compa
         blockFace = if (player == null) {
             BlockFace.SOUTH
         } else {
-            player.getDirection()!!.getOpposite()
+            player.getDirection().getOpposite()
         }
 
         val honeyLevel = (if (item.hasCustomBlockData()) item.customBlockData!!.getByte("HoneyLevel") else 0).toInt()
@@ -132,7 +132,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState = Compa
     @JvmOverloads
     fun honeyCollected(player: Player, angerBees: Boolean = Server.instance.getDifficulty() > 0 && !player.isCreative) {
         getOrCreateBlockEntity().honeyLevel = 0
-        if (down()!!.id != BlockID.CAMPFIRE && angerBees) {
+        if (down().id != BlockID.CAMPFIRE && angerBees) {
             angerBees(player)
         }
     }
@@ -171,7 +171,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState = Compa
     override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION))
         set(face) {
-            setPropertyValue(CommonBlockProperties.DIRECTION, face!!.horizontalIndex)
+            setPropertyValue(CommonBlockProperties.DIRECTION, face.horizontalIndex)
         }
 
     var honeyLevel: Int

@@ -84,7 +84,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
                 player!!,
                 newState,
                 this,
-                down()!!,
+                down(),
                 item
             )
             if (placeEvent.isCancelled) {
@@ -101,7 +101,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
             )
             item.setCount(item.getCount() - 1)
 
-            if (down()!!.id == BlockID.SAND) {
+            if (down().id == BlockID.SAND) {
                 level.addParticle(BoneMealParticle(this.position))
             }
 
@@ -151,7 +151,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (down()!!.id == BlockID.SAND) {
+            if (down().id == BlockID.SAND) {
                 val celestialAngle = level.calculateCelestialAngle(level.getTime(), 1f)
                 val random = ThreadLocalRandom.current()
                 if (0.70 > celestialAngle && celestialAngle > 0.65 || random.nextInt(500) == 0) {
@@ -285,12 +285,12 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!isValidSupport(block.down(1, 0)!!)) {
+        if (!isValidSupport(block.down(1, 0))) {
             return false
         }
 
         if (level.setBlock(this.position, this, true, true)) {
-            if (down()!!.id == BlockID.SAND) {
+            if (down().id == BlockID.SAND) {
                 level.addParticle(BoneMealParticle(this.position))
             }
             return true

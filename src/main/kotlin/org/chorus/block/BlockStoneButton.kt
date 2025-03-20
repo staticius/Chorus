@@ -1,7 +1,6 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
 open class BlockStoneButton @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :

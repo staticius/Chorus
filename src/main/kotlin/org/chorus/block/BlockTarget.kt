@@ -28,117 +28,117 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState = Companion.p
     override fun getBlockEntityType(): String {
         return BlockEntity.TARGET
 
-    override val isPowerSource: Boolean
+        override val isPowerSource: Boolean
         get() = true
 
-    override fun getWeakPower(face: BlockFace): Int {
-        val target = blockEntity
-        return target?.activePower ?: 0
-    }
-
-    @JvmOverloads
-    fun activatePower(power: Int, ticks: Int = 4 * 2): Boolean {
-        var level = level
-        if (power <= 0 || ticks <= 0) {
-            return deactivatePower()
+        override fun getWeakPower(face: BlockFace): Int {
+            val target = blockEntity
+            return target?.activePower ?: 0
         }
 
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
-            return false
-        }
+        @JvmOverloads
+        fun activatePower(power: Int, ticks: Int = 4 * 2): Boolean {
+            var level = level
+            if (power <= 0 || ticks <= 0) {
+                return deactivatePower()
+            }
 
-        val target = getOrCreateBlockEntity()!!
-        val previous = target.activePower
-        level.cancelSheduledUpdate(this.position, this)
-        level.scheduleUpdate(this, ticks)
-        target.activePower = power
-        if (previous != power) {
-            updateAroundRedstone()
-        }
-        return true
-    }
+            if (!Server.instance.settings.levelSettings().enableRedstone()) {
+                return false
+            }
 
-    fun deactivatePower(): Boolean {
-        val target = blockEntity
-        if (target != null) {
-            val currentPower = target.activePower
-            target.activePower = 0
-            target.close()
-            if (currentPower != 0 && Server.instance.settings.levelSettings().enableRedstone()) {
+            val target = getOrCreateBlockEntity()!!
+            val previous = target.activePower
+            level.cancelSheduledUpdate(this.position, this)
+            level.scheduleUpdate(this, ticks)
+            target.activePower = power
+            if (previous != power) {
                 updateAroundRedstone()
             }
             return true
         }
-        return false
-    }
 
-    override fun onUpdate(type: Int): Int {
-        if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            deactivatePower()
-            return type
-        }
-        return 0
-    }
-
-    override fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
-        var ticks = 8
-        if (projectile is EntityArrow || projectile is EntityThrownTrident || projectile is EntitySmallFireball) {
-            ticks = 20
-        }
-
-        val intercept = calculateIntercept(
-            locator.position,
-            locator.position.add(motion.multiply(2.0))
-        )
-        if (intercept == null) {
+        fun deactivatePower(): Boolean {
+            val target = blockEntity
+            if (target != null) {
+                val currentPower = target.activePower
+                target.activePower = 0
+                target.close()
+                if (currentPower != 0 && Server.instance.settings.levelSettings().enableRedstone()) {
+                    updateAroundRedstone()
+                }
+                return true
+            }
             return false
         }
 
-        val faceHit: BlockFace = intercept.faceHit ?: return false
-
-        val hitVector = intercept.hitVector!!.subtract(
-            position.x * 2,
-            position.y * 2, position.z * 2
-        )
-        val axes: MutableList<BlockFace.Axis?> = ArrayList(Arrays.asList(*BlockFace.Axis.entries.toTypedArray()))
-        axes.remove(faceHit.axis)
-
-        val coords = doubleArrayOf(hitVector.getAxis(axes[0]!!), hitVector.getAxis(axes[1]!!))
-
-        for (i in 0..1) {
-            if (coords[i] == 0.5) {
-                coords[i] = 1.0
-            } else if (coords[i] <= 0 || coords[i] >= 1) {
-                coords[i] = 0.0
-            } else if (coords[i] < 0.5) {
-                coords[i] *= 2.0
-            } else {
-                coords[i] = (coords[i] / (-0.5)) + 2
+        override fun onUpdate(type: Int): Int {
+            if (type == Level.BLOCK_UPDATE_SCHEDULED) {
+                deactivatePower()
+                return type
             }
+            return 0
         }
 
-        val scale = (coords[0] + coords[1]) / 2
-        activatePower(ceilDouble(16 * scale), ticks)
-        return true
-    }
+        override fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
+            var ticks = 8
+            if (projectile is EntityArrow || projectile is EntityThrownTrident || projectile is EntitySmallFireball) {
+                ticks = 20
+            }
 
-    override val toolType: Int
+            val intercept = calculateIntercept(
+                locator.position,
+                locator.position.add(motion.multiply(2.0))
+            )
+            if (intercept == null) {
+                return false
+            }
+
+            val faceHit: BlockFace = intercept.faceHit ?: return false
+
+            val hitVector = intercept.hitVector!!.subtract(
+                position.x * 2,
+                position.y * 2, position.z * 2
+            )
+            val axes: MutableList<BlockFace.Axis?> = ArrayList(Arrays.asList(*BlockFace.Axis.entries.toTypedArray()))
+            axes.remove(faceHit.axis)
+
+            val coords = doubleArrayOf(hitVector.getAxis(axes[0]!!), hitVector.getAxis(axes[1]!!))
+
+            for (i in 0..1) {
+                if (coords[i] == 0.5) {
+                    coords[i] = 1.0
+                } else if (coords[i] <= 0 || coords[i] >= 1) {
+                    coords[i] = 0.0
+                } else if (coords[i] < 0.5) {
+                    coords[i] *= 2.0
+                } else {
+                    coords[i] = (coords[i] / (-0.5)) + 2
+                }
+            }
+
+            val scale = (coords[0] + coords[1]) / 2
+            activatePower(ceilDouble(16 * scale), ticks)
+            return true
+        }
+
+        override val toolType: Int
         get() = ItemTool.TYPE_HOE
 
-    override val hardness: Double
+        override val hardness: Double
         get() = 0.5
 
-    override val resistance: Double
+        override val resistance: Double
         get() = 0.5
 
-    override val burnAbility: Int
+        override val burnAbility: Int
         get() = 15
 
-    override val burnChance: Int
+        override val burnChance: Int
         get() = 0
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.TARGET)
+        companion object {
+            val properties: BlockProperties = BlockProperties(BlockID.TARGET)
 
+        }
     }
-}

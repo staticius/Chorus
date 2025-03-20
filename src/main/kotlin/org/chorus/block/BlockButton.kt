@@ -63,7 +63,7 @@ abstract class BlockButton(meta: BlockState) : BlockFlowable(meta), RedstoneComp
         fz: Float
     ): Boolean {
         if (player != null) {
-            if (!player.getAdventureSettings()?.get(AdventureSettings.Type.DOORS_AND_SWITCHED)!!) return false
+            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
             val itemInHand = player.getInventory().itemInHand
             if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) return false
         }
@@ -77,13 +77,13 @@ abstract class BlockButton(meta: BlockState) : BlockFlowable(meta), RedstoneComp
         level.setBlock(this.position, this, direct = true, update = false)
         level.addLevelSoundEvent(
             position.add(0.5, 0.5, 0.5), LevelSoundEventPacket.SOUND_POWER_ON,
-            blockState!!.blockStateHash()
+            blockState.blockStateHash()
         )
         if (Server.instance.settings.levelSettings.enableRedstone) {
             Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 0, 15))
 
             updateAroundRedstone()
-            updateAroundRedstone(getSide(facing!!.getOpposite()!!)!!, facing)
+            updateAroundRedstone(getSide(facing.getOpposite()), facing)
         }
 
         return true
@@ -92,8 +92,8 @@ abstract class BlockButton(meta: BlockState) : BlockFlowable(meta), RedstoneComp
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val thisFace = facing
-            val touchingFace = thisFace!!.getOpposite()
-            val side = this.getSide(touchingFace!!)
+            val touchingFace = thisFace.getOpposite()
+            val side = this.getSide(touchingFace)
             if (side != null && !BlockLever.isSupportValid(side, thisFace)) {
                 level.useBreakOn(this.position, Item.get(ItemID.WOODEN_PICKAXE))
                 return Level.BLOCK_UPDATE_NORMAL
@@ -104,14 +104,14 @@ abstract class BlockButton(meta: BlockState) : BlockFlowable(meta), RedstoneComp
                 level.setBlock(this.position, this, direct = true, update = false)
                 level.addLevelSoundEvent(
                     position.add(0.5, 0.5, 0.5), LevelSoundEventPacket.SOUND_POWER_OFF,
-                    blockState!!.blockStateHash()
+                    blockState.blockStateHash()
                 )
 
                 if (Server.instance.settings.levelSettings.enableRedstone) {
                     Server.instance.pluginManager.callEvent(BlockRedstoneEvent(this, 15, 0))
 
                     updateAroundRedstone()
-                    updateAroundRedstone(getSide(facing!!.getOpposite()!!)!!, facing)
+                    updateAroundRedstone(getSide(facing.getOpposite()), facing)
                 }
             }
             return Level.BLOCK_UPDATE_SCHEDULED

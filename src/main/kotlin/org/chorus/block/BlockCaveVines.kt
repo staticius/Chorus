@@ -4,7 +4,8 @@ import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.event.block.BlockGrowEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
@@ -65,7 +66,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                 }
             }
             //random grow feature,according to wiki in https://minecraft.wiki/w/Glow_Berries#Growth
-            if (down()!!.isAir && random.nextInt(10) == 0) {
+            if (down().isAir && random.nextInt(10) == 0) {
                 val block = if (up() is BlockCaveVines && down() !is BlockCaveVines) {
                     BlockCaveVinesHeadWithBerries()
                 } else BlockCaveVinesBodyWithBerries()
@@ -73,17 +74,17 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    level.setBlock(down()!!.position, ev.newState!!, direct = false, update = true)
+                    level.setBlock(down().position, ev.newState!!, direct = false, update = true)
                 } else {
                     return type
                 }
-            } else if (down()!!.isAir) {
+            } else if (down().isAir) {
                 val block = BlockCaveVines()
                 block.growth = 0
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    level.setBlock(down()!!.position, ev.newState!!, direct = false, update = true)
+                    level.setBlock(down().position, ev.newState!!, direct = false, update = true)
                 }
             }
             return type
@@ -153,7 +154,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
 
         fun isValidSupport(block: Block): Boolean {
             return if (block is BlockLiquid) false
-            else block.up()!!.isSolid || block.up() is BlockCaveVines
+            else block.up().isSolid || block.up() is BlockCaveVines
         }
     }
 }

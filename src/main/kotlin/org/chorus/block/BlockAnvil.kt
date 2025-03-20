@@ -67,7 +67,7 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState = Compani
         fz: Double,
         player: Player?
     ): Boolean {
-        blockFace = if (player != null) player.getDirection()!!.rotateYCCW() else BlockFace.SOUTH
+        blockFace = if (player != null) player.getDirection().rotateYCCW() else BlockFace.SOUTH
         level.setBlock(this.position, this, true)
         if (player == null) {
             level.addSound(this.position, Sound.RANDOM_ANVIL_LAND, 1f, 0.8f)
@@ -120,7 +120,7 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState = Compani
         }
 
     override fun recalculateBoundingBox(): AxisAlignedBB? {
-        val face = blockFace!!.rotateY()
+        val face = blockFace.rotateY()
         val xOffset = abs(face.xOffset.toDouble()) * (2 / 16.0)
         val zOffset = abs(face.zOffset.toDouble()) * (2 / 16.0)
         return SimpleAxisAlignedBB(

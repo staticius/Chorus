@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom
 class BlockShortGrass : BlockFlowable {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockstate: BlockState) :  super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override fun canBeReplaced(): Boolean {
         return true
@@ -35,9 +35,9 @@ class BlockShortGrass : BlockFlowable {
         fz: Double,
         player: Player?
     ): Boolean {
-        if (level.getBlock(this.position)!!.id == BlockID.SHORT_GRASS) return false
+        if (level.getBlock(this.position).id == BlockID.SHORT_GRASS) return false
 
-        if (BlockSweetBerryBush.Companion.isSupportValid(down()!!)) {
+        if (BlockSweetBerryBush.Companion.isSupportValid(down())) {
             level.setBlock(block.position, this, true)
             return true
         }
@@ -46,7 +46,7 @@ class BlockShortGrass : BlockFlowable {
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!BlockSweetBerryBush.Companion.isSupportValid(down(1, 0)!!)) {
+            if (!BlockSweetBerryBush.Companion.isSupportValid(down(1, 0))) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
@@ -65,7 +65,7 @@ class BlockShortGrass : BlockFlowable {
         if (item.isFertilizer) {
             val up = this.up()
 
-            if (up!!.isAir) {
+            if (up.isAir) {
                 if (player != null && !player.isCreative) {
                     item.count--
                 }

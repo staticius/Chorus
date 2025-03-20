@@ -76,8 +76,8 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
         if (isHeadPiece) {
             head = this
         } else {
-            head = getSide(dir!!)
-            if (head!!.id !== id || !(head as BlockBed).isHeadPiece || (head.blockFace != dir)) {
+            head = getSide(dir)
+            if (head.id !== id || !(head as BlockBed).isHeadPiece || (head.blockFace != dir)) {
                 if (player != null && !willExplode) {
                     player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.bed.notValid"))
                 }
@@ -88,7 +88,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
             }
         }
 
-        val footPart = dir!!.getOpposite()
+        val footPart = dir.getOpposite()
 
         if (shouldExplode) {
             if (!willExplode) {
@@ -119,14 +119,14 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
         }
 
         val accessArea = SimpleAxisAlignedBB(
-            head!!.position.x - 2,
+            head.position.x - 2,
             head.position.y - 5.5,
             head.position.z - 2,
             head.position.x + 3,
             head.position.y + 2.5,
             head.position.z + 3
         )
-            .addCoord(footPart!!.xOffset.toDouble(), 0.0, footPart.zOffset.toDouble())
+            .addCoord(footPart.xOffset.toDouble(), 0.0, footPart.zOffset.toDouble())
 
         if (!accessArea.isVectorInside(player.position)) {
             player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.bed.tooFar"))
@@ -194,8 +194,8 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
         }
 
         val direction = if (player == null) BlockFace.NORTH else player.getDirection()
-        val next = this.getSide(direction!!)
-        val downNext = next!!.down()
+        val next = this.getSide(direction)
+        val downNext = next.down()
 
         if (downNext != null && (!next.canBeReplaced() || !(BlockLever.isSupportValid(
                 downNext,
@@ -232,10 +232,10 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
                 getBlockEntityType(), locator, next.locator, e
             )
             thisBed?.close()
-            level.setBlock(thisLayer0!!.position, 0, thisLayer0, true)
-            level.setBlock(thisLayer1!!.position, 1, thisLayer1, true)
-            level.setBlock(nextLayer0!!.position, 0, nextLayer0, true)
-            level.setBlock(nextLayer1!!.position, 1, nextLayer1, true)
+            level.setBlock(thisLayer0.position, 0, thisLayer0, true)
+            level.setBlock(thisLayer1.position, 1, thisLayer1, true)
+            level.setBlock(nextLayer0.position, 0, nextLayer0, true)
+            level.setBlock(nextLayer1.position, 1, nextLayer1, true)
             return false
         }
         return true
@@ -244,13 +244,13 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
     override fun onBreak(item: Item?): Boolean {
         val direction = blockFace
         if (isHeadPiece) { //This is the Top part of bed
-            val other = getSide(direction!!.getOpposite()!!)
-            if (other!!.id == id && !(other as BlockBed).isHeadPiece && direction == other.blockFace) {
+            val other = getSide(direction.getOpposite())
+            if (other.id == id && !(other as BlockBed).isHeadPiece && direction == other.blockFace) {
                 level.setBlock(other.position, get(BlockID.AIR), direct = true, update = true)
             }
         } else { //Bottom Part of Bed
-            val other = getSide(direction!!)
-            if (other!!.id == id && (other as BlockBed).isHeadPiece && direction == other.blockFace) {
+            val other = getSide(direction)
+            if (other.id == id && (other as BlockBed).isHeadPiece && direction == other.blockFace) {
                 level.setBlock(other.position, get(BlockID.AIR), direct = true, update = true)
             }
         }
@@ -284,7 +284,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
         set(face) {
             setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.DIRECTION,
-                face!!.horizontalIndex
+                face.horizontalIndex
             )
         }
 
@@ -321,13 +321,13 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
             val foot: Block?
             if (isHeadPiece) {
                 head = this
-                foot = getSide(dir!!.getOpposite()!!)
+                foot = getSide(dir.getOpposite())
             } else {
-                head = getSide(dir!!)
+                head = getSide(dir)
                 foot = this
             }
 
-            return head!!.id == foot!!.id
+            return head.id == foot.id
                     && (head as BlockBed).isHeadPiece && head.blockFace == dir
                     && !(foot as BlockBed).isHeadPiece && foot.blockFace == dir
         }
@@ -338,8 +338,8 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
                 return this
             }
             val dir = blockFace
-            val head = getSide(dir!!)
-            if (head!!.id == id && (head as BlockBed).isHeadPiece && head.blockFace == dir) {
+            val head = getSide(dir)
+            if (head.id == id && (head as BlockBed).isHeadPiece && head.blockFace == dir) {
                 return head
             }
             return null
@@ -352,8 +352,8 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
             }
 
             val dir = blockFace
-            val foot = getSide(dir!!.getOpposite()!!)
-            if (foot!!.id == id && !(foot as BlockBed).isHeadPiece && foot.blockFace == dir) {
+            val foot = getSide(dir.getOpposite())
+            if (foot.id == id && !(foot as BlockBed).isHeadPiece && foot.blockFace == dir) {
                 return foot
             }
             return null

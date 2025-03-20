@@ -30,7 +30,7 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState = Co
         get() = 1
 
     override var minX: Double
-        get() = position.x + (1 + blockState!!.specialValue() * 2) / 16.0
+        get() = position.x + (1 + blockState.specialValue() * 2) / 16.0
         set(minX) {
             super.minX = minX
         }
@@ -75,7 +75,7 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState = Co
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!down()!!.isAir) {
+        if (!down().isAir) {
             level.setBlock(block.position, this, direct = true, update = true)
             return true
         }
@@ -84,7 +84,7 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState = Co
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down()!!.isAir) {
+            if (down().isAir) {
                 level.setBlock(this.position, get(BlockID.AIR), true)
                 return Level.BLOCK_UPDATE_NORMAL
             }
@@ -126,7 +126,7 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState = Co
                 position.add(0.5, 0.5, 0.5),
                 getDrops(Item.AIR)[0]
             )
-            return level.getBlock(this.position)!!
+            return level.getBlock(this.position)
                 .onActivate(Item.get(BlockID.AIR), player, blockFace, fx, fy, fz)
         }
         return false

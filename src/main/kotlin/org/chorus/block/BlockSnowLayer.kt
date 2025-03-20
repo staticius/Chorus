@@ -110,7 +110,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         }
 
         val down = down()
-        if (!down!!.isSolid) {
+        if (!down.isSolid) {
             return false
         }
 
@@ -138,7 +138,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         if (layer != 0) {
             return super.onBreak(item)
         }
-        return level.setBlock(this.position, 0, getLevelBlockAtLayer(1)!!, true, true)
+        return level.setBlock(this.position, 0, getLevelBlockAtLayer(1), true, true)
     }
 
     override fun afterRemoval(newBlock: Block, update: Boolean) {
@@ -147,7 +147,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         }
 
         val layer1 = getLevelBlockAtLayer(1)
-        if (layer1!!.id != BlockID.TALL_GRASS) {
+        if (layer1.id != BlockID.TALL_GRASS) {
             return
         }
 
@@ -184,7 +184,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
                 return Level.BLOCK_UPDATE_RANDOM
             }
         } else if (type == Level.BLOCK_UPDATE_NORMAL) {
-            val covered = down()!!.id == BlockID.GRASS_BLOCK
+            val covered = down().id == BlockID.GRASS_BLOCK
             if (isCovered != covered) {
                 isCovered = covered
                 level.setBlock(this.position, this, true)
@@ -200,7 +200,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         var toMelt: Block = this
         while (toMelt.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT) === CommonBlockProperties.HEIGHT.getMax()) {
             val up = toMelt.up()
-            if (up!!.id != BlockID.SNOW_LAYER) {
+            if (up.id != BlockID.SNOW_LAYER) {
                 break
             }
 
@@ -209,7 +209,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
 
         val snowHeight = toMelt.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT) - layers
         val newState = if (snowHeight < 0) get(BlockID.AIR) else get(
-            blockState!!.setPropertyValue(Companion.properties, CommonBlockProperties.HEIGHT, snowHeight)
+            blockState.setPropertyValue(Companion.properties, CommonBlockProperties.HEIGHT, snowHeight)
         )
         val event: BlockFadeEvent = BlockFadeEvent(toMelt, newState)
         Server.instance.pluginManager.callEvent(event)

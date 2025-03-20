@@ -44,7 +44,7 @@ class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.prope
             packet.x = block.x.toFloat() + 0.5f
             packet.y = block.y.toFloat() + 1f
             packet.z = block.z.toFloat() + 0.5f
-            packet.data = get(BlockID.FLOWING_WATER).blockState!!.blockStateHash()
+            packet.data = get(BlockID.FLOWING_WATER).blockState.blockStateHash()
 
             for (i in 0..3) {
                 level.addChunkPacket(position.chunkX, position.chunkZ, packet)
@@ -70,7 +70,7 @@ class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.prope
         while (waterRemoved < 64 && (entries.poll().also { entry = it }) != null) {
             for (face in BlockFace.entries) {
                 val layer0 = entry.block.getSideAtLayer(0, face)
-                val layer1 = layer0!!.getLevelBlockAtLayer(1)
+                val layer1 = layer0.getLevelBlockAtLayer(1)
 
                 if (layer0 is BlockFlowingWater) {
                     level.setBlockStateAt(

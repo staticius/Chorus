@@ -44,7 +44,8 @@ class Materials private constructor() : NBTData {
      * @see .down
      */
     fun down(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("down",
+        this.process(
+            "down",
             ambientOcclusion = true,
             faceDimming = true,
             renderMethod = renderMethod,
@@ -76,7 +77,8 @@ class Materials private constructor() : NBTData {
      * @see .north
      */
     fun north(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("north",
+        this.process(
+            "north",
             ambientOcclusion = true,
             faceDimming = true,
             renderMethod = renderMethod,
@@ -108,7 +110,8 @@ class Materials private constructor() : NBTData {
      * @see .south
      */
     fun south(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("south",
+        this.process(
+            "south",
             ambientOcclusion = true,
             faceDimming = true,
             renderMethod = renderMethod,
@@ -140,7 +143,8 @@ class Materials private constructor() : NBTData {
      * @see .east
      */
     fun east(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("east",
+        this.process(
+            "east",
             ambientOcclusion = true,
             faceDimming = true,
             renderMethod = renderMethod,
@@ -172,7 +176,8 @@ class Materials private constructor() : NBTData {
      * @see .west
      */
     fun west(renderMethod: RenderMethod, texture: String): Materials {
-        this.process("west",
+        this.process(
+            "west",
             ambientOcclusion = true,
             faceDimming = true,
             renderMethod = renderMethod,

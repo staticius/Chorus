@@ -65,9 +65,9 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
     }
 
     override fun recalculateBoundingBox(): AxisAlignedBB {
-        val attachmentType = attachment!!
+        val attachmentType = attachment
         val blockFace = blockFace
-        val north = this.isConnectedTo(BlockFace.NORTH, attachmentType, blockFace!!)
+        val north = this.isConnectedTo(BlockFace.NORTH, attachmentType, blockFace)
         val south = this.isConnectedTo(BlockFace.SOUTH, attachmentType, blockFace)
         val west = this.isConnectedTo(BlockFace.WEST, attachmentType, blockFace)
         val east = this.isConnectedTo(BlockFace.EAST, attachmentType, blockFace)
@@ -189,19 +189,19 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
         }
         when (attachment) {
             Attachment.STANDING -> {
-                if (hitFace1!!.axis != blockFace!!.axis) {
+                if (hitFace1!!.axis != blockFace.axis) {
                     return false
                 }
             }
 
             Attachment.MULTIPLE -> {
-                if (hitFace1!!.axis == blockFace!!.axis) {
+                if (hitFace1!!.axis == blockFace.axis) {
                     return false
                 }
             }
 
             Attachment.SIDE -> {
-                if (hitFace1!!.axis == blockFace!!.axis) {
+                if (hitFace1!!.axis == blockFace.axis) {
                     addException = false
                 }
             }
@@ -215,7 +215,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
             return false
         }
 
-        bell.direction = hitFace1!!.getOpposite()!!.horizontalIndex
+        bell.direction = hitFace1!!.getOpposite().horizontalIndex
         bell.ticks = 0
         bell.setRinging(true)
         if (addException && causeEntity is Player) {
@@ -226,18 +226,18 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
 
     private fun checkSupport(): Boolean {
         when (attachment) {
-            Attachment.STANDING -> if (checkSupport(down()!!, BlockFace.UP)) {
+            Attachment.STANDING -> if (checkSupport(down(), BlockFace.UP)) {
                 return true
             }
 
-            Attachment.HANGING -> if (checkSupport(up()!!, BlockFace.DOWN)) {
+            Attachment.HANGING -> if (checkSupport(up(), BlockFace.DOWN)) {
                 return true
             }
 
             Attachment.MULTIPLE -> {
                 val blockFace = blockFace
-                if (checkSupport(getSide(blockFace!!)!!, blockFace.getOpposite()) &&
-                    checkSupport(getSide(blockFace.getOpposite()!!)!!, blockFace)
+                if (checkSupport(getSide(blockFace), blockFace.getOpposite()) &&
+                    checkSupport(getSide(blockFace.getOpposite()), blockFace)
                 ) {
                     return true
                 }
@@ -245,7 +245,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
 
             Attachment.SIDE -> {
                 blockFace = blockFace
-                if (checkSupport(getSide(blockFace!!.getOpposite()!!)!!, blockFace)) {
+                if (checkSupport(getSide(blockFace.getOpposite()), blockFace)) {
                     return true
                 }
             }
@@ -303,7 +303,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
             for (side in BlockFace.entries) {
                 val b = this.getSide(side)
 
-                if (b!!.id == BlockID.REDSTONE_WIRE && b.blockState!!.getPropertyValue(
+                if (b.id == BlockID.REDSTONE_WIRE && b.blockState.getPropertyValue(
                         CommonBlockProperties.REDSTONE_SIGNAL
                     ) > 0 && b.position.y >= this.y
                 ) {
@@ -336,17 +336,17 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
         when (face1) {
             BlockFace.UP -> {
                 attachment = Attachment.STANDING
-                blockFace = playerDirection!!.getOpposite()
+                blockFace = playerDirection.getOpposite()
             }
 
             BlockFace.DOWN -> {
                 attachment = Attachment.HANGING
-                blockFace = playerDirection!!.getOpposite()
+                blockFace = playerDirection.getOpposite()
             }
 
             else -> {
                 blockFace = face1
-                attachment = if (checkSupport(block.getSide(face1)!!, face1.getOpposite())) {
+                attachment = if (checkSupport(block.getSide(face1), face1.getOpposite())) {
                     Attachment.MULTIPLE
                 } else {
                     Attachment.SIDE
@@ -363,7 +363,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
 
     override fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
         ring(projectile, RingCause.PROJECTILE)
-        if (projectile.isOnFire() && projectile is EntityArrow && level.getBlock(projectile.position)!!.isAir) {
+        if (projectile.isOnFire() && projectile is EntityArrow && level.getBlock(projectile.position).isAir) {
             level.setBlock(projectile.position, get(BlockID.FIRE), true)
         }
         return true
@@ -374,7 +374,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
         set(face) {
             setPropertyValue(
                 CommonBlockProperties.DIRECTION,
-                face!!.horizontalIndex
+                face.horizontalIndex
             )
         }
 

@@ -11,7 +11,6 @@ import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 import java.util.function.Function
 import java.util.stream.Collectors
-import kotlin.collections.HashMap
 
 class BlockProperties(identifier: String, blockTags: Set<String>, vararg properties: BlockPropertyType<*>) {
 

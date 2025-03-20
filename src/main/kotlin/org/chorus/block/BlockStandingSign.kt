@@ -35,7 +35,7 @@ open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState = 
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down()!!.isAir) {
+            if (down().isAir) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
@@ -96,8 +96,8 @@ open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState = 
             return true
         } catch (e: Exception) {
             log.warn("Failed to create block entity {} at {}", getBlockEntityType(), locator, e)
-            level.setBlock(layer0!!.position, 0, layer0, true)
-            level.setBlock(layer1!!.position, 0, layer1, true)
+            level.setBlock(layer0.position, 0, layer0, true)
+            level.setBlock(layer1.position, 0, layer1, true)
             return false
         }
     }

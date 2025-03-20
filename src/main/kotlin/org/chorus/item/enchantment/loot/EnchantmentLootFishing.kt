@@ -1,6 +1,5 @@
 package org.chorus.item.enchantment.loot
 
-import org.chorus.item.enchantment.Enchantment
 import org.chorus.item.enchantment.EnchantmentType
 
 

@@ -75,7 +75,7 @@ interface IScoreboard {
      * @param scorer 追踪对象
      * @return 对应行
      */
-    fun getLine(scorer: IScorer?): IScoreboardLine?
+    fun getLine(scorer: IScorer): IScoreboardLine?
 
     /**
      * 为此计分板添加一个行
@@ -125,7 +125,7 @@ interface IScoreboard {
      * 向所有观察者发送新的分数 <br></br>
      * @param update 需要更新的行
      */
-    fun updateScore(update: IScoreboardLine?)
+    fun updateScore(update: IScoreboardLine)
 
     /**
      * 向所有观察者重新发送此计分板以及行信息 <br></br>

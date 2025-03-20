@@ -12,7 +12,7 @@ class BlockLava @JvmOverloads constructor(blockstate: BlockState = Companion.pro
 
     override fun getLiquidWithNewDepth(depth: Int): BlockLiquid {
         return BlockLava(
-            blockState!!.setPropertyValue(
+            blockState.setPropertyValue(
                 Companion.properties,
                 CommonBlockProperties.LIQUID_DEPTH.createValue(depth)
             )

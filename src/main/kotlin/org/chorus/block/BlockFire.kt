@@ -73,7 +73,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
             val down = down()
 
             if (type == Level.BLOCK_UPDATE_NORMAL) {
-                val downId = down!!.id
+                val downId = down.id
                 if (downId == Block.SOUL_SAND || downId == Block.SOUL_SOIL) {
                     level.setBlock(
                         this.position, get(SOUL_FIRE).setPropertyValue<Int, IntPropertyType>(
@@ -105,7 +105,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
             return Level.BLOCK_UPDATE_NORMAL
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED && level.gameRules.getBoolean(GameRule.DO_FIRE_TICK)) {
             val down = down()
-            val downId = down!!.id
+            val downId = down.id
 
             val random = ThreadLocalRandom.current()
 
@@ -150,12 +150,12 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                     val o = 0
 
                     //TODO: decrease the o if the rainfall values are high
-                    this.tryToCatchBlockOnFire(east()!!, 300 + o, meta)
-                    this.tryToCatchBlockOnFire(west()!!, 300 + o, meta)
+                    this.tryToCatchBlockOnFire(east(), 300 + o, meta)
+                    this.tryToCatchBlockOnFire(west(), 300 + o, meta)
                     this.tryToCatchBlockOnFire(down, 250 + o, meta)
-                    this.tryToCatchBlockOnFire(up()!!, 250 + o, meta)
-                    this.tryToCatchBlockOnFire(south()!!, 300 + o, meta)
-                    this.tryToCatchBlockOnFire(north()!!, 300 + o, meta)
+                    this.tryToCatchBlockOnFire(up(), 250 + o, meta)
+                    this.tryToCatchBlockOnFire(south(), 300 + o, meta)
+                    this.tryToCatchBlockOnFire(north(), 300 + o, meta)
 
                     for (x in (position.x - 1).toInt()..(position.x + 1).toInt()) {
                         for (z in (position.z - 1).toInt()..(position.z + 1).toInt()) {
@@ -170,7 +170,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                                     val block =
                                         level.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
                                     val chance = this.getChanceOfNeighborsEncouragingFire(
-                                        block!!
+                                        block
                                     )
 
                                     if (chance > 0) {
@@ -195,7 +195,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                                             if (!e.isCancelled) {
                                                 level.setBlock(
                                                     block.position, get(
-                                                        blockState!!.setPropertyValue(
+                                                        blockState.setPropertyValue(
                                                             Companion.properties,
                                                             CommonBlockProperties.AGE_16.createValue(
                                                                 age
@@ -236,7 +236,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                 if (!e.isCancelled) {
                     level.setBlock(
                         block.position, get(
-                            blockState!!.setPropertyValue(
+                            blockState.setPropertyValue(
                                 Companion.properties, CommonBlockProperties.AGE_16.createValue(
                                     age
                                 )
@@ -265,19 +265,19 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
             return 0
         } else {
             var chance = 0
-            chance = max(chance.toDouble(), block.east()!!.burnChance.toDouble()).toInt()
-            chance = max(chance.toDouble(), block.west()!!.burnChance.toDouble()).toInt()
-            chance = max(chance.toDouble(), block.down()!!.burnChance.toDouble()).toInt()
-            chance = max(chance.toDouble(), block.up()!!.burnChance.toDouble()).toInt()
-            chance = max(chance.toDouble(), block.south()!!.burnChance.toDouble()).toInt()
-            chance = max(chance.toDouble(), block.north()!!.burnChance.toDouble()).toInt()
+            chance = max(chance.toDouble(), block.east().burnChance.toDouble()).toInt()
+            chance = max(chance.toDouble(), block.west().burnChance.toDouble()).toInt()
+            chance = max(chance.toDouble(), block.down().burnChance.toDouble()).toInt()
+            chance = max(chance.toDouble(), block.up().burnChance.toDouble()).toInt()
+            chance = max(chance.toDouble(), block.south().burnChance.toDouble()).toInt()
+            chance = max(chance.toDouble(), block.north().burnChance.toDouble()).toInt()
             return chance
         }
     }
 
     fun canNeighborBurn(): Boolean {
         for (face in BlockFace.entries) {
-            if (getSide(face)!!.burnChance > 0) {
+            if (getSide(face).burnChance > 0) {
                 return true
             }
         }
@@ -325,16 +325,16 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
      */
     protected fun checkRain(): Boolean {
         val down = down()
-        val downId = down!!.id
+        val downId = down.id
         val forever = downId == NETHERRACK || downId == MAGMA
                 || downId == BEDROCK && (down as BlockBedrock).burnIndefinitely
 
         if (!forever && level.isRaining &&
             (level.canBlockSeeSky(this.position) ||
-                    level.canBlockSeeSky(east()!!.position) ||
-                    level.canBlockSeeSky(west()!!.position) ||
-                    level.canBlockSeeSky(south()!!.position) ||
-                    level.canBlockSeeSky(north()!!.position))
+                    level.canBlockSeeSky(east().position) ||
+                    level.canBlockSeeSky(west().position) ||
+                    level.canBlockSeeSky(south().position) ||
+                    level.canBlockSeeSky(north().position))
         ) {
             val event = BlockFadeEvent(this, get(AIR))
             Server.instance.pluginManager.callEvent(event)

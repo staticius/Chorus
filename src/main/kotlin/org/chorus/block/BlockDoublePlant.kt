@@ -158,6 +158,7 @@ abstract class BlockDoublePlant(blockstate: BlockState) : BlockFlowable(blocksta
                     level.addParticle(BoneMealParticle(this.position))
                     level.dropItem(this.position, toItem())
                 }
+
                 else -> {}
             }
 

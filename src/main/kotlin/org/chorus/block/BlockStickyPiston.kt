@@ -9,7 +9,7 @@ class BlockStickyPiston @JvmOverloads constructor(blockstate: BlockState = Compa
         sticky = true
     }
 
-    public override fun createHead(blockFace: BlockFace): Block {
+    override fun createHead(blockFace: BlockFace): Block {
         return BlockStickyPistonArmCollision().setPropertyValue<Int, IntPropertyType>(
             CommonBlockProperties.FACING_DIRECTION,
             blockFace.index

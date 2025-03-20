@@ -14,7 +14,7 @@ import org.chorus.utils.Faceable
 open class BlockPumpkin : BlockSolid, Faceable, Natural {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) :  super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override val name: String
         get() = "Pumpkin"
@@ -50,7 +50,7 @@ open class BlockPumpkin : BlockSolid, Faceable, Natural {
             if (player == null) {
                 carvedPumpkin.blockFace = BlockFace.SOUTH
             } else {
-                carvedPumpkin.blockFace = player.getDirection()!!.getOpposite()
+                carvedPumpkin.blockFace = player.getDirection().getOpposite()
             }
             item.useOn(this)
             level.setBlock(this.position, carvedPumpkin, true, true)
@@ -76,7 +76,7 @@ open class BlockPumpkin : BlockSolid, Faceable, Natural {
         blockFace = if (player == null) {
             BlockFace.SOUTH
         } else {
-            player.getDirection()!!.getOpposite()
+            player.getDirection().getOpposite()
         }
         level.setBlock(block.position, this, true, true)
         checkAndSpawnGolem(this)

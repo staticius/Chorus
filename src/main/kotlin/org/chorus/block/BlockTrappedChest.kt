@@ -28,7 +28,7 @@ class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState = Compa
         player: Player?
     ): Boolean {
         blockFace = if (player != null) fromHorizontalIndex(
-            player.getDirection()!!.getOpposite()!!.horizontalIndex
+            player.getDirection().getOpposite().horizontalIndex
         ) else BlockFace.SOUTH
 
         var chest: BlockEntityChest? = null

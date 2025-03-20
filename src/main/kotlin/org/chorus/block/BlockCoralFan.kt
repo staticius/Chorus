@@ -30,8 +30,8 @@ abstract class BlockCoralFan(blockstate: BlockState) : BlockFlowable(blockstate)
     override fun onUpdate(type: Int): Int {
         when (type) {
             Level.BLOCK_UPDATE_NORMAL -> {
-                val side = getSide(rootsFace!!)
-                if (!side!!.isSolid || side.id == BlockID.MAGMA || side.id == BlockID.SOUL_SAND) {
+                val side = getSide(rootsFace)
+                if (!side.isSolid || side.id == BlockID.MAGMA || side.id == BlockID.SOUL_SAND) {
                     level.useBreakOn(this.position)
                 } else {
                     level.scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40))
@@ -40,8 +40,8 @@ abstract class BlockCoralFan(blockstate: BlockState) : BlockFlowable(blockstate)
             }
 
             Level.BLOCK_UPDATE_SCHEDULED -> {
-                val side = getSide(rootsFace!!)
-                if (side!!.id == BlockID.ICE) {
+                val side = getSide(rootsFace)
+                if (side.id == BlockID.ICE) {
                     level.useBreakOn(this.position)
                     return type
                 }
@@ -85,13 +85,13 @@ abstract class BlockCoralFan(blockstate: BlockState) : BlockFlowable(blockstate)
 
         val layer1 = block.getLevelBlockAtLayer(1)
         val hasWater = layer1 is BlockFlowingWater
-        if (!layer1!!.isAir && (!hasWater || layer1.blockState!!.specialValue()
-                .toInt() != 0 && layer1.blockState!!.specialValue().toInt() != 8)
+        if (!layer1.isAir && (!hasWater || layer1.blockState.specialValue()
+                .toInt() != 0 && layer1.blockState.specialValue().toInt() != 8)
         ) {
             return false
         }
 
-        if (hasWater && layer1.blockState!!.specialValue().toInt() == 8) {
+        if (hasWater && layer1.blockState.specialValue().toInt() == 8) {
             level.setBlock(this.position, 1, BlockFlowingWater(), direct = true, update = false)
         }
 
@@ -108,7 +108,7 @@ abstract class BlockCoralFan(blockstate: BlockState) : BlockFlowable(blockstate)
             setPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION, axisBit)
             level.setBlock(
                 this.position, 0, if (hasWater) this.clone() else getDeadCoralFan().setPropertyValues(
-                    blockState!!.blockPropertyValues!!
+                    blockState.blockPropertyValues!!
                 ), direct = true, update = true
             )
         } else {

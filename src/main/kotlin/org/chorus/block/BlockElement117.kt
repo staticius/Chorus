@@ -1,7 +1,7 @@
 package org.chorus.block
 
 class BlockElement117 @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
-    Block(blockstate,) {
+    Block(blockstate) {
 
 
     override val properties: BlockProperties

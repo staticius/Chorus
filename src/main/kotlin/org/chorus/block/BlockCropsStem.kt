@@ -2,9 +2,8 @@ package org.chorus.block
 
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.block.BlockGrowEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
 import org.chorus.level.Level
 import org.chorus.math.BlockFace

@@ -9,7 +9,7 @@ class BlockPiston @JvmOverloads constructor(blockstate: BlockState = Companion.p
     override val name: String
         get() = "Piston"
 
-    public override fun createHead(blockFace: BlockFace): Block {
+    override fun createHead(blockFace: BlockFace): Block {
         return BlockPistonArmCollision().setPropertyValue<Int, IntPropertyType>(
             CommonBlockProperties.FACING_DIRECTION,
             blockFace.index

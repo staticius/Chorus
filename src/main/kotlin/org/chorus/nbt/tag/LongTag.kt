@@ -1,6 +1,6 @@
 package org.chorus.nbt.tag
 
-import java.util.Objects
+import java.util.*
 
 class LongTag : NumberTag<Long> {
     override var data: Long = 0

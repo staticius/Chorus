@@ -11,7 +11,7 @@ abstract class BlockCoralFanDead(blockstate: BlockState) : BlockCoralFan(blockst
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!getSide(rootsFace)!!.isSolid) {
+            if (!getSide(rootsFace).isSolid) {
                 level.useBreakOn(this.position)
             }
             return type

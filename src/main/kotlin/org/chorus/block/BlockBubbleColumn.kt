@@ -74,7 +74,7 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
     override fun onEntityCollide(entity: Entity) {
         if (entity != null) {
             if (entity.canBeMovedByCurrents()) {
-                if (up()!!.isAir) {
+                if (up().isAir) {
                     if (isDragDown) {
                         entity.motion.y = max(-0.9, entity.motion.y - 0.03)
                     } else {
@@ -128,7 +128,7 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
         fz: Double,
         player: Player?
     ): Boolean {
-        if (down()!!.id == BlockID.MAGMA) {
+        if (down().id == BlockID.MAGMA) {
             isDragDown = true
         }
         level.setBlock(this.position, 1, BlockFlowingWater(), direct = true, update = false)
@@ -154,11 +154,11 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val water = getLevelBlockAtLayer(1)
             if (water !is BlockFlowingWater || water.liquidDepth != 0 && water.liquidDepth != 8) {
-                fadeOut(water!!)
+                fadeOut(water)
                 return type
             }
 
-            if (water.blockState!!.specialValue().toInt() == 8) {
+            if (water.blockState.specialValue().toInt() == 8) {
                 water.liquidDepth = 0
                 level.setBlock(this.position, 1, water, direct = true, update = false)
             }
@@ -168,7 +168,7 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
                 if (down.isDragDown != this.isDragDown) {
                     level.setBlock(this.position, down, direct = true, update = true)
                 }
-            } else if (down!!.id == BlockID.MAGMA) {
+            } else if (down.id == BlockID.MAGMA) {
                 if (!this.isDragDown) {
                     isDragDown = true
                     level.setBlock(this.position, this, direct = true, update = true)
@@ -184,8 +184,8 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
             }
 
             val up = up()
-            if (up is BlockFlowingWater && (up.blockState!!.specialValue()
-                    .toInt() == 0 || up.blockState!!.specialValue().toInt() == 8)
+            if (up is BlockFlowingWater && (up.blockState.specialValue()
+                    .toInt() == 0 || up.blockState.specialValue().toInt() == 8)
             ) {
                 val event = BlockFromToEvent(this, up)
                 if (!event.isCancelled) {

@@ -8,7 +8,7 @@ class BlockCopperBulb @JvmOverloads constructor(blockstate: BlockState = Compani
 
     override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.UNAFFECTED
-    
+
 
     override val lightLevel: Int
         get() = if (lit) 15 else 0

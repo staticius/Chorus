@@ -26,7 +26,7 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Compani
             val torchAttachment = torchAttachment!!
 
             val support = this.getSide(torchAttachment.attachedFace)
-            if (!isSupportValid(support!!, torchAttachment.torchDirection!!)) {
+            if (!isSupportValid(support, torchAttachment.torchDirection!!)) {
                 level.useBreakOn(this.position)
 
                 return Level.BLOCK_UPDATE_NORMAL
@@ -38,11 +38,11 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Compani
 
     private fun findValidSupport(): BlockFace? {
         for (horizontalFace in BlockFace.Plane.HORIZONTAL) {
-            if (isSupportValid(getSide(horizontalFace.getOpposite()!!)!!, horizontalFace)) {
+            if (isSupportValid(getSide(horizontalFace.getOpposite()), horizontalFace)) {
                 return horizontalFace
             }
         }
-        if (isSupportValid(down()!!, BlockFace.UP)) {
+        if (isSupportValid(down(), BlockFace.UP)) {
             return BlockFace.UP
         }
         return null
@@ -61,7 +61,7 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Compani
         var target = target
         var face = face
         if (target.canBeReplaced()) {
-            target = target.down()!!
+            target = target.down()
             face = BlockFace.UP
         }
 
@@ -81,7 +81,7 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Compani
          * Sets the direction that the flame is pointing.
          */
         set(face) {
-            val torchAttachment = TorchFacingDirection.getByTorchDirection(face!!)
+            val torchAttachment = TorchFacingDirection.getByTorchDirection(face)
             requireNotNull(torchAttachment) { "The give BlockFace can't be mapped to TorchFace" }
             this.torchAttachment = torchAttachment
         }

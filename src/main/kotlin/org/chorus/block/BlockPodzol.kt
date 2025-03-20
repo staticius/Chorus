@@ -25,7 +25,7 @@ class BlockPodzol : BlockDirt {
         fy: Float,
         fz: Float
     ): Boolean {
-        if (!up()!!.canBeReplaced()) {
+        if (!up().canBeReplaced()) {
             return false
         }
 

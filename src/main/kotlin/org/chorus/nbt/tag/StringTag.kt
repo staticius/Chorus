@@ -3,7 +3,7 @@ package org.chorus.nbt.tag
 import java.util.*
 
 class StringTag(var data: String) : Tag<String>() {
-    constructor(): this("")
+    constructor() : this("")
 
     override fun parseValue(): String {
         return this.data

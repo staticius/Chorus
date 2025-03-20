@@ -93,7 +93,7 @@ class DummyBossBar private constructor(builder: Builder) {
     private fun createBossEntity() {
         val pkAdd = AddEntityPacket()
 
-        pkAdd.type = Registries.ENTITY.getEntityNetworkId(EntityID.CREEPER)
+        pkAdd.type = Registries.ENTITY.getEntityNetworkId(EntityID.CREEPER)!!
         pkAdd.entityUniqueId = bossBarId
         pkAdd.entityRuntimeId = bossBarId
         pkAdd.x = player.position.x.toFloat()

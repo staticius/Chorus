@@ -10,10 +10,10 @@ import kotlin.math.sqrt
 
 
 class BlockIterator @JvmOverloads constructor(
-    private val level: Level, start: Vector3, direction: Vector3, yOffset: Double = 0.0,
+    level: Level, start: Vector3, direction: Vector3, yOffset: Double = 0.0,
     private val maxDistance: Int = 0
 ) :
-    MutableIterator<Block?> {
+    Iterator<Block> {
     private var end = false
 
     private val blockQueue = arrayOfNulls<Block>(3)
@@ -54,7 +54,7 @@ class BlockIterator @JvmOverloads constructor(
         if (this.getXLength(direction) > mainDirection) {
             this.mainFace = this.getXFace(direction)
             mainDirection = this.getXLength(direction)
-            mainPosition = this.getXPosition(direction, startClone, startBlock!!)
+            mainPosition = this.getXPosition(direction, startClone, startBlock)
 
             this.secondFace = this.getYFace(direction)
             secondDirection = this.getYLength(direction)
@@ -67,7 +67,7 @@ class BlockIterator @JvmOverloads constructor(
         if (this.getYLength(direction) > mainDirection) {
             this.mainFace = this.getYFace(direction)
             mainDirection = this.getYLength(direction)
-            mainPosition = this.getYPosition(direction, startClone, startBlock!!)
+            mainPosition = this.getYPosition(direction, startClone, startBlock)
 
             this.secondFace = this.getZFace(direction)
             secondDirection = this.getZLength(direction)
@@ -80,7 +80,7 @@ class BlockIterator @JvmOverloads constructor(
         if (this.getZLength(direction) > mainDirection) {
             this.mainFace = this.getZFace(direction)
             mainDirection = this.getZLength(direction)
-            mainPosition = this.getZPosition(direction, startClone, startBlock!!)
+            mainPosition = this.getZPosition(direction, startClone, startBlock)
 
             this.secondFace = this.getXFace(direction)
             secondDirection = this.getXLength(direction)
@@ -108,16 +108,16 @@ class BlockIterator @JvmOverloads constructor(
             this.thirdError = -this.thirdStep + 1
         }
 
-        var lastBlock = startBlock!!.getSide(mainFace!!.getOpposite())
+        var lastBlock = startBlock.getSide(mainFace!!.getOpposite())
 
         if (this.secondError < 0) {
             this.secondError += GRID_SIZE
-            lastBlock = lastBlock!!.getSide(secondFace!!.getOpposite())
+            lastBlock = lastBlock.getSide(secondFace!!.getOpposite())
         }
 
         if (this.thirdError < 0) {
             this.thirdError += GRID_SIZE
-            lastBlock = lastBlock!!.getSide(thirdFace!!.getOpposite())
+            lastBlock = lastBlock.getSide(thirdFace!!.getOpposite())
         }
 
         this.secondError -= GRID_SIZE
@@ -190,7 +190,7 @@ class BlockIterator @JvmOverloads constructor(
         return this.getPosition(direction.z, position.z, block.position.z)
     }
 
-    override fun next(): Block? {
+    override fun next(): Block {
         this.scan()
 
         if (this.currentBlock <= -1) {
@@ -198,7 +198,7 @@ class BlockIterator @JvmOverloads constructor(
         } else {
             this.currentBlockObject = blockQueue[currentBlock--]
         }
-        return this.currentBlockObject
+        return this.currentBlockObject!!
     }
 
     override fun hasNext(): Boolean {

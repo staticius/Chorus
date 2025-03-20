@@ -3,7 +3,6 @@ package org.chorus.block.customblock.data
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.nbt.tag.Tag
 
 @JvmRecord
 data class CollisionBox(

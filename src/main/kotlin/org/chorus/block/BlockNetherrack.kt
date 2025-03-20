@@ -34,13 +34,13 @@ class BlockNetherrack : BlockSolid {
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.isNothing || !item.isFertilizer || up()!!.id !== BlockID.AIR) {
+        if (item.isNothing || !item.isFertilizer || up().id !== BlockID.AIR) {
             return false
         }
 
         val options: MutableList<String> = ArrayList()
         for (face in BlockFace.Plane.HORIZONTAL) {
-            val id = getSide(face)!!.id
+            val id = getSide(face).id
             if ((id == BlockID.CRIMSON_NYLIUM || id == BlockID.WARPED_NYLIUM) && !options.contains(id)) {
                 options.add(id)
             }

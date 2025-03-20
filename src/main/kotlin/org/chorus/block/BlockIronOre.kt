@@ -11,12 +11,12 @@ open class BlockIronOre @JvmOverloads constructor(blockstate: BlockState = Compa
     override val toolTier: Int
         get() = ItemTool.TIER_STONE
 
-    override val rawMaterial: String? 
+    override val rawMaterial: String?
         get() = ItemID.RAW_IRON
-    }
+}
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.Companion.IRON_ORE)
+companion object {
+    val properties: BlockProperties = BlockProperties(BlockID.Companion.IRON_ORE)
 
-    }
+}
 }

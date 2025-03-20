@@ -15,7 +15,7 @@ abstract class BlockFallable(blockstate: BlockState) : BlockSolid(blockstate) {
     override fun onUpdate(type: Int): Int {
         val down = this.down()
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if ((down!!.isAir || down is BlockFire || down is BlockLiquid ||
+            if ((down.isAir || down is BlockFire || down is BlockLiquid ||
                         (down is BlockBubbleColumn && down.getLevelBlockAtLayer(1) is BlockLiquid))
             ) {
                 val event = BlockFallEvent(this)
@@ -57,10 +57,10 @@ abstract class BlockFallable(blockstate: BlockState) : BlockSolid(blockstate) {
                     .add(FloatTag(0f))
                     .add(FloatTag(0f))
             )
-            .putCompound("Block", blockState!!.blockStateTag!!.copy())
+            .putCompound("Block", blockState.blockStateTag.copy())
 
         for ((key, value) in customNbt.entrySet) {
-            nbt.put(key, value!!.copy())
+            nbt.put(key, value.copy())
         }
 
         val fall = createEntity(

@@ -43,11 +43,11 @@ class BlockMycelium : BlockDirt {
                 val y: Int = random.nextInt(position.floorY - 1, position.floorY + 1)
                 val z: Int = random.nextInt(position.floorZ - 1, position.floorZ + 1)
                 val block = level.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
-                if (block!!.id == Block.DIRT && block.getPropertyValue<DirtType, EnumPropertyType<DirtType>>(
+                if (block.id == Block.DIRT && block.getPropertyValue<DirtType, EnumPropertyType<DirtType>>(
                         CommonBlockProperties.DIRT_TYPE
                     ) == DirtType.NORMAL
                 ) {
-                    if (block.up()!!.isTransparent) {
+                    if (block.up().isTransparent) {
                         val ev: BlockSpreadEvent = BlockSpreadEvent(block, this, get(BlockID.MYCELIUM))
                         instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
@@ -76,7 +76,7 @@ class BlockMycelium : BlockDirt {
         fy: Float,
         fz: Float
     ): Boolean {
-        if (!up()!!.canBeReplaced()) {
+        if (!up().canBeReplaced()) {
             return false
         }
 

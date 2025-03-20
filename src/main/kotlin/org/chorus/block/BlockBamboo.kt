@@ -38,7 +38,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
 
             Level.BLOCK_UPDATE_RANDOM -> {
                 val up = up()
-                if (age == 0 && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.MIN_LIGHT_LEVEL && ThreadLocalRandom.current()
+                if (age == 0 && up.isAir && level.getFullLight(up.position) >= BlockCrops.MIN_LIGHT_LEVEL && ThreadLocalRandom.current()
                         .nextInt(3) == 0
                 ) {
                     grow(up)
@@ -75,7 +75,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
         var count = 0
         var opt: Optional<Block>
         var down: Block = this
-        while ((down.down()!!.firstInLayers { b: Block? -> b!!.id === BlockID.BAMBOO }.also { opt = it }).isPresent) {
+        while ((down.down().firstInLayers { b: Block? -> b!!.id === BlockID.BAMBOO }.also { opt = it }).isPresent) {
             down = opt.get()
             if (++count >= 16) {
                 break
@@ -95,7 +95,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
         player: Player?
     ): Boolean {
         var down = down()
-        val downId = down!!.id
+        val downId = down.id
         if (downId != BlockID.BAMBOO && downId != BlockID.BAMBOO_SAPLING) {
             val sampling = BlockBambooSapling()
             sampling.position.x = position.x
@@ -122,7 +122,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
             if (!thick) {
                 var setThick = true
                 for (i in 2..3) {
-                    if (getSide(BlockFace.DOWN, i)!!.id !== BlockID.BAMBOO) {
+                    if (getSide(BlockFace.DOWN, i).id !== BlockID.BAMBOO) {
                         setThick = false
                     }
                 }
@@ -182,7 +182,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
     }
 
     override fun onBreak(item: Item?): Boolean {
-        val down = down()!!.firstInLayers { b: Block? -> b is BlockBamboo }
+        val down = down().firstInLayers { b: Block? -> b is BlockBamboo }
         if (down.isPresent) {
             val bambooDown = down.get() as BlockBamboo
             val height = bambooDown.countHeight()
@@ -199,7 +199,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
     }
 
     private val isSupportInvalid: Boolean
-        get() = when (down()!!.id) {
+        get() = when (down().id) {
             BlockID.BAMBOO, BlockID.DIRT, BlockID.GRASS_BLOCK, BlockID.SAND, BlockID.GRAVEL, BlockID.PODZOL, BlockID.BAMBOO_SAPLING, BlockID.MOSS_BLOCK -> false
             else -> true
         }
@@ -290,8 +290,8 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
             var success = false
 
             val block = this.up(top - position.y.toInt() + 1)
-            if (block!!.id === BlockID.AIR) {
-                success = grow(block!!)
+            if (block.id === BlockID.AIR) {
+                success = grow(block)
             }
 
             if (success) {

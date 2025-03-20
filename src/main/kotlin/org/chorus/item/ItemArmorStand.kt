@@ -32,7 +32,7 @@ class ItemArmorStand : Item(ItemID.Companion.ARMOR_STAND) {
             return false
         }
 
-        val chunk = block.chunk ?: return false
+        val chunk = block.chunk
 
         if (!block.canBeReplaced() || !block.up().canBeReplaced()) {
             return false

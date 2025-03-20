@@ -1,7 +1,5 @@
 package org.chorus.item.enchantment.bow
 
-import org.chorus.item.enchantment.Enchantment
-
 
 class EnchantmentBowPower :
     EnchantmentBow(ID_BOW_POWER, "arrowDamage", Rarity.COMMON) {

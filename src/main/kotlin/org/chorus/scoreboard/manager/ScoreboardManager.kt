@@ -13,11 +13,7 @@ import org.chorus.scoreboard.scorer.EntityScorer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.scoreboard.storage.IScoreboardStorage
 import java.util.*
-
 import java.util.function.Consumer
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardManager {
     override var scoreboards: MutableMap<String, IScoreboard> = HashMap()
@@ -53,7 +49,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
         scoreboards.remove(objectiveName)
         CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(UpdateSoftEnumPacket.Type.REMOVE, objectiveName)
         viewers.forEach(Consumer { viewer: IScoreboardViewer -> viewer.removeScoreboard(removed) })
-        display.forEach { (slot: DisplaySlot?, scoreboard: IScoreboard?) ->
+        display.forEach { (slot, scoreboard) ->
             if (scoreboard != null && scoreboard.objectiveName == objectiveName) {
                 display[slot] = null
             }
@@ -90,7 +86,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
 
     override fun addViewer(viewer: IScoreboardViewer): Boolean {
         val added = viewers.add(viewer)
-        if (added) display.forEach { (slot: DisplaySlot?, scoreboard: IScoreboard?) ->
+        if (added) display.forEach { (slot, scoreboard) ->
             scoreboard?.addViewer(viewer, slot)
         }
         return added
@@ -113,11 +109,11 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
     override fun onPlayerJoin(player: Player) {
         addViewer(player)
         val scorer = PlayerScorer(player)
-        scoreboards.values.forEach(Consumer { scoreboard: IScoreboard? ->
+        scoreboards.values.forEach(Consumer { scoreboard ->
             if (scoreboard!!.containLine(scorer)) {
-                viewers.forEach(Consumer { viewer: IScoreboardViewer ->
+                viewers.forEach(Consumer { viewer ->
                     viewer.updateScore(
-                        scoreboard.getLine(scorer)
+                        scoreboard.getLine(scorer)!!
                     )
                 })
             }
@@ -130,7 +126,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
             if (scoreboard!!.containLine(scorer)) {
                 viewers.forEach(Consumer { viewer: IScoreboardViewer ->
                     viewer.removeLine(
-                        scoreboard.getLine(scorer)
+                        scoreboard.getLine(scorer)!!
                     )
                 })
             }
@@ -162,7 +158,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
         display.forEach { (slot, _) -> setDisplay(slot, null) }
 
         scoreboards = storage.readScoreboard()
-        storage.readDisplay().forEach { (slot: DisplaySlot?, objectiveName: String?) ->
+        storage.readDisplay().forEach { (slot, objectiveName) ->
             val scoreboard = getScoreboard(objectiveName)
             if (scoreboard != null) {
                 this.setDisplay(slot, scoreboard)

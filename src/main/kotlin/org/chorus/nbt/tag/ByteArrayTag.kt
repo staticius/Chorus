@@ -3,7 +3,7 @@ package org.chorus.nbt.tag
 import org.chorus.utils.Binary
 
 class ByteArrayTag(var data: ByteArray) : Tag<ByteArray>() {
-    constructor(): this(ByteArray(0))
+    constructor() : this(ByteArray(0))
 
     override val id: Byte
         get() = TAG_BYTE_ARRAY

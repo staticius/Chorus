@@ -46,7 +46,7 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
     override var blockFace: BlockFace
         get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
         set(face) {
-            if (face!!.horizontalIndex == -1) {
+            if (face.horizontalIndex == -1) {
                 return
             }
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face.horizontalIndex)
@@ -112,12 +112,12 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
         when (face) {
             BlockFace.UP -> {
                 attachmentType = Attachment.STANDING
-                blockFace = player.getDirection()!!.getOpposite()
+                blockFace = player.getDirection().getOpposite()
             }
 
             BlockFace.DOWN -> {
                 attachmentType = Attachment.HANGING
-                blockFace = player.getDirection()!!.getOpposite()
+                blockFace = player.getDirection().getOpposite()
             }
 
             else -> {
@@ -134,9 +134,9 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
 
     private fun checkSupport(): Boolean {
         return when (attachmentType) {
-            Attachment.STANDING -> checkSupport(down()!!)
-            Attachment.HANGING -> checkSupport(up()!!)
-            Attachment.SIDE -> checkSupport(getSide(blockFace!!.getOpposite()!!)!!)
+            Attachment.STANDING -> checkSupport(down())
+            Attachment.HANGING -> checkSupport(up())
+            Attachment.SIDE -> checkSupport(getSide(blockFace.getOpposite()))
             else -> false
         }
     }
@@ -149,7 +149,7 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
     override fun recalculateBoundingBox(): AxisAlignedBB {
         val attachmentType = attachmentType!!
         val blockFace = blockFace
-        val south = this.isConnectedTo(BlockFace.SOUTH, attachmentType, blockFace!!)
+        val south = this.isConnectedTo(BlockFace.SOUTH, attachmentType, blockFace)
         val north = this.isConnectedTo(BlockFace.NORTH, attachmentType, blockFace)
         val west = this.isConnectedTo(BlockFace.WEST, attachmentType, blockFace)
         val east = this.isConnectedTo(BlockFace.EAST, attachmentType, blockFace)

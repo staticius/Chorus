@@ -44,7 +44,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
         fz: Double,
         player: Player?
     ): Boolean {
-        if (isSupportValid(down()!!)) {
+        if (isSupportValid(down())) {
             level.setBlock(block.position, this, true, true)
             return true
         }
@@ -83,7 +83,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isSupportValid(down()!!)) {
+            if (!isSupportValid(down())) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
@@ -207,7 +207,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
                 if (ev.isCancelled) {
                     return
                 }
-                if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
+                if (level.getBlock(vector3).id == BlockID.DIRT_WITH_ROOTS) {
                     level.setBlock(vector3, get(BlockID.DIRT))
                 }
                 blockManager.applySubChunkUpdate(ev.blockList)
@@ -230,7 +230,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
                 if (ev.isCancelled) {
                     return
                 }
-                if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
+                if (level.getBlock(vector3).id == BlockID.DIRT_WITH_ROOTS) {
                     level.setBlock(vector3, get(BlockID.DIRT))
                 }
                 blockManager.applySubChunkUpdate(ev.blockList)
@@ -263,7 +263,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
             return
         }
 
-        if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
+        if (level.getBlock(vector3).id == BlockID.DIRT_WITH_ROOTS) {
             level.setBlock(vector3, get(BlockID.DIRT))
         }
         blockManager.applySubChunkUpdate(ev.blockList)
@@ -316,7 +316,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
 
     fun isSameType(pos: Vector3, type: WoodType): Boolean {
         val block = level.getBlock(pos)
-        return block!!.id == this.id && (block as BlockSapling).getWoodType() == type
+        return block.id == this.id && (block as BlockSapling).getWoodType() == type
     }
 
     override val isFertilizable: Boolean

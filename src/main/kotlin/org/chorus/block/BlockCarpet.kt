@@ -48,7 +48,7 @@ abstract class BlockCarpet(blockState: BlockState) : BlockFlowable(blockState) {
         player: Player?
     ): Boolean {
         val down = this.down()
-        if (!down!!.isAir) {
+        if (!down.isAir) {
             level.setBlock(block.position, this, true, true)
             return true
         }
@@ -57,7 +57,7 @@ abstract class BlockCarpet(blockState: BlockState) : BlockFlowable(blockState) {
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down()!!.isAir) {
+            if (down().isAir) {
                 level.useBreakOn(this.position)
 
                 return Level.BLOCK_UPDATE_NORMAL

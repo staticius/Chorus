@@ -17,7 +17,7 @@ class BlockWallBanner @JvmOverloads constructor(blockstate: BlockState = Compani
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (getSide(blockFace!!.getOpposite()!!)!!.isAir) {
+            if (getSide(blockFace!!.getOpposite()).isAir) {
                 level.useBreakOn(this.position)
             }
             return Level.BLOCK_UPDATE_NORMAL

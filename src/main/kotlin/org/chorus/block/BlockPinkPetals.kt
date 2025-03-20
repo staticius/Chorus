@@ -24,7 +24,7 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState = Compani
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!isSupportValid(block.down()!!)) {
+        if (!isSupportValid(block.down())) {
             return false
         }
 

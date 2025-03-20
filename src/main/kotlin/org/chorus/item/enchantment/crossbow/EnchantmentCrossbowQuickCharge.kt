@@ -1,7 +1,5 @@
 package org.chorus.item.enchantment.crossbow
 
-import org.chorus.item.enchantment.Enchantment
-
 class EnchantmentCrossbowQuickCharge :
     EnchantmentCrossbow(ID_CROSSBOW_QUICK_CHARGE, "crossbowQuickCharge", Rarity.UNCOMMON) {
     override fun getMinEnchantAbility(level: Int): Int {

@@ -59,7 +59,7 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState = Compa
         if (powered != wasPowered) {
             this.setIsActive(powered)
             updateAroundRedstone()
-            updateAroundRedstone(getSide(BlockFace.DOWN)!!)
+            updateAroundRedstone(getSide(BlockFace.DOWN))
         }
         if (powered) {
             //每20gt检查一遍

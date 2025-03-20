@@ -15,7 +15,7 @@ import org.chorus.nbt.tag.CompoundTag
 class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) :  super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override val waterloggingLevel: Int
         get() = 1
@@ -72,9 +72,9 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
             }
             val plantBlockTag = blockEntity.namedTag.getCompound("PlantBlock")
             // TODO: Vanilla uses a Block NBT, not an Item
-            val id = plantBlockTag!!.getString("itemId")
+            val id = plantBlockTag.getString("itemId")
             val meta = plantBlockTag.getInt("itemMeta")
-            return get(id!!, meta)
+            return get(id, meta)
         }
 
     fun setFlower(item: Item?): Boolean {
@@ -84,7 +84,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
         }
 
         if (item.getBlock() is FlowerPotBlock && potBlock.isPotBlockState()) {
-            val blockEntity = getOrCreateBlockEntity()!!
+            val blockEntity = getOrCreateBlockEntity()
             blockEntity.namedTag.putCompound("PlantBlock", potBlock.getPlantBlockTag())
 
             setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT, true)
@@ -97,7 +97,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
     }
 
     fun removeFlower() {
-        val blockEntity = getOrCreateBlockEntity()!!
+        val blockEntity = getOrCreateBlockEntity()
         blockEntity.namedTag.remove("PlantBlock")
 
         setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT, false)
@@ -163,8 +163,8 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
         val blockEntity = blockEntity
         if (blockEntity != null) {
             dropInside = true
-            insideID = blockEntity.namedTag.getCompound("PlantBlock")!!.getString("itemId")
-            insideMeta = blockEntity.namedTag.getCompound("PlantBlock")!!.getInt("itemMeta")
+            insideID = blockEntity.namedTag.getCompound("PlantBlock").getString("itemId")
+            insideMeta = blockEntity.namedTag.getCompound("PlantBlock").getInt("itemMeta")
         }
         return if (dropInside) {
             arrayOf(
@@ -245,7 +245,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
              */
             get() {
                 val block = this as Block
-                val tag = block.blockState!!.blockStateTag.copy()
+                val tag = block.blockState.blockStateTag.copy()
                 val item = block.toItem()
                 return tag.putString("itemId", item.id)
                     .putInt("itemMeta", item.damage) //only exist in PNX

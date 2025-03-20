@@ -61,13 +61,13 @@ abstract class BlockLichen(blockState: BlockState) : BlockTransparent(blockState
 
         setPropertyValue<Int, IntPropertyType>(
             CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
-            currentMeta or (1 shl face.getOpposite()!!.indexDUSWNE)
+            currentMeta or (1 shl face.getOpposite().indexDUSWNE)
         )
 
         if (getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) == currentMeta) {
             val sides = BlockFace.entries.toTypedArray()
             val faceStream = Arrays.stream(sides).filter { side: BlockFace ->
-                block.getSide(side)!!
+                block.getSide(side)
                     .isSolid(side) && !isGrowthToSide(side)
             }
             val optionalFace = faceStream.findFirst()

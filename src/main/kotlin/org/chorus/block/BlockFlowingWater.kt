@@ -39,8 +39,8 @@ open class BlockFlowingWater @JvmOverloads constructor(blockstate: BlockState = 
 
         val up = up(1, 0)
         for (diagonalFace in BlockFace.Plane.HORIZONTAL) {
-            val diagonal = up!!.getSide(diagonalFace)
-            if (diagonal!!.id == REEDS) {
+            val diagonal = up.getSide(diagonalFace)
+            if (diagonal.id == REEDS) {
                 diagonal.onUpdate(Level.BLOCK_UPDATE_SCHEDULED)
             }
         }
@@ -48,7 +48,7 @@ open class BlockFlowingWater @JvmOverloads constructor(blockstate: BlockState = 
 
     override fun getLiquidWithNewDepth(depth: Int): BlockLiquid {
         return BlockFlowingWater(
-            blockState!!.setPropertyValue(
+            blockState.setPropertyValue(
                 Companion.properties,
                 CommonBlockProperties.LIQUID_DEPTH.createValue(depth)
             )

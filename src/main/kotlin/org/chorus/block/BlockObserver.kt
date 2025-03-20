@@ -74,8 +74,8 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState = Companion
                 isPowered = true
 
                 if (level.setBlock(this.position, this)) {
-                    getSide(blockFace!!.getOpposite()!!)!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
-                    updateAroundRedstone(getSide(blockFace!!.getOpposite()!!)!!)
+                    getSide(blockFace.getOpposite()).onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+                    updateAroundRedstone(getSide(blockFace.getOpposite()))
                     level.scheduleUpdate(this, 2)
                 }
             } else {
@@ -83,8 +83,8 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState = Companion
                 isPowered = false
 
                 level.setBlock(this.position, this)
-                getSide(blockFace!!.getOpposite()!!)!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
-                updateAroundRedstone(getSide(blockFace!!.getOpposite()!!)!!)
+                getSide(blockFace.getOpposite()).onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+                updateAroundRedstone(getSide(blockFace.getOpposite()))
             }
             return type
         }

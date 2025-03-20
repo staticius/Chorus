@@ -4,19 +4,23 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.*
+import org.chorus.blockentity.BlockEntityDispenser
+import org.chorus.blockentity.BlockEntityEjectable
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.dispenser.DispenseBehavior
 import org.chorus.dispenser.DispenseBehaviorRegister.getBehavior
 import org.chorus.dispenser.DropperDispenseBehavior
 import org.chorus.dispenser.FlintAndSteelDispenseBehavior
 import org.chorus.inventory.ContainerInventory.Companion.calculateRedstone
 import org.chorus.inventory.InventoryHolder
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Sound
-import org.chorus.math.*
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
@@ -240,7 +244,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
         get() {
             val facing = blockFace
             return position.add(
-                0.5 + 0.7 * facing!!.xOffset,
+                0.5 + 0.7 * facing.xOffset,
                 0.5 + 0.7 * facing.yOffset,
                 0.5 + 0.7 * facing.zOffset
             )

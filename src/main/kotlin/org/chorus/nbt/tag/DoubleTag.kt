@@ -1,6 +1,6 @@
 package org.chorus.nbt.tag
 
-import java.util.Objects
+import java.util.*
 
 class DoubleTag : NumberTag<Double> {
     override var data: Double = 0.0

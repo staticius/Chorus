@@ -11,7 +11,8 @@ import java.util.regex.MatchResult
 import java.util.regex.Pattern
 
 
-class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fallback: String = FALLBACK_LANGUAGE) : Loggable {
+class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fallback: String = FALLBACK_LANGUAGE) :
+    Loggable {
     /**
      * The Lang name.
      */
@@ -188,7 +189,7 @@ class BaseLang @JvmOverloads constructor(lang: String, path: String? = null, fal
      * @param id the id
      * @return the string
      */
-    fun get(id: String): String {
+    operator fun get(id: String): String {
         if (langMap!!.containsKey(id)) {
             return langMap!![id]!!
         } else if (fallbackLangMap!!.containsKey(id)) {

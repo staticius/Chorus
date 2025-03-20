@@ -28,7 +28,7 @@ open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
         fy: Float,
         fz: Float
     ): Boolean {
-        if (!up()!!.canBeReplaced()) {
+        if (!up().canBeReplaced()) {
             return false
         }
 
@@ -67,7 +67,7 @@ open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
             // Transparent blocks can kill grass in a similar manner,
             // but only if they cause the light level above the grass block to be four or below (like water does),
             // and the surrounding area is not otherwise sufficiently lit up.
-            if (up()!!.lightFilter > 1) {
+            if (up().lightFilter > 1) {
                 val ev = BlockFadeEvent(this, get(DIRT))
                 instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
@@ -90,9 +90,9 @@ open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
                 val y = random.nextInt(position.y.toInt() - 3, position.y.toInt() + 1 + 1)
                 val z = random.nextInt(position.z.toInt() - 1, position.z.toInt() + 1 + 1)
                 val block = level.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
-                if (block!!.id == Block.DIRT // The dirt block must have a light level of at least 4 above it.
+                if (block.id == Block.DIRT // The dirt block must have a light level of at least 4 above it.
                     && level.getFullLight(block.position) >= 4 // Any block directly above the dirt block must not reduce light by 2 levels or more.
-                    && block.up()!!.lightFilter < 2
+                    && block.up().lightFilter < 2
                 ) {
                     val ev: BlockSpreadEvent = BlockSpreadEvent(block, this, get(GRASS_BLOCK))
                     instance.pluginManager.callEvent(ev)

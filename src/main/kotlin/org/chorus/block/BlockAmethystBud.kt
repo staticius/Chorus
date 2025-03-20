@@ -87,7 +87,7 @@ abstract class BlockAmethystBud(blockState: BlockState) : BlockTransparent(block
     }
 
     override fun onUpdate(type: Int): Int {
-        if ((getSide(blockFace.getOpposite())!!.isAir)) {
+        if ((getSide(blockFace.getOpposite()).isAir)) {
             this.onBreak(Item.get(ItemID.DIAMOND_PICKAXE))
         }
 

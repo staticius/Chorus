@@ -81,7 +81,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
         val direction = player.getDirection()
         blockFace = direction
 
-        if (getSide(direction!!.rotateY()) is BlockWallBase
+        if (getSide(direction.rotateY()) is BlockWallBase
             || getSide(direction.rotateYCCW()) is BlockWallBase
         ) {
             isInWall = true
@@ -115,7 +115,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
 
     fun toggle(player: Player?): Boolean {
         if (player != null) {
-            if (!player.getAdventureSettings()!!.get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
         }
         return this.setOpen(player, !this.isOpen)
     }
@@ -147,7 +147,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
                 rotation += 360.0
             }
 
-            direction = if (originDirection!!.axis == BlockFace.Axis.Z) {
+            direction = if (originDirection.axis == BlockFace.Axis.Z) {
                 if (rotation >= 0 && rotation < 180) {
                     BlockFace.NORTH
                 } else {
@@ -161,7 +161,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
                 }
             }
         } else {
-            direction = if (originDirection!!.axis == BlockFace.Axis.Z) {
+            direction = if (originDirection.axis == BlockFace.Axis.Z) {
                 BlockFace.SOUTH
             } else {
                 BlockFace.WEST
@@ -219,7 +219,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val face = blockFace
-            val touchingWall = getSide(face!!.rotateY()) is BlockWallBase || getSide(face.rotateYCCW()) is BlockWallBase
+            val touchingWall = getSide(face.rotateY()) is BlockWallBase || getSide(face.rotateYCCW()) is BlockWallBase
             if (touchingWall != isInWall) {
                 this.isInWall = touchingWall
                 level.setBlock(this.position, this, true)
@@ -281,7 +281,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
         set(face) {
             setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                MinecraftCardinalDirection.VALUES[face!!.horizontalIndex]
+                MinecraftCardinalDirection.VALUES[face.horizontalIndex]
             )
         }
 

@@ -19,14 +19,14 @@ abstract class BlockFungus(blockState: BlockState) : BlockFlowable(blockState), 
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!isValidSupport(down()!!)) {
+        if (!isValidSupport(down())) {
             return false
         }
         return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
     override fun onUpdate(type: Int): Int {
-        if (type == Level.BLOCK_UPDATE_NORMAL && !isValidSupport(down()!!)) {
+        if (type == Level.BLOCK_UPDATE_NORMAL && !isValidSupport(down())) {
             level.useBreakOn(this.position)
             return type
         }
@@ -53,7 +53,7 @@ abstract class BlockFungus(blockState: BlockState) : BlockFlowable(blockState), 
         }
 
         val down = down()
-        if (!isValidSupport(down!!)) {
+        if (!isValidSupport(down)) {
             level.useBreakOn(this.position)
             return true
         }

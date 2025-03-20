@@ -116,7 +116,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState = Companion.p
     override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
-            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
     var isOpen: Boolean

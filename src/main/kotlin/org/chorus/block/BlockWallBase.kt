@@ -42,7 +42,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
             BlockID.BELL -> {
                 val bell = above as BlockBell
                 bell.attachment == Attachment.STANDING
-                        && bell.blockFace!!.axis != face.axis
+                        && bell.blockFace.axis != face.axis
             }
 
             else -> {
@@ -88,7 +88,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
     }
 
     fun autoConfigureState(): Boolean {
-        val previousMeta = blockState!!.specialValue()
+        val previousMeta = blockState.specialValue()
 
         isWallPost = true
 
@@ -98,11 +98,11 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
             val side = getSideAtLayer(0, blockFace)
             if (canConnect(side)) {
                 try {
-                    connect(blockFace, above!!, false)
+                    connect(blockFace, above, false)
                 } catch (e: RuntimeException) {
                     log.error(
                         "Failed to connect the block {} at {} to {} which is {} at {}",
-                        this, locator, blockFace, side, side!!.locator, e
+                        this, locator, blockFace, side, side.locator, e
                     )
                     throw e
                 }
@@ -111,8 +111,8 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
             }
         }
 
-        recheckPostConditions(above!!)
-        return blockState!!.specialValue() != previousMeta
+        recheckPostConditions(above)
+        return blockState.specialValue() != previousMeta
     }
 
     override fun onUpdate(type: Int): Int {
@@ -210,7 +210,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
      * @return true if it should be a post
      */
     fun autoUpdatePostFlag() {
-        isWallPost = recheckPostConditions(up(1, 0)!!)
+        isWallPost = recheckPostConditions(up(1, 0))
     }
 
     fun hasConnections(): Boolean {
@@ -258,7 +258,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
             BlockID.BELL -> {
                 val bell = above as BlockBell
                 if (bell.attachment == Attachment.STANDING
-                    && bell.blockFace!!.axis == axis
+                    && bell.blockFace.axis == axis
                 ) {
                     return true
                 }
@@ -286,7 +286,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
                 } else if (above is BlockFenceGate) {
                     // If the gate don't follow the path, make it a post
 
-                    if ((above as Faceable).blockFace!!.axis == axis) {
+                    if ((above as Faceable).blockFace.axis == axis) {
                         return true
                     }
                 } else if (above is BlockConnectable) {
@@ -331,7 +331,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
         }
 
         val above = getSideAtLayer(0, BlockFace.UP)
-        return connect(blockFace, above!!, recheckPost)
+        return connect(blockFace, above, recheckPost)
     }
 
     private fun connect(blockFace: BlockFace, above: Block, recheckPost: Boolean): Boolean {
@@ -398,7 +398,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
                         return true
                     }
                     if (block is BlockFenceGate) {
-                        return block.blockFace!!.axis != calculateAxis(this.position, block.position)
+                        return block.blockFace.axis != calculateAxis(this.position, block.position)
                     }
                     if (block is BlockStairs) {
                         return block.blockFace!!.getOpposite() == calculateFace(this.position, block.position)

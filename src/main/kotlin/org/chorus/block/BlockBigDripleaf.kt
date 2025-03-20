@@ -95,7 +95,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = Compan
         player: Player?
     ): Boolean {
         val below = block.down()
-        val id = below!!.id
+        val id = below.id
         if (!isValidSupportBlock(id)) return false
 
         if (id == BlockID.BIG_DRIPLEAF) {
@@ -125,10 +125,10 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = Compan
         if (item.isFertilizer) {
             var head: Block = this
             var up: Block?
-            while ((head.up().also { up = it })!!.id === BlockID.BIG_DRIPLEAF) head = up!!
+            while ((head.up().also { up = it }).id === BlockID.BIG_DRIPLEAF) head = up!!
             if (head.position.floorY + 1 > level.maxHeight) return false
             val above = head.up()
-            if (!above!!.isAir && above !is BlockFlowingWater) return false
+            if (!above.isAir && above !is BlockFlowingWater) return false
             if (player != null && !player.isCreative) item.count--
             level.addParticle(BoneMealParticle(this.position))
             val aboveDownBlock = BlockBigDripleaf()
@@ -158,7 +158,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = Compan
             }
 
             if (!isHead) {
-                if (up()!!.id == BlockID.BIG_DRIPLEAF) {
+                if (up().id == BlockID.BIG_DRIPLEAF) {
                     return 0
                 }
 
@@ -254,7 +254,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = Compan
     }
 
     private fun canSurvive(): Boolean {
-        return isValidSupportBlock(down()!!.id)
+        return isValidSupportBlock(down().id)
     }
 
     private fun isValidSupportBlock(id: String): Boolean {

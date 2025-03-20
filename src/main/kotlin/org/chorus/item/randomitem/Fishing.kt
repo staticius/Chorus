@@ -40,7 +40,7 @@ object Fishing {
     val JUNK_TRIPWIRE_HOOK: Selector =
         RandomItem.putSelector(ConstantItemSelector(get(BlockID.TRIPWIRE_HOOK), JUNKS), 0.12f)
 
-    fun getFishingResult(rod: Item?): Item? {
+    fun getFishingResult(rod: Item?): Item {
         var fortuneLevel = 0
         var lureLevel = 0
         if (rod != null) {

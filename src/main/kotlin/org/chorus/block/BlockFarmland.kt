@@ -29,7 +29,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (up()!!.isSolid) {
+            if (up().isSolid) {
                 val farmEvent = FarmLandDecayEvent(null, this)
                 Server.instance.pluginManager.callEvent(farmEvent)
                 if (farmEvent.isCancelled) return 0

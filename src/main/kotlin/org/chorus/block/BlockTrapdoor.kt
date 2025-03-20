@@ -49,7 +49,7 @@ open class BlockTrapdoor  //</editor-fold>
         get() = 1
 
     private val relativeBoundingBox: AxisAlignedBB?
-        get() = boundingBox2SpecialV[blockState!!.specialValue().toInt()]
+        get() = boundingBox2SpecialV[blockState.specialValue().toInt()]
 
     override var minX: Double
         get() = position.x + relativeBoundingBox!!.minX
@@ -135,8 +135,8 @@ open class BlockTrapdoor  //</editor-fold>
         fz: Double,
         player: Player?
     ): Boolean {
-        blockFace = if (player == null) face else player.getDirection()!!.getOpposite()
-        isTop = if (face.axis!!.isHorizontal) fy > 0.5 else face != BlockFace.UP
+        blockFace = if (player == null) face else player.getDirection().getOpposite()
+        isTop = if (face.axis.isHorizontal) fy > 0.5 else face != BlockFace.UP
 
         if (!level.setBlock(block.position, this, true, true)) {
             return false
@@ -166,7 +166,7 @@ open class BlockTrapdoor  //</editor-fold>
 
     fun toggle(player: Player?): Boolean {
         if (player != null) {
-            if (!player.getAdventureSettings()!!.get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
         }
         return this.setOpen(player!!, !this.isOpen)
     }
@@ -278,7 +278,7 @@ open class BlockTrapdoor  //</editor-fold>
                             CommonBlockProperties.DIRECTION
                         )]
                     face = face!!.getOpposite()
-                    bb = if (face!!.axisDirection == AxisDirection.NEGATIVE) {
+                    bb = if (face.axisDirection == AxisDirection.NEGATIVE) {
                         SimpleAxisAlignedBB(
                             0.0,
                             0.0,

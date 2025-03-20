@@ -29,7 +29,7 @@ open class BlockIce : BlockTransparent {
 
     override fun onBreak(item: Item?): Boolean {
         if (item != null) {
-            if (level.dimension == Level.DIMENSION_NETHER || item.getEnchantmentLevel(Enchantment.ID_SILK_TOUCH) > 0 || down()!!.isAir) {
+            if (level.dimension == Level.DIMENSION_NETHER || item.getEnchantmentLevel(Enchantment.ID_SILK_TOUCH) > 0 || down().isAir) {
                 return super.onBreak(item)
             }
         }

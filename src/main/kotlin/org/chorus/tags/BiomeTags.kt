@@ -4,7 +4,6 @@ import org.chorus.registry.BiomeRegistry.BiomeDefinition
 import org.chorus.registry.Registries
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
-import kotlin.collections.HashMap
 
 object BiomeTags {
     const val ANIMAL: String = "animal"

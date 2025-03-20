@@ -33,7 +33,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!canBePlacedOn(block.down()!!)) {
+        if (!canBePlacedOn(block.down())) {
             return false
         }
 
@@ -49,16 +49,16 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
             }
 
             for (blockFace in BlockFace.Plane.VERTICAL) {
-                this.updateAround(pos.getSide(blockFace)!!, blockFace.getOpposite())
+                this.updateAround(pos.getSide(blockFace), blockFace.getOpposite())
             }
 
             for (blockFace in BlockFace.Plane.HORIZONTAL) {
                 val p = pos.getSide(blockFace)
 
-                if (level.getBlock(p!!.position)!!.isNormalBlock) {
-                    this.updateAround(p.getSide(BlockFace.UP)!!, BlockFace.DOWN)
+                if (level.getBlock(p.position).isNormalBlock) {
+                    this.updateAround(p.getSide(BlockFace.UP), BlockFace.DOWN)
                 } else {
-                    this.updateAround(p.getSide(BlockFace.DOWN)!!, BlockFace.UP)
+                    this.updateAround(p.getSide(BlockFace.DOWN), BlockFace.UP)
                 }
             }
         } else {
@@ -69,7 +69,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
 
     //Update the neighbor's block of the pos location as well as the neighbor's neighbor's block
     private fun updateAround(pos: Locator, face: BlockFace?) {
-        if (level.getBlock(pos.position)!!.id == Block.REDSTONE_WIRE) {
+        if (level.getBlock(pos.position).id == Block.REDSTONE_WIRE) {
             updateAroundRedstone(face)
 
             for (side in BlockFace.entries) {
@@ -102,13 +102,13 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
 
             if (this.getMaxCurrentStrength(v.up(), strength) > strength && !level.getBlock(
                     pos.up()
-                )!!.isNormalBlock
+                ).isNormalBlock
             ) {
                 strength = this.getMaxCurrentStrength(v.up(), strength)
             }
             if (this.getMaxCurrentStrength(v.down(), strength) > strength && !level.getBlock(
                     v
-                )!!.isNormalBlock
+                ).isNormalBlock
             ) {
                 strength = this.getMaxCurrentStrength(v.down(), strength)
             }
@@ -170,10 +170,10 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
             for (blockFace in BlockFace.Plane.HORIZONTAL) {
                 val p = pos.getSide(blockFace)
 
-                if (level.getBlock(p!!.position)!!.isNormalBlock) {
-                    this.updateAround(p.getSide(BlockFace.UP)!!, BlockFace.DOWN)
+                if (level.getBlock(p.position).isNormalBlock) {
+                    this.updateAround(p.getSide(BlockFace.UP), BlockFace.DOWN)
                 } else {
-                    this.updateAround(p.getSide(BlockFace.DOWN)!!, BlockFace.UP)
+                    this.updateAround(p.getSide(BlockFace.DOWN), BlockFace.UP)
                 }
             }
         }
@@ -200,7 +200,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
             return 0
         }
 
-        if (type == Level.BLOCK_UPDATE_NORMAL && !this.canBePlacedOn(down()!!)) {
+        if (type == Level.BLOCK_UPDATE_NORMAL && !this.canBePlacedOn(down())) {
             level.useBreakOn(this.position)
             return Level.BLOCK_UPDATE_NORMAL
         }
@@ -237,7 +237,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
                     }
                 }
 
-                return if (side.axis!!.isHorizontal && faces.isEmpty()) {
+                return if (side.axis.isHorizontal && faces.isEmpty()) {
                     power
                 } else if (faces.contains(side) && !faces.contains(side.rotateYCCW()) && !faces.contains(side.rotateY())) {
                     power
@@ -252,11 +252,11 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
         val pos = this.position
         val v = pos.getSide(side)
         val block = level.getBlock(v)
-        val flag = block!!.isNormalBlock
-        val flag1 = level.getBlock(pos.up())!!.isNormalBlock
+        val flag = block.isNormalBlock
+        val flag1 = level.getBlock(pos.up()).isNormalBlock
         return !flag1 && flag && canConnectUpwardsTo(this.level, v.up()) || (canConnectTo(
             block, side
-        ) || !flag && canConnectUpwardsTo(this.level, block.down()!!.position))
+        ) || !flag && canConnectUpwardsTo(this.level, block.down().position))
     }
 
     override val isPowerSource: Boolean
@@ -291,7 +291,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
 
     private fun getIndirectPower(pos: Vector3, face: BlockFace): Int {
         val block = level.getBlock(pos)
-        if (block!!.id == Block.REDSTONE_WIRE) {
+        if (block.id == Block.REDSTONE_WIRE) {
             return 0
         }
         return if (block.isNormalBlock) getStrongPower(pos) else block.getWeakPower(face)
@@ -312,7 +312,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
     private fun getStrongPower(pos: Vector3, direction: BlockFace): Int {
         val block = level.getBlock(pos)
 
-        if (block!!.id == Block.REDSTONE_WIRE) {
+        if (block.id == Block.REDSTONE_WIRE) {
             return 0
         }
 
@@ -324,7 +324,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
 
 
         protected fun canConnectUpwardsTo(level: Level, pos: Vector3): Boolean {
-            return canConnectTo(level.getBlock(pos)!!, null)
+            return canConnectTo(level.getBlock(pos), null)
         }
 
         protected fun canConnectTo(block: Block, side: BlockFace?): Boolean {

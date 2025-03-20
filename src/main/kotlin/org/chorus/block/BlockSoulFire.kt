@@ -10,7 +10,7 @@ class BlockSoulFire @JvmOverloads constructor(blockstate: BlockState = Companion
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            val downId = down()!!.id
+            val downId = down().id
             if (downId != Block.SOUL_SAND && downId != Block.SOUL_SOIL) {
                 level.setBlock(
                     this.position, get(BlockID.FIRE).setPropertyValue<Int, IntPropertyType>(

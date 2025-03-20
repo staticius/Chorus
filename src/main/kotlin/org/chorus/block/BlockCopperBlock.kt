@@ -8,7 +8,7 @@ open class BlockCopperBlock @JvmOverloads constructor(blockstate: BlockState = C
         get() = "Block of Copper"
 
     override val oxidizationLevel: OxidizationLevel
-        get() =  OxidizationLevel.UNAFFECTED
+        get() = OxidizationLevel.UNAFFECTED
 
     override val properties: BlockProperties
         get() = Companion.properties

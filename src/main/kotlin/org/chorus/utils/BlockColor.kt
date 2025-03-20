@@ -167,7 +167,7 @@ class BlockColor {
         val REPEATING_COMMAND_BLOCK_COLOR: BlockColor = BlockColor(153, 90, 205)
 
         fun getDyeColor(dyeColorMeta: Int): BlockColor? {
-            return DyeColor.Companion.getByDyeData(dyeColorMeta).getColor()
+            return DyeColor.getByDyeData(dyeColorMeta)?.color
         }
     }
 }

@@ -27,13 +27,13 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companio
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val down = down()
-            if (!down!!.isSolid || down.id == BlockID.ICE) {
+            if (!down.isSolid || down.id == BlockID.ICE) {
                 level.useBreakOn(this.position)
                 return type
             }
 
             val layer1 = getLevelBlockAtLayer(1)
-            if (layer1 is BlockFlowingWater || layer1!!.id == BlockID.FROSTED_ICE) {
+            if (layer1 is BlockFlowingWater || layer1.id == BlockID.FROSTED_ICE) {
                 if (isDead && (layer1.id == BlockID.FROSTED_ICE || layer1.getPropertyValue<Int, IntPropertyType>(
                         CommonBlockProperties.LIQUID_DEPTH
                     ) == 0 || layer1.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.LIQUID_DEPTH) == 8)
@@ -88,8 +88,8 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companio
             return true
         }
 
-        val down = block.down()!!.getLevelBlockAtLayer(0)
-        if (down!!.isSolid && down.id != BlockID.ICE) {
+        val down = block.down().getLevelBlockAtLayer(0)
+        if (down.isSolid && down.id != BlockID.ICE) {
             if (down is BlockSlab || down is BlockStairs || block.id == BlockID.BUBBLE_COLUMN) {
                 return false
             }

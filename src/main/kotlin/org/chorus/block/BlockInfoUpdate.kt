@@ -1,9 +1,9 @@
 package org.chorus.block
 
 class BlockInfoUpdate : Block {
-    constructor() : super(Companion.properties.defaultState,)
+    constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockState: BlockState) : super(blockState,)
+    constructor(blockState: BlockState) : super(blockState)
 
     override val name: String
         get() = "Info Update Block"

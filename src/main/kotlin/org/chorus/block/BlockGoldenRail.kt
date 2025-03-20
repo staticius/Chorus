@@ -41,9 +41,9 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState = Compani
             // Avoid Block mistake
             if (wasPowered != isPowered) {
                 setIsActive(isPowered)
-                updateAroundRedstone(down()!!, BlockFace.UP, BlockFace.DOWN)
+                updateAroundRedstone(down(), BlockFace.UP, BlockFace.DOWN)
                 if (getOrientation()!!.isAscending) {
-                    updateAroundRedstone(up()!!, BlockFace.UP, BlockFace.DOWN)
+                    updateAroundRedstone(up(), BlockFace.UP, BlockFace.DOWN)
                 }
             }
             return type
@@ -52,9 +52,9 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState = Compani
     }
 
     override fun afterRemoval(newBlock: Block?, update: Boolean) {
-        updateAroundRedstone(down()!!)
+        updateAroundRedstone(down())
         if (getOrientation()!!.isAscending) {
-            updateAroundRedstone(up()!!)
+            updateAroundRedstone(up())
         }
         super.afterRemoval(newBlock, update)
     }
@@ -81,7 +81,7 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState = Compani
         val block2 = level.getBlock(Vector3(dx.toDouble(), dy.toDouble(), dz.toDouble()))
 
         // Second: check if the rail is Powered rail
-        if (isRailBlock(block2!!)) {
+        if (isRailBlock(block2)) {
             block = block2 as BlockRail
         } else {
             return false

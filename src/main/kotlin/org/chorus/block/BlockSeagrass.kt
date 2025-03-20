@@ -28,7 +28,7 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion
         val down = down()
         val layer1Block = block.getLevelBlockAtLayer(1)
         val waterDamage: Int
-        if (down!!.isSolid && (down.id != BlockID.MAGMA) && (down.id != BlockID.SOUL_SAND) &&
+        if (down.isSolid && (down.id != BlockID.MAGMA) && (down.id != BlockID.SOUL_SAND) &&
             (layer1Block is BlockFlowingWater && ((layer1Block.liquidDepth.also {
                 waterDamage = it
             }) == 0 || waterDamage == 8))
@@ -46,7 +46,7 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val blockLayer1 = getLevelBlockAtLayer(1)
             val damage: Int
-            if (blockLayer1 !is BlockFrostedIce && (blockLayer1 !is BlockFlowingWater || ((blockLayer1.blockState!!.specialValue()
+            if (blockLayer1 !is BlockFrostedIce && (blockLayer1 !is BlockFlowingWater || ((blockLayer1.blockState.specialValue()
                     .also {
                         damage =
                             it.toInt()
@@ -59,21 +59,21 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion
             val down = down()
             val propertyValue: SeaGrassType = getPropertyValue(CommonBlockProperties.SEA_GRASS_TYPE)
             if (propertyValue == SeaGrassType.DEFAULT || propertyValue == SeaGrassType.DOUBLE_BOT) {
-                if (!down!!.isSolid || down.id == BlockID.MAGMA || down.id == BlockID.SOUL_SAND) {
+                if (!down.isSolid || down.id == BlockID.MAGMA || down.id == BlockID.SOUL_SAND) {
                     level.useBreakOn(this.position)
                     return Level.BLOCK_UPDATE_NORMAL
                 }
 
                 if (propertyValue == SeaGrassType.DOUBLE_BOT) {
                     val up = up()
-                    if (up!!.id != id || up.getPropertyValue<SeaGrassType, EnumPropertyType<SeaGrassType>>(
+                    if (up.id != id || up.getPropertyValue<SeaGrassType, EnumPropertyType<SeaGrassType>>(
                             CommonBlockProperties.SEA_GRASS_TYPE
                         ) != SeaGrassType.DOUBLE_TOP
                     ) {
                         level.useBreakOn(this.position)
                     }
                 }
-            } else if (down!!.id != id || down.getPropertyValue<SeaGrassType, EnumPropertyType<SeaGrassType>>(
+            } else if (down.id != id || down.getPropertyValue<SeaGrassType, EnumPropertyType<SeaGrassType>>(
                     CommonBlockProperties.SEA_GRASS_TYPE
                 ) != SeaGrassType.DOUBLE_BOT
             ) {

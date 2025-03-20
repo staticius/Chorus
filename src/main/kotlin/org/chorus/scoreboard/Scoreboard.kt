@@ -10,8 +10,6 @@ import org.chorus.scoreboard.scorer.IScorer
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 
 class Scoreboard @JvmOverloads constructor(
@@ -60,7 +58,7 @@ class Scoreboard @JvmOverloads constructor(
         return viewers[slot]!!.contains(viewer)
     }
 
-    override fun getLine(scorer: IScorer?): IScoreboardLine? {
+    override fun getLine(scorer: IScorer): IScoreboardLine? {
         return lines[scorer]
     }
 
@@ -130,7 +128,7 @@ class Scoreboard @JvmOverloads constructor(
         return lines.containsKey(scorer)
     }
 
-    override fun updateScore(update: IScoreboardLine?) {
+    override fun updateScore(update: IScoreboardLine) {
         allViewers.forEach(Consumer { viewer: IScoreboardViewer -> viewer.updateScore(update) })
     }
 

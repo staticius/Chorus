@@ -57,7 +57,7 @@ class BlockLightningRod : BlockTransparent, Faceable {
         set(face) {
             this.setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.FACING_DIRECTION,
-                face!!.index
+                face.index
             )
         }
 

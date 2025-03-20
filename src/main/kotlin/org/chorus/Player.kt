@@ -102,10 +102,6 @@ import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
-import java.util.stream.Collectors
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
-import kotlin.collections.LinkedHashMap
 import kotlin.concurrent.Volatile
 import kotlin.math.*
 
@@ -543,9 +539,9 @@ class Player @UsedByReflection constructor(
             val block = level!!.getBlock(pos, false)
             val tempBreakingBlock = breakingBlock
             val miningTimeRequired = if (tempBreakingBlock is CustomBlock) {
-                tempBreakingBlock.breakTime(inventory!!.itemInHand, this)
+                tempBreakingBlock.breakTime(inventory.itemInHand, this)
             } else breakingBlock!!.calculateBreakTime(
-                inventory!!.itemInHand,
+                inventory.itemInHand,
                 this
             )
 
@@ -561,7 +557,7 @@ class Player @UsedByReflection constructor(
                     breakingBlock!!.position.floorX shr 4,
                     breakingBlock!!.position.floorZ shr 4, pk
                 )
-                level!!.addParticle(PunchBlockParticle(pos, block!!))
+                level!!.addParticle(PunchBlockParticle(pos, block))
                 if (breakingBlock is CustomBlock) {
                     val timeDiff = time - breakingBlockTime
                     blockBreakProgress += timeDiff / (miningTimeRequired * 1000)
@@ -586,12 +582,12 @@ class Player @UsedByReflection constructor(
         val target = level!!.getBlock(pos)
         val playerInteractEvent = PlayerInteractEvent(
             this,
-            inventory!!.itemInHand, target!!.position, face,
+            inventory.itemInHand, target.position, face,
             if (target.isAir) PlayerInteractEvent.Action.LEFT_CLICK_AIR else PlayerInteractEvent.Action.LEFT_CLICK_BLOCK
         )
         Server.instance.pluginManager.callEvent(playerInteractEvent)
         if (playerInteractEvent.isCancelled) {
-            inventory!!.sendHeldItem(this)
+            inventory.sendHeldItem(this)
             level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), UpdateBlockPacket.FLAG_ALL_PRIORITY, false)
             if (target.getLevelBlockAtLayer(1) is BlockLiquid) {
                 level!!.sendBlocks(
@@ -609,7 +605,7 @@ class Player @UsedByReflection constructor(
         )
 
         val block = target.getSide(face)
-        if (block!!.id == BlockID.FIRE || block.id == BlockID.SOUL_FIRE) {
+        if (block.id == BlockID.FIRE || block.id == BlockID.SOUL_FIRE) {
             level!!.setBlock(block.position, Block.get(BlockID.AIR), true)
             level!!.addLevelSoundEvent(block.position, LevelSoundEventPacket.SOUND_EXTINGUISH_FIRE)
             return
@@ -622,8 +618,8 @@ class Player @UsedByReflection constructor(
             if (this.isSurvival || this.isAdventure) {
                 foodData!!.exhaust(0.005)
                 if (!i!!.equals(oldItem) || i.getCount() != oldItem!!.getCount()) {
-                    inventory!!.setItemInHand(i)
-                    inventory!!.sendHeldItem(getViewers().values)
+                    inventory.setItemInHand(i)
+                    inventory.sendHeldItem(getViewers().values)
                 }
             }
             return
@@ -637,8 +633,8 @@ class Player @UsedByReflection constructor(
         if (this.isSurvival || (this.isAdventure && canChangeBlock)) {
             this.breakingBlockTime = currentBreak
             val miningTimeRequired = if (target is CustomBlock) {
-                target.breakTime(inventory!!.itemInHand, this)
-            } else target.calculateBreakTime(inventory!!.itemInHand, this)
+                target.breakTime(inventory.itemInHand, this)
+            } else target.calculateBreakTime(inventory.itemInHand, this)
             val breakTime = ceil(miningTimeRequired * 20).toInt()
             if (breakTime > 0) {
                 val pk = LevelEventPacket()
@@ -695,11 +691,11 @@ class Player @UsedByReflection constructor(
                 }
 
                 if (clone.id == handItem.id || handItem.isNothing) {
-                    inventory!!.setItemInHand(handItem, false)
+                    inventory.setItemInHand(handItem, false)
                 } else {
                     log.debug("Tried to set item " + handItem.id + " but " + this.getName() + " had item " + clone.id + " in their hand slot")
                 }
-                inventory!!.sendHeldItem(getViewers().values)
+                inventory.sendHeldItem(getViewers().values)
             } else if (handItem == null) level!!.sendBlocks(
                 arrayOf(this), arrayOf(
                     level!!.getBlock(blockPos.asVector3())
@@ -708,8 +704,8 @@ class Player @UsedByReflection constructor(
             return
         }
 
-        inventory!!.sendContents(this)
-        inventory!!.sendHeldItem(this)
+        inventory.sendContents(this)
+        inventory.sendHeldItem(this)
 
         if (blockPos.distanceSquared(this.position) < 100) {
             val target = level!!.getBlock(blockPos.asVector3())
@@ -762,7 +758,7 @@ class Player @UsedByReflection constructor(
     public override fun initEntity() {
         super.initEntity()
         val level = if (namedTag!!.containsString("SpawnLevel")) {
-            Server.instance.getLevelByName(namedTag!!.getString("SpawnLevel")!!)
+            Server.instance.getLevelByName(namedTag!!.getString("SpawnLevel"))
         } else Server.instance.getDefaultLevel()
         if (namedTag!!.containsInt("SpawnX") && namedTag!!.containsInt("SpawnY") && namedTag!!.containsInt("SpawnZ")) {
             this.spawnPoint = Locator(
@@ -984,7 +980,7 @@ class Player @UsedByReflection constructor(
             }
 
             block.onEntityCollide(this)
-            block.getLevelBlockAtLayer(1)!!.onEntityCollide(this)
+            block.getLevelBlockAtLayer(1).onEntityCollide(this)
         }
         val scanBoundingBox = boundingBox.getOffsetBoundingBox(0.0, -0.125, 0.0)
         scanBoundingBox.maxY = boundingBox.minY
@@ -1175,7 +1171,7 @@ class Player @UsedByReflection constructor(
                                 )
                             )
                         } else if (this.isOnGround() && (getLocator()
-                                .getSide(BlockFace.DOWN)!!.levelBlock !is BlockWool) && !this.isSneaking()
+                                .getSide(BlockFace.DOWN).levelBlock !is BlockWool) && !this.isSneaking()
                         ) {
                             level!!.vibrationManager.callVibrationEvent(
                                 VibrationEvent(
@@ -1418,7 +1414,7 @@ class Player @UsedByReflection constructor(
         adventureSettings.init(nbt)
 
         val level: Level
-        if ((Server.instance.getLevelByName(nbt.getString("Level")!!).also { level = it!! }) == null) {
+        if ((Server.instance.getLevelByName(nbt.getString("Level")).also { level = it!! }) == null) {
             this.level = Server.instance.defaultLevel
             nbt.putString("Level", this.level!!.getName()!!)
             val spawnLocation = this.level!!.safeSpawn
@@ -1971,7 +1967,7 @@ class Player @UsedByReflection constructor(
         if (this === player) {
             return
         }
-        hiddenPlayers[player.getUniqueId()!!] = player
+        hiddenPlayers[player.getUniqueId()] = player
         player.despawnFrom(this)
     }
 
@@ -2147,8 +2143,8 @@ class Player @UsedByReflection constructor(
         this.displayName = displayName
         if (this.spawned) {
             Server.instance.updatePlayerListData(
-                getUniqueId()!!, this.getId(), this.getDisplayName(),
-                getSkin()!!,
+                getUniqueId(), this.getId(), this.getDisplayName(),
+                getSkin(),
                 loginChainData.xuid
             )
         }
@@ -2161,7 +2157,7 @@ class Player @UsedByReflection constructor(
             val skinPacket = PlayerSkinPacket()
             skinPacket.uuid = this.getUniqueId()
             skinPacket.skin = this.getSkin()
-            skinPacket.newSkinName = getSkin()!!.getSkinId()
+            skinPacket.newSkinName = getSkin().getSkinId()
             skinPacket.oldSkinName = ""
             Server.Companion.broadcastPacket(Server.instance.onlinePlayers.values, skinPacket)
         }
@@ -2320,7 +2316,7 @@ class Player @UsedByReflection constructor(
         val index = chunkHash(x, z)
         if (level!!.unregisterChunkLoader(this, x, z, false)) {
             if (playerChunkManager.usedChunks.contains(index)) {
-                for (entity in level.getChunkEntities(x, z)!!.values) {
+                for (entity in level.getChunkEntities(x, z).values) {
                     if (entity !== this) {
                         entity.despawnFrom(this)
                     }
@@ -2382,7 +2378,7 @@ class Player @UsedByReflection constructor(
         this.dataPacket(packet)
 
         if (this.spawned) {
-            for (entity in level!!.getChunkEntities(x, z)!!.values) {
+            for (entity in level!!.getChunkEntities(x, z).values) {
                 if (this !== entity && !entity.closed && entity.isAlive()) {
                     entity.spawnTo(this)
                 }
@@ -2445,7 +2441,7 @@ class Player @UsedByReflection constructor(
         Server.instance.pluginManager.callEvent(
             PlayerBedEnterEvent(
                 this,
-                level!!.getBlock(pos)!!
+                level!!.getBlock(pos)
             ).also { ev = it })
         if (ev.isCancelled) {
             return false
@@ -2480,7 +2476,7 @@ class Player @UsedByReflection constructor(
                     this,
                     level!!.getBlock(
                         sleeping!!
-                    )!!
+                    )
                 )
             )
 
@@ -2503,7 +2499,7 @@ class Player @UsedByReflection constructor(
             return false
         }
 
-        val achievement  = Achievement.achievements.get(achievementId)
+        val achievement = Achievement.achievements.get(achievementId)
 
         if (achievement == null || hasAchievement(achievementId)) {
             return false
@@ -2564,7 +2560,7 @@ class Player @UsedByReflection constructor(
         }
 
         if (newSettings == null) {
-            newSettings = getAdventureSettings()!!.clone()
+            newSettings = getAdventureSettings().clone()
             newSettings.set(AdventureSettings.Type.WORLD_IMMUTABLE, (gamemode and 0x02) > 0)
             newSettings.set(AdventureSettings.Type.BUILD, (gamemode and 0x02) <= 0)
             newSettings.set(AdventureSettings.Type.WORLD_BUILDER, (gamemode and 0x02) <= 0)
@@ -2623,7 +2619,7 @@ class Player @UsedByReflection constructor(
     }
 
     fun sendSettings() {
-        getAdventureSettings()!!.update()
+        getAdventureSettings().update()
     }
 
     val isSurvival: Boolean
@@ -2882,7 +2878,7 @@ class Player @UsedByReflection constructor(
                 } else {
                     this.lastInAirTick = level!!.tick
                     //check fly for player
-                    if (this.isCheckingMovement && !this.isGliding() && !Server.instance.allowFlight && !getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT] && this.inAirTicks > 20 && !this.isSleeping() && !this.isImmobile() && !this.isSwimming() && this.riding == null && !this.hasEffect(
+                    if (this.isCheckingMovement && !this.isGliding() && !Server.instance.allowFlight && !getAdventureSettings()[AdventureSettings.Type.ALLOW_FLIGHT] && this.inAirTicks > 20 && !this.isSleeping() && !this.isImmobile() && !this.isSwimming() && this.riding == null && !this.hasEffect(
                             EffectType.LEVITATION
                         ) && !this.hasEffect(EffectType.SLOW_FALLING)
                     ) {
@@ -3052,7 +3048,7 @@ class Player @UsedByReflection constructor(
                     block = itr.next()
                     entity = getEntityAtPosition(
                         nearbyEntities,
-                        block!!.position.floorX,
+                        block.position.floorX,
                         block.position.floorY,
                         block.position.floorZ
                     )
@@ -3724,7 +3720,7 @@ class Player @UsedByReflection constructor(
                     pk.subChunkCount = 0
                     pk.data = ByteArray(0)
                     this.sendChunk(chunkX, chunkZ, pk)
-                    for (entity in level!!.getChunkEntities(chunkX, chunkZ)!!.values) {
+                    for (entity in level!!.getChunkEntities(chunkX, chunkZ).values) {
                         if (entity !== this) {
                             entity.despawnFrom(this)
                         }
@@ -4260,7 +4256,7 @@ class Player @UsedByReflection constructor(
         if (this.isSpectator || this.isCreative) {
             //source.setCancelled();
             return false
-        } else if (getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT] && source.cause == DamageCause.FALL) {
+        } else if (getAdventureSettings()[AdventureSettings.Type.ALLOW_FLIGHT] && source.cause == DamageCause.FALL) {
             //source.setCancelled();
             return false
         } else if (source.cause == DamageCause.FALL) {
@@ -5099,11 +5095,11 @@ class Player @UsedByReflection constructor(
                 }
 
                 val item = entity.getItem()
-                if (!this.isCreative && !this.inventory!!.canAddItem(item)) {
+                if (!this.isCreative && !this.inventory.canAddItem(item)) {
                     return false
                 }
 
-                val ev = InventoryPickupTridentEvent(this.inventory!!, entity)
+                val ev = InventoryPickupTridentEvent(this.inventory, entity)
 
                 val pickupMode = entity.getPickupMode()
                 if (pickupMode == EntityProjectile.PICKUP_NONE || (pickupMode == EntityProjectile.PICKUP_CREATIVE && !this.isCreative)) {
@@ -5135,7 +5131,7 @@ class Player @UsedByReflection constructor(
                     val item = entity.getItem()
 
                     if (item != null) {
-                        if (!this.isCreative && !this.inventory!!.canAddItem(item)) {
+                        if (!this.isCreative && !this.inventory.canAddItem(item)) {
                             return false
                         }
 
@@ -5177,17 +5173,17 @@ class Player @UsedByReflection constructor(
                 //Mending
                 val itemsWithMending = ArrayList<Int>()
                 for (i in 0..3) {
-                    if (inventory!!.getArmorItem(i).hasEnchantment(Enchantment.ID_MENDING)) {
-                        itemsWithMending.add(inventory!!.size + i)
+                    if (inventory.getArmorItem(i).hasEnchantment(Enchantment.ID_MENDING)) {
+                        itemsWithMending.add(inventory.size + i)
                     }
                 }
-                if (inventory!!.itemInHand.hasEnchantment(Enchantment.ID_MENDING)) {
-                    itemsWithMending.add(inventory!!.heldItemIndex)
+                if (inventory.itemInHand.hasEnchantment(Enchantment.ID_MENDING)) {
+                    itemsWithMending.add(inventory.heldItemIndex)
                 }
                 if (itemsWithMending.size > 0) {
                     val rand = Random()
                     val itemToRepair = itemsWithMending[rand.nextInt(itemsWithMending.size)]
-                    val toRepair = inventory!!.getItem(itemToRepair)
+                    val toRepair = inventory.getItem(itemToRepair)
                     if (toRepair is ItemTool || toRepair is ItemArmor) {
                         if (toRepair.damage > 0) {
                             var dmg = toRepair.damage - exp
@@ -5196,7 +5192,7 @@ class Player @UsedByReflection constructor(
                                 dmg = 0
                             }
                             toRepair.damage = dmg
-                            inventory!!.setItem(itemToRepair, toRepair)
+                            inventory.setItem(itemToRepair, toRepair)
                         }
                     }
                 }
@@ -5524,7 +5520,8 @@ class Player @UsedByReflection constructor(
 
         //client won't storage the score of a scoreboard,so we should send the score to client
         val pk2 = SetScorePacket()
-        pk2.infos = scoreboard.lines.values.stream().map { obj -> obj.toNetworkInfo() }.toList().filterNotNull().toMutableList()
+        pk2.infos =
+            scoreboard.lines.values.stream().map { obj -> obj.toNetworkInfo() }.toList().filterNotNull().toMutableList()
         pk2.action = SetScorePacket.Action.SET
         this.dataPacket(pk2)
 
