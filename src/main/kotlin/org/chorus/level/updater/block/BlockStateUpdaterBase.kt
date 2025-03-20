@@ -12,7 +12,6 @@ import org.chorus.utils.JSONUtils
 import java.io.IOException
 import kotlin.collections.set
 
-(access = AccessLevel.PRIVATE)
 class BlockStateUpdaterBase : Updater {
     override fun registerUpdaters(context: CompoundTagUpdaterContext) {
         context.addUpdater(0, 0, 0)
@@ -51,14 +50,10 @@ class BlockStateUpdaterBase : Updater {
             }
 
             for (entry in node.entrySet()) {
-                val name: String = entry.getKey()
-                val stateNodes: JsonArray = entry.getValue().getAsJsonArray()
+                val name: String = entry.key
+                val stateNodes: JsonArray = entry.value.getAsJsonArray()
 
-                val size = stateNodes.size()
-                val states: Array<Map<String?, Any?>> = arrayOfNulls<Map<*, *>>(size)
-                for (i in 0..<size) {
-                    states[i] = convertStateToCompound(stateNodes[i].asJsonObject)
-                }
+                val states = stateNodes.map { convertStateToCompound(it.asJsonObject) }.toTypedArray()
 
                 LEGACY_BLOCK_DATA_MAP[name] = states
             }
@@ -69,10 +64,10 @@ class BlockStateUpdaterBase : Updater {
             val iterator: Iterator<Map.Entry<String, JsonElement>> = node.entrySet().iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()
-                val name: String = entry.getKey()
-                val value: JsonElement = entry.getValue()
+                val name: String = entry.key
+                val value: JsonElement = entry.value
                 if (value.isJsonPrimitive) {
-                    val primitive: JsonPrimitive = entry.getValue().getAsJsonPrimitive()
+                    val primitive: JsonPrimitive = entry.value.getAsJsonPrimitive()
                     if (primitive.isBoolean) {
                         tag[name] = primitive.asBoolean
                     } else if (primitive.isNumber) {
