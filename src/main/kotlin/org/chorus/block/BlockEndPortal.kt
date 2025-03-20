@@ -13,8 +13,7 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = Companio
     override val name: String
         get() = "End Portal Block"
 
-    override val blockEntityClass: Class<out BlockEntityEndPortal>
-        get() = BlockEntityEndPortal::class.java
+    override fun getBlockEntityClass() = BlockEntityEndPortal::class.java
 
     override fun getBlockEntityType(): String {
         return BlockEntityID.END_PORTAL
@@ -83,9 +82,11 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = Companio
             super.maxY = maxY
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.END_PORTAL)
-
 
         fun spawnObsidianPlatform(locator: Locator) {
             val level = locator.level

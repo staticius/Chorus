@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockEndStoneBrickSlab(blockState: BlockState) : BlockSlab(blockState, END_STONE_BRICK_DOUBLE_SLAB) {
+class BlockEndStoneBrickSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.END_STONE_BRICK_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "End Stone Brick"
     }
@@ -28,9 +28,11 @@ class BlockEndStoneBrickSlab(blockState: BlockState) : BlockSlab(blockState, END
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.END_STONE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

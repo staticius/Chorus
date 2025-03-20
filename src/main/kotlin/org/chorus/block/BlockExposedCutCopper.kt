@@ -7,12 +7,13 @@ open class BlockExposedCutCopper @JvmOverloads constructor(blockstate: BlockStat
     override val name: String
         get() = "Exposed Cut Copper"
 
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.EXPOSED
-    }
+    override val oxidizationLevel: OxidizationLevel
+        get() = OxidizationLevel.EXPOSED
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.EXPOSED_CUT_COPPER)
-
     }
 }

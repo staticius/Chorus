@@ -14,16 +14,16 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
 class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
-    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityEnderChest?> {
+    BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityEnderChest> {
     override fun canBeActivated(): Boolean {
         return true
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.ENDER_CHEST
+        return BlockEntityID.ENDER_CHEST
+    }
 
-    override val blockEntityClass: Class<out E>
-        get() = BlockEntityEnderChest::class.java
+    override fun getBlockEntityClass() = BlockEntityEnderChest::class.java
 
     override val lightLevel: Int
         get() = 7
@@ -84,7 +84,7 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Compani
         player: Player?
     ): Boolean {
         blockFace = if (player != null) fromHorizontalIndex(
-            player.getDirection()!!.getOpposite()!!.horizontalIndex
+            player.getDirection().getOpposite().horizontalIndex
         ) else BlockFace.SOUTH
 
         val nbt = CompoundTag()
@@ -94,24 +94,24 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Compani
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.Companion.setBlockAndCreateEntity<BlockEntityEnderChest?, BlockEnderChest>(
+        return BlockEntityHolder.Companion.setBlockAndCreateEntity(
             this,
-            true,
-            true,
-            nbt
+            direct = true,
+            update = true,
+            initialData = nbt
         ) != null
     }
 
     override fun onActivate(
         item: Item,
-        player: Player,
-        blockFace: BlockFace?,
+        player: Player?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -119,18 +119,18 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Compani
         if (isNotActivate(player)) return false
 
         val top = this.up()
-        if (!top!!.isTransparent) {
+        if (!top.isTransparent) {
             return false
         }
 
         val chest = getOrCreateBlockEntity()
-        if (chest.namedTag.contains("Lock") && chest.namedTag.get("Lock") is StringTag
+        if (chest.namedTag.contains("Lock") && chest.namedTag["Lock"] is StringTag
             && (chest.namedTag.getString("Lock") != item.customName)
         ) {
             return false
         }
 
-        val enderChestInventory = player.getEnderChestInventory()
+        val enderChestInventory = player!!.getEnderChestInventory()
         enderChestInventory!!.setBlockEntityEnderChest(player, chest)
         player.addWindow(enderChestInventory)
         return true
@@ -142,7 +142,7 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Compani
     override fun getDrops(item: Item): Array<Item> {
         return if (item.isPickaxe && item.tier >= toolTier) {
             arrayOf(
-                get(get(OBSIDIAN).itemId, 0, 8)
+                get(get(BlockID.OBSIDIAN).itemId, 0, 8)
             )
         } else {
             Item.EMPTY_ARRAY
@@ -172,20 +172,22 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Compani
     override var blockFace: BlockFace
         get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-        )]
+        )]!!
         set(face) {
             this.setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]!!
             )
         }
 
-    override val blockEntity: E?
+    override val blockEntity: BlockEntityEnderChest?
         get() = getTypedBlockEntity(BlockEntityEnderChest::class.java)
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.ENDER_CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-
     }
 }

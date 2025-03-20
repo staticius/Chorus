@@ -30,13 +30,10 @@ class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
         fz: Double,
         player: Player?
     ): Boolean {
-        return BlockEntityHolder.Companion.setBlockAndCreateEntity<BlockEntityEndGateway?, BlockEndGateway>(this) != null
+        return BlockEntityHolder.setBlockAndCreateEntity(this) != null
     }
 
     override fun canPassThrough(): Boolean {
-        if (this.level == null) {
-            return false
-        }
 
         return if (level.dimension != Level.DIMENSION_THE_END) {
             false
@@ -63,7 +60,7 @@ class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(AIR))
+        return ItemBlock(get(BlockID.AIR))
     }
 
     override fun canBePushed(): Boolean {
@@ -75,15 +72,8 @@ class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
     }
 
     override fun onEntityCollide(entity: Entity) {
-        if (this.level == null) {
-            return
-        }
 
         if (level.dimension != Level.DIMENSION_THE_END) {
-            return
-        }
-
-        if (entity == null) {
             return
         }
 
@@ -94,8 +84,10 @@ class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
         }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.END_GATEWAY)
-
     }
 }

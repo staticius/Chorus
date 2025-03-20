@@ -14,7 +14,6 @@ open class BlockEmeraldOre @JvmOverloads constructor(blockstate: BlockState = Co
 
     override val rawMaterial: String? 
         get() = ItemID.EMERALD
-    }
 
     override val toolTier: Int
         get() = ItemTool.TIER_IRON
@@ -44,8 +43,10 @@ open class BlockEmeraldOre @JvmOverloads constructor(blockstate: BlockState = Co
     override val dropExp: Int
         get() = ThreadLocalRandom.current().nextInt(3, 8)
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.EMERALD_ORE)
-
     }
 }

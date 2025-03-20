@@ -62,17 +62,17 @@ class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState = Co
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.Companion.setBlockAndCreateEntity<BlockEntityEnchantTable?, BlockEnchantingTable>(
+        return BlockEntityHolder.setBlockAndCreateEntity(
             this,
-            true,
-            true,
-            nbt
+            direct = true,
+            update = true,
+            initialData = nbt
         ) != null
     }
 
@@ -93,7 +93,7 @@ class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState = Co
         }
 
         val enchantTable = getOrCreateBlockEntity()
-        if (enchantTable.namedTag.contains("Lock") && enchantTable.namedTag.get("Lock") is StringTag
+        if (enchantTable.namedTag.contains("Lock") && enchantTable.namedTag["Lock"] is StringTag
             && (enchantTable.namedTag.getString("Lock") != item.customName)
         ) {
             return false
@@ -112,8 +112,10 @@ class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState = Co
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.ENCHANTING_TABLE)
-
     }
 }

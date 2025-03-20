@@ -4,12 +4,13 @@ import org.chorus.block.property.enums.OxidizationLevel
 
 open class BlockExposedCopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCopperBlock(blockstate) {
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.EXPOSED
-    }
+    override val oxidizationLevel: OxidizationLevel
+        get() = OxidizationLevel.EXPOSED
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.EXPOSED_COPPER)
-
     }
 }

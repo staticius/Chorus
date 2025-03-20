@@ -5,16 +5,15 @@ import org.chorus.block.property.enums.OxidizationLevel
 
 open class BlockExposedDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleCutCopperSlab(blockstate) {
-    override val singleSlab: BlockState?
-        get() = BlockExposedCutCopperSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockExposedCutCopperSlab.properties.defaultState
 
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.EXPOSED
-    }
+    override val oxidizationLevel = OxidizationLevel.EXPOSED
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.EXPOSED_DOUBLE_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

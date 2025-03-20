@@ -7,18 +7,19 @@ open class BlockExposedCutCopperSlab : BlockCutCopperSlab {
     @JvmOverloads
     constructor(blockstate: BlockState = Companion.properties.defaultState) : super(
         blockstate,
-        EXPOSED_DOUBLE_CUT_COPPER_SLAB
+        BlockID.EXPOSED_DOUBLE_CUT_COPPER_SLAB
     )
 
-    protected constructor(blockstate: BlockState, doubleSlabId: String?) : super(blockstate, doubleSlabId)
+    protected constructor(blockstate: BlockState, doubleSlabId: String) : super(blockstate, doubleSlabId)
 
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.EXPOSED
-    }
+    override val oxidizationLevel: OxidizationLevel
+        get() = OxidizationLevel.EXPOSED
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.EXPOSED_CUT_COPPER_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }
