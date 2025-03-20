@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.blockentity.*
@@ -12,12 +13,12 @@ import org.chorus.math.MathHelper.cos
 import org.chorus.utils.RedstoneComponent
 
 open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
-    BlockTransparent(state), RedstoneComponent, BlockEntityHolder<BlockEntityDaylightDetector?> {
+    BlockTransparent(state), RedstoneComponent, BlockEntityHolder<BlockEntityDaylightDetector> {
     override val name: String
         get() = "Daylight Detector"
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.DAYLIGHT_DETECTOR
+        return BlockEntityID.DAYLIGHT_DETECTOR
     }
 
     override fun getBlockEntityClass(): Class<out BlockEntityDaylightDetector> {
@@ -33,7 +34,7 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -42,7 +43,7 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
     }
 
     override fun onUpdate(type: Int): Int {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return 0
         }
 
@@ -63,13 +64,9 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
         fz: Double,
         player: Player?
     ): Boolean {
-        val detector =
-            BlockEntityHolder.setBlockAndCreateEntity(
-                this
-            )
-                ?: return false
+        BlockEntityHolder.setBlockAndCreateEntity(this) ?: return false
         if (level.dimension == Level.DIMENSION_OVERWORLD) {
-            if (Server.instance.settings.levelSettings().enableRedstone()) {
+            if (Server.instance.settings.levelSettings.enableRedstone) {
                 updatePower()
             }
         }
@@ -86,8 +83,8 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
     ): Boolean {
         if (isNotActivate(player)) return false
         val block = BlockDaylightDetectorInverted()
-        level.setBlock(this.position, block, true, true)
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        level.setBlock(this.position, block, direct = true, update = true)
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             block.updatePower()
         }
         return true
@@ -154,9 +151,11 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
             super.maxY = maxY
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.DAYLIGHT_DETECTOR, CommonBlockProperties.REDSTONE_SIGNAL)
-
     }
 }

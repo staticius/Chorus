@@ -236,7 +236,7 @@ abstract class BaseInventory(
         return false
     }
 
-    override fun addItem(vararg slots: Item): Array<Item?> {
+    override fun addItem(vararg slots: Item): Array<Item> {
         val itemSlots: MutableList<Item> = ArrayList()
         for (slot in slots) {
             if (!slot.isNothing) {

@@ -38,14 +38,14 @@ open class BlockDirt : BlockSolid, Natural {
 
         if (item.isHoe) {
             item.useOn(this)
-            level.setBlock(this.position, get(FARMLAND), true)
+            level.setBlock(this.position, get(BlockID.FARMLAND), true)
             if (player != null) {
                 player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
             return true
         } else if (item.isShovel) {
             item.useOn(this)
-            level.setBlock(this.position, get(GRASS_PATH))
+            level.setBlock(this.position, get(BlockID.GRASS_PATH))
             if (player != null) {
                 player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
@@ -59,12 +59,14 @@ open class BlockDirt : BlockSolid, Natural {
         return arrayOf(this.toItem())
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DIRT)
-
     }
 }

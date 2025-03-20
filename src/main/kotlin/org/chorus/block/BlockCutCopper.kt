@@ -1,13 +1,13 @@
 package org.chorus.block
 
-import org.chorus.math.Vector3.equals
+import org.chorus.block.property.enums.OxidizationLevel
 
 open class BlockCutCopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCopperBase(blockstate) {
     override val name: String
         get() = "Cut Copper"
 
-    override val oxidizationLevel: OxidizationLevel 
+    override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.UNAFFECTED
     
 
@@ -16,15 +16,17 @@ open class BlockCutCopper @JvmOverloads constructor(blockstate: BlockState = Com
             return id
         }
         return when (oxidizationLevel) {
-            OxidizationLevel.UNAFFECTED -> if (waxed) WAXED_CUT_COPPER else CUT_COPPER
-            OxidizationLevel.EXPOSED -> if (waxed) WAXED_EXPOSED_CUT_COPPER else EXPOSED_CUT_COPPER
-            OxidizationLevel.WEATHERED -> if (waxed) WAXED_WEATHERED_CUT_COPPER else WEATHERED_CUT_COPPER
-            OxidizationLevel.OXIDIZED -> if (waxed) WAXED_OXIDIZED_CUT_COPPER else OXIDIZED_CUT_COPPER
+            OxidizationLevel.UNAFFECTED -> if (waxed) BlockID.WAXED_CUT_COPPER else BlockID.CUT_COPPER
+            OxidizationLevel.EXPOSED -> if (waxed) BlockID.WAXED_EXPOSED_CUT_COPPER else BlockID.EXPOSED_CUT_COPPER
+            OxidizationLevel.WEATHERED -> if (waxed) BlockID.WAXED_WEATHERED_CUT_COPPER else BlockID.WEATHERED_CUT_COPPER
+            OxidizationLevel.OXIDIZED -> if (waxed) BlockID.WAXED_OXIDIZED_CUT_COPPER else BlockID.OXIDIZED_CUT_COPPER
         }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CUT_COPPER)
-
     }
 }

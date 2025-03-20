@@ -26,8 +26,10 @@ class BlockDripstoneBlock @JvmOverloads constructor(blockstate: BlockState = Com
     override val isLavaResistant: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DRIPSTONE_BLOCK)
-
     }
 }

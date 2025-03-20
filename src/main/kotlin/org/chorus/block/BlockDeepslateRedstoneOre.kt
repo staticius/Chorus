@@ -8,16 +8,16 @@ open class BlockDeepslateRedstoneOre @JvmOverloads constructor(blockstate: Block
     override val hardness: Double
         get() = 4.5
 
-    override fun getLitBlock(): Block {
-        return BlockLitDeepslateRedstoneOre()
-    }
+    override val litBlock: Block
+        get() = BlockLitDeepslateRedstoneOre()
 
-    override fun getUnlitBlock(): Block {
-        return BlockDeepslateRedstoneOre()
-    }
+    override val unlitBlock: Block
+        get() =  BlockDeepslateRedstoneOre()
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DEEPSLATE_REDSTONE_ORE)
-
     }
 }

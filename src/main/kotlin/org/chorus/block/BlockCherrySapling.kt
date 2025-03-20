@@ -12,6 +12,7 @@ import org.chorus.level.generator.`object`.BlockManager
 import org.chorus.level.generator.`object`.ObjectCherryTree
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.*
+import org.chorus.utils.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Predicate
 
@@ -31,7 +32,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockState: BlockState = Comp
                 return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
-            if (level.getFullLight(position.add(0.0, 1.0, 0.0)) >= BlockCrops.minimumLightLevel) {
+            if (level.getFullLight(position.add(0.0, 1.0, 0.0)) >= BlockCrops.MIN_LIGHT_LEVEL) {
                 if (isAged) {
                     this.grow()
                 } else {
@@ -53,7 +54,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockState: BlockState = Comp
             position.z
         )
         val objectCherryTree = ObjectCherryTree()
-        val generate: Boolean = objectCherryTree.generate(blockManager, create(), this.position)
+        val generate: Boolean = objectCherryTree.generate(blockManager, ChorusRandom.create(), this.position)
         if (generate) {
             val ev = StructureGrowEvent(this, blockManager.blocks)
             Server.instance.pluginManager.callEvent(ev)

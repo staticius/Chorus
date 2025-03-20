@@ -35,7 +35,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState = Comp
             return type
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             val up = up()
-            if (!isAge && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.minimumLightLevel && ThreadLocalRandom.current()
+            if (!isAge && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.MIN_LIGHT_LEVEL && ThreadLocalRandom.current()
                     .nextInt(3) == 0
             ) {
                 val newState = BlockBamboo()

@@ -205,7 +205,7 @@ class PlayerHandle(val player: Player) {
         player.lastAttackEntity = lastAttackEntity
     }
 
-    var fogStack: List<PlayerFogPacket.Fog>
+    var fogStack: MutableList<PlayerFogPacket.Fog>
         get() = player.fogStack
         set(fogStack) {
             player.fogStack = fogStack

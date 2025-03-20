@@ -12,6 +12,7 @@ import org.chorus.level.generator.`object`.ObjectGenerator
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 
 open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
@@ -65,7 +66,7 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState = Compan
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
             if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && level.getFullLight(
                     position.add(0.0, 1.0, 0.0)
-                ) >= BlockCrops.minimumLightLevel
+                ) >= BlockCrops.MIN_LIGHT_LEVEL
             ) {
                 if (aged) {
                     this.grow()
@@ -113,7 +114,7 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState = Compan
 
     fun isSameType(pos: Vector3): Boolean {
         val block = level.getBlock(pos)
-        return block!!.id == this.id && block.properties === this.properties
+        return block.id == this.id && block.properties === this.properties
     }
 
     private fun grow() {
@@ -122,7 +123,7 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState = Compan
         val vector3 = position.add(0.0, 0.0, 0.0)
 
         val chunkManager = BlockManager(this.level)
-        val success: Boolean = generator.generate(chunkManager, create(), vector3)
+        val success: Boolean = generator.generate(chunkManager, ChorusRandom.create(), vector3)
         val ev = StructureGrowEvent(this, chunkManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled || !success) {

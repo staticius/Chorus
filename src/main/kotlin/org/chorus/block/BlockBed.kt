@@ -137,7 +137,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
             position.add(0.5, 0.5, 0.5),
             player.level!!
         )
-        if (player.spawn.first() != spawn) {
+        if (player.spawn.first != spawn) {
             player.setSpawn(this, SpawnPointType.BLOCK)
         }
         player.sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile.bed.respawnSet"))

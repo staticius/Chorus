@@ -23,20 +23,20 @@ abstract class BlockCropsStem(blockstate: BlockState) : BlockCrops(blockstate), 
     override var blockFace: BlockFace
         get() = facing
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
-    val facing: BlockFace?
-        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+    val facing: BlockFace
+        get() = fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down()!!.id !== FARMLAND) {
+            if (down().id !== BlockID.FARMLAND) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
             var blockFace = blockFace
-            if (blockFace!!.axis!!.isHorizontal && getSide(blockFace)!!.id !== fruitId) {
+            if (blockFace.axis.isHorizontal && getSide(blockFace).id !== fruitId) {
                 blockFace = BlockFace.DOWN
                 level.setBlock(this.position, this)
                 return Level.BLOCK_UPDATE_NORMAL
@@ -49,13 +49,13 @@ abstract class BlockCropsStem(blockstate: BlockState) : BlockCrops(blockstate), 
         }
 
         if (ThreadLocalRandom.current().nextInt(1, 3) != 1
-            || level.getFullLight(this.position) < BlockCrops.Companion.MINIMUM_LIGHT_LEVEL
+            || level.getFullLight(this.position) < MIN_LIGHT_LEVEL
         ) {
             return Level.BLOCK_UPDATE_RANDOM
         }
 
         val growth = growth
-        if (growth < CommonBlockProperties.GROWTH.getMax()) {
+        if (growth < CommonBlockProperties.GROWTH.max) {
             val block = this.clone()
             block.growth = growth + 1
             val ev = BlockGrowEvent(this, block)
@@ -74,15 +74,15 @@ abstract class BlockCropsStem(blockstate: BlockState) : BlockCrops(blockstate), 
         val fruitId = fruitId
         for (face in BlockFace.Plane.HORIZONTAL) {
             val b = this.getSide(face)
-            if (b!!.id == fruitId) {
+            if (b.id == fruitId) {
                 return false
             }
         }
 
         val sideFace = BlockFace.Plane.HORIZONTAL.random()
         val side = this.getSide(sideFace)
-        val d = side!!.down()
-        if (side.isAir && (d!!.id == FARMLAND || d.id == GRASS_BLOCK || d.id == DIRT)) {
+        val d = side.down()
+        if (side.isAir && (d.id == BlockID.FARMLAND || d.id == BlockID.GRASS_BLOCK || d.id == BlockID.DIRT)) {
             val ev = BlockGrowEvent(side, get(fruitId))
             instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
@@ -94,7 +94,7 @@ abstract class BlockCropsStem(blockstate: BlockState) : BlockCrops(blockstate), 
         return true
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return Item.get(seedsId!!)
     }
 

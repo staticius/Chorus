@@ -21,7 +21,6 @@ class BlockDeadbush @JvmOverloads constructor(blockState: BlockState = Companion
         return true
     }
 
-
     override fun place(
         item: Item,
         block: Block,
@@ -69,8 +68,10 @@ class BlockDeadbush @JvmOverloads constructor(blockState: BlockState = Companion
         }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DEADBUSH)
-
     }
 }

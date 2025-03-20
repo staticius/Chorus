@@ -3,15 +3,20 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 class BlockDarkOakDoubleSlab(blockstate: BlockState) : BlockDoubleWoodenSlab(blockstate) {
-    override val slabName: String
-        get() = "Dark Oak"
 
-    override val singleSlab: BlockState
-        get() = BlockDarkOakSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSlabName(): String {
+        return "Dark Oak"
+    }
+
+    override fun getSingleSlab(): BlockState {
+        return BlockDarkOakSlab.properties.defaultState
+    }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.DARK_OAK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

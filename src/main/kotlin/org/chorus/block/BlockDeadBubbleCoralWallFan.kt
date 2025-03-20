@@ -10,9 +10,11 @@ class BlockDeadBubbleCoralWallFan : BlockDeadCoralWallFan {
     override val name: String
         get() = "Bubble Coral"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.DEAD_BUBBLE_CORAL_WALL_FAN, CommonBlockProperties.CORAL_DIRECTION)
-
     }
 }

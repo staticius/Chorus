@@ -40,21 +40,21 @@ class BlockDirtWithRoots : BlockDirt {
                 item.count--
             }
             level.addParticle(BoneMealParticle(this.position))
-            level.setBlock(vector, get(HANGING_ROOTS))
+            level.setBlock(vector, get(BlockID.HANGING_ROOTS))
             return true
         }
         if (item.isHoe) {
             vector.setY(position.y + 1)
             item.useOn(this)
-            level.setBlock(this.position, get(DIRT), true)
-            level.dropItem(vector, ItemBlock(get(HANGING_ROOTS)))
+            level.setBlock(this.position, get(BlockID.DIRT), true)
+            level.dropItem(vector, ItemBlock(get(BlockID.HANGING_ROOTS)))
             if (player != null) {
                 player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
             return true
         } else if (item.isShovel) {
             item.useOn(this)
-            level.setBlock(this.position, get(GRASS_PATH))
+            level.setBlock(this.position, get(BlockID.GRASS_PATH))
             if (player != null) {
                 player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
@@ -72,11 +72,13 @@ class BlockDirtWithRoots : BlockDirt {
         get() = ItemTool.TYPE_SHOVEL
 
     override fun getDrops(item: Item): Array<Item> {
-        return arrayOf(ItemBlock(get(DIRT_WITH_ROOTS)))
+        return arrayOf(ItemBlock(get(BlockID.DIRT_WITH_ROOTS)))
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DIRT_WITH_ROOTS)
-
     }
 }

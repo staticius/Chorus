@@ -17,6 +17,9 @@ class BlockDeepslateBrickWall @JvmOverloads constructor(blockstate: BlockState =
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.DEEPSLATE_BRICK_WALL,
@@ -26,6 +29,5 @@ class BlockDeepslateBrickWall @JvmOverloads constructor(blockstate: BlockState =
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

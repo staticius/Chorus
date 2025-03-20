@@ -104,7 +104,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             if (growth < 3 && ThreadLocalRandom.current().nextInt(5) == 0 && level.getFullLight(
                     position.add(0.0, 1.0, 0.0)
-                ) >= BlockCrops.minimumLightLevel
+                ) >= BlockCrops.MIN_LIGHT_LEVEL
             ) {
                 val event: BlockGrowEvent = BlockGrowEvent(
                     this, get(id).setPropertyValue<Int, IntPropertyType>(

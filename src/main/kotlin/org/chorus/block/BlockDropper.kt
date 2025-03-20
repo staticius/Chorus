@@ -16,7 +16,7 @@ class BlockDropper @JvmOverloads constructor(blockstate: BlockState = Companion.
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.DROPPER
+        return BlockEntityID.DROPPER
     }
 
     override fun getDispenseBehavior(item: Item): DispenseBehavior {
@@ -35,6 +35,9 @@ class BlockDropper @JvmOverloads constructor(blockstate: BlockState = Companion.
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(
@@ -42,6 +45,5 @@ class BlockDropper @JvmOverloads constructor(blockstate: BlockState = Companion.
                 CommonBlockProperties.FACING_DIRECTION,
                 CommonBlockProperties.TRIGGERED_BIT
             )
-
     }
 }

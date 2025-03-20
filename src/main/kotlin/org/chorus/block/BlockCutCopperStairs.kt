@@ -1,8 +1,7 @@
 package org.chorus.block
 
-import org.chorus.block.Block.name
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.math.Vector3.equals
+import org.chorus.block.property.enums.OxidizationLevel
 
 open class BlockCutCopperStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockStairsCopperBase(blockstate) {
@@ -25,16 +24,18 @@ open class BlockCutCopperStairs @JvmOverloads constructor(blockstate: BlockState
             return id
         }
         return when (oxidizationLevel) {
-            OxidizationLevel.UNAFFECTED -> if (waxed) WAXED_CUT_COPPER_STAIRS else CUT_COPPER_STAIRS
-            OxidizationLevel.EXPOSED -> if (waxed) WAXED_EXPOSED_CUT_COPPER_STAIRS else EXPOSED_CUT_COPPER_STAIRS
-            OxidizationLevel.WEATHERED -> if (waxed) WAXED_WEATHERED_CUT_COPPER_STAIRS else WEATHERED_CUT_COPPER_STAIRS
-            OxidizationLevel.OXIDIZED -> if (waxed) WAXED_OXIDIZED_CUT_COPPER_STAIRS else OXIDIZED_CUT_COPPER_STAIRS
+            OxidizationLevel.UNAFFECTED -> if (waxed) BlockID.WAXED_CUT_COPPER_STAIRS else BlockID.CUT_COPPER_STAIRS
+            OxidizationLevel.EXPOSED -> if (waxed) BlockID.WAXED_EXPOSED_CUT_COPPER_STAIRS else BlockID.EXPOSED_CUT_COPPER_STAIRS
+            OxidizationLevel.WEATHERED -> if (waxed) BlockID.WAXED_WEATHERED_CUT_COPPER_STAIRS else BlockID.WEATHERED_CUT_COPPER_STAIRS
+            OxidizationLevel.OXIDIZED -> if (waxed) BlockID.WAXED_OXIDIZED_CUT_COPPER_STAIRS else BlockID.OXIDIZED_CUT_COPPER_STAIRS
         }
     }
 
     override val oxidizationLevel: OxidizationLevel 
         get() = OxidizationLevel.UNAFFECTED
-    
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -42,6 +43,5 @@ open class BlockCutCopperStairs @JvmOverloads constructor(blockstate: BlockState
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

@@ -7,6 +7,9 @@ class BlockDarkOakFenceGate @JvmOverloads constructor(blockstate: BlockState = C
     override val name: String
         get() = "Dark Oak Fence Gate"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.DARK_OAK_FENCE_GATE,
@@ -14,6 +17,5 @@ class BlockDarkOakFenceGate @JvmOverloads constructor(blockstate: BlockState = C
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-
     }
 }

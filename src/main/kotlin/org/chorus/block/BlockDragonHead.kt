@@ -18,8 +18,10 @@ class BlockDragonHead(blockState: BlockState) : BlockHead(blockState) {
         return ItemDragonHead()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DRAGON_HEAD, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

@@ -77,7 +77,7 @@ abstract class BlockMushroom(blockState: BlockState) : BlockFlowable(blockState)
         val generator = ObjectBigMushroom(getType())
 
         val chunkManager = BlockManager(this.level)
-        if (generator.generate(chunkManager, create(), this.position)) {
+        if (generator.generate(chunkManager, ChorusRandom.create(), this.position)) {
             val ev = StructureGrowEvent(this, chunkManager.blocks)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {

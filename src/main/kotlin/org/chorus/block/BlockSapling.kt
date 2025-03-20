@@ -90,7 +90,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
             if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && level.getFullLight(
                     position.add(0.0, 1.0, 0.0)
-                ) >= BlockCrops.minimumLightLevel
+                ) >= BlockCrops.MIN_LIGHT_LEVEL
             ) {
                 if (isAged) {
                     this.grow()
@@ -199,7 +199,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
                 LegacyTreeGenerator.growTree(
                     blockManager,
                     position.floorX,
-                    position.floorY, position.floorZ, create(),
+                    position.floorY, position.floorZ, ChorusRandom.create(),
                     getWoodType(), false
                 )
                 val ev = StructureGrowEvent(this, blockManager.blocks)
@@ -222,7 +222,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
                 LegacyTreeGenerator.growTree(
                     blockManager,
                     position.floorX,
-                    position.floorY, position.floorZ, create(),
+                    position.floorY, position.floorZ, ChorusRandom.create(),
                     getWoodType(), false
                 )
                 val ev = StructureGrowEvent(this, blockManager.blocks)
@@ -248,7 +248,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
         }
 
         val blockManager = BlockManager(this.level)
-        val success: Boolean = generator?.generate(blockManager, create(), vector3) == true
+        val success: Boolean = generator?.generate(blockManager, ChorusRandom.create(), vector3) == true
         val ev = StructureGrowEvent(this, blockManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled || !success) {

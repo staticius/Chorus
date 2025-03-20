@@ -8,8 +8,10 @@ class BlockDeepslateIronOre @JvmOverloads constructor(blockstate: BlockState = C
     override val hardness: Double
         get() = 4.5
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DEEPSLATE_IRON_ORE)
-
     }
 }

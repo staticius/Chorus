@@ -25,7 +25,7 @@ abstract class BlockDoublePlant(blockstate: BlockState) : BlockFlowable(blocksta
             )
         }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         val aux = doublePlantType.ordinal
         return ItemBlock(this, aux)
     }
@@ -42,13 +42,13 @@ abstract class BlockDoublePlant(blockstate: BlockState) : BlockFlowable(blocksta
             if (isTopHalf) {
                 // Top
                 if (down() !is BlockDoublePlant) {
-                    level.setBlock(this.position, get(AIR), false, true)
+                    level.setBlock(this.position, get(BlockID.AIR), direct = false, update = true)
                     return Level.BLOCK_UPDATE_NORMAL
                 }
             } else {
                 // Bottom
-                if (!isSupportValid(down()!!)) {
-                    level.setBlock(this.position, get(AIR), false, true)
+                if (!isSupportValid(down())) {
+                    level.setBlock(this.position, get(BlockID.AIR), direct = false, update = true)
                     return Level.BLOCK_UPDATE_NORMAL
                 }
             }
@@ -68,17 +68,17 @@ abstract class BlockDoublePlant(blockstate: BlockState) : BlockFlowable(blocksta
     ): Boolean {
         val up = up()
 
-        if (up!!.isAir && isSupportValid(down()!!)) {
+        if (up.isAir && isSupportValid(down())) {
             isTopHalf = false
             level.setBlock(
                 block.position,
                 this,
-                true,
-                false
+                direct = true,
+                update = false
             ) // If we update the bottom half, it will drop the item because there isn't a flower block above
 
             isTopHalf = true
-            level.setBlock(up.position, this, true, true)
+            level.setBlock(up.position, this, direct = true, update = true)
             level.updateAround(this.position)
             return true
         }
@@ -97,9 +97,9 @@ abstract class BlockDoublePlant(blockstate: BlockState) : BlockFlowable(blocksta
         val down = down()
 
         if (isTopHalf) { // Top half
-            level.useBreakOn(down!!.position)
+            level.useBreakOn(down.position)
         } else {
-            level.setBlock(this.position, get(AIR), true, true)
+            level.setBlock(this.position, get(BlockID.AIR), direct = true, update = true)
         }
 
         return true
@@ -156,8 +156,9 @@ abstract class BlockDoublePlant(blockstate: BlockState) : BlockFlowable(blocksta
                         item.count--
                     }
                     level.addParticle(BoneMealParticle(this.position))
-                    level.dropItem(this.position, toItem()!!)
+                    level.dropItem(this.position, toItem())
                 }
+                else -> {}
             }
 
             return true

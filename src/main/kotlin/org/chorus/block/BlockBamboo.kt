@@ -38,7 +38,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
 
             Level.BLOCK_UPDATE_RANDOM -> {
                 val up = up()
-                if (age == 0 && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.minimumLightLevel && ThreadLocalRandom.current()
+                if (age == 0 && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.MIN_LIGHT_LEVEL && ThreadLocalRandom.current()
                         .nextInt(3) == 0
                 ) {
                     grow(up)

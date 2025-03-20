@@ -23,8 +23,10 @@ class BlockDeepslateBricks @JvmOverloads constructor(blockstate: BlockState = Co
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DEEPSLATE_BRICKS)
-
     }
 }

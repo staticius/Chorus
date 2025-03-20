@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.block.property.type.IntPropertyType
@@ -27,7 +28,7 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 
 open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
-    BlockSolid(blockstate), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityEjectable?> {
+    BlockSolid(blockstate), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityEjectable> {
     override fun hasComparatorInputOverride(): Boolean {
         return true
     }
@@ -36,7 +37,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
         get() = "Dispenser"
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.DISPENSER
+        return BlockEntityID.DISPENSER
     }
 
     override val hardness: Double
@@ -49,7 +50,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
         return BlockEntityDispenser::class.java
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -76,8 +77,8 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
 
     override fun onActivate(
         item: Item,
-        player: Player,
-        blockFace: BlockFace?,
+        player: Player?,
+        blockFace: BlockFace,
         fx: Float,
         fy: Float,
         fz: Float
@@ -86,7 +87,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
 
         val blockEntity = blockEntity ?: return false
 
-        player.addWindow(blockEntity.inventory!!)
+        player!!.addWindow(blockEntity.getInventory())
         return true
     }
 
@@ -116,24 +117,24 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
             }
         }
 
-        val nbt = CompoundTag().putList("Items", ListTag())
+        val nbt = CompoundTag().putList("Items", ListTag<Tag<*>>())
 
         if (item.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
+        return BlockEntityHolder.setBlockAndCreateEntity(this, direct = true, update = true, initialData = nbt) != null
     }
 
     override fun onUpdate(type: Int): Int {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return 0
         }
 
@@ -146,11 +147,11 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
 
             if (this.isGettingPower && !triggered) {
                 this.isTriggered = true
-                level.setBlock(this.position, this, false, false)
+                level.setBlock(this.position, this, direct = false, update = false)
                 level.scheduleUpdate(this, this.position, 4)
             } else if (!this.isGettingPower && triggered) {
                 this.isTriggered = false
-                level.setBlock(this.position, this, false, false)
+                level.setBlock(this.position, this, direct = false, update = false)
             }
 
             return type
@@ -167,9 +168,9 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
         var slot = -1
         var target: Item? = null
 
-        val inv = blockEntity.inventory
-        for ((key, item) in inv!!.contents.entrySet()) {
-            if (!item.isNull && rand.nextInt(r++) == 0) {
+        val inv = blockEntity.getInventory()
+        for ((key, item) in inv.contents.entries) {
+            if (!item.isNothing && rand.nextInt(r++) == 0) {
                 target = item
                 slot = key
             }
@@ -179,13 +180,13 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
 
         val facing = blockFace
 
-        pk.x = 0.5f + facing!!.xOffset * 0.7f
+        pk.x = 0.5f + facing.xOffset * 0.7f
         pk.y = 0.5f + facing.yOffset * 0.7f
         pk.z = 0.5f + facing.zOffset * 0.7f
 
         if (target == null) {
             level.addSound(this.position, Sound.RANDOM_CLICK, 1.0f, 1.2f)
-            getBlockEntity()!!.setDirty()
+            blockEntity.setDirty()
             return
         } else {
             if (getDispenseBehavior(target) !is DropperDispenseBehavior && getDispenseBehavior(target) !is FlintAndSteelDispenseBehavior) level.addSound(
@@ -246,10 +247,13 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
         }
 
     override var blockFace: BlockFace
-        get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
+        get() = fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
@@ -258,6 +262,5 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
                 CommonBlockProperties.FACING_DIRECTION,
                 CommonBlockProperties.TRIGGERED_BIT
             )
-
     }
 }

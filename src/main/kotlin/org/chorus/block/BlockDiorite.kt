@@ -20,8 +20,10 @@ class BlockDiorite @JvmOverloads constructor(blockstate: BlockState = Companion.
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DIORITE)
-
     }
 }

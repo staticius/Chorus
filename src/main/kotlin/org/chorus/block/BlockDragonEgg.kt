@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.event.block.BlockFromToEvent
 import org.chorus.event.player.PlayerInteractEvent
 import org.chorus.item.*
@@ -69,7 +70,7 @@ class BlockDragonEgg : BlockFallable {
                         random.nextInt(-16, 16).toDouble()
                     )
                 )
-            if (to!!.isAir) {
+            if (to.isAir) {
                 val event = BlockFromToEvent(this, to)
                 Server.instance.pluginManager.callEvent(event)
                 if (event.isCancelled) return
@@ -89,7 +90,7 @@ class BlockDragonEgg : BlockFallable {
                     position.floorX shr 4,
                     position.floorZ shr 4, pk
                 )
-                level.setBlock(this.position, get(AIR), true)
+                level.setBlock(this.position, get(BlockID.AIR), true)
                 level.setBlock(to.position, this, true)
                 return
             }
@@ -104,8 +105,10 @@ class BlockDragonEgg : BlockFallable {
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DRAGON_EGG)
-
     }
 }

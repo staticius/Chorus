@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.block.BlockGrowEvent
 import org.chorus.item.*
 import org.chorus.level.Level
@@ -15,12 +14,12 @@ import kotlin.math.min
 
 abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
     val maxGrowth: Int
-        get() = CommonBlockProperties.GROWTH.getMax()
+        get() = CommonBlockProperties.GROWTH.max
 
     var growth: Int
-        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH)
+        get() = getPropertyValue(CommonBlockProperties.GROWTH)
         set(growth) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH, growth)
+            setPropertyValue(CommonBlockProperties.GROWTH, growth)
         }
 
     val isFullyGrown: Boolean
@@ -40,8 +39,8 @@ abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
         fz: Double,
         player: Player?
     ): Boolean {
-        if (block.down()!!.id == FARMLAND) {
-            level.setBlock(block.position, this, true, true)
+        if (block.down().id == BlockID.FARMLAND) {
+            level.setBlock(block.position, this, direct = true, update = true)
             return true
         }
         return false
@@ -70,7 +69,7 @@ abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
                     return false
                 }
 
-                level.setBlock(this.position, ev.newState!!, false, true)
+                level.setBlock(this.position, ev.newState!!, direct = false, update = true)
                 level.addParticle(BoneMealParticle(this.position))
 
                 if (player != null && !player.isCreative) {
@@ -86,13 +85,13 @@ abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down()!!.id != FARMLAND) {
+            if (down().id != BlockID.FARMLAND) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             if (ThreadLocalRandom.current()
-                    .nextInt(2) == 1 && level.getFullLight(this.position) >= this.minimumLightLevel
+                    .nextInt(2) == 1 && level.getFullLight(this.position) >= MIN_LIGHT_LEVEL
             ) {
                 val growth = growth
                 if (growth < maxGrowth) {
@@ -102,7 +101,7 @@ abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
                     instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled) {
-                        level.setBlock(this.position, ev.newState!!, false, true)
+                        level.setBlock(this.position, ev.newState!!, direct = false, update = true)
                     } else {
                         return Level.BLOCK_UPDATE_RANDOM
                     }
@@ -119,7 +118,6 @@ abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
         get() = true
 
     companion object {
-        val minimumLightLevel: Int = 9
-
+        const val MIN_LIGHT_LEVEL: Int = 9
     }
 }

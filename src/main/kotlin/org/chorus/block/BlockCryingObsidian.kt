@@ -34,8 +34,10 @@ class BlockCryingObsidian @JvmOverloads constructor(blockstate: BlockState = Com
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CRYING_OBSIDIAN)
-
     }
 }

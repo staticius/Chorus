@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockDioriteSlab(blockState: BlockState) : BlockSlab(blockState, DIORITE_DOUBLE_SLAB) {
+class BlockDioriteSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.DIORITE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Diorite"
     }
@@ -25,9 +25,11 @@ class BlockDioriteSlab(blockState: BlockState) : BlockSlab(blockState, DIORITE_D
     override val hardness: Double
         get() = 1.5
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.DIORITE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

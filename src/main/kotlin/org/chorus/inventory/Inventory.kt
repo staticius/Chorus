@@ -71,7 +71,7 @@ interface Inventory {
      * @param slots the items
      * @return the remain items that can't add to the inventory
      */
-    fun addItem(vararg slots: Item): Array<Item?>
+    fun addItem(vararg slots: Item): Array<Item>
 
     /**
      * @param item the item

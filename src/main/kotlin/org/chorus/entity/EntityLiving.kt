@@ -435,7 +435,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         return true
     }
 
-    protected open fun onBlock(entity: Entity?, event: EntityDamageEvent?, animate: Boolean) {
+    open fun onBlock(entity: Entity?, event: EntityDamageEvent?, animate: Boolean) {
         if (animate) {
             level!!.addSound(this.position, Sound.ITEM_SHIELD_BLOCK)
         }

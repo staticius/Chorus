@@ -32,15 +32,17 @@ class BlockDeepslate : BlockSolid {
             return Item.EMPTY_ARRAY
         }
 
-        return arrayOf(Item.get(COBBLED_DEEPSLATE))
+        return arrayOf(Item.get(BlockID.COBBLED_DEEPSLATE))
     }
 
     override fun canSilkTouch(): Boolean {
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DEEPSLATE, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

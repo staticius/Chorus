@@ -11,7 +11,7 @@ abstract class BlockDoubleSlabBase(blockState: BlockState) : BlockSolid(blockSta
 
     abstract fun getSingleSlab(): BlockState?
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return get(getSingleSlab()).toItem()
     }
 

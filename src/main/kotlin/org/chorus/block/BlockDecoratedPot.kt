@@ -13,7 +13,7 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 import java.util.*
 
-class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntityDecoratedPot?> {
+class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntityDecoratedPot> {
     constructor() : super(Companion.properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
@@ -33,11 +33,11 @@ class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntity
     ): Boolean {
         val nbt = CompoundTag()
 
-        nbt.putString("id", BlockEntity.DECORATED_POT)
+        nbt.putString("id", BlockEntityID.DECORATED_POT)
         nbt.putByte("isMovable", 1)
 
         if (item.namedTag != null) {
-            val customData: Map<String?, Tag?> = item.namedTag!!.getTags()
+            val customData = item.namedTag!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
@@ -47,8 +47,8 @@ class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntity
         nbt.putInt("y", position.y.toInt())
         nbt.putInt("z", position.y.toInt())
 
-        this.blockFace = player!!.getDirection()!!.getOpposite()
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
+        this.blockFace = player!!.getDirection().getOpposite()
+        return BlockEntityHolder.setBlockAndCreateEntity(this, direct = true, update = true, initialData = nbt) != null
     }
 
     override fun getBlockEntityClass(): Class<out BlockEntityDecoratedPot> {
@@ -56,7 +56,7 @@ class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntity
     }
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.DECORATED_POT
+        return BlockEntityID.DECORATED_POT
     }
 
     override var blockFace: BlockFace
@@ -83,8 +83,10 @@ class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntity
     override val waterloggingLevel: Int
         get() = 1
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DECORATED_POT, CommonBlockProperties.DIRECTION)
-
     }
 }

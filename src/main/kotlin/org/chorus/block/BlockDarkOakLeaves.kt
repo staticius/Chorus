@@ -10,8 +10,11 @@ class BlockDarkOakLeaves(blockstate: BlockState) : BlockLeaves(blockstate) {
     }
 
     override fun toSapling(): Item {
-        return Item.get(DARK_OAK_SAPLING)
+        return Item.get(BlockID.DARK_OAK_SAPLING)
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
@@ -20,6 +23,5 @@ class BlockDarkOakLeaves(blockstate: BlockState) : BlockLeaves(blockstate) {
                 CommonBlockProperties.PERSISTENT_BIT,
                 CommonBlockProperties.UPDATE_BIT
             )
-
     }
 }

@@ -36,7 +36,7 @@ class BlockMycelium : BlockDirt {
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (level.getFullLight(add(0.0, 1.0, 0.0).position) >= BlockCrops.minimumLightLevel) {
+            if (level.getFullLight(add(0.0, 1.0, 0.0).position) >= BlockCrops.MIN_LIGHT_LEVEL) {
                 //TODO: light levels
                 val random: NukkitRandom = NukkitRandom()
                 val x: Int = random.nextInt(position.floorX - 1, position.floorX + 1)

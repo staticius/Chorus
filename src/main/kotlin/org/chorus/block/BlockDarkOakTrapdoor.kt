@@ -7,6 +7,9 @@ class BlockDarkOakTrapdoor @JvmOverloads constructor(blockstate: BlockState = Co
     override val name: String
         get() = "Dark Oak Trapdoor"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.DARK_OAK_TRAPDOOR,
@@ -14,6 +17,5 @@ class BlockDarkOakTrapdoor @JvmOverloads constructor(blockstate: BlockState = Co
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-
     }
 }

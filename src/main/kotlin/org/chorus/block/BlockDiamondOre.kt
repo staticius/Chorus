@@ -9,9 +9,9 @@ import java.util.concurrent.ThreadLocalRandom
 
 open class BlockDiamondOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockOre(blockstate) {
+
     override val rawMaterial: String? 
         get() = ItemID.DIAMOND
-    }
 
     override val name: String
         get() = "Diamond Ore"
@@ -44,8 +44,10 @@ open class BlockDiamondOre @JvmOverloads constructor(blockstate: BlockState = Co
     override val dropExp: Int
         get() = ThreadLocalRandom.current().nextInt(3, 8)
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DIAMOND_ORE)
-
     }
 }
