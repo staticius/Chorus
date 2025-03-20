@@ -2,19 +2,23 @@ package org.chorus.entity
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockCactus
+import org.chorus.block.BlockMagma
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.entity.weather.EntityWeather
 import org.chorus.event.entity.*
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTurtleHelmet
 import org.chorus.level.GameRule
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.ChorusMath
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.network.protocol.AnimatePacket

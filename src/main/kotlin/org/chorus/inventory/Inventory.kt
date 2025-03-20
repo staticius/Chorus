@@ -242,7 +242,8 @@ interface Inventory {
     fun removeListener(listener: InventoryListener)
 
     @ApiStatus.Internal
-    fun init() {}
+    fun init() {
+    }
 
     /**
      * native slot id <---> network slot id

@@ -11,7 +11,7 @@ import org.chorus.utils.ServerException
  * Attributes are buffs/debuffs systems that act on [Entity].
  *
  * @author Box, MagicDroidX(code), PeratX @ Nukkit Project
- * 
+ *
  */
 class Attribute private constructor(
     private val id: Int,
@@ -305,7 +305,7 @@ class Attribute private constructor(
                 && nbt.containsFloat("Max")
                 && nbt.containsFloat("Min")
             ) {
-                val attribute = getAttributeByName(nbt.getString("Name")!!)
+                val attribute = getAttributeByName(nbt.getString("Name"))
                     ?: throw RuntimeException("Attribute not found: " + nbt.getString("Name"))
                 return attribute
                     .setMinValue(nbt.getFloat("Min"))

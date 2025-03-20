@@ -97,18 +97,23 @@ class EntityDataMap : MutableMap<EntityDataType<Any>, Any> {
                 Long::class.javaPrimitiveType, Long::class.java -> {
                     value1 = number.toLong()
                 }
+
                 Int::class.javaPrimitiveType, Int::class.java -> {
                     value1 = number.toInt()
                 }
+
                 Short::class.javaPrimitiveType, Short::class.java -> {
                     value1 = number.toShort()
                 }
+
                 Byte::class.javaPrimitiveType, Byte::class.java -> {
                     value1 = number.toByte()
                 }
+
                 Float::class.javaPrimitiveType, Float::class.java -> {
                     value1 = number.toFloat()
                 }
+
                 Double::class.javaPrimitiveType, Double::class.java -> {
                     value1 = number.toDouble()
                 }

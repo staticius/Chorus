@@ -12,7 +12,7 @@ open class BlockDeepslateRedstoneOre @JvmOverloads constructor(blockstate: Block
         get() = BlockLitDeepslateRedstoneOre()
 
     override val unlitBlock: Block
-        get() =  BlockDeepslateRedstoneOre()
+        get() = BlockDeepslateRedstoneOre()
 
     override val properties: BlockProperties
         get() = Companion.properties

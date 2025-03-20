@@ -29,7 +29,7 @@ abstract class BlockDoubleSlabBase(blockState: BlockState) : BlockSolid(blockSta
     override fun getDrops(item: Item): Array<Item> {
         if (isCorrectTool(item)) {
             val slab = toItem()
-            slab!!.setCount(2)
+            slab.setCount(2)
             return arrayOf(slab)
         } else {
             return Item.EMPTY_ARRAY

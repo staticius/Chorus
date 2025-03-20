@@ -76,7 +76,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
         val hanging = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING)
         if (!hanging) {
             val down = down()
-            if (!down!!.isSolid) {
+            if (!down.isSolid) {
                 level.useBreakOn(this.position)
             }
         }
@@ -88,10 +88,10 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
         if (!hanging) return
         var AirUp = false
         var blockUp: Block? = this.clone()
-        while (blockUp!!.getSide(BlockFace.UP)!!.id == BlockID.POINTED_DRIPSTONE) {
+        while (blockUp!!.getSide(BlockFace.UP).id == BlockID.POINTED_DRIPSTONE) {
             blockUp = blockUp.getSide(BlockFace.UP)
         }
-        if (!blockUp.getSide(BlockFace.UP)!!.isSolid) AirUp = true
+        if (!blockUp.getSide(BlockFace.UP).isSolid) AirUp = true
         if (AirUp) {
             val event = BlockFallEvent(this)
             instance.pluginManager.callEvent(event)
@@ -100,7 +100,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
             }
             var block = blockUp as BlockPointedDripstone?
             block!!.drop(CompoundTag().putBoolean("BreakOnGround", true))
-            while (block!!.getSide(BlockFace.DOWN)!!.id == BlockID.POINTED_DRIPSTONE) {
+            while (block!!.getSide(BlockFace.DOWN).id == BlockID.POINTED_DRIPSTONE) {
                 block = block.getSide(BlockFace.DOWN) as BlockPointedDripstone?
                 block!!.drop(CompoundTag().putBoolean("BreakOnGround", true))
             }
@@ -196,10 +196,10 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
             if (length > 0) {
                 val downBlock = down()
                 for (i in 0..length - 1) {
-                    level.setBlock(downBlock!!.down(i)!!.position, get(BlockID.AIR), false, false)
+                    level.setBlock(downBlock.down(i).position, get(BlockID.AIR), false, false)
                 }
                 for (i in length - 1 downTo 0) {
-                    place(null, downBlock!!.down(i)!!, null, BlockFace.DOWN, 0.0, 0.0, 0.0, null)
+                    place(null, downBlock.down(i), null, BlockFace.DOWN, 0.0, 0.0, 0.0, null)
                 }
             }
         }
@@ -208,10 +208,10 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
             if (length > 0) {
                 val upBlock = up()
                 for (i in 0..length - 1) {
-                    level.setBlock(upBlock!!.up(i)!!.position, get(BlockID.AIR), false, false)
+                    level.setBlock(upBlock.up(i).position, get(BlockID.AIR), false, false)
                 }
                 for (i in length - 1 downTo 0) {
-                    place(null, upBlock!!.up(i)!!, null, BlockFace.DOWN, 0.0, 0.0, 0.0, null)
+                    place(null, upBlock.up(i), null, BlockFace.DOWN, 0.0, 0.0, 0.0, null)
                 }
             }
         }
@@ -292,7 +292,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
     fun grow() {
         val face = if (this.isHanging) BlockFace.DOWN else BlockFace.UP
         val target = this.getSide(face)
-        if (target!!.isAir) {
+        if (target.isAir) {
             this.place(null, target, null, face, 0.0, 0.0, 0.0, null)
         }
     }
@@ -311,12 +311,12 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
         var isWaterloggingBlock = false
         if (height >= 11 ||
             !(highestPDS.getSide(BlockFace.UP, 2) is BlockLiquid ||
-                    highestPDS.getSide(BlockFace.UP, 2)!!.getLevelBlockAtLayer(1) is BlockFlowingWater)
+                    highestPDS.getSide(BlockFace.UP, 2).getLevelBlockAtLayer(1) is BlockFlowingWater)
         ) {
             return
         }
 
-        if (highestPDS.getSide(BlockFace.UP, 2)!!.getLevelBlockAtLayer(1) is BlockFlowingWater) {
+        if (highestPDS.getSide(BlockFace.UP, 2).getLevelBlockAtLayer(1) is BlockFlowingWater) {
             isWaterloggingBlock = true
         }
 
@@ -337,7 +337,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
             BlockFace.UP,
             2
         )
-        when (filledWith!!.id) {
+        when (filledWith.id) {
             BlockID.FLOWING_LAVA -> {
                 nextDouble = rand.nextDouble()
                 if ((cauldron!!.cauldronLiquid == CauldronLiquid.LAVA || cauldron.isEmpty) && cauldron.fillLevel < 6 && nextDouble <= 15.0 / 256.0) {

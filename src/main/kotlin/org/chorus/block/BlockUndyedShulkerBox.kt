@@ -125,7 +125,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
         }
 
         val box = getOrCreateBlockEntity()
-        val block = this.getSide(fromIndex(box.namedTag.getByte("facing").toInt())!!)
+        val block = this.getSide(fromIndex(box.namedTag.getByte("facing").toInt()))
         if ((block !is BlockAir) && (block !is BlockLiquid) && (block !is BlockFlowable)) {
             return false
         }

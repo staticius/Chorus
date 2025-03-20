@@ -24,7 +24,7 @@ interface CommandSender : Permissible {
      * @param message 要发送的信息.<br></br>Message to send.
      * @see org.chorus.utils.TextFormat
      *
-     * 
+     *
      */
     fun sendMessage(message: String)
 
@@ -35,7 +35,7 @@ interface CommandSender : Permissible {
      * Sends a message to the command sender.
      *
      * @param message 要发送的信息.<br></br>Message to send.
-     * 
+     *
      */
     fun sendMessage(message: TextContainer)
 

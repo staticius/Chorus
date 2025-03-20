@@ -13,7 +13,7 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
     override fun handle(playerHandle: PlayerHandle, pk: BlockPickRequestPacket) {
         val player = playerHandle.player
         val block = player.level!!.getBlock(pk.x, pk.y, pk.z, false)
-        if (block!!.position.distanceSquared(player.position) > 1000) {
+        if (block.position.distanceSquared(player.position) > 1000) {
             BlockPickRequestProcessor.log.debug(playerHandle.username + ": Block pick request for a block too far away")
             return
         }

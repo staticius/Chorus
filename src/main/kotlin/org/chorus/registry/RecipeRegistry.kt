@@ -8,9 +8,7 @@ import io.netty.buffer.ByteBufAllocator
 import io.netty.util.ReferenceCountUtil
 import io.netty.util.collection.CharObjectHashMap
 import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
 import org.chorus.Server
-import org.chorus.block.BlockID
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 import org.chorus.network.connection.util.HandleByteBuf.Companion.of
@@ -25,9 +23,6 @@ import org.chorus.utils.*
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.function.Consumer
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 
 class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
@@ -407,6 +402,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
             RecipeType.MULTI -> networkIdRecipeList.add(
                 recipe
             )
+
             else -> {}
         }
     }
@@ -532,7 +528,8 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                 }
 
                 //load containerMixes
-                val containerMixes: List<Map<String, Any>> = recipeConfig.getList("containerMixes") as List<Map<String, Any>>
+                val containerMixes: List<Map<String, Any>> =
+                    recipeConfig.getList("containerMixes") as List<Map<String, Any>>
                 for (containerMix in containerMixes) {
                     val inputId = containerMix["inputId"] as String?
                     val reagentId = containerMix["reagentId"] as String?
@@ -912,7 +909,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
         val itemDescriptors: MutableList<ItemDescriptor> = ArrayList()
         val inputs = (recipeObject["input"] as List<Map<String, Any>>)
         val outputs = (recipeObject["output"] as List<Map<String, Any>>)
-        if (outputs!!.size > 1) {
+        if (outputs.size > 1) {
             return null
         }
         val first: Map<String, Any> = outputs.first()
@@ -1025,7 +1022,8 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                 val count = if (data.containsKey("count")) Utils.toInt(data["count"]!!) else 1
 
                 val nbt = data["nbt"] as String?
-                val nbtBytes: ByteArray? = if (nbt != null) Base64.getDecoder().decode(nbt) else EmptyArrays.EMPTY_BYTES //TODO: idk how to fix nbt, cuz we don't use Cloudburst NBT
+                val nbtBytes: ByteArray? = if (nbt != null) Base64.getDecoder()
+                    .decode(nbt) else EmptyArrays.EMPTY_BYTES //TODO: idk how to fix nbt, cuz we don't use Cloudburst NBT
 
                 var meta: Int? = null
                 if (data.containsKey("data")) meta = Utils.toInt(data["data"]!!)

@@ -25,7 +25,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState = Comp
                 level.useBreakOn(this.position, null, null, true)
             } else {
                 val up = up()
-                if (up!!.id == BlockID.BAMBOO) {
+                if (up.id == BlockID.BAMBOO) {
                     val upperBamboo = up as BlockBamboo
                     val newState = BlockBamboo()
                     newState.isThick = upperBamboo.isThick
@@ -35,7 +35,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState = Comp
             return type
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             val up = up()
-            if (!isAge && up!!.isAir && level.getFullLight(up.position) >= BlockCrops.MIN_LIGHT_LEVEL && ThreadLocalRandom.current()
+            if (!isAge && up.isAir && level.getFullLight(up.position) >= BlockCrops.MIN_LIGHT_LEVEL && ThreadLocalRandom.current()
                     .nextInt(3) == 0
             ) {
                 val newState = BlockBamboo()
@@ -89,7 +89,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState = Comp
         if (item.isFertilizer) {
             var success = false
             val block = this.up()
-            if (block!!.isAir) {
+            if (block.isAir) {
                 success = grow(block)
             }
 
@@ -116,7 +116,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState = Comp
     }
 
     private val isSupportInvalid: Boolean
-        get() = when (down()!!.id) {
+        get() = when (down().id) {
             BlockID.BAMBOO, BlockID.DIRT, BlockID.GRASS_BLOCK, BlockID.SAND, BlockID.GRAVEL, BlockID.PODZOL, BlockID.BAMBOO_SAPLING, BlockID.MOSS_BLOCK -> false
             else -> true
         }

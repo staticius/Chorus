@@ -33,7 +33,7 @@ class BlockMuddyMangroveRoots : BlockSolid, Natural {
         set(axis) {
             setPropertyValue(
                 CommonBlockProperties.PILLAR_AXIS,
-                axis!!
+                axis
             )
         }
 

@@ -40,12 +40,12 @@ abstract class BlockRedstoneRepeater(blockState: BlockState) : BlockRedstoneDiod
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!isSupportValid(down()!!)) {
+        if (!isSupportValid(down())) {
             return false
         }
         val blockFace = if (player != null) fromHorizontalIndex(
-            player.getDirection()!!
-                .getOpposite()!!.horizontalIndex
+            player.getDirection()
+                .getOpposite().horizontalIndex
         ) else BlockFace.SOUTH
         setPropertyValue<MinecraftCardinalDirection, org.chorus.block.property.type.EnumPropertyType<MinecraftCardinalDirection>>(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,

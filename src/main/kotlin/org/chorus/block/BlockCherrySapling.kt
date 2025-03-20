@@ -6,12 +6,14 @@ import org.chorus.block.BlockFlowerPot.FlowerPotBlock
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
 import org.chorus.event.level.StructureGrowEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.level.generator.`object`.BlockManager
 import org.chorus.level.generator.`object`.ObjectCherryTree
 import org.chorus.level.particle.BoneMealParticle
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 import org.chorus.utils.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Predicate
@@ -61,7 +63,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockState: BlockState = Comp
             if (ev.isCancelled) {
                 return
             }
-            if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
+            if (level.getBlock(vector3).id == BlockID.DIRT_WITH_ROOTS) {
                 level.setBlock(vector3, get(BlockID.DIRT))
             }
             blockManager.applySubChunkUpdate(
@@ -123,7 +125,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockState: BlockState = Comp
 
     private val isSupportInvalid: Boolean
         get() {
-            val downId = down()!!.id
+            val downId = down().id
             return !(downId == BlockID.DIRT || downId == BlockID.GRASS_BLOCK || downId == BlockID.SAND || downId == BlockID.GRAVEL || downId == BlockID.PODZOL)
         }
 

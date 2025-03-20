@@ -3,7 +3,6 @@ package org.chorus.camera.data
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.nbt.tag.Tag
 
 @JvmRecord
 data class Pos(val x: Float, val y: Float, val z: Float) : SerializableData {

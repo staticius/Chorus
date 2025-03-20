@@ -15,7 +15,7 @@ import org.chorus.utils.OptionalValue
 import java.util.*
 import java.util.function.Consumer
 
-class CameraPreset @JvmOverloads constructor (
+class CameraPreset @JvmOverloads constructor(
     val identifier: String,
     inheritFrom: String? = null,
     val pos: Vector3f? = null,

@@ -569,54 +569,65 @@ object JSONUtils {
                     Short::class.javaPrimitiveType -> {
                         return json.toShort()
                     }
+
                     Short::class.java -> {
                         if (json.isEmpty()) {
                             return null
                         }
                         return json.toShort()
                     }
+
                     Int::class.javaPrimitiveType -> {
                         return json.toInt()
                     }
+
                     Int::class.java -> {
                         if (json.isEmpty()) {
                             return null
                         }
                         return json.toInt()
                     }
+
                     Long::class.javaPrimitiveType -> {
                         return json.toLong()
                     }
+
                     Long::class.java -> {
                         if (json.isEmpty()) {
                             return null
                         }
                         return json.toLong()
                     }
+
                     Float::class.javaPrimitiveType -> {
                         return json.toFloat()
                     }
+
                     Float::class.java -> {
                         if (json.isEmpty()) {
                             return null
                         }
                         return json.toFloat()
                     }
+
                     Double::class.javaPrimitiveType -> {
                         return json.toDouble()
                     }
+
                     Double::class.java -> {
                         if (json.isEmpty()) {
                             return null
                         }
                         return json.toDouble()
                     }
+
                     BigDecimal::class.java -> {
                         if (json.isEmpty()) {
                             return null
                         }
                         return BigDecimal(json)
                     }
+
                     else -> {
                         return json.toInt()
                     }

@@ -96,7 +96,9 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
                 TradeRecipeBuildUtils.of(
                     Item.get(Item.EMERALD, 0, 1),
                     Item.get(
-                        "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName.lowercase(Locale.getDefault()) + "_carpet"
+                        "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName.lowercase(
+                            Locale.getDefault()
+                        ) + "_carpet"
                     )
                 )
                     .setMaxUses(16)

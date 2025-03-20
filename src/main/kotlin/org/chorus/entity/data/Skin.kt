@@ -40,7 +40,8 @@ class Skin {
     }
 
     private fun isValidSkin(): Boolean {
-        return skinId != null && skinId!!.trim { it <= ' ' }.isNotEmpty() && skinId!!.length < 100 && skinData != null && skinData!!.width >= 32 && skinData!!.height >= 32 && skinData!!.data.size >= SINGLE_SKIN_SIZE &&
+        return skinId != null && skinId!!.trim { it <= ' ' }
+            .isNotEmpty() && skinId!!.length < 100 && skinData != null && skinData!!.width >= 32 && skinData!!.height >= 32 && skinData!!.data.size >= SINGLE_SKIN_SIZE &&
                 (playFabId == null || playFabId!!.length < 100) &&
                 (capeId == null || capeId!!.length < 100) &&
                 (skinColor == null || skinColor!!.length < 100) &&

@@ -67,6 +67,7 @@ object PaletteUtils {
                     deserialize(input, byteBuf, nbtType, maxDepth - 1)
                 }
             }
+
             Tag.TAG_LIST -> {
                 val typeId = input.readUnsignedByte()
                 val listLength = input.readInt()
@@ -74,6 +75,7 @@ object PaletteUtils {
                     deserialize(input, byteBuf, typeId, maxDepth - 1)
                 }
             }
+
             Tag.TAG_INT_ARRAY -> input.skipBytes(input.readInt() * 4)
         }
         return null

@@ -24,7 +24,7 @@ class TakeActionProcessor : TransferItemActionProcessor<TakeAction>() {
             val source: Inventory = getInventory(player, sourceSlotType)
             val sourItem = source.getUnclonedItem(0)
             val count = action.count
-            if (sourItem!!.getCount() > count) {
+            if (sourItem.getCount() > count) {
                 sourItem.setCount(count)
             }
         }

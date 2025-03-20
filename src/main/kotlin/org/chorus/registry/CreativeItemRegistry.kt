@@ -14,9 +14,6 @@ import java.io.InputStreamReader
 import java.nio.ByteOrder
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.HashMap
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.LinkedHashSet
 
 class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
     override fun init() {

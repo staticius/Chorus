@@ -2,8 +2,10 @@ package org.chorus.level.format.palette
 
 import io.netty.buffer.ByteBuf
 import it.unimi.dsi.fastutil.ints.IntSet
-import org.chorus.block.*
-import org.chorus.level.*
+import org.chorus.block.BlockAir
+import org.chorus.block.BlockState
+import org.chorus.level.AntiXraySystem
+import org.chorus.level.Level
 import org.chorus.level.format.ChunkSection
 import org.chorus.level.format.IChunk
 import org.chorus.level.format.bitarray.BitArrayVersion

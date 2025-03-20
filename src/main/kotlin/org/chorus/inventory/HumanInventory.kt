@@ -210,13 +210,13 @@ class HumanInventory(human: IHuman?) //9+27+4
             val slot = this.getUnclonedItem(i)
             if (item.equals(slot, checkDamage, checkTag)) {
                 val diff: Int
-                if (((min(slot!!.maxStackSize.toDouble(), getMaxStackSize().toDouble()) - slot.getCount()).also {
+                if (((min(slot.maxStackSize.toDouble(), getMaxStackSize().toDouble()) - slot.getCount()).also {
                         diff =
                             it.toInt()
                     }) > 0) {
                     item.setCount(item.getCount() - diff)
                 }
-            } else if (slot!!.isNothing) {
+            } else if (slot.isNothing) {
                 item.setCount(
                     (item.getCount() - min(
                         slot.maxStackSize.toDouble(),
@@ -248,7 +248,7 @@ class HumanInventory(human: IHuman?) //9+27+4
         for (i in 0..<ARMORS_INDEX) {
             //获取未克隆Item对象
             var item = this.getUnclonedItem(i)
-            if (item!!.isNothing || item.getCount() <= 0) {
+            if (item.isNothing || item.getCount() <= 0) {
                 emptySlots.add(i)
             }
 

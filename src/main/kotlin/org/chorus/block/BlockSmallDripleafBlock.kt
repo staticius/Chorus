@@ -59,12 +59,12 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState =
         val dripleaf = BlockSmallDripleafBlock()
         val dripleafTop = BlockSmallDripleafBlock()
         dripleafTop.isUpperBlock = true
-        val direction = if (player != null) player.getDirection()!!.getOpposite() else BlockFace.SOUTH
+        val direction = if (player != null) player.getDirection().getOpposite() else BlockFace.SOUTH
         dripleaf.blockFace = direction
         dripleafTop.blockFace = direction
         if (canKeepAlive(block)) {
             level.setBlock(block.position, dripleaf, true, true)
-            level.setBlock(block.getSide(BlockFace.UP)!!.position, dripleafTop, true, true)
+            level.setBlock(block.getSide(BlockFace.UP).position, dripleafTop, true, true)
             return true
         }
         return false
@@ -81,11 +81,11 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState =
     override fun onBreak(item: Item): Boolean {
         level.setBlock(this.position, BlockAir(), true, true)
         if (item.isShears) level.dropItem(this.position, toItem())
-        if (getSide(BlockFace.UP)!!.id == BlockID.SMALL_DRIPLEAF_BLOCK) {
-            level.getBlock(getSide(BlockFace.UP)!!.position)!!.onBreak(null)
+        if (getSide(BlockFace.UP).id == BlockID.SMALL_DRIPLEAF_BLOCK) {
+            level.getBlock(getSide(BlockFace.UP).position).onBreak(null)
         }
-        if (getSide(BlockFace.DOWN)!!.id == BlockID.SMALL_DRIPLEAF_BLOCK) {
-            level.getBlock(getSide(BlockFace.DOWN)!!.position)!!.onBreak(null)
+        if (getSide(BlockFace.DOWN).id == BlockID.SMALL_DRIPLEAF_BLOCK) {
+            level.getBlock(getSide(BlockFace.DOWN).position).onBreak(null)
         }
         return true
     }
@@ -116,13 +116,13 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState =
 
             val blockBigDripleafDown = BlockBigDripleaf()
             val blockBigDripleafHead = BlockBigDripleaf()
-            val direction = if (player != null) player.getDirection()!!.getOpposite() else BlockFace.SOUTH
+            val direction = if (player != null) player.getDirection().getOpposite() else BlockFace.SOUTH
             blockBigDripleafDown.blockFace = direction
             blockBigDripleafHead.blockFace = direction
             blockBigDripleafHead.isHead = true
 
             var buttom: Block? = this.clone()
-            while (buttom!!.getSide(BlockFace.DOWN)!!.id == BlockID.SMALL_DRIPLEAF_BLOCK) {
+            while (buttom!!.getSide(BlockFace.DOWN).id == BlockID.SMALL_DRIPLEAF_BLOCK) {
                 buttom = buttom.getSide(BlockFace.DOWN)
             }
 
@@ -139,10 +139,10 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState =
     }
 
     fun canKeepAlive(pos: Locator): Boolean {
-        val blockDown = level.getBlock(pos.getSide(BlockFace.DOWN)!!.position)
+        val blockDown = level.getBlock(pos.getSide(BlockFace.DOWN).position)
         val blockHere = level.getBlock(pos.position, 1)
-        val blockUp = level.getBlock(pos.getSide(BlockFace.UP)!!.position)
-        if (level.getBlock(blockDown!!.position) is BlockClay) {
+        val blockUp = level.getBlock(pos.getSide(BlockFace.UP).position)
+        if (level.getBlock(blockDown.position) is BlockClay) {
             return true
         }
         if (level.getBlock(blockDown.position) is BlockSmallDripleafBlock && !(level.getBlock(

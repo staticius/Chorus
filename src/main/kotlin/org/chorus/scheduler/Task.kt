@@ -20,7 +20,7 @@ import org.chorus.utils.Loggable
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * 
+ *
  */
 
 abstract class Task : Runnable {
@@ -43,7 +43,7 @@ abstract class Task : Runnable {
      *
      * @param currentTick 服务器从开始运行到现在所经过的tick数，20ticks = 1秒，1tick = 0.05秒。<br></br>
      * The elapsed tick count from the server is started. 20ticks = 1second, 1tick = 0.05second.
-     * 
+     *
      */
     abstract fun onRun(currentTick: Int)
 

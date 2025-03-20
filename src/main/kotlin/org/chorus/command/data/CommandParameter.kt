@@ -1,6 +1,5 @@
 package org.chorus.command.data
 
-import com.google.common.collect.Lists
 import org.chorus.command.tree.node.IParamNode
 import java.util.*
 

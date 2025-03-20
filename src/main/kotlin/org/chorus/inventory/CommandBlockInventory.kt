@@ -123,7 +123,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
             val pk = ContainerOpenPacket()
             pk.windowId = who.getWindowId(this)
             pk.type = type.networkType
-            val holder: InventoryHolder? = this.getHolder()
+            val holder: InventoryHolder = this.getHolder()
             if (holder is Vector3) {
                 pk.x = holder.floorX
                 pk.y = holder.floorY
@@ -187,6 +187,6 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
         }
     }
 
-    override val blockEntityInventoryHolder: BlockEntityNameable?
+    override val blockEntityInventoryHolder: BlockEntityNameable
         get() = getHolder()
 }

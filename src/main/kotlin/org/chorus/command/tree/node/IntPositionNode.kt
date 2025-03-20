@@ -8,7 +8,7 @@ import java.util.regex.Pattern
  *
  * 所有命令参数类型为[BLOCK_POSITION][org.chorus.command.data.CommandParamType.BLOCK_POSITION]如果没有手动指定[IParamNode],则会默认使用这个解析
  */
-class IntPositionNode() : PositionNode(INT_POS_PATTERN) {
+class IntPositionNode : PositionNode(INT_POS_PATTERN) {
     companion object {
         val INT_POS_PATTERN: Pattern = Pattern.compile("[~^]?([-+]?\\d+)|[~^]")
     }

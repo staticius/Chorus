@@ -11,7 +11,7 @@ import java.util.regex.Pattern
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see JavaPluginLoader
  *
- * 
+ *
  */
 interface PluginLoader {
     /**
@@ -34,7 +34,7 @@ interface PluginLoader {
      * @throws java.lang.Exception 插件加载失败所抛出的异常。<br></br>Thrown when an error occurred.
      * @see .loadPlugin
      * @see org.chorus.plugin.PluginBase.init
-     * 
+     *
      */
     @Throws(Exception::class)
     fun loadPlugin(filename: String): Plugin?
@@ -59,7 +59,7 @@ interface PluginLoader {
      * @throws java.lang.Exception 插件加载失败所抛出的异常。<br></br>Thrown when an error occurred.
      * @see .loadPlugin
      * @see org.chorus.plugin.PluginBase.init
-     * 
+     *
      */
     @Throws(Exception::class)
     fun loadPlugin(file: File): Plugin?
@@ -76,7 +76,7 @@ interface PluginLoader {
      * @return 描述这个插件的 `PluginDescription`对象。<br></br>
      * A `PluginDescription` object describes the plugin.
      * @see .getPluginDescription
-     * 
+     *
      */
     fun getPluginDescription(filename: String): PluginDescription?
 
@@ -92,7 +92,7 @@ interface PluginLoader {
      * @return 描述这个插件的 `PluginDescription`对象。<br></br>
      * A `PluginDescription` object describes the plugin.
      * @see .getPluginDescription
-     * 
+     *
      */
     fun getPluginDescription(file: File): PluginDescription?
 
@@ -121,7 +121,7 @@ interface PluginLoader {
      *
      * @return 表达这个插件加载器支持的文件类型的正则表达式数组。<br></br>
      * An array of regular expressions, that describes what kind of file this plugin loader supports.
-     * 
+     *
      */
     val pluginFilters: Array<Pattern>
 
@@ -132,7 +132,7 @@ interface PluginLoader {
      * @param plugin 要被启用的插件。<br></br>The plugin to enable.
      * @see .disablePlugin
      *
-     * 
+     *
      */
     fun enablePlugin(plugin: Plugin)
 
@@ -143,7 +143,7 @@ interface PluginLoader {
      * @param plugin 要被停用的插件。<br></br>The plugin to disable.
      * @see .enablePlugin
      *
-     * 
+     *
      */
     fun disablePlugin(plugin: Plugin)
 }

@@ -4,7 +4,6 @@ import me.sunlan.fastreflection.FastConstructor
 import org.chorus.entity.effect.*
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.HashMap
 import kotlin.collections.set
 
 class EffectRegistry :

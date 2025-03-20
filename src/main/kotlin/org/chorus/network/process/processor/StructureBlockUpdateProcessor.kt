@@ -20,7 +20,7 @@ class StructureBlockUpdateProcessor : DataPacketProcessor<StructureBlockUpdatePa
             )
             if (blockEntity is BlockEntityStructBlock) {
                 val sBlock = blockEntity.levelBlock
-                sBlock!!.setPropertyValue(CommonBlockProperties.STRUCTURE_BLOCK_TYPE, pk.editorData.type)
+                sBlock.setPropertyValue(CommonBlockProperties.STRUCTURE_BLOCK_TYPE, pk.editorData.type)
                 blockEntity.updateSetting(pk)
                 playerHandle.player.level!!.setBlock(blockEntity.position, sBlock, true)
                 blockEntity.spawnTo(playerHandle.player)

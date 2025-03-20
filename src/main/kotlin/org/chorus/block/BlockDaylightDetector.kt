@@ -4,8 +4,11 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.*
-import org.chorus.item.*
+import org.chorus.blockentity.BlockEntityDaylightDetector
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.MathHelper.clamp

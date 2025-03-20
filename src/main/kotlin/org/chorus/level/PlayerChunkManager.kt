@@ -9,8 +9,11 @@ import org.chorus.math.BlockVector3
 import org.chorus.network.protocol.NetworkChunkPublisherUpdatePacket
 import org.chorus.utils.Loggable
 import org.jetbrains.annotations.ApiStatus
-import java.util.PriorityQueue
-import java.util.concurrent.*
+import java.util.*
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 
 class PlayerChunkManager(private val player: Player) {
@@ -34,8 +37,10 @@ class PlayerChunkManager(private val player: Player) {
     @get:ApiStatus.Internal
     val inRadiusChunks: HashSet<Long> = HashSet()
     private val trySendChunkCountPerTick: Int = player.chunkSendCountPerTick
-    private val chunkSendQueue: PriorityQueue<Long> = PriorityQueue(player.viewDistance * player.viewDistance, chunkDistanceComparator)
-    private val chunkLoadingQueue: HashMap<Long, CompletableFuture<IChunk?>?> = HashMap(player.viewDistance * player.viewDistance)
+    private val chunkSendQueue: PriorityQueue<Long> =
+        PriorityQueue(player.viewDistance * player.viewDistance, chunkDistanceComparator)
+    private val chunkLoadingQueue: HashMap<Long, CompletableFuture<IChunk?>?> =
+        HashMap(player.viewDistance * player.viewDistance)
     private val chunkReadyToSend: HashMap<Long, IChunk> = HashMap()
     private var lastLoaderChunkPosHashed = java.lang.Long.MAX_VALUE
 
@@ -113,9 +118,9 @@ class PlayerChunkManager(private val player: Player) {
             val x: Int = Level.Companion.getHashX(hash)
             val z: Int = Level.Companion.getHashZ(hash)
             if (player.level!!.unregisterChunkLoader(player, x, z)) {
-                for (entity in player.level!!.getChunkEntities(x, z)!!.values) {
+                for (entity in player.level!!.getChunkEntities(x, z).values) {
                     if (entity !== player) {
-                        entity?.despawnFrom(player)
+                        entity.despawnFrom(player)
                     }
                 }
             }

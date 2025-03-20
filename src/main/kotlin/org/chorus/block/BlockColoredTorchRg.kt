@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 class BlockColoredTorchRg @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
-    Block(blockstate,) {
+    Block(blockstate) {
 
     override val properties: BlockProperties
         get() = Companion.properties

@@ -40,7 +40,7 @@ open class EntityDamageEvent(entity: Entity, cause: DamageCause, modifiers: Map<
         if (entity.hasEffect(EffectType.RESISTANCE)) {
             this.setDamage(
                 -(this.getDamage(DamageModifier.BASE) * 0.20 * entity.getEffect(EffectType.RESISTANCE)
-                    !!.getLevel()).toFloat(), DamageModifier.RESISTANCE
+                !!.getLevel()).toFloat(), DamageModifier.RESISTANCE
             )
         }
     }

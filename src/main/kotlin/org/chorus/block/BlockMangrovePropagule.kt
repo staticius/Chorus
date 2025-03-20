@@ -35,7 +35,7 @@ class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState = 
         player: Player?
     ): Boolean {
         //todo: 实现红树树苗放置逻辑
-        if (isSupportValid(down()!!)) {
+        if (isSupportValid(down())) {
             level.setBlock(block.position, this, true, true)
             return true
         }
@@ -77,7 +77,7 @@ class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState = 
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isSupportValid(down()!!)) {
+            if (!isSupportValid(down())) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
@@ -102,7 +102,7 @@ class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState = 
         }
         chunkManager.applySubChunkUpdate(ev.blockList)
         level.setBlock(this.position, get(BlockID.AIR))
-        if (level.getBlock(vector3)!!.id == BlockID.DIRT_WITH_ROOTS) {
+        if (level.getBlock(vector3).id == BlockID.DIRT_WITH_ROOTS) {
             level.setBlock(vector3, get(BlockID.DIRT))
         }
         for (block in ev.blockList) {

@@ -7,7 +7,7 @@ object BDSEntityTranslator {
     fun translate(from: CompoundTag): CompoundTag? {
         val linkedCompoundTag = LinkedCompoundTag()
         if (from.contains("identifier")) {
-            val identifier = from.getString("identifier")!!
+            val identifier = from.getString("identifier")
             val entityNetworkId = Registries.ENTITY.getEntityNetworkId(identifier)
             if (entityNetworkId == 0) return null
             linkedCompoundTag.putString("identifier", identifier)

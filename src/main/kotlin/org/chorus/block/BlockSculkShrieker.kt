@@ -32,28 +32,28 @@ class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState = Comp
     override fun getBlockEntityType(): String {
         return BlockEntity.SCULK_SHRIEKER
 
-    override fun canPassThrough(): Boolean {
-        return false
-    }
+        override fun canPassThrough(): Boolean {
+            return false
+        }
 
-    override fun breaksWhenMoved(): Boolean {
-        return false
-    }
+        override fun breaksWhenMoved(): Boolean {
+            return false
+        }
 
-    override fun canBeFlowedInto(): Boolean {
-        return false
-    }
+        override fun canBeFlowedInto(): Boolean {
+            return false
+        }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
-        return this
-    }
+        override fun recalculateBoundingBox(): AxisAlignedBB {
+            return this
+        }
 
-    override val waterloggingLevel: Int
+        override val waterloggingLevel: Int
         get() = 1
 
-    companion object {
-        val properties: BlockProperties =
-            BlockProperties(BlockID.SCULK_SHRIEKER, CommonBlockProperties.ACTIVE, CommonBlockProperties.CAN_SUMMON)
+        companion object {
+            val properties: BlockProperties =
+                BlockProperties(BlockID.SCULK_SHRIEKER, CommonBlockProperties.ACTIVE, CommonBlockProperties.CAN_SUMMON)
 
+        }
     }
-}

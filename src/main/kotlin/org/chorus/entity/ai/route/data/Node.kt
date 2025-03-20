@@ -1,11 +1,15 @@
 package org.chorus.entity.ai.route.data
 
-import org.chorus.math.*
 
-
+import org.chorus.math.Vector3
 import java.util.*
 
-class Node(private val vector3: Vector3, private val parent: Node?, private val cost: Int, private val heuristicCost: Int) :
+class Node(
+    private val vector3: Vector3,
+    private val parent: Node?,
+    private val cost: Int,
+    private val heuristicCost: Int
+) :
     Comparable<Node?> {
     private val finalCost = cost + heuristicCost
 

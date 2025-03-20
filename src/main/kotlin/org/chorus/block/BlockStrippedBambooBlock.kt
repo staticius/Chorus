@@ -16,7 +16,7 @@ class BlockStrippedBambooBlock @JvmOverloads constructor(blockState: BlockState 
     }
 
     override fun getStrippedState(): BlockState {
-        return blockState!!
+        return blockState
     }
 
     override fun canBeActivated(): Boolean {

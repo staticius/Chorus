@@ -3,7 +3,8 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.math.BlockFace
 
 class BlockDaylightDetectorInverted @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :

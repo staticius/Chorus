@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 class BlockDeadFireCoralWallFan : BlockDeadCoralWallFan {
     constructor() : super(Companion.properties.defaultState)
 
-    constructor(blockstate: BlockState) :  super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override val name: String
         get() = "Fire Coral"

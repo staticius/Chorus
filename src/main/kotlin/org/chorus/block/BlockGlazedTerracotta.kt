@@ -33,7 +33,7 @@ abstract class BlockGlazedTerracotta(blockState: BlockState) : BlockSolid(blockS
         player: Player?
     ): Boolean {
         val faces = intArrayOf(2, 5, 3, 4)
-        this.blockFace = fromIndex(faces[if (player != null) player.getDirection()!!.horizontalIndex else 0])
+        this.blockFace = fromIndex(faces[if (player != null) player.getDirection().horizontalIndex else 0])
         return level.setBlock(block.position, this, true, true)
     }
 
@@ -44,7 +44,7 @@ abstract class BlockGlazedTerracotta(blockState: BlockState) : BlockSolid(blockS
     override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
     //带釉陶瓦可以被推动但不能被收回

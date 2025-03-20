@@ -1,7 +1,10 @@
 package org.chorus.scheduler
 
 import org.chorus.utils.Loggable
-import java.util.concurrent.*
+import java.util.concurrent.SynchronousQueue
+import java.util.concurrent.ThreadFactory
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 class AsyncPool(size: Int) :
     ThreadPoolExecutor(size, Int.MAX_VALUE, 60, TimeUnit.MILLISECONDS, SynchronousQueue()), Loggable {

@@ -29,7 +29,7 @@ open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockSt
 
     override fun onBreak(item: Item?): Boolean {
         level.setBlock(this.position, get(BlockID.AIR), true, true)
-        val side = getSide(blockFace!!.getOpposite()!!)
+        val side = getSide(blockFace.getOpposite())
 
         if (side is BlockPistonBase && side.blockFace == this.blockFace) {
             side.onBreak(item)
@@ -42,7 +42,7 @@ open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockSt
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (getSide(blockFace!!.getOpposite()!!) !is BlockPistonBase) {
+            if (getSide(blockFace.getOpposite()) !is BlockPistonBase) {
                 level.setBlock(this.position, BlockAir(), true, false)
             }
             return type
@@ -50,17 +50,17 @@ open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockSt
         return 0
     }
 
-    val facing: BlockFace?
+    val facing: BlockFace
         get() = blockFace
 
     override var blockFace: BlockFace
         get() {
             val face =
                 fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
-            return if (face!!.horizontalIndex >= 0) face.getOpposite() else face
+            return if (face.horizontalIndex >= 0) face.getOpposite() else face
         }
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
     override fun canBePushed(): Boolean {

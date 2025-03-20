@@ -18,7 +18,7 @@ class BlockCrimsonFungus @JvmOverloads constructor(blockstate: BlockState = Comp
         if (support != null) {
             if (support.id == BlockID.CRIMSON_NYLIUM) {
                 for (i in 1..feature.getTreeHeight()) {
-                    if (!up(i)!!.isAir) {
+                    if (!up(i).isAir) {
                         return false
                     }
                 }

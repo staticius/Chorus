@@ -29,7 +29,7 @@ abstract class EntityHanging(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
     override fun saveNBT() {
         super.saveNBT()
 
-        namedTag!!.putByte("Direction", getDirection()!!.horizontalIndex)
+        namedTag!!.putByte("Direction", getDirection().horizontalIndex)
         namedTag!!.putInt("TileX", position.x.toInt())
         namedTag!!.putInt("TileY", position.y.toInt())
         namedTag!!.putInt("TileZ", position.z.toInt())

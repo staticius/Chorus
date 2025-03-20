@@ -11,7 +11,6 @@ import java.nio.ByteOrder
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.stream.Collectors
-import kotlin.collections.HashMap
 
 class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
     override fun init() {

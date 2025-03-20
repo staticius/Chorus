@@ -82,7 +82,7 @@ class FakeInventory @JvmOverloads constructor(
 
     override fun onOpen(player: Player) {
         player.fakeInventoryOpen = true
-        fakeBlock!!.create(player, this.title)
+        fakeBlock.create(player, this.title)
         player.level!!.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
             val packet = ContainerOpenPacket()
             packet.windowId = player.getWindowId(this)
@@ -114,7 +114,7 @@ class FakeInventory @JvmOverloads constructor(
         player.level!!.scheduler.scheduleDelayedTask(
             InternalPlugin.INSTANCE,
             {
-                fakeBlock!!.remove(player)
+                fakeBlock.remove(player)
             }, 5
         )
         super.onClose(player)

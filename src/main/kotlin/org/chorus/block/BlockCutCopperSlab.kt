@@ -33,7 +33,7 @@ open class BlockCutCopperSlab @JvmOverloads constructor(
         }
     }
 
-    override val oxidizationLevel: OxidizationLevel 
+    override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.UNAFFECTED
 
     override val properties: BlockProperties

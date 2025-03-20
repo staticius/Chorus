@@ -28,7 +28,7 @@ class BlockPaleMossBlock @JvmOverloads constructor(blockstate: BlockState = Comp
                                     z,
                                     pos.level
                                 ).position
-                            )!!
+                            )
                         ) && (random.nextDouble() < 0.6 || abs(x - pos.position.x) < 3 && abs(z - pos.position.z) < 3)
                     ) {
                         pos.level.setBlock(Locator(x, y, z, pos.level).position, get(BlockID.PALE_MOSS_BLOCK))

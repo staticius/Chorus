@@ -35,21 +35,21 @@ import org.chorus.plugin.Plugin
  * @param <T> 这个任务所属的插件。<br></br>The plugin that owns this task.
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * 
+ *
 </T> */
 abstract class PluginTask<T : Plugin?>
 /**
  * 构造一个插件拥有的任务的方法。<br></br>Constructs a plugin-owned task.
  *
  * @param owner 这个任务的所有者插件。<br></br>The plugin object that owns this task.
- * 
+ *
  */(
     /**
      * 返回这个任务的所有者插件。<br></br>
      * Returns the owner of this task.
      *
      * @return 这个任务的所有者插件。<br></br>The plugin that owns this task.
-     * 
+     *
      */
     val owner: T
 ) : Task()

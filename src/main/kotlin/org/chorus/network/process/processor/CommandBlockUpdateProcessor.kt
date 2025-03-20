@@ -29,29 +29,29 @@ class CommandBlockUpdateProcessor : DataPacketProcessor<CommandBlockUpdatePacket
 
                     //change commandblock type
                     when (pk.commandBlockMode) {
-                        ICommandBlock.MODE_REPEATING -> if (cmdBlock!!.id !== BlockID.REPEATING_COMMAND_BLOCK) {
+                        ICommandBlock.MODE_REPEATING -> if (cmdBlock.id !== BlockID.REPEATING_COMMAND_BLOCK) {
                             cmdBlock = Block.get(BlockID.REPEATING_COMMAND_BLOCK).setPropertyValues(
-                                cmdBlock!!.propertyValues
+                                cmdBlock.propertyValues
                             )
                             blockEntity.scheduleUpdate()
                         }
 
-                        ICommandBlock.MODE_CHAIN -> if (cmdBlock!!.id !== BlockID.CHAIN_COMMAND_BLOCK) {
+                        ICommandBlock.MODE_CHAIN -> if (cmdBlock.id !== BlockID.CHAIN_COMMAND_BLOCK) {
                             cmdBlock =
-                                Block.get(BlockID.CHAIN_COMMAND_BLOCK).setPropertyValues(cmdBlock!!.propertyValues)
+                                Block.get(BlockID.CHAIN_COMMAND_BLOCK).setPropertyValues(cmdBlock.propertyValues)
                         }
 
-                        ICommandBlock.MODE_NORMAL -> if (cmdBlock!!.id !== BlockID.COMMAND_BLOCK) {
-                            cmdBlock = Block.get(BlockID.COMMAND_BLOCK).setPropertyValues(cmdBlock!!.propertyValues)
+                        ICommandBlock.MODE_NORMAL -> if (cmdBlock.id !== BlockID.COMMAND_BLOCK) {
+                            cmdBlock = Block.get(BlockID.COMMAND_BLOCK).setPropertyValues(cmdBlock.propertyValues)
                         }
 
-                        else -> if (cmdBlock!!.id !== BlockID.COMMAND_BLOCK) {
-                            cmdBlock = Block.get(BlockID.COMMAND_BLOCK).setPropertyValues(cmdBlock!!.propertyValues)
+                        else -> if (cmdBlock.id !== BlockID.COMMAND_BLOCK) {
+                            cmdBlock = Block.get(BlockID.COMMAND_BLOCK).setPropertyValues(cmdBlock.propertyValues)
                         }
                     }
 
                     val conditional = pk.isConditional
-                    cmdBlock!!.setPropertyValue(CommonBlockProperties.CONDITIONAL_BIT, conditional)
+                    cmdBlock.setPropertyValue(CommonBlockProperties.CONDITIONAL_BIT, conditional)
 
                     blockEntity.setCommand(pk.command)
                     blockEntity.setName(pk.name)

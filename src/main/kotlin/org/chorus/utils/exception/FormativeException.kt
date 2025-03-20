@@ -63,7 +63,13 @@ open class FormativeException : Exception {
         if (indices[0] < 0) {
             ParameterFormatter.formatMessage(stringBuilder, format, arguments.toList().toTypedArray(), usedCount)
         } else {
-            ParameterFormatter.formatMessage2(stringBuilder, format, arguments.toList().toTypedArray(), usedCount, indices)
+            ParameterFormatter.formatMessage2(
+                stringBuilder,
+                format,
+                arguments.toList().toTypedArray(),
+                usedCount,
+                indices
+            )
         }
         return stringBuilder.toString()
     }

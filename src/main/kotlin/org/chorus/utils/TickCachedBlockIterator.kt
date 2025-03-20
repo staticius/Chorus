@@ -52,7 +52,7 @@ class TickCachedBlockIterator @JvmOverloads constructor(
         if (this.getXLength(direction) > mainDirection) {
             this.mainFace = this.getXFace(direction)
             mainDirection = this.getXLength(direction)
-            mainPosition = this.getXPosition(direction, startClone, startBlock!!)
+            mainPosition = this.getXPosition(direction, startClone, startBlock)
 
             this.secondFace = this.getYFace(direction)
             secondDirection = this.getYLength(direction)
@@ -65,7 +65,7 @@ class TickCachedBlockIterator @JvmOverloads constructor(
         if (this.getYLength(direction) > mainDirection) {
             this.mainFace = this.getYFace(direction)
             mainDirection = this.getYLength(direction)
-            mainPosition = this.getYPosition(direction, startClone, startBlock!!)
+            mainPosition = this.getYPosition(direction, startClone, startBlock)
 
             this.secondFace = this.getZFace(direction)
             secondDirection = this.getZLength(direction)
@@ -78,7 +78,7 @@ class TickCachedBlockIterator @JvmOverloads constructor(
         if (this.getZLength(direction) > mainDirection) {
             this.mainFace = this.getZFace(direction)
             mainDirection = this.getZLength(direction)
-            mainPosition = this.getZPosition(direction, startClone, startBlock!!)
+            mainPosition = this.getZPosition(direction, startClone, startBlock)
 
             this.secondFace = this.getXFace(direction)
             secondDirection = this.getXLength(direction)
@@ -106,16 +106,16 @@ class TickCachedBlockIterator @JvmOverloads constructor(
             this.thirdError = -this.thirdStep + 1
         }
 
-        var lastBlock = startBlock!!.getTickCachedSide(mainFace.getOpposite())
+        var lastBlock = startBlock.getTickCachedSide(mainFace.getOpposite())
 
         if (this.secondError < 0) {
             this.secondError += GRID_SIZE
-            lastBlock = lastBlock?.getTickCachedSide(secondFace.getOpposite())
+            lastBlock = lastBlock.getTickCachedSide(secondFace.getOpposite())
         }
 
         if (this.thirdError < 0) {
             this.thirdError += GRID_SIZE
-            lastBlock = lastBlock?.getTickCachedSide(thirdFace.getOpposite())
+            lastBlock = lastBlock.getTickCachedSide(thirdFace.getOpposite())
         }
 
         this.secondError -= GRID_SIZE

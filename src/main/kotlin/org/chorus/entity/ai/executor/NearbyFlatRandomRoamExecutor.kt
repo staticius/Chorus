@@ -1,6 +1,5 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.block.Block
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.math.IVector3

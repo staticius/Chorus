@@ -84,7 +84,7 @@ class OfflinePlayer(override var uuid: UUID) :
         Server.instance.playerMetadata.setMetadata(this, metadataKey, newMetadataValue)
     }
 
-    override fun getMetadata(metadataKey: String): List<MetadataValue?>? {
+    override fun getMetadata(metadataKey: String): List<MetadataValue?> {
         return Server.instance.playerMetadata.getMetadata(this, metadataKey)
     }
 

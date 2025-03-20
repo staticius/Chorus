@@ -52,10 +52,10 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
     }
 
     override fun onUpdate(): Boolean {
-        if (level.tick % 40 == 0 && isBlockEntityValid && heart!!.isActive) {
+        if (level.tick % 40 == 0 && isBlockEntityValid && heart.isActive) {
             level.addSound(this.position, Sound.BLOCK_CREAKING_HEART_AMBIENT)
         }
-        if ((linkedCreaking == null || !linkedCreaking.isAlive()) && isBlockEntityValid && heart!!.isActive && (!level.isDay || level.isRaining || level.isThundering)) {
+        if ((linkedCreaking == null || !linkedCreaking.isAlive()) && isBlockEntityValid && heart.isActive && (!level.isDay || level.isRaining || level.isThundering)) {
             val pos = Locator(
                 position.x + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
                 position.y,

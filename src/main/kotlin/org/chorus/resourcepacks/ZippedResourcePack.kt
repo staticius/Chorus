@@ -21,7 +21,6 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
     private var byteBuffer: ByteBuffer? = null
 
     override lateinit var sha256: ByteArray
-
         private set
     override var encryptionKey: String = ""
         private set

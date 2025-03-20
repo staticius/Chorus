@@ -1,11 +1,14 @@
 package org.chorus.level.format
 
 import io.netty.buffer.ByteBuf
-import org.chorus.block.*
-import org.chorus.level.*
+import org.chorus.block.Block
+import org.chorus.block.BlockAir
+import org.chorus.block.BlockState
+import org.chorus.level.Level
 import org.chorus.level.biome.BiomeID
 import org.chorus.level.format.bitarray.BitArrayVersion
-import org.chorus.level.format.palette.*
+import org.chorus.level.format.palette.BlockPalette
+import org.chorus.level.format.palette.Palette
 import org.chorus.math.BlockVector3
 import org.chorus.registry.Registries
 import java.util.concurrent.atomic.AtomicLong
@@ -32,8 +35,16 @@ data class ChunkSection(
     constructor(sectionY: Byte) : this(
         sectionY,
         arrayOf<BlockPalette>(
-            BlockPalette(BlockAir.properties.defaultState, MutableList<BlockState>(16) { BlockAir.STATE }, BitArrayVersion.V2),
-            BlockPalette(BlockAir.properties.defaultState, MutableList<BlockState>(16) { BlockAir.STATE }, BitArrayVersion.V2)
+            BlockPalette(
+                BlockAir.properties.defaultState,
+                MutableList<BlockState>(16) { BlockAir.STATE },
+                BitArrayVersion.V2
+            ),
+            BlockPalette(
+                BlockAir.properties.defaultState,
+                MutableList<BlockState>(16) { BlockAir.STATE },
+                BitArrayVersion.V2
+            )
         ),
         Palette<Int>(BiomeID.PLAINS),
         ByteArray(SIZE),
@@ -115,7 +126,7 @@ data class ChunkSection(
                     current.y = offsetY + y
                     val state = blockLayer[0][IChunk.index(x, y, z)]
                     if (condition.test(current, state)) {
-                        results.add(Registries.BLOCK[state, current.x, current.y, current.z, provider.level!!]!!)
+                        results.add(Registries.BLOCK[state, current.x, current.y, current.z, provider.level]!!)
                     }
                 }
             }

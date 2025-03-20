@@ -2,7 +2,8 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.enums.OxidizationLevel
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
 
@@ -55,7 +56,7 @@ abstract class BlockCopperGrateBase(blockState: BlockState) : BlockFlowable(bloc
         }
 
         val down = this.down()
-        if (!down!!.isAir) {
+        if (!down.isAir) {
             level.setBlock(block.position, this, true, true)
             return true
         }
@@ -114,9 +115,9 @@ abstract class BlockCopperGrateBase(blockState: BlockState) : BlockFlowable(bloc
         )
     }
 
-    override val isWaxed: Boolean 
+    override val isWaxed: Boolean
         get() = false
-    
+
 
     protected fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {

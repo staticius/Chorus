@@ -93,7 +93,7 @@ object PortalHelper : BlockID {
         }
 
         return blocks.stream()
-            .filter { block: Block? -> block!!.down()!!.id != BlockID.PORTAL }
+            .filter { block: Block? -> block!!.down().id != BlockID.PORTAL }
             .min(euclideanDistance.thenComparing(heightDistance))
             .orElse(null)
     }
@@ -106,20 +106,24 @@ object PortalHelper : BlockID {
                 dimensionData = DimensionEnum.NETHER.dimensionData
                 return Locator(
                     (current.position.floorX shr 3).toDouble(),
-                    ChorusMath.clamp(current.position.floorY, dimensionData.minHeight, dimensionData.maxHeight).toDouble(),
+                    ChorusMath.clamp(current.position.floorY, dimensionData.minHeight, dimensionData.maxHeight)
+                        .toDouble(),
                     (current.position.floorZ shr 3).toDouble(),
                     defaultNetherLevel
                 )
             }
+
             Level.DIMENSION_NETHER -> {
                 dimensionData = DimensionEnum.OVERWORLD.dimensionData
                 return Locator(
                     (current.position.floorX shl 3).toDouble(),
-                    ChorusMath.clamp(current.position.floorY, dimensionData.minHeight, dimensionData.maxHeight).toDouble(),
+                    ChorusMath.clamp(current.position.floorY, dimensionData.minHeight, dimensionData.maxHeight)
+                        .toDouble(),
                     (current.position.floorZ shl 3).toDouble(),
                     Server.instance.defaultLevel!!
                 )
             }
+
             else -> {
                 throw IllegalArgumentException("Neither overworld nor nether given!")
             }
@@ -133,9 +137,11 @@ object PortalHelper : BlockID {
             Level.DIMENSION_OVERWORLD -> {
                 Locator(100.0, 49.0, 0.0, defaultEndLevel)
             }
+
             Level.DIMENSION_THE_END -> {
                 Server.instance.defaultLevel!!.spawnLocation
             }
+
             else -> {
                 throw IllegalArgumentException("Neither overworld nor the end given!")
             }

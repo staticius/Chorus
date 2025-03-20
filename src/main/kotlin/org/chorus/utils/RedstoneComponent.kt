@@ -66,7 +66,7 @@ interface RedstoneComponent {
         fun updateAroundRedstone(pos: Locator, ignoredFaces: Set<BlockFace>) {
             for (face in BlockFace.entries) {
                 if (ignoredFaces.contains(face)) continue
-                pos.levelBlock!!.getSide(face)!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+                pos.levelBlock.getSide(face).onUpdate(Level.BLOCK_UPDATE_REDSTONE)
             }
         }
 
@@ -92,7 +92,7 @@ interface RedstoneComponent {
             for (face in BlockFace.entries) {
                 if (ignoredFaces.contains(face)) continue
 
-                updateAroundRedstone(pos.getSide(face)!!, face.getOpposite())
+                updateAroundRedstone(pos.getSide(face), face.getOpposite())
             }
         }
     }

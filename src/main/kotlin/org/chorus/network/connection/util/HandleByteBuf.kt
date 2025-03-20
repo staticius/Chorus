@@ -1209,7 +1209,6 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         val namedTag = item.namedTag ?: return emptyList<String>()
 
         val listTag = namedTag.getList(tagName, StringTag::class.java)
-            ?: return emptyList<String>()
 
         val size = listTag.size()
         val values: MutableList<String?> = ArrayList(size)
@@ -1315,7 +1314,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         this.writeUnsignedVarLong(eid)
     }
 
-    fun readBlockFace(): BlockFace? {
+    fun readBlockFace(): BlockFace {
         return fromIndex(this.readVarInt())
     }
 

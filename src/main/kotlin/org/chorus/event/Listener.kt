@@ -46,6 +46,6 @@ package org.chorus.event
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.event.Event
  *
- * 
+ *
  */
 interface Listener 

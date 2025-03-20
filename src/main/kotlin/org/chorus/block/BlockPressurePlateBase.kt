@@ -83,7 +83,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isSupportValid(down()!!, BlockFace.UP)) {
+            if (!isSupportValid(down(), BlockFace.UP)) {
                 level.useBreakOn(this.position, getBestTool(toolType))
             }
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
@@ -107,7 +107,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!isSupportValid(down()!!, BlockFace.UP)) {
+        if (!isSupportValid(down(), BlockFace.UP)) {
             return false
         }
 
@@ -162,7 +162,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
             level.setBlock(this.position, this, false, false)
 
             updateAroundRedstone()
-            updateAroundRedstone(getSide(BlockFace.DOWN)!!)
+            updateAroundRedstone(getSide(BlockFace.DOWN))
 
             if (!isPowered && wasPowered) {
                 this.playOffSound()
@@ -183,7 +183,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
 
         if (this.redstonePower > 0) {
             updateAroundRedstone()
-            updateAroundRedstone(getSide(BlockFace.DOWN)!!)
+            updateAroundRedstone(getSide(BlockFace.DOWN))
         }
 
         return true
@@ -207,7 +207,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
         level.addLevelSoundEvent(
             position.add(0.5, 0.1, 0.5),
             LevelSoundEventPacket.SOUND_POWER_ON,
-            blockState!!.blockStateHash()
+            blockState.blockStateHash()
         )
     }
 
@@ -215,7 +215,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
         level.addLevelSoundEvent(
             position.add(0.5, 0.1, 0.5),
             LevelSoundEventPacket.SOUND_POWER_OFF,
-            blockState!!.blockStateHash()
+            blockState.blockStateHash()
         )
     }
 

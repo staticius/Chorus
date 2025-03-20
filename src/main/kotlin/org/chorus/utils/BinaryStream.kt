@@ -8,8 +8,10 @@ import org.chorus.nbt.tag.CompoundTag
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import java.util.*
-import java.util.function.*
+import java.util.function.BiConsumer
+import java.util.function.Consumer
 import java.util.function.Function
+import java.util.function.ToLongFunction
 import kotlin.math.min
 
 

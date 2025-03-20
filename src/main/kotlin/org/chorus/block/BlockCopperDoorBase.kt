@@ -2,7 +2,8 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.enums.OxidizationLevel
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
 
@@ -68,9 +69,9 @@ abstract class BlockCopperDoorBase(blockState: BlockState) : BlockDoor(blockStat
         )
     }
 
-    override val isWaxed: Boolean 
+    override val isWaxed: Boolean
         get() = false
-    
+
 
     protected fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {

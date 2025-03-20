@@ -363,10 +363,6 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         super.resetFallDistance()
     }
 
-    override fun getGravity(): Float {
-        return super.getGravity()
-    }
-
     fun getFallingTick(): Int {
         return this.fallingTick
     }

@@ -20,7 +20,7 @@ import java.io.InputStream
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.plugin.PluginDescription
  *
- * 
+ *
  */
 
 abstract class PluginBase : Plugin {
@@ -37,7 +37,7 @@ abstract class PluginBase : Plugin {
      * Returns if this plugin is initialized.
      *
      * @return 这个插件是否已初始化。<br></br>if this plugin is initialized.
-     * 
+     *
      */
     var isInitialized: Boolean = false
         private set
@@ -53,7 +53,7 @@ abstract class PluginBase : Plugin {
      * Returns the `File` object of this plugin itself. For jar-packed plugins, it is the jar file itself.
      *
      * @return 这个插件的文件 `File`对象。<br></br>The `File` object of this plugin itself.
-     * 
+     *
      */
     override var file: File? = null
         private set
@@ -83,7 +83,7 @@ abstract class PluginBase : Plugin {
      * 如果你需要卸载这个插件，建议使用[.setEnabled]<br></br>
      * If you need to disable this plugin, it's recommended to use [.setEnabled]
      *
-     * 
+     *
      */
     fun setEnabled() {
         this.setEnabled(true)
@@ -99,7 +99,7 @@ abstract class PluginBase : Plugin {
      * It's normally used by a plugin manager plugin to manage plugins.
      *
      * @param value `true`为加载，`false`为卸载。<br></br>`true` for enable, `false` for disable.
-     * 
+     *
      */
     fun setEnabled(value: Boolean) {
         if (isEnabled != value) {
@@ -137,7 +137,7 @@ abstract class PluginBase : Plugin {
      * The data folder of this plugin.
      * @param file        这个插件的文件`File`对象。对于jar格式的插件，就是jar文件本身。<br></br>
      * The `File` object of this plugin itself. For jar-packed plugins, it is the jar file itself.
-     * 
+     *
      */
     fun init(
         loader: PluginLoader?,
@@ -305,7 +305,7 @@ abstract class PluginBase : Plugin {
          * @return 这个插件完整的名字。<br></br>The full name of this plugin.
          * @see org.chorus.plugin.PluginDescription.getFullName
          *
-         * 
+         *
          */
         get() = description.getFullName()
 }

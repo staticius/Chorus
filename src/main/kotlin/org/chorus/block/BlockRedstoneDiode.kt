@@ -51,11 +51,11 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!isSupportValid(down()!!)) {
+        if (!isSupportValid(down())) {
             return false
         }
 
-        blockFace = if (player != null) player.getDirection()!!.getOpposite() else BlockFace.SOUTH
+        blockFace = if (player != null) player.getDirection().getOpposite() else BlockFace.SOUTH
         if (!level.setBlock(block.position, this, true, true)) {
             return false
         }
@@ -85,13 +85,13 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
                 if (this.isPowered && !shouldBePowered) {
                     level.setBlock(pos, this.unpowered, true, true)
 
-                    val side = this.getSide(facing!!.getOpposite()!!)
-                    side!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+                    val side = this.getSide(facing!!.getOpposite())
+                    side.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
                     RedstoneComponent.updateAroundRedstone(side)
                 } else if (!this.isPowered) {
                     level.setBlock(pos, this.getPowered(), true, true)
-                    val side = this.getSide(facing!!.getOpposite()!!)
-                    side!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+                    val side = this.getSide(facing!!.getOpposite())
+                    side.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
                     RedstoneComponent.updateAroundRedstone(side)
 
                     if (!shouldBePowered) {
@@ -100,7 +100,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
                 }
             }
         } else if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            if (type == Level.BLOCK_UPDATE_NORMAL && !isSupportValid(down()!!)) {
+            if (type == Level.BLOCK_UPDATE_NORMAL && !isSupportValid(down())) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             } else if (Server.instance.settings.levelSettings().enableRedstone()) {
@@ -157,7 +157,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
             val block = level.getBlock(pos)
             return max(
                 power.toDouble(),
-                (if (block!!.id == Block.REDSTONE_WIRE) block.blockState!!.specialValue() else 0).toDouble()
+                (if (block.id == Block.REDSTONE_WIRE) block.blockState.specialValue() else 0).toDouble()
             ).toInt()
         }
     }
@@ -177,8 +177,8 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
 
     protected fun getPowerOnSide(pos: Vector3, side: BlockFace?): Int {
         val block = level.getBlock(pos)
-        return if (isAlternateInput(block!!)) (if (block.id == Block.REDSTONE_BLOCK) 15 else (if (block.id == Block.REDSTONE_WIRE)
-            block.blockState!!.specialValue()
+        return if (isAlternateInput(block)) (if (block.id == Block.REDSTONE_BLOCK) 15 else (if (block.id == Block.REDSTONE_WIRE)
+            block.blockState.specialValue()
                 .toInt()
         else
             level.getStrongPower(pos, side))) else 0
@@ -235,7 +235,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
     val isFacingTowardsRepeater: Boolean
         get() {
             val side = facing!!.getOpposite()
-            val block = this.getSide(side!!)
+            val block = this.getSide(side)
             return block is BlockRedstoneDiode && block.facing != side
         }
 

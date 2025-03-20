@@ -7,15 +7,19 @@ import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.EntityDamageEvent.DamageModifier
-import org.chorus.inventory.*
-import org.chorus.item.*
+import org.chorus.inventory.HumanEnderChestInventory
+import org.chorus.inventory.HumanInventory
+import org.chorus.inventory.HumanOffHandInventory
+import org.chorus.inventory.Inventory
+import org.chorus.item.Item
+import org.chorus.item.ItemShield
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.math.ChorusMath
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
-import java.util.concurrent.*
+import org.chorus.utils.Utils
+import java.util.concurrent.ThreadLocalRandom
 
 abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), IHuman {
     override lateinit var inventory: HumanInventory
@@ -170,8 +174,8 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
             }
 
             if (armor is ItemShield) armor.damage = (
-                armor.damage + (if (event.damage >= 3) event.damage.toInt() + 1 else 0)
-            )
+                    armor.damage + (if (event.damage >= 3) event.damage.toInt() + 1 else 0)
+                    )
             else armor.damage = (armor.damage + 1.coerceAtLeast((event.damage / 4.0f).toInt()))
 
             if (armor.damage >= armor.maxDurability) {

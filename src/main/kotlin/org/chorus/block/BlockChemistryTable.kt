@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 class BlockChemistryTable @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
-    Block(blockState,) {
+    Block(blockState) {
 
     override val properties
         get() = Companion.properties

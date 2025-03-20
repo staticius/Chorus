@@ -86,7 +86,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
         return VectorMath.getPassByVector3(from, to)
             .stream()
             .noneMatch(Predicate<Vector3> { vec: Vector3 ->
-                level.getTickCachedBlock(vec)!!
+                level.getTickCachedBlock(vec)
                     .`is`(BlockTags.PNX_WOOL)
             })
     }

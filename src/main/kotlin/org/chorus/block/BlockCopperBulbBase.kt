@@ -6,7 +6,8 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.OxidizationLevel
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.event.redstone.RedstoneUpdateEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.registry.Registries
@@ -119,7 +120,7 @@ abstract class BlockCopperBulbBase(blockState: BlockState) : BlockSolid(blockSta
 
     override val isWaxed: Boolean
         get() = false
-    
+
 
     protected fun getCopperId(waxed: Boolean, oxidizationLevel: OxidizationLevel?): String {
         if (oxidizationLevel == null) {

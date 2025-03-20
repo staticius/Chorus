@@ -373,7 +373,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         }
 
         if (namedTag!!.contains(TAG_CUSTOM_NAME)) {
-            this.setNameTag(namedTag!!.getString(TAG_CUSTOM_NAME)!!)
+            this.setNameTag(namedTag!!.getString(TAG_CUSTOM_NAME))
         }
         if (namedTag!!.contains(TAG_CUSTOM_NAME_VISIBLE)) {
             this.setNameTagAlwaysVisible(namedTag!!.getBoolean(TAG_CUSTOM_NAME_VISIBLE))
@@ -420,11 +420,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         val posList: ListTag<FloatTag> = namedTag!!.getList(
             TAG_POS,
             FloatTag::class.java
-        )!!
+        )
         val rotationList: ListTag<FloatTag> = namedTag!!.getList(
             TAG_ROTATION,
             FloatTag::class.java
-        )!!
+        )
 
         this.setPositionAndRotation(
             Vector3(
@@ -440,7 +440,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             val motionList: ListTag<FloatTag> = namedTag!!.getList(
                 TAG_MOTION,
                 FloatTag::class.java
-            )!!
+            )
 
             this.setMotion(
                 Vector3(
@@ -809,7 +809,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             }
             namedTag!!.putLong(
                 TAG_UNIQUE_ID,
-                entityUniqueId!!.leastSignificantBits
+                entityUniqueId.leastSignificantBits
             )
         }
 
@@ -1211,13 +1211,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         val diffY: Double = y - j
         val diffZ: Double = z - k
 
-        if (level!!.getBlock(i, j, k)?.isTransparent == false) {
-            val flag: Boolean = level!!.getBlock(i - 1, j, k)?.isTransparent ?: true
-            val flag1: Boolean = level!!.getBlock(i + 1, j, k)?.isTransparent ?: true
-            val flag2: Boolean = level!!.getBlock(i, j - 1, k)?.isTransparent ?: true
-            val flag3: Boolean = level!!.getBlock(i, j + 1, k)?.isTransparent ?: true
-            val flag4: Boolean = level!!.getBlock(i, j, k - 1)?.isTransparent ?: true
-            val flag5: Boolean = level!!.getBlock(i, j, k + 1)?.isTransparent ?: true
+        if (level!!.getBlock(i, j, k).isTransparent == false) {
+            val flag: Boolean = level!!.getBlock(i - 1, j, k).isTransparent
+            val flag1: Boolean = level!!.getBlock(i + 1, j, k).isTransparent
+            val flag2: Boolean = level!!.getBlock(i, j - 1, k).isTransparent
+            val flag3: Boolean = level!!.getBlock(i, j + 1, k).isTransparent
+            val flag4: Boolean = level!!.getBlock(i, j, k - 1).isTransparent
+            val flag5: Boolean = level!!.getBlock(i, j, k + 1).isTransparent
 
             var direction: Int = -1
             var limit = 9999.0
@@ -1799,8 +1799,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                     level!!
                 )
                 // check if we fell into at least 1 block of water
-                val lb: Block? = pos.levelBlock
-                val lb2: Block? = pos.getLevelBlockAtLayer(1)
+                val lb: Block = pos.levelBlock
+                val lb2: Block = pos.getLevelBlockAtLayer(1)
                 if (this is EntityLiving && this.riding == null && !(lb is BlockFlowingWater ||
                             lb is BlockFence ||
                             (lb2 is BlockFlowingWater && lb2.maxY == 1.0))
@@ -1823,7 +1823,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         }
 
         val floorLocation: Vector3 = position.floor()
-        val down: Block = level!!.getBlock(floorLocation.down())!!
+        val down: Block = level!!.getBlock(floorLocation.down())
 
         val event = EntityFallEvent(this, down, fallDistance1)
         Server.instance.pluginManager.callEvent(event)
@@ -1872,7 +1872,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                 return
             }
 
-            val floor: Block? = level!!.getBlock(floorLocation)
+            val floor: Block = level!!.getBlock(floorLocation)
 
             if (floor is BlockTurtleEgg) {
                 if (onPhysicalInteraction(floor, ThreadLocalRandom.current().nextInt(10) >= 3)) {
@@ -2003,7 +2003,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         val y: Int = position.floorY
         val z: Int = position.floorZ
         for (i in y + 1..level!!.maxHeight) {
-            if (!level!!.getBlock(x, i, z)?.isAir!!) {
+            if (!level!!.getBlock(x, i, z).isAir) {
                 return true
             }
         }
@@ -2018,7 +2018,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     protected fun hasWaterAt(height: Float, tickCached: Boolean): Boolean {
         val y: Double = position.y + height
-        val block: Block? = if (tickCached) level!!.getTickCachedBlock(
+        val block: Block = if (tickCached) level!!.getTickCachedBlock(
             position.floor()
         ) else level!!.getBlock(position.floor())
 
@@ -2039,7 +2039,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     fun isInsideOfSolid(): Boolean {
         val y: Double = position.y + this.getEyeHeight()
-        val block: Block? = level!!.getBlock(
+        val block: Block = level!!.getBlock(
             position.clone().setY(y).floor()
         )
 
@@ -2080,7 +2080,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     fun isOnLadder(): Boolean {
-        val b: Block? = getTransform().levelBlock
+        val b: Block = getTransform().levelBlock
 
         return BlockID.LADDER == b?.id
     }
@@ -2095,7 +2095,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         if (dx1 == 0.0 && dz1 == 0.0 && dy1 == 0.0) {
             val value: Locator = this.getTransform()
             value.position.setComponents(position.down())
-            this.onGround = !value.tickCachedLevelBlock!!.canPassThrough()
+            this.onGround = !value.tickCachedLevelBlock.canPassThrough()
             return true
         }
 
@@ -2233,7 +2233,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             for (z in minZ..maxZ) {
                 for (x in minX..maxX) {
                     for (y in minY..maxY) {
-                        val block: Block? = level!!.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
+                        val block: Block = level!!.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
                         if (block != null) blocksAround.add(block)
                     }
                 }
@@ -2332,7 +2332,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             }
 
             block.onEntityCollide(this)
-            block.getTickCachedLevelBlockAtLayer(1)?.onEntityCollide(this)
+            block.getTickCachedLevelBlockAtLayer(1).onEntityCollide(this)
             if (needsReCalcCurrent) block.addVelocityToEntity(this, vector)
         }
 
@@ -2351,7 +2351,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                         i.toDouble(), y.toDouble(), j.toDouble(),
                         level!!
                     )
-                    if (BlockID.SCAFFOLDING == transform.getLevelBlock(false)?.id) {
+                    if (BlockID.SCAFFOLDING == transform.getLevelBlock(false).id) {
                         setDataFlagExtend(EntityFlag.OVER_SCAFFOLDING, true)
                         break@outerScaffolding
                     }
@@ -2907,13 +2907,13 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     fun addTag(tag: String) {
         namedTag!!.putList(
             "Tags",
-            namedTag!!.getList("Tags", StringTag::class.java)!!.add(StringTag(tag))
+            namedTag!!.getList("Tags", StringTag::class.java).add(StringTag(tag))
         )
     }
 
 
     fun removeTag(tag: String) {
-        val tags: ListTag<StringTag> = namedTag!!.getList("Tags", StringTag::class.java)!!
+        val tags: ListTag<StringTag> = namedTag!!.getList("Tags", StringTag::class.java)
         tags.remove(StringTag(tag))
         namedTag!!.putList("Tags", tags)
     }
@@ -2923,12 +2923,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return namedTag!!.getList(
             "Tags",
             StringTag::class.java
-        )!!.all.stream().anyMatch { t: StringTag -> t.data == tag }
+        ).all.stream().anyMatch { t: StringTag -> t.data == tag }
     }
 
 
     fun getAllTags(): List<StringTag> {
-        return namedTag!!.getList("Tags", StringTag::class.java)!!.all
+        return namedTag!!.getList("Tags", StringTag::class.java).all
     }
 
 

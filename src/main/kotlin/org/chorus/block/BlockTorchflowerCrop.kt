@@ -77,7 +77,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (down()!!.id != BlockID.FARMLAND) {
+            if (down().id != BlockID.FARMLAND) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }

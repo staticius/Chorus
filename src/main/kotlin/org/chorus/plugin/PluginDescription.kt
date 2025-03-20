@@ -110,7 +110,7 @@ import org.yaml.snakeyaml.Yaml
  *
  * @see PluginLoadOrder
  *
- * 
+ *
  */
 class PluginDescription {
     /**
@@ -120,7 +120,7 @@ class PluginDescription {
      * @return 这个插件的名字。<br></br>The name of this plugin.
      * @see PluginDescription
      *
-     * 
+     *
      */
     var name: String? = null
         private set
@@ -138,7 +138,7 @@ class PluginDescription {
      * @return 这个插件的主类名。<br></br>The main class name of this plugin.
      * @see PluginDescription
      *
-     * 
+     *
      */
     var main: String? = null
         private set
@@ -150,7 +150,7 @@ class PluginDescription {
      * @return 这个插件支持的Nukkit API版本列表。<br></br>A list of all Nukkit API versions String this plugin supports.
      * @see PluginDescription
      *
-     * 
+     *
      */
     var compatibleAPIs: List<String?>? = null
         private set
@@ -181,7 +181,7 @@ class PluginDescription {
      * @return 插件名字列表的 `List`对象。<br></br>A `List` object carries the plugin names.
      * @see PluginDescription
      *
-     * 
+     *
      */
     var depend: MutableList<String>? = ArrayList()
         private set
@@ -205,7 +205,7 @@ class PluginDescription {
      * @return 这个插件的版本号。<br></br>The version string od this plugin.
      * @see PluginDescription
      *
-     * 
+     *
      */
     var version: String? = null
         private set
@@ -217,7 +217,7 @@ class PluginDescription {
      * @return 这个插件定义的命令列表。<br></br>A map of all defined commands of this plugin.
      * @see PluginDescription
      *
-     * 
+     *
      */
     var commands: Map<String, Any>? = HashMap()
         private set
@@ -229,7 +229,7 @@ class PluginDescription {
      * @return 这个插件的描述文字。<br></br>The description text of this plugin.
      * @see PluginDescription
      *
-     * 
+     *
      */
     var description: String? = null
         private set
@@ -242,7 +242,7 @@ class PluginDescription {
      * @return 这个插件的网站。<br></br>The website of this plugin.
      * @see PluginDescription
      *
-     * 
+     *
      */
     var website: String? = null
         private set
@@ -262,7 +262,7 @@ class PluginDescription {
      *
      * @see PluginDescription
      *
-     * 
+     *
      */
     var prefix: String? = null
         private set
@@ -276,7 +276,7 @@ class PluginDescription {
      *
      * @see PluginLoadOrder
      *
-     * 
+     *
      */
     var order: PluginLoadOrder = PluginLoadOrder.POSTWORLD
         private set
@@ -288,7 +288,7 @@ class PluginDescription {
      * @return 这个插件定义的权限列表。<br></br>A map of all defined permissions of this plugin.
      * @see PluginDescription
      *
-     * 
+     *
      */
     var permissions: List<Permission> = ArrayList()
         private set
@@ -406,7 +406,7 @@ class PluginDescription {
          * @return 这个插件完整的名字。<br></br>The full name of this plugin.
          * @see PluginDescription
          *
-         * 
+         *
          */
         get() = this.name + " v" + this.version
 
@@ -417,7 +417,7 @@ class PluginDescription {
      * @return 这个插件的作者列表。<br></br>A list of all authors of this plugin.
      * @see PluginDescription
      *
-     * 
+     *
      */
     fun getAuthors(): List<String?> {
         return authors

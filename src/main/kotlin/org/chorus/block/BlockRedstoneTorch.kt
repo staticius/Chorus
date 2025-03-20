@@ -35,7 +35,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
 
         if (Server.instance.settings.levelSettings().enableRedstone()) {
             if (!checkState()) {
-                updateAllAroundRedstone(blockFace!!.getOpposite())
+                updateAllAroundRedstone(blockFace.getOpposite())
             }
 
             checkState()
@@ -58,7 +58,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
         }
 
         if (Server.instance.settings.levelSettings().enableRedstone()) {
-            updateAllAroundRedstone(blockFace!!.getOpposite())
+            updateAllAroundRedstone(blockFace.getOpposite())
         }
         return true
     }
@@ -96,7 +96,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
                 false,
                 true
             )
-            updateAllAroundRedstone(blockFace!!.getOpposite())
+            updateAllAroundRedstone(blockFace.getOpposite())
             return true
         }
         return false
@@ -107,13 +107,13 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
          * Whether there is a power source in the opposite face of the current face
          */
         get() {
-            val face = blockFace!!.getOpposite()
-            val side = this.getSide(face!!)
+            val face = blockFace.getOpposite()
+            val side = this.getSide(face)
             if (side is BlockPistonBase && side.isGettingPower) {
                 return true
             }
 
-            return level.isSidePowered(side!!.position, face)
+            return level.isSidePowered(side.position, face)
         }
 
     override val isPowerSource: Boolean

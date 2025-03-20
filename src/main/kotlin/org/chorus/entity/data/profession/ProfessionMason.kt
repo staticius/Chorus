@@ -141,7 +141,9 @@ class ProfessionMason :
                 TradeRecipeBuildUtils.of(
                     Item.get(Item.EMERALD),
                     Item.get(
-                        "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName.lowercase(Locale.getDefault())
+                        "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName.lowercase(
+                            Locale.getDefault()
+                        )
                             .replace(" ", "_") + "_terracotta"
                     )
                 )
@@ -157,7 +159,9 @@ class ProfessionMason :
                 TradeRecipeBuildUtils.of(
                     Item.get(Item.EMERALD),
                     Item.get(
-                        "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName.lowercase(Locale.getDefault())
+                        "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName.lowercase(
+                            Locale.getDefault()
+                        )
                             .replace(" ", "_") + "_glazed_terracotta"
                     )
                 )

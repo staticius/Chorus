@@ -2,11 +2,14 @@ package org.chorus.utils
 
 import org.chorus.entity.data.EntityDataFormat
 import org.chorus.entity.data.EntityDataMap
-import org.chorus.math.*
+import org.chorus.math.BlockVector3
 import org.chorus.math.ChorusMath.round
+import org.chorus.math.Vector3
+import org.chorus.math.Vector3f
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
-import java.io.*
+import java.io.IOException
+import java.io.UncheckedIOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.charset.StandardCharsets

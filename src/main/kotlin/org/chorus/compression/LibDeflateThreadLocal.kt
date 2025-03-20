@@ -28,7 +28,7 @@ class LibDeflateThreadLocal(private val zlibThreadLocal: ZlibThreadLocal?) : Zli
 
     // decompress
     @Throws(IOException::class)
-    override fun inflate(data: ByteArray, maxSize: Int, raw: Boolean): ByteArray? {
+    override fun inflate(data: ByteArray, maxSize: Int, raw: Boolean): ByteArray {
         val type = if (raw) CompressionType.DEFLATE else CompressionType.ZLIB
         val inflator = INFLATOR.get().resource
         try {

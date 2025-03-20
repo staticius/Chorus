@@ -8,7 +8,7 @@ import java.util.regex.Pattern
  *
  * 所有命令参数类型为[POSITION][org.chorus.command.data.CommandParamType.POSITION]如果没有手动指定[IParamNode],则会默认使用这个解析
  */
-class FloatPositionNode() : PositionNode(FLOAT_POS_PATTERN) {
+class FloatPositionNode : PositionNode(FLOAT_POS_PATTERN) {
     companion object {
         val FLOAT_POS_PATTERN: Pattern = Pattern.compile("[~^]?[-+]?\\d+(?:\\.\\d+)?|[~^]")
     }

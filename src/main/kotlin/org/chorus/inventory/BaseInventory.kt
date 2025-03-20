@@ -6,12 +6,13 @@ import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.ints.IntList
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.blockentity.*
+import org.chorus.blockentity.BlockEntity
 import org.chorus.entity.Entity
 import org.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus.event.inventory.InventoryCloseEvent
 import org.chorus.event.inventory.InventoryOpenEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.network.protocol.InventoryContentPacket
 import org.chorus.network.protocol.InventorySlotPacket
 import org.chorus.network.protocol.types.inventory.FullContainerName

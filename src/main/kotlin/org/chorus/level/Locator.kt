@@ -31,7 +31,7 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
         get() = this.clone()
 
     override fun clone(): Locator {
-        return super<Cloneable>.clone() as Locator
+        return super.clone() as Locator
     }
 
     fun setLevel(level: Level): Locator {
@@ -70,7 +70,7 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
         return level.getBlockStateAt(
             position.floorX,
             position.floorY, position.floorZ, layer
-        )!!
+        )
     }
 
     val levelBlock: Block
@@ -88,7 +88,7 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
         return level.getBlock(this.position, layer, load)
     }
 
-    val tickCachedLevelBlock: Block?
+    val tickCachedLevelBlock: Block
         get() = level.getTickCachedBlock(this.position)
 
     val levelBlockAround: Set<Block?>

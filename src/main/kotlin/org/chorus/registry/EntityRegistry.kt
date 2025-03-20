@@ -38,78 +38,239 @@ import java.nio.ByteOrder
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.collections.HashMap
 import kotlin.collections.set
 
 
 class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out Entity>> {
     override fun init() {
         if (isLoad.getAndSet(true)) return
-        registerInternal(EntityDefinition(EntityID.CHICKEN, "", 10, hasSpawnegg = true, summonable = true), EntityChicken::class.java)
-        registerInternal(EntityDefinition(EntityID.COW, "", 11, hasSpawnegg = true, summonable = true), EntityCow::class.java)
-        registerInternal(EntityDefinition(EntityID.PIG, "", 12, hasSpawnegg = true, summonable = true), EntityPig::class.java)
-        registerInternal(EntityDefinition(EntityID.SHEEP, "", 13, hasSpawnegg = true, summonable = true), EntitySheep::class.java)
-        registerInternal(EntityDefinition(EntityID.WOLF, "", 14, hasSpawnegg = true, summonable = true), EntityWolf::class.java)
-        registerInternal(EntityDefinition(EntityID.VILLAGER, "", 15, hasSpawnegg = false, summonable = true), EntityVillager::class.java)
-        registerInternal(EntityDefinition(EntityID.MOOSHROOM, "", 16, hasSpawnegg = true, summonable = true), EntityMooshroom::class.java)
-        registerInternal(EntityDefinition(EntityID.SQUID, "", 17, hasSpawnegg = true, summonable = true), EntitySquid::class.java)
-        registerInternal(EntityDefinition(EntityID.RABBIT, "", 18, hasSpawnegg = true, summonable = true), EntityRabbit::class.java)
-        registerInternal(EntityDefinition(EntityID.BAT, "", 19, hasSpawnegg = true, summonable = true), EntityBat::class.java)
-        registerInternal(EntityDefinition(EntityID.IRON_GOLEM, "", 20, hasSpawnegg = true, summonable = true), EntityIronGolem::class.java)
-        registerInternal(EntityDefinition(EntityID.SNOW_GOLEM, "", 21, hasSpawnegg = true, summonable = true), EntitySnowGolem::class.java)
-        registerInternal(EntityDefinition(EntityID.OCELOT, "", 22, hasSpawnegg = true, summonable = true), EntityOcelot::class.java)
-        registerInternal(EntityDefinition(EntityID.HORSE, "", 23, hasSpawnegg = true, summonable = true), EntityHorse::class.java)
-        registerInternal(EntityDefinition(EntityID.DONKEY, "", 24, hasSpawnegg = true, summonable = true), EntityDonkey::class.java)
-        registerInternal(EntityDefinition(EntityID.MULE, "", 25, hasSpawnegg = true, summonable = true), EntityMule::class.java)
-        registerInternal(EntityDefinition(EntityID.SKELETON_HORSE, "", 26, hasSpawnegg = true, summonable = true), EntitySkeletonHorse::class.java)
-        registerInternal(EntityDefinition(EntityID.ZOMBIE_HORSE, "", 27, hasSpawnegg = true, summonable = true), EntityZombieHorse::class.java)
-        registerInternal(EntityDefinition(EntityID.POLAR_BEAR, "", 28, hasSpawnegg = true, summonable = true), EntityPolarBear::class.java)
-        registerInternal(EntityDefinition(EntityID.LLAMA, "", 29, hasSpawnegg = true, summonable = true), EntityLlama::class.java)
-        registerInternal(EntityDefinition(EntityID.PARROT, "", 30, hasSpawnegg = true, summonable = true), EntityParrot::class.java)
-        registerInternal(EntityDefinition(EntityID.DOLPHIN, "", 31, hasSpawnegg = true, summonable = true), EntityDolphin::class.java)
-        registerInternal(EntityDefinition(EntityID.ZOMBIE, "", 32, hasSpawnegg = true, summonable = true), EntityZombie::class.java)
-        registerInternal(EntityDefinition(EntityID.CREEPER, "", 33, hasSpawnegg = true, summonable = true), EntityCreeper::class.java)
-        registerInternal(EntityDefinition(EntityID.SKELETON, "", 34, hasSpawnegg = true, summonable = true), EntitySkeleton::class.java)
-        registerInternal(EntityDefinition(EntityID.SPIDER, "", 35, hasSpawnegg = true, summonable = true), EntitySpider::class.java)
-        registerInternal(EntityDefinition(EntityID.ZOMBIE_PIGMAN, "", 36, hasSpawnegg = true, summonable = true), EntityZombiePigman::class.java)
-        registerInternal(EntityDefinition(EntityID.SLIME, "", 37, hasSpawnegg = true, summonable = true), EntitySlime::class.java)
-        registerInternal(EntityDefinition(EntityID.ENDERMAN, "", 38, hasSpawnegg = true, summonable = true), EntityEnderman::class.java)
-        registerInternal(EntityDefinition(EntityID.SILVERFISH, "", 39, hasSpawnegg = true, summonable = true), EntitySilverfish::class.java)
-        registerInternal(EntityDefinition(EntityID.CAVE_SPIDER, "", 40, hasSpawnegg = true, summonable = true), EntityCaveSpider::class.java)
-        registerInternal(EntityDefinition(EntityID.GHAST, "", 41, hasSpawnegg = true, summonable = true), EntityGhast::class.java)
-        registerInternal(EntityDefinition(EntityID.MAGMA_CUBE, "", 42, hasSpawnegg = true, summonable = true), EntityMagmaCube::class.java)
-        registerInternal(EntityDefinition(EntityID.BLAZE, "", 43, hasSpawnegg = true, summonable = true), EntityBlaze::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.CHICKEN, "", 10, hasSpawnegg = true, summonable = true),
+            EntityChicken::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.COW, "", 11, hasSpawnegg = true, summonable = true),
+            EntityCow::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.PIG, "", 12, hasSpawnegg = true, summonable = true),
+            EntityPig::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SHEEP, "", 13, hasSpawnegg = true, summonable = true),
+            EntitySheep::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.WOLF, "", 14, hasSpawnegg = true, summonable = true),
+            EntityWolf::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.VILLAGER, "", 15, hasSpawnegg = false, summonable = true),
+            EntityVillager::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.MOOSHROOM, "", 16, hasSpawnegg = true, summonable = true),
+            EntityMooshroom::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SQUID, "", 17, hasSpawnegg = true, summonable = true),
+            EntitySquid::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.RABBIT, "", 18, hasSpawnegg = true, summonable = true),
+            EntityRabbit::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.BAT, "", 19, hasSpawnegg = true, summonable = true),
+            EntityBat::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.IRON_GOLEM, "", 20, hasSpawnegg = true, summonable = true),
+            EntityIronGolem::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SNOW_GOLEM, "", 21, hasSpawnegg = true, summonable = true),
+            EntitySnowGolem::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.OCELOT, "", 22, hasSpawnegg = true, summonable = true),
+            EntityOcelot::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.HORSE, "", 23, hasSpawnegg = true, summonable = true),
+            EntityHorse::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.DONKEY, "", 24, hasSpawnegg = true, summonable = true),
+            EntityDonkey::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.MULE, "", 25, hasSpawnegg = true, summonable = true),
+            EntityMule::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SKELETON_HORSE, "", 26, hasSpawnegg = true, summonable = true),
+            EntitySkeletonHorse::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ZOMBIE_HORSE, "", 27, hasSpawnegg = true, summonable = true),
+            EntityZombieHorse::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.POLAR_BEAR, "", 28, hasSpawnegg = true, summonable = true),
+            EntityPolarBear::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.LLAMA, "", 29, hasSpawnegg = true, summonable = true),
+            EntityLlama::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.PARROT, "", 30, hasSpawnegg = true, summonable = true),
+            EntityParrot::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.DOLPHIN, "", 31, hasSpawnegg = true, summonable = true),
+            EntityDolphin::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ZOMBIE, "", 32, hasSpawnegg = true, summonable = true),
+            EntityZombie::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.CREEPER, "", 33, hasSpawnegg = true, summonable = true),
+            EntityCreeper::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SKELETON, "", 34, hasSpawnegg = true, summonable = true),
+            EntitySkeleton::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SPIDER, "", 35, hasSpawnegg = true, summonable = true),
+            EntitySpider::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ZOMBIE_PIGMAN, "", 36, hasSpawnegg = true, summonable = true),
+            EntityZombiePigman::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SLIME, "", 37, hasSpawnegg = true, summonable = true),
+            EntitySlime::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ENDERMAN, "", 38, hasSpawnegg = true, summonable = true),
+            EntityEnderman::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SILVERFISH, "", 39, hasSpawnegg = true, summonable = true),
+            EntitySilverfish::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.CAVE_SPIDER, "", 40, hasSpawnegg = true, summonable = true),
+            EntityCaveSpider::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.GHAST, "", 41, hasSpawnegg = true, summonable = true),
+            EntityGhast::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.MAGMA_CUBE, "", 42, hasSpawnegg = true, summonable = true),
+            EntityMagmaCube::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.BLAZE, "", 43, hasSpawnegg = true, summonable = true),
+            EntityBlaze::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.ZOMBIE_VILLAGER, "", 44, hasSpawnegg = false, summonable = true),
             EntityZombieVillager::class.java
         )
-        registerInternal(EntityDefinition(EntityID.WITCH, "", 45, hasSpawnegg = true, summonable = true), EntityWitch::class.java)
-        registerInternal(EntityDefinition(EntityID.STRAY, "", 46, hasSpawnegg = true, summonable = true), EntityStray::class.java)
-        registerInternal(EntityDefinition(EntityID.HUSK, "", 47, hasSpawnegg = true, summonable = true), EntityHusk::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.WITCH, "", 45, hasSpawnegg = true, summonable = true),
+            EntityWitch::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.STRAY, "", 46, hasSpawnegg = true, summonable = true),
+            EntityStray::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.HUSK, "", 47, hasSpawnegg = true, summonable = true),
+            EntityHusk::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.WITHER_SKELETON, "", 48, hasSpawnegg = true, summonable = true),
             EntityWitherSkeleton::class.java
         )
-        registerInternal(EntityDefinition(EntityID.GUARDIAN, "", 49, hasSpawnegg = true, summonable = true), EntityGuardian::class.java)
-        registerInternal(EntityDefinition(EntityID.ELDER_GUARDIAN, "", 50, hasSpawnegg = true, summonable = true), EntityElderGuardian::class.java)
-        registerInternal(EntityDefinition(EntityID.NPC, "", 51, hasSpawnegg = true, summonable = true), EntityNPC::class.java)
-        registerInternal(EntityDefinition(EntityID.WITHER, "", 52, hasSpawnegg = true, summonable = true), EntityWither::class.java)
-        registerInternal(EntityDefinition(EntityID.ENDER_DRAGON, "", 53, hasSpawnegg = true, summonable = true), EntityEnderDragon::class.java)
-        registerInternal(EntityDefinition(EntityID.SHULKER, "", 54, hasSpawnegg = true, summonable = true), EntityShulker::class.java)
-        registerInternal(EntityDefinition(EntityID.ENDERMITE, "", 55, hasSpawnegg = true, summonable = true), EntityEndermite::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.GUARDIAN, "", 49, hasSpawnegg = true, summonable = true),
+            EntityGuardian::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ELDER_GUARDIAN, "", 50, hasSpawnegg = true, summonable = true),
+            EntityElderGuardian::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.NPC, "", 51, hasSpawnegg = true, summonable = true),
+            EntityNPC::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.WITHER, "", 52, hasSpawnegg = true, summonable = true),
+            EntityWither::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ENDER_DRAGON, "", 53, hasSpawnegg = true, summonable = true),
+            EntityEnderDragon::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SHULKER, "", 54, hasSpawnegg = true, summonable = true),
+            EntityShulker::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ENDERMITE, "", 55, hasSpawnegg = true, summonable = true),
+            EntityEndermite::class.java
+        )
         //        registerInternal(new EntityDefinition(AGENT, "", 56, hasSpawnegg = false, summonable = false), EntityAgent.class);
-        registerInternal(EntityDefinition(EntityID.VINDICATOR, "", 57, hasSpawnegg = true, summonable = true), EntityVindicator::class.java)
-        registerInternal(EntityDefinition(EntityID.PHANTOM, "", 58, hasSpawnegg = true, summonable = true), EntityPhantom::class.java)
-        registerInternal(EntityDefinition(EntityID.RAVAGER, "", 59, hasSpawnegg = true, summonable = true), EntityRavager::class.java)
-        registerInternal(EntityDefinition(EntityID.ARMOR_STAND, "", 61, hasSpawnegg = false, summonable = true), EntityArmorStand::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.VINDICATOR, "", 57, hasSpawnegg = true, summonable = true),
+            EntityVindicator::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.PHANTOM, "", 58, hasSpawnegg = true, summonable = true),
+            EntityPhantom::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.RAVAGER, "", 59, hasSpawnegg = true, summonable = true),
+            EntityRavager::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ARMOR_STAND, "", 61, hasSpawnegg = false, summonable = true),
+            EntityArmorStand::class.java
+        )
         //        registerInternal(new EntityDefinition(TRIPOD_CAMERA, "", 62, hasSpawnegg = false, summonable = false), EntityTripodCamera.class);
-        registerInternal(EntityDefinition(EntityID.ITEM, "", 64, hasSpawnegg = false, summonable = false), EntityItem::class.java)
-        registerInternal(EntityDefinition(EntityID.TNT, "", 65, hasSpawnegg = false, summonable = true), EntityTnt::class.java)
-        registerInternal(EntityDefinition(EntityID.FALLING_BLOCK, "", 66, hasSpawnegg = false, summonable = false), EntityFallingBlock::class.java)
-        registerInternal(EntityDefinition(EntityID.XP_BOTTLE, "", 68, hasSpawnegg = false, summonable = true), EntityXpBottle::class.java)
-        registerInternal(EntityDefinition(EntityID.XP_ORB, "", 69, hasSpawnegg = false, summonable = true), EntityXpOrb::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.ITEM, "", 64, hasSpawnegg = false, summonable = false),
+            EntityItem::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.TNT, "", 65, hasSpawnegg = false, summonable = true),
+            EntityTnt::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.FALLING_BLOCK, "", 66, hasSpawnegg = false, summonable = false),
+            EntityFallingBlock::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.XP_BOTTLE, "", 68, hasSpawnegg = false, summonable = true),
+            EntityXpBottle::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.XP_ORB, "", 69, hasSpawnegg = false, summonable = true),
+            EntityXpOrb::class.java
+        )
         //        registerInternal(new EntityDefinition(EYE_OF_ENDER_SIGNAL, "", 70, hasSpawnegg = false, summonable = false), EntityEyeOfEnderSignal.class);
-        registerInternal(EntityDefinition(EntityID.ENDER_CRYSTAL, "", 71, hasSpawnegg = false, summonable = true), EntityEnderCrystal::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.ENDER_CRYSTAL, "", 71, hasSpawnegg = false, summonable = true),
+            EntityEnderCrystal::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.FIREWORKS_ROCKET, "", 72, hasSpawnegg = false, summonable = true),
             EntityFireworksRocket::class.java
@@ -118,28 +279,67 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
             EntityDefinition(EntityID.THROWN_TRIDENT, "", 73, hasSpawnegg = false, summonable = false),
             EntityThrownTrident::class.java
         )
-        registerInternal(EntityDefinition(EntityID.TURTLE, "", 74, hasSpawnegg = true, summonable = true), EntityTurtle::class.java)
-        registerInternal(EntityDefinition(EntityID.CAT, "", 75, hasSpawnegg = true, summonable = true), EntityCat::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.TURTLE, "", 74, hasSpawnegg = true, summonable = true),
+            EntityTurtle::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.CAT, "", 75, hasSpawnegg = true, summonable = true),
+            EntityCat::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.SHULKER_BULLET, "", 76, hasSpawnegg = false, summonable = false),
             EntityShulkerBullet::class.java
         )
-        registerInternal(EntityDefinition(EntityID.FISHING_HOOK, "", 77, hasSpawnegg = false, summonable = false), EntityFishingHook::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.FISHING_HOOK, "", 77, hasSpawnegg = false, summonable = false),
+            EntityFishingHook::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.DRAGON_FIREBALL, "", 79, hasSpawnegg = false, summonable = false),
             EntityDragonFireball::class.java
         )
-        registerInternal(EntityDefinition(EntityID.ARROW, "", 80, hasSpawnegg = false, summonable = true), EntityArrow::class.java)
-        registerInternal(EntityDefinition(EntityID.SNOWBALL, "", 81, hasSpawnegg = false, summonable = true), EntitySnowball::class.java)
-        registerInternal(EntityDefinition(EntityID.EGG, "", 82, hasSpawnegg = false, summonable = true), EntityEgg::class.java)
-        registerInternal(EntityDefinition(EntityID.PAINTING, "", 83, hasSpawnegg = false, summonable = false), EntityPainting::class.java)
-        registerInternal(EntityDefinition(EntityID.MINECART, "", 84, hasSpawnegg = false, summonable = true), EntityMinecart::class.java)
-        registerInternal(EntityDefinition(EntityID.FIREBALL, "", 85, hasSpawnegg = false, summonable = false), EntityFireball::class.java)
-        registerInternal(EntityDefinition(EntityID.SPLASH_POTION, "", 86, hasSpawnegg = false, summonable = true), EntitySplashPotion::class.java)
-        registerInternal(EntityDefinition(EntityID.ENDER_PEARL, "", 87, hasSpawnegg = false, summonable = false), EntityEnderPearl::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.ARROW, "", 80, hasSpawnegg = false, summonable = true),
+            EntityArrow::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SNOWBALL, "", 81, hasSpawnegg = false, summonable = true),
+            EntitySnowball::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.EGG, "", 82, hasSpawnegg = false, summonable = true),
+            EntityEgg::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.PAINTING, "", 83, hasSpawnegg = false, summonable = false),
+            EntityPainting::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.MINECART, "", 84, hasSpawnegg = false, summonable = true),
+            EntityMinecart::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.FIREBALL, "", 85, hasSpawnegg = false, summonable = false),
+            EntityFireball::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SPLASH_POTION, "", 86, hasSpawnegg = false, summonable = true),
+            EntitySplashPotion::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ENDER_PEARL, "", 87, hasSpawnegg = false, summonable = false),
+            EntityEnderPearl::class.java
+        )
         //        registerInternal(new EntityDefinition(LEASH_KNOT, "", 88, hasSpawnegg = false, summonable = true), EntityLeashKnot.class);
-        registerInternal(EntityDefinition(EntityID.WITHER_SKULL, "", 89, hasSpawnegg = false, summonable = false), EntityWitherSkull::class.java)
-        registerInternal(EntityDefinition(EntityID.BOAT, "", 90, hasSpawnegg = false, summonable = true), EntityBoat::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.WITHER_SKULL, "", 89, hasSpawnegg = false, summonable = false),
+            EntityWitherSkull::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.BOAT, "", 90, hasSpawnegg = false, summonable = true),
+            EntityBoat::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.WITHER_SKULL_DANGEROUS, "", 91, hasSpawnegg = false, summonable = false),
             EntityWitherSkullDangerous::class.java
@@ -160,7 +360,10 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
             EntityDefinition(EntityID.HOPPER_MINECART, "", 96, hasSpawnegg = false, summonable = true),
             EntityHopperMinecart::class.java
         )
-        registerInternal(EntityDefinition(EntityID.TNT_MINECART, "", 97, hasSpawnegg = false, summonable = true), EntityTntMinecart::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.TNT_MINECART, "", 97, hasSpawnegg = false, summonable = true),
+            EntityTntMinecart::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.CHEST_MINECART, "", 98, hasSpawnegg = false, summonable = true),
             EntityChestMinecart::class.java
@@ -170,7 +373,10 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
             EntityDefinition(EntityID.LINGERING_POTION, "", 101, hasSpawnegg = false, summonable = false),
             EntityLingeringPotion::class.java
         )
-        registerInternal(EntityDefinition(EntityID.LLAMA_SPIT, "", 102, hasSpawnegg = false, summonable = false), EntityLlamaSpit::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.LLAMA_SPIT, "", 102, hasSpawnegg = false, summonable = false),
+            EntityLlamaSpit::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.EVOCATION_FANG, "", 103, hasSpawnegg = false, summonable = true),
             EntityEvocationFang::class.java
@@ -179,17 +385,44 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
             EntityDefinition(EntityID.EVOCATION_ILLAGER, "", 104, hasSpawnegg = true, summonable = true),
             EntityEvocationIllager::class.java
         )
-        registerInternal(EntityDefinition(EntityID.VEX, "", 105, hasSpawnegg = true, summonable = true), EntityVex::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.VEX, "", 105, hasSpawnegg = true, summonable = true),
+            EntityVex::class.java
+        )
         //        registerInternal(new EntityDefinition(ICE_BOMB, "", 106, hasSpawnegg = false, summonable = false), EntityIceBomb.class);
 //        registerInternal(new EntityDefinition(BALLOON, "", 107, hasSpawnegg = false, summonable = false), EntityBalloon.class);
-        registerInternal(EntityDefinition(EntityID.PUFFERFISH, "", 108, hasSpawnegg = true, summonable = true), EntityPufferfish::class.java)
-        registerInternal(EntityDefinition(EntityID.SALMON, "", 109, hasSpawnegg = true, summonable = true), EntitySalmon::class.java)
-        registerInternal(EntityDefinition(EntityID.DROWNED, "", 110, hasSpawnegg = true, summonable = true), EntityDrowned::class.java)
-        registerInternal(EntityDefinition(EntityID.TROPICALFISH, "", 111, hasSpawnegg = true, summonable = true), EntityTropicalfish::class.java)
-        registerInternal(EntityDefinition(EntityID.COD, "", 112, hasSpawnegg = true, summonable = true), EntityCod::class.java)
-        registerInternal(EntityDefinition(EntityID.PANDA, "", 113, hasSpawnegg = true, summonable = true), EntityPanda::class.java)
-        registerInternal(EntityDefinition(EntityID.PILLAGER, "", 114, hasSpawnegg = true, summonable = true), EntityPillager::class.java)
-        registerInternal(EntityDefinition(EntityID.VILLAGER_V2, "", 115, hasSpawnegg = true, summonable = false), EntityVillagerV2::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.PUFFERFISH, "", 108, hasSpawnegg = true, summonable = true),
+            EntityPufferfish::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SALMON, "", 109, hasSpawnegg = true, summonable = true),
+            EntitySalmon::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.DROWNED, "", 110, hasSpawnegg = true, summonable = true),
+            EntityDrowned::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.TROPICALFISH, "", 111, hasSpawnegg = true, summonable = true),
+            EntityTropicalfish::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.COD, "", 112, hasSpawnegg = true, summonable = true),
+            EntityCod::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.PANDA, "", 113, hasSpawnegg = true, summonable = true),
+            EntityPanda::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.PILLAGER, "", 114, hasSpawnegg = true, summonable = true),
+            EntityPillager::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.VILLAGER_V2, "", 115, hasSpawnegg = true, summonable = false),
+            EntityVillagerV2::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.ZOMBIE_VILLAGER_V2, "", 116, hasSpawnegg = true, summonable = false),
             EntityZombieVillagerV2::class.java
@@ -199,26 +432,86 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
             EntityWanderingTrader::class.java
         )
         //        registerInternal(new EntityDefinition(ELDER_GUARDIAN_GHOST, "", 120, hasSpawnegg = false, summonable = true), EntityElderGuardianGhost.class);
-        registerInternal(EntityDefinition(EntityID.FOX, "", 121, hasSpawnegg = true, summonable = true), EntityFox::class.java)
-        registerInternal(EntityDefinition(EntityID.BEE, "", 122, hasSpawnegg = true, summonable = true), EntityBee::class.java)
-        registerInternal(EntityDefinition(EntityID.PIGLIN, "", 123, hasSpawnegg = true, summonable = true), EntityPiglin::class.java)
-        registerInternal(EntityDefinition(EntityID.HOGLIN, "", 124, hasSpawnegg = true, summonable = true), EntityHoglin::class.java)
-        registerInternal(EntityDefinition(EntityID.STRIDER, "", 125, hasSpawnegg = true, summonable = true), EntityStrider::class.java)
-        registerInternal(EntityDefinition(EntityID.ZOGLIN, "", 126, hasSpawnegg = true, summonable = true), EntityZoglin::class.java)
-        registerInternal(EntityDefinition(EntityID.PIGLIN_BRUTE, "", 127, hasSpawnegg = true, summonable = true), EntityPiglinBrute::class.java)
-        registerInternal(EntityDefinition(EntityID.GOAT, "", 128, hasSpawnegg = true, summonable = true), EntityGoat::class.java)
-        registerInternal(EntityDefinition(EntityID.GLOW_SQUID, "", 129, hasSpawnegg = true, summonable = true), EntityGlowSquid::class.java)
-        registerInternal(EntityDefinition(EntityID.AXOLOTL, "", 130, hasSpawnegg = true, summonable = true), EntityAxolotl::class.java)
-        registerInternal(EntityDefinition(EntityID.WARDEN, "", 131, hasSpawnegg = true, summonable = true), EntityWarden::class.java)
-        registerInternal(EntityDefinition(EntityID.FROG, "", 132, hasSpawnegg = true, summonable = true), EntityFrog::class.java)
-        registerInternal(EntityDefinition(EntityID.TADPOLE, "", 133, hasSpawnegg = true, summonable = true), EntityTadpole::class.java)
-        registerInternal(EntityDefinition(EntityID.ALLAY, "", 134, hasSpawnegg = true, summonable = true), EntityAllay::class.java)
-        registerInternal(EntityDefinition(EntityID.CAMEL, "", 138, hasSpawnegg = true, summonable = true), EntityCamel::class.java)
-        registerInternal(EntityDefinition(EntityID.SNIFFER, "", 139, hasSpawnegg = true, summonable = true), EntitySniffer::class.java)
-        registerInternal(EntityDefinition(EntityID.TRADER_LLAMA, "", 157, hasSpawnegg = true, summonable = true), EntityTraderLlama::class.java)
-        registerInternal(EntityDefinition(EntityID.CHEST_BOAT, "", 218, hasSpawnegg = false, summonable = true), EntityChestBoat::class.java)
-        registerInternal(EntityDefinition(EntityID.ARMADILLO, "", 142, hasSpawnegg = true, summonable = true), EntityArmadillo::class.java)
-        registerInternal(EntityDefinition(EntityID.BREEZE, "", 140, hasSpawnegg = true, summonable = true), EntityBreeze::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.FOX, "", 121, hasSpawnegg = true, summonable = true),
+            EntityFox::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.BEE, "", 122, hasSpawnegg = true, summonable = true),
+            EntityBee::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.PIGLIN, "", 123, hasSpawnegg = true, summonable = true),
+            EntityPiglin::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.HOGLIN, "", 124, hasSpawnegg = true, summonable = true),
+            EntityHoglin::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.STRIDER, "", 125, hasSpawnegg = true, summonable = true),
+            EntityStrider::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ZOGLIN, "", 126, hasSpawnegg = true, summonable = true),
+            EntityZoglin::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.PIGLIN_BRUTE, "", 127, hasSpawnegg = true, summonable = true),
+            EntityPiglinBrute::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.GOAT, "", 128, hasSpawnegg = true, summonable = true),
+            EntityGoat::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.GLOW_SQUID, "", 129, hasSpawnegg = true, summonable = true),
+            EntityGlowSquid::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.AXOLOTL, "", 130, hasSpawnegg = true, summonable = true),
+            EntityAxolotl::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.WARDEN, "", 131, hasSpawnegg = true, summonable = true),
+            EntityWarden::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.FROG, "", 132, hasSpawnegg = true, summonable = true),
+            EntityFrog::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.TADPOLE, "", 133, hasSpawnegg = true, summonable = true),
+            EntityTadpole::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ALLAY, "", 134, hasSpawnegg = true, summonable = true),
+            EntityAllay::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.CAMEL, "", 138, hasSpawnegg = true, summonable = true),
+            EntityCamel::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.SNIFFER, "", 139, hasSpawnegg = true, summonable = true),
+            EntitySniffer::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.TRADER_LLAMA, "", 157, hasSpawnegg = true, summonable = true),
+            EntityTraderLlama::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.CHEST_BOAT, "", 218, hasSpawnegg = false, summonable = true),
+            EntityChestBoat::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.ARMADILLO, "", 142, hasSpawnegg = true, summonable = true),
+            EntityArmadillo::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.BREEZE, "", 140, hasSpawnegg = true, summonable = true),
+            EntityBreeze::class.java
+        )
         registerInternal(
             EntityDefinition(EntityID.BREEZE_WIND_CHARGE_PROJECTILE, "", 141, hasSpawnegg = false, summonable = false),
             EntityBreezeWindCharge::class.java
@@ -227,8 +520,14 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
             EntityDefinition(EntityID.WIND_CHARGE_PROJECTILE, "", 143, hasSpawnegg = false, summonable = false),
             EntityWindCharge::class.java
         )
-        registerInternal(EntityDefinition(EntityID.BOGGED, "", 144, hasSpawnegg = true, summonable = true), EntityBogged::class.java)
-        registerInternal(EntityDefinition(EntityID.CREAKING, "", 146, hasSpawnegg = true, summonable = true), EntityCreaking::class.java)
+        registerInternal(
+            EntityDefinition(EntityID.BOGGED, "", 144, hasSpawnegg = true, summonable = true),
+            EntityBogged::class.java
+        )
+        registerInternal(
+            EntityDefinition(EntityID.CREAKING, "", 146, hasSpawnegg = true, summonable = true),
+            EntityCreaking::class.java
+        )
 
         this.rebuildTag()
     }

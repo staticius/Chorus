@@ -161,7 +161,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                     if (blockEntity is BlockEntitySpawnable) {
                         tagList.add(blockEntity.spawnCompound)
                         //Adding NBT to a chunk pack does not show some block entities, and you have to send block entity packets to the player
-                        level!!.addChunkPacket(
+                        level.addChunkPacket(
                             blockEntity.position.chunkX,
                             blockEntity.position.chunkZ,
                             blockEntity.spawnPacket
@@ -191,31 +191,31 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
     override var isRaining: Boolean
         get() = levelData.isRaining()
         set(raining) {
-            levelData!!.isRaining = raining
+            levelData.isRaining = raining
         }
 
     override var rainTime: Int
         get() = levelData.getRainTime()
         set(rainTime) {
-            levelData!!.setRainTime(rainTime)
+            levelData.setRainTime(rainTime)
         }
 
     override var isThundering: Boolean
         get() = levelData.isThundering()
         set(thundering) {
-            levelData!!.isThundering = thundering
+            levelData.isThundering = thundering
         }
 
     override var thunderTime: Int
         get() = levelData.getLightningTime()
         set(thunderTime) {
-            levelData!!.setLightningTime(thunderTime)
+            levelData.setLightningTime(thunderTime)
         }
 
     override var currentTick: Long
         get() = levelData.getCurrentTick()
         set(currentTick) {
-            levelData!!.setCurrentTick(currentTick)
+            levelData.setCurrentTick(currentTick)
         }
 
     override var time: Long
@@ -227,7 +227,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
     override var seed: Long
         get() = levelData.getRandomSeed()
         set(value) {
-            levelData!!.setRandomSeed(value)
+            levelData.setRandomSeed(value)
         }
 
     override var spawn: Vector3?
@@ -310,7 +310,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         return false
     }
 
-    override fun getChunk(chunkX: Int, chunkZ: Int): IChunk? {
+    override fun getChunk(chunkX: Int, chunkZ: Int): IChunk {
         return this.getChunk(chunkX, chunkZ, false)
     }
 

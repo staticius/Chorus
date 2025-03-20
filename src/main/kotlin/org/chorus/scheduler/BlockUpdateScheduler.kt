@@ -6,7 +6,6 @@ import org.chorus.math.AxisAlignedBB
 import org.chorus.math.ChorusMath.floorDouble
 import org.chorus.math.Vector3
 import org.chorus.utils.BlockUpdateEntry
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.max
 
@@ -59,9 +58,9 @@ class BlockUpdateScheduler(level: Level, currentTick: Long) {
 
                         updateIterator.remove()
                         if (Block.equals(block, entry.block, false) && entry.checkBlockWhenUpdate) {
-                            block!!.onUpdate(Level.BLOCK_UPDATE_SCHEDULED)
+                            block.onUpdate(Level.BLOCK_UPDATE_SCHEDULED)
                         } else {
-                            block!!.onUpdate(Level.BLOCK_UPDATE_SCHEDULED)
+                            block.onUpdate(Level.BLOCK_UPDATE_SCHEDULED)
                         }
                     } else {
                         level.scheduleUpdate(entry.block, entry.pos, 0)

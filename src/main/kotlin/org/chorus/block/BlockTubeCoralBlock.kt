@@ -3,7 +3,7 @@ package org.chorus.block
 class BlockTubeCoralBlock : BlockCoralBlock {
     constructor() : super(Companion.properties.getDefaultState())
 
-    constructor(blockstate: BlockState) :  super(blockstate)
+    constructor(blockstate: BlockState) : super(blockstate)
 
     override fun toDead(): BlockCoralBlock {
         return BlockDeadTubeCoralBlock()

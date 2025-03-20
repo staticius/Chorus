@@ -6,7 +6,7 @@ package org.chorus.blockentity
  *
  * @author MagicDroidX(code) @ Nukkit Project
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * 
+ *
  */
 interface BlockEntityNameable {
     /**
@@ -14,14 +14,14 @@ interface BlockEntityNameable {
      * Gets the name of this object.
      *
      * @return 这个事物的名字。<br></br>The name of this object.
-     * 
+     *
      */
     /**
      * 设置或更改这个事物的名字。<br></br>
      * Changes the name of this object, or names it.
      *
      * @param name 这个事物的新名字。<br></br>The new name of this object.
-     * 
+     *
      */
     @JvmField
     var name: String?
@@ -31,7 +31,7 @@ interface BlockEntityNameable {
      * Whether this object has a name.
      *
      * @return 如果有名字，返回 `true`。<br></br>`true` for this object has a name.
-     * 
+     *
      */
     fun hasName(): Boolean
 }

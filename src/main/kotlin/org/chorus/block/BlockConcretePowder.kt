@@ -24,8 +24,8 @@ abstract class BlockConcretePowder(blockState: BlockState) : BlockFallable(block
             super.onUpdate(Level.BLOCK_UPDATE_NORMAL)
 
             for (side in 1..5) {
-                val block = this.getSide(fromIndex(side)!!)
-                if (block!!.id == BlockID.FLOWING_WATER || block.id == BlockID.WATER) {
+                val block = this.getSide(fromIndex(side))
+                if (block.id == BlockID.FLOWING_WATER || block.id == BlockID.WATER) {
                     level.setBlock(this.position, getConcrete(), direct = true, update = true)
                 }
             }
@@ -48,8 +48,8 @@ abstract class BlockConcretePowder(blockState: BlockState) : BlockFallable(block
         var concrete = false
 
         for (side in 1..5) {
-            val block = this.getSide(fromIndex(side)!!)
-            if (block!!.id == BlockID.FLOWING_WATER || block.id == BlockID.WATER) {
+            val block = this.getSide(fromIndex(side))
+            if (block.id == BlockID.FLOWING_WATER || block.id == BlockID.WATER) {
                 concrete = true
                 break
             }

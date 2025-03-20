@@ -118,7 +118,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 reputation = villager.getReputation(player)
             }
             output.setCount(output.getCount() * action.numberOfRequestedCrafts)
-            if (first!!.isNothing && second!!.isNothing) {
+            if (first.isNothing && second.isNothing) {
                 CraftRecipeActionProcessor.log.error("Can't find trade input!")
                 return context.error()
             }
@@ -131,7 +131,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 (reputation * (if (tradeRecipe.containsFloat("priceMultiplierB")) tradeRecipe.getFloat("priceMultiplierB") else 0f)).toInt()
 
             if (ca && cb) {
-                if ((first.isNothing || second!!.isNothing)) {
+                if ((first.isNothing || second.isNothing)) {
                     CraftRecipeActionProcessor.log.error("Can't find trade input!")
                     return context.error()
                 } else {

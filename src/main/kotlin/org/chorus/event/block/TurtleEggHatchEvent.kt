@@ -13,7 +13,7 @@ class TurtleEggHatchEvent(turtleEgg: BlockTurtleEgg, @JvmField var eggsHatching:
 
     fun recalculateNewState() {
         var turtleEgg = getBlock()
-        val eggCount = turtleEgg!!.eggCount.ordinal + 1
+        val eggCount = turtleEgg.eggCount.ordinal + 1
         val eggsHatching = this.eggsHatching
         if (eggCount <= eggsHatching) {
             newState = BlockAir()

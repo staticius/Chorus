@@ -11,7 +11,7 @@ class BarrelInventory(barrel: BlockEntityBarrel) : ContainerInventory(barrel, In
     BlockEntityInventoryNameable {
     override fun init() {
         val map = super.slotTypeMap()
-        for (i in 0..< size) {
+        for (i in 0..<size) {
             map[i] = ContainerSlotType.BARREL
         }
     }

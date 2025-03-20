@@ -54,7 +54,7 @@ class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState =
     private fun checkState(): Boolean {
         if (!this.isPoweredFromSide) {
             level.setBlock(this.position, get(BlockID.REDSTONE_TORCH).setPropertyValues(propertyValues), false, true)
-            updateAllAroundRedstone(blockFace!!.getOpposite())
+            updateAllAroundRedstone(blockFace.getOpposite())
             return true
         }
 
@@ -66,13 +66,13 @@ class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState =
          * Whether there is a power source in the opposite face of the current face
          */
         get() {
-            val face = blockFace!!.getOpposite()
-            val side = this.getSide(face!!)
+            val face = blockFace.getOpposite()
+            val side = this.getSide(face)
             if (side is BlockPistonBase && side.isGettingPower) {
                 return true
             }
 
-            return level.isSidePowered(side!!.position, face)
+            return level.isSidePowered(side.position, face)
         }
 
     override fun tickRate(): Int {

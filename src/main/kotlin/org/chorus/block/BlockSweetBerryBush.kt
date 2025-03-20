@@ -97,7 +97,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (!isSupportValid(down()!!)) {
+            if (!isSupportValid(down())) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
             }
@@ -133,7 +133,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
         if (target.id == BlockID.SWEET_BERRY_BUSH || !block.isAir) {
             return false
         }
-        if (isSupportValid(down()!!)) {
+        if (isSupportValid(down())) {
             level.setBlock(block.position, this, true)
             return true
         }

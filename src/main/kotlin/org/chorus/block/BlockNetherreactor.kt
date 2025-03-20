@@ -13,54 +13,54 @@ class BlockNetherreactor @JvmOverloads constructor(blockstate: BlockState = Comp
     override fun getBlockEntityType(): String {
         return BlockEntity.NETHER_REACTOR
 
-    override val blockEntityClass: Class<out Any>
+        override val blockEntityClass: Class<out Any>
         get() = BlockEntityNetherReactor::class.java
 
-    override val name: String
+        override val name: String
         get() = "Nether Reactor Core"
 
-    override val hardness: Double
+        override val hardness: Double
         get() = 10.0
 
-    override val resistance: Double
+        override val resistance: Double
         get() = 6.0
 
-    override fun canHarvestWithHand(): Boolean {
-        return false
-    }
+        override fun canHarvestWithHand(): Boolean {
+            return false
+        }
 
-    override val toolType: Int
+        override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    override val toolTier: Int
+        override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun getDrops(item: Item): Array<Item> {
-        return if (item.isPickaxe) {
-            arrayOf(
-                get(ItemID.DIAMOND, 0, 3),
-                get(ItemID.IRON_INGOT, 0, 6)
-            )
-        } else {
-            Item.EMPTY_ARRAY
+        override fun getDrops(item: Item): Array<Item> {
+            return if (item.isPickaxe) {
+                arrayOf(
+                    get(ItemID.DIAMOND, 0, 3),
+                    get(ItemID.IRON_INGOT, 0, 6)
+                )
+            } else {
+                Item.EMPTY_ARRAY
+            }
+        }
+
+        override fun place(
+            item: Item,
+            block: Block,
+            target: Block,
+            face: BlockFace,
+            fx: Double,
+            fy: Double,
+            fz: Double,
+            player: Player?
+        ): Boolean {
+            return BlockEntityHolder.setBlockAndCreateEntity(this) != null
+        }
+
+        companion object {
+            val properties: BlockProperties = BlockProperties(BlockID.NETHERREACTOR)
+
         }
     }
-
-    override fun place(
-        item: Item,
-        block: Block,
-        target: Block,
-        face: BlockFace,
-        fx: Double,
-        fy: Double,
-        fz: Double,
-        player: Player?
-    ): Boolean {
-        return BlockEntityHolder.setBlockAndCreateEntity(this) != null
-    }
-
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.NETHERREACTOR)
-
-    }
-}

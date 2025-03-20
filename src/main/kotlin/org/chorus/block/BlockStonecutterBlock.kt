@@ -47,7 +47,7 @@ class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState = C
         player: Player?
     ): Boolean {
         blockFace =
-            if (player != null) fromHorizontalIndex(player.getDirection()!!.horizontalIndex)!! else BlockFace.SOUTH
+            if (player != null) fromHorizontalIndex(player.getDirection().horizontalIndex) else BlockFace.SOUTH
 
         level.setBlock(block.position, this, true, true)
         return true

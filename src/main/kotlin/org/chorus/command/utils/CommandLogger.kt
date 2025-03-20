@@ -3,7 +3,10 @@ package org.chorus.command.utils
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.blockentity.ICommandBlock
-import org.chorus.command.*
+import org.chorus.command.Command
+import org.chorus.command.CommandSender
+import org.chorus.command.ConsoleCommandSender
+import org.chorus.command.ExecutorCommandSender
 import org.chorus.lang.CommandOutputContainer
 import org.chorus.lang.PluginI18nManager
 import org.chorus.lang.TranslationContainer
@@ -373,7 +376,7 @@ class CommandLogger(
     private fun broadcastMessage(key: String, value: Array<String>, target: CommandSender): TranslationContainer {
         val message = TranslationContainer(TextFormat.clean(key), *value)
         val resultStr =
-            "[" + target.getName() + ": " + (if (message.text != Server.instance.baseLang.get(message.text)) "%" else "" ) + message.text +"]"
+            "[" + target.getName() + ": " + (if (message.text != Server.instance.baseLang.get(message.text)) "%" else "") + message.text + "]"
         val coloredStr = TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + resultStr
         message.text = coloredStr
         return message

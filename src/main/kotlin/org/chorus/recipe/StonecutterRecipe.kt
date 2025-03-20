@@ -5,7 +5,6 @@ import org.chorus.network.protocol.types.RecipeUnlockingRequirement
 import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.registry.RecipeRegistry
 import java.util.*
-import kotlin.collections.first
 
 class StonecutterRecipe(
     recipeId: String?,

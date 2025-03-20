@@ -14,10 +14,8 @@ import org.chorus.entity.ai.route.RouteFindingManager.RouteFindingTask
 import org.chorus.entity.ai.route.finder.IRouteFinder
 import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.mob.EntityMob
-import org.chorus.level.*
-import org.chorus.math.*
-
-import java.util.*
+import org.chorus.level.Level
+import org.chorus.math.Vector3
 import java.util.function.Consumer
 import java.util.stream.Collectors
 import kotlin.math.max
@@ -190,7 +188,7 @@ class BehaviorGroup(
             //没到周期就不评估
             if (nextTick < behavior.period) continue
             behaviorPeriodTimer[behavior] = 0
-            if (behavior.evaluate(entity!!)) {
+            if (behavior.evaluate(entity)) {
                 if (behavior.priority > highestPriority) {
                     evalSucceed.clear()
                     highestPriority = behavior.priority
@@ -208,7 +206,7 @@ class BehaviorGroup(
         if (first != null) {
             if (first is Behavior) {
                 if (first.reevaluate) {
-                    firstEval = first.evaluate(entity!!)
+                    firstEval = first.evaluate(entity)
                 }
             }
         }

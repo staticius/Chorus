@@ -31,7 +31,7 @@ class AnvilInventory(anvil: BlockAnvil) //2 INPUT, 1 OUTPUT
             inputSlot,
             materialSlot
         )
-        drops = who.inventory!!.addItem(*drops)
+        drops = who.inventory.addItem(*drops)
         for (drop in drops) {
             if (!who.dropItem(drop)) {
                 holder.level!!.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
@@ -76,7 +76,7 @@ class AnvilInventory(anvil: BlockAnvil) //2 INPUT, 1 OUTPUT
     }
 
     override fun sendContents(vararg players: Player) {
-        for (slot in 0..< (size- 1)) {
+        for (slot in 0..<(size - 1)) {
             sendSlot(slot, *players)
         }
     }

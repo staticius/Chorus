@@ -6,17 +6,17 @@ import org.chorus.block.property.enums.OxidizationLevel
 open class BlockDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabCopperBase(blockstate) {
     override fun getSlabName(): String {
-            val sb = StringBuilder(30)
-            if (isWaxed) {
-                sb.append("Waxed ")
-            }
-            val oxidizationLevel = oxidizationLevel
-            if (OxidizationLevel.UNAFFECTED != oxidizationLevel) {
-                val name = oxidizationLevel.name
-                sb.append(name[0]).append(name.substring(1).lowercase()).append(' ')
-            }
-            return sb.append("Cut Copper").toString()
+        val sb = StringBuilder(30)
+        if (isWaxed) {
+            sb.append("Waxed ")
         }
+        val oxidizationLevel = oxidizationLevel
+        if (OxidizationLevel.UNAFFECTED != oxidizationLevel) {
+            val name = oxidizationLevel.name
+            sb.append(name[0]).append(name.substring(1).lowercase()).append(' ')
+        }
+        return sb.append("Cut Copper").toString()
+    }
 
     override fun getSingleSlab() = BlockCutCopperSlab.properties.defaultState
 
@@ -32,7 +32,7 @@ open class BlockDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockS
         }
     }
 
-    override val oxidizationLevel: OxidizationLevel 
+    override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.UNAFFECTED
 
     override val properties: BlockProperties

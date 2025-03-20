@@ -6,7 +6,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.blockentity.BlockEntityCalibratedSculkSensor
 import org.chorus.blockentity.BlockEntityID
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Level
 import org.chorus.level.Sound
 import org.chorus.math.AxisAlignedBB
@@ -41,7 +41,7 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
         player: Player?
     ): Boolean {
         blockFace =
-            if (player != null) fromHorizontalIndex(player.getDirection()!!.horizontalIndex) else BlockFace.SOUTH
+            if (player != null) fromHorizontalIndex(player.getDirection().horizontalIndex) else BlockFace.SOUTH
 
         level.setBlock(block.position, this, direct = true, update = true)
         return true

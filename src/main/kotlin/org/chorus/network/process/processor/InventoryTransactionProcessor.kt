@@ -314,7 +314,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     return
                 }
                 val target = player.level!!.getBlock(blockVector.asVector3())
-                val block = target!!.getSide(face)
+                val block = target.getSide(face)
                 player.level!!.sendBlocks(
                     arrayOf(player),
                     arrayOf<Block?>(target, block),
@@ -322,7 +322,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 )
                 player.level.sendBlocks(
                     arrayOf(player), arrayOf(
-                        target.getLevelBlockAtLayer(1), block!!.getLevelBlockAtLayer(1)
+                        target.getLevelBlockAtLayer(1), block.getLevelBlockAtLayer(1)
                     ), UpdateBlockPacket.FLAG_NOGRAPHIC, 1
                 )
             }
@@ -362,7 +362,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     val target = player.level!!.getBlock(blockVector.asVector3())
                     player.level.sendBlocks(
                         arrayOf(player), arrayOf<Vector3>(
-                            target!!.position
+                            target.position
                         ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0
                     )
 

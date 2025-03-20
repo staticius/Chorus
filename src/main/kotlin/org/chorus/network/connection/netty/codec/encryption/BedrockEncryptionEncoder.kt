@@ -12,7 +12,8 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 
-class BedrockEncryptionEncoder(val key: SecretKey, val cipher: Cipher) : MessageToMessageEncoder<BedrockBatchWrapper>() {
+class BedrockEncryptionEncoder(val key: SecretKey, val cipher: Cipher) :
+    MessageToMessageEncoder<BedrockBatchWrapper>() {
     private val packetCounter = AtomicLong()
 
     @Throws(Exception::class)

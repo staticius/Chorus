@@ -71,7 +71,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
 
         if (namedTag != null) {
             if (namedTag!!.contains("Block")) {
-                val blockState: BlockState? = NBTIO.getBlockStateHelper(namedTag!!.getCompound("Block")!!)
+                val blockState: BlockState? = NBTIO.getBlockStateHelper(namedTag!!.getCompound("Block"))
                 if (blockState == null) {
                     close()
                     return
@@ -150,13 +150,13 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
 
             if (onGround) {
                 close()
-                val block: Block = level!!.getBlock(pos)!!
+                val block: Block = level!!.getBlock(pos)
 
                 val floorPos: Vector3 = (Vector3(
                     position.x - 0.5,
                     position.y, position.z - 0.5
                 )).floor()
-                val floorBlock: Block = level!!.getBlock(floorPos)!!
+                val floorBlock: Block = level!!.getBlock(floorPos)
                 //handle for snow stack
                 if (getBlock().id == BlockID.SNOW_LAYER && floorBlock.id == BlockID.SNOW_LAYER && floorBlock.getPropertyValue(
                         CommonBlockProperties.HEIGHT
@@ -177,7 +177,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                             level!!.setBlock(floorPos, event.to, true)
 
                             val abovePos: Vector3 = floorPos.up()
-                            val aboveBlock: Block = level!!.getBlock(abovePos)!!
+                            val aboveBlock: Block = level!!.getBlock(abovePos)
                             if (aboveBlock.isAir) {
                                 val event2 = EntityBlockChangeEvent(
                                     this, aboveBlock, Block.get(
@@ -221,7 +221,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                             level!!.addParticle(DestroyBlockParticle(pos, Block.get(blockState)))
                         } else {
                             while (pos.y < level!!.maxHeight) {
-                                if (!level!!.getBlock(pos)!!.isAir) pos.y++ else break
+                                if (!level!!.getBlock(pos).isAir) pos.y++ else break
                             }
                             level!!.setBlock(pos, eventTo, true)
                         }

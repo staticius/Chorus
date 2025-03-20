@@ -2,12 +2,14 @@ package org.chorus.entity
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.data.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.entity.data.Skin
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.player.EntityFreezeEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemShield
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.AddPlayerPacket
@@ -101,7 +103,8 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     override fun entityBaseTick(tickDiff: Int): Boolean {
         val hasUpdate: Boolean = super.entityBaseTick(tickDiff)
         //handle human entity freeze
-        val collidedWithPowderSnow: Boolean = getTickCachedCollisionBlocks()!!.stream().anyMatch { block: Block -> block.id == BlockID.POWDER_SNOW }
+        val collidedWithPowderSnow: Boolean =
+            getTickCachedCollisionBlocks()!!.stream().anyMatch { block: Block -> block.id == BlockID.POWDER_SNOW }
         if (this.getFreezingTicks() < 140 && collidedWithPowderSnow) {
             if (getFreezingTicks() == 0) { //玩家疾跑进来要设置为非疾跑，统一为默认速度0.1
                 this.setSprinting(false)
@@ -177,7 +180,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             pk.entityData = this.entityDataMap
             player.dataPacket(pk)
 
-            inventory!!.sendArmorContents(player)
+            inventory.sendArmorContents(player)
             offhandInventory!!.sendContents(player)
 
             if (this.riding != null) {
@@ -208,7 +211,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     override fun close() {
         if (!this.closed) {
             if (inventory != null && (this !is Player || this.loggedIn)) {
-                for (viewer in inventory!!.getViewers()) {
+                for (viewer in inventory.getViewers()) {
                     viewer.removeWindow(this.inventory)
                 }
             }

@@ -131,7 +131,7 @@ class BlockManager(val level: Level) {
                 batch.extraBlocks.add(
                     BlockChangeEntry(
                         b.position.asBlockVector3(),
-                        b.blockState!!.unsignedBlockStateHash(),
+                        b.blockState.unsignedBlockStateHash(),
                         ProtocolInfo.UPDATE_BLOCK_PACKET,
                         -1,
                         BlockChangeEntry.MessageType.NONE
@@ -141,7 +141,7 @@ class BlockManager(val level: Level) {
                 batch.standardBlocks.add(
                     BlockChangeEntry(
                         b.position.asBlockVector3(),
-                        b.blockState!!.unsignedBlockStateHash(),
+                        b.blockState.unsignedBlockStateHash(),
                         ProtocolInfo.UPDATE_BLOCK_PACKET,
                         -1,
                         BlockChangeEntry.MessageType.NONE

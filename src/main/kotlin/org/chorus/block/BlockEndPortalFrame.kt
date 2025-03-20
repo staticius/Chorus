@@ -3,8 +3,9 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
-import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3

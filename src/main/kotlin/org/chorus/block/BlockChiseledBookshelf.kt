@@ -2,16 +2,18 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityChiseledBookshelf
 import org.chorus.blockentity.BlockEntityID
 import org.chorus.event.player.PlayerInteractEvent
-import org.chorus.item.*
-import org.chorus.math.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBook
+import org.chorus.item.ItemBookWritable
+import org.chorus.item.ItemEnchantedBook
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.math.Vector2
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.nbt.tag.Tag
 import org.chorus.utils.Faceable
 
 class BlockChiseledBookshelf @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :

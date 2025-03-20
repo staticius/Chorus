@@ -4,9 +4,9 @@ import org.chorus.block.property.CommonBlockProperties
 
 class BlockWaxedCopperBulb @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockCopperBulbBase(blockstate) {
-    override val oxidizationLevel: OxidizationLevel 
+    override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.UNAFFECTED
-    
+
 
     override fun isWaxed(): Boolean {
         return true

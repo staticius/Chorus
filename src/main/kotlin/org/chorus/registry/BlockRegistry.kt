@@ -15,7 +15,6 @@ import java.lang.reflect.Modifier
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
-import kotlin.collections.HashMap
 import kotlin.collections.set
 
 class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {

@@ -1,10 +1,13 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.level.Sound
 import org.chorus.level.particle.BoneMealParticle
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 
 class BlockDirtWithRoots : BlockDirt {
     constructor() : super(Companion.properties.defaultState)
@@ -32,10 +35,10 @@ class BlockDirtWithRoots : BlockDirt {
             position.x, position.y - 1,
             position.z
         )
-        if (!up()!!.canBeReplaced()) {
+        if (!up().canBeReplaced()) {
             return false
         }
-        if (item.isFertilizer && level.getBlock(vector)!!.isAir) {
+        if (item.isFertilizer && level.getBlock(vector).isAir) {
             if (player != null && (player.gamemode and 0x01) == 0) {
                 item.count--
             }

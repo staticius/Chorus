@@ -560,7 +560,7 @@ internal object ParameterFormatter {
             str.append(RECURSION_PREFIX).append(id).append(RECURSION_SUFFIX)
         } else {
             dejaVu1.add(id)
-            val oMap = o as Map<*, *>
+            val oMap = o
             str.append('{')
             var isFirst = true
             for (o1 in oMap.entries) {

@@ -90,9 +90,9 @@ class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = Com
     override fun getBlockEntityType(): String {
         return BlockEntity.STRUCTURE_BLOCK
 
-    companion object {
-        val properties: BlockProperties =
-            BlockProperties(BlockID.STRUCTURE_BLOCK, CommonBlockProperties.STRUCTURE_BLOCK_TYPE)
+        companion object {
+            val properties: BlockProperties =
+                BlockProperties(BlockID.STRUCTURE_BLOCK, CommonBlockProperties.STRUCTURE_BLOCK_TYPE)
 
+        }
     }
-}

@@ -159,7 +159,7 @@ interface IHuman : InventoryHolder {
             this.setUniqueId(
                 Utils.dataToUUID(
                     java.lang.String.valueOf(human.getId()).getBytes(StandardCharsets.UTF_8),
-                    getSkin()!!.getSkinData().data, human.getNameTag().getBytes(StandardCharsets.UTF_8)
+                    getSkin().getSkinData().data, human.getNameTag().getBytes(StandardCharsets.UTF_8)
                 )
             )
         }
@@ -230,7 +230,7 @@ interface IHuman : InventoryHolder {
         }
 
         //EntityHuman
-        val skin: Skin? = getSkin()
+        val skin: Skin = getSkin()
         if (skin != null) {
             val skinTag: CompoundTag = CompoundTag()
                 .putByteArray("Data", skin.getSkinData().data)

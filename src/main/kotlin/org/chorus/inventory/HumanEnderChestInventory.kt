@@ -17,7 +17,7 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
 
     override fun init() {
         val map = super.slotTypeMap()
-        for (i in 0..< size) {
+        for (i in 0..<size) {
             map[i] = ContainerSlotType.LEVEL_ENTITY
         }
     }

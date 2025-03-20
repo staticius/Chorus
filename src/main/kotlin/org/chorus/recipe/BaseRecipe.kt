@@ -1,7 +1,6 @@
 package org.chorus.recipe
 
 import com.google.common.base.Objects
-import com.google.common.base.Preconditions
 import org.chorus.item.Item
 import org.chorus.recipe.descriptor.ItemDescriptor
 

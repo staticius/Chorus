@@ -144,7 +144,8 @@ interface EntityDataTypes {
             false, "SEAT_LOCK_RIDER_ROTATION", 57,
             Transformers.BOOLEAN_TO_BYTE
         )
-        val SEAT_LOCK_RIDER_ROTATION_DEGREES: EntityDataType<Float> = EntityDataType(0f, "SEAT_LOCK_RIDER_ROTATION_DEGREES", 58)
+        val SEAT_LOCK_RIDER_ROTATION_DEGREES: EntityDataType<Float> =
+            EntityDataType(0f, "SEAT_LOCK_RIDER_ROTATION_DEGREES", 58)
         val SEAT_HAS_ROTATION: EntityDataType<Boolean> = EntityDataType(
             false, "SEAT_HAS_ROTATION", 59,
             Transformers.BOOLEAN_TO_BYTE
@@ -188,7 +189,8 @@ interface EntityDataTypes {
             false, "COMMAND_BLOCK_TRACK_OUTPUT", 73,
             Transformers.BOOLEAN_TO_BYTE
         )
-        val CONTROLLING_RIDER_SEAT_INDEX: EntityDataType<Byte> = EntityDataType(0.toByte(), "CONTROLLING_RIDER_SEAT_INDEX", 74)
+        val CONTROLLING_RIDER_SEAT_INDEX: EntityDataType<Byte> =
+            EntityDataType(0.toByte(), "CONTROLLING_RIDER_SEAT_INDEX", 74)
         val STRENGTH: EntityDataType<Int> = EntityDataType(0, "STRENGTH", 75)
         val STRENGTH_MAX: EntityDataType<Int> = EntityDataType(0, "STRENGTH_MAX", 76)
         val EVOKER_SPELL_CASTING_COLOR: EntityDataType<Int> = EntityDataType(0, "EVOKER_SPELL_CASTING_COLOR", 77)
@@ -226,9 +228,12 @@ interface EntityDataTypes {
         val LAYING_AMOUNT_PREVIOUS: EntityDataType<Float> = EntityDataType(0f, "LAYING_AMOUNT_PREVIOUS", 94)
         val AREA_EFFECT_CLOUD_DURATION: EntityDataType<Int> = EntityDataType(0, "AREA_EFFECT_CLOUD_DURATION", 95)
         val AREA_EFFECT_CLOUD_SPAWN_TIME: EntityDataType<Int> = EntityDataType(0, "AREA_EFFECT_CLOUD_SPAWN_TIME", 96)
-        val AREA_EFFECT_CLOUD_CHANGE_RATE: EntityDataType<Float> = EntityDataType(0f, "AREA_EFFECT_CLOUD_CHANGE_RATE", 97)
-        val AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP: EntityDataType<Float> = EntityDataType(0f, "AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP", 98)
-        val AREA_EFFECT_CLOUD_PICKUP_COUNT: EntityDataType<Int> = EntityDataType(0, "AREA_EFFECT_CLOUD_PICKUP_COUNT", 99)
+        val AREA_EFFECT_CLOUD_CHANGE_RATE: EntityDataType<Float> =
+            EntityDataType(0f, "AREA_EFFECT_CLOUD_CHANGE_RATE", 97)
+        val AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP: EntityDataType<Float> =
+            EntityDataType(0f, "AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP", 98)
+        val AREA_EFFECT_CLOUD_PICKUP_COUNT: EntityDataType<Int> =
+            EntityDataType(0, "AREA_EFFECT_CLOUD_PICKUP_COUNT", 99)
 
         val INTERACT_TEXT: EntityDataType<String> = EntityDataType("", "INTERACT_TEXT", 100)
         val TRADE_TIER: EntityDataType<Int> = EntityDataType(0, "TRADE_TIER", 101)

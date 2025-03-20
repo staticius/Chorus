@@ -21,7 +21,7 @@ class BlockPaleHangingMoss @JvmOverloads constructor(blockstate: BlockState = Co
     }
 
     override val isSupportValid: Boolean
-        get() = up()!!.isSolid || up() is BlockPaleHangingMoss
+        get() = up().isSolid || up() is BlockPaleHangingMoss
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PALE_HANGING_MOSS, CommonBlockProperties.TIP)

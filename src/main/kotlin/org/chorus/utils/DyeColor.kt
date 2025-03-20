@@ -3,7 +3,7 @@ package org.chorus.utils
 import org.chorus.math.MathHelper
 import java.util.*
 
-enum class DyeColor (
+enum class DyeColor(
     dyeColorMeta: Int, woolColorMeta: Int,
     /**
      * The `minecraft:dye` meta that actually represents the item dye for that color.
@@ -80,7 +80,8 @@ enum class DyeColor (
         "Cyan",
         BlockColor.CYAN_BLOCK_COLOR,
         BlockColor(0x169C9C),
-        BlockColor(0x16, 0x9c, 0x9c)),
+        BlockColor(0x16, 0x9c, 0x9c)
+    ),
     LIGHT_GRAY(
         7,
         8,
@@ -97,7 +98,8 @@ enum class DyeColor (
         "Gray",
         BlockColor.GRAY_BLOCK_COLOR,
         BlockColor(0x474F52),
-        BlockColor(0x47, 0x4f, 0x52)),
+        BlockColor(0x47, 0x4f, 0x52)
+    ),
     PINK(
         9,
         6,
@@ -105,7 +107,8 @@ enum class DyeColor (
         "Pink",
         BlockColor.PINK_BLOCK_COLOR,
         BlockColor(0xF38BAA),
-        BlockColor(0xf3, 0x8b, 0xaa)),
+        BlockColor(0xf3, 0x8b, 0xaa)
+    ),
     LIME(
         10,
         5,
@@ -113,7 +116,8 @@ enum class DyeColor (
         "Lime",
         BlockColor.LIME_BLOCK_COLOR,
         BlockColor(0x80C71F),
-        BlockColor(0x80, 0xc7, 0x1f)),
+        BlockColor(0x80, 0xc7, 0x1f)
+    ),
     YELLOW(
         11,
         4,

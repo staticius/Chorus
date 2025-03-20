@@ -120,7 +120,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
             val pk = ContainerOpenPacket()
             pk.windowId = who.getWindowId(this)
             pk.type = type.networkType
-            val holder: InventoryHolder? = this.getHolder()
+            val holder: InventoryHolder = this.getHolder()
             if (holder != null) {
                 pk.x = holder.vector3.floorX
                 pk.y = holder.vector3.floorY

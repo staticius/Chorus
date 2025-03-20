@@ -105,7 +105,7 @@ open class EntitySplashPotion : EntityThrowable {
         if (!potion.getEffects(true).isEmpty()) {
             for (effect: Effect in potion.getEffects(true)) {
                 val effectColor: Color = effect.getColor()
-                color.get(0) += effectColor!!.red * effect.getLevel()
+                color.get(0) += effectColor.red * effect.getLevel()
                 color.get(1) += effectColor.green * effect.getLevel()
                 color.get(2) += effectColor.blue * effect.getLevel()
                 count += effect.getLevel()

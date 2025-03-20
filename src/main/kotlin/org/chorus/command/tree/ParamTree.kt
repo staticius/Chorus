@@ -1,6 +1,8 @@
 package org.chorus.command.tree
 
-import org.chorus.command.*
+import org.chorus.command.Command
+import org.chorus.command.CommandSender
+import org.chorus.command.PluginCommand
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
@@ -73,15 +75,19 @@ class ParamTree {
                             CommandEnum.ENUM_BOOLEAN -> {
                                 BooleanNode()
                             }
+
                             CommandEnum.ENUM_ITEM -> {
                                 ItemNode()
                             }
+
                             CommandEnum.ENUM_BLOCK -> {
                                 BlockNode()
                             }
+
                             CommandEnum.ENUM_ENTITY -> {
                                 StringNode()
                             }
+
                             else -> EnumNode()
                         }
                     }

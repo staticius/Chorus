@@ -105,7 +105,7 @@ class BlockEntityLectern(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
         totalPages = if (book.isNothing || !book.hasCompoundTag()) {
             0
         } else {
-            book.namedTag!!.getList("pages", CompoundTag::class.java)?.size() ?: 0
+            book.namedTag!!.getList("pages", CompoundTag::class.java).size()
         }
         RedstoneComponent.updateAroundRedstone(this)
     }

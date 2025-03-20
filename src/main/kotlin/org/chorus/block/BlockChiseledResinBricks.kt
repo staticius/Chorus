@@ -2,7 +2,7 @@ package org.chorus.block
 
 class BlockChiseledResinBricks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockResinBricks(blockstate) {
-        
+
     override val properties: BlockProperties
         get() = Companion.properties
 

@@ -62,7 +62,7 @@ class UnsafeChunk(private val chunk: Chunk) {
                     }
 
                     // START of checks for the next block
-                    val block = getBlockState(x, y, z)!!.toBlock()
+                    val block = getBlockState(x, y, z).toBlock()
 
                     if (!block.isTransparent) { // if we encounter an opaque block, all the blocks under it will
                         // have a skylight value of 0 (the block itself has a value of 15, if it's a top-most block)
@@ -113,7 +113,7 @@ class UnsafeChunk(private val chunk: Chunk) {
         return section.getBlockState(x, y and 0x0f, z, 0)
     }
 
-    fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState? {
+    fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState {
         val section = getSection(y shr 4) ?: return BlockAir.STATE
         return section.getBlockState(x, y and 0x0f, z, layer)
     }

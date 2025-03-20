@@ -69,9 +69,9 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             color.get(0) = 255
 
             val potion: PotionType = PotionType.Companion.get(getPotionId())
-            for (effect: Effect in potion.getEffects(true)!!) {
+            for (effect: Effect in potion.getEffects(true)) {
                 val effectColor: Color = effect.getColor()
-                color.get(1) += effectColor!!.red * effect.getLevel()
+                color.get(1) += effectColor.red * effect.getLevel()
                 color.get(2) += effectColor.green * effect.getLevel()
                 color.get(3) += effectColor.blue * effect.getLevel()
                 count += effect.getLevel()

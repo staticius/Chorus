@@ -24,7 +24,7 @@ class BlockStrippedCherryWood @JvmOverloads constructor(blockstate: BlockState =
         get() = 5
 
     override fun getStrippedState(): BlockState {
-        return blockState!!
+        return blockState
     }
 
     override fun canBeActivated(): Boolean {

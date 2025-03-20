@@ -46,9 +46,9 @@ class BlockBuddingAmethyst : BlockSolid {
             return
         }
         val face = fromIndex(RANDOM.nextInt(6))
-        val side = this.getSide(face!!)
+        val side = this.getSide(face)
         val tmp: BlockAmethystBud
-        if (side!!.canBeReplaced()) {
+        if (side.canBeReplaced()) {
             tmp = BlockSmallAmethystBud()
             tmp.blockFace = face
             level.setBlock(side.position, tmp, direct = true, update = true)

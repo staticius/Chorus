@@ -34,9 +34,9 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState = Comp
             // Avoid Block mistake
             if (wasPowered != isPowered) {
                 setIsActive(isPowered)
-                updateAroundRedstone(down()!!, BlockFace.UP)
+                updateAroundRedstone(down(), BlockFace.UP)
                 if (getOrientation()!!.isAscending) {
-                    updateAroundRedstone(up()!!, BlockFace.DOWN)
+                    updateAroundRedstone(up(), BlockFace.DOWN)
                 }
             }
             return type
@@ -64,7 +64,7 @@ class BlockActivatorRail @JvmOverloads constructor(blockstate: BlockState = Comp
         val block: BlockRail
         val block2 = level.getBlock(Vector3(dx.toDouble(), dy.toDouble(), dz.toDouble()))
 
-        if (isRailBlock(block2!!)) {
+        if (isRailBlock(block2)) {
             block = block2 as BlockRail
         } else {
             return false

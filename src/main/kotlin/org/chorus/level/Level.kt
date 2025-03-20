@@ -566,7 +566,7 @@ class Level(
             return chunkLoaders[index]!!.entries
                 .stream()
                 .filter { it.value is Player }
-                .collect (
+                .collect(
                     { HashMap() },
                     { m, e ->
                         m[e.key] = e.value as Player
@@ -756,7 +756,7 @@ class Level(
                 Server.instance.pluginManager.callEvent(event)
 
                 if (!event.isCancelled) {
-                    block!!.onUpdate(BLOCK_UPDATE_NORMAL)
+                    block.onUpdate(BLOCK_UPDATE_NORMAL)
                     if (queuedUpdate.neighbor != null) {
                         block.onNeighborChange(queuedUpdate.neighbor.getOpposite())
                     }
@@ -963,7 +963,7 @@ class Level(
             }
 
             val b = this.getBlock(vector.floorX, vector.floorY, vector.floorZ)
-            if (b!!.properties != BlockTallGrass.properties && b !is BlockFlowingWater) vector.y += 1.0
+            if (b.properties != BlockTallGrass.properties && b !is BlockFlowingWater) vector.y += 1.0
             val nbt = CompoundTag()
                 .putList(
                     "Pos", ListTag<FloatTag>().add(FloatTag(vector.x))
@@ -1290,7 +1290,7 @@ class Level(
             }
             var block1 = this.getBlock(temporalVector)
 
-            if (BlockID.OBSERVER == block1!!.id) {
+            if (BlockID.OBSERVER == block1.id) {
                 if (observer) {
                     block1.onNeighborChange(face.getOpposite())
                 }
@@ -1300,7 +1300,7 @@ class Level(
                 block1 = this.getBlock(temporalVector.setComponentsAdding(temporalVector, face))
 
                 if (BlockRedstoneDiode.isDiode(block1)) {
-                    block1!!.onUpdate(BLOCK_UPDATE_REDSTONE)
+                    block1.onUpdate(BLOCK_UPDATE_REDSTONE)
                 }
             }
         }
@@ -1312,7 +1312,7 @@ class Level(
         for (face in BlockFace.Plane.VERTICAL) {
             val block1 = this.getBlock(temporalVector.setComponentsAdding(v, face))
 
-            if (BlockID.OBSERVER == block1!!.id) {
+            if (BlockID.OBSERVER == block1.id) {
                 block1.onNeighborChange(face.getOpposite())
             }
         }
@@ -1321,7 +1321,7 @@ class Level(
     fun updateAround(pos: Vector3) {
         val block = getBlock(pos)
         for (face in BlockFace.entries) {
-            val side = block!!.getSideAtLayer(0, face)
+            val side = block.getSideAtLayer(0, face)
             normalUpdateQueue.add(QueuedUpdate(side, face))
             normalUpdateQueue.add(QueuedUpdate(side.getLevelBlockAtLayer(1), face))
         }
@@ -1339,14 +1339,14 @@ class Level(
     fun neighborChangeAroundImmediately(pos: Vector3) {
         for (face in BlockFace.entries) {
             val neighborBlock = getBlock(pos.getSide(face))
-            neighborBlock!!.onNeighborChange(face.getOpposite())
+            neighborBlock.onNeighborChange(face.getOpposite())
         }
     }
 
     fun updateAroundObserver(pos: Vector3) {
         for (face in BlockFace.entries) {
             val neighborBlock = getBlock(pos.getSide(face))
-            if (neighborBlock!!.id === BlockID.OBSERVER) neighborBlock!!.onNeighborChange(face.getOpposite())
+            if (neighborBlock.id === BlockID.OBSERVER) neighborBlock.onNeighborChange(face.getOpposite())
         }
     }
 
@@ -1465,7 +1465,7 @@ class Level(
         while (i < start.distance(end)) {
             val block = this.getBlock(currentPos.floor(), load)
             currentPos = currentPos.add(direction)
-            if (!block!!.isAir || !ignoreAir) result.add(block)
+            if (!block.isAir || !ignoreAir) result.add(block)
             i += space
         }
         return Collections.unmodifiableList(result)
@@ -1537,7 +1537,7 @@ class Level(
             }
             bb = pos.getBoundingBox()
         } else {
-            bb = getBlock(pos.vector3)!!.boundingBox
+            bb = getBlock(pos.vector3).boundingBox
         }
 
         return bb != null && bb.getAverageEdgeLength() >= 1
@@ -1643,7 +1643,7 @@ class Level(
                 for (y in minY..maxY) {
                     val block =
                         this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
-                    if (!block!!.canPassThrough() && block.collidesWithBB(bb)) {
+                    if (!block.canPassThrough() && block.collidesWithBB(bb)) {
                         collides.add(block.boundingBox)
                     }
                 }
@@ -1686,7 +1686,7 @@ class Level(
                 for (y in minY..maxY) {
                     val block =
                         this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
-                    if (!block!!.canPassThrough() && block.collidesWithBB(bb)) {
+                    if (!block.canPassThrough() && block.collidesWithBB(bb)) {
                         collides.add(block.boundingBox)
                     }
                 }
@@ -1717,7 +1717,7 @@ class Level(
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
                     val block = this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()))
-                    if (!block!!.canPassThrough() && block.collidesWithBB(bb)) {
+                    if (!block.canPassThrough() && block.collidesWithBB(bb)) {
                         return true
                     }
                 }
@@ -1807,7 +1807,7 @@ class Level(
 
     fun getBlockRuntimeId(x: Int, y: Int, z: Int, layer: Int): Int {
         val tmp = this.getChunk(x shr 4, z shr 4, false)
-        return tmp.getBlockState(x and 0x0f, ensureY(y), z and 0x0f, layer)!!.blockStateHash()
+        return tmp.getBlockState(x and 0x0f, ensureY(y), z and 0x0f, layer).blockStateHash()
     }
 
     fun getBlockAround(pos: Vector3): Set<Block> {
@@ -1820,7 +1820,7 @@ class Level(
         return around
     }
 
-    fun getTickCachedBlock(pos: Vector3): Block? {
+    fun getTickCachedBlock(pos: Vector3): Block {
         return getTickCachedBlock(pos, 0)
     }
 
@@ -1930,7 +1930,7 @@ class Level(
         if (y == oldHeightMap) { // Block changed directly in the heightmap. Check if a block was removed or changed to a different light-filter
             newHeightMap = chunk.recalculateHeightMapColumn(x and 0x0f, z and 0x0f)
         } else if (y > oldHeightMap) { // Block changed above the heightmap
-            if (sourceBlock!!.lightFilter > 1 || sourceBlock.diffusesSkyLight()) {
+            if (sourceBlock.lightFilter > 1 || sourceBlock.diffusesSkyLight()) {
                 chunk.setHeightMap(x and 0xf, z and 0xf, y)
                 newHeightMap = y
             } else { // Block changed which has no effect on direct skylight, for example placing or removing glass.
@@ -1953,7 +1953,7 @@ class Level(
                 x,
                 y,
                 z,
-                Math.max(0, getHighestAdjacentBlockSkyLight(x, y, z) - sourceBlock!!.lightFilter)
+                Math.max(0, getHighestAdjacentBlockSkyLight(x, y, z) - sourceBlock.lightFilter)
             )
         }
     }
@@ -2068,7 +2068,7 @@ class Level(
             val x = Hash.hashBlockX(node)
             val y = Hash.hashBlockY(node)
             val z = Hash.hashBlockZ(node)
-            val lightLevel = this.getBlockLightAt(x, y, z) - getBlock(x, y, z)!!.lightFilter
+            val lightLevel = this.getBlockLightAt(x, y, z) - getBlock(x, y, z).lightFilter
 
             if (lightLevel >= 1) {
                 this.computeSpreadBlockLight(x - 1, y, z, lightLevel, lightPropagationQueue, visited)
@@ -2443,12 +2443,12 @@ class Level(
 
         val target = this.getBlock(vector.vector3, layer)
 
-        if (player != null && !target!!.isBlockChangeAllowed(player)) {
+        if (player != null && !target.isBlockChangeAllowed(player)) {
             return null
         }
 
         val drops: Array<Item>?
-        var dropExp = target!!.dropExp
+        var dropExp = target.dropExp
 
         if (item == null) {
             item = Item.AIR
@@ -2573,7 +2573,7 @@ class Level(
                 this.dropExpOrb(vector.vector3.add(0.5, 0.5, 0.5), dropExp)
             }
 
-            for (drop in drops!!) {
+            for (drop in drops) {
                 if (drop.getCount() > 0) {
                     this.dropItem(vector.vector3.add(0.5, 0.5, 0.5), drop)
                 }
@@ -2647,7 +2647,7 @@ class Level(
     ): Item? {
         var item = item
         val target = this.getBlock(vector)
-        var block = target!!.getSide(face)
+        var block = target.getSide(face)
 
         if (item.getBlock() is BlockScaffolding && face == BlockFace.UP && block.id == BlockID.SCAFFOLDING) {
             while (block is BlockScaffolding) {
@@ -2979,7 +2979,7 @@ class Level(
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
-                    allEntities.addAll(getChunkEntities(x, z, false)!!.values())
+                    allEntities.addAll(getChunkEntities(x, z, false).values())
                 }
             }
 
@@ -3031,7 +3031,7 @@ class Level(
         for (x in minX..maxX) {
             for (z in minZ..maxZ) {
                 for (ent in getChunkEntities(x, z, loadChunks).values) {
-                    if (ent != null && ent !== entity && ent.boundingBox!!.intersectsWith(bb)) {
+                    if (ent != null && ent !== entity && ent.boundingBox.intersectsWith(bb)) {
                         overflow = addEntityToBuffer(index, overflow, ent)
                         index++
                     }
@@ -3057,7 +3057,7 @@ class Level(
 
         for (x in minX..maxX) {
             for (z in minZ..maxZ) {
-                for (ent in getChunkEntities(x, z, loadChunks)!!.values()) {
+                for (ent in getChunkEntities(x, z, loadChunks).values()) {
                     if (ent !== entity && ent.boundingBox!!.intersectsWith(bb)) {
                         result.add(ent)
                     }
@@ -3154,7 +3154,7 @@ class Level(
         setBlockStateAt(x, y, z, 0, state)
     }
 
-    fun getBlockStateAt(x: Int, y: Int, z: Int, layer: Int): BlockState? {
+    fun getBlockStateAt(x: Int, y: Int, z: Int, layer: Int): BlockState {
         return getChunk(x shr 4, z shr 4, true)
             .getBlockState(x and 0x0f, ensureY(y), z and 0x0f, layer)
     }
@@ -3490,7 +3490,7 @@ class Level(
         var y = chunk.getHeightMap(chunkX, chunkZ)
         while (y >= minHeight) {
             val block = getBlock(x, y, z)
-            if (block!!.color == null) return null
+            if (block.color == null) return null
             if (block.color.alpha == 0 /* || block instanceof BlockFlowingWater*/) {
                 y--
             } else {
@@ -3599,7 +3599,7 @@ class Level(
             val players = chunkSendQueue[index]
             if (players != null) {
                 val pair = requireProvider().requestChunkData(x, z)
-                for (player in players!!.values()) {
+                for (player in players.values()) {
                     if (player.isConnected) {
                         val ncp: NetworkChunkPublisherUpdatePacket = NetworkChunkPublisherUpdatePacket()
                         ncp.position = player.position.asBlockVector3()
@@ -3976,11 +3976,11 @@ class Level(
         val blockUnder = pos.add(0.0, -1.0, 0.0).getLevelBlock(0, true)
         val block = pos.getLevelBlock(0, true)
         val blockUpper = pos.add(0.0, 1.0, 0.0).getLevelBlock(0, true)
-        return if (!allowWaterUnder) !blockUnder!!.canPassThrough() && (block!!.isAir || block.canPassThrough())
-                && (blockUpper!!.isAir || block.canPassThrough())
-        else (!blockUnder!!.canPassThrough() || blockUnder is BlockFlowingWater)
-                && (block!!.isAir || block.canPassThrough())
-                && (blockUpper!!.isAir || block.canPassThrough())
+        return if (!allowWaterUnder) !blockUnder.canPassThrough() && (block.isAir || block.canPassThrough())
+                && (blockUpper.isAir || block.canPassThrough())
+        else (!blockUnder.canPassThrough() || blockUnder is BlockFlowingWater)
+                && (block.isAir || block.canPassThrough())
+                && (blockUpper.isAir || block.canPassThrough())
     }
 
     val isTicked: Boolean
@@ -4380,7 +4380,7 @@ class Level(
         get() = dimensionData.maxHeight
 
     fun getStrongPower(pos: IVector3, direction: BlockFace?): Int {
-        return getBlock(pos.vector3)!!.getStrongPower(direction)
+        return getBlock(pos.vector3).getStrongPower(direction)
     }
 
     fun getStrongPower(pos: IVector3): Int {
@@ -4418,7 +4418,7 @@ class Level(
             getBlock(pos.vector3)
         }
 
-        return if (block!!.isNormalBlock) this.getStrongPower(pos) else block.getWeakPower(face)
+        return if (block.isNormalBlock) this.getStrongPower(pos) else block.getWeakPower(face)
     }
 
     fun isBlockPowered(pos: Vector3): Boolean {
@@ -4477,7 +4477,7 @@ class Level(
         val targZ = target.position.floorZ
         //check if there's air above (at least 3 blocks)
         for (i in 1..3) {
-            if (!getBlock(targX, targY + i, targZ)!!.isAir) {
+            if (!getBlock(targX, targY + i, targZ).isAir) {
                 return false
             }
         }
@@ -4486,28 +4486,28 @@ class Level(
         var sizePosZ = 0
         var sizeNegZ = 0
         for (i in 1..<maxPortalSize) {
-            if (getBlock(targX + i, targY, targZ)!!.id == BlockID.OBSIDIAN) {
+            if (getBlock(targX + i, targY, targZ).id == BlockID.OBSIDIAN) {
                 sizePosX++
             } else {
                 break
             }
         }
         for (i in 1..<maxPortalSize) {
-            if (getBlock(targX - i, targY, targZ)!!.id == BlockID.OBSIDIAN) {
+            if (getBlock(targX - i, targY, targZ).id == BlockID.OBSIDIAN) {
                 sizeNegX++
             } else {
                 break
             }
         }
         for (i in 1..<maxPortalSize) {
-            if (getBlock(targX, targY, targZ + i)!!.id == BlockID.OBSIDIAN) {
+            if (getBlock(targX, targY, targZ + i).id == BlockID.OBSIDIAN) {
                 sizePosZ++
             } else {
                 break
             }
         }
         for (i in 1..<maxPortalSize) {
-            if (getBlock(targX, targY, targZ - i)!!.id == BlockID.OBSIDIAN) {
+            if (getBlock(targX, targY, targZ - i).id == BlockID.OBSIDIAN) {
                 sizeNegZ++
             } else {
                 break
@@ -4524,22 +4524,22 @@ class Level(
             val scanZ = targZ
             for (i in 0..<sizePosX + 1) {
                 //this must be air
-                if (!getBlock(scanX + i, scanY, scanZ)!!.isAir) {
+                if (!getBlock(scanX + i, scanY, scanZ).isAir) {
                     return false
                 }
-                if (getBlock(scanX + i + 1, scanY, scanZ)!!.id == BlockID.OBSIDIAN) {
+                if (getBlock(scanX + i + 1, scanY, scanZ).id == BlockID.OBSIDIAN) {
                     scanX += i
                     break
                 }
             }
             //make sure that the above loop finished
-            if (getBlock(scanX + 1, scanY, scanZ)!!.id != BlockID.OBSIDIAN) {
+            if (getBlock(scanX + 1, scanY, scanZ).id != BlockID.OBSIDIAN) {
                 return false
             }
 
             var innerWidth = 0
             LOOP@ for (i in 0..<maxPortalSize - 2) {
-                val id = getBlock(scanX - i, scanY, scanZ)!!.id
+                val id = getBlock(scanX - i, scanY, scanZ).id
                 when (id) {
                     BlockID.AIR -> innerWidth++
                     BlockID.OBSIDIAN -> break@LOOP
@@ -4548,7 +4548,7 @@ class Level(
             }
             var innerHeight = 0
             LOOP@ for (i in 0..<maxPortalSize - 2) {
-                val id = getBlock(scanX, scanY + i, scanZ)!!.id
+                val id = getBlock(scanX, scanY + i, scanZ).id
                 when (id) {
                     BlockID.AIR -> innerHeight++
                     BlockID.OBSIDIAN -> break@LOOP
@@ -4562,7 +4562,7 @@ class Level(
             for (height in 0..<innerHeight + 1) {
                 if (height == innerHeight) {
                     for (width in 0..<innerWidth) {
-                        if (getBlock(scanX - width, scanY + height, scanZ)!!.id != BlockID.OBSIDIAN) {
+                        if (getBlock(scanX - width, scanY + height, scanZ).id != BlockID.OBSIDIAN) {
                             return false
                         }
                     }
@@ -4571,14 +4571,14 @@ class Level(
                             scanX + 1,
                             scanY + height,
                             scanZ
-                        )!!.id != BlockID.OBSIDIAN || getBlock(scanX - innerWidth, scanY + height, scanZ)!!
+                        ).id != BlockID.OBSIDIAN || getBlock(scanX - innerWidth, scanY + height, scanZ)
                             .id != BlockID.OBSIDIAN
                     ) {
                         return false
                     }
 
                     for (width in 0..<innerWidth) {
-                        if (!getBlock(scanX - width, scanY + height, scanZ)!!.isAir) {
+                        if (!getBlock(scanX - width, scanY + height, scanZ).isAir) {
                             return false
                         }
                     }
@@ -4604,22 +4604,22 @@ class Level(
             var scanZ = targZ
             for (i in 0..<sizePosZ + 1) {
                 //this must be air
-                if (!getBlock(scanX, scanY, scanZ + i)!!.isAir) {
+                if (!getBlock(scanX, scanY, scanZ + i).isAir) {
                     return false
                 }
-                if (getBlock(scanX, scanY, scanZ + i + 1)!!.id == BlockID.OBSIDIAN) {
+                if (getBlock(scanX, scanY, scanZ + i + 1).id == BlockID.OBSIDIAN) {
                     scanZ += i
                     break
                 }
             }
             //make sure that the above loop finished
-            if (getBlock(scanX, scanY, scanZ + 1)!!.id != BlockID.OBSIDIAN) {
+            if (getBlock(scanX, scanY, scanZ + 1).id != BlockID.OBSIDIAN) {
                 return false
             }
 
             var innerWidth = 0
             LOOP@ for (i in 0..<maxPortalSize - 2) {
-                val id = getBlock(scanX, scanY, scanZ - i)!!.id
+                val id = getBlock(scanX, scanY, scanZ - i).id
                 when (id) {
                     BlockID.AIR -> innerWidth++
                     BlockID.OBSIDIAN -> break@LOOP
@@ -4628,7 +4628,7 @@ class Level(
             }
             var innerHeight = 0
             LOOP@ for (i in 0..<maxPortalSize - 2) {
-                val id = getBlock(scanX, scanY + i, scanZ)!!.id
+                val id = getBlock(scanX, scanY + i, scanZ).id
                 when (id) {
                     BlockID.AIR -> innerHeight++
                     BlockID.OBSIDIAN -> break@LOOP
@@ -4642,23 +4642,23 @@ class Level(
             for (height in 0..<innerHeight + 1) {
                 if (height == innerHeight) {
                     for (width in 0..<innerWidth) {
-                        if (getBlock(scanX, scanY + height, scanZ - width)!!.id != BlockID.OBSIDIAN) {
+                        if (getBlock(scanX, scanY + height, scanZ - width).id != BlockID.OBSIDIAN) {
                             return false
                         }
                     }
                 } else {
-                    if (getBlock(scanX, scanY + height, scanZ + 1)!!.id != BlockID.OBSIDIAN || getBlock(
+                    if (getBlock(scanX, scanY + height, scanZ + 1).id != BlockID.OBSIDIAN || getBlock(
                             scanX,
                             scanY + height,
                             scanZ - innerWidth
-                        )!!
+                        )
                             .id != BlockID.OBSIDIAN
                     ) {
                         return false
                     }
 
                     for (width in 0..<innerWidth) {
-                        if (!getBlock(scanX, scanY + height, scanZ - width)!!.isAir) {
+                        if (!getBlock(scanX, scanY + height, scanZ - width).isAir) {
                             return false
                         }
                     }

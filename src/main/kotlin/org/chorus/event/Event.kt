@@ -23,7 +23,7 @@ import org.chorus.utils.EventException
  * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.event.EventHandler
  *
- * 
+ *
  */
 abstract class Event {
     protected var eventName: String? = null

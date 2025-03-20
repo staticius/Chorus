@@ -14,7 +14,6 @@ import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.HashMap
 import kotlin.collections.set
 
 class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {

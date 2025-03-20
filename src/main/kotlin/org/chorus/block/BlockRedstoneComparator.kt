@@ -14,7 +14,7 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 import kotlin.math.max
 
-abstract class BlockRedstoneComparator(blockstate: BlockState) :  BlockRedstoneDiode(blockstate),
+abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDiode(blockstate),
     BlockEntityHolder<BlockEntityComparator> {
     override fun getBlockEntityClass() = BlockEntityComparator::class.java
 
@@ -39,10 +39,10 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) :  BlockRedstoneD
 
     override val unpowered: Block
         get() = get(BlockID.UNPOWERED_COMPARATOR)
-            .setPropertyValues(blockState!!.blockPropertyValues) as BlockRedstoneComparator
+            .setPropertyValues(blockState.blockPropertyValues) as BlockRedstoneComparator
 
     public override fun getPowered(): BlockRedstoneComparator {
-        return get(BlockID.POWERED_COMPARATOR).setPropertyValues(blockState!!.blockPropertyValues) as BlockRedstoneComparator
+        return get(BlockID.POWERED_COMPARATOR).setPropertyValues(blockState.blockPropertyValues) as BlockRedstoneComparator
     }
 
     override val redstoneSignal: Int
@@ -67,12 +67,12 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) :  BlockRedstoneD
         val face = facing
         var block = this.getSide(face!!)
 
-        if (block!!.hasComparatorInputOverride()) {
+        if (block.hasComparatorInputOverride()) {
             power = block.comparatorInputOverride
         } else if (power < 15 && block.isNormalBlock) {
             block = block.getSide(face)
 
-            if (block!!.hasComparatorInputOverride()) {
+            if (block.hasComparatorInputOverride()) {
                 power = block.comparatorInputOverride
             }
         }
@@ -163,8 +163,8 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) :  BlockRedstoneD
                 level.updateComparatorOutputLevelSelective(this.position, true)
             }
 
-            val side = this.getSide(facing!!.getOpposite()!!)
-            side!!.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
+            val side = this.getSide(facing!!.getOpposite())
+            side.onUpdate(Level.BLOCK_UPDATE_REDSTONE)
             RedstoneComponent.updateAroundRedstone(side)
         }
     }
@@ -194,8 +194,8 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) :  BlockRedstoneD
                 locator,
                 e
             )
-            level.setBlock(layer0!!.position, 0, layer0, true)
-            level.setBlock(layer1!!.position, 1, layer1, true)
+            level.setBlock(layer0.position, 0, layer0, true)
+            level.setBlock(layer1.position, 1, layer1, true)
             return false
         }
 

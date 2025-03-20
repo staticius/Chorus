@@ -9,7 +9,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.chorus.network.connection.util.BatchFlag
 import org.chorus.network.protocol.DataPacket
-import org.chorus.network.protocol.types.*
+import org.chorus.network.protocol.types.CompressionAlgorithm
 import java.util.function.Consumer
 
 class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Handle<BedrockBatchWrapper>) :

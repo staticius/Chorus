@@ -32,11 +32,11 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventGenericPacket
 import org.chorus.network.protocol.LevelEventPacket
-
 import java.util.*
 import java.util.Set
 import java.util.concurrent.*
 import kotlin.collections.setOf
+import kotlin.collections.toTypedArray
 
 class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt) {
     override fun getIdentifier(): String {
@@ -111,7 +111,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         }
 
         val paleLogs = Arrays.stream(
-            creakingHeart!!.levelBlock?.boundingBox?.let {
+            creakingHeart!!.levelBlock.boundingBox?.let {
                 level!!.getCollisionBlocks(
                     it.grow(2.0, 2.0, 2.0)
                 )

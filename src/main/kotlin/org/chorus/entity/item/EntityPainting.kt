@@ -68,7 +68,7 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
         this.motive = getMotive(namedTag!!.getString("Motive"))
 
         if (this.motive != null) {
-            val face: BlockFace? = getHorizontalFacing()
+            val face: BlockFace = getHorizontalFacing()
 
             val size: Vector3 = Vector3(
                 motive!!.width.toDouble(),
@@ -109,7 +109,7 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
         addPainting.x = position.x.toFloat()
         addPainting.y = position.y.toFloat()
         addPainting.z = position.z.toFloat()
-        addPainting.direction = getDirection()!!.horizontalIndex
+        addPainting.direction = getDirection().horizontalIndex
         addPainting.title = namedTag!!.getString("Motive")
         return addPainting
     }

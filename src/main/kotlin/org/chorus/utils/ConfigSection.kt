@@ -450,7 +450,8 @@ class ConfigSection() : LinkedHashMap<String?, Any?>() {
                 is String -> {
                     try {
                         result.add(obj.toInt())
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }
@@ -497,7 +498,8 @@ class ConfigSection() : LinkedHashMap<String?, Any?>() {
                 is String -> {
                     try {
                         result.add(obj.toDouble())
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }
@@ -521,7 +523,8 @@ class ConfigSection() : LinkedHashMap<String?, Any?>() {
                 is String -> {
                     try {
                         result.add(obj.toFloat())
-                    } catch (_: Exception) { }
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }
@@ -545,7 +548,8 @@ class ConfigSection() : LinkedHashMap<String?, Any?>() {
                 is String -> {
                     try {
                         result.add(obj.toLong())
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }
@@ -571,7 +575,8 @@ class ConfigSection() : LinkedHashMap<String?, Any?>() {
                 is String -> {
                     try {
                         result.add(obj.toByte())
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }
@@ -624,7 +629,8 @@ class ConfigSection() : LinkedHashMap<String?, Any?>() {
                 is String -> {
                     try {
                         result.add(obj.toShort())
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }

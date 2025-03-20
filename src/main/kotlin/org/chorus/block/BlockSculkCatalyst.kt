@@ -35,8 +35,8 @@ class BlockSculkCatalyst @JvmOverloads constructor(blockstate: BlockState = Comp
     override fun getBlockEntityType(): String {
         return BlockEntity.SCULK_CATALYST
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.SCULK_CATALYST, CommonBlockProperties.BLOOM)
+        companion object {
+            val properties: BlockProperties = BlockProperties(BlockID.SCULK_CATALYST, CommonBlockProperties.BLOOM)
 
+        }
     }
-}

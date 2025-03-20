@@ -104,7 +104,7 @@ class LevelDBChunkSerializer private constructor() {
     //serialize chunk section light
     private fun serializeLight(writeBatch: WriteBatch, chunk: UnsafeChunk) {
         val sections = chunk.sections
-        for (section in sections!!) {
+        for (section in sections) {
             if (section == null) {
                 continue
             }
@@ -161,7 +161,7 @@ class LevelDBChunkSerializer private constructor() {
     //serialize chunk section
     private fun serializeBlock(writeBatch: WriteBatch, chunk: UnsafeChunk) {
         val sections = chunk.sections
-        for (section in sections!!) {
+        for (section in sections) {
             if (section == null) {
                 continue
             }
@@ -171,7 +171,7 @@ class LevelDBChunkSerializer private constructor() {
                 buffer.writeByte(ChunkSection.Companion.LAYER_COUNT)
                 buffer.writeByte(section.y.toInt())
                 for (i in 0..<ChunkSection.Companion.LAYER_COUNT) {
-                    section.blockLayer[i]!!.writeToStoragePersistent(
+                    section.blockLayer[i].writeToStoragePersistent(
                         buffer
                     ) { obj: V? -> obj.getBlockStateTag() }
                 }
@@ -228,7 +228,7 @@ class LevelDBChunkSerializer private constructor() {
                             }
                             var layer = 0
                             while (layer < layers) {
-                                section.blockLayer[layer]!!.readFromStoragePersistent(
+                                section.blockLayer[layer].readFromStoragePersistent(
                                     byteBuf
                                 ) { hash: Int ->
                                     val blockState = Registries.BLOCKSTATE[hash]
@@ -258,7 +258,7 @@ class LevelDBChunkSerializer private constructor() {
                             }
                             var layer = 0
                             while (layer < layers) {
-                                section.blockLayer[layer]!!.readFromStoragePersistent(
+                                section.blockLayer[layer].readFromStoragePersistent(
                                     byteBuf
                                 ) { hash: Int ->
                                     val blockState = Registries.BLOCKSTATE[hash]
@@ -486,7 +486,7 @@ class LevelDBChunkSerializer private constructor() {
                     if ((e !is Player) && !e.closed && e.canBeSavedWithChunk()) {
                         e.saveNBT()
 
-                        val entity_uuid = e.getUniqueId()!!.leastSignificantBits
+                        val entity_uuid = e.getUniqueId().leastSignificantBits
 
                         val entity_uuid_buf = ByteBuffer.allocate(java.lang.Long.BYTES)
                         entity_uuid_buf.order(ByteOrder.LITTLE_ENDIAN)
