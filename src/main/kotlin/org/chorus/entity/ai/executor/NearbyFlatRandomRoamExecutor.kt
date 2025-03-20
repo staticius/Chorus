@@ -44,7 +44,7 @@ open class NearbyFlatRandomRoamExecutor @JvmOverloads constructor(
                             -1.0,
                             0.0
                         )
-                    ).id.also { blockId = it }) === Block.FLOWING_WATER || blockId === Block.WATER)
+                    ).id.also { blockId = it }) === BlockID.FLOWING_WATER || blockId === BlockID.WATER)
                 ) {
                     target = next(center)
                     time++

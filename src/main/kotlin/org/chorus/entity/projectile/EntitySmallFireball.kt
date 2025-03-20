@@ -59,7 +59,7 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this,
-                this.getVector3(), VibrationType.PROJECTILE_LAND
+                this.vector3, VibrationType.PROJECTILE_LAND
             )
         )
         val damage: Int = this.getResultDamage(entity)
@@ -79,7 +79,7 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this,
-                this.getVector3(), VibrationType.PROJECTILE_LAND
+                this.vector3, VibrationType.PROJECTILE_LAND
             )
         )
         var affect: Boolean = false

@@ -26,7 +26,7 @@ class WalkingPosEvaluator : IPosEvaluator {
         //不能是栏杆
         if (block is BlockFence || block is BlockFenceGate) return false
         //水特判
-        if (block.id === Block.WATER || block.id === Block.FLOWING_WATER) return true
+        if (block.id === BlockID.WATER || block.id === BlockID.FLOWING_WATER) return true
         //必须可以站立
         return !block.canPassThrough()
     }

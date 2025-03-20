@@ -12,7 +12,7 @@ class ServerSettingsRequestProcessor : DataPacketProcessor<ServerSettingsRequest
     override fun handle(playerHandle: PlayerHandle, pk: ServerSettingsRequestPacket) {
         val settingsRequestEvent =
             PlayerServerSettingsRequestEvent(playerHandle.player, HashMap(playerHandle.serverSettings))
-        playerHandle.Server.instance.pluginManager.callEvent(settingsRequestEvent)
+        Server.instance.pluginManager.callEvent(settingsRequestEvent)
 
         if (!settingsRequestEvent.isCancelled) {
             settingsRequestEvent.getSettings().forEach { id: Int?, window: Form<*> ->

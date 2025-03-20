@@ -12,7 +12,7 @@ import java.util.function.Consumer
 
 class CameraPresetsPacket : DataPacket() {
     @JvmField
-    val presets: List<CameraPreset> = ObjectArrayList()
+    val presets: MutableList<CameraPreset> = ObjectArrayList()
 
     override fun decode(byteBuf: HandleByteBuf) {
     }
@@ -25,23 +25,23 @@ class CameraPresetsPacket : DataPacket() {
     }
 
     fun writePreset(byteBuf: HandleByteBuf, preset: CameraPreset) {
-        byteBuf.writeString(preset.getIdentifier())
-        byteBuf.writeString(preset.getInheritFrom())
-        byteBuf.writeNotNull<T>(preset.getPos(), Consumer<T?> { v: T? -> byteBuf.writeFloatLE(v.getX()) })
-        byteBuf.writeNotNull<T>(preset.getPos(), Consumer<T?> { v: T? -> byteBuf.writeFloatLE(v.getY()) })
-        byteBuf.writeNotNull<T>(preset.getPos(), Consumer<T?> { v: T? -> byteBuf.writeFloatLE(v.getZ()) })
-        byteBuf.writeNotNull<T>(preset.getPitch(), Consumer<T?> { value: T? -> byteBuf.writeFloatLE(value) })
-        byteBuf.writeNotNull<T>(preset.getYaw(), Consumer<T?> { value: T? -> byteBuf.writeFloatLE(value) })
-        byteBuf.writeNotNull<T>(preset.getRotationSpeed(), Consumer<T?> { value: T? -> byteBuf.writeFloatLE(value) })
-        byteBuf.writeOptional<T>(preset.getSnapToTarget(), Consumer<T> { value: T? -> byteBuf.writeBoolean(value) })
-        byteBuf.writeNotNull<T>(preset.getHorizontalRotationLimit(), byteBuf::writeVector2f)
-        byteBuf.writeNotNull<T>(preset.getVerticalRotationLimit(), byteBuf::writeVector2f)
-        byteBuf.writeOptional<T>(
-            preset.getContinueTargeting(),
-            Consumer<T> { value: T? -> byteBuf.writeBoolean(value) })
-        byteBuf.writeOptional<T>(
-            preset.getBlockListeningRadius(),
-            Consumer<T> { value: T? -> byteBuf.writeFloatLE(value) })
+        byteBuf.writeString(preset.identifier)
+        byteBuf.writeString(preset.inheritFrom)
+        byteBuf.writeNotNull(preset.pos) { v -> byteBuf.writeFloatLE(v!!.x) }
+        byteBuf.writeNotNull(preset.pos) { v -> byteBuf.writeFloatLE(v!!.y) }
+        byteBuf.writeNotNull(preset.pos) { v -> byteBuf.writeFloatLE(v!!.z) }
+        byteBuf.writeNotNull(preset.pitch) { value -> byteBuf.writeFloatLE(value!!) }
+        byteBuf.writeNotNull(preset.yaw) { value -> byteBuf.writeFloatLE(value!!) }
+        byteBuf.writeNotNull(preset.rotationSpeed) { value -> byteBuf.writeFloatLE(value!!) }
+        byteBuf.writeOptional(preset.snapToTarget) { value -> byteBuf.writeBoolean(value!!) }
+        byteBuf.writeNotNull(preset.horizontalRotationLimit) { byteBuf.writeVector2f(it!!) }
+        byteBuf.writeNotNull(preset.verticalRotationLimit) { byteBuf.writeVector2f(it!!) }
+        byteBuf.writeOptional(
+            preset.continueTargeting
+        ) { value -> byteBuf.writeBoolean(value!!) }
+        byteBuf.writeOptional(
+            preset.blockListeningRadius
+        ) { value -> byteBuf.writeFloatLE(value!!) }
         byteBuf.writeNotNull<T>(preset.getViewOffset(), byteBuf::writeVector2f)
         byteBuf.writeNotNull<T>(preset.getEntityOffset(), byteBuf::writeVector3f)
         byteBuf.writeNotNull<T>(preset.getRadius(), Consumer<T?> { value: T? -> byteBuf.writeFloatLE(value) })

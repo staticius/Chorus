@@ -14,7 +14,7 @@ class LecternUpdateProcessor : DataPacketProcessor<LecternUpdatePacket>() {
         val blockEntityLectern = playerHandle.player.level!!.getBlockEntity(blockPosition)
         if (blockEntityLectern is BlockEntityLectern) {
             val lecternPageChangeEvent = LecternPageChangeEvent(playerHandle.player, blockEntityLectern, pk.page)
-            playerHandle.Server.instance.pluginManager.callEvent(lecternPageChangeEvent)
+            Server.instance.pluginManager.callEvent(lecternPageChangeEvent)
             if (!lecternPageChangeEvent.isCancelled) {
                 blockEntityLectern.rawPage = lecternPageChangeEvent.newRawPage
                 blockEntityLectern.spawnToAll()

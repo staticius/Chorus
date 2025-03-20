@@ -3244,7 +3244,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         const val TAG_VARIANT: String = "Variant"
 
         @JvmField
-        val EMPTY_ARRAY: Array<Entity?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<Entity> = emptyArray()
         var entityCount: AtomicLong = AtomicLong(1)
 
         /**

@@ -149,9 +149,9 @@ class Binary {
                             z = applyData.z.toFloat()
                         } else {
                             val v3data = applyData as Vector3f
-                            x = v3data.south
-                            y = v3data.up
-                            z = v3data.west
+                            x = v3data.x
+                            y = v3data.y
+                            z = v3data.z
                         }
                         stream.putLFloat(x)
                         stream.putLFloat(y)

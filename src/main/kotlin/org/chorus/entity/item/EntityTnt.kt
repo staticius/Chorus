@@ -151,7 +151,7 @@ class EntityTnt @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, pro
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this,
-                this.getVector3(), VibrationType.EXPLODE
+                this.vector3, VibrationType.EXPLODE
             )
         )
     }

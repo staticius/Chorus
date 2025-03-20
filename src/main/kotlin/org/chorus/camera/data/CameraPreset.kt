@@ -16,38 +16,38 @@ import java.util.*
 import java.util.function.Consumer
 
 class CameraPreset @JvmOverloads constructor (
-    private val identifier: String,
+    val identifier: String,
     inheritFrom: String? = null,
-    private val pos: Vector3f? = null,
-    private val yaw: Float? = null,
-    private val pitch: Float? = null,
-    private val rotationSpeed: Float? = null,
+    val pos: Vector3f? = null,
+    val yaw: Float? = null,
+    val pitch: Float? = null,
+    val rotationSpeed: Float? = null,
     snapToTarget: Boolean? = null,
     blockListeningRadius: Float? = null,
-    private val viewOffset: Vector2f? = null,
-    private val entityOffset: Vector3f? = null,
-    private val radius: Float? = null,
-    private val yawLimitMin: Float? = null,
-    private val yawLimitMax: Float? = null,
-    private val listener: CameraAudioListener? = null,
+    val viewOffset: Vector2f? = null,
+    val entityOffset: Vector3f? = null,
+    val radius: Float? = null,
+    val yawLimitMin: Float? = null,
+    val yawLimitMax: Float? = null,
+    val listener: CameraAudioListener? = null,
     playEffect: Boolean? = null,
-    private val horizontalRotationLimit: Vector2f? = null,
-    private val verticalRotationLimit: Vector2f? = null,
+    val horizontalRotationLimit: Vector2f? = null,
+    val verticalRotationLimit: Vector2f? = null,
     continueTargeting: Boolean? = null,
     alignTargetAndCameraForward: Boolean? = null,
     aimAssist: CameraPresetAimAssist? = null
 ) {
-    private val inheritFrom = inheritFrom ?: ""
-    private val snapToTarget: OptionalValue<Boolean?> = OptionalValue.ofNullable(snapToTarget)
-    private val continueTargeting: OptionalValue<Boolean?> =
+    val inheritFrom = inheritFrom ?: ""
+    val snapToTarget: OptionalValue<Boolean?> = OptionalValue.ofNullable(snapToTarget)
+    val continueTargeting: OptionalValue<Boolean?> =
         OptionalValue.ofNullable(continueTargeting)
 
-    private val blockListeningRadius: OptionalValue<Float?> =
+    val blockListeningRadius: OptionalValue<Float?> =
         OptionalValue.ofNullable(blockListeningRadius)
-    private val playEffect: OptionalValue<Boolean?> = OptionalValue.ofNullable(playEffect)
-    private val alignTargetAndCameraForward: OptionalValue<Boolean?> =
+    val playEffect: OptionalValue<Boolean?> = OptionalValue.ofNullable(playEffect)
+    val alignTargetAndCameraForward: OptionalValue<Boolean?> =
         OptionalValue.ofNullable(alignTargetAndCameraForward)
-    private val aimAssist: OptionalValue<CameraPresetAimAssist?> =
+    val aimAssist: OptionalValue<CameraPresetAimAssist?> =
         OptionalValue.ofNullable(aimAssist)
 
 

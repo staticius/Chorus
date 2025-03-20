@@ -72,7 +72,7 @@ interface IChunk {
      * @param layer the layer
      * @return the block
      */
-    fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState?
+    fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState
 
     fun getAndSetBlockState(x: Int, y: Int, z: Int, blockstate: BlockState, layer: Int): BlockState?
 

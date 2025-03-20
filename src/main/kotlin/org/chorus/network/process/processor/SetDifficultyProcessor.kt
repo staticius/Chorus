@@ -13,15 +13,15 @@ class SetDifficultyProcessor : DataPacketProcessor<SetDifficultyPacket>() {
         if (!playerHandle.player.spawned || !playerHandle.player.hasPermission("nukkit.command.difficulty")) {
             return
         }
-        playerHandle.Server.instance.setDifficulty(pk.difficulty)
+        Server.instance.setDifficulty(pk.difficulty)
         val difficultyPacket = SetDifficultyPacket()
-        difficultyPacket.difficulty = playerHandle.Server.instance.getDifficulty()
-        Server.broadcastPacket(playerHandle.Server.instance.getOnlinePlayers().values, difficultyPacket)
+        difficultyPacket.difficulty = Server.instance.getDifficulty()
+        Server.broadcastPacket(Server.instance.onlinePlayers.values, difficultyPacket)
         Command.broadcastCommandMessage(
             playerHandle.player,
             TranslationContainer(
                 "commands.difficulty.success",
-                playerHandle.Server.instance.getDifficulty().toString()
+                Server.instance.getDifficulty().toString()
             )
         )
     }

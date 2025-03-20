@@ -13,11 +13,12 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = Companio
     override val name: String
         get() = "End Portal Block"
 
-    override val blockEntityClass: Class<out E>
+    override val blockEntityClass: Class<out BlockEntityEndPortal>
         get() = BlockEntityEndPortal::class.java
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.END_PORTAL
+        return BlockEntityID.END_PORTAL
+    }
 
     override fun place(
         item: Item,
@@ -29,7 +30,7 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = Companio
         fz: Double,
         player: Player?
     ): Boolean {
-        return BlockEntityHolder.Companion.setBlockAndCreateEntity<BlockEntityEndPortal?, BlockEndPortal>(this) != null
+        return BlockEntityHolder.setBlockAndCreateEntity(this) != null
     }
 
     override fun canPassThrough(): Boolean {
@@ -65,7 +66,7 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = Companio
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(AIR))
+        return ItemBlock(get(BlockID.AIR))
     }
 
     override fun canBePushed(): Boolean {

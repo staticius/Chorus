@@ -55,7 +55,7 @@ open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjecti
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this,
-                this.getVector3(), VibrationType.PROJECTILE_LAND
+                this.vector3, VibrationType.PROJECTILE_LAND
             )
         )
         var affect: Boolean = false

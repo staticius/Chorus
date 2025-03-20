@@ -13,7 +13,7 @@ import org.chorus.utils.Utils
 class SwimmingPosEvaluator : IPosEvaluator {
     override fun evalPos(entity: EntityMob, pos: Vector3): Boolean {
         val blockId = entity.level!!.getTickCachedBlock(pos).id
-        return isPassable(entity, pos) && (blockId === Block.FLOWING_WATER || blockId === Block.WATER)
+        return isPassable(entity, pos) && (blockId === BlockID.FLOWING_WATER || blockId === BlockID.WATER)
     }
 
     override fun evalStandingBlock(entity: EntityMob, block: Block): Boolean {

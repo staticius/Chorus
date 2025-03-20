@@ -43,7 +43,7 @@ class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(ch
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this,
-                this.getVector3(), VibrationType.PROJECTILE_LAND
+                this.vector3, VibrationType.PROJECTILE_LAND
             )
         )
         var affect: Boolean = false

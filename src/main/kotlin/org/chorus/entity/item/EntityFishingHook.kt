@@ -85,9 +85,9 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
                 val offset: Vector3f = entity.getMountedOffset(this)
                 setPosition(
                     Vector3(
-                        entity.position.x + offset!!.south,
-                        entity.position.y + offset.up,
-                        entity.position.z + offset.west
+                        entity.position.x + offset!!.x,
+                        entity.position.y + offset.y,
+                        entity.position.z + offset.z
                     )
                 )
             }

@@ -15,7 +15,7 @@ class SetPlayerGameTypeProcessor : DataPacketProcessor<SetPlayerGameTypePacket>(
                 when (pk.gamemode) {
                     0, 1, 2 -> pk.gamemode
                     6 -> 3
-                    5 -> playerHandle.Server.instance.getDefaultGamemode()
+                    5 -> Server.instance.getDefaultGamemode()
                     else -> throw IllegalStateException("Unexpected value: " + pk.gamemode)
                 }
             )

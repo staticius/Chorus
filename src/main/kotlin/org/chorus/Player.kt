@@ -429,7 +429,7 @@ class Player @UsedByReflection constructor(
      *
      * Player Fog Settings
      */
-    var fogStack: List<PlayerFogPacket.Fog> = ArrayList()
+    var fogStack: MutableList<PlayerFogPacket.Fog> = ArrayList()
     /**
      * @return [.lastBeAttackEntity]
      */
@@ -846,19 +846,19 @@ class Player @UsedByReflection constructor(
             food.sendFood()
         }
 
-        val scoreboardManager = Server.instance.getScoreboardManager()
-        scoreboardManager?.onPlayerJoin(this)
+        val scoreboardManager = Server.instance.scoreboardManager
+        scoreboardManager.onPlayerJoin(this)
 
-        if (spawn.second() == null || spawn.second() == SpawnPointType.WORLD) {
+        if (spawn.second == null || spawn.second == SpawnPointType.WORLD) {
             this.setSpawn(this.level!!.safeSpawn, SpawnPointType.WORLD)
         } else {
             //update compass
             val pk = SetSpawnPositionPacket()
             pk.spawnType = SetSpawnPositionPacket.TYPE_WORLD_SPAWN
-            pk.x = spawn.first()!!.position.floorX
-            pk.y = spawn.first()!!.position.floorY
-            pk.z = spawn.first()!!.position.floorZ
-            pk.dimension = spawn.first()!!.level.dimension
+            pk.x = spawn.first!!.position.floorX
+            pk.y = spawn.first!!.position.floorY
+            pk.z = spawn.first!!.position.floorZ
+            pk.dimension = spawn.first!!.level.dimension
             this.dataPacket(pk)
         }
 
@@ -870,8 +870,7 @@ class Player @UsedByReflection constructor(
 
         //客户端初始化完毕再传送玩家，避免下落 (x)
         //已经设置immobile了所以不用管下落了
-        val pos = if (Server.instance.getSettings().baseSettings()
-                .safeSpawn() && (this.gamemode and 0x01) == 0
+        val pos = if (Server.instance.settings.baseSettings.safeSpawn && (this.gamemode and 0x01) == 0
         ) {
             Transform(
                 this.level!!.getSafeSpawn(this.position).position,
@@ -949,7 +948,7 @@ class Player @UsedByReflection constructor(
                     position.floorY - 1, position.floorZ + 1
                 )
             )
-            if ((!b1!!.canPassThrough() && b1.collidesWithBB(realBB)) || (!b2!!.canPassThrough() && b2.collidesWithBB(
+            if ((!b1.canPassThrough() && b1.collidesWithBB(realBB)) || (!b2.canPassThrough() && b2.collidesWithBB(
                     realBB
                 ))
             ) {
@@ -990,13 +989,13 @@ class Player @UsedByReflection constructor(
         scanBoundingBox.maxY = boundingBox.minY
         val scaffoldingUnder = level!!.getCollisionBlocks(
             scanBoundingBox,
-            true, true
+            targetFirst = true, ignoreCollidesCheck = true
         ) { b: Block -> b.id == BlockID.SCAFFOLDING }
 
         setDataFlagExtend(EntityFlag.IN_SCAFFOLDING, scaffolding)
-        setDataFlagExtend(EntityFlag.OVER_SCAFFOLDING, scaffoldingUnder.size > 0)
+        setDataFlagExtend(EntityFlag.OVER_SCAFFOLDING, scaffoldingUnder.isNotEmpty())
         setDataFlagExtend(EntityFlag.IN_ASCENDABLE_BLOCK, scaffolding)
-        setDataFlagExtend(EntityFlag.OVER_DESCENDABLE_BLOCK, scaffoldingUnder.size > 0)
+        setDataFlagExtend(EntityFlag.OVER_DESCENDABLE_BLOCK, scaffoldingUnder.isNotEmpty())
 
         if (endPortal) { //handle endPortal teleport
             if (!inEndPortal) {
@@ -1111,7 +1110,7 @@ class Player @UsedByReflection constructor(
                 val event = PlayerInvalidMoveEvent(this, true)
                 Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled && (event.isRevert.also { invalidMotion = it })) {
-                    log.warn(Server.instance.getLanguage().tr("nukkit.player.invalidMove", this.getName()))
+                    log.warn(Server.instance.baseLang.tr("nukkit.player.invalidMove", this.getName()))
                 }
             }
             if (invalidMotion) {
@@ -1142,11 +1141,11 @@ class Player @UsedByReflection constructor(
         prevRotation.pitch = now.rotation.pitch
         this.prevHeadYaw = now.headYaw
 
-        var blocksAround: List<Block?>? = null
-        var collidingBlocks: List<Block?>? = null
+        var blocksAround: MutableList<Block>? = null
+        var collidingBlocks: MutableList<Block>? = null
         if (this.blocksAround != null && this.collisionBlocks != null) {
-            blocksAround = ArrayList(this.blocksAround)
-            collidingBlocks = ArrayList(this.collisionBlocks)
+            blocksAround = ArrayList(this.blocksAround!!)
+            collidingBlocks = ArrayList(this.collisionBlocks!!)
         }
 
         if (!this.firstMove) {
@@ -1171,7 +1170,7 @@ class Player @UsedByReflection constructor(
                             level!!.vibrationManager.callVibrationEvent(
                                 VibrationEvent(
                                     this,
-                                    this.getVector3(), VibrationType.ELYTRA_GLIDE
+                                    this.vector3, VibrationType.ELYTRA_GLIDE
                                 )
                             )
                         } else if (this.isOnGround() && (getLocator()
@@ -1180,7 +1179,7 @@ class Player @UsedByReflection constructor(
                             level!!.vibrationManager.callVibrationEvent(
                                 VibrationEvent(
                                     this,
-                                    this.getVector3(), VibrationType.STEP
+                                    this.vector3, VibrationType.STEP
                                 )
                             )
                         } else if (this.isTouchingWater()) {
@@ -1238,17 +1237,17 @@ class Player @UsedByReflection constructor(
         val distance = newPosition.position.distance(this.position)
         val updatePosition = distance > MOVEMENT_DISTANCE_THRESHOLD //sqrt distance
         val updateRotation =
-            Math.abs(rotation.pitch - newPosition.rotation.pitch) as Float > ROTATION_UPDATE_THRESHOLD || Math.abs(
+            abs(rotation.pitch - newPosition.rotation.pitch).toFloat() > ROTATION_UPDATE_THRESHOLD || abs(
                 rotation.yaw - newPosition.rotation.yaw
-            ) as Float > ROTATION_UPDATE_THRESHOLD || abs(
+            ).toFloat() > ROTATION_UPDATE_THRESHOLD || abs(
                 rotation.yaw - newPosition.headYaw
             ).toFloat() > ROTATION_UPDATE_THRESHOLD
         val isHandle = this.isAlive() && this.spawned && !this.isSleeping() && (updatePosition || updateRotation)
         if (isHandle) {
             //todo hack for receive a error position after teleport
             val now = System.currentTimeMillis()
-            if (lastTeleportMessage != null && (now - lastTeleportMessage!!.right()) < 200) {
-                val dis = newPosition.position.distance(lastTeleportMessage!!.left().position)
+            if (lastTeleportMessage != null && (now - lastTeleportMessage!!.second) < 200) {
+                val dis = newPosition.position.distance(lastTeleportMessage!!.first.position)
                 if (dis < MOVEMENT_DISTANCE_THRESHOLD) return
             }
             this.newPosition = newPosition.position
@@ -1260,7 +1259,7 @@ class Player @UsedByReflection constructor(
     fun handleLogicInMove(invalidMotion: Boolean, distance: Double) {
         if (!invalidMotion) {
             //处理饱食度更新
-            if (foodData!!.isEnabled && Server.instance.difficulty > 0) {
+            if (foodData!!.isEnabled && Server.instance.getDifficulty() > 0) {
                 //UpdateFoodExpLevel
                 if (distance >= 0.05) {
                     var jump = 0.0
@@ -1282,19 +1281,19 @@ class Player @UsedByReflection constructor(
             }
 
             //处理冰霜行者附魔
-            val frostWalker = inventory!!.boots.getEnchantment(Enchantment.ID_FROST_WALKER)
+            val frostWalker = inventory.boots.getEnchantment(Enchantment.ID_FROST_WALKER)
             if (frostWalker != null && frostWalker.level > 0 && !this.isSpectator && position.y >= 1 && position.y <= 255) {
                 val radius = 2 + frostWalker.level
-                for (coordX in position.floorX - radius..<position.floorX + radius + 1) {
-                    for (coordZ in position.floorZ - radius..<position.floorZ + radius + 1) {
-                        var block = level!!.getBlock(coordX, position.floorY - 1, coordZ)
+                for (coX in position.floorX - radius..<position.floorX + radius + 1) {
+                    for (coZ in position.floorZ - radius..<position.floorZ + radius + 1) {
+                        var block = level!!.getBlock(coX, position.floorY - 1, coZ)
                         var layer = 0
-                        if ((block!!.id != Block.WATER && (block.id != Block.FLOWING_WATER ||
+                        if ((block.id != BlockID.WATER && (block.id != BlockID.FLOWING_WATER ||
                                     block.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.LIQUID_DEPTH) != 0)) || !block.up().isAir
                         ) {
                             block = block.getLevelBlockAtLayer(1)
                             layer = 1
-                            if ((block!!.id != Block.WATER && (block.id != Block.FLOWING_WATER ||
+                            if ((block.id != BlockID.WATER && (block.id != BlockID.FLOWING_WATER ||
                                         block.getPropertyValue(CommonBlockProperties.LIQUID_DEPTH) != 0)) || !block.up().isAir
                             ) {
                                 continue
@@ -1303,9 +1302,9 @@ class Player @UsedByReflection constructor(
                         val ev = WaterFrostEvent(block, this)
                         Server.instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
-                            level!!.setBlock(block.position, layer, Block.get(Block.FROSTED_ICE), true, false)
+                            level!!.setBlock(block.position, layer, Block.get(BlockID.FROSTED_ICE), true, false)
                             level!!.scheduleUpdate(
-                                level!!.getBlock(block.position, layer)!!,
+                                level!!.getBlock(block.position, layer),
                                 ThreadLocalRandom.current().nextInt(20, 40)
                             )
                         }
@@ -1321,7 +1320,7 @@ class Player @UsedByReflection constructor(
                 this.soulSpeedMultiplier = (soulSpeedLevel * 0.105f) + 1.3f
 
                 // levelBlock check is required because of soul sand being 1 pixel shorter than normal blocks
-                val isSoulSandCompatible = levelBlock!!.isSoulSpeedCompatible || levelBlock.down().isSoulSpeedCompatible
+                val isSoulSandCompatible = levelBlock.isSoulSpeedCompatible || levelBlock.down().isSoulSpeedCompatible
 
                 if (this.wasInSoulSandCompatible && !isSoulSandCompatible) {
                     this.wasInSoulSandCompatible = false
@@ -1371,7 +1370,7 @@ class Player @UsedByReflection constructor(
         }
 
         var oldPlayer: Player? = null
-        for (p in ArrayList<Player>(Server.instance.getOnlinePlayers().values)) {
+        for (p in ArrayList<Player>(Server.instance.onlinePlayers.values)) {
             if (p !== this && p.getName()
                     .equals(this.getName(), ignoreCase = true) || this.getUniqueId() == p.getUniqueId()
             ) {
@@ -1422,7 +1421,7 @@ class Player @UsedByReflection constructor(
             this.level = Server.instance.defaultLevel
             nbt.putString("Level", this.level!!.getName()!!)
             val spawnLocation = this.level!!.safeSpawn
-            nbt.getList<FloatTag?>("Pos", FloatTag::class.java)
+            nbt.getList<FloatTag>("Pos", FloatTag::class.java)
                 .add(FloatTag(spawnLocation.position.x))
                 .add(FloatTag(spawnLocation.position.y))
                 .add(FloatTag(spawnLocation.position.z))
@@ -1430,7 +1429,7 @@ class Player @UsedByReflection constructor(
             this.level = level
         }
 
-        for ((key, value) in nbt.getCompound("Achievements")!!.entrySet) {
+        for ((key, value) in nbt.getCompound("Achievements").entrySet) {
             if (value !is ByteTag) {
                 continue
             }
@@ -1443,19 +1442,19 @@ class Player @UsedByReflection constructor(
         nbt.putLong("lastPlayed", System.currentTimeMillis() / 1000)
 
         val uuid = getUniqueId()
-        nbt.putLong("UUIDLeast", uuid!!.leastSignificantBits)
+        nbt.putLong("UUIDLeast", uuid.leastSignificantBits)
         nbt.putLong("UUIDMost", uuid.mostSignificantBits)
 
-        if (Server.instance.autoSave) {
-            Server.instance.saveOfflinePlayerData(this.uuid!!, nbt, true)
+        if (Server.instance.getAutoSave()) {
+            Server.instance.saveOfflinePlayerData(this.uuid, nbt, true)
         }
 
         val posList = nbt.getList("Pos", FloatTag::class.java)
 
         super.init(
             this.level!!.getChunk(
-                posList!!.get(0).data.toInt() shr 4,
-                posList.get(2).data.toInt() shr 4,
+                posList[0].data.toInt() shr 4,
+                posList[2].data.toInt() shr 4,
                 true
             ), nbt
         )
@@ -1493,10 +1492,10 @@ class Player @UsedByReflection constructor(
 
         //以下两个List的元素一一对应
         if (!namedTag!!.contains("fogIdentifiers")) {
-            namedTag!!.putList("fogIdentifiers", ListTag<StringTag?>())
+            namedTag!!.putList("fogIdentifiers", ListTag<StringTag>())
         }
         if (!namedTag!!.contains("userProvidedFogIds")) {
-            namedTag!!.putList("userProvidedFogIds", ListTag<StringTag?>())
+            namedTag!!.putList("userProvidedFogIds", ListTag<StringTag>())
         }
         val fogIdentifiers = namedTag!!.getList(
             "fogIdentifiers",
@@ -1506,17 +1505,17 @@ class Player @UsedByReflection constructor(
             "userProvidedFogIds",
             StringTag::class.java
         )
-        for (i in 0..<fogIdentifiers!!.size()) {
+        for (i in 0..<fogIdentifiers.size()) {
             fogStack.add(
                 i, PlayerFogPacket.Fog(
                     tryParse(
-                        fogIdentifiers.get(i).data!!
-                    )!!, userProvidedFogIds!!.get(i).data!!
+                        fogIdentifiers.get(i).data
+                    )!!, userProvidedFogIds[i].data
                 )
             )
         }
 
-        if (!Server.instance.settings.playerSettings().checkMovement()) {
+        if (!Server.instance.settings.playerSettings.checkMovement) {
             this.isCheckingMovement = false
         }
 
@@ -1527,7 +1526,7 @@ class Player @UsedByReflection constructor(
                 this.address,
                 port.toString(),
                 getId().toString(),
-                this.level!!.getName(),
+                this.level!!.getName()!!,
                 round(position.x, 4).toString(),
                 round(position.y, 4).toString(),
                 round(position.z, 4).toString()
@@ -1553,7 +1552,7 @@ class Player @UsedByReflection constructor(
         locallyInitialized = true
 
         //init entity data property
-        this.setDataProperty(EntityDataTypes.NAME, playerInfo.getUsername(), false)
+        this.setDataProperty(EntityDataTypes.NAME, playerInfo.username, false)
         this.setDataProperty(EntityDataTypes.NAMETAG_ALWAYS_SHOW, 1, false)
 
         val playerJoinEvent = PlayerJoinEvent(
@@ -1567,7 +1566,7 @@ class Player @UsedByReflection constructor(
 
         Server.instance.pluginManager.callEvent(playerJoinEvent)
 
-        if (!playerJoinEvent.joinMessage.toString().trim { it <= ' ' }.isEmpty()) {
+        if (playerJoinEvent.joinMessage.toString().trim { it <= ' ' }.isNotEmpty()) {
             Server.instance.broadcastMessage(playerJoinEvent.joinMessage)
         }
 
@@ -1581,7 +1580,7 @@ class Player @UsedByReflection constructor(
           mode update packet.
          */
         this.setGamemode(this.gamemode, false, null, true)
-        this.sendData(hasSpawned.values.toArray<Player>(EMPTY_ARRAY), entityDataMap)
+        this.sendData(hasSpawned.values.toTypedArray(), entityDataMap)
         this.spawnToAll()
         Arrays.stream(level!!.getEntities()).filter { entity: Entity ->
             entity.getViewers().containsKey(
@@ -1620,13 +1619,13 @@ class Player @UsedByReflection constructor(
     }
 
     override var isBanned: Boolean
-        get() = Server.instance.getNameBans().isBanned(this.getName())
+        get() = Server.instance.bannedPlayers.isBanned(this.getName())
         set(value) {
             if (value) {
-                Server.instance.getNameBans().addBan(this.getName(), null, null, null)
+                Server.instance.bannedPlayers.addBan(this.getName(), null, null, null)
                 this.kick(PlayerKickEvent.Reason.NAME_BANNED, "Banned by admin")
             } else {
-                Server.instance.getNameBans().remove(this.getName())
+                Server.instance.bannedPlayers.remove(this.getName())
             }
         }
 
@@ -1642,9 +1641,9 @@ class Player @UsedByReflection constructor(
         //level spawn point < block spawn = self spawn
         val spawnPair = this.spawn
         val playerRespawnEvent = PlayerRespawnEvent(this, spawnPair)
-        if (spawnPair.right() == SpawnPointType.BLOCK) { //block spawn
-            val spawnBlock = playerRespawnEvent.respawnPosition.first().levelBlock
-            if (spawnBlock != null && isValidRespawnBlock(spawnBlock)) {
+        if (spawnPair.second == SpawnPointType.BLOCK) { //block spawn
+            val spawnBlock = playerRespawnEvent.respawnPosition.first!!.levelBlock
+            if (isValidRespawnBlock(spawnBlock)) {
                 // handle RESPAWN_ANCHOR state change when consume charge is true
                 if (spawnBlock.id == BlockID.RESPAWN_ANCHOR) {
                     val respawnAnchor = spawnBlock as BlockRespawnAnchor
@@ -1659,14 +1658,14 @@ class Player @UsedByReflection constructor(
             } else { //block not available
                 val defaultSpawn = Server.instance.defaultLevel!!.spawnLocation
                 this.setSpawn(defaultSpawn, SpawnPointType.WORLD)
-                playerRespawnEvent.respawnPosition = Pair.of(defaultSpawn, SpawnPointType.WORLD)
+                playerRespawnEvent.respawnPosition = Pair(defaultSpawn, SpawnPointType.WORLD)
                 // handle spawn point change when block spawn not available
                 sendMessage(TranslationContainer(TextFormat.GRAY.toString() + "%tile." + (if (level!!.dimension == Level.DIMENSION_OVERWORLD) "bed" else "respawn_anchor") + ".notValid"))
             }
         }
 
         Server.instance.pluginManager.callEvent(playerRespawnEvent)
-        val respawnPos = playerRespawnEvent.respawnPosition.first()
+        val respawnPos = playerRespawnEvent.respawnPosition.first
 
         this.sendExperience()
         this.sendExperienceLevel()
@@ -1687,13 +1686,13 @@ class Player @UsedByReflection constructor(
 
         this.setMovementSpeed(DEFAULT_SPEED)
 
-        getAdventureSettings()!!.update()
-        inventory!!.sendContents(this)
-        inventory!!.sendArmorContents(this)
+        getAdventureSettings().update()
+        inventory.sendContents(this)
+        inventory.sendArmorContents(this)
         offhandInventory!!.sendContents(this)
         this.teleport(
             Transform.fromObject(
-                respawnPos.position.add(
+                respawnPos!!.position.add(
                     0.0,
                     getEyeHeight().toDouble(), 0.0
                 ), respawnPos.level
@@ -1703,7 +1702,7 @@ class Player @UsedByReflection constructor(
     }
 
     public override fun checkChunks() {
-        if (this.chunk == null || (chunk!!.x !== (position.x.toInt() shr 4) || chunk!!.z !== (position.z.toInt() shr 4))) {
+        if (this.chunk == null || (chunk!!.x != (position.x.toInt() shr 4) || chunk!!.z != (position.z.toInt() shr 4))) {
             if (this.chunk != null) {
                 chunk!!.removeEntity(this)
             }
@@ -1797,10 +1796,10 @@ class Player @UsedByReflection constructor(
         return super.getBaseOffset()
     }
 
-    override fun onBlock(entity: Entity?, e: EntityDamageEvent, animate: Boolean) {
-        super.onBlock(entity, e, animate)
-        if (e.isBreakShield) {
-            this.setItemCoolDown(e.shieldBreakCoolDown, "shield")
+    override fun onBlock(entity: Entity?, event: EntityDamageEvent?, animate: Boolean) {
+        super.onBlock(entity, event, animate)
+        if (event!!.isBreakShield) {
+            this.setItemCoolDown(event.shieldBreakCoolDown, "shield")
         }
         if (animate) {
             this.setDataFlag(EntityFlag.BLOCKED_USING_DAMAGED_SHIELD, true)
@@ -1837,7 +1836,7 @@ class Player @UsedByReflection constructor(
             }
         }
 
-    override val player: Player?
+    override val player: Player
         get() = this
 
     override val firstPlayed: Long?
@@ -1885,10 +1884,10 @@ class Player @UsedByReflection constructor(
     }
 
     var allowFlight: Boolean
-        get() = getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT]
+        get() = getAdventureSettings()[AdventureSettings.Type.ALLOW_FLIGHT]
         set(value) {
-            getAdventureSettings()!![AdventureSettings.Type.ALLOW_FLIGHT] = value
-            getAdventureSettings()!!.update()
+            getAdventureSettings()[AdventureSettings.Type.ALLOW_FLIGHT] = value
+            getAdventureSettings().update()
         }
 
 
@@ -1901,10 +1900,10 @@ class Player @UsedByReflection constructor(
      * @param value 是否允许修改世界<br></br>Whether to allow modification of the world
      */
     fun setAllowModifyWorld(value: Boolean) {
-        getAdventureSettings()!![AdventureSettings.Type.WORLD_IMMUTABLE] = !value
-        getAdventureSettings()!![AdventureSettings.Type.BUILD] = value
-        getAdventureSettings()!![AdventureSettings.Type.WORLD_BUILDER] = value
-        getAdventureSettings()!!.update()
+        getAdventureSettings()[AdventureSettings.Type.WORLD_IMMUTABLE] = !value
+        getAdventureSettings()[AdventureSettings.Type.BUILD] = value
+        getAdventureSettings()[AdventureSettings.Type.WORLD_BUILDER] = value
+        getAdventureSettings().update()
     }
 
     fun setAllowInteract(value: Boolean) {
@@ -1918,19 +1917,19 @@ class Player @UsedByReflection constructor(
      * @param containers 是否允许交互容器
      */
     fun setAllowInteract(value: Boolean, containers: Boolean) {
-        getAdventureSettings()!![AdventureSettings.Type.WORLD_IMMUTABLE] = !value
-        getAdventureSettings()!![AdventureSettings.Type.DOORS_AND_SWITCHED] = value
-        getAdventureSettings()!![AdventureSettings.Type.OPEN_CONTAINERS] = containers
-        getAdventureSettings()!!.update()
+        getAdventureSettings()[AdventureSettings.Type.WORLD_IMMUTABLE] = !value
+        getAdventureSettings()[AdventureSettings.Type.DOORS_AND_SWITCHED] = value
+        getAdventureSettings()[AdventureSettings.Type.OPEN_CONTAINERS] = containers
+        getAdventureSettings().update()
     }
 
     fun setAutoJump(value: Boolean) {
-        getAdventureSettings()!![AdventureSettings.Type.AUTO_JUMP] = value
-        getAdventureSettings()!!.update()
+        getAdventureSettings()[AdventureSettings.Type.AUTO_JUMP] = value
+        getAdventureSettings().update()
     }
 
     fun hasAutoJump(): Boolean {
-        return getAdventureSettings()!![AdventureSettings.Type.AUTO_JUMP]
+        return getAdventureSettings()[AdventureSettings.Type.AUTO_JUMP]
     }
 
     override fun spawnTo(player: Player) {
@@ -2016,7 +2015,7 @@ class Player @UsedByReflection constructor(
     override var isOp: Boolean
         get() = Server.instance.isOp(this.getName())
         set(value) {
-            if (value == field) {
+            if (value == isOp) {
                 return
             }
 
@@ -2163,7 +2162,7 @@ class Player @UsedByReflection constructor(
             skinPacket.skin = this.getSkin()
             skinPacket.newSkinName = getSkin()!!.getSkinId()
             skinPacket.oldSkinName = ""
-            Server.Companion.broadcastPacket(Server.instance.getOnlinePlayers().values, skinPacket)
+            Server.Companion.broadcastPacket(Server.instance.onlinePlayers.values, skinPacket)
         }
     }
 
@@ -2345,7 +2344,7 @@ class Player @UsedByReflection constructor(
          *
          * @return [Locator]
          */
-        get() = Pair.of(spawnPoint, spawnPointType)
+        get() = Pair(spawnPoint, spawnPointType)
 
     /**
      * 设置玩家的出生点/复活点。
@@ -2405,7 +2404,7 @@ class Player @UsedByReflection constructor(
             )
             return
         }
-        val positionTrackingService = Server.instance.positionTrackingService
+        val positionTrackingService = Server.instance.getPositionTrackingService()
         positionTrackingService.forceRecheck(this)
     }
 
@@ -2499,11 +2498,11 @@ class Player @UsedByReflection constructor(
     }
 
     fun awardAchievement(achievementId: String): Boolean {
-        if (!Server.instance.properties.get(ServerPropertiesKeys.ACHIEVEMENTS, true)) {
+        if (!Server.instance.properties[ServerPropertiesKeys.ACHIEVEMENTS, true]) {
             return false
         }
 
-        val achievement: Achievement = Achievement.Companion.achievements.get(achievementId)
+        val achievement  = Achievement.achievements.get(achievementId)
 
         if (achievement == null || hasAchievement(achievementId)) {
             return false
@@ -2605,7 +2604,7 @@ class Player @UsedByReflection constructor(
             pk.gameType = from(networkGamemode)
             pk.entityId = this.getId()
             val players: HashSet<Player> =
-                Sets.newHashSet<Player>(Server.instance.getOnlinePlayers().values)
+                Sets.newHashSet<Player>(Server.instance.onlinePlayers.values)
             //不向自身发送UpdatePlayerGameTypePacket，我们将使用SetPlayerGameTypePacket
             players.remove(this)
             //我们需要给所有玩家发送此包，来使玩家客户端能正确渲染玩家实体
@@ -2710,7 +2709,7 @@ class Player @UsedByReflection constructor(
     override fun moveDelta() {
         this.sendPosition(
             this.position,
-            rotation.yaw, rotation.pitch, MovePlayerPacket.MODE_NORMAL, getViewers().values.toArray(EMPTY_ARRAY)
+            rotation.yaw, rotation.pitch, MovePlayerPacket.MODE_NORMAL, getViewers().values.toTypedArray()
         )
     }
 
@@ -2756,7 +2755,7 @@ class Player @UsedByReflection constructor(
                 .setMaxValue(getMaxHealth().toFloat())
                 .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f),
             getAttribute(Attribute.MAX_HUNGER)
-                .setValue(foodData!!.food.toFloat()),
+                .setValue(foodData!!.getFood().toFloat()),
             getAttribute(Attribute.MOVEMENT_SPEED).setValue(this.getMovementSpeed()),
             getAttribute(Attribute.EXPERIENCE_LEVEL).setValue(
                 experienceLevel.toFloat()
@@ -2797,9 +2796,9 @@ class Player @UsedByReflection constructor(
 
     override fun setSwimming(value: Boolean) {
         //Stopping a swim at a height of 1 block will still send a STOPSWIMMING ACTION from the client, but the player will still be swimming height,so skip the action
-        if (!value && level!!.getBlock(position.up())!!.isSolid && level!!.getBlock(
+        if (!value && level!!.getBlock(position.up()).isSolid && level!!.getBlock(
                 position.down()
-            )!!.isSolid
+            ).isSolid
         ) {
             return
         }
@@ -2853,7 +2852,7 @@ class Player @UsedByReflection constructor(
 
             this.entityBaseTick(tickDiff)
 
-            if (Server.instance.difficulty == 0 && level!!.gameRules.getBoolean(GameRule.NATURAL_REGENERATION)) {
+            if (Server.instance.getDifficulty() == 0 && level!!.gameRules.getBoolean(GameRule.NATURAL_REGENERATION)) {
                 if (this.getHealth() < this.getMaxHealth() && this.ticksLived % 20 == 0) {
                     this.heal(1f)
                 }
@@ -2893,9 +2892,9 @@ class Player @UsedByReflection constructor(
                         val diff = (speed!!.y - expectedVelocity) * (speed!!.y - expectedVelocity)
 
                         val block = level!!.getBlock(this.position)
-                        val blockId = block!!.id
-                        val ignore = blockId == Block.LADDER || blockId == Block.VINE || blockId == Block.WEB
-                                || blockId == Block.SCAFFOLDING // || (blockId == Block.SWEET_BERRY_BUSH && block.getDamage() > 0);
+                        val blockId = block.id
+                        val ignore = blockId == BlockID.LADDER || blockId == BlockID.VINE || blockId == BlockID.WEB
+                                || blockId == BlockID.SCAFFOLDING // || (blockId == Block.SWEET_BERRY_BUSH && block.getDamage() > 0);
 
                         if (!this.hasEffect(EffectType.JUMP_BOOST) && diff > 0.6 && expectedVelocity < speed!!.y && !ignore) {
                             if (this.inAirTicks < 150) {
@@ -2959,7 +2958,7 @@ class Player @UsedByReflection constructor(
                 timeSinceRest++
             }
 
-            if (Server.instance.serverAuthoritativeMovement > 0 && this.breakingBlock != null) { //仅服务端权威使用，因为客户端权威continue break是正常的
+            if (Server.instance.getServerAuthoritativeMovement() > 0 && this.breakingBlock != null) { //仅服务端权威使用，因为客户端权威continue break是正常的
                 onBlockBreakContinue(breakingBlock!!.position, this.breakingBlockFace)
             }
 
@@ -3134,7 +3133,7 @@ class Player @UsedByReflection constructor(
                 Server.instance.pluginManager.callEvent(chatEvent)
                 if (!chatEvent.isCancelled) {
                     Server.instance.broadcastMessage(
-                        Server.instance.getLanguage().tr(
+                        Server.instance.baseLang.tr(
                             chatEvent.format, *arrayOf<String?>(
                                 chatEvent.player!!.getDisplayName(), chatEvent.message
                             )
@@ -3206,7 +3205,7 @@ class Player @UsedByReflection constructor(
             ).also { ev = it })
         if (!ev.isCancelled) {
             val message = if (isAdmin) {
-                if (!Server.instance.getNameBans().isBanned(getName())) {
+                if (!Server.instance.bannedPlayers.isBanned(getName())) {
                     "Kicked by admin." + (if (!reasonString.isEmpty()) " Reason: $reasonString" else "")
                 } else {
                     reasonString
@@ -3259,7 +3258,7 @@ class Player @UsedByReflection constructor(
     override fun sendMessage(message: String) {
         val pk = TextPacket()
         pk.type = TextPacket.TYPE_RAW
-        pk.message = Server.instance.getLanguage().tr(message)
+        pk.message = Server.instance.baseLang.tr(message)
         this.dataPacket(pk)
     }
 
@@ -3320,12 +3319,12 @@ class Player @UsedByReflection constructor(
         val pk = TextPacket()
         if (Server.instance.getSettings().baseSettings().forceServerTranslate()) {
             pk.type = TextPacket.TYPE_RAW
-            pk.message = Server.instance.getLanguage().tr(message, *parameters)
+            pk.message = Server.instance.baseLang.tr(message, *parameters)
         } else {
             pk.type = TextPacket.TYPE_TRANSLATION
-            pk.message = Server.instance.getLanguage().tr(message, parameters, "nukkit.", true)
+            pk.message = Server.instance.baseLang.tr(message, parameters, "nukkit.", true)
             for (i in parameters.indices) {
-                parameters[i] = Server.instance.getLanguage().tr(parameters[i], parameters, "nukkit.", true)
+                parameters[i] = Server.instance.baseLang.tr(parameters[i], parameters, "nukkit.", true)
             }
             pk.parameters = parameters
         }
@@ -3351,7 +3350,7 @@ class Player @UsedByReflection constructor(
         val pk = TextPacket()
         pk.type = TextPacket.TYPE_CHAT
         pk.source = source
-        pk.message = Server.instance.getLanguage().tr(message)
+        pk.message = Server.instance.baseLang.tr(message)
         this.dataPacket(pk)
     }
 
@@ -3608,12 +3607,12 @@ class Player @UsedByReflection constructor(
         }
         //output logout infomation
         log.info(
-            Server.instance.getLanguage().tr(
+            Server.instance.baseLang.tr(
                 "nukkit.player.logOut",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
                 this.address,
                 port.toString(),
-                Server.instance.getLanguage().tr(reason)
+                Server.instance.baseLang.tr(reason)
             )
         )
 
@@ -3628,7 +3627,7 @@ class Player @UsedByReflection constructor(
         }
 
         //handle scoreboardManager#beforePlayerQuit
-        val scoreboardManager = Server.instance.getScoreboardManager()
+        val scoreboardManager = Server.instance.scoreboardManager
         scoreboardManager?.beforePlayerQuit(this)
 
         //dismount horse

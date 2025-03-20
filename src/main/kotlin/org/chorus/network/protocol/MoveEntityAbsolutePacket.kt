@@ -35,9 +35,9 @@ class MoveEntityAbsolutePacket : DataPacket() {
         teleport = (flags and 0x02) != 0
         forceMoveLocalEntity = (flags and 0x04) != 0
         val v = byteBuf.readVector3f()
-        this.x = v.south.toDouble()
-        this.y = v.up.toDouble()
-        this.z = v.west.toDouble()
+        this.x = v.x.toDouble()
+        this.y = v.y.toDouble()
+        this.z = v.z.toDouble()
         this.pitch = byteBuf.readByte() * (360.0 / 256.0)
         this.headYaw = byteBuf.readByte() * (360.0 / 256.0)
         this.yaw = byteBuf.readByte() * (360.0 / 256.0)

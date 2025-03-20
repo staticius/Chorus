@@ -21,9 +21,9 @@ class RespawnPacket : DataPacket() {
 
     override fun decode(byteBuf: HandleByteBuf) {
         val v = byteBuf.readVector3f()
-        this.x = v.south
-        this.y = v.up
-        this.z = v.west
+        this.x = v.x
+        this.y = v.y
+        this.z = v.z
         this.respawnState = byteBuf.readByte().toInt()
         this.runtimeEntityId = byteBuf.readEntityRuntimeId()
     }

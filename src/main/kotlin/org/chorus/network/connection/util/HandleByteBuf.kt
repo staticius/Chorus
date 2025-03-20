@@ -1251,7 +1251,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
     }
 
     fun writeVector3f(v: Vector3f) {
-        this.writeVector3f(v.south, v.up, v.west)
+        this.writeVector3f(v.x, v.y, v.z)
     }
 
     fun writeVector3f(x: Float, y: Float, z: Float) {

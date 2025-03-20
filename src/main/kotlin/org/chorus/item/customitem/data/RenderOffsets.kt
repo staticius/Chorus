@@ -75,23 +75,23 @@ class RenderOffsets(
         val result = CompoundTag()
         if (pos != null) {
             val position = ListTag<FloatTag>()
-            position.add(FloatTag(pos.south))
-            position.add(FloatTag(pos.up))
-            position.add(FloatTag(pos.west))
+            position.add(FloatTag(pos.x))
+            position.add(FloatTag(pos.y))
+            position.add(FloatTag(pos.z))
             result.putList("position", position)
         }
         if (rot != null) {
             val rotation = ListTag<FloatTag>()
-            rotation.add(FloatTag(rot.south))
-            rotation.add(FloatTag(rot.up))
-            rotation.add(FloatTag(rot.west))
+            rotation.add(FloatTag(rot.x))
+            rotation.add(FloatTag(rot.y))
+            rotation.add(FloatTag(rot.z))
             result.putList("rotation", rotation)
         }
         if (sc != null) {
             val scale = ListTag<FloatTag>()
-            scale.add(FloatTag(sc.south))
-            scale.add(FloatTag(sc.up))
-            scale.add(FloatTag(sc.west))
+            scale.add(FloatTag(sc.x))
+            scale.add(FloatTag(sc.y))
+            scale.add(FloatTag(sc.z))
             result.putList("scale", scale)
         }
         return result

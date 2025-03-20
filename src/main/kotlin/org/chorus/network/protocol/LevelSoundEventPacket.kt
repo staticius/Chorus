@@ -17,9 +17,9 @@ open class LevelSoundEventPacket : DataPacket() {
     override fun decode(byteBuf: HandleByteBuf) {
         this.sound = byteBuf.readUnsignedVarInt()
         val v = byteBuf.readVector3f()
-        this.x = v.south
-        this.y = v.up
-        this.z = v.west
+        this.x = v.x
+        this.y = v.y
+        this.z = v.z
         this.extraData = byteBuf.readVarInt()
         this.entityIdentifier = byteBuf.readString()
         this.isBabyMob = byteBuf.readBoolean()

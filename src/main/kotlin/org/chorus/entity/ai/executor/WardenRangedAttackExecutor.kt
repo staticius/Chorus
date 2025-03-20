@@ -120,8 +120,8 @@ class WardenRangedAttackExecutor(protected var chargingTime: Int, protected var 
 
     protected fun createVec3fTag(vec3f: Vector3f): CompoundTag {
         return CompoundTag()
-            .putFloat("x", vec3f.south)
-            .putFloat("y", vec3f.up)
-            .putFloat("z", vec3f.west)
+            .putFloat("x", vec3f.x)
+            .putFloat("y", vec3f.y)
+            .putFloat("z", vec3f.z)
     }
 }

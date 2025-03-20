@@ -275,9 +275,9 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                                 blockVector.asVector3(),
                                 i,
                                 face,
-                                useItemData.clickPos.south,
-                                useItemData.clickPos.up,
-                                useItemData.clickPos.west,
+                                useItemData.clickPos.x,
+                                useItemData.clickPos.y,
+                                useItemData.clickPos.z,
                                 player
                             ) != null
                         ) {
@@ -291,9 +291,9 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                                 blockVector.asVector3(),
                                 i,
                                 face,
-                                useItemData.clickPos.south,
-                                useItemData.clickPos.up,
-                                useItemData.clickPos.west,
+                                useItemData.clickPos.x,
+                                useItemData.clickPos.y,
+                                useItemData.clickPos.z,
                                 player
                             ).also { i = it }) != null
                         ) {

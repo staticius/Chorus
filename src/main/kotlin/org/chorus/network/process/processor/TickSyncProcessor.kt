@@ -9,7 +9,7 @@ class TickSyncProcessor : DataPacketProcessor<TickSyncPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: TickSyncPacket) {
         val tickSyncPacketToClient = TickSyncPacket()
         tickSyncPacketToClient.requestTimestamp = pk.requestTimestamp
-        tickSyncPacketToClient.responseTimestamp = playerHandle.Server.instance.getTick().toLong()
+        tickSyncPacketToClient.responseTimestamp = Server.instance.getTick().toLong()
         playerHandle.player.dataPacketImmediately(tickSyncPacketToClient)
     }
 

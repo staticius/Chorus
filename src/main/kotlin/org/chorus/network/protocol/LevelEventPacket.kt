@@ -23,9 +23,9 @@ class LevelEventPacket : DataPacket() {
     override fun decode(byteBuf: HandleByteBuf) {
         this.evid = byteBuf.readVarInt()
         val v = byteBuf.readVector3f()
-        this.x = v.south
-        this.y = v.up
-        this.z = v.west
+        this.x = v.x
+        this.y = v.y
+        this.z = v.z
         this.data = byteBuf.readVarInt()
     }
 

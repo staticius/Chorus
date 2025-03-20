@@ -10,14 +10,14 @@ interface TickCachedBlockStore {
 
     fun saveIntoCachedStore(block: Block, x: Int, y: Int, z: Int, layer: Int)
 
-    fun getFromCachedStore(x: Int, y: Int, z: Int, layer: Int): Block?
+    fun getFromCachedStore(x: Int, y: Int, z: Int, layer: Int): Block
 
     /**
      * 同computeIfAbsent
      */
-    fun computeFromCachedStore(x: Int, y: Int, z: Int, layer: Int, cachedBlockComputer: CachedBlockComputer): Block?
+    fun computeFromCachedStore(x: Int, y: Int, z: Int, layer: Int, cachedBlockComputer: CachedBlockComputer): Block
 
     interface CachedBlockComputer {
-        fun compute(): Block?
+        fun compute(): Block
     }
 }

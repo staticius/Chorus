@@ -206,7 +206,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this,
-                this.getVector3(), VibrationType.LIGHTNING_STRIKE
+                this.vector3, VibrationType.LIGHTNING_STRIKE
             )
         )
         super.spawnToAll()

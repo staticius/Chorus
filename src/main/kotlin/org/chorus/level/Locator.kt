@@ -39,11 +39,11 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
         return this
     }
 
-    open fun getSide(face: BlockFace): Locator? {
+    open fun getSide(face: BlockFace): Locator {
         return this.getSide(face, 1)
     }
 
-    open fun getSide(face: BlockFace, step: Int): Locator? {
+    open fun getSide(face: BlockFace, step: Int): Locator {
         return fromObject(position.getSide(face, step), level)
     }
 
@@ -73,18 +73,18 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
         )!!
     }
 
-    val levelBlock: Block?
+    val levelBlock: Block
         get() = getLevelBlock(true)
 
-    fun getLevelBlock(load: Boolean): Block? {
+    fun getLevelBlock(load: Boolean): Block {
         return level.getBlock(this.position, load)
     }
 
-    fun getLevelBlock(layer: Int): Block? {
+    fun getLevelBlock(layer: Int): Block {
         return level.getBlock(this.position, layer)
     }
 
-    fun getLevelBlock(layer: Int, load: Boolean): Block? {
+    fun getLevelBlock(layer: Int, load: Boolean): Block {
         return level.getBlock(this.position, layer, load)
     }
 
@@ -94,24 +94,24 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
     val levelBlockAround: Set<Block?>
         get() = level.getBlockAround(this.position)
 
-    fun getLevelBlockAtLayer(layer: Int): Block? {
+    fun getLevelBlockAtLayer(layer: Int): Block {
         return level.getBlock(this.position, layer)
     }
 
-    fun getTickCachedLevelBlockAtLayer(layer: Int): Block? {
+    fun getTickCachedLevelBlockAtLayer(layer: Int): Block {
         return level.getTickCachedBlock(this.position, layer)
     }
 
     override val levelName: String
         get() = level.name
 
-    val x: Double
+    override val x: Double
         get() = position.x
 
-    val y: Double
+    override val y: Double
         get() = position.y
 
-    val z: Double
+    override val z: Double
         get() = position.z
 
     val chunk: IChunk

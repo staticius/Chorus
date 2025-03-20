@@ -46,9 +46,9 @@ class MovePlayerPacket : DataPacket() {
     override fun decode(byteBuf: HandleByteBuf) {
         this.eid = byteBuf.readEntityRuntimeId()
         val v = byteBuf.readVector3f()
-        this.x = v.south
-        this.y = v.up
-        this.z = v.west
+        this.x = v.x
+        this.y = v.y
+        this.z = v.z
         this.pitch = byteBuf.readFloatLE()
         this.yaw = byteBuf.readFloatLE()
         this.headYaw = byteBuf.readFloatLE()

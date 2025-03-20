@@ -77,7 +77,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this,
-                this.getVector3(), VibrationType.PROJECTILE_LAND
+                this.vector3, VibrationType.PROJECTILE_LAND
             )
         )
 
@@ -278,7 +278,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this,
-                this.getVector3(), VibrationType.PROJECTILE_LAND
+                this.vector3, VibrationType.PROJECTILE_LAND
             )
         )
         for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) {
@@ -307,7 +307,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this.shootingEntity,
-                this.getVector3(), VibrationType.PROJECTILE_SHOOT
+                this.vector3, VibrationType.PROJECTILE_SHOOT
             )
         )
     }

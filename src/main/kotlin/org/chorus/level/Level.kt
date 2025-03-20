@@ -28,6 +28,7 @@ import org.chorus.level.generator.ChunkGenerateContext
 import org.chorus.level.generator.Generator
 import org.chorus.level.particle.DestroyBlockParticle
 import org.chorus.level.particle.Particle
+import org.chorus.level.util.SimpleTickCachedBlockStore
 import org.chorus.level.util.TickCachedBlockStore
 import org.chorus.level.vibration.SimpleVibrationManager
 import org.chorus.level.vibration.VibrationEvent
@@ -559,24 +560,24 @@ class Level(
         return true
     }
 
-    fun getChunkPlayers(chunkX: Int, chunkZ: Int): Map<Int, Player> {
+    fun getChunkPlayers(chunkX: Int, chunkZ: Int): MutableMap<Int, Player> {
         val index = chunkHash(chunkX, chunkZ)
         if (chunkLoaders.containsKey(index)) {
-            return chunkLoaders[index].entrySet()
+            return chunkLoaders[index]!!.entries
                 .stream()
-                .filter(Predicate<Map.Entry<Int?, ChunkLoader?>> { e: Map.Entry<Int?, ChunkLoader?> -> e.getValue() is Player })
-                .collect<HashMap<Int, Player>>(
-                    Supplier<HashMap<Int, Player>> { HashMap() },
-                    BiConsumer<HashMap<Int?, Player?>, Map.Entry<Int?, ChunkLoader?>> { m: HashMap<Int?, Player?>, e: Map.Entry<Int?, ChunkLoader?> ->
-                        m[e.getKey()] = e.getValue() as Player
+                .filter { it.value is Player }
+                .collect (
+                    { HashMap() },
+                    { m, e ->
+                        m[e.key] = e.value as Player
                     },
-                    BiConsumer<HashMap<Int?, Player?>, HashMap<Int?, Player?>> { obj: HashMap<Int?, Player?>, m: HashMap<Int?, Player?>? ->
+                    { obj, m ->
                         obj.putAll(
                             m!!
                         )
                     })
         }
-        return Collections.emptyMap()
+        return mutableMapOf()
     }
 
     fun getChunkLoaders(chunkX: Int, chunkZ: Int): Array<ChunkLoader> {
@@ -1813,7 +1814,7 @@ class Level(
         val around: MutableSet<Block> = HashSet()
         val block = getBlock(pos)
         for (face in BlockFace.entries) {
-            val side = block!!.getSideAtLayer(0, face)
+            val side = block.getSideAtLayer(0, face)
             around.add(side)
         }
         return around
@@ -1823,70 +1824,73 @@ class Level(
         return getTickCachedBlock(pos, 0)
     }
 
-    fun getTickCachedBlock(pos: Vector3, layer: Int): Block? {
+    fun getTickCachedBlock(pos: Vector3, layer: Int): Block {
         return this.getTickCachedBlock(pos.floorX, pos.floorY, pos.floorZ, layer)
     }
 
-    fun getTickCachedBlock(pos: Vector3, load: Boolean): Block? {
+    fun getTickCachedBlock(pos: Vector3, load: Boolean): Block {
         return getTickCachedBlock(pos, 0, load)
     }
 
-    fun getTickCachedBlock(pos: Vector3, layer: Int, load: Boolean): Block? {
+    fun getTickCachedBlock(pos: Vector3, layer: Int, load: Boolean): Block {
         return this.getTickCachedBlock(pos.floorX, pos.floorY, pos.floorZ, layer, load)
     }
 
-    fun getTickCachedBlock(x: Int, y: Int, z: Int): Block? {
+    fun getTickCachedBlock(x: Int, y: Int, z: Int): Block {
         return getTickCachedBlock(x, y, z, 0)
     }
 
-    fun getTickCachedBlock(x: Int, y: Int, z: Int, layer: Int): Block? {
+    fun getTickCachedBlock(x: Int, y: Int, z: Int, layer: Int): Block {
         return getTickCachedBlock(x, y, z, layer, true)
     }
 
-    fun getTickCachedBlock(x: Int, y: Int, z: Int, load: Boolean): Block? {
+    fun getTickCachedBlock(x: Int, y: Int, z: Int, load: Boolean): Block {
         return getTickCachedBlock(x, y, z, 0, load)
     }
 
-    fun getTickCachedBlock(x: Int, y: Int, z: Int, layer: Int, load: Boolean): Block? {
+    fun getTickCachedBlock(x: Int, y: Int, z: Int, layer: Int, load: Boolean): Block {
         return tickCachedBlocks.computeIfAbsent(
-            chunkHash(x shr 4, z shr 4),
-            Function<Long, TickCachedBlockStore> { key: Long? ->
-                SimpleTickCachedBlockStore(
-                    this
-                )
-            })
-            .computeFromCachedStore(x, y, z, layer) { getBlock(x, y, z, layer, load) }
+            chunkHash(x shr 4, z shr 4)
+        ) {
+            SimpleTickCachedBlockStore(
+                this
+            )
+        }.computeFromCachedStore(x, y, z, layer, object : TickCachedBlockStore.CachedBlockComputer {
+            override fun compute(): Block {
+                return getBlock(x, y, z, layer, load)
+            }
+        })
     }
 
-    fun getBlock(pos: Vector3): Block? {
+    fun getBlock(pos: Vector3): Block {
         return getBlock(pos, 0)
     }
 
-    fun getBlock(pos: Vector3, layer: Int): Block? {
+    fun getBlock(pos: Vector3, layer: Int): Block {
         return this.getBlock(pos.floorX, pos.floorY, pos.floorZ, layer)
     }
 
-    fun getBlock(pos: Vector3, load: Boolean): Block? {
+    fun getBlock(pos: Vector3, load: Boolean): Block {
         return getBlock(pos, 0, load)
     }
 
-    fun getBlock(pos: Vector3, layer: Int, load: Boolean): Block? {
+    fun getBlock(pos: Vector3, layer: Int, load: Boolean): Block {
         return this.getBlock(pos.floorX, pos.floorY, pos.floorZ, layer, load)
     }
 
-    fun getBlock(x: Int, y: Int, z: Int): Block? {
+    fun getBlock(x: Int, y: Int, z: Int): Block {
         return getBlock(x, y, z, 0)
     }
 
-    fun getBlock(x: Int, y: Int, z: Int, layer: Int): Block? {
+    fun getBlock(x: Int, y: Int, z: Int, layer: Int): Block {
         return getBlock(x, y, z, layer, true)
     }
 
-    fun getBlock(x: Int, y: Int, z: Int, load: Boolean): Block? {
+    fun getBlock(x: Int, y: Int, z: Int, load: Boolean): Block {
         return getBlock(x, y, z, 0, load)
     }
 
-    fun getBlock(x: Int, y: Int, z: Int, layer: Int, load: Boolean): Block? {
+    fun getBlock(x: Int, y: Int, z: Int, layer: Int, load: Boolean): Block {
         var fullState = BlockAir.properties.defaultState
         if (isYInRange(y)) {
             val cx = x shr 4
@@ -1900,7 +1904,7 @@ class Level(
                 fullState = chunk.getBlockState(x and 0xF, y, z and 0xF, layer)
             }
         }
-        return Registries.BLOCK[fullState, x, y, z, layer, this]
+        return Registries.BLOCK[fullState, x, y, z, layer, this]!!
     }
 
     fun getBlockIdAt(x: Int, y: Int, z: Int): String {
@@ -1908,8 +1912,7 @@ class Level(
     }
 
     fun getBlockIdAt(x: Int, y: Int, z: Int, layer: Int): String {
-        return getChunk(x shr 4, z shr 4, true)
-            .getBlockState(x and 0x0f, ensureY(y), z and 0x0f, layer)!!.identifier
+        return getChunk(x shr 4, z shr 4, true).getBlockState(x and 0x0f, ensureY(y), z and 0x0f, layer).identifier
     }
 
     fun updateAllLight(pos: Vector3) {
@@ -2921,9 +2924,9 @@ class Level(
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
-                    for (ent in getChunkEntities(x, z, false)!!.values()) {
+                    for (ent in getChunkEntities(x, z, false).values) {
                         if ((entity == null || (ent !== entity && entity.canCollideWith(ent)))
-                            && ent.boundingBox!!.intersectsWith(bb)
+                            && ent.boundingBox.intersectsWith(bb)
                         ) {
                             overflow = addEntityToBuffer(index, overflow, ent)
                             index++
@@ -2951,9 +2954,9 @@ class Level(
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
-                    for (each in getChunkEntities(x, z, false)!!.values()) {
+                    for (each in getChunkEntities(x, z, false).values) {
                         if ((entity == null || (each !== entity && entity.canCollideWith(each)))
-                            && each.boundingBox!!.intersectsWith(bb)
+                            && each.boundingBox.intersectsWith(bb)
                         ) {
                             result.add(each)
                         }
@@ -3027,7 +3030,7 @@ class Level(
 
         for (x in minX..maxX) {
             for (z in minZ..maxZ) {
-                for (ent in getChunkEntities(x, z, loadChunks)!!.values()) {
+                for (ent in getChunkEntities(x, z, loadChunks).values) {
                     if (ent != null && ent !== entity && ent.boundingBox!!.intersectsWith(bb)) {
                         overflow = addEntityToBuffer(index, overflow, ent)
                         index++
@@ -3076,15 +3079,14 @@ class Level(
         return overflow
     }
 
-    private fun getEntitiesFromBuffer(index: Int, overflow: ArrayList<Entity>?): Array<Entity?> {
+    private fun getEntitiesFromBuffer(index: Int, overflow: ArrayList<Entity>?): Array<Entity> {
         if (index == 0) return Entity.EMPTY_ARRAY
-        val copy: Array<Entity?>
+        val copy: Array<Entity>
         if (overflow == null) {
             copy = Arrays.copyOfRange(ENTITY_BUFFER, 0, index)
             Arrays.fill(ENTITY_BUFFER, 0, index, null)
         } else {
-            copy = arrayOfNulls(ENTITY_BUFFER.size + overflow.size())
-            System.arraycopy(ENTITY_BUFFER, 0, copy, 0, ENTITY_BUFFER.size)
+            copy = arrayOf(ENTITY_BUFFER)
             for (i in overflow.indices) {
                 copy[ENTITY_BUFFER.size + i] = overflow[i]
             }

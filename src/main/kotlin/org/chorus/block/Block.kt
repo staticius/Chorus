@@ -56,7 +56,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
     var blockState: BlockState
 
     private val resolvedBlockState: BlockState by lazy {
-        blockState?.takeIf { properties.containBlockState(it) } ?: properties.defaultState
+        blockState.takeIf { properties.containBlockState(it) } ?: properties.defaultState
     }
 
     init {
@@ -347,11 +347,11 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
 
     fun getColor(): BlockColor {
         if (color != null) return color!!
-        else color = VANILLA_BLOCK_COLOR_MAP[blockState!!.blockStateHash()
+        else color = VANILLA_BLOCK_COLOR_MAP[blockState.blockStateHash()
             .toLong()]
         if (color == null) {
             log.error("Failed to get color of block $name")
-            log.error("Current block state hash: " + blockState!!.blockStateHash())
+            log.error("Current block state hash: " + blockState.blockStateHash())
             color = BlockColor.VOID_BLOCK_COLOR
         }
         return color!!
@@ -360,7 +360,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
     open val name: String
         get() {
             val path =
-                blockState!!.identifier.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+                blockState.identifier.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
             val result = StringBuilder()
             val parts =
                 path.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -379,7 +379,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         get() = id
 
     val propertyValues: MutableList<BlockPropertyValue<*, *, *>>
-        get() = blockState!!.blockPropertyValues!!
+        get() = blockState.blockPropertyValues!!
 
     val isAir: Boolean
         get() = this.blockState === BlockAir.properties.defaultState
@@ -388,24 +388,24 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         return getTagSet(this.id).contains(blockTag)
     }
 
-    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> getPropertyValue(p: PROPERTY): DATATYPE {
+    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> getPropertyValue(p: PROPERTY): DATATYPE {
         return blockState.getPropertyValue(p)
     }
 
-    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>?> setPropertyValue(
+    fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> setPropertyValue(
         property: PROPERTY,
         value: DATATYPE
     ): Block {
-        this.blockState = blockState!!.setPropertyValue(properties, property, value)
+        this.blockState = blockState.setPropertyValue(properties, property, value)
         return this
     }
 
-    fun setPropertyValue(propertyValue: BlockPropertyValue<*, *, *>?): Block {
+    fun setPropertyValue(propertyValue: BlockPropertyValue<*, *, *>): Block {
         this.blockState = blockState.setPropertyValue(properties, propertyValue)
         return this
     }
 
-    fun setPropertyValues(vararg values: BlockPropertyValue<*, *, *>?): Block {
+    fun setPropertyValues(vararg values: BlockPropertyValue<*, *, *>): Block {
         this.blockState = blockState.setPropertyValues(properties, *values)
         return this
     }
@@ -612,14 +612,14 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         return getTickCachedSideAtLayer(layer, face, step)
     }
 
-    fun getTickCachedSideAtLayer(layer: Int, face: BlockFace): Block? {
+    fun getTickCachedSideAtLayer(layer: Int, face: BlockFace): Block {
         return level.getTickCachedBlock(
             position.x.toInt() + face.xOffset,
             position.y.toInt() + face.yOffset, position.z.toInt() + face.zOffset, layer
         )
     }
 
-    fun getTickCachedSideAtLayer(layer: Int, face: BlockFace, step: Int): Block? {
+    fun getTickCachedSideAtLayer(layer: Int, face: BlockFace, step: Int): Block {
         if (step == 1) {
             return level.getTickCachedBlock(
                 position.x.toInt() + face.xOffset,
@@ -632,22 +632,22 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         )
     }
 
-    override fun getSide(face: BlockFace): Block? {
+    override fun getSide(face: BlockFace): Block {
         return getSideAtLayer(layer, face)
     }
 
-    override fun getSide(face: BlockFace, step: Int): Block? {
+    override fun getSide(face: BlockFace, step: Int): Block {
         return getSideAtLayer(layer, face, step)
     }
 
-    fun getSideAtLayer(layer: Int, face: BlockFace): Block? {
+    fun getSideAtLayer(layer: Int, face: BlockFace): Block {
         return level.getBlock(
             position.x.toInt() + face.xOffset,
             position.y.toInt() + face.yOffset, position.z.toInt() + face.zOffset, layer
         )
     }
 
-    fun getSideAtLayer(layer: Int, face: BlockFace, step: Int): Block? {
+    fun getSideAtLayer(layer: Int, face: BlockFace, step: Int): Block {
         if (step == 1) {
             return level.getBlock(
                 position.x.toInt() + face.xOffset,
@@ -661,56 +661,56 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
     }
 
     @JvmOverloads
-    fun up(step: Int = 1): Block? {
+    fun up(step: Int = 1): Block {
         return getSide(BlockFace.UP, step)
     }
 
-    fun up(step: Int, layer: Int): Block? {
+    fun up(step: Int, layer: Int): Block {
         return getSideAtLayer(layer, BlockFace.UP, step)
     }
 
     @JvmOverloads
-    fun down(step: Int = 1): Block? {
+    fun down(step: Int = 1): Block {
         return getSide(BlockFace.DOWN, step)
     }
 
-    fun down(step: Int, layer: Int): Block? {
+    fun down(step: Int, layer: Int): Block {
         return getSideAtLayer(layer, BlockFace.DOWN, step)
     }
 
     @JvmOverloads
-    fun north(step: Int = 1): Block? {
+    fun north(step: Int = 1): Block {
         return getSide(BlockFace.NORTH, step)
     }
 
-    fun north(step: Int, layer: Int): Block? {
+    fun north(step: Int, layer: Int): Block {
         return getSideAtLayer(layer, BlockFace.NORTH, step)
     }
 
     @JvmOverloads
-    fun south(step: Int = 1): Block? {
+    fun south(step: Int = 1): Block {
         return getSide(BlockFace.SOUTH, step)
     }
 
-    fun south(step: Int, layer: Int): Block? {
+    fun south(step: Int, layer: Int): Block {
         return getSideAtLayer(layer, BlockFace.SOUTH, step)
     }
 
     @JvmOverloads
-    fun east(step: Int = 1): Block? {
+    fun east(step: Int = 1): Block {
         return getSide(BlockFace.EAST, step)
     }
 
-    fun east(step: Int, layer: Int): Block? {
+    fun east(step: Int, layer: Int): Block {
         return getSideAtLayer(layer, BlockFace.EAST, step)
     }
 
     @JvmOverloads
-    fun west(step: Int = 1): Block? {
+    fun west(step: Int = 1): Block {
         return getSide(BlockFace.WEST, step)
     }
 
-    fun west(step: Int, layer: Int): Block? {
+    fun west(step: Int, layer: Int): Block {
         return getSideAtLayer(layer, BlockFace.WEST, step)
     }
 
@@ -948,7 +948,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
     fun isSideFull(face: BlockFace): Boolean {
         val boundingBox = boundingBox ?: return false
 
-        if (face.axis!!.plane == BlockFace.Plane.HORIZONTAL) {
+        if (face.axis.plane == BlockFace.Plane.HORIZONTAL) {
             if (boundingBox.minY != y || boundingBox.maxY != y + 1) {
                 return false
             }
@@ -1048,7 +1048,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         for (layer in startingLayer..maximumLayer) {
             val block = this.getLevelBlockAtLayer(layer)
             if (condition.test(block)) {
-                return Optional.of(block!!)
+                return Optional.of(block)
             }
         }
 
@@ -1086,7 +1086,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
                         if (v !is StringTag) {
                             continue
                         }
-                        val entry = Item.get(v.data!!)
+                        val entry = Item.get(v.data)
                         if (!entry.isNothing &&
                             entry.getBlock().id == this.id
                         ) {
@@ -1133,9 +1133,9 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
             if (!Server.instance.settings.levelSettings.enableRedstone) return false
 
             for (side in BlockFace.entries) {
-                val b = getSide(side)!!.levelBlock
+                val b = getSide(side).levelBlock
 
-                if (level.isSidePowered(b!!.position, side)) {
+                if (level.isSidePowered(b.position, side)) {
                     return true
                 }
             }

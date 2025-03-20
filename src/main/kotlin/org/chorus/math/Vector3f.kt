@@ -5,31 +5,31 @@ import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 0f, var west: Float = 0f) :
+class Vector3f @JvmOverloads constructor(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) :
     Cloneable {
     fun setX(x: Float): Vector3f {
-        this.south = x
+        this.x = x
         return this
     }
 
     fun setY(y: Float): Vector3f {
-        this.up = y
+        this.y = y
         return this
     }
 
     fun setZ(z: Float): Vector3f {
-        this.west = z
+        this.z = z
         return this
     }
 
     val floorX: Int
-        get() = ChorusMath.floorFloat(this.south)
+        get() = ChorusMath.floorFloat(this.x)
 
     val floorY: Int
-        get() = ChorusMath.floorFloat(this.up)
+        get() = ChorusMath.floorFloat(this.y)
 
     val floorZ: Int
-        get() = ChorusMath.floorFloat(this.west)
+        get() = ChorusMath.floorFloat(this.z)
 
     fun add(x: Float): Vector3f {
         return this.add(x, 0f, 0f)
@@ -40,11 +40,11 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
     }
 
     fun add(x: Float, y: Float, z: Float): Vector3f {
-        return Vector3f(this.south + x, this.up + y, this.west + z)
+        return Vector3f(this.x + x, this.y + y, this.z + z)
     }
 
     fun add(x: Vector3f): Vector3f {
-        return Vector3f(this.south + x.south, this.up + x.up, this.west + x.west)
+        return Vector3f(this.x + x.x, this.y + x.y, this.z + x.z)
     }
 
     @JvmOverloads
@@ -53,22 +53,22 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
     }
 
     fun subtract(x: Vector3f): Vector3f {
-        return this.add(-x.south, -x.up, -x.west)
+        return this.add(-x.x, -x.y, -x.z)
     }
 
     fun multiply(number: Float): Vector3f {
-        return Vector3f(this.south * number, this.up * number, this.west * number)
+        return Vector3f(this.x * number, this.y * number, this.z * number)
     }
 
     fun divide(number: Float): Vector3f {
-        return Vector3f(this.south / number, this.up / number, this.west / number)
+        return Vector3f(this.x / number, this.y / number, this.z / number)
     }
 
     fun ceil(): Vector3f {
         return Vector3f(
-            kotlin.math.ceil(south.toDouble()).toInt().toFloat(), kotlin.math.ceil(
-                up.toDouble()
-            ).toInt().toFloat(), kotlin.math.ceil(west.toDouble()).toInt().toFloat()
+            kotlin.math.ceil(x.toDouble()).toInt().toFloat(), kotlin.math.ceil(
+                y.toDouble()
+            ).toInt().toFloat(), kotlin.math.ceil(z.toDouble()).toInt().toFloat()
         )
     }
 
@@ -82,17 +82,17 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
 
     fun round(): Vector3f {
         return Vector3f(
-            Math.round(this.south).toFloat(), Math.round(this.up).toFloat(), Math.round(
-                this.west
+            Math.round(this.x).toFloat(), Math.round(this.y).toFloat(), Math.round(
+                this.z
             ).toFloat()
         )
     }
 
     fun abs(): Vector3f {
         return Vector3f(
-            kotlin.math.abs(south.toDouble()).toInt().toFloat(), kotlin.math.abs(
-                up.toDouble()
-            ).toInt().toFloat(), kotlin.math.abs(west.toDouble()).toInt().toFloat()
+            kotlin.math.abs(x.toDouble()).toInt().toFloat(), kotlin.math.abs(
+                y.toDouble()
+            ).toInt().toFloat(), kotlin.math.abs(z.toDouble()).toInt().toFloat()
         )
     }
 
@@ -103,39 +103,39 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
     fun getSide(side: Int, step: Int): Vector3f {
         return when (side) {
             SIDE_DOWN -> Vector3f(
-                this.south,
-                up - step,
-                west
+                this.x,
+                y - step,
+                z
             )
 
             SIDE_UP -> Vector3f(
-                this.south,
-                up + step,
-                west
+                this.x,
+                y + step,
+                z
             )
 
             SIDE_NORTH -> Vector3f(
-                this.south,
-                up,
-                west - step
+                this.x,
+                y,
+                z - step
             )
 
             SIDE_SOUTH -> Vector3f(
-                this.south,
-                up,
-                west + step
+                this.x,
+                y,
+                z + step
             )
 
             SIDE_WEST -> Vector3f(
-                this.south - step,
-                up,
-                west
+                this.x - step,
+                y,
+                z
             )
 
             SIDE_EAST -> Vector3f(
-                this.south + step,
-                up,
-                west
+                this.x + step,
+                y,
+                z
             )
 
             else -> this
@@ -147,13 +147,13 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
     }
 
     fun distanceSquared(pos: Vector3f): Double {
-        return (this.south - pos.south).toDouble().pow(2.0) + (this.up - pos.up).toDouble()
-            .pow(2.0) + (this.west - pos.west).toDouble().pow(2.0)
+        return (this.x - pos.x).toDouble().pow(2.0) + (this.y - pos.y).toDouble()
+            .pow(2.0) + (this.z - pos.z).toDouble().pow(2.0)
     }
 
     @JvmOverloads
     fun maxPlainDistance(x: Float = 0f, z: Float = 0f): Float {
-        return max(kotlin.math.abs((this.south - x).toDouble()), kotlin.math.abs((this.west - z).toDouble())).toFloat()
+        return max(kotlin.math.abs((this.x - x).toDouble()), kotlin.math.abs((this.z - z).toDouble())).toFloat()
     }
 
     fun maxPlainDistance(vector: Vector2f): Float {
@@ -161,11 +161,11 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
     }
 
     fun toHorizontal(): Vector2f {
-        return Vector2f(this.south, this.west)
+        return Vector2f(this.x, this.z)
     }
 
     fun maxPlainDistance(x: Vector3f): Float {
-        return this.maxPlainDistance(x.south, x.west)
+        return this.maxPlainDistance(x.x, x.z)
     }
 
     /**
@@ -178,7 +178,7 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
     }
 
     fun lengthSquared(): Float {
-        return this.south * this.south + this.up * this.up + this.west * this.west
+        return this.x * this.x + this.y * this.y + this.z * this.z
     }
 
     fun normalize(): Vector3f {
@@ -196,7 +196,7 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
      * @return Scalar Product
      */
     fun dot(v: Vector3f): Float {
-        return this.south * v.south + this.up * v.up + this.west * v.west
+        return this.x * v.x + this.y * v.y + this.z * v.z
     }
 
     /**
@@ -207,9 +207,9 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
      */
     fun cross(v: Vector3f): Vector3f {
         return Vector3f(
-            this.up * v.west - this.west * v.up,
-            this.west * v.south - this.south * v.west,
-            this.south * v.up - this.up * v.south
+            this.y * v.z - this.z * v.y,
+            this.z * v.x - this.x * v.z,
+            this.x * v.y - this.y * v.x
         )
     }
 
@@ -231,20 +231,20 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
      * @return intermediate vector
      */
     fun getIntermediateWithXValue(v: Vector3f, x: Float): Vector3f? {
-        val xDiff = v.south - this.south
-        val yDiff = v.up - this.up
-        val zDiff = v.west - this.west
+        val xDiff = v.x - this.x
+        val yDiff = v.y - this.y
+        val zDiff = v.z - this.z
         if (xDiff * xDiff < 0.0000001) {
             return null
         }
-        val f = (x - this.south) / xDiff
+        val f = (x - this.x) / xDiff
         return if (f < 0 || f > 1) {
             null
         } else {
             Vector3f(
-                this.south + xDiff * f,
-                up + yDiff * f,
-                west + zDiff * f
+                this.x + xDiff * f,
+                y + yDiff * f,
+                z + zDiff * f
             )
         }
     }
@@ -258,20 +258,20 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
      * @return intermediate vector
      */
     fun getIntermediateWithYValue(v: Vector3f, y: Float): Vector3f? {
-        val xDiff = v.south - this.south
-        val yDiff = v.up - this.up
-        val zDiff = v.west - this.west
+        val xDiff = v.x - this.x
+        val yDiff = v.y - this.y
+        val zDiff = v.z - this.z
         if (yDiff * yDiff < 0.0000001) {
             return null
         }
-        val f = (y - this.up) / yDiff
+        val f = (y - this.y) / yDiff
         return if (f < 0 || f > 1) {
             null
         } else {
             Vector3f(
-                this.south + xDiff * f,
-                up + yDiff * f,
-                west + zDiff * f
+                this.x + xDiff * f,
+                y + yDiff * f,
+                z + zDiff * f
             )
         }
     }
@@ -285,41 +285,41 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
      * @return intermediate vector
      */
     fun getIntermediateWithZValue(v: Vector3f, z: Float): Vector3f? {
-        val xDiff = v.south - this.south
-        val yDiff = v.up - this.up
-        val zDiff = v.west - this.west
+        val xDiff = v.x - this.x
+        val yDiff = v.y - this.y
+        val zDiff = v.z - this.z
         if (zDiff * zDiff < 0.0000001) {
             return null
         }
-        val f = (z - this.west) / zDiff
+        val f = (z - this.z) / zDiff
         return if (f < 0 || f > 1) {
             null
         } else {
             Vector3f(
-                this.south + xDiff * f,
-                up + yDiff * f,
-                west + zDiff * f
+                this.x + xDiff * f,
+                y + yDiff * f,
+                this.z + zDiff * f
             )
         }
     }
 
     fun setComponents(x: Float, y: Float, z: Float): Vector3f {
-        this.south = x
-        this.up = y
-        this.west = z
+        this.x = x
+        this.y = y
+        this.z = z
         return this
     }
 
     fun getAxis(axis: BlockFace.Axis): Float {
         return when (axis) {
-            BlockFace.Axis.X -> south
-            BlockFace.Axis.Y -> up
-            else -> west
+            BlockFace.Axis.X -> x
+            BlockFace.Axis.Y -> y
+            else -> z
         }
     }
 
     override fun toString(): String {
-        return "Vector3(x=" + this.south + ",y=" + this.up + ",z=" + this.west + ")"
+        return "Vector3(x=" + this.x + ",y=" + this.y + ",z=" + this.z + ")"
     }
 
     override fun equals(obj: Any?): Boolean {
@@ -327,7 +327,7 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
             return false
         }
 
-        return this.south == obj.south && this.up == obj.up && this.west == obj.west
+        return this.x == obj.x && this.y == obj.y && this.z == obj.z
     }
 
     fun rawHashCode(): Int {
@@ -340,7 +340,7 @@ class Vector3f @JvmOverloads constructor(var south: Float = 0f, var up: Float = 
     }
 
     fun asVector3(): Vector3 {
-        return Vector3(south.toDouble(), up.toDouble(), west.toDouble())
+        return Vector3(x.toDouble(), y.toDouble(), z.toDouble())
     }
 
     fun asBlockVector3(): BlockVector3 {
