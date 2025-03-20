@@ -5,6 +5,7 @@ import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.block.ComposterEmptyEvent
+import org.chorus.event.block.ComposterFillEvent
 import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
@@ -46,7 +47,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
     fun incrementLevel(): Boolean {
         val fillLevel = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL) + 1
         setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, fillLevel)
-        level.setBlock(this.position, this, true, true)
+        level.setBlock(this.position, this, direct = true, update = true)
         return fillLevel == 8
     }
 
@@ -70,11 +71,11 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
         }
 
         if (isFull) {
-            val event: ComposterEmptyEvent = ComposterEmptyEvent(this, player, item, Item.get(ItemID.BONE_MEAL), 0)
+            val event = ComposterEmptyEvent(this, player!!, item, Item.get(ItemID.BONE_MEAL), 0)
             Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
-                setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
-                level.setBlock(this.position, this, true, true)
+                setPropertyValue(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
+                level.setBlock(this.position, this, direct = true, update = true)
                 level.dropItem(position.add(0.5, 0.85, 0.5), event.getDrop(), event.motion, false, 10)
                 level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_EMPTY)
             }
@@ -87,7 +88,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
         }
 
         val success = Random().nextInt(100) < chance
-        val event: ComposterFillEvent = ComposterFillEvent(this, player, item, chance, success)
+        val event = ComposterFillEvent(this, player!!, item, chance, success)
         Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
@@ -116,11 +117,11 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
     }
 
     fun empty(item: Item?, player: Player?): Item? {
-        val event: ComposterEmptyEvent = ComposterEmptyEvent(this, player, item, ItemBoneMeal(), 0)
+        val event = ComposterEmptyEvent(this, player!!, item!!, ItemBoneMeal(), 0)
         Server.instance.pluginManager.callEvent(event)
         if (!event.isCancelled) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
-            level.setBlock(this.position, this, true, true)
+            level.setBlock(this.position, this, direct = true, update = true)
             if (item != null) {
                 level.dropItem(position.add(0.5, 0.85, 0.5), event.getDrop(), event.motion, false, 10)
             }
@@ -132,6 +133,9 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
 
     val outPutItem: Item
         get() = OUTPUT_ITEM.clone()
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.COMPOSTER, CommonBlockProperties.COMPOSTER_FILL_LEVEL)
@@ -152,7 +156,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
         }
 
         fun registerItem(chance: Int, itemId: String) {
-            compostableItems.put(itemId, chance)
+            compostableItems[itemId] = chance
         }
 
         fun registerItems(chance: Int, vararg itemId: String) {
@@ -161,16 +165,15 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
             }
         }
 
-        fun registerBlocks(chance: Int, vararg BlockID.: String)
-        {
-            for (BlockID. in BlockID.) {
-            registerBlock(chance, BlockID.0)
-        }
+        fun registerBlocks(chance: Int, vararg blockIds: String) {
+            for (blockId in blockIds) {
+                registerBlock(chance, blockId)
+            }
         }
 
         fun registerBlock(chance: Int, blockId: String) {
             val blockState = Registries.BLOCK.get(blockId)!!.blockState
-            compostableBlocks.put(blockState, chance)
+            compostableBlocks[blockState] = chance
         }
 
         fun registerBlock(chance: Int, blockId: String, meta: Int) {
@@ -182,14 +185,14 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
             } else {
                 blockState = Registries.BLOCKSTATE.get(i)!!
             }
-            compostableBlocks.put(blockState, chance)
+            compostableBlocks[blockState] = chance
         }
 
         fun getChance(item: Item): Int {
             return if (item is ItemBlock) {
-                compostableBlocks.getInt(item.blockUnsafe!!.blockState)
+                compostableBlocks[item.blockUnsafe!!.blockState]!!
             } else {
-                compostableItems.getInt(item.id)
+                compostableItems[item.id]!!
             }
         }
 

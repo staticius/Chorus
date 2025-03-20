@@ -2,8 +2,9 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.CreakingHeartState
 import org.chorus.blockentity.BlockEntityCreakingHeart
-import org.chorus.entity.mob.monster.EntityCreaking
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*
 import org.chorus.math.*
 import org.chorus.utils.RedstoneComponent
@@ -29,10 +30,10 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Comp
         fz: Double,
         player: Player?
     ): Boolean {
-        if (BlockEntityHolder.setBlockAndCreateEntity<BlockEntityCreakingHeart?, BlockCreakingHeart>(
+        if (BlockEntityHolder.setBlockAndCreateEntity(
                 this,
-                true,
-                true
+                direct = true,
+                update = true
             ) != null
         ) {
             this.pillarAxis = face.axis
@@ -48,7 +49,7 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Comp
     }
 
     protected fun testAxis() {
-        if (blockEntity.linkedCreaking == null) {
+        if (blockEntity?.linkedCreaking == null) {
             var state: CreakingHeartState = CreakingHeartState.DORMANT
             for (face in BlockFace.entries) {
                 if (pillarAxis.test(face)) {
@@ -60,7 +61,7 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Comp
             }
 
             if (state != this.state) {
-                setPropertyValue<CreakingHeartState, org.chorus.block.property.type.EnumPropertyType<CreakingHeartState>>(
+                setPropertyValue(
                     CommonBlockProperties.CREAKING_HEART_STATE,
                     state
                 )
@@ -70,12 +71,12 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Comp
     }
 
     val state: CreakingHeartState
-        get() = getPropertyValue<CreakingHeartState, org.chorus.block.property.type.EnumPropertyType<CreakingHeartState>>(
+        get() = getPropertyValue(
             CommonBlockProperties.CREAKING_HEART_STATE
         )
 
     val isActive: Boolean
-        get() = getPropertyValue<CreakingHeartState, org.chorus.block.property.type.EnumPropertyType<CreakingHeartState>>(
+        get() = getPropertyValue(
             CommonBlockProperties.CREAKING_HEART_STATE
         ) != CreakingHeartState.UPROOTED
 
@@ -116,7 +117,7 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Comp
     override val comparatorInputOverride: Int
         get() {
             val entityCreakingHeart: BlockEntityCreakingHeart = getOrCreateBlockEntity()
-            val creaking: EntityCreaking = entityCreakingHeart.link
+            val creaking = entityCreakingHeart.linkedCreaking
             return if (creaking != null) {
                 (15 - ((creaking.position.distance(this.position) / 32) * 15)).toInt()
             } else 0

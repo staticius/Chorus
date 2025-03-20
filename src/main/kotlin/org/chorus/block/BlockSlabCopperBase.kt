@@ -1,15 +1,12 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.block.property.enums.OxidizationLevel
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
-/**
- * @author joserobjr
- * @since 2021-06-14
- */
-abstract class BlockSlabCopperBase(blockState: BlockState?, doubleSlab: String) :
+abstract class BlockSlabCopperBase(blockState: BlockState, doubleSlab: String) :
     BlockSlab(blockState, doubleSlab), Waxable, Oxidizable {
     override fun isSameType(slab: BlockSlab): Boolean {
         return id == slab.id
@@ -56,7 +53,7 @@ abstract class BlockSlabCopperBase(blockState: BlockState?, doubleSlab: String) 
     }
 
     override fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean {
-        if (oxidizationLevel == oxidizationLevel) {
+        if (this.oxidizationLevel == oxidizationLevel) {
             return true
         }
         return level.setBlock(

@@ -140,7 +140,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                 )
                 Server.instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    replaceBucket(item, player, ev.item)
+                    replaceBucket(item, player!!, ev.item)
                     this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) // empty
                     level.setBlock(this.position, this, true)
                     cauldron.clearCustomColor()
@@ -156,12 +156,12 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
 
                 val ev = PlayerBucketEmptyEvent(
                     player,
-                    this, null,
+                    this, blockFace,
                     this, item, get(ItemID.BUCKET, 0, 1, item.compoundTag)
                 )
                 Server.instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    if (player.isSurvival || player.isAdventure) {
+                    if (player!!.isSurvival || player.isAdventure) {
                         replaceBucket(item, player, ev.item)
                     }
                     if (cauldron.hasPotion()) { //if has potion
@@ -194,42 +194,130 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
             }
         }
 
-        when (item.id) {
-            ItemID.DYE -> {
-                if (isEmpty || cauldron.hasPotion()) {
-                    break
+        run switch@{
+            when (item.id) {
+                ItemID.DYE -> {
+                    if (isEmpty || cauldron.hasPotion()) {
+                        return@switch
+                    }
+
+                    if (player!!.isSurvival || player.isAdventure) {
+                        item.setCount(item.getCount() - 1)
+                        player.getInventory().setItemInHand(item)
+                    }
+
+                    val color = ItemDye(item.damage).dyeColor.leatherColor
+                    if (!cauldron.isCustomColor()) {
+                        cauldron.customColor = color
+                    } else {
+                        val current = cauldron.customColor
+                        val mixed = BlockColor(
+                            Math.round(sqrt((color!!.red * current!!.red).toDouble()) * 0.965).toInt(),
+                            Math.round(sqrt((color.green * current.green).toDouble()) * 0.965).toInt(),
+                            Math.round(sqrt((color.blue * current.blue).toDouble()) * 0.965).toInt()
+                        )
+                        cauldron.customColor = mixed
+                    }
+                    level.addSound(position.add(0.5, 0.5, 0.5), Sound.CAULDRON_ADDDYE)
                 }
 
-                if (player.isSurvival || player.isAdventure) {
-                    item.setCount(item.getCount() - 1)
-                    player.getInventory().setItemInHand(item)
+                ItemID.LEATHER_HELMET, ItemID.LEATHER_CHESTPLATE, ItemID.LEATHER_LEGGINGS, ItemID.LEATHER_BOOTS, ItemID.LEATHER_HORSE_ARMOR -> {
+                    if (isEmpty || cauldron.hasPotion()) {
+                        return@switch
+                    }
+
+                    if (cauldron.isCustomColor()) {
+                        val compoundTag = if (item.hasCompoundTag()) item.namedTag else CompoundTag()
+                        compoundTag!!.putInt("customColor", cauldron.customColor!!.rGB)
+                        item.setCompoundTag(compoundTag)
+                        player!!.getInventory().setItemInHand(item)
+                        setFillLevel(
+                            clamp(
+                                fillLevel - 2,
+                                CommonBlockProperties.FILL_LEVEL.min,
+                                CommonBlockProperties.FILL_LEVEL.max
+                            ), player
+                        )
+                        level.setBlock(this.position, this, direct = true, update = true)
+                        level.addSound(position.add(0.5, 0.5, 0.5), Sound.CAULDRON_DYEARMOR)
+                    } else {
+                        if (!item.hasCompoundTag()) {
+                            return@switch
+                        }
+
+                        val compoundTag = item.namedTag
+                        if (!compoundTag!!.exist("customColor")) {
+                            return@switch
+                        }
+
+                        compoundTag.remove("customColor")
+                        item.setCompoundTag(compoundTag)
+                        player!!.getInventory().setItemInHand(item)
+
+                        setFillLevel(
+                            clamp(
+                                fillLevel - 2,
+                                CommonBlockProperties.FILL_LEVEL.min,
+                                CommonBlockProperties.FILL_LEVEL.max
+                            ), player
+                        )
+                        level.setBlock(this.position, this, direct = true, update = true)
+                        level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_TAKEWATER)
+                    }
                 }
 
-                val color = ItemDye(item.damage).dyeColor.leatherColor
-                if (!cauldron.isCustomColor()) {
-                    cauldron.customColor = color
-                } else {
-                    val current = cauldron.customColor
-                    val mixed = BlockColor(
-                        Math.round(sqrt((color!!.red * current!!.red).toDouble()) * 0.965).toInt(),
-                        Math.round(sqrt((color.green * current.green).toDouble()) * 0.965).toInt(),
-                        Math.round(sqrt((color.blue * current.blue).toDouble()) * 0.965).toInt()
+                ItemID.POTION, ItemID.SPLASH_POTION, ItemID.LINGERING_POTION -> {
+                    if (!isEmpty && (if (cauldron.hasPotion()) cauldron.potionId != item.damage else item.damage != 0)) {
+                        clearWithFizz(cauldron, player)
+                        consumePotion(item, player!!)
+                        return@switch
+                    }
+                    if (isFull) {
+                        return@switch
+                    }
+
+                    if (item.damage != 0 && isEmpty) {
+                        cauldron.potionId = item.damage
+                    }
+
+                    cauldron.type =
+                        if (item.id == ItemID.POTION) BlockEntityCauldron.PotionType.NORMAL else if (item.id == ItemID.SPLASH_POTION) BlockEntityCauldron.PotionType.SPLASH else BlockEntityCauldron.PotionType.LINGERING
+
+                    cauldron.spawnToAll()
+
+                    setFillLevel(
+                        clamp(
+                            fillLevel + 2,
+                            CommonBlockProperties.FILL_LEVEL.min,
+                            CommonBlockProperties.FILL_LEVEL.max
+                        ), player
                     )
-                    cauldron.customColor = mixed
-                }
-                level.addSound(position.add(0.5, 0.5, 0.5), Sound.CAULDRON_ADDDYE)
-            }
+                    level.setBlock(this.position, this, true)
 
-            ItemID.LEATHER_HELMET, ItemID.LEATHER_CHESTPLATE, ItemID.LEATHER_LEGGINGS, ItemID.LEATHER_BOOTS, ItemID.LEATHER_HORSE_ARMOR -> {
-                if (isEmpty || cauldron.hasPotion()) {
-                    break
+                    consumePotion(item, player!!)
+
+                    level.addLevelEvent(
+                        position.add(0.5, 0.375 + fillLevel * 0.125, 0.5),
+                        LevelEventPacket.EVENT_CAULDRON_FILL_POTION
+                    )
                 }
 
-                if (cauldron.isCustomColor()) {
-                    val compoundTag = if (item.hasCompoundTag()) item.namedTag else CompoundTag()
-                    compoundTag!!.putInt("customColor", cauldron.customColor!!.rGB)
-                    item.setCompoundTag(compoundTag)
-                    player.getInventory().setItemInHand(item)
+                ItemID.GLASS_BOTTLE -> {
+                    if (isEmpty) {
+                        return@switch
+                    }
+
+                    val meta = if (cauldron.hasPotion()) cauldron.potionId else 0
+                    val potion = if (meta == 0) {
+                        ItemPotion()
+                    } else {
+                        when (cauldron.type) {
+                            BlockEntityCauldron.PotionType.SPLASH -> ItemSplashPotion(meta)
+                            BlockEntityCauldron.PotionType.LINGERING -> ItemLingeringPotion(meta)
+                            else -> ItemPotion(meta)
+                        }
+                    }
+
                     setFillLevel(
                         clamp(
                             fillLevel - 2,
@@ -237,21 +325,68 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                             CommonBlockProperties.FILL_LEVEL.max
                         ), player
                     )
-                    level.setBlock(this.position, this, true, true)
-                    level.addSound(position.add(0.5, 0.5, 0.5), Sound.CAULDRON_DYEARMOR)
-                } else {
-                    if (!item.hasCompoundTag()) {
-                        break
+                    if (isEmpty) {
+                        cauldron.potionId = -1 //reset potion
+                        cauldron.clearCustomColor()
+                    }
+                    level.setBlock(this.position, this, true)
+
+                    val consumeBottle = player!!.isSurvival || player.isAdventure
+                    if (consumeBottle && item.getCount() == 1) {
+                        player.getInventory().setItemInHand(potion)
+                    } else if (item.getCount() > 1) {
+                        if (consumeBottle) {
+                            item.setCount(item.getCount() - 1)
+                            player.getInventory().setItemInHand(item)
+                        }
+
+                        if (player.getInventory().canAddItem(potion)) {
+                            player.getInventory().addItem(potion)
+                        } else {
+                            player.level!!.dropItem(
+                                player.position.add(0.0, 1.3, 0.0),
+                                potion,
+                                player.getDirectionVector().multiply(0.4)
+                            )
+                        }
                     }
 
-                    val compoundTag = item.namedTag
-                    if (!compoundTag!!.exist("customColor")) {
-                        break
+                    level.addLevelEvent(
+                        position.add(0.5, 0.375 + fillLevel * 0.125, 0.5),
+                        LevelEventPacket.EVENT_CAULDRON_TAKE_POTION
+                    )
+                }
+
+                ItemID.BANNER -> {
+                    if (isEmpty || cauldron.isCustomColor() || cauldron.hasPotion()) {
+                        return@switch
                     }
 
-                    compoundTag.remove("customColor")
-                    item.setCompoundTag(compoundTag)
-                    player.getInventory().setItemInHand(item)
+                    val banner = item as ItemBanner
+                    if (!banner.hasPattern()) {
+                        return@switch
+                    }
+
+                    banner.removePattern(banner.patternsSize - 1)
+                    val consumeBanner = player!!.isSurvival || player.isAdventure
+                    if (consumeBanner && item.getCount() < item.maxStackSize) {
+                        player.getInventory().setItemInHand(banner)
+                    } else {
+                        if (consumeBanner) {
+                            item.setCount(item.getCount() - 1)
+                            player.getInventory().setItemInHand(item)
+                        }
+
+                        if (player.getInventory().canAddItem(banner)) {
+                            player.getInventory().addItem(banner)
+                        } else {
+                            player.level!!.dropItem(
+                                player.position.add(0.0, 1.3, 0.0),
+                                banner,
+                                player.getDirectionVector().multiply(0.4)
+                            )
+                        }
+                    }
 
                     setFillLevel(
                         clamp(
@@ -260,169 +395,36 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                             CommonBlockProperties.FILL_LEVEL.max
                         ), player
                     )
-                    level.setBlock(this.position, this, true, true)
+                    level.setBlock(this.position, this, direct = true, update = true)
                     level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_TAKEWATER)
                 }
-            }
 
-            ItemID.POTION, ItemID.SPLASH_POTION, ItemID.LINGERING_POTION -> {
-                if (!isEmpty && (if (cauldron.hasPotion()) cauldron.potionId != item.damage else item.damage != 0)) {
-                    clearWithFizz(cauldron, player)
-                    consumePotion(item, player)
-                    break
-                }
-                if (isFull) {
-                    break
-                }
-
-                if (item.damage != 0 && isEmpty) {
-                    cauldron.potionId = item.damage
-                }
-
-                cauldron.type =
-                    if (item.id == ItemID.POTION) BlockEntityCauldron.PotionType.NORMAL else if (item.id == ItemID.SPLASH_POTION) BlockEntityCauldron.PotionType.SPLASH else BlockEntityCauldron.PotionType.LINGERING
-
-                cauldron.spawnToAll()
-
-                setFillLevel(
-                    clamp(
-                        fillLevel + 2,
-                        CommonBlockProperties.FILL_LEVEL.min,
-                        CommonBlockProperties.FILL_LEVEL.max
-                    ), player
-                )
-                level.setBlock(this.position, this, true)
-
-                consumePotion(item, player)
-
-                level.addLevelEvent(
-                    position.add(0.5, 0.375 + fillLevel * 0.125, 0.5),
-                    LevelEventPacket.EVENT_CAULDRON_FILL_POTION
-                )
-            }
-
-            ItemID.GLASS_BOTTLE -> {
-                if (isEmpty) {
-                    break
-                }
-
-                val meta = if (cauldron.hasPotion()) cauldron.potionId else 0
-                val potion = if (meta == 0) {
-                    ItemPotion()
-                } else {
-                    when (cauldron.type) {
-                        BlockEntityCauldron.PotionType.SPLASH -> ItemSplashPotion(meta)
-                        BlockEntityCauldron.PotionType.LINGERING -> ItemLingeringPotion(meta)
-                        else -> ItemPotion(meta)
+                else -> if (item is ItemDye) {
+                    if (isEmpty || cauldron.hasPotion()) {
+                        return@switch
                     }
-                }
 
-                setFillLevel(
-                    clamp(
-                        fillLevel - 2,
-                        CommonBlockProperties.FILL_LEVEL.min,
-                        CommonBlockProperties.FILL_LEVEL.max
-                    ), player
-                )
-                if (isEmpty) {
-                    cauldron.potionId = -1 //reset potion
-                    cauldron.clearCustomColor()
-                }
-                level.setBlock(this.position, this, true)
-
-                val consumeBottle = player.isSurvival || player.isAdventure
-                if (consumeBottle && item.getCount() == 1) {
-                    player.getInventory().setItemInHand(potion)
-                } else if (item.getCount() > 1) {
-                    if (consumeBottle) {
+                    if (player!!.isSurvival || player.isAdventure) {
                         item.setCount(item.getCount() - 1)
                         player.getInventory().setItemInHand(item)
                     }
 
-                    if (player.getInventory().canAddItem(potion)) {
-                        player.getInventory().addItem(potion)
+                    color = item.dyeColor.color
+                    if (!cauldron.isCustomColor()) {
+                        cauldron.customColor = color
                     } else {
-                        player.level!!.dropItem(
-                            player.position.add(0.0, 1.3, 0.0),
-                            potion,
-                            player.getDirectionVector().multiply(0.4)
+                        val current = cauldron.customColor
+                        val mixed = BlockColor(
+                            current!!.red + (color!!.red - current.red) / 2,
+                            current.green + (color!!.green - current.green) / 2,
+                            current.blue + (color!!.blue - current.blue) / 2
                         )
+                        cauldron.customColor = mixed
                     }
-                }
-
-                level.addLevelEvent(
-                    position.add(0.5, 0.375 + fillLevel * 0.125, 0.5),
-                    LevelEventPacket.EVENT_CAULDRON_TAKE_POTION
-                )
-            }
-
-            ItemID.BANNER -> {
-                if (isEmpty || cauldron.isCustomColor() || cauldron.hasPotion()) {
-                    break
-                }
-
-                val banner = item as ItemBanner
-                if (!banner.hasPattern()) {
-                    break
-                }
-
-                banner.removePattern(banner.patternsSize - 1)
-                val consumeBanner = player.isSurvival || player.isAdventure
-                if (consumeBanner && item.getCount() < item.maxStackSize) {
-                    player.getInventory().setItemInHand(banner)
+                    level.addSound(position.add(0.5, 0.5, 0.5), Sound.CAULDRON_ADDDYE)
                 } else {
-                    if (consumeBanner) {
-                        item.setCount(item.getCount() - 1)
-                        player.getInventory().setItemInHand(item)
-                    }
-
-                    if (player.getInventory().canAddItem(banner)) {
-                        player.getInventory().addItem(banner)
-                    } else {
-                        player.level!!.dropItem(
-                            player.position.add(0.0, 1.3, 0.0),
-                            banner,
-                            player.getDirectionVector().multiply(0.4)
-                        )
-                    }
+                    return true
                 }
-
-                setFillLevel(
-                    clamp(
-                        fillLevel - 2,
-                        CommonBlockProperties.FILL_LEVEL.min,
-                        CommonBlockProperties.FILL_LEVEL.max
-                    ), player
-                )
-                level.setBlock(this.position, this, true, true)
-                level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_TAKEWATER)
-            }
-
-            else -> if (item is ItemDye) {
-                if (isEmpty || cauldron.hasPotion()) {
-                    break
-                }
-
-                if (player.isSurvival || player.isAdventure) {
-                    item.setCount(item.getCount() - 1)
-                    player.getInventory().setItemInHand(item)
-                }
-
-                color = item.dyeColor.color
-                if (!cauldron.isCustomColor()) {
-                    cauldron.customColor = color
-                } else {
-                    val current = cauldron.customColor
-                    val mixed = BlockColor(
-                        current!!.red + (color!!.red - current.red) / 2,
-                        current.green + (color!!.green - current.green) / 2,
-                        current.blue + (color!!.blue - current.blue) / 2
-                    )
-                    cauldron.customColor = mixed
-                }
-                level.addSound(position.add(0.5, 0.5, 0.5), Sound.CAULDRON_ADDDYE)
-            } else {
-                return true
             }
         }
 
@@ -430,87 +432,90 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
         return true
     }
 
-    fun onLavaActivate(item: Item, player: Player?, blockFace: BlockFace?, fx: Float, fy: Float, fz: Float): Boolean {
+    fun onLavaActivate(item: Item, player: Player?, blockFace: BlockFace, fx: Float, fy: Float, fz: Float): Boolean {
         val be =
             level.getBlockEntity(this.position) as? BlockEntityCauldron ?: return false
 
-        when (item.id) {
-            ItemID.BUCKET -> {
-                val bucket = item as ItemBucket
-                if (bucket.fishEntityId != null) {
-                    break
-                }
-                if (item.damage == 0) { //empty
-                    if (!isFull || be.isCustomColor() || be.hasPotion()) {
-                        break
+        run switch@{
+            when (item.id) {
+                ItemID.BUCKET -> {
+                    val bucket = item as ItemBucket
+                    if (bucket.fishEntityId != null) {
+                        return@switch
                     }
+                    if (item.damage == 0) { //empty
+                        if (!isFull || be.isCustomColor() || be.hasPotion()) {
+                            return@switch
+                        }
 
-                    val ev = PlayerBucketFillEvent(
-                        player,
-                        this, null,
-                        this, item, get(ItemID.LAVA_BUCKET, 0, 1, bucket.compoundTag)
-                    )
-                    Server.instance.pluginManager.callEvent(ev)
-                    if (!ev.isCancelled) {
-                        replaceBucket(bucket, player, ev.item)
-                        this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) //empty
-                        level.setBlock(this.position, BlockCauldron(), true)
-                        be.clearCustomColor()
-                        level.addSound(position.add(0.5, 1.0, 0.5), Sound.BUCKET_FILL_LAVA)
-                    }
-                } else if (bucket.isWater || bucket.isLava) { //water or lava bucket
-                    if (isFull && !be.isCustomColor() && !be.hasPotion() && item.damage == 10) {
-                        break
-                    }
-
-                    val ev = PlayerBucketEmptyEvent(
-                        player,
-                        this, null,
-                        this, item, get(ItemID.BUCKET, 0, 1, bucket.compoundTag)
-                    )
-                    Server.instance.pluginManager.callEvent(ev)
-                    if (!ev.isCancelled) {
-                        replaceBucket(bucket, player, ev.item)
-
-                        if (be.hasPotion()) { //if has potion
-                            clearWithFizz(be)
-                        } else if (bucket.isLava) { //lava bucket
-                            this.setFillLevel(CommonBlockProperties.FILL_LEVEL.max, player) //fill
+                        val ev = PlayerBucketFillEvent(
+                            player,
+                            this, blockFace,
+                            this, item, get(ItemID.LAVA_BUCKET, 0, 1, bucket.compoundTag)
+                        )
+                        Server.instance.pluginManager.callEvent(ev)
+                        if (!ev.isCancelled) {
+                            replaceBucket(bucket, player!!, ev.item)
+                            this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) //empty
+                            level.setBlock(this.position, BlockCauldron(), true)
                             be.clearCustomColor()
-                            level.setBlock(this.position, this, true)
-                            level.addSound(position.add(0.5, 1.0, 0.5), Sound.BUCKET_EMPTY_LAVA)
-                        } else {
-                            if (isEmpty) {
-                                val blockCauldron = BlockCauldron()
-                                blockCauldron.fillLevel = 6
-                                level.setBlock(this.position, blockCauldron, true, true)
-                                be.clearCustomColor()
-                                level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_FILLWATER)
-                            } else {
+                            level.addSound(position.add(0.5, 1.0, 0.5), Sound.BUCKET_FILL_LAVA)
+                        }
+                    } else if (bucket.isWater || bucket.isLava) { //water or lava bucket
+                        if (isFull && !be.isCustomColor() && !be.hasPotion() && item.damage == 10) {
+                            return@switch
+                        }
+
+                        val ev = PlayerBucketEmptyEvent(
+                            player,
+                            this, blockFace,
+                            this, item, get(ItemID.BUCKET, 0, 1, bucket.compoundTag)
+                        )
+                        Server.instance.pluginManager.callEvent(ev)
+                        if (!ev.isCancelled) {
+                            replaceBucket(bucket, player!!, ev.item)
+
+                            if (be.hasPotion()) { //if has potion
                                 clearWithFizz(be)
+                            } else if (bucket.isLava) { //lava bucket
+                                this.setFillLevel(CommonBlockProperties.FILL_LEVEL.max, player) //fill
+                                be.clearCustomColor()
+                                level.setBlock(this.position, this, true)
+                                level.addSound(position.add(0.5, 1.0, 0.5), Sound.BUCKET_EMPTY_LAVA)
+                            } else {
+                                if (isEmpty) {
+                                    val blockCauldron = BlockCauldron()
+                                    blockCauldron.fillLevel = 6
+                                    level.setBlock(this.position, blockCauldron, direct = true, update = true)
+                                    be.clearCustomColor()
+                                    level.addSound(position.add(0.5, 1.0, 0.5), Sound.CAULDRON_FILLWATER)
+                                } else {
+                                    clearWithFizz(be)
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            Item.POTION, Item.SPLASH_POTION, Item.LINGERING_POTION -> {
-                if (!isEmpty && (if (be.hasPotion()) be.potionId != item.damage else item.damage != 0)) {
-                    clearWithFizz(be)
-                    break
-                }
-                return super.onActivate(item, player, blockFace, fx, fy, fz)
-            }
-
-            Item.GLASS_BOTTLE -> {
-                if (!isEmpty && be.hasPotion()) {
+                ItemID.POTION, ItemID.SPLASH_POTION, ItemID.LINGERING_POTION -> {
+                    if (!isEmpty && (if (be.hasPotion()) be.potionId != item.damage else item.damage != 0)) {
+                        clearWithFizz(be)
+                        return@switch
+                    }
                     return super.onActivate(item, player, blockFace, fx, fy, fz)
                 }
-                return true
-            }
 
-            else -> return true
+                ItemID.GLASS_BOTTLE -> {
+                    if (!isEmpty && be.hasPotion()) {
+                        return super.onActivate(item, player, blockFace, fx, fy, fz)
+                    }
+                    return true
+                }
+
+                else -> return true
+            }
         }
+
 
         level.updateComparatorOutputLevel(this.position)
         return true
@@ -585,13 +590,13 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
             .putByte("SplashPotion", 0)
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
         }
 
-        return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null
+        return BlockEntityHolder.setBlockAndCreateEntity(this, direct = true, update = true, initialData = nbt) != null
     }
 
     override val toolTier: Int
@@ -631,7 +636,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
 
     override fun onEntityCollide(entity: Entity) {
         val ev = EntityCombustByBlockEvent(this, entity, 15)
-        instance.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled) {
             // Making sure the entity is actually alive and not invulnerable.
             if (cauldronLiquid == CauldronLiquid.LAVA && entity.isAlive() && entity.noDamageTicks == 0) {

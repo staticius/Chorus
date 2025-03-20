@@ -10,11 +10,6 @@ import org.chorus.registry.Registries
 import org.chorus.scheduler.Task
 import org.chorus.utils.ChunkException
 
-
-/**
- * @author MagicDroidX
- */
-
 abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.provider.level),
     BlockEntityID {
     @JvmField
