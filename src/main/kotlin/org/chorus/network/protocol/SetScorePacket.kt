@@ -9,7 +9,7 @@ class SetScorePacket : DataPacket() {
     var action: Action? = null
 
     @JvmField
-    var infos: List<ScoreInfo> = ArrayList()
+    var infos: MutableList<ScoreInfo> = ArrayList()
 
     override fun decode(byteBuf: HandleByteBuf) {
     }

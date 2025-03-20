@@ -12,7 +12,7 @@ class BlockMetadataStore(private val owningLevel: Level) : MetadataStore() {
         return block.position.floorX.toString() + ":" + block.position.floorY + ":" + block.position.floorZ + ":" + metadataKey
     }
 
-    override fun getMetadata(block: Metadatable, metadataKey: String): List<MetadataValue?>? {
+    override fun getMetadata(block: Metadatable, metadataKey: String): List<MetadataValue> {
         require(block is Block) { "Object must be a Block" }
         if (block.level == this.owningLevel) {
             return super.getMetadata(block, metadataKey)

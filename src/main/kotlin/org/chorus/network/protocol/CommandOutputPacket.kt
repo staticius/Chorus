@@ -1,15 +1,13 @@
 package org.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.CommandOriginData
 import org.chorus.network.protocol.types.CommandOutputMessage
 import org.chorus.network.protocol.types.CommandOutputType
 
-
 class CommandOutputPacket : DataPacket() {
     @JvmField
-    val messages: List<CommandOutputMessage> = ObjectArrayList()
+    val messages: MutableList<CommandOutputMessage> = mutableListOf()
 
     @JvmField
     var commandOriginData: CommandOriginData? = null
@@ -29,7 +27,7 @@ class CommandOutputPacket : DataPacket() {
         byteBuf.writeUUID(commandOriginData!!.uuid)
         byteBuf.writeString(commandOriginData!!.requestId) // unknown
         if (commandOriginData!!.type == CommandOriginData.Origin.DEV_CONSOLE || commandOriginData!!.type == CommandOriginData.Origin.TEST) {
-            byteBuf.writeVarLong(commandOriginData.getVarLong().orElse(-1)) // unknown
+            byteBuf.writeVarLong(commandOriginData!!.varLong.orElse(-1)) // unknown
         }
 
         byteBuf.writeByte(type!!.ordinal.toByte().toInt())
@@ -37,11 +35,11 @@ class CommandOutputPacket : DataPacket() {
 
         byteBuf.writeUnsignedVarInt(messages.size)
         for (msg in messages) {
-            byteBuf.writeBoolean(msg.isInternal)
+            byteBuf.writeBoolean(msg.internal)
             byteBuf.writeString(msg.messageId)
             byteBuf.writeUnsignedVarInt(msg.parameters.size)
             for (param in msg.parameters) {
-                byteBuf.writeString(param!!)
+                byteBuf.writeString(param)
             }
         }
         if (this.type == CommandOutputType.DATA_SET) {

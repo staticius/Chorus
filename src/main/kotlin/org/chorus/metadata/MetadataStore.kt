@@ -7,7 +7,7 @@ import java.util.*
 
 
 abstract class MetadataStore {
-    protected val metadataMap: MutableMap<String, MutableMap<Plugin, MetadataValue?>> = HashMap()
+    protected val metadataMap: MutableMap<String, MutableMap<Plugin, MetadataValue>> = HashMap()
 
     open fun setMetadata(subject: Metadatable, metadataKey: String, newMetadataValue: MetadataValue) {
         if (newMetadataValue == null) {
@@ -20,13 +20,13 @@ abstract class MetadataStore {
         entry[owningPlugin] = newMetadataValue
     }
 
-    open fun getMetadata(subject: Metadatable, metadataKey: String): List<MetadataValue?>? {
+    open fun getMetadata(subject: Metadatable, metadataKey: String): List<MetadataValue> {
         val key = this.disambiguate(subject, metadataKey)
         if (metadataMap.containsKey(key)) {
-            val values: Collection<MetadataValue?> = metadataMap[key]!!.values
+            val values = metadataMap[key]!!.values
             return Collections.unmodifiableList(ArrayList(values))
         }
-        return emptyList<MetadataValue>()
+        return emptyList()
     }
 
     open fun getMetadata(subject: Metadatable, metadataKey: String, plugin: Plugin): MetadataValue? {

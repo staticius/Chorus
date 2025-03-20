@@ -44,6 +44,7 @@ import org.chorus.event.inventory.InventoryPickupItemEvent
 import org.chorus.event.inventory.InventoryPickupTridentEvent
 import org.chorus.event.player.*
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
+import org.chorus.event.server.DataPacketSendEvent
 import org.chorus.form.window.Form
 import org.chorus.inventory.*
 import org.chorus.inventory.fake.FakeInventory
@@ -3128,14 +3129,14 @@ class Player @UsedByReflection constructor(
         }
 
         for (msg in message.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
-            if (!msg.trim { it <= ' ' }.isEmpty() && msg.length <= 512 && messageLimitCounter-- > 0) {
+            if (msg.trim { it <= ' ' }.isNotEmpty() && msg.length <= 512 && messageLimitCounter-- > 0) {
                 val chatEvent = PlayerChatEvent(this, msg)
                 Server.instance.pluginManager.callEvent(chatEvent)
                 if (!chatEvent.isCancelled) {
                     Server.instance.broadcastMessage(
                         Server.instance.baseLang.tr(
-                            chatEvent.format, *arrayOf<String?>(
-                                chatEvent.player!!.getDisplayName(), chatEvent.message
+                            chatEvent.format, *arrayOf<String>(
+                                chatEvent.player!!.getDisplayName(), chatEvent.message!!
                             )
                         ), chatEvent.getRecipients()
                     )
@@ -3277,7 +3278,7 @@ class Player @UsedByReflection constructor(
             pk.messages.addAll(container.messages)
             pk.commandOriginData = CommandOriginData(
                 CommandOriginData.Origin.PLAYER,
-                getUniqueId()!!, "", null
+                getUniqueId(), "", null
             ) //Only players can effect
             pk.type = CommandOutputType.ALL_OUTPUT //Useless
             pk.successCount = container.successCount //Useless,maybe used for server-client interaction
@@ -3315,9 +3316,9 @@ class Player @UsedByReflection constructor(
      * @see .sendTranslation
      */
     @JvmOverloads
-    fun sendTranslation(message: String, parameters: Array<String?> = EmptyArrays.EMPTY_STRINGS) {
+    fun sendTranslation(message: String, parameters: Array<String> = EmptyArrays.EMPTY_STRINGS) {
         val pk = TextPacket()
-        if (Server.instance.getSettings().baseSettings().forceServerTranslate()) {
+        if (Server.instance.settings.baseSettings.forceServerTranslate) {
             pk.type = TextPacket.TYPE_RAW
             pk.message = Server.instance.baseLang.tr(message, *parameters)
         } else {
@@ -3628,18 +3629,18 @@ class Player @UsedByReflection constructor(
 
         //handle scoreboardManager#beforePlayerQuit
         val scoreboardManager = Server.instance.scoreboardManager
-        scoreboardManager?.beforePlayerQuit(this)
+        scoreboardManager.beforePlayerQuit(this)
 
         //dismount horse
         if (riding is EntityRideable) {
-            riding.dismountEntity(this)
+            riding!!.dismountEntity(this)
         }
 
         unloadAllUsedChunk()
 
         //send disconnection packet
         val packet = DisconnectPacket()
-        if (reason == null || reason.isBlank()) {
+        if (reason.isBlank()) {
             packet.hideDisconnectionScreen = true
             reason = BedrockDisconnectReasons.DISCONNECTED
         }
@@ -3648,7 +3649,7 @@ class Player @UsedByReflection constructor(
 
         //call quit event
         var ev: PlayerQuitEvent? = null
-        if (this.getName() != null && !getName().isEmpty()) {
+        if (getName().isNotEmpty()) {
             Server.instance.pluginManager.callEvent(PlayerQuitEvent(this, message, true, reason).also { ev = it })
             if (this.fishing != null) {
                 this.stopFishing(false)
@@ -3671,7 +3672,7 @@ class Player @UsedByReflection constructor(
         Server.instance.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE, this)
         // broadcast disconnection message
         if (ev != null && (this.getName() != "") && this.spawned && (ev!!.quitMessage.toString() != "")) {
-            Server.instance.broadcastMessage(ev!!.quitMessage)
+            Server.instance.broadcastMessage(ev!!.quitMessage!!)
         }
 
         hasSpawned.clear()
@@ -3684,9 +3685,6 @@ class Player @UsedByReflection constructor(
         if (this.perm != null) {
             perm!!.clearPermissions()
             this.perm = null
-        }
-        if (this.inventory != null) {
-            this.inventory = null
         }
         if (this.offhandInventory != null) {
             this.offhandInventory = null
@@ -3715,7 +3713,7 @@ class Player @UsedByReflection constructor(
         val iterator = playerChunkManager.usedChunks.iterator()
         try {
             while (iterator.hasNext()) {
-                val l = iterator.nextLong()
+                val l = iterator.next()
                 val chunkX = getHashX(l)
                 val chunkZ = getHashZ(l)
                 if (level!!.unregisterChunkLoader(this, chunkX, chunkZ, false)) {
@@ -3735,7 +3733,7 @@ class Player @UsedByReflection constructor(
                 }
             }
         } catch (e: Exception) {
-            Server.instance.getLogger().error("Failed to unload all used chunks.", e)
+            Server.instance.logger.error("Failed to unload all used chunks.", e)
         } finally {
             playerChunkManager.usedChunks.clear()
         }
@@ -3753,16 +3751,8 @@ class Player @UsedByReflection constructor(
             namedTag!!.putInt("SpawnX", spawnPoint!!.position.floorX)
                 .putInt("SpawnY", spawnPoint!!.position.floorY)
                 .putInt("SpawnZ", spawnPoint!!.position.floorZ)
-            if (spawnPoint!!.level != null) {
-                namedTag!!.putString("SpawnLevel", spawnPoint!!.level.getName()!!)
-                namedTag!!.putInt("SpawnDimension", spawnPoint!!.level.dimension)
-            } else {
-                namedTag!!.putString(
-                    "SpawnLevel",
-                    Server.instance.defaultLevel!!.getName()!!
-                )
-                namedTag!!.putInt("SpawnDimension", Server.instance.defaultLevel!!.dimension)
-            }
+            namedTag!!.putString("SpawnLevel", spawnPoint!!.level.getName()!!)
+            namedTag!!.putInt("SpawnDimension", spawnPoint!!.level.dimension)
         }
 
         adventureSettings.saveNBT()
@@ -3779,7 +3769,7 @@ class Player @UsedByReflection constructor(
 
             val achievements = CompoundTag()
             for (achievement in this.achievements) {
-                achievements.putByte(achievement, 1)
+                achievements.putByte(achievement!!, 1)
             }
 
             namedTag!!.putCompound("Achievements", achievements)
@@ -3788,24 +3778,24 @@ class Player @UsedByReflection constructor(
             namedTag!!.putString("lastIP", this.address)
             namedTag!!.putInt("EXP", this.experience)
             namedTag!!.putInt("expLevel", this.experienceLevel)
-            namedTag!!.putInt("foodLevel", foodData!!.food)
-            namedTag!!.putFloat("foodSaturationLevel", foodData!!.saturation)
+            namedTag!!.putInt("foodLevel", foodData!!.getFood())
+            namedTag!!.putFloat("foodSaturationLevel", foodData!!.getSaturation())
             namedTag!!.putInt("enchSeed", this.enchSeed)
 
-            val fogIdentifiers = ListTag<StringTag?>()
-            val userProvidedFogIds = ListTag<StringTag?>()
-            fogStack.forEach(Consumer<PlayerFogPacket.Fog> { fog: PlayerFogPacket.Fog ->
-                fogIdentifiers.add(StringTag(fog.identifier().toString()))
-                userProvidedFogIds.add(StringTag(fog.userProvidedId()))
-            })
+            val fogIdentifiers = ListTag<StringTag>()
+            val userProvidedFogIds = ListTag<StringTag>()
+            fogStack.forEach { fog ->
+                fogIdentifiers.add(StringTag(fog.identifier.toString()))
+                userProvidedFogIds.add(StringTag(fog.userProvidedId))
+            }
             namedTag!!.putList("fogIdentifiers", fogIdentifiers)
             namedTag!!.putList("userProvidedFogIds", userProvidedFogIds)
 
             namedTag!!.putInt("TimeSinceRest", this.timeSinceRest)
 
-            if (!getName().isBlank() && this.namedTag != null) {
+            if (getName().isNotBlank() && this.namedTag != null) {
                 Server.instance.saveOfflinePlayerData(
-                    uuid!!,
+                    uuid,
                     namedTag!!, async
                 )
             }
@@ -3817,7 +3807,7 @@ class Player @UsedByReflection constructor(
     }
 
     override fun getName(): String {
-        return playerInfo.getUsername()
+        return playerInfo.username
     }
 
 
@@ -3936,7 +3926,7 @@ class Player @UsedByReflection constructor(
 
         val ev: PlayerDeathEvent = PlayerDeathEvent(
             this,
-            this.getDrops(), TranslationContainer(message, *params.toArray<String>(EmptyArrays.EMPTY_STRINGS)),
+            this.getDrops(), TranslationContainer(message, *params.toTypedArray()),
             this.experienceLevel
         )
         ev.keepExperience = level!!.gameRules.getBoolean(GameRule.KEEP_INVENTORY)
@@ -3953,21 +3943,20 @@ class Player @UsedByReflection constructor(
             this.extinguish()
             this.scheduleUpdate()
             if (!ev.keepInventory && level!!.gameRules.getBoolean(GameRule.DO_ENTITY_DROPS)) {
-                for (item in ev.getDrops()!!) {
+                for (item in ev.getDrops()) {
                     if (!item.hasEnchantment(Enchantment.ID_VANISHING_CURSE) && item.applyEnchantments()) {
                         level!!.dropItem(this.position, item, null, true, 40)
                     }
                 }
 
-                if (this.inventory != null) {
-                    HashMap(inventory!!.contents).forEach { (slot: Int?, item: Item?) ->
-                        if (!item.keepOnDeath()) {
-                            inventory!!.clear(slot)
-                        }
+                inventory.contents.forEach { (slot, item) ->
+                    if (!item.keepOnDeath()) {
+                        inventory.clear(slot)
                     }
                 }
+
                 if (this.offhandInventory != null) {
-                    HashMap(offhandInventory!!.contents).forEach { (slot: Int?, item: Item?) ->
+                    offhandInventory!!.contents.forEach { (slot, item) ->
                         if (!item.keepOnDeath()) {
                             offhandInventory!!.clear(slot)
                         }
@@ -3990,8 +3979,8 @@ class Player @UsedByReflection constructor(
             deathInfo.translation = ev.translationDeathMessage
             this.dataPacket(deathInfo)
 
-            if (showMessages && !ev.deathMessage.toString().isEmpty()) {
-                Server.instance.broadcast(ev.deathMessage, Server.Companion.BROADCAST_CHANNEL_USERS)
+            if (showMessages && ev.deathMessage.toString().isNotEmpty()) {
+                Server.instance.broadcast(ev.deathMessage, Server.BROADCAST_CHANNEL_USERS)
             }
             this.setDataProperty(
                 EntityDataTypes.PLAYER_LAST_DEATH_POS, BlockVector3(
@@ -4000,7 +3989,7 @@ class Player @UsedByReflection constructor(
             )
 
             val pk = RespawnPacket()
-            val pos = spawn.left()
+            val pos = spawn.first
             pk.x = pos!!.position.x.toFloat()
             pk.y = pos.position.y.toFloat()
             pk.z = pos.position.z.toFloat()
@@ -4011,18 +4000,17 @@ class Player @UsedByReflection constructor(
     }
 
     override fun setHealth(health: Float) {
-        var health = health
-        if (health < 1) {
-            health = 0f
+        var health1 = health
+        if (health1 < 1) {
+            health1 = 0f
         }
-        super.setHealth(health)
-        val attribute: Attribute =
-            attributes.computeIfAbsent(Attribute.MAX_HEALTH) { obj: Int? -> getAttribute() }
+        super.setHealth(health1)
+        val attribute = attributes.computeIfAbsent(Attribute.MAX_HEALTH) { getAttribute(it) }
         attribute.setMaxValue((if (this.getAbsorption() % 2 != 0f) this.getMaxHealth() + 1 else this.getMaxHealth()).toFloat())
-            .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f)
+            .setValue(if (health1 > 0) (if (health1 < getMaxHealth()) health1 else getMaxHealth().toFloat()) else 0f)
         if (this.spawned) {
             val pk = UpdateAttributesPacket()
-            pk.entries = arrayOf<Attribute?>(attribute)
+            pk.entries = arrayOf(attribute)
             pk.entityId = this.getId()
             this.dataPacket(pk)
         }
@@ -4032,12 +4020,12 @@ class Player @UsedByReflection constructor(
         super.setMaxHealth(maxHealth)
 
         val attribute: Attribute =
-            attributes.computeIfAbsent(Attribute.MAX_HEALTH) { obj: Int? -> getAttribute() }
+            attributes.computeIfAbsent(Attribute.MAX_HEALTH) { getAttribute(it) }
         attribute.setMaxValue((if (this.getAbsorption() % 2 != 0f) this.getMaxHealth() + 1 else this.getMaxHealth()).toFloat())
             .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f)
         if (this.spawned) {
             val pk = UpdateAttributesPacket()
-            pk.entries = arrayOf<Attribute?>(attribute)
+            pk.entries = arrayOf(attribute)
             pk.entityId = this.getId()
             this.dataPacket(pk)
         }
@@ -4138,10 +4126,10 @@ class Player @UsedByReflection constructor(
             this.lastPlayerdLevelUpSoundTime = this.age
             this.level!!.addLevelSoundEvent(
                 this.position,
-                LevelSoundEventPacketV2.SOUND_LEVELUP,
+                LevelSoundEventPacket.SOUND_LEVELUP,
                 min(7.0, (level / 5).toDouble()).toInt() shl 28,
                 "",
-                false, false
+                isBaby = false, isGlobal = false
             )
         }
     }
@@ -4165,7 +4153,7 @@ class Player @UsedByReflection constructor(
             )
             percent = max(0.0, min(1.0, percent.toDouble())).toFloat()
             val attribute: Attribute =
-                attributes.computeIfAbsent(Attribute.EXPERIENCE) { obj: Int? -> getAttribute() }
+                attributes.computeIfAbsent(Attribute.EXPERIENCE) { getAttribute(it) }
             attribute.setValue(percent)
             this.syncAttribute(attribute)
         }
@@ -4186,7 +4174,7 @@ class Player @UsedByReflection constructor(
     fun sendExperienceLevel(level: Int = this.experienceLevel) {
         if (this.spawned) {
             val attribute: Attribute =
-                attributes.computeIfAbsent(Attribute.EXPERIENCE_LEVEL) { obj: Int? -> getAttribute() }
+                attributes.computeIfAbsent(Attribute.EXPERIENCE_LEVEL) { getAttribute(it) }
             attribute.setValue(level.toFloat())
             this.syncAttribute(attribute)
         }
@@ -4209,9 +4197,7 @@ class Player @UsedByReflection constructor(
 
     override fun syncAttributes() {
         val pk = UpdateAttributesPacket()
-        pk.entries =
-            attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }
-                .toArray<Attribute> { _Dummy_.__Array__() }
+        pk.entries = attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }.toList().toTypedArray()
         pk.entityId = this.getId()
         this.dataPacket(pk)
     }
@@ -4220,7 +4206,7 @@ class Player @UsedByReflection constructor(
         if (absorption != this.absorption) {
             this.absorption = absorption
             val attribute: Attribute =
-                attributes.computeIfAbsent(Attribute.ABSORPTION) { obj: Int? -> getAttribute() }
+                attributes.computeIfAbsent(Attribute.ABSORPTION) { getAttribute(it) }
             attribute.setValue(absorption)
             this.syncAttribute(attribute)
         }
@@ -4261,7 +4247,7 @@ class Player @UsedByReflection constructor(
      */
     fun sendMovementSpeed(speed: Float) {
         val attribute: Attribute =
-            attributes.computeIfAbsent(Attribute.MOVEMENT_SPEED) { obj: Int? -> getAttribute() }
+            attributes.computeIfAbsent(Attribute.MOVEMENT_SPEED) { getAttribute(it) }
         attribute.setValue(speed)
         this.syncAttribute(attribute)
     }
@@ -4281,8 +4267,7 @@ class Player @UsedByReflection constructor(
             if (level!!.getBlock(
                     getLocator().position.floor()
                         .add(0.5, -1.0, 0.5)
-                )!!
-                    .id == Block.SLIME
+                ).id == BlockID.SLIME
             ) {
                 if (!this.isSneaking()) {
                     //source.setCancelled();
@@ -4422,7 +4407,7 @@ class Player @UsedByReflection constructor(
             return false
         }
         val from = this.getTransform()
-        this.lastTeleportMessage = Pair.of(from, System.currentTimeMillis())
+        this.lastTeleportMessage = Pair(from, System.currentTimeMillis())
 
         var to = transform
         //event
@@ -4430,7 +4415,7 @@ class Player @UsedByReflection constructor(
             val event = PlayerTeleportEvent(this, from, to, cause)
             Server.instance.pluginManager.callEvent(event)
             if (event.isCancelled) return false
-            to = event.to
+            to = event.to!!
         }
 
         //remove inventory,ride,sign editor
@@ -4558,7 +4543,7 @@ class Player @UsedByReflection constructor(
         }
 
         if (!form.isViewer(this)) {
-            form.viewers().add(this)
+            form.viewers.add(this)
         }
 
         val packet = ModalFormRequestPacket()
@@ -4579,7 +4564,7 @@ class Player @UsedByReflection constructor(
         formWindows.entries
             .stream()
             .filter { f: Map.Entry<Int, Form<*>> -> f.value == form }
-            .map<Int> { java.util.Map.Entry.key }
+            .map { it.key }
             .findFirst()
             .ifPresent { id: Int? ->
                 val packet =
@@ -4895,12 +4880,12 @@ class Player @UsedByReflection constructor(
             if (topWindow.isPresent) {
                 value = topWindow.get()
                 if (value is CraftTypeInventory || (value is FakeInventory && value.fakeInventoryType.isCraftType)) {
-                    puts.addAll(value.contents.values())
+                    puts.addAll(value.contents.values)
                     value.clearAll()
                 }
                 removeWindow(value)
             }
-            val drops = getInventory().addItem(*puts.toArray(Item.EMPTY_ARRAY))
+            val drops = getInventory().addItem(*puts.toTypedArray())
             for (drop in drops) {
                 this.dropItem(drop)
             }
@@ -4928,19 +4913,19 @@ class Player @UsedByReflection constructor(
     }
 
     override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        Server.instance.getPlayerMetadata().setMetadata(this, metadataKey, newMetadataValue)
+        Server.instance.playerMetadata.setMetadata(this, metadataKey, newMetadataValue)
     }
 
     override fun getMetadata(metadataKey: String): List<MetadataValue> {
-        return Server.instance.getPlayerMetadata().getMetadata(this, metadataKey)
+        return Server.instance.playerMetadata.getMetadata(this, metadataKey)
     }
 
     override fun hasMetadata(metadataKey: String): Boolean {
-        return Server.instance.getPlayerMetadata().hasMetadata(this, metadataKey)
+        return Server.instance.playerMetadata.hasMetadata(this, metadataKey)
     }
 
     override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        Server.instance.getPlayerMetadata().removeMetadata(this, metadataKey, owningPlugin)
+        Server.instance.playerMetadata.removeMetadata(this, metadataKey, owningPlugin)
     }
 
     override fun onChunkChanged(chunk: IChunk) {
@@ -5163,7 +5148,7 @@ class Player @UsedByReflection constructor(
 
                         if (item.blockUnsafe is BlockWood) {
                             this.awardAchievement("mineWood")
-                        } else if (item.id == Item.DIAMOND) {
+                        } else if (item.id == ItemID.DIAMOND) {
                             this.awardAchievement("diamond")
                         }
 
@@ -5173,7 +5158,7 @@ class Player @UsedByReflection constructor(
                         Server.Companion.broadcastPacket(entity.getViewers().values, pk)
                         this.dataPacket(pk)
 
-                        this.inventory!!.addItem(item.clone())
+                        this.inventory.addItem(item.clone())
                         entity.close()
                         return true
                     }
@@ -5363,7 +5348,7 @@ class Player @UsedByReflection constructor(
      *
      * @param items The items to give to the player.
      */
-    fun giveItem(vararg items: Item?) {
+    fun giveItem(vararg items: Item) {
         for (failed in getInventory().addItem(*items)) {
             level!!.dropItem(this.position, failed)
         }
@@ -5510,7 +5495,7 @@ class Player @UsedByReflection constructor(
         this.dataPacket(packet)
 
         val scorer = PlayerScorer(this)
-        if (line.scorer.equals(scorer) && line.scoreboard.getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
+        if (line.scorer == scorer && line.scoreboard.getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
             this.setScoreTag("")
         }
     }
@@ -5523,8 +5508,8 @@ class Player @UsedByReflection constructor(
         this.dataPacket(packet)
 
         val scorer = PlayerScorer(this)
-        if (line.scorer.equals(scorer) && line.scoreboard.getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
-            this.setScoreTag(line.score + " " + line.scoreboard.displayName)
+        if (line.scorer == scorer && line.scoreboard.getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
+            this.setScoreTag("${line.score} ${line.scoreboard.displayName}")
         }
     }
 
@@ -5539,19 +5524,14 @@ class Player @UsedByReflection constructor(
 
         //client won't storage the score of a scoreboard,so we should send the score to client
         val pk2 = SetScorePacket()
-        pk2.infos =
-            scoreboard.lines.values().stream().map { obj: IScoreboardLine -> obj.toNetworkInfo() }.filter { obj: Any? ->
-                Objects.nonNull(
-                    obj
-                )
-            }.collect(Collectors.toList<T>())
+        pk2.infos = scoreboard.lines.values.stream().map { obj -> obj.toNetworkInfo() }.toList().filterNotNull().toMutableList()
         pk2.action = SetScorePacket.Action.SET
         this.dataPacket(pk2)
 
         val scorer = PlayerScorer(this)
         val line = scoreboard.getLine(scorer)
         if (slot == DisplaySlot.BELOW_NAME && line != null) {
-            this.setScoreTag(line.score + " " + scoreboard.displayName)
+            this.setScoreTag("${line.score} ${scoreboard.displayName}")
         }
     }
 
