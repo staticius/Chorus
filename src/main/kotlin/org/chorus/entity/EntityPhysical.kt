@@ -15,6 +15,8 @@ import java.util.function.Consumer
 import java.util.function.Predicate
 import java.util.function.Supplier
 import java.util.stream.Stream
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreature(chunk, nbt), EntityAsyncPrepare {
     /**
@@ -71,20 +73,19 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
     override fun entityBaseTick(tickDiff: Int): Boolean {
         val hasUpdate: Boolean = super.entityBaseTick(tickDiff)
         //handle human entity freeze
-        val collidedWithPowderSnow: Boolean = getTickCachedCollisionBlocks()!!.stream().anyMatch(
-            Predicate { block: Block -> block.getId() === BlockID.POWDER_SNOW })
+        val collidedWithPowderSnow: Boolean = getTickCachedCollisionBlocks()!!.stream().anyMatch { block: Block -> block.id === BlockID.POWDER_SNOW }
         if (this.getFreezingTicks() < 140 && collidedWithPowderSnow) {
             this.addFreezingTicks(1)
-            val event: EntityFreezeEvent = EntityFreezeEvent(this)
+            val event = EntityFreezeEvent(this)
             Server.instance.pluginManager.callEvent(event)
-            if (!event.isCancelled) {
-                //this.setMovementSpeed(); //todo 给物理实体添加freeze减速
-            }
+//            if (!event.isCancelled) {
+//                //this.setMovementSpeed(); // todo 给物理实体添加freeze减速
+//            }
         } else if (this.getFreezingTicks() > 0 && !collidedWithPowderSnow) {
             this.addFreezingTicks(-1)
             //this.setMovementSpeed();
         }
-        if (this.getFreezingTicks() == 140 && level!!.getTick() % 40 == 0) {
+        if (this.getFreezingTicks() == 140 && level!!.tick % 40 == 0) {
             this.attack(EntityDamageEvent(this, DamageCause.FREEZING, getFrostbiteInjury().toFloat()))
         }
         return hasUpdate
@@ -134,7 +135,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         //未在地面就没有地面阻力
         if (!this.onGround) return
         //小于精度
-        if (Math.abs(motion.z) < PRECISION && Math.abs(
+        if (abs(motion.z) < PRECISION && abs(
                 motion.x
             ) < PRECISION
         ) return
@@ -142,8 +143,8 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         val factor: Double = getGroundFrictionFactor()
         motion.x *= factor
         motion.z *= factor
-        if (Math.abs(motion.x) < PRECISION) motion.x = 0.0
-        if (Math.abs(motion.z) < PRECISION) motion.z = 0.0
+        if (abs(motion.x) < PRECISION) motion.x = 0.0
+        if (abs(motion.z) < PRECISION) motion.z = 0.0
     }
 
     /**
@@ -151,17 +152,17 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
      */
     protected fun handlePassableBlockFrictionMovement() {
         //小于精度
-        if (Math.abs(motion.z) < PRECISION && Math.abs(
+        if (abs(motion.z) < PRECISION && abs(
                 motion.x
-            ) < PRECISION && Math.abs(motion.y) < PRECISION
+            ) < PRECISION && abs(motion.y) < PRECISION
         ) return
         val factor: Double = getPassableBlockFrictionFactor()
         motion.x *= factor
         motion.y *= factor
         motion.z *= factor
-        if (Math.abs(motion.x) < PRECISION) motion.x = 0.0
-        if (Math.abs(motion.y) < PRECISION) motion.y = 0.0
-        if (Math.abs(motion.z) < PRECISION) motion.z = 0.0
+        if (abs(motion.x) < PRECISION) motion.x = 0.0
+        if (abs(motion.y) < PRECISION) motion.y = 0.0
+        if (abs(motion.z) < PRECISION) motion.z = 0.0
     }
 
     /**
@@ -171,7 +172,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
      */
     fun getGroundFrictionFactor(): Double {
         if (!this.onGround) return 1.0
-        return level!!.getTickCachedBlock(position.add(0.0, -1.0, 0.0).floor()).getFrictionFactor()
+        return level!!.getTickCachedBlock(position.add(0.0, -1.0, 0.0).floor()).frictionFactor
     }
 
     /**
@@ -180,8 +181,8 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
      * @return 当前位置的流体阻力因子
      */
     fun getPassableBlockFrictionFactor(): Double {
-        val block: Block = getLocator().getTickCachedLevelBlock()
-        if (block.collidesWithBB(this.getBoundingBox(), true)) return block.getPassableBlockFrictionFactor()
+        val block: Block = getLocator().tickCachedLevelBlock
+        if (block.collidesWithBB(this.getBoundingBox(), true)) return block.passableBlockFrictionFactor
         return Block.DEFAULT_AIR_FLUID_FRICTION
     }
 
@@ -193,8 +194,8 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         var blockLiquid: BlockLiquid? = null
         for (each: Block? in level!!.getCollisionBlocks(
             getOffsetBoundingBox(),
-            false, true,
-            Predicate<Block> { block: Block? -> block is BlockLiquid })) {
+            targetFirst = false, ignoreCollidesCheck = true)
+        { block: Block? -> block is BlockLiquid }) {
             blockLiquid = each as BlockLiquid?
             val flowVector: Vector3 = blockLiquid!!.getFlowVector()
             tmp.x += flowVector.x
@@ -213,7 +214,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
     }
 
     fun addPreviousLiquidMovement() {
-        if (previousCurrentMotion != null) addTmpMoveMotion(previousCurrentMotion)
+        addTmpMoveMotion(previousCurrentMotion)
     }
 
     protected fun handleFloatingMovement() {
@@ -257,10 +258,9 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
             motion.x,
             motion.y, motion.z
         )
-        val collidingEntities: MutableList<Entity> =
-            level!!.fastCollidingEntities(selfAABB, this)
-        collidingEntities.removeIf(Predicate { entity: Entity -> !(entity.canCollide() && (entity is EntityPhysical || entity is Player)) })
-        val size: Int = collidingEntities.size()
+        val collidingEntities = level!!.getCollidingEntities(selfAABB, this).toMutableList()
+        collidingEntities.removeIf { entity -> !(entity.canCollide() && (entity is Player || entity is EntityPhysical)) }
+        val size: Int = collidingEntities.size
         if (size == 0) {
             previousCollideMotion.setX(0.0)
             previousCollideMotion.setZ(0.0)
@@ -279,14 +279,11 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         if (size > 4) {
             stream = stream.parallel()
         }
-        stream.forEach(Consumer<Entity> { each: Entity ->
-            val targetAABB: AxisAlignedBB
-            if (each is EntityPhysical) {
-                targetAABB = each.getOffsetBoundingBox()
-            } else if (each is Player) {
-                targetAABB = each.reCalcOffsetBoundingBox()
-            } else {
-                return@forEach
+        stream.forEach { each ->
+            val targetAABB: AxisAlignedBB = when (each) {
+                is Player -> each.reCalcOffsetBoundingBox()
+                is EntityPhysical -> each.getOffsetBoundingBox()
+                else -> return@forEach
             }
             // 计算碰撞箱
             val centerXWidth: Double =
@@ -303,14 +300,14 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
             } else {
                 dzNegatives.add((targetAABB.maxZ - targetAABB.minZ) + (selfAABB.maxZ - selfAABB.minZ) * 0.5 + centerZWidth)
             }
-        })
-        val resultX: Double = (if (size > 4) dxPositives.doubleParallelStream() else dxPositives.doubleStream()).max()
-            .orElse(0.0) - (if (size > 4) dxNegatives.doubleParallelStream() else dxNegatives.doubleStream()).max()
+        }
+        val resultX: Double = (if (size > 4) dxPositives.parallelStream() else dxPositives.stream()).mapToDouble { it }.max()
+            .orElse(0.0) - (if (size > 4) dxNegatives.parallelStream() else dxNegatives.stream()).mapToDouble { it }.max()
             .orElse(0.0)
-        val resultZ: Double = (if (size > 4) dzPositives.doubleParallelStream() else dzPositives.doubleStream()).max()
-            .orElse(0.0) - (if (size > 4) dzNegatives.doubleParallelStream() else dzNegatives.doubleStream()).max()
+        val resultZ: Double = (if (size > 4) dzPositives.parallelStream() else dzPositives.stream()).mapToDouble { it }.max()
+            .orElse(0.0) - (if (size > 4) dzNegatives.parallelStream() else dzNegatives.stream()).mapToDouble { it }.max()
             .orElse(0.0)
-        val len: Double = Math.sqrt(resultX * resultX + resultZ * resultZ)
+        val len: Double = sqrt(resultX * resultX + resultZ * resultZ)
         previousCollideMotion.setX(-(resultX / len * 0.2 * 0.32))
         previousCollideMotion.setZ(-(resultZ / len * 0.2 * 0.32))
     }
@@ -321,7 +318,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
      */
     protected open fun onCollide(currentTick: Int, collidingEntities: List<Entity>): Boolean {
         if (currentTick % 10 == 0) {
-            if (collidingEntities.size() > 24) {
+            if (collidingEntities.size > 24) {
                 this.needsCollisionDamage = true
             }
         }
@@ -341,21 +338,18 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
 
     protected fun calculateOffsetBoundingBox() {
         //由于是asyncPrepare,this.offsetBoundingBox有几率为null，需要判空
-        if (this.offsetBoundingBox == null) return
         val dx: Double = this.getWidth() * 0.5
         val dz: Double = this.getHeight() * 0.5
-        offsetBoundingBox.setMinX(position.x - dx)
-        offsetBoundingBox.setMaxX(position.x + dz)
-        offsetBoundingBox.setMinY(position.y)
-        offsetBoundingBox.setMaxY(position.y + this.getHeight())
-        offsetBoundingBox.setMinZ(position.z - dz)
-        offsetBoundingBox.setMaxZ(position.z + dz)
+        offsetBoundingBox.minX = (position.x - dx)
+        offsetBoundingBox.maxX = (position.x + dz)
+        offsetBoundingBox.minY = (position.y)
+        offsetBoundingBox.maxY = (position.y + this.getHeight())
+        offsetBoundingBox.minZ = (position.z - dz)
+        offsetBoundingBox.maxZ = (position.z + dz)
     }
 
     fun getOffsetBoundingBox(): AxisAlignedBB {
-        return Objects.requireNonNullElseGet(
-            this.offsetBoundingBox,
-            Supplier<AxisAlignedBB> { SimpleAxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0) })
+        return this.offsetBoundingBox
     }
 
     override fun resetFallDistance() {

@@ -1,5 +1,6 @@
 package org.chorus.entity.projectile
 
+import org.chorus.Server
 import org.chorus.block.Block
 import org.chorus.entity.Entity
 import org.chorus.event.entity.ProjectileHitEvent
@@ -66,8 +67,7 @@ abstract class SlenderProjectile : EntityProjectile {
         for (i in 0..<SPLIT_NUMBER) {
             val collisionBlocks: Array<Block> =
                 level!!.getCollisionBlocks(currentAABB.offset(dirVector.x, dirVector.y, dirVector.z))
-            val collisionEntities: List<Entity?> =
-                level!!.fastCollidingEntities(currentAABB, this)
+            val collisionEntities = level!!.getCollidingEntities(currentAABB, this)
             if (collisionBlocks.size != 0) {
                 currentAABB.offset(-dirVector.x, -dirVector.y, -dirVector.z)
                 collisionBlock = Arrays.stream(collisionBlocks).min(
@@ -91,11 +91,7 @@ abstract class SlenderProjectile : EntityProjectile {
         )
         //collide with entity
         if (collisionEntity != null) {
-            val movingObject: MovingObjectPosition = MovingObjectPosition()
-            movingObject.typeOfHit = 1
-            movingObject.entityHit = collisionEntity
-            movingObject.hitVector = centerPoint1
-            onCollideWithEntity(movingObject.entityHit)
+            onCollideWithEntity(collisionEntity)
             return true
         }
 
@@ -106,33 +102,33 @@ abstract class SlenderProjectile : EntityProjectile {
         )
         val diff: Vector3 = centerPoint1.subtract(centerPoint2)
         if (dy > 0) {
-            if (diff.getY() + 0.001 < dy) {
-                dy = diff.getY()
+            if (diff.y + 0.001 < dy) {
+                dy = diff.y
             }
         }
         if (dy < 0) {
-            if (diff.getY() - 0.001 > dy) {
-                dy = diff.getY()
+            if (diff.y - 0.001 > dy) {
+                dy = diff.y
             }
         }
         if (dx > 0) {
-            if (diff.getX() + 0.001 < dx) {
-                dx = diff.getX()
+            if (diff.x + 0.001 < dx) {
+                dx = diff.x
             }
         }
         if (dx < 0) {
-            if (diff.getX() - 0.001 > dx) {
-                dx = diff.getX()
+            if (diff.x - 0.001 > dx) {
+                dx = diff.x
             }
         }
         if (dz > 0) {
-            if (diff.getZ() + 0.001 < dz) {
-                dz = diff.getZ()
+            if (diff.z + 0.001 < dz) {
+                dz = diff.z
             }
         }
         if (dz < 0) {
-            if (diff.getZ() - 0.001 > dz) {
-                dz = diff.getZ()
+            if (diff.z - 0.001 > dz) {
+                dz = diff.z
             }
         }
         boundingBox.offset(0.0, dy, 0.0)
@@ -164,32 +160,32 @@ abstract class SlenderProjectile : EntityProjectile {
             motion.y = 0.0
             motion.z = 0.0
             val bVector3: BVector3 = BVector3.fromPos(Vector3(dx, dy, dz))
-            var blockFace: BlockFace? = BlockFace.fromHorizontalAngle(bVector3.getYaw())
+            var blockFace = BlockFace.fromHorizontalAngle(bVector3.yaw)
             var block: Block = level!!.getBlock(
-                position.getFloorX(),
-                position.getFloorY(), position.getFloorZ()
+                position.floorX,
+                position.floorY, position.floorZ
             ).getSide(blockFace)
-            if (block.isAir()) {
+            if (block.isAir) {
                 blockFace = BlockFace.DOWN
                 block = level!!.getBlock(
-                    position.getFloorX(),
-                    position.getFloorY(), position.getFloorZ()
+                    position.floorX,
+                    position.floorY, position.floorZ
                 ).down()
             }
-            if (block.isAir()) {
+            if (block.isAir) {
                 blockFace = BlockFace.UP
                 block = level!!.getBlock(
-                    position.getFloorX(),
-                    position.getFloorY(), position.getFloorZ()
+                    position.floorX,
+                    position.floorY, position.floorZ
                 ).up()
             }
-            if (block.isAir() && collisionBlock != null) {
+            if (block.isAir && collisionBlock != null) {
                 block = collisionBlock
             }
             Server.instance.pluginManager.callEvent(
                 ProjectileHitEvent(
                     this, MovingObjectPosition.fromBlock(
-                        block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ(), blockFace,
+                        block.position.floorX, block.position.floorY, block.position.floorZ, blockFace,
                         this.position
                     ).also { lastHitBlock = it })
             )
@@ -215,7 +211,7 @@ abstract class SlenderProjectile : EntityProjectile {
                     lastHitBlock!!.blockX,
                     lastHitBlock!!.blockY,
                     lastHitBlock!!.blockZ
-                ).isAir()
+                ).isAir
             ) {
                 motion.y -= getGravity().toDouble()
                 updateRotation()

@@ -1,6 +1,7 @@
 package org.chorus.level
 
 import org.chorus.entity.Entity
+import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
 
@@ -37,11 +38,6 @@ class MovingObjectPosition {
             else -> null
         }
         set(face) {
-            if (face == null) {
-                sideHit = -1
-                return
-            }
-
             sideHit = when (face) {
                 BlockFace.DOWN -> 0
                 BlockFace.UP -> 1
@@ -49,7 +45,7 @@ class MovingObjectPosition {
                 BlockFace.SOUTH -> 5
                 BlockFace.WEST -> 3
                 BlockFace.EAST -> 2
-                else -> -1
+                null -> -1
             }
         }
 

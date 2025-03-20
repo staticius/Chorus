@@ -5,6 +5,7 @@ import org.chorus.utils.ChorusRandom
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Predicate
+import kotlin.math.abs
 
 enum class BlockFace(
     /**
@@ -302,7 +303,7 @@ enum class BlockFace(
          */
         @JvmStatic
         fun fromHorizontalIndex(index: Int): BlockFace {
-            return HORIZONTALS[MathHelper.abs(index % HORIZONTALS.size)]
+            return HORIZONTALS[abs(index % HORIZONTALS.size)]
         }
 
         /**

@@ -1114,7 +1114,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     open fun getNetworkId(): Int {
-        return Registries.ENTITY.getEntityNetworkId(getIdentifier())
+        return Registries.ENTITY.getEntityNetworkId(getIdentifier())!!
     }
 
     fun heal(source: EntityRegainHealthEvent) {
@@ -3296,7 +3296,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
          */
         @JvmStatic
         fun createEntity(type: Int, pos: Locator, vararg args: Any?): Entity? {
-            val entityIdentifier: String = Registries.ENTITY.getEntityIdentifier(type)
+            val entityIdentifier = Registries.ENTITY.getEntityIdentifier(type) ?: return null
             return createEntity(
                 entityIdentifier,
                 requireNonNull(pos.chunk)!!,
@@ -3319,7 +3319,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
          */
         @JvmStatic
         fun createEntity(type: Int, chunk: IChunk, nbt: CompoundTag, vararg args: Any?): Entity? {
-            val entityIdentifier: String = Registries.ENTITY.getEntityIdentifier(type)
+            val entityIdentifier = Registries.ENTITY.getEntityIdentifier(type) ?: return null
             return Registries.ENTITY.provideEntity(entityIdentifier, chunk, nbt, *args)
         }
 
@@ -3337,8 +3337,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
          *
          * @return the identifier
          */
-        fun getIdentifier(networkID: Int): Identifier {
-            val entityIdentifier: String = Registries.ENTITY.getEntityIdentifier(networkID)
+        fun getIdentifier(networkID: Int): Identifier? {
+            val entityIdentifier = Registries.ENTITY.getEntityIdentifier(networkID) ?: return null
             return Identifier(entityIdentifier)
         }
 

@@ -41,6 +41,7 @@ import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.*
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelEventPacket
+import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.network.protocol.UpdateBlockPacket
 import org.chorus.plugin.InternalPlugin
 import org.chorus.plugin.Plugin
@@ -1725,7 +1726,7 @@ class Level(
         }
 
         if (entities) {
-            return fastCollidingEntities(bb.grow(0.25, 0.25, 0.25), entity).size() > 0
+            return getCollidingEntities(bb.grow(0.25, 0.25, 0.25), entity).size > 0
         }
         return false
     }
@@ -2237,7 +2238,7 @@ class Level(
             val ev: BlockUpdateEvent = BlockUpdateEvent(block)
             Server.instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
-                for (entity in this.getNearbyEntitiesSafe(
+                for (entity in this.getNearbyEntities(
                     SimpleAxisAlignedBB(
                         (x - 1).toDouble(),
                         (y - 1).toDouble(),
@@ -2904,47 +2905,15 @@ class Level(
     }
 
     fun getEntities(): Array<Entity> {
-        return entities.values().toArray<Entity>(Entity.EMPTY_ARRAY)
+        return entities.values.toTypedArray()
     }
 
-    fun getCollidingEntities(bb: AxisAlignedBB): Array<Entity?> {
+    fun getCollidingEntities(bb: AxisAlignedBB): List<Entity> {
         return this.getCollidingEntities(bb, null)
     }
 
-    fun getCollidingEntities(bb: AxisAlignedBB, entity: Entity?): Array<Entity?> {
-        var index = 0
-
-        var overflow: ArrayList<Entity>? = null
-
-        if (entity == null || entity.canCollide()) {
-            val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
-            val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
-            val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
-            val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
-
-            for (x in minX..maxX) {
-                for (z in minZ..maxZ) {
-                    for (ent in getChunkEntities(x, z, false).values) {
-                        if ((entity == null || (ent !== entity && entity.canCollideWith(ent)))
-                            && ent.boundingBox.intersectsWith(bb)
-                        ) {
-                            overflow = addEntityToBuffer(index, overflow, ent)
-                            index++
-                        }
-                    }
-                }
-            }
-        }
-
-        return getEntitiesFromBuffer(index, overflow)
-    }
-
-    fun fastCollidingEntities(bb: AxisAlignedBB): List<Entity> {
-        return this.fastCollidingEntities(bb, null)
-    }
-
-    fun fastCollidingEntities(bb: AxisAlignedBB, entity: Entity?): List<Entity> {
-        val result = ArrayList<Entity>()
+    fun getCollidingEntities(bb: AxisAlignedBB, entity: Entity?): List<Entity> {
+        val result: MutableList<Entity> = mutableListOf()
 
         if (entity == null || entity.canCollide()) {
             val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
@@ -2968,130 +2937,54 @@ class Level(
         return result
     }
 
-    fun streamCollidingEntities(bb: AxisAlignedBB, entity: Entity?): Stream<Entity?> {
+    fun streamCollidingEntities(bb: AxisAlignedBB, entity: Entity?): Stream<Entity> {
         if (entity == null || entity.canCollide()) {
             val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
             val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
             val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
             val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
 
-            val allEntities = ArrayList<Entity?>()
+            val allEntities: MutableList<Entity> = mutableListOf()
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
-                    allEntities.addAll(getChunkEntities(x, z, false).values())
+                    allEntities.addAll(getChunkEntities(x, z, false).values)
                 }
             }
 
-            return allEntities.stream().filter { each: Entity? ->
-                (entity == null || (each !== entity && entity.canCollideWith(
-                    each!!
-                )))
-                        && each!!.boundingBox.intersectsWith(bb)
+            return allEntities.stream().filter { each ->
+                (entity == null || (each !== entity && entity.canCollideWith(each))) && each.boundingBox.intersectsWith(bb)
             }
         } else {
             return Stream.empty()
         }
     }
 
-    fun getNearbyEntitiesSafe(bb: AxisAlignedBB): Array<Entity> {
-        return this.getNearbyEntitiesSafe(bb, null)
-    }
-
-    fun getNearbyEntitiesSafe(bb: AxisAlignedBB, entity: Entity?): Array<Entity> {
-        return getNearbyEntitiesSafe(bb, entity, false)
-    }
-
-    fun getNearbyEntitiesSafe(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): Array<Entity> {
-        return Arrays.stream(getNearbyEntities(bb, entity, loadChunks)).filter { obj: Entity? ->
-            Objects.nonNull(
-                obj
-            )
-        }.toList().toArray(Entity.EMPTY_ARRAY)
-    }
-
-    fun getNearbyEntities(bb: AxisAlignedBB): Array<Entity?> {
+    fun getNearbyEntities(bb: AxisAlignedBB): List<Entity> {
         return this.getNearbyEntities(bb, null)
     }
 
-    fun getNearbyEntities(bb: AxisAlignedBB, entity: Entity?): Array<Entity?> {
+    fun getNearbyEntities(bb: AxisAlignedBB, entity: Entity?): List<Entity> {
         return getNearbyEntities(bb, entity, false)
     }
 
-    fun getNearbyEntities(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): Array<Entity?> {
-        var index = 0
-
+    fun getNearbyEntities(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): List<Entity> {
         val minX = ChorusMath.floorDouble((bb.minX - 2) * 0.0625)
         val maxX = ChorusMath.ceilDouble((bb.maxX + 2) * 0.0625)
         val minZ = ChorusMath.floorDouble((bb.minZ - 2) * 0.0625)
         val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) * 0.0625)
 
-        var overflow: ArrayList<Entity>? = null
-
+        val result: MutableList<Entity> = mutableListOf()
         for (x in minX..maxX) {
             for (z in minZ..maxZ) {
                 for (ent in getChunkEntities(x, z, loadChunks).values) {
-                    if (ent != null && ent !== entity && ent.boundingBox.intersectsWith(bb)) {
-                        overflow = addEntityToBuffer(index, overflow, ent)
-                        index++
-                    }
-                }
-            }
-        }
-
-        return getEntitiesFromBuffer(index, overflow)
-    }
-
-    @JvmOverloads
-    fun fastNearbyEntities(bb: AxisAlignedBB, entity: Entity? = null): List<Entity> {
-        return fastNearbyEntities(bb, entity, false)
-    }
-
-    fun fastNearbyEntities(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): List<Entity> {
-        val minX = ChorusMath.floorDouble((bb.minX - 2) * 0.0625)
-        val maxX = ChorusMath.ceilDouble((bb.maxX + 2) * 0.0625)
-        val minZ = ChorusMath.floorDouble((bb.minZ - 2) * 0.0625)
-        val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) * 0.0625)
-
-        val result = ArrayList<Entity>()
-
-        for (x in minX..maxX) {
-            for (z in minZ..maxZ) {
-                for (ent in getChunkEntities(x, z, loadChunks).values()) {
-                    if (ent !== entity && ent.boundingBox!!.intersectsWith(bb)) {
+                    if (ent !== entity && ent.boundingBox.intersectsWith(bb)) {
                         result.add(ent)
                     }
                 }
             }
         }
-
         return result
-    }
-
-    private fun addEntityToBuffer(index: Int, overflow: ArrayList<Entity>?, ent: Entity): ArrayList<Entity>? {
-        var overflow = overflow
-        if (index < ENTITY_BUFFER.size) {
-            ENTITY_BUFFER[index] = ent
-        } else {
-            if (overflow == null) overflow = ArrayList(1024)
-            overflow.add(ent)
-        }
-        return overflow
-    }
-
-    private fun getEntitiesFromBuffer(index: Int, overflow: ArrayList<Entity>?): Array<Entity> {
-        if (index == 0) return Entity.EMPTY_ARRAY
-        val copy: Array<Entity>
-        if (overflow == null) {
-            copy = Arrays.copyOfRange(ENTITY_BUFFER, 0, index)
-            Arrays.fill(ENTITY_BUFFER, 0, index, null)
-        } else {
-            copy = arrayOf(ENTITY_BUFFER)
-            for (i in overflow.indices) {
-                copy[ENTITY_BUFFER.size + i] = overflow[i]
-            }
-        }
-        return copy
     }
 
     @NonComputationAtomic
@@ -4831,7 +4724,6 @@ class Level(
 
         // endregion finals - number finals
         private val randomTickBlocks: MutableSet<String> = HashSet(64) // The blocks that can randomly tick
-        private val ENTITY_BUFFER = arrayOfNulls<Entity>(512)
 
         init {
             randomTickBlocks.add(BlockID.GRASS_BLOCK)

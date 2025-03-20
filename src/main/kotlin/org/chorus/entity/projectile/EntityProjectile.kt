@@ -1,6 +1,7 @@
 package org.chorus.entity.projectile
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.*
 import org.chorus.entity.data.EntityDataTypes
@@ -67,7 +68,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
     }
 
     open fun onCollideWithEntity(entity: Entity) {
-        val projectileHitEvent: ProjectileHitEvent = ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity))
+        val projectileHitEvent = ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity))
         Server.instance.pluginManager.callEvent(projectileHitEvent)
 
         if (projectileHitEvent.isCancelled) {
@@ -87,7 +88,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
         if (this.shootingEntity == null) {
             ev = EntityDamageByEntityEvent(this, entity, DamageCause.PROJECTILE, damage)
         } else {
-            ev = EntityDamageByChildEntityEvent(this.shootingEntity, this, entity, DamageCause.PROJECTILE, damage)
+            ev = EntityDamageByChildEntityEvent(this.shootingEntity!!, this, entity, DamageCause.PROJECTILE, damage)
         }
         if (entity.attack(ev)) {
             addHitEffect()
@@ -148,9 +149,8 @@ abstract class EntityProjectile @JvmOverloads constructor(
         return !((entity === this.shootingEntity && this.ticksLived < 5) ||
                 (entity is Player && entity.gamemode == Player.SPECTATOR)
                 || (shootingEntity is Player && Optional.ofNullable(
-            shootingEntity.riding
-        ).map(
-            Function { e: Entity -> e == entity }).orElse(false)))
+            shootingEntity!!.riding
+        ).map { e: Entity -> e == entity }.orElse(false)))
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
@@ -178,7 +178,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
                 position.y + motion.y, position.z + motion.z
             )
 
-            val list: Array<Entity> = level!!.getCollidingEntities(
+            val list = level!!.getCollidingEntities(
                 getBoundingBox()
                     .addCoord(motion.x, motion.y, motion.z).expand(1.0, 1.0, 1.0), this
             )
@@ -192,13 +192,9 @@ abstract class EntityProjectile @JvmOverloads constructor(
                 }
 
                 val axisalignedbb: AxisAlignedBB = entity.getBoundingBox().grow(0.3, 0.3, 0.3)
-                val ob: MovingObjectPosition? = axisalignedbb.calculateIntercept(this.position, moveVector)
+                val ob: MovingObjectPosition = axisalignedbb.calculateIntercept(this.position, moveVector) ?: continue
 
-                if (ob == null) {
-                    continue
-                }
-
-                val distance: Double = position.distanceSquared(ob.hitVector)
+                val distance: Double = position.distanceSquared(ob.hitVector!!)
 
                 if (distance < nearDistance) {
                     nearDistance = distance
@@ -212,7 +208,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
 
             if (movingObjectPosition != null) {
                 if (movingObjectPosition.entityHit != null) {
-                    onCollideWithEntity(movingObjectPosition.entityHit)
+                    onCollideWithEntity(movingObjectPosition.entityHit!!)
                     hasUpdate = true
                     if (closed) {
                         return true
@@ -234,8 +230,8 @@ abstract class EntityProjectile @JvmOverloads constructor(
                 Server.instance.pluginManager.callEvent(
                     ProjectileHitEvent(
                         this, MovingObjectPosition.fromBlock(
-                            position.getFloorX(),
-                            position.getFloorY(), position.getFloorZ(), BlockFace.UP, this.position
+                            position.floorX,
+                            position.floorY, position.floorZ, BlockFace.UP, this.position
                         )
                     )
                 )

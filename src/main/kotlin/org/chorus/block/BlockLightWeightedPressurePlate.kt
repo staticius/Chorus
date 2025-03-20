@@ -44,9 +44,11 @@ class BlockLightWeightedPressurePlate @JvmOverloads constructor(blockstate: Bloc
     val maxWeight: Int
         get() = 15
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.LIGHT_WEIGHTED_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-
     }
 }

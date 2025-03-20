@@ -1055,10 +1055,6 @@ class Player @UsedByReflection constructor(
         }
     }
 
-    override fun clone(): Player {
-        throw RuntimeException("Should not be cloning Player!")
-    }
-
     fun handleMovement(clientPos: Transform) {
         if (this.firstMove) this.firstMove = false
         var invalidMotion = false
@@ -1413,12 +1409,12 @@ class Player @UsedByReflection constructor(
 
         adventureSettings.init(nbt)
 
-        val level: Level
-        if ((Server.instance.getLevelByName(nbt.getString("Level")).also { level = it!! }) == null) {
+        val level: Level?
+        if (Server.instance.getLevelByName(nbt.getString("Level")).also { level = it } == null) {
             this.level = Server.instance.defaultLevel
             nbt.putString("Level", this.level!!.getName()!!)
             val spawnLocation = this.level!!.safeSpawn
-            nbt.getList<FloatTag>("Pos", FloatTag::class.java)
+            nbt.getList("Pos", FloatTag::class.java)
                 .add(FloatTag(spawnLocation.position.x))
                 .add(FloatTag(spawnLocation.position.y))
                 .add(FloatTag(spawnLocation.position.z))
@@ -3043,11 +3039,11 @@ class Player @UsedByReflection constructor(
                 getLocator().position, getDirectionVector(), getEyeHeight().toDouble(), maxDistance
             )
             if (itr.hasNext()) {
-                var block: Block?
+                var block: Block
                 while (itr.hasNext()) {
                     block = itr.next()
                     entity = getEntityAtPosition(
-                        nearbyEntities,
+                        nearbyEntities.toTypedArray(),
                         block.position.floorX,
                         block.position.floorY,
                         block.position.floorZ
@@ -3826,97 +3822,105 @@ class Player @UsedByReflection constructor(
         if (showMessages) {
             params.add(this.getDisplayName())
 
-            when (if (cause == null) DamageCause.CUSTOM else cause.cause) {
-                DamageCause.ENTITY_ATTACK -> if (cause is EntityDamageByEntityEvent) {
-                    val e = cause.damager
-                    killer = e
-                    if (e is Player) {
-                        message = "death.attack.player"
-                        params.add(e.getDisplayName())
-                        break
-                    } else if (e is EntityLiving) {
-                        message = "death.attack.mob"
-                        params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
-                        break
-                    } else {
-                        params.add("Unknown")
-                    }
-                }
-
-                DamageCause.PROJECTILE -> if (cause is EntityDamageByEntityEvent) {
-                    val e = cause.damager
-                    killer = e
-                    if (e is Player) {
-                        message = "death.attack.arrow"
-                        params.add(e.getDisplayName())
-                    } else if (e is EntityLiving) {
-                        message = "death.attack.arrow"
-                        params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
-                        break
-                    } else {
-                        params.add("Unknown")
-                    }
-                }
-
-                DamageCause.VOID -> message = "death.attack.outOfWorld"
-                DamageCause.FALL -> {
-                    if (cause!!.finalDamage > 2) {
-                        message = "death.fell.accident.generic"
-                        break
-                    }
-                    message = "death.attack.fall"
-                }
-
-                DamageCause.SUFFOCATION -> message = "death.attack.inWall"
-                DamageCause.LAVA -> {
-                    message = "death.attack.lava"
-
-                    if (killer is EntityProjectile) {
-                        val shooter = (killer as EntityProjectile).shootingEntity
-                        if (shooter != null) {
-                            killer = shooter
-                        }
-                        if (killer is EntityHuman) {
-                            message += ".player"
-                            params.add(if (shooter!!.getNameTag() != "") shooter.getNameTag() else shooter.getName())
+            run switch@{
+                when (if (cause == null) DamageCause.CUSTOM else cause.cause) {
+                    DamageCause.ENTITY_ATTACK -> if (cause is EntityDamageByEntityEvent) {
+                        val e = cause.damager
+                        killer = e
+                        when (e) {
+                            is Player -> {
+                                message = "death.attack.player"
+                                params.add(e.getDisplayName())
+                                return@switch
+                            }
+                            is EntityLiving -> {
+                                message = "death.attack.mob"
+                                params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
+                                return@switch
+                            }
+                            else -> params.add("Unknown")
                         }
                     }
-                }
 
-                DamageCause.FIRE -> message = "death.attack.onFire"
-                DamageCause.FIRE_TICK -> message = "death.attack.inFire"
-                DamageCause.DROWNING -> message = "death.attack.drown"
-                DamageCause.CONTACT -> if (cause is EntityDamageByBlockEvent) {
-                    val id = cause.damager.id
-                    if (id === BlockID.CACTUS) {
-                        message = "death.attack.cactus"
-                    } else if (id === BlockID.ANVIL) {
-                        message = "death.attack.anvil"
+                    DamageCause.PROJECTILE -> if (cause is EntityDamageByEntityEvent) {
+                        val e = cause.damager
+                        killer = e
+                        when (e) {
+                            is Player -> {
+                                message = "death.attack.arrow"
+                                params.add(e.getDisplayName())
+                            }
+                            is EntityLiving -> {
+                                message = "death.attack.arrow"
+                                params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
+                                return@switch
+                            }
+                            else -> params.add("Unknown")
+                        }
                     }
-                }
 
-                DamageCause.BLOCK_EXPLOSION, DamageCause.ENTITY_EXPLOSION -> if (cause is EntityDamageByEntityEvent) {
-                    val e = cause.damager
-                    killer = e
-                    if (e is Player) {
-                        message = "death.attack.explosion.player"
-                        params.add(e.getDisplayName())
-                    } else if (e is EntityLiving) {
-                        message = "death.attack.explosion.player"
-                        params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
-                        break
+                    DamageCause.VOID -> message = "death.attack.outOfWorld"
+                    DamageCause.FALL -> {
+                        if (cause!!.finalDamage > 2) {
+                            message = "death.fell.accident.generic"
+                            return@switch
+                        }
+                        message = "death.attack.fall"
+                    }
+
+                    DamageCause.SUFFOCATION -> message = "death.attack.inWall"
+                    DamageCause.LAVA -> {
+                        message = "death.attack.lava"
+
+                        if (killer is EntityProjectile) {
+                            val shooter = (killer as EntityProjectile).shootingEntity
+                            if (shooter != null) {
+                                killer = shooter
+                            }
+                            if (killer is EntityHuman) {
+                                message += ".player"
+                                params.add(if (shooter!!.getNameTag() != "") shooter.getNameTag() else shooter.getName())
+                            }
+                        }
+                    }
+
+                    DamageCause.FIRE -> message = "death.attack.onFire"
+                    DamageCause.FIRE_TICK -> message = "death.attack.inFire"
+                    DamageCause.DROWNING -> message = "death.attack.drown"
+                    DamageCause.CONTACT -> if (cause is EntityDamageByBlockEvent) {
+                        val id = cause.damager.id
+                        if (id === BlockID.CACTUS) {
+                            message = "death.attack.cactus"
+                        } else if (id === BlockID.ANVIL) {
+                            message = "death.attack.anvil"
+                        }
+                    }
+
+                    DamageCause.BLOCK_EXPLOSION, DamageCause.ENTITY_EXPLOSION -> if (cause is EntityDamageByEntityEvent) {
+                        val e = cause.damager
+                        killer = e
+                        when (e) {
+                            is Player -> {
+                                message = "death.attack.explosion.player"
+                                params.add(e.getDisplayName())
+                            }
+                            is EntityLiving -> {
+                                message = "death.attack.explosion.player"
+                                params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
+                                return@switch
+                            }
+                            else -> message = "death.attack.explosion"
+                        }
                     } else {
                         message = "death.attack.explosion"
                     }
-                } else {
-                    message = "death.attack.explosion"
-                }
 
-                DamageCause.MAGIC -> message = "death.attack.magic"
-                DamageCause.LIGHTNING -> message = "death.attack.lightningBolt"
-                DamageCause.HUNGER -> message = "death.attack.starve"
-                DamageCause.HOT_FLOOR -> message = "death.attack.magma"
-                else -> message = "death.attack.generic"
+                    DamageCause.MAGIC -> message = "death.attack.magic"
+                    DamageCause.LIGHTNING -> message = "death.attack.lightningBolt"
+                    DamageCause.HUNGER -> message = "death.attack.starve"
+                    DamageCause.HOT_FLOOR -> message = "death.attack.magma"
+                    else -> message = "death.attack.generic"
+                }
             }
         }
 
