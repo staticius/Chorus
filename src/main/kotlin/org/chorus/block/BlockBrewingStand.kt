@@ -115,7 +115,7 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState = Compa
                 }
             }
 
-            player.addWindow(brewing.getInventory())
+            player.addWindow(brewing.inventory)
         }
 
         return true
@@ -167,7 +167,7 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState = Compa
                 level.getBlockEntity(this.position)
 
             if (blockEntity is BlockEntityBrewingStand) {
-                return calculateRedstone(blockEntity.getInventory())
+                return calculateRedstone(blockEntity.inventory)
             }
 
             return super.comparatorInputOverride

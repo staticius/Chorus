@@ -41,7 +41,7 @@ class BlockMangroveLeaves : BlockLeaves {
         if (random.nextInt(stickOdds) == 0) {
             drops.add(Item.get(ItemID.STICK))
         }
-        return drops.toArray(Item.EMPTY_ARRAY)
+        return drops.toTypedArray()
     }
 
     override fun canBeActivated(): Boolean {

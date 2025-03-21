@@ -92,7 +92,7 @@ class BlockFern : BlockFlowable, FlowerPotBlock {
 
     override fun getDrops(item: Item): Array<Item> {
         // https://minecraft.wiki/w/Fortune#Grass_and_ferns
-        val drops: MutableList<Item?> = ArrayList(2)
+        val drops: MutableList<Item> = ArrayList(2)
         if (item.isShears) {
             drops.add(toItem())
         }
@@ -105,14 +105,16 @@ class BlockFern : BlockFlowable, FlowerPotBlock {
             drops.add(get(ItemID.WHEAT_SEEDS, 0, amount))
         }
 
-        return drops.toArray(Item.EMPTY_ARRAY)
+        return drops.toTypedArray()
     }
 
     override val toolType: Int
         get() = ItemTool.TYPE_SHEARS
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FERN)
-
     }
 }

@@ -424,7 +424,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
             return pushedItem
         } else if (be is BlockEntityBrewingStand) {
-            val inventory = be.getInventory()
+            val inventory = be.inventory
             if (inventory.isFull) {
                 return false
             }

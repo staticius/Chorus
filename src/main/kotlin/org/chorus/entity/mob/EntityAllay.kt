@@ -182,7 +182,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
     }
 
     override fun getDrops(): Array<Item> {
-        return getInventory().contents.values.toArray(Item.EMPTY_ARRAY)
+        return getInventory().contents.values.toTypedArray()
     }
 
     companion object {

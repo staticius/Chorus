@@ -212,7 +212,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
 
         val cloned: Item = item.clone()
         cloned.setCount(1)
-        val inventory = campfire.getInventory()
+        val inventory = campfire.inventory
         if (inventory.canAddItem(cloned)) {
             val recipe = instance.recipeRegistry.findCampfireRecipe(cloned)
             if (recipe != null) {
@@ -289,7 +289,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
             val blockEntity = blockEntity
 
             if (blockEntity != null) {
-                return calculateRedstone(blockEntity.getInventory())
+                return calculateRedstone(blockEntity.inventory)
             }
 
             return super.comparatorInputOverride

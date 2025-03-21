@@ -1,7 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.Server.Companion.instance
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.entity.Entity
@@ -58,7 +58,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
         if (entity is EntityArrow) {
             ev.setCancelled()
         }
-        instance.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled && entity.isAlive() && entity.noDamageTicks == 0) {
             entity.setOnFire(ev.duration)
         }
@@ -74,9 +74,9 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
 
             if (type == Level.BLOCK_UPDATE_NORMAL) {
                 val downId = down.id
-                if (downId == Block.SOUL_SAND || downId == Block.SOUL_SOIL) {
+                if (downId == BlockID.SOUL_SAND || downId == BlockID.SOUL_SOIL) {
                     level.setBlock(
-                        this.position, get(SOUL_FIRE).setPropertyValue<Int, IntPropertyType>(
+                        this.position, get(BlockID.SOUL_FIRE).setPropertyValue<Int, IntPropertyType>(
                             CommonBlockProperties.AGE_16,
                             age
                         )
@@ -86,7 +86,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
             }
 
             if (!this.isBlockTopFacingSurfaceSolid(down) && !this.canNeighborBurn()) {
-                val event = BlockFadeEvent(this, get(AIR))
+                val event = BlockFadeEvent(this, get(BlockID.AIR))
                 Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     level.setBlock(this.position, event.newState, true)
@@ -111,15 +111,15 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
 
             //TODO: END
             if (!this.isBlockTopFacingSurfaceSolid(down) && !this.canNeighborBurn()) {
-                val event = BlockFadeEvent(this, get(AIR))
+                val event = BlockFadeEvent(this, get(BlockID.AIR))
                 Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     level.setBlock(this.position, event.newState, true)
                 }
             }
 
-            val forever = downId == NETHERRACK ||
-                    downId == MAGMA || downId == BEDROCK && (down as BlockBedrock).burnIndefinitely
+            val forever = downId == BlockID.NETHERRACK ||
+                    downId == BlockID.MAGMA || downId == BlockID.BEDROCK && (down as BlockBedrock).burnIndefinitely
 
             if (!checkRain()) {
                 val meta = age
@@ -134,14 +134,14 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
 
                 if (!forever && !this.canNeighborBurn()) {
                     if (!this.isBlockTopFacingSurfaceSolid(down) || meta > 3) {
-                        val event = BlockFadeEvent(this, get(AIR))
+                        val event = BlockFadeEvent(this, get(BlockID.AIR))
                         Server.instance.pluginManager.callEvent(event)
                         if (!event.isCancelled) {
                             level.setBlock(this.position, event.newState, true)
                         }
                     }
                 } else if (!forever && (down.burnAbility <= 0) && meta == 15 && random.nextInt(4) == 0) {
-                    val event = BlockFadeEvent(this, get(AIR))
+                    val event = BlockFadeEvent(this, get(BlockID.AIR))
                     Server.instance.pluginManager.callEvent(event)
                     if (!event.isCancelled) {
                         level.setBlock(this.position, event.newState, true)
@@ -250,7 +250,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                 Server.instance.pluginManager.callEvent(ev)
 
                 if (!ev.isCancelled) {
-                    level.setBlock(block.position, get(AIR), true)
+                    level.setBlock(block.position, get(BlockID.AIR), true)
                 }
             }
 
@@ -314,8 +314,8 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
         return this
     }
 
-    override fun toItem(): Item? {
-        return ItemBlock(get(AIR))
+    override fun toItem(): Item {
+        return ItemBlock(get(BlockID.AIR))
     }
 
     /**
@@ -326,8 +326,8 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
     protected fun checkRain(): Boolean {
         val down = down()
         val downId = down.id
-        val forever = downId == NETHERRACK || downId == MAGMA
-                || downId == BEDROCK && (down as BlockBedrock).burnIndefinitely
+        val forever = downId == BlockID.NETHERRACK || downId == BlockID.MAGMA
+                || downId == BlockID.BEDROCK && (down as BlockBedrock).burnIndefinitely
 
         if (!forever && level.isRaining &&
             (level.canBlockSeeSky(this.position) ||
@@ -336,7 +336,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                     level.canBlockSeeSky(south().position) ||
                     level.canBlockSeeSky(north().position))
         ) {
-            val event = BlockFadeEvent(this, get(AIR))
+            val event = BlockFadeEvent(this, get(BlockID.AIR))
             Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 level.setBlock(this.position, event.newState, true)
@@ -346,8 +346,10 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FIRE, CommonBlockProperties.AGE_16)
-
     }
 }

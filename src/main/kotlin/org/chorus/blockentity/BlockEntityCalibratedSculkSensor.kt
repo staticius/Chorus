@@ -1,11 +1,11 @@
 package org.chorus.blockentity
 
+import org.chorus.Server
 import org.chorus.block.BlockCalibratedSculkSensor
 import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationListener
-import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.floor
 import kotlin.math.max
@@ -46,13 +46,10 @@ class BlockEntityCalibratedSculkSensor(chunk: IChunk, nbt: CompoundTag) : BlockE
     override val isBlockEntityValid: Boolean
         get() = levelBlock.id === BlockID.CALIBRATED_SCULK_SENSOR
 
-    override fun getListenerVector(): Vector3 {
-        return clone().position.floor().add(0.5, 0.5, 0.5)
-    }
+    override val listenerVector = clone().position.floor().add(0.5, 0.5, 0.5)
 
     override fun onVibrationOccur(event: VibrationEvent): Boolean {
-        if (this.isBlockEntityValid && Server.instance.settings.levelSettings()
-                .enableRedstone() && (level.getBlock(event.source) !is BlockCalibratedSculkSensor)
+        if (this.isBlockEntityValid && Server.instance.settings.levelSettings.enableRedstone && (level.getBlock(event.source) !is BlockCalibratedSculkSensor)
         ) {
             val canBeActive = (level.tick - lastActiveTime) > 40 && !waitForVibration
             if (canBeActive) waitForVibration = true
@@ -63,8 +60,7 @@ class BlockEntityCalibratedSculkSensor(chunk: IChunk, nbt: CompoundTag) : BlockE
     }
 
     override fun onVibrationArrive(event: VibrationEvent) {
-        if (this.level != null && this.isBlockEntityValid && Server.instance.settings.levelSettings()
-                .enableRedstone()
+        if (this.isBlockEntityValid && Server.instance.settings.levelSettings.enableRedstone
         ) {
             this.lastVibrationEvent = event
             this.updateLastActiveTime()
@@ -79,9 +75,7 @@ class BlockEntityCalibratedSculkSensor(chunk: IChunk, nbt: CompoundTag) : BlockE
         }
     }
 
-    override fun getListenRange(): Double {
-        return 8.0
-    }
+    override val listenRange = 8.0
 
     protected fun updateLastActiveTime() {
         this.lastActiveTime = level.tick

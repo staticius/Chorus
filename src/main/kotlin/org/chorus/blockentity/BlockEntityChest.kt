@@ -1,8 +1,7 @@
 package org.chorus.blockentity
 
 import org.chorus.Player
-import org.chorus.block.Block
-import org.chorus.inventory.BaseInventory
+import org.chorus.block.BlockID
 import org.chorus.inventory.ChestInventory
 import org.chorus.inventory.ContainerInventory
 import org.chorus.inventory.DoubleChestInventory
@@ -17,7 +16,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     protected var doubleInventory: DoubleChestInventory? = null
 
     init {
-        movable = true
+        isMovable = true
     }
 
     override fun requireContainerInventory(): ContainerInventory {
@@ -29,7 +28,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     override fun close() {
         if (!closed) {
             unpair()
-            getInventory().viewers.forEach(Consumer { p: Player -> p.removeWindow(this.getInventory()) })
+            inventory.viewers.forEach(Consumer { p: Player -> p.removeWindow(this.inventory) })
             realInventory.viewers.forEach(Consumer { p: Player ->
                 p.removeWindow(
                     realInventory
@@ -37,32 +36,28 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
             })
 
             this.closed = true
-            if (this.chunk != null) {
-                chunk!!.removeBlockEntity(this)
-            }
-            if (this.level != null) {
-                level.removeBlockEntity(this)
-            }
-            this.level = null
+            chunk.removeBlockEntity(this)
+            level.removeBlockEntity(this)
         }
     }
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID. = this.block.id
-            return BlockID.== Block . CHEST || BlockID . == Block.TRAPPED_CHEST
+            val blockId = this.block.id
+            return blockId == BlockID.CHEST || blockId == BlockID.TRAPPED_CHEST
         }
 
     val size: Int
-        get() = if (this.doubleInventory != null) doubleInventory!!.size else inventory!!.size
+        get() = if (this.doubleInventory != null) doubleInventory!!.size else inventory.size
 
-    override fun getInventory(): BaseInventory {
-        if (this.doubleInventory == null && this.isPaired) {
-            this.checkPairing()
+    override var inventory: ContainerInventory = super.inventory
+        get() {
+            if (this.doubleInventory == null && this.isPaired) {
+                this.checkPairing()
+            }
+
+            return if (this.doubleInventory != null) doubleInventory!! else field
         }
-
-        return if (this.doubleInventory != null) doubleInventory!! else inventory!!
-    }
 
     val realInventory: ChestInventory
         get() = inventory as ChestInventory
@@ -182,18 +177,18 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
                     .putInt("pairz", namedTag.getInt("pairz"))
             }
             if (this.hasName()) {
-                spawnCompound.put("CustomName", namedTag["CustomName"])
+                spawnCompound.put("CustomName", namedTag["CustomName"]!!)
             }
             return spawnCompound
         }
 
     override val cleanedNBT: CompoundTag
-        get() = super.getCleanedNBT().remove("pairx").remove("pairz")
+        get() = super.cleanedNBT!!.remove("pairx").remove("pairz")
 
     override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Chest"
         set(name) {
-            if (name == null || name.isEmpty()) {
+            if (name.isNullOrEmpty()) {
                 namedTag.remove("CustomName")
                 return
             }

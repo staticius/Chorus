@@ -185,7 +185,7 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
             HEAD, CHEST, LEGS, FEET -> {
                 val packet: MobArmorEquipmentPacket = MobArmorEquipmentPacket()
                 packet.eid = entity.getId()
-                packet.slots = getArmor().toArray(Item.EMPTY_ARRAY)
+                packet.slots = getArmor().toTypedArray()
                 player.dataPacket(packet)
             }
 

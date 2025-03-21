@@ -204,7 +204,7 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
             return false
         }
 
-        player?.addWindow(chest.getInventory())
+        player?.addWindow(chest.inventory)
         return true
     }
 
@@ -217,7 +217,7 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
             val blockEntity: BlockEntityChest? = blockEntity
 
             if (blockEntity != null) {
-                return calculateRedstone(blockEntity.getInventory())
+                return calculateRedstone(blockEntity.inventory)
             }
 
             return super.comparatorInputOverride

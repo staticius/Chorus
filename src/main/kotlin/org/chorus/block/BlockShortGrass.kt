@@ -102,7 +102,7 @@ class BlockShortGrass : BlockFlowable {
             drops.add(get(ItemID.WHEAT_SEEDS, 0, amount))
         }
 
-        return drops.toArray(Item.EMPTY_ARRAY)
+        return drops.toTypedArray()
     }
 
     override val toolType: Int

@@ -23,14 +23,14 @@ interface VibrationListener {
      * @param event 振动事件
      * @return boolean
      */
-    fun onVibrationOccur(event: VibrationEvent?): Boolean
+    fun onVibrationOccur(event: VibrationEvent): Boolean
 
     /**
      * 声波到达事件
      *
      * @param event 振动事件
      */
-    fun onVibrationArrive(event: VibrationEvent?)
+    fun onVibrationArrive(event: VibrationEvent)
 
     /**
      * 返回振动监听半径

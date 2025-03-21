@@ -5,7 +5,7 @@ import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class BlockIgniteEvent(block: Block, val source: Block, val entity: Entity, val cause: BlockIgniteCause) :
+class BlockIgniteEvent(block: Block, val source: Block, val entity: Entity?, val cause: BlockIgniteCause) :
     BlockEvent(block), Cancellable {
     enum class BlockIgniteCause {
         EXPLOSION,

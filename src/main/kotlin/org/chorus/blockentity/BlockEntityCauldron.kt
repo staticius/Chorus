@@ -7,12 +7,9 @@ import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.Tag
 import org.chorus.utils.BlockColor
 
-
-/**
- * @author CreeperFace (Nukkit Project)
- */
 class BlockEntityCauldron(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     override fun loadNBT() {
         super.loadNBT()
@@ -134,7 +131,7 @@ class BlockEntityCauldron(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
         get() {
             val compoundTag = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
-                .putList("Items", ListTag())
+                .putList("Items", ListTag<Tag<*>>())
                 .putShort("PotionId", namedTag.getShort("PotionId").toInt())
                 .putShort("PotionType", namedTag.getShort("PotionType").toInt())
             if (namedTag.contains("CustomColor")) {
@@ -143,16 +140,13 @@ class BlockEntityCauldron(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
             return compoundTag
         }
 
-    @RequiredArgsConstructor
-    enum class PotionType {
+    enum class PotionType(val potionTypeData: Int = 0) {
         EMPTY(-1),
         NORMAL(0),
         SPLASH(1),
         LINGERING(2),
         LAVA(0xF19B),
         UNKNOWN(-2);
-
-        val potionTypeData: Int = 0
 
         companion object {
             private val BY_DATA: Int2ObjectMap<PotionType>

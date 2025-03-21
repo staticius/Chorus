@@ -17,6 +17,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.Tag
 import org.chorus.network.protocol.ContainerSetDataPacket
 import org.chorus.recipe.ContainerRecipe
 import org.chorus.recipe.MixRecipe
@@ -25,7 +26,7 @@ import org.chorus.registry.Registries
 class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     RecipeInventoryHolder,
     BlockEntityInventoryHolder {
-    protected var inventory: BrewingInventory? = null
+    override lateinit var inventory: BrewingInventory
 
     var brewTime: Int = 0
     var fuelTotal: Int = 0
@@ -42,7 +43,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         super.loadNBT()
         inventory = BrewingInventory(this)
         if (!namedTag.contains("Items") || namedTag["Items"] !is ListTag<*>) {
-            namedTag.putList("Items", ListTag())
+            namedTag.putList("Items", ListTag<Tag<*>>())
         }
 
         for (i in 0..<size) {
@@ -76,8 +77,8 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override fun close() {
         if (!closed) {
-            for (player in HashSet(getInventory().viewers)) {
-                player.removeWindow(getInventory())
+            for (player in HashSet(inventory.viewers)) {
+                player.removeWindow(inventory)
             }
             super.close()
         }
@@ -92,7 +93,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override fun saveNBT() {
         super.saveNBT()
-        namedTag.putList("Items", ListTag())
+        namedTag.putList("Items", ListTag<Tag<*>>())
         for (index in 0..<size) {
             this.setItem(index, inventory!!.getItem(index))
         }
@@ -136,17 +137,13 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
         if (item.id === BlockID.AIR || item.getCount() <= 0) {
             if (i >= 0) {
-                namedTag.getList("Items").all.removeAt(i)
+                namedTag.getList("Items").all.toMutableList().removeAt(i)
             }
         } else if (i < 0) {
             (namedTag.getList("Items", CompoundTag::class.java)).add(d)
         } else {
             (namedTag.getList("Items", CompoundTag::class.java)).add(i, d)
         }
-    }
-
-    override fun getInventory(): BrewingInventory {
-        return inventory!!
     }
 
     override fun onUpdate(): Boolean {
@@ -222,7 +219,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     }
 
     private fun restockFuel() {
-        val fuel = getInventory().fuel
+        val fuel = inventory.fuel
         if (this.fuel > 0 || fuel.id !== ItemID.BLAZE_POWDER || fuel.getCount() <= 0) {
             return
         }
@@ -231,7 +228,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         this.fuel = 20
         this.fuelTotal = 20
 
-        inventory!!.fuel = fuel
+        inventory.fuel = fuel
         this.sendFuel()
     }
 
@@ -243,9 +240,9 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     private fun matchRecipes(quickTest: Boolean): Array<MixRecipe?> {
         val recipes = arrayOfNulls<MixRecipe>(if (quickTest) 1 else 3)
-        val ingredient = inventory!!.ingredient
+        val ingredient = inventory.ingredient
         for (i in 0..2) {
-            val potion = inventory!!.getItem(i + 1)
+            val potion = inventory.getItem(i + 1)
             if (potion.isNothing) {
                 continue
             }
@@ -343,19 +340,15 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             }
 
             if (this.hasName()) {
-                nbt.put("CustomName", namedTag["CustomName"])
+                nbt.put("CustomName", namedTag["CustomName"]!!)
             }
 
             return nbt
         }
 
-    override fun getIngredientView(): Inventory {
-        return InventorySlice(inventory!!, 0, 1)
-    }
+    override val ingredientView = InventorySlice(inventory, 0, 1)
 
-    override fun getProductView(): Inventory {
-        return InventorySlice(inventory!!, 1, 4)
-    }
+    override val productView = InventorySlice(inventory, 1, 4)
 
     companion object {
         const val MAX_BREW_TIME: Int = 400

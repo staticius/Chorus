@@ -146,6 +146,6 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
         if (Utils.rand(0, 40) == 1) {
             drops.add(Item.get(BlockID.SKULL, 1, 1))
         }
-        return drops.toArray(Item.EMPTY_ARRAY)
+        return drops.toTypedArray()
     }
 }

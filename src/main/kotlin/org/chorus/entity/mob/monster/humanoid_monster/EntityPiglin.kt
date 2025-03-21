@@ -307,7 +307,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
             drops.addAll(equipment.armor)
         }
         drops.add(itemInOffhand)
-        return drops.toArray(Item.EMPTY_ARRAY)
+        return drops.toTypedArray()
     }
 
     override fun attackTarget(entity: Entity): Boolean {

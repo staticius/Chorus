@@ -16,10 +16,10 @@ import java.util.concurrent.ThreadLocalRandom
 
 class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
-    private var inventory: CampfireInventory? = null
-    private var burnTime: IntArray
-    private var recipes: Array<CampfireRecipe?>
-    private var keepItem: BooleanArray
+    override lateinit var inventory: CampfireInventory
+    private lateinit var burnTime: IntArray
+    private lateinit var recipes: Array<CampfireRecipe?>
+    private lateinit var keepItem: BooleanArray
 
 
     override fun initBlockEntity() {
@@ -38,7 +38,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
             keepItem[i - 1] = namedTag.getBoolean("KeepItem" + 1)
 
             if (namedTag.contains("Item$i") && namedTag["Item$i"] is CompoundTag) {
-                inventory!!.setItem(i - 1, NBTIO.getItemHelper(namedTag.getCompound("Item$i")))
+                inventory.setItem(i - 1, NBTIO.getItemHelper(namedTag.getCompound("Item$i")))
             }
         }
     }
@@ -47,8 +47,8 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
         var needsUpdate = false
         val block = block
         val isLit = block is BlockCampfire && !block.isExtinguished
-        for (slot in 0..<inventory!!.size) {
-            val item = inventory!!.getItem(slot)
+        for (slot in 0..<inventory.size) {
+            val item = inventory.getItem(slot)
             if (item.isNothing) {
                 burnTime[slot] = 0
                 recipes[slot] = null
@@ -57,7 +57,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
                 if (recipe == null) {
                     recipe = Server.instance.recipeRegistry.findCampfireRecipe(item)
                     if (recipe == null) {
-                        inventory!!.setItem(slot, Item.AIR)
+                        inventory.setItem(slot, Item.AIR)
                         val random = ThreadLocalRandom.current()
                         level.dropItem(
                             position.add(random.nextFloat().toDouble(), 0.5, random.nextFloat().toDouble()),
@@ -77,7 +77,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
                     val product = Item.get(recipe.result.id, recipe.result.damage, item.getCount())
                     val event = CampfireSmeltEvent(this, item, product)
                     if (!event.isCancelled) {
-                        inventory!!.setItem(slot, Item.AIR)
+                        inventory.setItem(slot, Item.AIR)
                         val random = ThreadLocalRandom.current()
                         level.dropItem(
                             position.add(random.nextFloat().toDouble(), 0.5, random.nextFloat().toDouble()),
@@ -119,8 +119,8 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
     override fun saveNBT() {
         super.saveNBT()
         for (i in 1..burnTime.size) {
-            val item = inventory!!.getItem(i - 1)
-            if (item == null || item.id === BlockID.AIR || item.getCount() <= 0) {
+            val item = inventory.getItem(i - 1)
+            if (item.isNothing) {
                 namedTag.remove("Item$i")
                 namedTag.putInt("ItemTime$i", 0)
                 namedTag.remove("KeepItem$i")
@@ -138,15 +138,15 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
 
     override fun close() {
         if (!closed) {
-            for (player in HashSet(getInventory().viewers)) {
-                player.removeWindow(this.getInventory())
+            for (player in HashSet(inventory.viewers)) {
+                player.removeWindow(this.inventory)
             }
             super.close()
         }
     }
 
     override fun onBreak(isSilkTouch: Boolean) {
-        for (content in inventory!!.contents.values) {
+        for (content in inventory.contents.values) {
             level.dropItem(this.position, content)
         }
     }
@@ -154,7 +154,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
     override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Campfire"
         set(name) {
-            if (name == null || name.isBlank()) {
+            if (name.isNullOrEmpty()) {
                 namedTag.remove("CustomName")
                 return
             }
@@ -170,7 +170,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
             val c = super.spawnCompound
 
             for (i in 1..burnTime.size) {
-                val item = inventory!!.getItem(i - 1)
+                val item = inventory.getItem(i - 1)
                 if (item.isNothing) {
                     c.remove("Item$i")
                 } else {
@@ -196,16 +196,12 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
         }
     }
 
-    fun setItem(index: Int, item: Item?) {
+    fun setItem(index: Int, item: Item) {
         if (index < 0 || index >= size) {
             return
         }
 
         val nbt = NBTIO.putItemHelper(item)
         namedTag.putCompound("Item" + (index + 1), nbt)
-    }
-
-    override fun getInventory(): CampfireInventory {
-        return inventory!!
     }
 }
