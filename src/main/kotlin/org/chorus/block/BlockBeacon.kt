@@ -57,7 +57,7 @@ class BlockBeacon @JvmOverloads constructor(blockstate: BlockState = Companion.p
     ): Boolean {
         if (isNotActivate(player)) return false
         val entity = getOrCreateBlockEntity()
-        player!!.addWindow(entity.getInventory())
+        player!!.addWindow(entity.inventory)
         return true
     }
 

@@ -15,7 +15,7 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
-    protected var inventory: BeaconInventory = BeaconInventory(this)
+    override var inventory: BeaconInventory = BeaconInventory(this)
 
     override fun initBlockEntity() {
         super.initBlockEntity()
@@ -43,8 +43,8 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID. = block.id
-            return BlockID.=== Block . BEACON
+            val blockId = block.id
+            return blockId === BlockID.BEACON
         }
 
     override val spawnCompound: CompoundTag
@@ -156,8 +156,8 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
             for (queryX in tileX - powerLevel..tileX + powerLevel) {
                 for (queryZ in tileZ - powerLevel..tileZ + powerLevel) {
-                    val testBlockID. = level.getBlockIdAt(queryX, queryY, queryZ)
-                    if (testBlockID.!== Block . IRON_BLOCK && testBlockID . !== Block.GOLD_BLOCK && testBlockID.!== Block . EMERALD_BLOCK && testBlockID . !== Block.DIAMOND_BLOCK && testBlockID.!== Block . NETHERITE_BLOCK
+                    val testBlockID = level.getBlockIdAt(queryX, queryY, queryZ)
+                    if (testBlockID!== BlockID.IRON_BLOCK && testBlockID !== BlockID.GOLD_BLOCK && testBlockID!== BlockID.EMERALD_BLOCK && testBlockID !== BlockID.DIAMOND_BLOCK && testBlockID !== BlockID.NETHERITE_BLOCK
                             ) {
                         return powerLevel - 1
                     }
@@ -168,7 +168,7 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         return POWER_LEVEL_MAX
     }
 
-    var powerLevel: Int
+    var powerLevel: Int = 0
         get() = namedTag.getInt("Levels")
         set(level) {
             val currentLevel = field
@@ -179,7 +179,7 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             }
         }
 
-    var primaryPower: Int
+    var primaryPower: Int = 0
         get() = namedTag.getInt("Primary")
         set(power) {
             val currentPower = field
@@ -190,7 +190,7 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             }
         }
 
-    var secondaryPower: Int
+    var secondaryPower: Int = 0
         get() = namedTag.getInt("Secondary")
         set(power) {
             val currentPower = field
@@ -221,16 +221,14 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
         level.addSound(this.position, Sound.BEACON_POWER)
 
-        val inv = getInventory()
-
-        inv.setItem(0, Item.AIR)
+        inventory.setItem(0, Item.AIR)
         return true
     }
 
     override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Beacon"
         set(name) {
-            if (name == null || name.isBlank()) {
+            if (name.isNullOrEmpty()) {
                 namedTag.remove("CustomName")
                 return
             }
@@ -240,10 +238,6 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
     override fun hasName(): Boolean {
         return namedTag.contains("CustomName")
-    }
-
-    override fun getInventory(): BeaconInventory {
-        return inventory
     }
 
     companion object {

@@ -28,7 +28,7 @@ class BlockEntityBanner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         namedTag.putByte("color", this.color)
     }
 
-    override var name: String
+    override var name: String?
         get() = "Banner"
         set(name) {
             super.name = name
