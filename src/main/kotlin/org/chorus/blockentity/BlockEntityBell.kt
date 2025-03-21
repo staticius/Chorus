@@ -2,6 +2,7 @@ package org.chorus.blockentity
 
 import org.chorus.Player
 import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.ByteTag
@@ -99,7 +100,7 @@ class BlockEntityBell(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(ch
     }
 
     fun setRinging(ringing: Boolean) {
-        if (this.level != null && this.ringing != ringing) {
+        if (this.ringing != ringing) {
             this.ringing = ringing
             scheduleUpdate()
         }
@@ -113,5 +114,5 @@ class BlockEntityBell(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(ch
             .putInt("Ticks", this.ticks)
 
     override val isBlockEntityValid: Boolean
-        get() = block.id === Block.BELL
+        get() = block.id === BlockID.BELL
 }

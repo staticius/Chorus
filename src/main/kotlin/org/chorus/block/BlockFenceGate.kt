@@ -3,6 +3,7 @@ package org.chorus.block
 import com.google.common.collect.Sets
 import org.chorus.AdventureSettings
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
@@ -76,9 +77,9 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
         fx: Double,
         fy: Double,
         fz: Double,
-        player: Player
+        player: Player?
     ): Boolean {
-        val direction = player.getDirection()
+        val direction = player!!.getDirection()
         blockFace = direction
 
         if (getSide(direction.rotateY()) is BlockWallBase
@@ -91,7 +92,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
             return false
         }
 
-        if (Server.instance.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
+        if (Server.instance.settings.levelSettings.enableRedstone && !this.isOpen && this.isGettingPower) {
             this.setOpen(null, true)
         }
 
@@ -225,7 +226,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
                 level.setBlock(this.position, this, true)
                 return type
             }
-        } else if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings().enableRedstone()) {
+        } else if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings.enableRedstone) {
             this.onRedstoneUpdate()
             return type
         }
@@ -253,8 +254,8 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
 
     var manualOverride: Boolean
         get() = manualOverrides.contains(this.locator)
-        set(val) {
-            if (`val`) {
+        set(value) {
+            if (value) {
                 manualOverrides.add(this.locator)
             } else {
                 manualOverrides.remove(this.locator)
@@ -290,6 +291,9 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
 
     override val burnAbility: Int
         get() = 20
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(

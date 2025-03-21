@@ -344,7 +344,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
         //Fix for furnace inputs
         if (be is BlockEntityFurnace) {
-            val inventory = be.getInventory()
+            val inventory = be.inventory
             if (inventory.isFull) {
                 return false
             }

@@ -100,7 +100,7 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState = Co
             return false
         }
 
-        player.addWindow(furnace.getInventory())
+        player.addWindow(furnace.inventory)
         return true
     }
 
@@ -120,7 +120,7 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState = Co
             val blockEntity = blockEntity
 
             if (blockEntity != null) {
-                return calculateRedstone(blockEntity.getInventory())
+                return calculateRedstone(blockEntity.inventory)
             }
 
             return super.comparatorInputOverride

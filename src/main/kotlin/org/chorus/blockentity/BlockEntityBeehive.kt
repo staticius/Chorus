@@ -12,6 +12,7 @@ import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.Tag
 import org.chorus.utils.*
 
 
@@ -20,7 +21,7 @@ import kotlin.math.atan
 
 
 class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, nbt) {
-    private var occupants: MutableList<Occupant>? = null
+    private var occupants: MutableList<Occupant> = ArrayList(4)
 
     var interactingEntity: Entity? = null
 
@@ -33,16 +34,15 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
 
     override fun loadNBT() {
         super.loadNBT()
-        this.occupants = ArrayList(4)
         if (!namedTag.contains("ShouldSpawnBees")) {
             namedTag.putByte("ShouldSpawnBees", 0)
         }
 
         if (!namedTag.contains("Occupants")) {
-            namedTag.putList("Occupants", ListTag())
+            namedTag.putList("Occupants", ListTag<Tag<*>>())
         } else {
             val occupantsTag = namedTag.getList("Occupants", CompoundTag::class.java)
-            for (i in 0..<occupantsTag.size()) {
+            for (i in 0..< occupantsTag.size()) {
                 occupants.add(Occupant(occupantsTag[i]))
             }
         }
@@ -63,7 +63,7 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
     override fun saveNBT() {
         super.saveNBT()
         val occupantsTag = ListTag<CompoundTag>()
-        for (occupant in occupants!!) {
+        for (occupant in occupants) {
             occupantsTag.add(occupant.saveNBT())
         }
         namedTag.putList("Occupants", occupantsTag)
@@ -99,7 +99,7 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
         }
 
     fun addOccupant(occupant: Occupant): Boolean {
-        occupants!!.add(occupant)
+        occupants.add(occupant)
         val occupants = namedTag.getList("Occupants", CompoundTag::class.java)
         occupants.add(occupant.saveNBT())
         namedTag.putList("Occupants", occupants)
@@ -127,27 +127,27 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
 
     fun addOccupant(entity: Entity, ticksLeftToStay: Int, hasNectar: Boolean, playSound: Boolean): Occupant? {
         entity.saveNBT()
-        val occupant = Occupant(ticksLeftToStay, entity.getIdentifier(), hasNectar, entity.namedTag.copy())
+        val occupant = Occupant(ticksLeftToStay, entity.getIdentifier(), hasNectar, entity.namedTag!!.copy())
         if (!addOccupant(occupant)) {
             return null
         }
 
         entity.close()
         if (playSound) {
-            entity.level.addSound(this.position, Sound.BLOCK_BEEHIVE_ENTER)
+            entity.level!!.addSound(this.position, Sound.BLOCK_BEEHIVE_ENTER)
             if (entity.level != null && (entity.level !== level || entity.position.distanceSquared(this.position) >= 4)) {
-                entity.level.addSound(entity.position, Sound.BLOCK_BEEHIVE_ENTER)
+                entity.level!!.addSound(entity.position, Sound.BLOCK_BEEHIVE_ENTER)
             }
         }
         return occupant
     }
 
     fun getOccupants(): Array<Occupant> {
-        return occupants!!.toArray(Occupant.EMPTY_ARRAY)
+        return occupants.toTypedArray()
     }
 
     fun removeOccupant(occupant: Occupant): Boolean {
-        return occupants!!.remove(occupant)
+        return occupants.remove(occupant)
     }
 
     val isHoneyEmpty: Boolean
@@ -157,12 +157,12 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
         get() = honeyLevel == CommonBlockProperties.HONEY_LEVEL.max
 
     val isEmpty: Boolean
-        get() = occupants!!.isEmpty()
+        get() = occupants.isEmpty()
 
     val occupantsCount: Int
-        get() = occupants!!.size
+        get() = occupants.size
 
-    fun isSpawnFaceValid(face: BlockFace?): Boolean {
+    fun isSpawnFaceValid(face: BlockFace): Boolean {
         val side = getSide(face).levelBlock
         return side.canPassThrough() && side !is BlockLiquid
     }
@@ -199,14 +199,15 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
 
     override fun onBreak(isSilkTouch: Boolean) {
         if (!isSilkTouch) {
-            val interactingEntity: Entity = getInteractingEntity()
+            val interactingEntity = this.interactingEntity
             for (occupant in getOccupants()) {
-                if (spawnOccupant(occupant) is EntityBee && interactingEntity != null) {
-                    if (getInteractingEntity() is Player) {
-                        if (player.isSurvival() || player.isAdventure()) {
-                            bee.setAngry(player)
+                val spawnOccupant = spawnOccupant(occupant)
+                if (spawnOccupant is EntityBee && interactingEntity != null) {
+                    if (interactingEntity is Player) {
+                        if (interactingEntity.isSurvival || interactingEntity.isAdventure) {
+                            spawnOccupant.setAngry(interactingEntity)
                         }
-                    } else bee.setAngry(interactingEntity)
+                    } else spawnOccupant.setAngry(interactingEntity)
                 }
             }
         }
@@ -302,7 +303,7 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
 
     fun angerBees(player: Player?) {
         if (!isEmpty) {
-            val validFaces = scanValidSpawnFaces()
+            val validFaces = scanValidSpawnFaces().toMutableList()
             if (isSpawnFaceValid(BlockFace.UP)) {
                 validFaces.add(BlockFace.UP)
             }
@@ -312,11 +313,10 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
             for (occupant in getOccupants()) {
                 val entity = spawnOccupant(occupant, validFaces)
                 if (entity is EntityBee) {
-                    val bee = entity
                     if (player != null) {
-                        bee.setAngry(player)
+                        entity.setAngry(player)
                     } else {
-                        bee.setAngry(true)
+                        entity.setAngry(true)
                     }
                 }
             }
@@ -351,7 +351,7 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
     override val isBlockEntityValid: Boolean
         get() {
             val id = this.block.id
-            return id === Block.BEEHIVE || id === Block.BEE_NEST
+            return id === BlockID.BEEHIVE || id === BlockID.BEE_NEST
         }
 
     class Occupant : Cloneable {
@@ -423,10 +423,10 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
                     '}'
         }
 
-        override fun equals(o: Any?): Boolean {
-            if (this === o) return true
-            if (o == null || javaClass != o.javaClass) return false
-            val occupant = o as Occupant
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other == null || javaClass != other.javaClass) return false
+            val occupant = other as Occupant
             return ticksLeftToStay == occupant.ticksLeftToStay &&
                     actorIdentifier == occupant.actorIdentifier &&
                     saveData == occupant.saveData
@@ -451,7 +451,7 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
         }
     }
 
-    companion object {
+    companion object : Loggable {
         private val RANDOM = Random()
     }
 }

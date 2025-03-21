@@ -17,13 +17,10 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.ceil
 import kotlin.math.floor
 
-/**
- * @author MagicDroidX
- */
 open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     RecipeInventoryHolder,
     BlockEntityInventoryHolder {
-    protected var inventory: SmeltingInventory? = null
+    override lateinit var inventory: SmeltingInventory
 
     var burnTime: Int = 0
     var burnDuration: Int = 0
@@ -123,8 +120,8 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override fun close() {
         if (!closed) {
-            for (player in HashSet(getInventory().viewers)) {
-                player.removeWindow(this.getInventory())
+            for (player in HashSet(inventory.viewers)) {
+                player.removeWindow(this.inventory)
             }
             super.close()
         }
@@ -157,8 +154,8 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID. = block.id
-            return BlockID.=== idleBlockID . || BlockID.=== burningBlockId
+            val blockId = block.id
+            return blockId === idleBlockId || blockId === burningBlockId
         }
 
     val size: Int
@@ -192,7 +189,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
         if (item.isNothing) {
             if (i >= 0) {
-                namedTag.getList("Items").all.removeAt(i)
+                namedTag.getList("Items").all.toMutableList().removeAt(i)
             }
         } else if (i < 0) {
             (namedTag.getList("Items", CompoundTag::class.java)).add(d)
@@ -201,37 +198,33 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
     }
 
-    override fun getInventory(): SmeltingInventory {
-        return inventory!!
-    }
-
     protected open val idleBlockId: String
-        get() = Block.FURNACE
+        get() = BlockID.FURNACE
 
     protected open val burningBlockId: String
-        get() = Block.LIT_FURNACE
+        get() = BlockID.LIT_FURNACE
 
     protected fun setBurning(burning: Boolean) {
         if (burning) {
-            if (this.block.id == this.idleBlockID.{
+            if (this.block.id == this.idleBlockId) {
                     level.setBlock(
                         this.position, Block.getWithState(
-                            burningBlockID.this.block.blockState
+                            burningBlockId, this.block.blockState
                         ), true
                     )
                 }
-        } else if (this.block.id == this.burningBlockID.{
+        } else if (this.block.id == this.burningBlockId) {
                 level.setBlock(
                     this.position, Block.getWithState(
-                        idleBlockID.this.block.blockState
+                        idleBlockId, this.block.blockState
                     ), true
                 )
             }
     }
 
     protected fun checkFuel(fuel: Item) {
-        var fuel = fuel
-        val ev = FurnaceBurnEvent(this, fuel, if (fuel.fuelTime == null) 0 else fuel.fuelTime)
+        var fuel1 = fuel
+        val ev = FurnaceBurnEvent(this, fuel1, if (fuel1.fuelTime == null) 0 else fuel1.fuelTime!!)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return
@@ -243,16 +236,16 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         setBurning(true)
 
         if (burnTime > 0 && ev.isBurning) {
-            fuel.setCount(fuel.getCount() - 1)
-            if (fuel.getCount() == 0) {
-                if (fuel is ItemLavaBucket) {
-                    fuel.setDamage(0)
-                    fuel.setCount(1)
+            fuel1.setCount(fuel1.getCount() - 1)
+            if (fuel1.getCount() == 0) {
+                if (fuel1 is ItemLavaBucket) {
+                    fuel1.damage = (0)
+                    fuel1.setCount(1)
                 } else {
-                    fuel = Item.AIR
+                    fuel1 = Item.AIR
                 }
             }
-            inventory!!.setFuel(fuel)
+            inventory.setFuel(fuel1)
         }
     }
 
@@ -269,9 +262,9 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
 
         var ret = false
-        val fuel = inventory!!.fuel
-        var raw = inventory!!.smelting
-        var product = inventory!!.result
+        val fuel = inventory.fuel
+        var raw = inventory.smelting
+        var product = inventory.result
         val smelt = matchRecipe(raw)
 
         var canSmelt = false
@@ -313,13 +306,13 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                     )
                     Server.instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
-                        inventory!!.setResult(ev.result)
+                        inventory.setResult(ev.result)
                         raw.setCount(raw.getCount() - 1)
                         if (raw.getCount() == 0) {
                             raw = Item.AIR
                         }
                         this.storedXP += ev.xp
-                        inventory!!.setSmelting(raw)
+                        inventory.setSmelting(raw)
                     }
 
                     cookTime -= readyAt
@@ -340,8 +333,8 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             this.crackledTime = 0
         }
 
-        for (player in getInventory().viewers) {
-            val windowId = player.getWindowId(this.getInventory())
+        for (player in inventory.viewers) {
+            val windowId = player.getWindowId(this.inventory)
             if (windowId > 0) {
                 var pk = ContainerSetDataPacket()
                 pk.windowId = windowId
@@ -369,7 +362,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                 .putShort("CookTime", cookTime)
                 .putShort("StoredXpInt", storedXP.toInt())
             if (this.hasName()) {
-                c.put("CustomName", namedTag["CustomName"])
+                c.put("CustomName", namedTag["CustomName"]!!)
             }
             return c
         }
@@ -380,11 +373,9 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         ) 1 else 0)).toInt().toShort()
     }
 
-    override fun getIngredientView(): Inventory {
-        return InventorySlice(inventory!!, 0, 1)
-    }
+    override val ingredientView: Inventory?
+        get() = InventorySlice(inventory, 0, 1)
 
-    override fun getProductView(): Inventory {
-        return InventorySlice(inventory!!, 2, 3)
-    }
+    override val productView: Inventory?
+        get() = InventorySlice(inventory, 2, 3)
 }

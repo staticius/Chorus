@@ -15,15 +15,15 @@ class BlockEntityBlastFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntityFurn
 
 
     override val clientName: String
-        get() = BlockEntityID.Companion.BLAST_FURNACE
+        get() = BlockEntityID.BLAST_FURNACE
 
 
     override val idleBlockId: String
-        get() = Block.BLAST_FURNACE
+        get() = BlockID.BLAST_FURNACE
 
 
     override val burningBlockId: String
-        get() = Block.LIT_BLAST_FURNACE
+        get() = BlockID.LIT_BLAST_FURNACE
 
 
     override fun createInventory(): SmeltingInventory {
