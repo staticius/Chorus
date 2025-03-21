@@ -53,7 +53,7 @@ class CommandBlockUpdateProcessor : DataPacketProcessor<CommandBlockUpdatePacket
                     val conditional = pk.isConditional
                     cmdBlock.setPropertyValue(CommonBlockProperties.CONDITIONAL_BIT, conditional)
 
-                    blockEntity.setCommand(pk.command)
+                    blockEntity.command = pk.command
                     blockEntity.setName(pk.name)
                     blockEntity.setTrackOutput(pk.shouldTrackOutput)
                     blockEntity.isConditional = conditional

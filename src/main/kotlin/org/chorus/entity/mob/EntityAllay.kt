@@ -134,7 +134,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         } else getMemoryStorage().put<Class<out Item>>(CoreMemoryTypes.Companion.LOOKING_ITEM, item.javaClass)
     }
 
-    override fun getInventory(): Inventory {
+    fun getInventory(): Inventory {
         //0 = hand, 1 = offhand
         return InventorySlice(equipment, 2, 3) // TODO
     }

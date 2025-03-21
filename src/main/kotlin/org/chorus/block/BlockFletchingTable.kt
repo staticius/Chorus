@@ -23,8 +23,10 @@ class BlockFletchingTable @JvmOverloads constructor(blockstate: BlockState = Com
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FLETCHING_TABLE)
-
     }
 }

@@ -380,7 +380,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         return Vector3f(0f, 2.42f, 0f)
     }
 
-    override fun getInventory(): HorseInventory {
+    fun getInventory(): HorseInventory {
         return horseInventory!!
     }
 

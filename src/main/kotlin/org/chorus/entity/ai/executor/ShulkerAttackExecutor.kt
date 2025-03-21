@@ -23,7 +23,7 @@ class ShulkerAttackExecutor : IBehaviorExecutor {
     private var nextAttack = 0
 
     override fun execute(entity: EntityMob): Boolean {
-        val target = entity.memoryStorage!![target]
+        val target = entity.memoryStorage!!.get(target)
         tick++
         if (tick > nextAttack) {
             tick = 0
@@ -80,7 +80,7 @@ class ShulkerAttackExecutor : IBehaviorExecutor {
         nextAttack = 0
         if (entity is EntityShulker) {
             entity.setPeeking(40)
-            val target = entity.getMemoryStorage()[target]
+            val target = entity.getMemoryStorage().get(target)
             entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target.id)
         }
     }

@@ -30,7 +30,7 @@ abstract class BlockHanging(blockState: BlockState) : BlockFlowable(blockState) 
 
     protected open val isSupportValid: Boolean
         get() = down().`is`(BlockTags.DIRT) || when (down().id) {
-            WARPED_NYLIUM, CRIMSON_NYLIUM, SOUL_SOIL -> true
+            BlockID.WARPED_NYLIUM, BlockID.CRIMSON_NYLIUM, BlockID.SOUL_SOIL -> true
             else -> false
         }
 

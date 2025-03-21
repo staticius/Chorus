@@ -27,20 +27,20 @@ open class BlockFlowingWater @JvmOverloads constructor(blockstate: BlockState = 
         return ret
     }
 
-    override fun afterRemoval(newBlock: Block, update: Boolean) {
+    override fun afterRemoval(newBlock: Block?, update: Boolean) {
         if (!update) {
             return
         }
 
-        val newId = newBlock.id
-        if (newId == FLOWING_WATER || newId == WATER) {
+        val newId = newBlock!!.id
+        if (newId == BlockID.FLOWING_WATER || newId == BlockID.WATER) {
             return
         }
 
         val up = up(1, 0)
         for (diagonalFace in BlockFace.Plane.HORIZONTAL) {
             val diagonal = up.getSide(diagonalFace)
-            if (diagonal.id == REEDS) {
+            if (diagonal.id == BlockID.REEDS) {
                 diagonal.onUpdate(Level.BLOCK_UPDATE_SCHEDULED)
             }
         }
@@ -74,8 +74,10 @@ open class BlockFlowingWater @JvmOverloads constructor(blockstate: BlockState = 
     override val passableBlockFrictionFactor: Double
         get() = 0.5
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FLOWING_WATER, CommonBlockProperties.LIQUID_DEPTH)
-
     }
 }

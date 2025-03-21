@@ -4,11 +4,11 @@ import org.chorus.plugin.Plugin
 
 
 interface Permissible : ServerOperator {
-    fun isPermissionSet(name: String?): Boolean
+    fun isPermissionSet(name: String): Boolean
 
     fun isPermissionSet(permission: Permission): Boolean
 
-    fun hasPermission(name: String?): Boolean
+    fun hasPermission(name: String): Boolean
 
     fun hasPermission(permission: Permission): Boolean
 
@@ -21,6 +21,4 @@ interface Permissible : ServerOperator {
     fun removeAttachment(attachment: PermissionAttachment)
 
     fun recalculatePermissions()
-
-    val effectivePermissions: Map<String?, PermissionAttachmentInfo>
 }

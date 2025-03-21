@@ -15,7 +15,7 @@ interface ISensor {
     /**
      * @param entity 目标实体
      */
-    fun sense(entity: EntityMob?)
+    fun sense(entity: EntityMob)
 
     val period: Int
         /**

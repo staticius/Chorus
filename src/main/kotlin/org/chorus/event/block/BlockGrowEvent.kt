@@ -5,7 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
 
-open class BlockGrowEvent(block: Block, @JvmField val newState: Block?) : BlockEvent(block), Cancellable {
+open class BlockGrowEvent(block: Block, @JvmField val newState: Block) : BlockEvent(block), Cancellable {
     companion object {
         val handlers: HandlerList = HandlerList()
     }

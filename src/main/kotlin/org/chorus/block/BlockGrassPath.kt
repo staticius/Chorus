@@ -23,7 +23,7 @@ class BlockGrassPath : BlockGrassBlock {
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (up().isSolid) {
-                level.setBlock(this.position, get(DIRT), false, true)
+                level.setBlock(this.position, get(BlockID.DIRT), false, true)
             }
 
             return Level.BLOCK_UPDATE_NORMAL
@@ -41,7 +41,7 @@ class BlockGrassPath : BlockGrassBlock {
     ): Boolean {
         if (item.isHoe) {
             item.useOn(this)
-            level.setBlock(this.position, get(FARMLAND), true)
+            level.setBlock(this.position, get(BlockID.FARMLAND), true)
             if (player != null) {
                 player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
@@ -54,8 +54,10 @@ class BlockGrassPath : BlockGrassBlock {
     override val isTransparent: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.GRASS_PATH)
-
     }
 }

@@ -28,11 +28,11 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
             if (this.opable == null) {
                 throw ServerException("Cannot change op value as no ServerOperator is set")
             } else {
-                opable.setOp(value)
+                opable!!.isOp = value
             }
         }
 
-    override fun isPermissionSet(name: String?): Boolean {
+    override fun isPermissionSet(name: String): Boolean {
         return permissions.containsKey(name)
     }
 
@@ -40,9 +40,9 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
         return this.isPermissionSet(permission.name)
     }
 
-    override fun hasPermission(name: String?): Boolean {
+    override fun hasPermission(name: String): Boolean {
         if (this.isPermissionSet(name)) {
-            return permissions[name].getValue()
+            return permissions[name]!!.value
         }
 
         val perm = Server.instance.pluginManager.getPermission(name)
@@ -50,9 +50,9 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
         if (perm != null) {
             val permission = perm.default
 
-            return Permission.Companion.DEFAULT_TRUE == permission || (this.isOp && Permission.Companion.DEFAULT_OP == permission) || (!this.isOp && Permission.Companion.DEFAULT_NOT_OP == permission)
+            return Permission.DEFAULT_TRUE == permission || (this.isOp && Permission.DEFAULT_OP == permission) || (!this.isOp && Permission.DEFAULT_NOT_OP == permission)
         } else {
-            return Permission.Companion.DEFAULT_TRUE == Permission.Companion.DEFAULT_PERMISSION || (this.isOp && Permission.Companion.DEFAULT_OP == Permission.Companion.DEFAULT_PERMISSION) || (!this.isOp && Permission.Companion.DEFAULT_NOT_OP == Permission.Companion.DEFAULT_PERMISSION)
+            return Permission.DEFAULT_TRUE == Permission.DEFAULT_PERMISSION || (this.isOp && Permission.DEFAULT_OP == Permission.DEFAULT_PERMISSION) || (!this.isOp && Permission.DEFAULT_NOT_OP == Permission.DEFAULT_PERMISSION)
         }
     }
 
@@ -70,7 +70,7 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
 
     override fun addAttachment(plugin: Plugin, name: String?, value: Boolean?): PermissionAttachment {
         if (!plugin.isEnabled) {
-            throw PluginException("Plugin " + plugin.description.name + " is disabled")
+            throw PluginException("Plugin " + plugin.description!!.name + " is disabled")
         }
 
         val result = PermissionAttachment(plugin, if (this.parent != null) this.parent else this)
@@ -99,7 +99,7 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
         )
         Server.instance.pluginManager.subscribeToDefaultPerms(
             this.isOp,
-            if (this.parent != null) this.parent else this
+            this.parent ?: this
         )
 
         for (perm in defaults.values) {
@@ -110,31 +110,31 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
             )
             Server.instance.pluginManager.subscribeToPermission(
                 name,
-                if (this.parent != null) this.parent else this
+                this.parent ?: this
             )
             this.calculateChildPermissions(perm.children, false, null)
         }
 
         for (attachment in this.attachments) {
-            this.calculateChildPermissions(attachment.permissions, false, attachment)
+            this.calculateChildPermissions(attachment.getPermissions(), false, attachment)
         }
     }
 
     fun clearPermissions() {
         for (name in permissions.keys) {
             Server.instance.pluginManager.unsubscribeFromPermission(
-                name,
-                if (this.parent != null) this.parent else this
+                name!!,
+                this.parent ?: this
             )
         }
 
         Server.instance.pluginManager.unsubscribeFromDefaultPerms(
             false,
-            if (this.parent != null) this.parent else this
+            this.parent ?: this
         )
         Server.instance.pluginManager.unsubscribeFromDefaultPerms(
             true,
-            if (this.parent != null) this.parent else this
+            this.parent ?: this
         )
 
         permissions.clear()
@@ -157,7 +157,7 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
             )
             Server.instance.pluginManager.subscribeToPermission(
                 name,
-                if (this.parent != null) this.parent else this
+                this.parent ?: this
             )
 
             if (perm != null) {
@@ -166,6 +166,6 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
         }
     }
 
-    override val effectivePermissions: Map<String?, PermissionAttachmentInfo>
+    val effectivePermissions: Map<String?, PermissionAttachmentInfo>
         get() = this.permissions
 }

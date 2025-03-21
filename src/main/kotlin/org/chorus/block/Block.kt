@@ -43,7 +43,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
     Metadatable, AxisAlignedBB, IVector3, Loggable {
 
     protected var color: BlockColor? = null
-    val frictionFactor: Double = 0.6
+    open val frictionFactor: Double = 0.6
 
     @JvmField
     var layer: Int = 0

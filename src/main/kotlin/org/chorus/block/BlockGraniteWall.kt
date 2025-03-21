@@ -23,6 +23,9 @@ class BlockGraniteWall @JvmOverloads constructor(blockstate: BlockState = Compan
         return ItemBlock(properties.defaultState.toBlock())
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.GRANITE_WALL,
@@ -32,6 +35,5 @@ class BlockGraniteWall @JvmOverloads constructor(blockstate: BlockState = Compan
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

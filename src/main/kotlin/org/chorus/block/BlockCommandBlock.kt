@@ -92,7 +92,7 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState = 
             }
             val tile: BlockEntityCommandBlock = this.getOrCreateBlockEntity()
             tile.spawnTo(player)
-            player.addWindow(tile.getInventory())
+            player.addWindow(tile.inventory)
         }
         return true
     }

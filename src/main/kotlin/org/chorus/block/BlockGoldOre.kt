@@ -10,13 +10,14 @@ open class BlockGoldOre @JvmOverloads constructor(blockstate: BlockState = Compa
 
     override val rawMaterial: String?
         get() = ItemID.RAW_GOLD
-}
 
-override val toolTier: Int
-    get() = ItemTool.TIER_IRON
+    override val toolTier: Int
+        get() = ItemTool.TIER_IRON
 
-companion object {
-    val properties: BlockProperties = BlockProperties(BlockID.GOLD_ORE)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
-}
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.GOLD_ORE)
+    }
 }

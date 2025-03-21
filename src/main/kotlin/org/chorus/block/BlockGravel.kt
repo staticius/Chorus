@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.utils.ChorusRandom.nextInt
+import org.chorus.utils.ChorusRandom
 
 
 class BlockGravel : BlockFallable, Natural {
@@ -30,22 +30,22 @@ class BlockGravel : BlockFallable, Natural {
             fortune = enchantment.level
         }
 
-        val nukkitRandom: NukkitRandom = NukkitRandom()
+        val random = ChorusRandom()
         when (fortune) {
             0 -> {
-                if (nukkitRandom.nextInt(0, 9) == 0) {
+                if (random.nextInt(0, 9) == 0) {
                     return arrayOf(get(ItemID.FLINT, 0, 1))
                 }
             }
 
             1 -> {
-                if (nukkitRandom.nextInt(0, 6) == 0) {
+                if (random.nextInt(0, 6) == 0) {
                     return arrayOf(get(ItemID.FLINT, 0, 1))
                 }
             }
 
             2 -> {
-                if (nukkitRandom.nextInt(0, 3) == 0) {
+                if (random.nextInt(0, 3) == 0) {
                     return arrayOf(get(ItemID.FLINT, 0, 1))
                 }
             }
@@ -61,8 +61,10 @@ class BlockGravel : BlockFallable, Natural {
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.GRAVEL)
-
     }
 }

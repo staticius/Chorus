@@ -8,10 +8,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import java.io.IOException
 import java.nio.ByteOrder
 
-
-(exclude = ["namedTag"])
-
-
 class BlockEntityDataPacket : DataPacket() {
     var x: Int = 0
     var y: Int = 0
@@ -42,7 +38,7 @@ class BlockEntityDataPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.BLOCK_ENTITY_DATA_PACKET
+        return ProtocolInfo.BLOCK_ENTITY_DATA_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

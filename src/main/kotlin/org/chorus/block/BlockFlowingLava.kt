@@ -1,7 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.Server.Companion.instance
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.entity.Entity
 import org.chorus.entity.effect.EffectType
@@ -18,7 +18,6 @@ import org.chorus.math.BlockFace.Companion.fromIndex
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-
 open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockLiquid(blockstate) {
     override val lightLevel: Int
@@ -31,7 +30,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
         entity.highestPosition -= (entity.highestPosition - entity.position.y) * 0.5
 
         val ev = EntityCombustByBlockEvent(this, entity, 8)
-        instance.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled // Making sure the entity is actually alive and not invulnerable.
             && entity.isAlive()
             && entity.noDamageTicks == 0
@@ -81,7 +80,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
                             Server.instance.pluginManager.callEvent(e)
 
                             if (!e.isCancelled) {
-                                val fire = get(FIRE)
+                                val fire = get(BlockID.FIRE)
                                 level.setBlock(v, fire, true)
                                 level.scheduleUpdate(fire, fire.tickRate())
                                 return Level.BLOCK_UPDATE_RANDOM
@@ -103,7 +102,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
                         Server.instance.pluginManager.callEvent(e)
 
                         if (!e.isCancelled) {
-                            val fire = get(FIRE)
+                            val fire = get(BlockID.FIRE)
                             level.setBlock(v, fire, true)
                             level.scheduleUpdate(fire, fire.tickRate())
                         }
@@ -142,12 +141,13 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
         return 30
     }
 
-    override fun getFlowDecayPerBlock(): Int {
-        if (level.dimension == Level.DIMENSION_NETHER) {
-            return 1
+    override val flowDecayPerBlock: Int
+        get() {
+            if (level.dimension == Level.DIMENSION_NETHER) {
+                return 1
+            }
+            return 2
         }
-        return 2
-    }
 
     override fun checkForMixing() {
         var colliding: Block? = null
@@ -160,29 +160,29 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
             }
             if (down is BlockSoulSoil) {
                 if (blockSide is BlockBlueIce) {
-                    liquidCollide(this, get(BASALT))
+                    liquidCollide(this, get(BlockID.BASALT))
                     return
                 }
             }
         }
         if (colliding != null) {
             if (this.liquidDepth == 0) {
-                this.liquidCollide(colliding, get(OBSIDIAN))
+                this.liquidCollide(colliding, get(BlockID.OBSIDIAN))
             } else if (this.liquidDepth <= 4) {
-                this.liquidCollide(colliding, get(COBBLESTONE))
+                this.liquidCollide(colliding, get(BlockID.COBBLESTONE))
             }
         }
     }
 
     override fun flowIntoBlock(block: Block, newFlowDecay: Int) {
         if (block is BlockFlowingWater) {
-            (block as BlockLiquid).liquidCollide(this, get(STONE))
+            (block as BlockLiquid).liquidCollide(this, get(BlockID.STONE))
         } else {
             super.flowIntoBlock(block, newFlowDecay)
         }
     }
 
-    override fun addVelocityToEntity(entity: Entity, vector: Vector3?) {
+    override fun addVelocityToEntity(entity: Entity, vector: Vector3) {
         if (entity !is EntityTnt) {
             super.addVelocityToEntity(entity, vector)
         }
@@ -191,8 +191,10 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
     override val passableBlockFrictionFactor: Double
         get() = 0.3
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FLOWING_LAVA, CommonBlockProperties.LIQUID_DEPTH)
-
     }
 }

@@ -21,7 +21,7 @@ class GossipExecutor : EntityControl, IBehaviorExecutor {
     private val type: MemoryType<out EntityVillagerV2?>? = null
 
     override fun execute(entity: EntityMob): Boolean {
-        val entity1 = entity.memoryStorage!![type]
+        val entity1 = entity.memoryStorage!!.get(type)
         if (entity1 != null) {
             if (entity1.position.toHorizontal().distance(entity.position.toHorizontal()) < 2) {
                 if (!spread) {
@@ -72,8 +72,8 @@ class GossipExecutor : EntityControl, IBehaviorExecutor {
     }
 
     override fun onStart(entity: EntityMob) {
-        entity.moveTarget = entity.memoryStorage!![type].position
-        entity.lookTarget = entity.memoryStorage!![type].position
+        entity.moveTarget = entity.memoryStorage!!.get(type).position
+        entity.lookTarget = entity.memoryStorage!!.get(type).position
         this.tick = 0
         this.spread = false
         entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_GOSSIP, entity.level!!.tick)

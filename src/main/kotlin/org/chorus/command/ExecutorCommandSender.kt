@@ -3,8 +3,11 @@ package org.chorus.command
 import org.chorus.Player
 import org.chorus.entity.Entity
 import org.chorus.lang.CommandOutputContainer
+import org.chorus.lang.TextContainer
+import org.chorus.level.Locator
 import org.chorus.level.Transform
 import org.chorus.permission.Permission
+import org.chorus.permission.PermissionAttachment
 import org.chorus.plugin.Plugin
 
 //used for executing commands in place of an entity
@@ -25,26 +28,31 @@ class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTra
     }
 
     override fun sendMessage(message: String) {
-        executor.sendMessage(message)
+        executor!!.sendMessage(message)
     }
 
     override fun sendMessage(message: TextContainer) {
-        executor.sendMessage(message)
+        executor!!.sendMessage(message)
     }
 
     override fun sendCommandOutput(container: CommandOutputContainer) {
         executor!!.sendCommandOutput(container)
     }
 
-    override val name: String
-        get() = entity!!.name
+    override fun getName() = entity!!.name!!
+
+    override fun getLocator(): Locator {
+        return entity!!.getLocator()
+    }
+
+    override fun getTransform(): Transform {
+        return entity!!.getTransform()
+    }
 
     override val isPlayer: Boolean
         get() = entity is Player
 
-    override fun isEntity(): Boolean {
-        return true
-    }
+    override val isEntity: Boolean = true
 
     override fun asEntity(): Entity? {
         return this.entity
@@ -54,13 +62,11 @@ class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTra
         return if (isPlayer) entity as Player? else null
     }
 
-    override fun isOp(): Boolean {
-        return executor!!.isOp
-    }
-
-    override fun setOp(value: Boolean) {
-        executor!!.isOp = value
-    }
+    override var isOp: Boolean
+        get() = executor!!.isOp
+        set(value) {
+            executor!!.isOp = value
+        }
 
     override fun isPermissionSet(name: String): Boolean {
         return executor!!.isPermissionSet(name)
@@ -82,11 +88,11 @@ class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTra
         return executor!!.addAttachment(plugin)
     }
 
-    override fun addAttachment(plugin: Plugin, name: String): PermissionAttachment {
+    override fun addAttachment(plugin: Plugin, name: String?): PermissionAttachment {
         return executor!!.addAttachment(plugin, name)
     }
 
-    override fun addAttachment(plugin: Plugin, name: String, value: Boolean): PermissionAttachment {
+    override fun addAttachment(plugin: Plugin, name: String?, value: Boolean?): PermissionAttachment {
         return executor!!.addAttachment(plugin, name, value)
     }
 
@@ -98,12 +104,8 @@ class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTra
         executor!!.recalculatePermissions()
     }
 
-    override fun getEffectivePermissions(): Map<String, PermissionAttachmentInfo> {
-        return executor!!.effectivePermissions
-    }
-
     fun getExecutor(): CommandSender? {
-        return if (executor is ExecutorCommandSender) executor.getExecutor()
+        return if (executor is ExecutorCommandSender) (executor as ExecutorCommandSender).getExecutor()
         else executor
     }
 }

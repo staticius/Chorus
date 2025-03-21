@@ -1,6 +1,7 @@
 package org.chorus.blockentity
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.Entity
 import org.chorus.entity.effect.Effect
@@ -56,11 +57,11 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
     override fun saveNBT() {
         super.saveNBT()
         val targetEntity = this.targetEntity
-        namedTag.putLong("Target", targetEntity?.id ?: -1)
+        namedTag.putLong("Target", targetEntity?.uniqueId ?: -1)
         namedTag.putBoolean("Active", isActive)
     }
 
-    override var name: String
+    override var name: String?
         get() = "Conduit"
         set(name) {
             super.name = name
@@ -152,24 +153,22 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
         }
 
         if (target == null) {
-            val mobs = Arrays.stream<Entity>(
-                level.getCollidingEntities(
-                    SimpleAxisAlignedBB(
-                        position.x - radius,
-                        position.y - radius,
-                        position.z - radius,
-                        position.x + 1 + radius, position.y + 1 + radius, position.z + 1 + radius
-                    )
+            val mobs = level.getCollidingEntities(
+                SimpleAxisAlignedBB(
+                    position.x - radius,
+                    position.y - radius,
+                    position.z - radius,
+                    position.x + 1 + radius, position.y + 1 + radius, position.z + 1 + radius
                 )
-            )
-                .filter { target: Entity? -> this.canAttack(target) }
-                .toArray<Entity> { _Dummy_.__Array__() }
-            if (mobs.size == 0) {
+            ).filter { this.canAttack(it) }.toList().toTypedArray()
+
+            if (mobs.isEmpty()) {
                 if (updated) {
                     spawnToAll()
                 }
                 return
             }
+
             target = mobs[ThreadLocalRandom.current().nextInt(mobs.size)]
             this.targetEntity = target
             updated = true
@@ -190,10 +189,10 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
     }
 
     fun canAffect(target: Entity): Boolean {
-        return target.isTouchingWater
-                || target.level.isRaining && target.level.canBlockSeeSky(target.position)
+        return target.isTouchingWater()
+                || target.level!!.isRaining && target.level!!.canBlockSeeSky(target.position)
                 && !BiomeTags.containTag(
-            target.level.getBiomeId(
+            target.level!!.getBiomeId(
                 target.position.floorX,
                 target.position.floorY,
                 target.position.floorZ
@@ -235,12 +234,12 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
                             continue
                         }
 
-                        val BlockID. = level.getBlockIdAt(x + ix, y, z + iz)
+                        val blockId = level.getBlockIdAt(x + ix, y, z + iz)
                         //validBlocks++;
                         //level.setBlock(x + ix, y, z + iz, new BlockPlanks(), true, true);
-                        if (VALID_STRUCTURE_BLOCKS.contains(BlockID.) {
-                                validBlocks++
-                            }
+                        if (VALID_STRUCTURE_BLOCKS.contains(blockId)) {
+                            validBlocks++
+                        }
                     }
                 }
             } else {
@@ -251,12 +250,12 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
                     }
 
                     if (absIY == 2 || abs(ix.toDouble()) == 2.0) {
-                        val BlockID. = level.getBlockIdAt(x + ix, y + iy, z)
+                        val blockId = level.getBlockIdAt(x + ix, y + iy, z)
                         //validBlocks++;
                         //level.setBlock(x + ix, y + iy, z, new BlockWood(), true, true);
-                        if (VALID_STRUCTURE_BLOCKS.contains(BlockID.) {
-                                validBlocks++
-                            }
+                        if (VALID_STRUCTURE_BLOCKS.contains(blockId)) {
+                            validBlocks++
+                        }
                     }
                 }
 
@@ -266,12 +265,12 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
                     }
 
                     if (absIY == 2 && iz != 0 || abs(iz.toDouble()) == 2.0) {
-                        val BlockID. = level.getBlockIdAt(x, y + iy, z + iz)
+                        val blockId = level.getBlockIdAt(x, y + iy, z + iz)
                         //validBlocks++;
                         //level.setBlock(x, y + iy, z + iz, new BlockWood(), true, true);
-                        if (VALID_STRUCTURE_BLOCKS.contains(BlockID.) {
-                                validBlocks++
-                            }
+                        if (VALID_STRUCTURE_BLOCKS.contains(blockId)) {
+                            validBlocks++
+                        }
                     }
                 }
             }
@@ -349,11 +348,11 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
                 .putBoolean("isMovable", this.isMovable)
                 .putBoolean("Active", this.isActive)
             val targetEntity = this.targetEntity
-            tag.putLong("Target", targetEntity?.id ?: -1)
+            tag.putLong("Target", targetEntity?.uniqueId ?: -1)
             return tag
         }
 
     companion object {
-        private val VALID_STRUCTURE_BLOCKS = HashSet(java.util.List.of(BlockID.PRISMARINE, BlockID.SEA_LANTERN))
+        private val VALID_STRUCTURE_BLOCKS = HashSet(listOf(BlockID.PRISMARINE, BlockID.SEA_LANTERN))
     }
 }

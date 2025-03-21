@@ -71,7 +71,7 @@ abstract class BlockFungus(blockState: BlockState) : BlockFlowable(blockState), 
 
     protected fun isValidSupport(support: Block): Boolean {
         return when (support.id) {
-            GRASS_BLOCK, DIRT, PODZOL, FARMLAND, CRIMSON_NYLIUM, WARPED_NYLIUM, SOUL_SOIL, MYCELIUM -> true
+            BlockID.GRASS_BLOCK, BlockID.DIRT, BlockID.PODZOL, BlockID.FARMLAND, BlockID.CRIMSON_NYLIUM, BlockID.WARPED_NYLIUM, BlockID.SOUL_SOIL, BlockID.MYCELIUM -> true
             else -> false
         }
     }

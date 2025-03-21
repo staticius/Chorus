@@ -11,7 +11,7 @@ class EntityCheckEvaluator(private val memoryType: MemoryType<out Entity?>?) :
         if (entity.memoryStorage!!.isEmpty(memoryType)) {
             return false
         } else {
-            val e = entity.memoryStorage!![memoryType]
+            val e = entity.memoryStorage!!.get(memoryType)
             if (e is Player) {
                 return (e.spawned && e.isOnline && (e.isSurvival || e.isAdventure) && e.isAlive())
             }

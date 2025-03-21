@@ -2019,7 +2019,7 @@ class Player @UsedByReflection constructor(
             }
         }
 
-    override fun isPermissionSet(name: String?): Boolean {
+    override fun isPermissionSet(name: String): Boolean {
         return perm!!.isPermissionSet(name)
     }
 
@@ -2027,7 +2027,7 @@ class Player @UsedByReflection constructor(
         return perm!!.isPermissionSet(permission)
     }
 
-    override fun hasPermission(name: String?): Boolean {
+    override fun hasPermission(name: String): Boolean {
         return this.perm != null && perm!!.hasPermission(name)
     }
 
@@ -2088,9 +2088,6 @@ class Player @UsedByReflection constructor(
         this.enableClientCommand = enable
         session.setEnableClientCommand(enable)
     }
-
-    override val effectivePermissions: Map<String?, PermissionAttachmentInfo>
-        get() = perm!!.effectivePermissions
 
     override fun asPlayer(): Player {
         return this

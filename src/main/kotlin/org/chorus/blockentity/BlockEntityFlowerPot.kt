@@ -1,6 +1,7 @@
 package org.chorus.blockentity
 
 import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
@@ -10,13 +11,13 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class BlockEntityFlowerPot(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     init {
-        movable = true
+        isMovable = true
     }
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID. = block.id
-            return BlockID.== Block . FLOWER_POT
+            val blockId = block.id
+            return blockId == BlockID.FLOWER_POT
         }
 
     override val spawnCompound: CompoundTag

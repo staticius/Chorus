@@ -13,6 +13,8 @@ import org.chorus.lang.TextContainer
 import org.chorus.lang.TranslationContainer
 import org.chorus.level.GameRule
 import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.level.Transform
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
@@ -28,10 +30,21 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     protected var conditionalMode: Boolean = false
     override var isAuto: Boolean = false
     override var command: String? = null
+        set(value) {
+            successCount = 0
+            field = value
+        }
     override var lastExecution: Long = 0
     override var isTrackingOutput: Boolean = false
         protected set
     override var lastOutput: String? = null
+        set(value) {
+            field = if (value.isNullOrEmpty()) {
+                null
+            } else {
+                value
+            }
+        }
     protected var lastOutputParams: ListTag<StringTag>? = null
     override var lastOutputCommandMode: Int = 0
     override var isLastOutputCondionalMode: Boolean = false
@@ -44,11 +57,11 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     override var isExecutingOnFirstTick: Boolean = false //TODO: ???
     protected var perm: PermissibleBase? = null
     protected var currentTick: Int = 0
-    protected var inventory: CommandBlockInventory = CommandBlockInventory(this)
+    override var inventory: CommandBlockInventory = CommandBlockInventory(this)
 
     override fun initBlockEntity() {
         super.initBlockEntity()
-        if (this.mode == ICommandBlock.Companion.MODE_REPEATING) {
+        if (this.mode == ICommandBlock.MODE_REPEATING) {
             this.scheduleUpdate()
         }
     }
@@ -76,10 +89,10 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             this.isAuto = false
         }
 
-        if (namedTag.contains(ICommandBlock.Companion.TAG_COMMAND)) {
-            setCommand(namedTag.getString(ICommandBlock.Companion.TAG_COMMAND))
+        command = if (namedTag.contains(ICommandBlock.TAG_COMMAND)) {
+            namedTag.getString(ICommandBlock.TAG_COMMAND)
         } else {
-            setCommand("")
+            ""
         }
 
         if (namedTag.contains(ICommandBlock.Companion.TAG_LAST_EXECUTION)) {
@@ -154,31 +167,31 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override fun saveNBT() {
         super.saveNBT()
-        namedTag.putBoolean(ICommandBlock.Companion.TAG_POWERED, this.isPowered)
-        namedTag.putBoolean(ICommandBlock.Companion.TAG_CONDITIONAL_MODE, this.conditionalMode)
-        namedTag.putBoolean(ICommandBlock.Companion.TAG_AUTO, this.isAuto)
-        if (this.command != null && !command!!.isEmpty()) {
-            namedTag.putString(ICommandBlock.Companion.TAG_COMMAND, command!!)
+        namedTag.putBoolean(ICommandBlock.TAG_POWERED, this.isPowered)
+        namedTag.putBoolean(ICommandBlock.TAG_CONDITIONAL_MODE, this.conditionalMode)
+        namedTag.putBoolean(ICommandBlock.TAG_AUTO, this.isAuto)
+        if (this.command != null && command!!.isNotEmpty()) {
+            namedTag.putString(ICommandBlock.TAG_COMMAND, command!!)
         }
-        namedTag.putLong(ICommandBlock.Companion.TAG_LAST_EXECUTION, this.lastExecution)
-        namedTag.putBoolean(ICommandBlock.Companion.TAG_TRACK_OUTPUT, this.isTrackingOutput)
-        if (this.lastOutput != null && !lastOutput!!.isEmpty()) {
+        namedTag.putLong(ICommandBlock.TAG_LAST_EXECUTION, this.lastExecution)
+        namedTag.putBoolean(ICommandBlock.TAG_TRACK_OUTPUT, this.isTrackingOutput)
+        if (this.lastOutput != null && lastOutput!!.isNotEmpty()) {
             namedTag.putString(
-                ICommandBlock.Companion.TAG_LAST_OUTPUT,
+                ICommandBlock.TAG_LAST_OUTPUT,
                 lastOutput!!
             )
         }
         if (this.lastOutputParams != null) {
-            namedTag.putList(ICommandBlock.Companion.TAG_LAST_OUTPUT_PARAMS, this.lastOutputParams)
+            namedTag.putList(ICommandBlock.TAG_LAST_OUTPUT_PARAMS, this.lastOutputParams!!)
         }
-        namedTag.putInt(ICommandBlock.Companion.TAG_LP_COMMAND_MODE, this.lastOutputCommandMode)
-        namedTag.putBoolean(ICommandBlock.Companion.TAG_LP_CONDIONAL_MODE, this.isLastOutputCondionalMode)
-        namedTag.putBoolean(ICommandBlock.Companion.TAG_LP_REDSTONE_MODE, this.isLastOutputRedstoneMode)
-        namedTag.putInt(ICommandBlock.Companion.TAG_SUCCESS_COUNT, this.successCount)
-        namedTag.putBoolean(ICommandBlock.Companion.TAG_CONDITION_MET, this.isConditionMet)
-        namedTag.putInt(ICommandBlock.Companion.TAG_VERSION, ICommandBlock.Companion.CURRENT_VERSION)
-        namedTag.putInt(ICommandBlock.Companion.TAG_TICK_DELAY, this.tickDelay)
-        namedTag.putBoolean(ICommandBlock.Companion.TAG_EXECUTE_ON_FIRST_TICK, this.isExecutingOnFirstTick)
+        namedTag.putInt(ICommandBlock.TAG_LP_COMMAND_MODE, this.lastOutputCommandMode)
+        namedTag.putBoolean(ICommandBlock.TAG_LP_CONDIONAL_MODE, this.isLastOutputCondionalMode)
+        namedTag.putBoolean(ICommandBlock.TAG_LP_REDSTONE_MODE, this.isLastOutputRedstoneMode)
+        namedTag.putInt(ICommandBlock.TAG_SUCCESS_COUNT, this.successCount)
+        namedTag.putBoolean(ICommandBlock.TAG_CONDITION_MET, this.isConditionMet)
+        namedTag.putInt(ICommandBlock.TAG_VERSION, ICommandBlock.CURRENT_VERSION)
+        namedTag.putInt(ICommandBlock.TAG_TICK_DELAY, this.tickDelay)
+        namedTag.putBoolean(ICommandBlock.TAG_EXECUTE_ON_FIRST_TICK, this.isExecutingOnFirstTick)
     }
 
     override val spawnCompound: CompoundTag
@@ -206,7 +219,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                 nbt.putString(ICommandBlock.Companion.TAG_LAST_OUTPUT, lastOutput!!)
             }
             if (this.lastOutputParams != null) {
-                nbt.putList(ICommandBlock.Companion.TAG_LAST_OUTPUT_PARAMS, this.lastOutputParams)
+                nbt.putList(ICommandBlock.Companion.TAG_LAST_OUTPUT_PARAMS, this.lastOutputParams!!)
             }
             if (this.hasName()) {
                 nbt.putString(ICommandBlock.Companion.TAG_CUSTOM_NAME, this.getName())
@@ -216,8 +229,8 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID. = this.levelBlock.id
-            return BlockID.== BlockID . COMMAND_BLOCK || BlockID . == BlockID.CHAIN_COMMAND_BLOCK || BlockID.== BlockID . REPEATING_COMMAND_BLOCK
+            val blockId = this.levelBlock.id
+            return blockId == BlockID.COMMAND_BLOCK || blockId == BlockID.CHAIN_COMMAND_BLOCK || blockId == BlockID.REPEATING_COMMAND_BLOCK
         }
 
     override fun getName(): String {
@@ -236,6 +249,14 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
     }
 
+    override fun getLocator(): Locator {
+        return locator
+    }
+
+    override fun getTransform(): Transform {
+        return Transform(locator)
+    }
+
     override fun onUpdate(): Boolean {
         if (this.mode != ICommandBlock.Companion.MODE_REPEATING) {
             return false
@@ -252,19 +273,18 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     }
 
     override fun execute(chain: Int): Boolean {
-        var chain = chain
-        if (!(Server.instance.settings.gameplaySettings()
-                .enableCommandBlocks() && level.gameRules.getBoolean(GameRule.COMMAND_BLOCKS_ENABLED))
+        var chain1 = chain
+        if (!(Server.instance.settings.gameplaySettings.enableCommandBlocks && level.gameRules.getBoolean(GameRule.COMMAND_BLOCKS_ENABLED))
         ) {
             return false
         }
-        if (this.levelBlock.getSide((this.levelBlock as Faceable).blockFace.opposite) is BlockCommandBlock) {
-            if (this.isConditional && lastCB.getBlockEntity()
-                    .getSuccessCount() == 0
+        val block = this.levelBlock.getSide((this.levelBlock as Faceable).blockFace.getOpposite())
+        if (block is BlockCommandBlock) {
+            if (this.isConditional && block.blockEntity!!.successCount == 0
             ) { //jump over because this CB is conditional and the last CB didn't succeed
                 val next = this.levelBlock.getSide((this.levelBlock as Faceable).blockFace)
                 if (next is BlockChainCommandBlock) {
-                    next.blockEntity!!.trigger(++chain)
+                    next.blockEntity!!.trigger(++chain1)
                 }
                 return true
             }
@@ -272,8 +292,8 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         if (this.lastExecution != level.tick.toLong()) {
             this.setConditionMet()
             if (this.isConditionMet && (this.isAuto || this.isPowered)) {
-                val cmd = this.getCommand()
-                if (!Strings.isNullOrEmpty(cmd)) {
+                val cmd = this.command
+                if (!cmd.isNullOrEmpty()) {
                     if (cmd.equals("Searge", ignoreCase = true)) {
                         this.lastOutput = "#itzlipofutzli"
                         this.successCount = 1
@@ -291,9 +311,9 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                     }
                 }
 
-                val block = this.levelBlock.getSide((this.levelBlock as Faceable).blockFace)
-                if (block is BlockChainCommandBlock) {
-                    block.blockEntity!!.trigger(++chain)
+                val block1 = this.levelBlock.getSide((this.levelBlock as Faceable).blockFace)
+                if (block1 is BlockChainCommandBlock) {
+                    block1.blockEntity!!.trigger(++chain1)
                 }
             }
 
@@ -305,7 +325,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             this.successCount = 0
         }
 
-        this.levelBlockAround.forEach(Consumer { block: Block -> block.onUpdate(Level.BLOCK_UPDATE_REDSTONE) }) //update redstone
+        this.levelBlockAround.forEach(Consumer { it.onUpdate(Level.BLOCK_UPDATE_REDSTONE) }) //update redstone
         return true
     }
 
@@ -320,15 +340,6 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             return ICommandBlock.Companion.MODE_NORMAL
         }
 
-    override fun getCommand(): String? {
-        return this.command
-    }
-
-    override fun setCommand(command: String?) {
-        this.command = command
-        this.successCount = 0
-    }
-
     override var isConditional: Boolean
         get() = this.conditionalMode
         set(conditionalMode) {
@@ -337,9 +348,11 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
 
     override fun setConditionMet(): Boolean {
-        if (this.isConditional && this.levelBlock is BlockCommandBlock) {
-            if (block.getSide(block.getBlockFace().getOpposite()) is BlockCommandBlock) {
-                this.isConditionMet = (next.getBlockEntity() as BlockEntityCommandBlock).successCount > 0
+        if (this.isConditional && this.block is BlockCommandBlock) {
+            val commandBlock = (this.block as BlockCommandBlock)
+            val sideBlock = commandBlock.getSide(commandBlock.blockFace.getOpposite())
+            if (sideBlock is BlockCommandBlock) {
+                this.isConditionMet = sideBlock.blockEntity!!.successCount > 0
             } else {
                 this.isConditionMet = false
             }
@@ -351,18 +364,6 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override fun setTrackOutput(track: Boolean) {
         this.isTrackingOutput = track
-    }
-
-    override fun getLastOutput(): String? {
-        return this.lastOutput
-    }
-
-    override fun setLastOutput(output: String?) {
-        if (Strings.isNullOrEmpty(output)) {
-            this.lastOutput = null
-        } else {
-            this.lastOutput = output
-        }
     }
 
     override fun setLastOutputParams(params: ListTag<StringTag>?) {
@@ -389,11 +390,11 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         return perm!!.addAttachment(plugin)
     }
 
-    override fun addAttachment(plugin: Plugin, name: String): PermissionAttachment {
+    override fun addAttachment(plugin: Plugin, name: String?): PermissionAttachment {
         return perm!!.addAttachment(plugin, name)
     }
 
-    override fun addAttachment(plugin: Plugin, name: String, value: Boolean): PermissionAttachment {
+    override fun addAttachment(plugin: Plugin, name: String?, value: Boolean?): PermissionAttachment {
         return perm!!.addAttachment(plugin, name, value)
     }
 
@@ -405,17 +406,9 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         perm!!.recalculatePermissions()
     }
 
-    override fun getEffectivePermissions(): Map<String, PermissionAttachmentInfo> {
-        return perm!!.effectivePermissions
-    }
+    override val isPlayer = false
 
-    override fun isPlayer(): Boolean {
-        return false
-    }
-
-    override fun isEntity(): Boolean {
-        return false
-    }
+    override val isEntity = false
 
     override fun sendMessage(message: String) {
         this.sendMessage(TranslationContainer(message))
@@ -452,21 +445,12 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
     }
 
-    override fun isOp(): Boolean {
-        return true
-    }
-
-    override fun setOp(value: Boolean) {
-    }
-
-    override fun getInventory(): Inventory {
-        return inventory
-    }
+    override var isOp = true
 
     override fun close() {
         if (!closed) {
-            for (player in HashSet(getInventory().viewers)) {
-                player.removeWindow(this.getInventory())
+            for (player in HashSet(inventory.viewers)) {
+                player.removeWindow(this.inventory)
             }
             super.close()
         }

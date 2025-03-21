@@ -15,6 +15,7 @@ import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.IntTag
 import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.Tag
 import org.chorus.utils.*
 import kotlin.math.abs
 import kotlin.math.max
@@ -247,8 +248,8 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID. = block.id
-            return BlockID.== BlockID . PISTON || BlockID . == BlockID.STICKY_PISTON
+            val blockId = block.id
+            return blockId == BlockID.PISTON || blockId == BlockID.STICKY_PISTON
         }
 
     override val spawnCompound: CompoundTag
@@ -257,7 +258,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             .putFloat("Progress", this.progress)
             .putFloat("LastProgress", this.lastProgress)
             .putList("AttachedBlocks", getAttachedBlocks())
-            .putList("BreakBlocks", ListTag())
+            .putList("BreakBlocks", ListTag<Tag<*>>())
             .putBoolean("Sticky", this.sticky)
             .putByte("State", state.toInt())
             .putByte("NewState", newState.toInt())

@@ -60,7 +60,6 @@ interface Plugin : CommandExecutor {
      * @return 这个插件是否已经启用。<br></br>Whether this plugin is enabled.
      *
      */
-    @JvmField
     val isEnabled: Boolean
 
     /**
@@ -88,7 +87,6 @@ interface Plugin : CommandExecutor {
      * @return 这个插件是否已经停用。<br></br>Whether this plugin is disabled.
      *
      */
-    @JvmField
     val isDisabled: Boolean
 
     /**
@@ -103,7 +101,6 @@ interface Plugin : CommandExecutor {
      * @return 这个插件的数据文件夹。<br></br>The data folder of this plugin.
      *
      */
-    @JvmField
     val dataFolder: File?
 
     /**
@@ -119,7 +116,6 @@ interface Plugin : CommandExecutor {
      *
      *
      */
-    @JvmField
     val description: PluginDescription?
 
     /**
@@ -288,7 +284,6 @@ interface Plugin : CommandExecutor {
      *
      *
      */
-    @JvmField
     val name: String
 
     /**
@@ -315,7 +310,6 @@ interface Plugin : CommandExecutor {
      */
     val pluginLoader: PluginLoader?
 
-    @JvmField
     val pluginClassLoader: ClassLoader?
 
     /**

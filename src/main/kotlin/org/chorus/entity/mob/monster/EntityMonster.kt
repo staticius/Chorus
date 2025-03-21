@@ -1,5 +1,6 @@
 package org.chorus.entity.mob.monster
 
+import org.chorus.Server
 import org.chorus.entity.EntityCanAttack
 import org.chorus.entity.mob.EntityMob
 import org.chorus.item.enchantment.Enchantment
@@ -9,7 +10,7 @@ import kotlin.math.max
 
 
 abstract class EntityMonster(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityCanAttack {
-    protected var spawnedByNight: Boolean = true
+    private var spawnedByNight: Boolean = true
 
     override fun initEntity() {
         super.initEntity()
@@ -18,7 +19,7 @@ abstract class EntityMonster(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
-        if (Server.instance.difficulty == 0) {
+        if (Server.instance.getDifficulty() == 0) {
             this.close()
             return true
         } else return super.onUpdate(currentTick)
@@ -31,10 +32,10 @@ abstract class EntityMonster(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk
     }
 
     override fun setOnFire(seconds: Int) {
-        var seconds = seconds
+        var seconds1 = seconds
         var level = 0
 
-        for (armor in equipment.armor) {
+        for (armor in equipment.getArmor()) {
             val fireProtection = armor.getEnchantment(Enchantment.ID_PROTECTION_FIRE)
 
             if (fireProtection != null && fireProtection.level > 0) {
@@ -42,9 +43,9 @@ abstract class EntityMonster(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk
             }
         }
 
-        seconds = (seconds * (1 - level * 0.15)).toInt()
+        seconds1 = (seconds1 * (1 - level * 0.15)).toInt()
 
-        super.setOnFire(seconds)
+        super.setOnFire(seconds1)
     }
 
     companion object {

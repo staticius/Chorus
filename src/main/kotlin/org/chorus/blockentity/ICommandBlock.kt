@@ -2,7 +2,6 @@ package org.chorus.blockentity
 
 import org.chorus.command.CommandSender
 import org.chorus.inventory.InventoryHolder
-import org.chorus.level.Level
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.StringTag
 import org.chorus.plugin.InternalPlugin
@@ -20,7 +19,6 @@ interface ICommandBlock : CommandSender, InventoryHolder {
 
     var isPowered: Boolean
 
-    @JvmOverloads
     fun trigger(chain: Int = 0): Boolean {
         /*if (this.getLevel().getGameRules().getInteger(GameRule.MAX_COMMAND_CHAIN_LENGTH) < chain) {
             return false;
@@ -28,7 +26,7 @@ interface ICommandBlock : CommandSender, InventoryHolder {
 
         val delay = this.tickDelay
         if (delay > 0) {
-            level.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, CommandBlockTrigger(this, chain), delay)
+            level!!.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, CommandBlockTrigger(this, chain), delay)
             return false
         }
 
@@ -74,8 +72,6 @@ interface ICommandBlock : CommandSender, InventoryHolder {
     var tickDelay: Int
 
     var isExecutingOnFirstTick: Boolean
-
-    override fun getLevel(): Level
 
     class CommandBlockTrigger(private val commandBlock: ICommandBlock, private val chain: Int) : Runnable {
         override fun run() {

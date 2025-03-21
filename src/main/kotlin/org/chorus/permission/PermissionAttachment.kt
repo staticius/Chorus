@@ -15,7 +15,7 @@ class PermissionAttachment(plugin: Plugin, permissible: Permissible?) {
 
     init {
         if (!plugin.isEnabled) {
-            throw PluginException("Plugin " + plugin.description.name + " is disabled")
+            throw PluginException("Plugin " + plugin.description!!.name + " is disabled")
         }
         this.permissible = permissible
         this.plugin = plugin

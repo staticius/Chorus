@@ -19,7 +19,7 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState = Compani
     override val hardness: Double
         get() = 0.5
 
-    val frictionFactor: Double
+    override val frictionFactor: Double
         get() = 0.98
 
     override fun place(
@@ -40,7 +40,7 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState = Compani
     }
 
     override fun onBreak(item: Item?): Boolean {
-        level.setBlock(this.position, get(FLOWING_WATER), true)
+        level.setBlock(this.position, get(BlockID.FLOWING_WATER), true)
         return true
     }
 
@@ -55,7 +55,7 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState = Compani
             }
         } else if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (countNeighbors() < 2) {
-                level.setBlock(this.position, layer, get(FLOWING_WATER), true)
+                level.setBlock(this.position, layer, get(BlockID.FLOWING_WATER), true)
             }
         }
         return super.onUpdate(type)
@@ -76,7 +76,7 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState = Compani
             level.setBlock(this.position, layer, this, true)
             level.scheduleUpdate(level.getBlock(this.position), ThreadLocalRandom.current().nextInt(20, 40))
         } else {
-            level.setBlock(this.position, layer, get(FLOWING_WATER), true)
+            level.setBlock(this.position, layer, get(BlockID.FLOWING_WATER), true)
             if (isSource) {
                 for (face in BlockFace.entries) {
                     val block = getSide(face)
@@ -91,7 +91,7 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState = Compani
     private fun countNeighbors(): Int {
         var neighbors = 0
         for (face in BlockFace.entries) {
-            if (getSide(face).id == FROSTED_ICE && ++neighbors >= 4) {
+            if (getSide(face).id == BlockID.FROSTED_ICE && ++neighbors >= 4) {
                 return neighbors
             }
         }
@@ -104,8 +104,10 @@ class BlockFrostedIce @JvmOverloads constructor(blockstate: BlockState = Compani
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_4, age)
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FROSTED_ICE, CommonBlockProperties.AGE_4)
-
     }
 }

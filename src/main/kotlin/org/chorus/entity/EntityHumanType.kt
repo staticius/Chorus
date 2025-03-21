@@ -22,7 +22,7 @@ import org.chorus.utils.Utils
 import java.util.concurrent.ThreadLocalRandom
 
 abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), IHuman {
-    override lateinit var inventory: HumanInventory
+    lateinit var inventory: HumanInventory
     protected var enderChestInventory: HumanEnderChestInventory? = null
     protected var offhandInventory: HumanOffHandInventory? = null
 

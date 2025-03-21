@@ -5,6 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityFlowerPot
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 import org.chorus.level.Level
@@ -23,11 +24,10 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
     override val name: String
         get() = "Flower Pot"
 
-    override val blockEntityClass: Class<out BlockEntityFlowerPot>
-        get() = BlockEntityFlowerPot::class.java
+    override fun getBlockEntityClass() = BlockEntityFlowerPot::class.java
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.FLOWER_POT
+        return BlockEntityID.FLOWER_POT
     }
 
     override fun onUpdate(type: Int): Int {
@@ -82,10 +82,10 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
             removeFlower()
             return true
         }
-
-        if (item.getBlock() is FlowerPotBlock && potBlock.isPotBlockState()) {
+        val potBlock = item.getBlock()
+        if (potBlock is FlowerPotBlock && potBlock.isPotBlockState) {
             val blockEntity = getOrCreateBlockEntity()
-            blockEntity.namedTag.putCompound("PlantBlock", potBlock.getPlantBlockTag())
+            blockEntity.namedTag.putCompound("PlantBlock", potBlock.plantBlockTag)
 
             setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.UPDATE_BIT, true)
             level.setBlock(this.position, this, true)
@@ -220,7 +220,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
      * 实现了此接口的方块可以放入花盆中
      */
     interface FlowerPotBlock {
-        val plantBlockTag: CompoundTag?
+        val plantBlockTag: CompoundTag
             /**
              * 获取方块在花盆NBT中的标签
              *
@@ -260,9 +260,11 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
             get() = true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FLOWER_POT, CommonBlockProperties.UPDATE_BIT)
-
     }
 }
 

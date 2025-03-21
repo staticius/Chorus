@@ -20,7 +20,7 @@ class BlockGlowingobsidian @JvmOverloads constructor(blockstate: BlockState = Co
         get() = 12
 
     override fun toItem(): Item {
-        return ItemBlock(get(OBSIDIAN))
+        return ItemBlock(get(BlockID.OBSIDIAN))
     }
 
     override val toolTier: Int
@@ -46,8 +46,10 @@ class BlockGlowingobsidian @JvmOverloads constructor(blockstate: BlockState = Co
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.GLOWINGOBSIDIAN)
-
     }
 }

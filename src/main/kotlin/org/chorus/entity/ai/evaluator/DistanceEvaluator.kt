@@ -14,7 +14,7 @@ class DistanceEvaluator @JvmOverloads constructor(
         if (entity.memoryStorage!!.isEmpty(type)) {
             return false
         } else {
-            val location = entity.memoryStorage!![type].vector3
+            val location = entity.memoryStorage!!.get(type).vector3
             val distance = entity.position.distance(location)
             return distance <= maxDistance && distance >= minDistance
         }

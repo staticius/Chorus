@@ -19,7 +19,7 @@ interface IMemoryStorage {
      * @param data 数据
      * @param <D>  数据类型
     </D> */
-    fun <D> put(type: MemoryType<D?>?, data: D?)
+    fun <D> put(type: MemoryType<D>, data: D)
 
     /**
      * 从指定记忆类型获取数据
@@ -31,7 +31,7 @@ interface IMemoryStorage {
      * @param <D>  数据类型
      * @return 数据
     </D> */
-    operator fun <D> get(type: MemoryType<D?>?): D
+    operator fun <D> get(type: MemoryType<D>): D
 
     /**
      * 获取所有记忆
@@ -51,7 +51,7 @@ interface IMemoryStorage {
      *
      * @param type 记忆类型
      */
-    fun clear(type: MemoryType<*>?)
+    fun clear(type: MemoryType<*>)
 
     /**
      * 获取记忆存储所属的实体
@@ -72,7 +72,7 @@ interface IMemoryStorage {
      * @param type 记忆类型
      * @return 是否为空
      */
-    fun isEmpty(type: MemoryType<*>?): Boolean {
+    fun isEmpty(type: MemoryType<*>): Boolean {
         return get(type) == null
     }
 
@@ -85,7 +85,7 @@ interface IMemoryStorage {
      * @param type 记忆类型
      * @return 是否不为空
      */
-    fun notEmpty(type: MemoryType<*>?): Boolean {
+    fun notEmpty(type: MemoryType<*>): Boolean {
         return get(type) != null
     }
 
@@ -99,9 +99,9 @@ interface IMemoryStorage {
      * @param to   指定的数据
      * @return 是否相同
      */
-    fun <D> compareDataTo(type: MemoryType<D?>?, to: Any?): Boolean {
+    fun <D> compareDataTo(type: MemoryType<D>, to: Any?): Boolean {
         val value: D
-        return if ((get<D>(type).also { value = it }) != null) (value == to) else to == null
+        return if ((get(type).also { value = it }) != null) (value == to) else to == null
     }
 
     /**

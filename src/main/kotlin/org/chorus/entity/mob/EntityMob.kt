@@ -100,7 +100,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
         val storage = memoryStorage
         if (storage != null) {
-            storage.put<Int>(CoreMemoryTypes.ENTITY_SPAWN_TIME, level!!.tick)
+            storage.put(CoreMemoryTypes.ENTITY_SPAWN_TIME, level!!.tick)
             MemoryType.persistentMemories.forEach(Consumer { memory ->
                 val mem = memory as MemoryType<Any?>
                 val data = mem.codec!!.decoder.apply(this.namedTag)
@@ -201,8 +201,8 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     override fun attack(source: EntityDamageEvent): Boolean {
         val storage = memoryStorage
         if (storage != null) {
-            storage.put<EntityDamageEvent>(CoreMemoryTypes.Companion.BE_ATTACKED_EVENT, source)
-            storage.put<Int>(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, level!!.tick)
+            storage.put(CoreMemoryTypes.BE_ATTACKED_EVENT, source)
+            storage.put(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, level!!.tick)
         }
 
         if (this.isClosed() || !this.isAlive()) {
@@ -211,7 +211,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
         if (source is EntityDamageByEntityEvent && source.damager !is EntityCreeper) {
             //更新仇恨目标
-            memoryStorage!!.put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, source.damager)
+            memoryStorage!!.put(CoreMemoryTypes.ATTACK_TARGET, source.damager)
         }
 
         if (source.cause != DamageCause.VOID && source.cause != DamageCause.CUSTOM && source.cause != DamageCause.MAGIC && source.cause != DamageCause.HUNGER) {
@@ -307,9 +307,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         return armor
     }
 
-    override fun getInventory(): Inventory {
-        return this.equipment
-    }
+    override val inventory = this.equipment
 
     override fun getDiffHandDamage(): FloatArray? {
         return this.diffHandDamage

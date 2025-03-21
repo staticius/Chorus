@@ -5,6 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.Attachment
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.inventory.BlockInventoryHolder
+import org.chorus.inventory.GrindstoneInventory
 import org.chorus.inventory.Inventory
 import org.chorus.item.*
 import org.chorus.level.Level
@@ -44,15 +45,15 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
         get() = 6.0
 
     override var blockFace: BlockFace
-        get() = fromHorizontalIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION))
+        get() = fromHorizontalIndex(getPropertyValue(CommonBlockProperties.DIRECTION))
         set(face) {
             if (face.horizontalIndex == -1) {
                 return
             }
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face.horizontalIndex)
+            setPropertyValue(CommonBlockProperties.DIRECTION, face.horizontalIndex)
         }
 
-    var attachmentType: Attachment?
+    var attachmentType: Attachment
         get() = getPropertyValue(
             CommonBlockProperties.ATTACHMENT
         )
@@ -82,13 +83,12 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
                 connectedFace == blockFace.getOpposite()
             }
         }
-        return false
     }
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!checkSupport()) {
-                level.useBreakOn(this.position, Item.get(Item.DIAMOND_PICKAXE))
+                level.useBreakOn(this.position, Item.get(ItemID.DIAMOND_PICKAXE))
             }
             return type
         }
@@ -103,25 +103,25 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
         fx: Double,
         fy: Double,
         fz: Double,
-        player: Player
+        player: Player?
     ): Boolean {
-        var face = face
+        var face1 = face
         if (!block.isAir && block.canBeReplaced()) {
-            face = BlockFace.UP
+            face1 = BlockFace.UP
         }
-        when (face) {
+        when (face1) {
             BlockFace.UP -> {
                 attachmentType = Attachment.STANDING
-                blockFace = player.getDirection().getOpposite()
+                blockFace = player!!.getDirection().getOpposite()
             }
 
             BlockFace.DOWN -> {
                 attachmentType = Attachment.HANGING
-                blockFace = player.getDirection().getOpposite()
+                blockFace = player!!.getDirection().getOpposite()
             }
 
             else -> {
-                blockFace = face
+                blockFace = face1
                 attachmentType = Attachment.SIDE
             }
         }
@@ -143,11 +143,10 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
 
     private fun checkSupport(support: Block): Boolean {
         val id = support.id
-        return (id != AIR) && (id != BUBBLE_COLUMN) && (support !is BlockLiquid)
+        return (id != BlockID.AIR) && (id != BlockID.BUBBLE_COLUMN) && (support !is BlockLiquid)
     }
 
     override fun recalculateBoundingBox(): AxisAlignedBB {
-        val attachmentType = attachmentType!!
         val blockFace = blockFace
         val south = this.isConnectedTo(BlockFace.SOUTH, attachmentType, blockFace)
         val north = this.isConnectedTo(BlockFace.NORTH, attachmentType, blockFace)
@@ -201,9 +200,11 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
         return Supplier<Inventory?> { GrindstoneInventory(this) }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.GRINDSTONE, CommonBlockProperties.ATTACHMENT, CommonBlockProperties.DIRECTION)
-
     }
 }

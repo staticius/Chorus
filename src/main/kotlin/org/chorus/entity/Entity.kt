@@ -242,7 +242,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     @JvmField
     protected var inEndPortal: Boolean = false
     val isPlayer: Boolean = this is Player
-    private var maxHealth: Int = 20
+    var maxHealth: Int = 20
     var name: String? = null
         protected set
 

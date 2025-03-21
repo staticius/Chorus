@@ -60,11 +60,11 @@ class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
         return perm.addAttachment(plugin)
     }
 
-    override fun addAttachment(plugin: Plugin, name: String): PermissionAttachment {
+    override fun addAttachment(plugin: Plugin, name: String?): PermissionAttachment {
         return perm.addAttachment(plugin, name)
     }
 
-    override fun addAttachment(plugin: Plugin, name: String, value: Boolean): PermissionAttachment {
+    override fun addAttachment(plugin: Plugin, name: String?, value: Boolean?): PermissionAttachment {
         return perm.addAttachment(plugin, name, value)
     }
 
@@ -74,10 +74,6 @@ class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
 
     override fun recalculatePermissions() {
         perm.recalculatePermissions()
-    }
-
-    override fun getEffectivePermissions(): Map<String, PermissionAttachmentInfo> {
-        return perm.getEffectivePermissions()
     }
 
     override fun isOp(): Boolean {

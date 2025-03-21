@@ -33,7 +33,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventGenericPacket
 import org.chorus.network.protocol.LevelEventPacket
 import java.util.*
-import java.util.Set
 import java.util.concurrent.*
 import kotlin.collections.setOf
 import kotlin.collections.toTypedArray
@@ -43,13 +42,13 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         return EntityID.CREAKING
     }
 
-    protected var creakingHeart: BlockEntityCreakingHeart? = null
+    var creakingHeart: BlockEntityCreakingHeart? = null
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(DoNothingExecutor(), EntityCheckEvaluator(CoreMemoryTypes.Companion.STARING_PLAYER), 5, 1),
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_CREAKING_AMBIENT),
@@ -71,11 +70,11 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 PlayerStaringCreakingSensor(40.0, 70.0, true),
                 NearestPlayerCreakingSensor(40.0, 0.0, 0)
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )
@@ -102,12 +101,12 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
             return false
         }
         if (source is EntityDamageByEntityEvent && source.damager !is EntityCreeper) {
-            memoryStorage!!.put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, source.damager)
+            memoryStorage!!.put(CoreMemoryTypes.ATTACK_TARGET, source.damager)
         }
         val storage = memoryStorage
         if (storage != null) {
-            storage.put<EntityDamageEvent>(CoreMemoryTypes.Companion.BE_ATTACKED_EVENT, source)
-            storage.put<Int>(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, level!!.tick)
+            storage.put(CoreMemoryTypes.BE_ATTACKED_EVENT, source)
+            storage.put(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, level!!.tick)
         }
 
         val paleLogs = Arrays.stream(
@@ -126,7 +125,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
                     val clump = Block.get(BlockID.RESIN_CLUMP) as BlockResinClump
                     clump.setPropertyValue(
                         CommonBlockProperties.MULTI_FACE_DIRECTION_BITS,
-                        clump.getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) or (1 shl face.opposite.duswneIndex)
+                        clump.getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) or (1 shl face.getOpposite().indexDUSWNE)
                     )
                     side.level.setBlock(side.position, clump)
                     resinSpawned++
@@ -153,8 +152,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         Server.broadcastPacket(this.getViewers().values, packet)
     }
 
-    fun spawnResin() {
-    }
+    fun spawnResin() {}
 
     override fun kill() {
         //ToDo: Creaking Death Animation
@@ -185,7 +183,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
                 lookTarget = creakingHeart!!.position
             }
             if (memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME)) {
-                if (level!!.tick - memoryStorage!!.get<Int>(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME) < 51) {
+                if (level!!.tick - memoryStorage!![CoreMemoryTypes.LAST_BE_ATTACKED_TIME]!! < 51) {
                     sendParticleTrail()
                 }
             }
@@ -215,9 +213,9 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     private inner class NearestPlayerCreakingSensor(range: Double, minRange: Double, period: Int) :
         NearestPlayerSensor(range, minRange, period) {
         override fun sense(entity: EntityMob) {
-            val before = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
+            val before = entity.memoryStorage!![CoreMemoryTypes.NEAREST_PLAYER]
             super.sense(entity)
-            val after = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
+            val after = entity.memoryStorage!![CoreMemoryTypes.NEAREST_PLAYER]
             if (before !== after) {
                 if (before == null) {
                     entity.level!!.addSound(entity.position, Sound.MOB_CREAKING_ACTIVATE)
@@ -231,9 +229,9 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     private inner class PlayerStaringCreakingSensor(range: Double, triggerDiff: Double, ignoreRotation: Boolean) :
         PlayerStaringSensor(range, triggerDiff, ignoreRotation) {
         override fun sense(entity: EntityMob) {
-            val before = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.STARING_PLAYER)
+            val before = entity.memoryStorage!![CoreMemoryTypes.STARING_PLAYER]
             super.sense(entity)
-            val after = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.STARING_PLAYER)
+            val after = entity.memoryStorage!![CoreMemoryTypes.STARING_PLAYER]
             if (before !== after) {
                 if (before == null) {
                     entity.level!!.addSound(entity.position, Sound.MOB_CREAKING_FREEZE)

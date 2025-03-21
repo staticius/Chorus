@@ -2,6 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityID
 
 class BlockGlowFrame @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFrame(blockstate) {
@@ -9,15 +10,19 @@ class BlockGlowFrame @JvmOverloads constructor(blockstate: BlockState = Companio
         get() = "Glow Item Frame"
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.GLOW_ITEM_FRAME
-
-        companion object {
-            val properties: BlockProperties = BlockProperties(
-                BlockID.GLOW_FRAME,
-                CommonBlockProperties.FACING_DIRECTION,
-                CommonBlockProperties.ITEM_FRAME_MAP_BIT,
-                CommonBlockProperties.ITEM_FRAME_PHOTO_BIT
-            )
-
-        }
+        return BlockEntityID.GLOW_ITEM_FRAME
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(
+            BlockID.GLOW_FRAME,
+            CommonBlockProperties.FACING_DIRECTION,
+            CommonBlockProperties.ITEM_FRAME_MAP_BIT,
+            CommonBlockProperties.ITEM_FRAME_PHOTO_BIT
+        )
+
+    }
+}

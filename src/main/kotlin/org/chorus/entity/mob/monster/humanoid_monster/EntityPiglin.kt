@@ -398,7 +398,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         FleeFromTargetExecutor(memory, 0.5f, true, 8f) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            if (entity.position.distance(entity.memoryStorage!![getMemory()].vector3) < 8) {
+            if (entity.position.distance(entity.memoryStorage!!.get(getMemory()).vector3) < 8) {
                 entity.level!!.addSound(entity.position, Sound.MOB_PIGLIN_RETREAT)
             }
         }
@@ -414,7 +414,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage!![memory].id)
+            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage!!.get(memory).id)
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(
                 entity.position,
@@ -429,9 +429,9 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                     .isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
             }.forEach { entity1: Entity ->
                 (entity1 as EntityPiglin).memoryStorage!!
-                    .put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage!![memory])
+                    .put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage!!.get(memory))
             }
-            if (entity.memoryStorage!![memory] is EntityHoglin) {
+            if (entity.memoryStorage!!.get(memory) is EntityHoglin) {
                 entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
             }
         }

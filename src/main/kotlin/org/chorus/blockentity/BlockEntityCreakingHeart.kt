@@ -1,7 +1,9 @@
 package org.chorus.blockentity
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.mob.monster.EntityCreaking
 import org.chorus.event.entity.CreatureSpawnEvent
 import org.chorus.level.Level
@@ -21,7 +23,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
     var spawnRangeVertical: Double = 8.5
 
     init {
-        movable = true
+        isMovable = true
     }
 
     override fun initBlockEntity() {
@@ -32,9 +34,9 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
     }
 
     override val isBlockEntityValid: Boolean
-        get() = this.block.id == Block.CREAKING_HEART
+        get() = this.block.id == BlockID.CREAKING_HEART
 
-    override var name: String
+    override var name: String?
         get() = "Creaking Heart"
         set(name) {
             super.name = name
@@ -45,9 +47,9 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
 
     fun setLinkedCreaking(creaking: EntityCreaking?) {
         if (linkedCreaking != null) {
-            linkedCreaking.setCreakingHeart(null)
+            linkedCreaking!!.creakingHeart = (null)
         }
-        creaking?.setCreakingHeart(this)
+        creaking?.creakingHeart = (this)
         linkedCreaking = creaking
     }
 
@@ -55,7 +57,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
         if (level.tick % 40 == 0 && isBlockEntityValid && heart.isActive) {
             level.addSound(this.position, Sound.BLOCK_CREAKING_HEART_AMBIENT)
         }
-        if ((linkedCreaking == null || !linkedCreaking.isAlive()) && isBlockEntityValid && heart.isActive && (!level.isDay || level.isRaining || level.isThundering)) {
+        if ((linkedCreaking == null || !linkedCreaking!!.isAlive()) && isBlockEntityValid && heart.isActive && (!level.isDay || level.isRaining || level.isThundering())) {
             val pos = Locator(
                 position.x + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
                 position.y,
@@ -78,10 +80,10 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
                 }
                 i++
             }
-            val ent = Entity.createEntity(Entity.CREAKING, pos)
+            val ent = Entity.createEntity(EntityID.CREAKING, pos)
             if (ent != null) {
                 val ev =
-                    CreatureSpawnEvent(ent.networkId, pos, CompoundTag(), CreatureSpawnEvent.SpawnReason.CREAKING_HEART)
+                    CreatureSpawnEvent(ent.getNetworkId(), pos, CompoundTag(), CreatureSpawnEvent.SpawnReason.CREAKING_HEART)
                 Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     ent.close()
@@ -97,7 +99,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
 
     override fun onBreak(isSilkTouch: Boolean) {
         if (linkedCreaking != null) {
-            linkedCreaking.kill()
+            linkedCreaking!!.kill()
         }
         super.onBreak(isSilkTouch)
     }

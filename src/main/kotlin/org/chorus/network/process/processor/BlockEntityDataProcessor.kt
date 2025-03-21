@@ -23,7 +23,7 @@ class BlockEntityDataProcessor : DataPacketProcessor<BlockEntityDataPacket>() {
         val t = player.level!!.getBlockEntity(pos)
         if (t is BlockEntitySpawnable) {
             val nbt = pk.namedTag
-            if (!t.updateCompoundTag(nbt, player)) {
+            if (!t.updateCompoundTag(nbt!!, player)) {
                 t.spawnTo(player)
             }
         }

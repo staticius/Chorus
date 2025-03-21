@@ -7,11 +7,11 @@ class Permission @JvmOverloads constructor(
     @JvmField val name: String,
     description: String? = null,
     defualtValue: String? = null,
-    children: MutableMap<String?, Boolean?> = HashMap()
+    children: MutableMap<String?, Boolean> = HashMap()
 ) {
     var description: String = description ?: ""
 
-    var children: MutableMap<String?, Boolean?> = HashMap()
+    var children: MutableMap<String?, Boolean> = HashMap()
         private set
 
     private var defaultValue: String
@@ -100,7 +100,7 @@ class Permission @JvmOverloads constructor(
         ): Permission {
             var defaultValue = defaultValue
             var desc: String? = null
-            val children: MutableMap<String?, Boolean?> = HashMap()
+            val children: MutableMap<String?, Boolean> = HashMap()
             if (data.containsKey("default")) {
                 val value = getByName(data["default"].toString())
                 if (value != null) {

@@ -193,8 +193,8 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
 
     override val isBlockEntityValid: Boolean
         get() {
-            val BlockID. = this.levelBlock.id
-            return BlockID.=== BlockID . STRUCTURE_BLOCK
+            val blockId = this.levelBlock.id
+            return blockId === BlockID.STRUCTURE_BLOCK
         }
 
     override var name: String?

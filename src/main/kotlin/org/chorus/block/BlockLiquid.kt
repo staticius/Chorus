@@ -583,7 +583,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
     }
 
 
-    protected fun liquidCollide(cause: Block?, result: Block): Boolean {
+    fun liquidCollide(cause: Block?, result: Block): Boolean {
         val event = BlockFromToEvent(this, result)
         Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {

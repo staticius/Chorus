@@ -2,15 +2,16 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.Server.Companion.instance
-import org.chorus.event.Event.isCancelled
 import org.chorus.event.block.BlockFadeEvent
+import org.chorus.event.block.BlockSpreadEvent
 import org.chorus.item.*
 import org.chorus.level.Level
 import org.chorus.level.Sound
-import org.chorus.level.generator.`object`.BlockManager.applyBlockUpdate
-import org.chorus.level.generator.`object`.legacytree.LegacyTallGrass.growGrass
+import org.chorus.level.generator.`object`.BlockManager
+import org.chorus.level.generator.`object`.legacytree.LegacyTallGrass
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.*
+import org.chorus.utils.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 
 open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
@@ -37,20 +38,20 @@ open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
                 item.count--
             }
             level.addParticle(BoneMealParticle(this.position))
-            val blockManager: BlockManager = BlockManager(this.level)
-            LegacyTallGrass.growGrass(blockManager, this.position, NukkitRandom())
+            val blockManager = BlockManager(this.level)
+            LegacyTallGrass.growGrass(blockManager, this.position, ChorusRandom())
             blockManager.applyBlockUpdate()
             return true
         } else if (item.isHoe) {
             item.useOn(this)
-            level.setBlock(this.position, get(FARMLAND))
+            level.setBlock(this.position, get(BlockID.FARMLAND))
             if (player != null) {
                 player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
             return true
         } else if (item.isShovel) {
             item.useOn(this)
-            level.setBlock(this.position, get(GRASS_PATH))
+            level.setBlock(this.position, get(BlockID.GRASS_PATH))
             if (player != null) {
                 player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
@@ -68,7 +69,7 @@ open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
             // but only if they cause the light level above the grass block to be four or below (like water does),
             // and the surrounding area is not otherwise sufficiently lit up.
             if (up().lightFilter > 1) {
-                val ev = BlockFadeEvent(this, get(DIRT))
+                val ev = BlockFadeEvent(this, get(BlockID.DIRT))
                 instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
                     level.setBlock(this.position, ev.newState)
@@ -90,11 +91,11 @@ open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
                 val y = random.nextInt(position.y.toInt() - 3, position.y.toInt() + 1 + 1)
                 val z = random.nextInt(position.z.toInt() - 1, position.z.toInt() + 1 + 1)
                 val block = level.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
-                if (block.id == Block.DIRT // The dirt block must have a light level of at least 4 above it.
+                if (block.id == BlockID.DIRT // The dirt block must have a light level of at least 4 above it.
                     && level.getFullLight(block.position) >= 4 // Any block directly above the dirt block must not reduce light by 2 levels or more.
                     && block.up().lightFilter < 2
                 ) {
-                    val ev: BlockSpreadEvent = BlockSpreadEvent(block, this, get(GRASS_BLOCK))
+                    val ev = BlockSpreadEvent(block, this, get(BlockID.GRASS_BLOCK))
                     instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         level.setBlock(block.position, ev.newState)
@@ -111,14 +112,16 @@ open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
     }
 
     override fun getDrops(item: Item): Array<Item> {
-        return arrayOf(get(DIRT).toItem())
+        return arrayOf(get(BlockID.DIRT).toItem())
     }
 
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.GRASS_BLOCK)
-
     }
 }

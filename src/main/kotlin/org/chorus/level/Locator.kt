@@ -91,7 +91,7 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
     val tickCachedLevelBlock: Block
         get() = level.getTickCachedBlock(this.position)
 
-    val levelBlockAround: Set<Block?>
+    val levelBlockAround: Set<Block>
         get() = level.getBlockAround(this.position)
 
     fun getLevelBlockAtLayer(layer: Int): Block {

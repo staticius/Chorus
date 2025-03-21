@@ -2,8 +2,7 @@ package org.chorus.block
 
 class BlockLimeConcretePowder @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockConcretePowder(blockstate) {
-    override val concrete: BlockConcrete
-        get() = BlockLimeConcrete()
+    override fun getConcrete() = BlockLimeConcrete()
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIME_CONCRETE_POWDER)

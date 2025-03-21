@@ -42,10 +42,10 @@ class BlockGlowLichen : BlockLichen {
 
         val random = keyList[rand]
 
-        val newLichen = if (random!!.id == GLOW_LICHEN) {
+        val newLichen = if (random!!.id == BlockID.GLOW_LICHEN) {
             random
         } else {
-            get(GLOW_LICHEN)
+            get(BlockID.GLOW_LICHEN)
         }
 
         newLichen.setPropertyValue<Int, IntPropertyType>(
@@ -103,7 +103,7 @@ class BlockGlowLichen : BlockLichen {
         supportNeighbor: Block
     ): Boolean {
         // Air is a valid candidate!
-        if (supportNeighbor.id == AIR) {
+        if (supportNeighbor.id == BlockID.AIR) {
             candidates[supportNeighbor] = side
         }
 
@@ -112,11 +112,11 @@ class BlockGlowLichen : BlockLichen {
     }
 
     private fun shouldAddSupportNeighborOppositeSide(side: BlockFace, supportNeighborOppositeSide: Block): Boolean {
-        if (supportNeighborOppositeSide.id == AIR || supportNeighborOppositeSide.id == GLOW_LICHEN) {
-            return supportNeighborOppositeSide.id != GLOW_LICHEN ||
+        if (supportNeighborOppositeSide.id == BlockID.AIR || supportNeighborOppositeSide.id == BlockID.GLOW_LICHEN) {
+            return supportNeighborOppositeSide.id != BlockID.GLOW_LICHEN ||
                     (!(supportNeighborOppositeSide as BlockGlowLichen).isGrowthToSide(side) && supportNeighborOppositeSide.getSide(
                         side
-                    ).id != AIR)
+                    ).id != BlockID.AIR)
         }
         return false
     }
@@ -124,9 +124,11 @@ class BlockGlowLichen : BlockLichen {
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.GLOW_LICHEN, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
-
     }
 }

@@ -6,8 +6,7 @@ import java.util.Set
 
 class BlockYellowWool @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockWool(blockstate) {
-    override val dyeColor: DyeColor
-        get() = DyeColor.YELLOW
+    override fun getDyeColor()  = DyeColor.YELLOW
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.YELLOW_WOOL, Set.of(BlockTags.PNX_WOOL))

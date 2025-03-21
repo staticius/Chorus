@@ -937,7 +937,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         return tradeInventory
     }
 
-    override fun getInventory(): EntityEquipmentInventory {
+    fun getInventory(): EntityEquipmentInventory {
         return inventory!!
     }
 
