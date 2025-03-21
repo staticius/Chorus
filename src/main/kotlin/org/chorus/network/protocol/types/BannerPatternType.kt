@@ -1,8 +1,5 @@
 package org.chorus.network.protocol.types
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
-
 enum class BannerPatternType(val typeId: Int, val code: String, val patternName: String) {
     BORDER(0, "bo", "Border"),
     BRICKS(1, "bri", "Bricks"),
@@ -46,22 +43,22 @@ enum class BannerPatternType(val typeId: Int, val code: String, val patternName:
     PIGLIN(39, "pig", "Piglin");
 
     companion object {
-        var code2PatternType: Object2ObjectArrayMap<String?, BannerPatternType> = Object2ObjectArrayMap()
-        var typeId2PatternType: Int2ObjectArrayMap<BannerPatternType> = Int2ObjectArrayMap()
+        private var code2PatternType: MutableMap<String, BannerPatternType> = HashMap()
+        private var typeId2PatternType: MutableMap<Int, BannerPatternType> = HashMap()
 
         init {
             val values = entries.toTypedArray()
             for (value in values) {
                 code2PatternType[value.code] = value
-                typeId2PatternType.put(value.typeId, value)
+                typeId2PatternType[value.typeId] = value
             }
         }
 
-        fun fromCode(code: String?): BannerPatternType? {
+        fun fromCode(code: String): BannerPatternType? {
             return code2PatternType[code]
         }
 
-        fun fromTypeId(typeId: Int): BannerPatternType {
+        fun fromTypeId(typeId: Int): BannerPatternType? {
             return typeId2PatternType[typeId]
         }
     }

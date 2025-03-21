@@ -3,14 +3,14 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.Block.Companion.get
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
-import org.chorus.math.AxisAlignedBB.intersectsWith
+import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
-import org.chorus.registry.BiomeRegistry.get
-import org.chorus.registry.BlockRegistry.get
-
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.utils.Faceable
 
 abstract class BlockStairs(blockState: BlockState) : BlockTransparent(blockState), Faceable {
     override var minY: Double
@@ -140,13 +140,12 @@ abstract class BlockStairs(blockState: BlockState) : BlockTransparent(blockState
             )
         }
 
-    var blockFace: BlockFace?
-        get() = CommonPropertyMap.EWSN_DIRECTION.inverse()
-            .get(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.WEIRDO_DIRECTION))
+    override var blockFace: BlockFace
+        get() = CommonPropertyMap.EWSN_DIRECTION.inverse()[getPropertyValue(CommonBlockProperties.WEIRDO_DIRECTION)]!!
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(
+            setPropertyValue(
                 CommonBlockProperties.WEIRDO_DIRECTION,
-                CommonPropertyMap.EWSN_DIRECTION.get(face)
+                CommonPropertyMap.EWSN_DIRECTION[face]!!
             )
         }
 }

@@ -23,7 +23,6 @@ interface BlockEntityNameable {
      * @param name 这个事物的新名字。<br></br>The new name of this object.
      *
      */
-    @JvmField
     var name: String?
 
     /**

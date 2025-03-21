@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.inventory.SmeltingInventory
 import org.chorus.inventory.SmokerInventory
@@ -26,7 +27,7 @@ class BlockEntitySmoker(chunk: IChunk, nbt: CompoundTag) : BlockEntityFurnace(ch
     }
 
     override fun matchRecipe(raw: Item): SmeltingRecipe? {
-        return server.recipeRegistry.findSmokerRecipe(raw)
+        return Server.instance.recipeRegistry.findSmokerRecipe(raw)
     }
 
     override val speedMultiplier: Int

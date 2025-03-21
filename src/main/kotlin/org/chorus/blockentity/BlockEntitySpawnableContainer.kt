@@ -13,7 +13,8 @@ import java.util.function.Consumer
 
 abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
-    protected var inventory: ContainerInventory? = null
+
+    override lateinit var inventory: ContainerInventory
 
 
     override fun loadNBT() {
@@ -26,7 +27,7 @@ abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : 
         val list = namedTag.getList("Items") as ListTag<CompoundTag>
         for (compound in list.all) {
             val item = NBTIO.getItemHelper(compound)
-            inventory!!.setItemInternal(compound.getByte("Slot").toInt(), item)
+            inventory.setItemInternal(compound.getByte("Slot").toInt(), item)
         }
     }
 

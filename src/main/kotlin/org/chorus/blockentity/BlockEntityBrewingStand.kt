@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import org.chorus.Server
 import org.chorus.block.BlockBrewingStand
 import org.chorus.block.BlockID
 import org.chorus.block.property.CommonBlockProperties
@@ -58,7 +59,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         this.fuelTotal = namedTag.getShort("FuelTotal").toInt()
     }
 
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Brewing Stand"
         set(name) {
             if (name == null || name == "") {
@@ -162,7 +163,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
         if (brewTime == MAX_BREW_TIME) {
             val e = StartBrewEvent(this)
-            server.pluginManager.callEvent(e)
+            Server.instance.pluginManager.callEvent(e)
 
             if (e.isCancelled) {
                 return false
@@ -181,7 +182,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
         //20 seconds
         val e = BrewEvent(this)
-        server.pluginManager.callEvent(e)
+        Server.instance.pluginManager.callEvent(e)
 
         if (e.isCancelled) {
             stopBrewing()

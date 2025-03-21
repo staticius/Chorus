@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.BlockHopper.IHopper
 import org.chorus.block.property.CommonBlockProperties
@@ -102,7 +103,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             position.floorZ
         ) == Block.HOPPER
 
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Hopper"
         set(name) {
             if (name == null || name.isEmpty()) {
@@ -199,7 +200,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         var changed = pushItems() || pushItemsIntoMinecart()
 
         val event = HopperSearchItemEvent(this, false)
-        server.pluginManager.callEvent(event)
+        Server.instance.pluginManager.callEvent(event)
         if (!event.isCancelled) {
             changed = if (blockEntity is InventoryHolder || blockSide is BlockComposter) {
                 pullItems(this, this) || changed
@@ -242,7 +243,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                         itemToAdd,
                         InventoryMoveItemEvent.Action.SLOT_CHANGE
                     )
-                    server.pluginManager.callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
                     if (ev.isCancelled) continue
 
                     val items = inventory!!.addItem(itemToAdd)
@@ -297,7 +298,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                         this.inventory, holderInventory,
                         this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                     )
-                    server.pluginManager.callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
 
                     if (ev.isCancelled) continue
 
@@ -364,7 +365,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                                 this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
-                            server.pluginManager.callEvent(event)
+                            Server.instance.pluginManager.callEvent(event)
 
                             if (!event.isCancelled) {
                                 inventory.setSmelting(itemToAdd)
@@ -376,7 +377,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                                 this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
-                            server.pluginManager.callEvent(event)
+                            Server.instance.pluginManager.callEvent(event)
 
                             if (!event.isCancelled) {
                                 smelting.count++
@@ -392,7 +393,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                                 this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
-                            server.pluginManager.callEvent(event)
+                            Server.instance.pluginManager.callEvent(event)
 
                             if (!event.isCancelled) {
                                 inventory.setFuel(itemToAdd)
@@ -404,7 +405,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                                 this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
-                            server.pluginManager.callEvent(event)
+                            Server.instance.pluginManager.callEvent(event)
 
                             if (!event.isCancelled) {
                                 fuel.count++
@@ -444,7 +445,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                                 this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
-                            server.pluginManager.callEvent(event)
+                            Server.instance.pluginManager.callEvent(event)
 
                             if (!event.isCancelled) {
                                 inventory.ingredient = itemToAdd
@@ -456,7 +457,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                                 this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
-                            server.pluginManager.callEvent(event)
+                            Server.instance.pluginManager.callEvent(event)
 
                             if (!event.isCancelled) {
                                 ingredient.count++
@@ -533,7 +534,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                         itemToAdd,
                         InventoryMoveItemEvent.Action.SLOT_CHANGE
                     )
-                    server.pluginManager.callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
 
                     if (ev.isCancelled) {
                         continue

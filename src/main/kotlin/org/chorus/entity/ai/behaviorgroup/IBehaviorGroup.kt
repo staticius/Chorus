@@ -81,32 +81,32 @@ interface IBehaviorGroup {
     /**
      * @return 行为组包含的行为 [IBehavior]<br></br>Behaviors contained in Behavior Groups [IBehavior]
      */
-    fun getBehaviors(): Set<IBehavior?>?
+    fun getBehaviors(): Set<IBehavior>
 
     /**
      * @return 行为组包含的核心行为 [IBehavior]<br></br>Core Behaviors Contained by Behavior Groups [IBehavior]
      */
-    fun getCoreBehaviors(): Set<IBehavior?>?
+    fun getCoreBehaviors(): Set<IBehavior>
 
     /**
      * @return 被激活的行为 [IBehavior]<br></br>Activated Behavior [IBehavior]
      */
-    fun getRunningBehaviors(): Set<IBehavior?>?
+    fun getRunningBehaviors(): Set<IBehavior>
 
     /**
      * @return 被激活的核心行为 [IBehavior]<br></br>Activated Core Behavior [IBehavior]
      */
-    fun getRunningCoreBehaviors(): Set<IBehavior?>?
+    fun getRunningCoreBehaviors(): Set<IBehavior>
 
     /**
      * @return 行为组包含的传感器 [ISensor]<br></br>Behavior group includes sensors [ISensor]
      */
-    fun getSensors(): Set<ISensor?>?
+    fun getSensors(): Set<ISensor>
 
     /**
      * @return 行为组包含的控制器 [IController]<br></br>Behavior group contains the controller [IController]
      */
-    fun getControllers(): Set<IController?>?
+    fun getControllers(): Set<IController>
 
     /**
      * @return 行为组使用的寻路器 [IRouteFinder]<br></br>Routefinder used by behavior groups [IRouteFinder]
@@ -126,7 +126,7 @@ interface IBehaviorGroup {
     /**
      * @return 行为组的记忆存储器 [IMemoryStorage]<br></br>Behavior Group Memory Storage [IMemoryStorage]
      */
-    fun getMemoryStorage(): IMemoryStorage?
+    fun getMemoryStorage(): IMemoryStorage
 
     /**
      * @return 下一gt是否强制更新路径<br></br>Whether the next gt is forced to update the path
@@ -154,6 +154,6 @@ interface IBehaviorGroup {
 
     fun save(entity: EntityMob) {
         //EmptyBehaviorGroup will return null
-        if (getMemoryStorage() != null) getMemoryStorage()!!.encode()
+        getMemoryStorage().encode()
     }
 }

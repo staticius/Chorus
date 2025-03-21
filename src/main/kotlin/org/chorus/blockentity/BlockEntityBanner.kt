@@ -1,6 +1,6 @@
 package org.chorus.blockentity
 
-import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.types.BannerPattern
@@ -20,8 +20,8 @@ class BlockEntityBanner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
     override val isBlockEntityValid: Boolean
         get() = this.block
-            .id == Block.WALL_BANNER || this.block
-            .id == Block.STANDING_BANNER
+            .id == BlockID.WALL_BANNER || this.block
+            .id == BlockID.STANDING_BANNER
 
     override fun saveNBT() {
         super.saveNBT()

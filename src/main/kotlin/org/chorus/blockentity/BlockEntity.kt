@@ -1,6 +1,5 @@
 package org.chorus.blockentity
 
-import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.level.Locator
 import org.chorus.level.format.IChunk
@@ -8,13 +7,12 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.registry.Registries
 import org.chorus.scheduler.Task
-import org.chorus.utils.ChunkException
+import org.chorus.utils.Loggable
 
 abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.provider.level),
     BlockEntityID {
-    @JvmField
-    var chunk: IChunk?
-    open var name: String
+
+    open var name: String? = ""
 
     @JvmField
     var id: Long
@@ -25,18 +23,10 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
 
     @JvmField
     var namedTag: CompoundTag
-    protected var server: Server
 
     init {
-        if (chunk.provider == null || chunk.provider.level == null) {
-            throw ChunkException("Invalid garbage Chunk given to Block Entity")
-        }
-
-        this.server = Server.instance
-        this.chunk = chunk
         this.setLevel(chunk.provider.level)
         this.namedTag = nbt
-        this.name = ""
         this.id = count++
         position.x = namedTag.getInt("x").toDouble()
         position.y = namedTag.getInt("y").toDouble()
@@ -48,7 +38,7 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
 
         check(!closed) { "Could not create the entity " + javaClass.name + ", the initializer closed it on construction." }
 
-        this.chunk!!.addBlockEntity(this)
+        this.chunk.addBlockEntity(this)
         level.addBlockEntity(this)
     }
 
@@ -77,14 +67,14 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
     }
 
     val saveId: String
-        get() = Registries.BLOCKENTITY.getSaveId(javaClass)
+        get() = Registries.BLOCKENTITY.getSaveId(javaClass)!!
 
     open val cleanedNBT: CompoundTag?
         get() {
             this.saveNBT()
             val tag = namedTag.copy()
             tag.remove("x").remove("y").remove("z").remove("id")
-            return if (!tag.tags.isEmpty()) {
+            return if (tag.tags.isNotEmpty()) {
                 tag
             } else {
                 null
@@ -94,7 +84,6 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
     val block: Block
         get() = this.levelBlock
 
-    @JvmField
     abstract val isBlockEntityValid: Boolean
 
     open fun onUpdate(): Boolean {
@@ -108,13 +97,8 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
     open fun close() {
         if (!this.closed) {
             this.closed = true
-            if (this.chunk != null) {
-                chunk!!.removeBlockEntity(this)
-            }
-            if (this.level != null) {
-                level.removeBlockEntity(this)
-            }
-            this.level = null
+            chunk.removeBlockEntity(this)
+            level.removeBlockEntity(this)
         }
     }
 
@@ -122,15 +106,15 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
     }
 
     open fun setDirty() {
-        chunk!!.setChanged()
+        chunk.setChanged()
 
         if (!this.levelBlock.isAir) {
             level.scheduler.scheduleTask(object : Task() {
                 override fun onRun(currentTick: Int) {
-                    if (this.isBlockEntityValid) {
+                    if (isBlockEntityValid) {
                         level.updateComparatorOutputLevelSelective(
                             this@BlockEntity.position,
-                            this.isObservable
+                            isObservable
                         )
                     }
                 }
@@ -144,11 +128,10 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
          */
         get() = true
 
-    override fun getLevelBlockEntity(): BlockEntity? {
-        return super.getLevelBlockEntity()
-    }
+    override val levelBlockEntity: BlockEntity?
+        get() = super.levelBlockEntity
 
-    companion object {
+    companion object : Loggable {
         const val TAG_CUSTOM_NAME: String = "CustomName"
         const val TAG_ID: String = "id"
         const val TAG_IS_MOVABLE: String = "isMovable"
@@ -184,12 +167,12 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
                         break
                     }
 
-                    if (constructor.parameterCount != (if (args == null) 2 else args.size + 2)) {
+                    if (constructor.parameterCount != (args.size + 2)) {
                         continue
                     }
 
                     try {
-                        if (args == null || args.size == 0) {
+                        if (args.isEmpty()) {
                             blockEntity = constructor.newInstance(chunk, nbt) as BlockEntity
                         } else {
                             val objects = arrayOfNulls<Any>(args.size + 2)

@@ -94,7 +94,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
         }
     }
 
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else blockEntityName
         set(name) {
             if (name == null || name == "") {

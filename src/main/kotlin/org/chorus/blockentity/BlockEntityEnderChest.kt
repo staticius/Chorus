@@ -22,7 +22,7 @@ class BlockEntityEnderChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
             return spawnCompound
         }
 
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "EnderChest"
         set(name) {
             if (name == null || name.isBlank()) {

@@ -118,9 +118,7 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
 
     override var inventoryTitle: String
         get() {
-            return if (enderChest != null) {
-                enderChest!!.name
-            } else "Unknown"
+            return enderChest?.name ?: "Unknown"
         }
         set(name) {
             if (enderChest != null) {

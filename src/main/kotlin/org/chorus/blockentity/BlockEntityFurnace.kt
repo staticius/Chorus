@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.event.inventory.FurnaceBurnEvent
 import org.chorus.event.inventory.FurnaceSmeltEvent
@@ -105,7 +106,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     protected open val clientName: String
         get() = BlockEntityID.Companion.FURNACE
 
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else furnaceName
         set(name) {
             if (name == null || name == "") {
@@ -231,7 +232,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     protected fun checkFuel(fuel: Item) {
         var fuel = fuel
         val ev = FurnaceBurnEvent(this, fuel, if (fuel.fuelTime == null) 0 else fuel.fuelTime)
-        server.pluginManager.callEvent(ev)
+        Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return
         }
@@ -256,7 +257,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     }
 
     protected open fun matchRecipe(raw: Item): SmeltingRecipe? {
-        return server.recipeRegistry.findFurnaceRecipe(raw)
+        return Server.instance.recipeRegistry.findFurnaceRecipe(raw)
     }
 
     protected open val speedMultiplier: Int
@@ -308,9 +309,9 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
                     val ev = FurnaceSmeltEvent(
                         this, raw, product,
-                        server.recipeRegistry.getRecipeXp(smelt).toFloat()
+                        Server.instance.recipeRegistry.getRecipeXp(smelt).toFloat()
                     )
-                    server.pluginManager.callEvent(ev)
+                    Server.instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
                         inventory!!.setResult(ev.result)
                         raw.setCount(raw.getCount() - 1)

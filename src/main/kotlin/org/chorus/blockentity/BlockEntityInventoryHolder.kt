@@ -9,6 +9,6 @@ interface BlockEntityInventoryHolder : BlockEntityNameable, InventoryHolder {
     var inventoryTitle: String?
         get() = name
         set(name) {
-            setName(name)
+            this.name = (name)
         }
 }

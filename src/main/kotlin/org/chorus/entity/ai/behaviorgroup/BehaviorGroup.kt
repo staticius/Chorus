@@ -30,71 +30,112 @@ class BehaviorGroup(
     /**
      * 记录距离上次路径更新过去的gt数
      */
-    protected var currentRouteUpdateTick: Int, //gt
+    private var currentRouteUpdateTick: Int, //gt
     /**
      * 不会被其他行为覆盖的"核心“行为
      */
-    override val coreBehaviors: Set<IBehavior>,
+    private val coreBehaviors: Set<IBehavior>,
     /**
      * 全部行为
      */
-    override val behaviors: Set<IBehavior>,
+    private val behaviors: Set<IBehavior>,
     /**
      * 传感器
      */
-    override val sensors: Set<ISensor>,
+    private val sensors: Set<ISensor>,
     /**
      * 控制器
      */
-    override val controllers: Set<IController>,
+    private val controllers: Set<IController>,
     /**
      * 寻路器(非异步，因为没必要，生物AI本身就是并行的)
      */
-    override val routeFinder: IRouteFinder,
+    private val routeFinder: IRouteFinder,
     /**
      * 此行为组所属实体
      */
-    protected val entity: EntityMob
+    entity: EntityMob
 ) : IBehaviorGroup {
+
+    override fun getBehaviors(): Set<IBehavior> {
+        return behaviors
+    }
+
+    override fun getCoreBehaviors(): Set<IBehavior> {
+        return coreBehaviors
+    }
+
+    override fun getSensors(): Set<ISensor> {
+        return sensors
+    }
+
+    override fun getControllers(): Set<IController> {
+        return controllers
+    }
+
+    override fun getRouteFinder(): IRouteFinder {
+        return routeFinder
+    }
+
     /**
      * 正在运行的”核心“行为
      */
-    override val runningCoreBehaviors: MutableSet<IBehavior> = HashSet()
+    private val runningCoreBehaviors: MutableSet<IBehavior> = HashSet()
+
+    override fun getRunningCoreBehaviors(): Set<IBehavior> {
+        return runningCoreBehaviors
+    }
 
     /**
      * 正在运行的行为
      */
-    override val runningBehaviors: MutableSet<IBehavior> = HashSet()
+    private val runningBehaviors: MutableSet<IBehavior> = HashSet()
+
+    override fun getRunningBehaviors(): Set<IBehavior> {
+        return runningBehaviors
+    }
 
     /**
      * 用于存储核心行为距离上次评估逝去的gt数
      */
-    protected val coreBehaviorPeriodTimer: MutableMap<IBehavior, Int> = HashMap()
+    private val coreBehaviorPeriodTimer: MutableMap<IBehavior, Int> = HashMap()
 
     /**
      * 用于存储行为距离上次评估逝去的gt数
      */
-    protected val behaviorPeriodTimer: MutableMap<IBehavior, Int> = HashMap()
+    private val behaviorPeriodTimer: MutableMap<IBehavior, Int> = HashMap()
 
     /**
      * 用于存储传感器距离上次刷新逝去的gt数
      */
-    protected val sensorPeriodTimer: MutableMap<ISensor, Int> = HashMap()
+    private val sensorPeriodTimer: MutableMap<ISensor, Int> = HashMap()
 
     /**
      * 记忆存储器
      */
     //此参数用于错开各个实体路径更新的时间，避免在1gt内提交过多路径更新任务
-    override val memoryStorage: IMemoryStorage = MemoryStorage(entity)
+    val memoryStorage: IMemoryStorage = MemoryStorage(entity)
+
+    override fun getMemoryStorage(): IMemoryStorage {
+        return memoryStorage
+    }
 
     /**
      * 寻路任务
      */
-    protected var routeFindingTask: RouteFindingTask? = null
+    private var routeFindingTask: RouteFindingTask? = null
 
-    protected var blockChangeCache: Long = 0
+    private var blockChangeCache: Long = 0
 
-    protected var forceUpdateRoute: Boolean = false
+    private var forceUpdateRoute: Boolean = false
+
+    override fun setForceUpdateRoute(forceUpdateRoute: Boolean) {
+        this.forceUpdateRoute = forceUpdateRoute
+    }
+
+    override fun isForceUpdateRoute(): Boolean {
+        return forceUpdateRoute
+    }
 
     init {
         this.initPeriodTimer()
@@ -295,7 +336,7 @@ class BehaviorGroup(
      *
      * @return 是否需要更新路径
      */
-    protected fun shouldUpdateRoute(entity: EntityMob): Boolean {
+    private fun shouldUpdateRoute(entity: EntityMob): Boolean {
         //此优化只针对处于非active区块的实体
         if (entity.isActive) return true
         //终点发生变化或第一次计算，需要重算
@@ -320,22 +361,22 @@ class BehaviorGroup(
      * @param entity 实体
      * @return 是否存在新的未计算的寻路目标
      */
-    protected fun hasNewUnCalMoveTarget(entity: EntityMob): Boolean {
+    private fun hasNewUnCalMoveTarget(entity: EntityMob): Boolean {
         return entity.moveTarget != routeFinder.target
     }
 
     /**
      * 缓存section的blockChanges到blockChangeCache
      */
-    protected fun cacheSectionBlockChange(level: Level, vecs: Set<ChunkSectionVector>) {
+    private fun cacheSectionBlockChange(level: Level, vectors: Set<ChunkSectionVector>) {
         this.blockChangeCache =
-            vecs.stream().mapToLong { vector3: ChunkSectionVector -> getSectionBlockChange(level, vector3) }.sum()
+            vectors.stream().mapToLong { vector3: ChunkSectionVector -> getSectionBlockChange(level, vector3) }.sum()
     }
 
     /**
      * 返回sectionVector对应的section的blockChanges
      */
-    protected fun getSectionBlockChange(level: Level, vector: ChunkSectionVector): Long {
+    private fun getSectionBlockChange(level: Level, vector: ChunkSectionVector): Long {
         val chunk = level.getChunk(vector.chunkX, vector.chunkZ)
         return chunk.getSectionBlockChanges(vector.sectionY)
     }
@@ -345,7 +386,7 @@ class BehaviorGroup(
      *
      * @return (chunkX | chunkSectionY | chunkZ)
      */
-    protected fun calPassByChunkSections(nodes: Collection<Vector3>, level: Level): Set<ChunkSectionVector> {
+    private fun calPassByChunkSections(nodes: Collection<Vector3>, level: Level): Set<ChunkSectionVector> {
         return nodes.stream()
             .map { vector3: Vector3 ->
                 val dimensionData = level.dimensionData
@@ -437,14 +478,14 @@ class BehaviorGroup(
      * @param originalDelay 原始延迟
      * @return 如果实体是非活跃的，则延迟*4，否则返回原始延迟
      */
-    protected fun calcActiveDelay(entity: EntityMob, originalDelay: Int): Int {
+    private fun calcActiveDelay(entity: EntityMob, originalDelay: Int): Int {
         if (!entity.isActive) {
             return originalDelay shl 2
         }
         return originalDelay
     }
 
-    protected fun initPeriodTimer() {
+    private fun initPeriodTimer() {
         coreBehaviors.forEach(Consumer { coreBehavior: IBehavior ->
             coreBehaviorPeriodTimer[coreBehavior] = 0
         })
@@ -454,7 +495,7 @@ class BehaviorGroup(
         sensors.forEach(Consumer { sensor: ISensor -> sensorPeriodTimer[sensor] = 0 })
     }
 
-    protected fun updateMoveDirection(entity: EntityMob) {
+    private fun updateMoveDirection(entity: EntityMob) {
         var end = entity.moveDirectionEnd
         if (end == null) {
             end = entity.position.clone()
@@ -472,9 +513,9 @@ class BehaviorGroup(
      * @param entity    评估的实体
      * @param behaviors 要添加的行为
      */
-    protected fun addToRunningBehaviors(entity: EntityMob?, behaviors: Set<IBehavior>) {
+    private fun addToRunningBehaviors(entity: EntityMob, behaviors: Set<IBehavior>) {
         behaviors.forEach(Consumer { behavior: IBehavior ->
-            behavior.onStart(entity!!)
+            behavior.onStart(entity)
             behavior.behaviorState = BehaviorState.ACTIVE
             runningBehaviors.add(behavior)
         })
@@ -483,7 +524,7 @@ class BehaviorGroup(
     /**
      * 中断所有正在运行的行为
      */
-    protected fun interruptAllRunningBehaviors(entity: EntityMob?) {
+    private fun interruptAllRunningBehaviors(entity: EntityMob) {
         for (behavior in runningBehaviors) {
             behavior.onInterrupt(entity)
             behavior.behaviorState = BehaviorState.STOP
@@ -499,7 +540,7 @@ class BehaviorGroup(
      * @param chunkZ
      */
     @JvmRecord
-    protected data class ChunkSectionVector(val chunkX: Int, val sectionY: Int, val chunkZ: Int) {
+    private data class ChunkSectionVector(val chunkX: Int, val sectionY: Int, val chunkZ: Int) {
         override fun equals(other: Any?): Boolean {
             if (other !is ChunkSectionVector) {
                 return false
@@ -517,6 +558,6 @@ class BehaviorGroup(
         /**
          * 决定多少gt更新一次路径
          */
-        protected var ROUTE_UPDATE_CYCLE: Int = 16 //gt
+        private var ROUTE_UPDATE_CYCLE: Int = 16 //gt
     }
 }

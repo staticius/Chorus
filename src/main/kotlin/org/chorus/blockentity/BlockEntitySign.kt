@@ -1,6 +1,7 @@
 package org.chorus.blockentity
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.BlockStandingSign
 import org.chorus.event.block.SignChangeEvent
 import org.chorus.level.format.IChunk
@@ -246,7 +247,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             }
         }
 
-        server.pluginManager.callEvent(signChangeEvent)
+        Server.instance.pluginManager.callEvent(signChangeEvent)
 
         if (!signChangeEvent.isCancelled && player.isOpenSignFront != null) {
             this.setText(player.isOpenSignFront, *signChangeEvent.lines)

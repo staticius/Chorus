@@ -92,7 +92,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState = Companion.p
             return false
         }
 
-        player?.addWindow(barrel.getInventory())
+        player?.addWindow(barrel.inventory)
         return true
     }
 
@@ -134,7 +134,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState = Companion.p
             val blockEntity = blockEntity
 
             if (blockEntity != null) {
-                return calculateRedstone(blockEntity.getInventory())
+                return calculateRedstone(blockEntity.inventory)
             }
 
             return super.comparatorInputOverride

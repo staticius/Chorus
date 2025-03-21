@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.block.FarmLandDecayEvent
@@ -34,7 +35,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
                 Server.instance.pluginManager.callEvent(farmEvent)
                 if (farmEvent.isCancelled) return 0
 
-                level.setBlock(this.position, get(DIRT), false, true)
+                level.setBlock(this.position, get(BlockID.DIRT), direct = false, update = true)
 
                 return type
             }
@@ -69,12 +70,12 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
                             v.setComponents(x.toDouble(), y.toDouble(), z.toDouble())
                             var block = level.getBlockIdAt(v.floorX, v.floorY, v.floorZ)
 
-                            if (block == FLOWING_WATER || block == WATER || block == FROSTED_ICE) {
+                            if (block == BlockID.FLOWING_WATER || block == BlockID.WATER || block == BlockID.FROSTED_ICE) {
                                 found = true
                                 break@end
                             } else {
                                 block = level.getBlockIdAt(v.floorX, v.floorY, v.floorZ, 1)
-                                if (block == FLOWING_WATER || block == WATER || block == FROSTED_ICE) {
+                                if (block == BlockID.FLOWING_WATER || block == BlockID.WATER || block == BlockID.FROSTED_ICE) {
                                     found = true
                                     break@end
                                 }
@@ -102,13 +103,13 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
             }
 
             if (moistureAmount > 0) {
-                this.moistureAmount = this.moistureAmount - 1
+                this.moistureAmount -= 1
                 level.setBlock(this.position, this, false, moistureAmount == 1)
             } else {
                 val farmEvent = FarmLandDecayEvent(null, this)
                 Server.instance.pluginManager.callEvent(farmEvent)
                 if (farmEvent.isCancelled) return 0
-                level.setBlock(this.position, get(Block.DIRT), false, true)
+                level.setBlock(this.position, get(BlockID.DIRT), direct = false, update = true)
             }
 
             return Level.BLOCK_UPDATE_RANDOM
@@ -118,7 +119,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(DIRT))
+        return ItemBlock(get(BlockID.DIRT))
     }
 
     override fun isSolid(side: BlockFace): Boolean {
@@ -134,8 +135,10 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MOISTURIZED_AMOUNT, value)
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FARMLAND, CommonBlockProperties.MOISTURIZED_AMOUNT)
-
     }
 }

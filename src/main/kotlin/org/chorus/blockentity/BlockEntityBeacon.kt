@@ -227,7 +227,7 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         return true
     }
 
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Beacon"
         set(name) {
             if (name == null || name.isBlank()) {

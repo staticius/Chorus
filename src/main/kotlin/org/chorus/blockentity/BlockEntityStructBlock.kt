@@ -197,7 +197,7 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
             return BlockID.=== BlockID . STRUCTURE_BLOCK
         }
 
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString(IStructBlock.Companion.TAG_CUSTOM_NAME) else BlockEntityID.Companion.STRUCTURE_BLOCK
         set(name) {
             if (Strings.isNullOrEmpty(name)) {

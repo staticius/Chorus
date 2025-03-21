@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.block.property.enums.OxidizationLevel
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
@@ -52,7 +53,7 @@ abstract class BlockStairsCopperBase(blockstate: BlockState) : BlockStairs(block
     }
 
     override fun setOxidizationLevel(oxidizationLevel: OxidizationLevel): Boolean {
-        if (oxidizationLevel == oxidizationLevel) {
+        if (this.oxidizationLevel == oxidizationLevel) {
             return true
         }
 

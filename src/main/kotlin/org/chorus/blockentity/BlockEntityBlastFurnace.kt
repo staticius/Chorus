@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.inventory.BlastFurnaceInventory
 import org.chorus.inventory.SmeltingInventory
@@ -30,7 +31,7 @@ class BlockEntityBlastFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntityFurn
     }
 
     override fun matchRecipe(raw: Item): SmeltingRecipe? {
-        return server.recipeRegistry.findBlastFurnaceRecipe(raw)
+        return Server.instance.recipeRegistry.findBlastFurnaceRecipe(raw)
     }
 
     override val speedMultiplier: Int

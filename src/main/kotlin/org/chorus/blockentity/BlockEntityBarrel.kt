@@ -7,7 +7,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 class BlockEntityBarrel(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableContainer(chunk, nbt) {
     init {
-        movable = true
+        isMovable = true
     }
 
     override fun requireContainerInventory(): BarrelInventory {
@@ -22,14 +22,10 @@ class BlockEntityBarrel(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableC
     override val isBlockEntityValid: Boolean
         get() = block.id === BlockID.BARREL
 
-    override fun getInventory(): BarrelInventory {
-        return inventory as BarrelInventory
-    }
-
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Barrel"
         set(name) {
-            if (name == null || name == "") {
+            if (name.isNullOrEmpty()) {
                 namedTag.remove("CustomName")
                 return
             }

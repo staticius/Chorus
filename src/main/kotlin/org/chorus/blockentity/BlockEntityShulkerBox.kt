@@ -107,7 +107,7 @@ class BlockEntityShulkerBox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
         return realInventory!!
     }
 
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Shulker Box"
         set(name) {
             if (name == null || name.isEmpty()) {
