@@ -9,8 +9,10 @@ class BlockFireCoralBlock : BlockCoralBlock {
         return BlockDeadFireCoralBlock()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.FIRE_CORAL_BLOCK)
-
     }
 }
