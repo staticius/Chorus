@@ -2,10 +2,12 @@ package org.chorus.level.generator.`object`
 
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
 
 class ObjectMangroveTree : TreeGenerator() {
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, position: Vector3): Boolean {
+    override fun generate(level: BlockManager, rand: ChorusRandom, position: Vector3): Boolean {
         val i: Int = rand.nextInt(3) + 8
         val j = position.floorX
         val k = position.floorY
@@ -71,7 +73,7 @@ class ObjectMangroveTree : TreeGenerator() {
     private fun placeLogAt(worldIn: BlockManager, x: Int, y: Int, z: Int) {
         val blockpos = Vector3(x.toDouble(), y.toDouble(), z.toDouble())
         val material = worldIn.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
-        if (material === AIR || material === Block.MANGROVE_LEAVES || material === MANGROVE_PROPAGULE) {
+        if (material === BlockID.AIR || material === BlockID.MANGROVE_LEAVES || material === BlockID.MANGROVE_PROPAGULE) {
             worldIn.setBlockStateAt(blockpos, LOG)
         }
     }
@@ -79,15 +81,15 @@ class ObjectMangroveTree : TreeGenerator() {
     private fun placeRootAt(worldIn: BlockManager, x: Int, y: Int, z: Int) {
         val blockpos = Vector3(x.toDouble(), y.toDouble(), z.toDouble())
         val material = worldIn.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
-        if (material === AIR || material === Block.MANGROVE_LEAVES || material === MANGROVE_PROPAGULE) {
+        if (material === BlockID.AIR || material === BlockID.MANGROVE_LEAVES || material === BlockID.MANGROVE_PROPAGULE) {
             worldIn.setBlockStateAt(blockpos, ROOTS)
         }
     }
 
-    private fun placeLeafAt(worldIn: BlockManager, x: Int, y: Int, z: Int, random: RandomSourceProvider) {
+    private fun placeLeafAt(worldIn: BlockManager, x: Int, y: Int, z: Int, random: ChorusRandom) {
         val blockpos = Vector3(x.toDouble(), y.toDouble(), z.toDouble())
         val material = worldIn.getBlockAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
-        if (material!!.isAir || (material is BlockMangrovePropagule && material.isHanging())) {
+        if (material!!.isAir || (material is BlockMangrovePropagule && material.isHanging)) {
             worldIn.setBlockStateAt(blockpos, MANGROVE_LEAVES)
             if (random.nextInt(7) == 0) {
                 placePropaguleAt(worldIn, blockpos.floorX, blockpos.floorY - 1, blockpos.floorZ)
@@ -98,15 +100,14 @@ class ObjectMangroveTree : TreeGenerator() {
     private fun placePropaguleAt(worldIn: BlockManager, x: Int, y: Int, z: Int) {
         val blockpos = Vector3(x.toDouble(), y.toDouble(), z.toDouble())
         val material = worldIn.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
-        if (material === AIR) {
+        if (material === BlockID.AIR) {
             //Todo: Fix hanging mangrove propagule
         }
     }
 
     companion object {
-        private val LOG: BlockState =
-            BlockMangroveLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
-        private val ROOTS: BlockState = BlockMangroveRoots.properties.getDefaultState()
-        private val MANGROVE_LEAVES: BlockState = BlockMangroveLeaves.properties.getDefaultState()
+        private val LOG: BlockState = BlockMangroveLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
+        private val ROOTS: BlockState = BlockMangroveRoots.properties.defaultState
+        private val MANGROVE_LEAVES: BlockState = BlockMangroveLeaves.properties.defaultState
     }
 }
