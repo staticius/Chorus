@@ -3,6 +3,7 @@ package org.chorus.level.generator.`object`
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
 
 class ObjectBigMushroom : ObjectGenerator {
     /**
@@ -18,14 +19,14 @@ class ObjectBigMushroom : ObjectGenerator {
         this.mushroomType = null
     }
 
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, position: Vector3): Boolean {
+    override fun generate(level: BlockManager, rand: ChorusRandom, position: Vector3): Boolean {
         var block = this.mushroomType
         if (block == null) {
             block = if (rand.nextBoolean()) MushroomType.RED else MushroomType.BROWN
         }
 
-        val mushroom = if (block == MushroomType.BROWN) Block.get(BROWN_MUSHROOM_BLOCK) else Block.get(
-            RED_MUSHROOM_BLOCK
+        val mushroom = if (block == MushroomType.BROWN) Block.get(BlockID.BROWN_MUSHROOM_BLOCK) else Block.get(
+            BlockID.RED_MUSHROOM_BLOCK
         )
 
         var i: Int = rand.nextInt(3) + 4
@@ -36,26 +37,26 @@ class ObjectBigMushroom : ObjectGenerator {
 
         var flag = true
 
-        if (position.getY() >= 1 && position.getY() + i + 1 < 256) {
+        if (position.y >= 1 && position.y + i + 1 < 256) {
             var j = position.floorY
-            while (j <= position.getY() + 1 + i) {
+            while (j <= position.y + 1 + i) {
                 var k = 3
 
-                if (j <= position.getY() + 3) {
+                if (j <= position.y + 3) {
                     k = 0
                 }
 
                 val pos = Vector3()
 
                 var l = position.floorX - k
-                while (l <= position.getX() + k && flag) {
+                while (l <= position.x + k && flag) {
                     var i1 = position.floorZ - k
-                    while (i1 <= position.getZ() + k && flag) {
+                    while (i1 <= position.z + k && flag) {
                         if (j >= 0 && j < 256) {
                             pos.setComponents(l.toDouble(), j.toDouble(), i1.toDouble())
                             val material = level.getBlockAt(pos.floorX, pos.floorY, pos.floorZ)
 
-                            if (material!!.id != AIR && material !is BlockLeaves) {
+                            if (material!!.id != BlockID.AIR && material !is BlockLeaves) {
                                 flag = false
                             }
                         } else {
@@ -74,7 +75,7 @@ class ObjectBigMushroom : ObjectGenerator {
                 val pos2 = position.down()
                 val block1 = level.getBlockIdAt(pos2.floorX, pos2.floorY, pos2.floorZ)
 
-                if ((block1 != DIRT) && (block1 != GRASS_BLOCK) && (block1 != MYCELIUM)) {
+                if ((block1 != BlockID.DIRT) && (block1 != BlockID.GRASS_BLOCK) && (block1 != BlockID.MYCELIUM)) {
                     return false
                 } else {
                     var k2 = position.floorY + i
@@ -84,10 +85,10 @@ class ObjectBigMushroom : ObjectGenerator {
                     }
 
                     var l2 = k2
-                    while (l2 <= position.getY() + i) {
+                    while (l2 <= position.y + i) {
                         var j3 = 1
 
-                        if (l2 < position.getY() + i) {
+                        if (l2 < position.y + i) {
                             ++j3
                         }
 
@@ -118,49 +119,49 @@ class ObjectBigMushroom : ObjectGenerator {
 
                                 var meta = j2
 
-                                if (block == MushroomType.BROWN || l2 < position.getY() + i) {
+                                if (block == MushroomType.BROWN || l2 < position.y + i) {
                                     if ((l1 == k3 || l1 == l3) && (i2 == j1 || i2 == k1)) {
                                         continue
                                     }
 
-                                    if (l1.toDouble() == position.getX() - (j3 - 1) && i2 == j1) {
+                                    if (l1.toDouble() == position.x - (j3 - 1) && i2 == j1) {
                                         meta = NORTH_WEST
                                     }
 
-                                    if (l1 == k3 && i2.toDouble() == position.getZ() - (j3 - 1)) {
+                                    if (l1 == k3 && i2.toDouble() == position.z - (j3 - 1)) {
                                         meta = NORTH_WEST
                                     }
 
-                                    if (l1.toDouble() == position.getX() + (j3 - 1) && i2 == j1) {
+                                    if (l1.toDouble() == position.x + (j3 - 1) && i2 == j1) {
                                         meta = NORTH_EAST
                                     }
 
-                                    if (l1 == l3 && i2.toDouble() == position.getZ() - (j3 - 1)) {
+                                    if (l1 == l3 && i2.toDouble() == position.z - (j3 - 1)) {
                                         meta = NORTH_EAST
                                     }
 
-                                    if (l1.toDouble() == position.getX() - (j3 - 1) && i2 == k1) {
+                                    if (l1.toDouble() == position.x - (j3 - 1) && i2 == k1) {
                                         meta = SOUTH_WEST
                                     }
 
-                                    if (l1 == k3 && i2.toDouble() == position.getZ() + (j3 - 1)) {
+                                    if (l1 == k3 && i2.toDouble() == position.z + (j3 - 1)) {
                                         meta = SOUTH_WEST
                                     }
 
-                                    if (l1.toDouble() == position.getX() + (j3 - 1) && i2 == k1) {
+                                    if (l1.toDouble() == position.x + (j3 - 1) && i2 == k1) {
                                         meta = SOUTH_EAST
                                     }
 
-                                    if (l1 == l3 && i2.toDouble() == position.getZ() + (j3 - 1)) {
+                                    if (l1 == l3 && i2.toDouble() == position.z + (j3 - 1)) {
                                         meta = SOUTH_EAST
                                     }
                                 }
 
-                                if (meta == CENTER && l2 < position.getY() + i) {
+                                if (meta == CENTER && l2 < position.y + i) {
                                     meta = ALL_INSIDE
                                 }
 
-                                if (position.getY() >= position.getY() + i - 1 || meta != ALL_INSIDE) {
+                                if (position.y >= position.y + i - 1 || meta != ALL_INSIDE) {
                                     val blockPos = Vector3(l1.toDouble(), l2.toDouble(), i2.toDouble())
 
                                     if (Block.get(
