@@ -30,19 +30,19 @@ class LevelDBStorage(private var dimSum: Int, private val path: String, options:
     }
 
     @Throws(IOException::class)
-    fun readChunk(x: Int, z: Int, levelProvider: LevelProvider?): IChunk {
-        val builder: Chunk.Builder = Chunk.Companion.builder()
+    fun readChunk(x: Int, z: Int, levelProvider: LevelProvider): IChunk {
+        val builder: Chunk.Builder = Chunk.builder()
             .chunkX(x)
             .chunkZ(z)
             .levelProvider(levelProvider)
-        LevelDBChunkSerializer.Companion.INSTANCE.deserialize(this.db, builder)
+        LevelDBChunkSerializer.INSTANCE.deserialize(this.db, builder)
         return builder.build()
     }
 
     @Throws(IOException::class)
     fun writeChunk(chunk: IChunk) {
         db.createWriteBatch().use { writeBatch ->
-            LevelDBChunkSerializer.Companion.INSTANCE.serialize(writeBatch, chunk)
+            LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, chunk)
             val writeOptions = WriteOptions()
             writeOptions.sync(true)
             db.write(writeBatch, writeOptions)
@@ -55,7 +55,7 @@ class LevelDBStorage(private var dimSum: Int, private val path: String, options:
         if (dimSum <= 0) {
             try {
                 db.close()
-                LevelDBProvider.Companion.CACHE.remove(path)
+                LevelDBProvider.CACHE.remove(path)
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }

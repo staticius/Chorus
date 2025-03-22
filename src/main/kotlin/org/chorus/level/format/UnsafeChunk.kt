@@ -6,7 +6,6 @@ import org.chorus.block.BlockState
 import org.chorus.blockentity.BlockEntity
 import org.chorus.entity.Entity
 import org.chorus.level.DimensionData
-import org.chorus.nbt.tag.CompoundTag
 import org.jetbrains.annotations.ApiStatus
 
 class UnsafeChunk(private val chunk: Chunk) {
@@ -230,16 +229,6 @@ class UnsafeChunk(private val chunk: Chunk) {
     val provider: LevelProvider
         get() = chunk.provider
 
-    var isLightPopulated: Boolean
-        get() = chunk.isLightPopulated
-        set(value) {
-            chunk.isLightPopulated = value
-        }
-
-    fun setLightPopulated() {
-        chunk.setLightPopulated()
-    }
-
     var chunkState: ChunkState
         get() = chunk.chunkState
         set(chunkState) {
@@ -268,9 +257,6 @@ class UnsafeChunk(private val chunk: Chunk) {
     fun getTile(x: Int, y: Int, z: Int): BlockEntity? {
         return chunk.getTile(x, y, z)
     }
-
-    val extraData: CompoundTag
-        get() = chunk.extraData
 
     fun hasChanged(): Boolean {
         return chunk.hasChanged()

@@ -2,11 +2,6 @@ package org.chorus.level.format.bitarray
 
 import io.netty.buffer.ByteBuf
 
-/**
- * Allay Project 2023/4/14
- *
- * @author JukeboxMC | daoge_cmd
- */
 class SingletonBitArray : BitArray {
     override fun set(index: Int, value: Int) {
         throw UnsupportedOperationException()

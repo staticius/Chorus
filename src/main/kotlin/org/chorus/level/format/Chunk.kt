@@ -73,8 +73,6 @@ class Chunk : IChunk {
     val tiles: ConcurrentHashMap<Long, BlockEntity> //block entity id -> block entity
     protected val tileList: ConcurrentHashMap<Long, BlockEntity> //block entity position hash index -> block entity
 
-    //delay load block entity and entity
-    override val extraData: CompoundTag
     protected val blockLock: StampedLock
     protected val heightAndBiomeLock: StampedLock
     protected val lightLock: StampedLock
@@ -98,7 +96,6 @@ class Chunk : IChunk {
         this.tileList = ConcurrentHashMap()
         this.entityNBT = ArrayList()
         this.blockEntityNBT = ArrayList()
-        this.extraData = CompoundTag()
         this.blockLock = StampedLock()
         this.heightAndBiomeLock = StampedLock()
         this.lightLock = StampedLock()
@@ -112,8 +109,7 @@ class Chunk : IChunk {
         sections: Array<ChunkSection?>,
         heightMap: ShortArray,
         entityNBT: List<CompoundTag>,
-        blockEntityNBT: List<CompoundTag>,
-        extraData: CompoundTag
+        blockEntityNBT: List<CompoundTag>
     ) {
         this.atomicChunkState = AtomicReference(state)
         this.x = chunkX
@@ -126,7 +122,6 @@ class Chunk : IChunk {
         this.tileList = ConcurrentHashMap()
         this.entityNBT = entityNBT
         this.blockEntityNBT = blockEntityNBT
-        this.extraData = extraData
         this.blockLock = StampedLock()
         this.heightAndBiomeLock = StampedLock()
         this.lightLock = StampedLock()
@@ -437,16 +432,6 @@ class Chunk : IChunk {
         }
     }
 
-    override var isLightPopulated: Boolean
-        get() = extraData.contains("LightPopulated") && extraData.getBoolean("LightPopulated")
-        set(value) {
-            extraData.putBoolean("LightPopulated", value)
-        }
-
-    override fun setLightPopulated() {
-        extraData.putBoolean("LightPopulated", true)
-    }
-
     override fun addEntity(entity: Entity) {
         entities[entity.getId()] = entity
         if (entity !is Player && this.isInit) {
@@ -709,15 +694,14 @@ class Chunk : IChunk {
     }
 
     class Builder : IChunkBuilder {
-        var state: ChunkState? = null
+        var state: ChunkState = ChunkState.NEW
         override var chunkZ: Int = 0
         override var chunkX: Int = 0
-        var levelProvider: LevelProvider? = null
-        override var sections: Array<ChunkSection?>? = null
-        var heightMap: ShortArray? = null
-        var entities: List<CompoundTag>? = null
-        var blockEntities: List<CompoundTag>? = null
-        var extraData: CompoundTag? = null
+        private var levelProvider: LevelProvider? = null
+        override var sections: Array<ChunkSection?> = arrayOfNulls(levelProvider!!.dimensionData.chunkSectionCount)
+        private var heightMap: ShortArray = ShortArray(256)
+        var entities: List<CompoundTag> = listOf()
+        private var blockEntities: List<CompoundTag> = listOf()
 
         override fun chunkX(chunkX: Int): Builder {
             this.chunkX = chunkX
@@ -729,12 +713,12 @@ class Chunk : IChunk {
             return this
         }
 
-        override fun state(state: ChunkState?): Builder {
+        override fun state(state: ChunkState): Builder {
             this.state = state
             return this
         }
 
-        override fun levelProvider(levelProvider: LevelProvider?): Builder {
+        override fun levelProvider(levelProvider: LevelProvider): Builder {
             this.levelProvider = levelProvider
             return this
         }
@@ -744,49 +728,37 @@ class Chunk : IChunk {
                 return levelProvider!!.dimensionData
             }
 
-        override fun sections(sections: Array<ChunkSection?>?): Builder {
+        override fun sections(sections: Array<ChunkSection?>): Builder {
             this.sections = sections
             return this
         }
 
-        override fun heightMap(heightMap: ShortArray?): Builder {
+        override fun heightMap(heightMap: ShortArray): Builder {
             this.heightMap = heightMap
             return this
         }
 
-        override fun entities(entities: List<CompoundTag>?): Builder {
+        override fun entities(entities: List<CompoundTag>): Builder {
             this.entities = entities
             return this
         }
 
-        override fun blockEntities(blockEntities: List<CompoundTag>?): Builder {
+        override fun blockEntities(blockEntities: List<CompoundTag>): Builder {
             this.blockEntities = blockEntities
-            return this
-        }
-
-        override fun extraData(extraData: CompoundTag?): IChunkBuilder {
-            this.extraData = extraData
             return this
         }
 
         override fun build(): Chunk {
             Preconditions.checkNotNull(levelProvider)
-            if (state == null) state = ChunkState.NEW
-            if (sections == null) sections = arrayOfNulls(levelProvider!!.dimensionData.chunkSectionCount)
-            if (heightMap == null) heightMap = ShortArray(256)
-            if (entities == null) entities = ArrayList()
-            if (blockEntities == null) blockEntities = ArrayList()
-            if (extraData == null) extraData = CompoundTag()
             return Chunk(
-                state!!,
+                state,
                 chunkX,
                 chunkZ,
                 levelProvider!!,
-                sections!!,
-                heightMap!!,
-                entities!!,
-                blockEntities!!,
-                extraData!!
+                sections,
+                heightMap,
+                entities,
+                blockEntities
             )
         }
 

@@ -93,8 +93,8 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         return isChunkLoaded(Level.chunkHash(x, z))
     }
 
-    fun putChunk(index: Long, chunk: IChunk?) {
-        chunks.put(index, chunk)
+    private fun putChunk(index: Long, chunk: IChunk) {
+        chunks[index] = chunk
     }
 
     override fun isChunkLoaded(hash: Long): Boolean {
@@ -185,62 +185,50 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
     }
 
 
-    override val name: String?
-        get() = levelData.getName()
-
-    override var isRaining: Boolean
-        get() = levelData.isRaining()
-        set(raining) {
-            levelData.isRaining = raining
-        }
+    override val name: String
+        get() = levelData.name
 
     override var rainTime: Int
-        get() = levelData.getRainTime()
+        get() = levelData.rainTime
         set(rainTime) {
             levelData.setRainTime(rainTime)
         }
 
-    override var isThundering: Boolean
-        get() = levelData.isThundering()
-        set(thundering) {
-            levelData.isThundering = thundering
-        }
-
     override var thunderTime: Int
-        get() = levelData.getLightningTime()
+        get() = levelData.lightningTime
         set(thunderTime) {
             levelData.setLightningTime(thunderTime)
         }
 
     override var currentTick: Long
-        get() = levelData.getCurrentTick()
+        get() = levelData.currentTick
         set(currentTick) {
             levelData.setCurrentTick(currentTick)
         }
 
     override var time: Long
-        get() = levelData.getTime()
+        get() = levelData.time
         set(value) {
-            levelData.setTime(value)
+            levelData.time = value
         }
 
     override var seed: Long
-        get() = levelData.getRandomSeed()
+        get() = levelData.randomSeed
         set(value) {
             levelData.setRandomSeed(value)
         }
 
-    override var spawn: Vector3?
-        get() = levelData.getSpawnPoint().asVector3().add(0.5, 0.0, 0.5)
+    override var spawn: Vector3
+        get() = levelData.spawnPoint.asVector3().add(0.5, 0.0, 0.5)
         set(pos) {
-            levelData.setSpawnPoint(BlockVector3(pos!!.x.toInt(), pos.y.toInt(), pos.z.toInt()))
+            levelData.spawnPoint = (BlockVector3(pos.x.toInt(), pos.y.toInt(), pos.z.toInt()))
         }
 
     override val gamerules: GameRules
         get() = levelData.gameRules
 
-    override fun setGameRules(rules: GameRules?) {
-        levelData.setGameRules(rules)
+    override fun setGameRules(rules: GameRules) {
+        levelData.gameRules = (rules)
     }
 
     override fun saveChunks() {
@@ -252,20 +240,20 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         }
     }
 
-    override fun saveChunk(X: Int, Z: Int) {
-        val chunk = this.getChunk(X, Z)
+    override fun saveChunk(x: Int, z: Int) {
+        val chunk = this.getChunk(x, z)
         if (chunk != null) {
             try {
                 storage.writeChunk(chunk)
             } catch (e: Exception) {
-                throw ChunkException("Error saving chunk ($X, $Z)", e)
+                throw ChunkException("Error saving chunk ($x, $z)", e)
             }
         }
     }
 
-    override fun saveChunk(X: Int, Z: Int, chunk: IChunk) {
-        chunk.x = X
-        chunk.z = Z
+    override fun saveChunk(x: Int, z: Int, chunk: IChunk) {
+        chunk.x = x
+        chunk.z = z
         try {
             storage.writeChunk(chunk)
         } catch (e: Exception) {
@@ -279,28 +267,28 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
 
     override fun updateLevelName(name: String) {
         if (this.name != name) {
-            levelData.setName(name)
+            levelData.name = name
         }
     }
 
-    override fun loadChunk(chunkX: Int, chunkZ: Int): Boolean {
-        return this.loadChunk(chunkX, chunkZ, false)
+    override fun loadChunk(x: Int, z: Int): Boolean {
+        return this.loadChunk(x, z, false)
     }
 
-    override fun loadChunk(chunkX: Int, chunkZ: Int, create: Boolean): Boolean {
-        val index: Long = Level.Companion.chunkHash(chunkX, chunkZ)
+    override fun loadChunk(x: Int, z: Int, create: Boolean): Boolean {
+        val index: Long = Level.chunkHash(x, z)
         if (chunks.containsKey(index)) {
             return true
         }
-        return loadChunk(index, chunkX, chunkZ, create) != null
+        return loadChunk(index, x, z, create) != null
     }
 
-    override fun unloadChunk(X: Int, Z: Int): Boolean {
-        return this.unloadChunk(X, Z, true)
+    override fun unloadChunk(x: Int, z: Int): Boolean {
+        return this.unloadChunk(x, z, true)
     }
 
-    override fun unloadChunk(X: Int, Z: Int, safe: Boolean): Boolean {
-        val index: Long = Level.Companion.chunkHash(X, Z)
+    override fun unloadChunk(x: Int, z: Int, safe: Boolean): Boolean {
+        val index: Long = Level.chunkHash(x, z)
         val chunk = chunks[index]
         if (chunk != null && chunk.unload(false, safe)) {
             lastChunk.remove()
@@ -310,8 +298,8 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         return false
     }
 
-    override fun getChunk(chunkX: Int, chunkZ: Int): IChunk {
-        return this.getChunk(chunkX, chunkZ, false)
+    override fun getChunk(x: Int, z: Int): IChunk {
+        return this.getChunk(x, z, false)
     }
 
     protected val threadLastChunk: IChunk?
@@ -339,11 +327,11 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         return tmp
     }
 
-    override fun getChunk(chunkX: Int, chunkZ: Int, create: Boolean): IChunk {
-        val index: Long = Level.chunkHash(chunkX, chunkZ)
+    override fun getChunk(x: Int, z: Int, create: Boolean): IChunk {
+        val index: Long = Level.chunkHash(x, z)
         var tmp = getLoadedChunk(index)
         if (tmp == null) {
-            tmp = this.loadChunk(index, chunkX, chunkZ, create)
+            tmp = this.loadChunk(index, x, z, create)
             lastChunk.set(WeakReference(tmp))
         }
         return tmp
@@ -353,8 +341,8 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         return Chunk.Companion.builder().levelProvider(this).emptyChunk(x, z)
     }
 
-    override fun isChunkPopulated(chunkX: Int, chunkZ: Int): Boolean {
-        val chunk = this.getChunk(chunkX, chunkZ)
+    override fun isChunkPopulated(x: Int, z: Int): Boolean {
+        val chunk = this.getChunk(x, z)
         return chunk != null && chunk.chunkState.ordinal >= 2
     }
 
@@ -362,7 +350,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         storage.close()
     }
 
-    override fun isChunkGenerated(chunkX: Int, chunkZ: Int): Boolean {
+    override fun isChunkGenerated(x: Int, z: Int): Boolean {
         return true
     }
 
@@ -380,7 +368,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                 stream.close()
                 val abilities = d.getCompound("abilities")
                 val experiments = d.getCompound("experiments")
-                val gameRules: GameRules = GameRules.Companion.getDefault()
+                val gameRules: GameRules = GameRules.default
                 gameRules.setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, d.getBoolean("bonusChestSpawned"))
                 gameRules.setGameRule(GameRule.COMMAND_BLOCKS_ENABLED, d.getBoolean("commandblocksenabled"))
                 gameRules.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, d.getBoolean("dodaylightcycle"))
@@ -411,28 +399,28 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                 gameRules.setGameRule(GameRule.SHOW_TAGS, d.getBoolean("showtags"))
                 gameRules.setGameRule(GameRule.SPAWN_RADIUS, d.getInt("spawnradius"))
                 gameRules.setGameRule(GameRule.TNT_EXPLODES, d.getBoolean("tntexplodes"))
-                val levelDatBuilder = LevelDat.builder()
-                    .biomeOverride(d.getString("BiomeOverride"))
-                    .centerMapsToOrigin(d.getBoolean("CenterMapsToOrigin"))
-                    .confirmedPlatformLockedContent(d.getBoolean("ConfirmedPlatformLockedContent"))
-                    .difficulty(d.getInt("Difficulty"))
-                    .flatWorldLayers(d.getString("FlatWorldLayers"))
-                    .forceGameType(d.getBoolean("ForceGameType"))
-                    .gameType(GameType.from(d.getInt("GameType")))
-                    .generator(d.getInt("Generator"))
-                    .inventoryVersion(d.getString("InventoryVersion"))
-                    .LANBroadcast(d.getBoolean("LANBroadcast"))
-                    .LANBroadcastIntent(d.getBoolean("LANBroadcastIntent"))
-                    .lastPlayed(d.getLong("LastPlayed"))
-                    .name(d.getString("LevelName"))
-                    .limitedWorldOriginPoint(
+                val levelDatBuilder = LevelDat()
+                levelDatBuilder.biomeOverride = (d.getString("BiomeOverride"))
+                levelDatBuilder.centerMapsToOrigin = (d.getBoolean("CenterMapsToOrigin"))
+                levelDatBuilder.confirmedPlatformLockedContent = (d.getBoolean("ConfirmedPlatformLockedContent"))
+                levelDatBuilder.difficulty = (d.getInt("Difficulty"))
+                levelDatBuilder.flatWorldLayers = (d.getString("FlatWorldLayers"))
+                levelDatBuilder.forceGameType = (d.getBoolean("ForceGameType"))
+                levelDatBuilder.gameType = (GameType.from(d.getInt("GameType")))
+                levelDatBuilder.generator = (d.getInt("Generator"))
+                levelDatBuilder.inventoryVersion = (d.getString("InventoryVersion"))
+                levelDatBuilder.LANBroadcast = (d.getBoolean("LANBroadcast"))
+                levelDatBuilder.LANBroadcastIntent = (d.getBoolean("LANBroadcastIntent"))
+                levelDatBuilder.lastPlayed = (d.getLong("LastPlayed"))
+                levelDatBuilder.name = (d.getString("LevelName"))
+                levelDatBuilder.limitedWorldOriginPoint = (
                         BlockVector3(
                             d.getInt("LimitedWorldOriginX"),
                             d.getInt("LimitedWorldOriginY"),
                             d.getInt("LimitedWorldOriginZ")
                         )
                     )
-                    .minimumCompatibleClientVersion(
+                levelDatBuilder.minimumCompatibleClientVersion = (
                         SemVersion.from(
                             d.getList(
                                 "MinimumCompatibleClientVersion",
@@ -440,100 +428,99 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                             )
                         )
                     )
-                    .multiplayerGame(d.getBoolean("MultiplayerGame"))
-                    .multiplayerGameIntent(d.getBoolean("MultiplayerGameIntent"))
-                    .netherScale(d.getInt("NetherScale"))
-                    .networkVersion(d.getInt("NetworkVersion"))
-                    .platform(d.getInt("Platform"))
-                    .platformBroadcastIntent(d.getInt("PlatformBroadcastIntent"))
-                    .randomSeed(d.getLong("RandomSeed"))
-                    .spawnV1Villagers(d.getBoolean("SpawnV1Villagers"))
-                    .spawnPoint(BlockVector3(d.getInt("SpawnX"), d.getInt("SpawnY"), d.getInt("SpawnZ")))
-                    .storageVersion(d.getInt("StorageVersion"))
-                    .time(d.getLong("Time"))
-                    .worldVersion(d.getInt("WorldVersion"))
-                    .XBLBroadcastIntent(d.getInt("XBLBroadcastIntent"))
-                    .gameRules(gameRules)
-                    .abilities(
-                        Abilities.builder()
-                            .attackMobs(abilities.getBoolean("attackmobs"))
-                            .attackPlayers(abilities.getBoolean("attackplayers"))
-                            .build(abilities.getBoolean("build"))
-                            .doorsAndSwitches(abilities.getBoolean("doorsandswitches"))
-                            .flySpeed(abilities.getFloat("flySpeed"))
-                            .flying(abilities.getBoolean("flying"))
-                            .instaBuild(abilities.getBoolean("instabuild"))
-                            .invulnerable(abilities.getBoolean("invulnerable"))
-                            .lightning(abilities.getBoolean("lightning"))
-                            .mayFly(abilities.getBoolean("mayfly"))
-                            .mine(abilities.getBoolean("mine"))
-                            .op(abilities.getBoolean("op"))
-                            .openContainers(abilities.getBoolean("opencontainers"))
-                            .teleport(abilities.getBoolean("teleport"))
-                            .walkSpeed(abilities.getFloat("walkSpeed"))
-                            .build()
+                levelDatBuilder.multiplayerGame = (d.getBoolean("MultiplayerGame"))
+                levelDatBuilder.multiplayerGameIntent = (d.getBoolean("MultiplayerGameIntent"))
+                levelDatBuilder.netherScale = (d.getInt("NetherScale"))
+                levelDatBuilder.networkVersion = (d.getInt("NetworkVersion"))
+                levelDatBuilder.platform = (d.getInt("Platform"))
+                levelDatBuilder.platformBroadcastIntent = (d.getInt("PlatformBroadcastIntent"))
+                levelDatBuilder.randomSeed = (d.getLong("RandomSeed"))
+                levelDatBuilder.spawnV1Villagers = (d.getBoolean("SpawnV1Villagers"))
+                levelDatBuilder.spawnPoint = (BlockVector3(d.getInt("SpawnX"), d.getInt("SpawnY"), d.getInt("SpawnZ")))
+                levelDatBuilder.storageVersion = (d.getInt("StorageVersion"))
+                levelDatBuilder.time = (d.getLong("Time"))
+                levelDatBuilder.worldVersion = (d.getInt("WorldVersion"))
+                levelDatBuilder.XBLBroadcastIntent = (d.getInt("XBLBroadcastIntent"))
+                levelDatBuilder.gameRules = (gameRules)
+                levelDatBuilder.abilities = (
+                        run {
+                            val levelAbilities = Abilities()
+                            levelAbilities.attackMobs = (abilities.getBoolean("attackmobs"))
+                            levelAbilities.attackPlayers = (abilities.getBoolean("attackplayers"))
+                            levelAbilities.build = (abilities.getBoolean("build"))
+                            levelAbilities.doorsAndSwitches = (abilities.getBoolean("doorsandswitches"))
+                            levelAbilities.flySpeed = (abilities.getFloat("flySpeed"))
+                            levelAbilities.flying = (abilities.getBoolean("flying"))
+                            levelAbilities.instaBuild = (abilities.getBoolean("instabuild"))
+                            levelAbilities.invulnerable = (abilities.getBoolean("invulnerable"))
+                            levelAbilities.lightning = (abilities.getBoolean("lightning"))
+                            levelAbilities.mayFly = (abilities.getBoolean("mayfly"))
+                            levelAbilities.mine = (abilities.getBoolean("mine"))
+                            levelAbilities.op = (abilities.getBoolean("op"))
+                            levelAbilities.openContainers = (abilities.getBoolean("opencontainers"))
+                            levelAbilities.teleport = (abilities.getBoolean("teleport"))
+                            levelAbilities.walkSpeed = (abilities.getFloat("walkSpeed"))
+                            return@run levelAbilities
+                        }
+
                     )
-                    .baseGameVersion(d.getString("baseGameVersion"))
-                    .bonusChestEnabled(d.getBoolean("bonusChestEnabled"))
-                    .bonusChestSpawned(d.getBoolean("bonusChestSpawned"))
-                    .cheatsEnabled(d.getBoolean("cheatsEnabled"))
-                    .commandsEnabled(d.getBoolean("commandsEnabled"))
-                    .currentTick(d.getLong("currentTick"))
-                    .daylightCycle(d.getInt("daylightCycle"))
-                    .editorWorldType(d.getInt("editorWorldType"))
-                    .eduOffer(d.getInt("eduOffer"))
-                    .educationFeaturesEnabled(d.getBoolean("educationFeaturesEnabled"))
-                    .experiments(
-                        Experiments.builder()
-                            .cameras(experiments.getBoolean("cameras"))
-                            .dataDrivenBiomes(experiments.getBoolean("data_driven_biomes"))
-                            .dataDrivenItems(experiments.getBoolean("data_driven_items"))
-                            .experimentalMolangFeatures(experiments.getBoolean("experimental_molang_features"))
-                            .experimentsEverUsed(experiments.getBoolean("experiments_ever_used"))
-                            .savedWithToggledExperiments(experiments.getBoolean("saved_with_toggled_experiments"))
-                            .upcomingCreatorFeatures(experiments.getBoolean("upcoming_creator_features"))
-                            .villagerTradesRebalance(experiments.getBoolean("villager_trades_rebalance"))
-                            .build()
+                levelDatBuilder.baseGameVersion = (d.getString("baseGameVersion"))
+                levelDatBuilder.bonusChestEnabled = (d.getBoolean("bonusChestEnabled"))
+                levelDatBuilder.bonusChestSpawned = (d.getBoolean("bonusChestSpawned"))
+                levelDatBuilder.cheatsEnabled = (d.getBoolean("cheatsEnabled"))
+                levelDatBuilder.commandsEnabled = (d.getBoolean("commandsEnabled"))
+                levelDatBuilder.currentTick = (d.getLong("currentTick"))
+                levelDatBuilder.daylightCycle = (d.getInt("daylightCycle"))
+                levelDatBuilder.editorWorldType = (d.getInt("editorWorldType"))
+                levelDatBuilder.eduOffer = (d.getInt("eduOffer"))
+                levelDatBuilder.educationFeaturesEnabled = (d.getBoolean("educationFeaturesEnabled"))
+                levelDatBuilder.experiments = (
+                        run {
+                            val levelExperiments = Experiments()
+                            levelExperiments.cameras = (experiments.getBoolean("cameras"))
+                            levelExperiments.dataDrivenBiomes = (experiments.getBoolean("data_driven_biomes"))
+                            levelExperiments.dataDrivenItems = (experiments.getBoolean("data_driven_items"))
+                            levelExperiments.experimentalMolangFeatures = (experiments.getBoolean("experimental_molang_features"))
+                            levelExperiments.experimentsEverUsed = (experiments.getBoolean("experiments_ever_used"))
+                            levelExperiments.savedWithToggledExperiments = (experiments.getBoolean("saved_with_toggled_experiments"))
+                            levelExperiments.upcomingCreatorFeatures = (experiments.getBoolean("upcoming_creator_features"))
+                            levelExperiments.villagerTradesRebalance = (experiments.getBoolean("villager_trades_rebalance"))
+                            return@run levelExperiments
+                        }
                     )
-                    .hasBeenLoadedInCreative(d.getBoolean("hasBeenLoadedInCreative"))
-                    .hasLockedBehaviorPack(d.getBoolean("hasLockedBehaviorPack"))
-                    .hasLockedResourcePack(d.getBoolean("hasLockedResourcePack"))
-                    .immutableWorld(d.getBoolean("immutableWorld"))
-                    .isCreatedInEditor(d.getBoolean("isCreatedInEditor"))
-                    .isExportedFromEditor(d.getBoolean("isExportedFromEditor"))
-                    .isFromLockedTemplate(d.getBoolean("isFromLockedTemplate"))
-                    .isFromWorldTemplate(d.getBoolean("isFromWorldTemplate"))
-                    .isRandomSeedAllowed(d.getBoolean("isRandomSeedAllowed"))
-                    .isSingleUseWorld(d.getBoolean("isSingleUseWorld"))
-                    .isWorldTemplateOptionLocked(d.getBoolean("isWorldTemplateOptionLocked"))
-                    .lastOpenedWithVersion(SemVersion.from(d.getList("lastOpenedWithVersion", IntTag::class.java)))
-                    .lightningLevel(d.getFloat("lightningLevel"))
-                    .lightningTime(d.getInt("lightningTime"))
-                    .limitedWorldDepth(d.getInt("limitedWorldDepth"))
-                    .limitedWorldWidth(d.getInt("limitedWorldWidth"))
-                    .permissionsLevel(d.getInt("permissionsLevel"))
-                    .playerPermissionsLevel(d.getInt("playerPermissionsLevel"))
-                    .playersSleepingPercentage(d.getInt("playerssleepingpercentage"))
-                    .prid(d.getString("prid"))
-                    .rainLevel(d.getFloat("rainLevel"))
-                    .rainTime(d.getInt("rainTime"))
-                    .randomTickSpeed(d.getInt("randomtickspeed"))
-                    .recipesUnlock(d.getBoolean("recipesunlock"))
-                    .requiresCopiedPackRemovalCheck(d.getBoolean("requiresCopiedPackRemovalCheck"))
-                    .serverChunkTickRange(d.getInt("serverChunkTickRange"))
-                    .spawnMobs(d.getBoolean("spawnMobs"))
-                    .startWithMapEnabled(d.getBoolean("startWithMapEnabled"))
-                    .texturePacksRequired(d.getBoolean("texturePacksRequired"))
-                    .useMsaGamertagsOnly(d.getBoolean("useMsaGamertagsOnly"))
-                    .worldStartCount(d.getLong("worldStartCount"))
-                    .worldPolicies(WorldPolicies.builder().build())
-                if (d.contains("raining")) {
-                    levelDatBuilder.raining(d.getBoolean("raining")) //PNX Custom field
-                }
-                if (d.contains("thundering")) {
-                    levelDatBuilder.thundering(d.getBoolean("thundering")) //PNX Custom field
-                }
-                return levelDatBuilder.build()
+                levelDatBuilder.hasBeenLoadedInCreative = (d.getBoolean("hasBeenLoadedInCreative"))
+                levelDatBuilder.hasLockedBehaviorPack = (d.getBoolean("hasLockedBehaviorPack"))
+                levelDatBuilder.hasLockedResourcePack = (d.getBoolean("hasLockedResourcePack"))
+                levelDatBuilder.immutableWorld = (d.getBoolean("immutableWorld"))
+                levelDatBuilder.isCreatedInEditor = (d.getBoolean("isCreatedInEditor"))
+                levelDatBuilder.isExportedFromEditor = (d.getBoolean("isExportedFromEditor"))
+                levelDatBuilder.isFromLockedTemplate = (d.getBoolean("isFromLockedTemplate"))
+                levelDatBuilder.isFromWorldTemplate = (d.getBoolean("isFromWorldTemplate"))
+                levelDatBuilder.isRandomSeedAllowed = (d.getBoolean("isRandomSeedAllowed"))
+                levelDatBuilder.isSingleUseWorld = (d.getBoolean("isSingleUseWorld"))
+                levelDatBuilder.isWorldTemplateOptionLocked = (d.getBoolean("isWorldTemplateOptionLocked"))
+                levelDatBuilder.lastOpenedWithVersion = (SemVersion.from(d.getList("lastOpenedWithVersion", IntTag::class.java)))
+                levelDatBuilder.lightningLevel = (d.getFloat("lightningLevel"))
+                levelDatBuilder.lightningTime = (d.getInt("lightningTime"))
+                levelDatBuilder.limitedWorldDepth = (d.getInt("limitedWorldDepth"))
+                levelDatBuilder.limitedWorldWidth = (d.getInt("limitedWorldWidth"))
+                levelDatBuilder.permissionsLevel = (d.getInt("permissionsLevel"))
+                levelDatBuilder.playerPermissionsLevel = (d.getInt("playerPermissionsLevel"))
+                levelDatBuilder.playersSleepingPercentage = (d.getInt("playerssleepingpercentage"))
+                levelDatBuilder.prid = (d.getString("prid"))
+                levelDatBuilder.rainLevel = (d.getFloat("rainLevel"))
+                levelDatBuilder.rainTime = (d.getInt("rainTime"))
+                levelDatBuilder.randomTickSpeed = (d.getInt("randomtickspeed"))
+                levelDatBuilder.recipesUnlock = (d.getBoolean("recipesunlock"))
+                levelDatBuilder.requiresCopiedPackRemovalCheck = (d.getBoolean("requiresCopiedPackRemovalCheck"))
+                levelDatBuilder.serverChunkTickRange = (d.getInt("serverChunkTickRange"))
+                levelDatBuilder.spawnMobs = (d.getBoolean("spawnMobs"))
+                levelDatBuilder.startWithMapEnabled = (d.getBoolean("startWithMapEnabled"))
+                levelDatBuilder.texturePacksRequired = (d.getBoolean("texturePacksRequired"))
+                levelDatBuilder.useMsaGamertagsOnly = (d.getBoolean("useMsaGamertagsOnly"))
+                levelDatBuilder.worldStartCount = (d.getLong("worldStartCount"))
+                levelDatBuilder.worldPolicies = (WorldPolicies())
+                return levelDatBuilder
             }
         } catch (e: FileNotFoundException) {
             LevelDBProvider.log.error("The level.dat file does not exist!")
@@ -541,23 +528,22 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         throw RuntimeException("level.dat is null!")
     }
 
-    companion object {
+    companion object : Loggable {
         val CACHE: HashMap<String, LevelDBStorage> = HashMap()
         private val levelDatMagic = byteArrayOf(10, 0, 0, 0, 68, 11, 0, 0)
 
         @UsedByReflection
         @Throws(IOException::class)
-        fun generate(path: String, name: String?, generatorConfig: GeneratorConfig) {
+        fun generate(path: String, name: String, generatorConfig: GeneratorConfig) {
             val dataDir = File("$path/db")
             if (!dataDir.exists() && !dataDir.mkdirs()) {
                 throw IOException("Could not create the directory $dataDir")
             }
-            val levelData = LevelDat.builder()
-                .randomSeed(generatorConfig.seed())
-                .name(name)
-                .lastPlayed(System.currentTimeMillis() / 1000)
-                .build()
-            writeLevelDat(path, generatorConfig.dimensionData(), levelData)
+            val levelData = LevelDat()
+            levelData.randomSeed = (generatorConfig.seed)
+            levelData.name = (name)
+            levelData.lastPlayed = (System.currentTimeMillis() / 1000)
+            writeLevelDat(path, generatorConfig.dimensionData, levelData)
         }
 
         @UsedByReflection
@@ -577,7 +563,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
             val path = Path.of(pathName)
             var levelDatName = "level.dat"
             if (dimensionData.dimensionId != 0) {
-                levelDatName = "level_Dim%s.dat".formatted(dimensionData.dimensionId)
+                levelDatName = "level_Dim${dimensionData.dimensionId}.dat"
             }
             val levelDatNow = path.resolve(levelDatName).toFile()
             try {
@@ -591,7 +577,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                     } else {
                         levelDatNow.createNewFile()
                     }
-                    output.write(levelDatMagic) //magic number
+                    output.write(levelDatMagic) // magic number
                     NBTIO.write(createWorldDataNBT(levelDat), output, ByteOrder.LITTLE_ENDIAN)
                 }
             } catch (e: IOException) {
@@ -602,136 +588,133 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         private fun createWorldDataNBT(worldData: LevelDat): CompoundTag {
             val levelDat = CompoundTag()
 
-            levelDat.putString("BiomeOverride", worldData.getBiomeOverride())
-            levelDat.putBoolean("CenterMapsToOrigin", worldData.isCenterMapsToOrigin)
-            levelDat.putBoolean("ConfirmedPlatformLockedContent", worldData.isConfirmedPlatformLockedContent)
-            levelDat.putInt("Difficulty", worldData.getDifficulty())
-            levelDat.putString("FlatWorldLayers", worldData.getFlatWorldLayers())
-            levelDat.putBoolean("ForceGameType", worldData.isForceGameType)
-            levelDat.putInt("GameType", worldData.getGameType().ordinal)
-            levelDat.putInt("Generator", worldData.getGenerator())
-            levelDat.putString("InventoryVersion", worldData.getInventoryVersion())
-            levelDat.putBoolean("LANBroadcast", worldData.isLANBroadcast)
-            levelDat.putBoolean("LANBroadcastIntent", worldData.isLANBroadcastIntent)
-            levelDat.putLong("LastPlayed", worldData.getLastPlayed())
-            levelDat.putString("LevelName", worldData.getName())
-            levelDat.putInt("LimitedWorldOriginX", worldData.getLimitedWorldOriginPoint().getX())
-            levelDat.putInt("LimitedWorldOriginY", worldData.getLimitedWorldOriginPoint().getY())
-            levelDat.putInt("LimitedWorldOriginZ", worldData.getLimitedWorldOriginPoint().getZ())
-            levelDat.putList("MinimumCompatibleClientVersion", worldData.getMinimumCompatibleClientVersion().toTag())
-            levelDat.putList("lastOpenedWithVersion", worldData.getLastOpenedWithVersion().toTag())
-            levelDat.putBoolean("MultiplayerGame", worldData.isMultiplayerGame)
-            levelDat.putBoolean("MultiplayerGameIntent", worldData.isMultiplayerGameIntent)
-            levelDat.putInt("NetherScale", worldData.getNetherScale())
-            levelDat.putInt("NetworkVersion", worldData.getNetworkVersion())
-            levelDat.putInt("Platform", worldData.getPlatform())
-            levelDat.putInt("PlatformBroadcastIntent", worldData.getPlatformBroadcastIntent())
-            levelDat.putLong("RandomSeed", worldData.getRandomSeed())
-            levelDat.putBoolean("SpawnV1Villagers", worldData.isSpawnV1Villagers)
-            levelDat.putInt("SpawnX", worldData.getSpawnPoint().getX())
-            levelDat.putInt("SpawnY", worldData.getSpawnPoint().getY())
-            levelDat.putInt("SpawnZ", worldData.getSpawnPoint().getZ())
-            levelDat.putInt("StorageVersion", worldData.getStorageVersion())
-            levelDat.putLong("Time", worldData.getTime())
-            levelDat.putInt("WorldVersion", worldData.getWorldVersion())
-            levelDat.putInt("XBLBroadcastIntent", worldData.xblBroadcastIntent)
+            levelDat.putString("BiomeOverride", worldData.biomeOverride)
+            levelDat.putBoolean("CenterMapsToOrigin", worldData.centerMapsToOrigin)
+            levelDat.putBoolean("ConfirmedPlatformLockedContent", worldData.confirmedPlatformLockedContent)
+            levelDat.putInt("Difficulty", worldData.difficulty)
+            levelDat.putString("FlatWorldLayers", worldData.flatWorldLayers)
+            levelDat.putBoolean("ForceGameType", worldData.forceGameType)
+            levelDat.putInt("GameType", worldData.gameType.ordinal)
+            levelDat.putInt("Generator", worldData.generator)
+            levelDat.putString("InventoryVersion", worldData.inventoryVersion)
+            levelDat.putBoolean("LANBroadcast", worldData.LANBroadcast)
+            levelDat.putBoolean("LANBroadcastIntent", worldData.LANBroadcastIntent)
+            levelDat.putLong("LastPlayed", worldData.lastPlayed)
+            levelDat.putString("LevelName", worldData.name)
+            levelDat.putInt("LimitedWorldOriginX", worldData.limitedWorldOriginPoint.x)
+            levelDat.putInt("LimitedWorldOriginY", worldData.limitedWorldOriginPoint.y)
+            levelDat.putInt("LimitedWorldOriginZ", worldData.limitedWorldOriginPoint.z)
+            levelDat.putList("MinimumCompatibleClientVersion", worldData.minimumCompatibleClientVersion.toTag())
+            levelDat.putList("lastOpenedWithVersion", worldData.lastOpenedWithVersion.toTag())
+            levelDat.putBoolean("MultiplayerGame", worldData.multiplayerGame)
+            levelDat.putBoolean("MultiplayerGameIntent", worldData.multiplayerGameIntent)
+            levelDat.putInt("NetherScale", worldData.netherScale)
+            levelDat.putInt("NetworkVersion", worldData.networkVersion)
+            levelDat.putInt("Platform", worldData.platform)
+            levelDat.putInt("PlatformBroadcastIntent", worldData.platformBroadcastIntent)
+            levelDat.putLong("RandomSeed", worldData.randomSeed)
+            levelDat.putBoolean("SpawnV1Villagers", worldData.spawnV1Villagers)
+            levelDat.putInt("SpawnX", worldData.spawnPoint.x)
+            levelDat.putInt("SpawnY", worldData.spawnPoint.y)
+            levelDat.putInt("SpawnZ", worldData.spawnPoint.z)
+            levelDat.putInt("StorageVersion", worldData.storageVersion)
+            levelDat.putLong("Time", worldData.time)
+            levelDat.putInt("WorldVersion", worldData.worldVersion)
+            levelDat.putInt("XBLBroadcastIntent", worldData.XBLBroadcastIntent)
             val abilities = CompoundTag()
-                .putBoolean("attackmobs", worldData.getAbilities().isAttackMobs)
-                .putBoolean("attackplayers", worldData.getAbilities().isAttackPlayers)
-                .putBoolean("build", worldData.getAbilities().isBuild)
-                .putBoolean("doorsandswitches", worldData.getAbilities().isDoorsAndSwitches)
-                .putBoolean("flying", worldData.getAbilities().isFlying)
-                .putBoolean("instabuild", worldData.getAbilities().isInstaBuild)
-                .putBoolean("invulnerable", worldData.getAbilities().isInvulnerable)
-                .putBoolean("lightning", worldData.getAbilities().isLightning)
-                .putBoolean("mayfly", worldData.getAbilities().isMayFly)
-                .putBoolean("mine", worldData.getAbilities().isMine)
-                .putBoolean("op", worldData.getAbilities().isOp)
-                .putBoolean("opencontainers", worldData.getAbilities().isOpenContainers)
-                .putBoolean("teleport", worldData.getAbilities().isTeleport)
-                .putFloat("flySpeed", worldData.getAbilities().flySpeed)
-                .putFloat("walkSpeed", worldData.getAbilities().walkSpeed)
+                .putBoolean("attackmobs", worldData.abilities.attackMobs)
+                .putBoolean("attackplayers", worldData.abilities.attackPlayers)
+                .putBoolean("build", worldData.abilities.build)
+                .putBoolean("doorsandswitches", worldData.abilities.doorsAndSwitches)
+                .putBoolean("flying", worldData.abilities.flying)
+                .putBoolean("instabuild", worldData.abilities.instaBuild)
+                .putBoolean("invulnerable", worldData.abilities.invulnerable)
+                .putBoolean("lightning", worldData.abilities.lightning)
+                .putBoolean("mayfly", worldData.abilities.mayFly)
+                .putBoolean("mine", worldData.abilities.mine)
+                .putBoolean("op", worldData.abilities.op)
+                .putBoolean("opencontainers", worldData.abilities.openContainers)
+                .putBoolean("teleport", worldData.abilities.teleport)
+                .putFloat("flySpeed", worldData.abilities.flySpeed)
+                .putFloat("walkSpeed", worldData.abilities.walkSpeed)
             val experiments = CompoundTag()
-                .putBoolean("cameras", worldData.getExperiments().isCameras)
-                .putBoolean("data_driven_biomes", worldData.getExperiments().isDataDrivenBiomes)
-                .putBoolean("data_driven_items", worldData.getExperiments().isDataDrivenItems)
-                .putBoolean("experimental_molang_features", worldData.getExperiments().isExperimentalMolangFeatures)
-                .putBoolean("experiments_ever_used", worldData.getExperiments().isExperimentsEverUsed)
-                .putBoolean("gametest", worldData.getExperiments().isGametest)
-                .putBoolean("saved_with_toggled_experiments", worldData.getExperiments().isSavedWithToggledExperiments)
-                .putBoolean("upcoming_creator_features", worldData.getExperiments().isUpcomingCreatorFeatures)
-                .putBoolean("villager_trades_rebalance", worldData.getExperiments().isVillagerTradesRebalance)
+                .putBoolean("cameras", worldData.experiments.cameras)
+                .putBoolean("data_driven_biomes", worldData.experiments.dataDrivenBiomes)
+                .putBoolean("data_driven_items", worldData.experiments.dataDrivenItems)
+                .putBoolean("experimental_molang_features", worldData.experiments.experimentalMolangFeatures)
+                .putBoolean("experiments_ever_used", worldData.experiments.experimentsEverUsed)
+                .putBoolean("gametest", worldData.experiments.gametest)
+                .putBoolean("saved_with_toggled_experiments", worldData.experiments.savedWithToggledExperiments)
+                .putBoolean("upcoming_creator_features", worldData.experiments.upcomingCreatorFeatures)
+                .putBoolean("villager_trades_rebalance", worldData.experiments.villagerTradesRebalance)
             levelDat.put("abilities", abilities)
             levelDat.put("experiments", experiments)
 
-            levelDat.putBoolean("bonusChestEnabled", worldData.isBonusChestEnabled)
-            levelDat.putBoolean("bonusChestSpawned", worldData.isBonusChestSpawned)
-            levelDat.putBoolean("cheatsEnabled", worldData.isCheatsEnabled)
-            levelDat.putBoolean("commandsEnabled", worldData.isCommandsEnabled)
-            levelDat.putLong("currentTick", worldData.getCurrentTick())
-            levelDat.putInt("daylightCycle", worldData.getDaylightCycle())
-            levelDat.putInt("editorWorldType", worldData.getEditorWorldType())
-            levelDat.putInt("eduOffer", worldData.getEduOffer())
-            levelDat.putBoolean("educationFeaturesEnabled", worldData.isEducationFeaturesEnabled)
+            levelDat.putBoolean("bonusChestEnabled", worldData.bonusChestEnabled)
+            levelDat.putBoolean("bonusChestSpawned", worldData.bonusChestSpawned)
+            levelDat.putBoolean("cheatsEnabled", worldData.cheatsEnabled)
+            levelDat.putBoolean("commandsEnabled", worldData.commandsEnabled)
+            levelDat.putLong("currentTick", worldData.currentTick)
+            levelDat.putInt("daylightCycle", worldData.daylightCycle)
+            levelDat.putInt("editorWorldType", worldData.editorWorldType)
+            levelDat.putInt("eduOffer", worldData.eduOffer)
+            levelDat.putBoolean("educationFeaturesEnabled", worldData.educationFeaturesEnabled)
 
             levelDat.put(
                 "commandblockoutput",
-                worldData.getGameRules().gameRules[GameRule.COMMAND_BLOCK_OUTPUT].getTag()
+                worldData.gameRules.getGameRules()[GameRule.COMMAND_BLOCK_OUTPUT]!!.tag
             )
             levelDat.put(
                 "commandblocksenabled",
-                worldData.getGameRules().gameRules[GameRule.COMMAND_BLOCKS_ENABLED].getTag()
+                worldData.gameRules.getGameRules()[GameRule.COMMAND_BLOCKS_ENABLED]!!.tag
             )
-            levelDat.put("dodaylightcycle", worldData.getGameRules().gameRules[GameRule.DO_DAYLIGHT_CYCLE].getTag())
-            levelDat.put("doentitydrops", worldData.getGameRules().gameRules[GameRule.DO_ENTITY_DROPS].getTag())
-            levelDat.put("dofiretick", worldData.getGameRules().gameRules[GameRule.DO_FIRE_TICK].getTag())
+            levelDat.put("dodaylightcycle", worldData.gameRules.getGameRules()[GameRule.DO_DAYLIGHT_CYCLE]!!.tag)
+            levelDat.put("doentitydrops", worldData.gameRules.getGameRules()[GameRule.DO_ENTITY_DROPS]!!.tag)
+            levelDat.put("dofiretick", worldData.gameRules.getGameRules()[GameRule.DO_FIRE_TICK]!!.tag)
             levelDat.put(
                 "doimmediaterespawn",
-                worldData.getGameRules().gameRules[GameRule.DO_IMMEDIATE_RESPAWN].getTag()
+                worldData.gameRules.getGameRules()[GameRule.DO_IMMEDIATE_RESPAWN]!!.tag
             )
-            levelDat.put("doinsomnia", worldData.getGameRules().gameRules[GameRule.DO_INSOMNIA].getTag())
-            levelDat.put("dolimitedcrafting", worldData.getGameRules().gameRules[GameRule.DO_LIMITED_CRAFTING].getTag())
-            levelDat.put("domobloot", worldData.getGameRules().gameRules[GameRule.DO_MOB_LOOT].getTag())
-            levelDat.put("domobspawning", worldData.getGameRules().gameRules[GameRule.DO_MOB_SPAWNING].getTag())
-            levelDat.put("dotiledrops", worldData.getGameRules().gameRules[GameRule.DO_TILE_DROPS].getTag())
-            levelDat.put("doweathercycle", worldData.getGameRules().gameRules[GameRule.DO_WEATHER_CYCLE].getTag())
-            levelDat.put("drowningdamage", worldData.getGameRules().gameRules[GameRule.DROWNING_DAMAGE].getTag())
-            levelDat.put("falldamage", worldData.getGameRules().gameRules[GameRule.FALL_DAMAGE].getTag())
-            levelDat.put("firedamage", worldData.getGameRules().gameRules[GameRule.FIRE_DAMAGE].getTag())
-            levelDat.put("freezedamage", worldData.getGameRules().gameRules[GameRule.FREEZE_DAMAGE].getTag())
+            levelDat.put("doinsomnia", worldData.gameRules.getGameRules()[GameRule.DO_INSOMNIA]!!.tag)
+            levelDat.put("dolimitedcrafting", worldData.gameRules.getGameRules()[GameRule.DO_LIMITED_CRAFTING]!!.tag)
+            levelDat.put("domobloot", worldData.gameRules.getGameRules()[GameRule.DO_MOB_LOOT]!!.tag)
+            levelDat.put("domobspawning", worldData.gameRules.getGameRules()[GameRule.DO_MOB_SPAWNING]!!.tag)
+            levelDat.put("dotiledrops", worldData.gameRules.getGameRules()[GameRule.DO_TILE_DROPS]!!.tag)
+            levelDat.put("doweathercycle", worldData.gameRules.getGameRules()[GameRule.DO_WEATHER_CYCLE]!!.tag)
+            levelDat.put("drowningdamage", worldData.gameRules.getGameRules()[GameRule.DROWNING_DAMAGE]!!.tag)
+            levelDat.put("falldamage", worldData.gameRules.getGameRules()[GameRule.FALL_DAMAGE]!!.tag)
+            levelDat.put("firedamage", worldData.gameRules.getGameRules()[GameRule.FIRE_DAMAGE]!!.tag)
+            levelDat.put("freezedamage", worldData.gameRules.getGameRules()[GameRule.FREEZE_DAMAGE]!!.tag)
             levelDat.put(
                 "functioncommandlimit",
-                worldData.getGameRules().gameRules[GameRule.FUNCTION_COMMAND_LIMIT].getTag()
+                worldData.gameRules.getGameRules()[GameRule.FUNCTION_COMMAND_LIMIT]!!.tag
             )
-            levelDat.put("keepinventory", worldData.getGameRules().gameRules[GameRule.KEEP_INVENTORY].getTag())
+            levelDat.put("keepinventory", worldData.gameRules.getGameRules()[GameRule.KEEP_INVENTORY]!!.tag)
             levelDat.put(
                 "maxcommandchainlength",
-                worldData.getGameRules().gameRules[GameRule.MAX_COMMAND_CHAIN_LENGTH].getTag()
+                worldData.gameRules.getGameRules()[GameRule.MAX_COMMAND_CHAIN_LENGTH]!!.tag
             )
-            levelDat.put("mobgriefing", worldData.getGameRules().gameRules[GameRule.MOB_GRIEFING].getTag())
+            levelDat.put("mobgriefing", worldData.gameRules.getGameRules()[GameRule.MOB_GRIEFING]!!.tag)
             levelDat.put(
                 "naturalregeneration",
-                worldData.getGameRules().gameRules[GameRule.NATURAL_REGENERATION].getTag()
+                worldData.gameRules.getGameRules()[GameRule.NATURAL_REGENERATION]!!.tag
             )
-            levelDat.put("pvp", worldData.getGameRules().gameRules[GameRule.PVP].getTag())
+            levelDat.put("pvp", worldData.gameRules.getGameRules()[GameRule.PVP]!!.tag)
             levelDat.put(
                 "respawnblocksexplode",
-                worldData.getGameRules().gameRules[GameRule.RESPAWN_BLOCKS_EXPLODE].getTag()
+                worldData.gameRules.getGameRules()[GameRule.RESPAWN_BLOCKS_EXPLODE]!!.tag
             )
             levelDat.put(
                 "sendcommandfeedback",
-                worldData.getGameRules().gameRules[GameRule.SEND_COMMAND_FEEDBACK].getTag()
+                worldData.gameRules.getGameRules()[GameRule.SEND_COMMAND_FEEDBACK]!!.tag
             )
-            levelDat.put("showbordereffect", worldData.getGameRules().gameRules[GameRule.SHOW_BORDER_EFFECT].getTag())
-            levelDat.put("showcoordinates", worldData.getGameRules().gameRules[GameRule.SHOW_COORDINATES].getTag())
-            levelDat.put("showdeathmessages", worldData.getGameRules().gameRules[GameRule.SHOW_DEATH_MESSAGES].getTag())
-            levelDat.put("showtags", worldData.getGameRules().gameRules[GameRule.SHOW_TAGS].getTag())
-            levelDat.put("spawnradius", worldData.getGameRules().gameRules[GameRule.SPAWN_RADIUS].getTag())
-            levelDat.put("tntexplodes", worldData.getGameRules().gameRules[GameRule.TNT_EXPLODES].getTag())
+            levelDat.put("showbordereffect", worldData.gameRules.getGameRules()[GameRule.SHOW_BORDER_EFFECT]!!.tag)
+            levelDat.put("showcoordinates", worldData.gameRules.getGameRules()[GameRule.SHOW_COORDINATES]!!.tag)
+            levelDat.put("showdeathmessages", worldData.gameRules.getGameRules()[GameRule.SHOW_DEATH_MESSAGES]!!.tag)
+            levelDat.put("showtags", worldData.gameRules.getGameRules()[GameRule.SHOW_TAGS]!!.tag)
+            levelDat.put("spawnradius", worldData.gameRules.getGameRules()[GameRule.SPAWN_RADIUS]!!.tag)
+            levelDat.put("tntexplodes", worldData.gameRules.getGameRules()[GameRule.TNT_EXPLODES]!!.tag)
 
-            //PNX Custom field
-            levelDat.putBoolean("raining", worldData.isRaining)
-            levelDat.putBoolean("thundering", worldData.isThundering)
             return levelDat
         }
     }

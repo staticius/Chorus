@@ -50,13 +50,9 @@ interface LevelProvider {
 
     fun setChunk(chunkX: Int, chunkZ: Int, chunk: IChunk)
 
-    val name: String?
-
-    var isRaining: Boolean
+    val name: String
 
     var rainTime: Int
-
-    var isThundering: Boolean
 
     var thunderTime: Int
 
@@ -66,7 +62,7 @@ interface LevelProvider {
 
     var seed: Long
 
-    var spawn: Vector3?
+    var spawn: Vector3
 
     val loadedChunks: Map<Long, IChunk>
 
@@ -80,7 +76,7 @@ interface LevelProvider {
 
     val gamerules: GameRules
 
-    fun setGameRules(rules: GameRules?)
+    fun setGameRules(rules: GameRules)
 
     val maximumLayer: Int
         get() = 1 //two layer 0,1

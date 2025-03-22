@@ -1,6 +1,7 @@
 package org.chorus.level.format
 
 import org.chorus.level.DimensionData
+import org.chorus.level.DimensionEnum
 
 
 import java.util.concurrent.ThreadLocalRandom
@@ -16,7 +17,7 @@ data class LevelConfig(
         var enableAntiXray: Boolean = false,
         var antiXrayMode: AntiXrayMode = AntiXrayMode.LOW,
         var preDeobfuscate: Boolean = true,
-        var dimensionData: DimensionData? = null,
+        var dimensionData: DimensionData = DimensionEnum.OVERWORLD.dimensionData,
         var preset: Map<String, Any>? = null,
     )
 

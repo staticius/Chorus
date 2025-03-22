@@ -5,7 +5,6 @@ import org.chorus.blockentity.BlockEntity
 import org.chorus.entity.Entity
 import org.chorus.level.DimensionData
 import org.chorus.math.BlockVector3
-import org.chorus.nbt.tag.CompoundTag
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.Range
 import java.io.IOException
@@ -155,10 +154,6 @@ interface IChunk {
 
     fun setBiomeId(x: Int, y: Int, z: Int, biomeId: Int)
 
-    var isLightPopulated: Boolean
-
-    fun setLightPopulated()
-
     var chunkState: ChunkState
 
     fun addEntity(entity: Entity)
@@ -198,8 +193,6 @@ interface IChunk {
     fun initChunk()
 
     val heightMapArray: ShortArray
-
-    val extraData: CompoundTag
 
     fun hasChanged(): Boolean
 

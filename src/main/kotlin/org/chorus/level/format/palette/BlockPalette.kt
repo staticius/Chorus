@@ -55,7 +55,7 @@ class BlockPalette : Palette<BlockState> {
                 obfuscatePalette = BlockPalette(BlockAir.STATE)
                 this.copyTo(obfuscatePalette!!)
             }
-            for (i in 0..<ChunkSection.Companion.SIZE) {
+            for (i in 0..<ChunkSection.SIZE) {
                 val x = (i shr 8) and 0xF
                 val z = (i shr 4) and 0xF
                 val y = i and 0xF
@@ -77,7 +77,7 @@ class BlockPalette : Palette<BlockState> {
                         }
                     }
                 }
-                obfuscatePalette!![i] = Registries.BLOCKSTATE[rid]
+                obfuscatePalette!![i] = Registries.BLOCKSTATE[rid]!!
             }
             this.needReObfuscate = false
             write = obfuscatePalette!!

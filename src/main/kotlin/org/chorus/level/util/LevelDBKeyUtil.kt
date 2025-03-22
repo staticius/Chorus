@@ -14,6 +14,7 @@ enum class LevelDBKeyUtil(encoded: Char) {
     /**
      * Biome IDs are written as 8-bit integers. No longer written since v1.18.0.
      */
+    @Deprecated("No longer written since v1.18.0")
     DATA_2D('-'),
 
     /**
@@ -29,6 +30,7 @@ enum class LevelDBKeyUtil(encoded: Char) {
     /**
      * Each entry of the biome array contains a biome ID in the first byte, and the final 3 bytes are red/green/blue respectively. No longer written since v1.0.0.
      */
+    @Deprecated("No longer written since v1.0.0")
     DATA_2D_LEGACY('.'),
 
     /**
@@ -43,6 +45,7 @@ enum class LevelDBKeyUtil(encoded: Char) {
      *
      * Biomes are IDs plus RGB colours similar to Data2DLegacy.
      */
+    @Deprecated("No longer written since v1.0.0")
     LEGACY_TERRAIN('0'),
 
     /**
@@ -63,9 +66,12 @@ enum class LevelDBKeyUtil(encoded: Char) {
     /**
      * Array of blocks that appear in the same place as other blocks. Used for grass appearing inside snow layers prior to v1.2.13. No longer written as of v1.2.13.
      */
-    BLOCK_EXTRA_DATA('4'),
+    @Deprecated("No longer written since v1.2.13")
+    LEGACY_BLOCK_EXTRA_DATA('4'),
+
     BIOME_STATE('5'),
-    CHUNK_FINALIZED_STATE('6'),
+
+    FINALIZED_STATE('6'),
 
     /**
      * Education Edition Feature
@@ -76,17 +82,9 @@ enum class LevelDBKeyUtil(encoded: Char) {
      * Bounding boxes for structure spawns stored in binary format
      */
     HARDCODED_SPAWNERS('9'),
+
+    @Deprecated("Moved to 44 in v1.16.100")
     LEGACY_VERSION('v'),
-
-    /**
-     * Stores PNX-defined extra data,BIG BYTE_ORDER NBT FORMAT
-     */
-    PNX_EXTRA_DATA('|'),
-
-    /**
-     * Stores PNX-defined extra data,blockLight and SkyLight
-     */
-    PNX_LIGHT('}');
 
     private val encoded = encoded.code.toByte()
 
@@ -106,19 +104,9 @@ enum class LevelDBKeyUtil(encoded: Char) {
 
     fun getKey(chunkX: Int, chunkZ: Int, dimension: DimensionData): ByteArray {
         if (dimension == DimensionEnum.OVERWORLD.dimensionData) {
-            return byteArrayOf(
-                (chunkX and 0xff).toByte(),
-                ((chunkX ushr 8) and 0xff).toByte(),
-                ((chunkX ushr 16) and 0xff).toByte(),
-                ((chunkX ushr 24) and 0xff).toByte(),
-                (chunkZ and 0xff).toByte(),
-                ((chunkZ ushr 8) and 0xff).toByte(),
-                ((chunkZ ushr 16) and 0xff).toByte(),
-                ((chunkZ ushr 24) and 0xff).toByte(),
-                this.encoded
-            )
+            return getKey(chunkX, chunkZ)
         } else {
-            val dimensionId = dimension.dimensionId.toByte()
+            val dimensionId = dimension.dimensionId
             return byteArrayOf(
                 (chunkX and 0xff).toByte(),
                 ((chunkX ushr 8) and 0xff).toByte(),
@@ -128,10 +116,10 @@ enum class LevelDBKeyUtil(encoded: Char) {
                 ((chunkZ ushr 8) and 0xff).toByte(),
                 ((chunkZ ushr 16) and 0xff).toByte(),
                 ((chunkZ ushr 24) and 0xff).toByte(),
-                (dimensionId.toInt() and 0xff).toByte(),
-                ((dimensionId.toInt() ushr 8) and 0xff).toByte(),
-                ((dimensionId.toInt() ushr 16) and 0xff).toByte(),
-                ((dimensionId.toInt() ushr 24) and 0xff).toByte(),
+                (dimensionId and 0xff).toByte(),
+                ((dimensionId ushr 8) and 0xff).toByte(),
+                ((dimensionId ushr 16) and 0xff).toByte(),
+                ((dimensionId ushr 24) and 0xff).toByte(),
                 this.encoded
             )
         }
@@ -155,18 +143,7 @@ enum class LevelDBKeyUtil(encoded: Char) {
 
     fun getKey(chunkX: Int, chunkZ: Int, chunkSectionY: Int, dimension: DimensionData): ByteArray {
         if (dimension == DimensionEnum.OVERWORLD.dimensionData) {
-            return byteArrayOf(
-                (chunkX and 0xff).toByte(),
-                ((chunkX ushr 8) and 0xff).toByte(),
-                ((chunkX ushr 16) and 0xff).toByte(),
-                ((chunkX ushr 24) and 0xff).toByte(),
-                (chunkZ and 0xff).toByte(),
-                ((chunkZ ushr 8) and 0xff).toByte(),
-                ((chunkZ ushr 16) and 0xff).toByte(),
-                ((chunkZ ushr 24) and 0xff).toByte(),
-                this.encoded,
-                chunkSectionY.toByte()
-            )
+            return getKey(chunkX, chunkZ, chunkSectionY)
         } else {
             val dimensionId = dimension.dimensionId.toByte()
             return byteArrayOf(
@@ -215,16 +192,7 @@ enum class LevelDBKeyUtil(encoded: Char) {
 
         fun getChunkKey(chunkX: Int, chunkZ: Int, dimension: DimensionData): ByteArray {
             if (dimension == DimensionEnum.OVERWORLD.dimensionData) {
-                return byteArrayOf(
-                    (chunkX and 0xff).toByte(),
-                    ((chunkX ushr 8) and 0xff).toByte(),
-                    ((chunkX ushr 16) and 0xff).toByte(),
-                    ((chunkX ushr 24) and 0xff).toByte(),
-                    (chunkZ and 0xff).toByte(),
-                    ((chunkZ ushr 8) and 0xff).toByte(),
-                    ((chunkZ ushr 16) and 0xff).toByte(),
-                    ((chunkZ ushr 24) and 0xff).toByte()
-                )
+                return getChunkKey(chunkX, chunkZ)
             } else {
                 val dimensionId = dimension.dimensionId.toByte()
                 return byteArrayOf(

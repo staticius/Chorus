@@ -8,11 +8,6 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.*
 import java.io.IOException
 
-/**
- * Allay Project 11/12/2023
- *
- * @author Cool_Loong
- */
 object PaletteUtils {
     fun fastReadBlockHash(input: NBTInputStream, byteBuf: ByteBuf): Pair<Int, SemVersion>? {
         try {

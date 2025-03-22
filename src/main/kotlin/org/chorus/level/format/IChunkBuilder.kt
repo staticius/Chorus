@@ -3,11 +3,6 @@ package org.chorus.level.format
 import org.chorus.level.DimensionData
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * Allay Project 12/16/2023
- *
- * @author Cool_Loong
- */
 interface IChunkBuilder {
     fun chunkX(chunkX: Int): IChunkBuilder
 
@@ -17,23 +12,21 @@ interface IChunkBuilder {
 
     val chunkZ: Int
 
-    fun state(state: ChunkState?): IChunkBuilder
+    fun state(state: ChunkState): IChunkBuilder
 
-    fun levelProvider(levelProvider: LevelProvider?): IChunkBuilder
+    fun levelProvider(levelProvider: LevelProvider): IChunkBuilder
 
-    val dimensionData: DimensionData?
+    val dimensionData: DimensionData
 
-    fun sections(sections: Array<ChunkSection?>?): IChunkBuilder
+    fun sections(sections: Array<ChunkSection?>): IChunkBuilder
 
-    val sections: Array<ChunkSection?>?
+    val sections: Array<ChunkSection?>
 
-    fun heightMap(heightMap: ShortArray?): IChunkBuilder
+    fun heightMap(heightMap: ShortArray): IChunkBuilder
 
-    fun entities(entities: List<CompoundTag>?): IChunkBuilder
+    fun entities(entities: List<CompoundTag>): IChunkBuilder
 
-    fun blockEntities(blockEntities: List<CompoundTag>?): IChunkBuilder
-
-    fun extraData(extraData: CompoundTag?): IChunkBuilder
+    fun blockEntities(blockEntities: List<CompoundTag>): IChunkBuilder
 
     fun build(): IChunk
 

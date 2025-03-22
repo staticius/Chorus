@@ -3,14 +3,20 @@ package org.chorus.level.format.bitarray
 import com.google.common.base.Objects
 import org.chorus.math.ChorusMath
 
-/**
- * Allay Project 2023/4/14
- *
- * @author JukeboxMC | daoge_cmd
- */
 @JvmRecord
-data class Pow2BitArray(val version: BitArrayVersion, val size: Int, val words: IntArray) :
-    BitArray {
+data class Pow2BitArray(val version: BitArrayVersion, val size: Int, val words: IntArray) : BitArray {
+    override fun size(): Int {
+        return size
+    }
+
+    override fun words(): IntArray {
+        return words
+    }
+
+    override fun version(): BitArrayVersion {
+        return version
+    }
+
     override fun set(index: Int, value: Int) {
         val bitIndex = index * version.bits
         val arrayIndex = bitIndex shr 5
@@ -33,10 +39,10 @@ data class Pow2BitArray(val version: BitArrayVersion, val size: Int, val words: 
         )
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o !is Pow2BitArray) return false
-        return size == o.size && version == o.version && words.contentEquals(o.words)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Pow2BitArray) return false
+        return size == other.size && version == other.version && words.contentEquals(other.words)
     }
 
     override fun hashCode(): Int {

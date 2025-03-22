@@ -1,11 +1,9 @@
 package org.chorus.level.format.leveldb
 
-import com.google.common.base.Predicates
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufAllocator
 import io.netty.buffer.ByteBufOutputStream
 import io.netty.buffer.Unpooled
-import it.unimi.dsi.fastutil.objects.ReferenceArrayList
 import org.chorus.Player
 import org.chorus.block.BlockAir
 import org.chorus.block.BlockUnknown
@@ -35,54 +33,39 @@ import java.util.*
  */
 class LevelDBChunkSerializer private constructor() {
     fun serialize(writeBatch: WriteBatch, chunk: IChunk) {
-        chunk.batchProcess { unsafeChunk: UnsafeChunk ->
+        chunk.batchProcess { unsafeChunk ->
             try {
                 writeBatch.put(
                     LevelDBKeyUtil.VERSION.getKey(
                         unsafeChunk.x,
                         unsafeChunk.z,
-                        unsafeChunk.provider.dimensionData
-                    ), byteArrayOf(IChunk.Companion.VERSION.toByte())
+                        unsafeChunk.dimensionData
+                    ), byteArrayOf(IChunk.VERSION.toByte())
                 )
                 writeBatch.put(
-                    LevelDBKeyUtil.CHUNK_FINALIZED_STATE.getKey(
+                    LevelDBKeyUtil.FINALIZED_STATE.getKey(
                         unsafeChunk.x,
                         unsafeChunk.z,
                         unsafeChunk.dimensionData
                     ), Unpooled.buffer(4).writeIntLE(unsafeChunk.chunkState.ordinal - 1).array()
                 )
-                serializeBlock(writeBatch, unsafeChunk)
+                serializeSubChunks(writeBatch, unsafeChunk)
                 serializeHeightAndBiome(writeBatch, unsafeChunk)
-                serializeLight(writeBatch, unsafeChunk)
-                writeBatch.put(
-                    LevelDBKeyUtil.PNX_EXTRA_DATA.getKey(
-                        unsafeChunk.x,
-                        unsafeChunk.z,
-                        unsafeChunk.dimensionData
-                    ), NBTIO.write(unsafeChunk.extraData)
-                )
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
         }
-        //Spawning block entities requires call the getSpawnPacket method,
-        //which is easy to call Level#getBlock, which can cause a deadlock,
-        //so handle it without locking
-        serializeTileAndEntity(writeBatch, chunk)
+        // Spawning block entities requires call the getSpawnPacket method,
+        // which is easy to call Level#getBlock, which can cause a deadlock,
+        // so handle it without locking
+        serializeEntities(writeBatch, chunk)
     }
 
     @Throws(IOException::class)
     fun deserialize(db: DB, builder: IChunkBuilder) {
-        var versionValue = db[LevelDBKeyUtil.VERSION.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)]
-        if (versionValue == null) {
-            versionValue =
-                db[LevelDBKeyUtil.LEGACY_VERSION.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)]
-        }
-        if (versionValue == null) {
-            return
-        }
+        var versionValue = db[LevelDBKeyUtil.VERSION.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)] ?: return
         val finalized =
-            db[LevelDBKeyUtil.CHUNK_FINALIZED_STATE.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)]
+            db[LevelDBKeyUtil.FINALIZED_STATE.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)]
         if (finalized == null) {
             builder.state(ChunkState.FINISHED)
         } else {
@@ -90,90 +73,24 @@ class LevelDBChunkSerializer private constructor() {
             val i = if (byteBuf.readableBytes() >= 4) byteBuf.readIntLE() else byteBuf.readByte().toInt()
             builder.state(ChunkState.entries[i + 1])
         }
-        val extraData = db[LevelDBKeyUtil.PNX_EXTRA_DATA.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)]
-        var pnxExtraData: CompoundTag? = null
-        if (extraData != null) {
-            builder.extraData(NBTIO.read(extraData).also { pnxExtraData = it })
-        }
-        deserializeBlock(db, builder, pnxExtraData)
-        deserializeHeightAndBiome(db, builder, pnxExtraData)
-        deserializeTileAndEntity(db, builder, pnxExtraData)
-        deserializeLight(db, builder, pnxExtraData)
+
+        deserializeSubChunks(db, builder)
+        deserializeHeightAndBiome(db, builder)
+        deserializeEntities(db, builder)
     }
 
-    //serialize chunk section light
-    private fun serializeLight(writeBatch: WriteBatch, chunk: UnsafeChunk) {
+    private fun serializeSubChunks(writeBatch: WriteBatch, chunk: UnsafeChunk) {
         val sections = chunk.sections
         for (section in sections) {
-            if (section == null) {
-                continue
-            }
+            section ?: continue
+
             val buffer = ByteBufAllocator.DEFAULT.ioBuffer()
             try {
-                val blockLights = section.blockLights
-                buffer.writeInt(blockLights.size)
-                buffer.writeBytes(blockLights)
-                val skyLights = section.skyLights
-                buffer.writeInt(skyLights.size)
-                buffer.writeBytes(skyLights)
-                writeBatch.put(
-                    LevelDBKeyUtil.PNX_LIGHT.getKey(
-                        chunk.x,
-                        chunk.z,
-                        section.y.toInt(),
-                        chunk.provider.dimensionData
-                    ), Utils.convertByteBuf2Array(buffer)
-                )
-            } finally {
-                buffer.release()
-            }
-        }
-    }
-
-    private fun deserializeLight(db: DB, builder: IChunkBuilder, pnxExtraData: CompoundTag?) {
-        val dimensionInfo = builder.dimensionData
-        val minSectionY = dimensionInfo.minSectionY
-        for (ySection in minSectionY..dimensionInfo.maxSectionY) {
-            val bytes = db[LevelDBKeyUtil.PNX_LIGHT.getKey(
-                builder.chunkX, builder.chunkZ, ySection,
-                dimensionInfo!!
-            )]
-            if (bytes != null) {
-                val byteBuf = ByteBufAllocator.DEFAULT.ioBuffer()
-                try {
-                    byteBuf.writeBytes(bytes)
-                    val i = byteBuf.readInt()
-                    val blockLights = ByteArray(i)
-                    byteBuf.readBytes(blockLights)
-                    val i2 = byteBuf.readInt()
-                    val skyLights = ByteArray(i2)
-                    byteBuf.readBytes(skyLights)
-                    val section = builder.sections[ySection - minSectionY]
-                    section!!.blockLights.copyFrom(blockLights)
-                    section.skyLights.copyFrom(skyLights)
-                } finally {
-                    byteBuf.release()
-                }
-            }
-        }
-    }
-
-    //serialize chunk section
-    private fun serializeBlock(writeBatch: WriteBatch, chunk: UnsafeChunk) {
-        val sections = chunk.sections
-        for (section in sections) {
-            if (section == null) {
-                continue
-            }
-            val buffer = ByteBufAllocator.DEFAULT.ioBuffer()
-            try {
-                buffer.writeByte(ChunkSection.Companion.VERSION)
-                buffer.writeByte(ChunkSection.Companion.LAYER_COUNT)
+                buffer.writeByte(ChunkSection.VERSION)
+                buffer.writeByte(ChunkSection.LAYER_COUNT)
                 buffer.writeByte(section.y.toInt())
-                for (i in 0..<ChunkSection.Companion.LAYER_COUNT) {
-                    section.blockLayer[i].writeToStoragePersistent(
-                        buffer
-                    ) { obj: V? -> obj.getBlockStateTag() }
+                for (i in 0..<ChunkSection.LAYER_COUNT) {
+                    section.blockLayer[i].writeToStoragePersistent(buffer) { it.blockStateTag }
                 }
                 writeBatch.put(
                     LevelDBKeyUtil.CHUNK_SECTION_PREFIX.getKey(
@@ -189,110 +106,74 @@ class LevelDBChunkSerializer private constructor() {
         }
     }
 
-    //serialize chunk section
-    private fun deserializeBlock(db: DB, builder: IChunkBuilder, pnxExtraData: CompoundTag?) {
-        val dimensionInfo = builder.dimensionData
-        val sections = arrayOfNulls<ChunkSection>(dimensionInfo.chunkSectionCount)
-        val minSectionY = dimensionInfo.minSectionY
-        for (ySection in minSectionY..dimensionInfo.maxSectionY) {
-            val bytes = db[LevelDBKeyUtil.CHUNK_SECTION_PREFIX.getKey(
-                builder.chunkX, builder.chunkZ, ySection,
-                dimensionInfo!!
-            )]
-            if (bytes != null) {
-                val byteBuf = ByteBufAllocator.DEFAULT.ioBuffer()
-                try {
-                    byteBuf.writeBytes(bytes)
-                    val subChunkVersion = byteBuf.readByte()
-                    var layers = 2
-                    when (subChunkVersion) {
-                        8, 9 -> {
-                            layers = byteBuf.readByte().toInt() //layers
-                            if (subChunkVersion.toInt() == 9) {
-                                byteBuf.readByte() //sectionY not use
-                            }
-                            val section: ChunkSection
-                            if (layers <= 2) {
-                                section = ChunkSection(ySection.toByte())
-                            } else {
-                                val palettes = arrayOfNulls<BlockPalette>(layers)
-                                Arrays.fill(
-                                    palettes,
-                                    BlockPalette(
-                                        BlockAir.properties.defaultState,
-                                        ReferenceArrayList(16),
-                                        BitArrayVersion.V2
-                                    )
-                                )
-                                section = ChunkSection(ySection.toByte(), palettes)
-                            }
-                            var layer = 0
-                            while (layer < layers) {
-                                section.blockLayer[layer].readFromStoragePersistent(
-                                    byteBuf
-                                ) { hash: Int ->
-                                    val blockState = Registries.BLOCKSTATE[hash]
-                                        ?: return@readFromStoragePersistent BlockUnknown.properties.defaultState
-                                    blockState
-                                }
-                                layer++
-                            }
-                            sections[ySection - minSectionY] = section
-                        }
+    private fun deserializeSubChunks(db: DB, builder: IChunkBuilder) {
+        val dimensionData = builder.dimensionData
+        val minSectionY = dimensionData.minSectionY
 
-                        1 -> {
-                            val section: ChunkSection
-                            if (layers <= 2) {
-                                section = ChunkSection(ySection.toByte())
-                            } else {
-                                val palettes = arrayOfNulls<BlockPalette>(layers)
-                                Arrays.fill(
-                                    palettes,
-                                    BlockPalette(
-                                        BlockAir.properties.defaultState,
-                                        ReferenceArrayList(16),
-                                        BitArrayVersion.V2
-                                    )
-                                )
-                                section = ChunkSection(ySection.toByte(), palettes)
-                            }
-                            var layer = 0
-                            while (layer < layers) {
-                                section.blockLayer[layer].readFromStoragePersistent(
-                                    byteBuf
-                                ) { hash: Int ->
-                                    val blockState = Registries.BLOCKSTATE[hash]
-                                        ?: return@readFromStoragePersistent BlockUnknown.properties.defaultState
-                                    blockState
-                                }
-                                layer++
-                            }
-                            sections[ySection - minSectionY] = section
-                        }
+        val sections = arrayOfNulls<ChunkSection>(dimensionData.chunkSectionCount)
+        for (sectionY in minSectionY..dimensionData.maxSectionY) {
+            val bytes = db[LevelDBKeyUtil.CHUNK_SECTION_PREFIX.getKey(
+                builder.chunkX, builder.chunkZ, sectionY,
+                dimensionData
+            )] ?: continue
+
+            val byteBuf = ByteBufAllocator.DEFAULT.ioBuffer()
+            try {
+                byteBuf.writeBytes(bytes)
+
+                var layers = 2
+
+                val iSubChunkVersion = byteBuf.readByte().toInt()
+                if (iSubChunkVersion == 8 || iSubChunkVersion == 9) {
+                    layers = byteBuf.readByte().toInt()
+                    if (iSubChunkVersion == 9) {
+                        byteBuf.readByte() // sectionY not in use
                     }
-                } finally {
-                    byteBuf.release()
                 }
+
+                when (iSubChunkVersion) {
+                    1, 8, 9 -> {
+                        val section: ChunkSection
+                        if (layers <= 2) {
+                            section = ChunkSection(sectionY.toByte())
+                        } else {
+                            val palettes = Array(layers) { BlockPalette(
+                                BlockAir.properties.defaultState,
+                                BitArrayVersion.V2
+                            ) }
+                            section = ChunkSection(sectionY.toByte(), palettes)
+                        }
+                        var layer = 0
+                        while (layer < layers) {
+                            section.blockLayer[layer].readFromStoragePersistent(
+                                byteBuf
+                            ) { hash: Int ->
+                                val blockState = Registries.BLOCKSTATE[hash]
+                                    ?: return@readFromStoragePersistent BlockUnknown.properties.defaultState
+                                blockState
+                            }
+                            layer++
+                        }
+                        sections[sectionY - minSectionY] = section
+                    }
+                }
+            } finally {
+                byteBuf.release()
             }
-            builder.sections(sections)
         }
+        builder.sections(sections)
     }
 
-    //write biomeAndHeight
     private fun serializeHeightAndBiome(writeBatch: WriteBatch, chunk: UnsafeChunk) {
-        //Write biomeAndHeight
         val heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer()
         try {
             for (height in chunk.heightMapArray) {
                 heightAndBiomesBuffer.writeShortLE(height.toInt())
             }
-            var biomePalette: Palette<Int?>? = null
-            for (ySection in chunk.provider.dimensionData.minSectionY..chunk.provider.dimensionData.maxSectionY) {
-                val section = chunk.getSection(ySection) ?: continue
-                section.biomes.writeToStorageRuntime(
-                    heightAndBiomesBuffer,
-                    { obj: V? -> obj.toInt() }, biomePalette
-                )
+            var biomePalette: Palette<Int>? = null
+            for (sectionY in chunk.provider.dimensionData.minSectionY..chunk.provider.dimensionData.maxSectionY) {
+                val section = chunk.getSection(sectionY) ?: continue
+                section.biomes.writeToStorageRuntime(heightAndBiomesBuffer, { it }, biomePalette)
                 biomePalette = section.biomes
             }
             if (heightAndBiomesBuffer.readableBytes() > 0) {
@@ -306,15 +187,16 @@ class LevelDBChunkSerializer private constructor() {
         }
     }
 
-    //read biomeAndHeight
-    private fun deserializeHeightAndBiome(db: DB, builder: IChunkBuilder, pnxExtraData: CompoundTag?) {
+    private fun deserializeHeightAndBiome(db: DB, builder: IChunkBuilder) {
         var heightAndBiomesBuffer: ByteBuf? = null
         try {
             val dimensionInfo = builder.dimensionData
+
             val bytes = db[LevelDBKeyUtil.DATA_3D.getKey(
                 builder.chunkX, builder.chunkZ,
-                dimensionInfo!!
+                dimensionInfo
             )]
+
             if (bytes != null) {
                 heightAndBiomesBuffer = Unpooled.wrappedBuffer(bytes)
                 val heights = ShortArray(256)
@@ -322,43 +204,15 @@ class LevelDBChunkSerializer private constructor() {
                     heights[i] = heightAndBiomesBuffer.readShortLE()
                 }
                 builder.heightMap(heights)
-                var lastPalette: Palette<Int?>? = null
+                var lastPalette: Palette<Int>? = null
                 val minSectionY = builder.dimensionData.minSectionY
                 for (y in minSectionY..builder.dimensionData.maxSectionY) {
                     val section = builder.sections[y - minSectionY] ?: continue
                     section.biomes.readFromStorageRuntime(
                         heightAndBiomesBuffer,
-                        { i: Int -> i }, lastPalette!!
+                        { i: Int -> i }, lastPalette
                     )
                     lastPalette = section.biomes
-                }
-            } else {
-                val bytes2D = db[LevelDBKeyUtil.DATA_2D.getKey(
-                    builder.chunkX, builder.chunkZ,
-                    dimensionInfo
-                )]
-                if (bytes2D != null) {
-                    heightAndBiomesBuffer = Unpooled.wrappedBuffer(bytes2D)
-                    val heights = ShortArray(256)
-                    for (i in 0..255) {
-                        heights[i] = heightAndBiomesBuffer.readShortLE()
-                    }
-                    builder.heightMap(heights)
-                    val biomes = ByteArray(256)
-                    heightAndBiomesBuffer.readBytes(biomes)
-
-                    val minSectionY = builder.dimensionData.minSectionY
-                    for (y in minSectionY..builder.dimensionData.maxSectionY) {
-                        val section = builder.sections[y - minSectionY] ?: continue
-                        val biomePalette = section.biomes
-                        for (x in 0..15) {
-                            for (z in 0..15) {
-                                for (sy in 0..15) {
-                                    biomePalette[IChunk.Companion.index(x, sy, z)] = biomes[x + 16 * z].toInt()
-                                }
-                            }
-                        }
-                    }
                 }
             }
         } finally {
@@ -366,14 +220,17 @@ class LevelDBChunkSerializer private constructor() {
         }
     }
 
-    private fun deserializeTileAndEntity(db: DB, builder: IChunkBuilder, pnxExtraData: CompoundTag?) {
+    private fun deserializeEntities(db: DB, builder: IChunkBuilder) {
         val dimensionInfo = builder.dimensionData
-        val tileBytes = db[LevelDBKeyUtil.BLOCK_ENTITIES.getKey(
-            builder.chunkX, builder.chunkZ,
-            dimensionInfo!!
-        )]
-        if (tileBytes != null) {
-            val blockEntityTags: MutableList<CompoundTag> = ArrayList()
+
+        val blockEntityTags: MutableList<CompoundTag> = ArrayList()
+
+        run {
+            val tileBytes = db[LevelDBKeyUtil.BLOCK_ENTITIES.getKey(
+                builder.chunkX, builder.chunkZ,
+                dimensionInfo
+            )] ?: return@run
+
             try {
                 BufferedInputStream(ByteArrayInputStream(tileBytes)).use { stream ->
                     while (stream.available() > 0) {
@@ -383,27 +240,18 @@ class LevelDBChunkSerializer private constructor() {
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
-            builder.blockEntities(blockEntityTags)
         }
 
-        val chunk_key: ByteArray = LevelDBKeyUtil.Companion.getChunkKey(
-            builder.chunkX, builder.chunkZ,
-            dimensionInfo
-        )
-        val key_buf = ByteBuffer.allocate(LevelDBKeyUtil.Companion.NEW_ENTITIES_KEY.size + chunk_key.size)
-        key_buf.order(ByteOrder.LITTLE_ENDIAN)
-        key_buf.put(LevelDBKeyUtil.Companion.NEW_ENTITIES_KEY)
-        key_buf.put(chunk_key)
-        val new_key = key_buf.array()
+        builder.blockEntities(blockEntityTags)
 
-        val new_entity_bytes = db[new_key]
-        if (new_entity_bytes == null) {
-            val key = LevelDBKeyUtil.ENTITIES.getKey(
+        val entityTags: MutableList<CompoundTag> = ArrayList()
+
+        run oldEntities@{
+            val entityBytes = db[LevelDBKeyUtil.ENTITIES.getKey(
                 builder.chunkX, builder.chunkZ,
                 dimensionInfo
-            )
-            val entityBytes = db[key] ?: return
-            val entityTags: MutableList<CompoundTag?> = ArrayList()
+            )] ?: return@oldEntities
+
             try {
                 BufferedInputStream(ByteArrayInputStream(entityBytes)).use { stream ->
                     while (stream.available() > 0) {
@@ -413,43 +261,47 @@ class LevelDBChunkSerializer private constructor() {
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
-            if (pnxExtraData == null) {
-                db.delete(key)
-                val list = entityTags.stream().map { obj: CompoundTag? -> BDSEntityTranslator.translate() }.filter(
-                    Predicates.notNull()
-                ).toList()
-                builder.entities(list)
-            } else {
-                builder.entities(entityTags)
-            }
-        } else {
-            val entityTags: MutableList<CompoundTag?> = ArrayList()
+        }
+
+        run newEntities@{
+            val chunkKey: ByteArray = LevelDBKeyUtil.getChunkKey(builder.chunkX, builder.chunkZ, dimensionInfo)
+            val entitiesKey = LevelDBKeyUtil.NEW_ENTITIES_KEY
+            val key = ByteBuffer
+                .allocate(entitiesKey.size + chunkKey.size)
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .put(entitiesKey)
+                .put(chunkKey)
+                .array()
+            val newEntityBytes = db[key] ?: return@newEntities
+
             try {
-                BufferedInputStream(ByteArrayInputStream(new_entity_bytes)).use { stream ->
+                BufferedInputStream(ByteArrayInputStream(newEntityBytes)).use { stream ->
                     while (stream.available() > 0) {
                         val bytes = ByteArray(8)
-                        val bytes_read = stream.read(bytes)
-                        if (bytes_read != 8) {
+                        val bytesRead = stream.read(bytes)
+                        if (bytesRead != 8) {
                             throw IOException("Failed to read 8 bytes for Int64")
                         }
-                        val bb = ByteBuffer.wrap(bytes)
-                        bb.order(ByteOrder.LITTLE_ENDIAN)
-                        val entity_id = bb.getLong()
 
-                        val entity_key: ByteArray = LevelDBKeyUtil.Companion.getEntityKey(entity_id)
-                        val entity_bytes = db[entity_key] ?: throw IOException("Failed to read entity key")
-                        entityTags.add(NBTIO.read(entity_bytes, ByteOrder.LITTLE_ENDIAN))
+                        val entityId = ByteBuffer
+                            .wrap(bytes)
+                            .order(ByteOrder.LITTLE_ENDIAN)
+                            .getLong()
+
+                        val entityBytes = db[LevelDBKeyUtil.getEntityKey(entityId)] ?: throw IOException("Failed to read entity key")
+
+                        entityTags.add(NBTIO.read(entityBytes, ByteOrder.LITTLE_ENDIAN))
                     }
                 }
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
-            builder.entities(entityTags)
         }
+
+        builder.entities(entityTags)
     }
 
-    private fun serializeTileAndEntity(writeBatch: WriteBatch, chunk: IChunk) {
-        //Write blockEntities
+    private fun serializeEntities(writeBatch: WriteBatch, chunk: IChunk) {
         val blockEntities: Collection<BlockEntity> = chunk.blockEntities.values
         val tileBuffer = ByteBufAllocator.DEFAULT.ioBuffer()
         try {
@@ -474,31 +326,34 @@ class LevelDBChunkSerializer private constructor() {
         val entityBuffer = ByteBufAllocator.DEFAULT.ioBuffer()
         try {
             ByteBufOutputStream(entityBuffer).use { bufStream ->
-                val chunk_key: ByteArray =
-                    LevelDBKeyUtil.Companion.getChunkKey(chunk.x, chunk.z, chunk.provider.dimensionData)
-                val bb = ByteBuffer.allocate(LevelDBKeyUtil.Companion.NEW_ENTITIES_KEY.size + chunk_key.size)
-                bb.put(LevelDBKeyUtil.Companion.NEW_ENTITIES_KEY)
-                bb.put(chunk_key)
-                bb.order(ByteOrder.LITTLE_ENDIAN)
-                val new_key = bb.array()
+                val chunkKey: ByteArray = LevelDBKeyUtil.getChunkKey(chunk.x, chunk.z, chunk.provider.dimensionData)
+                val entityKey = ByteBuffer
+                    .allocate(LevelDBKeyUtil.NEW_ENTITIES_KEY.size + chunkKey.size)
+                    .put(LevelDBKeyUtil.NEW_ENTITIES_KEY)
+                    .put(chunkKey)
+                    .order(ByteOrder.LITTLE_ENDIAN)
+                    .array()
 
                 for (e in entities) {
                     if ((e !is Player) && !e.closed && e.canBeSavedWithChunk()) {
                         e.saveNBT()
 
-                        val entity_uuid = e.getUniqueId().leastSignificantBits
+                        val entityUUID = e.getUniqueId().leastSignificantBits
 
-                        val entity_uuid_buf = ByteBuffer.allocate(java.lang.Long.BYTES)
-                        entity_uuid_buf.order(ByteOrder.LITTLE_ENDIAN)
-                        entity_uuid_buf.putLong(entity_uuid)
-                        bufStream.write(entity_uuid_buf.array())
+                        bufStream.write(
+                            ByteBuffer
+                                .allocate(java.lang.Long.BYTES)
+                                .order(ByteOrder.LITTLE_ENDIAN)
+                                .putLong(entityUUID)
+                                .array()
+                        )
 
-                        val entity_tag_bytes = NBTIO.write(e.namedTag, ByteOrder.LITTLE_ENDIAN)
-                        val actor_key: ByteArray = LevelDBKeyUtil.Companion.getEntityKey(entity_uuid)
-                        writeBatch.put(actor_key, entity_tag_bytes)
+                        val entityTagBytes = NBTIO.write(e.namedTag!!, ByteOrder.LITTLE_ENDIAN)
+
+                        writeBatch.put(LevelDBKeyUtil.getEntityKey(entityUUID), entityTagBytes)
                     }
                 }
-                writeBatch.put(new_key, Utils.convertByteBuf2Array(entityBuffer))
+                writeBatch.put(entityKey, Utils.convertByteBuf2Array(entityBuffer))
             }
         } catch (e: IOException) {
             throw RuntimeException(e)

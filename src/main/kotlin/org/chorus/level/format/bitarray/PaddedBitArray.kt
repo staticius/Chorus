@@ -3,14 +3,20 @@ package org.chorus.level.format.bitarray
 import com.google.common.base.Objects
 import org.chorus.math.ChorusMath
 
-/**
- * Allay Project 2023/4/14
- *
- * @author JukeboxMC | daoge_cmd
- */
 @JvmRecord
-data class PaddedBitArray(val version: BitArrayVersion, val size: Int, val words: IntArray) :
-    BitArray {
+data class PaddedBitArray(val version: BitArrayVersion, val size: Int, val words: IntArray) : BitArray {
+    override fun size(): Int {
+        return size
+    }
+
+    override fun words(): IntArray {
+        return words
+    }
+
+    override fun version(): BitArrayVersion {
+        return version
+    }
+
     override fun set(index: Int, value: Int) {
         val arrayIndex = index / version.entriesPerWord
         val offset = (index % version.entriesPerWord) * version.bits

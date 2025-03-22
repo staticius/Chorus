@@ -23,11 +23,11 @@ import java.nio.ByteOrder
 
 open class Palette<V> {
     protected val palette: MutableList<V>
-    protected var bitArray: BitArray?
+    protected var bitArray: BitArray
 
     @JvmOverloads
     constructor(first: V, version: BitArrayVersion = BitArrayVersion.V2) {
-        this.bitArray = version.createArray(ChunkSection.Companion.SIZE)
+        this.bitArray = version.createArray(ChunkSection.SIZE)
         this.palette = ArrayList(16)
         palette.add(first)
     }
@@ -39,13 +39,13 @@ open class Palette<V> {
     }
 
     operator fun get(index: Int): V {
-        val i = bitArray!![index]
+        val i = bitArray[index]
         return if (i >= palette.size) palette.first() else palette[i]
     }
 
     open operator fun set(index: Int, value: V) {
         val paletteIndex = this.paletteIndexFor(value)
-        bitArray!![index] = paletteIndex
+        bitArray[index] = paletteIndex
     }
 
     /**
@@ -60,7 +60,7 @@ open class Palette<V> {
 
     fun readFromNetwork(byteBuf: ByteBuf, deserializer: RuntimeDataDeserializer<V>) {
         readWords(byteBuf, readBitArrayVersion(byteBuf)!!)
-        val size = bitArray!!.readSizeFromNetwork(byteBuf)
+        val size = bitArray.readSizeFromNetwork(byteBuf)
         for (i in 0..<size) palette.add(deserializer.deserialize(ByteBufVarInt.readInt(byteBuf)))
     }
 
@@ -82,20 +82,20 @@ open class Palette<V> {
     }
 
     protected fun writeWords(byteBuf: ByteBuf, serializer: RuntimeDataSerializer<V>) {
-        byteBuf.writeByte(getPaletteHeader(bitArray!!.version(), true))
-        for (word in bitArray!!.words()) byteBuf.writeIntLE(word)
-        bitArray!!.writeSizeToNetwork(byteBuf, palette.size)
+        byteBuf.writeByte(getPaletteHeader(bitArray.version(), true))
+        for (word in bitArray.words()) byteBuf.writeIntLE(word)
+        bitArray.writeSizeToNetwork(byteBuf, palette.size)
         for (value in this.palette) ByteBufVarInt.writeInt(byteBuf, serializer.serialize(value))
     }
 
     fun writeToStoragePersistent(byteBuf: ByteBuf, serializer: PersistentDataSerializer<V>) {
-        byteBuf.writeByte(getPaletteHeader(bitArray!!.version(), false))
-        for (word in bitArray!!.words()) byteBuf.writeIntLE(word)
+        byteBuf.writeByte(getPaletteHeader(bitArray.version(), false))
+        for (word in bitArray.words()) byteBuf.writeIntLE(word)
         byteBuf.writeIntLE(palette.size)
         try {
             ByteBufOutputStream(byteBuf).use { bufOutputStream ->
                 for (value in this.palette) {
-                    if (value == null) continue
+                    value ?: continue
 
                     if (value is BlockState && value.identifier == BlockID.UNKNOWN) {
                         NBTIO.write(value.blockStateTag.getCompound("Block"), bufOutputStream, ByteOrder.LITTLE_ENDIAN)
@@ -137,17 +137,17 @@ open class Palette<V> {
         if (writeLast(byteBuf, last)) return
         if (writeEmpty(byteBuf, serializer)) return
 
-        byteBuf.writeByte(getPaletteHeader(bitArray!!.version(), true))
-        for (word in bitArray!!.words()) byteBuf.writeIntLE(word)
+        byteBuf.writeByte(getPaletteHeader(bitArray.version(), true))
+        for (word in bitArray.words()) byteBuf.writeIntLE(word)
         byteBuf.writeIntLE(palette.size)
         for (value in this.palette) byteBuf.writeIntLE(serializer.serialize(value))
     }
 
-    fun readFromStorageRuntime(byteBuf: ByteBuf, deserializer: RuntimeDataDeserializer<V>, last: Palette<V>) {
+    fun readFromStorageRuntime(byteBuf: ByteBuf, deserializer: RuntimeDataDeserializer<V>, last: Palette<V>?) {
         val header = byteBuf.readUnsignedByte()
 
         if (hasCopyLastFlag(header)) {
-            last.copyTo(this)
+            last?.copyTo(this)
             return
         }
 
@@ -174,7 +174,7 @@ open class Palette<V> {
         index = palette.size
         palette.add(value)
 
-        val version = bitArray!!.version()
+        val version = bitArray.version()
         if (index > version.maxEntryValue) {
             val next = version.next
             if (next != null) this.onResize(next)
@@ -186,7 +186,7 @@ open class Palette<V> {
     val isEmpty: Boolean
         get() {
             if (palette.size == 1) {
-                for (word in bitArray!!.words()) if (word.toLong() != 0L) {
+                for (word in bitArray.words()) if (word.toLong() != 0L) {
                     return false
                 }
                 return true
@@ -217,7 +217,7 @@ open class Palette<V> {
         }
 
         val version: Int =
-            CompoundTagUpdaterContext.Companion.makeVersion(semVersion.major, semVersion.minor, semVersion.patch)
+            CompoundTagUpdaterContext.makeVersion(semVersion.major, semVersion.minor, semVersion.patch)
 
         var isBlockOutdated = false
 
@@ -276,23 +276,23 @@ open class Palette<V> {
     }
 
     protected fun readWords(byteBuf: ByteBuf, version: BitArrayVersion) {
-        val wordCount = version.getWordsForSize(ChunkSection.Companion.SIZE)
+        val wordCount = version.getWordsForSize(ChunkSection.SIZE)
         val words = IntArray(wordCount)
         for (i in 0..<wordCount) words[i] = byteBuf.readIntLE()
 
-        this.bitArray = version.createArray(ChunkSection.Companion.SIZE, words)
+        this.bitArray = version.createArray(ChunkSection.SIZE, words)
         palette.clear()
     }
 
     protected fun onResize(version: BitArrayVersion) {
-        val newBitArray = version.createArray(ChunkSection.Companion.SIZE)
-        for (i in 0..<ChunkSection.Companion.SIZE) newBitArray[i] = bitArray!![i]
+        val newBitArray = version.createArray(ChunkSection.SIZE)
+        for (i in 0..<ChunkSection.SIZE) newBitArray[i] = bitArray[i]
 
         this.bitArray = newBitArray
     }
 
     fun copyTo(palette: Palette<V>) {
-        palette.bitArray = bitArray!!.copy()
+        palette.bitArray = bitArray.copy()
         palette.palette.clear()
         palette.palette.addAll(this.palette)
     }
@@ -322,7 +322,7 @@ open class Palette<V> {
         }
 
         fun getVersionFromPaletteHeader(header: Short): BitArrayVersion? {
-            return BitArrayVersion.Companion.get(header.toInt() shr 1, true)
+            return BitArrayVersion.get(header.toInt() shr 1, true)
         }
     }
 }

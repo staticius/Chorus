@@ -12,7 +12,6 @@ class LightPopulationStage : GenerateStage() {
         val chunk = context.chunk ?: return
         chunk.recalculateHeightMap()
         chunk.populateSkyLight()
-        chunk.setLightPopulated()
     }
 
     companion object {

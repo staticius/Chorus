@@ -1263,9 +1263,7 @@ class Level(
 
         val levelProvider = this.requireProvider()
         levelProvider.time = time.toInt().toLong()
-        levelProvider.isRaining = isRaining
         levelProvider.rainTime = rainTime
-        levelProvider.isThundering = thundering
         levelProvider.thunderTime = thunderTime
         levelProvider.currentTick = currentTick
         levelProvider.setGameRules(this.gameRules)

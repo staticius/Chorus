@@ -17,11 +17,6 @@ import javax.annotation.concurrent.NotThreadSafe
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * Allay Project 2023/5/30
- *
- * @author Cool_Loong
- */
 @NotThreadSafe
 @JvmRecord
 data class ChunkSection(
@@ -164,6 +159,32 @@ data class ChunkSection(
         blockLayer[1].writeObfuscatedToNetwork(
             level, blockChanges, byteBuf
         ) { it.blockStateHash() }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ChunkSection
+
+        if (y != other.y) return false
+        if (!blockLayer.contentEquals(other.blockLayer)) return false
+        if (biomes != other.biomes) return false
+        if (!blockLights.contentEquals(other.blockLights)) return false
+        if (!skyLights.contentEquals(other.skyLights)) return false
+        if (blockChanges != other.blockChanges) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result: Int = y.toInt()
+        result = 31 * result + blockLayer.contentHashCode()
+        result = 31 * result + biomes.hashCode()
+        result = 31 * result + blockLights.contentHashCode()
+        result = 31 * result + skyLights.contentHashCode()
+        result = 31 * result + blockChanges.hashCode()
+        return result
     }
 
     companion object {
