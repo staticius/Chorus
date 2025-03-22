@@ -16,7 +16,7 @@ open class BlockLitBlastFurnace @JvmOverloads constructor(blockstate: BlockState
 
     override fun getBlockEntityClass(): Class<out BlockEntityFurnace> = BlockEntityBlastFurnace::class.java
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockBlastFurnace())
     }
 

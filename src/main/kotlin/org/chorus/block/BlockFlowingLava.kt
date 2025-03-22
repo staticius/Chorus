@@ -182,7 +182,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
         }
     }
 
-    override fun addVelocityToEntity(entity: Entity, vector: Vector3) {
+    override fun addVelocityToEntity(entity: Entity?, vector: Vector3?) {
         if (entity !is EntityTnt) {
             super.addVelocityToEntity(entity, vector)
         }
