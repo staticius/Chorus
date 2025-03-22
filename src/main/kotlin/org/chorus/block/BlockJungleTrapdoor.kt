@@ -7,13 +7,15 @@ class BlockJungleTrapdoor @JvmOverloads constructor(blockstate: BlockState = Com
     override val name: String
         get() = "Jungle Trapdoor"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.JUNGLE_TRAPDOOR,
+            BlockID.JUNGLE_TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-
     }
 }

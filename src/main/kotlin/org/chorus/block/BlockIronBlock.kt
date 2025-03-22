@@ -23,8 +23,10 @@ class BlockIronBlock @JvmOverloads constructor(blockstate: BlockState = Companio
         return false
     }
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.Companion.IRON_BLOCK)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.IRON_BLOCK)
     }
 }

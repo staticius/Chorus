@@ -8,9 +8,11 @@ class BlockJungleWood(blockstate: BlockState) : BlockWood(blockstate) {
         return WoodType.JUNGLE
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.Companion.JUNGLE_WOOD, CommonBlockProperties.PILLAR_AXIS)
-
+            BlockProperties(BlockID.JUNGLE_WOOD, CommonBlockProperties.PILLAR_AXIS)
     }
 }

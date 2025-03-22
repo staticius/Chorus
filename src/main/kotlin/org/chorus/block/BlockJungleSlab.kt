@@ -2,14 +2,16 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockJungleSlab(blockstate: BlockState) : BlockWoodenSlab(blockstate, BlockID.Companion.JUNGLE_DOUBLE_SLAB) {
+class BlockJungleSlab(blockstate: BlockState) : BlockWoodenSlab(blockstate, BlockID.JUNGLE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Jungle"
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.Companion.JUNGLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
+            BlockProperties(BlockID.JUNGLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
     }
 }

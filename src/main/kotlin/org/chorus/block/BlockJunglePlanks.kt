@@ -2,8 +2,11 @@ package org.chorus.block
 
 class BlockJunglePlanks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockPlanks(blockstate) {
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.Companion.JUNGLE_PLANKS)
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.JUNGLE_PLANKS)
     }
 }

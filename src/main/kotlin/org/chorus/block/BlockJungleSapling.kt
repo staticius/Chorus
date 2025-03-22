@@ -12,9 +12,11 @@ class BlockJungleSapling : BlockSapling {
         return WoodType.JUNGLE
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.Companion.JUNGLE_SAPLING, CommonBlockProperties.AGE_BIT)
-
+            BlockProperties(BlockID.JUNGLE_SAPLING, CommonBlockProperties.AGE_BIT)
     }
 }

@@ -47,9 +47,9 @@ class BlockJigsaw @JvmOverloads constructor(blockstate: BlockState = Companion.p
         fx: Double,
         fy: Double,
         fz: Double,
-        player: Player
+        player: Player?
     ): Boolean {
-        if (abs(player.position.x - position.x) < 2 && abs(player.position.z - position.z) < 2) {
+        if (abs(player!!.position.x - position.x) < 2 && abs(player.position.z - position.z) < 2) {
             val y = player.position.y + player.getEyeHeight()
 
             if (y - position.y > 2) {
@@ -67,12 +67,14 @@ class BlockJigsaw @JvmOverloads constructor(blockstate: BlockState = Companion.p
         return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.JIGSAW,
+            BlockID.JIGSAW,
             CommonBlockProperties.FACING_DIRECTION,
             CommonBlockProperties.ROTATION
         )
-
     }
 }

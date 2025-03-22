@@ -21,8 +21,10 @@ class BlockInfestedCrackedStoneBricks @JvmOverloads constructor(blockState: Bloc
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.Companion.INFESTED_CRACKED_STONE_BRICKS)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.INFESTED_CRACKED_STONE_BRICKS)
     }
 }

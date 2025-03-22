@@ -8,8 +8,10 @@ class BlockInfoUpdate : Block {
     override val name: String
         get() = "Info Update Block"
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.Companion.INFO_UPDATE)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.INFO_UPDATE)
     }
 }

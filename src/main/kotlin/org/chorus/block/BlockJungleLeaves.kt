@@ -10,15 +10,17 @@ class BlockJungleLeaves(blockstate: BlockState) : BlockLeaves(blockstate) {
     }
 
     override fun toSapling(): Item {
-        return Item.get(BlockID.Companion.JUNGLE_SAPLING)
+        return Item.get(BlockID.JUNGLE_SAPLING)
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.JUNGLE_LEAVES,
+            BlockID.JUNGLE_LEAVES,
             CommonBlockProperties.PERSISTENT_BIT,
             CommonBlockProperties.UPDATE_BIT
         )
-
     }
 }

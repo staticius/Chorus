@@ -7,14 +7,16 @@ class BlockJungleDoor @JvmOverloads constructor(blockstate: BlockState = Compani
     override val name: String
         get() = "Jungle Door Block"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.JUNGLE_DOOR,
+            BlockID.JUNGLE_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-
     }
 }

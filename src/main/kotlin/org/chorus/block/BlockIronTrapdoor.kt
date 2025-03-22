@@ -47,13 +47,15 @@ class BlockIronTrapdoor @JvmOverloads constructor(blockstate: BlockState = Compa
         level.addSound(this.position, Sound.CLOSE_IRON_TRAPDOOR)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.IRON_TRAPDOOR,
+            BlockID.IRON_TRAPDOOR,
             CommonBlockProperties.DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-
     }
 }

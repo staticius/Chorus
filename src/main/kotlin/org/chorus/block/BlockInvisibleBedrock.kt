@@ -37,11 +37,13 @@ class BlockInvisibleBedrock @JvmOverloads constructor(blockstate: BlockState = C
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.Companion.AIR))
+        return ItemBlock(get(BlockID.AIR))
     }
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.Companion.INVISIBLE_BEDROCK)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.INVISIBLE_BEDROCK)
     }
 }

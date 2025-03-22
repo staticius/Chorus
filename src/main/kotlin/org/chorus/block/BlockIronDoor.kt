@@ -47,14 +47,16 @@ class BlockIronDoor @JvmOverloads constructor(blockstate: BlockState = Companion
         level.addSound(this.position, Sound.CLOSE_IRON_DOOR)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.Companion.IRON_DOOR,
+            BlockID.IRON_DOOR,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-
     }
 }

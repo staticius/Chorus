@@ -8,9 +8,11 @@ class BlockJungleLog @JvmOverloads constructor(blockstate: BlockState = Companio
         return BlockStrippedJungleLog.properties.defaultState
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
-            BlockProperties(BlockID.Companion.JUNGLE_LOG, CommonBlockProperties.PILLAR_AXIS)
-
+            BlockProperties(BlockID.JUNGLE_LOG, CommonBlockProperties.PILLAR_AXIS)
     }
 }
