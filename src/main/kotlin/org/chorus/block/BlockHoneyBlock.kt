@@ -95,7 +95,7 @@ class BlockHoneyBlock @JvmOverloads constructor(blockstate: BlockState = Compani
     }
 
     override fun onEntityFallOn(entity: Entity, fallDistance: Float) {
-        val jumpBoost = if (entity.hasEffect(EffectType.JUMP_BOOST)) get(EffectType.JUMP_BOOST).getLevel() else 0
+        val jumpBoost = entity.getEffect(EffectType.JUMP_BOOST)?.getLevel() ?: 0
         var damage = floor((fallDistance - 3 - jumpBoost).toDouble()).toFloat()
 
         damage *= 0.2f
@@ -109,10 +109,12 @@ class BlockHoneyBlock @JvmOverloads constructor(blockstate: BlockState = Compani
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         private val RANDOM = Random()
 
         val properties: BlockProperties = BlockProperties(BlockID.HONEY_BLOCK)
-
     }
 }

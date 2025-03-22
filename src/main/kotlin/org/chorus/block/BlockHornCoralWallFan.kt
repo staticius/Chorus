@@ -10,12 +10,13 @@ class BlockHornCoralWallFan : BlockCoralWallFan {
     override val name: String
         get() = "Horn Coral"
 
-    override val deadCoralFan: Block
-        get() = BlockDeadHornCoralWallFan()
+    override fun getDeadCoralFan() = BlockDeadHornCoralWallFan()
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.HORN_CORAL_WALL_FAN, CommonBlockProperties.CORAL_DIRECTION)
-
     }
 }
