@@ -19,8 +19,10 @@ class BlockMudBricks @JvmOverloads constructor(blockstate: BlockState = Companio
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MUD_BRICKS)
-
     }
 }

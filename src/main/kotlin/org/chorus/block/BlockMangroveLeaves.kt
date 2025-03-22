@@ -14,8 +14,7 @@ class BlockMangroveLeaves : BlockLeaves {
 
     constructor(blockstate: BlockState) : super(blockstate)
 
-    override val type: WoodType
-        get() = null
+    override fun getType() = WoodType.MANGROVE
 
     override val name: String
         get() = "Mangrove Leaves"
@@ -60,12 +59,14 @@ class BlockMangroveLeaves : BlockLeaves {
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.MANGROVE_LEAVES,
             CommonBlockProperties.PERSISTENT_BIT,
             CommonBlockProperties.UPDATE_BIT
         )
-
     }
 }

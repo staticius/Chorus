@@ -21,12 +21,14 @@ class BlockMelonStem @JvmOverloads constructor(blockstate: BlockState = Companio
     override var blockFace: BlockFace
         get() = facing
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
+            setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MELON_STEM, CommonBlockProperties.FACING_DIRECTION, CommonBlockProperties.GROWTH)
-
     }
 }

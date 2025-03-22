@@ -11,6 +11,9 @@ class BlockMediumAmethystBud @JvmOverloads constructor(blockState: BlockState = 
     override val lightLevel: Int
         get() = 2
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MEDIUM_AMETHYST_BUD, CommonBlockProperties.MINECRAFT_BLOCK_FACE)

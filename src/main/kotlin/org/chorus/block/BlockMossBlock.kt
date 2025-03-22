@@ -2,8 +2,10 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 import org.chorus.level.Locator
+import org.chorus.level.ParticleEffect
 import org.chorus.math.BlockFace
 import java.util.*
 import kotlin.math.abs
@@ -177,11 +179,14 @@ open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState = Com
         get() = ItemTool.TYPE_HOE
 
     override fun getDrops(item: Item): Array<Item> {
-        return arrayOf<Item?>(ItemBlock(get(BlockID.MOSS_BLOCK)))
+        return arrayOf(ItemBlock(get(BlockID.MOSS_BLOCK)))
     }
 
     override val isFertilizable: Boolean
         get() = true
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MOSS_BLOCK)

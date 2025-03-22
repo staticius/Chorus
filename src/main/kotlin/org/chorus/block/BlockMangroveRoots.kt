@@ -37,8 +37,10 @@ class BlockMangroveRoots : BlockTransparent {
         return level.setBlock(this.position, this)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MANGROVE_ROOTS)
-
     }
 }

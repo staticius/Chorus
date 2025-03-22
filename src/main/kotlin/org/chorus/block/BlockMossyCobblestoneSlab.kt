@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockMossyCobblestoneSlab(blockState: BlockState?) :
+class BlockMossyCobblestoneSlab(blockState: BlockState) :
     BlockSlab(blockState, BlockID.MOSSY_COBBLESTONE_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Mossy Cobblestone"
@@ -23,9 +23,11 @@ class BlockMossyCobblestoneSlab(blockState: BlockState?) :
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MOSSY_COBBLESTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

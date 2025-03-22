@@ -4,8 +4,10 @@ class BlockMagentaConcretePowder @JvmOverloads constructor(blockstate: BlockStat
     BlockConcretePowder(blockstate) {
     override fun getConcrete() = BlockMagentaConcrete()
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MAGENTA_CONCRETE_POWDER)
-
     }
 }

@@ -5,8 +5,7 @@ import org.chorus.item.ItemTool
 
 class BlockMangroveDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
-    override val slabName: String
-        get() = "Mangrove"
+    override fun getSlabName() = "Mangrove"
 
     override val hardness: Double
         get() = 2.0
@@ -17,12 +16,13 @@ class BlockMangroveDoubleSlab @JvmOverloads constructor(blockstate: BlockState =
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    override val singleSlab: BlockState
-        get() = BlockMangroveSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockMangroveSlab.properties.defaultState
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MANGROVE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

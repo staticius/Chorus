@@ -19,8 +19,10 @@ class BlockMud : BlockSolid, Natural {
     override val toolType: Int
         get() = ItemTool.TYPE_SHOVEL
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MUD)
-
     }
 }

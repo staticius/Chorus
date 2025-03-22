@@ -7,6 +7,9 @@ class BlockMangroveDoor @JvmOverloads constructor(blockstate: BlockState = Compa
     override val name: String
         get() = "Mangrove Door Block"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.MANGROVE_DOOR,
@@ -15,6 +18,5 @@ class BlockMangroveDoor @JvmOverloads constructor(blockstate: BlockState = Compa
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-
     }
 }

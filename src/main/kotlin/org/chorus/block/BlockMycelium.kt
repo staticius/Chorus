@@ -1,15 +1,18 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.Server.Companion.instance
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.event.Event.isCancelled
+import org.chorus.block.property.enums.DirtType
+import org.chorus.event.block.BlockSpreadEvent
 import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
+import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
-import org.chorus.utils.ChorusRandom.nextInt
+import org.chorus.utils.ChorusRandom
 
 class BlockMycelium : BlockDirt {
     constructor() : super(Companion.properties.defaultState)
@@ -29,7 +32,7 @@ class BlockMycelium : BlockDirt {
         get() = 2.5
 
     override fun getDrops(item: Item): Array<Item> {
-        return arrayOf<Item?>(
+        return arrayOf(
             ItemBlock(get(BlockID.DIRT))
         )
     }
@@ -38,18 +41,18 @@ class BlockMycelium : BlockDirt {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
             if (level.getFullLight(add(0.0, 1.0, 0.0).position) >= BlockCrops.MIN_LIGHT_LEVEL) {
                 //TODO: light levels
-                val random: NukkitRandom = NukkitRandom()
+                val random = ChorusRandom()
                 val x: Int = random.nextInt(position.floorX - 1, position.floorX + 1)
                 val y: Int = random.nextInt(position.floorY - 1, position.floorY + 1)
                 val z: Int = random.nextInt(position.floorZ - 1, position.floorZ + 1)
                 val block = level.getBlock(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
-                if (block.id == Block.DIRT && block.getPropertyValue<DirtType, EnumPropertyType<DirtType>>(
+                if (block.id == BlockID.DIRT && block.getPropertyValue(
                         CommonBlockProperties.DIRT_TYPE
                     ) == DirtType.NORMAL
                 ) {
                     if (block.up().isTransparent) {
-                        val ev: BlockSpreadEvent = BlockSpreadEvent(block, this, get(BlockID.MYCELIUM))
-                        instance.pluginManager.callEvent(ev)
+                        val ev = BlockSpreadEvent(block, this, get(BlockID.MYCELIUM))
+                        Server.instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
                             level.setBlock(block.position, ev.newState)
                         }
@@ -91,8 +94,10 @@ class BlockMycelium : BlockDirt {
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MYCELIUM)
-
     }
 }

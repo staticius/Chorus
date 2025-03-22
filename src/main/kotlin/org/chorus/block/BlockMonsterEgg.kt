@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.MonsterEggStoneType
 import org.chorus.item.Item
 
 class BlockMonsterEgg @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
@@ -26,6 +27,9 @@ class BlockMonsterEgg @JvmOverloads constructor(blockstate: BlockState = Compani
     override fun getDrops(item: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =

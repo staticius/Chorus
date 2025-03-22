@@ -2,6 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 
 class BlockMossyCobblestoneWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
@@ -15,9 +16,12 @@ class BlockMossyCobblestoneWall @JvmOverloads constructor(blockstate: BlockState
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(properties.defaultState.toBlock())
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -28,6 +32,5 @@ class BlockMossyCobblestoneWall @JvmOverloads constructor(blockstate: BlockState
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

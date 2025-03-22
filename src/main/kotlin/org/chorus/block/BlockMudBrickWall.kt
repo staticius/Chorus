@@ -18,6 +18,9 @@ class BlockMudBrickWall @JvmOverloads constructor(blockState: BlockState = Compa
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.MUD_BRICK_WALL,
@@ -27,6 +30,5 @@ class BlockMudBrickWall @JvmOverloads constructor(blockState: BlockState = Compa
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

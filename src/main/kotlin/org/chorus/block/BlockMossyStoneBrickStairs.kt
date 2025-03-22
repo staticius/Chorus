@@ -24,12 +24,14 @@ class BlockMossyStoneBrickStairs @JvmOverloads constructor(blockstate: BlockStat
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.MOSSY_STONE_BRICK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

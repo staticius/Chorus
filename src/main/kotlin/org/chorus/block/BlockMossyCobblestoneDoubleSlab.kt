@@ -5,14 +5,15 @@ import org.chorus.item.ItemTool
 
 class BlockMossyCobblestoneDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
-    override val slabName: String
-        get() = "Mossy Cobblestone"
+    override fun getSlabName() = "Mossy Cobblestone"
 
-    override val singleSlab: BlockState
-        get() = BlockMossyCobblestoneSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockMossyCobblestoneSlab.properties.defaultState
 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =

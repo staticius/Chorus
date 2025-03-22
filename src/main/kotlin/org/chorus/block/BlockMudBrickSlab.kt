@@ -30,9 +30,11 @@ class BlockMudBrickSlab @JvmOverloads constructor(blockState: BlockState = Compa
     override val resistance: Double
         get() = 3.0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MUD_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

@@ -14,8 +14,10 @@ class BlockMangroveLog : BlockLog {
         return BlockStrippedMangroveLog.properties.defaultState
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MANGROVE_LOG, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

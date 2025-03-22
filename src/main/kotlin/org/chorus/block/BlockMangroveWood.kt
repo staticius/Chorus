@@ -12,6 +12,9 @@ class BlockMangroveWood @JvmOverloads constructor(blockstate: BlockState = Compa
         throw UnsupportedOperationException()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MANGROVE_WOOD, CommonBlockProperties.PILLAR_AXIS)
 

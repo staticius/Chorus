@@ -2,14 +2,13 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntityMobSpawner.spawnEntityType
-import org.chorus.blockentity.BlockEntitySpawnable.spawnToAll
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.blockentity.BlockEntityMobSpawner
 import org.chorus.item.Item
-import org.chorus.item.ItemSpawnEgg.entityNetworkId
+import org.chorus.item.ItemSpawnEgg
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
-import org.chorus.nbt.tag.CompoundTag.putInt
-import org.chorus.nbt.tag.CompoundTag.putString
+import org.chorus.nbt.tag.CompoundTag
 import org.chorus.registry.Registries
 
 class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
@@ -53,7 +52,7 @@ class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = Compani
     }
 
     fun setType(networkId: Int): Boolean {
-        val identifier = Registries.ENTITY.getEntityIdentifier(networkId)
+        val identifier = Registries.ENTITY.getEntityIdentifier(networkId)!!
 
         val blockEntity = level.getBlockEntity(this.position)
         if (blockEntity is BlockEntityMobSpawner) {
@@ -61,11 +60,11 @@ class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = Compani
         } else {
             blockEntity?.close()
             val nbt: CompoundTag = CompoundTag()
-                .putString(BlockEntityMobSpawner.TAG_ID, BlockEntity.MOB_SPAWNER)
+                .putString(BlockEntity.TAG_ID, BlockEntityID.MOB_SPAWNER)
                 .putString(BlockEntityMobSpawner.TAG_ENTITY_IDENTIFIER, identifier)
-                .putInt(BlockEntityMobSpawner.TAG_X, position.floorX)
-                .putInt(BlockEntityMobSpawner.TAG_Y, position.floorY)
-                .putInt(BlockEntityMobSpawner.TAG_Z, position.floorZ)
+                .putInt(BlockEntity.TAG_X, position.floorX)
+                .putInt(BlockEntity.TAG_Y, position.floorY)
+                .putInt(BlockEntity.TAG_Z, position.floorZ)
 
             val entitySpawner: BlockEntityMobSpawner = BlockEntityMobSpawner(
                 level.getChunk(
@@ -89,7 +88,7 @@ class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = Compani
         if (item !is ItemSpawnEgg) return false
         if (player == null) return false
         if (player.isAdventure) return false
-        if (setType(item.entityNetworkId)) {
+        if (setType(item.getNetId())) {
             if (!player.isCreative) {
                 player.getInventory().decreaseCount(player.getInventory().heldItemIndex)
             }
@@ -98,8 +97,10 @@ class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = Compani
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MOB_SPAWNER)
-
     }
 }

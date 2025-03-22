@@ -25,9 +25,11 @@ class BlockMossyStoneBrickSlab(blockState: BlockState) : BlockSlab(blockState, B
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MOSSY_STONE_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

@@ -23,8 +23,10 @@ class BlockMossyCobblestone @JvmOverloads constructor(blockstate: BlockState = C
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MOSSY_COBBLESTONE)
-
     }
 }

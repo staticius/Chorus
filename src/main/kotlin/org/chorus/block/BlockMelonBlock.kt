@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.item.Item
+import org.chorus.item.ItemMelonSlice
 import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import java.util.*
@@ -26,7 +27,7 @@ class BlockMelonBlock @JvmOverloads constructor(blockstate: BlockState = Compani
             count += random.nextInt(fortune.level + 1)
         }
 
-        return arrayOf<Item?>(
+        return arrayOf(
             ItemMelonSlice(0, min(9.0, count.toDouble()).toInt())
         )
     }
@@ -46,8 +47,10 @@ class BlockMelonBlock @JvmOverloads constructor(blockstate: BlockState = Compani
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MELON_BLOCK)
-
     }
 }

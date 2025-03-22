@@ -9,9 +9,11 @@ class BlockMushroomStem @JvmOverloads constructor(blockstate: BlockState = Compa
         return Item.EMPTY_ARRAY
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.MUSHROOM_STEM, CommonBlockProperties.HUGE_MUSHROOM_BITS)
-
     }
 }

@@ -12,6 +12,7 @@ import org.chorus.level.generator.`object`.ObjectBigMushroom
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 
 abstract class BlockMushroom(blockState: BlockState) : BlockFlowable(blockState), FlowerPotBlock,
@@ -77,7 +78,7 @@ abstract class BlockMushroom(blockState: BlockState) : BlockFlowable(blockState)
         val generator = ObjectBigMushroom(getType())
 
         val chunkManager = BlockManager(this.level)
-        if (generator.generate(chunkManager, ChorusRandom.create(), this.position)) {
+        if (generator.generate(chunkManager, ChorusRandom(), this.position)) {
             val ev = StructureGrowEvent(this, chunkManager.blocks)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {

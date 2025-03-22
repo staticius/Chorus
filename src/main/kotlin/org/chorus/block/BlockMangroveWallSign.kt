@@ -2,6 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
+import org.chorus.item.ItemMangroveSign
 
 class BlockMangroveWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockWallSign(blockState) {
@@ -16,9 +17,12 @@ class BlockMangroveWallSign @JvmOverloads constructor(blockState: BlockState = C
     override val name: String
         get() = "Mangrove Wall Sign"
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemMangroveSign()
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =

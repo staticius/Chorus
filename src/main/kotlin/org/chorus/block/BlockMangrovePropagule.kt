@@ -1,22 +1,20 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.block.Block.isAir
+import org.chorus.Server
 import org.chorus.block.BlockFlower.Companion.isSupportValid
 import org.chorus.block.BlockFlowerPot.FlowerPotBlock
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.level.StructureGrowEvent.blockList
+import org.chorus.event.level.StructureGrowEvent
 import org.chorus.item.Item
 import org.chorus.level.Level
-import org.chorus.level.generator.`object`.BlockManager.applySubChunkUpdate
-import org.chorus.level.generator.`object`.BlockManager.blocks
-import org.chorus.level.generator.`object`.ObjectBigMushroom.generate
-import org.chorus.level.generator.`object`.ObjectMangroveTree.generate
+import org.chorus.level.generator.`object`.BlockManager
+import org.chorus.level.generator.`object`.ObjectMangroveTree
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
@@ -88,14 +86,14 @@ class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState = 
     }
 
     protected fun grow() {
-        val chunkManager: BlockManager = BlockManager(this.level)
+        val chunkManager = BlockManager(this.level)
         val vector3 = Vector3(
             position.x, position.y - 1,
             position.z
         )
-        val objectMangroveTree: ObjectMangroveTree = ObjectMangroveTree()
-        objectMangroveTree.generate(chunkManager, NukkitRandom(), this.position)
-        val ev: StructureGrowEvent = StructureGrowEvent(this, chunkManager.blocks)
+        val objectMangroveTree = ObjectMangroveTree()
+        objectMangroveTree.generate(chunkManager, ChorusRandom(), this.position)
+        val ev = StructureGrowEvent(this, chunkManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return
@@ -114,12 +112,14 @@ class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState = 
     override val waterloggingLevel: Int
         get() = 1
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.MANGROVE_PROPAGULE,
             CommonBlockProperties.HANGING,
             CommonBlockProperties.PROPAGULE_STAGE
         )
-
     }
 }

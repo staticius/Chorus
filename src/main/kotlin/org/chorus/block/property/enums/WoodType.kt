@@ -16,5 +16,7 @@ enum class WoodType(val woodName: String) {
 
     CHERRY("Cherry"),
 
-    PALE_OAK("Pale Oak")
+    PALE_OAK("Pale Oak"),
+
+    MANGROVE("Mangrove")
 }
