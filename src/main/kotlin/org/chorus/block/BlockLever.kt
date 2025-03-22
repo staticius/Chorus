@@ -2,9 +2,9 @@ package org.chorus.block
 
 import org.chorus.AdventureSettings
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.LeverDirection
-import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.event.block.BlockRedstoneEvent
 import org.chorus.item.*
 import org.chorus.level.Level
@@ -36,12 +36,12 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
     }
 
     var isPowerOn: Boolean
-        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT)
+        get() = getPropertyValue(CommonBlockProperties.OPEN_BIT)
         set(powerOn) {
-            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OPEN_BIT, powerOn)
+            setPropertyValue(CommonBlockProperties.OPEN_BIT, powerOn)
         }
 
-    var leverOrientation: LeverDirection?
+    var leverOrientation: LeverDirection
         get() = getPropertyValue(CommonBlockProperties.LEVER_DIRECTION)
         set(value) {
             setPropertyValue(
@@ -59,7 +59,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         fz: Float
     ): Boolean {
         if (player != null) {
-            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+            if (!player.getAdventureSettings()[AdventureSettings.Type.DOORS_AND_SWITCHED]) return false
             if (isNotActivate(player)) return false
         }
         Server.instance.pluginManager.callEvent(
@@ -82,10 +82,10 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         level.setBlock(this.position, this, false, true)
         level.addSound(this.position, Sound.RANDOM_CLICK, 0.8f, if (isPowerOn) 0.58f else 0.5f)
 
-        val orientation = leverOrientation!!
+        val orientation = leverOrientation
         val face = orientation.facing
 
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             updateAroundRedstone()
             updateAroundRedstone(getSide(face.getOpposite()), face)
         }
@@ -111,19 +111,19 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         fx: Double,
         fy: Double,
         fz: Double,
-        player: Player
+        player: Player?
     ): Boolean {
-        var target = target
-        var face = face
-        if (target.canBeReplaced()) {
-            target = target.down()
-            face = BlockFace.UP
+        var target1 = target
+        var face1 = face
+        if (target1.canBeReplaced()) {
+            target1 = target1.down()
+            face1 = BlockFace.UP
         }
 
-        if (!isSupportValid(target, face)) {
+        if (!isSupportValid(target1, face1)) {
             return false
         }
-        leverOrientation = LeverDirection.forFacings(face, player.getHorizontalFacing())
+        leverOrientation = LeverDirection.forFacings(face1, player!!.getHorizontalFacing())
         return level.setBlock(block.position, this, true, true)
     }
 
@@ -131,10 +131,10 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         level.setBlock(this.position, get(BlockID.AIR), true, true)
 
         if (isPowerOn) {
-            val face = leverOrientation!!.facing
+            val face = leverOrientation.facing
             level.updateAround(position.getSide(face.getOpposite()))
 
-            if (Server.instance.settings.levelSettings().enableRedstone()) {
+            if (Server.instance.settings.levelSettings.enableRedstone) {
                 updateAroundRedstone()
                 updateAroundRedstone(getSide(face.getOpposite()), face)
             }
@@ -142,12 +142,12 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         return true
     }
 
-    override fun getWeakPower(side: BlockFace): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         return if (isPowerOn) 15 else 0
     }
 
     override fun getStrongPower(side: BlockFace?): Int {
-        return if (!isPowerOn) 0 else if (leverOrientation!!.facing == side) 15 else 0
+        return if (!isPowerOn) 0 else if (leverOrientation.facing == side) 15 else 0
     }
 
     override val isPowerSource: Boolean
@@ -161,14 +161,15 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
     }
 
     override var blockFace: BlockFace
-        get() = leverOrientation!!.facing
-        set(blockFace) {
-            super.blockFace = blockFace
-        }
+        get() = leverOrientation.facing
+        set(blockFace) {}
 
     override fun breaksWhenMoved(): Boolean {
         return true
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =

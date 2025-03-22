@@ -10,18 +10,20 @@ open class BlockLitSmoker @JvmOverloads constructor(blockstate: BlockState = Com
         get() = "Burning Smoker"
 
     override fun getBlockEntityType(): String {
-        return BlockEntity.SMOKER
-
-        override val blockEntityClass: Class<out BlockEntityFurnace>
-        get() = BlockEntitySmoker::class.java
-
-        override fun toItem(): Item {
-            return ItemBlock(BlockSmoker())
-        }
-
-        companion object {
-            val properties: BlockProperties =
-                BlockProperties(BlockID.LIT_SMOKER, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-
-        }
+        return BlockEntityID.SMOKER
     }
+
+    override fun getBlockEntityClass() = BlockEntitySmoker::class.java
+
+    override fun toItem(): Item {
+        return ItemBlock(BlockSmoker())
+    }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
+
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.LIT_SMOKER, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
+    }
+}

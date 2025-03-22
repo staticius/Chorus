@@ -5,8 +5,10 @@ class BlockLilyOfTheValley : BlockFlower {
 
     constructor(blockstate: BlockState) : super(blockstate)
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LILY_OF_THE_VALLEY)
-
     }
 }

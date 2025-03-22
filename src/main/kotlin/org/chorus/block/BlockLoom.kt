@@ -84,8 +84,10 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState = Companion.pro
         return Supplier { LoomInventory(this) }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LOOM, CommonBlockProperties.DIRECTION)
-
     }
 }

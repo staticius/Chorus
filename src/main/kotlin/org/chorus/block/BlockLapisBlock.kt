@@ -23,8 +23,10 @@ class BlockLapisBlock @JvmOverloads constructor(blockstate: BlockState = Compani
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LAPIS_BLOCK)
-
     }
 }

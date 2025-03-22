@@ -12,7 +12,7 @@ interface IBlockOreRedstoneGlowing {
 
     val level: Level
 
-    fun toItem(): Item? {
+    fun toItem(): Item {
         return unlitBlock.toItem()
     }
 

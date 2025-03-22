@@ -11,9 +11,8 @@ import java.util.*
 abstract class BlockLichen(blockState: BlockState) : BlockTransparent(blockState) {
     val growthSides: Array<BlockFace>
         get() {
-            val returns =
-                Arrays.stream(BlockFace.entries.toTypedArray()).filter { side: BlockFace -> this.isGrowthToSide(side) }
-            return returns.toArray<BlockFace> { _Dummy_.__Array__() }
+            val returns = BlockFace.entries.filter { side: BlockFace -> this.isGrowthToSide(side) }
+            return returns.toTypedArray()
         }
 
     open fun witherAtSide(side: BlockFace) {
@@ -147,7 +146,7 @@ abstract class BlockLichen(blockState: BlockState) : BlockTransparent(blockState
         return false
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(properties.defaultState.toBlock())
     }
 

@@ -17,9 +17,9 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
         get() = "Kelp"
 
     var age: Int
-        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.KELP_AGE)
+        get() = getPropertyValue(CommonBlockProperties.KELP_AGE)
         set(age) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.KELP_AGE, age)
+            setPropertyValue(CommonBlockProperties.KELP_AGE, age)
         }
 
     override fun place(
@@ -41,8 +41,8 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
                 level.setBlock(this.position, 1, get(BlockID.FLOWING_WATER), true, false)
             }
 
-            val maxAge: Int = CommonBlockProperties.KELP_AGE.getMax()
-            if (down.id == BlockID.KELP && down.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.KELP_AGE) != maxAge - 1) {
+            val maxAge: Int = CommonBlockProperties.KELP_AGE.max
+            if (down.id == BlockID.KELP && down.getPropertyValue(CommonBlockProperties.KELP_AGE) != maxAge - 1) {
                 age = maxAge - 1
                 level.setBlock(down.position, down, true, true)
             }
@@ -87,7 +87,7 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
 
     fun grow(): Boolean {
         val age = age
-        val maxValue: Int = CommonBlockProperties.KELP_AGE.getMax()
+        val maxValue: Int = CommonBlockProperties.KELP_AGE.max
         if (age < maxValue) {
             val up = up()
             if (up is BlockFlowingWater && up.isSourceOrFlowingDown) {
@@ -104,7 +104,7 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
                     this.age = maxValue
                     level.setBlock(this.position, 0, this, true, true)
                     level.setBlock(up.position, 1, get(BlockID.FLOWING_WATER), true, false)
-                    level.setBlock(up.position, 0, ev.newState!!, true, true)
+                    level.setBlock(up.position, 0, ev.newState, true, true)
                     return true
                 }
             }
@@ -119,7 +119,7 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
                 blockState.setPropertyValue(
                     Companion.properties, CommonBlockProperties.KELP_AGE.createValue(
                         ThreadLocalRandom.current().nextInt(
-                            CommonBlockProperties.KELP_AGE.getMax()
+                            CommonBlockProperties.KELP_AGE.max
                         )
                     )
                 )
@@ -144,8 +144,8 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
             val z = position.z.toInt()
             for (y in position.y.toInt() + 1..254) {
                 val blockAbove = level.getBlock(x, y, z)
-                val BlockID.bove = blockAbove.id
-                if (BlockID.bove != BlockID.KELP) {
+                val blockIdAbove = blockAbove.id
+                if (blockIdAbove != BlockID.KELP) {
                     if (blockAbove is BlockFlowingWater) {
                         if (blockAbove.isSourceOrFlowingDown) {
                             val highestKelp = level.getBlock(x, y - 1, z) as BlockKelp?
@@ -180,8 +180,10 @@ class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.pro
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.KELP, CommonBlockProperties.KELP_AGE)
-
     }
 }

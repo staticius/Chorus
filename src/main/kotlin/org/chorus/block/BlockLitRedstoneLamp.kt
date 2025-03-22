@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import org.chorus.Server
 import org.chorus.event.redstone.RedstoneUpdateEvent
 import org.chorus.item.*
 import org.chorus.level.Level
@@ -17,7 +18,7 @@ class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState = Co
     }
 
     override fun onUpdate(type: Int): Int {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return 0
         }
 
@@ -41,8 +42,10 @@ class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState = Co
         return 0
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIT_REDSTONE_LAMP)
-
     }
 }

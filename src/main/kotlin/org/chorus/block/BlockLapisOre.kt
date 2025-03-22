@@ -38,13 +38,14 @@ open class BlockLapisOre @JvmOverloads constructor(blockstate: BlockState = Comp
 
     override val rawMaterial: String?
         get() = ItemID.LAPIS_LAZULI
-}
 
-override val dropExp: Int
-    get() = ThreadLocalRandom.current().nextInt(2, 6)
+    override val dropExp: Int
+        get() = ThreadLocalRandom.current().nextInt(2, 6)
 
-companion object {
-    val properties: BlockProperties = BlockProperties(BlockID.LAPIS_ORE)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
-}
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.LAPIS_ORE)
+    }
 }

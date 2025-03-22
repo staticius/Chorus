@@ -3,6 +3,7 @@ package org.chorus.block
 import it.unimi.dsi.fastutil.longs.Long2ByteMap
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.entity.Entity
@@ -21,7 +22,7 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
-abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
+abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
     var adjacentSources: Int = 0
     protected var flowVector: Vector3? = null
     private val flowCostVisited: Long2ByteMap = Long2ByteOpenHashMap()
@@ -212,12 +213,12 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
         return vector!!.normalize().also { this.flowVector = it }
     }
 
-    override fun addVelocityToEntity(entity: Entity, vector: Vector3) {
-        if (entity.canBeMovedByCurrents()) {
+    override fun addVelocityToEntity(entity: Entity?, vector: Vector3?) {
+        if (entity!!.canBeMovedByCurrents()) {
             val flow = this.getFlowVector()
-            vector.x += flow.x
-            vector.y += flow.y
-            vector.z += flow.z
+            vector!!.x += flow.x
+            vector!!.y += flow.y
+            vector!!.z += flow.z
         }
     }
 
@@ -386,7 +387,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
             Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
                 if (block.layer == 0 && !block.isAir) {
-                    level.useBreakOn(block.position, if (block is BlockWeb) Item.get(Item.WOODEN_SWORD) else null)
+                    level.useBreakOn(block.position, if (block is BlockWeb) Item.get(ItemID.WOODEN_SWORD) else null)
                 }
                 level.setBlock(block.position, block.layer, getLiquidWithNewDepth(newFlowDecay), true, true)
                 level.scheduleUpdate(block, this.tickRate())
@@ -605,7 +606,7 @@ abstract class BlockLiquid(state: BlockState?) : BlockTransparent(state) {
         return block.canBeFlowedInto() && !(block is BlockLiquid && block.liquidDepth == 0)
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(get(BlockID.AIR))
     }
 

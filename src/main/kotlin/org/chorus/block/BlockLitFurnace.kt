@@ -56,14 +56,14 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState = Co
             player.getDirection().getOpposite().horizontalIndex
         ) else BlockFace.SOUTH
 
-        val nbt = CompoundTag().putList("Items", ListTag())
+        val nbt = CompoundTag().putList("Items", ListTag<Tag<*>>())
 
         if (item.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag<*>?> = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
@@ -104,7 +104,7 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState = Co
         return true
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(get(BlockID.FURNACE))
     }
 
@@ -133,11 +133,11 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState = Co
     override var blockFace: BlockFace
         get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-        )]
+        )]!!
         set(face) {
             this.setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]!!
             )
         }
 

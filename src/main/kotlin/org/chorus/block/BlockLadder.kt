@@ -201,8 +201,10 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState = Companion.p
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LADDER, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

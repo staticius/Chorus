@@ -5,8 +5,10 @@ class BlockLightBlock14 @JvmOverloads constructor(blockstate: BlockState = Compa
     override val lightLevel: Int
         get() = 14
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIGHT_BLOCK_14)
-
     }
 }

@@ -10,8 +10,10 @@ class BlockLightBlueWool @JvmOverloads constructor(blockstate: BlockState = Comp
         return DyeColor.LIGHT_BLUE
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIGHT_BLUE_WOOL, Set.of(BlockTags.PNX_WOOL))
-
     }
 }

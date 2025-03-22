@@ -10,7 +10,7 @@ class BlockLitDeepslateRedstoneOre @JvmOverloads constructor(blockstate: BlockSt
     override val lightLevel: Int
         get() = 9
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return super<IBlockOreRedstoneGlowing>.toItem()
     }
 
@@ -18,8 +18,10 @@ class BlockLitDeepslateRedstoneOre @JvmOverloads constructor(blockstate: BlockSt
         return super<IBlockOreRedstoneGlowing>.onUpdate(this, type)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LIT_DEEPSLATE_REDSTONE_ORE)
-
     }
 }

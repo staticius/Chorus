@@ -157,8 +157,10 @@ open class BlockLantern @JvmOverloads constructor(blockstate: BlockState = Compa
     override val waterloggingLevel: Int
         get() = 1
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LANTERN, CommonBlockProperties.HANGING)
-
     }
 }
