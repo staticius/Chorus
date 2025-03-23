@@ -112,7 +112,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.Companion.SITE
                 this.stayTick = 100
                 this.walkTick = 200
                 entity.recipes.all.forEach(Consumer { tag: CompoundTag? -> tag!!.putInt("uses", 0) })
-                entity.getMemoryStorage()!!.put<Int>(CoreMemoryTypes.Companion.LAST_REFILL_SHIFT, shift)
+                entity.getMemoryStorage()!!.set<Int>(CoreMemoryTypes.Companion.LAST_REFILL_SHIFT, shift)
             }
             if (stayTick < 100) setTarget(entity)
         }

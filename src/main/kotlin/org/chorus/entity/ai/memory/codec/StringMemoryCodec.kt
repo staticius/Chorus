@@ -6,11 +6,12 @@ import java.util.function.Function
 
 
 class StringMemoryCodec(key: String) : MemoryCodec<String>(
-    Function { tag: CompoundTag -> if (tag.contains(key)) tag.getString(key) else null },
-    BiConsumer { data: String?, tag: CompoundTag ->
-        tag.putString(
-            key,
-            data!!
-        )
+    Function { tag ->
+        if (tag.contains(key))
+            tag.getString(key)
+        else null
+    },
+    BiConsumer { data, tag ->
+        tag.putString(key, data)
     }
 )

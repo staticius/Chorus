@@ -106,13 +106,13 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     }
 
     fun setAngry(angry: Boolean) {
-        memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.IS_ANGRY, angry)
+        memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.IS_ANGRY, angry)
         setDataFlag(EntityFlag.ANGRY, angry)
     }
 
     fun setAngry(entity: Entity?) {
         setAngry(true)
-        memoryStorage!!.put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity)
+        memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity)
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
@@ -143,7 +143,7 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
             }
         }
         if (currentTick % 20 == 0 && hasSting()) {
-            memoryStorage!!.put<Class<out Block>>(
+            memoryStorage!!.set<Class<out Block>>(
                 CoreMemoryTypes.Companion.LOOKING_BLOCK,
                 if (shouldSearchBeehive()) BlockBeehive::class.java else BlockFlower::class.java
             )

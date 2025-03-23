@@ -42,7 +42,7 @@ open class FleeFromTargetExecutor @JvmOverloads constructor(//指示执行器应
         setLookTarget(entity, moveTarget)
 
         //This gives the Evoker enough time to turn around before attacking.
-        entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, entity.level!!.tick)
+        entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, entity.level!!.tick)
 
         if (updateRouteImmediatelyWhenTargetChange) {
             val floor = target.floor()

@@ -17,7 +17,7 @@ class DoorExecutor : EntityControl, IBehaviorExecutor {
         if (entity.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK_2)) {
             if (entity.memoryStorage!!.get<Block>(CoreMemoryTypes.Companion.NEAREST_BLOCK_2) is BlockWoodenDoor) {
                 if (!door.isAir() && !door.isOpen()) door.toggle(null)
-                entity.memoryStorage!!.put<BlockWoodenDoor>(CoreMemoryTypes.Companion.NEAREST_DOOR, door)
+                entity.memoryStorage!!.set<BlockWoodenDoor>(CoreMemoryTypes.Companion.NEAREST_DOOR, door)
             }
         }
     }

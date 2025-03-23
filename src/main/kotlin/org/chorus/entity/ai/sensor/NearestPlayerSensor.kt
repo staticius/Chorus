@@ -29,6 +29,6 @@ open class NearestPlayerSensor @JvmOverloads constructor(
                 }
             }
         }
-        entity.memoryStorage!!.put<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER, player)
+        entity.memoryStorage!!.set<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER, player)
     }
 }

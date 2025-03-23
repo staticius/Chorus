@@ -31,7 +31,7 @@ open class NearestFeedingPlayerSensor @JvmOverloads constructor(
                     }
                 }
             }
-            entity.getMemoryStorage()!!.put<Player>(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER, player)
+            entity.getMemoryStorage()!!.set<Player>(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER, player)
             return
         }
         entity.memoryStorage!!.clear(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)

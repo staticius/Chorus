@@ -98,7 +98,7 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                 ),
                 Behavior(
                     { entity: EntityMob ->
-                        entity.memoryStorage!!.put<Int>(
+                        entity.memoryStorage!!.set<Int>(
                             CoreMemoryTypes.Companion.LAST_EGG_SPAWN_TIME,
                             level!!.tick
                         )

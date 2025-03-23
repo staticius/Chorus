@@ -287,9 +287,9 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                     (entity is Player && attackTarget !is Player)
             if (changed) {
                 this.memoryStorage!!
-                    .put<Boolean>(CoreMemoryTypes.Companion.IS_ATTACK_TARGET_CHANGED, true)
+                    .set<Boolean>(CoreMemoryTypes.Companion.IS_ATTACK_TARGET_CHANGED, true)
                 this.memoryStorage!!
-                    .put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity)
+                    .set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity)
             }
         } else angerValueMap[entity] = added
     }

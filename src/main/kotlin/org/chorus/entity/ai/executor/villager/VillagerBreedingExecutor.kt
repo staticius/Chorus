@@ -64,8 +64,8 @@ class VillagerBreedingExecutor(entityClass: Class<*>, findingRangeSquared: Int, 
         val baby = Entity.Companion.createEntity(entity.networkId, entity.locator) as EntityVillagerV2
         baby.setBaby(true)
         //防止小屁孩去生baby
-        baby.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_IN_LOVE_TIME, entity.level!!.tick)
-        baby.memoryStorage!!.put<Entity>(CoreMemoryTypes.Companion.PARENT, entity)
+        baby.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_IN_LOVE_TIME, entity.level!!.tick)
+        baby.memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.PARENT, entity)
         baby.spawnToAll()
     }
 
@@ -78,8 +78,8 @@ class VillagerBreedingExecutor(entityClass: Class<*>, findingRangeSquared: Int, 
         //reset move speed
         entity.movementSpeed = 0.1f
         //interrupt in love status
-        entity.memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.WILLING, false)
-        entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_IN_LOVE_TIME, entity.level!!.tick)
+        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.WILLING, false)
+        entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_IN_LOVE_TIME, entity.level!!.tick)
     }
 
     protected fun sendInLoveParticles(entity: EntityMob) {

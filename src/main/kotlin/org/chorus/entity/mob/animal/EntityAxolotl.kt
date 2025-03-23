@@ -240,8 +240,8 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     }
 
     override fun useBreedingItem(player: Player, item: Item): Boolean {
-        memoryStorage.put<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
-        memoryStorage.put<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.tick)
+        memoryStorage.set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
+        memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.tick)
         sendBreedingAnimation(item)
         return player.inventory.setItemInHand(Item.get(Item.WATER_BUCKET))
     }

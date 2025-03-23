@@ -19,7 +19,7 @@ interface IMemoryStorage {
      * @param data 数据
      * @param <D>  数据类型
     </D> */
-    fun <D> put(type: MemoryType<D>, data: D)
+    operator fun <D> set(type: MemoryType<D>, data: D)
 
     /**
      * 从指定记忆类型获取数据

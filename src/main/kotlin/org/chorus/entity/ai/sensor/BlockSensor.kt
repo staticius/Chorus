@@ -37,6 +37,6 @@ class BlockSensor @JvmOverloads constructor(
             ) {
                 entity.memoryStorage!!.clear(memory)
             } // We don't want to clear data from different sensors
-        } else entity.memoryStorage!!.put(memory, block)
+        } else entity.memoryStorage!!.set(memory, block)
     }
 }

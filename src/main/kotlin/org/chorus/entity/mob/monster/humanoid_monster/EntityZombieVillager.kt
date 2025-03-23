@@ -138,7 +138,7 @@ class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chu
         this.maxHealth = 20
         this.diffHandDamage = floatArrayOf(2.5f, 3f, 4.5f)
         super.initEntity()
-        memoryStorage!!.put<Class<out Block>>(
+        memoryStorage!!.set<Class<out Block>>(
             CoreMemoryTypes.Companion.LOOKING_BLOCK,
             BlockTurtleEgg::class.java
         )

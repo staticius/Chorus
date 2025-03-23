@@ -118,7 +118,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
         super.initEntity()
         setMovementSpeed(0.5f)
         setRollState(RollState.UNROLLED)
-        memoryStorage!!.put<Int>(
+        memoryStorage!!.set<Int>(
             CoreMemoryTypes.Companion.NEXT_SHED,
             level!!.tick + Utils.rand(6000, 10800)
         )

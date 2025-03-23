@@ -14,7 +14,7 @@ interface EntityCanSit : EntityComponent {
     }
 
     fun setSitting(sitting: Boolean) {
-        getMemoryStorage().put<Boolean>(CoreMemoryTypes.Companion.IS_SITTING, sitting)
+        getMemoryStorage().set<Boolean>(CoreMemoryTypes.Companion.IS_SITTING, sitting)
         asEntity()!!.setDataFlag(EntityFlag.SITTING, sitting)
     }
 }

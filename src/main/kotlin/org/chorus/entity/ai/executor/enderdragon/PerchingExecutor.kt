@@ -95,7 +95,7 @@ class PerchingExecutor : EntityControl, IBehaviorExecutor {
     }
 
     override fun onStop(entity: EntityMob) {
-        entity.memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING, false)
+        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING, false)
         entity.isEnablePitch = false
     }
 

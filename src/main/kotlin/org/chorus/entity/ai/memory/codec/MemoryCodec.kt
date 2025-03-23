@@ -8,17 +8,10 @@ import java.util.function.Function
 
 
 open class MemoryCodec<Data>(
-    decoder: Function<CompoundTag, Data?>,
-    encoder: BiConsumer<Data, CompoundTag>
-) : IMemoryCodec<Data> {
-    override val decoder: Function<CompoundTag, Data>
+    override val decoder: Function<CompoundTag, Data?>,
     override val encoder: BiConsumer<Data, CompoundTag>
-    private var onInit: BiConsumer<Data?, EntityMob>? = null
-
-    init {
-        this.decoder = decoder
-        this.encoder = encoder
-    }
+) : IMemoryCodec<Data> {
+    private var onInit: BiConsumer<Data, EntityMob>? = null
 
     /**
      * BiConsumer<Data></Data>, EntityMob> Data can be Null
@@ -28,7 +21,7 @@ open class MemoryCodec<Data>(
         return this
     }
 
-    override fun init(data: Data?, entity: EntityMob) {
+    override fun init(data: Data, entity: EntityMob) {
         if (onInit != null) {
             onInit!!.accept(data, entity)
         }

@@ -243,7 +243,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         this.diffHandDamage = floatArrayOf(6f, 10f, 15f)
         this.maxHealth = 200
         super.initEntity()
-        memoryStorage!!.put<Vector3>(CoreMemoryTypes.Companion.STAY_NEARBY, Vector3(0.0, 84.0, 0.0))
+        memoryStorage!!.set<Vector3>(CoreMemoryTypes.Companion.STAY_NEARBY, Vector3(0.0, 84.0, 0.0))
         isActive = false
         noClip = true
     }

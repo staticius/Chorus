@@ -73,7 +73,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
                         Vector2.ZERO
                     ) < 128
                 }.count().toInt()) < 1) {
-                entity.getMemoryStorage()!!.put<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING, true)
+                entity.getMemoryStorage()!!.set<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING, true)
             }
         }
     }

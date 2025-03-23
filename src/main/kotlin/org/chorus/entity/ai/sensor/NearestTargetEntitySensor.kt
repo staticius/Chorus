@@ -81,7 +81,7 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
 
             if (entities.isEmpty()) {
                 entity.memoryStorage!!.clear(currentMemory)
-            } else entity.memoryStorage!!.put(currentMemory, entities[0])
+            } else entity.memoryStorage!!.set(currentMemory, entities[0])
             return
         }
         if (allTargetFunction != null) {
@@ -124,7 +124,7 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
 
                 if (sortEntities[i].isEmpty()) {
                     entity.memoryStorage!!.clear(currentMemory)
-                } else entity.memoryStorage!!.put(currentMemory, sortEntities[i][0])
+                } else entity.memoryStorage!!.set(currentMemory, sortEntities[i][0])
                 ++i
             }
         }

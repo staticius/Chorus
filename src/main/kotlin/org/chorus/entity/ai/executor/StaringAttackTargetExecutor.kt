@@ -15,13 +15,13 @@ class StaringAttackTargetExecutor : IBehaviorExecutor {
                     CoreMemoryTypes.Companion.STARING_PLAYER
                 ).evaluate(entity)
             ) {
-                entity.memoryStorage!!.put<Entity>(
+                entity.memoryStorage!!.set<Entity>(
                     CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage!!
                         .get<Player>(CoreMemoryTypes.Companion.STARING_PLAYER)
                 )
                 entity.level!!.addSound(entity.position, Sound.MOB_ENDERMEN_STARE)
             } else if (!entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_ENDERMITE)) {
-                entity.memoryStorage!!.put<Entity>(
+                entity.memoryStorage!!.set<Entity>(
                     CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage!!
                         .get<Entity>(CoreMemoryTypes.Companion.NEAREST_ENDERMITE)
                 )

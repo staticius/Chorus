@@ -47,7 +47,7 @@ interface CoreMemoryTypes {
          */
         val MOVE_TARGET: MemoryType<Vector3?> = MemoryType("minecraft:move_target")
 
-        val FORCE_PERCHING: MemoryType<Boolean?> = MemoryType("minecraft:force_perching", false)
+        val FORCE_PERCHING: MemoryType<Boolean> = MemoryType("minecraft:force_perching", false)
 
         val STAY_NEARBY: MemoryType<Vector3?> = MemoryType("minecraft:stay_nearby")
 
@@ -73,7 +73,7 @@ interface CoreMemoryTypes {
          *
          * Whether the entity needs to update the memory of the path
          */
-        val SHOULD_UPDATE_MOVE_DIRECTION: MemoryType<Boolean?> =
+        val SHOULD_UPDATE_MOVE_DIRECTION: MemoryType<Boolean> =
             MemoryType("minecraft:should_update_move_direction", false)
 
         /**
@@ -82,17 +82,17 @@ interface CoreMemoryTypes {
          *
          * Whether pitch is enabled for the entity
          */
-        val ENABLE_PITCH: MemoryType<Boolean?> = MemoryType("minecraft:enable_pitch", true)
+        val ENABLE_PITCH: MemoryType<Boolean> = MemoryType("minecraft:enable_pitch", true)
 
         /**
          * 控制实体是否开启升力控制器的记忆
          */
-        val ENABLE_LIFT_FORCE: MemoryType<Boolean?> = MemoryType("minecraft:enable_lift_force", true)
+        val ENABLE_LIFT_FORCE: MemoryType<Boolean> = MemoryType("minecraft:enable_lift_force", true)
 
         /**
          * 控制实体是否开启下潜控制器的记忆
          */
-        val ENABLE_DIVE_FORCE: MemoryType<Boolean?> = MemoryType("minecraft:enable_dive_force", true)
+        val ENABLE_DIVE_FORCE: MemoryType<Boolean> = MemoryType("minecraft:enable_dive_force", true)
         //以下这两个暂时未使用到
         //MemoryType<Boolean> ENABLE_YAW = new MemoryType<>("minecraft:enable_yaw", true);
         //MemoryType<Boolean> ENABLE_HEAD_YAW = new MemoryType<>("minecraft:enable_head_yaw", true);
@@ -287,14 +287,11 @@ interface CoreMemoryTypes {
          *
          * 目前仅在wolf中使用
          */
-        val IS_ANGRY: MemoryType<Boolean?> = MemoryType("minecraft:is_angry", false)
+        val IS_ANGRY: MemoryType<Boolean> = MemoryType("minecraft:is_angry", false)
             .withCodec(
                 BooleanMemoryCodec("Angry")
-                    .onInit { data: Boolean?, entity: EntityMob ->
-                        entity.setDataFlag(
-                            EntityFlag.ANGRY,
-                            data!!
-                        )
+                    .onInit { data, entity ->
+                        entity.setDataFlag(EntityFlag.ANGRY, data)
                     }
             )
 
@@ -304,14 +301,11 @@ interface CoreMemoryTypes {
          *
          * 目前仅在wolf中使用
          */
-        val IS_SITTING: MemoryType<Boolean?> = MemoryType("minecraft:is_sitting", false)
+        val IS_SITTING: MemoryType<Boolean> = MemoryType("minecraft:is_sitting", false)
             .withCodec(
                 BooleanMemoryCodec("Sitting")
-                    .onInit { data: Boolean?, entity: EntityMob ->
-                        entity.setDataFlag(
-                            EntityFlag.SITTING,
-                            data!!
-                        )
+                    .onInit { data, entity ->
+                        entity.setDataFlag(EntityFlag.SITTING, data)
                     }
             )
 
@@ -321,18 +315,18 @@ interface CoreMemoryTypes {
          *
          * 目前仅在wolf中使用
          */
-        val OWNER_NAME: MemoryType<String?> = MemoryType<String>("minecraft:owner_name")
+        val OWNER_NAME: MemoryType<String> = MemoryType<String>("minecraft:owner_name")
             .withCodec(
                 StringMemoryCodec("OwnerName")
                     .onInit { data: String?, entity: EntityMob ->
                         if (data == null) {
-                            entity.setDataProperty(EntityDataTypes.Companion.OWNER_EID, 0L)
+                            entity.setDataProperty(EntityDataTypes.OWNER_EID, 0L)
                             entity.setDataFlag(EntityFlag.TAMED, false)
                         } else {
                             entity.setDataFlag(EntityFlag.TAMED, true)
                             val owner = Server.instance.getPlayerExact(data)
                             if (owner != null && owner.isOnline) {
-                                entity.setDataProperty(EntityDataTypes.Companion.OWNER_EID, owner.id)
+                                entity.setDataProperty(EntityDataTypes.OWNER_EID, owner.uniqueId)
                             }
                         }
                     }
@@ -356,26 +350,22 @@ interface CoreMemoryTypes {
         /**
          * 代表实体的变种,和[EntityDataTypes.VARIANT]绑定
          */
-        val VARIANT: MemoryType<Int?> = MemoryType<Int>("minecraft:variant")
+        val VARIANT: MemoryType<Int> = MemoryType<Int>("minecraft:variant")
             .withCodec(
-                NumberMemoryCodec<Int?>("Variant")
-                    .onInit { data: Int?, entity: EntityMob? ->
-                        if (data != null) {
-                            entity!!.setDataProperty(EntityDataTypes.Companion.VARIANT, data)
-                        }
+                NumberMemoryCodec<Int>("Variant")
+                    .onInit { data, entity ->
+                        entity.setDataProperty(EntityDataTypes.VARIANT, data)
                     }
             )
 
         /**
          * 代表实体的次要变种,和[EntityDataTypes.MARK_VARIANT]绑定
          */
-        val MARK_VARIANT: MemoryType<Int?> = MemoryType<Int>("minecraft:mark_variant")
+        val MARK_VARIANT: MemoryType<Int> = MemoryType<Int>("minecraft:mark_variant")
             .withCodec(
-                NumberMemoryCodec<Int?>("MarkVariant")
-                    .onInit { data: Int?, entity: EntityMob? ->
-                        if (data != null) {
-                            entity!!.setDataProperty(EntityDataTypes.Companion.MARK_VARIANT, data)
-                        }
+                NumberMemoryCodec<Int>("MarkVariant")
+                    .onInit { data, entity ->
+                        entity.setDataProperty(EntityDataTypes.MARK_VARIANT, data)
                     }
             )
 
@@ -386,12 +376,12 @@ interface CoreMemoryTypes {
          * <br></br>
          * Wolf collar, Cat collar, Sheep wool, Tropical Fish base color
          */
-        val COLOR: MemoryType<Byte?> = MemoryType<Byte>("minecraft:color")
+        val COLOR: MemoryType<Byte?> = MemoryType<Byte?>("minecraft:color")
             .withCodec(
                 NumberMemoryCodec<Byte?>("Color")
-                    .onInit { data: Byte?, entity: EntityMob? ->
+                    .onInit { data, entity ->
                         if (data != null) {
-                            entity!!.setDataProperty(EntityDataTypes.Companion.COLOR, data)
+                            entity.setDataProperty(EntityDataTypes.COLOR, data)
                         }
                     }
             )
@@ -401,12 +391,12 @@ interface CoreMemoryTypes {
          * <br></br>
          * Tropical Fish secondary color
          */
-        val COLOR2: MemoryType<Byte?> = MemoryType<Byte>("minecraft:color2")
+        val COLOR2: MemoryType<Byte?> = MemoryType<Byte?>("minecraft:color2")
             .withCodec(
                 NumberMemoryCodec<Byte?>("Color2")
-                    .onInit { data: Byte?, entity: EntityMob? ->
+                    .onInit { data, entity ->
                         if (data != null) {
-                            entity!!.setDataProperty(EntityDataTypes.Companion.COLOR_2, data)
+                            entity.setDataProperty(EntityDataTypes.COLOR_2, data)
                         }
                     }
             )
@@ -417,13 +407,13 @@ interface CoreMemoryTypes {
          *
          * Sheep, Snow Golem
          */
-        val IS_SHEARED: MemoryType<Boolean?> = MemoryType("minecraft:is_sheared", false)
+        val IS_SHEARED: MemoryType<Boolean> = MemoryType("minecraft:is_sheared", false)
             .withCodec(
                 BooleanMemoryCodec("Sheared")
-                    .onInit { data: Boolean?, entity: EntityMob ->
+                    .onInit { data, entity ->
                         entity.setDataFlag(
                             EntityFlag.SHEARED,
-                            data!!
+                            data
                         )
                     }
             ) // endregion

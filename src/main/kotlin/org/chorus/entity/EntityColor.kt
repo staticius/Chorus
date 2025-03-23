@@ -6,11 +6,11 @@ import java.util.concurrent.*
 
 interface EntityColor : EntityComponent {
     fun setColor(color: DyeColor) {
-        getMemoryStorage().put<Byte>(CoreMemoryTypes.Companion.COLOR, Integer.valueOf(color.getWoolData()).toByte())
+        getMemoryStorage().set<Byte>(CoreMemoryTypes.Companion.COLOR, Integer.valueOf(color.getWoolData()).toByte())
     }
 
     fun setColor2(color: DyeColor) {
-        getMemoryStorage().put<Byte>(CoreMemoryTypes.Companion.COLOR2, Integer.valueOf(color.getWoolData()).toByte())
+        getMemoryStorage().set<Byte>(CoreMemoryTypes.Companion.COLOR2, Integer.valueOf(color.getWoolData()).toByte())
     }
 
     fun getColor(): DyeColor {

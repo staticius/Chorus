@@ -15,7 +15,7 @@ interface EntityOwnable : EntityComponent {
     }
 
     fun setOwnerName(playerName: String?) {
-        getMemoryStorage().put<String>(CoreMemoryTypes.Companion.OWNER_NAME, playerName)
+        getMemoryStorage().set<String>(CoreMemoryTypes.Companion.OWNER_NAME, playerName)
     }
 
     fun getOwner(): Player? {

@@ -24,7 +24,7 @@ open class PlayerStaringSensor(
                         )
                     ) {
                         entity.memoryStorage!!
-                            .put<Player>(CoreMemoryTypes.Companion.STARING_PLAYER, player)
+                            .set<Player>(CoreMemoryTypes.Companion.STARING_PLAYER, player)
                         return
                     }
                 }

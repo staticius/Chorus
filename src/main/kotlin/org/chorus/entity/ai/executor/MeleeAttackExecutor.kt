@@ -170,9 +170,9 @@ open class MeleeAttackExecutor(
                 }
 
                 playAttackAnimation(entity)
-                entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, entity.level!!.tick)
+                entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, entity.level!!.tick)
                 entity.memoryStorage!!
-                    .put<Entity>(CoreMemoryTypes.Companion.LAST_ATTACK_ENTITY, target)
+                    .set<Entity>(CoreMemoryTypes.Companion.LAST_ATTACK_ENTITY, target)
                 attackTick = 0
             }
 

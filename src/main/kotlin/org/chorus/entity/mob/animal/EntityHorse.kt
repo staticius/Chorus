@@ -366,7 +366,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun mountEntity(entity: Entity): Boolean {
-        this.memoryStorage.put<String>(CoreMemoryTypes.Companion.RIDER_NAME, entity.name)
+        this.memoryStorage.set<String>(CoreMemoryTypes.Companion.RIDER_NAME, entity.name)
         super.mountEntity(entity, EntityLink.Type.RIDER)
         return true
     }

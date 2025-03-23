@@ -20,7 +20,7 @@ class BeeAttackExecutor(
 
     override fun execute(entity: EntityMob): Boolean {
         if (entity is EntityBee) {
-            if (entity.getMemoryStorage()!!.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) {
+            if (entity.getMemoryStorage()!!.notEmpty(CoreMemoryTypes.ATTACK_TARGET)) {
                 if (!entity.isEnablePitch()) entity.setEnablePitch(true)
                 val entity1 = entity.getMemoryStorage()!![CoreMemoryTypes.ATTACK_TARGET]
                 if (entity1 != null) {
@@ -34,7 +34,7 @@ class BeeAttackExecutor(
             }
 
             if (entity.position.distanceSquared(
-                    entity.getMemoryStorage()!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET).position
+                    entity.getMemoryStorage()[CoreMemoryTypes.ATTACK_TARGET]!!.position
                 ) <= 2.5 && attackTick > coolDown && entity.hasSting()
             ) {
                 entity.dieInTicks = 700

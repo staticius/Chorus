@@ -105,7 +105,7 @@ class EntityEnderCrystal(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                     entity.attack(EntityDamageEvent(entity, DamageCause.MAGIC, 10f))
                 }
                 entity.getMemoryStorage()!!
-                    .put<BlockVector3>(CoreMemoryTypes.Companion.LAST_ENDER_CRYSTAL_DESTROY, position.asBlockVector3())
+                    .set<BlockVector3>(CoreMemoryTypes.Companion.LAST_ENDER_CRYSTAL_DESTROY, position.asBlockVector3())
             }
         }
     }

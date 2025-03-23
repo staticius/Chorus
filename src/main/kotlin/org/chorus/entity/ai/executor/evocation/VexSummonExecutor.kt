@@ -33,8 +33,8 @@ class VexSummonExecutor : FangLineExecutor() {
         }
         if (tick >= CAST_DURATION) {
             val tick = entity.level!!.tick
-            entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_SUMMON, tick)
-            entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, tick)
+            entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_SUMMON, tick)
+            entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, tick)
             return false
         } else return true
     }
@@ -43,7 +43,7 @@ class VexSummonExecutor : FangLineExecutor() {
         tick = 0
         entity.level!!.addSound(entity.position, Sound.MOB_EVOCATION_ILLAGER_PREPARE_SUMMON)
         entity.setDataProperty(EntityDataTypes.Companion.EVOKER_SPELL_CASTING_COLOR, BlockColor.WHITE_BLOCK_COLOR.argb)
-        entity.memoryStorage!!.put<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC, SPELL.SUMMON)
+        entity.memoryStorage!!.set<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC, SPELL.SUMMON)
         entity.setDataFlag(EntityFlag.CASTING)
     }
 

@@ -14,7 +14,7 @@ interface EntityAngryable : EntityComponent {
     }
 
     fun setAngry(angry: Boolean) {
-        getMemoryStorage().put<Boolean>(CoreMemoryTypes.Companion.IS_ANGRY, angry)
+        getMemoryStorage().set<Boolean>(CoreMemoryTypes.Companion.IS_ANGRY, angry)
         asEntity()!!.setDataFlag(EntityFlag.ANGRY, angry)
     }
 }

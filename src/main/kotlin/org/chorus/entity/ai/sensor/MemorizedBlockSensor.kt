@@ -30,6 +30,6 @@ class MemorizedBlockSensor @JvmOverloads constructor(
                 }
             }
         }
-        entity.memoryStorage!!.put<Block>(CoreMemoryTypes.Companion.NEAREST_BLOCK, block)
+        entity.memoryStorage!!.set<Block>(CoreMemoryTypes.Companion.NEAREST_BLOCK, block)
     }
 }

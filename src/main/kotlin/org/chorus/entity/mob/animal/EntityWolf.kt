@@ -116,7 +116,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                                 storage.clear(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET)
                             }
                         }
-                        storage.put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, attackTarget)
+                        storage.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, attackTarget)
                         false
                     },
                     { entity: EntityMob? -> this.memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) }, 1
@@ -285,8 +285,8 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                 this.setHealth(max(maxHealth.toDouble(), (this.getHealth() + healable).toDouble()).toFloat())
             }
 
-            memoryStorage.put<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
-            memoryStorage.put<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.tick)
+            memoryStorage.set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
+            memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.tick)
             return true
         } else if (this.hasOwner() && player.getName() == ownerName && !this.isTouchingWater) {
             this.isSitting = !this.isSitting

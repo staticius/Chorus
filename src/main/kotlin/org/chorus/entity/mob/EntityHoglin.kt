@@ -170,8 +170,8 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         val superResult: Boolean = super.onInteract(player, item, clickedPos)
         if (isBreedingItem(item)) {
-            getMemoryStorage()!!.put<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
-            getMemoryStorage()!!.put<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.getTick())
+            getMemoryStorage()!!.set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
+            getMemoryStorage()!!.set<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.getTick())
             sendBreedingAnimation(item)
             item.count--
             return player.getInventory().setItemInHand(item) && superResult

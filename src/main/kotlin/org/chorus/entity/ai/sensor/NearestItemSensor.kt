@@ -37,6 +37,6 @@ class NearestItemSensor @JvmOverloads constructor(
                 }
             }
         }
-        entity.memoryStorage!!.put<EntityItem>(CoreMemoryTypes.Companion.NEAREST_ITEM, item)
+        entity.memoryStorage!!.set<EntityItem>(CoreMemoryTypes.Companion.NEAREST_ITEM, item)
     }
 }

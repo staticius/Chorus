@@ -26,7 +26,7 @@ class WardenViolentAnimationExecutor(protected var duration: Int) : IBehaviorExe
     }
 
     override fun onStart(entity: EntityMob) {
-        entity.memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.IS_ATTACK_TARGET_CHANGED, false)
+        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.IS_ATTACK_TARGET_CHANGED, false)
         entity.moveTarget = null
 
         entity.setDataFlag(EntityFlag.ROARING, true)

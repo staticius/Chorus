@@ -63,12 +63,12 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
     }
 
     override fun onStart(entity: EntityMob) {
-        entity.memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, false)
+        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, false)
     }
 
     override fun onInterrupt(entity: EntityMob) {
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
-        entity.memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, true)
+        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, true)
         entity.isEnablePitch = false
         if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
         circleLoc++
@@ -77,7 +77,7 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
 
     override fun onStop(entity: EntityMob) {
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
-        entity.memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, true)
+        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, true)
         entity.isEnablePitch = false
         if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
         circleLoc++

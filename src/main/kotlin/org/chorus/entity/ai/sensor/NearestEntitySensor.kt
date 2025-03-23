@@ -40,6 +40,6 @@ class NearestEntitySensor @JvmOverloads constructor(
             ) {
                 entity.memoryStorage!!.clear(memoryType)
             } // We don't want to clear data from different sensors
-        } else entity.memoryStorage!!.put(memoryType, ent)
+        } else entity.memoryStorage!!.set(memoryType, ent)
     }
 }

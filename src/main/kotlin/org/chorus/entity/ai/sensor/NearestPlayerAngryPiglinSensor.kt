@@ -26,7 +26,7 @@ class NearestPlayerAngryPiglinSensor : ISensor {
                 }
                 if (trigger) {
                     entity.memoryStorage!!
-                        .put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, player)
+                        .set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, player)
                 }
             }
         }

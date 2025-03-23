@@ -12,7 +12,7 @@ interface EntityMarkVariant : EntityComponent {
     }
 
     fun setMarkVariant(variant: Int) {
-        getMemoryStorage().put<Int>(CoreMemoryTypes.Companion.MARK_VARIANT, variant)
+        getMemoryStorage().set<Int>(CoreMemoryTypes.Companion.MARK_VARIANT, variant)
     }
 
     fun hasMarkVariant(): Boolean {

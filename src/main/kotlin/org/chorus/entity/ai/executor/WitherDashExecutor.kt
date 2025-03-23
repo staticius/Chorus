@@ -18,7 +18,7 @@ class WitherDashExecutor(
 
     override fun onStart(entity: EntityMob) {
         super.onStart(entity)
-        entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_DASH, entity.level!!.tick)
+        entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_DASH, entity.level!!.tick)
         entity.setDataFlag(EntityFlag.CAN_DASH)
     }
 

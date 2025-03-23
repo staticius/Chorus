@@ -57,7 +57,7 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
                         ) {
                             attackTarget = storage.get<Entity>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET)
                         }
-                        storage.put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, attackTarget)
+                        storage.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, attackTarget)
                         false
                     },
                     { entity: EntityMob? -> true }, 20

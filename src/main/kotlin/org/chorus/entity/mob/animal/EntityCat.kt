@@ -81,7 +81,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                         ) {
                             attackTarget = storage.get<Entity>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET)
                         }
-                        storage.put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, attackTarget)
+                        storage.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, attackTarget)
                         false
                     },
                     { entity: EntityMob? -> true }, 20
@@ -262,11 +262,11 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                 if (healable != 0) {
                     this.setHealth(max(maxHealth.toDouble(), (this.getHealth() + healable).toDouble()).toFloat())
                 }
-                memoryStorage.put<Int>(
+                memoryStorage.set<Int>(
                     CoreMemoryTypes.Companion.LAST_BE_FEED_TIME,
                     level!!.tick
                 )
-                memoryStorage.put<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
+                memoryStorage.set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
                 return true
             }
         } else if (item.id === Item.DYE) {

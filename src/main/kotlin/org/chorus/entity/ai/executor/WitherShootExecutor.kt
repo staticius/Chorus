@@ -30,7 +30,7 @@ class WitherShootExecutor(protected var targetMemory: MemoryType<out Entity?>) :
             setLookTarget(entity, target.position)
             return true
         } else {
-            entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, entity.level!!.tick)
+            entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, entity.level!!.tick)
             return false
         }
     }

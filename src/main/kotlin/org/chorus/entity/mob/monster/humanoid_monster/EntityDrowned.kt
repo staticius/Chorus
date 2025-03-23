@@ -176,7 +176,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
         this.maxHealth = 20
         this.diffHandDamage = floatArrayOf(2.5f, 3f, 4.5f)
         super.initEntity()
-        memoryStorage!!.put<Boolean>(CoreMemoryTypes.Companion.ENABLE_DIVE_FORCE, true)
+        memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_DIVE_FORCE, true)
         val random = Utils.rand(0, 10000)
         if (random < 85) {
             setItemInHand(Item.get(Item.FISHING_ROD))

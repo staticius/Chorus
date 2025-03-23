@@ -429,10 +429,10 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                     .isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
             }.forEach { entity1: Entity ->
                 (entity1 as EntityPiglin).memoryStorage!!
-                    .put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage!!.get(memory))
+                    .set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage!!.get(memory))
             }
             if (entity.memoryStorage!!.get(memory) is EntityHoglin) {
-                entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
+                entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
             }
         }
 

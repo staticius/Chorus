@@ -17,7 +17,7 @@ interface IMemoryCodec<Data> {
      *
      * @return the decoder
      */
-    val decoder: Function<CompoundTag?, Data>
+    val decoder: Function<CompoundTag, Data?>
 
     /**
      * 获取记忆编码器，将实体记忆中的数据持久化进实体CompoundTag
@@ -27,7 +27,7 @@ interface IMemoryCodec<Data> {
      *
      * @return the encoder
      */
-    val encoder: BiConsumer<Data, CompoundTag?>
+    val encoder: BiConsumer<Data, CompoundTag>
 
     /**
      * 从实体记忆初始化实体，可以用于初始化实体DataFlag.
@@ -38,13 +38,13 @@ interface IMemoryCodec<Data> {
      * @param data   the data
      * @param entity the entity
      */
-    fun init(data: Data?, entity: EntityMob?)
+    fun init(data: Data, entity: EntityMob)
 
-    fun decode(tag: CompoundTag?): Data? {
+    fun decode(tag: CompoundTag): Data? {
         return decoder.apply(tag)
     }
 
-    fun encode(data: Data, tag: CompoundTag?) {
+    fun encode(data: Data, tag: CompoundTag) {
         encoder.accept(data, tag)
     }
 }

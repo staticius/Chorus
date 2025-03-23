@@ -142,7 +142,7 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         if (source.cause == DamageCause.PROJECTILE) {
             if (source is EntityDamageByEntityEvent) {
                 if (source.damager is EntityProjectile) {
-                    memoryStorage!!.put<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, projectile.shootingEntity)
+                    memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, projectile.shootingEntity)
                 }
             }
             TeleportExecutor(16, 5, 16).execute(this)

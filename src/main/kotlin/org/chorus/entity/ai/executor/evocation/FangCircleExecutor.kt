@@ -20,8 +20,8 @@ class FangCircleExecutor : FangLineExecutor() {
         tick++
         if (tick >= DURATION) {
             val tick = entity.level!!.tick
-            entity.getMemoryStorage()!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_CAST, tick)
-            entity.getMemoryStorage()!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, tick)
+            entity.getMemoryStorage()!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_CAST, tick)
+            entity.getMemoryStorage()!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, tick)
             return false
         } else return true
     }
@@ -38,7 +38,7 @@ class FangCircleExecutor : FangLineExecutor() {
 
     override fun startSpell(entity: EntityMob) {
         super.startSpell(entity)
-        entity.memoryStorage!!.put<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC, SPELL.CAST_CIRLCE)
+        entity.memoryStorage!!.set<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC, SPELL.CAST_CIRLCE)
     }
 
     companion object {

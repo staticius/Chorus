@@ -20,7 +20,7 @@ class MemoryStorage(@field:Getter override var entity: EntityMob) : IMemoryStora
         if (!memoryMap.containsKey(type)) {
             var data = type.decode(getEntity())
             if (data == null) data = type.defaultData
-            put(type, data)
+            set(type, data)
         }
         val value: D
         return if (((memoryMap[type] as D?).also { value = it }) !== EMPTY_VALUE) value else null

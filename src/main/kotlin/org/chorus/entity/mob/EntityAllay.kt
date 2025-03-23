@@ -131,7 +131,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         val item: Item = getItemInHand()
         if (item.isNull()) {
             getMemoryStorage().clear(CoreMemoryTypes.Companion.LOOKING_ITEM)
-        } else getMemoryStorage().put<Class<out Item>>(CoreMemoryTypes.Companion.LOOKING_ITEM, item.javaClass)
+        } else getMemoryStorage().set<Class<out Item>>(CoreMemoryTypes.Companion.LOOKING_ITEM, item.javaClass)
     }
 
     fun getInventory(): Inventory {

@@ -100,12 +100,12 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
             return false
         }
         if (source is EntityDamageByEntityEvent && source.damager !is EntityCreeper) {
-            memoryStorage!!.put(CoreMemoryTypes.ATTACK_TARGET, source.damager)
+            memoryStorage!!.set(CoreMemoryTypes.ATTACK_TARGET, source.damager)
         }
         val storage = memoryStorage
         if (storage != null) {
-            storage.put(CoreMemoryTypes.BE_ATTACKED_EVENT, source)
-            storage.put(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, level!!.tick)
+            storage.set(CoreMemoryTypes.BE_ATTACKED_EVENT, source)
+            storage.set(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, level!!.tick)
         }
 
         val paleLogs = Arrays.stream(

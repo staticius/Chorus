@@ -116,7 +116,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                             false
                         ))
                     ) {
-                        memoryStorage.put<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, true)
+                        memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, true)
                         return@of
                     }
                     if ((attacker == null || (attacker is Player && !attacker.isSurvival) || attacker.position.distanceSquared(
@@ -126,7 +126,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                             true
                         ) && memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.EXPLODE_CANCELLABLE)
                     ) {
-                        memoryStorage.put<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, false)
+                        memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, false)
                     }
                 }),
             Set.of<IController>(WalkController(), LookController(true, true), FluctuateController()),
@@ -210,8 +210,8 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                 false
             ))
         ) {
-            memoryStorage.put<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, true)
-            memoryStorage.put<Boolean>(CoreMemoryTypes.Companion.EXPLODE_CANCELLABLE, false)
+            memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, true)
+            memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.EXPLODE_CANCELLABLE, false)
             level!!.addSound(this.position, Sound.FIRE_IGNITE)
             return true
         }

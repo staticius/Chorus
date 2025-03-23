@@ -76,7 +76,7 @@ class GossipExecutor : EntityControl, IBehaviorExecutor {
         entity.lookTarget = entity.memoryStorage!!.get(type).position
         this.tick = 0
         this.spread = false
-        entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_GOSSIP, entity.level!!.tick)
+        entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_GOSSIP, entity.level!!.tick)
     }
 
     override fun onStop(entity: EntityMob) {

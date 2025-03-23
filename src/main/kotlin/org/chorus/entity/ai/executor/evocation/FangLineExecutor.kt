@@ -28,8 +28,8 @@ open class FangLineExecutor : EntityControl, IBehaviorExecutor {
         tick++
         if (tick >= DURATION) {
             val tick = entity.level!!.tick
-            entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_CAST, tick)
-            entity.memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, tick)
+            entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_CAST, tick)
+            entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, tick)
             return false
         } else return true
     }
@@ -54,7 +54,7 @@ open class FangLineExecutor : EntityControl, IBehaviorExecutor {
         tick = 0
         entity.level!!.addSound(entity.position, Sound.MOB_EVOCATION_ILLAGER_PREPARE_SUMMON)
         entity.setDataProperty(EntityDataTypes.Companion.EVOKER_SPELL_CASTING_COLOR, BlockColor.PURPLE_BLOCK_COLOR.argb)
-        entity.memoryStorage!!.put<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC, SPELL.CAST_LINE)
+        entity.memoryStorage!!.set<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC, SPELL.CAST_LINE)
         entity.setDataFlag(EntityFlag.CASTING)
     }
 

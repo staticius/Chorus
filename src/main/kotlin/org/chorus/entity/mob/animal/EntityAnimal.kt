@@ -24,8 +24,8 @@ abstract class EntityAnimal(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk,
     }
 
     protected open fun useBreedingItem(player: Player, item: Item): Boolean {
-        memoryStorage!!.put<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
-        memoryStorage!!.put<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.tick)
+        memoryStorage!!.set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
+        memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.tick)
         sendBreedingAnimation(item)
         item.count--
         return player.inventory.setItemInHand(item)

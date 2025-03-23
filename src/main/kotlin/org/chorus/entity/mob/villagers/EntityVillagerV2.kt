@@ -298,7 +298,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                                     }
                                 }
                                 if (nearest != null) {
-                                    memoryStorage!!.put<EntityVillagerV2>(
+                                    memoryStorage!!.set<EntityVillagerV2>(
                                         CoreMemoryTypes.Companion.GOSSIP_TARGET,
                                         nearest
                                     )
@@ -312,12 +312,12 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                                     ) < 16
                                 }.findAny().ifPresentOrElse(
                                     { entity1: EntityVillagerV2 ->
-                                        memoryStorage!!.put<EntityVillagerV2>(
+                                        memoryStorage!!.set<EntityVillagerV2>(
                                             CoreMemoryTypes.Companion.GOSSIP_TARGET,
                                             entity1
                                         )
                                         entity1.memoryStorage!!
-                                            .put<EntityVillagerV2>(CoreMemoryTypes.Companion.GOSSIP_TARGET, this)
+                                            .set<EntityVillagerV2>(CoreMemoryTypes.Companion.GOSSIP_TARGET, this)
                                     },
                                     { memoryStorage!!.clear(CoreMemoryTypes.Companion.GOSSIP_TARGET) })
                             } else if (!isHungry()) memoryStorage!!.clear(CoreMemoryTypes.Companion.GOSSIP_TARGET)
@@ -365,8 +365,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                             }
                             if (nearestInLove != null) {
                                 nearestInLove.memoryStorage!!
-                                    .put<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE, this)
-                                memoryStorage!!.put<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE, nearestInLove)
+                                    .set<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE, this)
+                                memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE, nearestInLove)
                             }
                         }
                     }
@@ -412,7 +412,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun setBed(bed: BlockBed) {
         if (bed.isBedValid) {
-            memoryStorage!!.put<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED, bed)
+            memoryStorage!!.set<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED, bed)
             for (i in 0..4) {
                 val randX = Utils.rand(0f, 0.5f)
                 val randY = Utils.rand(0f, 0.3f)
@@ -538,7 +538,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 setBed(bed)
             }
         }
-        memoryStorage!!.put<Object2ObjectArrayMap<String, IntArrayList>>(
+        memoryStorage!!.set<Object2ObjectArrayMap<String, IntArrayList>>(
             CoreMemoryTypes.Companion.GOSSIP,
             Object2ObjectArrayMap<String, IntArrayList>()
         )
@@ -778,7 +778,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         for (profession in Profession.Companion.getProfessions().values) {
             if (getTradeExp() != 0 && profession.index != getProfession()) continue
             if (block.id == profession.blockID) {
-                memoryStorage!!.put<Block>(CoreMemoryTypes.Companion.SITE_BLOCK, block)
+                memoryStorage!!.set<Block>(CoreMemoryTypes.Companion.SITE_BLOCK, block)
                 setProfession(profession.index, true)
                 return true
             }

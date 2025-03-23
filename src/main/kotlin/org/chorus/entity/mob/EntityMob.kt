@@ -22,7 +22,6 @@ import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus.form.window.SimpleForm
 import org.chorus.inventory.EntityInventoryHolder
-import org.chorus.inventory.Inventory
 import org.chorus.item.Item
 import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
@@ -89,8 +88,8 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
     override val equipment = EntityEquipment(this)
 
-    override val memoryStorage: IMemoryStorage?
-        get() = this.behaviorGroup?.getMemoryStorage()
+    override val memoryStorage: IMemoryStorage
+        get() = this.behaviorGroup.getMemoryStorage()
 
 
     override fun initEntity() {
@@ -99,16 +98,14 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         this.behaviorGroup = requireBehaviorGroup()
 
         val storage = memoryStorage
-        if (storage != null) {
-            storage.put(CoreMemoryTypes.ENTITY_SPAWN_TIME, level!!.tick)
-            MemoryType.persistentMemories.forEach(Consumer { memory ->
-                val mem = memory as MemoryType<Any?>
-                val data = mem.codec!!.decoder.apply(this.namedTag)
-                if (data != null) {
-                    storage.put(mem, data)
-                }
-            })
-        }
+        storage[CoreMemoryTypes.ENTITY_SPAWN_TIME] = level!!.tick
+        MemoryType.persistentMemories.forEach(Consumer { memory ->
+            val mem = memory as MemoryType<Any?>
+            val data = mem.codec!!.decoder.apply(this.namedTag!!)
+            if (data != null) {
+                storage[mem] = data
+            }
+        })
     }
 
     override fun spawnToAll() {
@@ -201,8 +198,8 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     override fun attack(source: EntityDamageEvent): Boolean {
         val storage = memoryStorage
         if (storage != null) {
-            storage.put(CoreMemoryTypes.BE_ATTACKED_EVENT, source)
-            storage.put(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, level!!.tick)
+            storage.set(CoreMemoryTypes.BE_ATTACKED_EVENT, source)
+            storage.set(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, level!!.tick)
         }
 
         if (this.isClosed() || !this.isAlive()) {
@@ -211,7 +208,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
         if (source is EntityDamageByEntityEvent && source.damager !is EntityCreeper) {
             //更新仇恨目标
-            memoryStorage!!.put(CoreMemoryTypes.ATTACK_TARGET, source.damager)
+            memoryStorage!!.set(CoreMemoryTypes.ATTACK_TARGET, source.damager)
         }
 
         if (source.cause != DamageCause.VOID && source.cause != DamageCause.CUSTOM && source.cause != DamageCause.MAGIC && source.cause != DamageCause.HUNGER) {
@@ -381,7 +378,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         return 5
     }
 
-    protected var behaviorGroup: IBehaviorGroup? = null
+    protected lateinit var behaviorGroup: IBehaviorGroup
 
     /**
      * 是否为活跃实体，如果实体不活跃，就应当降低AI运行频率
@@ -450,7 +447,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
      *
      * @return 此实体持有的行为组
      */
-    fun getBehaviorGroup(): IBehaviorGroup? {
+    fun getBehaviorGroup(): IBehaviorGroup {
         return behaviorGroup
     }
 
@@ -505,8 +502,8 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         }
     }
 
-    override fun getMemoryStorage(): IMemoryStorage? {
-        return getBehaviorGroup()!!.getMemoryStorage()
+    override fun getMemoryStorage(): IMemoryStorage {
+        return getBehaviorGroup().getMemoryStorage()
     }
 
     /**

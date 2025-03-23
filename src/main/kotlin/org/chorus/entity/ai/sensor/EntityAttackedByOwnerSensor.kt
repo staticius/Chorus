@@ -16,10 +16,10 @@ class EntityAttackedByOwnerSensor(override var period: Int, protected var change
                 }
                 if (player.lastBeAttackEntity != null) {
                     entity.getMemoryStorage()
-                        .put<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKING_OWNER, player.lastBeAttackEntity)
+                        .set<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKING_OWNER, player.lastBeAttackEntity)
                 } else if (player.lastAttackEntity != null) {
                     entity.getMemoryStorage()
-                        .put<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKED_BY_OWNER, player.lastAttackEntity)
+                        .set<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKED_BY_OWNER, player.lastAttackEntity)
                 } else entity.getMemoryStorage().clear(CoreMemoryTypes.Companion.ENTITY_ATTACKED_BY_OWNER)
             }
         }

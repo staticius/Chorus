@@ -12,7 +12,7 @@ interface EntityVariant : EntityComponent {
     }
 
     fun setVariant(variant: Int) {
-        getMemoryStorage().put<Int>(CoreMemoryTypes.Companion.VARIANT, variant)
+        getMemoryStorage().set<Int>(CoreMemoryTypes.Companion.VARIANT, variant)
     }
 
     fun hasVariant(): Boolean {
