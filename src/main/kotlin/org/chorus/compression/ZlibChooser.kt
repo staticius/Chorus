@@ -2,56 +2,55 @@ package org.chorus.compression
 
 import cn.powernukkitx.libdeflate.Libdeflate
 import org.chorus.Server
-import org.chorus.lang.BaseLang
 import org.chorus.utils.*
 
 
-object ZlibChooser {
+object ZlibChooser : Loggable {
     private val providers = arrayOfNulls<ZlibProvider>(4)
-    var currentProvider: ZlibProvider?
+    var currentProvider: ZlibProvider
         private set
 
     init {
         providers[2] = ZlibThreadLocal()
-        currentProvider = providers[2]
+        currentProvider = providers[2]!!
     }
 
     @JvmStatic
     fun setProvider(providerIndex: Int) {
-        var providerIndex = providerIndex
-        val lang = if (Server.instance == null) BaseLang("eng") else Server.instance.baseLang
-        when (providerIndex) {
-            0 -> if (providers[providerIndex] == null) providers[providerIndex] = ZlibOriginal()
-            1 -> if (providers[providerIndex] == null) providers[providerIndex] = ZlibSingleThreadLowMem()
+        var providerIndex1 = providerIndex
+        val lang = Server.instance.baseLang
+        when (providerIndex1) {
+            0 -> if (providers[providerIndex1] == null) providers[providerIndex1] = ZlibOriginal()
+            1 -> if (providers[providerIndex1] == null) providers[providerIndex1] = ZlibSingleThreadLowMem()
             2 -> {
-                if (providers[providerIndex] == null) providers[providerIndex] = ZlibThreadLocal()
+                if (providers[providerIndex1] == null) providers[providerIndex1] = ZlibThreadLocal()
                 if (Libdeflate.isAvailable()) {
                     ZlibChooser.log.info("{}{}", TextFormat.WHITE, lang.tr("nukkit.zlib.acceleration-can-enable"))
                 }
             }
 
             3 -> if (Libdeflate.isAvailable()) {
-                if (providers[providerIndex] == null) {
+                if (providers[providerIndex1] == null) {
                     val libDeflateThreadLocal = LibDeflateThreadLocal(providers[2] as ZlibThreadLocal?)
-                    providers[providerIndex] = libDeflateThreadLocal
+                    providers[providerIndex1] = libDeflateThreadLocal
                 }
             } else {
                 ZlibChooser.log.warn(lang.tr("nukkit.zlib.unavailable"))
-                providerIndex = 2
-                if (providers[providerIndex] == null) providers[providerIndex] = ZlibThreadLocal()
+                providerIndex1 = 2
+                if (providers[providerIndex1] == null) providers[providerIndex1] = ZlibThreadLocal()
             }
 
-            else -> throw UnsupportedOperationException("Invalid provider: $providerIndex")
+            else -> throw UnsupportedOperationException("Invalid provider: $providerIndex1")
         }
-        if (providerIndex < 2) {
+        if (providerIndex1 < 2) {
             ZlibChooser.log.warn(lang.tr("nukkit.zlib.affect-performance"))
         }
-        currentProvider = providers[providerIndex]
+        currentProvider = providers[providerIndex1]!!
         ZlibChooser.log.info(
             "{}: {} ({})",
             lang.tr("nukkit.zlib.selected"),
-            providerIndex,
-            currentProvider!!.javaClass.canonicalName
+            providerIndex1,
+            currentProvider.javaClass.canonicalName
         )
     }
 }

@@ -13,14 +13,12 @@ interface CompressionProvider {
 
     companion object {
         fun from(algorithm: PacketCompressionAlgorithm?): CompressionProvider {
-            if (algorithm == null) {
-                return NONE
-            } else if (algorithm == PacketCompressionAlgorithm.ZLIB) {
-                return ZLIB
-            } else if (algorithm == PacketCompressionAlgorithm.SNAPPY) {
-                return SNAPPY
+            return when (algorithm) {
+                null -> NONE
+                PacketCompressionAlgorithm.ZLIB -> ZLIB
+                PacketCompressionAlgorithm.SNAPPY -> SNAPPY
+                else -> throw UnsupportedOperationException()
             }
-            throw UnsupportedOperationException()
         }
 
         const val MAX_INFLATE_LEN: Int = 1024 * 1024 * 10
@@ -37,33 +35,30 @@ interface CompressionProvider {
             }
         }
 
-        @JvmField
         val ZLIB: CompressionProvider = object : CompressionProvider {
             @Throws(IOException::class)
             override fun compress(data: ByteArray, level: Int): ByteArray {
-                return ZlibChooser.getCurrentProvider().deflate(data, level, false)
+                return ZlibChooser.currentProvider.deflate(data, level, false)
             }
 
             @Throws(IOException::class)
             override fun decompress(compressed: ByteArray): ByteArray {
-                return ZlibChooser.getCurrentProvider().inflate(compressed, MAX_INFLATE_LEN, false)
+                return ZlibChooser.currentProvider.inflate(compressed, MAX_INFLATE_LEN, false)
             }
         }
 
-        @JvmField
         val ZLIB_RAW: CompressionProvider = object : CompressionProvider {
             @Throws(IOException::class)
             override fun compress(data: ByteArray, level: Int): ByteArray {
-                return ZlibChooser.getCurrentProvider().deflate(data, level, true)
+                return ZlibChooser.currentProvider.deflate(data, level, true)
             }
 
             @Throws(IOException::class)
             override fun decompress(compressed: ByteArray): ByteArray {
-                return ZlibChooser.getCurrentProvider().inflate(compressed, MAX_INFLATE_LEN, true)
+                return ZlibChooser.currentProvider.inflate(compressed, MAX_INFLATE_LEN, true)
             }
         }
 
-        @JvmField
         val SNAPPY: CompressionProvider = object : CompressionProvider {
             @Throws(IOException::class)
             override fun compress(data: ByteArray, level: Int): ByteArray? {

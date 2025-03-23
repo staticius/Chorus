@@ -15,7 +15,7 @@ class ZlibSingleThreadLowMem : ZlibProvider {
             DEFLATER_RAW.setLevel(level)
             DEFLATER_RAW.setInput(data)
             DEFLATER_RAW.finish()
-            val bos = ThreadCache.fbaos.get()
+            val bos = ThreadCache.fbaos.get()!!
             bos.reset()
             while (!DEFLATER_RAW.finished()) {
                 val i = DEFLATER_RAW.deflate(BUFFER)
@@ -27,7 +27,7 @@ class ZlibSingleThreadLowMem : ZlibProvider {
             DEFLATER.setLevel(level)
             DEFLATER.setInput(data)
             DEFLATER.finish()
-            val bos = ThreadCache.fbaos.get()
+            val bos = ThreadCache.fbaos.get()!!
             bos.reset()
             while (!DEFLATER.finished()) {
                 val i = DEFLATER.deflate(BUFFER)
@@ -44,14 +44,14 @@ class ZlibSingleThreadLowMem : ZlibProvider {
             INFLATER_RAW.reset()
             INFLATER_RAW.setInput(data)
             INFLATER_RAW.finished()
-            val bos = ThreadCache.fbaos.get()
+            val bos = ThreadCache.fbaos.get()!!
             bos.reset()
             try {
                 var length = 0
                 while (!INFLATER_RAW.finished()) {
                     val i = INFLATER_RAW.inflate(BUFFER)
                     length += i
-                    if (maxSize > 0 && length > maxSize) {
+                    if (maxSize in 1..<length) {
                         throw IOException("Inflated data exceeds maximum size")
                     }
                     bos.write(BUFFER, 0, i)
@@ -64,14 +64,14 @@ class ZlibSingleThreadLowMem : ZlibProvider {
             INFLATER.reset()
             INFLATER.setInput(data)
             INFLATER.finished()
-            val bos = ThreadCache.fbaos.get()
+            val bos = ThreadCache.fbaos.get()!!
             bos.reset()
             try {
                 var length = 0
                 while (!INFLATER.finished()) {
                     val i = INFLATER.inflate(BUFFER)
                     length += i
-                    if (maxSize > 0 && length > maxSize) {
+                    if (maxSize in 1..<length) {
                         throw IOException("Inflated data exceeds maximum size")
                     }
                     bos.write(BUFFER, 0, i)

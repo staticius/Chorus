@@ -12,7 +12,7 @@ class ZlibOriginal : ZlibProvider {
         val deflater = Deflater(level, raw)
         deflater.setInput(data)
         deflater.finish()
-        val bos = ThreadCache.fbaos.get()
+        val bos = ThreadCache.fbaos.get()!!
         bos.reset()
         val buf = ByteArray(1024)
         try {
@@ -31,7 +31,7 @@ class ZlibOriginal : ZlibProvider {
         val inflater = Inflater(raw)
         inflater.setInput(data)
         inflater.finished()
-        val bos = ThreadCache.fbaos.get()
+        val bos = ThreadCache.fbaos.get()!!
         bos.reset()
 
         val buffer = ByteArray(1024)
@@ -40,7 +40,7 @@ class ZlibOriginal : ZlibProvider {
             while (!inflater.finished()) {
                 val i = inflater.inflate(buffer)
                 length += i
-                if (maxSize > 0 && length > maxSize) {
+                if (maxSize in 1..<length) {
                     throw IOException("Inflated data exceeds maximum size")
                 }
                 bos.write(buffer, 0, i)
