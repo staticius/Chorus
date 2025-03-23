@@ -12,7 +12,7 @@ class BlockLightBlock @JvmOverloads constructor(blockstate: BlockState = Compani
     override val lightLevel: Int
         get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.BLOCK_LIGHT_LEVEL)
 
-    override val boundingBox: AxisAlignedBB?
+    override val boundingBox: AxisAlignedBB
         get() = null
 
     override val waterloggingLevel: Int

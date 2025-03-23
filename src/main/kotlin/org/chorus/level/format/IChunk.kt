@@ -164,9 +164,9 @@ interface IChunk {
 
     fun removeBlockEntity(blockEntity: BlockEntity)
 
-    val entities: Map<Long, Entity>
+    val entities: MutableMap<Long, Entity>
 
-    val blockEntities: Map<Long, BlockEntity>
+    val blockEntities: MutableMap<Long, BlockEntity>
 
     fun getBlockEntity(x: Int, y: Int, z: Int): BlockEntity?
 

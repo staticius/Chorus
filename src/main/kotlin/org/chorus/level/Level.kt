@@ -2,24 +2,33 @@ package org.chorus.level
 
 
 import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.longs.*
-import it.unimi.dsi.fastutil.objects.ObjectIterator
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.api.NonComputationAtomic
 import org.chorus.block.*
+import org.chorus.block.customblock.CustomBlock
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
 import org.chorus.entity.Entity
 import org.chorus.entity.Entity.Companion.createEntity
 import org.chorus.entity.Entity.Companion.getDefaultNBT
-import org.chorus.entity.item.EntityXpOrb.Companion.splitIntoOrbSizes
-import org.chorus.event.level.ChunkLoadEvent
+import org.chorus.entity.EntityAsyncPrepare
+import org.chorus.entity.EntityID
+import org.chorus.entity.item.*
+import org.chorus.entity.mob.EntityMob
+import org.chorus.entity.projectile.EntityProjectile
+import org.chorus.entity.weather.EntityLightningBolt
+import org.chorus.event.block.BlockBreakEvent
+import org.chorus.event.block.BlockPlaceEvent
+import org.chorus.event.block.BlockUpdateEvent
+import org.chorus.event.level.*
 import org.chorus.event.player.PlayerInteractEvent
+import org.chorus.event.weather.LightningStrikeEvent
 import org.chorus.inventory.BlockInventoryHolder
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemBucket
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.format.*
 import org.chorus.level.format.LevelConfig.AntiXrayMode
@@ -28,6 +37,7 @@ import org.chorus.level.generator.ChunkGenerateContext
 import org.chorus.level.generator.Generator
 import org.chorus.level.particle.DestroyBlockParticle
 import org.chorus.level.particle.Particle
+import org.chorus.level.tickingarea.TickingArea
 import org.chorus.level.util.SimpleTickCachedBlockStore
 import org.chorus.level.util.TickCachedBlockStore
 import org.chorus.level.vibration.SimpleVibrationManager
@@ -36,13 +46,13 @@ import org.chorus.level.vibration.VibrationManager
 import org.chorus.level.vibration.VibrationType
 import org.chorus.math.*
 import org.chorus.metadata.BlockMetadataStore
+import org.chorus.metadata.MetadataValue
 import org.chorus.metadata.Metadatable
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.*
-import org.chorus.network.protocol.DataPacket
-import org.chorus.network.protocol.LevelEventPacket
-import org.chorus.network.protocol.LevelSoundEventPacket
-import org.chorus.network.protocol.UpdateBlockPacket
+import org.chorus.network.protocol.*
+import org.chorus.network.protocol.types.PlayerAbility
+import org.chorus.network.protocol.types.SpawnPointType
 import org.chorus.plugin.InternalPlugin
 import org.chorus.plugin.Plugin
 import org.chorus.registry.Registries
@@ -57,8 +67,6 @@ import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.*
 import java.util.function.Function
-import java.util.function.LongConsumer
-import java.util.stream.Collectors
 import java.util.stream.IntStream
 import java.util.stream.Stream
 import kotlin.Any
@@ -73,15 +81,14 @@ import kotlin.Long
 import kotlin.NullPointerException
 import kotlin.RuntimeException
 import kotlin.String
-import kotlin.Suppress
 import kotlin.Throwable
 import kotlin.addSuppressed
 import kotlin.also
 import kotlin.arrayOf
 import kotlin.arrayOfNulls
 import kotlin.code
+import kotlin.collections.HashMap
 import kotlin.intArrayOf
-import kotlin.plus
 import kotlin.require
 import kotlin.synchronized
 
@@ -117,7 +124,7 @@ class Level(
     /*
      * <ChunkIndex,<ChunkLoader ID,ChunkLoader>>
      */
-    private val chunkLoaders = HashMap<Long, Map<Int, ChunkLoader>>()
+    private val chunkLoaders = HashMap<Long, MutableMap<Int, ChunkLoader>>()
 
     // Computation atomicity may be required in addChunkPacket(int, int, DataPacket)
     private val chunkPackets = ConcurrentHashMap<Long, Deque<DataPacket>>()
@@ -128,7 +135,7 @@ class Level(
     private val highLightChunks: MutableSet<Long> = HashSet()
 
     // Avoid OOM, gc'd references result in whole chunk being sent (possibly higher cpu)
-    private val changedBlocks = HashMap<Long, SoftReference<HashMap<Int, Any>>>()
+    private val changedBlocks = HashMap<Long, SoftReference<MutableMap<Int, Any>>>()
 
     // Storing the vector is redundant
     private val changeBlocksPresent = Any()
@@ -168,7 +175,7 @@ class Level(
     var tickRateOptDelay: Int = 1
 
     lateinit var gameRules: GameRules
-    private var provider: AtomicReference<LevelProvider>? = null
+    private lateinit var provider: AtomicReference<LevelProvider>
     private var time: Float
     private var nextTimeSendTick = 0
     val name: String
@@ -184,7 +191,7 @@ class Level(
     private val chunkTickRadius: Int
     private val chunksPerTicks: Int
     private val clearChunksOnTick: Boolean
-    var generator: Generator? = null
+    lateinit var generator: Generator
     private val generatorClass: Class<out Generator>?
 
     private var updateLCG: Int = ThreadLocalRandom.current().nextInt()
@@ -195,7 +202,7 @@ class Level(
     var currentTick: Long = 0
         private set
 
-    private val lightQueue: Map<Long, MutableMap<Int, Any>> = ConcurrentHashMap(8, 0.9f, 1)
+    private val lightQueue: MutableMap<Long, MutableMap<Int, Any>> = ConcurrentHashMap(8, 0.9f, 1)
 
     /**base tick system */
     private val baseTickThread: Thread
@@ -223,6 +230,27 @@ class Level(
     var thunderTime: Int = 0
 
     private val playerWeatherShowMap = HashMap<String, Int>()
+
+    var isAntiXrayEnabled: Boolean
+        /**
+         * Is anti-xray enabled.
+         */
+        get() = this.antiXraySystem != null
+        /**
+         * enable the anti-xray system.
+         */
+        set(antiXrayEnabled) {
+            if (antiXrayEnabled) {
+                if (antiXraySystem == null) {
+                    this.antiXraySystem = AntiXraySystem(this)
+                }
+            } else {
+                this.antiXraySystem = null
+            }
+        }
+
+    val tick: Int
+        get() = if (Server.instance.settings.levelSettings.levelThread) this.baseTickGameLoop.getTick() else Server.instance.tick
 
     fun recalcTickOptDelay(): Int {
         return if (tickRateTime > 40) {
@@ -261,7 +289,7 @@ class Level(
     }
 
     fun getProvider(): LevelProvider {
-        return provider!!.get()
+        return provider.get()
     }
 
     /**
@@ -285,7 +313,7 @@ class Level(
     }
 
     fun close() {
-        if (Server.instance.settings.levelSettings().levelThread() && baseTickThread.isAlive) {
+        if (Server.instance.settings.levelSettings.levelThread && baseTickThread.isAlive) {
             baseTickGameLoop.stop()
         } else remove()
     }
@@ -295,7 +323,7 @@ class Level(
         scheduler.cancelAllTasks()
         scheduler.mainThreadHeartbeat(this.tick + 10000)
         Server.instance.levels.remove(this.id)
-        val levelProvider = provider!!.get()
+        val levelProvider = provider.get()
         if (levelProvider != null) {
             if (this.autoSave) {
                 this.save(true)
@@ -307,19 +335,19 @@ class Level(
     }
 
     fun addSound(pos: Vector3, sound: Sound) {
-        this.addSound(pos, sound, 1f, 1f, *(null as Array<Player?>?)!!)
+        this.addSound(pos, sound, 1f, 1f, *arrayOf())
     }
 
     fun addSound(pos: Vector3, sound: Sound, volume: Float, pitch: Float) {
-        this.addSound(pos, sound, volume, pitch, *(null as Array<Player?>?)!!)
+        this.addSound(pos, sound, volume, pitch, *arrayOf())
     }
 
-    fun addSound(pos: Vector3, sound: Sound, volume: Float, pitch: Float, players: Collection<Player?>) {
+    fun addSound(pos: Vector3, sound: Sound, volume: Float, pitch: Float, players: Collection<Player>) {
         this.addSound(pos, sound, volume, pitch, *players.toTypedArray())
     }
 
-    fun addSound(pos: Vector3, sound: Sound, volume: Float, pitch: Float, vararg players: Player?) {
-        Preconditions.checkArgument(volume >= 0 && volume <= 1, "Sound volume must be between 0 and 1")
+    fun addSound(pos: Vector3, sound: Sound, volume: Float, pitch: Float, vararg players: Player) {
+        Preconditions.checkArgument(volume in 0.0..1.0, "Sound volume must be between 0 and 1")
         Preconditions.checkArgument(pitch >= 0, "Sound pitch must be higher than 0")
 
         val packet: PlaySoundPacket = PlaySoundPacket()
@@ -330,10 +358,10 @@ class Level(
         packet.y = pos.floorY
         packet.z = pos.floorZ
 
-        if (players == null || players.size == 0) {
+        if (players.isEmpty()) {
             addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, packet)
         } else {
-            Server.broadcastPacket(players, packet)
+            Server.broadcastPacket(players.toList().toTypedArray(), packet)
         }
     }
 
@@ -434,7 +462,7 @@ class Level(
         this.addParticle(particle, arrayOf(player))
     }
 
-    fun addParticle(particle: Particle, players: Collection<Player?>) {
+    fun addParticle(particle: Particle, players: Collection<Player>) {
         this.addParticle(particle, players.toTypedArray())
     }
 
@@ -443,30 +471,26 @@ class Level(
         val packets = particle.encode()
 
         if (players == null) {
-            if (packets != null) {
-                for (packet in packets) {
-                    this.addChunkPacket(particle.x.toInt() shr 4, particle.z.toInt() shr 4, packet)
-                }
+            for (packet in packets) {
+                this.addChunkPacket(particle.x.toInt() shr 4, particle.z.toInt() shr 4, packet)
             }
         } else {
-            if (packets != null) {
-                for (p in packets) {
-                    Server.broadcastPacket(players, p)
-                }
+            for (p in packets) {
+                Server.broadcastPacket(players, p)
             }
         }
     }
 
     fun addParticleEffect(pos: Vector3, particleEffect: ParticleEffect) {
-        this.addParticleEffect(pos, particleEffect, -1, this.dimension, *(null as Array<Player?>?)!!)
+        this.addParticleEffect(pos, particleEffect, -1, this.dimension, *emptyArray())
     }
 
     fun addParticleEffect(pos: Vector3, particleEffect: ParticleEffect, uniqueEntityId: Long) {
-        this.addParticleEffect(pos, particleEffect, uniqueEntityId, this.dimension, *(null as Array<Player?>?)!!)
+        this.addParticleEffect(pos, particleEffect, uniqueEntityId, this.dimension, *emptyArray())
     }
 
     fun addParticleEffect(pos: Vector3, particleEffect: ParticleEffect, uniqueEntityId: Long, dimensionId: Int) {
-        this.addParticleEffect(pos, particleEffect, uniqueEntityId, dimensionId, *(null as Array<Player?>?)!!)
+        this.addParticleEffect(pos, particleEffect, uniqueEntityId, dimensionId, *emptyArray())
     }
 
     fun addParticleEffect(
@@ -474,7 +498,7 @@ class Level(
         particleEffect: ParticleEffect,
         uniqueEntityId: Long,
         dimensionId: Int,
-        players: Collection<Player?>
+        players: Collection<Player>
     ) {
         this.addParticleEffect(
             pos,
@@ -490,7 +514,7 @@ class Level(
         particleEffect: ParticleEffect,
         uniqueEntityId: Long,
         dimensionId: Int,
-        vararg players: Player?
+        vararg players: Player
     ) {
         this.addParticleEffect(pos.asVector3f(), particleEffect.identifier, uniqueEntityId, dimensionId, *players)
     }
@@ -500,7 +524,7 @@ class Level(
         identifier: String,
         uniqueEntityId: Long,
         dimensionId: Int,
-        vararg players: Player?
+        vararg players: Player
     ) {
         val pk: SpawnParticleEffectPacket = SpawnParticleEffectPacket()
         pk.identifier = identifier
@@ -508,10 +532,10 @@ class Level(
         pk.dimensionId = dimensionId
         pk.position = pos
 
-        if (players == null || players.size == 0) {
-            addChunkPacket(pos.getFloorX() shr 4, pos.getFloorZ() shr 4, pk)
+        if (players.isEmpty()) {
+            addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, pk)
         } else {
-            Server.broadcastPacket(players, pk)
+            Server.broadcastPacket(players.toList().toTypedArray(), pk)
         }
     }
 
@@ -550,7 +574,7 @@ class Level(
         }
 
         this.close()
-        if (force && Server.instance.settings.levelSettings().levelThread()) {
+        if (force && Server.instance.settings.levelSettings.levelThread) {
             Server.instance.scheduler.scheduleDelayedTask({
                 if (baseTickThread.isAlive) {
                     Server.instance.logger.critical(getName() + " failed to unload. Trying to stop the thread.")
@@ -584,7 +608,7 @@ class Level(
     fun getChunkLoaders(chunkX: Int, chunkZ: Int): Array<ChunkLoader> {
         val index = chunkHash(chunkX, chunkZ)
         return if (chunkLoaders.containsKey(index)) {
-            chunkLoaders[index].values.toTypedArray()
+            chunkLoaders[index]!!.values.toTypedArray()
         } else {
             ChunkLoader.EMPTY_ARRAY
         }
@@ -594,7 +618,7 @@ class Level(
         val index = chunkHash(chunkX, chunkZ)
         val packets = chunkPackets.computeIfAbsent(
             index,
-            Function<Long, Deque<DataPacket?>> { i: Long? -> ConcurrentLinkedDeque<DataPacket>() })
+            Function<Long, Deque<DataPacket>> { ConcurrentLinkedDeque<DataPacket>() })
         packets.add(packet)
     }
 
@@ -603,18 +627,18 @@ class Level(
         val hash = loader.loaderId
         val index = chunkHash(chunkX, chunkZ)
         if (!chunkLoaders.containsKey(index)) {
-            chunkLoaders.put(index, HashMap())
-        } else if (chunkLoaders[index].containsKey(hash)) {
+            chunkLoaders[index] = HashMap()
+        } else if (chunkLoaders[index]!!.containsKey(hash)) {
             return
         }
 
-        chunkLoaders[index].put(hash, loader)
+        chunkLoaders[index]!![hash] = loader
 
         if (!loaders.containsKey(hash)) {
-            loaderCounter.put(hash, 1)
-            loaders.put(hash, loader)
+            loaderCounter[hash] = 1
+            loaders[hash] = loader
         } else {
-            loaderCounter.put(hash, loaderCounter[hash] + 1)
+            loaderCounter[hash] = loaderCounter[hash]!! + 1
         }
 
         this.cancelUnloadChunkRequest(hash.toLong())
@@ -637,12 +661,12 @@ class Level(
                     return this.unloadChunkRequest(chunkX, chunkZ, isSafeUnload)
                 }
 
-                var count = loaderCounter[loaderId]
+                var count = loaderCounter[loaderId]!!
                 if (--count == 0) {
                     loaderCounter.remove(loaderId)
                     loaders.remove(loaderId)
                 } else {
-                    loaderCounter.put(loaderId, count)
+                    loaderCounter[loaderId] = count
                 }
                 return true
             }
@@ -657,31 +681,31 @@ class Level(
         }
     }
 
-    fun sendTime(vararg players: Player?) {
+    fun sendTime(vararg players: Player) {
         val pk: SetTimePacket = SetTimePacket()
         pk.time = time.toInt()
 
-        Server.broadcastPacket(players, pk)
+        Server.broadcastPacket(players.toList().toTypedArray(), pk)
     }
 
     fun sendTime() {
-        this.sendTime(*players.values().toTypedArray())
+        this.sendTime(*players.values.toTypedArray())
     }
 
     fun releaseTickCachedBlocks() {
         synchronized(this.tickCachedBlocks) {
-            for (each in tickCachedBlocks.values()) {
+            for (each in tickCachedBlocks.values) {
                 each.clearCachedStore()
             }
         }
     }
 
     private fun doTick(gameLoop: GameLoop) {
-        val baseTickRate: Int = Server.instance.settings.levelSettings().baseTickRate()
+        val baseTickRate: Int = Server.instance.settings.levelSettings.baseTickRate
         val levelTime = System.currentTimeMillis()
         val tickMs = (System.currentTimeMillis() - levelTime).toInt()
         doTick(gameLoop.getTick())
-        if (Server.instance.settings.levelSettings().autoTickRate()) {
+        if (Server.instance.settings.levelSettings.autoTickRate) {
             if (tickMs < 50 && this.tickRate > baseTickRate) {
                 val r: Int
                 this.tickRate = (this.tickRate - 1).also { r = it }
@@ -693,17 +717,16 @@ class Level(
                     tickRate
                 )
             } else if (tickMs >= 50) {
-                val autoTickRateLimit: Int = Server.instance.settings.levelSettings().autoTickRateLimit()
+                val autoTickRateLimit: Int = Server.instance.settings.levelSettings.autoTickRateLimit
                 if (this.tickRate == baseTickRate) {
-                    this.tickRate =
-                        Math.max(baseTickRate + 1, Math.min(autoTickRateLimit, tickMs / 50))
+                    this.tickRate = (baseTickRate + 1).coerceAtLeast(autoTickRateLimit.coerceAtMost(tickMs / 50))
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
                         this.getName(), ChorusMath.round(tickMs.toDouble(), 2),
                         tickRate
                     )
                 } else if ((tickMs / this.tickRate) >= 50 && this.tickRate < autoTickRateLimit) {
-                    this.tickRate = this.tickRate + 1
+                    this.tickRate += 1
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
                         this.getName(), ChorusMath.round(tickMs.toDouble(), 2),
@@ -716,10 +739,10 @@ class Level(
     }
 
     fun doTick(currentTick: Int) {
-        players.values().forEach(Consumer { player: Player -> player.session.tick() })
+        players.values.forEach(Consumer { player: Player -> player.session.tick() })
         requireProvider()
         try {
-            getScheduler().mainThreadHeartbeat(currentTick)
+            scheduler.mainThreadHeartbeat(currentTick)
             updateBlockLight(lightQueue)
             this.checkTime()
             if (currentTick >= nextTimeSendTick) { // Send time to client every 30 seconds to make sure it
@@ -730,7 +753,7 @@ class Level(
             // 检查突出区块（玩家附近3x3区块）
             if ((currentTick and 127) == 0) { // 每127刻检查一次是比较合理的
                 highLightChunks.clear()
-                for (player in players.values()) {
+                for (player in players.values) {
                     if (player.isOnline) {
                         val chunkX = player.position.chunkX
                         val chunkZ = player.position.chunkZ
@@ -765,15 +788,14 @@ class Level(
             }
             if (!updateEntities.isEmpty()) {
                 CompletableFuture.runAsync({
-                    updateEntities.keySet()
-                        .longParallelStream().forEach(LongConsumer { id: Long ->
+                    updateEntities.keys.parallelStream().forEach(Consumer { id ->
                             val entity = updateEntities[id]
                             if (entity != null && entity.isInitialized() && entity is EntityAsyncPrepare) {
                                 entity.asyncPrepare(tick)
                             }
                         })
-                }, Server.instance.getInstance().computeThreadPool).join()
-                for (id in updateEntities.keySetLong()) {
+                }, Server.instance.computeThreadPool).join()
+                for (id in updateEntities.keys) {
                     val entity = updateEntities[id]
                     if (entity is EntityMob) {
                         if (entity.getBehaviorGroup() == null) {
@@ -794,12 +816,12 @@ class Level(
 
             this.tickChunks()
             synchronized(changedBlocks) {
-                if (!changedBlocks.isEmpty()) {
+                if (changedBlocks.isNotEmpty()) {
                     if (!players.isEmpty()) {
-                        val iter = changedBlocks.long2ObjectEntrySet().fastIterator()
+                        val iter = changedBlocks.entries.iterator()
                         while (iter.hasNext()) {
                             val entry = iter.next()
-                            val index = entry.longKey
+                            val index = entry.key
                             val blocks = entry.value.get()
                             val chunkX = getHashX(index)
                             val chunkZ = getHashZ(index)
@@ -819,7 +841,7 @@ class Level(
                                 } else {
                                     val blocksArray = arrayOfNulls<Vector3>(size)
                                     var i = 0
-                                    for (blockHash in blocks.keySet()) {
+                                    for (blockHash in blocks.keys) {
                                         val hash = getBlockXYZ(index, blockHash, this)
                                         blocksArray[i++] = hash
                                     }
@@ -835,11 +857,11 @@ class Level(
                 this.checkSleep()
             }
 
-            for (index in chunkPackets.keySet()) {
+            for (index in chunkPackets.keys) {
                 val chunkX = getHashX(index)
                 val chunkZ = getHashZ(index)
                 val chunkPlayers: Array<Player> =
-                    getChunkPlayers(chunkX, chunkZ).values().toTypedArray()
+                    getChunkPlayers(chunkX, chunkZ).values.toTypedArray()
                 if (chunkPlayers.size > 0) {
                     for (pk in chunkPackets[index]!!) {
                         Server.broadcastPacket(chunkPlayers, pk)
@@ -851,7 +873,7 @@ class Level(
             if (gameRules.isStale) {
                 val packet: GameRulesChangedPacket = GameRulesChangedPacket()
                 packet.gameRules = gameRules
-                Server.broadcastPacket(players.values().toTypedArray(), packet)
+                Server.broadcastPacket(players.values.toTypedArray(), packet)
                 gameRules.refresh()
             }
         } catch (e: Exception) {
@@ -863,16 +885,16 @@ class Level(
             )
             e.printStackTrace()
         } finally {
-            getPlayers().values().forEach(Consumer { obj: Player -> obj.checkNetwork() })
+            getPlayers().values.forEach(Consumer { obj: Player -> obj.checkNetwork() })
             releaseTickCachedBlocks()
         }
     }
 
     private fun checkWeather() {
         if (gameRules.getBoolean(GameRule.DO_WEATHER_CYCLE)) {
-            for (entry in playerWeatherShowMap.object2IntEntrySet()) {
-                val intValue = entry.intValue
-                val key: String = entry.getKey()
+            for (entry in playerWeatherShowMap.entries) {
+                val intValue = entry.value
+                val key: String = entry.key
                 if (intValue == 0) {
                     val player = Server.instance.getPlayer(key)
                     if (player != null) {
@@ -916,17 +938,8 @@ class Level(
 
                 if (this.isThundering()) {
                     val chunks = chunks
-                    if (chunks is Long2ObjectOpenHashMap<IChunk?>) {
-                        val iter: ObjectIterator<out Long2ObjectMap.Entry<IChunk?>> =
-                            chunks.long2ObjectEntrySet().fastIterator()
-                        while (iter.hasNext()) {
-                            val entry = iter.next()
-                            performThunder(entry.longKey, entry.getValue())
-                        }
-                    } else {
-                        for (entry in this.chunks.entrySet()) {
-                            performThunder(entry.getKey(), entry.getValue())
-                        }
+                    for (entry in this.chunks.entries) {
+                        performThunder(entry.key, entry.value)
                     }
                 }
             }
@@ -992,13 +1005,13 @@ class Level(
                 vector,
                 LevelSoundEventPacket.SOUND_THUNDER,
                 -1,
-                Registries.ENTITY.getEntityNetworkId(EntityID.LIGHTNING_BOLT)
+                Registries.ENTITY.getEntityNetworkId(EntityID.LIGHTNING_BOLT)!!
             )
             this.addLevelSoundEvent(
                 vector,
                 LevelSoundEventPacket.SOUND_EXPLODE,
                 -1,
-                Registries.ENTITY.getEntityNetworkId(EntityID.LIGHTNING_BOLT)
+                Registries.ENTITY.getEntityNetworkId(EntityID.LIGHTNING_BOLT)!!
             )
         }
     }
@@ -1010,9 +1023,9 @@ class Level(
             pos.x,
             pos.y,
             pos.z,
-            pos.getX(),
+            pos.x,
             (if (isOverWorld) 320 else 255).toDouble(),
-            pos.getZ()
+            pos.z
         ).expand(3.0, 3.0, 3.0)
         val list: MutableList<Entity> = ArrayList()
 
@@ -1023,9 +1036,9 @@ class Level(
         }
 
         if (!list.isEmpty()) {
-            return list[ThreadLocalRandom.current().nextInt(list.size())].getLocator().position
+            return list[ThreadLocalRandom.current().nextInt(list.size)].getLocator().position
         } else {
-            if (pos.getY() == -1.0) {
+            if (pos.y == -1.0) {
                 pos = pos.up(2)
             }
 
@@ -1040,9 +1053,9 @@ class Level(
 
         var playerCount = 0
         var sleepingPlayerCount = 0
-        for (p in getPlayers().values()) {
+        for (p in getPlayers().values) {
             playerCount++
-            if (p.isSleeping) {
+            if (p.isSleeping()) {
                 sleepingPlayerCount++
             }
         }
@@ -1053,7 +1066,7 @@ class Level(
             if (time >= TIME_NIGHT && time < TIME_SUNRISE) {
                 this.setTime(this.getTime() + TIME_FULL - time)
 
-                for (p in getPlayers().values()) {
+                for (p in getPlayers().values) {
                     p.stopSleep()
                 }
             }
@@ -1139,12 +1152,12 @@ class Level(
             updateBlockPacket.dataLayer = dataLayer
             val runtimeId: Int
             if (b is Block) {
-                runtimeId = b.getRuntimeId()
+                runtimeId = b.runtimeId
             } else if (b is Vector3WithRuntimeId) {
                 runtimeId = if (dataLayer == 0) {
-                    b.getRuntimeIdLayer0()
+                    b.runtimeIdLayer0
                 } else {
-                    b.getRuntimeIdLayer1()
+                    b.runtimeIdLayer1
                 }
             } else {
                 val hash = getBlockRuntimeId(bPos.x, bPos.y, bPos.z, dataLayer)
@@ -1169,16 +1182,16 @@ class Level(
 
         val chunksPerLoader = Math.min(
             200,
-            Math.max(1, (((this.chunksPerTicks - loaders.size()).toDouble() / loaders.size() + 0.5)).toInt())
+            Math.max(1, (((this.chunksPerTicks - loaders.size).toDouble() / loaders.size + 0.5)).toInt())
         )
         var randRange = 3 + chunksPerLoader / 30
         randRange = Math.min(randRange, this.chunkTickRadius)
 
         val random = ThreadLocalRandom.current()
         if (!loaders.isEmpty()) {
-            for (loader in loaders.values()) {
-                val chunkX = loader.x.toInt() shr 4
-                val chunkZ = loader.z.toInt() shr 4
+            for (loader in loaders.values) {
+                val chunkX = loader.getLocator().position.chunkX
+                val chunkZ = loader.getLocator().position.chunkZ
 
                 val index = chunkHash(chunkX, chunkZ)
                 val existingLoaders = Math.max(0, chunkTickList.getOrDefault(index, 0))
@@ -1195,21 +1208,21 @@ class Level(
         }
 
         if (!chunkTickList.isEmpty()) {
-            val iter = chunkTickList.long2IntEntrySet().iterator()
+            val iter = chunkTickList.entries.iterator()
             while (iter.hasNext()) {
                 val entry = iter.next()
-                val index = entry.longKey
+                val index = entry.key
                 if (!areNeighboringChunksLoaded(index)) {
                     iter.remove()
                     continue
                 }
 
-                val loaders = entry.intValue
+                val loaders = entry.value
 
                 val chunkX = getHashX(index)
                 val chunkZ = getHashZ(index)
 
-                val chunk: IChunk?
+                val chunk: IChunk
                 if ((getChunk(chunkX, chunkZ, false).also { chunk = it }) == null) {
                     iter.remove()
                     continue
@@ -1217,7 +1230,7 @@ class Level(
                     iter.remove()
                 }
 
-                for (entity in chunk.getEntities().values()) {
+                for (entity in chunk.entities.values) {
                     entity.scheduleUpdate()
                 }
                 val tickSpeed = gameRules.getInteger(GameRule.RANDOM_TICK_SPEED)
@@ -1225,7 +1238,7 @@ class Level(
                     continue
                 }
 
-                for (section in chunk.getSections()) {
+                for (section in chunk.sections) {
                     if (section == null || section.isEmpty) {
                         continue
                     }
@@ -1238,7 +1251,7 @@ class Level(
                         if (state != null && randomTickBlocks.contains(state.identifier)) {
                             val block = Block.get(
                                 state,
-                                this, (chunk.getX() shl 4) + x, (section.y.toInt() shl 4) + y, (chunk.getZ() shl 4) + z
+                                this, (chunk.x shl 4) + x, (section.y.toInt() shl 4) + y, (chunk.z shl 4) + z
                             )
                             block.setLevel(this)
                             block.onUpdate(BLOCK_UPDATE_RANDOM)
@@ -1386,15 +1399,15 @@ class Level(
         }
     }
 
-    fun cancelSheduledUpdate(pos: Vector3?, block: Block?): Boolean {
+    fun cancelSheduledUpdate(pos: Vector3, block: Block): Boolean {
         return updateQueue.remove(BlockUpdateEntry(pos, block))
     }
 
-    fun isUpdateScheduled(pos: Vector3?, block: Block?): Boolean {
+    fun isUpdateScheduled(pos: Vector3, block: Block): Boolean {
         return updateQueue.contains(BlockUpdateEntry(pos, block))
     }
 
-    fun isBlockTickPending(pos: Vector3?, block: Block?): Boolean {
+    fun isBlockTickPending(pos: Vector3, block: Block): Boolean {
         return updateQueue.isBlockTickPending(pos, block)
     }
 
@@ -1416,7 +1429,7 @@ class Level(
         )
     }
 
-    fun getPendingBlockUpdates(boundingBox: AxisAlignedBB?): Set<BlockUpdateEntry> {
+    fun getPendingBlockUpdates(boundingBox: AxisAlignedBB): Set<BlockUpdateEntry> {
         return updateQueue.getPendingBlockUpdates(boundingBox)
     }
 
@@ -1434,21 +1447,21 @@ class Level(
         val minChunk: ChunkVector2 = min.chunkVector
         val maxChunk: ChunkVector2 = max.chunkVector
         return IntStream.rangeClosed(minChunk.x, maxChunk.x)
-            .mapToObj<Stream<ChunkVector2>>(IntFunction<Stream<ChunkVector2>> { x: Int ->
-                IntStream.rangeClosed(minChunk.z, maxChunk.z).mapToObj<ChunkVector2>(
-                    IntFunction<ChunkVector2> { z: Int -> ChunkVector2(x, z) })
-            })
-            .flatMap<ChunkVector2>(Function.identity<Stream<ChunkVector2>>()).parallel()
-            .map<IChunk>(Function<ChunkVector2, IChunk?> { pos: ChunkVector2 -> this.getChunk(pos) }).filter(
-                Predicate<IChunk> { obj: IChunk? -> Objects.nonNull(obj) })
-            .flatMap<Block>(Function<IChunk, Stream<out Block?>?> { chunk: IChunk ->
+            .mapToObj { x: Int ->
+                IntStream.rangeClosed(minChunk.z, maxChunk.z).mapToObj { z: Int -> ChunkVector2(x, z) }
+            }
+            .flatMap(Function.identity<Stream<ChunkVector2>>())
+            .parallel()
+            .map<IChunk> { pos: ChunkVector2 -> this.getChunk(pos) }
+            .filter { obj: IChunk? -> Objects.nonNull(obj) }
+            .flatMap<Block> { chunk: IChunk ->
                 chunk.scanBlocks(
                     min,
                     max,
                     condition
                 )
-            })
-            .collect<List<Block>, Any>(Collectors.toList<Block>())
+            }
+            .toList()
     }
 
     fun raycastBlocks(start: Vector3, end: Vector3): List<Block?> {
@@ -1525,21 +1538,21 @@ class Level(
             }
         }
 
-        return collides.toArray(Block.EMPTY_ARRAY)
+        return collides.toTypedArray()
     }
 
     fun isFullBlock(pos: IVector3): Boolean {
         val bb: AxisAlignedBB?
         if (pos is Block) {
-            if (pos.isSolid()) {
+            if (pos.isSolid) {
                 return true
             }
-            bb = pos.getBoundingBox()
+            bb = pos.boundingBox
         } else {
             bb = getBlock(pos.vector3).boundingBox
         }
 
-        return bb != null && bb.getAverageEdgeLength() >= 1
+        return bb != null && bb.averageEdgeLength >= 1
     }
 
     fun getTickCachedCollisionBlocks(bb: AxisAlignedBB): Array<Block> {
@@ -1611,7 +1624,7 @@ class Level(
             }
         }
 
-        return collides.toArray(Block.EMPTY_ARRAY)
+        return collides.toTypedArray()
     }
 
     fun getCollisionCubes(entity: Entity?, bb: AxisAlignedBB): Array<AxisAlignedBB> {
@@ -1657,7 +1670,7 @@ class Level(
             }
         }
 
-        return collides.toArray<AxisAlignedBB>(AxisAlignedBB.EMPTY_ARRAY)
+        return collides.toTypedArray()
     }
 
     @JvmOverloads
@@ -1980,8 +1993,8 @@ class Level(
         return maxValue
     }
 
-    fun updateBlockLight(map: Map<Long, Map<Int, Any>>) {
-        var size: Int = map.size()
+    fun updateBlockLight(map: MutableMap<Long, MutableMap<Int, Any>>) {
+        var size: Int = map.size
         if (size == 0) {
             return
         }
@@ -1990,17 +2003,17 @@ class Level(
         val visited = Long2ObjectOpenHashMap<Any>()
         val removalVisited = Long2ObjectOpenHashMap<Any>()
 
-        val iter: MutableIterator<Map.Entry<Long, Map<Int, Any>>> = map.entrySet().iterator()
+        val iter = map.entries.iterator()
         while (iter.hasNext() && size-- > 0) {
             val entry = iter.next()
             iter.remove()
-            val index: Long = entry.getKey()
-            val blocks: Map<Int, Any> = entry.getValue()
+            val index = entry.key
+            val blocks = entry.value
             val chunkX = getHashX(index)
             val chunkZ = getHashZ(index)
             val bx = chunkX shl 4
             val bz = chunkZ shl 4
-            for (blockHash in blocks.keySet()) {
+            for (blockHash in blocks.keys) {
                 val hi = (blockHash ushr 16).toByte().toInt()
                 val lo = blockHash.toShort().toInt()
                 val y = ensureY(lo - 64)
@@ -2011,7 +2024,7 @@ class Level(
                     val lcx = x and 0xF
                     val lcz = z and 0xF
                     val oldLevel = chunk.getBlockLight(lcx, y, lcz)
-                    val newLevel = Registries.BLOCK[chunk.getBlockState(lcx, y, lcz), x, y, z, this].lightLevel
+                    val newLevel = Registries.BLOCK[chunk.getBlockState(lcx, y, lcz)!!, x, y, z, this]!!.lightLevel
                     if (oldLevel != newLevel) {
                         this.setBlockLightAt(x, y, z, newLevel)
                         if (newLevel < oldLevel) {
@@ -2206,7 +2219,7 @@ class Level(
         if (direct) {
             if (isAntiXrayEnabled && block.isTransparent) {
                 this.sendBlocks(
-                    getChunkPlayers(cx, cz).values().toTypedArray(),
+                    getChunkPlayers(cx, cz).values.toTypedArray(),
                     arrayOf<Vector3?>(
                         block.position.add(-1.0),
                         block.position.add(1.0),
@@ -2219,7 +2232,7 @@ class Level(
                 )
             }
             this.sendBlocks(
-                getChunkPlayers(cx, cz).values().toTypedArray(),
+                getChunkPlayers(cx, cz).values.toTypedArray(),
                 arrayOf<Block?>(block),
                 UpdateBlockPacket.FLAG_ALL_PRIORITY,
                 block.layer
@@ -2229,7 +2242,7 @@ class Level(
         }
 
         if (update) {
-            if (Server.instance.settings.chunkSettings().lightUpdates()) {
+            if (Server.instance.settings.chunkSettings.lightUpdates) {
                 updateAllLight(block.position)
             }
 
@@ -2282,18 +2295,16 @@ class Level(
         synchronized(changedBlocks) {
             val current = changedBlocks.computeIfAbsent(
                 index,
-                Long2ObjectFunction { SoftReference(Int2ObjectOpenHashMap()) })
+                Long2ObjectFunction { SoftReference(HashMap()) })
             val currentMap = current.get()
             if (currentMap !== changeBlocksFullMap && currentMap != null) {
                 if (currentMap.size > MAX_BLOCK_CACHE) {
-                    changedBlocks.put(index, SoftReference(changeBlocksFullMap))
+                    changedBlocks[index] = SoftReference(changeBlocksFullMap)
                 } else {
-                    currentMap.put(
-                        localBlockHash(
-                            x.toDouble(), y.toDouble(), z.toDouble(),
-                            this
-                        ), changeBlocksPresent
-                    )
+                    currentMap[localBlockHash(
+                        x.toDouble(), y.toDouble(), z.toDouble(),
+                        this
+                    )] = changeBlocksPresent
                 }
             }
         }
@@ -2327,9 +2338,9 @@ class Level(
         if (item.isNothing) {
             return
         }
-        val itemEntity: EntityItem? = createEntity(
-            Entity.ITEM,
-            this.getChunk(source.getX().toInt() shr 4, source.getZ().toInt() shr 4, true),
+        val itemEntity = createEntity(
+            EntityID.ITEM,
+            this.getChunk(source.x.toInt() shr 4, source.z.toInt() shr 4, true),
             getDefaultNBT(source, motion, Random().nextFloat() * 360, 0f)
                 .putShort("Health", 5)
                 .putCompound("Item", NBTIO.putItemHelper(item))
@@ -2347,22 +2358,22 @@ class Level(
     }
 
     fun dropAndGetItem(source: Vector3, item: Item, motion: Vector3?, dropAround: Boolean, delay: Int): EntityItem? {
-        var motion = motion
+        var motion1 = motion
         if (item.isNothing) {
             return null
         }
-        if (motion == null) {
+        if (motion1 == null) {
             if (dropAround) {
                 val f = ThreadLocalRandom.current().nextFloat() * 0.5f
                 val f1 = ThreadLocalRandom.current().nextFloat() * (Math.PI.toFloat() * 2)
 
-                motion = Vector3(
+                motion1 = Vector3(
                     (-MathHelper.sin(f1) * f).toDouble(),
                     0.20000000298023224,
                     (MathHelper.cos(f1) * f).toDouble()
                 )
             } else {
-                motion = Vector3(
+                motion1 = Vector3(
                     Random().nextDouble() * 0.2 - 0.1, 0.2,
                     Random().nextDouble() * 0.2 - 0.1
                 )
@@ -2372,16 +2383,16 @@ class Level(
         val itemTag = NBTIO.putItemHelper(item)
 
         val itemEntity: EntityItem? = createEntity(
-            Entity.ITEM,
-            this.getChunk(source.getX().toInt() shr 4, source.getZ().toInt() shr 4, true),
+            EntityID.ITEM,
+            this.getChunk(source.x.toInt() shr 4, source.z.toInt() shr 4, true),
             CompoundTag().putList(
-                "Pos", ListTag<FloatTag>().add(FloatTag(source.getX()))
-                    .add(FloatTag(source.getY())).add(FloatTag(source.getZ()))
+                "Pos", ListTag<FloatTag>().add(FloatTag(source.x))
+                    .add(FloatTag(source.y)).add(FloatTag(source.z))
             )
 
                 .putList(
-                    "Motion", ListTag<FloatTag>().add(FloatTag(motion.x))
-                        .add(FloatTag(motion.y)).add(FloatTag(motion.z))
+                    "Motion", ListTag<FloatTag>().add(FloatTag(motion1.x))
+                        .add(FloatTag(motion1.y)).add(FloatTag(motion1.z))
                 )
 
                 .putList(
@@ -2393,9 +2404,7 @@ class Level(
                 .putShort("Health", 5).putCompound("Item", itemTag).putShort("PickupDelay", delay)
         ) as EntityItem?
 
-        if (itemEntity != null) {
-            itemEntity.spawnToAll()
-        }
+        itemEntity?.spawnToAll()
 
         return itemEntity
     }
@@ -2478,7 +2487,7 @@ class Level(
                 var breakTime = target.calculateBreakTimeNotInAir(item, player)
                 //对于自定义方块，由于用户可以自由设置客户端侧的挖掘时间，拿服务端硬度计算出来的挖掘时间来判断是否为fastBreak是不准确的。
                 if (target is CustomBlock) {
-                    val comp: CompoundTag = target.getDefinition().nbt.getCompound("components")
+                    val comp: CompoundTag = target.definition.nbt.getCompound("components")
                     if (comp.containsCompound("minecraft:destructible_by_mining")) {
                         val clientBreakTime = comp.getCompound("minecraft:destructible_by_mining").getFloat("value")
                         breakTime = Math.min(breakTime, clientBreakTime.toDouble())
@@ -2535,7 +2544,7 @@ class Level(
             if (player != null && immediateDestroy) {
                 players.remove(player.loaderId)
             }
-            this.addParticle(DestroyBlockParticle(target.position.add(0.5), target), players.values())
+            this.addParticle(DestroyBlockParticle(target.position.add(0.5), target), players.values)
         }
 
         // Close BlockEntity before we check onBreak
@@ -2594,7 +2603,7 @@ class Level(
     fun dropExpOrbAndGetEntities(source: Vector3, exp: Int, motion: Vector3?, delay: Int): List<EntityXpOrb> {
         val rand: Random = ThreadLocalRandom.current()
         val drops: List<Int> = EntityXpOrb.splitIntoOrbSizes(exp)
-        val entities: MutableList<EntityXpOrb> = ArrayList<EntityXpOrb>(drops.size())
+        val entities: MutableList<EntityXpOrb> = ArrayList<EntityXpOrb>(drops.size)
         for (split in drops) {
             val nbt = getDefaultNBT(
                 source, motion
@@ -2610,7 +2619,7 @@ class Level(
             nbt.putShort("PickupDelay", delay)
 
             val entity: EntityXpOrb? = createEntity(
-                Entity.XP_ORB,
+                EntityID.XP_ORB,
                 this.getChunk(source.chunkX, source.chunkZ), nbt
             ) as EntityXpOrb?
             if (entity != null) {
@@ -2781,8 +2790,8 @@ class Level(
         block: Block,
         target: Block
     ): Item? {
-        var item = item
-        val hand = beforePlaceBlock(item, face, fx, fy, fz, player, playSound, block, target) ?: return null
+        var item1 = item
+        val hand = beforePlaceBlock(item1, face, fx, fy, fz, player, playSound, block, target) ?: return null
         if (!hand.canPassThrough() && hand.boundingBox != null) {
             var realCount = 0
             val entities = this.getCollidingEntities(hand.boundingBox)
@@ -2812,12 +2821,12 @@ class Level(
             val canChangeBlock = block.isBlockChangeAllowed(player)
             if ((!player.adventureSettings.get(PlayerAbility.BUILD) && !canChangeBlock) || !canChangeBlock) return null
 
-            val event: BlockPlaceEvent = BlockPlaceEvent(player, hand, block, target, item)
+            val event: BlockPlaceEvent = BlockPlaceEvent(player, hand, block, target, item1)
             if (player.isAdventure) {
-                val tag = item.getNamedTagEntry("CanPlaceOn")
+                val tag = item1.getNamedTagEntry("CanPlaceOn")
                 var canPlace = canChangeBlock
                 if (tag is ListTag<*>) {
-                    for (v in (tag as ListTag<Tag>).all) {
+                    for (v in (tag as ListTag<Tag<*>>).all) {
                         if (v !is StringTag) {
                             continue
                         }
@@ -2855,7 +2864,7 @@ class Level(
             this.scheduleUpdate(block, 1)
         }
 
-        if (!hand.place(item, block, target, face, fx.toDouble(), fy.toDouble(), fz.toDouble(), player)) {
+        if (!hand.place(item1, block, target, face, fx.toDouble(), fy.toDouble(), fz.toDouble(), player)) {
             this.setBlock(block.position, 0, block, true, false)
             this.setBlock(block.position, 1, Block.get(BlockID.AIR), true, false)
             return null
@@ -2863,7 +2872,7 @@ class Level(
 
         if (player != null) {
             if (!player.isCreative) {
-                item.setCount(item.getCount() - 1)
+                item1.setCount(item1.getCount() - 1)
             }
         }
 
@@ -2871,8 +2880,8 @@ class Level(
             this.addLevelSoundEvent(hand.position, LevelSoundEventPacket.SOUND_PLACE, hand.runtimeId)
         }
 
-        if (item.getCount() <= 0) {
-            item = Item.AIR
+        if (item1.getCount() <= 0) {
+            item1 = Item.AIR
         }
 
         vibrationManager.callVibrationEvent(
@@ -2882,7 +2891,7 @@ class Level(
                 VibrationType.BLOCK_PLACE
             )
         )
-        return item
+        return item1
     }
 
     fun isInSpawnRadius(vector3: Vector3): Boolean {
@@ -3036,12 +3045,12 @@ class Level(
         return chunk?.entities ?: mapOf()
     }
 
-    fun getChunkBlockEntities(X: Int, Z: Int): Map<Long?, BlockEntity?>? {
+    fun getChunkBlockEntities(X: Int, Z: Int): Map<Long, BlockEntity> {
         val chunk: IChunk
         return if ((getChunk(X, Z).also { chunk = it }) != null) chunk.blockEntities else Collections.emptyMap()
     }
 
-    fun setBlockStateAt(x: Int, y: Int, z: Int, state: BlockState?) {
+    fun setBlockStateAt(x: Int, y: Int, z: Int, state: BlockState) {
         setBlockStateAt(x, y, z, 0, state)
     }
 
@@ -3054,12 +3063,12 @@ class Level(
         return getBlockStateAt(x, y, z, 0)
     }
 
-    fun setBlockStateAt(x: Int, y: Int, z: Int, layer: Int, state: BlockState?) {
+    fun setBlockStateAt(x: Int, y: Int, z: Int, layer: Int, state: BlockState) {
         val chunk = this.getChunk(x shr 4, z shr 4, true)
         chunk.setBlockState(x and 0x0f, ensureY(y), z and 0x0f, state, layer)
         addBlockChange(x, y, z)
         temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble())
-        if (Server.instance.settings.chunkSettings().lightUpdates()) {
+        if (Server.instance.settings.chunkSettings.lightUpdates) {
             updateAllLight(Vector3(x.toDouble(), y.toDouble(), z.toDouble()))
         }
     }
@@ -3108,7 +3117,7 @@ class Level(
         getChunk(x shr 4, z shr 4, true).setHeightMap(x and 0x0f, z and 0x0f, value and 0x0f)
     }
 
-    val chunks: Map<Long?, IChunk?>
+    val chunks: Map<Long, IChunk>
         get() = requireProvider().loadedChunks
 
     fun getChunkIfLoaded(chunkX: Int, chunkZ: Int): IChunk? {
@@ -3130,10 +3139,10 @@ class Level(
 
             //move oldChunk to new Chunk
             if (!oldEntities!!.isEmpty()) {
-                val iter: MutableIterator<Map.Entry<Long, Entity>> = oldEntities.entrySet().iterator()
+                val iter = oldEntities.entries.iterator()
                 while (iter.hasNext()) {
                     val entry = iter.next()
-                    val entity: Entity = entry.getValue()
+                    val entity: Entity = entry.value
                     chunk.addEntity(entity)
                     iter.remove()
                     oldChunk.removeEntity(entity)
@@ -3142,14 +3151,13 @@ class Level(
             }
 
             if (!oldBlockEntities!!.isEmpty()) {
-                val iter: MutableIterator<Map.Entry<Long, BlockEntity>> = oldBlockEntities.entrySet().iterator()
+                val iter = oldBlockEntities.entries.iterator()
                 while (iter.hasNext()) {
                     val entry = iter.next()
-                    val blockEntity: BlockEntity = entry.getValue()
+                    val blockEntity: BlockEntity = entry.value
                     chunk.addBlockEntity(blockEntity)
                     iter.remove()
                     oldChunk.removeBlockEntity(blockEntity)
-                    blockEntity.chunk = chunk
                 }
             }
 
@@ -3177,18 +3185,18 @@ class Level(
     /** */
     init {
         this.blockMetadata = BlockMetadataStore(this)
-        this.autoSave = Server.instance.autoSave
-        this.generatorClass = Registries.GENERATOR[generatorConfig.name()]
+        this.autoSave = Server.instance.getAutoSave()
+        this.generatorClass = Registries.GENERATOR[generatorConfig.name]
         if (generatorClass == null) {
-            throw NullPointerException("Can't find generator for " + generatorConfig.name() + " The level " + name + " can't be load!")
+            throw NullPointerException("Can't find generator for " + generatorConfig.name + " The level " + name + " can't be load!")
         }
         try {
             this.generator =
                 generatorClass.getConstructor(DimensionData::class.java, MutableMap::class.java).newInstance(
-                    generatorConfig.dimensionData(),
-                    generatorConfig.preset()
+                    generatorConfig.dimensionData,
+                    generatorConfig.preset
                 )
-            generator.setLevel(this@Level)
+            generator!!.setLevel(this@Level)
         } catch (e: Throwable) {
             throw RuntimeException(e)
         }
@@ -3207,38 +3215,36 @@ class Level(
         //to be changed later as the Dim0 will be deleted to be put in a config.json file of the world
         val levelNameDim = levelProvider.name.replace(" Dim0", "")
         log.info(
-            this.Server.instance.baseLang.tr(
+            Server.instance.baseLang.tr(
                 "nukkit.level.preparing",
                 TextFormat.GREEN.toString() + levelNameDim + TextFormat.RESET
             )
         )
         levelProvider.updateLevelName(name)
 
-        if (generatorConfig.enableAntiXray()) {
+        if (generatorConfig.enableAntiXray) {
             this.isAntiXrayEnabled = true
             antiXraySystem!!.reinitAntiXray(false)
 
-            antiXraySystem.setFakeOreDenominator(
-                when (generatorConfig.antiXrayMode()) {
+            antiXraySystem!!.fakeOreDenominator = (
+                when (generatorConfig.antiXrayMode) {
                     AntiXrayMode.HIGH -> 4
                     AntiXrayMode.MEDIUM -> 8
                     else -> 16
                 }
             )
-            antiXraySystem.setPreDeObfuscate(generatorConfig.preDeobfuscate())
+            antiXraySystem!!.isPreDeObfuscate = (generatorConfig.preDeobfuscate)
         }
 
         this.name = name
         this.folderPath = path
         this.time = levelProvider.time.toFloat()
-
-        this.isRaining = levelProvider.isRaining
+        
         this.rainTime = requireProvider().rainTime
         if (this.rainTime <= 0) {
             rainTime = ThreadLocalRandom.current().nextInt(168000) + 12000
         }
-
-        this.thundering = levelProvider.isThundering
+        
         this.thunderTime = levelProvider.thunderTime
         if (this.thunderTime <= 0) {
             thunderTime = ThreadLocalRandom.current().nextInt(168000) + 12000
@@ -3248,14 +3254,14 @@ class Level(
         this.updateQueue = BlockUpdateScheduler(this, currentTick)
 
         this.chunkTickRadius = Math.min(
-            this.Server.instance.viewDistance, Math.max(
+            Server.instance.viewDistance, Math.max(
                 1,
-                this.Server.instance.settings.chunkSettings().tickRadius()
+                Server.instance.settings.chunkSettings.tickRadius
             )
         )
-        this.chunkGenerationQueueSize = this.Server.instance.settings.chunkSettings().generationQueueSize()
-        this.chunksPerTicks = this.Server.instance.settings.chunkSettings().chunksPerTicks()
-        this.clearChunksOnTick = this.Server.instance.settings.chunkSettings().clearTickList()
+        this.chunkGenerationQueueSize = Server.instance.settings.chunkSettings.generationQueueSize
+        this.chunksPerTicks = Server.instance.settings.chunkSettings.chunksPerTicks
+        this.clearChunksOnTick = Server.instance.settings.chunkSettings.clearTickList
         chunkTickList.clear()
         this.temporalVector = Vector3(0.0, 0.0, 0.0)
         this.scheduler = ServerScheduler()
@@ -3264,8 +3270,8 @@ class Level(
         this.skyLightSubtracted = this.calculateSkylightSubtracted(1f)
         val levelName = getName()
         baseTickGameLoop = GameLoop.builder()
-            .onTick(Consumer<GameLoop> { gameLoop: GameLoop? -> this.doTick(gameLoop) })
-            .onStop(Runnable { this.remove() })
+            .onTick { this.doTick(it) }
+            .onStop { this.remove() }
             .loopCountPerSec(20)
             .build()
         this.baseTickThread = object : Thread() {
@@ -3294,17 +3300,17 @@ class Level(
     }
 
     fun getMapColorAt(x: Int, z: Int): BlockColor {
-        var color = VOID_BLOCK_COLOR.toAwtColor()
+        var color: Color
 
         val block = getMapColoredBlockAt(x, z) ?: return VOID_BLOCK_COLOR
 
         //在z轴存在高度差的地方，颜色变深或变浅
-        val nzy = getMapColoredBlockAt(x, z - 1) ?: return block.color
-        color = block.color.toAwtColor()
+        val nzy = getMapColoredBlockAt(x, z - 1) ?: return block.getColor()
+        color = block.getColor().toAwtColor()
         if (nzy.position.floorY > block.position.floorY) {
-            color = darker(color, 0.875 - Math.min(5, nzy.position.floorY - block.position.floorY) * 0.05)
+            color = darker(color, 0.875 - 5.coerceAtMost(nzy.position.floorY - block.position.floorY) * 0.05)
         } else if (nzy.position.floorY < block.position.floorY) {
-            color = brighter(color, 0.875 - Math.min(5, block.position.floorY - nzy.position.floorY) * 0.05)
+            color = brighter(color, 0.875 - 5.coerceAtMost(block.position.floorY - nzy.position.floorY) * 0.05)
         }
 
         //效果不好，暂时禁用
@@ -3382,7 +3388,7 @@ class Level(
         while (y >= minHeight) {
             val block = getBlock(x, y, z)
             if (block.color == null) return null
-            if (block.color.alpha == 0 /* || block instanceof BlockFlowingWater*/) {
+            if (block.color!!.alpha == 0 /* || block instanceof BlockFlowingWater*/) {
                 y--
             } else {
                 return block
@@ -3420,8 +3426,8 @@ class Level(
         val previousSpawn = this.spawnLocation
         requireProvider().spawn = pos
         Server.instance.pluginManager.callEvent(SpawnChangeEvent(this, previousSpawn))
-        getPlayers().values().stream()
-            .filter(Predicate<Player> { player: Player -> player.spawn.second() == null || player.spawn.second() == SpawnPointType.WORLD }
+        getPlayers().values.stream()
+            .filter(Predicate<Player> { player: Player -> player.spawn.second == null || player.spawn.second == SpawnPointType.WORLD }
             ).forEach(Consumer<Player> { player: Player ->
                 player.setSpawn(
                     spawnLocation, SpawnPointType.WORLD
@@ -3445,26 +3451,16 @@ class Level(
             return spawn
         }
 
-    @Suppress("deprecation")
     fun requestChunk(x: Int, z: Int, player: Player) {
         Preconditions.checkArgument(player.loaderId > 0, player.getName() + " has no chunk loader")
         val index = chunkHash(x, z)
-        val casLock: AtomicBoolean = AtomicBoolean(false)
-        val playerInt2ObjectMap = chunkSendQueue.computeIfAbsent(
-            index
-        ) {
-            if (casLock.weakCompareAndSetVolatile(false, true)) {
-                return@computeIfAbsent ConcurrentHashMap<Int, Player>()
-            } else {
-                return@computeIfAbsent null
-            }
-        }
-        playerInt2ObjectMap.put(player.loaderId, player)
+        val playerInt2ObjectMap = chunkSendQueue.computeIfAbsent(index) { ConcurrentHashMap<Int, Player>() }
+        playerInt2ObjectMap[player.loaderId] = player
     }
 
     private fun sendChunk(x: Int, z: Int, index: Long, packet: DataPacket) {
-        for (player in chunkSendQueue[index].values) {
-            if (player.isConnected && player.usedChunks.contains(index)) {
+        for (player in chunkSendQueue[index]?.values ?: return) {
+            if (player.isConnected() && player.usedChunks.contains(index)) {
                 player.sendChunk(x, z, packet)
             }
         }
@@ -3484,14 +3480,14 @@ class Level(
     }
 
     private fun processChunkRequest() {
-        for (index in chunkSendQueue.keySet()) {
+        for (index in chunkSendQueue.keys) {
             val x = getHashX(index)
             val z = getHashZ(index)
             val players = chunkSendQueue[index]
             if (players != null) {
                 val pair = requireProvider().requestChunkData(x, z)
-                for (player in players.values()) {
-                    if (player.isConnected) {
+                for (player in players.values) {
+                    if (player.isConnected()) {
                         val ncp: NetworkChunkPublisherUpdatePacket = NetworkChunkPublisherUpdatePacket()
                         ncp.position = player.position.asBlockVector3()
                         ncp.radius = player.viewDistance shl 4
@@ -3546,7 +3542,7 @@ class Level(
 
         if (entity is Player) {
             players.remove(entity.getId())
-            playerWeatherShowMap.removeInt(entity.getName())
+            playerWeatherShowMap.remove(entity.getName())
             this.checkSleep()
         } else {
             entity.close()
@@ -3569,7 +3565,7 @@ class Level(
     }
 
     fun addBlockEntity(blockEntity: BlockEntity) {
-        if (blockEntity.getLevel() !== this) {
+        if (blockEntity.level !== this) {
             throw LevelException("Invalid Block Entity level")
         }
         blockEntities.put(blockEntity.id, blockEntity)
@@ -3577,7 +3573,7 @@ class Level(
 
     fun scheduleBlockEntityUpdate(entity: BlockEntity) {
         Preconditions.checkNotNull(entity, "entity")
-        Preconditions.checkArgument(entity.getLevel() === this, "BlockEntity is not in this level")
+        Preconditions.checkArgument(entity.level === this, "BlockEntity is not in this level")
         if (!updateBlockEntities.contains(entity)) {
             updateBlockEntities.add(entity)
         }
@@ -3585,7 +3581,7 @@ class Level(
 
     fun removeBlockEntity(entity: BlockEntity) {
         Preconditions.checkNotNull(entity, "entity")
-        Preconditions.checkArgument(entity.getLevel() === this, "BlockEntity is not in this level")
+        Preconditions.checkArgument(entity.level === this, "BlockEntity is not in this level")
         blockEntities.remove(entity.id)
         updateBlockEntities.remove(entity)
     }
@@ -3618,17 +3614,17 @@ class Level(
             return true
         }
 
-        val tickingAreaManager: TickingAreaManager = Server.instance.tickingAreaManager
-        if (tickingAreaManager != null && tickingAreaManager.getTickingAreaByChunk(
+        val tickingAreaManager = Server.instance.tickingAreaManager
+        if (tickingAreaManager.getTickingAreaByChunk(
                 this.getName(),
-                ChunkPos(getHashX(hash), getHashZ(hash))
+                TickingArea.ChunkPos(getHashX(hash), getHashZ(hash))
             ) != null
         ) {
             return true
         }
         val integerChunkLoaderMap = chunkLoaders[hash]
         return if (integerChunkLoaderMap != null) {
-            chunkLoaders.containsKey(hash) && !integerChunkLoaderMap.isEmpty()
+            chunkLoaders.containsKey(hash) && integerChunkLoaderMap.isNotEmpty()
         } else false
     }
 
@@ -3665,7 +3661,7 @@ class Level(
                 chunk = this.forceLoadChunk(index, chunkX, chunkZ, create)
             }
             chunk
-        }, this.scheduler.getAsyncTaskThreadPool())
+        }, this.scheduler.asyncTaskThreadPool)
     }
 
 
@@ -3684,7 +3680,7 @@ class Level(
             throw IllegalStateException("Could not create new Chunk")
         }
 
-        Server.instance.pluginManager.callEvent(ChunkLoadEvent(chunk, !chunk.isGenerated))
+        Server.instance.pluginManager.callEvent(ChunkLoadEvent(chunk!!, !chunk.isGenerated))
         chunk.initChunk()
 
         if (this.isChunkInUse(index)) {
@@ -3766,7 +3762,7 @@ class Level(
             if (chunk != null) {
                 if (trySave && this.autoSave) {
                     var entities = 0
-                    for (e in chunk.entities.values()) {
+                    for (e in chunk.entities.values) {
                         if (e is Player) {
                             continue
                         }
@@ -3801,7 +3797,7 @@ class Level(
         get() = getSafeSpawn(null)
 
     fun getSafeSpawn(spawn: Vector3?): Locator {
-        return getSafeSpawn(spawn, Server.instance.settings.playerSettings().spawnRadius())
+        return getSafeSpawn(spawn, Server.instance.settings.playerSettings.spawnRadius)
     }
 
     fun getSafeSpawn(spawn: Vector3?, horizontalMaxOffset: Int): Locator {
@@ -3809,17 +3805,16 @@ class Level(
     }
 
     fun getSafeSpawn(spawn: Vector3?, horizontalMaxOffset: Int, allowWaterUnder: Boolean): Locator {
-        var spawn = spawn
-        if (spawn == null) spawn = fuzzySpawnLocation!!.position
-        if (spawn == null) return null
-        if (standable(spawn, true)) return Locator.Companion.fromObject(spawn, this)
+        var spawn1 = spawn
+        if (spawn1 == null) spawn1 = fuzzySpawnLocation!!.position
+        if (standable(spawn1, true)) return Locator.fromObject(spawn1, this)
 
         val maxY = if (isNether) 127 else (if (isOverWorld) 319 else 255)
         val minY = if (isOverWorld) -64 else 0
 
         for (horizontalOffset in 0..horizontalMaxOffset) {
             for (y in maxY downTo minY) {
-                val pos = spawn.clone()
+                val pos = spawn1.clone()
                 pos.setY(y.toDouble())
                 var newSpawn: Vector3
                 if (standable(
@@ -3857,8 +3852,8 @@ class Level(
             }
         }
 
-        log.warn("cannot find a safe spawn around " + spawn.asBlockVector3() + "!")
-        return Locator.Companion.fromObject(spawn, this)
+        log.warn("cannot find a safe spawn around " + spawn1.asBlockVector3() + "!")
+        return Locator.Companion.fromObject(spawn1, this)
     }
 
     @JvmOverloads
@@ -3876,7 +3871,7 @@ class Level(
 
     val isTicked: Boolean
         get() {
-            return if (Server.instance.settings.levelSettings().levelThread()) {
+            return if (Server.instance.settings.levelSettings.levelThread) {
                 baseTickGameLoop.isRunning()
             } else Server.instance.levels.containsKey(this.id)
         }
@@ -3924,7 +3919,7 @@ class Level(
     val isDaytime: Boolean
         get() = this.skyLightSubtracted < 4
 
-    fun getName(): String? {
+    fun getName(): String {
         return requireProvider().name
     }
 
@@ -3952,7 +3947,7 @@ class Level(
     fun regenerateChunk(x: Int, z: Int) {
         val chunkLoadersCopy = getChunkLoaders(x, z)
         val chunk = requireProvider().getChunk(x, z)
-        chunk.chunkState = ChunkState.NEW
+        chunk!!.chunkState = ChunkState.NEW
         this.unloadChunk(x, z, false)
         this.cancelUnloadChunkRequest(x, z)
         for (loader in chunkLoadersCopy) {
@@ -3965,7 +3960,7 @@ class Level(
     fun syncRegenerateChunk(x: Int, z: Int) {
         val chunkLoadersCopy = getChunkLoaders(x, z)
         val chunk = requireProvider().getChunk(x, z)
-        chunk.chunkState = ChunkState.NEW
+        chunk!!.chunkState = ChunkState.NEW
         this.unloadChunk(x, z, false)
         this.cancelUnloadChunkRequest(x, z)
 
@@ -3982,7 +3977,7 @@ class Level(
 
     @JvmOverloads
     fun generateChunk(x: Int, z: Int, force: Boolean = false) {
-        if (chunkGenerationQueue.size() >= this.chunkGenerationQueueSize && !force) {
+        if (chunkGenerationQueue.size >= this.chunkGenerationQueueSize && !force) {
             return
         }
         val index = chunkHash(x, z)
@@ -4014,11 +4009,11 @@ class Level(
     fun doLevelGarbageCollection(force: Boolean) {
         //gcBlockInventoryMetaData
         for (entry in HashMap<String, Map<Plugin, MetadataValue>>(
-            getBlockMetadata().getBlockMetadataMap()
-        ).entrySet()) {
-            val key: String = entry.getKey()
-            val split: Array<String> = key.split(":")
-            val value: Map<Plugin, MetadataValue> = entry.getValue()
+            getBlockMetadata()!!.blockMetadataMap
+        ).entries) {
+            val key = entry.key
+            val split = key.split(":")
+            val value = entry.value
             if (split[3] == BlockInventoryHolder.KEY && value.containsKey(InternalPlugin.INSTANCE)) {
                 val block = getBlock(
                     Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(
@@ -4026,30 +4021,25 @@ class Level(
                     )
                 )
                 if (block !is BlockInventoryHolder) {
-                    getBlockMetadata().removeMetadata(block, key, InternalPlugin.INSTANCE)
+                    getBlockMetadata()!!.removeMetadata(block, key, InternalPlugin.INSTANCE)
                 }
             }
         }
 
         // remove all invaild block entities.
         if (!blockEntities.isEmpty()) {
-            val iter: MutableIterator<BlockEntity> = blockEntities.values().iterator()
+            val iter = blockEntities.values.iterator()
             while (iter.hasNext()) {
                 val blockEntity = iter.next()
-                if (blockEntity == null) {
-                    iter.remove()
-                }
             }
         }
 
         //gcDeadChunks
-        for (entry in requireProvider().loadedChunks.entrySet()) {
-            val index: Long = entry.getKey()
+        for (entry in requireProvider().loadedChunks.entries) {
+            val index: Long = entry.key
             if (!unloadQueue.containsKey(index)) {
-                val chunk: IChunk = entry.getValue()
-                val X = chunk.x
-                val Z = chunk.z
-                this.unloadChunkRequest(X, Z, true)
+                val chunk: IChunk = entry.value
+                this.unloadChunkRequest(chunk.x, chunk.z, true)
             }
         }
         this.unloadChunks()
@@ -4061,22 +4051,21 @@ class Level(
     }
 
     fun unloadChunks(maxUnload: Int, force: Boolean) {
-        var maxUnload = maxUnload
+        var maxUnload1 = maxUnload
         if (!unloadQueue.isEmpty()) {
             val now = System.currentTimeMillis()
 
-            var toRemove: LongList? = null
-            for (entry in unloadQueue.fastEntrySet()) {
-                val index = entry.longKey
+            var toRemove: MutableList<Long>? = mutableListOf()
+            for (entry in unloadQueue.entries) {
+                val index = entry.key
                 if (isChunkInUse(index)) {
                     continue
                 }
                 if (!force) {
-                    val time: Long = entry.getValue()
-                    if (maxUnload <= 0) {
+                    val time: Long = entry.value
+                    if (maxUnload1 <= 0) {
                         break
-                    } else if (time > (now - Server.instance.getInstance().settings.levelSettings()
-                            .chunkUnloadDelay())
+                    } else if (time > (now - Server.instance.settings.levelSettings.chunkUnloadDelay)
                     ) {
                         continue
                     }
@@ -4087,15 +4076,15 @@ class Level(
             }
 
             if (toRemove != null) {
-                val size: Int = toRemove.size()
+                val size: Int = toRemove.size
                 for (i in 0..<size) {
-                    val index = toRemove.getLong(i)
+                    val index = toRemove.get(i)
                     val X = getHashX(index)
                     val Z = getHashZ(index)
 
                     if (this.unloadChunk(X, Z, true)) {
                         unloadQueue.remove(index)
-                        --maxUnload
+                        --maxUnload1
                     }
                 }
             }
@@ -4110,7 +4099,7 @@ class Level(
         return Server.instance.levelMetadata.getMetadata(this, metadataKey)
     }
 
-    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue {
+    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue? {
         return Server.instance.levelMetadata.getMetadata(this, metadataKey, plugin)
     }
 
@@ -4147,7 +4136,7 @@ class Level(
             rainTime = ThreadLocalRandom.current().nextInt(168000) + 12000
         }
 
-        for (p in getPlayers().values()) {
+        for (p in getPlayers().values) {
             playerWeatherShowMap.put(p.getName(), if (raining) 1 else 0)
             p.dataPacket(pk)
         }
@@ -4186,7 +4175,7 @@ class Level(
             thunderTime = ThreadLocalRandom.current().nextInt(168000) + 12000
         }
 
-        for (p in getPlayers().values()) {
+        for (p in getPlayers().values) {
             playerWeatherShowMap.put(p.getName(), if (isRaining) 2 else 0)
             p.dataPacket(pk)
         }
@@ -4194,10 +4183,10 @@ class Level(
         return true
     }
 
-    fun sendWeather(players: Array<Player?>?) {
-        var players = players
-        if (players == null) {
-            players = getPlayers().values().toTypedArray()
+    fun sendWeather(players: Array<Player>?) {
+        var players1 = players
+        if (players1 == null) {
+            players1 = getPlayers().values.toTypedArray()
         }
 
         val pk = LevelEventPacket()
@@ -4209,7 +4198,7 @@ class Level(
             pk.evid = LevelEventPacket.EVENT_STOP_RAINING
         }
 
-        Server.broadcastPacket(players, pk)
+        Server.broadcastPacket(players1, pk)
 
         if (this.isThundering()) {
             pk.evid = LevelEventPacket.EVENT_START_THUNDERSTORM
@@ -4218,7 +4207,7 @@ class Level(
             pk.evid = LevelEventPacket.EVENT_STOP_THUNDERSTORM
         }
 
-        Server.broadcastPacket(players, pk)
+        Server.broadcastPacket(players1, pk)
     }
 
     fun sendWeather(player: Player?) {
@@ -4227,16 +4216,16 @@ class Level(
         }
     }
 
-    fun sendWeather(players: Collection<Player?>?) {
-        var players = players
-        if (players == null) {
-            players = getPlayers().values()
+    fun sendWeather(players: Collection<Player>?) {
+        var players1 = players
+        if (players1 == null) {
+            players1 = getPlayers().values
         }
-        this.sendWeather(players!!.toArray<Player?>(Player.EMPTY_ARRAY))
+        this.sendWeather(players1.toTypedArray())
     }
 
     val dimensionData: DimensionData
-        get() = generator.getDimensionData()
+        get() = generator.dimensionData
 
     val dimension: Int
         get() = dimensionData.dimensionId
@@ -4255,7 +4244,7 @@ class Level(
     }
 
     fun canBlockSeeSky(pos: Vector3): Boolean {
-        return this.getHighestBlockAt(pos.floorX, pos.floorZ) < pos.getY()
+        return this.getHighestBlockAt(pos.floorX, pos.floorZ) < pos.y
     }
 
     val minHeight: Int
@@ -4292,7 +4281,7 @@ class Level(
         return i
     }
 
-    fun isSidePowered(pos: IVector3, face: BlockFace?): Boolean {
+    fun isSidePowered(pos: IVector3, face: BlockFace): Boolean {
         return this.getRedstonePower(pos, face) > 0
     }
 
@@ -4302,7 +4291,7 @@ class Level(
      * @param pos  the block pos
      * @param face Only be used on block with not isNormalBlock, such as redstone torch
      */
-    fun getRedstonePower(pos: IVector3, face: BlockFace?): Int {
+    fun getRedstonePower(pos: IVector3, face: BlockFace): Int {
         val block = if (pos is Block) {
             pos
         } else {
@@ -4655,28 +4644,6 @@ class Level(
         return Math.max(Math.min(y, dimensionData.maxHeight), dimensionData.minHeight)
     }
 
-    var isAntiXrayEnabled: Boolean
-        /**
-         * Is anti-xray enabled.
-         */
-        get() = this.antiXraySystem != null
-        /**
-         * enable the anti-xray system.
-         */
-        set(antiXrayEnabled) {
-            if (antiXrayEnabled) {
-                if (antiXraySystem == null) {
-                    this.antiXraySystem = AntiXraySystem(this)
-                }
-            } else {
-                this.antiXraySystem = null
-            }
-        }
-
-    val tick: Int
-        get() = if (Server.instance.settings.levelSettings().levelThread()) this.getBaseTickGameLoop()
-            .getTick() else Server.instance.tick
-
     override fun toString(): String {
         return "Level{" +
                 "name='" + name + '\'' +
@@ -4685,10 +4652,10 @@ class Level(
     }
 
 
-    private class QueuedUpdate {
-        val block: Block? = null
-        val neighbor: BlockFace? = null
-    }
+    private data class QueuedUpdate(
+        val block: Block,
+        val neighbor: BlockFace,
+    )
 
     companion object {
         // region finals - number finals

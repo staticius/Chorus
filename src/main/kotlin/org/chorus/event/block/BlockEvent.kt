@@ -5,7 +5,7 @@ import org.chorus.event.Event
 
 
 abstract class BlockEvent(protected val block: Block) : Event() {
-    open fun getBlock(): Block? {
+    open fun getBlock(): Block {
         return block
     }
 }

@@ -357,7 +357,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val north = this.canConnect(this.getSide(BlockFace.NORTH))
         val south = this.canConnect(this.getSide(BlockFace.SOUTH))
         val west = this.canConnect(this.getSide(BlockFace.WEST))

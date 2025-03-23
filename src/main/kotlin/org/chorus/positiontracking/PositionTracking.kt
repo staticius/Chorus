@@ -161,7 +161,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return PositionTracking(levelName, intermediateWithZValue)
     }
 
-    override fun setComponents(x: Double, y: Double, z: Double): PositionTracking {
+    override fun setComponents(x: Double, y: Double, z: Double): Vector3 {
         super.setComponents(x, y, z)
         return this
     }

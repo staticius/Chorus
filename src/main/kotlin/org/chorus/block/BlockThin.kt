@@ -19,7 +19,7 @@ abstract class BlockThin(blockState: BlockState) : BlockTransparent(blockState),
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val offNW = 7.0 / 16.0
         val offSE = 9.0 / 16.0
         val onNW = 0.0

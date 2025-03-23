@@ -8,6 +8,7 @@ import org.chorus.event.Event.isCancelled
 import org.chorus.item.Item
 import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
+import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.MathHelper.clamp
 import java.util.concurrent.ThreadLocalRandom
@@ -154,7 +155,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
         }
     }
 
-    override val collisionBoundingBox: AxisAlignedBB?
+    override val collisionBoundingBox: AxisAlignedBB
         get() = if (growth > 0) this else null
 
     override fun getDrops(item: Item): Array<Item> {

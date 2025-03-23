@@ -47,7 +47,7 @@ class AntiXraySystem(private val level: Level) {
     val rawFakeOreToPutRuntimeIdMap: Int2ObjectMap<IntList>
         get() = this.fakeOreToPutRuntimeIds
 
-    fun obfuscateSendBlocks(index: Long, playerArray: Array<Player>, blocks: Int2ObjectOpenHashMap<Any>) {
+    fun obfuscateSendBlocks(index: Long, playerArray: Array<Player>, blocks: Map<Int, Any>) {
         val size: Int = blocks.size
         val vectorSet = IntOpenHashSet(size * 6)
         val vRidList = ArrayList<Vector3WithRuntimeId>(size * 7)

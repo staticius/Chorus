@@ -18,7 +18,7 @@ abstract class BlockFence(blockState: BlockState) : BlockTransparent(blockState)
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val north = this.canConnect(this.north())
         val south = this.canConnect(this.south())
         val west = this.canConnect(this.west())

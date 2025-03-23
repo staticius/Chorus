@@ -1,6 +1,5 @@
 package org.chorus.entity.mob.monster
 
-import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties

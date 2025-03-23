@@ -12,7 +12,7 @@ data class LevelConfig(
     var generators: MutableMap<Int, GeneratorConfig> = mutableMapOf(),
 ) {
     data class GeneratorConfig(
-        var name: String? = null,
+        var name: String,
         var seed: Long = ThreadLocalRandom.current().nextLong(Long.MIN_VALUE, Long.MAX_VALUE),
         var enableAntiXray: Boolean = false,
         var antiXrayMode: AntiXrayMode = AntiXrayMode.LOW,

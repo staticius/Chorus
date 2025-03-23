@@ -25,7 +25,7 @@ abstract class BlockHangingSign(blockState: BlockState) : BlockSignBase(blockSta
 
     override fun getBlockEntityType(): String = BlockEntityID.HANGING_SIGN
 
-    override val boundingBox: AxisAlignedBB?
+    override val boundingBox: AxisAlignedBB
         get() = null //01 23 45
 
     override fun onUpdate(type: Int): Int {

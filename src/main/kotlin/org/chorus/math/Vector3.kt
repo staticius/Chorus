@@ -369,7 +369,7 @@ open class Vector3 @JvmOverloads constructor(var x: Double = 0.0, var y: Double 
         }
     }
 
-    open fun setComponents(x: Double, y: Double, z: Double): Vector3? {
+    open fun setComponents(x: Double, y: Double, z: Double): Vector3 {
         this.x = x
         this.y = y
         this.z = z

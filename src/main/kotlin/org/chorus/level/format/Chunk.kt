@@ -69,7 +69,7 @@ class Chunk : IChunk {
 
     private val atomicChanges = AtomicLong()
 
-    override val entities: ConcurrentHashMap<Long, Entity>
+    override val entities: MutableMap<Long, Entity>
     val tiles: ConcurrentHashMap<Long, BlockEntity> //block entity id -> block entity
     protected val tileList: ConcurrentHashMap<Long, BlockEntity> //block entity position hash index -> block entity
 
@@ -475,7 +475,7 @@ class Chunk : IChunk {
         }
     }
 
-    override val blockEntities: Map<Long, BlockEntity>
+    override val blockEntities: MutableMap<Long, BlockEntity>
         get() = tiles
 
     override fun getBlockEntity(x: Int, y: Int, z: Int): BlockEntity? {

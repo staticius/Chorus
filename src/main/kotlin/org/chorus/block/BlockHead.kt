@@ -116,7 +116,7 @@ abstract class BlockHead(blockState: BlockState) : BlockTransparent(blockState),
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val bb: AxisAlignedBB = SimpleAxisAlignedBB(
             position.x + 0.25,
             position.y,

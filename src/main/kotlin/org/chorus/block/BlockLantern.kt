@@ -141,7 +141,7 @@ open class BlockLantern @JvmOverloads constructor(blockstate: BlockState = Compa
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 

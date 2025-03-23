@@ -239,7 +239,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
             return block is BlockRedstoneDiode && block.facing != side
         }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return SimpleAxisAlignedBB(
             position.x,
             position.y,

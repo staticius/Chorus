@@ -27,6 +27,8 @@ class GameLoop private constructor(
 
     private var tick = 0
 
+    fun getTick() = tick
+
     init {
         require(loopCountPerSec > 0) { "Loop count per second must be greater than 0! (loopCountPerSec=$loopCountPerSec)" }
         this.onStart = onStart

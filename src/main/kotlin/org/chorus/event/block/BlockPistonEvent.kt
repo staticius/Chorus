@@ -18,7 +18,7 @@ class BlockPistonEvent(
         return ArrayList(blocks)
     }
 
-    override fun getBlock(): BlockPistonBase {
+    override fun getBlock(): Block {
         return super.getBlock() as BlockPistonBase
     }
 

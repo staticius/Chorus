@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityFlowerPot
 import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*

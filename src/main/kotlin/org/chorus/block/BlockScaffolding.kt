@@ -7,6 +7,7 @@ import org.chorus.entity.Entity
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.level.Level
+import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.nbt.tag.CompoundTag.putBoolean
@@ -163,7 +164,7 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return SimpleAxisAlignedBB(
             position.x,
             position.y + (2.0 / 16),

@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.Attachment
-import org.chorus.block.property.type.IntPropertyType
 import org.chorus.inventory.BlockInventoryHolder
 import org.chorus.inventory.GrindstoneInventory
 import org.chorus.inventory.Inventory

@@ -31,7 +31,7 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
         return true
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return null
     }
 
@@ -62,7 +62,7 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
         return false
     }
 
-    override val boundingBox: AxisAlignedBB?
+    override val boundingBox: AxisAlignedBB
         get() = null
 
     override var maxY: Double
@@ -71,7 +71,7 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
             super.maxY = maxY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 

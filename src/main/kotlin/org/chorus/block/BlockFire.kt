@@ -310,7 +310,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
         return 30
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 

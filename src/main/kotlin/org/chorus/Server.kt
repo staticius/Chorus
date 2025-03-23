@@ -303,11 +303,8 @@ class Server internal constructor(
 
     /**default levels */
     var defaultLevel: Level? = null
-        private set
     var defaultNether: Level? = null
-        private set
     var defaultEnd: Level? = null
-        private set
 
     val allowNether: Boolean = properties[ServerPropertiesKeys.ALLOW_NETHER, true]
     val allowEnd: Boolean = properties[ServerPropertiesKeys.ALLOW_THE_END, true]

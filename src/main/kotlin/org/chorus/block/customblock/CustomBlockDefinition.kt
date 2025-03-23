@@ -25,19 +25,19 @@ import java.util.function.Consumer
  */
 
 @JvmRecord
-data class CustomBlockDefinition(val identifier: String?, val nbt: CompoundTag?) {
+data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
     val runtimeId: Int
         get() = INTERNAL_ALLOCATION_ID_MAP[identifier]!!
 
     class Builder(protected val customBlock: CustomBlock) {
         protected val identifier: String = customBlock.id
 
-        protected var nbt: CompoundTag? = CompoundTag()
+        protected var nbt: CompoundTag = CompoundTag()
             .putCompound("components", CompoundTag())
 
         init {
             val b = customBlock as Block
-            val components = nbt!!.getCompound("components")
+            val components = nbt.getCompound("components")
 
             //设置一些与PNX内部对应的方块属性
             components.putCompound(

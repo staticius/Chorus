@@ -10,6 +10,7 @@ import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
+import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.registry.Registries
@@ -44,7 +45,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
             super.maxY = maxY
         }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val snowHeight = snowHeight
         if (snowHeight < 3) {
             return null

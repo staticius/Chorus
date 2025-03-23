@@ -119,7 +119,7 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState = Compani
             )
         }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val face = blockFace.rotateY()
         val xOffset = abs(face.xOffset.toDouble()) * (2 / 16.0)
         val zOffset = abs(face.zOffset.toDouble()) * (2 / 16.0)
