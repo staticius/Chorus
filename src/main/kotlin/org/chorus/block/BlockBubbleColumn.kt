@@ -41,7 +41,7 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
         return Item.AIR
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return this
     }
 
@@ -64,10 +64,10 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
         return false
     }
 
-    override val boundingBox: AxisAlignedBB
+    override val boundingBox: AxisAlignedBB?
         get() = null
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         return null
     }
 

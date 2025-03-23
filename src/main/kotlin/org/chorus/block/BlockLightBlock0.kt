@@ -7,7 +7,7 @@ open class BlockLightBlock0 @JvmOverloads constructor(blockstate: BlockState = C
     override val name: String
         get() = "Light Block"
 
-    override val boundingBox: AxisAlignedBB
+    override val boundingBox: AxisAlignedBB?
         get() = null
 
     override val waterloggingLevel: Int

@@ -90,7 +90,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
             super.maxY = maxY
         }
 
-    public override fun recalculateBoundingBox(): AxisAlignedBB {
+    public override fun recalculateBoundingBox(): AxisAlignedBB? {
         return this
     }
 

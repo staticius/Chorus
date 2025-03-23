@@ -155,7 +155,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
         }
     }
 
-    override val collisionBoundingBox: AxisAlignedBB
+    override val collisionBoundingBox: AxisAlignedBB?
         get() = if (growth > 0) this else null
 
     override fun getDrops(item: Item): Array<Item> {

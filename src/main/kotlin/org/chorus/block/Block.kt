@@ -737,13 +737,13 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         return true
     }
 
-    open val boundingBox: AxisAlignedBB
+    open val boundingBox: AxisAlignedBB?
         get() = this.recalculateBoundingBox()
 
-    open val collisionBoundingBox: AxisAlignedBB
+    open val collisionBoundingBox: AxisAlignedBB?
         get() = this.recalculateCollisionBoundingBox()
 
-    protected open fun recalculateBoundingBox(): AxisAlignedBB {
+    protected open fun recalculateBoundingBox(): AxisAlignedBB? {
         return this
     }
 
@@ -783,7 +783,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
             throw UnsupportedOperationException("Immutable")
         }
 
-    protected open fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    protected open fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return boundingBox
     }
 

@@ -27,7 +27,7 @@ abstract class BlockCarpet(blockState: BlockState) : BlockFlowable(blockState) {
     override val waterloggingLevel: Int
         get() = 1
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         return this
     }
 

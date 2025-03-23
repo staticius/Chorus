@@ -72,7 +72,7 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState = Compani
         if (player == null) {
             level.addSound(this.position, Sound.RANDOM_ANVIL_LAND, 1f, 0.8f)
         } else {
-            val players: MutableCollection<Player?> = level.getChunkPlayers(
+            val players = level.getChunkPlayers(
                 position.chunkX,
                 position.chunkZ
             ).values.toMutableList()
@@ -119,7 +119,7 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState = Compani
             )
         }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         val face = blockFace.rotateY()
         val xOffset = abs(face.xOffset.toDouble()) * (2 / 16.0)
         val zOffset = abs(face.zOffset.toDouble()) * (2 / 16.0)

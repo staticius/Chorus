@@ -225,10 +225,8 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = Compan
         return !isHead || tilt == BigDripleafTilt.FULL_TILT
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         return if (!isHead) {
-            //杆没有碰撞箱
-            //            var face = this.getBlockFace().getOpposite();
             null
         } else {
             SimpleAxisAlignedBB(
@@ -242,10 +240,10 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = Compan
         }
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         val bb = boundingBox
         //使方块碰撞检测箱的maxY向上取整，使当实体站在方块上面的时候可以触发碰撞
-        if (isHead) bb!!.maxY = ceil(bb.maxY)
+        if (isHead) bb.maxY = ceil(bb.maxY)
         return bb
     }
 

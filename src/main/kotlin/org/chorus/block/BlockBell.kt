@@ -64,7 +64,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
         }
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         val attachmentType = attachment
         val blockFace = blockFace
         val north = this.isConnectedTo(BlockFace.NORTH, attachmentType, blockFace)
@@ -133,7 +133,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
         return true
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return recalculateBoundingBox().expand(0.000001, 0.000001, 0.000001)
     }
 

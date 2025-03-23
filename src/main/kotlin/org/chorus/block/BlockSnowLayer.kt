@@ -45,7 +45,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
             super.maxY = maxY
         }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         val snowHeight = snowHeight
         if (snowHeight < 3) {
             return null
@@ -60,7 +60,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         )
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return this
     }
 

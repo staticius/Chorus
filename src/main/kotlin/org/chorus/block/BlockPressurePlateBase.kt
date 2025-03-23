@@ -115,7 +115,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
         return true
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return SimpleAxisAlignedBB(
             position.x + 0.125,
             position.y,

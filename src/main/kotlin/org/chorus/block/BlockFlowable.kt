@@ -29,7 +29,7 @@ abstract class BlockFlowable(blockState: BlockState) : BlockTransparent(blockSta
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         return null
     }
 }

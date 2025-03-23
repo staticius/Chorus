@@ -67,7 +67,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         var f1 = 1.0
         var f2 = 1.0
         var f3 = 1.0

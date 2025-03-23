@@ -246,7 +246,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
             super.maxY = maxY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return SimpleAxisAlignedBB(
             position.x,
             position.y,

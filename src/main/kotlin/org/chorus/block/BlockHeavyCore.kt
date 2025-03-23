@@ -8,7 +8,7 @@ class BlockHeavyCore : BlockFlowable {
 
     constructor(blockstate: BlockState) : super(blockstate)
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         return this
     }
 

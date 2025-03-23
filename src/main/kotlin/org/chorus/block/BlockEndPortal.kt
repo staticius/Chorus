@@ -55,7 +55,7 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = Companio
         return true
     }
 
-    override val collisionBoundingBox: AxisAlignedBB
+    override val collisionBoundingBox: AxisAlignedBB?
         get() = this
 
     override fun canHarvestWithHand(): Boolean {

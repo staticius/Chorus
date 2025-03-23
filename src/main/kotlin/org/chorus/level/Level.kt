@@ -1653,10 +1653,9 @@ class Level(
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
-                    val block =
-                        this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
-                    if (!block.canPassThrough() && block.collidesWithBB(bb)) {
-                        collides.add(block.boundingBox)
+                    val block = this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
+                    if (block.boundingBox != null && !block.canPassThrough() && block.collidesWithBB(bb)) {
+                        collides.add(block.boundingBox!!)
                     }
                 }
             }
@@ -1696,10 +1695,9 @@ class Level(
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
-                    val block =
-                        this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
-                    if (!block.canPassThrough() && block.collidesWithBB(bb)) {
-                        collides.add(block.boundingBox)
+                    val block = this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
+                    if (block.boundingBox != null && !block.canPassThrough() && block.collidesWithBB(bb)) {
+                        collides.add(block.boundingBox!!)
                     }
                 }
             }
@@ -2794,7 +2792,7 @@ class Level(
         val hand = beforePlaceBlock(item1, face, fx, fy, fz, player, playSound, block, target) ?: return null
         if (!hand.canPassThrough() && hand.boundingBox != null) {
             var realCount = 0
-            val entities = this.getCollidingEntities(hand.boundingBox)
+            val entities = this.getCollidingEntities(hand.boundingBox!!)
             for (e in entities) {
                 if (e is EntityProjectile || e is EntityItem || e is EntityXpOrb || e is EntityAreaEffectCloud ||
                     e is EntityFireworksRocket || e is EntityPainting || e === player ||
@@ -2807,7 +2805,7 @@ class Level(
             if (player != null) {
                 val diff: Vector3 = player.nextPosition.position.subtract(player.getLocator().position)
                 val aabb: AxisAlignedBB = player.getBoundingBox().getOffsetBoundingBox(diff.x, diff.y, diff.z)
-                if (aabb.intersectsWith(hand.boundingBox.shrink(0.02, 0.02, 0.02))) {
+                if (aabb.intersectsWith(hand.boundingBox!!.shrink(0.02, 0.02, 0.02))) {
                     ++realCount
                 }
             }
@@ -4585,8 +4583,8 @@ class Level(
             val z = Math.round(srcZ + normalizedDirection.z * t).toInt()
 
             val block = getBlock(x, y, z)
-            if (block != null && block.collisionBoundingBox != null) {
-                val bb: AxisAlignedBB = block.collisionBoundingBox
+            if (block?.collisionBoundingBox != null) {
+                val bb: AxisAlignedBB = block.collisionBoundingBox!!
                 if (bb.isVectorInside(x.toDouble(), y.toDouble(), z.toDouble())) {
                     return true
                 }

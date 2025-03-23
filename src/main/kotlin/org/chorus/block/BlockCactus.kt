@@ -71,7 +71,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState = Companion.proper
             super.maxZ = maxZ
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return SimpleAxisAlignedBB(
             position.x,
             position.y,

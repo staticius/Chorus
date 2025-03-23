@@ -33,7 +33,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
     override val hardness: Double
         get() = 0.0
 
-    override val boundingBox: AxisAlignedBB
+    override val boundingBox: AxisAlignedBB?
         get() = null
 
     override fun toItem(): Item {
@@ -211,7 +211,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
             super.maxY = maxY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return this
     }
 

@@ -232,7 +232,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Compani
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         val aabb = arrayOf(
             doubleArrayOf(2.0 / 16, 14.0 / 16),
             doubleArrayOf(2.0 / 16, 14.0 / 16),

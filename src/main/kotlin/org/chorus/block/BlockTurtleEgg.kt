@@ -145,7 +145,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
             super.maxY = maxY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return this
     }
 

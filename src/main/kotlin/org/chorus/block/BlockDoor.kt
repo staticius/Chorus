@@ -43,7 +43,7 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         val position = blockFace.getOpposite()
         val isOpen = isOpen
         val isRight = isRightHinged

@@ -164,7 +164,7 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB {
+    override fun recalculateBoundingBox(): AxisAlignedBB? {
         return SimpleAxisAlignedBB(
             position.x,
             position.y + (2.0 / 16),
@@ -180,10 +180,10 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
         return true
     }
 
-    override val boundingBox: AxisAlignedBB
+    override val boundingBox: AxisAlignedBB?
         get() = this
 
-    override val collisionBoundingBox: AxisAlignedBB
+    override val collisionBoundingBox: AxisAlignedBB?
         get() = this
 
     override var minY: Double
@@ -192,7 +192,7 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
             super.minY = minY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return this
     }
 

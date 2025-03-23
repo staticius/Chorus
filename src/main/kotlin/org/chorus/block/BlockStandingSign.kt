@@ -30,7 +30,7 @@ open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState = 
 
     override fun getBlockEntityType(): String = BlockEntityID.SIGN
 
-    override val boundingBox: AxisAlignedBB
+    override val boundingBox: AxisAlignedBB?
         get() = null
 
     override fun onUpdate(type: Int): Int {
