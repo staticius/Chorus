@@ -1,14 +1,14 @@
 package org.chorus.item
 
 import org.chorus.entity.Entity
-import org.chorus.math.ChorusMath
+import kotlin.math.floor
 
 class ItemMace : ItemTool(ItemID.Companion.MACE) {
     override val maxDurability: Int
         get() = 501
 
     override fun getAttackDamage(entity: Entity): Int {
-        val height = ChorusMath.floorDouble(entity.highestPosition - entity.position.y)
+        val height = floor(entity.highestPosition - entity.position.y).toInt()
         if (height < 1.5f) return 6
         var damage = 0
         for (i in 0..height) {

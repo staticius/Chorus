@@ -134,7 +134,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
     }
 
     override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
-        return recalculateBoundingBox().expand(0.000001, 0.000001, 0.000001)
+        return recalculateBoundingBox()?.expand(0.000001, 0.000001, 0.000001)
     }
 
     override fun canBeActivated(): Boolean {

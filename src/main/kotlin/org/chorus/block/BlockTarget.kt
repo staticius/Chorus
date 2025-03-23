@@ -10,9 +10,9 @@ import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.math.*
-import org.chorus.math.ChorusMath.ceilDouble
 import org.chorus.utils.RedstoneComponent
 import java.util.*
+import kotlin.math.ceil
 
 /**
  * @author joserobjr
@@ -27,6 +27,7 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState = Companion.p
 
     override fun getBlockEntityType(): String {
         return BlockEntity.TARGET
+    }
 
         override val isPowerSource: Boolean
         get() = true
@@ -118,7 +119,7 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState = Companion.p
             }
 
             val scale = (coords[0] + coords[1]) / 2
-            activatePower(ceilDouble(16 * scale), ticks)
+            activatePower(ceil(16 * scale).toInt(), ticks)
             return true
         }
 

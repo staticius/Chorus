@@ -89,6 +89,7 @@ import kotlin.arrayOfNulls
 import kotlin.code
 import kotlin.collections.HashMap
 import kotlin.intArrayOf
+import kotlin.math.*
 import kotlin.require
 import kotlin.synchronized
 
@@ -382,7 +383,7 @@ class Level(
         packet.z = z
         packet.data = data
 
-        this.addChunkPacket(ChorusMath.floorFloat(x) shr 4, ChorusMath.floorFloat(z) shr 4, packet)
+        this.addChunkPacket(floor(x).toInt() shr 4, floor(z).toInt() shr 4, packet)
     }
 
     @JvmOverloads
@@ -722,14 +723,14 @@ class Level(
                     this.tickRate = (baseTickRate + 1).coerceAtLeast(autoTickRateLimit.coerceAtMost(tickMs / 50))
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getName(), ChorusMath.round(tickMs.toDouble(), 2),
+                        this.getName(), round(tickMs.toDouble()),
                         tickRate
                     )
                 } else if ((tickMs / this.tickRate) >= 50 && this.tickRate < autoTickRateLimit) {
                     this.tickRate += 1
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getName(), ChorusMath.round(tickMs.toDouble(), 2),
+                        this.getName(), round(tickMs.toDouble()),
                         tickRate
                     )
                 }
@@ -1435,14 +1436,14 @@ class Level(
 
     fun scanBlocks(bb: AxisAlignedBB, condition: BiPredicate<BlockVector3?, BlockState?>): List<Block> {
         val min = BlockVector3(
-            ChorusMath.floorDouble(bb.minX),
-            ChorusMath.floorDouble(bb.minY),
-            ChorusMath.floorDouble(bb.minZ)
+            floor(bb.minX),
+            floor(bb.minY),
+            floor(bb.minZ)
         )
         val max = BlockVector3(
-            ChorusMath.floorDouble(bb.maxX),
-            ChorusMath.floorDouble(bb.maxY),
-            ChorusMath.floorDouble(bb.maxZ)
+            floor(bb.maxX),
+            floor(bb.maxY),
+            floor(bb.maxZ)
         )
         val minChunk: ChunkVector2 = min.chunkVector
         val maxChunk: ChunkVector2 = max.chunkVector
@@ -1503,12 +1504,12 @@ class Level(
         ignoreCollidesCheck: Boolean,
         condition: Predicate<Block>
     ): Array<Block> {
-        val minX = ChorusMath.floorDouble(bb.minX)
-        val minY = ChorusMath.floorDouble(bb.minY)
-        val minZ = ChorusMath.floorDouble(bb.minZ)
-        val maxX = ChorusMath.ceilDouble(bb.maxX)
-        val maxY = ChorusMath.ceilDouble(bb.maxY)
-        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
+        val minX = floor(bb.minX)
+        val minY = floor(bb.minY)
+        val minZ = floor(bb.minZ)
+        val maxX = ceil(bb.maxX)
+        val maxY = ceil(bb.maxY)
+        val maxZ = ceil(bb.maxZ)
 
         val collides: MutableList<Block> = ArrayList()
 
@@ -1579,12 +1580,12 @@ class Level(
         ignoreCollidesCheck: Boolean,
         condition: Predicate<Block>
     ): Array<Block> {
-        val minX = ChorusMath.floorDouble(bb.minX)
-        val minY = ChorusMath.floorDouble(bb.minY)
-        val minZ = ChorusMath.floorDouble(bb.minZ)
-        val maxX = ChorusMath.ceilDouble(bb.maxX)
-        val maxY = ChorusMath.ceilDouble(bb.maxY)
-        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
+        val minX = floor(bb.minX)
+        val minY = floor(bb.minY)
+        val minZ = floor(bb.minZ)
+        val maxX = ceil(bb.maxX)
+        val maxY = ceil(bb.maxY)
+        val maxZ = ceil(bb.maxZ)
 
         val collides: MutableList<Block> = ArrayList()
 
@@ -1641,12 +1642,12 @@ class Level(
         entities: Boolean,
         solidEntities: Boolean
     ): Array<AxisAlignedBB> {
-        val minX = ChorusMath.floorDouble(bb.minX)
-        val minY = ChorusMath.floorDouble(bb.minY)
-        val minZ = ChorusMath.floorDouble(bb.minZ)
-        val maxX = ChorusMath.ceilDouble(bb.maxX)
-        val maxY = ChorusMath.ceilDouble(bb.maxY)
-        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
+        val minX = floor(bb.minX)
+        val minY = floor(bb.minY)
+        val minZ = floor(bb.minZ)
+        val maxX = ceil(bb.maxX)
+        val maxY = ceil(bb.maxY)
+        val maxZ = ceil(bb.maxZ)
 
         val collides: MutableList<AxisAlignedBB> = ArrayList<AxisAlignedBB>()
 
@@ -1683,12 +1684,12 @@ class Level(
         entities: Boolean,
         solidEntities: Boolean
     ): List<AxisAlignedBB> {
-        val minX = ChorusMath.floorDouble(bb.minX)
-        val minY = ChorusMath.floorDouble(bb.minY)
-        val minZ = ChorusMath.floorDouble(bb.minZ)
-        val maxX = ChorusMath.ceilDouble(bb.maxX)
-        val maxY = ChorusMath.ceilDouble(bb.maxY)
-        val maxZ = ChorusMath.ceilDouble(bb.maxZ)
+        val minX = floor(bb.minX)
+        val minY = floor(bb.minY)
+        val minZ = floor(bb.minZ)
+        val maxX = ceil(bb.maxX)
+        val maxY = ceil(bb.maxY)
+        val maxZ = ceil(bb.maxZ)
 
         val collides: MutableList<AxisAlignedBB> = ArrayList<AxisAlignedBB>()
 
@@ -1716,12 +1717,12 @@ class Level(
     }
 
     fun hasCollision(entity: Entity?, bb: AxisAlignedBB, entities: Boolean): Boolean {
-        val minX = ChorusMath.floorDouble(ChorusMath.round(bb.minX, 4))
-        val minY = ChorusMath.floorDouble(ChorusMath.round(bb.minY, 4))
-        val minZ = ChorusMath.floorDouble(ChorusMath.round(bb.minZ, 4))
-        val maxX = ChorusMath.ceilDouble(ChorusMath.round(bb.maxX, 4) - 0.00001)
-        val maxY = ChorusMath.ceilDouble(ChorusMath.round(bb.maxY, 4) - 0.00001)
-        val maxZ = ChorusMath.ceilDouble(ChorusMath.round(bb.maxZ, 4) - 0.00001)
+        val minX = floor(round(bb.minX)).toInt()
+        val minY = floor(round(bb.minY)).toInt()
+        val minZ = floor(round(bb.minZ)).toInt()
+        val maxX = ceil(round(bb.maxX) - 0.00001).toInt()
+        val maxY = ceil(round(bb.maxY) - 0.00001).toInt()
+        val maxZ = ceil(round(bb.maxZ) - 0.00001).toInt()
 
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
@@ -1762,12 +1763,12 @@ class Level(
         val d = 1.0f - (this.getRainStrength(tickDiff) * 5.0f) / 16.0f
         val e = 1.0f - (this.getThunderStrength(tickDiff) * 5.0f) / 16.0f
         val f =
-            0.5f + 2.0f * MathHelper.clamp(MathHelper.cos(this.getCelestialAngle(tickDiff) * 6.2831855f), -0.25f, 0.25f)
+            0.5f + 2.0f * cos(this.getCelestialAngle(tickDiff) * 6.2831855f).coerceIn(-0.25f, 0.25f)
         return ((1.0f - f * d * e) * 11.0f).toInt()
         /* Old NukkitX Code
         float angle = this.getCelestialAngle(tickDiff);
-        float light = 1.0F - (MathHelper.cos(angle * ((float) Math.PI * 2F)) * 2.0F + 0.5F);
-        light = MathHelper.clamp(light, 0.0F, 1.0F);
+        float light = 1.0F - (cos(angle * ((float) Math.PI * 2F)) * 2.0F + 0.5F);
+        light = light.coerceIn(0.0F, 1.0F);
         light = 1.0F - light;
         light = (float) ((double) light * (1.0D - (double) (this.getRainStrength(tickDiff) * 5.0F) / 16.0D));
         light = (float) ((double) light * (1.0D - (double) (this.getThunderStrength(tickDiff) * 5.0F) / 16.0D));
@@ -2321,9 +2322,9 @@ class Level(
                 val f1 = ThreadLocalRandom.current().nextFloat() * (Math.PI.toFloat() * 2)
 
                 motion = Vector3(
-                    (-MathHelper.sin(f1) * f).toDouble(),
+                    (-sin(f1) * f).toDouble(),
                     0.20000000298023224,
-                    (MathHelper.cos(f1) * f).toDouble()
+                    (cos(f1) * f).toDouble()
                 )
             } else {
                 motion = Vector3(
@@ -2366,9 +2367,9 @@ class Level(
                 val f1 = ThreadLocalRandom.current().nextFloat() * (Math.PI.toFloat() * 2)
 
                 motion1 = Vector3(
-                    (-MathHelper.sin(f1) * f).toDouble(),
+                    (-sin(f1) * f).toDouble(),
                     0.20000000298023224,
-                    (MathHelper.cos(f1) * f).toDouble()
+                    (cos(f1) * f).toDouble()
                 )
             } else {
                 motion1 = Vector3(
@@ -2921,10 +2922,10 @@ class Level(
         val result: MutableList<Entity> = mutableListOf()
 
         if (entity == null || entity.canCollide()) {
-            val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
-            val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
-            val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
-            val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
+            val minX = floor((bb.minX - 2) / 16)
+            val maxX = ceil((bb.maxX + 2) / 16)
+            val minZ = floor((bb.minZ - 2) / 16)
+            val maxZ = ceil((bb.maxZ + 2) / 16)
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
@@ -2944,10 +2945,10 @@ class Level(
 
     fun streamCollidingEntities(bb: AxisAlignedBB, entity: Entity?): Stream<Entity> {
         if (entity == null || entity.canCollide()) {
-            val minX = ChorusMath.floorDouble((bb.minX - 2) / 16)
-            val maxX = ChorusMath.ceilDouble((bb.maxX + 2) / 16)
-            val minZ = ChorusMath.floorDouble((bb.minZ - 2) / 16)
-            val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) / 16)
+            val minX = floor((bb.minX - 2) / 16)
+            val maxX = ceil((bb.maxX + 2) / 16)
+            val minZ = floor((bb.minZ - 2) / 16)
+            val maxZ = ceil((bb.maxZ + 2) / 16)
 
             val allEntities: MutableList<Entity> = mutableListOf()
 
@@ -2974,10 +2975,10 @@ class Level(
     }
 
     fun getNearbyEntities(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): List<Entity> {
-        val minX = ChorusMath.floorDouble((bb.minX - 2) * 0.0625)
-        val maxX = ChorusMath.ceilDouble((bb.maxX + 2) * 0.0625)
-        val minZ = ChorusMath.floorDouble((bb.minZ - 2) * 0.0625)
-        val maxZ = ChorusMath.ceilDouble((bb.maxZ + 2) * 0.0625)
+        val minX = floor((bb.minX - 2) * 0.0625)
+        val maxX = ceil((bb.maxX + 2) * 0.0625)
+        val minZ = floor((bb.minZ - 2) * 0.0625)
+        val maxZ = ceil((bb.maxZ + 2) * 0.0625)
 
         val result: MutableList<Entity> = mutableListOf()
         for (x in minX..maxX) {
@@ -4331,10 +4332,10 @@ class Level(
         if (bb.maxY < (if (isOverWorld) -64 else 0) || bb.minY >= (if (isOverWorld) 320 else 256)) {
             return false
         }
-        val minX = ChorusMath.floorDouble(bb.minX) shr 4
-        val minZ = ChorusMath.floorDouble(bb.minZ) shr 4
-        val maxX = ChorusMath.floorDouble(bb.maxX) shr 4
-        val maxZ = ChorusMath.floorDouble(bb.maxZ) shr 4
+        val minX = floor(bb.minX) shr 4
+        val minZ = floor(bb.minZ) shr 4
+        val maxX = floor(bb.maxX) shr 4
+        val maxZ = floor(bb.maxZ) shr 4
 
         for (x in minX..maxX) {
             for (z in minZ..maxZ) {

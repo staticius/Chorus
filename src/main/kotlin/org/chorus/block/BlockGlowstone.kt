@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.item.Item
 import org.chorus.item.ItemGlowstoneDust
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.math.MathHelper.clamp
 import java.util.*
 
 class BlockGlowstone : BlockTransparent {
@@ -33,7 +32,7 @@ class BlockGlowstone : BlockTransparent {
         }
 
         return arrayOf(
-            ItemGlowstoneDust(0, clamp(count, 1, 4))
+            ItemGlowstoneDust(0, count.coerceIn(1, 4))
         )
     }
 

@@ -8,7 +8,6 @@ import org.chorus.event.inventory.GrindstoneEvent
 import org.chorus.inventory.GrindstoneInventory
 import org.chorus.item.*
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.math.ChorusMath
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.types.itemstack.request.action.CraftGrindstoneAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
@@ -130,7 +129,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
             .sum()
 
         resultExperience = ThreadLocalRandom.current().nextInt(
-            ChorusMath.ceilDouble(resultExperience.toDouble() / 2),
+            ceil(resultExperience.toDouble() / 2),
             resultExperience + 1
         )
         return resultExperience

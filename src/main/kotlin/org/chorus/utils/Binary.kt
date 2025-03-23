@@ -3,7 +3,6 @@ package org.chorus.utils
 import org.chorus.entity.data.EntityDataFormat
 import org.chorus.entity.data.EntityDataMap
 import org.chorus.math.BlockVector3
-import org.chorus.math.ChorusMath.round
 import org.chorus.math.Vector3
 import org.chorus.math.Vector3f
 import org.chorus.nbt.NBTIO.write
@@ -16,7 +15,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.function.Function
 import kotlin.math.min
-
+import kotlin.math.round
 
 class Binary {
     fun unsignShort(value: Int): Int {
@@ -249,7 +248,7 @@ class Binary {
         fun readFloat(bytes: ByteArray, accuracy: Int = -1): Float {
             val `val` = java.lang.Float.intBitsToFloat(readInt(bytes))
             return if (accuracy > -1) {
-                round(`val`.toDouble(), accuracy).toFloat()
+                round(`val`.toDouble()).toFloat()
             } else {
                 `val`
             }
@@ -263,7 +262,7 @@ class Binary {
         fun readLFloat(bytes: ByteArray, accuracy: Int = -1): Float {
             val `val` = java.lang.Float.intBitsToFloat(readLInt(bytes))
             return if (accuracy > -1) {
-                round(`val`.toDouble(), accuracy).toFloat()
+                round(`val`.toDouble()).toFloat()
             } else {
                 `val`
             }

@@ -497,7 +497,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             var diffX: Double = entity.position.x - position.x
             var diffZ: Double = entity.position.z - position.z
 
-            var direction: Double = ChorusMath.getDirection(diffX, diffZ)
+            var direction: Double = max(abs(diffX), abs(diffZ))
 
             if (direction >= 0.009999999776482582) {
                 direction = sqrt(direction)

@@ -1,6 +1,7 @@
 package org.chorus.math
 
 
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -23,13 +24,13 @@ class Vector3f @JvmOverloads constructor(var x: Float = 0f, var y: Float = 0f, v
     }
 
     val floorX: Int
-        get() = ChorusMath.floorFloat(this.x)
+        get() = floor(this.x).toInt()
 
     val floorY: Int
-        get() = ChorusMath.floorFloat(this.y)
+        get() = floor(this.y).toInt()
 
     val floorZ: Int
-        get() = ChorusMath.floorFloat(this.z)
+        get() = floor(this.z).toInt()
 
     fun add(x: Float): Vector3f {
         return this.add(x, 0f, 0f)

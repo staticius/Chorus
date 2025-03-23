@@ -277,11 +277,11 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
             this.memoryStorage!!.get<MutableMap<Entity?, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
         val attackTarget = this.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
         val origin = angerValueMap.getOrDefault(entity, 0)
-        var added = ChorusMath.clamp(origin + addition, 0, 150)
+        var added = (origin + addition).coerceIn(0, 150)
         if (added == 0) angerValueMap.remove(entity)
         else if (added >= 80) {
             added += 20
-            added = ChorusMath.clamp(added, 0, 150)
+            added = added.coerceIn(0, 150)
             angerValueMap[entity] = added
             val changed = attackTarget == null ||
                     (entity is Player && attackTarget !is Player)
@@ -335,7 +335,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
             this.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
         val anger = this.memoryStorage!!.get<MutableMap<Entity, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
             .getOrDefault(target, 0)
-        return (40 - ChorusMath.clamp((anger / 80f), 0f, 1f) * 30f).toInt()
+        return (40 - (anger / 80f).coerceIn(0f, 1f) * 30f).toInt()
     }
 
     override fun setOnFire(seconds: Int) {

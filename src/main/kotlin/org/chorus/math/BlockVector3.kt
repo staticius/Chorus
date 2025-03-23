@@ -64,7 +64,7 @@ class BlockVector3 : Cloneable {
     }
 
     fun add(x: Vector3): Vector3 {
-        return Vector3(this.x + x.getX(), this.y + x.getY(), this.z + x.getZ())
+        return Vector3(this.x + x.x, this.y + x.y, this.z + x.z)
     }
 
     @JvmOverloads
@@ -73,7 +73,7 @@ class BlockVector3 : Cloneable {
     }
 
     fun subtract(x: Vector3): Vector3 {
-        return this.add(-x.getX(), -x.getY(), -x.getZ())
+        return this.add(-x.x, -x.y, -x.z)
     }
 
     fun add(x: Int): BlockVector3 {
@@ -195,13 +195,13 @@ class BlockVector3 : Cloneable {
         }
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (o == null) return false
-        if (o === this) return true
+    override fun equals(other: Any?): Boolean {
+        if (other == null) return false
+        if (other === this) return true
 
-        if (o !is BlockVector3) return false
+        if (other !is BlockVector3) return false
 
-        return this.x == o.x && this.y == o.y && this.z == o.z
+        return this.x == other.x && this.y == other.y && this.z == other.z
     }
 
     override fun hashCode(): Int {
@@ -212,7 +212,6 @@ class BlockVector3 : Cloneable {
         return "BlockPosition(level=" + ",x=" + this.x + ",y=" + this.y + ",z=" + this.z + ")"
     }
 
-    @SneakyThrows
     public override fun clone(): BlockVector3 {
         return super.clone() as BlockVector3
     }

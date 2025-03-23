@@ -6,6 +6,7 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Predicate
 import kotlin.math.abs
+import kotlin.math.floor
 
 enum class BlockFace(
     /**
@@ -292,7 +293,7 @@ enum class BlockFace(
          */
         @JvmStatic
         fun fromIndex(index: Int): BlockFace {
-            return VALUES[MathHelper.abs(index % VALUES.size)]
+            return VALUES[abs(index % VALUES.size)]
         }
 
         /**
@@ -313,7 +314,7 @@ enum class BlockFace(
          * @return block face
          */
         fun fromHorizontalAngle(angle: Double): BlockFace {
-            return fromHorizontalIndex(ChorusMath.floorDouble(angle / 90.0 + 0.5) and 3)
+            return fromHorizontalIndex(floor(angle / 90.0 + 0.5).toInt() and 3)
         }
 
         fun fromAxis(axisDirection: AxisDirection, axis: Axis): BlockFace {

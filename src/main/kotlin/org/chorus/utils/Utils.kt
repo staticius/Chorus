@@ -4,12 +4,12 @@ import io.netty.buffer.ByteBuf
 import org.chorus.block.Block
 import org.chorus.level.Level
 import org.chorus.math.*
-import org.chorus.math.ChorusMath.ceilDouble
-import org.chorus.math.ChorusMath.floorDouble
 import java.io.*
 import java.lang.management.ManagementFactory
 import java.nio.charset.StandardCharsets
 import java.util.*
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
@@ -220,12 +220,12 @@ object Utils : Loggable {
     }
 
     fun getLevelBlocks(level: Level, bb: AxisAlignedBB): Array<Block?> {
-        val minX = floorDouble(min(bb.minX, bb.maxX))
-        val minY = floorDouble(min(bb.minY, bb.maxY))
-        val minZ = floorDouble(min(bb.minZ, bb.maxZ))
-        val maxX = floorDouble(max(bb.minX, bb.maxX))
-        val maxY = floorDouble(max(bb.minY, bb.maxY))
-        val maxZ = floorDouble(max(bb.minZ, bb.maxZ))
+        val minX = floor(min(bb.minX, bb.maxX)).toInt()
+        val minY = floor(min(bb.minY, bb.maxY)).toInt()
+        val minZ = floor(min(bb.minZ, bb.maxZ)).toInt()
+        val maxX = floor(max(bb.minX, bb.maxX)).toInt()
+        val maxY = floor(max(bb.minY, bb.maxY)).toInt()
+        val maxZ = floor(max(bb.minZ, bb.maxZ)).toInt()
 
         val blocks: MutableList<Block?> = ArrayList()
         val vec = Vector3()
@@ -233,7 +233,7 @@ object Utils : Loggable {
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
-                    blocks.add(level.getBlock(vec.setComponents(x.toDouble(), y.toDouble(), z.toDouble())!!, false))
+                    blocks.add(level.getBlock(vec.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false))
                 }
             }
         }
@@ -242,12 +242,12 @@ object Utils : Loggable {
     }
 
     fun hasCollisionTickCachedBlocks(level: Level, bb: AxisAlignedBB): Boolean {
-        val minX = floorDouble(bb.minX)
-        val minY = floorDouble(bb.minY)
-        val minZ = floorDouble(bb.minZ)
-        val maxX = ceilDouble(bb.maxX)
-        val maxY = ceilDouble(bb.maxY)
-        val maxZ = ceilDouble(bb.maxZ)
+        val minX = floor(bb.minX).toInt()
+        val minY = floor(bb.minY).toInt()
+        val minZ = floor(bb.minZ).toInt()
+        val maxX = ceil(bb.maxX).toInt()
+        val maxY = ceil(bb.maxY).toInt()
+        val maxZ = ceil(bb.maxZ).toInt()
 
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
@@ -277,12 +277,12 @@ object Utils : Loggable {
      * if zz is 00, then zz is not used <br></br>
      */
     fun hasCollisionTickCachedBlocksWithInfo(level: Level, bb: AxisAlignedBB): Byte {
-        val minX = floorDouble(bb.minX)
-        val minY = floorDouble(bb.minY)
-        val minZ = floorDouble(bb.minZ)
-        val maxX = ceilDouble(bb.maxX)
-        val maxY = ceilDouble(bb.maxY)
-        val maxZ = ceilDouble(bb.maxZ)
+        val minX = floor(bb.minX).toInt()
+        val minY = floor(bb.minY).toInt()
+        val minZ = floor(bb.minZ).toInt()
+        val maxX = ceil(bb.maxX).toInt()
+        val maxY = ceil(bb.maxY).toInt()
+        val maxZ = ceil(bb.maxZ).toInt()
         val centerX = (maxX + minX).toFloat() / 2
         val centerY = (maxY + minY).toFloat() / 2
         val centerZ = (maxZ + minZ).toFloat() / 2

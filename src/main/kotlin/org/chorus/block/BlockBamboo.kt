@@ -13,7 +13,6 @@ import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
-import org.chorus.math.MathHelper.clamp
 import org.chorus.network.protocol.AnimatePacket
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
@@ -310,7 +309,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
         get() = if (getPropertyValue(CommonBlockProperties.AGE_BIT)) 1 else 0
         set(age) {
             var age1 = age
-            age1 = clamp(age1, 0, 1)
+            age1 = age1.coerceIn(0, 1)
             setPropertyValue(CommonBlockProperties.AGE_BIT, age1 == 1)
         }
 

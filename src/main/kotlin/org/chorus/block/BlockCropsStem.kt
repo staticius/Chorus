@@ -8,7 +8,6 @@ import org.chorus.item.Item.Companion.get
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
-import org.chorus.math.ChorusMath.clamp
 import org.chorus.utils.Faceable
 import java.util.concurrent.ThreadLocalRandom
 

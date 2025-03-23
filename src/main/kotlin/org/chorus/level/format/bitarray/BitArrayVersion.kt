@@ -1,6 +1,6 @@
 package org.chorus.level.format.bitarray
 
-import org.chorus.math.ChorusMath
+import kotlin.math.ceil
 
 enum class BitArrayVersion(bits: Int, entriesPerWord: Int, val next: BitArrayVersion?) {
     V16(16, 2, null),
@@ -18,13 +18,13 @@ enum class BitArrayVersion(bits: Int, entriesPerWord: Int, val next: BitArrayVer
     val maxEntryValue: Int = (1 shl this.bits.toInt()) - 1
 
     fun getWordsForSize(size: Int): Int {
-        return ChorusMath.ceilFloat(size.toFloat() / this.entriesPerWord)
+        return ceil(size.toFloat() / this.entriesPerWord).toInt()
     }
 
     @JvmOverloads
     fun createArray(
         size: Int,
-        words: IntArray = IntArray(ChorusMath.ceilFloat(size.toFloat() / this.entriesPerWord))
+        words: IntArray = IntArray(ceil(size.toFloat() / this.entriesPerWord).toInt())
     ): BitArray {
         return if (this == V3 || this == V5 || this == V6) PaddedBitArray(
             this, size, words

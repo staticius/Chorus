@@ -17,7 +17,6 @@ import org.chorus.item.ItemTurtleHelmet
 import org.chorus.level.GameRule
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.ChorusMath
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
@@ -26,6 +25,7 @@ import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.scoreboard.manager.IScoreboardManager
 import org.chorus.utils.TickCachedBlockIterator
 import java.util.*
+import kotlin.math.round
 import kotlin.math.sqrt
 
 abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt), EntityDamageable {
@@ -390,7 +390,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
      * @param speed 速度大小<br></br>Speed value
      */
     open fun setMovementSpeed(speed: Float) {
-        this.movementSpeed = ChorusMath.round(speed.toDouble(), 2).toFloat()
+        this.movementSpeed = round(speed.toDouble()).toFloat()
     }
 
     fun getAirTicks(): Int {

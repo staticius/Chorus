@@ -26,6 +26,7 @@ import org.chorus.utils.*
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.LinkedHashSet
+import kotlin.math.floor
 
 class Explosion protected constructor(private val source: Locator, size: Double, private val what: Any) {
     private val RAYS = 16
@@ -206,12 +207,12 @@ class Explosion protected constructor(private val source: Locator, size: Double,
         }
 
         val explosionSize = this.size * 2.0
-        val minX = ChorusMath.floorDouble(this.source.position.x - explosionSize - 1).toDouble()
-        val maxX = ChorusMath.ceilDouble(this.source.position.x + explosionSize + 1).toDouble()
-        val minY = ChorusMath.floorDouble(this.source.position.y - explosionSize - 1).toDouble()
-        val maxY = ChorusMath.ceilDouble(this.source.position.y + explosionSize + 1).toDouble()
-        val minZ = ChorusMath.floorDouble(this.source.position.z - explosionSize - 1).toDouble()
-        val maxZ = ChorusMath.ceilDouble(this.source.position.z + explosionSize + 1).toDouble()
+        val minX = floor(this.source.position.x - explosionSize - 1)
+        val maxX = ceil(this.source.position.x + explosionSize + 1).toDouble()
+        val minY = floor(this.source.position.y - explosionSize - 1)
+        val maxY = ceil(this.source.position.y + explosionSize + 1).toDouble()
+        val minZ = floor(this.source.position.z - explosionSize - 1)
+        val maxZ = ceil(this.source.position.z + explosionSize + 1).toDouble()
 
         val explosionBB: AxisAlignedBB = SimpleAxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ)
         val list = level.getNearbyEntities(explosionBB, if (what is Entity) what else null)

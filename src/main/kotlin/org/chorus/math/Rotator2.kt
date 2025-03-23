@@ -116,7 +116,6 @@ class Rotator2 @JvmOverloads constructor(@JvmField var pitch: Double = 0.0, @Jvm
         return "Rotator2(x=" + this.pitch + ",y=" + this.yaw + ")"
     }
 
-    @SneakyThrows
     public override fun clone(): Rotator2 {
         return super.clone() as Rotator2
     }

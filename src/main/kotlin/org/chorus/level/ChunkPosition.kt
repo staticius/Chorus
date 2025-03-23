@@ -1,10 +1,10 @@
 package org.chorus.level
 
-import org.chorus.math.MathHelper
 import org.chorus.math.Vector3
+import kotlin.math.floor
 
 class ChunkPosition(val x: Int, val y: Int, val z: Int) {
-    constructor(vec3d: Vector3) : this(MathHelper.floor(vec3d.x), MathHelper.floor(vec3d.y), MathHelper.floor(vec3d.z))
+    constructor(vec3d: Vector3) : this(floor(vec3d.x).toInt(), floor(vec3d.y).toInt(), floor(vec3d.z).toInt())
 
     override fun equals(`object`: Any?): Boolean {
         return if (`object` !is ChunkPosition) {

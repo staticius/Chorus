@@ -11,8 +11,6 @@ import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
-import org.chorus.math.MathHelper.clamp
-import org.chorus.math.MathHelper.cos
 import org.chorus.utils.RedstoneComponent
 
 open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
@@ -132,7 +130,7 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
                 i = Math.round(i.toFloat() * cos(f))
             }
 
-            i = clamp(i, 0, 15)
+            i = i.coerceIn(0, 15)
         } else i = 0
 
         if (i != level.getBlockStateAt(floorX, floorY, floorZ)!!

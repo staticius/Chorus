@@ -1,6 +1,7 @@
 package org.chorus.math
 
 import org.chorus.level.MovingObjectPosition
+import kotlin.math.floor
 
 interface AxisAlignedBB : Cloneable {
     fun setBounds(minX: Double, minY: Double, minZ: Double, maxX: Double, maxY: Double, maxZ: Double): AxisAlignedBB {
@@ -313,13 +314,13 @@ interface AxisAlignedBB : Cloneable {
     public override fun clone(): AxisAlignedBB
 
     fun forEach(action: BBConsumer<*>) {
-        val minX = ChorusMath.floorDouble(this.minX)
-        val minY = ChorusMath.floorDouble(this.minY)
-        val minZ = ChorusMath.floorDouble(this.minZ)
+        val minX = floor(this.minX).toInt()
+        val minY = floor(this.minY).toInt()
+        val minZ = floor(this.minZ).toInt()
 
-        val maxX = ChorusMath.floorDouble(this.maxX)
-        val maxY = ChorusMath.floorDouble(this.maxY)
-        val maxZ = ChorusMath.floorDouble(this.maxZ)
+        val maxX = floor(this.maxX).toInt()
+        val maxY = floor(this.maxY).toInt()
+        val maxZ = floor(this.maxZ).toInt()
 
         for (x in minX..maxX) {
             for (y in minY..maxY) {

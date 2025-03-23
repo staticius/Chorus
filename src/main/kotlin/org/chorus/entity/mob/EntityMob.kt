@@ -28,7 +28,6 @@ import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.ChorusMath
 import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 import org.chorus.nbt.NBTIO
@@ -40,6 +39,7 @@ import org.chorus.utils.Utils
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import java.util.stream.Stream
+import kotlin.math.ceil
 import kotlin.math.min
 import kotlin.math.pow
 
@@ -231,7 +231,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
             source.setDamage(
                 (-source.finalDamage * min(
-                    ChorusMath.ceilFloat(
+                    ceil(
                         (min(
                             epf.toDouble(),
                             25.0

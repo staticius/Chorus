@@ -2,7 +2,6 @@ package org.chorus.blockentity
 
 import org.chorus.block.BlockHead
 import org.chorus.level.format.IChunk
-import org.chorus.math.ChorusMath
 import org.chorus.nbt.tag.CompoundTag
 
 /**
@@ -29,7 +28,7 @@ class BlockEntitySkull(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(c
         }
 
         if (namedTag.containsInt("MouthTickCount")) {
-            mouthTickCount = ChorusMath.clamp(namedTag.getInt("MouthTickCount"), 0, 60)
+            mouthTickCount = namedTag.getInt("MouthTickCount").coerceIn(0, 60)
         }
     }
 

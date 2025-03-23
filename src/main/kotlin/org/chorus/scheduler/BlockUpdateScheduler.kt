@@ -3,10 +3,10 @@ package org.chorus.scheduler
 import org.chorus.block.Block
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
-import org.chorus.math.ChorusMath.floorDouble
 import org.chorus.math.Vector3
 import org.chorus.utils.BlockUpdateEntry
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.floor
 import kotlin.math.max
 
 class BlockUpdateScheduler(level: Level, currentTick: Long) {
@@ -53,7 +53,7 @@ class BlockUpdateScheduler(level: Level, currentTick: Long) {
                     val entry = updateIterator.next()
 
                     val pos = entry.pos
-                    if (level.isChunkLoaded(floorDouble(pos.x) shr 4, floorDouble(pos.z) shr 4)) {
+                    if (level.isChunkLoaded(floor(pos.x).toInt() shr 4, floor(pos.z).toInt() shr 4)) {
                         val block = level.getBlock(entry.pos, entry.block.layer)
 
                         updateIterator.remove()

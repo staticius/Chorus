@@ -3,7 +3,6 @@ package org.chorus.blockentity
 import org.chorus.block.BlockID
 import org.chorus.block.property.enums.NetherReactorState
 import org.chorus.level.format.IChunk
-import org.chorus.math.MathHelper
 import org.chorus.nbt.tag.CompoundTag
 
 /**
@@ -26,7 +25,7 @@ class BlockEntityNetherReactor(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
     }
 
     fun setProgress(progress: Int) {
-        this.progress = MathHelper.clamp(progress, 0, 900)
+        this.progress = progress.coerceIn(0, 900)
     }
 
     override fun loadNBT() {

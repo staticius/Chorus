@@ -6,7 +6,6 @@ import org.chorus.inventory.*
 import org.chorus.item.*
 import org.chorus.level.*
 import org.chorus.math.BlockVector3
-import org.chorus.math.ChorusMath
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
@@ -173,7 +172,7 @@ interface IHuman : InventoryHolder {
         )
 
         if (human.namedTag!!.containsNumber("SelectedInventorySlot")) {
-            getInventory().setHeldItemSlot(ChorusMath.clamp(human.namedTag!!.getInt("SelectedInventorySlot"), 0, 8))
+            getInventory().setHeldItemSlot(human.namedTag!!.getInt("SelectedInventorySlot").coerceIn(0, 8))
         }
 
         if (human.namedTag!!.contains("Inventory") && human.namedTag!!.get("Inventory") is ListTag<*>) {

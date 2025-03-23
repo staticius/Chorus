@@ -16,10 +16,10 @@ import org.chorus.item.ItemShield
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.ChorusMath
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.ceil
 
 abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), IHuman {
     lateinit var inventory: HumanInventory
@@ -80,9 +80,9 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
             }
 
             source.setDamage(
-                -source.finalDamage * ChorusMath.ceilFloat(
+                -source.finalDamage * ceil(
                     epf.coerceAtMost(25) * (ThreadLocalRandom.current().nextInt(50, 100).toFloat() / 100)
-                ).coerceAtMost(20) * 0.04f,
+                ).toInt().coerceAtMost(20) * 0.04f,
                 DamageModifier.ARMOR_ENCHANTMENTS
             )
 

@@ -1203,9 +1203,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             return false
         }
 
-        val i: Int = ChorusMath.floorDouble(x)
-        val j: Int = ChorusMath.floorDouble(y)
-        val k: Int = ChorusMath.floorDouble(z)
+        val i: Int = floor(x).toInt()
+        val j: Int = floor(y).toInt()
+        val k: Int = floor(z).toInt()
 
         val diffX: Double = x - i
         val diffY: Double = y - j
@@ -1585,7 +1585,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     fun getHorizontalFacing(): BlockFace {
-        return BlockFace.fromHorizontalIndex(ChorusMath.floorDouble((rotation.yaw * 4.0f / 360.0f) + 0.5) and 3)
+        return BlockFace.fromHorizontalIndex(floor((rotation.yaw * 4.0f / 360.0f) + 0.5).toInt() and 3)
     }
 
     open fun onUpdate(currentTick: Int): Boolean {
@@ -1901,10 +1901,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         if (entity.riding !== this && !entity.passengers.contains(this)) {
             var dx: Double = entity.position.x - position.x
             var dy: Double = entity.position.z - position.z
-            var dz: Double = ChorusMath.getDirection(dx, dy)
+            var dz: Double = max(abs(dx), abs(dy))
 
             if (dz >= 0.009999999776482582) {
-                dz = MathHelper.sqrt(dz.toFloat()).toDouble()
+                dz = sqrt(dz.toFloat()).toDouble()
                 dx /= dz
                 dy /= dz
                 var d3: Double = 1.0 / dz
@@ -2221,12 +2221,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     fun getBlocksAround(): List<Block>? {
         if (this.blocksAround == null) {
-            val minX: Int = ChorusMath.floorDouble(boundingBox.minX)
-            val minY: Int = ChorusMath.floorDouble(boundingBox.minY)
-            val minZ: Int = ChorusMath.floorDouble(boundingBox.minZ)
-            val maxX: Int = ChorusMath.ceilDouble(boundingBox.maxX)
-            val maxY: Int = ChorusMath.ceilDouble(boundingBox.maxY)
-            val maxZ: Int = ChorusMath.ceilDouble(boundingBox.maxZ)
+            val minX: Int = floor(boundingBox.minX).toInt()
+            val minY: Int = floor(boundingBox.minY).toInt()
+            val minZ: Int = floor(boundingBox.minZ).toInt()
+            val maxX: Int = ceil(boundingBox.maxX).toInt()
+            val maxY: Int = ceil(boundingBox.maxY).toInt()
+            val maxZ: Int = ceil(boundingBox.maxZ).toInt()
 
             val blocksAround = ArrayList<Block>()
 
@@ -2247,12 +2247,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     fun getTickCachedBlocksAround(): List<Block>? {
         if (this.blocksAround == null) {
-            val minX: Int = ChorusMath.floorDouble(boundingBox.minX)
-            val minY: Int = ChorusMath.floorDouble(boundingBox.minY)
-            val minZ: Int = ChorusMath.floorDouble(boundingBox.minZ)
-            val maxX: Int = ChorusMath.ceilDouble(boundingBox.maxX)
-            val maxY: Int = ChorusMath.ceilDouble(boundingBox.maxY)
-            val maxZ: Int = ChorusMath.ceilDouble(boundingBox.maxZ)
+            val minX: Int = floor(boundingBox.minX).toInt()
+            val minY: Int = floor(boundingBox.minY).toInt()
+            val minZ: Int = floor(boundingBox.minZ).toInt()
+            val maxX: Int = ceil(boundingBox.maxX).toInt()
+            val maxY: Int = ceil(boundingBox.maxY).toInt()
+            val maxZ: Int = ceil(boundingBox.maxZ).toInt()
 
             val blocksAround = ArrayList<Block>()
 
@@ -2339,10 +2339,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         setDataFlagExtend(EntityFlag.IN_SCAFFOLDING, scaffolding)
 
         if (abs(position.y % 1) > 0.125) {
-            val minX: Int = ChorusMath.floorDouble(boundingBox.minX)
-            val minZ: Int = ChorusMath.floorDouble(boundingBox.minZ)
-            val maxX: Int = ChorusMath.ceilDouble(boundingBox.maxX)
-            val maxZ: Int = ChorusMath.ceilDouble(boundingBox.maxZ)
+            val minX: Int = floor(boundingBox.minX).toInt()
+            val minZ: Int = floor(boundingBox.minZ).toInt()
+            val maxX: Int = ceil(boundingBox.maxX).toInt()
+            val maxZ: Int = ceil(boundingBox.maxZ).toInt()
             val y: Int = position.y.toInt()
 
             outerScaffolding@ for (i in minX..maxX) {

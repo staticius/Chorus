@@ -122,9 +122,9 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             prevPosition.y = position.y
             prevPosition.z = position.z
             motion.y -= 0.03999999910593033
-            val dx: Int = MathHelper.floor(position.x)
-            var dy: Int = MathHelper.floor(position.y)
-            val dz: Int = MathHelper.floor(position.z)
+            val dx: Int = floor(position.x).toInt()
+            var dy: Int = floor(position.y).toInt()
+            val dz: Int = floor(position.z).toInt()
 
             // Some hack to check rails
             if (Rail.isRailBlock(level!!.getBlockIdAt(dx, dy - 1, dz))) {
@@ -329,7 +329,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                     val desinityZ: Double = entity.position.z - position.z
                     val vector: Vector3 = Vector3(desinityX, 0.0, desinityZ).normalize()
                     val vec: Vector3 = Vector3(
-                        MathHelper.cos(rotation.yaw.toFloat() * 0.017453292f).toDouble(), 0.0, MathHelper.sin(
+                        cos(rotation.yaw.toFloat() * 0.017453292f).toDouble(), 0.0, sin(
                             rotation.yaw.toFloat() * 0.017453292f
                         ).toDouble()
                     ).normalize()
@@ -410,12 +410,12 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
      * @return 是否有漏斗被通知
      */
     private fun checkPushHopper(pushArea: AxisAlignedBB, holder: InventoryHolder): Boolean {
-        val minX: Int = ChorusMath.floorDouble(pushArea.minX)
-        val minY: Int = ChorusMath.floorDouble(pushArea.minY)
-        val minZ: Int = ChorusMath.floorDouble(pushArea.minZ)
-        val maxX: Int = ChorusMath.ceilDouble(pushArea.maxX)
-        val maxY: Int = ChorusMath.ceilDouble(pushArea.maxY)
-        val maxZ: Int = ChorusMath.ceilDouble(pushArea.maxZ)
+        val minX: Int = floor(pushArea.minX).toInt()
+        val minY: Int = floor(pushArea.minY).toInt()
+        val minZ: Int = floor(pushArea.minZ).toInt()
+        val maxX: Int = ceil(pushArea.maxX)
+        val maxY: Int = ceil(pushArea.maxY)
+        val maxZ: Int = ceil(pushArea.maxZ)
         val tmpBV: BlockVector3 = BlockVector3()
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
@@ -439,12 +439,12 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
      * @return 是否有漏斗被通知
      */
     private fun checkPickupHopper(pickupArea: AxisAlignedBB, holder: InventoryHolder): Boolean {
-        val minX: Int = ChorusMath.floorDouble(pickupArea.minX)
-        val minY: Int = ChorusMath.floorDouble(pickupArea.minY)
-        val minZ: Int = ChorusMath.floorDouble(pickupArea.minZ)
-        val maxX: Int = ChorusMath.ceilDouble(pickupArea.maxX)
-        val maxY: Int = ChorusMath.ceilDouble(pickupArea.maxY)
-        val maxZ: Int = ChorusMath.ceilDouble(pickupArea.maxZ)
+        val minX: Int = floor(pickupArea.minX).toInt()
+        val minY: Int = floor(pickupArea.minY).toInt()
+        val minZ: Int = floor(pickupArea.minZ).toInt()
+        val maxX: Int = ceil(pickupArea.maxX).toInt()
+        val maxY: Int = ceil(pickupArea.maxY).toInt()
+        val maxZ: Int = ceil(pickupArea.maxZ).toInt()
         val tmpBV: BlockVector3 = BlockVector3()
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
@@ -462,8 +462,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
     }
 
     private fun setFalling() {
-        motion.x = ChorusMath.clamp(motion.x, -getMaxSpeed(), getMaxSpeed())
-        motion.z = ChorusMath.clamp(motion.z, -getMaxSpeed(), getMaxSpeed())
+        motion.x = motion.x.coerceIn(-getMaxSpeed(), getMaxSpeed())
+        motion.z = motion.z.coerceIn(-getMaxSpeed(), getMaxSpeed())
 
         if (!hasUpdated) {
             for (linked: Entity in passengers) {
@@ -614,13 +614,13 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             motX *= 0.75
             motZ *= 0.75
         }
-        motX = ChorusMath.clamp(motX, -getMaxSpeed(), getMaxSpeed())
-        motZ = ChorusMath.clamp(motZ, -getMaxSpeed(), getMaxSpeed())
+        motX = motX.coerceIn(-getMaxSpeed(), getMaxSpeed())
+        motZ = motZ.coerceIn(-getMaxSpeed(), getMaxSpeed())
 
         move(motX, 0.0, motZ)
-        if (facing.get(0).get(1) != 0 && MathHelper.floor(position.x) - dx == facing.get(0).get(0) && MathHelper.floor(
+        if (facing[0][1] != 0 && floor(position.x).toInt() - dx == facing[0][0] && floor(
                 position.z
-            ) - dz == facing.get(0).get(2)
+            ).toInt() - dz == facing[0][2]
         ) {
             setPosition(
                 Vector3(
@@ -628,10 +628,9 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                     position.y + facing.get(0).get(1).toDouble(), position.z
                 )
             )
-        } else if (facing.get(1).get(1) != 0 && MathHelper.floor(position.x) - dx == facing.get(1)
-                .get(0) && MathHelper.floor(
+        } else if (facing[1][1] != 0 && floor(position.x).toInt() - dx == facing[1][0] && floor(
                 position.z
-            ) - dz == facing.get(1).get(2)
+            ).toInt() - dz == facing[1][2]
         ) {
             setPosition(
                 Vector3(
@@ -659,8 +658,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             setPosition(Vector3(position.x, vector1.y, position.z))
         }
 
-        val floorX: Int = MathHelper.floor(position.x)
-        val floorZ: Int = MathHelper.floor(position.z)
+        val floorX: Int = floor(position.x).toInt()
+        val floorZ: Int = floor(position.z).toInt()
 
         if (floorX != dx || floorZ != dz) {
             squareOfFame = sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z)
@@ -712,9 +711,9 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         var dx: Double = dx
         var dy: Double = dy
         var dz: Double = dz
-        val checkX: Int = MathHelper.floor(dx)
-        var checkY: Int = MathHelper.floor(dy)
-        val checkZ: Int = MathHelper.floor(dz)
+        val checkX: Int = floor(dx).toInt()
+        var checkY: Int = floor(dy).toInt()
+        val checkZ: Int = floor(dz).toInt()
 
         if (Rail.isRailBlock(level!!.getBlockIdAt(checkX, checkY - 1, checkZ))) {
             --checkY

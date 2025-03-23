@@ -13,6 +13,7 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.*
 import org.chorus.network.protocol.LevelEventPacket
 import java.util.concurrent.*
+import kotlin.math.floor
 
 class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityThrowable(chunk, nbt, shootingEntity) {
@@ -83,8 +84,8 @@ class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTa
             LevelEventPacket.EVENT_SOUND_TELEPORT_ENDERPEARL
         )
         val destination: Vector3 = Vector3(
-            ChorusMath.floorDouble(position.x) + 0.5,
-            position.y + 1, ChorusMath.floorDouble(position.z) + 0.5
+            floor(position.x) + 0.5,
+            position.y + 1, floor(position.z) + 0.5
         )
         shootingEntity!!.teleport(destination, TeleportCause.ENDER_PEARL)
         if (((shootingEntity as Player).gamemode and 0x01) == 0) {

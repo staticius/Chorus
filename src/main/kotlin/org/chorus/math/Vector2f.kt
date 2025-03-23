@@ -1,15 +1,16 @@
 package org.chorus.math
 
+import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 
 class Vector2f @JvmOverloads constructor(@JvmField var x: Float = 0f, @JvmField var y: Float = 0f) {
     val floorX: Int
-        get() = ChorusMath.floorFloat(this.x)
+        get() = floor(this.x).toInt()
 
     val floorY: Int
-        get() = ChorusMath.floorFloat(this.y)
+        get() = floor(this.y).toInt()
 
     fun add(x: Float): Vector2f {
         return this.add(x, 0f)

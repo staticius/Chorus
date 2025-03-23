@@ -7,14 +7,14 @@ package org.chorus.math
  * https://en.wikipedia.org/wiki/Compass_rose#/media/File:Brosen_windrose.svg
  */
 enum class CompassRoseDirection {
-    NORTH(0, -1, BlockFace.NORTH, 0, 8),
-    EAST(1, 0, BlockFace.EAST, 90, 12),
-    SOUTH(0, 1, BlockFace.SOUTH, 180, 0),
-    WEST(-1, 0, BlockFace.WEST, 270, 4),
-    NORTH_EAST(NORTH, EAST, BlockFace.NORTH, 45, 10),
-    NORTH_WEST(NORTH, WEST, BlockFace.WEST, 315, 6),
-    SOUTH_EAST(SOUTH, EAST, BlockFace.EAST, 135, 14),
-    SOUTH_WEST(SOUTH, WEST, BlockFace.SOUTH, 225, 2),
+    NORTH(0, -1, BlockFace.NORTH, 0.0, 8),
+    EAST(1, 0, BlockFace.EAST, 90.0, 12),
+    SOUTH(0, 1, BlockFace.SOUTH, 180.0, 0),
+    WEST(-1, 0, BlockFace.WEST, 270.0, 4),
+    NORTH_EAST(NORTH, EAST, BlockFace.NORTH, 45.0, 10),
+    NORTH_WEST(NORTH, WEST, BlockFace.WEST, 315.0, 6),
+    SOUTH_EAST(SOUTH, EAST, BlockFace.EAST, 135.0, 14),
+    SOUTH_WEST(SOUTH, WEST, BlockFace.SOUTH, 225.0, 2),
     WEST_NORTH_WEST(WEST, NORTH_WEST, BlockFace.WEST, 292.5, 5),
     NORTH_NORTH_WEST(NORTH, NORTH_WEST, BlockFace.NORTH, 337.5, 7),
     NORTH_NORTH_EAST(NORTH, NORTH_EAST, BlockFace.NORTH, 22.5, 9),
@@ -99,8 +99,7 @@ enum class CompassRoseDirection {
             else -> throw IncompatibleClassChangeError("New values was added to the enum")
         }
 
-    @RequiredArgsConstructor
-    enum class Precision {
+    enum class Precision(val directions: Int) {
         /**
          * North, South, East, West.
          */
@@ -115,8 +114,6 @@ enum class CompassRoseDirection {
          * N, E, S, W, NE, NW, SE, SW, WNW, NNW, NNE, ENE, ESE, SSE, SSW, WSW.
          */
         SECONDARY_INTER_CARDINAL(16);
-
-        val directions: Int = 0
     }
 
     companion object {

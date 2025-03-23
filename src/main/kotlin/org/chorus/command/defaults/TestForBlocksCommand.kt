@@ -1,5 +1,6 @@
 package org.chorus.command.defaults
 
+import org.chorus.block.BlockID
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
@@ -8,6 +9,7 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
 import org.chorus.math.*
 import org.chorus.utils.Utils
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
@@ -50,8 +52,7 @@ class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testfo
                 begin.y, end.y
             ), max(begin.z, end.z)
         )
-        val size =
-            ChorusMath.floorDouble((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
+        val size = floor((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
 
         if (size > 16 * 16 * 256 * 8) {
             log.addError("commands.fill.tooManyBlocks", size.toString(), (16 * 16 * 256 * 8).toString())
@@ -81,12 +82,12 @@ class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testfo
 
         val level = begin.level
 
-        var sourceChunkX = ChorusMath.floorDouble(blocksAABB.minX) shr 4
-        var destinationChunkX = ChorusMath.floorDouble(destinationAABB.minX) shr 4
-        while (sourceChunkX <= ChorusMath.floorDouble(blocksAABB.maxX) shr 4) {
-            var sourceChunkZ = ChorusMath.floorDouble(blocksAABB.minZ) shr 4
-            var destinationChunkZ = ChorusMath.floorDouble(destinationAABB.minZ) shr 4
-            while (sourceChunkZ <= ChorusMath.floorDouble(blocksAABB.maxZ) shr 4) {
+        var sourceChunkX = floor(blocksAABB.minX).toInt() shr 4
+        var destinationChunkX = floor(destinationAABB.minX).toInt() shr 4
+        while (sourceChunkX <= floor(blocksAABB.maxX).toInt() shr 4) {
+            var sourceChunkZ = floor(blocksAABB.minZ).toInt() shr 4
+            var destinationChunkZ = floor(destinationAABB.minZ).toInt() shr 4
+            while (sourceChunkZ <= floor(blocksAABB.maxZ).toInt() shr 4) {
                 if (level.getChunkIfLoaded(sourceChunkX, sourceChunkZ) == null) {
                     log.addError("commands.testforblock.outOfWorld").output()
                     return 0

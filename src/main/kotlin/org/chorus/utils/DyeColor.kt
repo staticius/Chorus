@@ -1,6 +1,5 @@
 package org.chorus.utils
 
-import org.chorus.math.MathHelper
 import java.util.*
 
 enum class DyeColor(
@@ -231,11 +230,7 @@ enum class DyeColor(
 
 
         fun getByDyeData(dyeColorMeta: Int): DyeColor? {
-            return BY_DYE_ITEM_DATA[MathHelper.clamp(
-                dyeColorMeta,
-                0,
-                BY_DYE_ITEM_DATA.size - 1
-            )]
+            return BY_DYE_ITEM_DATA[dyeColorMeta.coerceIn(0, BY_DYE_ITEM_DATA.size - 1)]
         }
 
         fun getByWoolData(woolColorMeta: Int): DyeColor {

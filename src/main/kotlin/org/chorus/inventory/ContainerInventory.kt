@@ -4,9 +4,9 @@ import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
-import org.chorus.math.ChorusMath
 import org.chorus.math.Vector3
 import org.chorus.network.protocol.ContainerOpenPacket
+import kotlin.math.floor
 import kotlin.math.min
 
 abstract class ContainerInventory(holder: InventoryHolder, type: InventoryType, size: Int) :
@@ -81,7 +81,7 @@ abstract class ContainerInventory(holder: InventoryHolder, type: InventoryType, 
                 }
 
                 averageCount = averageCount / inv.size.toFloat()
-                return ChorusMath.floorFloat(averageCount * 14) + (if (itemCount > 0) 1 else 0)
+                return floor(averageCount * 14).toInt() + (if (itemCount > 0) 1 else 0)
             }
         }
     }

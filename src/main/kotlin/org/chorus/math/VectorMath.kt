@@ -3,10 +3,7 @@ package org.chorus.math
 import org.chorus.math.BlockFace.AxisDirection
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sin
+import kotlin.math.*
 
 
 object VectorMath {
@@ -36,7 +33,7 @@ object VectorMath {
         var lastXCut = if (from.x < to.x) from else to
         val targetXCut = if (from.x > to.x) from else to
         if (from.x != to.x) {
-            for (xCut in ChorusMath.ceilDouble(min(from.x, to.x))..<ChorusMath.floorDouble(max(from.x, to.x)) + 1) {
+            for (xCut in ceil(min(from.x, to.x)).toInt()..<floor(max(from.x, to.x)).toInt() + 1) {
                 val ratio = (xCut - from.x) / (to.x - from.x)
                 val currentXCut =
                     Vector3(xCut.toDouble(), from.y + (to.y - from.y) * ratio, from.z + (to.z - from.z) * ratio)
@@ -44,7 +41,7 @@ object VectorMath {
                     xCuts.add(FixedVector3(lastXCut, currentXCut))
                 }
                 lastXCut = currentXCut
-                if (xCut + 1 > ChorusMath.floorDouble(max(from.x, to.x))) {
+                if (xCut + 1 > floor(max(from.x, to.x))) {
                     xCuts.add(FixedVector3(lastXCut, targetXCut))
                 }
             }
@@ -58,12 +55,12 @@ object VectorMath {
                 var lastZCut = if (xCut.from.z < xCut.to.z) xCut.from else xCut.to
                 val targetZCut = if (xCut.from.z > xCut.to.z) xCut.from else xCut.to
                 val oldSize = zCuts.size
-                for (zCut in ChorusMath.ceilDouble(
+                for (zCut in ceil(
                     min(
                         xCut.from.z,
                         xCut.to.z
                     )
-                )..<ChorusMath.floorDouble(max(xCut.from.z, xCut.to.z)) + 1) {
+                ).toInt()..<floor(max(xCut.from.z, xCut.to.z)).toInt() + 1) {
                     val ratio = (zCut - xCut.from.z) / (xCut.to.z - xCut.from.z)
                     val currentZCut = Vector3(
                         xCut.from.x + (xCut.to.x - xCut.from.x) * ratio,
@@ -74,7 +71,7 @@ object VectorMath {
                         zCuts.add(FixedVector3(lastZCut, currentZCut))
                     }
                     lastZCut = currentZCut
-                    if (zCut + 1 > ChorusMath.floorDouble(max(xCut.from.z, xCut.to.z))) {
+                    if (zCut + 1 > floor(max(xCut.from.z, xCut.to.z))) {
                         zCuts.add(FixedVector3(lastZCut, targetZCut))
                     }
                 }
@@ -88,12 +85,12 @@ object VectorMath {
                 var lastYCut = if (zCut.from.y < zCut.to.y) zCut.from else zCut.to
                 val targetYCut = if (zCut.from.y > zCut.to.y) zCut.from else zCut.to
                 val oldSize = yCuts.size
-                for (yCut in ChorusMath.ceilDouble(
+                for (yCut in ceil(
                     min(
                         zCut.from.y,
                         zCut.to.y
                     )
-                )..<ChorusMath.floorDouble(max(zCut.from.y, zCut.to.y)) + 1) {
+                ).toInt()..<floor(max(zCut.from.y, zCut.to.y)).toInt() + 1) {
                     val ratio = (yCut - zCut.from.y) / (zCut.to.y - zCut.from.y)
                     val currentYCut = Vector3(
                         zCut.from.x + (zCut.to.x - zCut.from.x) * ratio,
@@ -104,7 +101,7 @@ object VectorMath {
                         yCuts.add(FixedVector3(lastYCut, currentYCut))
                     }
                     lastYCut = currentYCut
-                    if (yCut + 1 > ChorusMath.floorDouble(max(zCut.from.y, zCut.to.y))) {
+                    if (yCut + 1 > floor(max(zCut.from.y, zCut.to.y))) {
                         yCuts.add(FixedVector3(lastYCut, targetYCut))
                     }
                 }

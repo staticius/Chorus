@@ -23,7 +23,6 @@ import org.chorus.item.enchantment.trident.EnchantmentTridentChanneling
 import org.chorus.item.enchantment.trident.EnchantmentTridentImpaling
 import org.chorus.item.enchantment.trident.EnchantmentTridentLoyalty
 import org.chorus.item.enchantment.trident.EnchantmentTridentRiptide
-import org.chorus.math.ChorusMath
 import org.chorus.plugin.InternalPlugin
 import org.chorus.registry.RegisterException
 import org.chorus.registry.Registries
@@ -186,7 +185,7 @@ abstract class Enchantment : Cloneable {
             return this
         }
 
-        this.level = ChorusMath.clamp(level, this.minLevel, this.maxLevel)
+        this.level = level.coerceIn(this.minLevel, this.maxLevel)
 
         return this
     }

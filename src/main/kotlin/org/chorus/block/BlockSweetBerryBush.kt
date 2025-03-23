@@ -10,7 +10,6 @@ import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
-import org.chorus.math.MathHelper.clamp
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
@@ -39,7 +38,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
         fy: Float,
         fz: Float
     ): Boolean {
-        val age: Int = MathHelper.clamp(growth, 0, 3)
+        val age: Int = growth.coerceIn(0, 3)
 
         if (age < 3 && item.isFertilizer) {
             val block = clone() as BlockSweetBerryBush
@@ -159,7 +158,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
         get() = if (growth > 0) this else null
 
     override fun getDrops(item: Item): Array<Item> {
-        val age: Int = MathHelper.clamp(growth, 0, 3)
+        val age: Int = growth.coerceIn(0, 3)
 
         var amount = 1
         if (age > 1) {

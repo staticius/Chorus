@@ -66,7 +66,6 @@ import org.chorus.level.particle.PunchBlockParticle
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
 import org.chorus.math.*
-import org.chorus.math.ChorusMath.round
 import org.chorus.metadata.MetadataValue
 import org.chorus.nbt.tag.*
 import org.chorus.network.connection.BedrockDisconnectReasons
@@ -1519,10 +1518,10 @@ class Player @UsedByReflection constructor(
                 this.address,
                 port.toString(),
                 getId().toString(),
-                this.level!!.getName()!!,
-                round(position.x, 4).toString(),
-                round(position.y, 4).toString(),
-                round(position.z, 4).toString()
+                this.level!!.getName(),
+                round(position.x).toString(),
+                round(position.y).toString(),
+                round(position.z).toString()
             )
         )
     }

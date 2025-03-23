@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.math.ChorusMath.clamp
 import java.util.concurrent.ThreadLocalRandom
 
 abstract class BlockOre(blockState: BlockState) : BlockSolid(blockState) {

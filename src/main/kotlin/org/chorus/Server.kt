@@ -48,7 +48,6 @@ import org.chorus.level.tickingarea.manager.SimpleTickingAreaManager
 import org.chorus.level.tickingarea.manager.TickingAreaManager
 import org.chorus.level.tickingarea.storage.JSONTickingAreaStorage
 import org.chorus.level.updater.block.BlockStateUpdaterBase
-import org.chorus.math.ChorusMath.round
 import org.chorus.metadata.EntityMetadataStore
 import org.chorus.metadata.LevelMetadataStore
 import org.chorus.metadata.PlayerMetadataStore
@@ -119,6 +118,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.round
 import kotlin.system.exitProcess
 
 /**
@@ -640,7 +640,7 @@ class Server internal constructor(
                             log.debug(
                                 "Level \"{}\" took {}ms, setting tick rate to {} ticks",
                                 level.getName(),
-                                round(tickMs.toDouble(), 2),
+                                round(tickMs.toDouble()),
                                 level.tickRate
                             )
                             level.tickRateCounter = level.tickRate
@@ -758,7 +758,7 @@ class Server internal constructor(
         }
 
     val tickUsage: Float
-        get() = round((this.maxUse * 100).toDouble(), 2).toFloat()
+        get() = round((this.maxUse * 100).toDouble()).toFloat()
 
     val tickUsageAverage: Float
         get() {
@@ -772,8 +772,8 @@ class Server internal constructor(
         }
 
         val runtime = Runtime.getRuntime()
-        val used = round((runtime.totalMemory() - runtime.freeMemory()).toDouble() / 1024 / 1024, 2)
-        val max = round((runtime.maxMemory().toDouble()) / 1024 / 1024, 2)
+        val used = round((runtime.totalMemory() - runtime.freeMemory()).toDouble() / 1024 / 1024)
+        val max = round((runtime.maxMemory().toDouble()) / 1024 / 1024)
         val usage = Math.round(used / max * 100).toString() + "%"
         var title = (0x1b.toChar().toString() + "]0;" + this.name + " "
                 + this.nukkitVersion
@@ -781,8 +781,8 @@ class Server internal constructor(
                 + " | Online " + players.size + "/" + this.getMaxPlayers()
                 + " | Memory " + usage)
         if (!Chorus.shortTitle) {
-            title += (" | U " + round((network.upload / 1024 * 1000), 2)
-                    + " D " + round((network.download / 1024 * 1000), 2) + " kB/s")
+            title += (" | U " + round((network.upload / 1024 * 1000))
+                    + " D " + round((network.download / 1024 * 1000)) + " kB/s")
         }
         title += (" | TPS " + this.ticksPerSecond
                 + " | Load " + this.tickUsage + "%" + 0x07.toChar())

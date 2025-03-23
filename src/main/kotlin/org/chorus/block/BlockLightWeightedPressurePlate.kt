@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
-import org.chorus.math.ChorusMath.ceilFloat
+import kotlin.math.ceil
 import kotlin.math.min
 
 class BlockLightWeightedPressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
@@ -35,7 +35,7 @@ class BlockLightWeightedPressurePlate @JvmOverloads constructor(blockstate: Bloc
 
         if (count > 0) {
             val f = min(maxWeight.toDouble(), count.toDouble()).toFloat() / maxWeight.toFloat()
-            return ceilFloat(f * 15.0f)
+            return ceil(f * 15.0f).toInt()
         } else {
             return 0
         }

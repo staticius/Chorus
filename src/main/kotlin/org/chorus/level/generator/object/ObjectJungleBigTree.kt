@@ -3,9 +3,10 @@ package org.chorus.level.generator.`object`
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.BlockVector3
-import org.chorus.math.MathHelper
 import org.chorus.math.Vector3
 import org.chorus.utils.ChorusRandom
+import kotlin.math.cos
+import kotlin.math.sin
 
 class ObjectJungleBigTree(
     baseHeightIn: Int,
@@ -25,12 +26,12 @@ class ObjectJungleBigTree(
             var j: Int = position.y.toInt() + height - 2 - rand.nextInt(4)
             while (j > position.y + height.toDouble() / 2) {
                 val f: Float = rand.nextFloat() * (Math.PI.toFloat() * 2f)
-                var k = (position.x + (0.5f + MathHelper.cos(f) * 4.0f)).toInt()
-                var l = (position.z + (0.5f + MathHelper.sin(f) * 4.0f)).toInt()
+                var k = (position.x + (0.5f + cos(f) * 4.0f)).toInt()
+                var l = (position.z + (0.5f + sin(f) * 4.0f)).toInt()
 
                 for (i1 in 0..4) {
-                    k = (position.x + (1.5f + MathHelper.cos(f) * i1.toFloat())).toInt()
-                    l = (position.z + (1.5f + MathHelper.sin(f) * i1.toFloat())).toInt()
+                    k = (position.x + (1.5f + cos(f) * i1.toFloat())).toInt()
+                    l = (position.z + (1.5f + sin(f) * i1.toFloat())).toInt()
                     level.setBlockStateAt(BlockVector3(k, j - 3 + i1 / 2, l), this.woodMetadata)
                 }
 

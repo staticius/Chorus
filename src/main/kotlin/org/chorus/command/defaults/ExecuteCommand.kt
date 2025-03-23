@@ -314,8 +314,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val pos = list!!.getResult<Vector3>(1)
                 val chainCommand = list.getResult<String>(2)
                 val source = sender.getTransform()
-                val bv =
-                    BVector3.fromPos(pos!!.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z)
+                val bv = BVector3.fromPos(pos!!.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z)
                 source.setPitch(bv.pitch)
                 source.setYaw(bv.yaw)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), source)
@@ -503,7 +502,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     ), max(begin.z, end.z)
                 )
                 val size =
-                    ChorusMath.floorDouble((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
+                    floor((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
 
                 if (size > 16 * 16 * 256 * 8) {
                     log.addError("commands.fill.tooManyBlocks", size.toString(), (16 * 16 * 256 * 8).toString())
@@ -533,12 +532,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
                 val level = begin.level
 
-                var sourceChunkX = ChorusMath.floorDouble(blocksAABB.minX) shr 4
-                var destinationChunkX = ChorusMath.floorDouble(destinationAABB.minX) shr 4
-                while (sourceChunkX <= ChorusMath.floorDouble(blocksAABB.maxX) shr 4) {
-                    var sourceChunkZ = ChorusMath.floorDouble(blocksAABB.minZ) shr 4
-                    var destinationChunkZ = ChorusMath.floorDouble(destinationAABB.minZ) shr 4
-                    while (sourceChunkZ <= ChorusMath.floorDouble(blocksAABB.maxZ) shr 4) {
+                var sourceChunkX = floor(blocksAABB.minX) shr 4
+                var destinationChunkX = floor(destinationAABB.minX) shr 4
+                while (sourceChunkX <= floor(blocksAABB.maxX) shr 4) {
+                    var sourceChunkZ = floor(blocksAABB.minZ) shr 4
+                    var destinationChunkZ = floor(destinationAABB.minZ) shr 4
+                    while (sourceChunkZ <= floor(blocksAABB.maxZ) shr 4) {
                         if (level.getChunkIfLoaded(sourceChunkX, sourceChunkZ) == null) {
                             log.addError("commands.testforblock.outOfWorld").output()
                             return 0

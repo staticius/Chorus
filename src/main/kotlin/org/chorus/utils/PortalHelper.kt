@@ -106,7 +106,7 @@ object PortalHelper : BlockID {
                 dimensionData = DimensionEnum.NETHER.dimensionData
                 return Locator(
                     (current.position.floorX shr 3).toDouble(),
-                    ChorusMath.clamp(current.position.floorY, dimensionData.minHeight, dimensionData.maxHeight)
+                    current.position.floorY.coerceIn(dimensionData.minHeight, dimensionData.maxHeight)
                         .toDouble(),
                     (current.position.floorZ shr 3).toDouble(),
                     defaultNetherLevel
@@ -117,7 +117,7 @@ object PortalHelper : BlockID {
                 dimensionData = DimensionEnum.OVERWORLD.dimensionData
                 return Locator(
                     (current.position.floorX shl 3).toDouble(),
-                    ChorusMath.clamp(current.position.floorY, dimensionData.minHeight, dimensionData.maxHeight)
+                    current.position.floorY.coerceIn(dimensionData.minHeight, dimensionData.maxHeight)
                         .toDouble(),
                     (current.position.floorZ shl 3).toDouble(),
                     Server.instance.defaultLevel!!
