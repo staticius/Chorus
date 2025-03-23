@@ -230,8 +230,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                         item.setCompoundTag(compoundTag)
                         player!!.getInventory().setItemInHand(item)
                         setFillLevel(
-                            clamp(
-                                fillLevel - 2,
+                            (fillLevel - 2).coerceIn(
                                 CommonBlockProperties.FILL_LEVEL.min,
                                 CommonBlockProperties.FILL_LEVEL.max
                             ), player
@@ -253,8 +252,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                         player!!.getInventory().setItemInHand(item)
 
                         setFillLevel(
-                            clamp(
-                                fillLevel - 2,
+                            (fillLevel - 2).coerceIn(
                                 CommonBlockProperties.FILL_LEVEL.min,
                                 CommonBlockProperties.FILL_LEVEL.max
                             ), player
@@ -284,8 +282,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     cauldron.spawnToAll()
 
                     setFillLevel(
-                        clamp(
-                            fillLevel + 2,
+                        (fillLevel + 2).coerceIn(
                             CommonBlockProperties.FILL_LEVEL.min,
                             CommonBlockProperties.FILL_LEVEL.max
                         ), player
@@ -317,8 +314,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     }
 
                     setFillLevel(
-                        clamp(
-                            fillLevel - 2,
+                        (fillLevel - 2).coerceIn(
                             CommonBlockProperties.FILL_LEVEL.min,
                             CommonBlockProperties.FILL_LEVEL.max
                         ), player
@@ -387,8 +383,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     }
 
                     setFillLevel(
-                        clamp(
-                            fillLevel - 2,
+                        (fillLevel - 2).coerceIn(
                             CommonBlockProperties.FILL_LEVEL.min,
                             CommonBlockProperties.FILL_LEVEL.max
                         ), player
