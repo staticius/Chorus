@@ -82,7 +82,7 @@ class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.de
                 log.addSyntaxErrors(0).output()
                 return 0
             }
-            log.addSuccess(gameRule.get().name.lowercase() + " = " + rules.getString(gameRule.get())).output()
+            log.addSuccess(gameRule.get().gameRuleName.lowercase() + " = " + rules.getString(gameRule.get())).output()
             return 1
         }
 
@@ -113,7 +113,7 @@ class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.de
             }
         }
         val str = list.getResult<Any>(1)
-        log.addSuccess("commands.gamerule.success", optionalRule.get().name.lowercase(), str.toString()).output()
+        log.addSuccess("commands.gamerule.success", optionalRule.get().gameRuleName.lowercase(), str.toString()).output()
         return 1
     }
 }

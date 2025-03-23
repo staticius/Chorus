@@ -1,8 +1,5 @@
 package org.chorus.level
 
-/**
- * @author CreeperFace
- */
 enum class Sound(val sound: String) {
     AMBIENT_BASALT_DELTAS_ADDITIONS("ambient.basalt_deltas.additions"),
     AMBIENT_BASALT_DELTAS_LOOP("ambient.basalt_deltas.loop"),

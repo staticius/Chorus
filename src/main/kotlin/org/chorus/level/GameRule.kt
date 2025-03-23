@@ -28,7 +28,7 @@ enum class GameRule {
     SEND_COMMAND_FEEDBACK("sendCommandFeedback"),
     SHOW_COORDINATES("showCoordinates"),
     SHOW_DEATH_MESSAGES("showDeathMessages"),
-    SHOW_DEATH_MESSAGE(SHOW_DEATH_MESSAGES.name, true),
+    SHOW_DEATH_MESSAGE(SHOW_DEATH_MESSAGES.gameRuleName, true),
     SPAWN_RADIUS("spawnRadius"),
     TNT_EXPLODES("tntExplodes"),
     EXPERIMENTAL_GAMEPLAY("experimentalGameplay"),
@@ -40,45 +40,39 @@ enum class GameRule {
     RECIPES_UNLOCK("recipesUnlock"),
     SHOW_DAYS_PLAYED("showDaysPlayed");
 
-    override val name: String
+    val gameRuleName: String
     val isDeprecated: Boolean
 
     constructor(name: String) {
-        this.name = name
+        this.gameRuleName = name
         this.isDeprecated = false
     }
 
     constructor(name: String, deprecated: Boolean) {
-        this.name = name
+        this.gameRuleName = name
         this.isDeprecated = deprecated
     }
 
     companion object {
         val EMPTY_ARRAY: Array<GameRule?> = arrayOfNulls(0)
         fun parseString(gameRuleString: String?): Optional<GameRule> {
-            //Backward compatibility
-            var gameRuleString = gameRuleString
-            if ("showDeathMessage".equalsIgnoreCase(gameRuleString)) {
-                gameRuleString = "showDeathMessages"
+            // Backward compatibility
+            var gameRuleString1 = gameRuleString
+            if ("showDeathMessage".equals(gameRuleString1, true)) {
+                gameRuleString1 = "showDeathMessages"
             }
 
             for (gameRule in entries) {
-                if (gameRule.name.equalsIgnoreCase(gameRuleString)) {
+                if (gameRule.gameRuleName.equals(gameRuleString1, true)) {
                     return Optional.of(gameRule)
                 }
             }
             return Optional.empty()
         }
 
-        val names: Array<String?>
+        val names: Array<String>
             get() {
-                val stringValues =
-                    arrayOfNulls<String>(entries.toTypedArray().length)
-
-                for (i in 0..<entries.toTypedArray().length) {
-                    stringValues[i] = entries[i].name
-                }
-                return stringValues
+                return entries.map { it.gameRuleName }.toTypedArray()
             }
     }
 }

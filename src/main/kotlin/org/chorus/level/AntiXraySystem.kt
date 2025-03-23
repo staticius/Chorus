@@ -7,7 +7,6 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.network.protocol.UpdateBlockPacket
 import org.chorus.registry.Registries
-import java.util.List
 
 class AntiXraySystem(private val level: Level) {
     var fakeOreDenominator: Int = 16
@@ -214,9 +213,9 @@ class AntiXraySystem(private val level: Level) {
     }
 
     fun reinitAntiXray(global: Boolean) {
-        val stone: BlockStone = BlockStone()
-        val netherRack: BlockNetherrack = BlockNetherrack()
-        val deepSlate: BlockDeepslate = BlockDeepslate()
+        val stone = BlockStone()
+        val netherrack = BlockNetherrack()
+        val deepslate = BlockDeepslate()
         run {
             rawFakeOreToPutRuntimeIdMap.clear()
             rawRealOreToReplacedRuntimeIdMap.clear()
@@ -229,21 +228,21 @@ class AntiXraySystem(private val level: Level) {
             addAntiXrayOreBlock(BlockIronOre(), stone)
             addAntiXrayOreBlock(BlockLapisOre(), stone)
             addAntiXrayOreBlock(BlockRedstoneOre(), stone)
-            addAntiXrayOreBlock(BlockQuartzOre(), netherRack)
-            addAntiXrayOreBlock(BlockNetherGoldOre(), netherRack)
-            addAntiXrayOreBlock(BlockAncientDebris(), netherRack)
-            addAntiXrayOreBlock(BlockDeepslateCoalOre(), deepSlate)
-            addAntiXrayOreBlock(BlockDeepslateDiamondOre(), deepSlate)
-            addAntiXrayOreBlock(BlockDeepslateEmeraldOre(), deepSlate)
-            addAntiXrayOreBlock(BlockDeepslateGoldOre(), deepSlate)
-            addAntiXrayOreBlock(BlockDeepslateIronOre(), deepSlate)
-            addAntiXrayOreBlock(BlockDeepslateLapisOre(), deepSlate)
-            addAntiXrayOreBlock(BlockDeepslateRedstoneOre(), deepSlate)
+            addAntiXrayOreBlock(BlockQuartzOre(), netherrack)
+            addAntiXrayOreBlock(BlockNetherGoldOre(), netherrack)
+            addAntiXrayOreBlock(BlockAncientDebris(), netherrack)
+            addAntiXrayOreBlock(BlockDeepslateCoalOre(), deepslate)
+            addAntiXrayOreBlock(BlockDeepslateDiamondOre(), deepslate)
+            addAntiXrayOreBlock(BlockDeepslateEmeraldOre(), deepslate)
+            addAntiXrayOreBlock(BlockDeepslateGoldOre(), deepslate)
+            addAntiXrayOreBlock(BlockDeepslateIronOre(), deepslate)
+            addAntiXrayOreBlock(BlockDeepslateLapisOre(), deepslate)
+            addAntiXrayOreBlock(BlockDeepslateRedstoneOre(), deepslate)
         }
         run {
             addAntiXrayFakeBlock(
                 stone,
-                List.of<Block>(
+                listOf(
                     BlockCoalOre(),
                     BlockDiamondOre(),
                     BlockEmeraldOre(),
@@ -254,12 +253,12 @@ class AntiXraySystem(private val level: Level) {
                 )
             )
             addAntiXrayFakeBlock(
-                netherRack,
-                List.of<Block>(BlockQuartzOre(), BlockNetherGoldOre(), BlockAncientDebris())
+                netherrack,
+                listOf(BlockQuartzOre(), BlockNetherGoldOre(), BlockAncientDebris())
             )
             addAntiXrayFakeBlock(
-                deepSlate,
-                List.of<Block>(
+                deepslate,
+                listOf(
                     BlockDeepslateCoalOre(),
                     BlockDeepslateDiamondOre(),
                     BlockDeepslateEmeraldOre(),

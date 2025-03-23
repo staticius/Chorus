@@ -2,15 +2,16 @@ package org.chorus.level
 
 import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
-import org.chorus.entity.EntityHuman.getName
+
 import org.chorus.nbt.tag.*
+import org.chorus.network.connection.util.HandleByteBuf
 import java.util.*
 import javax.annotation.Nonnull
 import kotlin.collections.set
 
 class GameRules private constructor() {
     @Nonnull
-    private val gameRules = EnumMap<GameRule?, Value<*>>(
+    private val gameRules = EnumMap<GameRule, Value<*>>(
         GameRule::class.java
     )
     var isStale: Boolean = false
@@ -24,34 +25,34 @@ class GameRules private constructor() {
         isStale = false
     }
 
-    fun <V> setGameRule(gameRule: GameRule?, value: V, type: Type) {
+    fun <V : Any> setGameRule(gameRule: GameRule, value: V, type: Type) {
         require(gameRules.containsKey(gameRule)) { "Gamerule does not exist" }
-        (gameRules[gameRule] as Value<V>).setValue(value, type)
+        (gameRules[gameRule]!! as Value<V>).setValue(value, type)
         isStale = true
     }
 
-    fun setGameRule(gameRule: GameRule?, value: Boolean) {
+    fun setGameRule(gameRule: GameRule, value: Boolean) {
         setGameRule(gameRule, value, Type.BOOLEAN)
     }
 
-    fun setGameRule(gameRule: GameRule?, value: Int) {
+    fun setGameRule(gameRule: GameRule, value: Int) {
         setGameRule(gameRule, value, Type.INTEGER)
     }
 
-    fun setGameRule(gameRule: GameRule?, value: Float) {
+    fun setGameRule(gameRule: GameRule, value: Float) {
         setGameRule(gameRule, value, Type.FLOAT)
     }
 
     @Throws(IllegalArgumentException::class)
-    fun setGameRule(gameRule: GameRule?, value: String) {
+    fun setGameRule(gameRule: GameRule, value: String) {
         Preconditions.checkNotNull(gameRule, "gameRule")
         Preconditions.checkNotNull(value, "value")
 
         when (getGameRuleType(gameRule)) {
             Type.BOOLEAN -> {
-                if (value.equalsIgnoreCase("true")) {
+                if (value.equals("true", true)) {
                     setGameRule(gameRule, true)
-                } else if (value.equalsIgnoreCase("false")) {
+                } else if (value.equals("false", true)) {
                     setGameRule(gameRule, false)
                 } else {
                     throw IllegalArgumentException("Was not a boolean")
@@ -60,6 +61,7 @@ class GameRules private constructor() {
 
             Type.INTEGER -> setGameRule(gameRule, Integer.parseInt(value))
             Type.FLOAT -> setGameRule(gameRule, java.lang.Float.parseFloat(value))
+            Type.UNKNOWN -> {}
         }
     }
 
@@ -92,14 +94,14 @@ class GameRules private constructor() {
     }
 
     val rules: Array<GameRule>
-        get() = gameRules.keySet().toArray<GameRule>(GameRule.Companion.EMPTY_ARRAY)
+        get() = gameRules.keys.toTypedArray()
 
     // TODO: This needs to be moved out since there is not a separate compound tag in the LevelDB format for Game Rules.
     fun writeNBT(): CompoundTag {
         val nbt = CompoundTag()
 
-        for (entry in gameRules.entrySet()) {
-            nbt.putString(entry.getKey().getName(), entry.getValue().value.toString())
+        for (entry in gameRules.entries) {
+            nbt.putString(entry.key.gameRuleName, entry.value.value.toString())
         }
 
         return nbt
@@ -107,8 +109,8 @@ class GameRules private constructor() {
 
     fun readNBT(nbt: CompoundTag) {
         Preconditions.checkNotNull(nbt)
-        for (key in nbt.tags.keySet()) {
-            val gameRule: Optional<GameRule> = GameRule.Companion.parseString(key)
+        for (key in nbt.tags.keys) {
+            val gameRule: Optional<GameRule> = GameRule.parseString(key)
             if (!gameRule.isPresent) {
                 continue
             }
@@ -119,8 +121,7 @@ class GameRules private constructor() {
 
     enum class Type {
         UNKNOWN {
-            override fun write(pk: HandleByteBuf, value: Value<*>?) {
-            }
+            override fun write(pk: HandleByteBuf, value: Value<*>) {}
         },
         BOOLEAN {
             override fun write(pk: HandleByteBuf, value: Value<*>) {
@@ -138,20 +139,20 @@ class GameRules private constructor() {
             }
         };
 
-        abstract fun write(pk: HandleByteBuf, value: Value<*>?)
+        abstract fun write(pk: HandleByteBuf, value: Value<*>)
     }
 
     class Value<T>(val type: Type, var value: T) {
-        var isCanBeChanged: Boolean = false
+        private var isCanBeChanged: Boolean = false
 
         fun setValue(value: T, type: Type) {
             if (this.type !== type) {
-                throw UnsupportedOperationException("Rule not of type " + type.name().toLowerCase(Locale.ENGLISH))
+                throw UnsupportedOperationException("Rule not of type " + type.name.lowercase(Locale.ENGLISH))
             }
             this.value = value
         }
 
-        val tag: Tag
+        val tag: Tag<*>
             get() = when (this.type) {
                 Type.BOOLEAN -> ByteTag(if (valueAsBoolean) 1 else 0)
                 Type.INTEGER -> IntTag(valueAsInteger)
@@ -185,7 +186,7 @@ class GameRules private constructor() {
 
         fun write(stream: HandleByteBuf) {
             stream.writeBoolean(this.isCanBeChanged)
-            stream.writeUnsignedVarInt(type.ordinal())
+            stream.writeUnsignedVarInt(type.ordinal)
             type.write(stream, this)
         }
     }
@@ -245,10 +246,6 @@ class GameRules private constructor() {
                     Value(Type.BOOLEAN, false)
                 gameRules.gameRules[GameRule.SHOW_DEATH_MESSAGES] =
                     Value(Type.BOOLEAN, true)
-
-                @Suppress("deprecation") val deprecated = GameRule.SHOW_DEATH_MESSAGE
-                gameRules.gameRules[deprecated] = gameRules.gameRules[GameRule.SHOW_DEATH_MESSAGES]
-
                 gameRules.gameRules[GameRule.SPAWN_RADIUS] =
                     Value(Type.INTEGER, 5)
                 gameRules.gameRules[GameRule.TNT_EXPLODES] =

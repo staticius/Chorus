@@ -3,7 +3,6 @@ package org.chorus.level
 import org.chorus.math.Rotator2
 import org.chorus.math.Vector3
 
-
 class Transform : Locator {
     @JvmField
     var rotation: Rotator2

@@ -1279,7 +1279,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
 
         this.writeUnsignedVarInt(rules.size)
         rules.forEach { (gameRule: GameRule?, value: GameRules.Value<*>?) ->
-            this.writeString(gameRule!!.name.lowercase())
+            this.writeString(gameRule!!.gameRuleName.lowercase())
             value.write(this)
         }
     }
