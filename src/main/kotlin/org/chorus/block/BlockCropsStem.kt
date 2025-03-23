@@ -97,11 +97,7 @@ abstract class BlockCropsStem(blockstate: BlockState) : BlockCrops(blockstate), 
     }
 
     override fun getDrops(item: Item): Array<Item> {
-        val dropChance = dropChances[clamp(
-            growth,
-            0,
-            dropChances.size
-        )]
+        val dropChance = dropChances[growth.coerceIn(0, dropChances.size)]
 
         val dice = ThreadLocalRandom.current().nextDouble()
         var count = 0

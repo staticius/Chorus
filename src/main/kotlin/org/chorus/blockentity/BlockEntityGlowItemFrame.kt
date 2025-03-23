@@ -35,8 +35,8 @@ class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityIte
                     itemTag.putShort("Damage", networkDamage)
                     itemTag.putString("Name", namespacedId)
                 }
-                if (item.isBlock) {
-                    itemTag.putCompound("Block", item.blockUnsafe.blockState.blockStateTag)
+                if (item.isBlock()) {
+                    itemTag.putCompound("Block", item.blockUnsafe!!.blockState.blockStateTag)
                 }
                 tag.putCompound("Item", itemTag)
                     .putByte("ItemRotation", this.itemRotation)

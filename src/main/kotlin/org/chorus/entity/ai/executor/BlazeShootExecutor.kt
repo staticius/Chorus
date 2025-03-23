@@ -48,8 +48,8 @@ class BlazeShootExecutor(
             tick1++
         }
         if (!entity.isEnablePitch()) entity.setEnablePitch(true)
-        if (entity.getBehaviorGroup()!!.getMemoryStorage()!!.isEmpty(memory)) return false
-        val newTarget = entity.getBehaviorGroup()!!.getMemoryStorage()!![memory]
+        if (entity.getBehaviorGroup().getMemoryStorage().isEmpty(memory)) return false
+        val newTarget = entity.getBehaviorGroup().getMemoryStorage()[memory] ?: return false
         if (this.target == null) target = newTarget
 
         if (!target!!.isAlive()) return false

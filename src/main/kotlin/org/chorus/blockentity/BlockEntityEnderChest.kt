@@ -1,23 +1,24 @@
 package org.chorus.blockentity
 
 import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
 class BlockEntityEnderChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt), BlockEntityNameable {
     init {
-        movable = true
+        isMovable = true
     }
 
     override val isBlockEntityValid: Boolean
-        get() = this.block.id == Block.ENDER_CHEST
+        get() = this.block.id == BlockID.ENDER_CHEST
 
     override val spawnCompound: CompoundTag
         get() {
             val spawnCompound = super.spawnCompound
                 .putBoolean("isMovable", this.isMovable)
             if (this.hasName()) {
-                spawnCompound.put("CustomName", namedTag["CustomName"])
+                spawnCompound.put("CustomName", namedTag["CustomName"]!!)
             }
             return spawnCompound
         }

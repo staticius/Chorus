@@ -44,7 +44,7 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState = Companion.p
                 return deactivatePower()
             }
 
-            if (!Server.instance.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings.enableRedstone) {
                 return false
             }
 
@@ -65,7 +65,7 @@ class BlockTarget @JvmOverloads constructor(blockState: BlockState = Companion.p
                 val currentPower = target.activePower
                 target.activePower = 0
                 target.close()
-                if (currentPower != 0 && Server.instance.settings.levelSettings().enableRedstone()) {
+                if (currentPower != 0 && Server.instance.settings.levelSettings.enableRedstone) {
                     updateAroundRedstone()
                 }
                 return true

@@ -35,7 +35,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
     override fun onBreak(item: Item?): Boolean {
         level.setBlock(this.position, get(BlockID.AIR), true, true)
 
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             updateAllAroundRedstone()
         }
         return true
@@ -60,7 +60,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
             return false
         }
 
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             if (shouldBePowered()) {
                 level.scheduleUpdate(this, 1)
             }
@@ -74,7 +74,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            if (!Server.instance.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings.enableRedstone) {
                 return 0
             }
 
@@ -103,7 +103,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
             if (type == Level.BLOCK_UPDATE_NORMAL && !isSupportValid(down())) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
-            } else if (Server.instance.settings.levelSettings().enableRedstone()) {
+            } else if (Server.instance.settings.levelSettings.enableRedstone) {
                 // Redstone event
                 val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
                 Server.instance.pluginManager.callEvent(ev)

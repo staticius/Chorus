@@ -55,7 +55,7 @@ abstract class BlockRedstoneRepeater(blockState: BlockState) : BlockRedstoneDiod
             return false
         }
 
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             if (shouldBePowered()) {
                 level.scheduleUpdate(this, 1)
             }

@@ -92,7 +92,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
         }
 
     override fun onEntityCollide(entity: Entity) {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return
         }
         if (!entity.doesTriggerPressurePlate()) {
@@ -111,7 +111,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
     }
 
     private fun updateHook(scheduleUpdate: Boolean) {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return
         }
 
@@ -138,7 +138,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
     }
 
     override fun onUpdate(type: Int): Int {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return 0
         }
 

@@ -88,7 +88,7 @@ open class BlockTrapdoor  //</editor-fold>
         }
 
     override fun onUpdate(type: Int): Int {
-        if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings().enableRedstone()) {
+        if (type == Level.BLOCK_UPDATE_REDSTONE && Server.instance.settings.levelSettings.enableRedstone) {
             if ((this.isOpen != this.isGettingPower) && !this.manualOverride) {
                 if (this.isOpen != this.isGettingPower) {
                     Server.instance.pluginManager.callEvent(
@@ -142,7 +142,7 @@ open class BlockTrapdoor  //</editor-fold>
             return false
         }
 
-        if (Server.instance.settings.levelSettings().enableRedstone() && !this.isOpen && this.isGettingPower) {
+        if (Server.instance.settings.levelSettings.enableRedstone && !this.isOpen && this.isGettingPower) {
             this.setOpen(null, true)
         }
 

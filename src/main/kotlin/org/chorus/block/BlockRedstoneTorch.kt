@@ -33,7 +33,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
             return false
         }
 
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             if (!checkState()) {
                 updateAllAroundRedstone(blockFace.getOpposite())
             }
@@ -57,7 +57,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
             return false
         }
 
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             updateAllAroundRedstone(blockFace.getOpposite())
         }
         return true
@@ -65,7 +65,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
 
     override fun onUpdate(type: Int): Int {
         if (super.onUpdate(type) == 0) {
-            if (!Server.instance.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings.enableRedstone) {
                 return 0
             }
 

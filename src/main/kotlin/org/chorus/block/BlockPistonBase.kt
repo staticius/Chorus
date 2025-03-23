@@ -111,12 +111,12 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
 
         override fun onUpdate(type: Int): Int {
             if (type == Level.BLOCK_UPDATE_REDSTONE || type == Level.BLOCK_UPDATE_MOVED || type == Level.BLOCK_UPDATE_NORMAL) {
-                if (!Server.instance.settings.levelSettings().enableRedstone()) return 0
+                if (!Server.instance.settings.levelSettings.enableRedstone) return 0
                 level.scheduleUpdate(this, 2)
                 return type
             }
             if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-                if (!Server.instance.settings.levelSettings().enableRedstone()) return 0
+                if (!Server.instance.settings.levelSettings.enableRedstone) return 0
                 // We can't use getOrCreateBlockEntity(), because the update method is called on block place,
                 // before the "real" BlockEntity is set. That means, if we'd use the other method here,
                 // it would create two BlockEntities.
@@ -173,7 +173,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
 
         protected fun checkState(isPowered: Boolean?): Boolean {
             var isPowered = isPowered
-            if (!Server.instance.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings.enableRedstone) {
                 return false
             }
 

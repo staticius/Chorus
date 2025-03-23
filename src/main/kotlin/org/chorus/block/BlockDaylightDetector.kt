@@ -12,6 +12,8 @@ import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.utils.RedstoneComponent
+import kotlin.math.cos
+import kotlin.math.round
 
 open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
     BlockTransparent(state), RedstoneComponent, BlockEntityHolder<BlockEntityDaylightDetector> {
@@ -126,8 +128,8 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
 
             if (i > 0 && !this.isInverted) {
                 val f1 = if (f < Math.PI.toFloat()) 0.0f else (Math.PI.toFloat() * 2f)
-                f = f + (f1 - f) * 0.2f
-                i = Math.round(i.toFloat() * cos(f))
+                f += (f1 - f) * 0.2f
+                i = round(i.toFloat() * cos(f)).toInt()
             }
 
             i = i.coerceIn(0, 15)

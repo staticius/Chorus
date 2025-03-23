@@ -125,7 +125,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
     }
 
     override fun onEntityCollide(entity: Entity) {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return
         }
 

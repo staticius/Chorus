@@ -37,7 +37,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
             return false
         }
 
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             level.setBlock(block.position, this, true)
 
             this.updateSurroundingRedstone(true)
@@ -159,7 +159,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
 
         val pos = this.locator
 
-        if (Server.instance.settings.levelSettings().enableRedstone()) {
+        if (Server.instance.settings.levelSettings.enableRedstone) {
             this.updateSurroundingRedstone(false)
             level.setBlock(this.position, air, true, true)
 
@@ -189,7 +189,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
             return 0
         }
 
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return 0
         }
 

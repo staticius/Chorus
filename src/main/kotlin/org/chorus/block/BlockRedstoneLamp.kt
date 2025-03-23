@@ -45,7 +45,7 @@ open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = 
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            if (!Server.instance.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings.enableRedstone) {
                 return 0
             }
 

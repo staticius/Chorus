@@ -100,7 +100,7 @@ class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState = Co
             return false
         }
 
-        player.addWindow(enchantTable.getInventory())
+        player.addWindow(enchantTable.inventory)
 
         return true
     }

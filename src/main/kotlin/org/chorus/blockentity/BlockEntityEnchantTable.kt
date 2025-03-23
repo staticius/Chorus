@@ -1,7 +1,8 @@
 package org.chorus.blockentity
 
-import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.inventory.EnchantInventory
+import org.chorus.inventory.Inventory
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
@@ -9,7 +10,7 @@ import org.chorus.nbt.tag.CompoundTag
 class BlockEntityEnchantTable(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
     override val isBlockEntityValid: Boolean
-        get() = block.id == Block.ENCHANTING_TABLE
+        get() = block.id == BlockID.ENCHANTING_TABLE
 
     override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Enchanting Table"
@@ -32,13 +33,12 @@ class BlockEntityEnchantTable(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                 .putBoolean("isMovable", false)
 
             if (this.hasName()) {
-                c.put("CustomName", namedTag["CustomName"])
+                c.put("CustomName", namedTag["CustomName"]!!)
             }
 
             return c
         }
 
-    override fun getInventory(): EnchantInventory {
-        return EnchantInventory(this)
-    }
+    override val inventory: Inventory
+        get() = EnchantInventory(this)
 }

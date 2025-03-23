@@ -92,7 +92,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         isHookBroken: Boolean, doUpdateAroundHook: Boolean,
         eventDistance: Int = -1, eventBlock: BlockTripWire? = null
     ) {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return
         }
 

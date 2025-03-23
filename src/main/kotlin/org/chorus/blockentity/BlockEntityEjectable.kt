@@ -11,7 +11,7 @@ import org.chorus.nbt.tag.ListTag
 
 abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
-    protected var inventory: EjectableInventory? = null
+    override var inventory: EjectableInventory? = null
 
 
     protected abstract fun createInventory(): EjectableInventory
@@ -62,7 +62,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
 
         if (item.isNothing || item.getCount() <= 0) {
             if (i >= 0) {
-                namedTag.getList("Items").all.removeAt(i)
+                namedTag.getList("Items").remove(i)
             }
         } else if (i < 0) {
             (namedTag.getList("Items", CompoundTag::class.java)).add(d)
@@ -71,7 +71,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
         }
     }
 
-    override fun getInventory(): EjectableInventory {
+    open fun getInventory(): EjectableInventory {
         return inventory!!
     }
 
@@ -80,7 +80,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
             val c = super.spawnCompound
 
             if (this.hasName()) {
-                c.put("CustomName", namedTag["CustomName"])
+                c.put("CustomName", namedTag["CustomName"]!!)
             }
 
             return c

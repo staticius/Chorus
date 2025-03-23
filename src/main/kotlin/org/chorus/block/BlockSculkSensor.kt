@@ -37,7 +37,7 @@ class BlockSculkSensor @JvmOverloads constructor(blockstate: BlockState = Compan
         override fun onUpdate(type: Int): Int {
             getOrCreateBlockEntity()
             if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-                if (Server.instance.settings.levelSettings().enableRedstone()) {
+                if (Server.instance.settings.levelSettings.enableRedstone) {
                     blockEntity.calPower()
                     this.setPhase(0)
                     updateAroundRedstone()

@@ -29,7 +29,7 @@ class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState =
 
     override fun onUpdate(type: Int): Int {
         if (super.onUpdate(type) == 0) {
-            if (!Server.instance.settings.levelSettings().enableRedstone()) {
+            if (!Server.instance.settings.levelSettings.enableRedstone) {
                 return 0
             }
 

@@ -1,9 +1,6 @@
 package org.chorus.blockentity
 
-import org.chorus.block.Block
-import org.chorus.block.BlockAir
-import org.chorus.block.BlockBedrock
-import org.chorus.block.BlockState
+import org.chorus.block.*
 import org.chorus.entity.Entity
 import org.chorus.entity.projectile.throwable.EntityEnderPearl
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
@@ -17,9 +14,6 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.network.protocol.BlockEventPacket
 import kotlin.math.max
 
-/**
- * @author GoodLucky777
- */
 class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     // NBT data
     var age: Int = 0
@@ -66,7 +60,7 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
 
     override val isBlockEntityValid: Boolean
         get() = level
-            .getBlockIdAt(floorX, floorY, floorZ) === Block.END_GATEWAY
+            .getBlockIdAt(floorX, floorY, floorZ) === BlockID.END_GATEWAY
 
     override fun saveNBT() {
         super.saveNBT()
@@ -112,7 +106,7 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
         if (exitPortal != null) {
             if (entity is EntityEnderPearl) {
                 if (entity.shootingEntity != null) {
-                    entity.shootingEntity.teleport(
+                    entity.shootingEntity!!.teleport(
                         checkTeleport(safeExitPortal.asVector3().asBlockVector3()).add(
                             0.5,
                             0.0,
@@ -144,12 +138,12 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
                 for (j in -1..1) {
                     level.setBlock(
                         Vector3((vector3.x + j).toDouble(), 64.0, (vector3.z + j).toDouble()), Block.get(
-                            Block.END_STONE
+                            BlockID.END_STONE
                         )
                     )
                     level.setBlock(
                         Vector3((vector3.x + j).toDouble(), 64.0, (vector3.z + i).toDouble()), Block.get(
-                            Block.END_STONE
+                            BlockID.END_STONE
                         )
                     )
                 }

@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import org.chorus.Server
 import org.chorus.block.BlockDaylightDetector
 import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
@@ -17,7 +18,7 @@ class BlockEntityDaylightDetector(chunk: IChunk, nbt: CompoundTag) : BlockEntity
         }
 
     override fun onUpdate(): Boolean {
-        if (!Server.instance.settings.levelSettings().enableRedstone()) {
+        if (!Server.instance.settings.levelSettings.enableRedstone) {
             return false
         }
         if (level.currentTick % 20 != 0L) {

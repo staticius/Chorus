@@ -88,7 +88,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
 
         val blockEntity = getOrCreateBlockEntity()
 
-        return player?.addWindow(blockEntity.getInventory()) != -1
+        return player?.addWindow(blockEntity.inventory!!) != -1
     }
 
     override fun canBeActivated(): Boolean {
@@ -104,7 +104,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
             val blockEntity = blockEntity
 
             if (blockEntity != null) {
-                return calculateRedstone(blockEntity.getInventory())
+                return calculateRedstone(blockEntity.inventory)
             }
 
             return super.comparatorInputOverride
