@@ -26,7 +26,7 @@ class BlockStateUpdaterBase : Updater {
                 val statesArray = LEGACY_BLOCK_DATA_MAP[id]
                 if (statesArray != null) {
                     if (`val` >= statesArray.size) `val` = 0
-                    tag!!.putAll(statesArray[`val`.toInt()])
+                    tag.putAll(statesArray[`val`.toInt()])
                 }
             }
             .remove("val")
@@ -36,7 +36,7 @@ class BlockStateUpdaterBase : Updater {
         @JvmField
         val INSTANCE: Updater = BlockStateUpdaterBase()
 
-        val LEGACY_BLOCK_DATA_MAP: MutableMap<String?, Array<Map<String?, Any?>>> = HashMap()
+        val LEGACY_BLOCK_DATA_MAP: MutableMap<String, Array<Map<String, Any?>>> = HashMap()
 
         init {
             val node: JsonObject
@@ -59,8 +59,8 @@ class BlockStateUpdaterBase : Updater {
             }
         }
 
-        private fun convertStateToCompound(node: JsonObject): Map<String?, Any?> {
-            val tag: MutableMap<String?, Any?> = LinkedHashMap()
+        private fun convertStateToCompound(node: JsonObject): Map<String, Any?> {
+            val tag: MutableMap<String, Any?> = LinkedHashMap()
             val iterator: Iterator<Map.Entry<String, JsonElement>> = node.entrySet().iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next()

@@ -2,14 +2,17 @@ package org.chorus.level.generator.`object`
 
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
+import kotlin.math.abs
 
 class ObjectSavannaTree : TreeGenerator() {
     /**
      * The metadata value of the wood to use in tree generation.
      */
     private val TRUNK: BlockState =
-        BlockAcaciaWood.properties.getBlockState<BlockFace.Axis, EnumPropertyType<BlockFace.Axis>>(
+        BlockAcaciaWood.properties.getBlockState(
             CommonBlockProperties.PILLAR_AXIS,
             BlockFace.Axis.Y
         )
@@ -17,31 +20,31 @@ class ObjectSavannaTree : TreeGenerator() {
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val LEAF: BlockState = BlockAcaciaLeaves.properties.getDefaultState()
+    private val LEAF: BlockState = BlockAcaciaLeaves.properties.defaultState
 
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, position: Vector3): Boolean {
+    override fun generate(level: BlockManager, rand: ChorusRandom, position: Vector3): Boolean {
         val i: Int = rand.nextInt(3) + rand.nextInt(3) + 5
         var flag = true
 
-        if (position.getY() >= 1 && position.getY() + i + 1 <= 256) {
-            var j = position.getY().toInt()
-            while (j <= position.getY() + 1 + i) {
+        if (position.y >= 1 && position.y + i + 1 <= 256) {
+            var j = position.y.toInt()
+            while (j <= position.y + 1 + i) {
                 var k = 1
 
-                if (j.toDouble() == position.getY()) {
+                if (j.toDouble() == position.y) {
                     k = 0
                 }
 
-                if (j >= position.getY() + 1 + i - 2) {
+                if (j >= position.y + 1 + i - 2) {
                     k = 2
                 }
 
                 val vector3 = Vector3()
 
-                var l = position.getX().toInt() - k
-                while (l <= position.getX() + k && flag) {
-                    var i1 = position.getZ().toInt() - k
-                    while (i1 <= position.getZ() + k && flag) {
+                var l = position.x.toInt() - k
+                while (l <= position.x + k && flag) {
+                    var i1 = position.z.toInt() - k
+                    while (i1 <= position.z + k && flag) {
                         if (j >= 0 && j < 256) {
                             vector3.setComponents(l.toDouble(), j.toDouble(), i1.toDouble())
                             if (!this.canGrowInto(
@@ -70,7 +73,7 @@ class ObjectSavannaTree : TreeGenerator() {
                 val down = position.down()
                 val block = level.getBlockIdAt(down.floorX, down.floorY, down.floorZ)
 
-                if ((block == GRASS_BLOCK || block == DIRT) && position.getY() < 256 - i - 1) {
+                if ((block == BlockID.GRASS_BLOCK || block == BlockID.DIRT) && position.y < 256 - i - 1) {
                     this.setDirtAt(level, position.down())
                     val face: BlockFace = BlockFace.Plane.HORIZONTAL.random(rand)
                     val k2: Int = i - rand.nextInt(4) - 1
@@ -83,15 +86,15 @@ class ObjectSavannaTree : TreeGenerator() {
                         val i2 = position.floorY + l1
 
                         if (l1 >= k2 && l2 > 0) {
-                            i3 += face.getXOffset()
-                            j1 += face.getZOffset()
+                            i3 += face.xOffset
+                            j1 += face.zOffset
                             --l2
                         }
 
                         val blockpos = Vector3(i3.toDouble(), i2.toDouble(), j1.toDouble())
                         val b = level.getBlockAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
                         val material = b!!.id
-                        if (material == AIR || b is BlockLeaves) {
+                        if (material == BlockID.AIR || b is BlockLeaves) {
                             this.placeLogAt(level, blockpos)
                             k1 = i2
                         }
@@ -101,7 +104,7 @@ class ObjectSavannaTree : TreeGenerator() {
 
                     for (j3 in -3..3) {
                         for (i4 in -3..3) {
-                            if (Math.abs(j3) != 3 || Math.abs(i4) != 3) {
+                            if (abs(j3) != 3 || abs(i4) != 3) {
                                 this.placeLeafAt(level, blockpos2.add(j3.toDouble(), 0.0, i4.toDouble()))
                             }
                         }
@@ -132,13 +135,13 @@ class ObjectSavannaTree : TreeGenerator() {
                         while (l4 < i && k4 > 0) {
                             if (l4 >= 1) {
                                 val j2 = position.floorY + l4
-                                i3 += face1.getXOffset()
-                                j1 += face1.getZOffset()
+                                i3 += face1.xOffset
+                                j1 += face1.zOffset
                                 val blockpos1 = Vector3(i3.toDouble(), j2.toDouble(), j1.toDouble())
                                 val b = level.getBlockAt(blockpos1.floorX, blockpos1.floorY, blockpos1.floorZ)
                                 val material1 = b!!.id
 
-                                if (material1 == AIR || b is BlockLeaves) {
+                                if (material1 == BlockID.AIR || b is BlockLeaves) {
                                     this.placeLogAt(level, blockpos1)
                                     k1 = j2
                                 }
@@ -153,7 +156,7 @@ class ObjectSavannaTree : TreeGenerator() {
 
                             for (i5 in -2..2) {
                                 for (k5 in -2..2) {
-                                    if (Math.abs(i5) != 2 || Math.abs(k5) != 2) {
+                                    if (abs(i5) != 2 || abs(k5) != 2) {
                                         this.placeLeafAt(level, blockpos3.add(i5.toDouble(), 0.0, k5.toDouble()))
                                     }
                                 }
@@ -186,7 +189,7 @@ class ObjectSavannaTree : TreeGenerator() {
     private fun placeLeafAt(worldIn: BlockManager, pos: Vector3) {
         val b = worldIn.getBlockAt(pos.floorX, pos.floorY, pos.floorZ)
         val material = b!!.id
-        if (material == AIR || b is BlockLeaves) {
+        if (material == BlockID.AIR || b is BlockLeaves) {
             worldIn.setBlockStateAt(pos, LEAF)
         }
     }

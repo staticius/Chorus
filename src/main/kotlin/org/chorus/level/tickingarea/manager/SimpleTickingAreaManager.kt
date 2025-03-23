@@ -1,15 +1,15 @@
 package org.chorus.level.tickingarea.manager
 
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.level.*
-import java.util.function.Predicate
+import org.chorus.level.tickingarea.TickingArea
+import org.chorus.level.tickingarea.storage.TickingAreaStorage
 import kotlin.collections.set
 
 class SimpleTickingAreaManager(storage: TickingAreaStorage) : TickingAreaManager(storage) {
-    protected var areaMap: MutableMap<String, TickingArea> = storage.readTickingArea()
+    private var areaMap = storage.readTickingArea()
 
     override fun addTickingArea(area: TickingArea) {
-        areaMap[area.getName()] = area
+        areaMap[area.name] = area
         storage.addTickingArea(area)
     }
 
@@ -31,14 +31,14 @@ class SimpleTickingAreaManager(storage: TickingAreaStorage) : TickingAreaManager
         return areaMap.containsKey(name)
     }
 
-    override val allTickingArea: Set<Any?>
-        get() = HashSet<TickingArea>(areaMap.values())
+    override val allTickingArea: Set<TickingArea>
+        get() = HashSet<TickingArea>(areaMap.values)
 
-    override fun getTickingAreaByChunk(levelName: String, chunkPos: ChunkPos): TickingArea? {
+    override fun getTickingAreaByChunk(levelName: String, chunkPos: TickingArea.ChunkPos): TickingArea? {
         var matchedArea: TickingArea? = null
-        for (area in areaMap.values()) {
-            val matched = area.getLevelName() == levelName && area.getChunks().stream()
-                .anyMatch(Predicate<ChunkPos> { pos: ChunkPos -> pos == chunkPos })
+        for (area in areaMap.values) {
+            val matched = area.levelName == levelName && area.chunks.stream()
+                .anyMatch { it == chunkPos }
             if (matched) {
                 matchedArea = area
                 break
@@ -48,10 +48,10 @@ class SimpleTickingAreaManager(storage: TickingAreaStorage) : TickingAreaManager
     }
 
     override fun getTickingAreaByPos(pos: Locator): TickingArea? {
-        return getTickingAreaByChunk(pos.levelName, ChunkPos(pos.position.chunkX, pos.position.chunkZ))
+        return getTickingAreaByChunk(pos.levelName, TickingArea.ChunkPos(pos.position.chunkX, pos.position.chunkZ))
     }
 
     override fun loadAllTickingArea() {
-        for (area in areaMap.values()) if (!area.loadAllChunk()) removeTickingArea(area.getName())
+        for (area in areaMap.values) if (!area.loadAllChunk()) removeTickingArea(area.name)
     }
 }

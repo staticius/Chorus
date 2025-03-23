@@ -119,21 +119,17 @@ abstract class Particle : Vector3 {
 
 
         fun getParticleIdByName(name: String): Int? {
-            var name = name
-            name = name.uppercase(Locale.ENGLISH)
+            val name1: String = name.uppercase(Locale.ENGLISH)
 
             try {
-                val field = Particle::class.java.getDeclaredField(if (name.startsWith("TYPE_")) name else "TYPE_$name")
+                val field = Particle::class.java.getDeclaredField(if (name1.startsWith("TYPE_")) name1 else "TYPE_$name1")
 
                 val type = field.type
 
                 if (type == Int::class.javaPrimitiveType) {
                     return field.getInt(null)
                 }
-            } catch (e: NoSuchFieldException) {
-                // ignore
-            } catch (e: IllegalAccessException) {
-            }
+            } catch (_: Exception) {}
             return null
         }
 

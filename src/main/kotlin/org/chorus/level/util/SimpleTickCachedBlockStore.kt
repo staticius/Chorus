@@ -19,7 +19,7 @@ class SimpleTickCachedBlockStore(private val level: Level) : TickCachedBlockStor
     }
 
     override fun getFromCachedStore(x: Int, y: Int, z: Int, layer: Int): Block {
-        return tickCachedBlockStore[Level.Companion.localBlockHash(x, y, z, layer, level)]
+        return tickCachedBlockStore[Level.localBlockHash(x, y, z, layer, level)]!!
     }
 
     override fun computeFromCachedStore(
@@ -30,13 +30,13 @@ class SimpleTickCachedBlockStore(private val level: Level) : TickCachedBlockStor
         cachedBlockComputer: CachedBlockComputer
     ): Block {
         return tickCachedBlockStore.computeIfAbsent(
-            Level.Companion.localBlockHash(
+            Level.localBlockHash(
                 x,
                 y,
                 z,
                 layer,
                 level
             )
-        ) { ignore: Int? -> cachedBlockComputer.compute() }
+        ) { cachedBlockComputer.compute() }!!
     }
 }

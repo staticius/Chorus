@@ -5,10 +5,6 @@ import org.chorus.math.Vector3
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelEventPacket
 
-/**
- * @author xtypr
- * @since 2015/11/21
- */
 class ItemBreakParticle(pos: Vector3, item: Item) :
     Particle(pos.x, pos.y, pos.z) {
     private val data: Int

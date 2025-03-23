@@ -3011,7 +3011,7 @@ class Level(
         val chunk = this.getChunk(pos.x shr 4, pos.z shr 4, false)
 
         if (chunk != null) {
-            return chunk.getTile(pos.x and 0x0f, ensureY(pos.y), pos.z and 0x0f)
+            return chunk.getBlockEntity(pos.x and 0x0f, ensureY(pos.y), pos.z and 0x0f)
         }
 
         return null
@@ -3021,7 +3021,7 @@ class Level(
         val chunk = this.getChunkIfLoaded(pos.x.toInt() shr 4, pos.z.toInt() shr 4)
 
         if (chunk != null) {
-            return chunk.getTile(pos.x.toInt() and 0x0f, ensureY(pos.y.toInt()), pos.z.toInt() and 0x0f)
+            return chunk.getBlockEntity(pos.x.toInt() and 0x0f, ensureY(pos.y.toInt()), pos.z.toInt() and 0x0f)
         }
 
         return null

@@ -3,9 +3,6 @@ package org.chorus.level
 import org.chorus.math.MathHelper
 import org.chorus.math.Vector3
 
-/**
- * @author Adam Matthew (Nukkit Project)
- */
 class ChunkPosition(val x: Int, val y: Int, val z: Int) {
     constructor(vec3d: Vector3) : this(MathHelper.floor(vec3d.x), MathHelper.floor(vec3d.y), MathHelper.floor(vec3d.z))
 

@@ -6,7 +6,6 @@ import org.chorus.nbt.tag.CompoundTag
 
 import java.util.function.Consumer
 
-@UtilityClass
 object ItemUpdaters {
     private val CONTEXT: CompoundTagUpdaterContext
     val latestVersion: Int

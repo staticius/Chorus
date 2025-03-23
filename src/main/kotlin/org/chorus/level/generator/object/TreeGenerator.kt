@@ -7,9 +7,9 @@ import java.util.*
 
 abstract class TreeGenerator : ObjectGenerator() {
     /*
-        * returns whether or not a tree can grow into a block
-        * For example, a tree will not grow into stone
-        */
+    * returns whether a tree can grow into a block
+    * For example, a tree will not grow into stone
+    */
     protected fun canGrowInto(id: String): Boolean {
         return when (id) {
             BlockID.AIR,
@@ -53,8 +53,7 @@ abstract class TreeGenerator : ObjectGenerator() {
         }
     }
 
-    fun generateSaplings(level: BlockManager?, random: Random?, pos: Vector3?) {
-    }
+    fun generateSaplings(level: BlockManager?, random: Random?, pos: Vector3?) {}
 
     protected fun setDirtAt(level: BlockManager, pos: BlockVector3) {
         setDirtAt(level, Vector3(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()))

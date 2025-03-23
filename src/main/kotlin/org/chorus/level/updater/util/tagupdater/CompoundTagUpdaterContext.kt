@@ -31,7 +31,7 @@ class CompoundTagUpdaterContext {
 
         val updater = CompoundTagUpdater(version)
         updaters.add(updater)
-        updaters.sort(null)
+        updaters.sort()
         return updater.builder()
     }
 
@@ -50,12 +50,12 @@ class CompoundTagUpdaterContext {
     }
 
     fun updateStates(tag: CompoundTag, version: Int): CompoundTag {
-        val updated: Map<String?, Any?>? = this.updateStates0(tag, version)
+        val updated: Map<String, Any?>? = this.updateStates0(tag, version)
         return if (updated == null) tag else TagUtils.toImmutable(updated)
     }
 
-    private fun updateStates0(tag: CompoundTag, version: Int): MutableMap<String?, Any?>? {
-        var mutableTag: MutableMap<String?, Any?>? = null
+    private fun updateStates0(tag: CompoundTag, version: Int): MutableMap<String, Any?>? {
+        var mutableTag: MutableMap<String, Any?>? = null
         var updated = false
         for (updater in updaters) {
             if (updater.version < version) {
@@ -63,7 +63,7 @@ class CompoundTagUpdaterContext {
             }
 
             if (mutableTag == null) {
-                mutableTag = TagUtils.toMutable(tag) as MutableMap<String?, Any?>
+                mutableTag = TagUtils.toMutable(tag) as MutableMap<String, Any?>
             }
             updated = updated or updater.update(mutableTag)
         }

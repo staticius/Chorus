@@ -3,59 +3,57 @@ package org.chorus.level.updater.util
 import org.chorus.nbt.tag.*
 
 object TagUtils {
-    fun toMutable(immutable: Tag): Any {
+    fun toMutable(immutable: Tag<*>): Any {
         return when (immutable) {
-            -> {
+            is CompoundTag -> {
                 val mutable: MutableMap<String, Any> = LinkedHashMap()
-                t.getTags().forEach { (k: String?, v: Tag?) -> mutable.put(k, toMutable(v)) }
+                immutable.tags.forEach { (k, v) -> mutable[k] = toMutable(v) }
                 mutable
             }
 
-            -> {
+            is ListTag<*> -> {
                 val list: MutableList<Any> = ArrayList()
-                t.getAll().forEach(({ v: Any -> list.add(toMutable(v)) }))
+                immutable.all.forEach(({ v -> list.add(toMutable(v)) }))
                 list
             }
 
-            -> (t.parseValue() and 0xff).toByte()
-            -> (t.parseValue() and 0xffff).toShort()
+            is ByteTag -> (immutable.parseValue() and 0xff).toByte()
+            is ShortTag -> (immutable.parseValue().toInt() and 0xffff).toShort()
             else -> immutable.parseValue<Any>()
         }
     }
 
-    fun toImmutable(mutable: Any): Tag {
+    fun toImmutable(mutable: Any?): Tag<*> {
         return when (mutable) {
-            -> {
+            is Map<*, *> -> {
                 val compoundTag = CompoundTag()
-                map.forEach { k: Any?, v: Any ->
+                mutable.forEach { k, v ->
                     if (k is String) {
                         compoundTag.put(k, toImmutable(v))
                     }
                 }
                 compoundTag
             }
-
-            -> {
-                val listTag = ListTag<Tag>()
-                list.forEach { v: Any -> listTag.add(toImmutable(v)) }
+            is List<*> -> {
+                val listTag = ListTag<Tag<*>>()
+                mutable.forEach { listTag.add(toImmutable(it)) }
                 listTag
             }
-
             else -> byClass(mutable)
         }
     }
 
-    private fun byClass(mutable: Any): Tag {
+    private fun byClass(mutable: Any?): Tag<*> {
         return when (mutable) {
-            -> IntTag(v)
-            -> ByteTag(v.toInt())
-            -> ShortTag(v.toInt())
-            -> LongTag(v)
-            -> FloatTag(v)
-            -> DoubleTag(v)
-            -> StringTag(v)
-            -> ByteArrayTag(v)
-            -> IntArrayTag(v)
+            is Int -> IntTag(mutable)
+            is Byte -> ByteTag(mutable.toInt())
+            is Short -> ShortTag(mutable.toInt())
+            is Long -> LongTag(mutable)
+            is Float -> FloatTag(mutable)
+            is Double -> DoubleTag(mutable)
+            is String -> StringTag(mutable)
+            is ByteArray -> ByteArrayTag(mutable)
+            is IntArray -> IntArrayTag(mutable)
             null -> EndTag()
             else -> throw IllegalArgumentException("unhandled error in TagUtils")
         }

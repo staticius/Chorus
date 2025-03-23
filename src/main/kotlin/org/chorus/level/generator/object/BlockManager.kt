@@ -168,7 +168,7 @@ class BlockManager(val level: Level) {
                 key.reObfuscateChunk()
             }
         for (p in batchs.values) {
-            Server.broadcastPacket(level.players.values(), p)
+            Server.broadcastPacket(level.players.values, p)
         }
         places.clear()
         caches.clear()

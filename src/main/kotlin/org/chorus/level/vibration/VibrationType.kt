@@ -46,7 +46,7 @@ enum class VibrationType(frequency: Int) {
     LIGHTNING_STRIKE(15),
     PISTON_EXTEND(15);
 
-    val identifier: String = "minecraft:" + this.name().toLowerCase(Locale.ENGLISH)
+    val identifier: String = "minecraft:" + this.name.lowercase(Locale.ENGLISH)
     val frequency: Int
 
     init {

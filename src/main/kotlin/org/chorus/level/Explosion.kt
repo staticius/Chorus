@@ -3,40 +3,42 @@ package org.chorus.level
 import it.unimi.dsi.fastutil.longs.LongArraySet
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntity.onUpdate
+import org.chorus.blockentity.BlockEntityShulkerBox
 import org.chorus.entity.Entity
-import org.chorus.entity.Entity.onUpdate
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.block.BlockEvent.getBlock
-import org.chorus.event.block.BlockExplodeEvent.affectedBlocks
-import org.chorus.event.entity.EntityExplodeEvent.blockList
+import org.chorus.entity.EntityExplosive
+import org.chorus.entity.item.EntityItem
+import org.chorus.entity.item.EntityXpOrb
+import org.chorus.event.block.BlockExplodeEvent
+import org.chorus.event.block.BlockUpdateEvent
+import org.chorus.event.entity.EntityDamageByBlockEvent
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
+import org.chorus.event.entity.EntityExplodeEvent
 import org.chorus.inventory.InventoryHolder
-import org.chorus.item.Item.getBlock
-import org.chorus.math.ChorusMath
-import org.chorus.math.Vector3
+import org.chorus.item.ItemBlock
+import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventPacket
 import org.chorus.utils.*
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.collections.LinkedHashSet
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 class Explosion protected constructor(private val source: Locator, size: Double, private val what: Any) {
-    private val RAYS = 16 //Rays
+    private val RAYS = 16
     private val STEP_LEN = 0.3
 
-    private val level = source.getLevel()
-    private val size = Math.max(size, 0.0)
+    private val level = source.level
+    private val size = size.coerceAtLeast(0.0)
 
     @JvmField
     var fireChance: Double = 0.0
 
-    private var affectedBlocks: MutableSet<Block>? = null
-    private var fireIgnitions: Set<Block>? = null
+    private var affectedBlocks: MutableSet<Block> = LinkedHashSet()
+    private var fireIgnitions: MutableSet<Block> = LinkedHashSet()
     private var doesDamage = true
 
     constructor(center: Locator, size: Double, what: Entity) : this(center, size, what as Any)
@@ -74,10 +76,10 @@ class Explosion protected constructor(private val source: Locator, size: Double,
             val entity = what as Entity
             val blockLayer0 = level.getBlock(entity.position.floor())
             val blockLayer1 = level.getBlock(entity.position.floor(), 1)
-            if (BlockID.FLOWING_WATER == blockLayer0!!.id
-                || BlockID.WATER == blockLayer0!!.id
-                || BlockID.FLOWING_WATER == blockLayer1!!.id
-                || BlockID.WATER == blockLayer1!!.id
+            if (BlockID.FLOWING_WATER == blockLayer0.id
+                || BlockID.WATER == blockLayer0.id
+                || BlockID.FLOWING_WATER == blockLayer1.id
+                || BlockID.WATER == blockLayer1.id
             ) {
                 this.doesDamage = false
                 return true
@@ -88,14 +90,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
             return false
         }
 
-        if (affectedBlocks == null) {
-            affectedBlocks = LinkedHashSet()
-        }
-
         val incendiary = fireChance > 0
-        if (incendiary && fireIgnitions == null) {
-            fireIgnitions = LinkedHashSet()
-        }
 
         val random = ThreadLocalRandom.current()
 
@@ -135,17 +130,17 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                             }
                             val block = level.getBlock(vBlock)
 
-                            if (!block!!.isAir) {
-                                val layer1 = block!!.getLevelBlockAtLayer(1)
-                                val resistance = Math.max(block!!.resistance, layer1.resistance)
+                            if (!block.isAir) {
+                                val layer1 = block.getLevelBlockAtLayer(1)
+                                val resistance = block.resistance.coerceAtLeast(layer1.resistance)
                                 blastForce -= (resistance / 5 + 0.3) * this.STEP_LEN
                                 if (blastForce > 0) {
-                                    if (affectedBlocks!!.add(block!!)) {
+                                    if (affectedBlocks.add(block)) {
                                         if (incendiary && random.nextDouble() <= fireChance) {
                                             fireIgnitions.add(block)
                                         }
                                         if (!layer1.isAir) {
-                                            affectedBlocks!!.add(layer1)
+                                            affectedBlocks.add(layer1)
                                         }
                                     }
                                 }
@@ -179,38 +174,34 @@ class Explosion protected constructor(private val source: Locator, size: Double,
         )).floor()
         var yield = (1.0 / this.size) * 100.0
 
-        if (affectedBlocks == null) {
-            affectedBlocks = LinkedHashSet()
-        }
-
         if (what is Entity) {
             val affectedBlocksList: List<Block> = ArrayList(this.affectedBlocks)
             val ev: EntityExplodeEvent = EntityExplodeEvent(
                 what,
                 this.source, affectedBlocksList, yield
             )
-            ev.setIgnitions(if (fireIgnitions == null) LinkedHashSet<E>(0) else fireIgnitions)
+            ev.ignitions = (fireIgnitions)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
             } else {
                 yield = ev.yield
-                affectedBlocks!!.clear()
-                affectedBlocks!!.addAll(ev.blockList)
-                fireIgnitions = ev.ignitions
+                affectedBlocks.clear()
+                affectedBlocks.addAll(ev.blockList)
+                fireIgnitions = ev.ignitions.toMutableSet()
             }
         } else if (what is Block) {
             val ev: BlockExplodeEvent = BlockExplodeEvent(
                 what, this.source, this.affectedBlocks,
-                if (fireIgnitions == null) LinkedHashSet<Block>(0) else fireIgnitions, yield, this.fireChance
+                fireIgnitions, yield, this.fireChance
             )
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 return false
             } else {
                 yield = ev.yield
-                affectedBlocks = ev.affectedBlocks
-                fireIgnitions = ev.ignitions
+                affectedBlocks = ev.affectedBlocks.toMutableSet()
+                fireIgnitions = ev.ignitions.toMutableSet()
             }
         }
 
@@ -224,7 +215,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
 
         val explosionBB: AxisAlignedBB = SimpleAxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ)
         val list = level.getNearbyEntities(explosionBB, if (what is Entity) what else null)
-        for (entity in list!!) {
+        for (entity in list) {
             val distance = entity.position.distance(this.source.position) / explosionSize
 
             if (distance <= 1) {
@@ -237,12 +228,28 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 val entityDamageAmount = ((impact * impact + impact).toFloat() / 2.0 * 7.0 * force + 1.0).toFloat()
                 val damage = if (this.doesDamage) entityDamageAmount else 0f
 
-                if (what is Entity) {
-                    entity.attack(EntityDamageByEntityEvent(what, entity, DamageCause.ENTITY_EXPLOSION, damage))
-                } else if (what is Block) {
-                    entity.attack(EntityDamageByBlockEvent(what, entity, DamageCause.BLOCK_EXPLOSION, damage))
-                } else {
-                    entity.attack(EntityDamageEvent(entity, DamageCause.BLOCK_EXPLOSION, damage))
+                when (what) {
+                    is Entity -> {
+                        entity.attack(EntityDamageByEntityEvent(
+                            what,
+                            entity,
+                            EntityDamageEvent.DamageCause.ENTITY_EXPLOSION,
+                            damage
+                        ))
+                    }
+
+                    is Block -> {
+                        entity.attack(EntityDamageByBlockEvent(
+                            what,
+                            entity,
+                            EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
+                            damage
+                        ))
+                    }
+
+                    else -> {
+                        entity.attack(EntityDamageEvent(entity, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, damage))
+                    }
                 }
 
                 if (!(entity is EntityItem || entity is EntityXpOrb)) {
@@ -256,21 +263,21 @@ class Explosion protected constructor(private val source: Locator, size: Double,
 
         val air: ItemBlock = ItemBlock(Block.get(BlockID.AIR))
         var container: BlockEntity?
-        val smokePositions = if (affectedBlocks!!.isEmpty()) Collections.emptyList() else ObjectArrayList<Vector3>()
+        val smokePositions = if (affectedBlocks.isEmpty()) Collections.emptyList() else ObjectArrayList<Vector3>()
         val random = ThreadLocalRandom.current()
 
-        for (block in affectedBlocks!!) {
+        for (block in affectedBlocks) {
             if (block is BlockTNT) {
                 block.prime(random.nextInt(10, 31), if (what is Entity) what else null)
-            } else if ((block.getLevel().getBlockEntity(block.position).also { container = it }) is InventoryHolder) {
+            } else if ((block.level.getBlockEntity(block.position).also { container = it }) is InventoryHolder) {
                 if (container is BlockEntityShulkerBox) {
                     level.dropItem(block.position.add(0.5, 0.5, 0.5), block.toItem())
-                    inventoryHolder.inventory.clearAll()
+                    (container as InventoryHolder).inventory!!.clearAll()
                 } else {
-                    for (drop in inventoryHolder.inventory.contents.values()) {
+                    for (drop in (container as InventoryHolder).inventory!!.contents.values) {
                         level.dropItem(block.position.add(0.5, 0.5, 0.5), drop)
                     }
-                    inventoryHolder.inventory.clearAll()
+                    (container as InventoryHolder).inventory!!.clearAll()
                 }
             } else if (random.nextDouble() * 100 < yield) {
                 for (drop in block.getDrops(air)) {
@@ -300,18 +307,18 @@ class Explosion protected constructor(private val source: Locator, size: Double,
             for (side in BlockFace.entries) {
                 val sideBlock = pos.getSide(side)
                 val index = Hash.hashBlock(sideBlock.x.toInt(), sideBlock.y.toInt(), sideBlock.z.toInt())
-                if (!affectedBlocks!!.contains(sideBlock) && !updateBlocks.contains(index)) {
+                if (!affectedBlocks.contains(level.getBlock(sideBlock)) && !updateBlocks.contains(index)) {
                     var ev: BlockUpdateEvent = BlockUpdateEvent(level.getBlock(sideBlock))
                     Server.instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
-                        ev.getBlock().onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
+                        ev.getBlock()?.onUpdate(Level.BLOCK_UPDATE_NORMAL)
                     }
                     val layer1 = level.getBlock(sideBlock, 1)
-                    if (!layer1!!.isAir) {
+                    if (!layer1.isAir) {
                         ev = BlockUpdateEvent(layer1)
                         Server.instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
-                            ev.getBlock().onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
+                            ev.getBlock()?.onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
                         }
                     }
                     updateBlocks.add(index)
@@ -320,16 +327,14 @@ class Explosion protected constructor(private val source: Locator, size: Double,
             send.add(Vector3(block.position.x - source.x, block.position.y - source.y, block.position.z - source.z))
         }
 
-        if (fireIgnitions != null) {
-            for (remainingPos in fireIgnitions!!) {
-                val toIgnite = level.getBlock(remainingPos.position)
-                if (toIgnite!!.isAir && toIgnite!!.down().isSolid(BlockFace.UP)) {
-                    level.setBlock(toIgnite!!.position, Block.get(BlockID.FIRE))
-                }
+        for (remainingPos in fireIgnitions) {
+            val toIgnite = level.getBlock(remainingPos.position)
+            if (toIgnite.isAir && toIgnite.down().isSolid(BlockFace.UP)) {
+                level.setBlock(toIgnite.position, Block.get(BlockID.FIRE))
             }
         }
 
-        val count: Int = smokePositions.size()
+        val count: Int = smokePositions.size
         val data = CompoundTag(Object2ObjectOpenHashMap(count, 0.999999f))
             .putFloat("originX", this.source.position.x.toFloat())
             .putFloat("originY", this.source.position.y.toFloat())

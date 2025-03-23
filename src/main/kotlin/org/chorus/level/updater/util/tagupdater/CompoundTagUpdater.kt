@@ -5,12 +5,12 @@ import java.util.function.Predicate
 import java.util.regex.Pattern
 import kotlin.collections.set
 
-class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
+class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater> {
     private val builder: Builder = Builder()
     private val filters: MutableList<Predicate<CompoundTagEditHelper>> = ArrayList()
     private val updaters: MutableList<Consumer<CompoundTagEditHelper>> = ArrayList()
 
-    fun update(tag: MutableMap<String?, Any?>?): Boolean {
+    fun update(tag: MutableMap<String, Any?>): Boolean {
         val filterHelper = CompoundTagEditHelper(tag)
         for (filter in this.filters) {
             if (!filter.test(filterHelper)) {
@@ -33,14 +33,14 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
         return Integer.compare(this.version, o.version)
     }
 
-    private class TagNamePredicate(private val name: String) : Predicate<CompoundTagEditHelper?> {
+    private class TagNamePredicate(private val name: String) : Predicate<CompoundTagEditHelper> {
         override fun test(helper: CompoundTagEditHelper): Boolean {
             val tag = helper.tag
             return tag is Map<*, *> && (tag as Map<String?, Any?>).containsKey(name)
         }
     }
 
-    private class TryAddPredicate(private val name: String) : Predicate<CompoundTagEditHelper?> {
+    private class TryAddPredicate(private val name: String) : Predicate<CompoundTagEditHelper> {
         override fun test(helper: CompoundTagEditHelper): Boolean {
             val tag = helper.tag
             return tag is Map<*, *> && !(tag as Map<String?, Any?>).containsKey(name)
@@ -48,7 +48,7 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
     }
 
     inner class Builder {
-        fun addByte(name: String?, value: Byte): Builder {
+        fun addByte(name: String, value: Byte): Builder {
             filters.add(COMPOUND_FILTER)
             updaters.add(Consumer { helper: CompoundTagEditHelper ->
                 helper.compoundTag[name] = value
@@ -64,7 +64,7 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
             return this
         }
 
-        fun addInt(name: String?, value: Int): Builder {
+        fun addInt(name: String, value: Int): Builder {
             filters.add(COMPOUND_FILTER)
             updaters.add(Consumer { helper: CompoundTagEditHelper ->
                 helper.compoundTag[name] = value
@@ -72,7 +72,7 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
             return this
         }
 
-        fun addCompound(name: String?): Builder {
+        fun addCompound(name: String): Builder {
             filters.add(COMPOUND_FILTER)
             updaters.add(Consumer { helper: CompoundTagEditHelper ->
                 helper.compoundTag[name] = LinkedHashMap<Any, Any>()
@@ -99,7 +99,7 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
         fun match(name: String?, match: String, regex: Boolean): Builder {
             val pattern = if (regex) Pattern.compile(match) else null
 
-            filters.add(Predicate<CompoundTagEditHelper> { helper: CompoundTagEditHelper ->
+            filters.add(Predicate<CompoundTagEditHelper> add@ { helper: CompoundTagEditHelper ->
                 val tag = helper.tag as? Map<*, *> ?: return@add false
                 val compound = tag as Map<String?, Any>
                 if (!compound.containsKey(name)) {
@@ -108,7 +108,7 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
 
                 var success = match.isEmpty()
                 if (success) {
-                    return@add success
+                    return@add true
                 }
 
                 val matchTag = compound[name]
@@ -123,7 +123,7 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
         }
 
         fun popVisit(): Builder {
-            filters.add(Predicate<CompoundTagEditHelper> { helper: CompoundTagEditHelper ->
+            filters.add(Predicate<CompoundTagEditHelper> add@{ helper: CompoundTagEditHelper ->
                 if (helper.canPopChild()) {
                     helper.popChild()
                     return@add true
@@ -142,11 +142,11 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
             return this
         }
 
-        fun rename(from: String, to: String?): Builder {
+        fun rename(from: String, to: String): Builder {
             filters.add(TagNamePredicate(from))
             updaters.add(Consumer { helper: CompoundTagEditHelper ->
                 val tag = helper.compoundTag
-                tag!![to] = tag.remove(from)
+                tag[to] = tag.remove(from)
             })
             return this
         }
@@ -167,7 +167,7 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
         }
 
         fun visit(name: String?): Builder {
-            filters.add(Predicate<CompoundTagEditHelper> { helper: CompoundTagEditHelper ->
+            filters.add(Predicate<CompoundTagEditHelper> add@{ helper: CompoundTagEditHelper ->
                 val tag = helper.tag
                 if (tag is Map<*, *> && (tag as Map<String?, Any?>).containsKey(name)) {
                     helper.pushChild(name)
@@ -189,18 +189,13 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater?> {
             Predicate { helper: CompoundTagEditHelper -> helper.tag is Map<*, *> }
 
         private fun getTagValue(tag: Any?): String {
-            if (tag == null) {
-                return "END"
-            } else if (tag is Byte || tag is Short || tag is Int || tag is Long ||
-                tag is Float || tag is Double
-            ) {
-                return tag.toString()
-            } else if (tag is String) {
-                return tag
-            } else if (tag is Boolean) {
-                return if (tag === java.lang.Boolean.TRUE) "1" else "0"
+            return when (tag) {
+                null -> "END"
+                is Byte, is Short, is Int, is Long, is Float, is Double -> tag.toString()
+                is String -> tag
+                is Boolean -> if (tag == true) "1" else "0"
+                else -> throw IllegalArgumentException("Invalid tag " + tag.javaClass.simpleName)
             }
-            throw IllegalArgumentException("Invalid tag " + tag.javaClass.simpleName)
         }
     }
 }

@@ -168,7 +168,7 @@ interface IChunk {
 
     val blockEntities: Map<Long, BlockEntity>
 
-    fun getTile(x: Int, y: Int, z: Int): BlockEntity?
+    fun getBlockEntity(x: Int, y: Int, z: Int): BlockEntity?
 
     @ApiStatus.Experimental
     fun batchProcess(unsafeChunkConsumer: Consumer<UnsafeChunk>)
@@ -220,15 +220,6 @@ interface IChunk {
     fun reObfuscateChunk() {
     }
 
-    val isOverWorld: Boolean
-        get() = provider.isOverWorld
-
-    val isNether: Boolean
-        get() = provider.isNether
-
-    val isTheEnd: Boolean
-        get() = provider.isTheEnd
-
     val isGenerated: Boolean
         get() = chunkState.ordinal >= ChunkState.GENERATED.ordinal
 
@@ -256,7 +247,7 @@ interface IChunk {
          * @return the int
          */
         fun index(x: Int, y: Int, z: Int): Int {
-            //The bedrock chunk order is xzy,the chunk order of java version is yzx
+            // Chunk Order; Bedrock: XZY, Java: YZX
             return (x shl 8) + (z shl 4) + y
         }
 

@@ -7,7 +7,6 @@ import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
 
 import kotlin.collections.set
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class BlockStateUpdater_1_16_0 : Updater {
     override fun registerUpdaters(context: CompoundTagUpdaterContext) {
         context.addUpdater(1, 16, 0)

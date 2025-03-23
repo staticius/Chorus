@@ -8,7 +8,6 @@ import org.chorus.level.format.IChunk
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-
 abstract class Generator(val dimensionData: DimensionData, val settings: Map<String?, Any>?) :
     BlockID {
     protected val start: GenerateStage
@@ -18,7 +17,7 @@ abstract class Generator(val dimensionData: DimensionData, val settings: Map<Str
     init {
         val builder = GenerateStage.Builder()
         stages(builder)
-        this.start = builder.start
+        this.start = builder.start!!
         this.end = builder.end
     }
 
@@ -31,18 +30,18 @@ abstract class Generator(val dimensionData: DimensionData, val settings: Map<Str
     abstract val name: String
 
     @JvmOverloads
-    fun syncGenerate(chunk: IChunk?, to: String? = end!!.name()): IChunk {
+    fun syncGenerate(chunk: IChunk, to: String? = end!!.name()): IChunk {
         val context = ChunkGenerateContext(this, level, chunk)
         var future = CompletableFuture.runAsync(
             {
                 start.apply(context)
             }, start.executor
         )
-        var now = start
-        while ((now.nextStage.also { now = it }) != null) {
-            val finalNow = now
+        var now: GenerateStage? = start
+        while ((now?.nextStage.also { now = it }) != null) {
+            val finalNow = now!!
             if (finalNow.name() == to) {
-                future = future.thenRunAsync({ finalNow.apply(context) }, now.executor)
+                future = future.thenRunAsync({ finalNow.apply(context) }, finalNow.executor)
                 break
             }
             future = future.thenRunAsync({ finalNow.apply(context) }, finalNow.executor)
@@ -51,15 +50,15 @@ abstract class Generator(val dimensionData: DimensionData, val settings: Map<Str
         return context.chunk
     }
 
-    fun asyncGenerate(chunk: IChunk?, callback: Consumer<ChunkGenerateContext>) {
+    fun asyncGenerate(chunk: IChunk, callback: Consumer<ChunkGenerateContext>) {
         asyncGenerate(chunk, end!!.name(), callback)
     }
 
     @JvmOverloads
     fun asyncGenerate(
-        chunk: IChunk?,
+        chunk: IChunk,
         to: String? = end!!.name(),
-        callback: Consumer<ChunkGenerateContext> = Consumer { c: ChunkGenerateContext? -> }
+        callback: Consumer<ChunkGenerateContext> = Consumer { }
     ) {
         Preconditions.checkNotNull(to)
         val context = ChunkGenerateContext(this, level, chunk)

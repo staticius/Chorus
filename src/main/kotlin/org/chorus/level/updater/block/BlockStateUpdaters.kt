@@ -6,7 +6,6 @@ import org.chorus.nbt.tag.CompoundTag
 import java.util.function.Consumer
 import kotlin.collections.set
 
-@UtilityClass
 object BlockStateUpdaters {
     private val CONTEXT: CompoundTagUpdaterContext
     val latestVersion: Int

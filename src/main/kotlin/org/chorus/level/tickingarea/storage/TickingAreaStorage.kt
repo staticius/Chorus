@@ -1,15 +1,17 @@
 package org.chorus.level.tickingarea.storage
 
+import org.chorus.level.tickingarea.TickingArea
+
 interface TickingAreaStorage {
     fun addTickingArea(area: TickingArea)
 
-    fun addTickingArea(vararg areas: TickingArea?) {
+    fun addTickingArea(vararg areas: TickingArea) {
         for (area in areas) {
             addTickingArea(area)
         }
     }
 
-    fun readTickingArea(): Map<String, TickingArea>
+    fun readTickingArea(): MutableMap<String, TickingArea>
 
     fun removeTickingArea(name: String)
 

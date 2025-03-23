@@ -5,13 +5,8 @@ import org.chorus.math.Vector3
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelEventPacket
 
-/**
- * @author xtypr
- * @since 2015/11/21
- */
-class DestroyBlockParticle(pos: Vector3, block: Block) :
-    Particle(pos.x, pos.y, pos.z) {
-    protected val data: Int
+class DestroyBlockParticle(pos: Vector3, block: Block) : Particle(pos.x, pos.y, pos.z) {
+    private val data: Int
 
     init {
         this.data = block.runtimeId

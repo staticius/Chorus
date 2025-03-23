@@ -4,10 +4,6 @@ import org.chorus.math.Vector3
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelEventPacket
 
-/**
- * @author CreeperFace
- * @since 15.4.2017
- */
 class BoneMealParticle(pos: Vector3) : Particle(pos.x, pos.y, pos.z) {
     override fun encode(): Array<DataPacket> {
         val pk = LevelEventPacket()

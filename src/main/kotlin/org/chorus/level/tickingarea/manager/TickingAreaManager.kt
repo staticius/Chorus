@@ -1,9 +1,10 @@
 package org.chorus.level.tickingarea.manager
 
 import org.chorus.level.*
+import org.chorus.level.tickingarea.TickingArea
+import org.chorus.level.tickingarea.storage.TickingAreaStorage
 
-abstract class TickingAreaManager(storage: TickingAreaStorage) {
-    protected var storage: TickingAreaStorage = storage
+abstract class TickingAreaManager(protected var storage: TickingAreaStorage) {
 
     abstract fun addTickingArea(area: TickingArea)
 
@@ -15,9 +16,9 @@ abstract class TickingAreaManager(storage: TickingAreaStorage) {
 
     abstract fun containTickingArea(name: String): Boolean
 
-    abstract val allTickingArea: Set<Any?>
+    abstract val allTickingArea: Set<TickingArea>
 
-    abstract fun getTickingAreaByChunk(levelName: String, chunkPos: ChunkPos): TickingArea?
+    abstract fun getTickingAreaByChunk(levelName: String, chunkPos: TickingArea.ChunkPos): TickingArea?
 
     abstract fun getTickingAreaByPos(pos: Locator): TickingArea?
 

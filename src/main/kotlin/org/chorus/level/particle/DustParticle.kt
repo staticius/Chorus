@@ -3,12 +3,7 @@ package org.chorus.level.particle
 import org.chorus.math.Vector3
 import org.chorus.utils.BlockColor
 
-/**
- * @author xtypr
- * @since 2015/11/21
- */
-class DustParticle @JvmOverloads constructor(pos: Vector3, r: Int, g: Int, b: Int, a: Int = 255) :
-    GenericParticle(
+class DustParticle @JvmOverloads constructor(pos: Vector3, r: Int, g: Int, b: Int, a: Int = 255) : GenericParticle(
         pos,
         TYPE_FALLING_DUST,
         ((a and 0xff) shl 24) or ((r and 0xff) shl 16) or ((g and 0xff) shl 8) or (b and 0xff)

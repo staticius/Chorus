@@ -2,7 +2,6 @@ package org.chorus.level.vibration
 
 import org.chorus.math.Vector3
 
-//nothing
 /**
  * @param initiator The object which cause the vibration (can be an instance of Block, Entity ...)
  * @param source    The vibration source pos

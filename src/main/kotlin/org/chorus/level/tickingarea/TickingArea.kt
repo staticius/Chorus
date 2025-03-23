@@ -1,18 +1,19 @@
 package org.chorus.level.tickingarea
 
 import org.chorus.Server
+import org.chorus.level.tickingarea.manager.TickingAreaManager
 import java.util.concurrent.ThreadLocalRandom
 
 class TickingArea(name: String, levelName: String, vararg chunks: ChunkPos) {
-    var name: String? = null
-        protected set
+    var name: String
+        private set
     var levelName: String
-        protected set
-    var chunks: Set<ChunkPos> = HashSet()
-        protected set
+        private set
+    var chunks: MutableSet<ChunkPos> = HashSet()
+        private set
 
     init {
-        if (!name.isEmpty()) this.name = name
+        if (name.isNotEmpty()) this.name = name
         else {
             var randomName = randomName()
             val manager: TickingAreaManager = Server.instance.tickingAreaManager
@@ -33,12 +34,12 @@ class TickingArea(name: String, levelName: String, vararg chunks: ChunkPos) {
         if (!Server.instance.loadLevel(levelName)) return false
         val level = Server.instance.getLevelByName(levelName)
         for (pos in chunks) {
-            level.loadChunk(pos.x, pos.z)
+            level?.loadChunk(pos.x, pos.z)
         }
         return true
     }
 
-    //two entry [0] => min, [1] => max
+    // two entry [0] => min, [1] => max
     fun minAndMaxChunkPos(): List<ChunkPos> {
         val min = ChunkPos(Integer.MAX_VALUE, Integer.MAX_VALUE)
         val max = ChunkPos(Integer.MIN_VALUE, Integer.MIN_VALUE)
@@ -48,7 +49,7 @@ class TickingArea(name: String, levelName: String, vararg chunks: ChunkPos) {
             if (pos.x > max.x) max.x = pos.x
             if (pos.z > max.z) max.z = pos.z
         }
-        return java.util.List.of(min, max)
+        return listOf(min, max)
     }
 
     private fun randomName(): String {
@@ -56,8 +57,8 @@ class TickingArea(name: String, levelName: String, vararg chunks: ChunkPos) {
     }
 
     class ChunkPos(var x: Int, var z: Int) {
-        override fun equals(obj: Any?): Boolean {
-            if (obj is ChunkPos) return obj.x == this.x && obj.z == this.z
+        override fun equals(other: Any?): Boolean {
+            if (other is ChunkPos) return other.x == this.x && other.z == this.z
             return false
         }
 

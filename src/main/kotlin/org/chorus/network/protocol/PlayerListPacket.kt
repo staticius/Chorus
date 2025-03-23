@@ -12,7 +12,7 @@ class PlayerListPacket : DataPacket() {
     var type: Byte = 0
 
     @JvmField
-    var entries: Array<Entry?> = Entry.EMPTY_ARRAY
+    var entries: Array<Entry> = emptyArray()
 
     override fun decode(byteBuf: HandleByteBuf) {
     }
@@ -38,7 +38,7 @@ class PlayerListPacket : DataPacket() {
 
             for (entry in this.entries) {
                 byteBuf.writeBoolean(
-                    entry.trustedSkin || Server.instance.settings.playerSettings().forceSkinTrusted()
+                    entry.trustedSkin || Server.instance.settings.playerSettings.forceSkinTrusted
                 )
             }
         } else {
@@ -54,8 +54,8 @@ class PlayerListPacket : DataPacket() {
 
         var entityId: Long = 0
         var name: String = ""
-        var xboxUserId: String = "" //TODO
-        var platformChatId: String = "" //TODO
+        var xboxUserId: String = "" // TODO
+        var platformChatId: String = "" // TODO
         var buildPlatform: Int = -1
         var skin: Skin? = null
         var isTeacher: Boolean = false
@@ -76,14 +76,10 @@ class PlayerListPacket : DataPacket() {
             this.trustedSkin = skin.isTrusted()
             this.xboxUserId = xboxUserId ?: ""
         }
-
-        companion object {
-            val EMPTY_ARRAY: Array<Entry?> = arrayOfNulls(0)
-        }
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAYER_LIST_PACKET
+        return ProtocolInfo.PLAYER_LIST_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

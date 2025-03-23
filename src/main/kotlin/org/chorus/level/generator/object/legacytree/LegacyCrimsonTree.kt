@@ -6,8 +6,8 @@ import org.chorus.block.BlockState
 
 class LegacyCrimsonTree : LegacyNetherTree() {
     override val trunkBlockState: BlockState
-        get() = BlockCrimsonStem.properties.getDefaultState()
+        get() = BlockCrimsonStem.properties.defaultState
 
     override val leafBlockState: BlockState
-        get() = BlockNetherWartBlock.properties.getDefaultState()
+        get() = BlockNetherWartBlock.properties.defaultState
 }

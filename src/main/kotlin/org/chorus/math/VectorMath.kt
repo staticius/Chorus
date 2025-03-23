@@ -29,7 +29,7 @@ object VectorMath {
         return BlockFace.Companion.fromAxis(if (direction < 0) AxisDirection.NEGATIVE else AxisDirection.POSITIVE, axis)
     }
 
-    fun getPassByVector3(from: Vector3, to: Vector3): List<Vector3?> {
+    fun getPassByVector3(from: Vector3, to: Vector3): List<Vector3> {
         require(from != to) { "from == to" }
 
         val xCuts = LinkedList<FixedVector3>()

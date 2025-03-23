@@ -2,15 +2,17 @@ package org.chorus.level.generator.`object`
 
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.utils.ChorusRandom
+import kotlin.math.abs
 
 class ObjectPaleOakTree : TreeGenerator() {
     /**
      * The metadata value of the wood to use in tree generation.
      */
     private val PALE_OAK_LOG: BlockState =
-        BlockPaleOakLog.properties.getBlockState<BlockFace.Axis, EnumPropertyType<BlockFace.Axis>>(
+        BlockPaleOakLog.properties.getBlockState(
             CommonBlockProperties.PILLAR_AXIS,
             BlockFace.Axis.Y
         )
@@ -18,12 +20,12 @@ class ObjectPaleOakTree : TreeGenerator() {
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val PALE_OAK_LEAVES: BlockState = BlockPaleOakLeaves.properties.getDefaultState()
+    private val PALE_OAK_LEAVES: BlockState = BlockPaleOakLeaves.properties.defaultState
 
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, position: Vector3): Boolean {
+    override fun generate(level: BlockManager, rand: ChorusRandom, position: Vector3): Boolean {
         val i: Int = rand.nextInt(3) + rand.nextInt(2) + 6
         val j = position.floorX
         val k = position.floorY
@@ -33,7 +35,7 @@ class ObjectPaleOakTree : TreeGenerator() {
             val blockpos = position.down()
             val block = level.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
 
-            if (block != GRASS_BLOCK && block != DIRT) {
+            if (block != BlockID.GRASS_BLOCK && block != BlockID.DIRT) {
                 return false
             } else if (!this.placeTreeOfHeight(level, position, i)) {
                 return false
@@ -51,8 +53,8 @@ class ObjectPaleOakTree : TreeGenerator() {
 
                 for (j2 in 0..<i) {
                     if (j2 >= i1 && j1 > 0) {
-                        k1 += enumfacing.getXOffset()
-                        l1 += enumfacing.getZOffset()
+                        k1 += enumfacing.xOffset
+                        l1 += enumfacing.zOffset
                         --j1
                     }
 
@@ -95,9 +97,9 @@ class ObjectPaleOakTree : TreeGenerator() {
 
                 for (j3 in -3..4) {
                     for (i4 in -3..4) {
-                        if ((j3 != -3 || i4 != -3) && (j3 != -3 || i4 != 4) && (j3 != 4 || i4 != -3) && (j3 != 4 || i4 != 4) && (Math.abs(
+                        if ((j3 != -3 || i4 != -3) && (j3 != -3 || i4 != 4) && (j3 != 4 || i4 != -3) && (j3 != 4 || i4 != 4) && (abs(
                                 j3
-                            ) < 3 || Math.abs(i4) < 3)
+                            ) < 3 || abs(i4) < 3)
                         ) {
                             this.placeLeafAt(level, k1 + j3, i2, l1 + i4)
                         }
@@ -124,7 +126,7 @@ class ObjectPaleOakTree : TreeGenerator() {
 
                             for (k5 in -2..2) {
                                 for (l5 in -2..2) {
-                                    if (Math.abs(k5) != 2 || Math.abs(l5) != 2) {
+                                    if (abs(k5) != 2 || abs(l5) != 2) {
                                         this.placeLeafAt(level, k1 + k3 + k5, i2 - 1, l1 + j4 + l5)
                                     }
                                 }
@@ -179,7 +181,7 @@ class ObjectPaleOakTree : TreeGenerator() {
     private fun placeLeafAt(worldIn: BlockManager, x: Int, y: Int, z: Int) {
         val blockpos = Vector3(x.toDouble(), y.toDouble(), z.toDouble())
         val material = worldIn.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
-        if (material == AIR) {
+        if (material == BlockID.AIR) {
             worldIn.setBlockStateAt(blockpos, PALE_OAK_LEAVES)
             val random = ChorusRandom(worldIn.seed + x + y + z)
             if (random.nextInt(2) == 0) {
@@ -190,14 +192,14 @@ class ObjectPaleOakTree : TreeGenerator() {
                         if (i == depth - 1) {
                             worldIn.setBlockStateAt(
                                 pos,
-                                BlockPaleHangingMoss.properties.getBlockState<Boolean, BooleanPropertyType>(
+                                BlockPaleHangingMoss.properties.getBlockState(
                                     CommonBlockProperties.TIP,
                                     true
                                 )
                             )
                         } else worldIn.setBlockStateAt(
                             pos,
-                            BlockPaleHangingMoss.properties.getBlockState<Boolean, BooleanPropertyType>(
+                            BlockPaleHangingMoss.properties.getBlockState(
                                 CommonBlockProperties.TIP,
                                 false
                             )

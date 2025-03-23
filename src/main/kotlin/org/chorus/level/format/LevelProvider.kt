@@ -10,9 +10,9 @@ import org.chorus.math.Vector3
 interface LevelProvider {
     val dimensionData: DimensionData
 
-    fun requestChunkData(x: Int, z: Int): Pair<ByteArray, Int>
-
     val path: String
+
+    fun requestChunkData(x: Int, z: Int): Pair<ByteArray, Int>
 
     fun getLoadedChunk(x: Int, z: Int): IChunk?
 
@@ -79,16 +79,7 @@ interface LevelProvider {
     fun setGameRules(rules: GameRules)
 
     val maximumLayer: Int
-        get() = 1 //two layer 0,1
-
-    val isOverWorld: Boolean
-        get() = dimensionData.dimensionId == 0
-
-    val isNether: Boolean
-        get() = dimensionData.dimensionId == 1
-
-    val isTheEnd: Boolean
-        get() = dimensionData.dimensionId == 2
+        get() = 1 // Vanilla has 2 layers, 0 (Normal), and 1 (Water)
 
     companion object {
         const val ORDER_YZX: Byte = 0

@@ -17,7 +17,7 @@ class TreeMapCompoundTag : CompoundTag {
     override fun parseValue(): MutableMap<String, Any> {
         val value: MutableMap<String, Any> = TreeMap()
         for ((key, value1) in tags) {
-            value[key] = value1.parseValue()
+            value[key] = value1.parseValue<Any>()
         }
         return value
     }

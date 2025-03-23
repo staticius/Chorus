@@ -4,7 +4,7 @@ import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import com.google.gson.reflect.TypeToken
 import org.chorus.Server
-import org.chorus.entity.EntityHuman.getName
+import org.chorus.level.tickingarea.TickingArea
 import org.chorus.utils.JSONUtils
 import java.io.*
 import java.nio.file.Files
@@ -15,13 +15,13 @@ import kotlin.collections.set
 
 class JSONTickingAreaStorage(path: String) : TickingAreaStorage {
     /**
-     * 存储常加载区域的根目录
+     * Store the root directory of the frequently loaded area
      */
-    protected var filePath: Path = Paths.get(path)
+    private var filePath: Path = Paths.get(path)
 
     //               row     column
     //            LevelName AreaName
-    protected var areaMap: Table<String?, String, TickingArea> = HashBasedTable.create<String?, String, TickingArea>()
+    private var areaMap: Table<String, String, TickingArea> = HashBasedTable.create()
 
     init {
         try {
@@ -34,29 +34,29 @@ class JSONTickingAreaStorage(path: String) : TickingAreaStorage {
     }
 
     override fun addTickingArea(area: TickingArea) {
-        areaMap.put(area.getLevelName(), area.getName(), area)
+        areaMap.put(area.levelName, area.name, area)
         save()
     }
 
-    override fun addTickingArea(vararg areas: TickingArea?) {
+    override fun addTickingArea(vararg areas: TickingArea) {
         for (each in areas) {
-            areaMap.put(each.getLevelName(), each.getName(), each)
+            areaMap.put(each.levelName, each.name, each)
         }
         save()
     }
 
-    override fun readTickingArea(): Map<String, TickingArea> {
+    override fun readTickingArea(): MutableMap<String, TickingArea> {
         val rootDir = File(filePath.toString())
-        val aMap: HashMap<String, TickingArea> = HashMap<String, TickingArea>()
+        val aMap: MutableMap<String, TickingArea> = HashMap<String, TickingArea>()
         for (each in Objects.requireNonNull<Array<File>>(rootDir.listFiles())) {
             val jsonFile = File(each, "tickingarea.json")
             if (jsonFile.exists()) {
                 try {
                     FileReader(jsonFile).use { fr ->
-                        val areas: Set<TickingArea> = JSONUtils.from<HashSet<TickingArea>>(fr, type)
+                        val areas: Set<TickingArea> = JSONUtils.from(fr, type)
                         for (area in areas) {
-                            areaMap.put(area.getLevelName(), area.getName(), area)
-                            aMap[area.getName()] = area
+                            areaMap.put(area.levelName, area.name, area)
+                            aMap[area.name] = area
                         }
                     }
                 } catch (e: IOException) {
@@ -83,12 +83,12 @@ class JSONTickingAreaStorage(path: String) : TickingAreaStorage {
 
     private fun save() {
         try {
-            for (level in Server.instance.levels.values()) {
+            for (level in Server.instance.levels.values) {
                 if (areaMap.containsRow(level.name)) {
                     Files.writeString(
                         Path.of(filePath.toString(), level.folderName, "tickingarea.json"),
                         JSONUtils.toPretty<Array<Any>>(
-                            areaMap.rowMap()[level.name]!!.values().toArray()
+                            areaMap.rowMap()[level.name]!!.values.toTypedArray()
                         )
                     )
                 } else {
@@ -101,7 +101,6 @@ class JSONTickingAreaStorage(path: String) : TickingAreaStorage {
     }
 
     companion object {
-        private val type: TypeToken<HashSet<TickingArea>> = object : TypeToken<HashSet<TickingArea?>?>() {
-        }
+        private val type = object : TypeToken<HashSet<TickingArea>>() {}
     }
 }

@@ -2,9 +2,11 @@ package org.chorus.level.generator.`object`
 
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
 import org.chorus.utils.ChorusRandom
+import kotlin.math.abs
 
 class ObjectSmallPaleOakTree(
     /**
@@ -21,9 +23,9 @@ class ObjectSmallPaleOakTree(
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val metaLeaves: BlockState = BlockPaleOakLeaves.properties.getDefaultState()
+    private val metaLeaves: BlockState = BlockPaleOakLeaves.properties.defaultState
 
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, vectorPosition: Vector3): Boolean {
+    override fun generate(level: BlockManager, rand: ChorusRandom, vectorPosition: Vector3): Boolean {
         val position = BlockVector3(vectorPosition.floorX, vectorPosition.floorY, vectorPosition.floorZ)
 
         var i: Int = rand.nextInt(maxTreeHeight) + this.minTreeHeight
@@ -68,7 +70,7 @@ class ObjectSmallPaleOakTree(
                 val down = position.down()
                 val block = level.getBlockIdAt(down.x, down.y, down.z)
 
-                if ((block == GRASS_BLOCK || block == DIRT || block == FARMLAND) && position.y < level.maxHeight - i - 1) {
+                if ((block == BlockID.GRASS_BLOCK || block == BlockID.DIRT || block == BlockID.FARMLAND) && position.y < level.maxHeight - i - 1) {
                     this.setDirtAt(level, down)
 
                     //Add leaves
@@ -83,11 +85,11 @@ class ObjectSmallPaleOakTree(
                             for (i2 in position.z - j1..position.z + j1) {
                                 val j2 = i2 - position.z
 
-                                if (Math.abs(l1) != j1 || Math.abs(j2) != j1 || rand.nextInt(2) != 0 && i4 != 0) {
+                                if (abs(l1) != j1 || abs(j2) != j1 || rand.nextInt(2) != 0 && i4 != 0) {
                                     val blockpos = BlockVector3(k1, i3, i2)
                                     val id = level.getBlockAt(blockpos.x, blockpos.y, blockpos.z)
 
-                                    if (id!!.id == AIR || id is BlockLeaves || id.id == PALE_HANGING_MOSS) {
+                                    if (id!!.id == BlockID.AIR || id is BlockLeaves || id.id == BlockID.PALE_HANGING_MOSS) {
                                         level.setBlockStateAt(blockpos, metaLeaves)
                                         val random = ChorusRandom(level.seed + blockpos.x + blockpos.y + blockpos.z)
                                         if (random.nextInt(2) == 0) {
@@ -103,14 +105,14 @@ class ObjectSmallPaleOakTree(
                                                     if (i == depth - 1) {
                                                         level.setBlockStateAt(
                                                             pos,
-                                                            BlockPaleHangingMoss.properties.getBlockState<Boolean, BooleanPropertyType>(
+                                                            BlockPaleHangingMoss.properties.getBlockState(
                                                                 CommonBlockProperties.TIP,
                                                                 true
                                                             )
                                                         )
                                                     } else level.setBlockStateAt(
                                                         pos,
-                                                        BlockPaleHangingMoss.properties.getBlockState<Boolean, BooleanPropertyType>(
+                                                        BlockPaleHangingMoss.properties.getBlockState(
                                                             CommonBlockProperties.TIP,
                                                             false
                                                         )

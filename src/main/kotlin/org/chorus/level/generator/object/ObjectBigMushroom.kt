@@ -52,7 +52,7 @@ class ObjectBigMushroom : ObjectGenerator {
                 while (l <= position.x + k && flag) {
                     var i1 = position.floorZ - k
                     while (i1 <= position.z + k && flag) {
-                        if (j >= 0 && j < 256) {
+                        if (j in 0..255) {
                             pos.setComponents(l.toDouble(), j.toDouble(), i1.toDouble())
                             val material = level.getBlockAt(pos.floorX, pos.floorY, pos.floorZ)
 

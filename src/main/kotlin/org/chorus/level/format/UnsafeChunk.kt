@@ -254,8 +254,8 @@ class UnsafeChunk(private val chunk: Chunk) {
     val entities: Map<Long, Entity>
         get() = chunk.entities
 
-    fun getTile(x: Int, y: Int, z: Int): BlockEntity? {
-        return chunk.getTile(x, y, z)
+    fun getBlockEntity(x: Int, y: Int, z: Int): BlockEntity? {
+        return chunk.getBlockEntity(x, y, z)
     }
 
     fun hasChanged(): Boolean {
@@ -268,15 +268,6 @@ class UnsafeChunk(private val chunk: Chunk) {
     fun setPosition(x: Int, z: Int) {
         chunk.setPosition(x, z)
     }
-
-    val isOverWorld: Boolean
-        get() = chunk.isOverWorld
-
-    val isNether: Boolean
-        get() = chunk.isNether
-
-    val isTheEnd: Boolean
-        get() = chunk.isTheEnd
 
     val isGenerated: Boolean
         get() = chunk.isGenerated

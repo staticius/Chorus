@@ -5,11 +5,6 @@ import org.chorus.level.DimensionEnum
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-/**
- * Allay Project 8/22/2023
- *
- * @author Cool_Loong | Cloudburst Server
- */
 enum class LevelDBKeyUtil(encoded: Char) {
     /**
      * Biome IDs are written as 8-bit integers. No longer written since v1.18.0.
@@ -84,7 +79,7 @@ enum class LevelDBKeyUtil(encoded: Char) {
     HARDCODED_SPAWNERS('9'),
 
     @Deprecated("Moved to 44 in v1.16.100")
-    LEGACY_VERSION('v'),
+    LEGACY_VERSION('v');
 
     private val encoded = encoded.code.toByte()
 

@@ -2,15 +2,21 @@ package org.chorus.level.vibration
 
 import org.chorus.Server
 import org.chorus.entity.Entity
+import org.chorus.event.level.VibrationArriveEvent
+import org.chorus.event.level.VibrationOccurEvent
 import org.chorus.level.*
 import org.chorus.math.Vector3
+import org.chorus.math.Vector3f
+import org.chorus.math.VectorMath
 import org.chorus.nbt.tag.CompoundTag
+import org.chorus.network.protocol.LevelEventGenericPacket
 import org.chorus.network.protocol.LevelEventPacket
 import org.chorus.plugin.InternalPlugin
-import java.util.function.Predicate
+import org.chorus.tags.BlockTags
+import kotlin.math.pow
 
 class SimpleVibrationManager(protected var level: Level) : VibrationManager {
-    protected var listeners: Set<VibrationListener> = CopyOnWriteArraySet<VibrationListener>()
+    protected var listeners: MutableSet<VibrationListener> = mutableSetOf()
 
     override fun callVibrationEvent(event: VibrationEvent) {
         val vibrationOccurPluginEvent: VibrationOccurEvent = VibrationOccurEvent(event)
@@ -19,8 +25,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
             return
         }
         for (listener in listeners) {
-            if ((listener.listenerVector != event.source) && listener.listenerVector.distanceSquared(event.source) <= Math.pow(
-                    listener.listenRange,
+            if ((listener.listenerVector != event.source) && listener.listenerVector.distanceSquared(event.source) <= listener.listenRange.pow(
                     2.0
                 ) && canVibrationArrive(
                     level,
@@ -64,7 +69,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
         packet.eventId = LevelEventPacket.EVENT_PARTICLE_VIBRATION_SIGNAL
         packet.tag = tag
         //todo: 只对在视野范围内的玩家发包
-        Server.broadcastPacket(level.players.values(), packet)
+        Server.broadcastPacket(level.players.values, packet)
     }
 
     protected fun createVec3fTag(vec3f: Vector3f): CompoundTag {
@@ -82,12 +87,12 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
             .putInt("attachPos", 3) //todo: check the use of this value :)
     }
 
-    protected fun canVibrationArrive(level: Level, from: Vector3, to: Vector3?): Boolean {
+    protected fun canVibrationArrive(level: Level, from: Vector3, to: Vector3): Boolean {
         return VectorMath.getPassByVector3(from, to)
             .stream()
-            .noneMatch(Predicate<Vector3> { vec: Vector3 ->
+            .noneMatch { vec ->
                 level.getTickCachedBlock(vec)
                     .`is`(BlockTags.PNX_WOOL)
-            })
+            }
     }
 }

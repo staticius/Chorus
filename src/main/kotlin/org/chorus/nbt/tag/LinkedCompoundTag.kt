@@ -16,7 +16,7 @@ class LinkedCompoundTag @JvmOverloads constructor(tags: MutableMap<String, Tag<*
         )
 
         for ((key, value1) in tags) {
-            value[key] = value1.parseValue()
+            value[key] = value1.parseValue<Any>()
         }
 
         return value

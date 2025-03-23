@@ -4,26 +4,8 @@ package org.chorus.level.updater.util
 /**
  * Stores updates from ints to Strings.
  */
-class OrderedUpdater(oldProperty: String?, newProperty: String?, offset: Int, vararg order: String) {
 
-    private val oldProperty: String?
-
-
-    private val newProperty: String?
-
-    private val order: Array<String>
-    private val offset: Int
-
-    /**
-     * [.OrderedUpdater] with an offset of 0 (old values start at 0)
-     */
-    constructor(oldProperty: String?, newProperty: String?, vararg order: String?) : this(
-        oldProperty,
-        newProperty,
-        0,
-        *order
-    )
-
+class OrderedUpdater
     /**
      * Creates an OrderedUpdater whose values are provided by the ordered array.
      *
@@ -33,12 +15,23 @@ class OrderedUpdater(oldProperty: String?, newProperty: String?, offset: Int, va
      * If the first element has an old value of n, then the offset is n.
      * @param order       an array of ordered values
      */
+    constructor(val oldProperty: String, val newProperty: String, private val offset: Int, vararg order: String) {
+    private val order: Array<String>
+
+    /**
+     * [.OrderedUpdater] with an offset of 0 (old values start at 0)
+     */
+    constructor(oldProperty: String, newProperty: String, vararg order: String) : this(
+        oldProperty,
+        newProperty,
+        0,
+        *order
+    )
+
+
     init {
-        require(order.size >= 1) { "empty order array" }
-        this.oldProperty = oldProperty
-        this.newProperty = newProperty
-        this.offset = offset
-        this.order = order
+        require(order.isNotEmpty()) { "empty order array" }
+        this.order = order.toList().toTypedArray()
     }
 
     fun translate(value: Int): String {

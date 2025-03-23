@@ -2,13 +2,12 @@ package org.chorus.level.generator.`object`
 
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
+import kotlin.math.abs
 
-/**
- * @author CreeperFace
- * @since 26. 10. 2016
- */
 class NewJungleTree(
     /**
      * The minimum height of a generated tree.
@@ -24,33 +23,33 @@ class NewJungleTree(
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val metaLeaves: BlockState = BlockJungleLeaves.properties.getDefaultState()
+    private val metaLeaves: BlockState = BlockJungleLeaves.properties.defaultState
 
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, vectorPosition: Vector3): Boolean {
-        val position = BlockVector3(vectorPosition.floorX, vectorPosition.floorY, vectorPosition.floorZ)
+    override fun generate(level: BlockManager, rand: ChorusRandom, position: Vector3): Boolean {
+        val position1 = BlockVector3(position.floorX, position.floorY, position.floorZ)
 
         val i: Int = rand.nextInt(maxTreeHeight) + this.minTreeHeight
         var flag = true
 
         //Check the height of the tree and if exist block in it
-        if (position.y >= level.minHeight && position.y + i + 1 < level.maxHeight) {
-            for (j in position.y..position.y + 1 + i) {
+        if (position1.y >= level.minHeight && position1.y + i + 1 < level.maxHeight) {
+            for (j in position1.y..position1.y + 1 + i) {
                 var k = 1
 
-                if (j == position.y) {
+                if (j == position1.y) {
                     k = 0
                 }
 
-                if (j >= position.y + 1 + i - 2) {
+                if (j >= position1.y + 1 + i - 2) {
                     k = 2
                 }
 
                 val pos2 = BlockVector3()
 
-                var l = position.x - k
-                while (l <= position.x + k && flag) {
-                    var i1 = position.z - k
-                    while (i1 <= position.z + k && flag) {
+                var l = position1.x - k
+                while (l <= position1.x + k && flag) {
+                    var i1 = position1.z - k
+                    while (i1 <= position1.z + k && flag) {
                         if (j >= level.minHeight && j < level.maxHeight) {
                             pos2.setComponents(l, j, i1)
                             if (!this.canGrowInto(level.getBlockIdAt(pos2.x, pos2.y, pos2.z))) {
@@ -68,29 +67,29 @@ class NewJungleTree(
             if (!flag) {
                 return false
             } else {
-                val down = position.down()
+                val down = position1.down()
                 val block = level.getBlockIdAt(down.x, down.y, down.z)
 
-                if ((block == GRASS_BLOCK || block == DIRT || block == FARMLAND) && position.y < level.maxHeight - i - 1) {
+                if ((block == BlockID.GRASS_BLOCK || block == BlockID.DIRT || block == BlockID.FARMLAND) && position1.y < level.maxHeight - i - 1) {
                     this.setDirtAt(level, down)
 
                     //Add leaves
-                    for (i3 in position.y - 3 + i..position.y + i) {
-                        val i4 = i3 - (position.y + i)
+                    for (i3 in position1.y - 3 + i..position1.y + i) {
+                        val i4 = i3 - (position1.y + i)
                         val j1 = 1 - i4 / 2
 
-                        for (k1 in position.x - j1..position.x + j1) {
-                            val l1 = k1 - position.x
+                        for (k1 in position1.x - j1..position1.x + j1) {
+                            val l1 = k1 - position1.x
 
-                            for (i2 in position.z - j1..position.z + j1) {
-                                val j2 = i2 - position.z
+                            for (i2 in position1.z - j1..position1.z + j1) {
+                                val j2 = i2 - position1.z
 
-                                if (Math.abs(l1) != j1 || Math.abs(j2) != j1 || rand.nextInt(2) != 0 && i4 != 0) {
-                                    val blockpos = BlockVector3(k1, i3, i2)
-                                    val id = level.getBlockAt(blockpos.x, blockpos.y, blockpos.z)
+                                if (abs(l1) != j1 || abs(j2) != j1 || rand.nextInt(2) != 0 && i4 != 0) {
+                                    val blockPos = BlockVector3(k1, i3, i2)
+                                    val id = level.getBlockAt(blockPos.x, blockPos.y, blockPos.z)
 
-                                    if (id!!.id == AIR || id is BlockLeaves || id.id == VINE) {
-                                        level.setBlockStateAt(blockpos, metaLeaves)
+                                    if (id!!.id == BlockID.AIR || id is BlockLeaves || id.id == BlockID.VINE) {
+                                        level.setBlockStateAt(blockPos, metaLeaves)
                                     }
                                 }
                             }
@@ -99,82 +98,82 @@ class NewJungleTree(
 
                     //Add vine
                     for (j3 in 0..<i) {
-                        val up = position.up(j3)
+                        val up = position1.up(j3)
                         val b = level.getBlockAt(up.x, up.y, up.z)
                         val id = b!!.id
 
-                        if (id == AIR || b is BlockLeaves || id == VINE) {
+                        if (id == BlockID.AIR || b is BlockLeaves || id == BlockID.VINE) {
                             //Add tree trunks
                             level.setBlockStateAt(up, metaWood)
                             if (j3 > 0) {
-                                if (rand.nextInt(3) > 0 && isAirBlock(level, position.add(-1, j3, 0))) {
-                                    this.addVine(level, position.add(-1, j3, 0), 8)
+                                if (rand.nextInt(3) > 0 && isAirBlock(level, position1.add(-1, j3, 0))) {
+                                    this.addVine(level, position1.add(-1, j3, 0), 8)
                                 }
 
-                                if (rand.nextInt(3) > 0 && isAirBlock(level, position.add(1, j3, 0))) {
-                                    this.addVine(level, position.add(1, j3, 0), 2)
+                                if (rand.nextInt(3) > 0 && isAirBlock(level, position1.add(1, j3, 0))) {
+                                    this.addVine(level, position1.add(1, j3, 0), 2)
                                 }
 
-                                if (rand.nextInt(3) > 0 && isAirBlock(level, position.add(0, j3, -1))) {
-                                    this.addVine(level, position.add(0, j3, -1), 1)
+                                if (rand.nextInt(3) > 0 && isAirBlock(level, position1.add(0, j3, -1))) {
+                                    this.addVine(level, position1.add(0, j3, -1), 1)
                                 }
 
-                                if (rand.nextInt(3) > 0 && isAirBlock(level, position.add(0, j3, 1))) {
-                                    this.addVine(level, position.add(0, j3, 1), 4)
+                                if (rand.nextInt(3) > 0 && isAirBlock(level, position1.add(0, j3, 1))) {
+                                    this.addVine(level, position1.add(0, j3, 1), 4)
                                 }
                             }
                         }
                     }
 
-                    for (k3 in position.y - 3 + i..position.y + i) {
-                        val j4 = k3 - (position.y + i)
+                    for (k3 in position1.y - 3 + i..position1.y + i) {
+                        val j4 = k3 - (position1.y + i)
                         val k4 = 2 - j4 / 2
                         val pos2 = BlockVector3()
 
-                        for (l4 in position.x - k4..position.x + k4) {
-                            for (i5 in position.z - k4..position.z + k4) {
+                        for (l4 in position1.x - k4..position1.x + k4) {
+                            for (i5 in position1.z - k4..position1.z + k4) {
                                 pos2.setComponents(l4, k3, i5)
 
                                 if (level.getBlockAt(pos2.x, pos2.y, pos2.z) is BlockLeaves) {
-                                    val blockpos2 = pos2.west()
-                                    val blockpos3 = pos2.east()
-                                    val blockpos4 = pos2.north()
-                                    val blockpos1 = pos2.south()
+                                    val blockPos1 = pos2.south()
+                                    val blockPos2 = pos2.west()
+                                    val blockPos3 = pos2.east()
+                                    val blockPos4 = pos2.north()
 
                                     if (rand.nextInt(4) == 0 && level.getBlockIdAt(
-                                            blockpos2.x,
-                                            blockpos2.y,
-                                            blockpos2.z
-                                        ) == AIR
+                                            blockPos2.x,
+                                            blockPos2.y,
+                                            blockPos2.z
+                                        ) == BlockID.AIR
                                     ) {
-                                        this.addHangingVine(level, blockpos2, 8)
+                                        this.addHangingVine(level, blockPos2, 8)
                                     }
 
                                     if (rand.nextInt(4) == 0 && level.getBlockIdAt(
-                                            blockpos3.x,
-                                            blockpos3.y,
-                                            blockpos3.z
-                                        ) == AIR
+                                            blockPos3.x,
+                                            blockPos3.y,
+                                            blockPos3.z
+                                        ) == BlockID.AIR
                                     ) {
-                                        this.addHangingVine(level, blockpos3, 2)
+                                        this.addHangingVine(level, blockPos3, 2)
                                     }
 
                                     if (rand.nextInt(4) == 0 && level.getBlockIdAt(
-                                            blockpos4.x,
-                                            blockpos4.y,
-                                            blockpos4.z
-                                        ) == AIR
+                                            blockPos4.x,
+                                            blockPos4.y,
+                                            blockPos4.z
+                                        ) == BlockID.AIR
                                     ) {
-                                        this.addHangingVine(level, blockpos4, 1)
+                                        this.addHangingVine(level, blockPos4, 1)
                                     }
 
                                     if (rand.nextInt(4) == 0 && level.getBlockIdAt(
-                                            blockpos1.x,
-                                            blockpos1.y,
-                                            blockpos1.z
-                                        ) == AIR
+                                            blockPos1.x,
+                                            blockPos1.y,
+                                            blockPos1.z
+                                        ) == BlockID.AIR
                                     ) {
-                                        this.addHangingVine(level, blockpos1, 4)
+                                        this.addHangingVine(level, blockPos1, 4)
                                     }
                                 }
                             }
@@ -190,7 +189,7 @@ class NewJungleTree(
                                     this.placeCocoa(
                                         level,
                                         rand.nextInt(3),
-                                        position.add(enumfacing1.getXOffset(), i - 5 + l3, enumfacing1.getZOffset()),
+                                        position1.add(enumfacing1.xOffset, i - 5 + l3, enumfacing1.zOffset),
                                         enumfacing
                                     )
                                 }
@@ -211,31 +210,31 @@ class NewJungleTree(
     private fun placeCocoa(level: BlockManager, age: Int, pos: BlockVector3, side: BlockFace) {
         val blockState: BlockState = BlockCocoa.properties.getBlockState(
             CommonBlockProperties.AGE_3.createValue(age),
-            CommonBlockProperties.DIRECTION.createValue(side.getHorizontalIndex())
+            CommonBlockProperties.DIRECTION.createValue(side.horizontalIndex)
         )
         level.setBlockStateAt(pos, blockState)
     }
 
     private fun addVine(level: BlockManager, pos: BlockVector3, meta: Int) {
         val blockState: BlockState =
-            BlockVine.properties.getBlockState<Int, IntPropertyType>(CommonBlockProperties.VINE_DIRECTION_BITS, meta)
+            BlockVine.properties.getBlockState(CommonBlockProperties.VINE_DIRECTION_BITS, meta)
         level.setBlockStateAt(pos, blockState)
     }
 
     private fun addHangingVine(level: BlockManager, pos: BlockVector3, meta: Int) {
-        var pos = pos
-        this.addVine(level, pos, meta)
+        var pos1 = pos
+        this.addVine(level, pos1, meta)
         var i = 4
 
-        pos = pos.down()
-        while (i > 0 && level.getBlockIdAt(pos.x, pos.y, pos.z) == AIR) {
-            this.addVine(level, pos, meta)
-            pos = pos.down()
+        pos1 = pos1.down()
+        while (i > 0 && level.getBlockIdAt(pos1.x, pos1.y, pos1.z) == BlockID.AIR) {
+            this.addVine(level, pos1, meta)
+            pos1 = pos1.down()
             --i
         }
     }
 
     private fun isAirBlock(level: BlockManager, v: BlockVector3): Boolean {
-        return level.getBlockIdAt(v.x, v.y, v.z) == AIR
+        return level.getBlockIdAt(v.x, v.y, v.z) == BlockID.AIR
     }
 }

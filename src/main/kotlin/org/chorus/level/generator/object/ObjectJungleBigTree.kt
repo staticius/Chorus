@@ -22,15 +22,15 @@ class ObjectJungleBigTree(
         } else {
             this.createCrown(level, position.up(height), 2)
 
-            var j: Int = position.getY().toInt() + height - 2 - rand.nextInt(4)
-            while (j > position.getY() + height.toDouble() / 2) {
+            var j: Int = position.y.toInt() + height - 2 - rand.nextInt(4)
+            while (j > position.y + height.toDouble() / 2) {
                 val f: Float = rand.nextFloat() * (Math.PI.toFloat() * 2f)
-                var k = (position.getX() + (0.5f + MathHelper.cos(f) * 4.0f)).toInt()
-                var l = (position.getZ() + (0.5f + MathHelper.sin(f) * 4.0f)).toInt()
+                var k = (position.x + (0.5f + MathHelper.cos(f) * 4.0f)).toInt()
+                var l = (position.z + (0.5f + MathHelper.sin(f) * 4.0f)).toInt()
 
                 for (i1 in 0..4) {
-                    k = (position.getX() + (1.5f + MathHelper.cos(f) * i1.toFloat())).toInt()
-                    l = (position.getZ() + (1.5f + MathHelper.sin(f) * i1.toFloat())).toInt()
+                    k = (position.x + (1.5f + MathHelper.cos(f) * i1.toFloat())).toInt()
+                    l = (position.z + (1.5f + MathHelper.sin(f) * i1.toFloat())).toInt()
                     level.setBlockStateAt(BlockVector3(k, j - 3 + i1 / 2, l), this.woodMetadata)
                 }
 
@@ -131,8 +131,8 @@ class ObjectJungleBigTree(
     }
 
     private fun placeVine(level: BlockManager, random: ChorusRandom, pos: Vector3, meta: Int) {
-        if (random.nextInt(3) > 0 && level.getBlockIdAt(pos.x.toInt(), pos.y.toInt(), pos.z.toInt()) == AIR) {
-            val block: BlockState = BlockVine.properties.getBlockState<Int, IntPropertyType>(
+        if (random.nextInt(3) > 0 && level.getBlockIdAt(pos.x.toInt(), pos.y.toInt(), pos.z.toInt()) == BlockID.AIR) {
+            val block: BlockState = BlockVine.properties.getBlockState(
                 CommonBlockProperties.VINE_DIRECTION_BITS,
                 meta
             )

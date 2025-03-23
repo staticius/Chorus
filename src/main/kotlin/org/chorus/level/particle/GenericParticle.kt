@@ -4,10 +4,6 @@ import org.chorus.math.Vector3
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelEventPacket
 
-/**
- * @author xtypr
- * @since 2015/11/21
- */
 open class GenericParticle @JvmOverloads constructor(pos: Vector3, id: Int, data: Int = 0) :
     Particle(pos.x, pos.y, pos.z) {
     protected val data: Int

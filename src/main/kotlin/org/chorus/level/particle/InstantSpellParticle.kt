@@ -3,10 +3,6 @@ package org.chorus.level.particle
 import org.chorus.math.Vector3
 import org.chorus.utils.BlockColor
 
-/**
- * @author xtypr
- * @since 2016/1/4
- */
 class InstantSpellParticle : SpellParticle {
     override var data: Int = 0
 

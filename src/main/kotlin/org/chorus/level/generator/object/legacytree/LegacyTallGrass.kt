@@ -1,28 +1,31 @@
 package org.chorus.level.generator.`object`.legacytree
 
 import org.chorus.block.*
+import org.chorus.level.generator.`object`.BlockManager
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
+import kotlin.math.abs
 
 object LegacyTallGrass {
-    private val places = arrayOf<BlockState>(
-        //total 106
-        BlockShortGrass.properties.getDefaultState(),  //50
-        BlockTallGrass.properties.getDefaultState(),  // 30
-        BlockDandelion.properties.getDefaultState(),  // 10
-        BlockPoppy.properties.getDefaultState(),  // 10
-        BlockAzureBluet.properties.getDefaultState(),  // 5
-        BlockOxeyeDaisy.properties.getDefaultState(),  // 5
-        BlockAllium.properties.getDefaultState(),  // 2
-        BlockCornflower.properties.getDefaultState(),  // 2
-        BlockBlueOrchid.properties.getDefaultState(),  // 2
-        BlockLilyOfTheValley.properties.getDefaultState(),  // 2
-        BlockRedTulip.properties.getDefaultState(),  // 2
-        BlockOrangeTulip.properties.getDefaultState(),  // 2
-        BlockPinkTulip.properties.getDefaultState(),  // 2
-        BlockWhiteTulip.properties.getDefaultState(),  // 2
+    private val places = arrayOf(
+        // Total: 106
+        BlockShortGrass.properties.defaultState,  // 50
+        BlockTallGrass.properties.defaultState,  // 30
+        BlockDandelion.properties.defaultState,  // 10
+        BlockPoppy.properties.defaultState,  // 10
+        BlockAzureBluet.properties.defaultState,  // 5
+        BlockOxeyeDaisy.properties.defaultState,  // 5
+        BlockAllium.properties.defaultState,  // 2
+        BlockCornflower.properties.defaultState,  // 2
+        BlockBlueOrchid.properties.defaultState,  // 2
+        BlockLilyOfTheValley.properties.defaultState,  // 2
+        BlockRedTulip.properties.defaultState,  // 2
+        BlockOrangeTulip.properties.defaultState,  // 2
+        BlockPinkTulip.properties.defaultState,  // 2
+        BlockWhiteTulip.properties.defaultState,  // 2
     )
 
-    fun growGrass(level: BlockManager, pos: Vector3, random: RandomSourceProvider) {
+    fun growGrass(level: BlockManager, pos: Vector3, random: ChorusRandom) {
         val y = pos.floorY + 1
         val minx = pos.floorX - 2
         val minz = pos.floorZ - 2
@@ -36,22 +39,22 @@ object LegacyTallGrass {
                             x,
                             newY - 1,
                             z
-                        ) == Block.GRASS_BLOCK
+                        ) == BlockID.GRASS_BLOCK
                     ) {
                         val ranNumber = Math.round(random.nextGaussian() * 1000).toInt()
-                        val absRn = Math.abs(ranNumber)
+                        val absRn = abs(ranNumber)
                         if (-300 <= ranNumber && ranNumber <= 300) {
                             level.setBlockStateAt(x, newY, z, places[0])
-                        } else if (300 <= absRn && absRn <= 500) { //-300 ~ -500 + 300 ~ 50
+                        } else if (absRn in 300..500) { //-300 ~ -500 + 300 ~ 50
                             level.setBlockStateAt(x, newY, z, places[1])
                             val block: BlockTallGrass = BlockTallGrass()
-                            block.setTopHalf(true)
-                            level.getLevel().setBlock(x, newY + 1, z, block, false, false)
-                        } else if (500 <= ranNumber && ranNumber < 600) {
+                            block.isTopHalf = (true)
+                            level.level.setBlock(x, newY + 1, z, block, false, false)
+                        } else if (ranNumber in 500..599) {
                             level.setBlockStateAt(x, newY, z, places[2])
                         } else if (-600 <= ranNumber && ranNumber <= -500) {
                             level.setBlockStateAt(x, newY, z, places[3])
-                        } else if (600 <= ranNumber && ranNumber < 700) {
+                        } else if (ranNumber in 600..699) {
                             level.setBlockStateAt(x, newY, z, places[4])
                         } else if (-700 <= ranNumber && ranNumber < -600) {
                             level.setBlockStateAt(x, newY, z, places[5])
@@ -65,11 +68,11 @@ object LegacyTallGrass {
                             level.setBlockStateAt(x, newY, z, places[9])
                         } else if (-1000 <= ranNumber && ranNumber < -900) {
                             level.setBlockStateAt(x, newY, z, places[10])
-                        } else if (700 <= ranNumber && ranNumber < 800) {
+                        } else if (ranNumber in 700..799) {
                             level.setBlockStateAt(x, newY, z, places[11])
-                        } else if (800 <= ranNumber && ranNumber < 900) {
+                        } else if (ranNumber in 800..899) {
                             level.setBlockStateAt(x, newY, z, places[12])
-                        } else if (900 <= ranNumber && ranNumber < 1000) {
+                        } else if (ranNumber in 900..999) {
                             level.setBlockStateAt(x, newY, z, places[13])
                         }
                     }

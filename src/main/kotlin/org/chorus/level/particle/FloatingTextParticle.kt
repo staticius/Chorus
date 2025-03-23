@@ -1,11 +1,7 @@
 package org.chorus.level.particle
 
 import com.google.common.base.Strings
-import org.chorus.entity.Entity
-import org.chorus.entity.data.EntityDataMap
-import org.chorus.entity.data.EntityDataTypes
-import org.chorus.entity.data.EntityFlag
-import org.chorus.entity.data.Skin
+import org.chorus.entity.data.*
 import org.chorus.item.Item
 import org.chorus.level.*
 import org.chorus.math.Vector3
@@ -15,64 +11,60 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/21
- */
 class FloatingTextParticle private constructor(
-    protected val level: Level?,
+    private val level: Level?,
     pos: Vector3,
     title: String,
-    text: String?
+    text: String
 ) :
     Particle(pos.x, pos.y, pos.z) {
-    protected var uuid: UUID = UUID.randomUUID()
+    private var uuid: UUID = UUID.randomUUID()
     var entityId: Long = -1
-        protected set
-    var isInvisible: Boolean = false
-    protected var entityData: EntityDataMap = EntityDataMap()
+        private set
+    private var isInvisible: Boolean = false
+    private var entityData: EntityDataMap = EntityDataMap()
 
     @JvmOverloads
-    constructor(transform: Transform, title: String, text: String? = null) : this(
-        transform.getLevel(),
+    constructor(transform: Transform, title: String, text: String = "") : this(
+        transform.level,
         transform.position,
         title,
         text
     )
 
     @JvmOverloads
-    constructor(pos: Vector3, title: String, text: String? = null) : this(null, pos, title, text)
+    constructor(pos: Vector3, title: String, text: String = "") : this(null, pos, title, text)
 
     init {
         entityData.setFlag(EntityFlag.NO_AI, true)
-        entityData.put(Entity.LEASH_HOLDER, -1)
-        entityData.put(Entity.SCALE, 0.01f) //zero causes problems on debug builds?
-        entityData.put(Entity.HEIGHT, 0.01f)
-        entityData.put(Entity.WIDTH, 0.01f)
-        entityData.put(EntityDataTypes.NAMETAG_ALWAYS_SHOW, 1.toByte())
+        entityData[EntityDataTypes.LEASH_HOLDER] = -1
+        entityData[EntityDataTypes.SCALE] = 0.01f // zero causes problems on debug builds?
+        entityData[EntityDataTypes.HEIGHT] = 0.01f
+        entityData[EntityDataTypes.WIDTH] = 0.01f
+        entityData[EntityDataTypes.NAMETAG_ALWAYS_SHOW] = 1.toByte()
         if (!Strings.isNullOrEmpty(title)) {
-            entityData.put(Entity.NAME, title)
+            entityData[EntityDataTypes.NAME] = title
         }
         if (!Strings.isNullOrEmpty(text)) {
-            entityData[Entity.SCORE] = text
+            entityData[EntityDataTypes.SCORE] = text
         }
     }
 
     var text: String
-        get() = entityData.get<String>(Entity.SCORE)
+        get() = entityData.get<String>(EntityDataTypes.SCORE)
         set(text) {
-            entityData.put(Entity.SCORE, text)
-            sendentityData()
+            entityData[EntityDataTypes.SCORE] = text
+            sendEntityData()
         }
 
     var title: String
-        get() = entityData.get<String>(Entity.NAME)
+        get() = entityData.get<String>(EntityDataTypes.NAME)
         set(title) {
-            entityData.put(Entity.NAME, title)
-            sendentityData()
+            entityData[EntityDataTypes.NAME] = title
+            sendEntityData()
         }
 
-    private fun sendentityData() {
+    private fun sendEntityData() {
         if (level != null) {
             val packet = SetEntityDataPacket()
             packet.eid = entityId
@@ -98,8 +90,8 @@ class FloatingTextParticle private constructor(
         }
 
         if (!this.isInvisible) {
-            val entry = arrayOf<PlayerListPacket.Entry>(
-                PlayerListPacket.Entry(uuid, entityId, entityData.get<String>(Entity.NAME), EMPTY_SKIN)
+            val entry = arrayOf(
+                PlayerListPacket.Entry(uuid, entityId, entityData.get<String>(EntityDataTypes.NAME), EMPTY_SKIN)
             )
             val playerAdd = PlayerListPacket()
             playerAdd.entries = entry

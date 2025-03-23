@@ -478,7 +478,7 @@ class Chunk : IChunk {
     override val blockEntities: Map<Long, BlockEntity>
         get() = tiles
 
-    override fun getTile(x: Int, y: Int, z: Int): BlockEntity? {
+    override fun getBlockEntity(x: Int, y: Int, z: Int): BlockEntity? {
         return tileList[(z.toLong() shl 16) or (x.toLong() shl 12) or (y + 64).toLong()]
     }
 
@@ -647,7 +647,7 @@ class Chunk : IChunk {
     }
 
     private fun removeInvalidTile(x: Int, y: Int, z: Int) {
-        val entity = getTile(x, y, z)
+        val entity = getBlockEntity(x, y, z)
         if (entity != null) {
             try {
                 if (!entity.closed && entity.isBlockEntityValid) {

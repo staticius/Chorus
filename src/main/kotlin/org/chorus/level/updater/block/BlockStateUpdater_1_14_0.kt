@@ -4,8 +4,6 @@ import org.chorus.level.updater.Updater
 import org.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
 import org.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
 
-
-(access = AccessLevel.PRIVATE)
 class BlockStateUpdater_1_14_0 : Updater {
     override fun registerUpdaters(context: CompoundTagUpdaterContext) {
         context.addUpdater(1, 14, 0)

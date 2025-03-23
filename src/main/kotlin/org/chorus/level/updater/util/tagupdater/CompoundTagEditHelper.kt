@@ -3,8 +3,8 @@ package org.chorus.level.updater.util.tagupdater
 import java.util.*
 import kotlin.collections.set
 
-class CompoundTagEditHelper(var rootTag: MutableMap<String?, Any?>?) {
-    private val parentTag: Deque<Any?> = ArrayDeque()
+class CompoundTagEditHelper(var rootTag: MutableMap<String, Any?>) {
+    private val parentTag: Deque<MutableMap<String, Any?>> = ArrayDeque()
     private val tagName: Deque<String?> = ArrayDeque()
     var tag: Any?
         private set
@@ -13,8 +13,8 @@ class CompoundTagEditHelper(var rootTag: MutableMap<String?, Any?>?) {
         this.tag = rootTag
     }
 
-    val compoundTag: MutableMap<String?, Any?>?
-        get() = tag as MutableMap<String?, Any?>?
+    val compoundTag: MutableMap<String, Any?>
+        get() = tag as MutableMap<String, Any?>
 
     val parent: Map<String, Any>?
         get() {
@@ -41,15 +41,15 @@ class CompoundTagEditHelper(var rootTag: MutableMap<String?, Any?>?) {
     fun pushChild(name: String?) {
         Objects.requireNonNull(name, "name")
         check(tag is Map<*, *>) { "Tag is not of Compound type" }
-        parentTag.addLast(this.tag)
+        parentTag.addLast(this.tag as MutableMap<String, Any?>?)
         tagName.addLast(name)
-        this.tag = (tag as Map<String?, Any?>)[name]
+        this.tag = (tag as MutableMap<String, Any?>)[name]
     }
 
-    fun replaceWith(name: String?, newTag: Any?) {
+    fun replaceWith(name: String, newTag: Any) {
         this.tag = newTag
         if (parentTag.isEmpty()) {
-            this.rootTag = (tag as MutableMap<String?, Any?>?)
+            this.rootTag = tag as MutableMap<String, Any?>
             return
         }
         val tag = parentTag.last

@@ -4,10 +4,6 @@ import org.chorus.math.Vector3
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelEventPacket
 
-/**
- * @author joserobjr
- * @since 2021-06-15
- */
 class ElectricSparkParticle(pos: Vector3) : GenericParticle(pos, TYPE_WAX) {
     override fun encode(): Array<DataPacket> {
         val pk = LevelEventPacket()

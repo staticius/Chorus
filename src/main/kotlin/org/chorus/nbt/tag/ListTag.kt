@@ -90,7 +90,7 @@ class ListTag<T : Tag<*>> : Tag<MutableList<T>> {
 
         for (t in this.list) {
             @Suppress("UNCHECKED_CAST")
-            value.add(t.parseValue() as? T ?: continue)
+            value.add(t.parseValue<Any>() as? T ?: continue)
         }
 
         return value

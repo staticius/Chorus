@@ -1,8 +1,10 @@
 package org.chorus.level.format
 
+import org.chorus.utils.Loggable
 
-object LevelProviderManager {
-    internal val providers: MutableMap<String, Class<out LevelProvider>> = HashMap()
+
+object LevelProviderManager : Loggable {
+    private val providers: MutableMap<String, Class<out LevelProvider>> = HashMap()
 
     fun addProvider(name: String, clazz: Class<out LevelProvider>) {
         if (providers.putIfAbsent(name.trim { it <= ' ' }.lowercase(), clazz) != null) {
@@ -35,8 +37,7 @@ object LevelProviderManager {
 
     @JvmStatic
     fun getProviderByName(name: String): Class<out LevelProvider> {
-        var name = name
-        name = name.trim { it <= ' ' }.lowercase()
-        return providers.getOrDefault(name, null)!!
+        val name1 = name.trim { it <= ' ' }.lowercase()
+        return providers.getOrDefault(name1, null)!!
     }
 }

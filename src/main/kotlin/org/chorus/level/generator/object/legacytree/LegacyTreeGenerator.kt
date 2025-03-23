@@ -2,6 +2,12 @@ package org.chorus.level.generator.`object`.legacytree
 
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.WoodType
+import org.chorus.block.property.type.EnumPropertyType
+import org.chorus.level.generator.`object`.BlockManager
+import org.chorus.math.BlockFace
+import org.chorus.utils.ChorusRandom
+import kotlin.math.abs
 
 abstract class LegacyTreeGenerator {
     open var treeHeight: Int = 7
@@ -18,7 +24,7 @@ abstract class LegacyTreeGenerator {
     open val type: WoodType
         get() = WoodType.OAK
 
-    fun canPlaceObject(level: BlockManager, x: Int, y: Int, z: Int, random: RandomSourceProvider?): Boolean {
+    fun canPlaceObject(level: BlockManager, x: Int, y: Int, z: Int): Boolean {
         var radiusToCheck = 0
         for (yy in 0..<this.treeHeight + 3) {
             if (yy == 1 || yy == this.treeHeight) {
@@ -26,7 +32,7 @@ abstract class LegacyTreeGenerator {
             }
             for (xx in -radiusToCheck..<(radiusToCheck + 1)) {
                 for (zz in -radiusToCheck..<(radiusToCheck + 1)) {
-                    if (!this.overridable(level.getBlockAt(x + xx, y + yy, z + zz))) {
+                    if (!this.overridable(level.getBlockAt(x + xx, y + yy, z + zz) ?: BlockAir())) {
                         return false
                     }
                 }
@@ -36,20 +42,20 @@ abstract class LegacyTreeGenerator {
         return true
     }
 
-    open fun placeObject(level: BlockManager, x: Int, y: Int, z: Int, random: RandomSourceProvider) {
+    open fun placeObject(level: BlockManager, x: Int, y: Int, z: Int, random: ChorusRandom) {
         this.placeTrunk(level, x, y, z, random, this.treeHeight - 1)
 
         for (yy in y - 3 + this.treeHeight..y + this.treeHeight) {
             val yOff = (yy - (y + this.treeHeight)).toDouble()
             val mid = (1 - yOff / 2).toInt()
             for (xx in x - mid..x + mid) {
-                val xOff = Math.abs(xx - x)
+                val xOff = abs(xx - x)
                 for (zz in z - mid..z + mid) {
-                    val zOff = Math.abs(zz - z)
+                    val zOff = abs(zz - z)
                     if (xOff == mid && zOff == mid && (yOff == 0.0 || random.nextInt(2) == 0)) {
                         continue
                     }
-                    val blockAt: Block = level.getBlockAt(xx, yy, zz)
+                    val blockAt: Block = level.getBlockAt(xx, yy, zz) ?: BlockAir()
                     if (!blockAt.isSolid) {
                         level.setBlockStateAt(xx, yy, zz, leafBlockState)
                     }
@@ -63,14 +69,14 @@ abstract class LegacyTreeGenerator {
         x: Int,
         y: Int,
         z: Int,
-        random: RandomSourceProvider?,
+        random: ChorusRandom?,
         trunkHeight: Int
     ) {
         // The base dirt block
-        level.setBlockStateAt(x, y - 1, z, Block.DIRT)
+        level.setBlockStateAt(x, y - 1, z, BlockID.DIRT)
 
         for (yy in 0..<trunkHeight) {
-            val b: Block = level.getBlockAt(x, y + yy, z)
+            val b: Block = level.getBlockAt(x, y + yy, z) ?: BlockAir()
             if (this.overridable(b)) {
                 level.setBlockStateAt(x, y + yy, z, trunkBlockState)
             }
@@ -79,7 +85,7 @@ abstract class LegacyTreeGenerator {
 
     protected open val trunkBlockState: BlockState
         get() {
-            val pillarAxisValue: EnumPropertyValue = CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y)
+            val pillarAxisValue = CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y)
             return when (type) {
                 WoodType.JUNGLE -> BlockJungleLog.properties.getBlockState(pillarAxisValue)
                 WoodType.DARK_OAK -> BlockDarkOakLog.properties.getBlockState(pillarAxisValue)
@@ -89,45 +95,22 @@ abstract class LegacyTreeGenerator {
                 WoodType.OAK -> BlockOakLog.properties.getBlockState(pillarAxisValue)
                 WoodType.CHERRY -> BlockCherryLog.properties.getBlockState(pillarAxisValue)
                 WoodType.PALE_OAK -> BlockPaleOakLog.properties.getBlockState(pillarAxisValue)
+                WoodType.MANGROVE -> BlockMangroveLog.properties.getBlockState(pillarAxisValue)
             }
         }
 
     protected open val leafBlockState: BlockState
         get() {
             return when (type) {
-                WoodType.OAK -> {
-                    BlockOakLeaves.properties.getDefaultState()
-                }
-
-                WoodType.BIRCH -> {
-                    BlockBirchLeaves.properties.getDefaultState()
-                }
-
-                WoodType.ACACIA -> {
-                    BlockAcaciaLeaves.properties.getDefaultState()
-                }
-
-                WoodType.JUNGLE -> {
-                    BlockJungleLeaves.properties.getDefaultState()
-                }
-
-                WoodType.SPRUCE -> {
-                    BlockSpruceLeaves.properties.getDefaultState()
-                }
-
-                WoodType.DARK_OAK -> {
-                    BlockDarkOakLeaves.properties.getDefaultState()
-                }
-
-                WoodType.CHERRY -> {
-                    BlockCherryLeaves.properties.getDefaultState()
-                }
-
-                WoodType.PALE_OAK -> {
-                    BlockPaleOakLeaves.properties.getDefaultState()
-                }
-
-                else -> throw IllegalArgumentException()
+                WoodType.OAK -> BlockOakLeaves.properties.defaultState
+                WoodType.BIRCH -> BlockBirchLeaves.properties.defaultState
+                WoodType.ACACIA -> BlockAcaciaLeaves.properties.defaultState
+                WoodType.JUNGLE -> BlockJungleLeaves.properties.defaultState
+                WoodType.SPRUCE -> BlockSpruceLeaves.properties.defaultState
+                WoodType.DARK_OAK -> BlockDarkOakLeaves.properties.defaultState
+                WoodType.CHERRY -> BlockCherryLeaves.properties.defaultState
+                WoodType.PALE_OAK -> BlockPaleOakLeaves.properties.defaultState
+                WoodType.MANGROVE -> BlockMangroveLeaves.properties.defaultState
             }
         }
 
@@ -137,7 +120,7 @@ abstract class LegacyTreeGenerator {
             x: Int,
             y: Int,
             z: Int,
-            random: RandomSourceProvider,
+            random: ChorusRandom,
             type: WoodType,
             tall: Boolean
         ) {
@@ -156,7 +139,7 @@ abstract class LegacyTreeGenerator {
                 else -> LegacyOakTree()
             }
 
-            if (tree.canPlaceObject(level, x, y, z, random)) {
+            if (tree.canPlaceObject(level, x, y, z)) {
                 tree.placeObject(level, x, y, z, random)
             }
         }

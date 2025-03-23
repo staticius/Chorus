@@ -2,10 +2,12 @@ package org.chorus.level.generator.`object`
 
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
 
 class ObjectAzaleaTree : TreeGenerator() {
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, position: Vector3): Boolean {
+    override fun generate(level: BlockManager, rand: ChorusRandom, position: Vector3): Boolean {
         val i: Int = rand.nextInt(2) + 2
         val j = position.floorX
         val k = position.floorY
@@ -69,16 +71,16 @@ class ObjectAzaleaTree : TreeGenerator() {
         val blockpos = Vector3(x.toDouble(), y.toDouble(), z.toDouble())
         val material = worldIn.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
 
-        if (material == AIR || material == BlockID.AZALEA_LEAVES || material == BlockID.AZALEA_LEAVES_FLOWERED) {
+        if (material == BlockID.AIR || material == BlockID.AZALEA_LEAVES || material == BlockID.AZALEA_LEAVES_FLOWERED) {
             worldIn.setBlockStateAt(blockpos, OAK_LOG)
         }
     }
 
-    private fun placeLeafAt(worldIn: BlockManager, x: Int, y: Int, z: Int, random: RandomSourceProvider) {
+    private fun placeLeafAt(worldIn: BlockManager, x: Int, y: Int, z: Int, random: ChorusRandom) {
         val blockpos = Vector3(x.toDouble(), y.toDouble(), z.toDouble())
         val material = worldIn.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
 
-        if (material == AIR) {
+        if (material == BlockID.AIR) {
             if (random.nextInt(3) == 1) {
                 worldIn.setBlockStateAt(blockpos, AZALEA_LEAVES_FLOWERED)
             } else {
@@ -90,8 +92,8 @@ class ObjectAzaleaTree : TreeGenerator() {
     companion object {
         private val OAK_LOG: BlockState =
             BlockOakLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
-        private val DIRT_WITH_ROOTS: BlockState = BlockDirtWithRoots.properties.getDefaultState()
-        private val AZALEA_LEAVES_FLOWERED: BlockState = BlockAzaleaLeavesFlowered.properties.getDefaultState()
-        private val AZALEA_LEAVES: BlockState = BlockAzaleaLeaves.properties.getDefaultState()
+        private val DIRT_WITH_ROOTS: BlockState = BlockDirtWithRoots.properties.defaultState
+        private val AZALEA_LEAVES_FLOWERED: BlockState = BlockAzaleaLeavesFlowered.properties.defaultState
+        private val AZALEA_LEAVES: BlockState = BlockAzaleaLeaves.properties.defaultState
     }
 }

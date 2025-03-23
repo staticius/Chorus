@@ -4,14 +4,10 @@ import org.chorus.math.Vector3
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelEventPacket
 
-/**
- * @author xtypr
- * @since 2015/11/21
- */
 class MobSpawnParticle(pos: Vector3, width: Float, height: Float) :
     Particle(pos.x, pos.y, pos.z) {
-    protected val width: Int = width.toInt()
-    protected val height: Int = height.toInt()
+    private val width: Int = width.toInt()
+    private val height: Int = height.toInt()
 
     override fun encode(): Array<DataPacket> {
         val packet = LevelEventPacket()

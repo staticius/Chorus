@@ -2,7 +2,9 @@ package org.chorus.level.generator.`object`
 
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
+import org.chorus.utils.ChorusRandom
 
 /**
  * @author CreeperFace
@@ -13,7 +15,7 @@ class ObjectDarkOakTree : TreeGenerator() {
      * The metadata value of the wood to use in tree generation.
      */
     private val DARK_OAK_WOOD: BlockState =
-        BlockDarkOakWood.properties.getBlockState<BlockFace.Axis, EnumPropertyType<BlockFace.Axis>>(
+        BlockDarkOakWood.properties.getBlockState(
             CommonBlockProperties.PILLAR_AXIS,
             BlockFace.Axis.Y
         )
@@ -21,9 +23,9 @@ class ObjectDarkOakTree : TreeGenerator() {
     /**
      * The metadata value of the leaves to use in tree generation.
      */
-    private val DARK_OAK_LEAVES: BlockState = BlockDarkOakLeaves.properties.getDefaultState()
+    private val DARK_OAK_LEAVES: BlockState = BlockDarkOakLeaves.properties.defaultState
 
-    override fun generate(level: BlockManager, rand: RandomSourceProvider, position: Vector3): Boolean {
+    override fun generate(level: BlockManager, rand: ChorusRandom, position: Vector3): Boolean {
         val i: Int = rand.nextInt(3) + rand.nextInt(2) + 6
         val j = position.floorX
         val k = position.floorY
@@ -33,7 +35,7 @@ class ObjectDarkOakTree : TreeGenerator() {
             val blockpos = position.down()
             val block = level.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
 
-            if (block != GRASS_BLOCK && block != DIRT) {
+            if (block != BlockID.GRASS_BLOCK && block != BlockID.DIRT) {
                 return false
             } else if (!this.placeTreeOfHeight(level, position, i)) {
                 return false
@@ -51,8 +53,8 @@ class ObjectDarkOakTree : TreeGenerator() {
 
                 for (j2 in 0..<i) {
                     if (j2 >= i1 && j1 > 0) {
-                        k1 += enumfacing.getXOffset()
-                        l1 += enumfacing.getZOffset()
+                        k1 += enumfacing.xOffset
+                        l1 += enumfacing.zOffset
                         --j1
                     }
 
@@ -179,7 +181,7 @@ class ObjectDarkOakTree : TreeGenerator() {
     private fun placeLeafAt(worldIn: BlockManager, x: Int, y: Int, z: Int) {
         val blockpos = Vector3(x.toDouble(), y.toDouble(), z.toDouble())
         val material = worldIn.getBlockIdAt(blockpos.floorX, blockpos.floorY, blockpos.floorZ)
-        if (material == AIR) {
+        if (material == BlockID.AIR) {
             worldIn.setBlockStateAt(blockpos, DARK_OAK_LEAVES)
         }
     }

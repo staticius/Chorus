@@ -13,7 +13,7 @@ abstract class Tag<T : Any> protected constructor() {
 
     abstract fun copy(): Tag<T>
 
-    abstract fun parseValue(): T
+    abstract fun <U> parseValue(): T
 
     override fun equals(other: Any?): Boolean {
         if (other !is Tag<*>) {

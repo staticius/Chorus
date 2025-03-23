@@ -41,11 +41,10 @@ class ItemUpdater_1_21_30 : Updater {
             .edit("Name") { helper: CompoundTagEditHelper ->
                 val block =
                     helper.rootTag["Block"] as? Map<*, *> ?: return@edit
-                val states = block["states"] as? Map<*, *> ?: return@edit
+                val states = block["states"] as? MutableMap<*, *> ?: return@edit
 
-                val bit: Any = states.remove("color_bit")
-                val toggled =
-                    bit is Byte && bit.toInt() == 1 || bit is Boolean && bit
+                val bit = states.remove("color_bit")
+                val toggled = bit is Byte && bit.toInt() == 1 || bit is Boolean && bit
                 helper.rootTag["Name"] =
                     if (toggled) "minecraft:colored_torch_purple" else "minecraft:colored_torch_blue"
             }
@@ -53,13 +52,11 @@ class ItemUpdater_1_21_30 : Updater {
         context.addUpdater(1, 21, 30)
             .match("Name", "minecraft:colored_torch_rg")
             .edit("Name") { helper: CompoundTagEditHelper ->
-                val block =
-                    helper.rootTag["Block"] as? Map<*, *> ?: return@edit
-                val states = block["states"] as? Map<*, *> ?: return@edit
+                val block = helper.rootTag["Block"] as? Map<*, *> ?: return@edit
+                val states = block["states"] as? MutableMap<*, *> ?: return@edit
 
-                val bit: Any = states.remove("color_bit")
-                val toggled =
-                    bit is Byte && bit.toInt() == 1 || bit is Boolean && bit
+                val bit = states.remove("color_bit")
+                val toggled = bit is Byte && bit.toInt() == 1 || bit is Boolean && bit
                 helper.rootTag["Name"] = if (toggled) "minecraft:colored_torch_red" else "minecraft:colored_torch_green"
             }
 
@@ -90,13 +87,11 @@ class ItemUpdater_1_21_30 : Updater {
         context.addUpdater(1, 21, 30)
             .match("Name", "minecraft:tnt")
             .edit("Name") { helper: CompoundTagEditHelper ->
-                val block =
-                    helper.rootTag["Block"] as? Map<*, *> ?: return@edit
-                val states = block["states"] as? Map<*, *> ?: return@edit
+                val block = helper.rootTag["Block"] as? Map<*, *> ?: return@edit
+                val states = block["states"] as? MutableMap<*, *> ?: return@edit
 
-                val allowUnderwater: Any = states.remove("allow_underwater_bit")
-                val toggled =
-                    allowUnderwater is Byte && allowUnderwater.toInt() == 1 || allowUnderwater is Boolean && allowUnderwater
+                val allowUnderwater = states.remove("allow_underwater_bit")
+                val toggled = allowUnderwater is Byte && allowUnderwater.toInt() == 1 || allowUnderwater is Boolean && allowUnderwater
                 helper.rootTag["Name"] = if (toggled) "minecraft:tnt" else "minecraft:underwater_tnt"
             }
     }

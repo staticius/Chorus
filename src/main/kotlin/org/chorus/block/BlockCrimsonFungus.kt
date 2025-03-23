@@ -17,7 +17,7 @@ class BlockCrimsonFungus @JvmOverloads constructor(blockstate: BlockState = Comp
     override fun canGrowOn(support: Block?): Boolean {
         if (support != null) {
             if (support.id == BlockID.CRIMSON_NYLIUM) {
-                for (i in 1..feature.getTreeHeight()) {
+                for (i in 1..feature.treeHeight) {
                     if (!up(i).isAir) {
                         return false
                     }

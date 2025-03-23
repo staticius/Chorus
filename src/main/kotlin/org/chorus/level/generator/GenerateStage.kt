@@ -17,9 +17,9 @@ abstract class GenerateStage {
 
     private fun next(stage: GenerateStage) {
         if (this.nextStage == null) {
-            this.nextStage = stage //next -> null
+            this.nextStage = stage // next -> null
         } else {
-            nextStage!!.next(stage) //next -> next
+            nextStage!!.next(stage) // next -> next
         }
     }
 
@@ -28,7 +28,7 @@ abstract class GenerateStage {
     }
 
     class Builder internal constructor() {
-        private var start: GenerateStage? = null
+        var start: GenerateStage? = null
         var end: GenerateStage? = null
             private set
 
@@ -45,7 +45,7 @@ abstract class GenerateStage {
         }
 
         fun getStart(): GenerateStage {
-            Preconditions.checkNotNull(start, "you must be set start generate stage!")
+            Preconditions.checkNotNull(start, "Starting GenerateStage must be set")
             return start!!
         }
     }
