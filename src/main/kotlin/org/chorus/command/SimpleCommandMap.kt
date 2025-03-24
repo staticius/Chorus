@@ -75,7 +75,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
         this.register("nukkit", DifficultyCommand("difficulty"))
         this.register("nukkit", KickCommand("kick"))
         this.register("nukkit", OpCommand("op"))
-        this.register("nukkit", DeopCommand("deop"))
+        this.register("nukkit", DeOpCommand("deop"))
         this.register("nukkit", WhitelistCommand("whitelist"))
         this.register("nukkit", SaveOnCommand("save-on"))
         this.register("nukkit", SaveOffCommand("save-off"))

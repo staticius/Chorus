@@ -8,12 +8,10 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.InstantEffect
+import org.chorus.entity.item.EntityItem
 import kotlin.collections.set
 
-/**
- * @author Snake1999 and Pub4Game
- * @since 2016/1/23
- */
 class EffectCommand(name: String) : Command(name, "commands.effect.description", "nukkit.command.effect.usage") {
     init {
         this.permission = "nukkit.command.effect"
@@ -39,7 +37,7 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
         log: CommandLogger
     ): Int {
         val list = result.value
-        var entities = list!!.getResult<List<Entity>>(0)!!
+        var entities = list.getResult<List<Entity>>(0)!!
         entities = entities.stream().filter { e: Entity? -> e !is EntityItem }.toList()
         if (entities.isEmpty()) {
             log.addNoTargetMatch().output()
@@ -48,9 +46,9 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
         when (result.key) {
             "default" -> {
                 val effect: Effect
-                val str = list.getResult<String>(1)
+                val str = list.getResult<String>(1)!!
                 try {
-                    effect = Effect.get(str)
+                    effect = Effect.get(str)!!
                 } catch (e: RuntimeException) {
                     log.addError("commands.effect.notFound", str).output()
                     return 0
@@ -86,21 +84,21 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
                 var success = 0
                 for (entity in entities) {
                     if (duration == 0) {
-                        if (!entity.hasEffect(effect.type)) {
-                            log.addError("commands.effect.failure.notActive", effect.name, entity.name).output()
+                        if (!entity.hasEffect(effect.getType())) {
+                            log.addError("commands.effect.failure.notActive", effect.getName(), entity.getName()).output()
                             continue
                         }
-                        entity.removeEffect(effect.type)
-                        log.addSuccess("commands.effect.success.removed", effect.name, entity.name).output()
+                        entity.removeEffect(effect.getType())
+                        log.addSuccess("commands.effect.success.removed", effect.getName(), entity.getName()).output()
                     } else {
                         effect.setDuration(duration).setAmplifier(amplification)
                         entity.addEffect(effect.clone())
                         log.addSuccess(
                             "%commands.effect.success",
-                            effect.name,
-                            effect.amplifier.toString(),
-                            entity.name,
-                            (effect.duration / 20).toString()
+                            effect.getName(),
+                            effect.getAmplifier().toString(),
+                            entity.getName(),
+                            (effect.getDuration() / 20).toString()
                         )
                             .output(true)
                     }
@@ -112,15 +110,15 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
             "clear" -> {
                 var success = 0
                 for (entity in entities) {
-                    if (entity.effects.isEmpty()) {
-                        log.addError("commands.effect.failure.notActive.all", entity.name)
+                    if (entity.getEffects().isEmpty()) {
+                        log.addError("commands.effect.failure.notActive.all", entity.getName())
                         continue
                     }
-                    for (effect in entity.effects.values) {
-                        entity.removeEffect(effect.type)
+                    for (effect in entity.getEffects().values) {
+                        entity.removeEffect(effect.getType())
                     }
                     success++
-                    log.addSuccess("commands.effect.success.removed.all", entity.name)
+                    log.addSuccess("commands.effect.success.removed.all", entity.getName())
                 }
                 log.successCount(success).output()
                 return success

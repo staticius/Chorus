@@ -296,7 +296,7 @@ class CommandLogger(
      * @param receiver 命令目标
      * @param params   给命令目标的反馈信息参数
      */
-    fun outputObjectWhisper(receiver: Player, rawtext: String, vararg params: Any?) {
+    fun outputObjectWhisperRaw(receiver: Player, rawtext: String, vararg params: Any?) {
         if (receiver.level!!.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             receiver.sendRawTextMessage(
                 RawText.fromRawText(

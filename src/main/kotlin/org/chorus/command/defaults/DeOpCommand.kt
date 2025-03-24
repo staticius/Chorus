@@ -10,11 +10,7 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.utils.TextFormat
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
-class DeopCommand(name: String) : VanillaCommand(name, "commands.deop.description") {
+class DeOpCommand(name: String) : VanillaCommand(name, "commands.deop.description") {
     init {
         this.permission = "nukkit.command.op.take"
         commandParameters["default"] = arrayOf(
@@ -29,12 +25,12 @@ class DeopCommand(name: String) : VanillaCommand(name, "commands.deop.descriptio
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        val IPlayers = result.value!!.getResult<List<IPlayer>>(0)!!
-        if (IPlayers.isEmpty()) {
+        val players = result.value.getResult<List<IPlayer>>(0)!!
+        if (players.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
         }
-        for (player in IPlayers) {
+        for (player in players) {
             if (!player.isOp) {
                 log.addError("Privileges cannot be revoked (revoked or with higher privileges)")
                     .output() //no translation in client
@@ -42,10 +38,10 @@ class DeopCommand(name: String) : VanillaCommand(name, "commands.deop.descriptio
             }
             player.isOp = false
             if (player.isOnline) {
-                log.outputObjectWhisper(player.player, TextFormat.GRAY.toString() + "%commands.deop.message")
+                log.outputObjectWhisper(player.player!!, TextFormat.GRAY.toString() + "%commands.deop.message")
             }
-            log.addSuccess("commands.deop.success", player.name).output(true)
+            log.addSuccess("commands.deop.success", player.name!!).output(true)
         }
-        return IPlayers.size
+        return players.size
     }
 }

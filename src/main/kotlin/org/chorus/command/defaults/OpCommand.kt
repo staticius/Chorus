@@ -38,13 +38,13 @@ class OpCommand(name: String) : VanillaCommand(name, "commands.op.description") 
 
         for (player in IPlayers) {
             if (player.isOp) {
-                log.addError("commands.op.failed", player.name).output()
+                log.addError("commands.op.failed", player.name!!).output()
             } else {
                 player.isOp = true
                 if (player.isOnline) {
-                    log.outputObjectWhisper(player.player, TextFormat.GRAY.toString() + "%commands.op.message")
+                    log.outputObjectWhisper(player.player!!, TextFormat.GRAY.toString() + "%commands.op.message")
                 }
-                log.addSuccess("commands.op.success", player.name).output(true)
+                log.addSuccess("commands.op.success", player.name!!).output(true)
             }
         }
         return IPlayers.size

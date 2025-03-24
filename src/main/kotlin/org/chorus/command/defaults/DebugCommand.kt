@@ -6,7 +6,10 @@ import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
+import org.chorus.entity.ai.EntityAI
+import org.chorus.item.ItemFilledMap
 import org.chorus.plugin.InternalPlugin
+import org.chorus.scheduler.AsyncTask
 import java.util.*
 import kotlin.collections.set
 
@@ -21,9 +24,7 @@ class DebugCommand(name: String) : TestCommand(name, "commands.debug.description
                 CommandParameter.Companion.newEnum("entity", arrayOf("entity")),
                 CommandParameter.Companion.newEnum(
                     "option",
-                    Arrays.stream<EntityAI.DebugOption>(EntityAI.DebugOption.EntityAI.DebugOption.entries.toTypedArray())
-                        .map<String> { option: EntityAI.DebugOption -> option.name.lowercase() }.toList()
-                        .toTypedArray<String>()
+                    EntityAI.DebugOption.entries.map { option: EntityAI.DebugOption -> option.name.lowercase() }.toTypedArray()
                 ),
                 CommandParameter.Companion.newEnum("value", false, CommandEnum.Companion.ENUM_BOOLEAN)
             )
@@ -43,7 +44,7 @@ class DebugCommand(name: String) : TestCommand(name, "commands.debug.description
         val list = result.value
         when (result.key) {
             "entity" -> {
-                val str = list!!.getResult<String>(1)
+                val str = list.getResult<String>(1)
                 val option: EntityAI.DebugOption = EntityAI.DebugOption.valueOf(str!!.uppercase())
                 val value = list.getResult<Boolean>(2)!!
                 EntityAI.setDebugOption(option, value)
@@ -57,17 +58,18 @@ class DebugCommand(name: String) : TestCommand(name, "commands.debug.description
 
             "rendermap" -> {
                 if (!sender.isPlayer) return 0
-                val zoom = list!!.getResult<Int>(1)!!
+                val zoom = list.getResult<Int>(1)!!
                 if (zoom < 1) {
                     log.addError("Zoom must bigger than one").output()
                     return 0
                 }
                 val player = sender.asPlayer()
                 if (player!!.inventory.itemInHand is ItemFilledMap) {
-                    player.level.scheduler.scheduleAsyncTask(InternalPlugin.INSTANCE, object : AsyncTask() {
+                    val itemFilledMap = player.inventory.itemInHand as ItemFilledMap
+                    player.level!!.scheduler.scheduleAsyncTask(InternalPlugin.INSTANCE, object : AsyncTask() {
                         override fun onRun() {
                             itemFilledMap.renderMap(
-                                player.level,
+                                player.level!!,
                                 player.position.floorX - 64,
                                 player.position.floorZ - 64,
                                 zoom

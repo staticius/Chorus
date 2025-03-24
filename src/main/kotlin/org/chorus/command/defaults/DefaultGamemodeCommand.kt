@@ -7,12 +7,9 @@ import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
+import org.chorus.config.ServerPropertiesKeys
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
 class DefaultGamemodeCommand(name: String) : VanillaCommand(name, "commands.defaultgamemode.description") {
     init {
         this.permission = "nukkit.command.defaultgamemode"
@@ -35,9 +32,9 @@ class DefaultGamemodeCommand(name: String) : VanillaCommand(name, "commands.defa
         val list = result.value
         val gameMode: Int
         when (result.key) {
-            "default" -> gameMode = list!!.getResult(0)!!
+            "default" -> gameMode = list.getResult(0)!!
             "byString" -> {
-                val mode = list!!.getResult<String>(0)
+                val mode = list.getResult<String>(0)!!
                 gameMode = Server.getGamemodeFromString(mode)
             }
 
@@ -46,7 +43,7 @@ class DefaultGamemodeCommand(name: String) : VanillaCommand(name, "commands.defa
             }
         }
 
-        val valid = gameMode >= 0 && gameMode <= 3
+        val valid = gameMode in 0..3
         if (valid) {
             Server.instance.properties[ServerPropertiesKeys.GAMEMODE, gameMode]
             log.addSuccess("commands.defaultgamemode.success", Server.getGamemodeString(gameMode)).output()

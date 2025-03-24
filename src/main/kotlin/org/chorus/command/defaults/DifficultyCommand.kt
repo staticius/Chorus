@@ -7,12 +7,9 @@ import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
+import org.chorus.network.protocol.SetDifficultyPacket
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
 class DifficultyCommand(name: String) :
     VanillaCommand(name, "commands.difficulty.description", "%commands.difficulty.usage") {
     init {
@@ -40,11 +37,11 @@ class DifficultyCommand(name: String) :
         var difficulty: Int
         when (result.key) {
             "default" -> {
-                difficulty = list!!.getResult(0)!!
+                difficulty = list.getResult(0)!!
             }
 
             "byString" -> {
-                val str = list!!.getResult<String>(0)
+                val str = list.getResult<String>(0)!!
                 difficulty = Server.getDifficultyFromString(str)
             }
 
@@ -56,9 +53,9 @@ class DifficultyCommand(name: String) :
             difficulty = 3
         }
         if (difficulty != -1) {
-            Server.instance.difficulty = difficulty
+            Server.instance.setDifficulty(difficulty)
             val pk: SetDifficultyPacket = SetDifficultyPacket()
-            pk.difficulty = Server.instance.difficulty
+            pk.difficulty = Server.instance.getDifficulty()
             Server.broadcastPacket(ArrayList(Server.instance.onlinePlayers.values), pk)
             log.addSuccess("commands.difficulty.success", difficulty.toString()).output(true)
             return 1
