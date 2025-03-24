@@ -34,25 +34,25 @@ class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.de
         }
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
         if (!boolGameRules.isEmpty()) {
-            commandParameters["boolGameRules"] = arrayOf<CommandParameter?>(
+            commandParameters["boolGameRules"] = arrayOf(
                 CommandParameter.Companion.newEnum("rule", CommandEnum("BoolGameRule", boolGameRules)),
                 CommandParameter.Companion.newEnum("value", true, CommandEnum.Companion.ENUM_BOOLEAN)
             )
         }
         if (!intGameRules.isEmpty()) {
-            commandParameters["intGameRules"] = arrayOf<CommandParameter?>(
+            commandParameters["intGameRules"] = arrayOf(
                 CommandParameter.Companion.newEnum("rule", CommandEnum("IntGameRule", intGameRules)),
                 CommandParameter.Companion.newType("value", true, CommandParamType.INT)
             )
         }
         if (!floatGameRules.isEmpty()) {
-            commandParameters["floatGameRules"] = arrayOf<CommandParameter?>(
+            commandParameters["floatGameRules"] = arrayOf(
                 CommandParameter.Companion.newEnum("rule", CommandEnum("FloatGameRule", floatGameRules)),
                 CommandParameter.Companion.newType("value", true, CommandParamType.FLOAT)
             )
         }
         if (!unknownGameRules.isEmpty()) {
-            commandParameters["unknownGameRules"] = arrayOf<CommandParameter?>(
+            commandParameters["unknownGameRules"] = arrayOf(
                 CommandParameter.Companion.newEnum("rule", CommandEnum("UnknownGameRule", unknownGameRules)),
                 CommandParameter.Companion.newType("value", true, CommandParamType.STRING)
             )

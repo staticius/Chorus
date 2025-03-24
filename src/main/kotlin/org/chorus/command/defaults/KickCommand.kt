@@ -18,7 +18,7 @@ class KickCommand(name: String) : VanillaCommand(name, "commands.kick.descriptio
     init {
         this.permission = "nukkit.command.kick"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newType("reason", true, CommandParamType.MESSAGE)
         )

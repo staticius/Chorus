@@ -21,7 +21,7 @@ class GiveCommand(name: String) : VanillaCommand(name, "commands.give.descriptio
     init {
         this.permission = "nukkit.command.give"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),
             GenericParameter.Companion.ITEM_NAME.get(false),
             CommandParameter.Companion.newType("amount", true, CommandParamType.INT),

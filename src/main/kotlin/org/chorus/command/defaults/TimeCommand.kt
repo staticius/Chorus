@@ -21,18 +21,18 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                 "nukkit.command.time.start;" +
                 "nukkit.command.time.stop"
         commandParameters.clear()
-        commandParameters["1arg"] = arrayOf<CommandParameter?>(
+        commandParameters["1arg"] = arrayOf(
             CommandParameter.Companion.newEnum("mode", CommandEnum("TimeMode", "query", "start", "stop"))
         )
-        commandParameters["add"] = arrayOf<CommandParameter?>(
+        commandParameters["add"] = arrayOf(
             CommandParameter.Companion.newEnum("mode", CommandEnum("TimeModeAdd", "add")),
             CommandParameter.Companion.newType("amount", CommandParamType.INT)
         )
-        commandParameters["setAmount"] = arrayOf<CommandParameter?>(
+        commandParameters["setAmount"] = arrayOf(
             CommandParameter.Companion.newEnum("mode", false, CommandEnum("TimeModeSet", "set")),
             CommandParameter.Companion.newType("amount", CommandParamType.INT)
         )
-        commandParameters["setTime"] = arrayOf<CommandParameter?>(
+        commandParameters["setTime"] = arrayOf(
             CommandParameter.Companion.newEnum("mode", CommandEnum("TimeModeSet", "set")),
             CommandParameter.Companion.newEnum(
                 "time",

@@ -32,7 +32,7 @@ class ScoreboardCommand(name: String) :
     init {
         this.permission = "nukkit.command.scoreboard"
         commandParameters.clear()
-        commandParameters["objectives-add"] = arrayOf<CommandParameter?>(
+        commandParameters["objectives-add"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -55,7 +55,7 @@ class ScoreboardCommand(name: String) :
             ),
             CommandParameter.Companion.newType("displayName", true, CommandParamType.STRING)
         )
-        commandParameters["objectives-list"] = arrayOf<CommandParameter?>(
+        commandParameters["objectives-list"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -71,7 +71,7 @@ class ScoreboardCommand(name: String) :
                 CommandEnum("ScoreboardListAction", listOf<String>("list"), false)
             ),
         )
-        commandParameters["objectives-remove"] = arrayOf<CommandParameter?>(
+        commandParameters["objectives-remove"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -88,7 +88,7 @@ class ScoreboardCommand(name: String) :
             ),
             GenericParameter.Companion.OBJECTIVES.get(false),
         )
-        commandParameters["objectives-setdisplay-list-sidebar"] = arrayOf<CommandParameter?>(
+        commandParameters["objectives-setdisplay-list-sidebar"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -125,7 +125,7 @@ class ScoreboardCommand(name: String) :
                 CommandParamOption.SUPPRESS_ENUM_AUTOCOMPLETION
             ),
         )
-        commandParameters["objectives-setdisplay-belowname"] = arrayOf<CommandParameter?>(
+        commandParameters["objectives-setdisplay-belowname"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -151,7 +151,7 @@ class ScoreboardCommand(name: String) :
             ),
             GenericParameter.Companion.OBJECTIVES.get(true)
         )
-        commandParameters["players-add-remove-set"] = arrayOf<CommandParameter?>(
+        commandParameters["players-add-remove-set"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -170,7 +170,7 @@ class ScoreboardCommand(name: String) :
             GenericParameter.Companion.TARGET_OBJECTIVES.get(false),
             CommandParameter.Companion.newType("count", CommandParamType.INT)
         )
-        commandParameters["players-list"] = arrayOf<CommandParameter?>(
+        commandParameters["players-list"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -183,7 +183,7 @@ class ScoreboardCommand(name: String) :
             ),
             CommandParameter.Companion.newType("playername", true, CommandParamType.WILDCARD_TARGET) //allow *
         )
-        commandParameters["players-operation"] = arrayOf<CommandParameter?>(
+        commandParameters["players-operation"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -200,7 +200,7 @@ class ScoreboardCommand(name: String) :
             CommandParameter.Companion.newType("selector", CommandParamType.WILDCARD_TARGET),
             GenericParameter.Companion.OBJECTIVES.get(false),
         )
-        commandParameters["players-random"] = arrayOf<CommandParameter?>(
+        commandParameters["players-random"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -226,7 +226,7 @@ class ScoreboardCommand(name: String) :
                 WildcardIntNode(Int.MAX_VALUE)
             )
         )
-        commandParameters["players-reset"] = arrayOf<CommandParameter?>(
+        commandParameters["players-reset"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,
@@ -240,7 +240,7 @@ class ScoreboardCommand(name: String) :
             CommandParameter.Companion.newType("player", false, CommandParamType.WILDCARD_TARGET),  //allow *
             GenericParameter.Companion.OBJECTIVES.get(true),
         )
-        commandParameters["players-test"] = arrayOf<CommandParameter?>(
+        commandParameters["players-test"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "category",
                 false,

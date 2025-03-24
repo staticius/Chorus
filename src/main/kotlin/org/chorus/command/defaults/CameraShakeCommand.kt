@@ -15,7 +15,7 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
     init {
         this.permission = "nukkit.command.camerashake"
         commandParameters.clear()
-        commandParameters["add"] = arrayOf<CommandParameter?>(
+        commandParameters["add"] = arrayOf(
             CommandParameter.Companion.newEnum("add", false, arrayOf<String?>("add")),
             CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newType("intensity", false, CommandParamType.FLOAT),
@@ -26,7 +26,7 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
                 arrayOf<String?>("positional", "rotational")
             )
         )
-        commandParameters["stop"] = arrayOf<CommandParameter?>(
+        commandParameters["stop"] = arrayOf(
             CommandParameter.Companion.newEnum("stop", false, arrayOf<String?>("stop")),
             CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
         )

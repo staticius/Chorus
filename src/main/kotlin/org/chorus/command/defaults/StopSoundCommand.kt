@@ -15,7 +15,7 @@ class StopSoundCommand(name: String) : VanillaCommand(name, "commands.stopsound.
         this.permission = "nukkit.command.stopsound"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
                 CommandParameter.Companion.newType("sound", true, CommandParamType.STRING)
             )

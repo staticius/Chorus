@@ -13,7 +13,7 @@ class TestForCommand(name: String) : VanillaCommand(name, "commands.testfor.desc
         this.permission = "nukkit.command.testfor"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("victim", false, CommandParamType.TARGET)
             )
         )

@@ -113,7 +113,7 @@ class VersionCommand(name: String) : Command(
     init {
         this.permission = "nukkit.command.version"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("pluginName", true, CommandParamType.STRING)
         )
     }

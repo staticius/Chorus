@@ -14,10 +14,10 @@ class ReloadCommand(name: String) : VanillaCommand(name, "Reload the server/plug
         this.permission = "nukkit.command.reload"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
-        commandParameters["function"] = arrayOf<CommandParameter?>(
+        commandParameters["function"] = arrayOf(
             CommandParameter.Companion.newEnum("function", false, arrayOf<String?>("function"))
         )
-        commandParameters["plugin"] = arrayOf<CommandParameter?>(
+        commandParameters["plugin"] = arrayOf(
             CommandParameter.Companion.newEnum("plugin", arrayOf<String?>("plugin")),
             CommandParameter.Companion.newType("plugin", CommandParamType.STRING)
         )

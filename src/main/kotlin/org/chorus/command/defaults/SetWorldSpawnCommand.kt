@@ -19,7 +19,7 @@ class SetWorldSpawnCommand(name: String) : VanillaCommand(name, "commands.setwor
         this.permission = "nukkit.command.setworldspawn"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
-        commandParameters["spawnPoint"] = arrayOf<CommandParameter?>(
+        commandParameters["spawnPoint"] = arrayOf(
             CommandParameter.Companion.newType("spawnPoint", true, CommandParamType.POSITION)
         )
         this.enableParamTree()

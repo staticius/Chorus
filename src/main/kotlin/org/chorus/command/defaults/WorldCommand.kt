@@ -15,11 +15,11 @@ class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.de
     init {
         this.permission = "nukkit.command.world"
         commandParameters.clear()
-        commandParameters["tp"] = arrayOf<CommandParameter?>(
+        commandParameters["tp"] = arrayOf(
             CommandParameter.Companion.newEnum("tp", arrayOf<String?>("tp")),
             CommandParameter.Companion.newEnum("world", false, WORLD_NAME_ENUM)
         )
-        commandParameters["list"] = arrayOf<CommandParameter?>(
+        commandParameters["list"] = arrayOf(
             CommandParameter.Companion.newEnum("list", arrayOf<String?>("list"))
         )
         this.enableParamTree()

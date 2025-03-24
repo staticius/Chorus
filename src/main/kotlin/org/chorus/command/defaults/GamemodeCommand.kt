@@ -27,11 +27,11 @@ class GamemodeCommand(name: String) : VanillaCommand(
                 "nukkit.command.gamemode.spectator;" +
                 "nukkit.command.gamemode.other"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("gameMode", CommandParamType.INT),
             CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode())
         )
-        commandParameters["byString"] = arrayOf<CommandParameter?>(
+        commandParameters["byString"] = arrayOf(
             CommandParameter.Companion.newEnum("gameMode", CommandEnum.Companion.ENUM_GAMEMODE),
             CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode())
         )

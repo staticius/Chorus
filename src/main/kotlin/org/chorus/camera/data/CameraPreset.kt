@@ -53,6 +53,8 @@ class CameraPreset @JvmOverloads constructor(
 
     private var id = 0
 
+    fun getId() = id
+
     /**
      * Remember to call the registerCameraPresets() method to register!
      */

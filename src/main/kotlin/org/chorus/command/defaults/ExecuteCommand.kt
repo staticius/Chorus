@@ -32,35 +32,35 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
         this.permission = "nukkit.command.execute"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "as", arrayOf<CommandParameter?>(
+            "as", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_As", "as")),
                 GenericParameter.Companion.ORIGIN.get(false),
                 GenericParameter.Companion.CHAINED_COMMAND.get(false)
             )
         )
         this.addCommandParameters(
-            "at", arrayOf<CommandParameter?>(
+            "at", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_At", "at")),
                 GenericParameter.Companion.ORIGIN.get(false),
                 GenericParameter.Companion.CHAINED_COMMAND.get(false)
             )
         )
         this.addCommandParameters(
-            "in", arrayOf<CommandParameter?>(
+            "in", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_In", "in")),
                 CommandParameter.Companion.newType("dimension", CommandParamType.STRING),
                 GenericParameter.Companion.CHAINED_COMMAND.get(false)
             )
         )
         this.addCommandParameters(
-            "facing", arrayOf<CommandParameter?>(
+            "facing", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Facing", "facing")),
                 CommandParameter.Companion.newType("pos", CommandParamType.POSITION),
                 GenericParameter.Companion.CHAINED_COMMAND.get(false)
             )
         )
         this.addCommandParameters(
-            "facing-entity", arrayOf<CommandParameter?>(
+            "facing-entity", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Facing", "facing")),
                 CommandParameter.Companion.newEnum(
                     "secondary subcommand",
@@ -73,7 +73,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             )
         )
         this.addCommandParameters(
-            "rotated", arrayOf<CommandParameter?>(
+            "rotated", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Rotated", "rotated")),
                 CommandParameter.Companion.newType("yaw", false, CommandParamType.VALUE),
                 CommandParameter.Companion.newType("pitch", false, CommandParamType.VALUE),
@@ -81,7 +81,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             )
         )
         this.addCommandParameters(
-            "rotated as", arrayOf<CommandParameter?>(
+            "rotated as", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Rotated", "rotated")),
                 CommandParameter.Companion.newEnum("secondary subcommand", false, CommandEnum("Option_As", "as")),
                 CommandParameter.Companion.newType("targets", CommandParamType.TARGET),
@@ -89,28 +89,28 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             )
         )
         this.addCommandParameters(
-            "align", arrayOf<CommandParameter?>(
+            "align", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Align", "align")),
                 CommandParameter.Companion.newType("axes", CommandParamType.STRING),
                 GenericParameter.Companion.CHAINED_COMMAND.get(false)
             )
         )
         this.addCommandParameters(
-            "anchored", arrayOf<CommandParameter?>(
+            "anchored", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Anchored", "anchored")),
                 CommandParameter.Companion.newEnum("anchor", arrayOf<String?>("eyes", "feet")),
                 GenericParameter.Companion.CHAINED_COMMAND.get(false)
             )
         )
         this.addCommandParameters(
-            "positioned", arrayOf<CommandParameter?>(
+            "positioned", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Positioned", "positioned")),
                 CommandParameter.Companion.newType("position", CommandParamType.POSITION),
                 GenericParameter.Companion.CHAINED_COMMAND.get(false)
             )
         )
         this.addCommandParameters(
-            "positioned as", arrayOf<CommandParameter?>(
+            "positioned as", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Positioned", "positioned")),
                 CommandParameter.Companion.newEnum("secondary subcommand", false, CommandEnum("Option_As", "as")),
                 GenericParameter.Companion.ORIGIN.get(false),
@@ -118,7 +118,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             )
         )
         this.addCommandParameters(
-            "if-unless-block", arrayOf<CommandParameter?>(
+            "if-unless-block", arrayOf(
                 CommandParameter.Companion.newEnum(
                     "subcommand",
                     false,
@@ -140,7 +140,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 CommandParameter.newEnum("chainedCommand", false, CHAINED_COMMAND_ENUM, new ChainedCommandNode(),CommandParamOption.ENUM_AS_CHAINED_COMMAND)
         });*/
         this.addCommandParameters(
-            "if-unless-block-data", arrayOf<CommandParameter?>(
+            "if-unless-block-data", arrayOf(
                 CommandParameter.Companion.newEnum(
                     "subcommand",
                     false,
@@ -154,7 +154,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             )
         )
         this.addCommandParameters(
-            "if-unless-blocks", arrayOf<CommandParameter?>(
+            "if-unless-blocks", arrayOf(
                 CommandParameter.Companion.newEnum(
                     "subcommand",
                     false,
@@ -173,7 +173,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             )
         )
         this.addCommandParameters(
-            "if-unless-entity", arrayOf<CommandParameter?>(
+            "if-unless-entity", arrayOf(
                 CommandParameter.Companion.newEnum(
                     "subcommand",
                     false,
@@ -189,7 +189,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             )
         )
         this.addCommandParameters(
-            "if-unless-score", arrayOf<CommandParameter?>(
+            "if-unless-score", arrayOf(
                 CommandParameter.Companion.newEnum(
                     "subcommand",
                     false,
@@ -213,7 +213,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             )
         )
         this.addCommandParameters(
-            "if-unless-score-matches", arrayOf<CommandParameter?>(
+            "if-unless-score-matches", arrayOf(
                 CommandParameter.Companion.newEnum(
                     "subcommand",
                     false,
@@ -232,7 +232,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             )
         )
         this.addCommandParameters(
-            "run", arrayOf<CommandParameter?>(
+            "run", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Run", "run")),
                 CommandParameter.Companion.newType(
                     "command",

@@ -16,7 +16,7 @@ class HudCommand(name: String) : VanillaCommand(name, "commands.hud.description"
         this.permission = "nukkit.command.hud"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
                 CommandParameter.Companion.newEnum("visible", false, arrayOf<String?>("hide", "reset")),
                 CommandParameter.Companion.newEnum(

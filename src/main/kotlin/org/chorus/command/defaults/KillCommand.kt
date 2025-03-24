@@ -20,7 +20,7 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
         this.permission = ("nukkit.command.kill.self;"
                 + "nukkit.command.kill.other")
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", true, CommandParamType.TARGET)
         )
         this.enableParamTree()

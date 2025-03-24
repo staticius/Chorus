@@ -22,7 +22,7 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
         this.permission = "nukkit.command.fill"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("from", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("to", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newEnum("tileName", false, CommandEnum.Companion.ENUM_BLOCK),
@@ -35,7 +35,7 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
             )
         )
         this.addCommandParameters(
-            "replace", arrayOf<CommandParameter?>(
+            "replace", arrayOf(
                 CommandParameter.Companion.newType("from", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("to", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newEnum("tileName", false, CommandEnum.Companion.ENUM_BLOCK),

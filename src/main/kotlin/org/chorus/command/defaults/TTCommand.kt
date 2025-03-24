@@ -14,7 +14,7 @@ class TTCommand(name: String) : TestCommand(name, "tt") {
 
     init {
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newEnum("sub", arrayOf<String?>("get", "set")),
             CommandParameter.Companion.newType("name", false, CommandParamType.TARGET, PlayersNode()),
         )

@@ -19,15 +19,15 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
         this.permission = "nukkit.command.title"
 
         commandParameters.clear()
-        commandParameters["clear"] = arrayOf<CommandParameter?>(
+        commandParameters["clear"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("clear", CommandEnum("TitleClear", "clear"))
         )
-        commandParameters["reset"] = arrayOf<CommandParameter?>(
+        commandParameters["reset"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("reset", CommandEnum("TitleReset", "reset"))
         )
-        commandParameters["set"] = arrayOf<CommandParameter?>(
+        commandParameters["set"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum(
                 "titleLocation",
@@ -35,7 +35,7 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
             ),
             CommandParameter.Companion.newType("titleText", CommandParamType.MESSAGE)
         )
-        commandParameters["times"] = arrayOf<CommandParameter?>(
+        commandParameters["times"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("times", CommandEnum("TitleTimes", "times")),
             CommandParameter.Companion.newType("fadeIn", CommandParamType.INT),

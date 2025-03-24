@@ -729,11 +729,11 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         return buf.writeBytes(bytes)
     }
 
-    fun <T> writeNotNull(data: T?, consumer: Consumer<T?>) {
+    fun <T> writeNotNull(data: T?, consumer: Consumer<T>) {
         val present = data != null
         writeBoolean(present)
         if (present) {
-            consumer.accept(data)
+            consumer.accept(data!!)
         }
     }
 

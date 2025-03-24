@@ -7,13 +7,13 @@ import org.chorus.math.Vector2f
 import org.chorus.math.Vector3f
 import org.chorus.utils.OptionalValue
 
-class SetInstruction : CameraInstruction {
-    private val ease: Ease? = null
-    private val pos: Vector3f? = null
-    private val rot: Vector2f? = null
-    private val facing: Vector3f? = null
-    private val preset: CameraPreset? = null
-    private val viewOffset: Vector2f? = null
-    private val entityOffset: Vector3f? = null
-    private val defaultPreset: OptionalValue<Boolean> = OptionalValue.empty()
-}
+data class SetInstruction (
+    val ease: Ease? = null,
+    val pos: Vector3f? = null,
+    val rot: Vector2f? = null,
+    val facing: Vector3f? = null,
+    val preset: CameraPreset? = null,
+    val viewOffset: Vector2f? = null,
+    val entityOffset: Vector3f? = null,
+    val defaultPreset: OptionalValue<Boolean> = OptionalValue.empty()
+) : CameraInstruction

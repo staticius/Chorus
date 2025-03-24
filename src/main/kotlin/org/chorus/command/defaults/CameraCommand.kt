@@ -3,7 +3,9 @@ package org.chorus.command.defaults
 import org.chorus.Player
 import org.chorus.camera.data.CameraPreset.Companion.getPreset
 import org.chorus.camera.data.Time
+import org.chorus.camera.instruction.impl.ClearInstruction
 import org.chorus.camera.instruction.impl.ClearInstruction.get
+import org.chorus.camera.instruction.impl.FadeInstruction
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
@@ -12,28 +14,26 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.*
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
+import org.chorus.network.protocol.CameraInstructionPacket
 import java.awt.Color
 import java.util.*
 
 /**
- * @author daoge_cmd <br></br>
- * Date: 2023/6/11 <br></br>
- * PowerNukkitX Project <br></br>
- * TODO: 此命令的多语言文本似乎不能正常工作
+ * TODO: The multilingual text of this command does not seem to work properly
  */
 class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.description") {
     init {
         this.permission = "nukkit.command.camera"
         commandParameters.clear()
-        commandParameters["clear"] = arrayOf<CommandParameter?>(
+        commandParameters["clear"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
-            CommandParameter.Companion.newEnum("clear", false, arrayOf<String?>("clear"))
+            CommandParameter.Companion.newEnum("clear", false, arrayOf("clear"))
         )
-        commandParameters["fade"] = arrayOf<CommandParameter?>(
+        commandParameters["fade"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
-            CommandParameter.Companion.newEnum("fade", false, arrayOf<String?>("fade"))
+            CommandParameter.Companion.newEnum("fade", false, arrayOf("fade"))
         )
-        commandParameters["fade-color"] = arrayOf<CommandParameter?>(
+        commandParameters["fade-color"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("fade", false, arrayOf<String?>("fade")),
             CommandParameter.Companion.newEnum("color", false, arrayOf<String?>("color")),
@@ -41,7 +41,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             CommandParameter.Companion.newType("green", false, CommandParamType.FLOAT),
             CommandParameter.Companion.newType("blue", false, CommandParamType.FLOAT)
         )
-        commandParameters["fade-time-color"] = arrayOf<CommandParameter?>(
+        commandParameters["fade-time-color"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("fade", false, arrayOf<String?>("fade")),
             CommandParameter.Companion.newEnum("time", false, arrayOf<String?>("time")),
@@ -53,13 +53,13 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             CommandParameter.Companion.newType("green", false, CommandParamType.FLOAT),
             CommandParameter.Companion.newType("blue", false, CommandParamType.FLOAT)
         )
-        commandParameters["set-default"] = arrayOf<CommandParameter?>(
+        commandParameters["set-default"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("set", false, arrayOf<String?>("set")),
             CommandParameter.Companion.newEnum("preset", false, CommandEnum.Companion.CAMERA_PRESETS),
             CommandParameter.Companion.newEnum("default", true, arrayOf<String?>("default"))
         )
-        commandParameters["set-rot"] = arrayOf<CommandParameter?>(
+        commandParameters["set-rot"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("set", false, arrayOf<String?>("set")),
             CommandParameter.Companion.newEnum("preset", false, CommandEnum.Companion.CAMERA_PRESETS),
@@ -67,14 +67,14 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             CommandParameter.Companion.newType("xRot", false, CommandParamType.VALUE, RelativeFloatNode()),
             CommandParameter.Companion.newType("yRot", false, CommandParamType.VALUE, RelativeFloatNode())
         )
-        commandParameters["set-pos"] = arrayOf<CommandParameter?>(
+        commandParameters["set-pos"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("set", false, arrayOf<String?>("set")),
             CommandParameter.Companion.newEnum("preset", false, CommandEnum.Companion.CAMERA_PRESETS),
             CommandParameter.Companion.newEnum("pos", false, arrayOf<String?>("pos")),
             CommandParameter.Companion.newType("position", false, CommandParamType.POSITION),
         )
-        commandParameters["set-pos-rot"] = arrayOf<CommandParameter?>(
+        commandParameters["set-pos-rot"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("set", false, arrayOf<String?>("set")),
             CommandParameter.Companion.newEnum("preset", false, CommandEnum.Companion.CAMERA_PRESETS),
@@ -84,7 +84,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             CommandParameter.Companion.newType("xRot", false, CommandParamType.VALUE, RelativeFloatNode()),
             CommandParameter.Companion.newType("yRot", false, CommandParamType.VALUE, RelativeFloatNode())
         )
-        commandParameters["set-ease-default"] = arrayOf<CommandParameter?>(
+        commandParameters["set-ease-default"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("set", false, arrayOf<String?>("set")),
             CommandParameter.Companion.newEnum("preset", false, CommandEnum.Companion.CAMERA_PRESETS),
@@ -98,7 +98,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             CommandParameter.Companion.newEnum("easeType", false, EASE_TYPES),
             CommandParameter.Companion.newEnum("default", true, arrayOf<String?>("default"))
         )
-        commandParameters["set-ease-rot"] = arrayOf<CommandParameter?>(
+        commandParameters["set-ease-rot"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("set", false, arrayOf<String?>("set")),
             CommandParameter.Companion.newEnum("preset", false, CommandEnum.Companion.CAMERA_PRESETS),
@@ -114,7 +114,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             CommandParameter.Companion.newType("xRot", false, CommandParamType.VALUE, RelativeFloatNode()),
             CommandParameter.Companion.newType("yRot", false, CommandParamType.VALUE, RelativeFloatNode())
         )
-        commandParameters["set-ease-pos"] = arrayOf<CommandParameter?>(
+        commandParameters["set-ease-pos"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("set", false, arrayOf<String?>("set")),
             CommandParameter.Companion.newEnum("preset", false, CommandEnum.Companion.CAMERA_PRESETS),
@@ -129,7 +129,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             CommandParameter.Companion.newEnum("pos", false, arrayOf<String?>("pos")),
             CommandParameter.Companion.newType("position", false, CommandParamType.POSITION),
         )
-        commandParameters["set-ease-pos-rot"] = arrayOf<CommandParameter?>(
+        commandParameters["set-ease-pos-rot"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("set", false, arrayOf<String?>("set")),
             CommandParameter.Companion.newEnum("preset", false, CommandEnum.Companion.CAMERA_PRESETS),
@@ -153,7 +153,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList>,
+        result: Map.Entry<String, ParamList?>,
         log: CommandLogger
     ): Int {
         val list = result.value
@@ -168,19 +168,18 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
         val senderLocation = sender.getTransform()
         when (result.key) {
             "clear" -> {
-                pk.setInstruction(ClearInstruction.get())
+                pk.setInstruction(ClearInstruction)
             }
 
             "fade" -> {
-                pk.setInstruction(FadeInstruction.builder().build())
+                pk.setInstruction(FadeInstruction())
             }
 
             "fade-color" -> {
                 pk.setInstruction(
-                    FadeInstruction
-                        .builder()
-                        .color(Color(getFloat(list, 3), getFloat(list, 4), getFloat(list, 5)))
-                        .build()
+                    FadeInstruction(
+                        Color(getFloat(list, 3), getFloat(list, 4), getFloat(list, 5))
+                    )
                 )
             }
 

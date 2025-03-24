@@ -17,7 +17,7 @@ class SpreadPlayersCommand(name: String) : VanillaCommand(name, "commands.spread
         this.permission = "nukkit.command.spreadplayers"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("x", false, CommandParamType.VALUE),
                 CommandParameter.Companion.newType("z", false, CommandParamType.VALUE),
                 CommandParameter.Companion.newType("spreadDistance", false, CommandParamType.FLOAT),

@@ -18,7 +18,7 @@ class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.descript
         this.permission = "nukkit.command.clone"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("begin", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("end", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("destination", false, CommandParamType.BLOCK_POSITION),
@@ -27,7 +27,7 @@ class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.descript
             )
         )
         this.addCommandParameters(
-            "filtered", arrayOf<CommandParameter?>(
+            "filtered", arrayOf(
                 CommandParameter.Companion.newType("begin", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("end", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("destination", false, CommandParamType.BLOCK_POSITION),

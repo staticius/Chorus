@@ -7,13 +7,9 @@ import org.chorus.camera.instruction.impl.ClearInstruction
 import org.chorus.camera.instruction.impl.FadeInstruction
 import org.chorus.camera.instruction.impl.SetInstruction
 import org.chorus.camera.instruction.impl.TargetInstruction
-import org.chorus.entity.Entity.getId
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.utils.OptionalBoolean
-
 import java.awt.Color
-import java.util.function.Consumer
-
 
 class CameraInstructionPacket : DataPacket() {
     var setInstruction: SetInstruction? = null
@@ -26,40 +22,32 @@ class CameraInstructionPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeNotNull<SetInstruction>(setInstruction) { s: SetInstruction? ->
-            byteBuf.writeIntLE(s.getPreset().getId())
-            byteBuf.writeNotNull<T>(
-                s.getEase(),
-                Consumer<T?> { e: T -> this.writeEase(byteBuf, e) })
-            byteBuf.writeNotNull<T>(s.getPos(), byteBuf::writeVector3f)
-            byteBuf.writeNotNull<T>(s.getRot(), byteBuf::writeVector2f)
-            byteBuf.writeNotNull<T>(s.getFacing(), byteBuf::writeVector3f)
-            byteBuf.writeNotNull<T>(s.getViewOffset(), byteBuf::writeVector2f)
-            byteBuf.writeNotNull<T>(s.getEntityOffset(), byteBuf::writeVector3f)
-            byteBuf.writeOptional<T>(
-                s.getDefaultPreset(),
-                Consumer<T> { value: T? -> byteBuf.writeBoolean(value) })
+        byteBuf.writeNotNull(setInstruction) { s ->
+            byteBuf.writeIntLE(s.preset!!.getId())
+            byteBuf.writeNotNull(s.ease) { e -> this.writeEase(byteBuf, e) }
+            byteBuf.writeNotNull(s.pos, byteBuf::writeVector3f)
+            byteBuf.writeNotNull(s.rot, byteBuf::writeVector2f)
+            byteBuf.writeNotNull(s.facing, byteBuf::writeVector3f)
+            byteBuf.writeNotNull(s.viewOffset, byteBuf::writeVector2f)
+            byteBuf.writeNotNull(s.entityOffset, byteBuf::writeVector3f)
+            byteBuf.writeOptional(s.defaultPreset) { value -> byteBuf.writeBoolean(value) }
         }
 
         if (clearInstruction == null) {
             byteBuf.writeBoolean(false)
         } else {
-            byteBuf.writeBoolean(true) //optional.isPresent
-            byteBuf.writeBoolean(true) //actual data
+            byteBuf.writeBoolean(true) // optional.isPresent
+            byteBuf.writeBoolean(true) // actual data
         }
 
-        byteBuf.writeNotNull<FadeInstruction>(fadeInstruction) { f: FadeInstruction? ->
-            byteBuf.writeNotNull<T>(
-                f.getTime(),
-                Consumer<T?> { t: T -> this.writeTimeData(byteBuf, t) })
-            byteBuf.writeNotNull<T>(
-                f.getColor(),
-                Consumer<T?> { c: T -> this.writeColor(byteBuf, c) })
+        byteBuf.writeNotNull(fadeInstruction) { f ->
+            byteBuf.writeNotNull(f.time) { t -> this.writeTimeData(byteBuf, t) }
+            byteBuf.writeNotNull(f.color) { c -> this.writeColor(byteBuf, c) }
         }
 
-        byteBuf.writeNotNull<TargetInstruction>(targetInstruction) { target: TargetInstruction? ->
-            byteBuf.writeNotNull<T>(target.getTargetCenterOffset(), byteBuf::writeVector3f)
-            byteBuf.writeLongLE(targetInstruction.getUniqueEntityId())
+        byteBuf.writeNotNull(targetInstruction) { target ->
+            byteBuf.writeNotNull(target.targetCenterOffset, byteBuf::writeVector3f)
+            byteBuf.writeLongLE(target.uniqueEntityId)
         }
 
         byteBuf.writeOptional(
@@ -69,16 +57,15 @@ class CameraInstructionPacket : DataPacket() {
 
     fun setInstruction(instruction: CameraInstruction) {
         when (instruction) {
-            -> this.setInstruction = set
-            -> this.fadeInstruction = fade
-            -> this.clearInstruction = clear
-            -> this.targetInstruction = target
-            else -> {}
+            is SetInstruction -> this.setInstruction = instruction
+            is FadeInstruction -> this.fadeInstruction = instruction
+            is ClearInstruction -> this.clearInstruction = instruction
+            is TargetInstruction -> this.targetInstruction = instruction
         }
     }
 
     protected fun writeEase(byteBuf: HandleByteBuf, ease: Ease) {
-        byteBuf.writeByte(ease.easeType.ordinal().toByte().toInt())
+        byteBuf.writeByte(ease.easeType.ordinal.toByte().toInt())
         byteBuf.writeFloatLE(ease.time)
     }
 

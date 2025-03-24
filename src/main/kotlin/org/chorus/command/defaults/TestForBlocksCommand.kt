@@ -18,7 +18,7 @@ class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testfo
         this.permission = "nukkit.command.testforblocks"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("begin", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("end", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("destination", false, CommandParamType.BLOCK_POSITION),

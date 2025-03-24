@@ -16,7 +16,7 @@ class TellrawCommand(name: String) : VanillaCommand(name, "commands.tellraw.desc
     init {
         this.permission = "nukkit.command.tellraw"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newType("rawtext", CommandParamType.RAWTEXT)
         )

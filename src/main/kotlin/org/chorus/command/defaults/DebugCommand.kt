@@ -17,7 +17,7 @@ class DebugCommand(name: String) : TestCommand(name, "commands.debug.description
         commandParameters.clear()
         //生物AI debug模式开关
         commandParameters["entity"] =
-            arrayOf<CommandParameter?>(
+            arrayOf(
                 CommandParameter.Companion.newEnum("entity", arrayOf<String?>("entity")),
                 CommandParameter.Companion.newEnum(
                     "option",
@@ -27,7 +27,7 @@ class DebugCommand(name: String) : TestCommand(name, "commands.debug.description
                 ),
                 CommandParameter.Companion.newEnum("value", false, CommandEnum.Companion.ENUM_BOOLEAN)
             )
-        commandParameters["rendermap"] = arrayOf<CommandParameter?>(
+        commandParameters["rendermap"] = arrayOf(
             CommandParameter.Companion.newEnum("rendermap", arrayOf<String?>("rendermap")),
             CommandParameter.Companion.newType("zoom", CommandParamType.INT)
         )

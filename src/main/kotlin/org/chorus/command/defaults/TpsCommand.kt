@@ -12,7 +12,7 @@ class TpsCommand(name: String) : Command(name, "get server tps"), CoreCommand {
         this.permission = "nukkit.tps.status"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("count", true, CommandParamType.INT)
             )
         )

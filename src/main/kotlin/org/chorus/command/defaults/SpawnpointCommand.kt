@@ -22,7 +22,7 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
     init {
         this.permission = "nukkit.command.spawnpoint"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newType("spawnPos", true, CommandParamType.POSITION),
         )

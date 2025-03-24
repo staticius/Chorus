@@ -18,7 +18,7 @@ class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.
         getCommandParameters().clear()
         this.addCommandParameters(
             "default",
-            arrayOf<CommandParameter?>(
+            arrayOf(
                 CommandParameter.Companion.newEnum(
                     "sound",
                     false,

@@ -21,49 +21,49 @@ class TeleportCommand(name: String) :
     init {
         this.permission = "nukkit.command.teleport"
         commandParameters.clear()
-        commandParameters["->Entity"] = arrayOf<CommandParameter?>(
+        commandParameters["->Entity"] = arrayOf(
             CommandParameter.Companion.newType("destination", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
-        commandParameters["Entity->Entity"] = arrayOf<CommandParameter?>(
+        commandParameters["Entity->Entity"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET),
             CommandParameter.Companion.newType("destination", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
-        commandParameters["Entity->Pos"] = arrayOf<CommandParameter?>(
+        commandParameters["Entity->Pos"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET),
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
             CommandParameter.Companion.newType("yRot", true, CommandParamType.VALUE),
             CommandParameter.Companion.newType("xRot", true, CommandParamType.VALUE),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
-        commandParameters["Entity->Pos(FacingPos)"] = arrayOf<CommandParameter?>(
+        commandParameters["Entity->Pos(FacingPos)"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET),
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
             CommandParameter.Companion.newEnum("facing", false, arrayOf<String?>("facing")),
             CommandParameter.Companion.newType("lookAtPosition", CommandParamType.POSITION),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
-        commandParameters["Entity->Pos(FacingEntity)"] = arrayOf<CommandParameter?>(
+        commandParameters["Entity->Pos(FacingEntity)"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET),
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
             CommandParameter.Companion.newEnum("facing", false, arrayOf<String?>("facing")),
             CommandParameter.Companion.newType("lookAtEntity", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
-        commandParameters["->Pos"] = arrayOf<CommandParameter?>(
+        commandParameters["->Pos"] = arrayOf(
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
             CommandParameter.Companion.newType("yRot", true, CommandParamType.VALUE),
             CommandParameter.Companion.newType("xRot", true, CommandParamType.VALUE),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
-        commandParameters["->Pos(FacingPos)"] = arrayOf<CommandParameter?>(
+        commandParameters["->Pos(FacingPos)"] = arrayOf(
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
             CommandParameter.Companion.newEnum("facing", false, arrayOf<String?>("facing")),
             CommandParameter.Companion.newType("lookAtPosition", CommandParamType.POSITION),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
-        commandParameters["->Pos(FacingEntity)"] = arrayOf<CommandParameter?>(
+        commandParameters["->Pos(FacingEntity)"] = arrayOf(
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
             CommandParameter.Companion.newEnum("facing", false, arrayOf<String?>("facing")),
             CommandParameter.Companion.newType("lookAtEntity", CommandParamType.TARGET),

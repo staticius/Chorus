@@ -14,17 +14,17 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
     init {
         this.permission = "nukkit.command.tag"
         commandParameters.clear()
-        commandParameters["add"] = arrayOf<CommandParameter?>(
+        commandParameters["add"] = arrayOf(
             CommandParameter.Companion.newType("targets", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("add", arrayOf<String?>("add")),
             CommandParameter.Companion.newType("name", CommandParamType.STRING)
         )
-        commandParameters["remove"] = arrayOf<CommandParameter?>(
+        commandParameters["remove"] = arrayOf(
             CommandParameter.Companion.newType("targets", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("remove", arrayOf<String?>("remove")),
             CommandParameter.Companion.newType("name", CommandParamType.STRING)
         )
-        commandParameters["list"] = arrayOf<CommandParameter?>(
+        commandParameters["list"] = arrayOf(
             CommandParameter.Companion.newType("targets", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("list", arrayOf<String?>("list")),
         )

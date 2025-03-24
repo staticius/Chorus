@@ -18,14 +18,14 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
     init {
         this.permission = "nukkit.command.effect"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("effect", CommandEnum.Companion.ENUM_EFFECT),
             CommandParameter.Companion.newType("seconds", true, CommandParamType.INT),
             CommandParameter.Companion.newType("amplifier", true, CommandParamType.INT),
             CommandParameter.Companion.newEnum("hideParticle", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
-        commandParameters["clear"] = arrayOf<CommandParameter?>(
+        commandParameters["clear"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("clear", CommandEnum("ClearEffects", "clear"))
         )

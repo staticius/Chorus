@@ -17,10 +17,10 @@ class DefaultGamemodeCommand(name: String) : VanillaCommand(name, "commands.defa
     init {
         this.permission = "nukkit.command.defaultgamemode"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("gameMode", CommandParamType.INT)
         )
-        commandParameters["byString"] = arrayOf<CommandParameter?>(
+        commandParameters["byString"] = arrayOf(
             CommandParameter.Companion.newEnum("gameMode", CommandEnum.Companion.ENUM_GAMEMODE)
         )
         this.enableParamTree()

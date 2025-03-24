@@ -16,7 +16,7 @@ class ClearSpawnPointCommand(name: String) : VanillaCommand(name, "commands.clea
         this.permission = "nukkit.command.clearspawnpoint"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode()),
             )
         )

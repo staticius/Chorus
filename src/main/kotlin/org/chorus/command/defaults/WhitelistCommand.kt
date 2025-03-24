@@ -35,10 +35,10 @@ class WhitelistCommand(name: String) :
                 "nukkit.command.allowlist.add;" +
                 "nukkit.command.allowlist.remove"
         commandParameters.clear()
-        commandParameters["1arg"] = arrayOf<CommandParameter?>(
+        commandParameters["1arg"] = arrayOf(
             CommandParameter.Companion.newEnum("action", CommandEnum("AllowlistAction", "on", "off", "list", "reload"))
         )
-        commandParameters["2args"] = arrayOf<CommandParameter?>(
+        commandParameters["2args"] = arrayOf(
             CommandParameter.Companion.newEnum("action", CommandEnum("AllowlistPlayerAction", "add", "remove")),
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, StringNode())
         )

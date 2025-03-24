@@ -14,15 +14,15 @@ class TitlerawCommand(name: String) : VanillaCommand(name, "commands.titleraw.de
     init {
         this.permission = "nukkit.command.titleraw"
         commandParameters.clear()
-        commandParameters["clear"] = arrayOf<CommandParameter?>(
+        commandParameters["clear"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("clear", CommandEnum("TitleClear", "clear"))
         )
-        commandParameters["reset"] = arrayOf<CommandParameter?>(
+        commandParameters["reset"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("reset", CommandEnum("TitleReset", "reset"))
         )
-        commandParameters["set"] = arrayOf<CommandParameter?>(
+        commandParameters["set"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum(
                 "titleLocation",
@@ -30,7 +30,7 @@ class TitlerawCommand(name: String) : VanillaCommand(name, "commands.titleraw.de
             ),
             CommandParameter.Companion.newType("titleJson", CommandParamType.RAWTEXT)
         )
-        commandParameters["times"] = arrayOf<CommandParameter?>(
+        commandParameters["times"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("times", CommandEnum("TitleTimes", "times")),
             CommandParameter.Companion.newType("fadeIn", CommandParamType.INT),

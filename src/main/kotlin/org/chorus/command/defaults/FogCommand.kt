@@ -18,13 +18,13 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
     init {
         this.permission = "nukkit.command.fog"
         commandParameters.clear()
-        commandParameters["push"] = arrayOf<CommandParameter?>(
+        commandParameters["push"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("push", arrayOf<String?>("push")),
             CommandParameter.Companion.newType("fogId", CommandParamType.STRING),
             CommandParameter.Companion.newType("userProvidedId", CommandParamType.STRING)
         )
-        commandParameters["delete"] = arrayOf<CommandParameter?>(
+        commandParameters["delete"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newEnum("mode", CommandEnum("delete", "pop", "remove")),
             CommandParameter.Companion.newType("userProvidedId", CommandParamType.STRING)

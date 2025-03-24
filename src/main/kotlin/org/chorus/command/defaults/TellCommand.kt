@@ -19,7 +19,7 @@ class TellCommand(name: String) :
     init {
         this.permission = "nukkit.command.tell"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newType("message", CommandParamType.MESSAGE)
         )

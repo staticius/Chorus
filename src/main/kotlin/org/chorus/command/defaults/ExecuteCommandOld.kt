@@ -16,12 +16,12 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
     init {
         this.permission = "nukkit.command.executeold"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("origin", CommandParamType.TARGET),
             CommandParameter.Companion.newType("position", CommandParamType.POSITION),
             CommandParameter.Companion.newType("command", CommandParamType.COMMAND)
         )
-        commandParameters["detect"] = arrayOf<CommandParameter?>(
+        commandParameters["detect"] = arrayOf(
             CommandParameter.Companion.newType("origin", CommandParamType.TARGET),
             CommandParameter.Companion.newType("position", CommandParamType.POSITION),
             CommandParameter.Companion.newEnum("detect", arrayOf<String?>("detect")),

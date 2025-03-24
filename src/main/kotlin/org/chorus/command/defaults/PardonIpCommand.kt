@@ -15,7 +15,7 @@ class PardonIpCommand(name: String) : VanillaCommand(name, "unban an IP") {
         this.permission = "nukkit.command.unban.ip"
         this.aliases = arrayOf<String?>("unbanip", "unban-ip", "pardonip")
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("ip", CommandParamType.STRING)
         )
         this.enableParamTree()

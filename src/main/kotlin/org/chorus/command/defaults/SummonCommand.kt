@@ -19,7 +19,7 @@ class SummonCommand(name: String) : VanillaCommand(name, "commands.summon.descri
         for (key in Registries.ENTITY.knownEntities.keys) {
             entity_key.add(key.replace("minecraft:", ""))
         }
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newEnum("entityType", false, entity_key.toTypedArray<String>(), true),
             CommandParameter.Companion.newType("spawnPos", true, CommandParamType.POSITION),
             CommandParameter.Companion.newType("nameTag", true, CommandParamType.STRING),

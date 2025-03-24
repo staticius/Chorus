@@ -18,31 +18,31 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
     init {
         this.permission = "nukkit.command.tickingarea"
         commandParameters.clear()
-        commandParameters["add-pos"] = arrayOf<CommandParameter?>(
+        commandParameters["add-pos"] = arrayOf(
             CommandParameter.Companion.newEnum("add", arrayOf<String?>("add")),
             CommandParameter.Companion.newType("from", CommandParamType.POSITION),
             CommandParameter.Companion.newType("to", CommandParamType.POSITION),
             CommandParameter.Companion.newType("name", true, CommandParamType.STRING)
         )
-        commandParameters["add-circle"] = arrayOf<CommandParameter?>(
+        commandParameters["add-circle"] = arrayOf(
             CommandParameter.Companion.newEnum("add", arrayOf<String?>("add")),
             CommandParameter.Companion.newEnum("circle", arrayOf<String?>("circle")),
             CommandParameter.Companion.newType("center", CommandParamType.POSITION),
             CommandParameter.Companion.newType("radius", CommandParamType.INT),
             CommandParameter.Companion.newType("name", true, CommandParamType.STRING)
         )
-        commandParameters["remove-pos"] = arrayOf<CommandParameter?>(
+        commandParameters["remove-pos"] = arrayOf(
             CommandParameter.Companion.newEnum("remove", arrayOf<String?>("remove")),
             CommandParameter.Companion.newType("position", CommandParamType.POSITION)
         )
-        commandParameters["remove-name"] = arrayOf<CommandParameter?>(
+        commandParameters["remove-name"] = arrayOf(
             CommandParameter.Companion.newEnum("remove", arrayOf<String?>("remove")),
             CommandParameter.Companion.newType("name", CommandParamType.STRING)
         )
-        commandParameters["remove-all"] = arrayOf<CommandParameter?>(
+        commandParameters["remove-all"] = arrayOf(
             CommandParameter.Companion.newEnum("remove-all", arrayOf<String?>("remove-all"))
         )
-        commandParameters["list"] = arrayOf<CommandParameter?>(
+        commandParameters["list"] = arrayOf(
             CommandParameter.Companion.newEnum("list", arrayOf<String?>("list")),
             CommandParameter.Companion.newEnum("all-dimensions", true, arrayOf<String?>("all-dimensions"))
         )

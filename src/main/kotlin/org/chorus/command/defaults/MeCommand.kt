@@ -17,7 +17,7 @@ class MeCommand(name: String) : VanillaCommand(name, "commands.me.description", 
     init {
         this.permission = "nukkit.command.me"
         commandParameters.clear()
-        commandParameters["message"] = arrayOf<CommandParameter?>(
+        commandParameters["message"] = arrayOf(
             CommandParameter.Companion.newType("message", CommandParamType.MESSAGE)
         )
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY

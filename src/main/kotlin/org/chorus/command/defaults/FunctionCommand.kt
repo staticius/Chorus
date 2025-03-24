@@ -12,7 +12,7 @@ class FunctionCommand(name: String) : VanillaCommand(name, "commands.function.de
     init {
         this.permission = "nukkit.command.function"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "name",
                 false,

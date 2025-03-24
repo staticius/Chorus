@@ -14,7 +14,7 @@ class HelpCommand(name: String) :
     init {
         this.permission = "nukkit.command.help"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("page", true, CommandParamType.INT)
         )
         this.serverSideOnly = true

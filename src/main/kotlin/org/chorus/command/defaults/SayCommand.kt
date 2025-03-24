@@ -16,7 +16,7 @@ class SayCommand(name: String) : VanillaCommand(name, "commands.say.description"
     init {
         this.permission = "nukkit.command.say"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("message", CommandParamType.MESSAGE)
         )
         this.enableParamTree()

@@ -17,7 +17,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
     init {
         this.permission = "nukkit.command.replaceitem"
         commandParameters.clear()
-        commandParameters["block"] = arrayOf<CommandParameter?>(
+        commandParameters["block"] = arrayOf(
             CommandParameter.Companion.newEnum("block", false, arrayOf<String?>("block")),
             CommandParameter.Companion.newType("position", CommandParamType.BLOCK_POSITION),
             CommandParameter.Companion.newEnum(
@@ -31,7 +31,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
             CommandParameter.Companion.newType("data", true, CommandParamType.INT),
             CommandParameter.Companion.newType("components", true, CommandParamType.JSON),
         )
-        commandParameters["block-oldItemHandling"] = arrayOf<CommandParameter?>(
+        commandParameters["block-oldItemHandling"] = arrayOf(
             CommandParameter.Companion.newEnum("block", false, arrayOf<String?>("block")),
             CommandParameter.Companion.newType("position", CommandParamType.BLOCK_POSITION),
             CommandParameter.Companion.newEnum(
@@ -64,7 +64,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
             "slot.armor",
             "slot.equippable"
         )
-        commandParameters["entity"] = arrayOf<CommandParameter?>(
+        commandParameters["entity"] = arrayOf(
             CommandParameter.Companion.newEnum("entity", false, arrayOf<String?>("entity")),
             CommandParameter.Companion.newType("target", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("slotType", false, slotTypes.toTypedArray<String?>()),
@@ -74,7 +74,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
             CommandParameter.Companion.newType("data", true, CommandParamType.INT),
             CommandParameter.Companion.newType("components", true, CommandParamType.JSON),
         )
-        commandParameters["entity-oldItemHandling"] = arrayOf<CommandParameter?>(
+        commandParameters["entity-oldItemHandling"] = arrayOf(
             CommandParameter.Companion.newEnum("entity", false, arrayOf<String?>("entity")),
             CommandParameter.Companion.newType("target", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("slotType", false, slotTypes.toTypedArray<String?>()),

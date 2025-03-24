@@ -16,7 +16,7 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
         getCommandParameters().clear()
         this.addCommandParameters(
             "default",
-            arrayOf<CommandParameter?>(
+            arrayOf(
                 CommandParameter.Companion.newType("target", false, CommandParamType.TARGET),
                 CommandParameter.Companion.newType("amount", false, CommandParamType.INT),
                 CommandParameter.Companion.newEnum(
@@ -29,7 +29,7 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
         )
         this.addCommandParameters(
             "damager",
-            arrayOf<CommandParameter?>(
+            arrayOf(
                 CommandParameter.Companion.newType("target", false, CommandParamType.TARGET),
                 CommandParameter.Companion.newType("amount", false, CommandParamType.INT),
                 CommandParameter.Companion.newEnum(

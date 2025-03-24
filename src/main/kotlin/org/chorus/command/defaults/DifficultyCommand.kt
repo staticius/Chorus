@@ -18,10 +18,10 @@ class DifficultyCommand(name: String) :
     init {
         this.permission = "nukkit.command.difficulty"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("difficulty", CommandParamType.INT)
         )
-        commandParameters["byString"] = arrayOf<CommandParameter?>(
+        commandParameters["byString"] = arrayOf(
             CommandParameter.Companion.newEnum(
                 "difficulty",
                 CommandEnum("Difficulty", "peaceful", "p", "easy", "e", "normal", "n", "hard", "h")

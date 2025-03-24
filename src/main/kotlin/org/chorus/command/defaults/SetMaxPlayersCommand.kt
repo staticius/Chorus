@@ -12,7 +12,7 @@ class SetMaxPlayersCommand(name: String) : VanillaCommand(name, "commands.setmax
         this.permission = "nukkit.command.setmaxplayers"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newType("maxPlayers", false, CommandParamType.INT)
             )
         )

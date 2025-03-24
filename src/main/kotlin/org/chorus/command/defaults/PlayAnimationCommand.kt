@@ -12,7 +12,7 @@ class PlayAnimationCommand(name: String) : VanillaCommand(name, "commands.playan
     init {
         this.permission = "nukkit.command.playanimation"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("entity", CommandParamType.TARGET),
             CommandParameter.Companion.newType("animation", CommandParamType.STRING),
             CommandParameter.Companion.newType("next_state", true, CommandParamType.STRING),

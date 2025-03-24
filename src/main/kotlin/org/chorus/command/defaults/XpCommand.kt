@@ -19,11 +19,11 @@ class XpCommand(name: String) : Command(name, "commands.xp.description") {
     init {
         this.permission = "nukkit.command.xp"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("amount", CommandParamType.INT),
             CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode())
         )
-        commandParameters["level"] = arrayOf<CommandParameter?>(
+        commandParameters["level"] = arrayOf(
             CommandParameter.Companion.newType("level", CommandParamType.STRING, XpLevelNode()),
             CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode())
         )

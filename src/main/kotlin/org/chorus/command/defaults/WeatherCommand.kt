@@ -16,7 +16,7 @@ class WeatherCommand(name: String) : VanillaCommand(name, "commands.weather.desc
     init {
         this.permission = "nukkit.command.weather"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newEnum("type", CommandEnum("WeatherType", "clear", "rain", "thunder")),
             CommandParameter.Companion.newType("duration", true, CommandParamType.INT)
         )

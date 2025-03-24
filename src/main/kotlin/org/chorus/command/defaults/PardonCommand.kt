@@ -15,7 +15,7 @@ class PardonCommand(name: String) : VanillaCommand(name, "unban a player") {
         this.permission = "nukkit.command.unban.player"
         this.aliases = arrayOf<String?>("unban")
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, IPlayersNode())
         )
         this.enableParamTree()

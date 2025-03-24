@@ -22,7 +22,7 @@ class ParticleCommand(name: String) : VanillaCommand(name, "commands.particle.de
         for (particle in ParticleEffect.entries) {
             particles.add(particle.getIdentifier())
         }
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newEnum("effect", CommandEnum("particle", particles, true)),
             CommandParameter.Companion.newType("position", CommandParamType.POSITION),
             CommandParameter.Companion.newType("count", true, CommandParamType.INT)

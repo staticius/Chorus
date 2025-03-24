@@ -25,7 +25,7 @@ class StatusCommand(name: String) :
         this.permission = "nukkit.command.status"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newEnum("mode", true, arrayOf<String?>("full", "simple"))
             )
         )

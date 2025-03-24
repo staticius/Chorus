@@ -21,12 +21,12 @@ class EnchantCommand(name: String) :
     init {
         this.permission = "nukkit.command.enchant"
         commandParameters.clear()
-        commandParameters["default"] = arrayOf<CommandParameter?>(
+        commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),
             CommandParameter.Companion.newType("enchantmentId", CommandParamType.INT),
             CommandParameter.Companion.newType("level", true, CommandParamType.INT)
         )
-        commandParameters["byName"] = arrayOf<CommandParameter?>(
+        commandParameters["byName"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("enchantmentName", CommandEnum.Companion.ENUM_ENCHANTMENT),
             CommandParameter.Companion.newType("level", true, CommandParamType.INT)

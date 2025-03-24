@@ -14,7 +14,7 @@ class DayLockCommand(name: String) :
         this.permission = "nukkit.command.daylock"
         getCommandParameters().clear()
         this.addCommandParameters(
-            "default", arrayOf<CommandParameter?>(
+            "default", arrayOf(
                 CommandParameter.Companion.newEnum("lock", true, CommandEnum.Companion.ENUM_BOOLEAN)
             )
         )
