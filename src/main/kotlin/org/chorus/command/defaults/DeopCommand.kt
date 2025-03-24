@@ -26,7 +26,7 @@ class DeopCommand(name: String) : VanillaCommand(name, "commands.deop.descriptio
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val IPlayers = result.value!!.getResult<List<IPlayer>>(0)!!

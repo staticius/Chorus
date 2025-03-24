@@ -29,7 +29,7 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         if (result.value!!.hasResult(0)) {

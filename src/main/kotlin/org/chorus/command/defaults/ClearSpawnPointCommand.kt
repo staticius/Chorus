@@ -8,16 +8,16 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
-import java.util.List
+import org.chorus.network.protocol.types.SpawnPointType
 import java.util.stream.Collectors
 
 class ClearSpawnPointCommand(name: String) : VanillaCommand(name, "commands.clearspawnpoint.description") {
     init {
         this.permission = "nukkit.command.clearspawnpoint"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
-                CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode()),
+                CommandParameter.newType("player", true, CommandParamType.TARGET, PlayersNode()),
             )
         )
         this.enableParamTree()
@@ -26,24 +26,24 @@ class ClearSpawnPointCommand(name: String) : VanillaCommand(name, "commands.clea
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value
-        var players = if (sender.isPlayer) List.of(sender.asPlayer()) else null
-        if (list!!.hasResult(0)) players = list.getResult(0)
-        if (players == null || players.isEmpty()) {
+        var players = if (sender.isPlayer) listOf(sender.asPlayer()!!) else null
+        if (list.hasResult(0)) players = list.getResult(0)
+        if (players.isNullOrEmpty()) {
             log.addNoTargetMatch().output()
             return 0
         }
         for (player in players) {
-            player.setSpawn(Server.instance.defaultLevel.spawnLocation, SpawnPointType.WORLD)
+            player.setSpawn(Server.instance.defaultLevel!!.spawnLocation, SpawnPointType.WORLD)
         }
-        val players_str = players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
+        val playersStr = players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
         if (players.size > 1) {
-            log.addSuccess("commands.clearspawnpoint.success.multiple", players_str)
+            log.addSuccess("commands.clearspawnpoint.success.multiple", playersStr)
         } else {
-            log.addSuccess("commands.clearspawnpoint.success.single", players_str)
+            log.addSuccess("commands.clearspawnpoint.success.single", playersStr)
         }
         log.successCount(players.size).output()
         return players.size

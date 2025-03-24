@@ -10,10 +10,7 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.event.player.PlayerKickEvent
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/11
- */
+
 class KickCommand(name: String) : VanillaCommand(name, "commands.kick.description") {
     init {
         this.permission = "nukkit.command.kick"
@@ -28,7 +25,7 @@ class KickCommand(name: String) : VanillaCommand(name, "commands.kick.descriptio
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

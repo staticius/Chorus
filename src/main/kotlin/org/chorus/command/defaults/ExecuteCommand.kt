@@ -30,7 +30,7 @@ import kotlin.math.min
 class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.description", "commands.execute.usage") {
     init {
         this.permission = "nukkit.command.execute"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "as", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_As", "as")),
@@ -68,7 +68,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     CommandEnum("Option_Entity", "entity")
                 ),
                 CommandParameter.Companion.newType("targets", CommandParamType.TARGET),
-                CommandParameter.Companion.newEnum("anchor", arrayOf<String?>("eyes", "feet")),
+                CommandParameter.Companion.newEnum("anchor", arrayOf("eyes", "feet")),
                 GenericParameter.Companion.CHAINED_COMMAND.get(false)
             )
         )
@@ -98,7 +98,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
         this.addCommandParameters(
             "anchored", arrayOf(
                 CommandParameter.Companion.newEnum("subcommand", false, CommandEnum("Option_Anchored", "anchored")),
-                CommandParameter.Companion.newEnum("anchor", arrayOf<String?>("eyes", "feet")),
+                CommandParameter.Companion.newEnum("anchor", arrayOf("eyes", "feet")),
                 GenericParameter.Companion.CHAINED_COMMAND.get(false)
             )
         )
@@ -168,7 +168,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 CommandParameter.Companion.newType("begin", CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("end", CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("destination", CommandParamType.BLOCK_POSITION),
-                CommandParameter.Companion.newEnum("scan mode", true, arrayOf<String?>("all", "masked")),
+                CommandParameter.Companion.newEnum("scan mode", true, arrayOf("all", "masked")),
                 GenericParameter.Companion.CHAINED_COMMAND.get(true)
             )
         )
@@ -226,7 +226,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     false,
                     CommandEnum("ScoreboardObjectives", listOf<String>(), true)
                 ),
-                CommandParameter.Companion.newEnum("matches", arrayOf<String?>("matches")),
+                CommandParameter.Companion.newEnum("matches", arrayOf("matches")),
                 CommandParameter.Companion.newType("range", CommandParamType.STRING),
                 GenericParameter.Companion.CHAINED_COMMAND.get(true)
             )
@@ -248,7 +248,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         var num = 0

@@ -15,7 +15,7 @@ class SpreadPlayersCommand(name: String) : VanillaCommand(name, "commands.spread
 
     init {
         this.permission = "nukkit.command.spreadplayers"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
                 CommandParameter.Companion.newType("x", false, CommandParamType.VALUE),
@@ -32,7 +32,7 @@ class SpreadPlayersCommand(name: String) : VanillaCommand(name, "commands.spread
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

@@ -2,11 +2,6 @@ package org.chorus.command.defaults
 
 import org.chorus.command.Command
 
-/**
- * 代表原版命令的基类
- *
- * @author MagicDroidX (Nukkit Project)
- */
 abstract class VanillaCommand : Command {
     constructor(name: String) : super(name)
 

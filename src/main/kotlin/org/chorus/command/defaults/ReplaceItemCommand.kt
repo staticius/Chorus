@@ -18,12 +18,12 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
         this.permission = "nukkit.command.replaceitem"
         commandParameters.clear()
         commandParameters["block"] = arrayOf(
-            CommandParameter.Companion.newEnum("block", false, arrayOf<String?>("block")),
+            CommandParameter.Companion.newEnum("block", false, arrayOf("block")),
             CommandParameter.Companion.newType("position", CommandParamType.BLOCK_POSITION),
             CommandParameter.Companion.newEnum(
                 "slot.container",
                 false,
-                arrayOf<String?>("slot.container")
+                arrayOf("slot.container")
             ),
             CommandParameter.Companion.newType("slotId", CommandParamType.INT),
             CommandParameter.Companion.newEnum("itemName", CommandEnum.Companion.ENUM_ITEM),
@@ -32,18 +32,18 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
             CommandParameter.Companion.newType("components", true, CommandParamType.JSON),
         )
         commandParameters["block-oldItemHandling"] = arrayOf(
-            CommandParameter.Companion.newEnum("block", false, arrayOf<String?>("block")),
+            CommandParameter.Companion.newEnum("block", false, arrayOf("block")),
             CommandParameter.Companion.newType("position", CommandParamType.BLOCK_POSITION),
             CommandParameter.Companion.newEnum(
                 "slot.container",
                 false,
-                arrayOf<String?>("slot.container")
+                arrayOf("slot.container")
             ),
             CommandParameter.Companion.newType("slotId", CommandParamType.INT),
             CommandParameter.Companion.newEnum(
                 "oldItemHandling",
                 false,
-                arrayOf<String?>("destroy", "keep")
+                arrayOf("destroy", "keep")
             ),
             CommandParameter.Companion.newEnum("itemName", CommandEnum.Companion.ENUM_ITEM),
             CommandParameter.Companion.newType("amount", true, CommandParamType.INT),
@@ -65,7 +65,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
             "slot.equippable"
         )
         commandParameters["entity"] = arrayOf(
-            CommandParameter.Companion.newEnum("entity", false, arrayOf<String?>("entity")),
+            CommandParameter.Companion.newEnum("entity", false, arrayOf("entity")),
             CommandParameter.Companion.newType("target", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("slotType", false, slotTypes.toTypedArray<String?>()),
             CommandParameter.Companion.newType("slotId", CommandParamType.INT),
@@ -75,14 +75,14 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
             CommandParameter.Companion.newType("components", true, CommandParamType.JSON),
         )
         commandParameters["entity-oldItemHandling"] = arrayOf(
-            CommandParameter.Companion.newEnum("entity", false, arrayOf<String?>("entity")),
+            CommandParameter.Companion.newEnum("entity", false, arrayOf("entity")),
             CommandParameter.Companion.newType("target", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("slotType", false, slotTypes.toTypedArray<String?>()),
             CommandParameter.Companion.newType("slotId", CommandParamType.INT),
             CommandParameter.Companion.newEnum(
                 "oldItemHandling",
                 false,
-                arrayOf<String?>("destroy", "keep")
+                arrayOf("destroy", "keep")
             ),
             CommandParameter.Companion.newEnum("itemName", CommandEnum.Companion.ENUM_ITEM),
             CommandParameter.Companion.newType("amount", true, CommandParamType.INT),

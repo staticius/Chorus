@@ -1,6 +1,5 @@
 package org.chorus.command.data
 
-import com.google.common.collect.ImmutableList
 import org.chorus.Server
 import org.chorus.camera.data.CameraPreset.Companion.presets
 import org.chorus.item.enchantment.Enchantment
@@ -21,7 +20,7 @@ class CommandEnum {
     private val supplier: Supplier<Collection<String>>?
 
 
-    constructor(name: String, vararg values: String?) : this(name, Arrays.asList<String?>(*values))
+    constructor(name: String, vararg values: String) : this(name, values.toList())
 
     /**
      * 构建一个枚举参数
@@ -31,7 +30,7 @@ class CommandEnum {
      * @param soft   当为False  时，客户端显示枚举参数会带上枚举名称[CommandEnum.getName],当为true时 则判定为String
      */
     @JvmOverloads
-    constructor(name: String, values: List<String?>?, soft: Boolean = false) {
+    constructor(name: String, values: List<String>?, soft: Boolean = false) {
         this.name = name
         this.values = values
         this.isSoft = soft
@@ -51,9 +50,9 @@ class CommandEnum {
         this.supplier = supplier
     }
 
-    fun getValues(): List<String>? {
+    fun getValues(): List<String> {
         return if (this.supplier == null) {
-            values
+            values!!
         } else {
             supplier.get().stream().toList()
         }
@@ -63,11 +62,11 @@ class CommandEnum {
         return name.hashCode()
     }
 
-    fun updateSoftEnum(mode: UpdateSoftEnumPacket.Type?, vararg value: String) {
+    fun updateSoftEnum(mode: UpdateSoftEnumPacket.Type, vararg value: String) {
         if (!this.isSoft) return
         val packet = UpdateSoftEnumPacket()
         packet.name = this.name
-        packet.values = Arrays.stream(value).toList()
+        packet.values = value.toList()
         packet.type = mode
         Server.broadcastPacket(Server.instance.onlinePlayers.values, packet)
     }
@@ -76,7 +75,7 @@ class CommandEnum {
         if (!this.isSoft && this.supplier == null) return
         val packet = UpdateSoftEnumPacket()
         packet.name = this.name
-        packet.values = this.getValues()
+        packet.values = this.getValues()!!
         packet.type = UpdateSoftEnumPacket.Type.SET
         Server.broadcastPacket(Server.instance.onlinePlayers.values, packet)
     }
@@ -85,7 +84,7 @@ class CommandEnum {
         val ENUM_ENCHANTMENT: CommandEnum = CommandEnum(
             "enchantmentName"
         ) {
-            Enchantment.getEnchantmentName2IDMap().keys.stream()
+            Enchantment.enchantmentName2IDMap.keys.stream()
                 .map { name: String ->
                     if (name.startsWith(Identifier.DEFAULT_NAMESPACE)) name.substring(
                         10
@@ -129,15 +128,14 @@ class CommandEnum {
             "facing"
         )
 
-        val ENUM_BOOLEAN: CommandEnum = CommandEnum("Boolean", ImmutableList.of("true", "false"))
+        val ENUM_BOOLEAN: CommandEnum = CommandEnum("Boolean", listOf("true", "false"))
 
-        val ENUM_GAMEMODE: CommandEnum =
-            CommandEnum("GameMode", ImmutableList.of("survival", "creative", "s", "c", "adventure", "a", "spectator"))
+        val ENUM_GAMEMODE: CommandEnum = CommandEnum("GameMode", listOf("survival", "creative", "s", "c", "adventure", "a", "spectator"))
 
-        val ENUM_BLOCK: CommandEnum = CommandEnum("Block", emptyList<String>())
+        val ENUM_BLOCK: CommandEnum = CommandEnum("Block", emptyList())
 
-        val ENUM_ITEM: CommandEnum = CommandEnum("Item", emptyList<String>())
+        val ENUM_ITEM: CommandEnum = CommandEnum("Item", emptyList())
 
-        val ENUM_ENTITY: CommandEnum = CommandEnum("Entity", emptyList<String>())
+        val ENUM_ENTITY: CommandEnum = CommandEnum("Entity", emptyList())
     }
 }

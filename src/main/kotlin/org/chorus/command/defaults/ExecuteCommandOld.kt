@@ -24,7 +24,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
         commandParameters["detect"] = arrayOf(
             CommandParameter.Companion.newType("origin", CommandParamType.TARGET),
             CommandParameter.Companion.newType("position", CommandParamType.POSITION),
-            CommandParameter.Companion.newEnum("detect", arrayOf<String?>("detect")),
+            CommandParameter.Companion.newEnum("detect", arrayOf("detect")),
             CommandParameter.Companion.newType("detectPos", CommandParamType.POSITION),
             CommandParameter.Companion.newType("block", CommandParamType.INT),
             CommandParameter.Companion.newType("data", CommandParamType.INT),
@@ -36,7 +36,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         var num = 0

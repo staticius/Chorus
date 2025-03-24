@@ -10,10 +10,7 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Level
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/11
- */
+
 class TimeCommand(name: String) : VanillaCommand(name, "commands.time.description") {
     init {
         this.permission = "nukkit.command.time.add;" +
@@ -45,7 +42,7 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

@@ -16,13 +16,13 @@ import kotlin.math.min
 class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testforblocks.description") {
     init {
         this.permission = "nukkit.command.testforblocks"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
                 CommandParameter.Companion.newType("begin", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("end", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("destination", false, CommandParamType.BLOCK_POSITION),
-                CommandParameter.Companion.newEnum("mode", true, arrayOf<String?>("all", "masked"))
+                CommandParameter.Companion.newEnum("mode", true, arrayOf("all", "masked"))
             )
         )
         this.enableParamTree()
@@ -31,7 +31,7 @@ class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testfo
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

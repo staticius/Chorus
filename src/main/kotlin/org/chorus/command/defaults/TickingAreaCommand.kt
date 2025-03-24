@@ -19,32 +19,32 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
         this.permission = "nukkit.command.tickingarea"
         commandParameters.clear()
         commandParameters["add-pos"] = arrayOf(
-            CommandParameter.Companion.newEnum("add", arrayOf<String?>("add")),
+            CommandParameter.Companion.newEnum("add", arrayOf("add")),
             CommandParameter.Companion.newType("from", CommandParamType.POSITION),
             CommandParameter.Companion.newType("to", CommandParamType.POSITION),
             CommandParameter.Companion.newType("name", true, CommandParamType.STRING)
         )
         commandParameters["add-circle"] = arrayOf(
-            CommandParameter.Companion.newEnum("add", arrayOf<String?>("add")),
-            CommandParameter.Companion.newEnum("circle", arrayOf<String?>("circle")),
+            CommandParameter.Companion.newEnum("add", arrayOf("add")),
+            CommandParameter.Companion.newEnum("circle", arrayOf("circle")),
             CommandParameter.Companion.newType("center", CommandParamType.POSITION),
             CommandParameter.Companion.newType("radius", CommandParamType.INT),
             CommandParameter.Companion.newType("name", true, CommandParamType.STRING)
         )
         commandParameters["remove-pos"] = arrayOf(
-            CommandParameter.Companion.newEnum("remove", arrayOf<String?>("remove")),
+            CommandParameter.Companion.newEnum("remove", arrayOf("remove")),
             CommandParameter.Companion.newType("position", CommandParamType.POSITION)
         )
         commandParameters["remove-name"] = arrayOf(
-            CommandParameter.Companion.newEnum("remove", arrayOf<String?>("remove")),
+            CommandParameter.Companion.newEnum("remove", arrayOf("remove")),
             CommandParameter.Companion.newType("name", CommandParamType.STRING)
         )
         commandParameters["remove-all"] = arrayOf(
-            CommandParameter.Companion.newEnum("remove-all", arrayOf<String?>("remove-all"))
+            CommandParameter.Companion.newEnum("remove-all", arrayOf("remove-all"))
         )
         commandParameters["list"] = arrayOf(
-            CommandParameter.Companion.newEnum("list", arrayOf<String?>("list")),
-            CommandParameter.Companion.newEnum("all-dimensions", true, arrayOf<String?>("all-dimensions"))
+            CommandParameter.Companion.newEnum("list", arrayOf("list")),
+            CommandParameter.Companion.newEnum("all-dimensions", true, arrayOf("all-dimensions"))
         )
         this.enableParamTree()
     }
@@ -52,7 +52,7 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

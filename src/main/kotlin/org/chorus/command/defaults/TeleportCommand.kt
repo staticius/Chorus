@@ -40,14 +40,14 @@ class TeleportCommand(name: String) :
         commandParameters["Entity->Pos(FacingPos)"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET),
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
-            CommandParameter.Companion.newEnum("facing", false, arrayOf<String?>("facing")),
+            CommandParameter.Companion.newEnum("facing", false, arrayOf("facing")),
             CommandParameter.Companion.newType("lookAtPosition", CommandParamType.POSITION),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
         commandParameters["Entity->Pos(FacingEntity)"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET),
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
-            CommandParameter.Companion.newEnum("facing", false, arrayOf<String?>("facing")),
+            CommandParameter.Companion.newEnum("facing", false, arrayOf("facing")),
             CommandParameter.Companion.newType("lookAtEntity", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
@@ -59,13 +59,13 @@ class TeleportCommand(name: String) :
         )
         commandParameters["->Pos(FacingPos)"] = arrayOf(
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
-            CommandParameter.Companion.newEnum("facing", false, arrayOf<String?>("facing")),
+            CommandParameter.Companion.newEnum("facing", false, arrayOf("facing")),
             CommandParameter.Companion.newType("lookAtPosition", CommandParamType.POSITION),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
         commandParameters["->Pos(FacingEntity)"] = arrayOf(
             CommandParameter.Companion.newType("destination", CommandParamType.POSITION),
-            CommandParameter.Companion.newEnum("facing", false, arrayOf<String?>("facing")),
+            CommandParameter.Companion.newEnum("facing", false, arrayOf("facing")),
             CommandParameter.Companion.newType("lookAtEntity", CommandParamType.TARGET),
             CommandParameter.Companion.newEnum("checkForBlocks", true, CommandEnum.Companion.ENUM_BOOLEAN)
         )
@@ -80,7 +80,7 @@ class TeleportCommand(name: String) :
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

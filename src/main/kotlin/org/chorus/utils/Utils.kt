@@ -219,7 +219,7 @@ object Utils : Loggable {
         return value
     }
 
-    fun getLevelBlocks(level: Level, bb: AxisAlignedBB): Array<Block?> {
+    fun getLevelBlocks(level: Level, bb: AxisAlignedBB): Array<Block> {
         val minX = floor(min(bb.minX, bb.maxX)).toInt()
         val minY = floor(min(bb.minY, bb.maxY)).toInt()
         val minZ = floor(min(bb.minZ, bb.maxZ)).toInt()
@@ -227,7 +227,7 @@ object Utils : Loggable {
         val maxY = floor(max(bb.minY, bb.maxY)).toInt()
         val maxZ = floor(max(bb.minZ, bb.maxZ)).toInt()
 
-        val blocks: MutableList<Block?> = ArrayList()
+        val blocks: MutableList<Block> = ArrayList()
         val vec = Vector3()
 
         for (z in minZ..maxZ) {

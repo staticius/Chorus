@@ -18,7 +18,7 @@ class DebugCommand(name: String) : TestCommand(name, "commands.debug.description
         //生物AI debug模式开关
         commandParameters["entity"] =
             arrayOf(
-                CommandParameter.Companion.newEnum("entity", arrayOf<String?>("entity")),
+                CommandParameter.Companion.newEnum("entity", arrayOf("entity")),
                 CommandParameter.Companion.newEnum(
                     "option",
                     Arrays.stream<EntityAI.DebugOption>(EntityAI.DebugOption.EntityAI.DebugOption.entries.toTypedArray())
@@ -28,7 +28,7 @@ class DebugCommand(name: String) : TestCommand(name, "commands.debug.description
                 CommandParameter.Companion.newEnum("value", false, CommandEnum.Companion.ENUM_BOOLEAN)
             )
         commandParameters["rendermap"] = arrayOf(
-            CommandParameter.Companion.newEnum("rendermap", arrayOf<String?>("rendermap")),
+            CommandParameter.Companion.newEnum("rendermap", arrayOf("rendermap")),
             CommandParameter.Companion.newType("zoom", CommandParamType.INT)
         )
         this.enableParamTree()
@@ -37,7 +37,7 @@ class DebugCommand(name: String) : TestCommand(name, "commands.debug.description
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

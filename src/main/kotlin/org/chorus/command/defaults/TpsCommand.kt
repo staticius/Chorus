@@ -10,7 +10,7 @@ import org.chorus.utils.TextFormat
 class TpsCommand(name: String) : Command(name, "get server tps"), CoreCommand {
     init {
         this.permission = "nukkit.tps.status"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
                 CommandParameter.Companion.newType("count", true, CommandParamType.INT)

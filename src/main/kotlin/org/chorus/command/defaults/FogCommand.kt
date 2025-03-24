@@ -20,7 +20,7 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
         commandParameters.clear()
         commandParameters["push"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET, PlayersNode()),
-            CommandParameter.Companion.newEnum("push", arrayOf<String?>("push")),
+            CommandParameter.Companion.newEnum("push", arrayOf("push")),
             CommandParameter.Companion.newType("fogId", CommandParamType.STRING),
             CommandParameter.Companion.newType("userProvidedId", CommandParamType.STRING)
         )
@@ -35,7 +35,7 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

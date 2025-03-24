@@ -16,11 +16,11 @@ class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.de
         this.permission = "nukkit.command.world"
         commandParameters.clear()
         commandParameters["tp"] = arrayOf(
-            CommandParameter.Companion.newEnum("tp", arrayOf<String?>("tp")),
+            CommandParameter.Companion.newEnum("tp", arrayOf("tp")),
             CommandParameter.Companion.newEnum("world", false, WORLD_NAME_ENUM)
         )
         commandParameters["list"] = arrayOf(
-            CommandParameter.Companion.newEnum("list", arrayOf<String?>("list"))
+            CommandParameter.Companion.newEnum("list", arrayOf("list"))
         )
         this.enableParamTree()
     }
@@ -28,7 +28,7 @@ class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.de
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         when (result.key) {

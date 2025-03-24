@@ -20,7 +20,7 @@ import kotlin.math.min
 class FillCommand(name: String) : VanillaCommand(name, "commands.fill.description") {
     init {
         this.permission = "nukkit.command.fill"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
                 CommandParameter.Companion.newType("from", false, CommandParamType.BLOCK_POSITION),
@@ -30,7 +30,7 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
                 CommandParameter.Companion.newEnum(
                     "oldBlockHandling",
                     true,
-                    arrayOf<String?>("destroy", "hollow", "keep", "outline", "replace")
+                    arrayOf("destroy", "hollow", "keep", "outline", "replace")
                 ),
             )
         )
@@ -40,7 +40,7 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
                 CommandParameter.Companion.newType("to", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newEnum("tileName", false, CommandEnum.Companion.ENUM_BLOCK),
                 CommandParameter.Companion.newType("blockStates", false, CommandParamType.BLOCK_STATES),
-                CommandParameter.Companion.newEnum("oldBlockHandling", false, arrayOf<String?>("replace")),
+                CommandParameter.Companion.newEnum("oldBlockHandling", false, arrayOf("replace")),
                 CommandParameter.Companion.newEnum("replaceTileName", false, CommandEnum.Companion.ENUM_BLOCK),
                 CommandParameter.Companion.newType("blockStates", true, CommandParamType.BLOCK_STATES)
             )
@@ -51,7 +51,7 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

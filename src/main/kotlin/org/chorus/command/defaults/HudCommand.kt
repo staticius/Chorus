@@ -14,15 +14,15 @@ import org.chorus.network.protocol.types.hud.HudVisibility
 class HudCommand(name: String) : VanillaCommand(name, "commands.hud.description", "%commands.hud.usage") {
     init {
         this.permission = "nukkit.command.hud"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
                 CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
-                CommandParameter.Companion.newEnum("visible", false, arrayOf<String?>("hide", "reset")),
+                CommandParameter.Companion.newEnum("visible", false, arrayOf("hide", "reset")),
                 CommandParameter.Companion.newEnum(
                     "hud_element",
                     false,
-                    arrayOf<String?>(
+                    arrayOf(
                         "armor",
                         "air_bubbles_bar",
                         "crosshair",
@@ -44,7 +44,7 @@ class HudCommand(name: String) : VanillaCommand(name, "commands.hud.description"
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

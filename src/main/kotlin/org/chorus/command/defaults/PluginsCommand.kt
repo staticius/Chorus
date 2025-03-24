@@ -28,7 +28,7 @@ class PluginsCommand(name: String) : Command(
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         this.sendPluginList(sender, log)

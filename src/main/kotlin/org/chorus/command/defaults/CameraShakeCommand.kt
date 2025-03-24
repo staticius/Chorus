@@ -7,6 +7,7 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
+import org.chorus.network.protocol.CameraShakePacket
 import java.util.function.Consumer
 import java.util.stream.Collectors
 import kotlin.collections.set
@@ -16,18 +17,18 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
         this.permission = "nukkit.command.camerashake"
         commandParameters.clear()
         commandParameters["add"] = arrayOf(
-            CommandParameter.Companion.newEnum("add", false, arrayOf<String?>("add")),
+            CommandParameter.Companion.newEnum("add", false, arrayOf("add")),
             CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
             CommandParameter.Companion.newType("intensity", false, CommandParamType.FLOAT),
             CommandParameter.Companion.newType("second", false, CommandParamType.FLOAT),
             CommandParameter.Companion.newEnum(
                 "shakeType",
                 false,
-                arrayOf<String?>("positional", "rotational")
+                arrayOf("positional", "rotational")
             )
         )
         commandParameters["stop"] = arrayOf(
-            CommandParameter.Companion.newEnum("stop", false, arrayOf<String?>("stop")),
+            CommandParameter.Companion.newEnum("stop", false, arrayOf("stop")),
             CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
         )
         this.enableParamTree()
@@ -36,7 +37,7 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value
@@ -51,12 +52,12 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
                 val intensity = list.getResult<Float>(2)!!
                 val second = list.getResult<Float>(3)!!
                 val type = list.getResult<String>(4)
-                val shakeType: CameraShakeType? = when (type) {
+                val shakeType: CameraShakePacket.CameraShakeType? = when (type) {
                     "positional" -> CameraShakePacket.CameraShakeType.POSITIONAL
                     "rotational" -> CameraShakePacket.CameraShakeType.ROTATIONAL
                     else -> null
                 }
-                val packet: CameraShakePacket = CameraShakePacket()
+                val packet = CameraShakePacket()
                 packet.intensity = intensity
                 packet.duration = second
                 packet.shakeType = shakeType
@@ -68,9 +69,9 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
 
             "stop" -> {
                 val players_str = players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
-                val packet: CameraShakePacket = CameraShakePacket()
+                val packet = CameraShakePacket()
                 packet.shakeAction = CameraShakePacket.CameraShakeAction.STOP
-                //avoid NPE
+                // avoid NPE
                 packet.intensity = -1f
                 packet.duration = -1f
                 packet.shakeType = CameraShakePacket.CameraShakeType.POSITIONAL

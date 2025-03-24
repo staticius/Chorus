@@ -4,10 +4,7 @@ import org.chorus.command.CommandSender
 import org.chorus.utils.TextFormat
 import kotlin.math.round
 
-/**
- * @author xtypr
- * @since 2015/11/11
- */
+
 class GarbageCollectorCommand(name: String) :
     TestCommand(name, "%nukkit.command.gc.description", "%nukkit.command.gc.usage"),
     CoreCommand {

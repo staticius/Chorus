@@ -19,7 +19,6 @@ import java.net.UnknownHostException
 import java.util.regex.Pattern
 import kotlin.collections.set
 
-
 class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.description", "%commands.banip.usage") {
     init {
         this.permission = "nukkit.command.ban.ip"
@@ -40,7 +39,7 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         var reason = ""

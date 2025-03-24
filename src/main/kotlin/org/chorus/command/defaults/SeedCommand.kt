@@ -19,7 +19,7 @@ class SeedCommand(name: String) : VanillaCommand(name, "Show the level's seed") 
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val seed = if (sender is Player) {

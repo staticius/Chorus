@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.ceil
 
 abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), IHuman {
-    lateinit var inventory: HumanInventory
+    override lateinit var inventory: HumanInventory
     protected var enderChestInventory: HumanEnderChestInventory? = null
     protected var offhandInventory: HumanOffHandInventory? = null
 

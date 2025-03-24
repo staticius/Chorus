@@ -10,7 +10,7 @@ import org.chorus.command.utils.CommandLogger
 class SetMaxPlayersCommand(name: String) : VanillaCommand(name, "commands.setmaxplayers.description") {
     init {
         this.permission = "nukkit.command.setmaxplayers"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
                 CommandParameter.Companion.newType("maxPlayers", false, CommandParamType.INT)
@@ -22,7 +22,7 @@ class SetMaxPlayersCommand(name: String) : VanillaCommand(name, "commands.setmax
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         var maxPlayers = result.value!!.getResult<Int>(0)!!

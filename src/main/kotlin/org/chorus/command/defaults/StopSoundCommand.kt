@@ -13,7 +13,7 @@ import java.util.stream.Collectors
 class StopSoundCommand(name: String) : VanillaCommand(name, "commands.stopsound.description") {
     init {
         this.permission = "nukkit.command.stopsound"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
                 CommandParameter.Companion.newType("player", false, CommandParamType.TARGET, PlayersNode()),
@@ -26,7 +26,7 @@ class StopSoundCommand(name: String) : VanillaCommand(name, "commands.stopsound.
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

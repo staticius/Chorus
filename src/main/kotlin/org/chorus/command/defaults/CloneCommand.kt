@@ -1,6 +1,7 @@
 package org.chorus.command.defaults
 
 import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
@@ -16,14 +17,14 @@ import kotlin.math.min
 class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.description") {
     init {
         this.permission = "nukkit.command.clone"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
                 CommandParameter.Companion.newType("begin", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("end", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("destination", false, CommandParamType.BLOCK_POSITION),
-                CommandParameter.Companion.newEnum("maskMode", true, arrayOf<String?>("masked", "replace")),
-                CommandParameter.Companion.newEnum("cloneMode", true, arrayOf<String?>("force", "move", "normal"))
+                CommandParameter.Companion.newEnum("maskMode", true, arrayOf("masked", "replace")),
+                CommandParameter.Companion.newEnum("cloneMode", true, arrayOf("force", "move", "normal"))
             )
         )
         this.addCommandParameters(
@@ -31,8 +32,8 @@ class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.descript
                 CommandParameter.Companion.newType("begin", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("end", false, CommandParamType.BLOCK_POSITION),
                 CommandParameter.Companion.newType("destination", false, CommandParamType.BLOCK_POSITION),
-                CommandParameter.Companion.newEnum("maskMode", false, arrayOf<String?>("filtered")),
-                CommandParameter.Companion.newEnum("cloneMode", false, arrayOf<String?>("force", "move", "normal")),
+                CommandParameter.Companion.newEnum("maskMode", false, arrayOf("filtered")),
+                CommandParameter.Companion.newEnum("cloneMode", false, arrayOf("force", "move", "normal")),
                 CommandParameter.Companion.newType("tileId", false, CommandParamType.INT),
                 CommandParameter.Companion.newType("tileData", false, CommandParamType.INT)
             )
@@ -43,11 +44,11 @@ class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.descript
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value
-        val begin = list!!.getResult<Locator>(0)
+        val begin = list.getResult<Locator>(0)
         val end = list.getResult<Locator>(1)
         val destination = list.getResult<Locator>(2)
         var maskMode = MaskMode.REPLACE
@@ -99,12 +100,12 @@ class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.descript
             destination.z + (blocksAABB.maxZ - blocksAABB.minZ)
         )
         val destinationAABB: AxisAlignedBB = SimpleAxisAlignedBB(
-            min(destination.x, to.getX()), min(
-                destination.y, to.getY()
-            ), min(destination.z, to.getZ()), max(
-                destination.x, to.getX()
-            ), max(destination.y, to.getY()), max(
-                destination.z, to.getZ()
+            min(destination.x, to.x), min(
+                destination.y, to.y
+            ), min(destination.z, to.z), max(
+                destination.x, to.x
+            ), max(destination.y, to.y), max(
+                destination.z, to.z
             )
         )
 

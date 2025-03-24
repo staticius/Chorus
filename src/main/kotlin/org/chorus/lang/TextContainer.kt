@@ -19,12 +19,7 @@ open class TextContainer(@JvmField var text: String) : Cloneable {
         return this.text
     }
 
-    public override fun clone(): Any {
-        try {
-            return super.clone() as TextContainer
-        } catch (e: CloneNotSupportedException) {
-            TextContainer.log.error("Failed to clone the text container {}", this.toString(), e)
-        }
-        return null
+    public override fun clone(): TextContainer {
+        return super.clone() as TextContainer
     }
 }

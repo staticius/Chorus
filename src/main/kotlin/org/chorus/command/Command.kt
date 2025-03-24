@@ -10,6 +10,7 @@ import org.chorus.command.tree.ParamTree
 import org.chorus.command.utils.CommandLogger
 import org.chorus.lang.CommandOutputContainer
 import org.chorus.lang.PluginI18nManager
+import org.chorus.lang.TextContainer
 import org.chorus.lang.TranslationContainer
 import org.chorus.level.GameRule
 import org.chorus.plugin.InternalPlugin
@@ -118,12 +119,12 @@ abstract class Command @JvmOverloads constructor(
             return null
         }
 
-        val plugin: Plugin = if (this is PluginCommand<*>) pluginCommand.getPlugin() else InternalPlugin.INSTANCE
+        val plugin: Plugin = if (this is PluginCommand<*>) this.plugin else InternalPlugin.INSTANCE
 
         val customData = defaultCommandData.clone()
 
-        if (getAliases().length > 0) {
-            val aliases: MutableList<String?> = ArrayList(Arrays.asList(*getAliases()))
+        if (getAliases().size > 0) {
+            val aliases = getAliases().toMutableList()
             if (!aliases.contains(this.name)) {
                 aliases.add(this.name)
             }
@@ -143,7 +144,7 @@ abstract class Command @JvmOverloads constructor(
             }
         }
 
-        commandParameters.forEach { (key: String?, params: Array<CommandParameter?>?) ->
+        commandParameters.forEach { (key, params) ->
             val overload = CommandOverload()
             overload.input.parameters = params
             customData.overloads[key] = overload
@@ -153,12 +154,12 @@ abstract class Command @JvmOverloads constructor(
             customData.overloads["default"] = CommandOverload()
         }
 
-        val versions: CommandDataVersions = CommandDataVersions()
+        val versions = CommandDataVersions()
         versions.versions.add(customData)
         return versions
     }
 
-    val overloads: Map<String?, CommandOverload?>
+    val overloads: Map<String, CommandOverload>
         get() = defaultCommandData.overloads
 
     open fun execute(sender: CommandSender, commandLabel: String?, args: Array<String?>): Boolean {
@@ -177,7 +178,7 @@ abstract class Command @JvmOverloads constructor(
     open fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         throw UnsupportedOperationException()
@@ -276,12 +277,12 @@ abstract class Command @JvmOverloads constructor(
                                 .append(">")
                         } else {
                             builder.append(" <").append(
-                                commandParameter.enumData.values!!.subList(
+                                commandParameter.enumData.getValues().subList(
                                     0,
-                                    min(commandParameter.enumData.values.size.toDouble(), 10.0)
+                                    min(commandParameter.enumData.getValues().size.toDouble(), 10.0)
                                         .toInt()
                                 ).stream().collect(Collectors.joining("|"))
-                            ).append(if (commandParameter.enumData.values.size > 10) "|..." else "").append(">")
+                            ).append(if (commandParameter.enumData.getValues().size > 10) "|..." else "").append(">")
                         }
                     } else {
                         if (commandParameter.enumData == null) {
@@ -290,12 +291,12 @@ abstract class Command @JvmOverloads constructor(
                                 .append("]")
                         } else {
                             builder.append(" [").append(
-                                commandParameter.enumData.values!!.subList(
+                                commandParameter.enumData.getValues().subList(
                                     0,
-                                    min(commandParameter.enumData.values.size.toDouble(), 10.0)
+                                    min(commandParameter.enumData.getValues().size.toDouble(), 10.0)
                                         .toInt()
                                 ).stream().collect(Collectors.joining("|"))
-                            ).append(if (commandParameter.enumData.values.size > 10) "|..." else "").append("]")
+                            ).append(if (commandParameter.enumData.getValues().size > 10) "|..." else "").append("]")
                         }
                     }
                 }
@@ -328,15 +329,15 @@ abstract class Command @JvmOverloads constructor(
 
     companion object {
         @JvmOverloads
-        fun broadcastCommandMessage(source: CommandSender, message: String?, sendToSource: Boolean = true) {
+        fun broadcastCommandMessage(source: CommandSender, message: String, sendToSource: Boolean = true) {
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
 
-            val result = TranslationContainer("chat.type.admin", source.name, message)
+            val result = TranslationContainer("chat.type.admin", source.getName(), message)
 
             val colored = TranslationContainer(
                 TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "%chat.type.admin",
-                source.name,
+                source.getName(),
                 message
             )
 
@@ -357,26 +358,26 @@ abstract class Command @JvmOverloads constructor(
 
         @JvmOverloads
         fun broadcastCommandMessage(source: CommandSender, message: TextContainer, sendToSource: Boolean = true) {
-            if ((source is ICommandBlock && !source.getLocator().getLevel().getGameRules()
+            if ((source is ICommandBlock && !source.getLocator().level.gameRules
                     .getBoolean(GameRule.COMMAND_BLOCK_OUTPUT)) ||
-                (source is ExecutorCommandSender && source.executor is ICommandBlock && !source.getLocator().getLevel()
-                    .getGameRules().getBoolean(GameRule.COMMAND_BLOCK_OUTPUT))
+                (source is ExecutorCommandSender && source.getExecutor() is ICommandBlock && !source.getLocator().level
+                    .gameRules.getBoolean(GameRule.COMMAND_BLOCK_OUTPUT))
             ) {
                 return
             }
 
             val m: TextContainer = message.clone()
             val resultStr =
-                "[" + source.name + ": " + (if (m.getText() != Server.instance.baseLang.m.getText()]) "%" else "")+m.getText()+"]"
+                "[" + source.getName() + ": " + (if (m.text != Server.instance.baseLang.tr(m.text)) "%" else "") + m.text + "]"
 
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
 
             val coloredStr = TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + resultStr
 
-            m.setText(resultStr)
+            m.text = (resultStr)
             val result: TextContainer = m.clone()
-            m.setText(coloredStr)
+            m.text = (coloredStr)
             val colored: TextContainer = m.clone()
 
             if (sendToSource && source !is ConsoleCommandSender) {

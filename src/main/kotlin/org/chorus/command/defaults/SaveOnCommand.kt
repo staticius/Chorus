@@ -21,7 +21,7 @@ class SaveOnCommand(name: String) : VanillaCommand(name, "Enable auto saving") {
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         Server.instance.autoSave = true

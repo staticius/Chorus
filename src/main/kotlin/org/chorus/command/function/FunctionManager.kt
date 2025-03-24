@@ -8,7 +8,7 @@ import kotlin.collections.set
 
 
 class FunctionManager(private val rootPath: Path) {
-    private val functions: MutableMap<String, Function> = HashMap()
+    val functions: MutableMap<String, Function> = HashMap()
 
     init {
         try {

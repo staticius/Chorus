@@ -21,7 +21,7 @@ class SaveCommand(name: String) : VanillaCommand(name, "Save the server (levels 
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         log.addSuccess("commands.save.start").output(true)

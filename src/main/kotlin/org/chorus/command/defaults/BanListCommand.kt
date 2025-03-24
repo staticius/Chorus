@@ -11,10 +11,6 @@ import org.chorus.permission.BanList
 import org.chorus.utils.TextFormat
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/11
- */
 class BanListCommand(name: String) : VanillaCommand(name, "list all the banned players or IPs") {
     init {
         this.permission = "nukkit.command.ban.list"
@@ -28,7 +24,7 @@ class BanListCommand(name: String) : VanillaCommand(name, "list all the banned p
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val paramList = result.value

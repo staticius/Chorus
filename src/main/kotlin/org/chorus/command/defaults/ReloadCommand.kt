@@ -15,10 +15,10 @@ class ReloadCommand(name: String) : VanillaCommand(name, "Reload the server/plug
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
         commandParameters["function"] = arrayOf(
-            CommandParameter.Companion.newEnum("function", false, arrayOf<String?>("function"))
+            CommandParameter.Companion.newEnum("function", false, arrayOf("function"))
         )
         commandParameters["plugin"] = arrayOf(
-            CommandParameter.Companion.newEnum("plugin", arrayOf<String?>("plugin")),
+            CommandParameter.Companion.newEnum("plugin", arrayOf("plugin")),
             CommandParameter.Companion.newType("plugin", CommandParamType.STRING)
         )
         this.enableParamTree()
@@ -27,7 +27,7 @@ class ReloadCommand(name: String) : VanillaCommand(name, "Reload the server/plug
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

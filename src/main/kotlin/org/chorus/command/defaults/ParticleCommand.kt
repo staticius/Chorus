@@ -33,7 +33,7 @@ class ParticleCommand(name: String) : VanillaCommand(name, "commands.particle.de
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val name = result.value!!.getResult<String>(0)

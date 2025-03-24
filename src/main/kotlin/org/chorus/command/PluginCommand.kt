@@ -6,7 +6,7 @@ import org.chorus.lang.TranslationContainer
 import org.chorus.plugin.Plugin
 
 
-class PluginCommand<T : Plugin?> : Command, PluginIdentifiableCommand {
+class PluginCommand<T : Plugin> : Command, PluginIdentifiableCommand {
     private val owningPlugin: T
 
     private var executor: CommandExecutor
@@ -14,7 +14,7 @@ class PluginCommand<T : Plugin?> : Command, PluginIdentifiableCommand {
     constructor(name: String, owner: T) : super(name) {
         this.owningPlugin = owner
         this.executor = owner
-        this.usageMessage = ""
+        this.usage = ""
     }
 
     constructor(name: String, description: String, owner: T) : super(name, description) {
@@ -25,17 +25,17 @@ class PluginCommand<T : Plugin?> : Command, PluginIdentifiableCommand {
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        if (!owningPlugin!!.isEnabled) {
+        if (!owningPlugin.isEnabled) {
             return 0
         }
         return 1
     }
 
     override fun execute(sender: CommandSender, commandLabel: String?, args: Array<String?>): Boolean {
-        if (!owningPlugin!!.isEnabled) {
+        if (!owningPlugin.isEnabled) {
             return false
         }
 
@@ -45,8 +45,8 @@ class PluginCommand<T : Plugin?> : Command, PluginIdentifiableCommand {
 
         val success = executor.onCommand(sender, this, commandLabel, args)
 
-        if (!success && !usageMessage.isEmpty()) {
-            sender.sendMessage(TranslationContainer("commands.generic.usage", this.usageMessage))
+        if (!success && usage.isNotEmpty()) {
+            sender.sendMessage(TranslationContainer("commands.generic.usage", this.usage))
         }
 
         return success
@@ -60,6 +60,6 @@ class PluginCommand<T : Plugin?> : Command, PluginIdentifiableCommand {
         this.executor = executor ?: this.owningPlugin
     }
 
-    override val plugin: Plugin?
+    override val plugin: Plugin
         get() = this.owningPlugin
 }

@@ -11,7 +11,7 @@ import java.util.stream.Collectors
 class TestForCommand(name: String) : VanillaCommand(name, "commands.testfor.description") {
     init {
         this.permission = "nukkit.command.testfor"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
                 CommandParameter.Companion.newType("victim", false, CommandParamType.TARGET)
@@ -23,7 +23,7 @@ class TestForCommand(name: String) : VanillaCommand(name, "commands.testfor.desc
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val targets = result.value!!.getResult<List<Entity>>(0)!!

@@ -16,17 +16,17 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
         commandParameters.clear()
         commandParameters["add"] = arrayOf(
             CommandParameter.Companion.newType("targets", CommandParamType.TARGET),
-            CommandParameter.Companion.newEnum("add", arrayOf<String?>("add")),
+            CommandParameter.Companion.newEnum("add", arrayOf("add")),
             CommandParameter.Companion.newType("name", CommandParamType.STRING)
         )
         commandParameters["remove"] = arrayOf(
             CommandParameter.Companion.newType("targets", CommandParamType.TARGET),
-            CommandParameter.Companion.newEnum("remove", arrayOf<String?>("remove")),
+            CommandParameter.Companion.newEnum("remove", arrayOf("remove")),
             CommandParameter.Companion.newType("name", CommandParamType.STRING)
         )
         commandParameters["list"] = arrayOf(
             CommandParameter.Companion.newType("targets", CommandParamType.TARGET),
-            CommandParameter.Companion.newEnum("list", arrayOf<String?>("list")),
+            CommandParameter.Companion.newEnum("list", arrayOf("list")),
         )
         this.enableParamTree()
     }
@@ -34,7 +34,7 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

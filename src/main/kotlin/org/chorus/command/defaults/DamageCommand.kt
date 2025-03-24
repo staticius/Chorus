@@ -6,6 +6,9 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
+import org.chorus.entity.item.EntityItem
+import org.chorus.event.entity.EntityDamageByEntityEvent
+import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.lang.TranslationContainer
 import java.util.*
 import java.util.stream.Collectors
@@ -13,7 +16,7 @@ import java.util.stream.Collectors
 class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.description") {
     init {
         this.permission = "nukkit.command.damage"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default",
             arrayOf(
@@ -22,8 +25,7 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
                 CommandParameter.Companion.newEnum(
                     "cause",
                     true,
-                    Arrays.stream<DamageCause>(EntityDamageEvent.DamageCause.DamageCause.entries.toTypedArray())
-                        .map<String> { e: DamageCause -> e.name.lowercase() }.toList().toTypedArray<String>()
+                    EntityDamageEvent.DamageCause.entries.map { e: EntityDamageEvent.DamageCause -> e.name.lowercase() }.toList().toTypedArray()
                 )
             )
         )
@@ -35,10 +37,9 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
                 CommandParameter.Companion.newEnum(
                     "cause",
                     false,
-                    Arrays.stream<DamageCause>(EntityDamageEvent.DamageCause.DamageCause.entries.toTypedArray())
-                        .map<String> { e: DamageCause -> e.name.lowercase() }.toList().toTypedArray<String>()
+                    EntityDamageEvent.DamageCause.entries.map { e: EntityDamageEvent.DamageCause -> e.name.lowercase() }.toList().toTypedArray()
                 ),
-                CommandParameter.Companion.newEnum("entity", false, arrayOf<String?>("entity")),
+                CommandParameter.Companion.newEnum("entity", false, arrayOf("entity")),
                 CommandParameter.Companion.newType("damager", false, CommandParamType.TARGET)
             )
         )
@@ -48,11 +49,11 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value
-        val entities = list!!.getResult<List<Entity>>(0)!!
+        val entities = list.getResult<List<Entity>>(0)!!
         if (entities.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
@@ -65,9 +66,9 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
         }
         when (result.key) {
             "default" -> {
-                var cause: DamageCause = EntityDamageEvent.DamageCause.NONE
+                var cause = EntityDamageEvent.DamageCause.NONE
                 if (list.hasResult(2)) {
-                    val str = list.getResult<String>(2)
+                    val str = list.getResult<String>(2)!!
                     cause = EntityDamageEvent.DamageCause.valueOf(str)
                 }
                 var all_success = true
@@ -96,7 +97,7 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
 
             "damager" -> {
                 val str = list.getResult<String>(2)
-                val cause: DamageCause = EntityDamageEvent.DamageCause.valueOf(str!!.uppercase())
+                val cause = EntityDamageEvent.DamageCause.valueOf(str!!.uppercase())
                 val damagers = list.getResult<List<Entity>>(4)!!
                 if (damagers.isEmpty()) {
                     log.addNoTargetMatch().output()
@@ -110,8 +111,7 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
                 var all_success = true
                 val failed: MutableList<Entity> = ArrayList()
                 for (entity in entities) {
-                    val event: EntityDamageByEntityEvent =
-                        EntityDamageByEntityEvent(damager, entity, cause, amount.toFloat())
+                    val event = EntityDamageByEntityEvent(damager, entity, cause, amount.toFloat())
                     val success: Boolean = entity.attack(event)
                     if (!success) {
                         all_success = false

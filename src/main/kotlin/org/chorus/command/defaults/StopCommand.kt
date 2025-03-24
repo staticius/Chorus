@@ -18,7 +18,7 @@ class StopCommand(name: String) : VanillaCommand(name, "commands.stop.descriptio
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         log.addSuccess("commands.stop.start").output(true)

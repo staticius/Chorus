@@ -9,7 +9,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.event.player.PlayerKickEvent
 import kotlin.collections.set
 
-
 class BanCommand(name: String) : VanillaCommand(name, "commands.ban.description", "%commands.ban.usage") {
     init {
         this.permission = "nukkit.command.ban.player"
@@ -24,7 +23,7 @@ class BanCommand(name: String) : VanillaCommand(name, "commands.ban.description"
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val list = result.value

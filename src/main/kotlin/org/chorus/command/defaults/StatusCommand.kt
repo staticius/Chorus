@@ -12,10 +12,7 @@ import java.nio.file.Files
 import java.util.concurrent.TimeUnit
 import kotlin.math.round
 
-/**
- * @author xtypr
- * @since 2015/11/11
- */
+
 class StatusCommand(name: String) :
     TestCommand(name, "%nukkit.command.status.description", "%nukkit.command.status.usage"),
     CoreCommand {
@@ -23,10 +20,10 @@ class StatusCommand(name: String) :
 
     init {
         this.permission = "nukkit.command.status"
-        getCommandParameters().clear()
+        commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(
-                CommandParameter.Companion.newEnum("mode", true, arrayOf<String?>("full", "simple"))
+                CommandParameter.Companion.newEnum("mode", true, arrayOf("full", "simple"))
             )
         )
     }

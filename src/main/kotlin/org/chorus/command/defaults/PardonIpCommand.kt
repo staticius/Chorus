@@ -13,7 +13,7 @@ import kotlin.collections.set
 class PardonIpCommand(name: String) : VanillaCommand(name, "unban an IP") {
     init {
         this.permission = "nukkit.command.unban.ip"
-        this.aliases = arrayOf<String?>("unbanip", "unban-ip", "pardonip")
+        this.aliases = arrayOf("unbanip", "unban-ip", "pardonip")
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("ip", CommandParamType.STRING)
@@ -24,7 +24,7 @@ class PardonIpCommand(name: String) : VanillaCommand(name, "unban an IP") {
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         val value = result.value!!.getResult<String>(0)

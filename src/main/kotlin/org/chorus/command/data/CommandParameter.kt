@@ -87,7 +87,7 @@ class CommandParameter private constructor(
          *
          * @see .newEnum
          */
-        fun newEnum(name: String, values: Array<String?>): CommandParameter {
+        fun newEnum(name: String, values: Array<String>): CommandParameter {
             return newEnum(name, false, values)
         }
 
@@ -99,7 +99,7 @@ class CommandParameter private constructor(
          *
          * @see .newEnum
          */
-        fun newEnum(name: String, optional: Boolean, values: Array<String?>): CommandParameter {
+        fun newEnum(name: String, optional: Boolean, values: Array<String>): CommandParameter {
             return newEnum(name, optional, CommandEnum(name + "Enums", *values))
         }
 
@@ -166,7 +166,7 @@ class CommandParameter private constructor(
          * @see .newEnum
          */
         fun newEnum(name: String, optional: Boolean, data: CommandEnum?, paramNode: IParamNode<*>?): CommandParameter {
-            return newEnum(name, optional, data, paramNode, *arrayOf<CommandParamOption>())
+            return newEnum(name, optional, data, paramNode, *arrayOf())
         }
 
         /**

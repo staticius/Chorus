@@ -33,7 +33,7 @@ class XpCommand(name: String) : Command(name, "commands.xp.description") {
     override fun execute(
         sender: CommandSender,
         commandLabel: String?,
-        result: Map.Entry<String, ParamList?>,
+        result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
         //  "/xp <amount> [player]"  for adding exp
