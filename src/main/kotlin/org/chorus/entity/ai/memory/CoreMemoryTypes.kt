@@ -136,7 +136,7 @@ interface CoreMemoryTypes {
         /**
          * 实体从生成的服务器tick
          */
-        val ENTITY_SPAWN_TIME: MemoryType<Int?> = MemoryType(
+        val ENTITY_SPAWN_TIME: MemoryType<Int> = MemoryType(
             "minecraft:entity_spawn_time"
         ) { Server.instance.tick }
 
@@ -170,7 +170,7 @@ interface CoreMemoryTypes {
          *
          * 目前仅在Chicken中使用
          */
-        val LAST_EGG_SPAWN_TIME: MemoryType<Int?> = MemoryType(
+        val LAST_EGG_SPAWN_TIME: MemoryType<Int> = MemoryType(
             "minecraft:last_egg_spawn_time"
         ) { Server.instance.tick }
 
