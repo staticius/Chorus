@@ -3,9 +3,7 @@ package org.chorus.recipe
 import org.chorus.network.protocol.types.RecipeUnlockingRequirement
 import java.util.*
 
-/**
- * @author CreeperFace
- */
+
 abstract class CraftingRecipe protected constructor(
     id: String,
     /**

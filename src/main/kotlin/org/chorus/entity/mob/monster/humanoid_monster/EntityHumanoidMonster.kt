@@ -9,7 +9,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 
 abstract class EntityHumanoidMonster(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!!), EntityCanAttack {
-    protected var itemInHand: Item? = null
+    protected var itemInHand: Item = null
 
     override fun initEntity() {
         super.initEntity()

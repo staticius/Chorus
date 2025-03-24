@@ -12,7 +12,7 @@ class DropperDispenseBehavior : DefaultDispenseBehavior() {
 
         if (block.level.getBlockEntityIfLoaded(target.position) is InventoryHolder) {
             val invHolder = block.level.getBlockEntityIfLoaded(target.position) as InventoryHolder
-            val inv = invHolder.inventory
+            val inv = invHolder.inventory!!
             val clone = item.clone()
             clone.count = 1
 

@@ -11,9 +11,7 @@ import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.network.protocol.LevelSoundEventPacketV2
 
-/**
- * @author CreeperFace
- */
+
 abstract class ProjectileItem(id: String, meta: Int, count: Int, name: String?) :
     Item(id, meta, count, name) {
     abstract val projectileEntityType: String

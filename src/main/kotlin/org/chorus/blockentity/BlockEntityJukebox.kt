@@ -10,9 +10,7 @@ import org.chorus.network.protocol.PlaySoundPacket
 import org.chorus.network.protocol.StopSoundPacket
 import java.util.*
 
-/**
- * @author CreeperFace
- */
+
 class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     private var recordItem: Item? = null
 

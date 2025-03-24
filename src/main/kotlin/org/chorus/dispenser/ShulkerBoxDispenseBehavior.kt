@@ -16,7 +16,7 @@ class ShulkerBoxDispenseBehavior : DefaultDispenseBehavior() {
             return null
         }
 
-        val shulkerBox = item.block.clone() as BlockUndyedShulkerBox
+        val shulkerBox = item.getBlock().clone() as BlockUndyedShulkerBox
         shulkerBox.level = block.level
         shulkerBox.layer = 0
         shulkerBox.position.x = target.position.x
@@ -25,7 +25,7 @@ class ShulkerBoxDispenseBehavior : DefaultDispenseBehavior() {
 
         val shulkerBoxFace = if (shulkerBox.down().isTransparent) face else BlockFace.UP
 
-        if (shulkerBox.place(item, target, target.getSide(shulkerBoxFace.opposite), shulkerBoxFace, 0.0, 0.0, 0.0, null)
+        if (shulkerBox.place(item, target, target.getSide(shulkerBoxFace.getOpposite()), shulkerBoxFace, 0.0, 0.0, 0.0, null)
                 .also { success = it }
         ) {
             block.level.updateComparatorOutputLevel(target.position)

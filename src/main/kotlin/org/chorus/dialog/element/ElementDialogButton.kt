@@ -2,7 +2,7 @@ package org.chorus.dialog.element
 
 import org.chorus.dialog.window.Dialog
 
-class ElementDialogButton @JvmOverloads constructor(// json 格式需要，勿改
+class ElementDialogButton @JvmOverloads constructor(// json if the format is required do not change it
     var name: String, var text: String, nextDialog: Dialog? = null, mode: Mode = Mode.BUTTON_MODE, type: Int = 1
 ) {
     private var data: List<CmdLine>
@@ -11,7 +11,7 @@ class ElementDialogButton @JvmOverloads constructor(// json 格式需要，勿�
     @Transient
     var nextDialog: Dialog? = null
 
-    class CmdLine(@JvmField var cmd_line: String, var cmd_ver: Int) {
+    class CmdLine(@JvmField var cmdLine: String, var cmdVer: Int) {
         companion object {
             @Transient
             const val CMD_VER: Int = 19
@@ -39,10 +39,9 @@ class ElementDialogButton @JvmOverloads constructor(// json 格式需要，勿�
     }
 
     fun getData(): List<CmdLine> {
-        //data will not be updated by the client
-        //so we should update data with text content whenever we need it
-        data = updateButtonData()
-        return data
+        // data will not be updated by the client
+        // so we should update data with text content whenever we need it
+        return updateButtonData()
     }
 
     fun getMode(): Mode {

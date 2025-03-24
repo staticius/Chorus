@@ -12,9 +12,7 @@ import org.chorus.math.Vector3
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author CreeperFace
- */
+
 open class DefaultDispenseBehavior : DispenseBehavior {
     var success: Boolean = true
 
@@ -47,12 +45,12 @@ open class DefaultDispenseBehavior : DispenseBehavior {
 
         val dropPos = dispensePos.add(face.xOffset.toDouble(), face.yOffset.toDouble(), face.zOffset.toDouble())
         val bb: AxisAlignedBB = SimpleAxisAlignedBB(
-            dropPos.getX() - 0.5,
-            dropPos.getY() - 1,
-            dropPos.getZ() - 0.5,
-            dropPos.getX() + 0.5,
-            dropPos.getY() + 1,
-            dropPos.getZ() + 0.5
+            dropPos.x - 0.5,
+            dropPos.y - 1,
+            dropPos.z - 0.5,
+            dropPos.x + 0.5,
+            dropPos.y + 1,
+            dropPos.z + 0.5
         )
         for (e in block.level.getNearbyEntities(bb)) {
             if (e is EntityInventoryHolder && e.canEquipByDispenser()) {

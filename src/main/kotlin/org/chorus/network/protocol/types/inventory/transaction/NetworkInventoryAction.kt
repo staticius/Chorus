@@ -5,9 +5,7 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.InventoryTransactionPacket
 
 
-/**
- * @author CreeperFace
- */
+
 
 
 class NetworkInventoryAction {

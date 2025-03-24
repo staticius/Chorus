@@ -4,9 +4,7 @@ import org.chorus.item.Item
 import org.chorus.math.Vector3
 
 
-/**
- * @author CreeperFace
- */
+
 
 class ReleaseItemData : TransactionData {
     var actionType: Int = 0

@@ -7,9 +7,7 @@ import org.chorus.math.Vector3
 import org.chorus.math.Vector3f
 
 
-/**
- * @author CreeperFace
- */
+
 
 class UseItemData : TransactionData {
     var actionType: Int = 0

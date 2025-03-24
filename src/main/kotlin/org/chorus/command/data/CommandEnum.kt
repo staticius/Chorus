@@ -10,9 +10,7 @@ import org.chorus.utils.Identifier
 import java.util.*
 import java.util.function.Supplier
 
-/**
- * @author CreeperFace
- */
+
 class CommandEnum {
     @JvmField
     val name: String

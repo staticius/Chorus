@@ -2,9 +2,7 @@ package org.chorus.command.data
 
 import org.chorus.network.protocol.AvailableCommandsPacket
 
-/**
- * @author CreeperFace
- */
+
 enum class CommandParamType(@JvmField val id: Int) {
     INT(AvailableCommandsPacket.ARG_TYPE_INT),
     FLOAT(AvailableCommandsPacket.ARG_TYPE_FLOAT),

@@ -5,9 +5,7 @@ import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author CreeperFace
- */
+
 class EntityInteractEvent(entity: Entity?, block: Block) : EntityEvent(), Cancellable {
     val block: Block
 

@@ -74,9 +74,9 @@ class TrConfigPostprocessor {
         } catch (exception: Exception) {
             throw RuntimeException(
                 """
-                    failed to #updateLinesKeys for context:
-                    ${context}
-                    """.trimIndent(), exception
+                failed to #updateLinesKeys for context:
+                $context
+                """.trimIndent(), exception
             )
         }
     }
@@ -84,7 +84,7 @@ class TrConfigPostprocessor {
     private fun updateLinesKeys0(walker: ConfigSectionWalker): TrConfigPostprocessor {
         val lines =
             context!!.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        var currentPath: MutableList<ConfigLineInfo?> = ArrayList()
+        var currentPath: MutableList<ConfigLineInfo> = mutableListOf()
         var lastIndent = 0
         var level = 0
         val newContext = StringBuilder()
@@ -113,7 +113,7 @@ class TrConfigPostprocessor {
                 }
             } else {
                 if (change != 0) {
-                    val lastLineInfo: ConfigLineInfo = currentPath.getLast()
+                    val lastLineInfo: ConfigLineInfo = currentPath.last()
                     val step = lastLineInfo.indent / level
                     level -= ((change * -1) / step)
                     currentPath = currentPath.subList(0, level + 1)
@@ -132,7 +132,7 @@ class TrConfigPostprocessor {
             }
 
             lastIndent = indent
-            val updatedLine = walker.update(line, currentPath.getLast(), currentPath)
+            val updatedLine = walker.update(line, currentPath.last(), currentPath)
             newContext.append(updatedLine).append("\n")
         }
 
@@ -145,16 +145,16 @@ class TrConfigPostprocessor {
         return this
     }
 
-    fun prependContextComment(prefix: String?, strings: Array<String?>?): TrConfigPostprocessor {
+    fun prependContextComment(prefix: String, strings: Array<String>?): TrConfigPostprocessor {
         if (strings != null) this.context = createComment(prefix, strings) + this.context
         return this
     }
 
-    fun appendContextComment(prefix: String?, strings: Array<String?>?): TrConfigPostprocessor {
+    fun appendContextComment(prefix: String, strings: Array<String>?): TrConfigPostprocessor {
         return this.appendContextComment(prefix, "", strings)
     }
 
-    fun appendContextComment(prefix: String?, separator: String, strings: Array<String?>?): TrConfigPostprocessor {
+    fun appendContextComment(prefix: String, separator: String, strings: Array<String>?): TrConfigPostprocessor {
         if (strings != null) this.context += separator + createComment(prefix, strings)
         return this
     }
@@ -162,13 +162,13 @@ class TrConfigPostprocessor {
     companion object {
         fun of(inputStream: InputStream): TrConfigPostprocessor {
             val postprocessor = TrConfigPostprocessor()
-            postprocessor.setContext(readInput(inputStream))
+            postprocessor.context = readInput(inputStream)
             return postprocessor
         }
 
         fun of(context: String): TrConfigPostprocessor {
             val postprocessor = TrConfigPostprocessor()
-            postprocessor.setContext(context)
+            postprocessor.context = context
             return postprocessor
         }
 
@@ -192,15 +192,11 @@ class TrConfigPostprocessor {
                     + "\n")
         }
 
-        fun createCommentOrEmpty(commentPrefix: String?, strings: Array<String?>?): String {
-            return if (strings == null) "" else createComment(commentPrefix, strings)!!
+        fun createCommentOrEmpty(commentPrefix: String, strings: Array<String>?): String {
+            return if (strings == null) "" else createComment(commentPrefix, strings)
         }
 
-        fun createComment(commentPrefix: String?, strings: Array<String?>?): String? {
-            var commentPrefix = commentPrefix
-            if (strings == null) return null
-            if (commentPrefix == null) commentPrefix = ""
-
+        fun createComment(commentPrefix: String, strings: Array<String>): String {
             val newLines: MutableList<String> = ArrayList()
             for (line in strings) {
                 val trLine = Server.instance.baseLang.tr(line)
@@ -208,7 +204,7 @@ class TrConfigPostprocessor {
                 val result = (if (trLine.isEmpty()) "" else prefix) + trLine
 
                 val parts = result.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                if (parts.size != 0) {
+                if (parts.isNotEmpty()) {
                     for (p in parts) {
                         prefix = if (p.startsWith(commentPrefix.trim { it <= ' ' })) "" else commentPrefix
                         newLines.add((if (p.isEmpty()) "" else prefix) + p)
@@ -226,9 +222,8 @@ class TrConfigPostprocessor {
                 .collect(Collectors.joining("\n"))
         }
 
-        @SneakyThrows
         private fun writeOutput(outputStream: OutputStream, text: String?) {
-            @Cleanup val out = PrintStream(outputStream, true, StandardCharsets.UTF_8.name())
+            val out = PrintStream(outputStream, true, StandardCharsets.UTF_8.name())
             out.print(text)
         }
     }

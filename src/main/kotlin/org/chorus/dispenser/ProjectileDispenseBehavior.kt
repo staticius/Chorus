@@ -4,14 +4,13 @@ import org.chorus.block.BlockDispenser
 import org.chorus.entity.Entity
 import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author CreeperFace
- */
+
 open class ProjectileDispenseBehavior(protected val entityType: String) : DefaultDispenseBehavior() {
     override fun dispense(source: BlockDispenser, face: BlockFace, item: Item): Item? {
         val dispensePos = source.dispensePosition
@@ -41,10 +40,10 @@ open class ProjectileDispenseBehavior(protected val entityType: String) : Defaul
         return null
     }
 
-    protected open val shootingSound: Sound?
+    protected open val shootingSound: Sound
         get() = Sound.RANDOM_BOW
 
-    protected open fun initMotion(face: BlockFace): Vector3? {
+    protected open fun initMotion(face: BlockFace): Vector3 {
         return Vector3(face.xOffset.toDouble(), (face.yOffset + 0.1f).toDouble(), face.zOffset.toDouble())
             .normalize()
     }
@@ -62,7 +61,7 @@ open class ProjectileDispenseBehavior(protected val entityType: String) : Defaul
      */
     protected fun correctNBT(nbt: CompoundTag, item: Item? = null) {
         if (item != null) {
-            if (item.id === Item.SPLASH_POTION || item.id === Item.LINGERING_POTION) {
+            if (item.id === ItemID.SPLASH_POTION || item.id === ItemID.LINGERING_POTION) {
                 nbt.putInt("PotionId", item.damage)
             }
         }

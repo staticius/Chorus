@@ -4,9 +4,7 @@ import org.chorus.Player
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author CreeperFace
- */
+
 class PlayerToggleSwimEvent(player: Player?, isSwimming: Boolean) : PlayerEvent(), Cancellable {
     val isSwimming: Boolean
 

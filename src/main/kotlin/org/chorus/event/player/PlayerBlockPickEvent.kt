@@ -6,9 +6,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-/**
- * @author CreeperFace
- */
+
 class PlayerBlockPickEvent(player: Player?, val blockClicked: Block, @JvmField var item: Item) :
     PlayerEvent(), Cancellable {
     init {

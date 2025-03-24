@@ -15,7 +15,7 @@ class FormResponseDialog(packet: NPCRequestPacket, dialog: FormWindowDialog) {
 
     init {
         try {
-            this.clickedButton = dialog.buttons[packet.skinType]
+            this.clickedButton = dialog.getButtons()[packet.skinType]
         } catch (e: IndexOutOfBoundsException) {
             this.clickedButton = null
         }

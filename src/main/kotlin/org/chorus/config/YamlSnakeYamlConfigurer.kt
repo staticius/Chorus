@@ -21,8 +21,6 @@ import java.io.OutputStream
 import java.util.*
 import java.util.function.Consumer
 
-
-@Accessors(chain = true)
 class YamlSnakeYamlConfigurer : Configurer {
     private val yaml: Yaml
     private var map: MutableMap<String, Any>? = LinkedHashMap()
@@ -87,8 +85,8 @@ class YamlSnakeYamlConfigurer : Configurer {
         val contents = yaml.dump(this.map)
 
         // postprocess
-        TrConfigPostprocessor.Companion.of(contents) // remove all current top-level comments
-            .removeLines(ConfigLineFilter { line: String -> line.startsWith(commentPrefix.trim { it <= ' ' }) }) // add new comments
+        TrConfigPostprocessor.of(contents) // remove all current top-level comments
+            .removeLines { line: String -> line.startsWith(commentPrefix.trim { it <= ' ' }) } // add new comments
             .updateLinesKeys(object : YamlSectionWalker() {
                 override fun update(line: String, lineInfo: ConfigLineInfo, path: List<ConfigLineInfo>): String {
                     var currentDeclaration = declaration
@@ -112,11 +110,11 @@ class YamlSnakeYamlConfigurer : Configurer {
 
                     val fieldComment = lineDeclaration.get().comment ?: return line
 
-                    val comment: String = TrConfigPostprocessor.Companion.createComment(
+                    val comment = TrConfigPostprocessor.createComment(
                         this@YamlSnakeYamlConfigurer.commentPrefix,
                         fieldComment
                     )
-                    return TrConfigPostprocessor.Companion.addIndent(comment, lineInfo.indent) + line
+                    return TrConfigPostprocessor.addIndent(comment, lineInfo.indent) + line
                 }
             }) // add header if available
             .prependContextComment(this.commentPrefix, declaration.header) // save

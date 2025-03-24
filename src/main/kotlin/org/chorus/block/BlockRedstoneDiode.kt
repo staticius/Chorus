@@ -17,9 +17,7 @@ import org.chorus.utils.RedstoneComponent.updateAllAroundRedstone
 import org.chorus.utils.RedstoneComponent.updateAroundRedstone
 import kotlin.math.max
 
-/**
- * @author CreeperFace
- */
+
 abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blockstate),
     RedstoneComponent, Faceable {
     @JvmField

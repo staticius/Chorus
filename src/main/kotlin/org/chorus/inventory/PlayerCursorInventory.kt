@@ -7,9 +7,7 @@ import org.chorus.network.protocol.InventorySlotPacket
 import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-/**
- * @author CreeperFace
- */
+
 class PlayerCursorInventory(player: Player?) : BaseInventory(player, InventoryType.INVENTORY, 1) {
     override var holder: InventoryHolder?
         /**

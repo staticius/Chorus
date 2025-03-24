@@ -21,9 +21,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author CreeperFace
- */
+
 class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     var facing: BlockFace? = null
     var extending: Boolean = false

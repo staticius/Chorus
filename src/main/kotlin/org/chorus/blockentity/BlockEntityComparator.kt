@@ -4,9 +4,7 @@ import org.chorus.block.BlockRedstoneComparator
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author CreeperFace
- */
+
 class BlockEntityComparator(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, nbt) {
     @JvmField
     var outputSignal: Int = 0

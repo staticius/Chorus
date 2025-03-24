@@ -24,7 +24,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
     IHopper {
     override var inventory: HopperInventory? = null
 
-    override fun getLocator(): Locator? {
+    override fun getLocator(): Locator {
         return this.locator
     }
 
@@ -36,12 +36,8 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
     private val temporalVector = BlockVector3()
 
-    //由容器矿车检测漏斗并通知更新，这样子能大幅优化性能
-
-
+    // The container mine cart detects the funnel and notifies the update, which greatly optimizes performance
     private var minecartInvPickupFrom: InventoryHolder? = null
-
-
     private var minecartInvPushTo: InventoryHolder? = null
 
     override fun initBlockEntity() {

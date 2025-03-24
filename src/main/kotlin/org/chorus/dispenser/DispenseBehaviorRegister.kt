@@ -9,9 +9,6 @@ import org.chorus.math.Vector3
 import org.chorus.registry.Registries
 import java.util.regex.Pattern
 
-/**
- * @author CreeperFace
- */
 object DispenseBehaviorRegister {
     private val behaviors: MutableMap<String, DispenseBehavior> = HashMap()
     private val defaultBehavior: DispenseBehavior = DefaultDispenseBehavior()
@@ -87,7 +84,7 @@ object DispenseBehaviorRegister {
         registerBehavior(BlockID.TNT, TNTDispenseBehavior())
         registerBehavior(ItemID.ARROW, object : ProjectileDispenseBehavior(EntityID.ARROW) {
             override val motion: Double
-                get() = super.getMotion() * 1.5
+                get() = super.motion * 1.5
         })
         //TODO: tipped arrow
         //TODO: spectral arrow
@@ -112,25 +109,25 @@ object DispenseBehaviorRegister {
         })
         registerBehavior(ItemID.EXPERIENCE_BOTTLE, object : ProjectileDispenseBehavior(EntityID.XP_BOTTLE) {
             override val accuracy: Float
-                get() = super.getAccuracy() * 0.5f
+                get() = super.accuracy * 0.5f
 
             override val motion: Double
-                get() = super.getMotion() * 1.25
+                get() = super.motion * 1.25
         })
         registerBehavior(ItemID.SPLASH_POTION, object : ProjectileDispenseBehavior(EntityID.SPLASH_POTION) {
             override val accuracy: Float
-                get() = super.getAccuracy() * 0.5f
+                get() = super.accuracy * 0.5f
 
             override val motion: Double
-                get() = super.getMotion() * 1.25
+                get() = super.motion * 1.25
         })
         //        registerBehavior(ItemID.LINGERING_POTION, new ProjectileDispenseBehavior("LingeringPotion")); //TODO
         registerBehavior(ItemID.TRIDENT, object : ProjectileDispenseBehavior(EntityID.THROWN_TRIDENT) {
             override val accuracy: Float
-                get() = super.getAccuracy() * 0.5f
+                get() = super.accuracy * 0.5f
 
             override val motion: Double
-                get() = super.getMotion() * 1.25
+                get() = super.motion * 1.25
 
             override val shootingSound: Sound
                 get() = Sound.ITEM_TRIDENT_THROW

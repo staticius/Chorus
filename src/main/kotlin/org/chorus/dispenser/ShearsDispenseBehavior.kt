@@ -8,8 +8,8 @@ import org.chorus.math.SimpleAxisAlignedBB
 
 class ShearsDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {
-        var item = item
-        item = item.clone()
+        var item1 = item
+        item1 = item1.clone()
         val target = block.getSide(face)
         val bb = SimpleAxisAlignedBB(
             0.0, 0.0, 0.0,
@@ -23,9 +23,9 @@ class ShearsDispenseBehavior : DefaultDispenseBehavior() {
             if (!entity.shear()) {
                 continue
             }
-            item.useOn(entity)
-            return if (item.damage >= item.maxDurability) null else item
+            item1.useOn(entity)
+            return if (item1.damage >= item1.maxDurability) null else item1
         }
-        return item
+        return item1
     }
 }

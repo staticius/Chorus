@@ -10,7 +10,6 @@ import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.atomic.AtomicBoolean
 
-@RequiredArgsConstructor
 class ChorusConsole(private val server: Server) : SimpleTerminalConsole() {
     private val consoleQueue: BlockingQueue<String> = LinkedBlockingQueue()
     private val executingCommands = AtomicBoolean(false)
@@ -46,7 +45,7 @@ class ChorusConsole(private val server: Server) : SimpleTerminalConsole() {
     }
 
     override fun buildReader(builder: LineReaderBuilder): LineReader {
-        builder.completer(NukkitConsoleCompleter(server))
+        builder.completer(ChorusConsoleCompleter(server))
         builder.appName("PowerNukkitX")
         builder.option(LineReader.Option.HISTORY_BEEP, false)
         builder.option(LineReader.Option.HISTORY_IGNORE_DUPS, true)

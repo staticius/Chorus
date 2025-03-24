@@ -7,6 +7,7 @@ import org.chorus.dialog.element.ElementDialogButton
 import org.chorus.dialog.handler.FormDialogHandler
 import org.chorus.entity.Entity
 import org.chorus.utils.JSONUtils
+import org.chorus.utils.Loggable
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -24,11 +25,11 @@ class FormWindowDialog @JvmOverloads constructor(
     @JvmField
     var skinData: String = ""
 
-    //请不要随意调用此方法，否则可能会导致潜在的bug
-    //usually you shouldn't edit this
-    //in pnx this value is used to be an identifier
+    // Please do not call this method at will, otherwise it may cause potential bugs
+    // usually you shouldn't edit this
+    // but here this value is used to be an identifier
     var sceneName: String = (dialogId++).toString()
-        //请不要随意调用此方法，否则可能会导致潜在的bug
+        // Please do not call this method at will, otherwise it may cause potential bugs
         protected set
 
     @Transient
@@ -65,7 +66,7 @@ class FormWindowDialog @JvmOverloads constructor(
     }
 
     val entityId: Long
-        get() = bindEntity!!.id
+        get() = bindEntity!!.getId()
 
     fun addHandler(handler: FormDialogHandler) {
         handlers.add(handler)
@@ -78,14 +79,7 @@ class FormWindowDialog @JvmOverloads constructor(
     var buttonJSONData: String?
         get() = JSONUtils.to(this.buttons)
         set(json) {
-            var buttons =
-                JSONUtils.from<MutableList<ElementDialogButton?>>(
-                    json,
-                    object : TypeToken<List<ElementDialogButton?>?>() {
-                    }.type
-                )
-            //Cannot be null
-            if (buttons == null) buttons = ArrayList()
+            val buttons = JSONUtils.from<MutableList<ElementDialogButton?>?>(json, object : TypeToken<List<ElementDialogButton?>?>() {}.type) ?: mutableListOf()
             this.setButtons(buttons)
         }
 
@@ -97,7 +91,7 @@ class FormWindowDialog @JvmOverloads constructor(
         player.showDialogWindow(this)
     }
 
-    companion object {
+    companion object : Loggable {
         private var dialogId: Long = 0
     }
 }

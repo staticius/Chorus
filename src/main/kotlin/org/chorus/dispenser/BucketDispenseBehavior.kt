@@ -7,9 +7,6 @@ import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
 import org.chorus.math.BlockFace
 
-/**
- * @author CreeperFace
- */
 class BucketDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {
         if (item !is ItemBucket) {
@@ -54,7 +51,7 @@ class BucketDispenseBehavior : DefaultDispenseBehavior() {
                             this, target.position.add(0.5, 0.5, 0.5), VibrationType.BLOCK_PLACE
                         )
                     )
-                    return Item.get(ItemID.BUCKET, 0, 1, item.getCompoundTag())
+                    return Item.get(ItemID.BUCKET, 0, 1, item.compoundTag)
                 }
             }
         } else {
@@ -68,7 +65,7 @@ class BucketDispenseBehavior : DefaultDispenseBehavior() {
                     )
                 )
                 target.level.addSound(block.position, Sound.BUCKET_FILL_WATER)
-                return Item.get(ItemID.WATER_BUCKET, 0, 1, item.getCompoundTag())
+                return Item.get(ItemID.WATER_BUCKET, 0, 1, item.compoundTag)
             } else if (target is BlockFlowingLava && target.liquidDepth == 0) {
                 target.level.setBlock(target.position, Block.get(BlockID.AIR))
                 target.level.vibrationManager.callVibrationEvent(
@@ -79,7 +76,7 @@ class BucketDispenseBehavior : DefaultDispenseBehavior() {
                     )
                 )
                 target.level.addSound(block.position, Sound.BUCKET_FILL_LAVA)
-                return Item.get(ItemID.LAVA_BUCKET, 0, 1, item.getCompoundTag())
+                return Item.get(ItemID.LAVA_BUCKET, 0, 1, item.compoundTag)
             } else if (target is BlockPowderSnow) {
                 target.level.setBlock(target.position, Block.get(BlockID.AIR))
                 target.level.addSound(block.position, Sound.BUCKET_FILL_POWDER_SNOW)
@@ -90,7 +87,7 @@ class BucketDispenseBehavior : DefaultDispenseBehavior() {
                         VibrationType.FLUID_PICKUP
                     )
                 )
-                return Item.get(ItemID.POWDER_SNOW_BUCKET, 0, 1, item.getCompoundTag())
+                return Item.get(ItemID.POWDER_SNOW_BUCKET, 0, 1, item.compoundTag)
             }
         }
 

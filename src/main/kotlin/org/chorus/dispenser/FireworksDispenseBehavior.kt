@@ -9,7 +9,7 @@ import org.chorus.nbt.NBTIO
 
 class FireworksDispenseBehavior : DefaultDispenseBehavior() {
     override fun dispense(block: BlockDispenser, face: BlockFace, item: Item): Item? {
-        val opposite = face.opposite
+        val opposite = face.getOpposite()
         val pos = block.getSide(face).position.add(
             0.5 + opposite.xOffset * 0.2,
             0.5 + opposite.yOffset * 0.2,

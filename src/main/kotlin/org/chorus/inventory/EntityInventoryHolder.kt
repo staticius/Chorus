@@ -39,7 +39,7 @@ interface EntityInventoryHolder : InventoryHolder {
         return equipment.setFeet(item)
     }
 
-    val itemInHand: Item?
+    val itemInHand: Item
         get() = equipment.getMainHand()
 
     val itemInOffhand: Item

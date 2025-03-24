@@ -22,7 +22,7 @@ class SpawnEggDispenseBehavior : DefaultDispenseBehavior() {
 
         if (this.success) {
             if (item.hasCustomName() && entity is EntityLiving) {
-                entity.setNameTag(item.getCustomName())
+                entity.setNameTag(item.customName)
             }
 
             entity!!.spawnToAll()

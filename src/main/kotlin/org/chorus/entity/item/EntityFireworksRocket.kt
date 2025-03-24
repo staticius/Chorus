@@ -22,9 +22,7 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-/**
- * @author CreeperFace
- */
+
 open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chunk, nbt) {
     override fun getIdentifier(): String {
         return EntityID.Companion.FIREWORKS_ROCKET

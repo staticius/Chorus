@@ -10,8 +10,7 @@ import org.jline.reader.ParsedLine
 import java.util.*
 import java.util.function.Consumer
 
-@RequiredArgsConstructor
-class NukkitConsoleCompleter(private val server: Server) : Completer {
+class ChorusConsoleCompleter(private val server: Server) : Completer {
     override fun complete(lineReader: LineReader, parsedLine: ParsedLine, candidates: MutableList<Candidate>) {
         if (parsedLine.wordIndex() == 0) {
             if (parsedLine.word().isEmpty()) {

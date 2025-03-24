@@ -5,9 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-/**
- * @author CreeperFace
- */
+
 class BrewEvent(val brewingStand: BlockEntityBrewingStand) : InventoryEvent(brewingStand.inventory), Cancellable {
     val ingredient: Item = brewingStand.inventory.ingredient
 

@@ -15,9 +15,7 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-/**
- * @author CreeperFace
- */
+
 class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
     BlockTransparent(state), RedstoneComponent {
     override val name: String

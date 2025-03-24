@@ -5,9 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.form.window.Form
 
-/**
- * @author CreeperFace
- */
+
 class PlayerServerSettingsRequestEvent(player: Player?, settings: MutableMap<Int, Form<*>>) :
     PlayerEvent(), Cancellable {
     private var settings: MutableMap<Int, Form<*>>
