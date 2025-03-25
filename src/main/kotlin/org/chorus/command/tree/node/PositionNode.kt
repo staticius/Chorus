@@ -15,7 +15,7 @@ abstract class PositionNode(private val pattern: Pattern) : ParamNode<Locator?>(
     protected var index: Byte = 0
 
     override fun <E> get(): E? {
-        return this.get<E>(paramList.paramTree.sender.getLocator())
+        return this.get<E>(paramList.paramTree.sender!!.getLocator())
     }
 
     fun <E> get(basePos: Locator): E? {
@@ -45,7 +45,7 @@ abstract class PositionNode(private val pattern: Pattern) : ParamNode<Locator?>(
         else {
             //parse
             try {
-                val loc = paramList.paramTree.sender.getTransform()
+                val loc = paramList.paramTree.sender!!.getTransform()
                 for (s in TMP) {
                     if (s[0] == '~') {
                         this.setRelative(index)
@@ -68,7 +68,7 @@ abstract class PositionNode(private val pattern: Pattern) : ParamNode<Locator?>(
                             val vector3: Vector3
                             if (relativeAngleCoordinate[0] == '+') relativeAngleCoordinate =
                                 relativeAngleCoordinate.substring(1)
-                            when (index) {
+                            when (index.toInt()) {
                                 0 -> {
                                     vector3 = BVector3.fromLocation(loc).rotateYaw(-90.0).setPitch(0.0)
                                         .setLength(relativeAngleCoordinate.toDouble()).addToPos()
@@ -123,7 +123,7 @@ abstract class PositionNode(private val pattern: Pattern) : ParamNode<Locator?>(
     }
 
     fun setRelative(index: Byte) {
-        when (index) {
+        when (index.toInt()) {
             0 -> this.relative = (relative.toInt() or 1).toByte()
             1 -> this.relative = (relative.toInt() or 2).toByte()
             2 -> this.relative = (relative.toInt() or 4).toByte()

@@ -5,7 +5,7 @@ import org.chorus.lang.CommandOutputContainer
 import org.chorus.network.protocol.types.CommandOutputMessage
 import org.jetbrains.annotations.ApiStatus
 
-class ParamList(@get:ApiStatus.Internal val paramTree: ParamTree) : ArrayList<IParamNode<*>?>() {
+class ParamList(@get:ApiStatus.Internal val paramTree: ParamTree) : ArrayList<IParamNode<*>>() {
     /**
      * 获取当前的参数链解析在哪个下标发生了错误(下标从0开始)
      *
@@ -49,22 +49,22 @@ class ParamList(@get:ApiStatus.Internal val paramTree: ParamTree) : ArrayList<IP
      * 获取指定索引处参数节点的值。
      */
     fun <E> getResult(index: Int): E? {
-        return this[index]!!.get()
+        return this[index].get()
     }
 
     fun <E> getResult(index: Int, defaultValue: E): E {
-        return if (this.hasResult(index)) this.getResult(index) else defaultValue
+        return this.getResult(index) ?: defaultValue
     }
 
     fun addMessage(key: String) {
         messageContainer.messages.add(CommandOutputMessage(key, *CommandOutputContainer.EMPTY_STRING))
     }
 
-    fun addMessage(key: String, vararg params: String?) {
+    fun addMessage(key: String, vararg params: String) {
         messageContainer.messages.add(CommandOutputMessage(key, *params))
     }
 
-    fun addMessage(vararg messages: CommandOutputMessage?) {
+    fun addMessage(vararg messages: CommandOutputMessage) {
         for (message in messages) {
             messageContainer.messages.add(message)
         }
@@ -76,7 +76,7 @@ class ParamList(@get:ApiStatus.Internal val paramTree: ParamTree) : ArrayList<IP
      * @return 指定索引处的参数节点是否存在值
      */
     fun hasResult(index: Int): Boolean {
-        return index < this.size && index > -1 && this[index]!!.hasResult()
+        return index < this.size && index > -1 && this[index].hasResult()
     }
 
     override fun clone(): ParamList {

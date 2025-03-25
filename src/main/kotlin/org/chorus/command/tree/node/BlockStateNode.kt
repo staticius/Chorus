@@ -31,7 +31,7 @@ class BlockStateNode : ParamNode<BlockState?>() {
         }
 
         val split = substring.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val propertyTypeSet = properties.propertyTypeSet
+        val propertyTypeSet = properties.getPropertyTypeSet()
         for (s in split) {
             val property = s.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val nameWithQuote = property[0]
@@ -42,7 +42,7 @@ class BlockStateNode : ParamNode<BlockState?>() {
                 if (properties.identifier == key) {
                     if (propertyType.getType() == BlockPropertyType.Type.ENUM) {
                         if (propertyType.getValidValues().contains(value)) {
-                            result = result.setPropertyValue(properties, propertyType.tryCreateValue(value))
+                            result = result.setPropertyValue(properties, propertyType.tryCreateValue(value)!!)
                             break
                         } else {
                             this.error()
@@ -50,7 +50,7 @@ class BlockStateNode : ParamNode<BlockState?>() {
                         }
                     } else if (propertyType.getType() == BlockPropertyType.Type.BOOLEAN) {
                         if (value == "true" || value == "false") {
-                            result = result.setPropertyValue(properties, propertyType.tryCreateValue(value.toBoolean()))
+                            result = result.setPropertyValue(properties, propertyType.tryCreateValue(value.toBoolean())!!)
                             break
                         } else {
                             this.error()
@@ -58,7 +58,7 @@ class BlockStateNode : ParamNode<BlockState?>() {
                         }
                     } else if (propertyType.getType() == BlockPropertyType.Type.INT) {
                         try {
-                            result = result.setPropertyValue(properties, propertyType.tryCreateValue(value.toInt()))
+                            result = result.setPropertyValue(properties, propertyType.tryCreateValue(value.toInt())!!)
                             break
                         } catch (e: NumberFormatException) {
                             this.error()

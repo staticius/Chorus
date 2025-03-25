@@ -135,7 +135,7 @@ class ParamTree {
             f2@ for (i in list.indices) {
                 list.nodeIndex = i
                 val node = list[i]
-                while (!node!!.hasResult()) {
+                while (!node.hasResult()) {
                     if (list.index >= args.size) { //参数用完
                         if (node.isOptional) break@f2
                         list.indexAndIncrement

@@ -15,12 +15,12 @@ import org.chorus.entity.Entity
 class EntitiesNode : TargetNode<Entity?>() {
     //todo 支持uuid 或者 xuid
     override fun fill(arg: String) {
-        val entities: MutableList<Entity?>
+        val entities: MutableList<Entity>
         if (arg.isBlank()) {
             this.error()
-        } else if (EntitySelectorAPI.Companion.getAPI().checkValid(arg)) {
+        } else if (EntitySelectorAPI.Companion.api.checkValid(arg)) {
             try {
-                entities = EntitySelectorAPI.Companion.getAPI().matchEntities(paramList.paramTree.sender, arg)
+                entities = EntitySelectorAPI.api.matchEntities(paramList.paramTree.sender!!, arg)
             } catch (exception: SelectorSyntaxException) {
                 error(exception.message)
                 return

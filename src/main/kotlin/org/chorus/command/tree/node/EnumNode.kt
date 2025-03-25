@@ -1,6 +1,5 @@
 package org.chorus.command.tree.node
 
-import com.google.common.collect.Sets
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.tree.ParamList
@@ -13,7 +12,7 @@ import org.chorus.command.tree.ParamList
  */
 open class EnumNode : ParamNode<String>() {
     protected var commandEnum: CommandEnum? = null
-    protected var enums: Set<String?>? = null
+    protected var enums: Set<String>? = null
 
     override fun fill(arg: String) {
         if (commandEnum!!.isSoft) {
@@ -34,8 +33,8 @@ open class EnumNode : ParamNode<String>() {
     ): IParamNode<String> {
         this.paramList = parent
         this.commandEnum = enumData
-        this.enums = Sets.newHashSet(commandEnum!!.values)
-        this.optional = optional
+        this.enums = commandEnum?.getValues()?.toSet() ?: setOf()
+        this.isOptional = optional
         return this
     }
 }

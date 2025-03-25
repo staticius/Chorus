@@ -70,7 +70,7 @@ interface IParamNode<T> {
      * @param key    添加的错误信息，可以填写多语言文本key
      * @param params 填充多语言文本的参数
      */
-    fun error(key: String, vararg params: String?) {
+    fun error(key: String, vararg params: String) {
         val list = this.paramList
         list.error()
         list.addMessage(key, *params)
@@ -81,7 +81,7 @@ interface IParamNode<T> {
      *
      * @param messages 添加的错误信息[CommandOutputMessage]
      */
-    fun error(vararg messages: CommandOutputMessage?) {
+    fun error(vararg messages: CommandOutputMessage) {
         val list = this.paramList
         list.error()
         list.addMessage(*messages)

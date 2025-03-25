@@ -37,13 +37,13 @@ class MessageStringNode : ParamNode<String?>() {
                     if (after == '”' || after == '\'' || after == '\\' || after == ';') return@replaceAll match.group()
                 }
                 val m = match.group()
-                if (EntitySelectorAPI.Companion.getAPI().checkValid(m)) {
+                if (EntitySelectorAPI.Companion.api.checkValid(m)) {
                     val join = StringJoiner(", ")
                     try {
-                        for (entity in EntitySelectorAPI.Companion.getAPI()
-                            .matchEntities(paramList.paramTree.sender, m)) {
-                            var name = entity.name
-                            if (name.isBlank()) name = entity.originalName
+                        for (entity in EntitySelectorAPI.Companion.api
+                            .matchEntities(paramList.paramTree.sender!!, m)) {
+                            var name = entity.getName()
+                            if (name.isBlank()) name = entity.getOriginalName()
                             join.add(name)
                         }
                     } catch (e: SelectorSyntaxException) {

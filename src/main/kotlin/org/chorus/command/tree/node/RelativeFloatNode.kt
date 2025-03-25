@@ -1,10 +1,5 @@
 package org.chorus.command.tree.node
 
-/**
- * @author daoge_cmd <br></br>
- * Date: 2023/6/11 <br></br>
- * PowerNukkitX Project <br></br>
- */
 class RelativeFloatNode : RelativeNumberNode<Float>() {
     override fun fill(arg: String) {
         if (arg.startsWith("~")) {

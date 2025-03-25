@@ -6,7 +6,7 @@ import org.chorus.command.exceptions.SelectorSyntaxException
 /**
  * 所有可能的选择器类型
  */
-enum class SelectorType(@field:Getter private val token: String) {
+enum class SelectorType(val token: String) {
     ALL_PLAYERS("a"),
     ALL_ENTITIES("e"),
 

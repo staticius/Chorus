@@ -61,7 +61,7 @@ class EntitySelectorAPI private constructor() {
         //根据选择器类型先确定实体检测范围
         var entities: MutableList<Entity>
         entities = if (selectorType != SelectorType.SELF) {
-            Lists.newArrayList(senderLocation.level.entities.values())
+            Lists.newArrayList(senderLocation.level.entities.values)
         } else {
             if (sender.isEntity) Lists.newArrayList(sender.asEntity())
             else return Lists.newArrayList()

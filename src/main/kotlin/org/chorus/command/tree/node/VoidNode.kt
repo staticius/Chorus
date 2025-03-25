@@ -5,7 +5,7 @@ import org.chorus.command.tree.ParamList
 /**
  * 一个用来占位的空参数节点
  */
-class VoidNode : IParamNode<Void?> {
+class VoidNode : ParamNode<Void?>() {
     override fun fill(arg: String) {
     }
 
@@ -16,13 +16,9 @@ class VoidNode : IParamNode<Void?> {
     override fun reset() {
     }
 
-    override val paramList: ParamList
-        get() = null
-
     override fun hasResult(): Boolean {
         return true
     }
 
-    override val isOptional: Boolean
-        get() = true
+    override var isOptional: Boolean = true
 }
