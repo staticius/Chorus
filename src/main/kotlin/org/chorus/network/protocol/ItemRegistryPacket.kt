@@ -8,13 +8,8 @@ import org.chorus.utils.MainLogger
 import java.io.IOException
 import java.nio.ByteOrder
 
-/**
- * @author GoodLucky777
- */
-
-
 class ItemRegistryPacket : DataPacket() {
-    private var entries: Array<Entry?>? = Entry.EMPTY_ARRAY
+    var entries: Array<Entry>? = emptyArray()
 
     override fun decode(byteBuf: HandleByteBuf) {}
 
@@ -33,25 +28,22 @@ class ItemRegistryPacket : DataPacket() {
         }
     }
 
-    fun setEntries(entries: Array<Entry?>?) {
-        this.entries = if (entries == null) null else if (entries.size == 0) Entry.EMPTY_ARRAY else entries.clone()
+    fun setEntries(entries: Array<Entry>?) {
+        this.entries = if (entries == null) null else if (entries.isEmpty()) emptyArray() else entries.clone()
     }
 
     fun getEntries(): Array<Entry>? {
-        return if (entries == null) null else if (entries!!.size == 0) Entry.EMPTY_ARRAY else entries!!.clone()
+        return if (entries == null) null else if (entries!!.isEmpty()) emptyArray() else entries!!.clone()
     }
 
 
     class Entry(
         val name: String,
-        val runtimeId: Int, val version: Int,
+        val runtimeId: Int,
+        val version: Int,
         val componentBased: Boolean,
         val data: CompoundTag
-    ) {
-        companion object {
-            val EMPTY_ARRAY: Array<Entry?> = arrayOfNulls(0)
-        }
-    }
+    )
 
     override fun pid(): Int {
         return ProtocolInfo.Companion.ITEM_REGISTRY_PACKET

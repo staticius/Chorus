@@ -2,19 +2,19 @@ package org.chorus.network.protocol.types
 
 import com.google.gson.JsonObject
 import org.chorus.utils.JSONUtils
-import org.jetbrains.annotations.UnmodifiableView
-import java.util.*
 
 object TrimData {
-    var trimPatterns: @UnmodifiableView MutableList<TrimPattern>? = null
-    var trimMaterials: @UnmodifiableView MutableList<TrimMaterial>? = null
+    var trimPatterns: List<TrimPattern> = emptyList()
+    var trimMaterials: List<TrimMaterial> = emptyList()
 
     init {
         try {
             TrimData::class.java.classLoader.getResourceAsStream("trim_data.json").use { stream ->
+                stream ?: throw Exception("trim_data.json could not be loaded")
+
                 val obj = JSONUtils.from(stream, JsonObject::class.java)
-                val l1 = ArrayList<TrimPattern>()
-                val l2 = ArrayList<TrimMaterial>()
+                val l1 = mutableListOf<TrimPattern>()
+                val l2 = mutableListOf<TrimMaterial>()
                 for (e in obj.getAsJsonArray("patterns").asList()) {
                     val asJsonObject = e.asJsonObject
                     l1.add(TrimPattern(asJsonObject["itemName"].asString, asJsonObject["patternId"].asString))
@@ -29,8 +29,8 @@ object TrimData {
                         )
                     )
                 }
-                trimPatterns = Collections.unmodifiableList(l1)
-                trimMaterials = Collections.unmodifiableList(l2)
+                trimPatterns = l1.toList()
+                trimMaterials = l2.toList()
             }
         } catch (e: Exception) {
             throw RuntimeException(e)

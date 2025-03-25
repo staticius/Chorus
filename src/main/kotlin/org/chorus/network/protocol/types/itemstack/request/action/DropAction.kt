@@ -10,11 +10,11 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotD
  * whether the item stack network IDs are used or not.
  */
 
-class DropAction : ItemStackRequestAction {
-    var count: Int = 0
-    var source: ItemStackRequestSlotData? = null
-    var randomly: Boolean = false // ?? Perhaps deals with order of items being dropped? Normally false.
-
+data class DropAction(
+    var count: Int,
+    var source: ItemStackRequestSlotData,
+    var randomly: Boolean, // ?? Perhaps deals with order of items being dropped? Normally false.
+) : ItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.DROP
 }

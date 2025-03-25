@@ -1,12 +1,12 @@
 package org.chorus.network.protocol.types
 
-enum class InputMode(override val ordinal: Int) {
-    UNDEFINED(0),
-    MOUSE(1),
-    TOUCH(2),
-    GAME_PAD(3),
-    MOTION_CONTROLLER(4),
-    COUNT(5);
+enum class InputMode {
+    UNDEFINED,
+    MOUSE,
+    TOUCH,
+    GAME_PAD,
+    MOTION_CONTROLLER,
+    COUNT;
 
     companion object {
         private val VALUES = entries.toTypedArray()

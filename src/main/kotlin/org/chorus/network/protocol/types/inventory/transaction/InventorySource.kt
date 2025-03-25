@@ -4,12 +4,12 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.inventory.SpecialWindowId
 
+data class InventorySource(
+    val type: Type,
+    val containerId: Int,
+    val flag: Flag,
+) {
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-class InventorySource {
-    private val type: Type? = null
-    private val containerId = 0
-    private val flag: Flag? = null
 
     enum class Type(private val id: Int) {
         INVALID(-1),

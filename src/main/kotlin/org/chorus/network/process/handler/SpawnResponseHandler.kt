@@ -12,10 +12,10 @@ import org.chorus.network.protocol.types.TrimData
 import org.chorus.registry.ItemRegistry
 import org.chorus.registry.ItemRuntimeIdRegistry
 import org.chorus.registry.Registries
+import org.chorus.utils.Loggable
 import java.util.function.Consumer
 import kotlin.math.max
 import kotlin.math.min
-
 
 class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
     init {
@@ -28,12 +28,12 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         val itemRegistryPacket = ItemRegistryPacket()
         val entries = ObjectOpenHashSet<ItemRegistryPacket.Entry>()
 
-        for (data in ItemRuntimeIdRegistry.getITEMDATA()) {
+        for (data in ItemRuntimeIdRegistry.ITEM_DATA) {
             var tag = CompoundTag()
 
-            if (ItemRegistry.getItemComponents().containsCompound(data.identifier)) {
-                val item_tag = ItemRegistry.getItemComponents().getCompound(data.identifier)
-                tag.putCompound("components", item_tag!!.getCompound("components"))
+            if (ItemRegistry.itemComponents.containsCompound(data.identifier)) {
+                val itemTag = ItemRegistry.itemComponents.getCompound(data.identifier)
+                tag.putCompound("components", itemTag.getCompound("components"))
             } else if (Registries.ITEM.customItemDefinition.containsKey(data.identifier)) {
                 tag = Registries.ITEM.customItemDefinition[data.identifier]!!.nbt
             }
@@ -49,7 +49,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
             )
         }
 
-        itemRegistryPacket.entries = entries.toArray(ItemRegistryPacket.Entry.EMPTY_ARRAY)
+        itemRegistryPacket.entries = entries.toTypedArray()
         player!!.dataPacket(itemRegistryPacket)
 
         SpawnResponseHandler.log.debug("Sending actor identifiers")
@@ -130,7 +130,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         startPk.seed = -1L
         startPk.dimension = (player.level!!.dimension and 0xff).toByte()
         startPk.worldGamemode = Player.toNetworkGamemode(server.defaultGamemode)
-        startPk.difficulty = server.difficulty
+        startPk.difficulty = server.getDifficulty()
         val spawn = player.safeSpawn
         startPk.spawnX = spawn.floorX
         startPk.spawnY = spawn.floorY
@@ -139,13 +139,13 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         startPk.dayCycleStopTime = -1
         startPk.rainLevel = 0f
         startPk.lightningLevel = 0f
-        startPk.commandsEnabled = player.isEnableClientCommand
+        startPk.commandsEnabled = player.isEnableClientCommand()
         startPk.gameRules = player.level!!.gameRules
         startPk.levelId = ""
         startPk.worldName = server.subMotd
         startPk.generator = ((player.level!!.dimension + 1) and 0xff).toByte()
             .toInt() //0 旧世界 Old world, 1 主世界 Main world, 2 下界 Nether, 3 末地 End
-        startPk.serverAuthoritativeMovement = server.serverAuthoritativeMovement
+        startPk.serverAuthoritativeMovement = server.getServerAuthoritativeMovement()
         startPk.isInventoryServerAuthoritative = true //enable item stack request packet
         startPk.blockNetworkIdsHashed = true //enable blockhash
         // 写入自定义方块数据
@@ -167,4 +167,6 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         )
         handle!!.onPlayerLocallyInitialized()
     }
+
+    companion object : Loggable
 }

@@ -1,7 +1,5 @@
 package org.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.LegacySetItemSlotData
 import org.chorus.network.protocol.types.inventory.transaction.*
@@ -12,9 +10,9 @@ import java.util.*
 
 class InventoryTransactionPacket : DataPacket() {
     var transactionType: Int = 0
-    var actions: Array<NetworkInventoryAction>
+    var actions: Array<NetworkInventoryAction> = emptyArray()
     var transactionData: TransactionData? = null
-    val legacySlots: MutableList<LegacySetItemSlotData> = ObjectArrayList()
+    val legacySlots: MutableList<LegacySetItemSlotData> = mutableListOf()
 
     var legacyRequestId: Int = 0
     private var triggerType: TriggerType? = null
@@ -45,49 +43,49 @@ class InventoryTransactionPacket : DataPacket() {
         val length = byteBuf.readUnsignedVarInt()
         val actions: MutableCollection<NetworkInventoryAction> = ArrayDeque()
         for (i in 0..<length) {
-            actions.add(NetworkInventoryAction().read(this, byteBuf))
+            actions.add(NetworkInventoryAction.read(this, byteBuf))
         }
-        this.actions = actions.toArray<NetworkInventoryAction>(NetworkInventoryAction.Companion.EMPTY_ARRAY)
+        this.actions = actions.toTypedArray()
 
         when (this.transactionType) {
             TYPE_NORMAL, TYPE_MISMATCH -> {}
             TYPE_USE_ITEM -> {
-                val itemData = UseItemData()
-
-                itemData.actionType = byteBuf.readUnsignedVarInt()
-                itemData.triggerType = TriggerType.entries[byteBuf.readUnsignedVarInt()]
-                itemData.blockPos = byteBuf.readBlockVector3()
-                itemData.face = byteBuf.readBlockFace()
-                itemData.hotbarSlot = byteBuf.readVarInt()
-                itemData.itemInHand = byteBuf.readSlot()
-                itemData.playerPos = byteBuf.readVector3f().asVector3()
-                itemData.clickPos = byteBuf.readVector3f()
-                itemData.blockRuntimeId = byteBuf.readUnsignedVarInt()
-                itemData.clientInteractPrediction = PredictedResult.entries[byteBuf.readUnsignedVarInt()]
+                val itemData = UseItemData(
+                    actionType = byteBuf.readUnsignedVarInt(),
+                    triggerType = TriggerType.entries[byteBuf.readUnsignedVarInt()],
+                    blockPos = byteBuf.readBlockVector3(),
+                    face = byteBuf.readBlockFace(),
+                    hotbarSlot = byteBuf.readVarInt(),
+                    itemInHand = byteBuf.readSlot(),
+                    playerPos = byteBuf.readVector3f().asVector3(),
+                    clickPos = byteBuf.readVector3f(),
+                    blockRuntimeId = byteBuf.readUnsignedVarInt(),
+                    clientInteractPrediction = PredictedResult.entries[byteBuf.readUnsignedVarInt()],
+                )
 
                 this.transactionData = itemData
             }
 
             TYPE_USE_ITEM_ON_ENTITY -> {
-                val useItemOnEntityData = UseItemOnEntityData()
-
-                useItemOnEntityData.entityRuntimeId = byteBuf.readEntityRuntimeId()
-                useItemOnEntityData.actionType = byteBuf.readUnsignedVarInt()
-                useItemOnEntityData.hotbarSlot = byteBuf.readVarInt()
-                useItemOnEntityData.itemInHand = byteBuf.readSlot()
-                useItemOnEntityData.playerPos = byteBuf.readVector3f().asVector3()
-                useItemOnEntityData.clickPos = byteBuf.readVector3f().asVector3()
+                val useItemOnEntityData = UseItemOnEntityData(
+                    entityRuntimeId = byteBuf.readEntityRuntimeId(),
+                    actionType = byteBuf.readUnsignedVarInt(),
+                    hotbarSlot = byteBuf.readVarInt(),
+                    itemInHand = byteBuf.readSlot(),
+                    playerPos = byteBuf.readVector3f().asVector3(),
+                    clickPos = byteBuf.readVector3f().asVector3(),
+                )
 
                 this.transactionData = useItemOnEntityData
             }
 
             TYPE_RELEASE_ITEM -> {
-                val releaseItemData = ReleaseItemData()
-
-                releaseItemData.actionType = byteBuf.readUnsignedVarInt()
-                releaseItemData.hotbarSlot = byteBuf.readVarInt()
-                releaseItemData.itemInHand = byteBuf.readSlot()
-                releaseItemData.headRot = byteBuf.readVector3f().asVector3()
+                val releaseItemData = ReleaseItemData(
+                    actionType = byteBuf.readUnsignedVarInt(),
+                    hotbarSlot = byteBuf.readVarInt(),
+                    itemInHand = byteBuf.readSlot(),
+                    headRot = byteBuf.readVector3f().asVector3()
+                )
 
                 this.transactionData = releaseItemData
             }
@@ -102,7 +100,7 @@ class InventoryTransactionPacket : DataPacket() {
 
         //slots array
         if (legacyRequestId != 0) {
-            byteBuf.writeUnsignedVarInt(legacySlots.size())
+            byteBuf.writeUnsignedVarInt(legacySlots.size)
             for (slot in legacySlots) {
                 byteBuf.writeByte(slot.containerId.toByte().toInt())
                 byteBuf.writeByteArray(slot.slots)
@@ -117,37 +115,38 @@ class InventoryTransactionPacket : DataPacket() {
         when (this.transactionType) {
             TYPE_NORMAL, TYPE_MISMATCH -> {}
             TYPE_USE_ITEM -> {
-                val useItemData = transactionData as UseItemData?
-                byteBuf.writeUnsignedVarInt(useItemData!!.actionType)
-                byteBuf.writeUnsignedVarInt(useItemData.triggerType!!.ordinal())
-                byteBuf.writeBlockVector3(useItemData.blockPos!!)
-                byteBuf.writeBlockFace(useItemData.face!!)
+                val useItemData = transactionData as UseItemData
+
+                byteBuf.writeUnsignedVarInt(useItemData.actionType)
+                byteBuf.writeUnsignedVarInt(useItemData.triggerType.ordinal)
+                byteBuf.writeBlockVector3(useItemData.blockPos)
+                byteBuf.writeBlockFace(useItemData.face)
                 byteBuf.writeVarInt(useItemData.hotbarSlot)
                 byteBuf.writeSlot(useItemData.itemInHand)
-                byteBuf.writeVector3f(useItemData.playerPos!!.asVector3f())
-                byteBuf.writeVector3f(useItemData.clickPos!!)
+                byteBuf.writeVector3f(useItemData.playerPos.asVector3f())
+                byteBuf.writeVector3f(useItemData.clickPos)
                 byteBuf.writeUnsignedVarInt(useItemData.blockRuntimeId)
-                byteBuf.writeUnsignedVarInt(useItemData.clientInteractPrediction!!.ordinal())
+                byteBuf.writeUnsignedVarInt(useItemData.clientInteractPrediction.ordinal)
             }
 
             TYPE_USE_ITEM_ON_ENTITY -> {
-                val useItemOnEntityData = transactionData as UseItemOnEntityData?
+                val useItemOnEntityData = transactionData as UseItemOnEntityData
 
-                byteBuf.writeEntityRuntimeId(useItemOnEntityData!!.entityRuntimeId)
+                byteBuf.writeEntityRuntimeId(useItemOnEntityData.entityRuntimeId)
                 byteBuf.writeUnsignedVarInt(useItemOnEntityData.actionType)
                 byteBuf.writeVarInt(useItemOnEntityData.hotbarSlot)
                 byteBuf.writeSlot(useItemOnEntityData.itemInHand)
-                byteBuf.writeVector3f(useItemOnEntityData.playerPos!!.asVector3f())
-                byteBuf.writeVector3f(useItemOnEntityData.clickPos!!.asVector3f())
+                byteBuf.writeVector3f(useItemOnEntityData.playerPos.asVector3f())
+                byteBuf.writeVector3f(useItemOnEntityData.clickPos.asVector3f())
             }
 
             TYPE_RELEASE_ITEM -> {
-                val releaseItemData = transactionData as ReleaseItemData?
+                val releaseItemData = transactionData as ReleaseItemData
 
-                byteBuf.writeUnsignedVarInt(releaseItemData!!.actionType)
+                byteBuf.writeUnsignedVarInt(releaseItemData.actionType)
                 byteBuf.writeVarInt(releaseItemData.hotbarSlot)
                 byteBuf.writeSlot(releaseItemData.itemInHand)
-                byteBuf.writeVector3f(releaseItemData.headRot!!.asVector3f())
+                byteBuf.writeVector3f(releaseItemData.headRot.asVector3f())
             }
 
             else -> throw RuntimeException("Unknown transaction type " + this.transactionType)
@@ -173,8 +172,8 @@ class InventoryTransactionPacket : DataPacket() {
         const val USE_ITEM_ACTION_CLICK_AIR: Int = 1
         const val USE_ITEM_ACTION_BREAK_BLOCK: Int = 2
 
-        const val RELEASE_ITEM_ACTION_RELEASE: Int = 0 //bow shoot
-        const val RELEASE_ITEM_ACTION_CONSUME: Int = 1 //eat food, drink potion
+        const val RELEASE_ITEM_ACTION_RELEASE: Int = 0 // bow shoot
+        const val RELEASE_ITEM_ACTION_CONSUME: Int = 1 // eat food, drink potion
 
         const val USE_ITEM_ON_ENTITY_ACTION_INTERACT: Int = 0
         const val USE_ITEM_ON_ENTITY_ACTION_ATTACK: Int = 1

@@ -24,15 +24,15 @@ class SessionStartHandler(session: BedrockSession) : BedrockSessionPacketHandler
         }
 
         val server = session.server
-        if (server.ipBans.isBanned(session.addressString)) {
-            val reason = server.ipBans.entires[session.addressString]!!.reason
-            session.close(if (!reason.isEmpty()) "You are banned. Reason: $reason" else "You are banned")
+        if (server.bannedIPs.isBanned(session.addressString)) {
+            val reason = server.bannedIPs.entries[session.addressString]!!.reason
+            session.close(if (reason.isNotEmpty()) "You are banned. Reason: $reason" else "You are banned")
             return
         }
 
         val settingsPacket = NetworkSettingsPacket()
         //FIXME there is no way out there to disable compression
-        val algorithm = if (Server.instance.settings.networkSettings().snappy()) {
+        val algorithm = if (Server.instance.settings.networkSettings.snappy) {
             PacketCompressionAlgorithm.SNAPPY
         } else {
             PacketCompressionAlgorithm.ZLIB

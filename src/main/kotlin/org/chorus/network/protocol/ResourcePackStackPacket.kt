@@ -1,17 +1,13 @@
 package org.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import org.chorus.entity.Attribute.getName
-import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.resourcepacks.ResourcePack
 
-
 class ResourcePackStackPacket : DataPacket() {
     var mustAccept: Boolean = false
-    var behaviourPackStack: Array<ResourcePack> = ResourcePack.EMPTY_ARRAY
-    var resourcePackStack: Array<ResourcePack> = ResourcePack.EMPTY_ARRAY
-    val experiments: List<ExperimentData> = ObjectArrayList()
+    var behaviourPackStack: Array<ResourcePack> = emptyArray()
+    var resourcePackStack: Array<ResourcePack> = emptyArray()
+    val experiments: MutableList<ExperimentData> = mutableListOf()
     var gameVersion: String = "*"
     var isHasEditorPacks: Boolean = false
 
@@ -25,31 +21,30 @@ class ResourcePackStackPacket : DataPacket() {
         for (entry in this.behaviourPackStack) {
             byteBuf.writeString(entry.packId.toString())
             byteBuf.writeString(entry.packVersion)
-            byteBuf.writeString("") //TODO: subpack name
+            byteBuf.writeString("") // TODO: subpack name
         }
 
         byteBuf.writeUnsignedVarInt(resourcePackStack.size)
         for (entry in this.resourcePackStack) {
             byteBuf.writeString(entry.packId.toString())
             byteBuf.writeString(entry.packVersion)
-            byteBuf.writeString("") //TODO: subpack name
+            byteBuf.writeString("") // TODO: subpack name
         }
 
         byteBuf.writeString(this.gameVersion)
-        byteBuf.writeIntLE(experiments.size()) // Experiments length
+        byteBuf.writeIntLE(experiments.size) // Experiments length
         for (experimentData in this.experiments) {
-            byteBuf.writeString(experimentData.getName())
-            byteBuf.writeBoolean(experimentData.isEnabled())
+            byteBuf.writeString(experimentData.name)
+            byteBuf.writeBoolean(experimentData.enabled)
         }
         byteBuf.writeBoolean(true) // Were experiments previously toggled
         byteBuf.writeBoolean(isHasEditorPacks)
     }
 
-
-    class ExperimentData {
-        var name: String? = null
-        var enabled: Boolean = false
-    }
+    data class ExperimentData(
+        var name: String,
+        var enabled: Boolean,
+    )
 
     override fun pid(): Int {
         return ProtocolInfo.Companion.RESOURCE_PACK_STACK_PACKET

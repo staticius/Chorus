@@ -4,11 +4,9 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequest
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 
 
-class ItemStackRequestContext(@field:Getter private val itemStackRequest: ItemStackRequest) {
-
-
-    private val currentActionIndex = 0
-    private val extraData: MutableMap<String, Any> =
+class ItemStackRequestContext(val itemStackRequest: ItemStackRequest) {
+    var currentActionIndex = 0
+    val extraData: MutableMap<String, Any> =
         HashMap()
 
     fun put(key: String, value: Any) {

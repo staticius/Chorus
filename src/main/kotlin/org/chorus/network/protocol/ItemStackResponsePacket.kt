@@ -8,7 +8,7 @@ import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSta
 
 
 class ItemStackResponsePacket : DataPacket() {
-    val entries: List<ItemStackResponse> = ArrayList()
+    val entries: MutableList<ItemStackResponse> = ArrayList()
 
     override fun decode(byteBuf: HandleByteBuf) {
     }

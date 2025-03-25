@@ -2,33 +2,24 @@ package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
 import org.chorus.Server
-import org.chorus.dialog.handler.FormDialogHandler.handle
-import org.chorus.entity.EntityHumanType.getInventory
-import org.chorus.entity.item.EntityChestBoat.getInventory
-import org.chorus.entity.mob.animal.EntityHorse.getInventory
 import org.chorus.event.inventory.ItemStackRequestActionEvent
 import org.chorus.event.player.PlayerTransferItemEvent
 import org.chorus.inventory.Inventory
 import org.chorus.inventory.fake.FakeInventory
-import org.chorus.inventory.fake.FakeInventory.handle
 import org.chorus.inventory.request.*
-import org.chorus.inventory.request.ItemStackRequestActionProcessor.handle
-import org.chorus.inventory.request.NetworkMapping.getInventory
-import org.chorus.network.connection.BedrockSession.handle
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ItemStackRequestPacket
 import org.chorus.network.protocol.ItemStackResponsePacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
-import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestAction
-import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.network.protocol.types.itemstack.request.action.*
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponse
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseStatus
+import org.chorus.utils.Loggable
 import java.util.*
-import java.util.function.Function
 import kotlin.collections.set
 
 
@@ -43,7 +34,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
             val responseContainerMap: MutableMap<ContainerSlotType, ItemStackResponseContainer> = LinkedHashMap()
             for (index in actions.indices) {
                 val action = actions[index]
-                context.setCurrentActionIndex(index)
+                context.currentActionIndex = (index)
                 val processor = PROCESSORS[action.type] as ItemStackRequestActionProcessor<ItemStackRequestAction>?
                 if (processor == null) {
                     ItemStackRequestPacketProcessor.log.warn("Unhandled inventory action type {}", action.type)
@@ -55,7 +46,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
                 Server.instance.pluginManager.callEvent(event)
                 val topWindow = player.topWindow
                 if (topWindow.isPresent && topWindow.get() is FakeInventory) {
-                    fakeInventory.handle(event)
+                    (topWindow.get() as FakeInventory).handle(event)
                 }
                 val response = if (event.response != null) {
                     event.response
@@ -86,7 +77,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
                     }
                 }
             }
-            itemStackResponse.containers.addAll(responseContainerMap.values())
+            itemStackResponse.containers.addAll(responseContainerMap.values)
             responses.add(itemStackResponse)
         }
 
@@ -97,7 +88,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
                     newItems[Objects.hash(i.slot, i.hotbarSlot)] = i
                 }
                 c.items.clear()
-                c.items.addAll(newItems.values())
+                c.items.addAll(newItems.values)
             }
         }
 
@@ -117,17 +108,16 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
             val transferResult = handleAction(action) ?: return
 
             val player = event.player
-            val sourceInventory: Inventory =
-                NetworkMapping.getInventory(player, transferResult.source.containerName.container)
+            val sourceInventory = NetworkMapping.getInventory(player, transferResult.source.containerName.container)!!
             val sourceSlot = sourceInventory.fromNetworkSlot(transferResult.source.slot)
 
             val destinationInventory = transferResult.destination
-                .map<Inventory?>(Function<ItemStackRequestSlotData, Inventory?> { destination: ItemStackRequestSlotData ->
+                .map { destination ->
                     NetworkMapping.getInventory(
                         player,
                         destination.containerName.container
                     )
-                })
+                }
             val destinationSlot = destinationInventory
                 .flatMap { inventory: Inventory? ->
                     transferResult.destination
@@ -162,20 +152,20 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
 
         fun handleAction(action: ItemStackRequestAction): TransferResult? {
             return when (action) {
-                -> TransferResult(
-                    transfer.getSource(),
-                    Optional.of<ItemStackRequestSlotData>(transfer.getDestination()),
+                is TransferItemStackRequestAction -> TransferResult(
+                    action.source,
+                    Optional.of<ItemStackRequestSlotData>(action.destination),
                     PlayerTransferItemEvent.Type.TRANSFER
                 )
 
-                -> TransferResult(
-                    swap.getSource(),
-                    Optional.of<ItemStackRequestSlotData>(swap.getDestination()),
+                is SwapAction -> TransferResult(
+                    action.source,
+                    Optional.of<ItemStackRequestSlotData>(action.destination),
                     PlayerTransferItemEvent.Type.SWAP
                 )
 
-                -> TransferResult(
-                    drop.getSource(),
+                is DropAction -> TransferResult(
+                    action.source,
                     Optional.empty<ItemStackRequestSlotData>(),
                     PlayerTransferItemEvent.Type.DROP
                 )
@@ -193,7 +183,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
         )
     }
 
-    companion object {
+    companion object : Loggable {
         val PROCESSORS: EnumMap<ItemStackRequestActionType, ItemStackRequestActionProcessor<*>> = EnumMap(
             ItemStackRequestActionType::class.java
         )

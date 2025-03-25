@@ -9,18 +9,18 @@ import org.chorus.math.Vector3f
 
 
 
-class UseItemData : TransactionData {
-    var actionType: Int = 0
-    var blockPos: BlockVector3? = null
-    var face: BlockFace? = null
-    var hotbarSlot: Int = 0
-    var itemInHand: Item? = null
-    var playerPos: Vector3? = null
-    var clickPos: Vector3f? = null
-    var blockRuntimeId: Int = 0
-    var clientInteractPrediction: PredictedResult? = null
-    var triggerType: TriggerType? = null
-
+data class UseItemData(
+    var actionType: Int,
+    var blockPos: BlockVector3,
+    var face: BlockFace,
+    var hotbarSlot: Int,
+    var itemInHand: Item,
+    var playerPos: Vector3,
+    var clickPos: Vector3f,
+    var blockRuntimeId: Int,
+    var clientInteractPrediction: PredictedResult,
+    var triggerType: TriggerType,
+) : TransactionData {
     enum class PredictedResult {
         FAILURE,
         SUCCESS

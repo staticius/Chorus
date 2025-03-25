@@ -9,11 +9,6 @@ import org.chorus.utils.*
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-/**
- * @since on 15-10-13
- */
-
-
 class LoginPacket : DataPacket() {
     var username: String? = null
     var titleId: String? = null
@@ -41,12 +36,12 @@ class LoginPacket : DataPacket() {
     }
 
     private fun decodeChainData(binaryStream: BinaryStream) {
-        val map: Map<String, List<String>> = JSONUtils.from<Map<String, List<String>>>(
+        val map: Map<String, List<String>> = JSONUtils.from(
             String(
                 binaryStream[binaryStream.lInt], StandardCharsets.UTF_8
             ),
-            object : TypeToken<Map<String?, List<String?>?>?>() {
-            })
+            object : TypeToken<Map<String, List<String>>>() {}
+        )
         if (map.isEmpty() || !map.containsKey("chain") || map["chain"]!!.isEmpty()) return
         val chains = map["chain"]!!
         for (c in chains) {
@@ -78,9 +73,9 @@ class LoginPacket : DataPacket() {
         }
 
         if (skinToken.has("SkinId")) {
-            //The "SkinId" obtained here is FullId
-            //FullId = SkinId + CapeId
-            //The skinId in the Skin object is not FullId, we need to subtract the CapeId
+            // The "SkinId" obtained here is FullId
+            // FullId = SkinId + CapeId
+            // The skinId in the Skin object is not FullId, we need to subtract the CapeId
 
             val fullSkinId = skinToken["SkinId"].asString
             skin!!.setFullSkinId(fullSkinId)

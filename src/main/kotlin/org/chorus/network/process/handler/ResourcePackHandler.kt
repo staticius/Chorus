@@ -4,6 +4,7 @@ import org.chorus.network.connection.BedrockSession
 import org.chorus.network.process.SessionState
 import org.chorus.network.protocol.*
 import org.chorus.network.protocol.ResourcePackStackPacket.ExperimentData
+import org.chorus.utils.Loggable
 import org.chorus.utils.Version
 
 import java.util.*
@@ -99,4 +100,6 @@ class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler
         dataPacket.progress = maxChunkSize * pk.chunkIndex.toLong()
         session.sendPacket(dataPacket)
     }
+
+    companion object : Loggable
 }

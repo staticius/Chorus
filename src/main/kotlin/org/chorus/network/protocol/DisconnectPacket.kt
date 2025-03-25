@@ -3,12 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.DisconnectFailReason
 
-
-/**
- * @since 15-10-12
- */
-
-
 class DisconnectPacket : DataPacket() {
     var reason: DisconnectFailReason = DisconnectFailReason.UNKNOWN
 
@@ -16,7 +10,7 @@ class DisconnectPacket : DataPacket() {
     var hideDisconnectionScreen: Boolean = false
 
     @JvmField
-    var message: String? = null
+    var message: String = ""
     private var filteredMessage = ""
 
     override fun decode(byteBuf: HandleByteBuf) {
@@ -30,13 +24,13 @@ class DisconnectPacket : DataPacket() {
         byteBuf.writeVarInt(reason.ordinal)
         byteBuf.writeBoolean(this.hideDisconnectionScreen)
         if (!this.hideDisconnectionScreen) {
-            byteBuf.writeString(message!!)
+            byteBuf.writeString(message)
             byteBuf.writeString(this.filteredMessage)
         }
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.DISCONNECT_PACKET
+        return ProtocolInfo.DISCONNECT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

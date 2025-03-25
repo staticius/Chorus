@@ -7,9 +7,7 @@ import org.chorus.inventory.InventoryHolder
 import org.chorus.inventory.fake.FakeInventory
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-
-@UtilityClass
-class NetworkMapping {
+object NetworkMapping {
     fun getInventory(player: Player, containerSlotType: ContainerSlotType): Inventory? {
         return when (containerSlotType) {
             ContainerSlotType.HORSE_EQUIP -> {
@@ -17,11 +15,7 @@ class NetworkMapping {
                 if (riding is InventoryHolder) {
                     riding.inventory
                 } else {
-                    throw IllegalArgumentException(
-                        "Can't handle horse inventory: %s when an ItemStackRequest is received!".formatted(
-                            containerSlotType.name.uppercase()
-                        )
-                    )
+                    throw IllegalArgumentException("Can't handle horse inventory: ${containerSlotType.name.uppercase()} when an ItemStackRequest is received!")
                 }
             }
 
@@ -38,11 +32,7 @@ class NetworkMapping {
                 } else if (player.topWindow.isPresent) {
                     player.topWindow.get()
                 } else {
-                    throw IllegalArgumentException(
-                        "Can't handle inventory: %s when an ItemStackRequest is received!".formatted(
-                            containerSlotType.name.uppercase()
-                        )
-                    )
+                    throw IllegalArgumentException("Can't handle inventory: ${containerSlotType.name.uppercase()} when an ItemStackRequest is received!")
                 }
             }
 
@@ -57,11 +47,7 @@ class NetworkMapping {
             }
 
             else -> {
-                throw IllegalArgumentException(
-                    "Can't handle containerSlotType: %s when an ItemStackRequest is received!".formatted(
-                        containerSlotType.name.uppercase()
-                    )
-                )
+                throw IllegalArgumentException("Can't handle containerSlotType: ${containerSlotType.name.uppercase()} when an ItemStackRequest is received!")
             }
         }
     }

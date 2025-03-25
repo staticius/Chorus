@@ -15,7 +15,7 @@ class BanEntry(name: String) {
     var creationDate: Date? = null
     var source: String? = "(Unknown)"
     var expirationDate: Date? = null
-    var reason: String? = "Banned by an operator."
+    var reason: String = "Banned by an operator."
 
     init {
         this.creationDate = Date()
@@ -33,8 +33,7 @@ class BanEntry(name: String) {
             map["name"] = name
             map["creationDate"] = SimpleDateFormat(FORMAT).format(creationDate)
             map["source"] = source
-            map["expireDate"] = if (expirationDate != null) SimpleDateFormat(FORMAT)
-                .format(expirationDate) else "Forever"
+            map["expireDate"] = if (expirationDate != null) SimpleDateFormat(FORMAT).format(expirationDate) else "Forever"
             map["reason"] = reason
             return map
         }
@@ -57,7 +56,7 @@ class BanEntry(name: String) {
                 log.error("An exception happed while loading the ban list.", e)
             }
             banEntry.source = map["source"]
-            banEntry.reason = map["reason"]
+            banEntry.reason = map["reason"] ?: banEntry.reason
             return banEntry
         }
 
@@ -75,7 +74,7 @@ class BanEntry(name: String) {
                 log.error("An exception happened while loading a ban entry from the string {}", str, e)
             }
             banEntry.source = map["source"]
-            banEntry.reason = map["reason"]
+            banEntry.reason = map["reason"] ?: banEntry.reason
             return banEntry
         }
     }

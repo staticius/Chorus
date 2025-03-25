@@ -6,11 +6,11 @@ import org.chorus.math.Vector3
 
 
 
-class UseItemOnEntityData : TransactionData {
-    var entityRuntimeId: Long = 0
-    var actionType: Int = 0
-    var hotbarSlot: Int = 0
-    var itemInHand: Item? = null
-    var playerPos: Vector3? = null
-    var clickPos: Vector3? = null
-}
+data class UseItemOnEntityData(
+    var entityRuntimeId: Long,
+    var actionType: Int,
+    var hotbarSlot: Int,
+    var itemInHand: Item,
+    var playerPos: Vector3,
+    var clickPos: Vector3,
+) : TransactionData

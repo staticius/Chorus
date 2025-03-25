@@ -4,6 +4,7 @@ import org.chorus.PlayerHandle
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.EmotePacket
 import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.utils.Loggable
 import org.chorus.utils.UUIDValidator
 
 
@@ -33,4 +34,6 @@ class EmoteProcessor : DataPacketProcessor<EmotePacket>() {
 
     override val packetId: Int
         get() = ProtocolInfo.EMOTE_PACKET
+
+    companion object : Loggable
 }

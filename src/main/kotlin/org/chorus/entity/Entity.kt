@@ -139,7 +139,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     protected val hasSpawned: MutableMap<Int, Player> = ConcurrentHashMap()
-    protected val effects: MutableMap<EffectType?, Effect> = ConcurrentHashMap()
+    protected val effects: MutableMap<EffectType, Effect> = ConcurrentHashMap()
 
     /**
      * 这个实体骑在谁身上
@@ -634,7 +634,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return riding
     }
 
-    fun getEffects(): Map<EffectType?, Effect> {
+    fun getEffects(): Map<EffectType, Effect> {
         return effects
     }
 
@@ -670,19 +670,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         }
     }
 
-    fun getEffect(type: EffectType?): Effect? {
+    fun getEffect(type: EffectType): Effect? {
         return effects.getOrDefault(type, null)
     }
 
-    fun hasEffect(type: EffectType?): Boolean {
+    fun hasEffect(type: EffectType): Boolean {
         return effects.containsKey(type)
     }
 
-    fun addEffect(effect: Effect?) {
-        if (effect == null) {
-            return
-        }
-
+    fun addEffect(effect: Effect) {
         val oldEffect: Effect? = this.getEffect(effect.getType())
 
         if (oldEffect != null) {
@@ -1064,11 +1060,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                     this.setHealth(1f)
 
                     this.addEffect(
-                        Effect.get(EffectType.REGENERATION).setDuration(800).setAmplifier(1)
+                        Effect.get(EffectType.REGENERATION)!!.setDuration(800).setAmplifier(1)
                     )
-                    this.addEffect(Effect.get(EffectType.FIRE_RESISTANCE).setDuration(800))
+                    this.addEffect(Effect.get(EffectType.FIRE_RESISTANCE)!!.setDuration(800))
                     this.addEffect(
-                        Effect.get(EffectType.ABSORPTION).setDuration(100).setAmplifier(1)
+                        Effect.get(EffectType.ABSORPTION)!!.setDuration(100).setAmplifier(1)
                     )
 
                     val pk = EntityEventPacket()

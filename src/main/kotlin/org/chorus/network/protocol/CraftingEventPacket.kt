@@ -4,37 +4,26 @@ import org.chorus.item.Item
 import org.chorus.network.connection.util.HandleByteBuf
 
 import java.util.*
-import java.util.function.Function
-
-/**
- * @author Nukkit Project Team
- */
-(callSuper = false)
-
-
-
-
-
 
 class CraftingEventPacket : DataPacket() {
     var windowId: Int = 0
     var type: Int = 0
     var id: UUID? = null
 
-    var input: Array<Item>
-    var output: Array<Item>
+    lateinit var input: Array<Item>
+    lateinit var output: Array<Item>
 
     override fun decode(byteBuf: HandleByteBuf) {
         this.windowId = byteBuf.readByte().toInt()
         this.type = byteBuf.readVarInt()
         this.id = byteBuf.readUUID()
 
-        this.input = byteBuf.readArray<Item>(
-            Item::class.java,
-            Function { obj: HandleByteBuf -> obj.readSlot() })
-        this.output = byteBuf.readArray<Item>(
-            Item::class.java,
-            Function { obj: HandleByteBuf -> obj.readSlot() })
+        this.input = byteBuf.readArray(
+            Item::class.java
+        ) { it.readSlot() }
+        this.output = byteBuf.readArray(
+            Item::class.java
+        ) { it.readSlot() }
     }
 
     override fun encode(byteBuf: HandleByteBuf) {

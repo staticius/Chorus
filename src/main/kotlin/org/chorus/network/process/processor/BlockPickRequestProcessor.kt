@@ -1,12 +1,14 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.event.player.PlayerBlockPickEvent
 import org.chorus.inventory.HumanInventory
 import org.chorus.math.Vector3
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.BlockPickRequestPacket
 import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.utils.Loggable
 
 
 class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() {
@@ -92,4 +94,6 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
 
     override val packetId: Int
         get() = ProtocolInfo.BLOCK_PICK_REQUEST_PACKET
+
+    companion object : Loggable
 }

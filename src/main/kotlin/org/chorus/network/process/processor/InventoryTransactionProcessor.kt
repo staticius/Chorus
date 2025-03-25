@@ -3,10 +3,10 @@ package org.chorus.network.process.processor
 import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.block.Block
 import org.chorus.block.BlockID
 import org.chorus.blockentity.BlockEntitySpawnable
-import org.chorus.config.ServerProperties.get
 import org.chorus.config.ServerPropertiesKeys
 import org.chorus.entity.EntityLiving
 import org.chorus.entity.data.EntityFlag
@@ -31,13 +31,12 @@ import org.chorus.network.protocol.types.inventory.transaction.InventorySource
 import org.chorus.network.protocol.types.inventory.transaction.ReleaseItemData
 import org.chorus.network.protocol.types.inventory.transaction.UseItemData
 import org.chorus.network.protocol.types.inventory.transaction.UseItemOnEntityData
+import org.chorus.utils.Loggable
 
 import java.util.*
 
-
 class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPacket>() {
-    var lastUsedItem: Item? = null
-
+    private var lastUsedItem: Item? = null
 
     override fun handle(playerHandle: PlayerHandle, pk: InventoryTransactionPacket) {
         val player = playerHandle.player
@@ -177,7 +176,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 } else if (target is Player) {
                     if ((target.gamemode and 0x01) > 0) {
                         return
-                    } else if (!Server.instance.getProperties().get(ServerPropertiesKeys.PVP, true)) {
+                    } else if (!Server.instance.properties.get(ServerPropertiesKeys.PVP, true)) {
                         return
                     }
                 }
@@ -188,7 +187,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         itemDamage += enchantment.getDamageBonus(target, player).toFloat()
                     }
                 }
-                val damage: MutableMap<DamageModifier?, Float?> = EnumMap(
+                val damage: MutableMap<DamageModifier, Float> = EnumMap(
                     DamageModifier::class.java
                 )
                 damage[DamageModifier.BASE] = itemDamage
@@ -260,7 +259,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 // Remove if client bug is ever fixed
                 val spamBug =
                     (playerHandle.lastRightClickPos != null && System.currentTimeMillis() - playerHandle.lastRightClickTime < 100.0 && blockVector.distanceSquared(
-                        playerHandle.lastRightClickPos
+                        playerHandle.lastRightClickPos!!
                     ) < 0.00001)
                 playerHandle.lastRightClickPos = blockVector.asVector3()
                 playerHandle.lastRightClickTime = System.currentTimeMillis().toDouble()
@@ -303,7 +302,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                                 } else {
                                     logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
                                 }
-                                player.getInventory().sendHeldItem(player.getViewers().values())
+                                player.getInventory().sendHeldItem(player.getViewers().values)
                             }
                             return
                         }
@@ -320,7 +319,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     arrayOf<Block?>(target, block),
                     UpdateBlockPacket.FLAG_NOGRAPHIC
                 )
-                player.level.sendBlocks(
+                player.level!!.sendBlocks(
                     arrayOf(player), arrayOf(
                         target.getLevelBlockAtLayer(1), block.getLevelBlockAtLayer(1)
                     ), UpdateBlockPacket.FLAG_NOGRAPHIC, 1
@@ -344,14 +343,14 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                             true
                         ).also { i = it }) != null
                     ) {
-                        player.foodData.exhaust(0.005)
+                        player.foodData!!.exhaust(0.005)
                         if (!i!!.equals(oldItem) || i!!.getCount() != oldItem.getCount()) {
                             if (oldItem.id == i!!.id || i!!.isNothing) {
                                 player.getInventory().setItemInHand(i!!)
                             } else {
                                 logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
                             }
-                            player.getInventory().sendHeldItem(player.getViewers().values())
+                            player.getInventory().sendHeldItem(player.getViewers().values)
                         }
                         return
                     }
@@ -360,8 +359,8 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 player.getInventory().sendHeldItem(player)
                 if (blockVector.distanceSquared(player.position) < 10000) {
                     val target = player.level!!.getBlock(blockVector.asVector3())
-                    player.level.sendBlocks(
-                        arrayOf(player), arrayOf<Vector3>(
+                    player.level!!.sendBlocks(
+                        arrayOf(player), arrayOf(
                             target.position
                         ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0
                     )
@@ -387,11 +386,11 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         useItemDataItem.namedTag!!.remove("Damage")
                     }
                 }
-                /**/ */
+
                 item = if (player.isCreative) {
                     serverItemInHand
-                } else if (!player.getInventory().itemInHand.equals(useItemDataItem)) {
-                    Server.instance.getLogger().warning("Item received did not match item in hand.")
+                } else if (player.getInventory().itemInHand != useItemDataItem) {
+                    Server.instance.logger.warning("Item received did not match item in hand.")
                     player.getInventory().sendHeldItem(player)
                     return
                 } else {
@@ -443,7 +442,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
         )
     }
 
-    companion object {
+    companion object : Loggable {
         private fun dropHotBarItemForPlayer(hotbarSlot: Int, dropCount: Int, player: Player) {
             val inventory = player.getInventory()
             val item = inventory.getItem(hotbarSlot)

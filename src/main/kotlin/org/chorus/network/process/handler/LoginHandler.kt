@@ -2,7 +2,6 @@ package org.chorus.network.process.handler
 
 import org.chorus.Server
 import org.chorus.config.ServerPropertiesKeys
-import org.chorus.inventory.request.ItemStackRequestContext.error
 import org.chorus.network.connection.BedrockSession
 import org.chorus.network.connection.util.EncryptionUtils.createHandshakeJwt
 import org.chorus.network.connection.util.EncryptionUtils.createKeyPair
@@ -15,6 +14,7 @@ import org.chorus.network.protocol.PlayStatusPacket
 import org.chorus.network.protocol.ServerToClientHandshakePacket
 import org.chorus.network.protocol.types.*
 import org.chorus.utils.ClientChainData
+import org.chorus.utils.Loggable
 
 
 import java.net.InetSocketAddress
@@ -22,10 +22,9 @@ import java.util.*
 import java.util.function.Consumer
 import java.util.regex.Pattern
 
-
 class LoginHandler(session: BedrockSession, private val consumer: Consumer<PlayerInfo>) :
     BedrockSessionPacketHandler(session) {
-    @SneakyThrows
+
     override fun handle(pk: LoginPacket) {
         val server = session.server
 
@@ -41,7 +40,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         val chainData = ClientChainData.read(pk)
 
         //verify the player if enable the xbox-auth
-        if (!chainData.isXboxAuthed && server.properties.get(ServerPropertiesKeys.XBOX_AUTH, true)) {
+        if (!chainData.isXboxAuthed && server.properties[ServerPropertiesKeys.XBOX_AUTH, true]) {
             LoginHandler.log.debug("disconnection due to notAuthenticated")
             session.close("disconnectionScreen.notAuthenticated")
             return
@@ -55,54 +54,54 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         }
 
         //set proxy ip
-        if (server.settings.baseSettings().waterdogpe() && chainData.waterdogIP != null) {
+        if (server.settings.baseSettings.waterdogpe && chainData.waterdogIP != null) {
             val oldAddress = session.address
             session.address = InetSocketAddress(chainData.waterdogIP, session.address!!.port)
-            Server.instance.network.replaceSessionAddress(oldAddress, session.address, session)
+            Server.instance.network.replaceSessionAddress(oldAddress, session.address!!, session)
         }
 
-        //Verify if the titleId match with DeviceOs
+        // Verify if the titleId match with DeviceOs
         val predictedDeviceOS = getPredictedDeviceOS(chainData)
         if (predictedDeviceOS != chainData.deviceOS) {
             session.close("§cPacket handling error")
             return
         }
 
-        //Verify if the language is valid
-        if (!isValidLanguage(chainData.languageCode)) {
+        // Verify if the language is valid
+        if (!isValidLanguage(chainData.languageCode!!)) {
             session.close("§cPacket handling error")
             return
         }
 
-        //Verify if the GameVersion has valid format
-        if (chainData.gameVersion.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray().size != 3 && !Server.instance.settings.debugSettings().allowBeta()) {
+        // Verify if the GameVersion has valid format
+        if (chainData.gameVersion!!.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray().size != 3 && !Server.instance.settings.debugSettings.allowBeta) {
             session.close("§cPacket handling error")
             return
         }
 
-        //Verify if the CurrentInputMode is valid
-        val CurrentInputMode = chainData.currentInputMode
-        if (CurrentInputMode <= InputMode.UNDEFINED.ordinal ||
-            CurrentInputMode >= InputMode.COUNT.ordinal
+        // Verify if the CurrentInputMode is valid
+        val currentInputMode = chainData.currentInputMode
+        if (currentInputMode <= InputMode.UNDEFINED.ordinal ||
+            currentInputMode >= InputMode.COUNT.ordinal
         ) {
             LoginHandler.log.debug("disconnection due to invalid input mode")
             session.close("§cPacket handling error")
             return
         }
 
-        //Verify if the DefaultInputMode is valid
-        val DefaultInputMode = chainData.defaultInputMode
-        if (DefaultInputMode <= InputMode.UNDEFINED.ordinal ||
-            DefaultInputMode >= InputMode.COUNT.ordinal
+        // Verify if the DefaultInputMode is valid
+        val defaultInputMode = chainData.defaultInputMode
+        if (defaultInputMode <= InputMode.UNDEFINED.ordinal ||
+            defaultInputMode >= InputMode.COUNT.ordinal
         ) {
             LoginHandler.log.debug("disconnection due to invalid input mode")
             session.close("§cPacket handling error")
             return
         }
 
-        val uniqueId = pk.clientUUID
-        val username = pk.username
+        val uniqueId = pk.clientUUID!!
+        val username = pk.username!!
         val usernameMatcher = playerNamePattern.matcher(username)
 
         if (!usernameMatcher.matches() ||
@@ -114,14 +113,14 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
             return
         }
 
-        if (!pk.skin.isValid()) {
+        if (!pk.skin!!.isValid()) {
             LoginHandler.log.debug("disconnection due to invalidSkin")
             session.close("disconnectionScreen.invalidSkin")
             return
         }
 
-        val skin = pk.skin
-        if (server.settings.playerSettings().forceSkinTrusted()) {
+        val skin = pk.skin!!
+        if (server.settings.playerSettings.forceSkinTrusted) {
             skin.setTrusted(true)
         }
 
@@ -138,7 +137,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
                 uniqueId,
                 skin,
                 chainData,
-                chainData.xuid
+                chainData.xuid!!
             )
         }
 
@@ -151,11 +150,11 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
             return
         }
 
-        val entry = server.nameBans.entires[info.username.lowercase()]
+        val entry = server.bannedPlayers.entries[info.username.lowercase()]
         if (entry != null) {
             val reason = entry.reason
             LoginHandler.log.debug("disconnection due to named ban")
-            session.close(if (!reason.isEmpty()) "You are banned. Reason: $reason" else "You are banned")
+            session.close(if (reason.isNotEmpty()) "You are banned. Reason: $reason" else "You are banned")
             return
         }
 
@@ -180,18 +179,16 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
     }
 
     private fun isValidLanguage(language: String): Boolean {
-        val languagesCode: Set<String> = HashSet()
-        Collections.addAll(
-            languagesCode,
-            "fr_CA", "fr_FR",
-            "bg_BG", "cs_CZ", "da_DK",
-            "de_DE", "el_GR", "en_GB",
-            "en_US", "es_ES", "es_MX",
-            "fi_FI", "hu_HU", "id_ID",
-            "it_IT", "ja_JP", "ko_KR",
-            "nb_NO", "nl_NL", "pl_PL",
-            "pt_BR", "pt_PT", "ru_RU",
-            "sk_SK", "sv_SE", "tr_TR", "uk_UA",
+        val languagesCode: MutableSet<String> = mutableSetOf(
+            "fr_CA", "fr_FR", "bg_BG",
+            "cs_CZ", "da_DK", "de_DE",
+            "el_GR", "en_GB", "en_US",
+            "es_ES", "es_MX", "fi_FI",
+            "hu_HU", "id_ID", "it_IT",
+            "ja_JP", "ko_KR", "nb_NO",
+            "nl_NL", "pl_PL", "pt_BR",
+            "pt_PT", "ru_RU", "sk_SK",
+            "sv_SE", "tr_TR", "uk_UA",
             "zh_CN", "zh_TW"
         )
         return languagesCode.contains(language)
@@ -223,7 +220,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         }
     }
 
-    companion object {
+    companion object : Loggable {
         private val playerNamePattern: Pattern = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$")
     }
 }

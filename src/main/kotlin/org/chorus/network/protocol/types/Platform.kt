@@ -1,9 +1,6 @@
 package org.chorus.network.protocol.types
 
-import org.chorus.entity.Entity.getId
-
-
-enum class Platform(@field:Getter override val name: String, @field:Getter private val id: Int) {
+enum class Platform(val platformName: String, val id: Int) {
     UNKNOWN("Unknown", -1),
     ANDROID("Android", 1),
     IOS("iOS", 2),
@@ -23,13 +20,7 @@ enum class Platform(@field:Getter override val name: String, @field:Getter priva
 
 
     companion object {
-        private val PLATFORM_BY_ID: MutableMap<Int, Platform> = HashMap()
-
-        init {
-            for (platform in entries) {
-                PLATFORM_BY_ID[platform.getId()] = platform
-            }
-        }
+        private val PLATFORM_BY_ID: Map<Int, Platform> = entries.associateBy { it.id }
 
         fun getPlatformByID(id: Int): Platform? {
             if (PLATFORM_BY_ID.containsKey(id)) {

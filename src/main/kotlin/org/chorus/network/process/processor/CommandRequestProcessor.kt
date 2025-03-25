@@ -14,7 +14,7 @@ class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
     val rateLimiter: RateLimiter = RateLimiter.create(500.0)
 
     override fun handle(playerHandle: PlayerHandle, pk: CommandRequestPacket) {
-        val length = pk.command.length
+        val length = pk.command!!.length
         if (!rateLimiter.tryAcquire(length, 300, TimeUnit.MILLISECONDS)) {
             val event = PlayerHackDetectedEvent(playerHandle.player, PlayerHackDetectedEvent.HackType.COMMAND_SPAM)
             Server.instance.pluginManager.callEvent(event)
@@ -30,7 +30,7 @@ class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
         if (playerCommandPreprocessEvent.isCancelled) {
             return
         }
-        Server.instance.executeCommand(playerCommandPreprocessEvent.player, playerCommandPreprocessEvent.message)
+        Server.instance.executeCommand(playerCommandPreprocessEvent.player!!, playerCommandPreprocessEvent.message!!)
     }
 
     override val packetId: Int

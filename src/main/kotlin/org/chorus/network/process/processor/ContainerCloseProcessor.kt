@@ -21,12 +21,12 @@ class ContainerCloseProcessor : DataPacketProcessor<ContainerClosePacket>() {
                 player.getInventory().close(player)
                 playerHandle.inventoryOpen = false
             } else {
-                playerHandle.removeWindow(playerHandle.windowIndex[pk.windowId])
+                playerHandle.removeWindow(playerHandle.windowIndex[pk.windowId]!!)
             }
         }
 
         if (pk.windowId == -1) {
-            player.addWindow(player.craftingGrid, SpecialWindowId.NONE.id)
+            player.addWindow(player.craftingGrid!!, SpecialWindowId.NONE.id)
         }
         if (inventory != null) {
             val pk2 = ContainerClosePacket()

@@ -1,6 +1,7 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.entity.EntityRideable
 import org.chorus.entity.custom.CustomEntity
 import org.chorus.entity.item.EntityChestBoat
@@ -11,11 +12,10 @@ import org.chorus.entity.projectile.abstract_arrow.EntityArrow
 import org.chorus.event.player.PlayerHackDetectedEvent
 import org.chorus.event.player.PlayerKickEvent
 import org.chorus.event.player.PlayerMouseOverEntityEvent
-import org.chorus.lang.BaseLang.tr
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.InteractPacket
 import org.chorus.network.protocol.ProtocolInfo
-
+import org.chorus.utils.Loggable
 
 class InteractProcessor : DataPacketProcessor<InteractPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: InteractPacket) {
@@ -31,7 +31,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
         }
 
         if (targetEntity is EntityItem || targetEntity is EntityArrow || targetEntity is EntityXpOrb) {
-            // 自定义实体在客户端中可以互动, 所以不踢出玩家
+            // Custom entities can interact in the client, so they do not kick out the player.
             if (targetEntity is CustomEntity) {
                 return
             }
@@ -88,4 +88,6 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
 
     override val packetId: Int
         get() = ProtocolInfo.INTERACT_PACKET
+
+    companion object : Loggable
 }

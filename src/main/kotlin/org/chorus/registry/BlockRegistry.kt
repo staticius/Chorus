@@ -1261,9 +1261,8 @@ class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
         }
     }
 
-    val customBlockDefinitionList: @UnmodifiableView MutableList<CustomBlockDefinition?>
-        get() = CUSTOM_BLOCK_DEFINITIONS.values.stream().flatMap { obj: List<CustomBlockDefinition?> -> obj.stream() }
-            .toList()
+    val customBlockDefinitionList: @UnmodifiableView MutableList<CustomBlockDefinition>
+        get() = CUSTOM_BLOCK_DEFINITIONS.values.stream().flatMap { it.stream() }.toList()
 
     override fun reload() {
         isLoad.set(false)

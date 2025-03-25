@@ -8,9 +8,11 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotD
  * container. The two item stacks swap places.
  */
 
-class SwapAction : ItemStackRequestAction {
-    var source: ItemStackRequestSlotData? = null
-    var destination: ItemStackRequestSlotData? = null
+data class SwapAction(
+    var source: ItemStackRequestSlotData,
+    var destination: ItemStackRequestSlotData,
+) : ItemStackRequestAction {
+
 
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.SWAP

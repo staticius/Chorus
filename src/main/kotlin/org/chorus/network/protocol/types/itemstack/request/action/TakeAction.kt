@@ -10,8 +10,8 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotD
 
 class TakeAction : TransferItemStackRequestAction {
     override var count: Int = 0
-    override var source: ItemStackRequestSlotData? = null
-    override var destination: ItemStackRequestSlotData? = null
+    override var source: ItemStackRequestSlotData = null
+    override var destination: ItemStackRequestSlotData = null
 
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.TAKE

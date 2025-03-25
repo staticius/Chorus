@@ -10,7 +10,7 @@ open class EntityDamageByEntityEvent : EntityDamageEvent {
     val damager: Entity
 
     var knockBack: Float
-    private var enchantments: Array<Enchantment>?
+    private var enchantments: Array<Enchantment>? = null
 
     @JvmOverloads
     constructor(damager: Entity, entity: Entity, cause: DamageCause, damage: Float, knockBack: Float = 0.3f) : super(
@@ -28,7 +28,7 @@ open class EntityDamageByEntityEvent : EntityDamageEvent {
         damager: Entity,
         entity: Entity,
         cause: DamageCause,
-        modifiers: Map<DamageModifier?, Float?>,
+        modifiers: Map<DamageModifier, Float>,
         knockBack: Float = 0.3f,
         enchantments: Array<Enchantment>? = null
     ) : super(entity, cause, modifiers) {
@@ -41,15 +41,13 @@ open class EntityDamageByEntityEvent : EntityDamageEvent {
     protected fun addAttackerModifiers(damager: Entity) {
         if (damager.hasEffect(EffectType.STRENGTH)) {
             this.setDamage(
-                (this.getDamage(DamageModifier.BASE) * 0.3 * damager.getEffect(EffectType.STRENGTH)
-                    .getLevel()).toFloat(), DamageModifier.STRENGTH
+                (this.getDamage(DamageModifier.BASE) * 0.3 * damager.getEffect(EffectType.STRENGTH)!!.getLevel()).toFloat(), DamageModifier.STRENGTH
             )
         }
 
         if (damager.hasEffect(EffectType.WEAKNESS)) {
             this.setDamage(
-                -(this.getDamage(DamageModifier.BASE) * 0.2 * damager.getEffect(EffectType.WEAKNESS)
-                    .getLevel()).toFloat(), DamageModifier.WEAKNESS
+                -(this.getDamage(DamageModifier.BASE) * 0.2 * damager.getEffect(EffectType.WEAKNESS)!!.getLevel()).toFloat(), DamageModifier.WEAKNESS
             )
         }
     }
@@ -59,6 +57,6 @@ open class EntityDamageByEntityEvent : EntityDamageEvent {
             if (enchantments == null) {
                 return null
             }
-            return if (enchantments!!.size > 0) enchantments!!.clone() else Enchantment.EMPTY_ARRAY
+            return if (enchantments!!.isNotEmpty()) enchantments!!.clone() else Enchantment.EMPTY_ARRAY
         }
 }

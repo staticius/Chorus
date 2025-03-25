@@ -87,7 +87,7 @@ class BanList(private val file: String) : Loggable {
                     }.type
                 )
                 for (map in list) {
-                    val entry: BanEntry = BanEntry.Companion.fromMap(map)
+                    val entry: BanEntry = BanEntry.fromMap(map)
                     this.list[entry.name] = entry
                 }
             }

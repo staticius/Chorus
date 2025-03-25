@@ -23,5 +23,5 @@ class ItemStackResponse(
      * containers holds information on the containers that had their contents changed as a result of the
      * request.
      */
-    var containers: List<ItemStackResponseContainer>
+    var containers: MutableList<ItemStackResponseContainer>
 )

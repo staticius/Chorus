@@ -6,9 +6,9 @@ import org.chorus.math.Vector3
 
 
 
-class ReleaseItemData : TransactionData {
-    var actionType: Int = 0
-    var hotbarSlot: Int = 0
-    var itemInHand: Item? = null
-    var headRot: Vector3? = null
-}
+data class ReleaseItemData(
+    var actionType: Int,
+    var hotbarSlot: Int,
+    var itemInHand: Item,
+    var headRot: Vector3,
+) : TransactionData

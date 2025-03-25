@@ -124,15 +124,15 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
     @JvmRecord
     data class ItemData(val identifier: String, val runtimeId: Int, val version: Int, val componentBased: Boolean)
     companion object {
-        private val isLoad = AtomicBoolean(false)
+        val isLoad = AtomicBoolean(false)
 
-        private val REGISTRY = HashMap<String, Int>()
-        private val CUSTOM_REGISTRY = HashMap<String, RuntimeEntry>()
+        val REGISTRY = HashMap<String, Int>()
+        val CUSTOM_REGISTRY = HashMap<String, RuntimeEntry>()
 
-        private val ID2NAME = HashMap<Int, String>()
+        val ID2NAME = HashMap<Int, String>()
 
 
-        private val ITEM_DATA = HashSet<ItemData>()
+        val ITEM_DATA = HashSet<ItemData>()
 
         private lateinit var itemPalette: ByteArray
     }

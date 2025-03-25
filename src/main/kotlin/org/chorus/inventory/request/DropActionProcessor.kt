@@ -58,7 +58,7 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
             inventory.setItem(slot, item, false)
         }
         return context.success(
-            List.of(
+            listOf(
                 ItemStackResponseContainer(
                     inventory.getSlotType(slot),
                     Lists.newArrayList(

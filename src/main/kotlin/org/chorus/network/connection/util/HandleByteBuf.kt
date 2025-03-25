@@ -1397,7 +1397,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         }
     }
 
-    fun <T> readArray(clazz: Class<T>?, function: Function<HandleByteBuf?, T>): Array<T> {
+    fun <T : Any> readArray(clazz: Class<T>, function: Function<HandleByteBuf, T>): Array<T> {
         val deque = ArrayDeque<T>()
         val count = readUnsignedVarInt()
         for (i in 0..<count) {

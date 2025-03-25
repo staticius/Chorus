@@ -6,6 +6,7 @@ import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.NBTIO.writeNetwork
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.utils.Loggable
 
 
 import java.io.IOException
@@ -61,12 +62,12 @@ class StartGamePacket : DataPacket() {
     var isFromWorldTemplate: Boolean = false
     var isWorldTemplateOptionLocked: Boolean = false
     var isOnlySpawningV1Villagers: Boolean = false
-    var vanillaVersion: String = ProtocolInfo.Companion.MINECRAFT_VERSION_NETWORK
+    var vanillaVersion: String = ProtocolInfo.MINECRAFT_VERSION_NETWORK
 
-    //HACK: For now we can specify this version, since the new chunk changes are not relevant for our Anvil format.
-    //However, it could be that Microsoft will prevent this in a new update.
+    // HACK: For now we can specify this version, since the new chunk changes are not relevant for our Anvil format.
+    // However, it could be that Microsoft will prevent this in a new update.
     var playerPropertyData: CompoundTag = CompoundTag()
-    var levelId: String = "" //base64 string, usually the same as world folder name in vanilla
+    var levelId: String = "" // base64 string, usually the same as world folder name in vanilla
     var worldName: String? = null
     var premiumWorldTemplateId: String = ""
     var isTrial: Boolean = false
@@ -75,7 +76,7 @@ class StartGamePacket : DataPacket() {
     var isInventoryServerAuthoritative: Boolean = false
     var currentTick: Long = 0
     var enchantmentSeed: Int = 0
-    val blockProperties: List<CustomBlockDefinition> = ArrayList()
+    val blockProperties: MutableList<CustomBlockDefinition> = mutableListOf()
     var multiplayerCorrelationId: String = ""
     var isDisablingPersonas: Boolean = false
     var isDisablingCustomSkins: Boolean = false
@@ -140,10 +141,7 @@ class StartGamePacket : DataPacket() {
         byteBuf.writeString(worldName!!)
         byteBuf.writeString(this.premiumWorldTemplateId)
         byteBuf.writeBoolean(this.isTrial)
-        byteBuf.writeVarInt(
-            Objects.requireNonNullElseGet(
-                this.serverAuthoritativeMovement
-            ) { if (this.isMovementServerAuthoritative) 1 else 0 }) // 2 - rewind
+        byteBuf.writeVarInt(this.serverAuthoritativeMovement ?: if (this.isMovementServerAuthoritative) 1 else 0) // 2 - rewind
         byteBuf.writeVarInt(0) // RewindHistorySize
         if (this.serverAuthoritativeMovement != null) {
             byteBuf.writeBoolean(serverAuthoritativeMovement!! > 0) // isServerAuthoritativeBlockBreaking
@@ -263,7 +261,7 @@ class StartGamePacket : DataPacket() {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : Loggable {
         const val GAME_PUBLISH_SETTING_NO_MULTI_PLAY: Int = 0
         const val GAME_PUBLISH_SETTING_INVITE_ONLY: Int = 1
         const val GAME_PUBLISH_SETTING_FRIENDS_ONLY: Int = 2

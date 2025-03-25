@@ -52,7 +52,7 @@ class Skin {
     }
 
     private fun isValidResourcePatch(): Boolean {
-        if (skinResourcePatch == null || skinResourcePatch.length > 1000) {
+        if (skinResourcePatch.length > 1000) {
             return false
         }
         try {
@@ -73,7 +73,7 @@ class Skin {
         return skinData!!
     }
 
-    fun setSkinData(skinData: ByteArray?) {
+    fun setSkinData(skinData: ByteArray) {
         setSkinData(SerializedImage.fromLegacy(skinData))
     }
 
@@ -102,7 +102,7 @@ class Skin {
 
     fun generateSkinId(name: String) {
         val data: ByteArray = Binary.appendBytes(
-            getSkinData().data, *getSkinResourcePatch().toByteArray(
+            getSkinData().data, getSkinResourcePatch().toByteArray(
                 StandardCharsets.UTF_8
             )
         )
@@ -123,23 +123,20 @@ class Skin {
     }
 
     fun setSkinResourcePatch(skinResourcePatch: String?) {
-        var skinResourcePatch: String? = skinResourcePatch
-        if (skinResourcePatch == null || skinResourcePatch.trim { it <= ' ' }.isEmpty()) {
-            skinResourcePatch = GEOMETRY_CUSTOM
+        var skinResourcePatch1 = skinResourcePatch
+        if (skinResourcePatch1 == null || skinResourcePatch1.trim { it <= ' ' }.isEmpty()) {
+            skinResourcePatch1 = GEOMETRY_CUSTOM
         }
-        this.skinResourcePatch = skinResourcePatch
+        this.skinResourcePatch = skinResourcePatch1
     }
 
     fun getCapeData(): SerializedImage {
-        if (capeData == null) {
-            return SerializedImage.EMPTY
-        }
-        return capeData
+        return capeData ?: SerializedImage.EMPTY
     }
 
     fun setCapeData(capeData: ByteArray) {
         Objects.requireNonNull(capeData, "capeData")
-        Preconditions.checkArgument(capeData.size == SINGLE_SKIN_SIZE || capeData.size == 0, "Invalid legacy cape")
+        Preconditions.checkArgument(capeData.size == SINGLE_SKIN_SIZE || capeData.isEmpty(), "Invalid legacy cape")
         setCapeData(SerializedImage(64, 32, capeData))
     }
 
@@ -153,25 +150,19 @@ class Skin {
     }
 
     fun getCapeId(): String {
-        if (capeId == null) {
-            return ""
-        }
-        return capeId
+        return capeId ?: ""
     }
 
     fun setCapeId(capeId: String?) {
-        var capeId: String? = capeId
-        if (capeId == null || capeId.trim { it <= ' ' }.isEmpty()) {
-            capeId = null
+        var capeId1 = capeId
+        if (capeId1 == null || capeId1.trim { it <= ' ' }.isEmpty()) {
+            capeId1 = null
         }
-        this.capeId = capeId
+        this.capeId = capeId1
     }
 
     fun getGeometryData(): String {
-        if (geometryData == null) {
-            return ""
-        }
-        return geometryData
+        return geometryData ?: ""
     }
 
     fun setGeometryData(geometryData: String) {
@@ -182,10 +173,7 @@ class Skin {
     }
 
     fun getAnimationData(): String {
-        if (animationData == null) {
-            return ""
-        }
-        return animationData
+        return animationData ?: ""
     }
 
     fun setAnimationData(animationData: String) {
@@ -339,7 +327,7 @@ class Skin {
         }
 
         private fun convertLegacyGeometryName(geometryName: String): String {
-            return "{\"geometry\" : {\"default\" : \"" + geometryName + "\"}}"
+            return "{\"geometry\" : {\"default\" : \"$geometryName\"}}"
         }
     }
 }

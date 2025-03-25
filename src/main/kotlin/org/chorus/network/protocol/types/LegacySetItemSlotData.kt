@@ -1,7 +1,25 @@
 package org.chorus.network.protocol.types
 
 
-class LegacySetItemSlotData {
-    private val containerId = 0
-    private val slots: ByteArray
+data class LegacySetItemSlotData(
+    val containerId: Int = 0,
+    val slots: ByteArray,
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as LegacySetItemSlotData
+
+        if (containerId != other.containerId) return false
+        if (!slots.contentEquals(other.slots)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = containerId
+        result = 31 * result + slots.contentHashCode()
+        return result
+    }
 }
