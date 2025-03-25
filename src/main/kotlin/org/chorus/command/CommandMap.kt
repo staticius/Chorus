@@ -1,6 +1,5 @@
 package org.chorus.command
 
-
 interface CommandMap {
     /**
      * 注册全部命令

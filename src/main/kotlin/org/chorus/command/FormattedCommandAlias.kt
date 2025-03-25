@@ -1,8 +1,8 @@
 package org.chorus.command
 
-import io.netty.util.internal.EmptyArrays
 import org.chorus.Server
 import org.chorus.lang.TranslationContainer
+import org.chorus.utils.Loggable
 import org.chorus.utils.TextFormat
 
 
@@ -13,8 +13,8 @@ class FormattedCommandAlias : Command {
         this.formatStrings = formatStrings
     }
 
-    constructor(alias: String, formatStrings: List<String?>) : super(alias) {
-        this.formatStrings = formatStrings.toArray(EmptyArrays.EMPTY_STRINGS)
+    constructor(alias: String, formatStrings: List<String>) : super(alias) {
+        this.formatStrings = formatStrings.toTypedArray()
     }
 
     override fun execute(sender: CommandSender, commandLabel: String?, args: Array<String?>): Boolean {
@@ -31,7 +31,7 @@ class FormattedCommandAlias : Command {
                     FormattedCommandAlias.log.warn(
                         "An error has occurred while executing the formatted command alias {} by the sender {}",
                         commandLabel,
-                        sender.name,
+                        sender.getName(),
                         e
                     )
                 }
@@ -118,7 +118,7 @@ class FormattedCommandAlias : Command {
         return formatString
     }
 
-    companion object {
+    companion object : Loggable {
         private fun inRange(i: Int, j: Int, k: Int): Boolean {
             return i >= j && i <= k
         }

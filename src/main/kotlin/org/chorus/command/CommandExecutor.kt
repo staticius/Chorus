@@ -4,13 +4,9 @@ package org.chorus.command
  * 能监听命令执行的类实现的接口。<br></br>
  * An interface what can be implemented by classes which listens command executing.
  *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.plugin.PluginBase
  *
  * @see org.chorus.command.CommandExecutor.onCommand
- *
- *
  */
 interface CommandExecutor {
     /**

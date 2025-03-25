@@ -9,11 +9,10 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.lang.CommandOutputContainer
 import org.chorus.lang.TranslationContainer
 import org.chorus.plugin.InternalPlugin
+import org.chorus.utils.Loggable
 import org.chorus.utils.TextFormat
 import org.chorus.utils.Utils
 import java.util.*
-import java.util.function.Function
-import java.util.stream.Collectors
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -100,7 +99,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
 
         this.register("nukkit", StatusCommand("status"))
         this.register("nukkit", GarbageCollectorCommand("gc"))
-        if (server.settings.debugSettings().command()) {
+        if (server.settings.debugSettings.command) {
             this.register("nukkit", DebugCommand("debug"))
         }
     }
@@ -126,7 +125,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
 
         val registered = this.registerAlias(command, false, fallbackPrefix, label)
 
-        val aliases: MutableList<String?> = ArrayList(Arrays.asList(*command.aliases))
+        val aliases = mutableListOf(*command.aliases)
 
         val iterator = aliases.iterator()
         while (iterator.hasNext()) {
@@ -135,7 +134,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
                 iterator.remove()
             }
         }
-        command.aliases = aliases.toArray(EmptyArrays.EMPTY_STRINGS)
+        command.aliases = aliases.toTypedArray()
 
         if (!registered) {
             command.setLabel("$fallbackPrefix:$label")
@@ -171,26 +170,17 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
                     sc.setForbidConsole(true)
                 }
 
-                val commandParameters: CommandParameters =
-                    method.getAnnotation<CommandParameters>(CommandParameters::class.java)
+                val commandParameters = method.getAnnotation(CommandParameters::class.java)
                 if (commandParameters != null) {
-                    val map = Arrays.stream<Parameters>(commandParameters.parameters)
-                        .collect(
-                            Collectors.toMap<Parameters, String, Array<CommandParameter?>?>(
-                                Function<Parameters, String> { obj: Parameters -> obj.name },
-                                Function<Parameters, Array<CommandParameter?>?> { parameters: Parameters ->
-                                    Arrays.stream<Parameter>(parameters.parameters)
-                                        .map<CommandParameter> { parameter: Parameter ->
-                                            CommandParameter.Companion.newType(
-                                                parameter.name,
-                                                parameter.optional,
-                                                parameter.type
-                                            )
-                                        }
-                                        .distinct()
-                                        .toArray<CommandParameter?> { _Dummy_.__Array__() }
-                                })
-                        )
+                    val map = commandParameters.parameters.associate {
+                        it.name to it.parameters.map { param ->
+                            CommandParameter.newType(
+                                param.name,
+                                param.optional,
+                                param.type
+                            )
+                        }.toTypedArray()
+                    }
 
                     sc.commandParameters.putAll(map)
                 }
@@ -207,7 +197,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
         val alreadyRegistered = knownCommands.containsKey(label)
         val existingCommand = knownCommands[label]
         val existingCommandIsNotVanilla = alreadyRegistered && existingCommand !is VanillaCommand
-        //basically, if we're an alias and it's already registered, or we're a vanilla command, then we can't override it
+        //basically, if we're an alias, and it's already registered, or we're a vanilla command, then we can't override it
         if ((command is VanillaCommand || isAlias) && alreadyRegistered && existingCommandIsNotVanilla) {
             return false
         }
@@ -216,7 +206,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
         //so basically we can't override the main name of a command, but we can override aliases if we're not an alias
 
         //added the last statement which will allow us to override a VanillaCommand unconditionally
-        if (alreadyRegistered && existingCommand.getLabel() != null && existingCommand.getLabel() == label && existingCommandIsNotVanilla) {
+        if (alreadyRegistered && existingCommand!!.label != null && existingCommand.label == label && existingCommandIsNotVanilla) {
             return false
         }
 
@@ -275,7 +265,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
         try {
             if (target.hasParamTree()) {
                 val plugin = if (target is PluginCommand<*>) target.plugin else InternalPlugin.INSTANCE
-                val result = target.getParamTree().matchAndParse(sender, sentCommandLabel, args)
+                val result = target.paramTree!!.matchAndParse(sender, sentCommandLabel, args)
                 if (result == null) output = 0
                 else if (target.testPermissionSilent(sender)) {
                     try {
@@ -294,7 +284,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
                     if (target.permissionMessage == null) {
                         log.addMessage("nukkit.command.generic.permission").output()
                     } else if (target.permissionMessage != "") {
-                        log.addError(target.permissionMessage.replace("<permission>", target.permission)).output()
+                        log.addError(target.permissionMessage!!.replace("<permission>", target.permission!!)).output()
                     }
                     output = 0
                 }
@@ -326,10 +316,10 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
     }
 
     override fun getCommand(name: String): Command? {
-        var name = name
-        name = name.lowercase()
-        if (knownCommands.containsKey(name)) {
-            return knownCommands[name]
+        var name1 = name
+        name1 = name1.lowercase()
+        if (knownCommands.containsKey(name1)) {
+            return knownCommands[name1]
         }
         return null
     }
@@ -342,7 +332,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
          */
         get() = knownCommands
 
-    companion object {
+    companion object : Loggable {
         /**
          * 解析给定文本，从中分割参数
          *

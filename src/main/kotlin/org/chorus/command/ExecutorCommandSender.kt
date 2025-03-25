@@ -10,7 +10,7 @@ import org.chorus.permission.Permission
 import org.chorus.permission.PermissionAttachment
 import org.chorus.plugin.Plugin
 
-//used for executing commands in place of an entity
+// used for executing commands in place of an entity
 class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTransform: Transform?) :
     CommandSender {
     private var executor: CommandSender? = null

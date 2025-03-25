@@ -1,19 +1,22 @@
 package org.chorus.command
 
 import org.chorus.Server
+import org.chorus.event.server.ConsoleCommandOutputEvent
 import org.chorus.lang.CommandOutputContainer
+import org.chorus.lang.TextContainer
 import org.chorus.lang.TranslationContainer
 import org.chorus.level.GameRule
+import org.chorus.level.Locator
+import org.chorus.level.Transform
+import org.chorus.permission.PermissibleBase
 import org.chorus.permission.Permission
+import org.chorus.permission.PermissionAttachment
 import org.chorus.plugin.Plugin
+import org.chorus.utils.Loggable
 
 
 open class ConsoleCommandSender : CommandSender {
-    private val perm: PermissibleBase
-
-    init {
-        this.perm = PermissibleBase(this)
-    }
+    private val perm: PermissibleBase = PermissibleBase(this)
 
     override fun isPermissionSet(name: String): Boolean {
         return perm.isPermissionSet(name)
@@ -67,24 +70,28 @@ open class ConsoleCommandSender : CommandSender {
     override fun sendCommandOutput(container: CommandOutputContainer) {
         if (this.getTransform().level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             for (msg in container.messages) {
-                var text =
-                    Server.instance.baseLang.tr(TranslationContainer(msg.messageId, *msg.parameters))
-                val event: ConsoleCommandOutputEvent = ConsoleCommandOutputEvent(this, text)
+                var text = Server.instance.baseLang.tr(TranslationContainer(msg.messageId, *msg.parameters))
+                val event = ConsoleCommandOutputEvent(this, text)
                 Server.instance.pluginManager.callEvent(event)
-                if (event.isCancelled()) continue
-                text = event.getMessage()
+                if (event.isCancelled) continue
+                text = event.message
                 this.sendMessage(text)
             }
         }
     }
 
-    override val name: String
-        get() = "CONSOLE"
-
-    override fun isOp(): Boolean {
-        return true
+    override fun getLocator(): Locator {
+        throw UnsupportedOperationException("Can't get locator of ConsoleCommandSender")
     }
 
-    override fun setOp(value: Boolean) {
+    override fun getTransform(): Transform {
+        throw UnsupportedOperationException("Can't get transform of ConsoleCommandSender")
     }
+
+    override fun getName() = "CONSOLE"
+
+    override var isOp = true
+        set(_) = throw UnsupportedOperationException("Can't set isOp of ConsoleCommandSender")
+
+    companion object : Loggable
 }

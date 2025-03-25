@@ -5,13 +5,15 @@ import org.chorus.entity.Entity
 import org.chorus.entity.mob.EntityNPC
 import org.chorus.lang.CommandOutputContainer
 import org.chorus.lang.TextContainer
+import org.chorus.level.Locator
+import org.chorus.level.Transform
 import org.chorus.permission.PermissibleBase
 import org.chorus.permission.Permission
+import org.chorus.permission.PermissionAttachment
 import org.chorus.plugin.Plugin
 
-class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
+class NPCCommandSender(private val npc: EntityNPC, val initiator: Player) : CommandSender {
     protected var perm: PermissibleBase = PermissibleBase(this)
-    private val npc: EntityNPC = npc
 
     fun getNpc(): EntityNPC {
         return npc
@@ -23,8 +25,7 @@ class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
 
     override fun sendCommandOutput(container: CommandOutputContainer) {}
 
-    override val name: String
-        get() = npc.getName()
+    override fun getName() = npc.getName()
 
     override val isPlayer: Boolean
         get() = false
@@ -76,9 +77,14 @@ class NPCCommandSender(npc: EntityNPC, val initiator: Player) : CommandSender {
         perm.recalculatePermissions()
     }
 
-    override fun isOp(): Boolean {
-        return true
+    override fun getLocator(): Locator {
+        return npc.getLocator()
     }
 
-    override fun setOp(value: Boolean) {}
+    override fun getTransform(): Transform {
+        return npc.getTransform()
+    }
+
+    override var isOp: Boolean = true
+        set(_) = throw UnsupportedOperationException("Can't set isOp of NPCCommandSender")
 }

@@ -63,7 +63,6 @@ import org.chorus.network.protocol.PlayerListPacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.types.PlayerInfo
 import org.chorus.network.protocol.types.XboxLivePlayerInfo
-import org.chorus.network.rcon.RCON
 import org.chorus.permission.BanList
 import org.chorus.permission.DefaultPermissions.registerCorePermissions
 import org.chorus.plugin.*
@@ -210,7 +209,6 @@ class Server internal constructor(
      * 配置项是否检查登录时间.<P>Does the configuration item check the login time.
     </P> */
     var checkLoginTime: Boolean = false
-    private var rcon: RCON? = null
 
     lateinit var entityMetadata: EntityMetadataStore
         private set
@@ -466,10 +464,6 @@ class Server internal constructor(
 
             pluginManager.callEvent(ServerStopEvent)
 
-            if (this.rcon != null) {
-                rcon!!.close()
-            }
-
             for (player in ArrayList(players.values)) {
                 player.close(player.leaveMessage, settings.baseSettings.shutdownMessage)
             }
@@ -694,10 +688,6 @@ class Server internal constructor(
 
         ++this.tick
         network.processInterfaces()
-
-        if (this.rcon != null) {
-            rcon!!.check()
-        }
 
         scheduler.mainThreadHeartbeat(this.tick)
 
@@ -1858,17 +1848,6 @@ class Server internal constructor(
             this.checkLoginTime = false
         }
 
-        if (properties[ServerPropertiesKeys.ENABLE_RCON, false]) {
-            try {
-                this.rcon = RCON(
-                    this,
-                    properties.get(ServerPropertiesKeys.RCON_PASSWORD, ""), if (this.ip != "") ip else "0.0.0.0",
-                    port
-                )
-            } catch (e: IllegalArgumentException) {
-                log.error(this.baseLang.tr(e.message!!, e.cause!!.message!!))
-            }
-        }
         this.entityMetadata = EntityMetadataStore()
         this.playerMetadata = PlayerMetadataStore()
         this.levelMetadata = LevelMetadataStore()
