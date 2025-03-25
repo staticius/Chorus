@@ -33,24 +33,24 @@ class RawText private constructor(base: Component) {
 
     class Component {
         @SerializedName("text")
-        private val component_text: String? = null
+        var component_text: String? = null
 
         @SerializedName("selector")
-        val component_selector: String? = null
+        var component_selector: String? = null
 
         @SerializedName("translate")
-        private val component_translate: String? = null
+        var component_translate: String? = null
 
         @SerializedName("with")
         var component_translate_with: Any? = null
 
         @SerializedName("score")
-        private val component_score: ScoreComponent? = null
+        var component_score: ScoreComponent? = null
 
         @SerializedName("rawtext")
-        val component_rawtext: MutableList<Component>? = null
+        var component_rawtext: MutableList<Component>? = null
 
-        private class ScoreComponent {
+        class ScoreComponent {
             @SerializedName("name")
             val name: String? = null
 
@@ -85,7 +85,7 @@ class RawText private constructor(base: Component) {
                     return ComponentType.TRANSLATE
                 }
                 if (component_score != null) {
-                    if (component_score.name != null && component_score.objective != null) {
+                    if (component_score!!.name != null && component_score!!.objective != null) {
                         return ComponentType.SCORE
                     }
                 }
@@ -139,40 +139,33 @@ class RawText private constructor(base: Component) {
             }
         }
 
-        @SneakyThrows
         private fun preParseScore(
             component: Component,
             sender: CommandSender
         ): Component? {
             val scoreboard = Server.instance.scoreboardManager.getScoreboard(component.component_score!!.objective)
                 ?: return null
-            val name_str = component.component_score.name
+            val name_str = component.component_score!!.name!!
             var scorer: IScorer? = null
-            var value = component.component_score.value
+            var value = component.component_score!!.value
 
             if (name_str == "*") {
                 if (!sender.isEntity) return null
-                scorer = if (sender.isPlayer) PlayerScorer(sender.asPlayer()) else EntityScorer(sender.asEntity())
-            } else if (EntitySelectorAPI.Companion.getAPI().checkValid(name_str)) {
+                scorer = if (sender.isPlayer) PlayerScorer(sender.asPlayer()!!) else EntityScorer(sender.asEntity()!!)
+            } else if (EntitySelectorAPI.api.checkValid(name_str)) {
                 val scorers: List<IScorer> =
-                    EntitySelectorAPI.Companion.getAPI().matchEntities(sender, name_str).stream()
-                        .map<IScorer> { t: Entity? ->
-                            if (t is Player) PlayerScorer(
-                                t
-                            ) else EntityScorer(t)
-                        }.toList()
+                    EntitySelectorAPI.api.matchEntities(sender, name_str).map { t -> if (t is Player) PlayerScorer(t) else EntityScorer(t) }.toList()
                 if (scorers.isEmpty()) return null
                 scorer = scorers[0]
             } else if (Server.instance.getPlayer(name_str) != null) {
-                scorer = PlayerScorer(Server.instance.getPlayer(name_str))
+                scorer = PlayerScorer(Server.instance.getPlayer(name_str)!!)
             } else {
                 scorer = FakeScorer(name_str)
             }
 
-            if (scorer == null) return null
             if (value == null) value = scoreboard.getLine(scorer)!!.score
             val newComponent = Component()
-            newComponent.setComponent_text(value.toString())
+            newComponent.component_text = (value.toString())
             return newComponent
         }
 
@@ -182,14 +175,14 @@ class RawText private constructor(base: Component) {
         ): Component? {
             val entities: List<Entity>
             try {
-                entities = EntitySelectorAPI.Companion.getAPI().matchEntities(sender, component.component_selector)
+                entities = EntitySelectorAPI.Companion.api.matchEntities(sender, component.component_selector!!)
             } catch (e: Exception) {
                 return null
             }
             if (entities.isEmpty()) return null
             val entities_str = entities.stream().map { obj: Entity -> obj.name }.collect(Collectors.joining(", "))
             val newComponent = Component()
-            newComponent.setComponent_text(entities_str)
+            newComponent.component_text = (entities_str)
             return newComponent
         }
     }

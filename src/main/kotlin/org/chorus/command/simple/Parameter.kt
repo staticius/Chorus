@@ -2,9 +2,6 @@ package org.chorus.command.simple
 
 import org.chorus.command.data.CommandParamType
 
-/**
- * @author nilsbrychzy
- */
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
 @Retention(
     AnnotationRetention.RUNTIME

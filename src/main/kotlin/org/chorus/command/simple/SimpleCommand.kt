@@ -3,12 +3,9 @@ package org.chorus.command.simple
 import org.chorus.command.*
 import org.chorus.command.Command
 import org.chorus.lang.TranslationContainer
+import org.chorus.utils.Loggable
 
 import java.lang.reflect.Method
-
-/**
- * @author Tee7even
- */
 
 class SimpleCommand(
     private val `object`: Any,
@@ -36,8 +33,8 @@ class SimpleCommand(
     }
 
     fun sendUsageMessage(sender: CommandSender) {
-        if (this.usageMessage != "") {
-            sender.sendMessage(TranslationContainer("commands.generic.usage", this.usageMessage))
+        if (this.usage != "") {
+            sender.sendMessage(TranslationContainer("commands.generic.usage", this.usage))
         }
     }
 
@@ -64,7 +61,7 @@ class SimpleCommand(
         try {
             success = method.invoke(this.`object`, sender, commandLabel, args) as Boolean
         } catch (exception: Exception) {
-            SimpleCommand.log.error("Failed to execute {} by {}", commandLabel, sender.name, exception)
+            SimpleCommand.log.error("Failed to execute {} by {}", commandLabel, sender.getName(), exception)
         }
 
         if (!success) {
@@ -73,4 +70,6 @@ class SimpleCommand(
 
         return success
     }
+
+    companion object : Loggable
 }

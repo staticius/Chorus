@@ -1,11 +1,13 @@
 package org.chorus.command.function
 
 import org.chorus.command.data.CommandEnum
+import java.io.IOException
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
 import kotlin.collections.set
-
 
 class FunctionManager(private val rootPath: Path) {
     val functions: MutableMap<String, Function> = HashMap()
@@ -25,12 +27,12 @@ class FunctionManager(private val rootPath: Path) {
 
     fun loadFunctions() {
         try {
-            Files.walkFileTree(this.rootPath, object : SimpleFileVisitor<Path?>() {
+            Files.walkFileTree(this.rootPath, object : SimpleFileVisitor<Path>() {
                 @Throws(IOException::class)
-                override fun visitFile(path: Path, attrs: BasicFileAttributes): FileVisitResult {
-                    if (path.toString().endsWith(".mcfunction")) {
-                        functions[path.toString().replace(rootPath.toString() + "\\", "").replace("\\\\".toRegex(), "/")
-                            .replace(".mcfunction", "")] = Function.Companion.fromPath(path)
+                override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                    if (file.toString().endsWith(".mcfunction")) {
+                        functions[file.toString().replace(rootPath.toString() + "\\", "").replace("\\\\".toRegex(), "/")
+                            .replace(".mcfunction", "")] = Function.Companion.fromPath(file)
                     }
                     return FileVisitResult.CONTINUE
                 }
