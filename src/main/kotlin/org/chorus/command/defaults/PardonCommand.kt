@@ -12,7 +12,7 @@ import kotlin.collections.set
 
 class PardonCommand(name: String) : VanillaCommand(name, "unban a player") {
     init {
-        this.permission = "nukkit.command.unban.player"
+        this.permission = "chorus.command.unban.player"
         this.aliases = arrayOf("unban")
         commandParameters.clear()
         commandParameters["default"] = arrayOf(

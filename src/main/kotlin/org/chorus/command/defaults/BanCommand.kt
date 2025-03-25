@@ -11,7 +11,7 @@ import kotlin.collections.set
 
 class BanCommand(name: String) : VanillaCommand(name, "commands.ban.description", "%commands.ban.usage") {
     init {
-        this.permission = "nukkit.command.ban.player"
+        this.permission = "chorus.command.ban.player"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.newType("player", CommandParamType.STRING),

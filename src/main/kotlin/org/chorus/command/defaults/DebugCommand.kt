@@ -16,7 +16,7 @@ import kotlin.collections.set
 class DebugCommand(name: String) : TestCommand(name, "commands.debug.description"),
     CoreCommand {
     init {
-        this.permission = "nukkit.command.debug"
+        this.permission = "chorus.command.debug"
         commandParameters.clear()
         //生物AI debug模式开关
         commandParameters["entity"] =

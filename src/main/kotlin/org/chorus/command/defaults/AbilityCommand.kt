@@ -14,7 +14,7 @@ import kotlin.collections.set
 
 class AbilityCommand(name: String) : VanillaCommand(name, "commands.ability.description", "%commands.ability.usage") {
     init {
-        this.permission = "nukkit.command.ability"
+        this.permission = "chorus.command.ability"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.newType("player", false, CommandParamType.TARGET, PlayersNode()),

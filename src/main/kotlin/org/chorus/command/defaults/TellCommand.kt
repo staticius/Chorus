@@ -13,7 +13,7 @@ import kotlin.collections.set
 class TellCommand(name: String) :
     VanillaCommand(name, "commands.tell.description", "", arrayOf<String>("w", "msg")) {
     init {
-        this.permission = "nukkit.command.tell"
+        this.permission = "chorus.command.tell"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),

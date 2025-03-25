@@ -17,7 +17,7 @@ import kotlin.math.min
 
 class GiveCommand(name: String) : VanillaCommand(name, "commands.give.description") {
     init {
-        this.permission = "nukkit.command.give"
+        this.permission = "chorus.command.give"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),

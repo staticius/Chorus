@@ -12,7 +12,7 @@ import kotlin.collections.set
 
 class ReloadCommand(name: String) : VanillaCommand(name, "Reload the server/plugin") {
     init {
-        this.permission = "nukkit.command.reload"
+        this.permission = "chorus.command.reload"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
         commandParameters["function"] = arrayOf(

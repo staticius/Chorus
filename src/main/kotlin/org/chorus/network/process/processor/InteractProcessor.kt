@@ -45,7 +45,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
             )
 
             InteractProcessor.log.warn(
-                Server.instance.baseLang.tr("nukkit.player.invalidEntity", player.getName())
+                Server.instance.baseLang.tr("chorus.player.invalidEntity", player.getName())
             )
             return
         }

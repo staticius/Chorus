@@ -13,7 +13,7 @@ import kotlin.collections.set
 class DifficultyCommand(name: String) :
     VanillaCommand(name, "commands.difficulty.description", "%commands.difficulty.usage") {
     init {
-        this.permission = "nukkit.command.difficulty"
+        this.permission = "chorus.command.difficulty"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("difficulty", CommandParamType.INT)

@@ -13,7 +13,7 @@ import org.chorus.network.protocol.types.hud.HudVisibility
 
 class HudCommand(name: String) : VanillaCommand(name, "commands.hud.description", "%commands.hud.usage") {
     init {
-        this.permission = "nukkit.command.hud"
+        this.permission = "chorus.command.hud"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

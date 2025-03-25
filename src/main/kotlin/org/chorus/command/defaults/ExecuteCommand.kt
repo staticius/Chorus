@@ -24,7 +24,7 @@ import kotlin.math.min
 
 class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.description", "commands.execute.usage") {
     init {
-        this.permission = "nukkit.command.execute"
+        this.permission = "chorus.command.execute"
         commandParameters.clear()
         this.addCommandParameters(
             "as", arrayOf(

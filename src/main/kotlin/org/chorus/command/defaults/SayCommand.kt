@@ -15,7 +15,7 @@ import kotlin.collections.set
  */
 class SayCommand(name: String) : VanillaCommand(name, "commands.say.description") {
     init {
-        this.permission = "nukkit.command.say"
+        this.permission = "chorus.command.say"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("message", CommandParamType.MESSAGE)

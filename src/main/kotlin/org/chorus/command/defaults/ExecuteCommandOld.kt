@@ -15,7 +15,7 @@ import kotlin.collections.set
 
 class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute command", "commands.execute.usage") {
     init {
-        this.permission = "nukkit.command.executeold"
+        this.permission = "chorus.command.executeold"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("origin", CommandParamType.TARGET),

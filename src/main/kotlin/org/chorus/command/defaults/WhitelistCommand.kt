@@ -15,23 +15,23 @@ import kotlin.collections.set
 class WhitelistCommand(name: String) :
     VanillaCommand(
         name,
-        "nukkit.command.whitelist.description",
-        "nukkit.command.allowlist.usage",
+        "chorus.command.whitelist.description",
+        "chorus.command.allowlist.usage",
         arrayOf<String>("allowlist")
     ) {
     init {
-        this.permission = "nukkit.command.whitelist.reload;" +
-                "nukkit.command.whitelist.enable;" +
-                "nukkit.command.whitelist.disable;" +
-                "nukkit.command.whitelist.list;" +
-                "nukkit.command.whitelist.add;" +
-                "nukkit.command.whitelist.remove;" +  //v1.18.10+
-                "nukkit.command.allowlist.reload;" +
-                "nukkit.command.allowlist.enable;" +
-                "nukkit.command.allowlist.disable;" +
-                "nukkit.command.allowlist.list;" +
-                "nukkit.command.allowlist.add;" +
-                "nukkit.command.allowlist.remove"
+        this.permission = "chorus.command.whitelist.reload;" +
+                "chorus.command.whitelist.enable;" +
+                "chorus.command.whitelist.disable;" +
+                "chorus.command.whitelist.list;" +
+                "chorus.command.whitelist.add;" +
+                "chorus.command.whitelist.remove;" +  //v1.18.10+
+                "chorus.command.allowlist.reload;" +
+                "chorus.command.allowlist.enable;" +
+                "chorus.command.allowlist.disable;" +
+                "chorus.command.allowlist.list;" +
+                "chorus.command.allowlist.add;" +
+                "chorus.command.allowlist.remove"
         commandParameters.clear()
         commandParameters["1arg"] = arrayOf(
             CommandParameter.Companion.newEnum("action", CommandEnum("AllowlistAction", "on", "off", "list", "reload"))
@@ -118,7 +118,7 @@ class WhitelistCommand(name: String) :
     }
 
     private fun badPerm(log: CommandLogger, sender: CommandSender, perm: String): Boolean {
-        if (!sender.hasPermission("nukkit.command.whitelist.$perm") && !sender.hasPermission("nukkit.command.allowlist.$perm")) {
+        if (!sender.hasPermission("chorus.command.whitelist.$perm") && !sender.hasPermission("chorus.command.allowlist.$perm")) {
             log.addMessage(TextFormat.RED.toString() + "%nukkit.command.generic.permission").output()
             return true
         }

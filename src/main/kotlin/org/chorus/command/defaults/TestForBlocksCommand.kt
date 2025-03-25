@@ -15,7 +15,7 @@ import kotlin.math.min
 
 class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testforblocks.description") {
     init {
-        this.permission = "nukkit.command.testforblocks"
+        this.permission = "chorus.command.testforblocks"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

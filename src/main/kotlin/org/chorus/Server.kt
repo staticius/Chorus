@@ -525,21 +525,21 @@ class Server internal constructor(
 
         log.info(
             this.baseLang.tr(
-                "nukkit.server.defaultGameMode", getGamemodeString(
+                "chorus.server.defaultGameMode", getGamemodeString(
                     gamemode
                 )
             )
         )
         log.info(
             this.baseLang.tr(
-                "nukkit.server.networkStart",
+                "chorus.server.networkStart",
                 TextFormat.YELLOW.toString() + (ip.ifEmpty { "*" }),
                 TextFormat.YELLOW.toString() + port.toString()
             )
         )
         log.info(
             this.baseLang.tr(
-                "nukkit.server.startFinished",
+                "chorus.server.startFinished",
                 ((System.currentTimeMillis() - Chorus.START_TIME).toDouble() / 1000).toString()
             )
         )
@@ -643,7 +643,7 @@ class Server internal constructor(
                 } catch (e: Exception) {
                     log.error(
                         this.baseLang.tr(
-                            "nukkit.level.tickError",
+                            "chorus.level.tickError",
                             level.folderPath, getExceptionMessage(e)
                         ), e
                     )
@@ -1389,12 +1389,12 @@ class Server internal constructor(
                 return readCompressed(bytes)
             }
         } catch (e: IOException) {
-            log.warn(this.baseLang.tr("nukkit.data.playerCorrupted", uuid), e)
+            log.warn(this.baseLang.tr("chorus.data.playerCorrupted", uuid), e)
         }
 
         if (create) {
             if (settings.playerSettings.savePlayerData) {
-                log.info(this.baseLang.tr("nukkit.data.playerNotFound", uuid))
+                log.info(this.baseLang.tr("chorus.data.playerNotFound", uuid))
             }
             val spawn = getDefaultLevel()!!.safeSpawn
             val nbt = CompoundTag()
@@ -1806,13 +1806,13 @@ class Server internal constructor(
 
         val isShaded = isShaded
         if (!isValidStart || (JarStart.isUsingJavaJar && !isShaded)) {
-            log.error(this.baseLang.tr("nukkit.start.invalid"))
+            log.error(this.baseLang.tr("chorus.start.invalid"))
             throw RuntimeException()
         }
         if (!properties[ServerPropertiesKeys.ALLOW_SHADED, false] && isShaded) {
-            log.error(this.baseLang.tr("nukkit.start.shaded1"))
-            log.error(this.baseLang.tr("nukkit.start.shaded2"))
-            log.error(this.baseLang.tr("nukkit.start.shaded3"))
+            log.error(this.baseLang.tr("chorus.start.shaded1"))
+            log.error(this.baseLang.tr("chorus.start.shaded2"))
+            log.error(this.baseLang.tr("chorus.start.shaded3"))
             throw RuntimeException()
         }
 
@@ -1821,7 +1821,7 @@ class Server internal constructor(
         log.info(this.baseLang.tr("language.selected", baseLang.name, baseLang.getLang()))
         log.info(
             this.baseLang.tr(
-                "nukkit.server.start",
+                "chorus.server.start",
                 TextFormat.AQUA.toString() + this.version + TextFormat.RESET
             )
         )
@@ -1865,13 +1865,13 @@ class Server internal constructor(
 
         log.info(
             this.baseLang.tr(
-                "nukkit.server.info",
+                "chorus.server.info",
                 name,
                 TextFormat.YELLOW.toString() + this.nukkitVersion + TextFormat.RESET + " (" + TextFormat.YELLOW + this.gitCommit + TextFormat.RESET + ")" + TextFormat.RESET,
                 apiVersion
             )
         )
-        log.info(this.baseLang.tr("nukkit.server.license"))
+        log.info(this.baseLang.tr("chorus.server.license"))
         this.consoleSender = ConsoleCommandSender()
 
         run {
@@ -1953,7 +1953,7 @@ class Server internal constructor(
         properties.save()
 
         if (this.getDefaultLevel() == null) {
-            log.error(this.baseLang.tr("nukkit.level.defaultError"))
+            log.error(this.baseLang.tr("chorus.level.defaultError"))
             this.forceShutdown()
 
             throw RuntimeException()
@@ -2064,7 +2064,7 @@ class Server internal constructor(
         val jpath = Path.of(path)
         path = jpath.toString()
         if (!jpath.toFile().exists()) {
-            log.warn(this.baseLang.tr("nukkit.level.notFound", levelFolderName))
+            log.warn(this.baseLang.tr("chorus.level.notFound", levelFolderName))
             return null
         }
 
@@ -2081,7 +2081,7 @@ class Server internal constructor(
             //verify the provider
             val provider = getProvider(path)
             if (provider == null) {
-                log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName, "Unknown provider"))
+                log.error(this.baseLang.tr("chorus.level.loadError", levelFolderName, "Unknown provider"))
                 return null
             }
             val map: MutableMap<Int, GeneratorConfig> = HashMap()
@@ -2133,14 +2133,14 @@ class Server internal constructor(
             val level: Level
             try {
                 if (provider == null) {
-                    log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName1, "the level does not exist"))
+                    log.error(this.baseLang.tr("chorus.level.loadError", levelFolderName1, "the level does not exist"))
                     return false
                 }
                 level = Level(
                     levelName, pathS, generators.size, provider, value
                 )
             } catch (e: Exception) {
-                log.error(this.baseLang.tr("nukkit.level.loadError", levelFolderName1, e.message!!), e)
+                log.error(this.baseLang.tr("chorus.level.loadError", levelFolderName1, e.message!!), e)
                 return false
             }
             levels[level.id] = level
@@ -2209,7 +2209,7 @@ class Server internal constructor(
                 pluginManager.callEvent(LevelInitEvent(level))
                 pluginManager.callEvent(LevelLoadEvent(level))
             } catch (e: Exception) {
-                log.error(this.baseLang.tr("nukkit.level.generationError", name, getExceptionMessage(e)), e)
+                log.error(this.baseLang.tr("chorus.level.generationError", name, getExceptionMessage(e)), e)
                 return false
             }
         }

@@ -11,7 +11,7 @@ import kotlin.collections.set
 
 class PlayAnimationCommand(name: String) : VanillaCommand(name, "commands.playanimation.description") {
     init {
-        this.permission = "nukkit.command.playanimation"
+        this.permission = "chorus.command.playanimation"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("entity", CommandParamType.TARGET),

@@ -16,7 +16,7 @@ import kotlin.collections.set
 
 class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description", "commands.fog.usage") {
     init {
-        this.permission = "nukkit.command.fog"
+        this.permission = "chorus.command.fog"
         commandParameters.clear()
         commandParameters["push"] = arrayOf(
             CommandParameter.Companion.newType("victim", CommandParamType.TARGET, PlayersNode()),

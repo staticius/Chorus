@@ -13,10 +13,10 @@ import kotlin.collections.set
 
 class TimeCommand(name: String) : VanillaCommand(name, "commands.time.description") {
     init {
-        this.permission = "nukkit.command.time.add;" +
-                "nukkit.command.time.set;" +
-                "nukkit.command.time.start;" +
-                "nukkit.command.time.stop"
+        this.permission = "chorus.command.time.add;" +
+                "chorus.command.time.set;" +
+                "chorus.command.time.start;" +
+                "chorus.command.time.stop"
         commandParameters.clear()
         commandParameters["1arg"] = arrayOf(
             CommandParameter.Companion.newEnum("mode", CommandEnum("TimeMode", "query", "start", "stop"))
@@ -50,8 +50,8 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
             "1arg" -> {
                 val mode = list.getResult<String>(0)
                 if ("start" == mode) {
-                    if (!sender.hasPermission("nukkit.command.time.start")) {
-                        log.addMessage("nukkit.command.generic.permission").output()
+                    if (!sender.hasPermission("chorus.command.time.start")) {
+                        log.addMessage("chorus.command.generic.permission").output()
                         return 0
                     }
                     for (level in Server.instance.levels.values) {
@@ -61,8 +61,8 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                     }
                     log.addSuccess("Restarted the time").output(true)
                 } else if ("stop" == mode) {
-                    if (!sender.hasPermission("nukkit.command.time.stop")) {
-                        log.addMessage("nukkit.command.generic.permission").output()
+                    if (!sender.hasPermission("chorus.command.time.stop")) {
+                        log.addMessage("chorus.command.generic.permission").output()
                         return 0
                     }
                     for (level in Server.instance.levels.values) {
@@ -72,8 +72,8 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                     }
                     log.addSuccess("Stopped the time").output(true)
                 } else if ("query" == mode) {
-                    if (!sender.hasPermission("nukkit.command.time.query")) {
-                        log.addMessage("nukkit.command.generic.permission").output()
+                    if (!sender.hasPermission("chorus.command.time.query")) {
+                        log.addMessage("chorus.command.generic.permission").output()
                         return 0
                     }
                     val level = if (sender is Player) {
@@ -87,8 +87,8 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
             }
 
             "add" -> {
-                if (!sender.hasPermission("nukkit.command.time.add")) {
-                    log.addMessage("nukkit.command.generic.permission").output()
+                if (!sender.hasPermission("chorus.command.time.add")) {
+                    log.addMessage("chorus.command.generic.permission").output()
                     return 0
                 }
                 val value = list.getResult<Int>(1)!!
@@ -106,8 +106,8 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
             }
 
             "setAmount" -> {
-                if (!sender.hasPermission("nukkit.command.time.set")) {
-                    log.addMessage("nukkit.command.generic.permission").output()
+                if (!sender.hasPermission("chorus.command.time.set")) {
+                    log.addMessage("chorus.command.generic.permission").output()
                     return 0
                 }
                 val value = list.getResult<Int>(1)!!
@@ -125,8 +125,8 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
             }
 
             "setTime" -> {
-                if (!sender.hasPermission("nukkit.command.time.set")) {
-                    log.addMessage("nukkit.command.generic.permission").output()
+                if (!sender.hasPermission("chorus.command.time.set")) {
+                    log.addMessage("chorus.command.generic.permission").output()
                     return 0
                 }
                 var value = 0

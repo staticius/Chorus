@@ -30,7 +30,7 @@ import kotlin.math.min
 class ScoreboardCommand(name: String) :
     VanillaCommand(name, "commands.scoreboard.description", "commands.scoreboard.usage") {
     init {
-        this.permission = "nukkit.command.scoreboard"
+        this.permission = "chorus.command.scoreboard"
         commandParameters.clear()
         commandParameters["objectives-add"] = arrayOf(
             CommandParameter.Companion.newEnum(

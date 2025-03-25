@@ -279,7 +279,7 @@ class Level(
         }
         log.info(
             Server.instance.baseLang.tr(
-                "nukkit.level.init",
+                "chorus.level.init",
                 TextFormat.GREEN.toString() + this.folderName + TextFormat.RESET
             )
         )
@@ -556,7 +556,7 @@ class Level(
 
         log.info(
             Server.instance.baseLang.tr(
-                "nukkit.level.unloading",
+                "chorus.level.unloading",
                 TextFormat.GREEN.toString() + this.getName() + TextFormat.WHITE
             )
         )
@@ -880,7 +880,7 @@ class Level(
         } catch (e: Exception) {
             log.error(
                 Server.instance.baseLang.tr(
-                    "nukkit.level.tickError",
+                    "chorus.level.tickError",
                     this.folderPath, Utils.getExceptionMessage(e)
                 ), e
             )
@@ -3215,7 +3215,7 @@ class Level(
         val levelNameDim = levelProvider.name.replace(" Dim0", "")
         log.info(
             Server.instance.baseLang.tr(
-                "nukkit.level.preparing",
+                "chorus.level.preparing",
                 TextFormat.GREEN.toString() + levelNameDim + TextFormat.RESET
             )
         )
@@ -3779,7 +3779,7 @@ class Level(
             }
             levelProvider.unloadChunk(x, z, safe)
         } catch (e: Exception) {
-            log.error(Server.instance.baseLang.tr("nukkit.level.chunkUnloadError", e.toString()), e)
+            log.error(Server.instance.baseLang.tr("chorus.level.chunkUnloadError", e.toString()), e)
         }
 
         return true

@@ -13,7 +13,7 @@ import kotlin.collections.set
 
 class SetWorldSpawnCommand(name: String) : VanillaCommand(name, "commands.setworldspawn.description") {
     init {
-        this.permission = "nukkit.command.setworldspawn"
+        this.permission = "chorus.command.setworldspawn"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
         commandParameters["spawnPoint"] = arrayOf(

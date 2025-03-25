@@ -14,7 +14,7 @@ class SpreadPlayersCommand(name: String) : VanillaCommand(name, "commands.spread
     private val random: ThreadLocalRandom
 
     init {
-        this.permission = "nukkit.command.spreadplayers"
+        this.permission = "chorus.command.spreadplayers"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

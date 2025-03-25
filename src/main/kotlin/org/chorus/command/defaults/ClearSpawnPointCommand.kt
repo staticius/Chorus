@@ -13,7 +13,7 @@ import java.util.stream.Collectors
 
 class ClearSpawnPointCommand(name: String) : VanillaCommand(name, "commands.clearspawnpoint.description") {
     init {
-        this.permission = "nukkit.command.clearspawnpoint"
+        this.permission = "chorus.command.clearspawnpoint"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

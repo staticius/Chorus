@@ -16,7 +16,7 @@ class ZippedResourcePackLoader(//资源包文件存放地址
             path.mkdirs()
         } else require(path.isDirectory) {
             Server.instance.baseLang
-                .tr("nukkit.resources.invalid-path", path.name)
+                .tr("chorus.resources.invalid-path", path.name)
         }
     }
 
@@ -32,7 +32,7 @@ class ZippedResourcePackLoader(//资源包文件存放地址
                         "zip", "mcpack" -> resourcePack = ZippedResourcePack(pack)
                         else -> ZippedResourcePackLoader.log.warn(
                             baseLang.tr(
-                                "nukkit.resources.unknown-format",
+                                "chorus.resources.unknown-format",
                                 pack.name
                             )
                         )
@@ -40,10 +40,10 @@ class ZippedResourcePackLoader(//资源包文件存放地址
                 }
                 if (resourcePack != null) {
                     loadedResourcePacks.add(resourcePack)
-                    ZippedResourcePackLoader.log.info(baseLang.tr("nukkit.resources.zip.loaded", pack.name))
+                    ZippedResourcePackLoader.log.info(baseLang.tr("chorus.resources.zip.loaded", pack.name))
                 }
             } catch (e: IllegalArgumentException) {
-                ZippedResourcePackLoader.log.warn(baseLang.tr("nukkit.resources.fail", pack.name, e.message!!), e)
+                ZippedResourcePackLoader.log.warn(baseLang.tr("chorus.resources.fail", pack.name, e.message!!), e)
             }
         }
         return loadedResourcePacks

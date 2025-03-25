@@ -14,7 +14,7 @@ import kotlin.collections.set
 
 class TellrawCommand(name: String) : VanillaCommand(name, "commands.tellraw.description") {
     init {
-        this.permission = "nukkit.command.tellraw"
+        this.permission = "chorus.command.tellraw"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),

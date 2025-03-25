@@ -15,8 +15,8 @@ import java.util.stream.Collectors
 
 class KillCommand(name: String) : VanillaCommand(name, "commands.kill.description") {
     init {
-        this.permission = ("nukkit.command.kill.self;"
-                + "nukkit.command.kill.other")
+        this.permission = ("chorus.command.kill.self;"
+                + "chorus.command.kill.other")
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", true, CommandParamType.TARGET)
@@ -31,8 +31,8 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
         log: CommandLogger
     ): Int {
         if (result.value.hasResult(0)) {
-            if (!sender.hasPermission("nukkit.command.kill.other")) {
-                log.addError("nukkit.command.generic.permission").output()
+            if (!sender.hasPermission("chorus.command.kill.other")) {
+                log.addError("chorus.command.generic.permission").output()
                 return 0
             }
             var entities = result.value.getResult<MutableList<Entity>>(0)!!
@@ -59,7 +59,7 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
 
             for (entity in entities) {
                 if (entity.getName() == sender.getName()) {
-                    if (!sender.hasPermission("nukkit.command.kill.self")) {
+                    if (!sender.hasPermission("chorus.command.kill.self")) {
                         continue
                     }
                 }
@@ -75,8 +75,8 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
             return entities.size
         } else {
             if (sender.isPlayer) {
-                if (!sender.hasPermission("nukkit.command.kill.self")) {
-                    log.addError("nukkit.command.generic.permission").output()
+                if (!sender.hasPermission("chorus.command.kill.self")) {
+                    log.addError("chorus.command.generic.permission").output()
                     return 0
                 }
                 if (sender.asPlayer()!!.isCreative) {

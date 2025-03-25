@@ -17,7 +17,7 @@ import kotlin.collections.set
  */
 class ParticleCommand(name: String) : VanillaCommand(name, "commands.particle.description") {
     init {
-        this.permission = "nukkit.command.particle"
+        this.permission = "chorus.command.particle"
         commandParameters.clear()
         val particles =  ParticleEffect.entries.map { it.identifier }
         commandParameters["default"] = arrayOf(

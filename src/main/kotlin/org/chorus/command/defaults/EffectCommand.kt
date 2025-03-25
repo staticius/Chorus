@@ -12,9 +12,9 @@ import org.chorus.entity.effect.InstantEffect
 import org.chorus.entity.item.EntityItem
 import kotlin.collections.set
 
-class EffectCommand(name: String) : Command(name, "commands.effect.description", "nukkit.command.effect.usage") {
+class EffectCommand(name: String) : Command(name, "commands.effect.description", "chorus.command.effect.usage") {
     init {
-        this.permission = "nukkit.command.effect"
+        this.permission = "chorus.command.effect"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),

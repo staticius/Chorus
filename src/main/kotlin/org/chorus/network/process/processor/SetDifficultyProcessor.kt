@@ -10,7 +10,7 @@ import org.chorus.network.protocol.SetDifficultyPacket
 
 class SetDifficultyProcessor : DataPacketProcessor<SetDifficultyPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: SetDifficultyPacket) {
-        if (!playerHandle.player.spawned || !playerHandle.player.hasPermission("nukkit.command.difficulty")) {
+        if (!playerHandle.player.spawned || !playerHandle.player.hasPermission("chorus.command.difficulty")) {
             return
         }
         Server.instance.setDifficulty(pk.difficulty)

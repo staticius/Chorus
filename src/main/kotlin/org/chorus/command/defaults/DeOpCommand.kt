@@ -12,7 +12,7 @@ import kotlin.collections.set
 
 class DeOpCommand(name: String) : VanillaCommand(name, "commands.deop.description") {
     init {
-        this.permission = "nukkit.command.op.take"
+        this.permission = "chorus.command.op.take"
         commandParameters["default"] = arrayOf(
             CommandParameter.newType("player", CommandParamType.TARGET, IPlayersNode())
         )

@@ -11,7 +11,7 @@ import org.chorus.level.Locator
 
 class TestForBlockCommand(name: String) : VanillaCommand(name, "commands.testforblock.description") {
     init {
-        this.permission = "nukkit.command.testforblock"
+        this.permission = "chorus.command.testforblock"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

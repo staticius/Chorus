@@ -10,7 +10,7 @@ class GarbageCollectorCommand(name: String) :
     TestCommand(name, "%nukkit.command.gc.description", "%nukkit.command.gc.usage"),
     CoreCommand {
     init {
-        this.permission = "nukkit.command.gc"
+        this.permission = "chorus.command.gc"
         commandParameters.clear()
     }
 

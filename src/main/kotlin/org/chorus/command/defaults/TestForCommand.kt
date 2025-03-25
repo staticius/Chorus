@@ -10,7 +10,7 @@ import java.util.stream.Collectors
 
 class TestForCommand(name: String) : VanillaCommand(name, "commands.testfor.description") {
     init {
-        this.permission = "nukkit.command.testfor"
+        this.permission = "chorus.command.testfor"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

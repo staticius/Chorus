@@ -16,7 +16,7 @@ import java.util.*
 
 class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.description") {
     init {
-        this.permission = "nukkit.command.playsound"
+        this.permission = "chorus.command.playsound"
         commandParameters.clear()
         this.addCommandParameters(
             "default",

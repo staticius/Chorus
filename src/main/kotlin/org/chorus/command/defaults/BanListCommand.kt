@@ -13,7 +13,7 @@ import kotlin.collections.set
 
 class BanListCommand(name: String) : VanillaCommand(name, "list all the banned players or IPs") {
     init {
-        this.permission = "nukkit.command.ban.list"
+        this.permission = "chorus.command.ban.list"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.newEnum("type", true, CommandEnum("BanListType", "ips", "players"))

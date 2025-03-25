@@ -12,7 +12,7 @@ import kotlin.collections.set
 
 class TitlerawCommand(name: String) : VanillaCommand(name, "commands.titleraw.description") {
     init {
-        this.permission = "nukkit.command.titleraw"
+        this.permission = "chorus.command.titleraw"
         commandParameters.clear()
         commandParameters["clear"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),

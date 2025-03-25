@@ -21,7 +21,7 @@ import kotlin.math.min
 
 class FillCommand(name: String) : VanillaCommand(name, "commands.fill.description") {
     init {
-        this.permission = "nukkit.command.fill"
+        this.permission = "chorus.command.fill"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

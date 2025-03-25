@@ -55,7 +55,7 @@ class ResourcePackManager(private val loaders: MutableSet<ResourcePackLoader>) {
 
         ResourcePackManager.log.info(
             Server.instance.baseLang
-                .tr("nukkit.resources.success", resourcePacks.size.toString())
+                .tr("chorus.resources.success", resourcePacks.size.toString())
         )
     }
 

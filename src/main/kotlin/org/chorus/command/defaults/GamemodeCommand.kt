@@ -17,11 +17,11 @@ class GamemodeCommand(name: String) : VanillaCommand(
     arrayOf("gm")
 ) {
     init {
-        this.permission = "nukkit.command.gamemode.survival;" +
-                "nukkit.command.gamemode.creative;" +
-                "nukkit.command.gamemode.adventure;" +
-                "nukkit.command.gamemode.spectator;" +
-                "nukkit.command.gamemode.other"
+        this.permission = "chorus.command.gamemode.survival;" +
+                "chorus.command.gamemode.creative;" +
+                "chorus.command.gamemode.adventure;" +
+                "chorus.command.gamemode.spectator;" +
+                "chorus.command.gamemode.other"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("gameMode", CommandParamType.INT),
@@ -55,7 +55,7 @@ class GamemodeCommand(name: String) : VanillaCommand(
         }
         val players =
             if (list.hasResult(1)) {
-                if (sender.hasPermission("nukkit.command.gamemode.other")) {
+                if (sender.hasPermission("chorus.command.gamemode.other")) {
                     list.getResult<List<Player>>(1)!!
                 } else {
                     log.addMessage(TextFormat.RED.toString() + "%nukkit.command.generic.permission").output()
@@ -70,10 +70,10 @@ class GamemodeCommand(name: String) : VanillaCommand(
             return 0
         }
 
-        if ((gameMode == 0 && !sender.hasPermission("nukkit.command.gamemode.survival")) ||
-            (gameMode == 1 && !sender.hasPermission("nukkit.command.gamemode.creative")) ||
-            (gameMode == 2 && !sender.hasPermission("nukkit.command.gamemode.adventure")) ||
-            (gameMode == 3 && !sender.hasPermission("nukkit.command.gamemode.spectator"))
+        if ((gameMode == 0 && !sender.hasPermission("chorus.command.gamemode.survival")) ||
+            (gameMode == 1 && !sender.hasPermission("chorus.command.gamemode.creative")) ||
+            (gameMode == 2 && !sender.hasPermission("chorus.command.gamemode.adventure")) ||
+            (gameMode == 3 && !sender.hasPermission("chorus.command.gamemode.spectator"))
         ) {
             log.addMessage(TextFormat.RED.toString() + "%nukkit.command.generic.permission").output()
             return 0

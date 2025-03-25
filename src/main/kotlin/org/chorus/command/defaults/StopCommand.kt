@@ -10,7 +10,7 @@ import kotlin.collections.set
 
 class StopCommand(name: String) : VanillaCommand(name, "commands.stop.description") {
     init {
-        this.permission = "nukkit.command.stop"
+        this.permission = "chorus.command.stop"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
         this.enableParamTree()

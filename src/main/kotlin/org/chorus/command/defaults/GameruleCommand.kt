@@ -13,7 +13,7 @@ import kotlin.collections.set
 
 class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.description") {
     init {
-        this.permission = "nukkit.command.gamerule"
+        this.permission = "chorus.command.gamerule"
         commandParameters.clear()
 
         val rules: GameRules = GameRules.default

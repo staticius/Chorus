@@ -1102,7 +1102,7 @@ class Player @UsedByReflection constructor(
                 val event = PlayerInvalidMoveEvent(this, true)
                 Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled && (event.isRevert.also { invalidMotion = it })) {
-                    log.warn(Server.instance.baseLang.tr("nukkit.player.invalidMove", this.getName()))
+                    log.warn(Server.instance.baseLang.tr("chorus.player.invalidMove", this.getName()))
                 }
             }
             if (invalidMotion) {
@@ -1513,7 +1513,7 @@ class Player @UsedByReflection constructor(
 
         log.info(
             Server.instance.baseLang.tr(
-                "nukkit.player.logIn",
+                "chorus.player.logIn",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
                 this.address,
                 port.toString(),
@@ -3597,7 +3597,7 @@ class Player @UsedByReflection constructor(
         //output logout infomation
         log.info(
             Server.instance.baseLang.tr(
-                "nukkit.player.logOut",
+                "chorus.player.logOut",
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
                 this.address,
                 port.toString(),

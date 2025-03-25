@@ -13,7 +13,7 @@ import kotlin.collections.set
 
 class TitleCommand(name: String) : VanillaCommand(name, "commands.title.description") {
     init {
-        this.permission = "nukkit.command.title"
+        this.permission = "chorus.command.title"
 
         commandParameters.clear()
         commandParameters["clear"] = arrayOf(

@@ -18,7 +18,7 @@ import kotlin.math.min
 
 class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickingarea.description") {
     init {
-        this.permission = "nukkit.command.tickingarea"
+        this.permission = "chorus.command.tickingarea"
         commandParameters.clear()
         commandParameters["add-pos"] = arrayOf(
             CommandParameter.Companion.newEnum("add", arrayOf("add")),

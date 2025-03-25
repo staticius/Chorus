@@ -11,9 +11,9 @@ import org.chorus.utils.TextFormat
 import java.util.function.Consumer
 import kotlin.collections.set
 
-class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.description") {
+class WorldCommand(name: String) : VanillaCommand(name, "chorus.command.world.description") {
     init {
-        this.permission = "nukkit.command.world"
+        this.permission = "chorus.command.world"
         commandParameters.clear()
         commandParameters["tp"] = arrayOf(
             CommandParameter.Companion.newEnum("tp", arrayOf("tp")),
@@ -52,7 +52,7 @@ class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.de
                     if (Server.instance.loadLevel(levelName)) {
                         level = Server.instance.getLevelByName(levelName)
                     } else {
-                        log.addMessage("nukkit.command.world.levelNotFound", levelName).output()
+                        log.addMessage("chorus.command.world.levelNotFound", levelName).output()
                         return 0
                     }
                 }

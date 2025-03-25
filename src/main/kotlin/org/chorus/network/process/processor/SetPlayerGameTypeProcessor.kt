@@ -10,7 +10,7 @@ import org.chorus.network.protocol.SetPlayerGameTypePacket
 
 class SetPlayerGameTypeProcessor : DataPacketProcessor<SetPlayerGameTypePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: SetPlayerGameTypePacket) {
-        if (pk.gamemode != playerHandle.player.gamemode && playerHandle.player.hasPermission("nukkit.command.gamemode")) {
+        if (pk.gamemode != playerHandle.player.gamemode && playerHandle.player.hasPermission("chorus.command.gamemode")) {
             playerHandle.player.setGamemode(
                 when (pk.gamemode) {
                     0, 1, 2 -> pk.gamemode

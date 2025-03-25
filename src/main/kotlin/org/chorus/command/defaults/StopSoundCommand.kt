@@ -13,7 +13,7 @@ import java.util.stream.Collectors
 
 class StopSoundCommand(name: String) : VanillaCommand(name, "commands.stopsound.description") {
     init {
-        this.permission = "nukkit.command.stopsound"
+        this.permission = "chorus.command.stopsound"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

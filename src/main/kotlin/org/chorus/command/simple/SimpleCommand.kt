@@ -39,7 +39,7 @@ class SimpleCommand(
     }
 
     fun sendInGameMessage(sender: CommandSender) {
-        sender.sendMessage(TranslationContainer("nukkit.command.generic.ingame"))
+        sender.sendMessage(TranslationContainer("chorus.command.generic.ingame"))
     }
 
     override fun execute(sender: CommandSender, commandLabel: String?, args: Array<String?>): Boolean {

@@ -12,7 +12,7 @@ import kotlin.collections.set
 
 class KickCommand(name: String) : VanillaCommand(name, "commands.kick.description") {
     init {
-        this.permission = "nukkit.command.kick"
+        this.permission = "chorus.command.kick"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET, PlayersNode()),

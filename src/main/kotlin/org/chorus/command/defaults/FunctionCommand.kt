@@ -10,7 +10,7 @@ import kotlin.collections.set
 
 class FunctionCommand(name: String) : VanillaCommand(name, "commands.function.description") {
     init {
-        this.permission = "nukkit.command.function"
+        this.permission = "chorus.command.function"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newEnum(

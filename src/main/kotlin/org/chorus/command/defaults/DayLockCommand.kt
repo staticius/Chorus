@@ -13,7 +13,7 @@ import org.chorus.level.Level
 class DayLockCommand(name: String) :
     VanillaCommand(name, "commands.daylock.description", "", arrayOf<String>("alwaysday")) {
     init {
-        this.permission = "nukkit.command.daylock"
+        this.permission = "chorus.command.daylock"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

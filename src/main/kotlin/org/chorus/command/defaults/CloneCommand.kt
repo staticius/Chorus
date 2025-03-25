@@ -16,7 +16,7 @@ import kotlin.math.min
 
 class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.description") {
     init {
-        this.permission = "nukkit.command.clone"
+        this.permission = "chorus.command.clone"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

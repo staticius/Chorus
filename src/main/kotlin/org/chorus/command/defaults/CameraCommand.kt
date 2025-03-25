@@ -27,7 +27,7 @@ import java.util.*
  */
 class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.description") {
     init {
-        this.permission = "nukkit.command.camera"
+        this.permission = "chorus.command.camera"
         commandParameters.clear()
         commandParameters["clear"] = arrayOf(
             CommandParameter.Companion.newType("players", false, CommandParamType.TARGET, PlayersNode()),

@@ -14,7 +14,7 @@ import kotlin.collections.set
 
 class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screenshake.description") {
     init {
-        this.permission = "nukkit.command.camerashake"
+        this.permission = "chorus.command.camerashake"
         commandParameters.clear()
         commandParameters["add"] = arrayOf(
             CommandParameter.Companion.newEnum("add", false, arrayOf("add")),

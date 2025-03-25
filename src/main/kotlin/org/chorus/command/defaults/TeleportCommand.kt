@@ -16,7 +16,7 @@ import kotlin.collections.set
 class TeleportCommand(name: String) :
     VanillaCommand(name, "commands.tp.description", "commands.tp.usage", arrayOf<String>("teleport")) {
     init {
-        this.permission = "nukkit.command.teleport"
+        this.permission = "chorus.command.teleport"
         commandParameters.clear()
         commandParameters["->Entity"] = arrayOf(
             CommandParameter.Companion.newType("destination", CommandParamType.TARGET),

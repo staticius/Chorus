@@ -13,7 +13,7 @@ import kotlin.collections.set
 
 class XpCommand(name: String) : Command(name, "commands.xp.description") {
     init {
-        this.permission = "nukkit.command.xp"
+        this.permission = "chorus.command.xp"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("amount", CommandParamType.INT),

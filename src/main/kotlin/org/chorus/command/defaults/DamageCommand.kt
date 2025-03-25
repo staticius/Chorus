@@ -15,7 +15,7 @@ import java.util.stream.Collectors
 
 class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.description") {
     init {
-        this.permission = "nukkit.command.damage"
+        this.permission = "chorus.command.damage"
         commandParameters.clear()
         this.addCommandParameters(
             "default",

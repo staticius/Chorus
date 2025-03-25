@@ -12,7 +12,7 @@ import kotlin.collections.set
 
 class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description") {
     init {
-        this.permission = "nukkit.command.tag"
+        this.permission = "chorus.command.tag"
         commandParameters.clear()
         commandParameters["add"] = arrayOf(
             CommandParameter.Companion.newType("targets", CommandParamType.TARGET),

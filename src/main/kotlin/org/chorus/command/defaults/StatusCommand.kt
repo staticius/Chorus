@@ -25,7 +25,7 @@ class StatusCommand(name: String) :
     private val systemInfo = SystemInfo()
 
     init {
-        this.permission = "nukkit.command.status"
+        this.permission = "chorus.command.status"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

@@ -12,7 +12,7 @@ import kotlin.collections.set
 
 class OpCommand(name: String) : VanillaCommand(name, "commands.op.description") {
     init {
-        this.permission = "nukkit.command.op.give"
+        this.permission = "chorus.command.op.give"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.newType("player", CommandParamType.TARGET, IPlayersNode())

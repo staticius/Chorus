@@ -282,7 +282,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
                 } else {
                     val log = CommandLogger(target, sender, sentCommandLabel, args, plugin)
                     if (target.permissionMessage == null) {
-                        log.addMessage("nukkit.command.generic.permission").output()
+                        log.addMessage("chorus.command.generic.permission").output()
                     } else if (target.permissionMessage != "") {
                         log.addError(target.permissionMessage!!.replace("<permission>", target.permission!!)).output()
                     }
@@ -294,7 +294,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
         } catch (e: Exception) {
             SimpleCommandMap.log.error(
                 server.baseLang.tr(
-                    "nukkit.command.exception",
+                    "chorus.command.exception",
                     cmdLine,
                     target.toString(),
                     Utils.getExceptionMessage(e)

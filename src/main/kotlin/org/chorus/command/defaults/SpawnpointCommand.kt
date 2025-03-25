@@ -17,7 +17,7 @@ import kotlin.collections.set
 
 class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoint.description") {
     init {
-        this.permission = "nukkit.command.spawnpoint"
+        this.permission = "chorus.command.spawnpoint"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode()),

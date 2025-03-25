@@ -79,7 +79,7 @@ class Network @JvmOverloads constructor(
             try {
                 tmpIfs = SystemInfo().hardware.networkIFs
             } catch (t: Throwable) {
-                Network.log.warn(Server.instance.baseLang["nukkit.start.hardwareMonitorDisabled"])
+                Network.log.warn(Server.instance.baseLang["chorus.start.hardwareMonitorDisabled"])
             }
             hardWareNetworkInterfaces.set(tmpIfs)
         }, true)
@@ -178,7 +178,7 @@ class Network @JvmOverloads constructor(
         } catch (e: Exception) {
             Network.log.error(
                 server.baseLang.tr(
-                    "nukkit.server.networkError",
+                    "chorus.server.networkError",
                     javaClass.name, Utils.getExceptionMessage(e)
                 ), e
             )

@@ -18,9 +18,9 @@ import kotlin.collections.set
  * @since 23.01.2016
  */
 class EnchantCommand(name: String) :
-    VanillaCommand(name, "commands.enchant.description", "nukkit.command.enchant.usage") {
+    VanillaCommand(name, "commands.enchant.description", "chorus.command.enchant.usage") {
     init {
-        this.permission = "nukkit.command.enchant"
+        this.permission = "chorus.command.enchant"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("player", CommandParamType.TARGET),

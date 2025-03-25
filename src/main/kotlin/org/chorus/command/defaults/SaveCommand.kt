@@ -9,7 +9,7 @@ import kotlin.collections.set
 
 class SaveCommand(name: String) : VanillaCommand(name, "Save the server (levels and players)") {
     init {
-        this.permission = "nukkit.command.save.perform"
+        this.permission = "chorus.command.save.perform"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
         this.enableParamTree()

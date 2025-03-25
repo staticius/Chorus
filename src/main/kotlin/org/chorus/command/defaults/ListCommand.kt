@@ -11,7 +11,7 @@ import kotlin.collections.set
 
 class ListCommand(name: String) : VanillaCommand(name, "commands.list.description") {
     init {
-        this.permission = "nukkit.command.list"
+        this.permission = "chorus.command.list"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
         this.enableParamTree()

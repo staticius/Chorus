@@ -9,7 +9,7 @@ import kotlin.collections.set
 
 class SaveOffCommand(name: String) : VanillaCommand(name, "Disable auto saving") {
     init {
-        this.permission = "nukkit.command.save.disable"
+        this.permission = "chorus.command.save.disable"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
         this.enableParamTree()

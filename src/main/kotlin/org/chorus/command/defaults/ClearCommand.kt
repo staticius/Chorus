@@ -16,7 +16,7 @@ import kotlin.math.min
 
 class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.description", "commands.clear.usage") {
     init {
-        this.permission = "nukkit.command.clear"
+        this.permission = "chorus.command.clear"
         commandParameters.clear()
         this.addCommandParameters(
             "default", arrayOf(

@@ -21,7 +21,7 @@ import kotlin.collections.set
 
 class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.description", "%commands.banip.usage") {
     init {
-        this.permission = "nukkit.command.ban.ip"
+        this.permission = "chorus.command.ban.ip"
         this.aliases = arrayOf("banip")
         commandParameters.clear()
         commandParameters["default"] = arrayOf(

@@ -12,7 +12,7 @@ import kotlin.collections.set
 
 class DefaultGamemodeCommand(name: String) : VanillaCommand(name, "commands.defaultgamemode.description") {
     init {
-        this.permission = "nukkit.command.defaultgamemode"
+        this.permission = "chorus.command.defaultgamemode"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("gameMode", CommandParamType.INT)

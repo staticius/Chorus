@@ -9,9 +9,9 @@ import org.chorus.lang.TranslationContainer
 import org.chorus.utils.TextFormat
 import kotlin.collections.set
 
-class MeCommand(name: String) : VanillaCommand(name, "commands.me.description", "nukkit.command.me.usage") {
+class MeCommand(name: String) : VanillaCommand(name, "commands.me.description", "chorus.command.me.usage") {
     init {
-        this.permission = "nukkit.command.me"
+        this.permission = "chorus.command.me"
         commandParameters.clear()
         commandParameters["message"] = arrayOf(
             CommandParameter.Companion.newType("message", CommandParamType.MESSAGE)

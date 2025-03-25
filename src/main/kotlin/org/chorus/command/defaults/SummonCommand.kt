@@ -13,7 +13,7 @@ import org.chorus.registry.Registries
 
 class SummonCommand(name: String) : VanillaCommand(name, "commands.summon.description") {
     init {
-        this.permission = "nukkit.command.summon"
+        this.permission = "chorus.command.summon"
         commandParameters.clear()
         val entity_key: MutableList<String> = ArrayList()
         for (key in Registries.ENTITY.knownEntities.keys) {

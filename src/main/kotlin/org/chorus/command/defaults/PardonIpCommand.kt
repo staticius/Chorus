@@ -14,7 +14,7 @@ import kotlin.collections.set
 
 class PardonIpCommand(name: String) : VanillaCommand(name, "unban an IP") {
     init {
-        this.permission = "nukkit.command.unban.ip"
+        this.permission = "chorus.command.unban.ip"
         this.aliases = arrayOf("unbanip", "unban-ip", "pardonip")
         commandParameters.clear()
         commandParameters["default"] = arrayOf(

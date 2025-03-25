@@ -16,7 +16,7 @@ class PluginsCommand(name: String) : Command(
     arrayOf<String>("pl")
 ), CoreCommand {
     init {
-        this.permission = "nukkit.command.plugins"
+        this.permission = "chorus.command.plugins"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
         this.enableParamTree()
@@ -42,6 +42,6 @@ class PluginsCommand(name: String) : Command(
             list.append(if (plugin.isEnabled) TextFormat.GREEN else TextFormat.RED)
             list.append(plugin.description.fullName)
         }
-        log.addMessage("nukkit.command.plugins.success", plugins.size.toString(), list.toString()).output()
+        log.addMessage("chorus.command.plugins.success", plugins.size.toString(), list.toString()).output()
     }
 }

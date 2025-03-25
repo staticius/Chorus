@@ -11,7 +11,7 @@ import kotlin.collections.set
 
 class WeatherCommand(name: String) : VanillaCommand(name, "commands.weather.description", "commands.weather.usage") {
     init {
-        this.permission = "nukkit.command.weather"
+        this.permission = "chorus.command.weather"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newEnum("type", CommandEnum("WeatherType", "clear", "rain", "thunder")),

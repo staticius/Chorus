@@ -11,7 +11,7 @@ import kotlin.collections.set
 
 class SeedCommand(name: String) : VanillaCommand(name, "Show the level's seed") {
     init {
-        this.permission = "nukkit.command.seed"
+        this.permission = "chorus.command.seed"
         commandParameters.clear()
         commandParameters["default"] = CommandParameter.EMPTY_ARRAY
         this.enableParamTree()

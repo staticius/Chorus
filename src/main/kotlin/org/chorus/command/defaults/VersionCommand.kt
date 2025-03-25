@@ -109,7 +109,7 @@ class VersionCommand(name: String) : Command(
     }
 
     init {
-        this.permission = "nukkit.command.version"
+        this.permission = "chorus.command.version"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newType("pluginName", true, CommandParamType.STRING)
@@ -123,7 +123,7 @@ class VersionCommand(name: String) : Command(
         if (args.size == 0) {
             sender.sendMessage(
                 TranslationContainer(
-                    "nukkit.server.info.extended", Server.instance.name,
+                    "chorus.server.info.extended", Server.instance.name,
                     Server.instance.nukkitVersion + " (" + Server.instance.gitCommit + ")",
                     Server.instance.apiVersion,
                     Server.instance.version,
@@ -168,7 +168,7 @@ class VersionCommand(name: String) : Command(
                     sender.sendMessage("Authors: " + java.lang.String.join(", ", authors))
                 }
             } else {
-                sender.sendMessage(TranslationContainer("nukkit.command.version.noSuchPlugin"))
+                sender.sendMessage(TranslationContainer("chorus.command.version.noSuchPlugin"))
             }
         }
         return true

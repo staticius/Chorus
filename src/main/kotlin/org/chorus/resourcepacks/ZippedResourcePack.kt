@@ -28,7 +28,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
 
     init {
         require(file.exists()) {
-            Server.instance.baseLang.tr("nukkit.resources.zip.not-found", file.name)
+            Server.instance.baseLang.tr("chorus.resources.zip.not-found", file.name)
         }
 
         this.file = file
@@ -65,7 +65,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
 
         require(this.verifyManifest()) {
             Server.instance.baseLang
-                .tr("nukkit.resources.zip.invalid-manifest")
+                .tr("chorus.resources.zip.invalid-manifest")
         }
     }
 
@@ -85,7 +85,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
                 .findFirst()
                 .orElseThrow {
                     IllegalArgumentException(
-                        Server.instance.baseLang.tr("nukkit.resources.zip.no-manifest")
+                        Server.instance.baseLang.tr("chorus.resources.zip.no-manifest")
                     )
                 }
         }

@@ -12,7 +12,7 @@ import kotlin.math.min
 
 class HelpCommand(name: String) : VanillaCommand(name, "commands.help.description", "%commands.help.usage", arrayOf<String>("?")) {
     init {
-        this.permission = "nukkit.command.help"
+        this.permission = "chorus.command.help"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.newType("page", true, CommandParamType.INT)

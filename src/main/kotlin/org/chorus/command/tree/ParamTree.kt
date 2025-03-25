@@ -31,7 +31,7 @@ class ParamTree {
      * <pre>
      * public TestCommand(String name) {
      * super(name, description, usage, aliases);
-     * this.setPermission("nukkit.command.test");
+     * this.setPermission("chorus.command.test");
      * this.commandParameters.clear();
      * this.commandParameters.put("pos", new CommandParameter[]{
      * CommandParameter.newType("destination", CommandParamType.POSITION)

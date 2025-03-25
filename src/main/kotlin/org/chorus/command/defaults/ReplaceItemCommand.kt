@@ -17,7 +17,7 @@ import kotlin.collections.set
 
 class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replaceitem.description") {
     init {
-        this.permission = "nukkit.command.replaceitem"
+        this.permission = "chorus.command.replaceitem"
         commandParameters.clear()
         commandParameters["block"] = arrayOf(
             CommandParameter.Companion.newEnum("block", false, arrayOf("block")),

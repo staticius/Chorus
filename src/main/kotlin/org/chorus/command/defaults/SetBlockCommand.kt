@@ -14,7 +14,7 @@ import kotlin.collections.set
 
 class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.description") {
     init {
-        this.permission = "nukkit.command.setblock"
+        this.permission = "chorus.command.setblock"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
             CommandParameter.newType("position", CommandParamType.POSITION),
