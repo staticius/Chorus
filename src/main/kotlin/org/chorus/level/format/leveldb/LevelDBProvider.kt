@@ -3,7 +3,6 @@ package org.chorus.level.format.leveldb
 import io.netty.buffer.ByteBufAllocator
 import io.netty.buffer.ByteBufOutputStream
 import it.unimi.dsi.fastutil.Pair
-import org.chorus.api.UsedByReflection
 import org.chorus.blockentity.BlockEntitySpawnable
 import org.chorus.level.*
 import org.chorus.level.format.*
@@ -532,7 +531,6 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
         val CACHE: HashMap<String, LevelDBStorage> = HashMap()
         private val levelDatMagic = byteArrayOf(10, 0, 0, 0, 68, 11, 0, 0)
 
-        @UsedByReflection
         @Throws(IOException::class)
         fun generate(path: String, name: String, generatorConfig: GeneratorConfig) {
             val dataDir = File("$path/db")
@@ -546,7 +544,6 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
             writeLevelDat(path, generatorConfig.dimensionData, levelData)
         }
 
-        @UsedByReflection
         fun isValid(path: String?): Boolean {
             val isValid = (File(path, "level.dat").exists()) && File(path, "db").isDirectory
             if (isValid) {

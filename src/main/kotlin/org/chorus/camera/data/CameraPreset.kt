@@ -2,7 +2,6 @@ package org.chorus.camera.data
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.api.DoNotModify
 import org.chorus.command.data.CommandEnum
 import org.chorus.math.Vector2f
 import org.chorus.math.Vector3f
@@ -94,7 +93,6 @@ class CameraPreset @JvmOverloads constructor(
         private val PRESETS: MutableMap<String, CameraPreset> = TreeMap()
 
         @JvmStatic
-        @get:DoNotModify
         val presets: Map<String, CameraPreset>
             get() = PRESETS
 

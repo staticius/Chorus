@@ -3,7 +3,6 @@ package org.chorus.inventory
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import org.chorus.Player
-import org.chorus.api.DoNotModify
 import org.chorus.item.Item
 import org.chorus.network.protocol.InventorySlotPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
@@ -42,7 +41,6 @@ interface Inventory {
      * @return the item
      */
     @ApiStatus.Internal
-    @DoNotModify
     fun getUnclonedItem(index: Int): Item {
         //你需要覆写它来实现
         return getItem(index)

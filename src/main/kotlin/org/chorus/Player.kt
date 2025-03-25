@@ -9,7 +9,6 @@ import com.google.common.collect.HashBiMap
 import com.google.common.collect.Sets
 import io.netty.util.internal.EmptyArrays
 import io.netty.util.internal.PlatformDependent
-import org.chorus.api.UsedByReflection
 import org.chorus.block.*
 import org.chorus.block.customblock.CustomBlock
 import org.chorus.block.property.CommonBlockProperties
@@ -107,7 +106,7 @@ import kotlin.math.*
 /**
  * Game player object, representing the controlled character
  */
-class Player @UsedByReflection constructor(
+class Player constructor(
     val session: BedrockSession,
     val playerInfo: PlayerInfo
 ) :

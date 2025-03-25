@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions
 import it.unimi.dsi.fastutil.longs.*
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.api.NonComputationAtomic
 import org.chorus.block.*
 import org.chorus.block.customblock.CustomBlock
 import org.chorus.block.property.CommonBlockProperties
@@ -102,18 +101,13 @@ class Level(
     generatorConfig: GeneratorConfig
 ) :
     Metadatable, Loggable {
-    @NonComputationAtomic
-    val updateEntities: ConcurrentHashMap<Long, Entity> = ConcurrentHashMap()
-
-    @NonComputationAtomic
+    val players = ConcurrentHashMap<Long, Player>()
+    val entities = ConcurrentHashMap<Long, Entity>()
     val blockEntities = ConcurrentHashMap<Long, BlockEntity>()
 
-    @NonComputationAtomic
-    val players = ConcurrentHashMap<Long, Player>()
+    val updateEntities = ConcurrentHashMap<Long, Entity>()
+    private val updateBlockEntities = ConcurrentLinkedQueue<BlockEntity>()
 
-    @NonComputationAtomic
-    val entities = ConcurrentHashMap<Long, Entity>()
-    private val updateBlockEntities: ConcurrentLinkedQueue<BlockEntity> = ConcurrentLinkedQueue<BlockEntity>()
     private val chunkGenerationQueue = ConcurrentHashMap<Long, Boolean?>()
     private var chunkGenerationQueueSize = 8
     val id: Int = levelIdCounter++
@@ -130,7 +124,6 @@ class Level(
     // Computation atomicity may be required in addChunkPacket(int, int, DataPacket)
     private val chunkPackets = ConcurrentHashMap<Long, Deque<DataPacket>>()
 
-    @NonComputationAtomic
     private val unloadQueue = ConcurrentHashMap<Long, Long>()
     private val tickCachedBlocks = ConcurrentHashMap<Long, TickCachedBlockStore>()
     private val highLightChunks: MutableSet<Long> = HashSet()
@@ -150,7 +143,6 @@ class Level(
     private val updateQueue: BlockUpdateScheduler
     private val normalUpdateQueue: Queue<QueuedUpdate> = ConcurrentLinkedDeque()
 
-    @NonComputationAtomic
     private val chunkSendQueue: ConcurrentHashMap<Long, ConcurrentHashMap<Int, Player>> = ConcurrentHashMap()
 
     private val chunkTickList: MutableMap<Long, Int> = HashMap()
@@ -2975,10 +2967,10 @@ class Level(
     }
 
     fun getNearbyEntities(bb: AxisAlignedBB, entity: Entity?, loadChunks: Boolean): List<Entity> {
-        val minX = floor((bb.minX - 2) * 0.0625)
-        val maxX = ceil((bb.maxX + 2) * 0.0625)
-        val minZ = floor((bb.minZ - 2) * 0.0625)
-        val maxZ = ceil((bb.maxZ + 2) * 0.0625)
+        val minX = floor((bb.minX - 2) * 0.0625).toInt()
+        val maxX = ceil((bb.maxX + 2) * 0.0625).toInt()
+        val minZ = floor((bb.minZ - 2) * 0.0625).toInt()
+        val maxZ = ceil((bb.maxZ + 2) * 0.0625).toInt()
 
         val result: MutableList<Entity> = mutableListOf()
         for (x in minX..maxX) {
@@ -2993,7 +2985,6 @@ class Level(
         return result
     }
 
-    @NonComputationAtomic
     fun getBlockEntities(): Map<Long, BlockEntity> {
         return blockEntities
     }
@@ -3002,7 +2993,6 @@ class Level(
         return if (blockEntities.containsKey(blockEntityId)) blockEntities[blockEntityId] else null
     }
 
-    @NonComputationAtomic
     fun getPlayers(): Map<Long, Player> {
         return players
     }

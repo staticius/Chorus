@@ -1,6 +1,5 @@
 package org.chorus.math
 
-import org.chorus.api.DoNotModify
 import org.chorus.level.Transform
 
 /**
@@ -21,9 +20,7 @@ class BVector3 {
      *
      * the unit vector of a vector
      */
-    @get:DoNotModify
-    var unclonedDirectionVector: Vector3? //标准化的方向向量,模长为1
-        private set
+    private var unclonedDirectionVector: Vector3 //标准化的方向向量,模长为1
     var yaw: Double //-90 270
         private set
     var pitch: Double //-90 90
@@ -75,7 +72,7 @@ class BVector3 {
     fun setYaw(yaw: Double): BVector3 {
         this.unclonedDirectionVector = getDirectionVector(yaw, this.pitch)
         //重新计算在范围内的等价yaw值
-        this.yaw = getYawFromVector(unclonedDirectionVector!!)
+        this.yaw = getYawFromVector(unclonedDirectionVector)
         return this
     }
 
