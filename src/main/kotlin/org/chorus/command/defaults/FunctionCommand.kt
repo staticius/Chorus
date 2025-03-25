@@ -30,7 +30,7 @@ class FunctionCommand(name: String) : VanillaCommand(name, "commands.function.de
     ): Int {
         val list = result.value
         if (result.key == "default") {
-            val file = list!!.getResult<String>(0)
+            val file = list.getResult<String>(0)!!
             val function = Server.instance.functionManager.getFunction(file)
             if (function == null) {
                 log.addError("commands.function.functionNameNotFound", file).output()

@@ -1,22 +1,20 @@
 package org.chorus.command.defaults
 
 import org.chorus.Player
-import org.chorus.camera.instruction.impl.ClearInstruction.get
+import org.chorus.block.BlockUnknown
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
+import org.chorus.command.data.GenericParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.tree.node.RemainStringNode
 import org.chorus.command.utils.CommandLogger
 import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import java.util.stream.Collectors
 import kotlin.math.min
 
-/**
- * @author xtypr
- * @since 2015/12/9
- */
 class GiveCommand(name: String) : VanillaCommand(name, "commands.give.description") {
     init {
         this.permission = "nukkit.command.give"
@@ -38,7 +36,7 @@ class GiveCommand(name: String) : VanillaCommand(name, "commands.give.descriptio
         log: CommandLogger
     ): Int {
         val list = result.value
-        val players = list!!.getResult<List<Player>>(0)!!
+        val players = list.getResult<List<Player>>(0)!!
 
         if (players.isEmpty()) {
             log.addNoTargetMatch().output()
@@ -50,7 +48,7 @@ class GiveCommand(name: String) : VanillaCommand(name, "commands.give.descriptio
             log.addError("commands.give.item.notFound", item.displayName).output()
             return 0
         }
-        if (item is ItemBlock && item.block is BlockUnknown) {
+        if (item is ItemBlock && item.getBlock() is BlockUnknown) {
             log.addError("commands.give.block.notFound", item.displayName).output()
             return 0
         }
@@ -69,7 +67,7 @@ class GiveCommand(name: String) : VanillaCommand(name, "commands.give.descriptio
         }
         if (list.hasResult(4)) {
             val json = list.getResult<String>(4)
-            val components: ItemJsonComponents = Item.ItemJsonComponents.fromJson(json)
+            val components = Item.ItemJsonComponents.fromJson(json)
             item.readItemJsonComponents(components)
         }
 

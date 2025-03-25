@@ -5,6 +5,7 @@ import org.chorus.block.BlockID
 import org.chorus.inventory.ChestInventory
 import org.chorus.inventory.ContainerInventory
 import org.chorus.inventory.DoubleChestInventory
+import org.chorus.inventory.Inventory
 import org.chorus.level.format.IChunk
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
@@ -50,7 +51,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     val size: Int
         get() = if (this.doubleInventory != null) doubleInventory!!.size else inventory.size
 
-    override var inventory: ContainerInventory = super.inventory
+    override var inventory: Inventory = super.inventory
         get() {
             if (this.doubleInventory == null && this.isPaired) {
                 this.checkPairing()

@@ -6,6 +6,7 @@ import org.chorus.block.BlockCampfire
 import org.chorus.block.BlockID
 import org.chorus.event.inventory.CampfireSmeltEvent
 import org.chorus.inventory.CampfireInventory
+import org.chorus.inventory.Inventory
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.level.format.IChunk
@@ -16,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom
 
 class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
-    override lateinit var inventory: CampfireInventory
+    override lateinit var inventory: Inventory
     private lateinit var burnTime: IntArray
     private lateinit var recipes: Array<CampfireRecipe?>
     private lateinit var keepItem: BooleanArray

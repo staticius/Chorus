@@ -10,6 +10,8 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
+import org.chorus.level.Sound
+import org.chorus.network.protocol.PlaySoundPacket
 import java.util.*
 
 class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.description") {
@@ -22,11 +24,8 @@ class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.
                 CommandParameter.Companion.newEnum(
                     "sound",
                     false,
-                    CommandEnum(
-                        "sound",
-                        Arrays.stream<Sound>(Sound.entries.toTypedArray()).map<String> { obj: Sound -> obj.getSound() }
-                            .toList(),
-                        true)),
+                    CommandEnum("sound", Sound.entries.map { it.sound }.toList(), true)
+                ),
                 CommandParameter.Companion.newType("player", true, CommandParamType.TARGET, PlayersNode()),
                 CommandParameter.Companion.newType("position", true, CommandParamType.POSITION),
                 CommandParameter.Companion.newType("volume", true, CommandParamType.FLOAT),
@@ -43,7 +42,7 @@ class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.
         log: CommandLogger
     ): Int {
         val list = result.value
-        val sound = list!!.getResult<String>(0)
+        val sound = list.getResult<String>(0)!!
         var targets: List<Player>? = null
         var locator: Locator? = null
         var volume = 1f
@@ -59,23 +58,23 @@ class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.
             return 0
         }
 
-        if (targets == null || targets.isEmpty()) {
+        if (targets.isNullOrEmpty()) {
             if (sender.isPlayer) {
-                targets = Lists.newArrayList(sender.asPlayer())
+                targets = listOf(sender.asPlayer()!!)
             } else {
                 log.addError("commands.generic.noTargetMatch").output()
                 return 0
             }
         }
         if (locator == null) {
-            locator = targets!![0].getLocator()
+            locator = targets[0].getLocator()
         }
 
         val maxDistance = (if (volume > 1) volume * 16 else 16f).toDouble()
 
-        val successes: MutableList<String> = Lists.newArrayList()
-        for (player in targets!!) {
-            val name = player.name
+        val successes: MutableList<String> = mutableListOf()
+        for (player in targets) {
+            val name = player.name!!
             val packet: PlaySoundPacket = PlaySoundPacket()
             if (locator.position.distance(player.position) > maxDistance) {
                 if (minimumVolume <= 0) {

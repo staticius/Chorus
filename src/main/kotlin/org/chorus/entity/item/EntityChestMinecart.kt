@@ -24,7 +24,7 @@ class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbst
         return EntityID.Companion.CHEST_MINECART
     }
 
-    protected var inventory: MinecartChestInventory? = null
+    protected var inventory: Inventory = null
 
     init {
         setDisplayBlock(Block.get(Block.CHEST), false)

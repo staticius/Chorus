@@ -39,20 +39,20 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
         log: CommandLogger
     ): Int {
         val list = result.value
-        val targets = list!!.getResult<List<Player>>(0)!!
+        val targets = list.getResult<List<Player>>(0)!!
         if (targets.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
         }
         when (result.key) {
             "push" -> {
-                val fogIdStr = list.getResult<String>(2)
+                val fogIdStr = list.getResult<String>(2)!!
                 val fogId = Identifier.tryParse(fogIdStr)
                 if (fogId == null) {
                     log.addError("commands.fog.invalidFogId", fogIdStr).output()
                     return 0
                 }
-                val userProvidedId = list.getResult<String>(3)
+                val userProvidedId = list.getResult<String>(3)!!
                 val fog = PlayerFogPacket.Fog(fogId, userProvidedId)
                 targets.forEach(Consumer<Player> { player: Player ->
                     player.fogStack.add(fog)
@@ -64,11 +64,11 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
 
             "delete" -> {
                 val mode = list.getResult<String>(1)
-                val userProvidedId = list.getResult<String>(2)
+                val userProvidedId = list.getResult<String>(2)!!
                 val success = AtomicInteger(1)
                 when (mode) {
                     "pop" -> {
-                        targets.forEach(Consumer<Player> { player: Player ->
+                        targets.forEach(Consumer forEach@{ player: Player ->
                             val fogStack = player.fogStack
                             for (i in fogStack.indices.reversed()) {
                                 val fog = fogStack[i]

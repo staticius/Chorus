@@ -864,20 +864,19 @@ abstract class Enchantment : Cloneable {
          * @return the enchantment
          */
         @JvmStatic
-        fun getEnchantment(name: String): Enchantment {
+        fun getEnchantment(name: String): Enchantment? {
             return if (Identifier.isValid(name)) {
                 namedEnchantments[Identifier.tryParse(
                     name
-                )]!!
-                    .clone()
+                )]?.clone()
             } else namedEnchantments[Identifier(
                 Identifier.DEFAULT_NAMESPACE,
                 name
-            )]!!.clone()
+            )]?.clone()
         }
 
-        fun getEnchantment(name: Identifier): Enchantment {
-            return namedEnchantments[name]!!.clone()
+        fun getEnchantment(name: Identifier): Enchantment? {
+            return namedEnchantments[name]?.clone()
         }
 
         /**

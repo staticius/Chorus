@@ -45,14 +45,13 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
         }
         when (result.key) {
             "default" -> {
-                val effect: Effect
                 val str = list.getResult<String>(1)!!
-                try {
-                    effect = Effect.get(str)!!
-                } catch (e: RuntimeException) {
+
+                val effect: Effect = Effect.get(str) ?: run {
                     log.addError("commands.effect.notFound", str).output()
                     return 0
                 }
+
                 var duration = 300
                 var amplification = 0
                 if (list.hasResult(2)) {

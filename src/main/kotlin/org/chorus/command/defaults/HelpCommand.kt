@@ -1,5 +1,6 @@
 package org.chorus.command.defaults
 
+import org.chorus.Server
 import org.chorus.command.*
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
@@ -9,15 +10,14 @@ import kotlin.collections.set
 import kotlin.math.min
 
 
-class HelpCommand(name: String) :
-    VanillaCommand(name, "commands.help.description", "%commands.help.usage", arrayOf<String>("?")) {
+class HelpCommand(name: String) : VanillaCommand(name, "commands.help.description", "%commands.help.usage", arrayOf<String>("?")) {
     init {
         this.permission = "nukkit.command.help"
         commandParameters.clear()
         commandParameters["default"] = arrayOf(
-            CommandParameter.Companion.newType("page", true, CommandParamType.INT)
+            CommandParameter.newType("page", true, CommandParamType.INT)
         )
-        this.serverSideOnly = true
+        this.isServerSideOnly = true
     }
 
     override fun execute(sender: CommandSender, commandLabel: String?, args: Array<String?>): Boolean {
@@ -65,7 +65,7 @@ class HelpCommand(name: String) :
         }
 
         if (command.toString() == "") {
-            val commands: MutableMap<String?, Command> = TreeMap<String, Command>()
+            val commands: MutableMap<String?, Command> = mutableMapOf()
             for (cmd in Server.instance.commandMap.commands.values) {
                 if (cmd.testPermissionSilent(sender)) {
                     commands[cmd.name] = cmd

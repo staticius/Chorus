@@ -10,7 +10,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.event.player.PlayerKickEvent
 import kotlin.collections.set
 
-
 class KickCommand(name: String) : VanillaCommand(name, "commands.kick.description") {
     init {
         this.permission = "nukkit.command.kick"
@@ -34,17 +33,17 @@ class KickCommand(name: String) : VanillaCommand(name, "commands.kick.descriptio
             log.addNoTargetMatch().output()
             return 0
         }
-        var reason: String? = ""
+        var reason = ""
         if (list.hasResult(1)) {
-            reason = list.getResult(1)
+            reason = list.getResult(1)!!
         }
 
         for (player in players) {
             player.kick(PlayerKickEvent.Reason.KICKED_BY_ADMIN, reason)
-            if (reason!!.length >= 1) {
-                log.addSuccess("commands.kick.success.reason", player.name, reason.toString())
+            if (reason.isNotEmpty()) {
+                log.addSuccess("commands.kick.success.reason", player.getName(), reason.toString())
             } else {
-                log.addSuccess("commands.kick.success", player.name)
+                log.addSuccess("commands.kick.success", player.getName())
             }
         }
         log.successCount(players.size).output(true)

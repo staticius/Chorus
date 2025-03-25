@@ -26,7 +26,7 @@ import org.chorus.registry.Registries
 class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     RecipeInventoryHolder,
     BlockEntityInventoryHolder {
-    override lateinit var inventory: BrewingInventory
+    override lateinit var inventory: Inventory
 
     var brewTime: Int = 0
     var fuelTotal: Int = 0

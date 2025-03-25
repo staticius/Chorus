@@ -10,6 +10,8 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
+import org.chorus.level.generator.`object`.BlockManager
+import org.chorus.level.particle.DestroyBlockParticle
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.utils.Utils
@@ -55,12 +57,11 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
         log: CommandLogger
     ): Int {
         val list = result.value
-        val from = list!!.getResult<Locator>(0)
+        val from = list.getResult<Locator>(0)
         val to = list.getResult<Locator>(1)
         val b = list.getResult<Block>(2)
         var tileState = b!!.properties.defaultState
         var oldBlockHandling = FillMode.REPLACE
-        var replaceState: BlockState? = null
 
         val aabb: AxisAlignedBB = SimpleAxisAlignedBB(
             min(from!!.x, to!!.x), min(from.y, to.y), min(
@@ -97,7 +98,7 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
         val blockManager: BlockManager = BlockManager(level)
         when (result.key) {
             "default" -> {
-                if (list.hasResult(3)) tileState = list.getResult(3)
+                if (list.hasResult(3)) tileState = list.getResult(3)!!
                 if (list.hasResult(4)) {
                     val str = list.getResult<String>(4)
                     oldBlockHandling = FillMode.valueOf(str!!.uppercase())
@@ -208,8 +209,8 @@ class FillCommand(name: String) : VanillaCommand(name, "commands.fill.descriptio
 
             "replace" -> {
                 val replaceBlock = list.getResult<Block>(5)
-                replaceState = if (list.hasResult(6)) {
-                    list.getResult(6)
+                val replaceState = if (list.hasResult(6)) {
+                    list.getResult(6)!!
                 } else {
                     replaceBlock!!.properties.defaultState
                 }

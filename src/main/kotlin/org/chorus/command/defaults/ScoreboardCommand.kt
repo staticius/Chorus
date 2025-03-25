@@ -2,12 +2,8 @@ package org.chorus.command.defaults
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.camera.instruction.impl.ClearInstruction.get
 import org.chorus.command.CommandSender
-import org.chorus.command.data.CommandEnum
-import org.chorus.command.data.CommandParamOption
-import org.chorus.command.data.CommandParamType
-import org.chorus.command.data.CommandParameter
+import org.chorus.command.data.*
 import org.chorus.command.exceptions.SelectorSyntaxException
 import org.chorus.command.selector.EntitySelectorAPI
 import org.chorus.command.tree.ParamList
@@ -15,7 +11,11 @@ import org.chorus.command.tree.node.WildcardIntNode
 import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.scoreboard.IScoreboard
+import org.chorus.scoreboard.Scoreboard
+import org.chorus.scoreboard.ScoreboardLine
+import org.chorus.scoreboard.data.DisplaySlot
 import org.chorus.scoreboard.data.SortOrder
+import org.chorus.scoreboard.manager.IScoreboardManager
 import org.chorus.scoreboard.scorer.EntityScorer
 import org.chorus.scoreboard.scorer.FakeScorer
 import org.chorus.scoreboard.scorer.IScorer
@@ -280,17 +280,17 @@ class ScoreboardCommand(name: String) :
         try {
             when (result.key) {
                 "objectives-add" -> {
-                    val objectiveName = list.getResult<String>(2)
+                    val objectiveName = list.getResult<String>(2)!!
                     if (manager.containScoreboard(objectiveName)) {
                         log.addError("commands.scoreboard.objectives.add.alreadyExists", objectiveName).output()
                         return 0
                     }
-                    val criteriaName = list.getResult<String>(3)
+                    val criteriaName = list.getResult<String>(3)!!
                     if (list.hasResult(4)) {
                         manager.addScoreboard(
                             Scoreboard(
                                 objectiveName,
-                                list.getResult<String>(4),
+                                list.getResult<String>(4)!!,
                                 criteriaName,
                                 SortOrder.ASCENDING
                             )
@@ -312,14 +312,14 @@ class ScoreboardCommand(name: String) :
                 "objectives-list" -> {
                     log.addSuccess(
                         TextFormat.GREEN.toString() + "%commands.scoreboard.objectives.list.count",
-                        manager.getScoreboards().size.toString()
+                        manager.scoreboards.size.toString()
                     )
-                    for (scoreboard in manager.getScoreboards().values) {
+                    for (scoreboard in manager.scoreboards.values) {
                         log.addSuccess(
                             "commands.scoreboard.objectives.list.entry",
                             scoreboard.objectiveName,
-                            scoreboard.displayName,
-                            scoreboard.criteriaName
+                            scoreboard.displayName!!,
+                            scoreboard.criteriaName!!
                         )
                     }
                     log.output(true)
@@ -327,7 +327,7 @@ class ScoreboardCommand(name: String) :
                 }
 
                 "objectives-remove" -> {
-                    val objectiveName = list.getResult<String>(2)
+                    val objectiveName = list.getResult<String>(2)!!
                     if (!manager.containScoreboard(objectiveName)) {
                         log.addError("commands.scoreboard.objectiveNotFound", objectiveName).output()
                         return 0
@@ -348,15 +348,16 @@ class ScoreboardCommand(name: String) :
 
                     if (!list.hasResult(3)) {
                         manager.setDisplay(slot, null)
-                        log.addSuccess("commands.scoreboard.objectives.setdisplay.successCleared", slot.getSlotName())
+                        log.addSuccess("commands.scoreboard.objectives.setdisplay.successCleared", slot.slotName)
                             .output()
                     } else {
-                        val objectiveName = list.getResult<String>(3)
-                        if (!manager.containScoreboard(objectiveName)) {
+                        val objectiveName = list.getResult<String>(3)!!
+
+                        val scoreboard = manager.scoreboards[objectiveName] ?: run {
                             log.addError("commands.scoreboard.objectiveNotFound", objectiveName).output()
                             return 0
                         }
-                        val scoreboard: IScoreboard = manager.getScoreboards().get(objectiveName)
+
                         val orderName = list.getResult<String>(4)
                         val order = if (list.hasResult(4)) when (orderName) {
                             "ascending" -> SortOrder.ASCENDING
@@ -367,7 +368,7 @@ class ScoreboardCommand(name: String) :
                         manager.setDisplay(slot, scoreboard)
                         log.addSuccess(
                             "commands.scoreboard.objectives.setdisplay.successSet",
-                            slot.getSlotName(),
+                            slot.slotName,
                             objectiveName
                         ).output()
                     }
@@ -379,11 +380,11 @@ class ScoreboardCommand(name: String) :
                         manager.setDisplay(DisplaySlot.BELOW_NAME, null)
                         log.addSuccess(
                             "commands.scoreboard.objectives.setdisplay.successCleared",
-                            DisplaySlot.BELOW_NAME.getSlotName()
+                            DisplaySlot.BELOW_NAME.slotName
                         ).output()
                         return 1
                     } else {
-                        val objectiveName = list.getResult<String>(3)
+                        val objectiveName = list.getResult<String>(3)!!
                         if (!manager.containScoreboard(objectiveName)) {
                             log.addError("commands.scoreboard.objectiveNotFound", objectiveName).output()
                             return 0
@@ -391,7 +392,7 @@ class ScoreboardCommand(name: String) :
                         manager.setDisplay(DisplaySlot.BELOW_NAME, manager.getScoreboard(objectiveName))
                         log.addSuccess(
                             "commands.scoreboard.objectives.setdisplay.successSet",
-                            DisplaySlot.BELOW_NAME.getSlotName(),
+                            DisplaySlot.BELOW_NAME.slotName,
                             objectiveName
                         ).output()
                         return 1
@@ -403,7 +404,7 @@ class ScoreboardCommand(name: String) :
                 }
 
                 "players-list" -> {
-                    if (manager.getScoreboards().isEmpty()) {
+                    if (manager.scoreboards.isEmpty()) {
                         log.addError("commands.scoreboard.players.list.empty").output()
                         return 0
                     }
@@ -417,7 +418,7 @@ class ScoreboardCommand(name: String) :
                         for (scorer in scorers) {
                             var find = false
                             var count = 0
-                            for (scoreboard in manager.getScoreboards().values) {
+                            for (scoreboard in manager.scoreboards.values) {
                                 if (scoreboard.lines.containsKey(scorer)) {
                                     find = true
                                     count++
@@ -432,11 +433,11 @@ class ScoreboardCommand(name: String) :
                                 count.toString(),
                                 scorer.name
                             )
-                            for (scoreboard in manager.getScoreboards().values) {
+                            for (scoreboard in manager.scoreboards.values) {
                                 if (scoreboard.lines.containsKey(scorer)) {
                                     log.addSuccess(
                                         "commands.scoreboard.players.list.player.entry", scoreboard.lines[scorer]!!
-                                            .score.toString(), scoreboard.displayName, scoreboard.objectiveName
+                                            .score.toString(), scoreboard.displayName!!, scoreboard.objectiveName
                                     )
                                 }
                             }
@@ -445,17 +446,15 @@ class ScoreboardCommand(name: String) :
                         return 1
                     } else {
                         val scorerNames: MutableSet<String> = LinkedHashSet()
-                        manager.getScoreboards().values.forEach(
-                            Consumer<IScoreboard> { scoreboard: IScoreboard ->
+                        manager.scoreboards.values.forEach { scoreboard: IScoreboard ->
                                 scoreboard.lines.values.forEach(
-                                    Consumer<IScoreboardLine> { line: IScoreboardLine ->
+                                    Consumer { line ->
                                         scorerNames.add(
-                                            TextFormat.WHITE.toString() + line.getScorer().getName()
+                                            TextFormat.WHITE.toString() + line.scorer.name
                                         )
                                     }
                                 )
                             }
-                        )
                         log.addSuccess(
                             TextFormat.GREEN.toString() + "%commands.scoreboard.players.list.count",
                             scorerNames.size.toString()
@@ -477,12 +476,13 @@ class ScoreboardCommand(name: String) :
                         log.addNoTargetMatch().output()
                         return 0
                     }
-                    val objectiveName = list.getResult<String>(3)
-                    if (!manager.containScoreboard(objectiveName)) {
+                    val objectiveName = list.getResult<String>(3)!!
+
+                    val scoreboard = manager.scoreboards[objectiveName] ?: run {
                         log.addError("commands.scoreboard.objectiveNotFound", objectiveName).output()
                         return 0
                     }
-                    val scoreboard: IScoreboard = manager.getScoreboards().get(objectiveName)
+
                     val min = list.getResult<Long>(4)!!
                     val max = list.getResult<Long>(5)!!
                     if (min > max) {
@@ -517,12 +517,13 @@ class ScoreboardCommand(name: String) :
                         return 0
                     }
                     if (list.hasResult(3)) {
-                        val objectiveName = list.getResult<String>(3)
-                        if (!manager.containScoreboard(objectiveName)) {
+                        val objectiveName = list.getResult<String>(3)!!
+
+                        val scoreboard: IScoreboard = manager.scoreboards[objectiveName] ?: run {
                             log.addError("commands.scoreboard.objectiveNotFound", objectiveName).output()
                             return 0
                         }
-                        val scoreboard: IScoreboard = manager.getScoreboards().get(objectiveName)
+
                         for (scorer in scorers) {
                             if (scoreboard.containLine(scorer)) {
                                 scoreboard.removeLine(scorer)
@@ -536,7 +537,7 @@ class ScoreboardCommand(name: String) :
                         log.output()
                         return 1
                     } else {
-                        for (scoreboard in manager.getScoreboards().values) {
+                        for (scoreboard in manager.scoreboards.values) {
                             for (scorer in scorers) {
                                 if (scoreboard.containLine(scorer)) {
                                     scoreboard.removeLine(scorer)
@@ -560,25 +561,26 @@ class ScoreboardCommand(name: String) :
                         log.addNoTargetMatch().output()
                         return 0
                     }
-                    val objectiveName = list.getResult<String>(3)
-                    if (!manager.containScoreboard(objectiveName)) {
+                    val objectiveName = list.getResult<String>(3)!!
+
+                    val scoreboard: IScoreboard = manager.scoreboards[objectiveName] ?: run {
                         log.addError("commands.scoreboard.objectiveNotFound", objectiveName).output()
                         return 0
                     }
-                    val scoreboard: IScoreboard = manager.getScoreboards().get(objectiveName)
+
                     val min = list.getResult<Int>(4)!!
                     var max = Int.MAX_VALUE
                     if (list.hasResult(5)) {
                         max = list.getResult(5)!!
                     }
                     for (scorer in scorers) {
-                        val line: IScoreboardLine? = scoreboard.getLine(scorer)
+                        val line = scoreboard.getLine(scorer)
                         if (line == null) {
                             log.addError("commands.scoreboard.players.score.notFound", objectiveName, scorer.name)
                                 .output()
                             return 0
                         }
-                        val score: Int = line.getScore()
+                        val score: Int = line.score
                         if (score < min || score > max) {
                             log.addError(
                                 "commands.scoreboard.players.test.failed",
@@ -614,12 +616,13 @@ class ScoreboardCommand(name: String) :
         log: CommandLogger
     ): Int {
         val ars = list.getResult<String>(1)
-        val objectiveName = list.getResult<String>(3)
-        if (!manager.containScoreboard(objectiveName)) {
+        val objectiveName = list.getResult<String>(3)!!
+
+        val scoreboard: IScoreboard = manager.scoreboards[objectiveName] ?: run {
             log.addError("commands.scoreboard.objectiveNotFound", objectiveName).output()
             return 0
         }
-        val scoreboard: IScoreboard = manager.getScoreboards().get(objectiveName)
+
         val wildcard_target_str = list.getResult<String>(2)
         val scorers = parseScorers(sender, wildcard_target_str!!, scoreboard)
         if (scorers.isEmpty()) {
@@ -725,12 +728,12 @@ class ScoreboardCommand(name: String) :
         manager: IScoreboardManager,
         log: CommandLogger
     ): Int {
-        val targetObjectiveName = list.getResult<String>(3)
-        if (!manager.containScoreboard(targetObjectiveName)) {
+        val targetObjectiveName = list.getResult<String>(3)!!
+
+        val targetScoreboard: IScoreboard = manager.scoreboards[targetObjectiveName] ?: run {
             log.addError("commands.scoreboard.objectiveNotFound", targetObjectiveName).output()
             return 0
         }
-        val targetScoreboard: IScoreboard = manager.getScoreboards().get(targetObjectiveName)
 
         val wildcard_target_str = list.getResult<String>(2)
         val targetScorers = parseScorers(
@@ -745,12 +748,12 @@ class ScoreboardCommand(name: String) :
         val operation = list.getResult<String>(4)
 
 
-        val selectorObjectiveName = list.getResult<String>(6)
-        if (!manager.containScoreboard(selectorObjectiveName)) {
+        val selectorObjectiveName = list.getResult<String>(6)!!
+
+        val selectorScoreboard: IScoreboard = manager.scoreboards[selectorObjectiveName] ?: run {
             log.addError("commands.scoreboard.objectiveNotFound", selectorObjectiveName).output()
             return 0
         }
-        val selectorScoreboard: IScoreboard = manager.getScoreboards().get(targetObjectiveName)
 
         val selector_str = list.getResult<String>(5)
         val selectorScorers = parseScorers(sender, selector_str!!, selectorScoreboard)
@@ -855,19 +858,16 @@ class ScoreboardCommand(name: String) :
             if (wildcardScoreboard != null) {
                 scorers.addAll(wildcardScoreboard.lines.keys)
             } else {
-                for (scoreboard in manager.getScoreboards().values) {
+                for (scoreboard in manager.scoreboards.values) {
                     scorers.addAll(scoreboard.lines.keys)
                 }
             }
-        } else if (EntitySelectorAPI.Companion.getAPI().checkValid(wildcardTargetStr)) {
-            scorers = EntitySelectorAPI.Companion.getAPI().matchEntities(sender, wildcardTargetStr).stream()
-                .map<IScorer> { t: Entity? ->
-                    if (t is Player) PlayerScorer(
-                        t
-                    ) else EntityScorer(t)
-                }.collect<MutableSet<IScorer>, Any>(Collectors.toSet<IScorer>())
+        } else if (EntitySelectorAPI.api.checkValid(wildcardTargetStr)) {
+            scorers = EntitySelectorAPI.api.matchEntities(sender, wildcardTargetStr)
+                .map { t  -> if (t is Player) PlayerScorer(t) else EntityScorer(t) }
+                .toMutableSet()
         } else if (Server.instance.getPlayer(wildcardTargetStr) != null) {
-            scorers.add(PlayerScorer(Server.instance.getPlayer(wildcardTargetStr)))
+            scorers.add(PlayerScorer(Server.instance.getPlayer(wildcardTargetStr)!!))
         } else {
             scorers.add(FakeScorer(wildcardTargetStr))
         }

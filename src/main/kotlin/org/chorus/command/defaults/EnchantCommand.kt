@@ -9,6 +9,7 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import kotlin.collections.set
 
@@ -41,7 +42,7 @@ class EnchantCommand(name: String) :
         log: CommandLogger
     ): Int {
         val list = result.value
-        val entities = list!!.getResult<List<Entity>>(0)!!
+        val entities = list.getResult<List<Entity>>(0)!!
         if (entities.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
@@ -59,10 +60,9 @@ class EnchantCommand(name: String) :
             }
 
             "byName" -> {
-                val str = list.getResult<String>(1)
-                enchantment = Enchantment.getEnchantment(str)
-                if (enchantment == null) {
-                    log.addError("commands.enchant.notFound", str.toString()).output()
+                val str = list.getResult<String>(1)!!
+                enchantment = Enchantment.getEnchantment(str) ?: run {
+                    log.addError("commands.enchant.notFound", str).output()
                     return 0
                 }
             }
@@ -95,11 +95,11 @@ class EnchantCommand(name: String) :
                 enchanted.addEnchantment(enchantment)
                 val clone = item.clone()
                 clone.count--
-                val inventory: HumanInventory = player.inventory
+                val inventory = player.inventory
                 inventory.setItemInHand(clone)
                 player.giveItem(enchanted)
             }
-            log.addSuccess("commands.enchant.success", enchantment.name).output(true)
+            log.addSuccess("commands.enchant.success", enchantment.getName()).output(true)
             success++
         }
         return success

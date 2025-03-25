@@ -6,6 +6,7 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
+import org.chorus.network.protocol.AnimateEntityPacket
 import kotlin.collections.set
 
 class PlayAnimationCommand(name: String) : VanillaCommand(name, "commands.playanimation.description") {
@@ -30,33 +31,33 @@ class PlayAnimationCommand(name: String) : VanillaCommand(name, "commands.playan
         log: CommandLogger
     ): Int {
         val list = result.value
-        val entities = list!!.getResult<List<Entity>>(0)!!
+        val entities = list.getResult<List<Entity>>(0)!!
         if (entities.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
         }
-        val animationBuilder: Animation.AnimationBuilder = AnimateEntityPacket.Animation.builder()
+        val animationBuilder = AnimateEntityPacket.Animation()
         val animation = list.getResult<String>(1)
-        animationBuilder.animation(animation)
-        //optional
+        animationBuilder.animation = (animation)
+        // optional
         if (list.hasResult(2)) {
-            val next_state = list.getResult<String>(2)
-            animationBuilder.nextState(next_state)
+            val nextState = list.getResult<String>(2)!!
+            animationBuilder.nextState = (nextState)
         }
         if (list.hasResult(3)) {
-            val blend_out_time = list.getResult<Float>(3)!!
-            animationBuilder.blendOutTime(blend_out_time)
+            val blendOutTime = list.getResult<Float>(3)!!
+            animationBuilder.blendOutTime = (blendOutTime)
         }
         if (list.hasResult(4)) {
-            val stop_expression = list.getResult<String>(4)
-            animationBuilder.stopExpression(stop_expression)
+            val stopExpression = list.getResult<String>(4)!!
+            animationBuilder.stopExpression = (stopExpression)
         }
         if (list.hasResult(5)) {
-            val controller = list.getResult<String>(5)
-            animationBuilder.controller(controller)
+            val controller = list.getResult<String>(5)!!
+            animationBuilder.controller = (controller)
         }
-        //send animation
-        Entity.playAnimationOnEntities(animationBuilder.build(), entities)
+        // send animation
+        Entity.playAnimationOnEntities(animationBuilder, entities)
         log.addSuccess("commands.playanimation.success").output()
         return 1
     }

@@ -9,7 +9,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.lang.TranslationContainer
 import kotlin.collections.set
 
-
 class ListCommand(name: String) : VanillaCommand(name, "commands.list.description") {
     init {
         this.permission = "nukkit.command.list"
@@ -32,7 +31,7 @@ class ListCommand(name: String) : VanillaCommand(name, "commands.list.descriptio
                 ++onlineCount
             }
         }
-        if (!online.isEmpty()) {
+        if (online.isNotEmpty()) {
             online = StringBuilder(online.substring(0, online.length - 2))
         }
         sender.sendMessage(

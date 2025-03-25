@@ -6,12 +6,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.ints.IntList
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.Entity.getId
-import org.chorus.entity.Entity.getViewers
-import org.chorus.entity.EntityHumanType.getOffhandInventory
 import org.chorus.entity.IHuman
-import org.chorus.entity.IHuman.getEntity
-import org.chorus.entity.IHuman.getOffhandInventory
 import org.chorus.event.entity.EntityArmorChangeEvent
 import org.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus.event.player.PlayerItemHeldEvent
@@ -36,10 +31,8 @@ import kotlin.math.min
  * 9-35 inventory<br></br>
  * 36-39 Armor Inventory<br></br>
  * To obtain the off-hand inventory, please use [HumanOffHandInventory]<br></br>
- *
- * @author MagicDroidX (Nukkit Project)
  */
-class HumanInventory(human: IHuman?) //9+27+4
+class HumanInventory(human: IHuman) //9+27+4
     : BaseInventory(human, InventoryType.INVENTORY, 40) {
     protected var itemInHandIndex: Int = 0
 
@@ -54,10 +47,10 @@ class HumanInventory(human: IHuman?) //9+27+4
         for (i in 9..35) {
             map[i] = ContainerSlotType.INVENTORY
         }
-        armorInventory = object : InventorySlice(this, ARMORS_INDEX, this.getSize()) {
+        armorInventory = object : InventorySlice(this, ARMORS_INDEX, this.size) {
             init {
-                val map = HashMap<Int?, ContainerSlotType?>()
-                val biMap: BiMap<Int?, Int?> = HashBiMap.create()
+                val map = HashMap<Int, ContainerSlotType>()
+                val biMap: BiMap<Int, Int> = HashBiMap.create()
                 for (i in 0..3) {
                     map[i] = ContainerSlotType.ARMOR
                     biMap[i] = i

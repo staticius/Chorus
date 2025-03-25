@@ -10,10 +10,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.utils.TextFormat
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
 class OpCommand(name: String) : VanillaCommand(name, "commands.op.description") {
     init {
         this.permission = "nukkit.command.op.give"
@@ -30,13 +26,13 @@ class OpCommand(name: String) : VanillaCommand(name, "commands.op.description") 
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        val IPlayers = result.value!!.getResult<List<IPlayer>>(0)!!
-        if (IPlayers.isEmpty()) {
+        val players = result.value.getResult<List<IPlayer>>(0)!!
+        if (players.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
         }
 
-        for (player in IPlayers) {
+        for (player in players) {
             if (player.isOp) {
                 log.addError("commands.op.failed", player.name!!).output()
             } else {
@@ -47,6 +43,6 @@ class OpCommand(name: String) : VanillaCommand(name, "commands.op.description") 
                 log.addSuccess("commands.op.success", player.name!!).output(true)
             }
         }
-        return IPlayers.size
+        return players.size
     }
 }

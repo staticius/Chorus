@@ -7,6 +7,7 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.GameRule
+import org.chorus.level.GameRules
 import java.util.*
 import kotlin.collections.set
 
@@ -15,21 +16,21 @@ class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.de
         this.permission = "nukkit.command.gamerule"
         commandParameters.clear()
 
-        val rules: GameRules = GameRules.getDefault()
-        val boolGameRules: MutableList<String?> = ArrayList()
-        val intGameRules: MutableList<String?> = ArrayList()
-        val floatGameRules: MutableList<String?> = ArrayList()
-        val unknownGameRules: MutableList<String?> = ArrayList()
+        val rules: GameRules = GameRules.default
+        val boolGameRules: MutableList<String> = mutableListOf()
+        val intGameRules: MutableList<String> = mutableListOf()
+        val floatGameRules: MutableList<String> =  mutableListOf()
+        val unknownGameRules: MutableList<String> = mutableListOf()
 
-        rules.getGameRules().forEach { (rule: GameRule?, value: GameRules.Value<*>?) ->
-            if (rule.isDeprecated()) {
+        rules.getGameRules().forEach { (rule, value) ->
+            if (rule.isDeprecated) {
                 return@forEach
             }
-            when (value.getType()) {
-                GameRules.Type.BOOLEAN -> boolGameRules.add(rule.getName().lowercase())
-                GameRules.Type.INTEGER -> intGameRules.add(rule.getName().lowercase())
-                GameRules.Type.FLOAT -> floatGameRules.add(rule.getName().lowercase())
-                else -> unknownGameRules.add(rule.getName().lowercase())
+            when (value.type) {
+                GameRules.Type.BOOLEAN -> boolGameRules.add(rule.name.lowercase())
+                GameRules.Type.INTEGER -> intGameRules.add(rule.name.lowercase())
+                GameRules.Type.FLOAT -> floatGameRules.add(rule.name.lowercase())
+                else -> unknownGameRules.add(rule.name.lowercase())
             }
         }
         commandParameters["default"] = CommandParameter.Companion.EMPTY_ARRAY
@@ -68,11 +69,11 @@ class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.de
     ): Int {
         val rules: GameRules = sender.getLocator().level.gameRules
         val list = result.value
-        val ruleStr = list!!.getResult<String>(0)
+        val ruleStr = list.getResult<String>(0)
         if (result.key == "default") {
             val rulesJoiner = StringJoiner(", ")
-            for (rule in rules.getRules()) {
-                rulesJoiner.add(rule.getName().lowercase())
+            for (rule in rules.rules) {
+                rulesJoiner.add(rule.name.lowercase())
             }
             log.addSuccess(rulesJoiner.toString()).output()
             return 1
@@ -108,7 +109,7 @@ class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.de
             }
 
             "unknownGameRules" -> {
-                val value = list.getResult<String>(1)
+                val value = list.getResult<String>(1)!!
                 rules.setGameRule(optionalRule.get(), value)
             }
         }

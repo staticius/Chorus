@@ -57,7 +57,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     override var isExecutingOnFirstTick: Boolean = false //TODO: ???
     protected var perm: PermissibleBase? = null
     protected var currentTick: Int = 0
-    override var inventory: CommandBlockInventory = CommandBlockInventory(this)
+    override var inventory: Inventory = CommandBlockInventory(this)
 
     override fun initBlockEntity() {
         super.initBlockEntity()

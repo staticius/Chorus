@@ -20,7 +20,7 @@ import kotlin.math.floor
 open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     RecipeInventoryHolder,
     BlockEntityInventoryHolder {
-    override lateinit var inventory: SmeltingInventory
+    override lateinit var inventory: Inventory
 
     var burnTime: Int = 0
     var burnDuration: Int = 0

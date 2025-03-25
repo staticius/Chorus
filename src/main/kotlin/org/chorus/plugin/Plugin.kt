@@ -116,7 +116,7 @@ interface Plugin : CommandExecutor {
      *
      *
      */
-    val description: PluginDescription?
+    val description: PluginDescription
 
     /**
      * 读取这个插件特定的资源文件，并返回为`InputStream`对象。<br></br>
@@ -318,7 +318,7 @@ interface Plugin : CommandExecutor {
      *
      * @return 这个插件的文件 `File`对象。<br></br>The `File` object of this plugin itself.
      */
-    val file: File?
+    val file: File
 
     companion object {
         val EMPTY_ARRAY: Array<Plugin?> = arrayOfNulls(0)

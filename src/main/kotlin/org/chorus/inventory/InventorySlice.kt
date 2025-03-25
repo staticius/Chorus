@@ -59,35 +59,35 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
         return rawInv.setItem(index + startSlot, item, send)
     }
 
-    override fun addItem(vararg slots: Item): Array<Item?> {
+    override fun addItem(vararg slots: Item): Array<Item> {
         return rawInv.addItem(*slots)
     }
 
     override fun canAddItem(item: Item): Boolean {
-        var item = item
-        item = item.clone()
-        val checkDamage = item.hasMeta()
-        val checkTag = item.namedTag != null
+        var item1 = item
+        item1 = item1.clone()
+        val checkDamage = item1.hasMeta()
+        val checkTag = item1.namedTag != null
         for (i in startSlot..<endSlot) {
             val slot = rawInv.getItem(i)
-            if (item.equals(slot, checkDamage, checkTag)) {
+            if (item1.equals(slot, checkDamage, checkTag)) {
                 val diff: Int
                 if (((min(slot.maxStackSize.toDouble(), rawInv.maxStackSize.toDouble()) - slot.getCount()).also {
                         diff =
                             it.toInt()
                     }) > 0) {
-                    item.setCount(item.getCount() - diff)
+                    item1.setCount(item1.getCount() - diff)
                 }
             } else if (slot.isNothing) {
-                item.setCount(
-                    (item.getCount() - min(
+                item1.setCount(
+                    (item1.getCount() - min(
                         slot.maxStackSize.toDouble(),
                         rawInv.maxStackSize.toDouble()
                     )).toInt()
                 )
             }
 
-            if (item.getCount() <= 0) {
+            if (item1.getCount() <= 0) {
                 return true
             }
         }
@@ -287,7 +287,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
 
 
     override fun addListener(listener: InventoryListener) {
-        rawInv.addListener((InventoryListener { inventory: Inventory?, oldItem: Item?, slot: Int ->
+        rawInv.addListener((InventoryListener { _, oldItem, slot ->
             listener.onInventoryChanged(
                 this, oldItem, slot - startSlot
             )
@@ -296,7 +296,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
 
 
     override fun removeListener(listener: InventoryListener) {
-        rawInv.removeListener((InventoryListener { inventory: Inventory?, oldItem: Item?, slot: Int ->
+        rawInv.removeListener((InventoryListener { _, oldItem, slot ->
             listener.onInventoryChanged(
                 this, oldItem, slot - startSlot
             )

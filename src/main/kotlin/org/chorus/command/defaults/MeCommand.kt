@@ -9,10 +9,6 @@ import org.chorus.lang.TranslationContainer
 import org.chorus.utils.TextFormat
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
 class MeCommand(name: String) : VanillaCommand(name, "commands.me.description", "nukkit.command.me.usage") {
     init {
         this.permission = "nukkit.command.me"
@@ -30,11 +26,11 @@ class MeCommand(name: String) : VanillaCommand(name, "commands.me.description", 
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        val name = sender.name
-        var message: String? = ""
-        if (result.key == "message") {
-            message = result.value!!.getResult(0)
-        }
+        val name = sender.getName()
+
+        val message = if (result.key == "message") {
+            result.value.getResult(0) ?: ""
+        } else ""
 
         broadcastCommandMessage(
             sender,

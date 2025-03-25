@@ -22,6 +22,7 @@ import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus.form.window.SimpleForm
 import org.chorus.inventory.EntityInventoryHolder
+import org.chorus.inventory.Inventory
 import org.chorus.item.Item
 import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
@@ -304,7 +305,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         return armor
     }
 
-    override val inventory = this.equipment
+    override val inventory: Inventory = this.equipment
 
     override fun getDiffHandDamage(): FloatArray? {
         return this.diffHandDamage

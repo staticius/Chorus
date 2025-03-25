@@ -4,7 +4,7 @@ import org.chorus.level.Level
 import org.chorus.math.Vector3
 
 interface InventoryHolder {
-    val inventory: Inventory?
+    val inventory: Inventory
 
     val level: Level?
 

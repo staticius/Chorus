@@ -8,6 +8,7 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
+import org.chorus.level.ParticleEffect
 import kotlin.collections.set
 
 /**
@@ -18,10 +19,7 @@ class ParticleCommand(name: String) : VanillaCommand(name, "commands.particle.de
     init {
         this.permission = "nukkit.command.particle"
         commandParameters.clear()
-        val particles: MutableList<String?> = ArrayList()
-        for (particle in ParticleEffect.entries) {
-            particles.add(particle.getIdentifier())
-        }
+        val particles =  ParticleEffect.entries.map { it.identifier }
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newEnum("effect", CommandEnum("particle", particles, true)),
             CommandParameter.Companion.newType("position", CommandParamType.POSITION),
@@ -36,21 +34,20 @@ class ParticleCommand(name: String) : VanillaCommand(name, "commands.particle.de
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        val name = result.value!!.getResult<String>(0)
-        val locator = result.value!!.getResult<Locator>(1)
+        val name = result.value.getResult<String>(0)!!
+        val locator = result.value.getResult<Locator>(1)!!
         var count = 1
-        if (result.value!!.hasResult(2)) count = result.value!!.getResult(2)!!
+        if (result.value.hasResult(2)) count = result.value.getResult(2)!!
         if (count < 1) {
             log.addNumTooSmall(2, 1).output()
             return 0
         }
         for (i in 0..<count) {
-            locator!!.level.addParticleEffect(
+            locator.level.addParticleEffect(
                 locator.position.asVector3f(),
                 name,
                 -1,
-                locator.level.dimension,
-                *null as Array<Player?>?
+                locator.level.dimension
             )
         }
         log.addSuccess("commands.particle.success", name, count.toString())

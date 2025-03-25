@@ -22,7 +22,7 @@ import org.chorus.registry.Registries
 
 class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt), BlockEntityInventoryHolder,
     IHopper {
-    override var inventory: HopperInventory? = null
+    override var inventory: Inventory = null
 
     override fun getLocator(): Locator {
         return this.locator

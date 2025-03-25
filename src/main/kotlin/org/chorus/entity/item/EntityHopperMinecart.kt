@@ -27,7 +27,7 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
     private val temporalVector: BlockVector3 = BlockVector3()
     var transferCooldown: Int = 0
 
-    protected var inventory: MinecartHopperInventory? = null
+    protected var inventory: Inventory = null
     private var disabled: Boolean = false
     private var pickupArea: AxisAlignedBB? = null
 

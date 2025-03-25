@@ -62,22 +62,12 @@ class AnimateEntityPacket : DataPacket() {
      */
 
     class Animation {
-        val animation: String? = null
-
-
-        val nextState: String = DEFAULT_NEXT_STATE
-
-
-        val blendOutTime: Float = DEFAULT_BLEND_OUT_TIME
-
-
-        val stopExpression: String = DEFAULT_STOP_EXPRESSION
-
-
-        val controller: String = DEFAULT_CONTROLLER
-
-
-        val stopExpressionVersion: Int = DEFAULT_STOP_EXPRESSION_VERSION
+        var animation: String? = null
+        var nextState: String = DEFAULT_NEXT_STATE
+        var blendOutTime: Float = DEFAULT_BLEND_OUT_TIME
+        var stopExpression: String = DEFAULT_STOP_EXPRESSION
+        var controller: String = DEFAULT_CONTROLLER
+        var stopExpressionVersion: Int = DEFAULT_STOP_EXPRESSION_VERSION
 
         companion object {
             const val DEFAULT_BLEND_OUT_TIME: Float = 0.0f

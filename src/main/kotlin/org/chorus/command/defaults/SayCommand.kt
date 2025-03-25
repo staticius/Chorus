@@ -1,5 +1,6 @@
 package org.chorus.command.defaults
 
+import org.chorus.Server
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
@@ -28,8 +29,8 @@ class SayCommand(name: String) : VanillaCommand(name, "commands.say.description"
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        val senderString = sender.name
-        val message = result.value!!.getResult<String>(0)
+        val senderString = sender.getName()
+        val message = result.value.getResult<String>(0)!!
         Server.instance.broadcastMessage(TranslationContainer("%chat.type.announcement", senderString, message))
         return 1
     }

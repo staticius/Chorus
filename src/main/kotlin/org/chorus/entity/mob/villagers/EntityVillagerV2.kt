@@ -81,7 +81,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     protected var tradeInventory: TradeInventory? = null
 
-    private var inventory: EntityEquipmentInventory? = null
+    private var inventory: Inventory = null
 
     protected var canTrade: Boolean? = null
 

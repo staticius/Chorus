@@ -3,27 +3,22 @@ package org.chorus.command.defaults
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.Block
-import org.chorus.camera.instruction.impl.ClearInstruction.get
+import org.chorus.block.BlockID
 import org.chorus.command.CommandSender
 import org.chorus.command.ExecutorCommandSender
-import org.chorus.command.data.CommandEnum
-import org.chorus.command.data.CommandParamOption
-import org.chorus.command.data.CommandParamType
-import org.chorus.command.data.CommandParameter
+import org.chorus.command.data.*
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.level.Locator
 import org.chorus.level.Transform
 import org.chorus.math.*
-import org.chorus.scoreboard.IScoreboard
 import org.chorus.scoreboard.scorer.EntityScorer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.utils.StringUtils
 import org.chorus.utils.Utils
-import java.util.*
 import java.util.regex.Pattern
-import java.util.stream.Collectors
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
@@ -266,19 +261,19 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     log.addNoTargetMatch().output()
                     return 0
                 }
-                val chainCommand = list.getResult<String>(2)
+                val chainCommand = list.getResult<String>(2)!!
                 for (executor in executors) {
-                    val executorCommandSender = ExecutorCommandSender(sender, executor, executor.transform)
+                    val executorCommandSender = ExecutorCommandSender(sender, executor, executor.getTransform())
                     val n = Server.instance.executeCommand(executorCommandSender, chainCommand)
                     if (n == 0) {
-                        val names = ArrayList<String?>()
+                        val names = mutableListOf<String>()
                         val match = ERROR_COMMAND_NAME.matcher(chainCommand)
                         while (match.find()) {
                             names.add(match.group())
                         }
-                        Collections.reverse(names)
+                        names.reverse()
                         for (name in names) {
-                            log.addError("commands.execute.failed", name, executor.name)
+                            log.addError("commands.execute.failed", name, executor.getName())
                         }
                     } else num += n
                 }
@@ -287,13 +282,13 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "at" -> {
-                val locations = list!!.getResult<List<Entity>>(1)!!
+                val locations = list.getResult<List<Entity>>(1)!!
                 if (locations.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
                 }
-                val chainCommand = list.getResult<String>(2)
-                for (transform in locations.stream().map<Transform> { obj: Entity -> obj.transform }.toList()) {
+                val chainCommand = list.getResult<String>(2)!!
+                for (transform in locations.stream().map<Transform> { obj: Entity -> obj.getTransform() }.toList()) {
                     val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
                     num += Server.instance.executeCommand(executorCommandSender, chainCommand)
                 }
@@ -301,9 +296,9 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "in" -> {
-                val levelName = list!!.getResult<String>(1)
+                val levelName = list.getResult<String>(1)!!
                 val level = Server.instance.getLevelByName(levelName) ?: return 0
-                val chainCommand = list.getResult<String>(2)
+                val chainCommand = list.getResult<String>(2)!!
                 val transform = sender.getTransform()
                 transform.setLevel(level)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
@@ -311,8 +306,8 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "facing" -> {
-                val pos = list!!.getResult<Vector3>(1)
-                val chainCommand = list.getResult<String>(2)
+                val pos = list.getResult<Vector3>(1)
+                val chainCommand = list.getResult<String>(2)!!
                 val source = sender.getTransform()
                 val bv = BVector3.fromPos(pos!!.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z)
                 source.setPitch(bv.pitch)
@@ -322,19 +317,19 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "facing-entity" -> {
-                val targets = list!!.getResult<List<Entity>>(2)!!
+                val targets = list.getResult<List<Entity>>(2)!!
                 if (targets.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
                 }
                 val anchor = list.getResult<String>(3)
                 val anchorAtEyes = anchor == "eyes"
-                val chainCommand = list.getResult<String>(4)
+                val chainCommand = list.getResult<String>(4)!!
                 for (target in targets) {
                     val source = sender.getTransform()
                     val bv = BVector3.fromPos(
                         target.position.x - source.position.x,
-                        target.position.y + (if (anchorAtEyes) target.eyeHeight else 0f) - source.position.y,
+                        target.position.y + (if (anchorAtEyes) target.getEyeHeight() else 0f) - source.position.y,
                         target.position.z - source.position.z
                     )
                     source.setPitch(bv.pitch)
@@ -347,10 +342,10 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
             "rotated" -> {
                 var yaw = sender.getTransform().rotation.yaw
-                if (list!!.hasResult(1)) yaw = list.getResult(1)!!
+                if (list.hasResult(1)) yaw = list.getResult(1)!!
                 var pitch = sender.getTransform().rotation.pitch
                 if (list.hasResult(2)) pitch = list.getResult(2)!!
-                val chainCommand = list.getResult<String>(3)
+                val chainCommand = list.getResult<String>(3)!!
                 val transform = sender.getTransform()
                 transform.setYaw(yaw)
                 transform.setPitch(pitch)
@@ -359,12 +354,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "rotated as" -> {
-                val executors = list!!.getResult<List<Entity>>(2)!!
+                val executors = list.getResult<List<Entity>>(2)!!
                 if (executors.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
                 }
-                val chainCommand = list.getResult<String>(3)
+                val chainCommand = list.getResult<String>(3)!!
                 for (executor in executors) {
                     val transform = sender.getTransform()
                     transform.setYaw(executor.rotation.yaw)
@@ -376,10 +371,10 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "align" -> {
-                val axes = list!!.getResult<String>(1)
-                val chainCommand = list.getResult<String>(2)
+                val axes = list.getResult<String>(1)!!
+                val chainCommand = list.getResult<String>(2)!!
                 val transform = sender.getTransform()
-                for (c in axes!!.toCharArray()) {
+                for (c in axes.toCharArray()) {
                     when (c) {
                         'x' -> transform.position.x = transform.position.floorX.toDouble()
                         'y' -> transform.position.y = transform.position.floorY.toDouble()
@@ -393,42 +388,42 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             "anchored" -> {
                 if (!sender.isEntity) return 0
                 var transform = sender.getTransform()
-                val anchor = list!!.getResult<String>(1)
-                val chainCommand = list.getResult<String>(2)
+                val anchor = list.getResult<String>(1)
+                val chainCommand = list.getResult<String>(2)!!
                 when (anchor) {
                     "feet" -> {
                         //todo do nothing
                     }
 
-                    "eyes" -> transform = transform.add(0.0, sender.asEntity()!!.eyeHeight.toDouble(), 0.0)
+                    "eyes" -> transform = transform.add(0.0, sender.asEntity()!!.getEyeHeight().toDouble(), 0.0)
                 }
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
                 return Server.instance.executeCommand(executorCommandSender, chainCommand)
             }
 
             "positioned" -> {
-                val vec = list!!.getResult<Vector3>(1)
+                val vec = list.getResult<Vector3>(1)!!
                 val newLoc = sender.getTransform()
-                newLoc.setX(vec!!.getX())
-                newLoc.setY(vec.getY())
-                newLoc.setZ(vec.getZ())
-                val chainCommand = list.getResult<String>(2)
+                newLoc.setX(vec.x)
+                newLoc.setY(vec.y)
+                newLoc.setZ(vec.z)
+                val chainCommand = list.getResult<String>(2)!!
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), newLoc)
                 return Server.instance.executeCommand(executorCommandSender, chainCommand)
             }
 
             "positioned as" -> {
-                val targets = list!!.getResult<List<Entity>>(2)!!
+                val targets = list.getResult<List<Entity>>(2)!!
                 if (targets.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
                 }
-                val chainCommand = list.getResult<String>(3)
-                for (vec in targets.stream().map<Vector3> { e: Entity -> e.position }.toList()) {
+                val chainCommand = list.getResult<String>(3)!!
+                for (vec in targets.stream().map { e: Entity -> e.position }.toList()) {
                     val newLoc = sender.getTransform()
-                    newLoc.setX(vec.getX())
-                    newLoc.setY(vec.getY())
-                    newLoc.setZ(vec.getZ())
+                    newLoc.setX(vec.x)
+                    newLoc.setY(vec.y)
+                    newLoc.setZ(vec.z)
                     val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), newLoc)
                     num += Server.instance.executeCommand(executorCommandSender, chainCommand)
                 }
@@ -436,18 +431,18 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "if-unless-block" -> {
-                val pos = list!!.getResult<Locator>(2)
+                val pos = list.getResult<Locator>(2)
                 val block = pos!!.levelBlock
                 val blockName = list.getResult<Block>(3)
                 val id = blockName!!.id
-                val isIF = list.getResult<String>(0)
+                val isIF = list.getResult<String>(0)!!
 
                 val matched = block.id === id
                 val shouldMatch = isIF == "if"
                 val condition = (matched && shouldMatch) || (!matched && !shouldMatch)
 
                 if (list.hasResult(4) && condition) {
-                    val chainCommand = list.getResult<String>(4)
+                    val chainCommand = list.getResult<String>(4)!!
                     return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()
@@ -459,19 +454,19 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "if-unless-block-data" -> {
-                val pos = list!!.getResult<Locator>(2)
+                val pos = list.getResult<Locator>(2)
                 val block = pos!!.levelBlock
                 val blockName = list.getResult<Block>(3)
                 val id = blockName!!.id
                 val data = list.getResult<Int>(4)!!
-                val isIF = list.getResult<String>(0)
+                val isIF = list.getResult<String>(0)!!
 
                 val matched = id === block.id && (data == -1 || data == block.blockState.specialValue().toInt())
                 val shouldMatch = isIF == "if"
                 val condition = (matched && shouldMatch) || (!matched && !shouldMatch)
 
                 if (list.hasResult(5) && condition) {
-                    val chainCommand = list.getResult<String>(5)
+                    val chainCommand = list.getResult<String>(5)!!
                     return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()
@@ -483,12 +478,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "if-unless-blocks" -> {
-                val isIF = list!!.getResult<String>(0)
+                val isIF = list.getResult<String>(0)!!
                 val shouldMatch = isIF == "if"
                 val begin = list.getResult<Locator>(2)
                 val end = list.getResult<Locator>(3)
                 val destination = list.getResult<Locator>(4)
-                var mode: TestForBlocksMode = TestForBlocksMode.ALL
+                var mode = TestForBlocksCommand.TestForBlocksMode.ALL
                 if (list.hasResult(5)) {
                     val str5 = list.getResult<String>(5)
                     mode = TestForBlocksCommand.TestForBlocksMode.valueOf(str5!!.uppercase())
@@ -501,8 +496,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                         begin.y, end.y
                     ), max(begin.z, end.z)
                 )
-                val size =
-                    floor((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
+                val size = floor((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
 
                 if (size > 16 * 16 * 256 * 8) {
                     log.addError("commands.fill.tooManyBlocks", size.toString(), (16 * 16 * 256 * 8).toString())
@@ -516,12 +510,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     destination.z + (blocksAABB.maxZ - blocksAABB.minZ)
                 )
                 val destinationAABB: AxisAlignedBB = SimpleAxisAlignedBB(
-                    min(destination.x, to.getX()), min(
-                        destination.y, to.getY()
-                    ), min(destination.z, to.getZ()), max(
-                        destination.x, to.getX()
-                    ), max(destination.y, to.getY()), max(
-                        destination.z, to.getZ()
+                    min(destination.x, to.x), min(
+                        destination.y, to.y
+                    ), min(destination.z, to.z), max(
+                        destination.x, to.x
+                    ), max(destination.y, to.y), max(
+                        destination.z, to.z
                     )
                 )
 
@@ -532,12 +526,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
                 val level = begin.level
 
-                var sourceChunkX = floor(blocksAABB.minX) shr 4
-                var destinationChunkX = floor(destinationAABB.minX) shr 4
-                while (sourceChunkX <= floor(blocksAABB.maxX) shr 4) {
-                    var sourceChunkZ = floor(blocksAABB.minZ) shr 4
-                    var destinationChunkZ = floor(destinationAABB.minZ) shr 4
-                    while (sourceChunkZ <= floor(blocksAABB.maxZ) shr 4) {
+                var sourceChunkX = floor(blocksAABB.minX).toInt() shr 4
+                var destinationChunkX = floor(destinationAABB.minX).toInt() shr 4
+                while (sourceChunkX <= floor(blocksAABB.maxX).toInt() shr 4) {
+                    var sourceChunkZ = floor(blocksAABB.minZ).toInt() shr 4
+                    var destinationChunkZ = floor(destinationAABB.minZ).toInt() shr 4
+                    while (sourceChunkZ <= floor(blocksAABB.maxZ).toInt() shr 4) {
                         if (level.getChunkIfLoaded(sourceChunkX, sourceChunkZ) == null) {
                             log.addError("commands.testforblock.outOfWorld").output()
                             return 0
@@ -560,7 +554,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 var matched = true
 
                 when (mode) {
-                    TestForBlocksMode.ALL -> {
+                    TestForBlocksCommand.TestForBlocksMode.ALL -> {
                         var i = 0
                         while (i < blocks.size) {
                             val block = blocks[i]
@@ -577,7 +571,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                         }
                     }
 
-                    TestForBlocksMode.MASKED -> {
+                    TestForBlocksCommand.TestForBlocksMode.MASKED -> {
                         var i = 0
                         while (i < blocks.size) {
                             val block = blocks[i]
@@ -600,7 +594,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
                 val condition = (matched && shouldMatch) || (!matched && !shouldMatch)
                 if (list.hasResult(6) && condition) {
-                    val chainCommand = list.getResult<String>(6)
+                    val chainCommand = list.getResult<String>(6)!!
                     return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueConditionWithCount", count.toString()).output()
@@ -612,13 +606,13 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "if-unless-entity" -> {
-                val isIF = list!!.getResult<String>(0)
+                val isIF = list.getResult<String>(0)!!
                 val shouldMatch = isIF == "if"
                 val targets = list.getResult<List<Entity>>(2)!!
                 val found = !targets.isEmpty()
                 val condition = (found && shouldMatch) || (!found && !shouldMatch)
                 if (list.hasResult(3) && condition) {
-                    val chainCommand = list.getResult<String>(3)
+                    val chainCommand = list.getResult<String>(3)!!
                     return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()
@@ -631,16 +625,14 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
             "if-unless-score" -> {
                 val matched: Boolean
-                val isIF = list!!.getResult<String>(0)
+                val isIF = list.getResult<String>(0)!!
                 val shouldMatch = isIF == "if"
-                val manager: IScoreboardManager = Server.instance.scoreboardManager
+                val manager = Server.instance.scoreboardManager
 
                 val targets = list.getResult<List<Entity>>(2)!!
-                val targetScorers = targets.stream().filter { obj: Entity? -> Objects.nonNull(obj) }.map { t: Entity? ->
-                    if (t is Player) PlayerScorer(
-                        t
-                    ) else EntityScorer(t)
-                }.collect(Collectors.toSet())
+                val targetScorers = targets.map { t ->
+                    if (t is Player) PlayerScorer(t) else EntityScorer(t)
+                }.toSet()
                 if (targetScorers.size > 1) {
                     log.addTooManyTargets().output()
                     return 0
@@ -651,20 +643,18 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 }
                 val targetScorer = targetScorers.iterator().next()
 
-                val targetObjectiveName = list.getResult<String>(3)
-                if (!manager.containScoreboard(targetObjectiveName)) {
+                val targetObjectiveName = list.getResult<String>(3)!!
+
+                val targetScoreboard = manager.scoreboards[targetObjectiveName] ?: run {
                     log.addError("commands.scoreboard.objectiveNotFound", targetObjectiveName).output()
                     return 0
                 }
-                val targetScoreboard: IScoreboard = manager.getScoreboards().get(targetObjectiveName)
 
                 val operation = list.getResult<String>(4)
                 val scorers = list.getResult<List<Entity>>(5)!!
-                val selectorScorers = scorers.stream().filter { t: Entity? -> t != null }.map { t: Entity? ->
-                    if (t is Player) PlayerScorer(
-                        t
-                    ) else EntityScorer(t)
-                }.collect(Collectors.toSet())
+                val selectorScorers = scorers.map { t ->
+                    if (t is Player) PlayerScorer(t) else EntityScorer(t)
+                }.toSet()
                 if (selectorScorers.size > 1) {
                     log.addTooManyTargets().output()
                     return 0
@@ -675,12 +665,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 }
                 val sourceScorer = selectorScorers.iterator().next()
 
-                val sourceObjectiveName = list.getResult<String>(6)
-                if (!manager.containScoreboard(sourceObjectiveName)) {
+                val sourceObjectiveName = list.getResult<String>(6)!!
+
+                val sourceScoreboard = manager.scoreboards[sourceObjectiveName] ?: run {
                     log.addError("commands.scoreboard.objectiveNotFound", sourceObjectiveName).output()
                     return 0
                 }
-                val sourceScoreboard: IScoreboard = manager.getScoreboards().get(targetObjectiveName)
 
                 if (!sourceScoreboard.lines.containsKey(sourceScorer)) {
                     log.addError(
@@ -705,7 +695,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
                 val condition = (matched && shouldMatch) || (!matched && !shouldMatch)
                 if (list.hasResult(7) && condition) {
-                    val chainCommand = list.getResult<String>(7)
+                    val chainCommand = list.getResult<String>(7)!!
                     return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()
@@ -718,16 +708,15 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
             "if-unless-score-matches" -> {
                 val matched: Boolean
-                val isIF = list!!.getResult<String>(0)
+                val isIF = list.getResult<String>(0)!!
                 val shouldMatch = isIF == "if"
-                val manager: IScoreboardManager = Server.instance.scoreboardManager
+                val manager = Server.instance.scoreboardManager
 
                 val targets = list.getResult<List<Entity>>(2)!!
-                val targetScorers = targets.stream().filter { obj: Entity? -> Objects.nonNull(obj) }.map { t: Entity? ->
-                    if (t is Player) PlayerScorer(
-                        t
-                    ) else EntityScorer(t)
-                }.collect(Collectors.toSet())
+                val targetScorers = targets.map { t ->
+                    if (t is Player) PlayerScorer(t) else EntityScorer(t)
+                }.toSet()
+
                 if (targetScorers.size > 1) {
                     log.addTooManyTargets().output()
                     return 0
@@ -738,12 +727,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 }
                 val targetScorer = targetScorers.iterator().next()
 
-                val targetObjectiveName = list.getResult<String>(3)
-                if (!manager.containScoreboard(targetObjectiveName)) {
+                val targetObjectiveName = list.getResult<String>(3)!!
+
+                val targetScoreboard = manager.scoreboards[targetObjectiveName] ?: run {
                     log.addError("commands.scoreboard.objectiveNotFound", targetObjectiveName).output()
                     return 0
                 }
-                val targetScoreboard: IScoreboard = manager.getScoreboards().get(targetObjectiveName)
 
                 val targetScore = targetScoreboard.lines[targetScorer]!!.score
                 val range = list.getResult<String>(5)
@@ -769,7 +758,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
                 val condition = (matched && shouldMatch) || (!matched && !shouldMatch)
                 if (list.hasResult(6) && condition) {
-                    val chainCommand = list.getResult<String>(6)
+                    val chainCommand = list.getResult<String>(6)!!
                     return Server.instance.executeCommand(sender, chainCommand)
                 } else if (condition) {
                     log.addSuccess("commands.execute.trueCondition").output()

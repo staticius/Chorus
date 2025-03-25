@@ -5,6 +5,7 @@ import org.chorus.block.*
 import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 import org.chorus.inventory.BeaconInventory
+import org.chorus.inventory.Inventory
 import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
@@ -15,7 +16,7 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
-    override var inventory: BeaconInventory = BeaconInventory(this)
+    override var inventory: Inventory = BeaconInventory(this)
 
     override fun initBlockEntity() {
         super.initBlockEntity()

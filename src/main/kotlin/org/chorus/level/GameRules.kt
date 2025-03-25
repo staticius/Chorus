@@ -1,24 +1,21 @@
 package org.chorus.level
 
 import com.google.common.base.Preconditions
-import com.google.common.collect.ImmutableMap
 
 import org.chorus.nbt.tag.*
 import org.chorus.network.connection.util.HandleByteBuf
 import java.util.*
-import javax.annotation.Nonnull
 import kotlin.collections.set
 
 class GameRules private constructor() {
-    @Nonnull
     private val gameRules = EnumMap<GameRule, Value<*>>(
         GameRule::class.java
     )
     var isStale: Boolean = false
         private set
 
-    fun getGameRules(): Map<GameRule?, Value<*>> {
-        return ImmutableMap.copyOf(gameRules)
+    fun getGameRules(): Map<GameRule, Value<*>> {
+        return gameRules.toMap()
     }
 
     fun refresh() {

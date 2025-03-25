@@ -37,7 +37,7 @@ import kotlin.require
  */
 
 open class PluginManager(private val server: Server, private val commandMap: SimpleCommandMap) {
-    protected val plugins: MutableMap<String?, Plugin> = LinkedHashMap()
+    val plugins: MutableMap<String, Plugin> = LinkedHashMap()
 
     protected val permissions: MutableMap<String, Permission> = HashMap()
 
@@ -54,7 +54,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
     protected val fileAssociations: MutableMap<String, PluginLoader> = HashMap()
 
-    fun getPlugin(name: String?): Plugin? {
+    fun getPlugin(name: String): Plugin? {
         if (plugins.containsKey(name)) {
             return plugins[name]
         }

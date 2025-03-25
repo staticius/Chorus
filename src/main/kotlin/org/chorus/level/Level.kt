@@ -106,7 +106,7 @@ class Level(
     val updateEntities: ConcurrentHashMap<Long, Entity> = ConcurrentHashMap()
 
     @NonComputationAtomic
-    private val blockEntities = ConcurrentHashMap<Long, BlockEntity>()
+    val blockEntities = ConcurrentHashMap<Long, BlockEntity>()
 
     @NonComputationAtomic
     val players = ConcurrentHashMap<Long, Player>()

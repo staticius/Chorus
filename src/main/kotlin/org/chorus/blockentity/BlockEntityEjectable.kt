@@ -2,6 +2,7 @@ package org.chorus.blockentity
 
 import org.chorus.block.BlockAir
 import org.chorus.inventory.EjectableInventory
+import org.chorus.inventory.Inventory
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.level.format.IChunk
@@ -11,7 +12,7 @@ import org.chorus.nbt.tag.ListTag
 
 abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
-    override var inventory: EjectableInventory? = null
+    override var inventory: Inventory = null
 
 
     protected abstract fun createInventory(): EjectableInventory

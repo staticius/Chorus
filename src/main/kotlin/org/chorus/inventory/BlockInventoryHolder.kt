@@ -9,7 +9,7 @@ interface BlockInventoryHolder : InventoryHolder {
     val block: Block
         get() = this as Block
 
-    override val inventory: Inventory?
+    override val inventory: Inventory
         get() = blockInventorySupplier().get()
 
     companion object {

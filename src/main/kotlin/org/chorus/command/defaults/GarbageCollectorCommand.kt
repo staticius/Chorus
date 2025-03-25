@@ -1,9 +1,10 @@
 package org.chorus.command.defaults
 
+import org.chorus.Server
 import org.chorus.command.CommandSender
 import org.chorus.utils.TextFormat
+import org.chorus.utils.ThreadCache
 import kotlin.math.round
-
 
 class GarbageCollectorCommand(name: String) :
     TestCommand(name, "%nukkit.command.gc.description", "%nukkit.command.gc.usage"),

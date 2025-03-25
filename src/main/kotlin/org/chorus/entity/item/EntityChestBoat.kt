@@ -19,7 +19,7 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
         return EntityID.Companion.CHEST_BOAT
     }
 
-    protected var inventory: ChestBoatInventory? = null
+    protected var inventory: Inventory = null
 
     override fun getOriginalName(): String {
         return "Chest Boat"

@@ -12,13 +12,9 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.utils.TextFormat
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/13
- */
 class GamemodeCommand(name: String) : VanillaCommand(
     name, "commands.gamemode.description", "",
-    arrayOf<String>("gm")
+    arrayOf("gm")
 ) {
     init {
         this.permission = "nukkit.command.gamemode.survival;" +
@@ -47,9 +43,9 @@ class GamemodeCommand(name: String) : VanillaCommand(
         val list = result.value
         var gameMode = -1
         when (result.key) {
-            "default" -> gameMode = list!!.getResult(0)!!
+            "default" -> gameMode = list.getResult(0)!!
             "byString" -> {
-                val str = list!!.getResult<String>(0)
+                val str = list.getResult<String>(0)!!
                 gameMode = Server.getGamemodeFromString(str)
             }
         }
@@ -57,17 +53,17 @@ class GamemodeCommand(name: String) : VanillaCommand(
             log.addError("commands.gamemode.fail.invalid", gameMode.toString()).output()
             return 0
         }
-        val players = if (list!!.hasResult(1)) {
-            if (sender.hasPermission("nukkit.command.gamemode.other")) {
-                list.getResult<List<Player>>(1)!!
+        val players =
+            if (list.hasResult(1)) {
+                if (sender.hasPermission("nukkit.command.gamemode.other")) {
+                    list.getResult<List<Player>>(1)!!
+                } else {
+                    log.addMessage(TextFormat.RED.toString() + "%nukkit.command.generic.permission").output()
+                    return 0
+                }
             } else {
-                log.addMessage(TextFormat.RED.toString() + "%nukkit.command.generic.permission")
-                    .output()
-                return 0
+                if (sender.isPlayer) listOf(sender.asPlayer()!!) else listOf()
             }
-        } else {
-            if (sender.isPlayer) java.util.List.of(sender.asPlayer()) else listOf()
-        }
 
         if (players.isEmpty()) {
             log.addNoTargetMatch().output()
@@ -89,7 +85,7 @@ class GamemodeCommand(name: String) : VanillaCommand(
                 log.addSuccess("commands.gamemode.success.self", Server.getGamemodeString(gameMode))
             } else {
                 log.outputObjectWhisper(target, "gameMode.changed", Server.getGamemodeString(gameMode))
-                log.addSuccess("commands.gamemode.success.other", Server.getGamemodeString(gameMode), target.name)
+                log.addSuccess("commands.gamemode.success.other", Server.getGamemodeString(gameMode), target.getName())
             }
         }
         log.successCount(players.size).output(true)

@@ -8,13 +8,11 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
+import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.utils.TextFormat
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.stream.Collectors
 
-/**
- * @author Pub4Game
- * @since 2015/12/08
- */
 class KillCommand(name: String) : VanillaCommand(name, "commands.kill.description") {
     init {
         this.permission = ("nukkit.command.kill.self;"
@@ -32,24 +30,24 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        if (result.value!!.hasResult(0)) {
+        if (result.value.hasResult(0)) {
             if (!sender.hasPermission("nukkit.command.kill.other")) {
                 log.addError("nukkit.command.generic.permission").output()
                 return 0
             }
-            var entities = result.value!!.getResult<MutableList<Entity>>(0)!!
-            entities.removeIf { entity: Entity -> !entity.isAlive }
+            var entities = result.value.getResult<MutableList<Entity>>(0)!!
+            entities.removeIf { !it.isAlive() }
             if (entities.isEmpty()) {
                 log.addNoTargetMatch().output()
                 return 0
             }
-            val creativePlayer: AtomicBoolean = AtomicBoolean(false)
+            val creativePlayer = AtomicBoolean(false)
             entities = entities.stream().filter { entity: Entity ->
                 if (entity is Player) if (entity.isCreative) {
                     creativePlayer.set(true)
-                    return@filter false.toInt()
-                } else return@filter true.toInt()
-                else return@filter true.toInt()
+                    return@filter false
+                } else return@filter true
+                else return@filter true
             }.toList()
 
             if (entities.isEmpty()) {
@@ -60,13 +58,13 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
             }
 
             for (entity in entities) {
-                if (entity.name == sender.name) {
+                if (entity.getName() == sender.getName()) {
                     if (!sender.hasPermission("nukkit.command.kill.self")) {
                         continue
                     }
                 }
                 if (entity is Player) {
-                    val ev: EntityDamageEvent = EntityDamageEvent(entity, DamageCause.SUICIDE, 1000000f)
+                    val ev = EntityDamageEvent(entity, EntityDamageEvent.DamageCause.SUICIDE, 1000000f)
                     entity.attack(ev)
                 } else {
                     entity.kill()
@@ -85,14 +83,11 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
                     log.addError("commands.kill.attemptKillPlayerCreative").output()
                     return 0
                 }
-                val ev: EntityDamageEvent = EntityDamageEvent(sender.asPlayer(), DamageCause.SUICIDE, 1000000f)
-                sender.asPlayer().attack(ev)
+                val ev = EntityDamageEvent(sender.asPlayer()!!, EntityDamageEvent.DamageCause.SUICIDE, 1000000f)
+                sender.asPlayer()!!.attack(ev)
             } else {
                 log.addError(
-                    "commands.generic.usage", """
-     
-     ${this.commandFormatTips}
-     """.trimIndent()
+                    "commands.generic.usage", this.commandFormatTips.trimIndent()
                 ).output()
                 return 0
             }

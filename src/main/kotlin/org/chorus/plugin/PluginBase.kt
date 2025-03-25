@@ -41,7 +41,7 @@ abstract class PluginBase : Plugin {
      */
     var isInitialized: Boolean = false
         private set
-    override var description: PluginDescription? = null
+    override var description: PluginDescription = null
         private set
     override var dataFolder: File? = null
         private set
@@ -55,7 +55,7 @@ abstract class PluginBase : Plugin {
      * @return 这个插件的文件 `File`对象。<br></br>The `File` object of this plugin itself.
      *
      */
-    override var file: File? = null
+    override var file: File = null
         private set
     override var logger: PluginLogger? = null
         private set

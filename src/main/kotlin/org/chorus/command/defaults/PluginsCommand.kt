@@ -1,5 +1,6 @@
 package org.chorus.command.defaults
 
+import org.chorus.Server
 import org.chorus.command.Command
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParameter
@@ -8,10 +9,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.utils.TextFormat
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
 class PluginsCommand(name: String) : Command(
     name,
     "%nukkit.command.plugins.description",
@@ -39,7 +36,7 @@ class PluginsCommand(name: String) : Command(
         val list = StringBuilder()
         val plugins = Server.instance.pluginManager.plugins
         for (plugin in plugins.values) {
-            if (list.length > 0) {
+            if (list.isNotEmpty()) {
                 list.append(TextFormat.WHITE.toString() + ", ")
             }
             list.append(if (plugin.isEnabled) TextFormat.GREEN else TextFormat.RED)

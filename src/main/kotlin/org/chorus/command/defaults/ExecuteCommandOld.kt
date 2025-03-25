@@ -1,5 +1,6 @@
 package org.chorus.command.defaults
 
+import org.chorus.Server
 import org.chorus.command.CommandSender
 import org.chorus.command.ExecutorCommandSender
 import org.chorus.command.data.CommandParamType
@@ -41,16 +42,16 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
     ): Int {
         var num = 0
         val list = result.value
-        val entities = list!!.getResult<List<Entity>>(0)!!
+        val entities = list.getResult<List<Entity>>(0)!!
         if (entities.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
         }
         when (result.key) {
             "default" -> {
-                val command = list.getResult<String>(2)
+                val command = list.getResult<String>(2)!!
                 for (entity in entities) {
-                    val pos = (list[1] as PositionNode).get<Locator>(entity.locator)
+                    val pos = (list[1] as PositionNode).get<Locator>(entity.getLocator())
                     val executeSender = ExecutorCommandSender(
                         sender, entity, Transform.fromObject(
                             pos!!.position, pos.level
@@ -58,7 +59,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
                     )
                     val n = Server.instance.executeCommand(executeSender, command)
                     if (n == 0) {
-                        log.addError("commands.execute.failed", command, entity.name)
+                        log.addError("commands.execute.failed", command, entity.getName())
                     } else num += n
                 }
             }
@@ -66,9 +67,9 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
             "detect" -> {
                 val blockId = list.getResult<String>(4)
                 val meta = list.getResult<Int>(5)!!
-                val command = list.getResult<String>(6)
+                val command = list.getResult<String>(6)!!
                 for (entity in entities) {
-                    val pos = (list[1] as PositionNode).get<Locator>(entity.locator)
+                    val pos = (list[1] as PositionNode).get<Locator>(entity.getLocator())
                     val detect = (list[3] as PositionNode).get<Locator>(
                         pos!!
                     )
@@ -82,7 +83,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
                         )
                         val n = Server.instance.executeCommand(executeSender, command)
                         if (n == 0) {
-                            log.addError("commands.execute.failed", command, entity.name)
+                            log.addError("commands.execute.failed", command, entity.getName())
                         } else num += n
                     }
                 }

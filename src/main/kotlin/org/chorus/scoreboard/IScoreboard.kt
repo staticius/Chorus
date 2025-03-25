@@ -68,7 +68,7 @@ interface IScoreboard {
     /**
      * @return 此计分板的所有行
      */
-    val lines: Map<IScorer?, IScoreboardLine>
+    val lines: Map<IScorer, IScoreboardLine>
 
     /**
      * 获取追踪对象在此计分板上对应的行（如果存在）

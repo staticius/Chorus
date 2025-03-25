@@ -3,6 +3,7 @@ package org.chorus.blockentity
 import org.chorus.Player
 import org.chorus.block.BlockAir
 import org.chorus.inventory.ContainerInventory
+import org.chorus.inventory.Inventory
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.level.format.IChunk
@@ -14,7 +15,7 @@ import java.util.function.Consumer
 abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
 
-    override lateinit var inventory: ContainerInventory
+    override lateinit var inventory: Inventory
 
 
     override fun loadNBT() {

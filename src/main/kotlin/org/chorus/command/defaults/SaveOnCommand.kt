@@ -1,15 +1,12 @@
 package org.chorus.command.defaults
 
+import org.chorus.Server
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/13
- */
 class SaveOnCommand(name: String) : VanillaCommand(name, "Enable auto saving") {
     init {
         this.permission = "nukkit.command.save.enable"
@@ -24,7 +21,7 @@ class SaveOnCommand(name: String) : VanillaCommand(name, "Enable auto saving") {
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        Server.instance.autoSave = true
+        Server.instance.setAutoSave(true)
         log.addSuccess("commands.save.enabled").output(true)
         return 1
     }
