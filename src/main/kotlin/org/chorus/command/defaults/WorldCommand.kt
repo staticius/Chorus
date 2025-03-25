@@ -46,7 +46,7 @@ class WorldCommand(name: String) : VanillaCommand(name, "nukkit.command.world.de
             }
 
             "tp" -> {
-                val levelName = result.value!!.getResult<String>(1)
+                val levelName = result.value.getResult<String>(1)!!
                 var level = Server.instance.getLevelByName(levelName)
                 if (level == null) {
                     if (Server.instance.loadLevel(levelName)) {

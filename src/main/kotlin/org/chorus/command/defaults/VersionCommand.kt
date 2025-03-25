@@ -7,8 +7,10 @@ import org.chorus.command.*
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
 import org.chorus.lang.TranslationContainer
+import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.plugin.Plugin
 import org.chorus.utils.TextFormat
+import java.io.IOException
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -24,10 +26,6 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
 class VersionCommand(name: String) : Command(
     name,
     "%nukkit.command.version.description",
@@ -153,13 +151,13 @@ class VersionCommand(name: String) : Command(
             }
 
             if (found[0]) {
-                val desc: PluginDescription = exactPlugin[0]!!.description
-                sender.sendMessage(TextFormat.DARK_GREEN.toString() + desc.getName() + TextFormat.WHITE + " version " + TextFormat.DARK_GREEN + desc.getVersion())
-                if (desc.getDescription() != null) {
-                    sender.sendMessage(desc.getDescription())
+                val desc = exactPlugin[0]!!.description
+                sender.sendMessage(TextFormat.DARK_GREEN.toString() + desc.name + TextFormat.WHITE + " version " + TextFormat.DARK_GREEN + desc.version)
+                if (desc.description != null) {
+                    sender.sendMessage(desc.description!!)
                 }
-                if (desc.getWebsite() != null) {
-                    sender.sendMessage("Website: " + desc.getWebsite())
+                if (desc.website != null) {
+                    sender.sendMessage("Website: " + desc.website!!)
                 }
                 val authors: List<String> = desc.getAuthors()
                 val authorsString = arrayOf("")

@@ -1,6 +1,7 @@
 package org.chorus.command.defaults
 
 import org.chorus.block.Block
+import org.chorus.block.BlockAir
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
@@ -35,7 +36,7 @@ class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.de
         log: CommandLogger
     ): Int {
         val list = result.value
-        val locator = list!!.getResult<Locator>(0)
+        val locator = list.getResult<Locator>(0)
         var block = list.getResult<Block>(1)
         try {
             if (list.hasResult(2)) {
@@ -65,7 +66,10 @@ class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.de
             when (oldBlockHandling) {
                 "destroy" -> {
                     if (sender.isPlayer) {
-                        level.useBreakOn(locator.position, null, Item.AIR, sender.asPlayer(), true, true)
+                        level.useBreakOn(locator.position, null, Item.AIR, sender.asPlayer(),
+                            createParticles = true,
+                            immediateDestroy = true
+                        )
                     } else {
                         level.useBreakOn(locator.position)
                     }

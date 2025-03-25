@@ -8,6 +8,7 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
+import org.chorus.network.protocol.StopSoundPacket
 import java.util.stream.Collectors
 
 class StopSoundCommand(name: String) : VanillaCommand(name, "commands.stopsound.description") {

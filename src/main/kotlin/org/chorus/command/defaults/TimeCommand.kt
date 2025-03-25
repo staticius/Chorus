@@ -1,6 +1,7 @@
 package org.chorus.command.defaults
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
@@ -9,7 +10,6 @@ import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Level
 import kotlin.collections.set
-
 
 class TimeCommand(name: String) : VanillaCommand(name, "commands.time.description") {
     init {
@@ -48,7 +48,7 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
         val list = result.value
         when (result.key) {
             "1arg" -> {
-                val mode = list!!.getResult<String>(0)
+                val mode = list.getResult<String>(0)
                 if ("start" == mode) {
                     if (!sender.hasPermission("nukkit.command.time.start")) {
                         log.addMessage("nukkit.command.generic.permission").output()
@@ -77,11 +77,11 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                         return 0
                     }
                     val level = if (sender is Player) {
-                        sender.level
+                        sender.level!!
                     } else {
-                        Server.instance.defaultLevel
+                        Server.instance.defaultLevel!!
                     }
-                    log.addSuccess("commands.time.query.gametime", level.time.toString()).output(true)
+                    log.addSuccess("commands.time.query.gametime", level.getTime().toString()).output(true)
                 }
                 return 1
             }
@@ -91,14 +91,14 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                     log.addMessage("nukkit.command.generic.permission").output()
                     return 0
                 }
-                val value = list!!.getResult<Int>(1)!!
+                val value = list.getResult<Int>(1)!!
                 if (value < 0) {
                     log.addNumTooSmall(1, 0).output()
                     return 0
                 }
                 for (level in Server.instance.levels.values) {
                     level.checkTime()
-                    level.time = level.time + value
+                    level.setTime(level.getTime() + value)
                     level.checkTime()
                 }
                 log.addSuccess("commands.time.added", value.toString()).output(true)
@@ -110,14 +110,14 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                     log.addMessage("nukkit.command.generic.permission").output()
                     return 0
                 }
-                val value = list!!.getResult<Int>(1)!!
+                val value = list.getResult<Int>(1)!!
                 if (value < 0) {
                     log.addNumTooSmall(1, 0).output()
                     return 0
                 }
                 for (level in Server.instance.levels.values) {
                     level.checkTime()
-                    level.time = value
+                    level.setTime(value)
                     level.checkTime()
                 }
                 log.addSuccess("commands.time.set", value.toString()).output(true)
@@ -130,23 +130,18 @@ class TimeCommand(name: String) : VanillaCommand(name, "commands.time.descriptio
                     return 0
                 }
                 var value = 0
-                val str = list!!.getResult<String>(1)
-                if ("day" == str) {
-                    value = Level.TIME_DAY
-                } else if ("night" == str) {
-                    value = Level.TIME_NIGHT
-                } else if ("midnight" == str) {
-                    value = Level.TIME_MIDNIGHT
-                } else if ("noon" == str) {
-                    value = Level.TIME_NOON
-                } else if ("sunrise" == str) {
-                    value = Level.TIME_SUNRISE
-                } else if ("sunset" == str) {
-                    value = Level.TIME_SUNSET
+                val str = list.getResult<String>(1)
+                when (str) {
+                    "day" -> value = Level.TIME_DAY
+                    "night" -> value = Level.TIME_NIGHT
+                    "midnight" -> value = Level.TIME_MIDNIGHT
+                    "noon" -> value = Level.TIME_NOON
+                    "sunrise" -> value = Level.TIME_SUNRISE
+                    "sunset" -> value = Level.TIME_SUNSET
                 }
                 for (level in Server.instance.levels.values) {
                     level.checkTime()
-                    level.time = value
+                    level.setTime(value)
                     level.checkTime()
                 }
                 log.addSuccess("commands.time.set", value.toString()).output(true)

@@ -10,10 +10,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.lang.TranslationContainer
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
 class TellCommand(name: String) :
     VanillaCommand(name, "commands.tell.description", "", arrayOf<String>("w", "msg")) {
     init {
@@ -33,19 +29,19 @@ class TellCommand(name: String) :
         log: CommandLogger
     ): Int {
         val list = result.value
-        val players = list!!.getResult<List<Player>>(0)!!
+        val players = list.getResult<List<Player>>(0)!!
         if (players.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
         }
-        val msg = list.getResult<String>(1)
+        val msg = list.getResult<String>(1)!!
         for (player in players) {
             if (player === sender) {
                 log.addError("commands.message.sameTarget").output()
                 continue
             }
-            log.addSuccess("commands.message.display.outgoing", player.name, msg)
-            player.sendMessage(TranslationContainer("commands.message.display.incoming", sender.name, msg))
+            log.addSuccess("commands.message.display.outgoing", player.getName(), msg)
+            player.sendMessage(TranslationContainer("commands.message.display.incoming", sender.getName(), msg))
         }
         log.output()
         return 1

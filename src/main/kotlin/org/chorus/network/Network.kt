@@ -26,6 +26,7 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.query.codec.QueryPacketCodec
 import org.chorus.network.query.handler.QueryPacketHandler
 import org.chorus.plugin.InternalPlugin
+import org.chorus.utils.Loggable
 import org.chorus.utils.Utils
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel
@@ -64,7 +65,7 @@ class Network @JvmOverloads constructor(
         server.onlinePlayers.size,
         server.getMaxPlayers(),
         server.serverID.mostSignificantBits,
-        Server.getGamemodeString(server.defaultGamemode, true)
+        Server.getGamemodeString(server.defaultGamemode, true),
         false,
         ProtocolInfo.CURRENT_PROTOCOL,
         null,
@@ -78,7 +79,7 @@ class Network @JvmOverloads constructor(
             try {
                 tmpIfs = SystemInfo().hardware.networkIFs
             } catch (t: Throwable) {
-                Network.log.warn(Server.instance.baseLang.get("nukkit.start.hardwareMonitorDisabled"))
+                Network.log.warn(Server.instance.baseLang["nukkit.start.hardwareMonitorDisabled"])
             }
             hardWareNetworkInterfaces.set(tmpIfs)
         }, true)
@@ -108,11 +109,11 @@ class Network @JvmOverloads constructor(
             .group(eventloopgroup)
             .childHandler(object : BedrockServerInitializer() {
                 override fun postInitChannel(channel: Channel?) {
-                    if (server.properties.get(ServerPropertiesKeys.ENABLE_QUERY, true)) {
+                    if (server.properties[ServerPropertiesKeys.ENABLE_QUERY, true]) {
                         channel!!.pipeline().addLast("queryPacketCodec", QueryPacketCodec())
                             .addLast(
                                 "queryPacketHandler",
-                                QueryPacketHandler { address: InetSocketAddress? -> server.queryInformation })
+                                QueryPacketHandler { server.queryInformation })
                     }
                 }
 
@@ -141,7 +142,7 @@ class Network @JvmOverloads constructor(
 
     fun shutdown() {
         channel.close()
-        this.pong = null
+//        this.pong = null
         sessionMap.clear()
         netWorkStatisticDataList.clear()
     }
@@ -287,4 +288,6 @@ class Network @JvmOverloads constructor(
     fun onSessionDisconnect(address: InetSocketAddress?) {
         sessionMap.remove(address)
     }
+
+    companion object : Loggable
 }

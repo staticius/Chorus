@@ -9,15 +9,12 @@ import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
 import org.chorus.lang.TranslationContainer
 import org.chorus.level.Locator
+import org.chorus.network.protocol.types.SpawnPointType
 import org.chorus.utils.TextFormat
 import java.text.DecimalFormat
 import java.util.stream.Collectors
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/12/13
- */
 class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoint.description") {
     init {
         this.permission = "nukkit.command.spawnpoint"
@@ -36,9 +33,9 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
         log: CommandLogger
     ): Int {
         val list = result.value
-        var players = if (sender.isPlayer) listOf(sender.asPlayer()) else listOf()
+        var players = if (sender.isPlayer) listOf(sender.asPlayer()!!) else listOf()
         val round2 = DecimalFormat("##0.00")
-        if (list!!.hasResult(0)) {
+        if (list.hasResult(0)) {
             players = list.getResult(0)!!
             if (players.isEmpty()) {
                 log.addNoTargetMatch().output()
@@ -73,11 +70,11 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
             log.addSyntaxErrors(1).output()
             return 0
         }
-        if (!players.isEmpty()) {
+        if (players.isNotEmpty()) {
             val pos = players[0].getLocator()
             players[0].setSpawn(pos, SpawnPointType.PLAYER)
             log.addSuccess(
-                "commands.spawnpoint.success.single", sender.name,
+                "commands.spawnpoint.success.single", sender.getName(),
                 round2.format(pos.position.x),
                 round2.format(pos.position.y),
                 round2.format(pos.position.z)

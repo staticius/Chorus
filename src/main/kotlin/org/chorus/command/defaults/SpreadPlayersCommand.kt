@@ -55,7 +55,7 @@ class SpreadPlayersCommand(name: String) : VanillaCommand(name, "commands.spread
         }
         for (target in targets) {
             val vec3 = this.nextXZ(x, z, maxRange.toInt())
-            vec3.y = (target.level.getHighestBlockAt(vec3.floorX, vec3.floorZ) + 1).toDouble()
+            vec3.y = (target.level!!.getHighestBlockAt(vec3.floorX, vec3.floorZ) + 1).toDouble()
             target.teleport(vec3)
         }
         log.addSuccess(

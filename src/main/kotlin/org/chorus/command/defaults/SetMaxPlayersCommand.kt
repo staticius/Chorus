@@ -25,7 +25,7 @@ class SetMaxPlayersCommand(name: String) : VanillaCommand(name, "commands.setmax
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        var maxPlayers = result.value!!.getResult<Int>(0)!!
+        var maxPlayers = result.value.getResult<Int>(0)!!
         var lowerBound = false
 
         if (maxPlayers < Server.instance.onlinePlayers.size) {
@@ -33,7 +33,7 @@ class SetMaxPlayersCommand(name: String) : VanillaCommand(name, "commands.setmax
             lowerBound = true
         }
 
-        Server.instance.maxPlayers = maxPlayers
+        Server.instance.setMaxPlayers(maxPlayers)
         log.addSuccess("commands.setmaxplayers.success", maxPlayers.toString())
         if (lowerBound) {
             log.addSuccess("commands.setmaxplayers.success.lowerbound")

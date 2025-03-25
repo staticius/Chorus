@@ -38,14 +38,14 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
         log: CommandLogger
     ): Int {
         val list = result.value
-        val entities = list!!.getResult<List<Entity>>(0)!!
+        val entities = list.getResult<List<Entity>>(0)!!
         if (entities.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
         }
         when (result.key) {
             "add" -> {
-                val tag = list.getResult<String>(2)
+                val tag = list.getResult<String>(2)!!
                 var success_count = 0
                 for (entity in entities) {
                     if (entity.containTag(tag)) continue
@@ -57,7 +57,7 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
                     return 0
                 }
                 if (entities.size == 1) {
-                    log.addSuccess("commands.tag.add.success.single", tag, entities[0].name)
+                    log.addSuccess("commands.tag.add.success.single", tag, entities[0].getName())
                 } else {
                     log.addSuccess("commands.tag.add.success.multiple", tag, entities.size.toString())
                 }
@@ -66,7 +66,7 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
             }
 
             "remove" -> {
-                val tag = list.getResult<String>(2)
+                val tag = list.getResult<String>(2)!!
                 var success_count = 0
                 for (entity in entities) {
                     if (!entity.containTag(tag)) continue
@@ -78,7 +78,7 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
                     return 0
                 }
                 if (entities.size == 1) {
-                    log.addSuccess("commands.tag.remove.success.single", tag, entities[0].name)
+                    log.addSuccess("commands.tag.remove.success.single", tag, entities[0].getName())
                 } else {
                     log.addSuccess("commands.tag.remove.success.multiple", tag, entities.size.toString())
                 }
@@ -89,14 +89,14 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
             "list" -> {
                 val tagSet: MutableSet<String> = HashSet()
                 for (entity in entities) {
-                    tagSet.addAll(entity.allTags.stream().map { t: StringTag -> t.data }.collect(Collectors.toSet()))
+                    tagSet.addAll(entity.getAllTags().map { t: StringTag -> t.data }.toSet())
                 }
                 val tagCount = tagSet.size
                 val tagStr = tagSet.stream().collect(Collectors.joining(" "))
 
                 if (tagStr.isEmpty()) {
                     if (entities.size == 1) {
-                        log.addError("commands.tag.list.single.empty", entities[0].name)
+                        log.addError("commands.tag.list.single.empty", entities[0].getName())
                     } else {
                         log.addError("commands.tag.list.multiple.empty", entities.size.toString())
                     }
@@ -106,7 +106,7 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
                     if (entities.size == 1) {
                         log.addSuccess(
                             "commands.tag.list.single.success",
-                            entities[0].name,
+                            entities[0].getName(),
                             tagCount.toString(),
                             tagStr
                         )

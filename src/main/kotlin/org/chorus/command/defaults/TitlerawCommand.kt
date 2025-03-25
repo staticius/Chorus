@@ -47,7 +47,7 @@ class TitlerawCommand(name: String) : VanillaCommand(name, "commands.titleraw.de
         log: CommandLogger
     ): Int {
         val list = result.value
-        val players = list!!.getResult<List<Player>>(0)!!
+        val players = list.getResult<List<Player>>(0)!!
         if (players.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
@@ -57,7 +57,7 @@ class TitlerawCommand(name: String) : VanillaCommand(name, "commands.titleraw.de
             "clear" -> {
                 for (player in players) {
                     player.clearTitle()
-                    log.addMessage(TextFormat.WHITE.toString() + "%nukkit.command.title.clear", player.name)
+                    log.addMessage(TextFormat.WHITE.toString() + "%nukkit.command.title.clear", player.getName())
                 }
                 log.output()
                 return 1
@@ -66,7 +66,7 @@ class TitlerawCommand(name: String) : VanillaCommand(name, "commands.titleraw.de
             "reset" -> {
                 for (player in players) {
                     player.resetTitleSettings()
-                    log.addMessage(TextFormat.WHITE.toString() + "%nukkit.command.title.reset", player.name)
+                    log.addMessage(TextFormat.WHITE.toString() + "%nukkit.command.title.reset", player.getName())
                 }
                 log.output()
                 return 1
@@ -74,7 +74,7 @@ class TitlerawCommand(name: String) : VanillaCommand(name, "commands.titleraw.de
 
             "set" -> {
                 val titleLocation = list.getResult<String>(1)
-                val rawText = list.getResult<org.chorus.command.utils.RawText>(2)
+                val rawText = list.getResult<org.chorus.command.utils.RawText>(2)!!
                 when (titleLocation) {
                     "title" -> {
                         for (player in players) {
@@ -123,7 +123,7 @@ class TitlerawCommand(name: String) : VanillaCommand(name, "commands.titleraw.de
                         fadeIn.toString(),
                         stay.toString(),
                         fadeOut.toString(),
-                        player.name
+                        player.getName()
                     )
                 }
                 log.output()

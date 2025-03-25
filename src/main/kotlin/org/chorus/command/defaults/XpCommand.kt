@@ -11,10 +11,6 @@ import org.chorus.command.tree.node.XpLevelNode
 import org.chorus.command.utils.CommandLogger
 import kotlin.collections.set
 
-/**
- * @author Snake1999
- * @since 2016/1/22
- */
 class XpCommand(name: String) : Command(name, "commands.xp.description") {
     init {
         this.permission = "nukkit.command.xp"
@@ -39,7 +35,7 @@ class XpCommand(name: String) : Command(name, "commands.xp.description") {
         //  "/xp <amount> [player]"  for adding exp
         //  "/xp <amount>L [player]" for adding exp level
         val list = result.value
-        var players: List<Player>? = if (sender.isPlayer) listOf(sender.asPlayer()) else null
+        var players: List<Player>? = if (sender.isPlayer) listOf(sender.asPlayer()!!) else null
         when (result.key) {
             "default" -> {
                 val amount = list!!.getResult<Int>(0)!!
@@ -56,7 +52,7 @@ class XpCommand(name: String) : Command(name, "commands.xp.description") {
                 }
                 for (player in players) {
                     player.addExperience(amount)
-                    log.addSuccess("commands.xp.success", amount.toString(), player.name)
+                    log.addSuccess("commands.xp.success", amount.toString(), player.getName())
                 }
                 log.successCount(players.size).output()
                 return players.size
@@ -80,7 +76,7 @@ class XpCommand(name: String) : Command(name, "commands.xp.description") {
                     } else {
                         player.setExperience(player.experience, newLevel, true)
                     }
-                    log.addSuccess("commands.xp.success.levels", level.toString(), player.name)
+                    log.addSuccess("commands.xp.success.levels", level.toString(), player.getName())
                 }
                 log.successCount(players.size).output()
                 return players.size

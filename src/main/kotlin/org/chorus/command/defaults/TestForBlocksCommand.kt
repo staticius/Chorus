@@ -66,12 +66,12 @@ class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testfo
             destination.z + (blocksAABB.maxZ - blocksAABB.minZ)
         )
         val destinationAABB: AxisAlignedBB = SimpleAxisAlignedBB(
-            min(destination.x, to.getX()), min(
-                destination.y, to.getY()
-            ), min(destination.z, to.getZ()), max(
-                destination.x, to.getX()
-            ), max(destination.y, to.getY()), max(
-                destination.z, to.getZ()
+            min(destination.x, to.x), min(
+                destination.y, to.y
+            ), min(destination.z, to.z), max(
+                destination.x, to.x
+            ), max(destination.y, to.y), max(
+                destination.z, to.z
             )
         )
 

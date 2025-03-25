@@ -1,5 +1,6 @@
 package org.chorus.command.defaults
 
+import org.chorus.Server
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
@@ -7,13 +8,10 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.StringNode
 import org.chorus.command.utils.CommandLogger
+import org.chorus.config.ServerPropertiesKeys
 import org.chorus.utils.TextFormat
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
 class WhitelistCommand(name: String) :
     VanillaCommand(
         name,
@@ -92,20 +90,20 @@ class WhitelistCommand(name: String) :
             }
 
             "2args" -> {
-                val action = list!!.getResult<String>(0)
-                val name = list.getResult<String>(1)
+                val action = list.getResult<String>(0)
+                val name = list.getResult<String>(1)!!
                 if (this.badPerm(log, sender, action!!.lowercase())) {
                     return 0
                 }
                 when (action.lowercase()) {
                     "add" -> {
-                        Server.instance.getOfflinePlayer(name).isWhitelisted = true
+                        Server.instance.getOfflinePlayer(name)?.isWhitelisted = true
                         log.addSuccess("commands.allowlist.add.success", name).output(true)
                         return 1
                     }
 
                     "remove" -> {
-                        Server.instance.getOfflinePlayer(name).isWhitelisted = false
+                        Server.instance.getOfflinePlayer(name)?.isWhitelisted = false
                         log.addSuccess("commands.allowlist.remove.success", name).output(true)
                         return 1
                     }

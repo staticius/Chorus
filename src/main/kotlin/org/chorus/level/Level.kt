@@ -206,14 +206,14 @@ class Level(
     private val lightQueue: MutableMap<Long, MutableMap<Int, Any>> = ConcurrentHashMap(8, 0.9f, 1)
 
     /**base tick system */
-    private val baseTickThread: Thread
+    val baseTickThread: Thread
 
 
-    private val baseTickGameLoop: GameLoop
+    val baseTickGameLoop: GameLoop
 
     /**sub tick system */
-    private val subTickThread: Thread
-    private val subTickGameLoop: GameLoop
+    val subTickThread: Thread
+    val subTickGameLoop: GameLoop
 
     //Scheduler
 

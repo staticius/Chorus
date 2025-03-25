@@ -9,9 +9,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.lang.TranslationContainer
 import kotlin.collections.set
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 class WeatherCommand(name: String) : VanillaCommand(name, "commands.weather.description", "commands.weather.usage") {
     init {
         this.permission = "nukkit.command.weather"

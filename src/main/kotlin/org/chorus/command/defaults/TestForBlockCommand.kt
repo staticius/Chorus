@@ -30,7 +30,7 @@ class TestForBlockCommand(name: String) : VanillaCommand(name, "commands.testfor
         log: CommandLogger
     ): Int {
         val list = result.value
-        val locator = list!!.getResult<Locator>(0)
+        val locator = list.getResult<Locator>(0)
         val tileName = list.getResult<Block>(1)
         val tileId = tileName!!.id
         var dataValue = 0

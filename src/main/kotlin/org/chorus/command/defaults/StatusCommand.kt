@@ -1,12 +1,18 @@
 package org.chorus.command.defaults
 
+import com.sun.jna.platform.win32.COM.WbemcliUtil
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
+import org.chorus.Chorus
+import org.chorus.Server
 import org.chorus.camera.instruction.impl.ClearInstruction.get
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParameter
 import org.chorus.utils.TextFormat
 import oshi.SystemInfo
+import oshi.hardware.HardwareAbstractionLayer
+import oshi.util.platform.windows.WmiQueryHandler
 import java.io.File
+import java.io.IOException
 import java.lang.management.ManagementFactory
 import java.nio.file.Files
 import java.util.concurrent.TimeUnit
@@ -39,7 +45,7 @@ class StatusCommand(name: String) :
         if (simpleMode) {
             sender.sendMessage(TextFormat.GREEN.toString() + "---- " + TextFormat.WHITE + "Server status" + TextFormat.GREEN + " ----")
 
-            val time: Long = System.currentTimeMillis() - Nukkit.START_TIME
+            val time: Long = System.currentTimeMillis() - Chorus.START_TIME
 
             sender.sendMessage(TextFormat.GOLD.toString() + "Uptime: " + formatUptime(time))
 
@@ -101,7 +107,7 @@ class StatusCommand(name: String) :
                     ) + "ms" +
                             (" [delayOpt " + (level.tickRateOptDelay - 1) + "]") +
                             (if (level.tickRate > 1) " (tick rate " + (19 - level.tickRate) + ")" else "") +
-                            (if (level.baseTickGameLoop.isRunning) " (" + (if (level.baseTickGameLoop.tps >= 19) TextFormat.GREEN else (if (level.baseTickGameLoop.tps < 5) TextFormat.RED else TextFormat.YELLOW)) + level.baseTickGameLoop.tps + " TPS, " + level.baseTickGameLoop.msPt + " MSPT)" else "")
+                            (if (level.baseTickGameLoop.isRunning()) " (" + (if (level.baseTickGameLoop.tps >= 19) TextFormat.GREEN else (if (level.baseTickGameLoop.tps < 5) TextFormat.RED else TextFormat.YELLOW)) + level.baseTickGameLoop.tps + " TPS, " + level.baseTickGameLoop.msPt + " MSPT)" else "")
                 )
             }
         } else {
@@ -112,7 +118,7 @@ class StatusCommand(name: String) :
             run {
                 sender.sendMessage(TextFormat.YELLOW.toString() + ">>> " + TextFormat.WHITE + "PNX Server Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET)
                 // 运行时间
-                val time: Long = System.currentTimeMillis() - Nukkit.START_TIME
+                val time: Long = System.currentTimeMillis() - Chorus.START_TIME
                 sender.sendMessage(TextFormat.GOLD.toString() + "Uptime: " + formatUptime(time))
                 // TPS
                 var tpsColor = TextFormat.GREEN
@@ -179,7 +185,7 @@ class StatusCommand(name: String) :
             // 网络信息
             try {
                 val network = Server.instance.network
-                if (network.hardWareNetworkInterfaces != null) {
+                if (network.getHardWareNetworkInterfaces() != null) {
                     sender.sendMessage(TextFormat.YELLOW.toString() + ">>> " + TextFormat.WHITE + "Network Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET)
                     sender.sendMessage(
                         TextFormat.GOLD.toString() + "Network upload: " + TextFormat.GREEN + formatKB(
@@ -193,7 +199,7 @@ class StatusCommand(name: String) :
                     )
                     sender.sendMessage(TextFormat.GOLD.toString() + "Network hardware list: ")
                     var list: ObjectArrayList<String?>
-                    for (each in network.hardWareNetworkInterfaces!!) {
+                    for (each in network.getHardWareNetworkInterfaces()!!) {
                         list = ObjectArrayList(each.iPv4addr.size + each.iPv6addr.size)
                         list.addElements(0, each.iPv4addr)
                         list.addElements(list.size, each.iPv6addr)
@@ -212,32 +218,32 @@ class StatusCommand(name: String) :
             }
             // CPU信息
             run {
-                val cpu: CentralProcessor = systemInfo.hardware.processor
+                val cpu = systemInfo.hardware.processor
                 sender.sendMessage(TextFormat.YELLOW.toString() + ">>> " + TextFormat.WHITE + "CPU Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET)
                 sender.sendMessage(
-                    TextFormat.GOLD.toString() + "CPU: " + TextFormat.AQUA + cpu.getProcessorIdentifier()
-                        .getName() + TextFormat.GRAY +
-                            " (" + formatFreq(cpu.getMaxFreq()) + " baseline; " + cpu.getPhysicalProcessorCount() + " cores, " + cpu.getLogicalProcessorCount() + " logical cores)"
+                    TextFormat.GOLD.toString() + "CPU: " + TextFormat.AQUA + cpu.processorIdentifier
+                        .name + TextFormat.GRAY +
+                            " (" + formatFreq(cpu.maxFreq) + " baseline; " + cpu.physicalProcessorCount + " cores, " + cpu.logicalProcessorCount + " logical cores)"
                 )
                 sender.sendMessage(TextFormat.GOLD.toString() + "Thread count: " + TextFormat.GREEN + Thread.getAllStackTraces().size)
                 sender.sendMessage(
-                    TextFormat.GOLD.toString() + "CPU Features: " + TextFormat.RESET + (if (cpu.getProcessorIdentifier()
-                            .isCpu64bit()
+                    TextFormat.GOLD.toString() + "CPU Features: " + TextFormat.RESET + (if (cpu.processorIdentifier
+                            .isCpu64bit
                     ) "64bit, " else "32bit, ") +
-                            cpu.getProcessorIdentifier().getModel() + ", micro-arch: " + cpu.getProcessorIdentifier()
-                        .getMicroarchitecture()
+                            cpu.processorIdentifier.model + ", micro-arch: " + cpu.processorIdentifier
+                        .microarchitecture
                 )
                 sender.sendMessage("")
             }
             // 内存信息
             run {
-                val globalMemory: GlobalMemory = systemInfo.hardware.memory
-                val physicalMemories: List<PhysicalMemory> = globalMemory.getPhysicalMemory()
-                val virtualMemory: VirtualMemory = globalMemory.getVirtualMemory()
-                val allPhysicalMemory: Long = globalMemory.getTotal() / 1000
-                val usedPhysicalMemory: Long = (globalMemory.getTotal() - globalMemory.getAvailable()) / 1000
-                val allVirtualMemory: Long = virtualMemory.getVirtualMax() / 1000
-                val usedVirtualMemory: Long = virtualMemory.getVirtualInUse() / 1000
+                val globalMemory = systemInfo.hardware.memory
+                val physicalMemories = globalMemory.physicalMemory
+                val virtualMemory = globalMemory.virtualMemory
+                val allPhysicalMemory: Long = globalMemory.total / 1000
+                val usedPhysicalMemory: Long = (globalMemory.total - globalMemory.available) / 1000
+                val allVirtualMemory: Long = virtualMemory.virtualMax / 1000
+                val usedVirtualMemory: Long = virtualMemory.virtualInUse / 1000
                 sender.sendMessage(TextFormat.YELLOW.toString() + ">>> " + TextFormat.WHITE + "Memory Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET)
                 //JVM内存
                 val runtime = Runtime.getRuntime()
@@ -268,7 +274,7 @@ class StatusCommand(name: String) :
                 sender.sendMessage(
                     TextFormat.GOLD.toString() + "  Physical memory: " + TextFormat.GREEN + usageColor + formatMB(
                         usedPhysicalMemory
-                    ) + " / " + formatMB(allPhysicalMemory) + ". (" + round(usage, 2) + "%)"
+                    ) + " / " + formatMB(allPhysicalMemory) + ". (" + round(usage) + "%)"
                 )
                 usage = usedVirtualMemory.toDouble() / allVirtualMemory * 100
                 usageColor = TextFormat.GREEN
@@ -283,11 +289,11 @@ class StatusCommand(name: String) :
                 if (physicalMemories.size > 0) sender.sendMessage(TextFormat.GOLD.toString() + "  Hardware list: ")
                 for (each in physicalMemories) {
                     sender.sendMessage(
-                        TextFormat.AQUA.toString() + "    " + each.getBankLabel() + " @ " + formatFreq(
-                            each.getClockSpeed()
-                        ) + TextFormat.WHITE + " " + formatMB(each.getCapacity() / 1000)
+                        TextFormat.AQUA.toString() + "    " + each.bankLabel + " @ " + formatFreq(
+                            each.clockSpeed
+                        ) + TextFormat.WHITE + " " + formatMB(each.capacity / 1000)
                     )
-                    sender.sendMessage(TextFormat.GRAY.toString() + "      " + each.getMemoryType() + ", " + each.getManufacturer())
+                    sender.sendMessage(TextFormat.GRAY.toString() + "      " + each.memoryType + ", " + each.manufacturer)
                 }
                 sender.sendMessage("")
             }
@@ -380,15 +386,15 @@ class StatusCommand(name: String) :
 
         private fun isInVM(hardware: HardwareAbstractionLayer): String? {
             // CPU型号检测
-            val vendor: String = hardware.getProcessor().getProcessorIdentifier().getVendor().trim { it <= ' ' }
+            val vendor: String = hardware.processor.processorIdentifier.vendor.trim { it <= ' ' }
             if (vmVendor.containsKey(vendor)) {
                 return vmVendor[vendor]
             }
 
             // MAC地址检测
-            val nifs: List<NetworkIF> = hardware.getNetworkIFs()
+            val nifs = hardware.networkIFs
             for (nif in nifs) {
-                val mac: String = nif.getMacaddr().uppercase()
+                val mac: String = nif.macaddr.uppercase()
                 val oui = if (mac.length > 7) mac.substring(0, 8) else mac
                 if (vmMac.containsKey(oui)) {
                     return vmMac[oui]
@@ -396,32 +402,31 @@ class StatusCommand(name: String) :
             }
 
             // 模型检测
-            val model: String = hardware.getComputerSystem().getModel()
+            val model: String = hardware.computerSystem.model
             for (vm in vmModelArray) {
                 if (model.contains(vm)) {
                     return vm
                 }
             }
-            val manufacturer: String = hardware.getComputerSystem().getManufacturer()
+            val manufacturer: String = hardware.computerSystem.manufacturer
             if ("Microsoft Corporation" == manufacturer && "Virtual Machine" == model) {
                 return "Microsoft Hyper-V"
             }
 
             //内存型号检测
-            if (hardware.getMemory().getPhysicalMemory().get(0).getManufacturer() == "QEMU") {
+            if (hardware.memory.physicalMemory[0].manufacturer == "QEMU") {
                 return "QEMU"
             }
 
             //检查Windows系统参数
             //Wmi虚拟机查询只能在Windows上使用，Linux上不执行这个部分即可
             if (System.getProperties().getProperty("os.name").uppercase().contains("WINDOWS")) {
-                val computerSystemQuery: WmiQuery<ComputerSystemProperty> = WmiQuery<Any?>(
+                val computerSystemQuery = WbemcliUtil.WmiQuery(
                     "Win32_ComputerSystem",
                     ComputerSystemEntry::class.java
                 )
-                val result: WmiResult<*> =
-                    WmiQueryHandler.createInstance().queryWMI<ComputerSystemProperty>(computerSystemQuery)
-                val tmp: Any = result.getValue(ComputerSystemEntry.HYPERVISORPRESENT, 0)
+                val result = WmiQueryHandler.createInstance().queryWMI(computerSystemQuery)
+                val tmp = result.getValue(ComputerSystemEntry.HYPERVISORPRESENT, 0)
                 if (tmp != null && tmp.toString() == "true") {
                     return "Hyper-V"
                 }

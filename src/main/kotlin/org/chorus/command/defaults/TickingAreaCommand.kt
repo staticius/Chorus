@@ -7,6 +7,8 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
+import org.chorus.level.tickingarea.TickingArea
+import org.chorus.level.tickingarea.manager.TickingAreaManager
 import org.chorus.math.*
 import org.chorus.utils.TextFormat
 import java.util.stream.Collectors
@@ -60,22 +62,22 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
         val level = sender.getLocator().level
         when (result.key) {
             "add-pos" -> {
-                val from = list!!.getResult<Locator>(1)
+                val from = list.getResult<Locator>(1)
                 val to = list.getResult<Locator>(2)
-                var name: String? = "" //will auto generate name if not set, like "Area0"
-                if (list.hasResult(3)) name = list.getResult(3)
+                var name = "" // will auto generate name if not set, like "Area0"
+                if (list.hasResult(3)) name = list.getResult(3)!!
                 if (manager.containTickingArea(name)) {
                     log.addError("commands.tickingarea-add.conflictingname", name).output()
                     return 0
                 }
-                val area: TickingArea = TickingArea(name, level.name)
-                for (chunkX in min(from!!.position.chunkX.toDouble(), to!!.position.chunkX.toDouble())..max(
+                val area = TickingArea(name, level.name)
+                for (chunkX in min(from!!.position.chunkX.toDouble(), to!!.position.chunkX.toDouble()).toInt()..max(
                     from.position.chunkX.toDouble(), to.position.chunkX.toDouble()
-                )) {
-                    for (chunkZ in min(from.position.chunkZ.toDouble(), to.position.chunkZ.toDouble())..max(
+                ).toInt()) {
+                    for (chunkZ in min(from.position.chunkZ.toDouble(), to.position.chunkZ.toDouble()).toInt()..max(
                         from.position.chunkZ.toDouble(), to.position.chunkZ.toDouble()
-                    )) {
-                        area.addChunk(ChunkPos(chunkX, chunkZ))
+                    ).toInt()) {
+                        area.addChunk(TickingArea.ChunkPos(chunkX, chunkZ))
                     }
                 }
                 manager.addTickingArea(area)
@@ -88,10 +90,10 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
             }
 
             "add-circle" -> {
-                val center = list!!.getResult<Locator>(2)
+                val center = list.getResult<Locator>(2)
                 val radius = list.getResult<Int>(3)!!
-                var name: String? = "" //will auto generate name if not set, like "Area0"
-                if (list.hasResult(4)) name = list.getResult(4)
+                var name = "" //will auto generate name if not set, like "Area0"
+                if (list.hasResult(4)) name = list.getResult(4)!!
                 if (manager.containTickingArea(name)) {
                     log.addError("commands.tickingarea-add.conflictingname", name).output()
                     return 0
@@ -104,7 +106,7 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
                     for (chunkZ in center.position.chunkZ - radius..center.position.chunkZ + radius) {
                         val distanceSquared = Vector2(chunkX.toDouble(), chunkZ.toDouble()).distanceSquared(centerVec2)
                         if (distanceSquared <= radiusSquared) {
-                            area.addChunk(ChunkPos(chunkX, chunkZ))
+                            area.addChunk(TickingArea.ChunkPos(chunkX, chunkZ))
                         }
                     }
                 }
@@ -119,23 +121,23 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
             }
 
             "remove-pos" -> {
-                val pos = list!!.getResult<Locator>(1)
+                val pos = list.getResult<Locator>(1)!!
                 if (manager.getTickingAreaByPos(pos) == null) {
                     log.addSuccess(
                         "commands.tickingarea-remove.failure",
-                        pos!!.position.x.toInt().toString(),
+                        pos.position.x.toInt().toString(),
                         pos.position.y.toInt().toString(),
                         pos.position.z.toInt().toString()
                     ).output()
                     return 0
                 }
-                manager.removeTickingArea(manager.getTickingAreaByPos(pos).getName())
+                manager.removeTickingArea(manager.getTickingAreaByPos(pos)!!.name)
                 log.addSuccess("commands.tickingarea-remove.success").output()
                 return 1
             }
 
             "remove-name" -> {
-                val name = list!!.getResult<String>(1)
+                val name = list.getResult<String>(1)!!
                 if (!manager.containTickingArea(name)) {
                     log.addSuccess("commands.tickingarea-remove.byname.failure", name).output()
                     return 0
@@ -146,7 +148,7 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
             }
 
             "remove-all" -> {
-                if (manager.getAllTickingArea().isEmpty()) {
+                if (manager.allTickingArea.isEmpty()) {
                     log.addSuccess("commands.tickingarea-list.failure.allDimensions").output()
                     return 0
                 }
@@ -156,12 +158,10 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
             }
 
             "list" -> {
-                var areas: Set<TickingArea> = manager.getAllTickingArea()
-                val showAll = list!!.hasResult(1)
+                var areas: Set<TickingArea> = manager.allTickingArea
+                val showAll = list.hasResult(1)
                 if (!showAll) {
-                    areas = areas.stream().filter { area: TickingArea -> area.getLevelName() == level.name }.collect(
-                        Collectors.toSet<TickingArea>()
-                    )
+                    areas = areas.filter { area -> area.levelName == level.name }.toSet()
                     if (areas.isEmpty()) {
                         log.addError("commands.tickingarea-remove_all.failure").output()
                         return 0
@@ -169,10 +169,10 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
                     log.addSuccess(TextFormat.GREEN.toString() + "%commands.tickingarea-list.success.currentDimension")
                         .output()
                     for (area in areas) {
-                        val minAndMax: List<ChunkPos> = area.minAndMaxChunkPos()
-                        val min: ChunkPos = minAndMax[0]
-                        val max: ChunkPos = minAndMax[1]
-                        log.addSuccess(" - " + area.getName() + ": " + min.x + " " + min.z + " %commands.tickingarea-list.to " + max.x + " " + max.z)
+                        val minAndMax = area.minAndMaxChunkPos()
+                        val min = minAndMax[0]
+                        val max = minAndMax[1]
+                        log.addSuccess(" - " + area.name + ": " + min.x + " " + min.z + " %commands.tickingarea-list.to " + max.x + " " + max.z)
                             .output()
                     }
                     log.addSuccess("commands.tickingarea.inuse", areas.size.toString(), "∞").output()
@@ -184,10 +184,10 @@ class TickingAreaCommand(name: String) : VanillaCommand(name, "commands.tickinga
                     log.addSuccess(TextFormat.GREEN.toString() + "%commands.tickingarea-list.success.allDimensions")
                         .output()
                     for (area in areas) {
-                        val minAndMax: List<ChunkPos> = area.minAndMaxChunkPos()
-                        val min: ChunkPos = minAndMax[0]
-                        val max: ChunkPos = minAndMax[1]
-                        log.addSuccess(" - " + area.getName() + ": " + min.x + " " + min.z + " %commands.tickingarea-list.to " + max.x + " " + max.z)
+                        val minAndMax = area.minAndMaxChunkPos()
+                        val min = minAndMax[0]
+                        val max = minAndMax[1]
+                        log.addSuccess(" - " + area.name + ": " + min.x + " " + min.z + " %commands.tickingarea-list.to " + max.x + " " + max.z)
                             .output()
                     }
                     log.addSuccess("commands.tickingarea.inuse", areas.size.toString(), "∞").output()

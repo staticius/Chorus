@@ -35,12 +35,12 @@ class SummonCommand(name: String) : VanillaCommand(name, "commands.summon.descri
         log: CommandLogger
     ): Int {
         val list = result.value
-        val entityType = completionPrefix(list!!.getResult(0)!!)
+        val entityType = completionPrefix(list.getResult(0)!!)
         if (entityType == "minecraft:player") {
             log.addError("commands.summon.failed").output()
             return 0
         }
-        val entityId: Int = Type.Companion.ENTITY_TYPE2ID.get(entityType)
+        val entityId = Type.Companion.ENTITY_TYPE2ID[entityType]
         var pos: Locator? = sender.getLocator()
         if (list.hasResult(1)) {
             pos = list.getResult(1)
@@ -69,8 +69,8 @@ class SummonCommand(name: String) : VanillaCommand(name, "commands.summon.descri
             return 0
         }
         if (nameTag != null) {
-            entity.nameTag = nameTag
-            entity.isNameTagAlwaysVisible = nameTagAlwaysVisible
+            entity.setNameTag(nameTag)
+            entity.setNameTagAlwaysVisible(nameTagAlwaysVisible)
         }
         entity.spawnToAll()
         log.addSuccess("commands.summon.success").output()

@@ -31,7 +31,7 @@ class TellrawCommand(name: String) : VanillaCommand(name, "commands.tellraw.desc
     ): Int {
         val list = result.value
         try {
-            val players = list!!.getResult<List<Player>>(0)!!
+            val players = list.getResult<List<Player>>(0)!!
             if (players.isEmpty()) {
                 log.addNoTargetMatch().output()
                 return 0

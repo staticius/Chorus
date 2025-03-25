@@ -233,7 +233,7 @@ class PluginDescription {
      */
     var description: String? = null
         private set
-    private val authors: MutableList<String?> = ArrayList()
+    private val authors: MutableList<String> = mutableListOf()
 
     /**
      * 返回这个插件的网站。<br></br>
@@ -376,15 +376,15 @@ class PluginDescription {
         }
 
         if (plugin.containsKey("author")) {
-            authors.add(plugin["author"] as String?)
+            authors.add(plugin["author"] as String)
         }
 
         if (plugin.containsKey("authors")) {
-            authors.addAll((plugin["authors"] as Collection<String?>?)!!)
+            authors.addAll((plugin["authors"] as Collection<String>?)!!)
         }
 
         if (plugin.containsKey("permissions")) {
-            this.permissions = Permission.loadPermissions(plugin["permissions"] as Map<String?, Any?>?)
+            this.permissions = Permission.loadPermissions(plugin["permissions"] as Map<String, Any>?)
         }
 
         if (plugin.containsKey("features")) {
@@ -419,7 +419,7 @@ class PluginDescription {
      *
      *
      */
-    fun getAuthors(): List<String?> {
+    fun getAuthors(): List<String> {
         return authors
     }
 }

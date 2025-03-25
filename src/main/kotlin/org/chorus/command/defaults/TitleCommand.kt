@@ -11,9 +11,6 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.utils.TextFormat
 import kotlin.collections.set
 
-/**
- * @author Tee7even
- */
 class TitleCommand(name: String) : VanillaCommand(name, "commands.title.description") {
     init {
         this.permission = "nukkit.command.title"
@@ -52,7 +49,7 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
         log: CommandLogger
     ): Int {
         val list = result.value
-        val players = list!!.getResult<List<Player>>(0)!!
+        val players = list.getResult<List<Player>>(0)!!
         if (players.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
@@ -61,7 +58,7 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
             "clear" -> {
                 for (player in players) {
                     player.clearTitle()
-                    log.addMessage(TextFormat.WHITE.toString() + "%nukkit.command.title.clear", player.name)
+                    log.addMessage(TextFormat.WHITE.toString() + "%nukkit.command.title.clear", player.getName())
                 }
                 log.output()
                 return 1
@@ -70,7 +67,7 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
             "reset" -> {
                 for (player in players) {
                     player.resetTitleSettings()
-                    log.addMessage(TextFormat.WHITE.toString() + "%nukkit.command.title.reset", player.name)
+                    log.addMessage(TextFormat.WHITE.toString() + "%nukkit.command.title.reset", player.getName())
                 }
                 log.output()
                 return 1
@@ -78,7 +75,7 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
 
             "set" -> {
                 val titleLocation = list.getResult<String>(1)
-                val titleText = list.getResult<String>(2)
+                val titleText = list.getResult<String>(2)!!
                 when (titleLocation) {
                     "title" -> {
                         for (player in players) {
@@ -86,7 +83,7 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
                             log.addMessage(
                                 TextFormat.WHITE.toString() + "%nukkit.command.title.title",
                                 TextFormat.clean(titleText),
-                                player.name
+                                player.getName()
                             )
                         }
                         log.output()
@@ -98,7 +95,7 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
                             log.addMessage(
                                 TextFormat.WHITE.toString() + "%nukkit.command.title.subtitle",
                                 TextFormat.clean(titleText),
-                                player.name
+                                player.getName()
                             )
                         }
                         log.output()
@@ -110,7 +107,7 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
                             log.addMessage(
                                 TextFormat.WHITE.toString() + "%nukkit.command.title.actionbar",
                                 TextFormat.clean(titleText),
-                                player.name
+                                player.getName()
                             )
                         }
                         log.output()
@@ -139,7 +136,7 @@ class TitleCommand(name: String) : VanillaCommand(name, "commands.title.descript
                         fadeIn.toString(),
                         stay.toString(),
                         fadeOut.toString(),
-                        player.name
+                        player.getName()
                     )
                 }
                 log.output()

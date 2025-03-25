@@ -26,14 +26,14 @@ class TestForCommand(name: String) : VanillaCommand(name, "commands.testfor.desc
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        val targets = result.value!!.getResult<List<Entity>>(0)!!
+        val targets = result.value.getResult<List<Entity>>(0)!!
         if (targets.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
         } else {
             log.addSuccess("commands.testfor.success", targets.stream().map<String> { entity: Entity ->
-                var name = entity.name
-                if (name.isBlank()) name = entity.originalName
+                var name = entity.getName()
+                if (name.isBlank()) name = entity.getOriginalName()
                 name
             }.collect(Collectors.joining(","))).output()
             return targets.size
