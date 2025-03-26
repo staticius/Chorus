@@ -2,9 +2,8 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
 class SettingsCommandPacket : DataPacket() {
-    var command: String? = null
+    lateinit var command: String
     var suppressOutput: Boolean = false
 
     override fun decode(byteBuf: HandleByteBuf) {
@@ -13,12 +12,12 @@ class SettingsCommandPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeString(command!!)
+        byteBuf.writeString(command)
         byteBuf.writeBoolean(suppressOutput)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SETTINGS_COMMAND_PACKET
+        return ProtocolInfo.SETTINGS_COMMAND_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

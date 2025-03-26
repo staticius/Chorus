@@ -4,6 +4,7 @@ import org.chorus.PlayerHandle
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.PacketViolationWarningPacket
 import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.utils.Loggable
 import java.lang.reflect.Field
 import java.util.*
 
@@ -30,4 +31,6 @@ class PacketViolationWarningProcessor : DataPacketProcessor<PacketViolationWarni
 
     override val packetId: Int
         get() = ProtocolInfo.PACKET_VIOLATION_WARNING_PACKET
+
+    companion object : Loggable
 }

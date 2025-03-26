@@ -3,18 +3,15 @@ package org.chorus.form.element.custom
 import com.google.common.base.Preconditions
 import com.google.gson.JsonObject
 
-
-@Accessors(chain = true, fluent = true)
-
-class ElementSlider : ElementCustom {
-    private val text: String? = null
-    private val min = 0f
-    private val max = 0f
-    private val step = 0
-    private val defaultValue = 0f
-
+class ElementSlider(
+    var text: String? = null,
+    var min: Float = 0f,
+    var max: Float = 0f,
+    var step: Int = 0,
+    var defaultValue: Float = 0f,
+) : ElementCustom() {
     @JvmOverloads
-    constructor(text: String? = "", min: Float = 1f, max: Float = Math.max(min, 100f), step: Int = 1) : this(
+    constructor(text: String? = "", min: Float = 1f, max: Float = min.coerceAtLeast(100f), step: Int = 1) : this(
         text,
         min,
         max,

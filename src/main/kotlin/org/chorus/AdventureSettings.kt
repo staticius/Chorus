@@ -12,16 +12,12 @@ import org.chorus.network.protocol.types.PlayerPermission
 import java.util.*
 
 class AdventureSettings : Cloneable {
-    private val values: MutableMap<Type, Boolean> = EnumMap(
+    val values: MutableMap<Type, Boolean> = EnumMap(
         Type::class.java
     )
-
-    private var playerPermission: PlayerPermission? = null
-
-
-    private var commandPermission: CommandPermission? = null
-
-    private var player: Player
+    var playerPermission: PlayerPermission? = null
+    var commandPermission: CommandPermission? = null
+    var player: Player
 
     constructor(player: Player) {
         this.player = player

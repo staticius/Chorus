@@ -4,15 +4,9 @@ import org.chorus.AdventureSettings
 import org.chorus.Player
 import org.chorus.PlayerHandle
 import org.chorus.Server
-import org.chorus.entity.EntityOwnable.hasOwner
 import org.chorus.entity.item.EntityBoat
-import org.chorus.entity.item.EntityBoat.onInput
 import org.chorus.entity.item.EntityMinecartAbstract
-import org.chorus.entity.item.EntityMinecartAbstract.setCurrentSpeed
 import org.chorus.entity.mob.animal.EntityHorse
-import org.chorus.entity.mob.animal.EntityHorse.getHeight
-import org.chorus.entity.mob.animal.EntityHorse.getSaddle
-import org.chorus.entity.mob.animal.EntityHorse.onInput
 import org.chorus.event.player.*
 import org.chorus.level.Transform
 import org.chorus.level.Transform.Companion.fromObject
@@ -39,7 +33,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                 val blockFace = fromIndex(action.facing)
 
                 val lastBreakPos =
-                    if (playerHandle.lastBlockAction == null) null else playerHandle.lastBlockAction.position
+                    if (playerHandle.lastBlockAction == null) null else playerHandle.lastBlockAction!!.position
                 if (lastBreakPos != null && (lastBreakPos.x != blockPos.x || lastBreakPos.y != blockPos.y || lastBreakPos.z != blockPos.z)) {
                     playerHandle.onBlockBreakAbort(lastBreakPos.asVector3())
                     playerHandle.onBlockBreakStart(blockPos.asVector3(), blockFace)
@@ -59,6 +53,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                         playerHandle.onBlockBreakAbort(blockPos.asVector3())
                         playerHandle.onBlockBreakComplete(blockPos, blockFace)
                     }
+                    else -> {}
                 }
                 playerHandle.lastBlockAction = action
             }
@@ -69,7 +64,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
             val dataPacketManager = player.session.dataPacketManager
             if (dataPacketManager != null) {
                 val itemStackRequestPacket = ItemStackRequestPacket()
-                itemStackRequestPacket.requests.add(pk.itemStackRequest)
+                itemStackRequestPacket.requests.add(pk.itemStackRequest!!)
                 dataPacketManager.processPacket(playerHandle, itemStackRequestPacket)
             }
         }
@@ -176,7 +171,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                 player.adventureSettings[AdventureSettings.Type.FLYING] = playerToggleFlightEvent.isFlying
             }
         }
-        val clientPosition = pk.position.asVector3().subtract(0.0, playerHandle.baseOffset.toDouble(), 0.0)
+        val clientPosition = pk.position!!.asVector3().subtract(0.0, playerHandle.baseOffset.toDouble(), 0.0)
         var yaw = pk.yaw % 360
         val pitch = pk.pitch % 360
         var headYaw = pk.headYaw % 360
@@ -191,13 +186,14 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
             player.level!!, yaw.toDouble(), pitch.toDouble(), headYaw.toDouble()
         )
         // Proper player.isPassenger() check may be needed
-        if (player.riding is EntityMinecartAbstract) {
-            val inputY = pk.motion.y
+        val riding = player.riding
+        if (riding is EntityMinecartAbstract) {
+            val inputY = pk.motion!!.y
             if (inputY >= -1.001 && inputY <= 1.001) {
                 riding.setCurrentSpeed(inputY)
             }
-        } else if (player.riding is EntityBoat && pk.inputData.contains(AuthInputAction.IN_CLIENT_PREDICTED_IN_VEHICLE)) {
-            if (player.riding.getId() == pk.predictedVehicle && player.riding.isControlling(player)) {
+        } else if (riding is EntityBoat && pk.inputData.contains(AuthInputAction.IN_CLIENT_PREDICTED_IN_VEHICLE)) {
+            if (riding.getId() == pk.predictedVehicle && riding.isControlling(player)) {
                 if (check(clientLoc, player)) {
                     val offsetLoc = clientLoc.add(0.0, playerHandle.baseOffset.toDouble(), 0.0)
                     riding.onInput(offsetLoc)
@@ -205,10 +201,10 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                 }
                 return
             }
-        } else if (playerHandle.player.riding is EntityHorse) {
+        } else if (riding is EntityHorse) {
             if (check(clientLoc, player)) {
                 val playerLoc: Transform
-                if (riding.hasOwner() && !riding.getSaddle().isNull) {
+                if (riding.hasOwner() && !riding.getSaddle().isNothing) {
                     riding.onInput(clientLoc.add(0.0, riding.getHeight().toDouble(), 0.0))
                     playerLoc = clientLoc.add(0.0, (playerHandle.baseOffset + riding.getHeight()).toDouble(), 0.0)
                 } else {
@@ -229,7 +225,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
             val distance = clientLoc.position.distanceSquared(player.position)
             val updatePosition = sqrt(distance).toFloat() > 0.1f
             val updateRotation =
-                Math.abs(player.rotation.pitch - clientLoc.rotation.pitch) as Float > 1 || Math.abs(player.rotation.yaw - clientLoc.rotation.yaw) as Float > 1 || abs(
+                abs(player.rotation.pitch - clientLoc.rotation.pitch).toFloat() > 1 || abs(player.rotation.yaw - clientLoc.rotation.yaw).toFloat() > 1 || abs(
                     player.headYaw - clientLoc.headYaw
                 ).toFloat() > 1
             return updatePosition || updateRotation

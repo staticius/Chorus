@@ -2,13 +2,10 @@ package org.chorus.form.element.custom
 
 import com.google.gson.JsonObject
 
-
-@Accessors(chain = true, fluent = true)
-
-class ElementToggle : ElementCustom {
-    private val text: String? = null
-    private val defaultValue = false
-
+class ElementToggle(
+    var text: String? = null,
+    var defaultValue: Boolean = false,
+) : ElementCustom() {
     @JvmOverloads
     constructor(text: String? = "") : this(text, false)
 

@@ -7,24 +7,21 @@ import com.google.gson.JsonObject
 
 import java.util.function.Consumer
 
-
-@Accessors(chain = true, fluent = true)
-
-class ElementStepSlider : ElementCustom {
-    protected var text: String? = null
-    protected var steps: MutableList<String?>? = null
-    protected var defaultStep: Int = 0
-
+class ElementStepSlider(
+    var text: String? = null,
+    var steps: MutableList<String>? = null,
+    var defaultStep: Int = 0,
+) : ElementCustom() {
     @JvmOverloads
-    constructor(text: String? = "", steps: List<String?>? = ArrayList()) : this(text, steps, 0)
+    constructor(text: String? = "", steps: List<String>? = ArrayList()) : this(text, steps?.toMutableList(), 0)
 
-    fun addStep(step: String?): ElementStepSlider {
+    fun addStep(step: String): ElementStepSlider {
         return this.addStep(step, false)
     }
 
-    fun addStep(step: String?, isDefault: Boolean): ElementStepSlider {
+    fun addStep(step: String, isDefault: Boolean): ElementStepSlider {
         if (isDefault) {
-            this.defaultStep = steps!!.size()
+            this.defaultStep = steps!!.size
         }
 
         steps!!.add(step)
@@ -34,7 +31,7 @@ class ElementStepSlider : ElementCustom {
 
     override fun toJson(): JsonObject {
         Preconditions.checkArgument(
-            this.defaultStep > -1 && this.defaultStep < steps!!.size(),
+            this.defaultStep > -1 && this.defaultStep < steps!!.size,
             "Default option not within range"
         )
 

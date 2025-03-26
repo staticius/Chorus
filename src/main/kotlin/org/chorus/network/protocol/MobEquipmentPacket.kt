@@ -6,7 +6,7 @@ import org.chorus.network.connection.util.HandleByteBuf
 
 class MobEquipmentPacket : DataPacket() {
     var eid: Long = 0
-    var item: Item? = null
+    lateinit var item: Item
     var slot: Int = 0
     var selectedSlot: Int = 0
     var containerId: Int = 0

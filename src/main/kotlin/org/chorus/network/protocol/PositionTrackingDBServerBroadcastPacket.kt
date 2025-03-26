@@ -11,17 +11,11 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
 import org.chorus.network.connection.util.HandleByteBuf
 import java.io.IOException
-import java.lang.String
-
-/**
- * @author joserobjr
- */
-
 
 class PositionTrackingDBServerBroadcastPacket : DataPacket() {
-    private var action: Action? = null
-    private var trackingId = 0
-    private var tag: CompoundTag? = null
+    var action: Action? = null
+    var trackingId = 0
+    var tag: CompoundTag? = null
 
     override fun decode(byteBuf: HandleByteBuf) {
         action = ACTIONS[byteBuf.readByte().toInt()]
@@ -36,7 +30,7 @@ class PositionTrackingDBServerBroadcastPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeByte(action!!.ordinal().toByte().toInt())
+        byteBuf.writeByte(action!!.ordinal.toByte().toInt())
         byteBuf.writeVarInt(trackingId)
         try {
             byteBuf.writeBytes(writeNetwork((if (tag != null) tag else CompoundTag())!!))
@@ -71,10 +65,10 @@ class PositionTrackingDBServerBroadcastPacket : DataPacket() {
                 return null
             }
             val pos = tag!!.getList("pos", IntTag::class.java)
-            if (pos == null || pos.size() != 3) {
+            if (pos.size() != 3) {
                 return null
             }
-            return BlockVector3(pos.get(0).data, pos.get(1).data, pos.get(2).data)
+            return BlockVector3(pos[0].data, pos[1].data, pos[2].data)
         }
         set(position) {
             setPosition(position!!.x, position.y, position.z)
@@ -86,7 +80,7 @@ class PositionTrackingDBServerBroadcastPacket : DataPacket() {
 
     fun setPosition(x: Int, y: Int, z: Int) {
         requireTag()!!.putList(
-            "pos", ListTag<Tag?>()
+            "pos", ListTag<IntTag>()
                 .add(IntTag(x))
                 .add(IntTag(y))
                 .add(IntTag(z))

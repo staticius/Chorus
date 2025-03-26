@@ -10,9 +10,9 @@ class ShowCreditsProcessor : DataPacketProcessor<ShowCreditsPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: ShowCreditsPacket) {
         if (pk.status == ShowCreditsPacket.STATUS_END_CREDITS) {
             if (playerHandle.showingCredits) {
-                playerHandle.player.isShowingCredits = false
+                playerHandle.player.setShowingCredits(false)
                 playerHandle.player.teleport(
-                    playerHandle.player.spawn.left(),
+                    playerHandle.player.spawn.first!!,
                     PlayerTeleportEvent.TeleportCause.END_PORTAL
                 )
             }

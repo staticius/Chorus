@@ -56,8 +56,8 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
     @JvmField
     var address: InetSocketAddress?
 
-
-    protected var authenticated: Boolean = false
+    var authenticated: Boolean = false
+        private set
 
 
     init {

@@ -8,17 +8,10 @@ import java.util.*
 
 
 class PlayerSkinPacket : DataPacket() {
-    @JvmField
-    var uuid: UUID? = null
-
-    @JvmField
-    var skin: Skin? = null
-
-    @JvmField
-    var newSkinName: String? = null
-
-    @JvmField
-    var oldSkinName: String? = null
+    lateinit var uuid: UUID
+    lateinit var skin: Skin
+    lateinit var newSkinName: String
+    lateinit var oldSkinName: String
 
     override fun decode(byteBuf: HandleByteBuf) {
         uuid = byteBuf.readUUID()
@@ -26,16 +19,16 @@ class PlayerSkinPacket : DataPacket() {
         newSkinName = byteBuf.readString()
         oldSkinName = byteBuf.readString()
         if (byteBuf.isReadable) { // -facepalm-
-            skin!!.setTrusted(byteBuf.readBoolean())
+            skin.setTrusted(byteBuf.readBoolean())
         }
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeUUID(uuid!!)
-        byteBuf.writeSkin(skin!!)
-        byteBuf.writeString(newSkinName!!)
-        byteBuf.writeString(oldSkinName!!)
-        byteBuf.writeBoolean(skin!!.isTrusted() || Server.instance.settings.playerSettings().forceSkinTrusted())
+        byteBuf.writeUUID(uuid)
+        byteBuf.writeSkin(skin)
+        byteBuf.writeString(newSkinName)
+        byteBuf.writeString(oldSkinName)
+        byteBuf.writeBoolean(skin.isTrusted() || Server.instance.settings.playerSettings.forceSkinTrusted)
     }
 
     override fun pid(): Int {

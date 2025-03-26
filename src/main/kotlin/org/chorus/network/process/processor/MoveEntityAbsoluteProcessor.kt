@@ -1,6 +1,7 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.entity.item.EntityBoat
 import org.chorus.event.vehicle.VehicleMoveEvent
 import org.chorus.math.Vector3

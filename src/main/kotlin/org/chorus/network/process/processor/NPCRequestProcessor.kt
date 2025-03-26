@@ -1,13 +1,11 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.dialog.response.FormResponseDialog
 import org.chorus.dialog.window.FormWindowDialog
-import org.chorus.entity.Entity.equals
 import org.chorus.entity.mob.EntityNPC
-import org.chorus.entity.mob.EntityNPC.getDialog
 import org.chorus.event.player.PlayerDialogRespondedEvent
-import org.chorus.item.Item.equals
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.NPCDialoguePacket
 import org.chorus.network.protocol.NPCRequestPacket
@@ -17,8 +15,9 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: NPCRequestPacket) {
         val player = playerHandle.player
         //若sceneName字段为空，则为玩家在编辑NPC，我们并不需要记录对话框，直接通过entityRuntimeId获取实体即可
-        if (pk.sceneName.isEmpty() && player.level!!.getEntity(pk.entityRuntimeId) is EntityNPC) {
-            val dialog: FormWindowDialog = npcEntity.getDialog()
+        val entity = player.level!!.getEntity(pk.entityRuntimeId)
+        if (pk.sceneName.isEmpty() && entity is EntityNPC) {
+            val dialog: FormWindowDialog = entity.getDialog()!!
 
             val response = FormResponseDialog(pk, dialog)
             for (handler in dialog.getHandlers()) {
@@ -48,15 +47,15 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
             Server.instance.pluginManager.callEvent(event)
 
             //close dialog after clicked button (otherwise the client will not be able to close the window)
-            if (response.getClickedButton() != null && pk.requestType == NPCRequestPacket.RequestType.EXECUTE_ACTION) {
+            if (response.clickedButton != null && pk.requestType == NPCRequestPacket.RequestType.EXECUTE_ACTION) {
                 val closeWindowPacket = NPCDialoguePacket()
                 closeWindowPacket.runtimeEntityId = pk.entityRuntimeId
-                closeWindowPacket.sceneName = response.getSceneName()
+                closeWindowPacket.sceneName = response.sceneName
                 closeWindowPacket.action = NPCDialoguePacket.NPCDialogAction.CLOSE
                 player.dataPacket(closeWindowPacket)
             }
-            if (response.getClickedButton() != null && response.getRequestType() === NPCRequestPacket.RequestType.EXECUTE_ACTION && response.getClickedButton().nextDialog != null) {
-                response.getClickedButton().nextDialog.send(player)
+            if (response.clickedButton != null && response.requestType === NPCRequestPacket.RequestType.EXECUTE_ACTION && response.clickedButton!!.nextDialog != null) {
+                response.clickedButton!!.nextDialog!!.send(player)
             }
         }
     }

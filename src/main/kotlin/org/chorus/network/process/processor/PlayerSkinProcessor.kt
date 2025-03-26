@@ -1,14 +1,14 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.event.player.PlayerChangeSkinEvent
-import org.chorus.event.player.PlayerServerSettingsRequestEvent.getSettings
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.PlayerSkinPacket
 import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.utils.Loggable
 
 import java.util.concurrent.TimeUnit
-
 
 class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: PlayerSkinPacket) {
@@ -20,13 +20,13 @@ class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
             return
         }
 
-        if (Server.instance.getSettings().playerSettings().forceSkinTrusted()) {
+        if (Server.instance.settings.playerSettings.forceSkinTrusted) {
             skin.setTrusted(true)
         }
 
         val playerChangeSkinEvent = PlayerChangeSkinEvent(player, skin)
         val tooQuick = TimeUnit.SECONDS.toMillis(
-            Server.instance.getSettings().playerSettings().skinChangeCooldown()
+            Server.instance.settings.playerSettings.skinChangeCooldown.toLong()
         ) > System.currentTimeMillis() - player.lastSkinChange
         if (tooQuick) {
             playerChangeSkinEvent.isCancelled = true
@@ -41,4 +41,6 @@ class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
 
     override val packetId: Int
         get() = ProtocolInfo.PLAYER_SKIN_PACKET
+
+    companion object : Loggable
 }

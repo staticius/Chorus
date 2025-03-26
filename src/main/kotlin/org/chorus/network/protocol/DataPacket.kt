@@ -13,6 +13,6 @@ abstract class DataPacket {
     abstract fun handle(handler: PacketHandler)
 
     companion object {
-        val EMPTY_ARRAY: Array<DataPacket?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<DataPacket> = emptyArray()
     }
 }

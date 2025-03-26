@@ -6,12 +6,12 @@ import org.chorus.network.protocol.NPCRequestPacket
 
 
 class FormResponseDialog(packet: NPCRequestPacket, dialog: FormWindowDialog) {
-    private val entityRuntimeId = packet.entityRuntimeId
-    private val data: String = packet.data
-    private var clickedButton: ElementDialogButton? = null //can be null
-    private val sceneName: String
-    private val requestType: NPCRequestPacket.RequestType
-    private val skinType: Int
+    val entityRuntimeId = packet.entityRuntimeId
+    val data: String = packet.data
+    var clickedButton: ElementDialogButton? = null //can be null
+    val sceneName: String
+    val requestType: NPCRequestPacket.RequestType
+    val skinType: Int
 
     init {
         try {

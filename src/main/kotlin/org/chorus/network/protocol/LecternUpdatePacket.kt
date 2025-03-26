@@ -7,7 +7,7 @@ import org.chorus.network.connection.util.HandleByteBuf
 class LecternUpdatePacket : DataPacket() {
     var page: Int = 0
     var totalPages: Int = 0
-    var blockPosition: BlockVector3? = null
+    lateinit var blockPosition: BlockVector3
 
     override fun decode(byteBuf: HandleByteBuf) {
         this.page = byteBuf.readUnsignedByte().toInt()
@@ -15,8 +15,7 @@ class LecternUpdatePacket : DataPacket() {
         this.blockPosition = byteBuf.readBlockVector3()
     }
 
-    override fun encode(byteBuf: HandleByteBuf) {
-    }
+    override fun encode(byteBuf: HandleByteBuf) {}
 
     override fun pid(): Int {
         return ProtocolInfo.Companion.LECTERN_UPDATE_PACKET

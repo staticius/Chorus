@@ -1,6 +1,7 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.block.BlockLectern
 import org.chorus.blockentity.BlockEntityLectern
 import org.chorus.event.block.LecternPageChangeEvent

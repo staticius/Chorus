@@ -1,6 +1,7 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.blockentity.BlockEntityItemFrame
 import org.chorus.event.player.PlayerMapInfoRequestEvent
 import org.chorus.item.*
@@ -46,8 +47,7 @@ class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
 
         if (mapItem != null) {
             val event: PlayerMapInfoRequestEvent
-            Server.instance.pluginManager
-                .callEvent(PlayerMapInfoRequestEvent(player, mapItem).also { event = it })
+            Server.instance.pluginManager.callEvent(PlayerMapInfoRequestEvent(player, mapItem).also { event = it })
 
             if (!event.isCancelled) {
                 val map = mapItem as ItemFilledMap

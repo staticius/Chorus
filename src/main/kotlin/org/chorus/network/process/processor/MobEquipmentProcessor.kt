@@ -8,6 +8,7 @@ import org.chorus.item.enchantment.Enchantment.Companion.getEnchantments
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.MobEquipmentPacket
 import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.utils.Loggable
 
 
 class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
@@ -76,4 +77,6 @@ class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
 
     override val packetId: Int
         get() = ProtocolInfo.MOB_EQUIPMENT_PACKET
+
+    companion object : Loggable
 }

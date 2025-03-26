@@ -1,6 +1,7 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.event.player.PlayerDuplicatedLoginEvent
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.LoginPacket
@@ -9,7 +10,7 @@ import org.chorus.network.protocol.ProtocolInfo
 class LoginProcessor : DataPacketProcessor<LoginPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: LoginPacket) {
         val player = playerHandle.player
-        if (!player.session.isAuthenticated()) {
+        if (!player.session.authenticated) {
             return
         }
 

@@ -11,7 +11,7 @@ import org.chorus.network.protocol.ProtocolInfo
  * Why not interfaces? Hotspot C2 JIT cannot handle so many classes that impl the same interface, it makes the
  * performance lower.
  */
-abstract class DataPacketProcessor<T : DataPacket?> {
+abstract class DataPacketProcessor<T : DataPacket> {
     abstract fun handle(playerHandle: PlayerHandle, pk: T)
 
     abstract val packetId: Int

@@ -2,14 +2,7 @@ package org.chorus.form.element.custom
 
 import com.google.gson.JsonObject
 
-
-@Accessors(chain = true, fluent = true)
-
-class ElementInput : ElementCustom {
-    private val text: String? = null
-    private val placeholder: String? = null
-    private val defaultText: String? = null
-
+class ElementInput(var text: String? = null, var placeholder: String? = null, var defaultText: String? = null) : ElementCustom() {
     @JvmOverloads
     constructor(text: String? = "", placeholder: String? = "") : this(text, placeholder, "")
 

@@ -2,14 +2,13 @@ package org.chorus.network.protocol.types
 
 import org.chorus.block.property.enums.StructureBlockType
 
-
-class StructureEditorData {
-    var name: String? = null
-    var filteredName: String? = null
-    var dataField: String? = null
-    var includingPlayers: Boolean = false
-    var boundingBoxVisible: Boolean = false
-    var type: StructureBlockType? = null
-    var settings: StructureSettings? = null
-    var redstoneSaveMode: StructureRedstoneSaveMode? = null
-}
+data class StructureEditorData(
+    var name: String,
+    var filteredName: String,
+    var dataField: String,
+    var includingPlayers: Boolean,
+    var boundingBoxVisible: Boolean,
+    var type: StructureBlockType,
+    var settings: StructureSettings,
+    var redstoneSaveMode: StructureRedstoneSaveMode,
+)

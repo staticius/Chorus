@@ -7,24 +7,17 @@ import com.google.gson.JsonObject
 
 import java.util.function.Consumer
 
-
-@Accessors(chain = true, fluent = true)
-
-class ElementDropdown : ElementCustom {
-    protected var text: String? = null
-    protected var options: MutableList<String?>? = null
-    protected var defaultOption: Int = 0
-
+class ElementDropdown(var text: String?, var options: MutableList<String>?, var defaultOption: Int = 0) : ElementCustom() {
     @JvmOverloads
-    constructor(text: String? = "", options: List<String?>? = ArrayList()) : this(text, options, 0)
+    constructor(text: String? = "", options: List<String>? = ArrayList()) : this(text, options?.toMutableList(), 0)
 
-    fun addOption(option: String?): ElementDropdown {
+    fun addOption(option: String): ElementDropdown {
         return this.addOption(option, false)
     }
 
-    fun addOption(option: String?, isDefault: Boolean): ElementDropdown {
+    fun addOption(option: String, isDefault: Boolean): ElementDropdown {
         if (isDefault) {
-            this.defaultOption = options!!.size()
+            this.defaultOption = options!!.size
         }
 
         options!!.add(option)
@@ -34,7 +27,7 @@ class ElementDropdown : ElementCustom {
 
     override fun toJson(): JsonObject {
         Preconditions.checkArgument(
-            0 > this.defaultOption || this.defaultOption < options!!.size(),
+            0 > this.defaultOption || this.defaultOption < options!!.size,
             "Default option not an index"
         )
 

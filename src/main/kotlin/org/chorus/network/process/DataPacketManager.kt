@@ -1,8 +1,6 @@
 package org.chorus.network.process
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.PlayerHandle
-import org.chorus.entity.EntityHuman.getName
 import org.chorus.network.process.processor.*
 import org.chorus.network.protocol.DataPacket
 
@@ -10,7 +8,7 @@ import org.chorus.network.protocol.DataPacket
  * DataPacketManager is a static class to manage DataPacketProcessors and process DataPackets.
  */
 class DataPacketManager {
-    private val PROCESSORS = Int2ObjectOpenHashMap<DataPacketProcessor<*>>(300)
+    private val PROCESSORS = HashMap<Int, DataPacketProcessor<*>>(300)
 
     init {
         registerDefaultProcessors()
@@ -18,22 +16,21 @@ class DataPacketManager {
 
     fun registerProcessor(vararg processors: DataPacketProcessor<*>) {
         for (processor in processors) {
-            PROCESSORS.put(processor.packetId, processor)
+            PROCESSORS[processor.packetId] = processor
         }
-        PROCESSORS.trim()
     }
 
     fun canProcess(packetId: Int): Boolean {
         return PROCESSORS.containsKey(packetId)
     }
 
-    fun processPacket(playerHandle: PlayerHandle, packet: DataPacket) {
-        val processor = PROCESSORS[packet.pid()]
+    fun <T : DataPacket> processPacket(playerHandle: PlayerHandle, packet: T) {
+        val processor = PROCESSORS[packet.pid()] as DataPacketProcessor<T>?
         if (processor != null) {
             processor.handle(playerHandle, packet)
         } else {
             throw UnsupportedOperationException(
-                "No processor found for packet " + packet.getClass().getName() + " with id " + packet.pid() + "."
+                "No processor found for packet " + packet::class.java.name + " with id " + packet.pid() + "."
             )
         }
     }

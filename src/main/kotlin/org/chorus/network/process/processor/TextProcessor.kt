@@ -6,7 +6,7 @@ import org.chorus.config.ServerPropertiesKeys
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.TextPacket
-
+import org.chorus.utils.Loggable
 
 class TextProcessor : DataPacketProcessor<TextPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: TextPacket) {
@@ -33,7 +33,7 @@ class TextProcessor : DataPacketProcessor<TextPacket>() {
         if (pk.type == TextPacket.TYPE_CHAT) {
             var chatMessage = pk.message
             val breakLine = chatMessage.indexOf('\n')
-            // Chat messages shouldn't contain break lines so ignore text afterwards
+            // Chat messages shouldn't contain break lines so ignore text afterward
             if (breakLine != -1) {
                 chatMessage = chatMessage.substring(0, breakLine)
             }
@@ -43,4 +43,6 @@ class TextProcessor : DataPacketProcessor<TextPacket>() {
 
     override val packetId: Int
         get() = ProtocolInfo.TEXT_PACKET
+
+    companion object : Loggable
 }

@@ -1,24 +1,22 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
-import org.chorus.config.ServerProperties.get
+import org.chorus.Server
 import org.chorus.event.player.PlayerFormRespondedEvent
 import org.chorus.event.player.PlayerSettingsRespondedEvent
 import org.chorus.form.element.Element
+import org.chorus.form.element.custom.*
 import org.chorus.form.response.CustomResponse
 import org.chorus.form.response.ElementResponse
 import org.chorus.form.window.CustomForm
-import org.chorus.item.Item.Companion.get
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ModalFormResponsePacket
 import org.chorus.network.protocol.ProtocolInfo
+import org.chorus.utils.Loggable
 
-import java.lang.String
-import kotlin.Any
 import kotlin.Boolean
 import kotlin.Float
 import kotlin.Int
-
 
 class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: ModalFormResponsePacket) {
@@ -51,14 +49,14 @@ class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>(
             Server.instance.pluginManager.callEvent(event)
 
             // Apply responses as default settings
-            if (!event.isCancelled && window is CustomForm && response != null) {
-                (response as CustomResponse).responses.forEach { (i: Int?, res: Any?) ->
-                    when (val e: Element = window.elements().get(i)) {
-                        -> dropdown.defaultOption((res as ElementResponse).elementId())
-                        -> input.defaultText(String.valueOf(res))
-                        -> slider.defaultValue(res as Float)
-                        -> toggle.defaultValue(res as Boolean)
-                        -> stepSlider.defaultStep((res as ElementResponse).elementId())
+            if (!event.isCancelled && window is CustomForm) {
+                (response as CustomResponse).responses.forEach { (i, res) ->
+                    when (val e: Element = window.elements[i]) {
+                        is ElementDropdown -> e.defaultOption = ((res as ElementResponse).elementId)
+                        is ElementInput -> e.defaultText = (res.toString())
+                        is ElementSlider -> e.defaultValue = (res as Float)
+                        is ElementToggle -> e.defaultValue = (res as Boolean)
+                        is ElementStepSlider -> e.defaultStep = ((res as ElementResponse).elementId)
                         else -> ModalFormResponseProcessor.log.warn("Illegal element {} within ServerSettings", e)
                     }
                 }
@@ -68,4 +66,6 @@ class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>(
 
     override val packetId: Int
         get() = ProtocolInfo.MODAL_FORM_RESPONSE_PACKET
+
+    companion object : Loggable
 }

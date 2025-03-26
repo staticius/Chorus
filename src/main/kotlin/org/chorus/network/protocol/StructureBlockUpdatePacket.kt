@@ -7,8 +7,8 @@ import org.chorus.network.protocol.types.*
 
 
 class StructureBlockUpdatePacket : DataPacket() {
-    var blockPosition: BlockVector3? = null
-    var editorData: StructureEditorData? = null
+    lateinit var blockPosition: BlockVector3
+    lateinit var editorData: StructureEditorData
     var powered: Boolean = false
     var waterlogged: Boolean = false
 
@@ -20,8 +20,8 @@ class StructureBlockUpdatePacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeBlockVector3(blockPosition!!)
-        this.writeEditorData(byteBuf, editorData!!)
+        byteBuf.writeBlockVector3(blockPosition)
+        this.writeEditorData(byteBuf, editorData)
         byteBuf.writeBoolean(powered)
         byteBuf.writeBoolean(waterlogged)
     }
@@ -43,7 +43,7 @@ class StructureBlockUpdatePacket : DataPacket() {
             isBoundingBoxVisible,
             StructureBlockType.from(type),
             structureSettings,
-            StructureRedstoneSaveMode.Companion.from(redstoneSaveMode)
+            StructureRedstoneSaveMode.from(redstoneSaveMode)
         )
     }
 

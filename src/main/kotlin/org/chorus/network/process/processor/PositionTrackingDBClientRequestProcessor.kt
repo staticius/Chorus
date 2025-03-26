@@ -1,11 +1,13 @@
 package org.chorus.network.process.processor
 
 import org.chorus.PlayerHandle
+import org.chorus.Server
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.PositionTrackingDBClientRequestPacket
 import org.chorus.network.protocol.PositionTrackingDBServerBroadcastPacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.positiontracking.PositionTracking
+import org.chorus.utils.Loggable
 
 import java.io.IOException
 
@@ -14,8 +16,7 @@ class PositionTrackingDBClientRequestProcessor : DataPacketProcessor<PositionTra
     override fun handle(playerHandle: PlayerHandle, pk: PositionTrackingDBClientRequestPacket) {
         val player = playerHandle.player
         try {
-            val positionTracking: PositionTracking =
-                Server.instance.getPositionTrackingService().startTracking(player, pk.trackingId, true)
+            val positionTracking = Server.instance.getPositionTrackingService().startTracking(player, pk.trackingId, true)
             if (positionTracking != null) {
                 return
             }
@@ -34,4 +35,6 @@ class PositionTrackingDBClientRequestProcessor : DataPacketProcessor<PositionTra
 
     override val packetId: Int
         get() = ProtocolInfo.POS_TRACKING_CLIENT_REQUEST_PACKET
+
+    companion object : Loggable
 }

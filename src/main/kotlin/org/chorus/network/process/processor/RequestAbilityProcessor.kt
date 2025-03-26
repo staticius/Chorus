@@ -10,6 +10,7 @@ import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.RequestAbilityPacket
 import org.chorus.network.protocol.types.PlayerAbility
+import org.chorus.utils.Loggable
 
 
 class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
@@ -41,4 +42,6 @@ class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
 
     override val packetId: Int
         get() = ProtocolInfo.REQUEST_ABILITY_PACKET
+
+    companion object : Loggable
 }
