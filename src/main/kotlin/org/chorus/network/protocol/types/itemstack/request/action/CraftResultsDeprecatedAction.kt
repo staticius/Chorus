@@ -8,10 +8,28 @@ import org.chorus.item.Item
  * This action is also sent when an item is enchanted. Enchanting should be treated mostly the same way as
  * crafting, where the old item is consumed.
  */
-class CraftResultsDeprecatedAction(
-    var resultItems: Array<Item>,
-    var timesCrafted: Int,
+data class CraftResultsDeprecatedAction(
+    val resultItems: Array<Item>,
+    val timesCrafted: Int,
 ) : ItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CraftResultsDeprecatedAction
+
+        if (timesCrafted != other.timesCrafted) return false
+        if (!resultItems.contentEquals(other.resultItems)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = timesCrafted
+        result = 31 * result + resultItems.contentHashCode()
+        return result
+    }
 }

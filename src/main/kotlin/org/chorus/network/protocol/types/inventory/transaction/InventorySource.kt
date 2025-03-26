@@ -9,8 +9,6 @@ data class InventorySource(
     val containerId: Int,
     val flag: Flag,
 ) {
-
-
     enum class Type(private val id: Int) {
         INVALID(-1),
         CONTAINER(0),

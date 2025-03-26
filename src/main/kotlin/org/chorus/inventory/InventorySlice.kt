@@ -11,7 +11,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
     private var slotTypeMap: Map<Int, ContainerSlotType>? = null
     private var networkSlotMap: BiMap<Int, Int>? = null
 
-    override fun getSlotType(nativeSlot: Int): ContainerSlotType? {
+    override fun getSlotType(nativeSlot: Int): ContainerSlotType {
         return if (slotTypeMap != null) {
             slotTypeMap!![nativeSlot]
         } else rawInv.getSlotType(nativeSlot)

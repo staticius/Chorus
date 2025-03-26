@@ -6,6 +6,5 @@ package org.chorus.network.protocol.types.itemstack.request.action
  */
 interface RecipeItemStackRequestAction : ItemStackRequestAction {
     val recipeNetworkId: Int
-
     val numberOfRequestedCrafts: Int
 }

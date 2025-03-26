@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
+import org.chorus.registry.CreativeItemRegistry
 import org.chorus.registry.Registries
 import java.util.function.BiConsumer
 
@@ -16,12 +17,12 @@ class CreativeContentPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeArray(
-            Registries.CREATIVE.creativeGroups,
-            BiConsumer { byteBuf: HandleByteBuf, group: CreativeItemGroup -> this.writeGroup(byteBuf, group) })
-        byteBuf.writeArray(
-            Registries.CREATIVE.creativeItemData,
-            BiConsumer { byteBuf: HandleByteBuf, data: CreativeItemData -> this.writeItem(byteBuf, data) })
+        byteBuf.writeArray(CreativeItemRegistry.creativeGroups) { buf, group ->
+            this.writeGroup(buf, group)
+        }
+        byteBuf.writeArray(CreativeItemRegistry.creativeItemData) { buf, data ->
+            this.writeItem(buf, data)
+        }
     }
 
     private fun writeGroup(byteBuf: HandleByteBuf, group: CreativeItemGroup) {
@@ -37,7 +38,7 @@ class CreativeContentPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CREATIVE_CONTENT_PACKET
+        return ProtocolInfo.CREATIVE_CONTENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

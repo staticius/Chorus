@@ -5,10 +5,10 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.InventoryTransactionPacket
 
 data class NetworkInventoryAction(
-    var inventorySource: InventorySource,
-    var inventorySlot: Int,
-    var oldItem: Item,
-    var newItem: Item,
+    val inventorySource: InventorySource,
+    val inventorySlot: Int,
+    val oldItem: Item,
+    val newItem: Item,
 ) {
     fun write(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(inventorySource.type.id())
@@ -41,10 +41,8 @@ data class NetworkInventoryAction(
         const val SOURCE_TYPE_TRADING_USE_INPUTS: Int = -33
 
         fun read(pk: InventoryTransactionPacket, byteBuf: HandleByteBuf): NetworkInventoryAction {
-            //read InventorySource
-            val type: InventorySource.Type = InventorySource.Type.byId(
-                byteBuf.readUnsignedVarInt()
-            )
+            val type: InventorySource.Type = InventorySource.Type.byId(byteBuf.readUnsignedVarInt())
+
             val inventorySource = when (type) {
                 InventorySource.Type.UNTRACKED_INTERACTION_UI -> InventorySource.fromUntrackedInteractionUI(byteBuf.readVarInt())
 

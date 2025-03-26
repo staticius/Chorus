@@ -1,7 +1,5 @@
 package org.chorus.network.protocol.types.itemstack.request
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
-
 enum class TextProcessingEventOrigin(val id: Int) {
     SERVER_CHAT_PUBLIC(0),
     SERVER_CHAT_WHISPER(1),
@@ -18,18 +16,11 @@ enum class TextProcessingEventOrigin(val id: Int) {
     SCOREBOARD_TEXT(12),
     TICKING_AREA_TEXT(13);
 
-
     companion object {
-        private val VALUES = Int2ObjectArrayMap<TextProcessingEventOrigin>()
-
-        init {
-            for (v in entries) {
-                VALUES.put(v.id, v)
-            }
-        }
+        private val VALUES = entries.associateBy { it.id }
 
         fun fromId(id: Int): TextProcessingEventOrigin {
-            return VALUES[id]
+            return VALUES[id] ?: throw RuntimeException("Unknown TextProcessingEventOrigin ID: $id")
         }
     }
 }

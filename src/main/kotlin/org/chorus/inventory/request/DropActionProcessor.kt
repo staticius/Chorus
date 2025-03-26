@@ -9,7 +9,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.DropAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import java.util.List
 
 /**
  * Allay Project 2023/9/23

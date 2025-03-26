@@ -11,17 +11,19 @@ class HandshakePacket : QueryPacket {
     // Response
     var token: String? = null
 
-    override fun decode(buffer: ByteBuf) {
-        sessionId = buffer.readInt()
+    override fun decode(buf: ByteBuf) {
+        sessionId = buf.readInt()
     }
 
-    override fun encode(buffer: ByteBuf) {
-        buffer.writeInt(sessionId)
-        QueryUtil.writeNullTerminatedString(buffer, token!!)
+    override fun encode(buf: ByteBuf) {
+        buf.writeInt(sessionId)
+        QueryUtil.writeNullTerminatedString(buf, token!!)
     }
+
+    override val id: Short
+        get() = ID
 
     companion object {
-        val id: Short = 0x09
-            get() = Companion.field
+        const val ID: Short = 0x09
     }
 }

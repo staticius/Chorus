@@ -14,20 +14,22 @@ class StatisticsPacket : QueryPacket {
     // Response
     var payload: ByteBuf? = null
 
-    override fun decode(buffer: ByteBuf) {
-        sessionId = buffer.readInt()
-        token = buffer.readInt()
-        isFull = (buffer.isReadable)
-        buffer.skipBytes(buffer.readableBytes())
+    override fun decode(buf: ByteBuf) {
+        sessionId = buf.readInt()
+        token = buf.readInt()
+        isFull = (buf.isReadable)
+        buf.skipBytes(buf.readableBytes())
     }
 
-    override fun encode(buffer: ByteBuf) {
-        buffer.writeInt(sessionId)
-        buffer.writeBytes(payload)
+    override fun encode(buf: ByteBuf) {
+        buf.writeInt(sessionId)
+        buf.writeBytes(payload)
     }
+
+    override val id: Short
+        get() = ID
 
     companion object {
-        val id: Short = 0x00
-            get() = Companion.field
+        const val ID: Short = 0x00
     }
 }

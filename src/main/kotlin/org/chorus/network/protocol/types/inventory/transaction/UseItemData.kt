@@ -6,20 +6,17 @@ import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
 import org.chorus.math.Vector3f
 
-
-
-
 data class UseItemData(
-    var actionType: Int,
-    var blockPos: BlockVector3,
-    var face: BlockFace,
-    var hotbarSlot: Int,
-    var itemInHand: Item,
-    var playerPos: Vector3,
-    var clickPos: Vector3f,
-    var blockRuntimeId: Int,
-    var clientInteractPrediction: PredictedResult,
-    var triggerType: TriggerType,
+    val actionType: Int,
+    val blockPos: BlockVector3,
+    val face: BlockFace,
+    val hotbarSlot: Int,
+    val itemInHand: Item,
+    val playerPos: Vector3,
+    val clickPos: Vector3f,
+    val blockRuntimeId: Int,
+    val clientInteractPrediction: PredictedResult,
+    val triggerType: TriggerType,
 ) : TransactionData {
     enum class PredictedResult {
         FAILURE,

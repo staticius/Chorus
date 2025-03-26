@@ -70,16 +70,10 @@ enum class ContainerSlotType(val id: Int) {
 
 
     companion object {
-        private val VALUES = Int2ObjectArrayMap<ContainerSlotType>()
-
-        init {
-            for (v in entries) {
-                VALUES.put(v.id, v)
-            }
-        }
+        private val VALUES = entries.associateBy { it.id }
 
         fun fromId(id: Int): ContainerSlotType {
-            return VALUES[id]
+            return VALUES[id] ?: throw RuntimeException("Unknown ContainerSlotType ID: $id")
         }
     }
 }

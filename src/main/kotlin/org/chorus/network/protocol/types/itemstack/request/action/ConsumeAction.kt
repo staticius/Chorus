@@ -6,9 +6,9 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotD
  * ConsumeStackRequestAction is sent by the client when it uses an item to craft another item. The original
  * item is 'consumed'.
  */
-class ConsumeAction(
-    var count: Int,
-    var source: ItemStackRequestSlotData,
+data class ConsumeAction(
+    val count: Int,
+    val source: ItemStackRequestSlotData,
 ) : ItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CONSUME

@@ -1,7 +1,5 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
-
 enum class ItemStackRequestActionType(val id: Int) {
     TAKE(0),
     PLACE(1),
@@ -29,16 +27,10 @@ enum class ItemStackRequestActionType(val id: Int) {
     CRAFT_RESULTS_DEPRECATED(19);
 
     companion object {
-        private val VALUES = Int2ObjectArrayMap<ItemStackRequestActionType>()
-
-        init {
-            for (v in entries) {
-                VALUES.put(v.id, v)
-            }
-        }
+        private val VALUES = entries.associateBy { it.id }
 
         fun fromId(id: Int): ItemStackRequestActionType {
-            return VALUES[id]
+            return VALUES[id] ?: throw RuntimeException("Unknown ItemStackRequestActionType ID: $id")
         }
     }
 }

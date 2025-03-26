@@ -6,9 +6,9 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotD
  * DestroyStackRequestActionData is sent by the client when it destroys an item in creative mode by moving it
  * back into the creative inventory.
  */
-class DestroyAction(
-    var count: Int,
-    var source: ItemStackRequestSlotData,
+data class DestroyAction(
+    val count: Int,
+    val source: ItemStackRequestSlotData,
 ) : ItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.DESTROY

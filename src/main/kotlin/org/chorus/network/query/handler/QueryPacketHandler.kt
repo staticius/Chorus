@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom
 class QueryPacketHandler(private val listener: QueryEventListener) :
     SimpleChannelInboundHandler<DirectAddressedQueryPacket>() {
     private val timer = Timer("QueryRegenerationTicker")
-    private var lastToken: ByteArray
+    private lateinit var lastToken: ByteArray
     private val token = ByteArray(16)
 
 

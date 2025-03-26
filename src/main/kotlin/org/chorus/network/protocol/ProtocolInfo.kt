@@ -83,7 +83,6 @@ interface ProtocolInfo {
         const val SET_PLAYER_GAME_TYPE_PACKET: Int = 0x3e
         const val PLAYER_LIST_PACKET: Int = 0x3f
         const val SIMPLE_EVENT_PACKET: Int = 0x40
-        const val EVENT_PACKET: Int = 0x41
         const val SPAWN_EXPERIENCE_ORB_PACKET: Int = 0x42
         const val CLIENTBOUND_MAP_ITEM_DATA_PACKET: Int = 0x43
         const val MAP_INFO_REQUEST_PACKET: Int = 0x44

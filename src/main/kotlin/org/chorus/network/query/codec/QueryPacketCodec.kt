@@ -17,7 +17,7 @@ class QueryPacketCodec : MessageToMessageCodec<DatagramPacket, DirectAddressedQu
     ) {
         try {
             val buf = ByteBufAllocator.DEFAULT.ioBuffer()
-            buf.writeByte(packet.content().id.toInt() and 0xFF)
+            buf.writeByte(packet.content()!!.id.toInt() and 0xFF)
             packet.content()!!.encode(buf)
             list.add(DatagramPacket(buf, packet.recipient(), packet.sender()))
         } finally {
@@ -55,7 +55,7 @@ class QueryPacketCodec : MessageToMessageCodec<DatagramPacket, DirectAddressedQu
 
     companion object {
         private val QUERY_SIGNATURE = byteArrayOf(0xFE.toByte(), 0xFD.toByte())
-        private const val HANDSHAKE = 0x09
+        private const val HANDSHAKE: Short = 0x09
         private const val STATISTICS: Short = 0x00
     }
 }

@@ -1,8 +1,6 @@
 package org.chorus.network.protocol.types
 
-
 import java.util.*
-
 
 class AbilityLayer {
     var layerType: Type = Type.CACHE

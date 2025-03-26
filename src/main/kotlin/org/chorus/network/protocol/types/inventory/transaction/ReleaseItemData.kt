@@ -3,12 +3,9 @@ package org.chorus.network.protocol.types.inventory.transaction
 import org.chorus.item.Item
 import org.chorus.math.Vector3
 
-
-
-
 data class ReleaseItemData(
-    var actionType: Int,
-    var hotbarSlot: Int,
-    var itemInHand: Item,
-    var headRot: Vector3,
+    val actionType: Int,
+    val hotbarSlot: Int,
+    val itemInHand: Item,
+    val headRot: Vector3,
 ) : TransactionData

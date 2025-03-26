@@ -1,16 +1,13 @@
 package org.chorus.network.protocol.types.camera.aimassist
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.utils.OptionalValue
 
-
-class CameraAimAssistPreset {
-    var identifier: String? = null
-    var categories: String? = null
-    val exclusionList: List<String> = ObjectArrayList()
-    val liquidTargetingList: List<String> = ObjectArrayList()
-    val itemSettings: Map<String, String> = Object2ObjectArrayMap()
-    var defaultItemSettings: OptionalValue<String>? = null
-    var handSettings: OptionalValue<String>? = null
-}
+data class CameraAimAssistPreset(
+    val identifier: String,
+    val categories: String,
+    val exclusionList: List<String>,
+    val liquidTargetingList: List<String>,
+    val itemSettings: Map<String, String>,
+    val defaultItemSettings: OptionalValue<String>,
+    val handSettings: OptionalValue<String>,
+)

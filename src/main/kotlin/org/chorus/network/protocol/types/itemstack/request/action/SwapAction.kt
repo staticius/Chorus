@@ -9,8 +9,8 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotD
  */
 
 data class SwapAction(
-    var source: ItemStackRequestSlotData,
-    var destination: ItemStackRequestSlotData,
+    val source: ItemStackRequestSlotData,
+    val destination: ItemStackRequestSlotData,
 ) : ItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.SWAP

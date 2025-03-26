@@ -119,8 +119,6 @@ interface PacketHandler {
 
     fun handle(pk: EntityPickRequestPacket) {}
 
-    fun handle(pk: EventPacket) {}
-
     fun handle(pk: FilterTextPacket) {}
 
     fun handle(pk: GUIDataPickItemPacket) {}

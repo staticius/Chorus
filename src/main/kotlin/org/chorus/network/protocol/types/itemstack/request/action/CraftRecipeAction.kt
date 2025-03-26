@@ -6,9 +6,9 @@ package org.chorus.network.protocol.types.itemstack.request.action
  * This action is also sent when an item is enchanted. Enchanting should be treated mostly the same way as
  * crafting, where the old item is consumed.
  */
-class CraftRecipeAction(
-    override var recipeNetworkId: Int,
-    override var numberOfRequestedCrafts: Int,
+data class CraftRecipeAction(
+    override val recipeNetworkId: Int,
+    override val numberOfRequestedCrafts: Int,
 ) : RecipeItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_RECIPE

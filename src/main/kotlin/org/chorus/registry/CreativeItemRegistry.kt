@@ -24,23 +24,23 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                 if (input == null) {
                     throw RuntimeException("Could not load creative_items.json")
                 }
-                val data = Gson().fromJson<Map<*, *>>(
+                val data = Gson().fromJson<Map<String, Any>>(
                     InputStreamReader(input),
                     MutableMap::class.java
                 )
-                val groups = data["groups"] as List<Map<String, Any>>?
+                val groups = data["groups"] as List<*>?
                 for (i in groups!!.indices) {
-                    val tag = groups[i]
+                    val tag = groups[i] as Map<*, *>
                     val creativeCategory = (tag.getOrDefault("creative_category", 0) as Number).toInt()
-                    val name = tag["name"] as String?
-                    val iconMap = tag["icon"] as Map<*, *>?
-                    val icon = get((iconMap!!["id"] as String?)!!)
+                    val name = tag["name"] as String
+                    val iconMap = tag["icon"] as Map<*, *>
+                    val icon = get(iconMap["id"] as String)
                     creativeGroups.add(CreativeItemGroup(CreativeItemCategory.VALUES[creativeCategory], name, icon))
                 }
 
-                val items = data["items"] as List<Map<String, Any>>?
+                val items = data["items"] as List<*>?
                 for (i in items!!.indices) {
-                    val tag = items[i]
+                    val tag = items[i] as Map<*, *>
                     val damage = (tag.getOrDefault("damage", 0) as Number).toInt()
                     val groupIndex = (tag.getOrDefault("group_index", -1) as Number).toInt()
                     val nbt = if (tag.containsKey("nbt_b64")) Base64.getDecoder()

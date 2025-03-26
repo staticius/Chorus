@@ -1,15 +1,10 @@
 package org.chorus.network.protocol
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import org.chorus.entity.Attribute.getValue
-import org.chorus.nbt.tag.ListTag.get
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.camera.aimassist.*
 import org.chorus.utils.OptionalValue
-import java.util.List
 import java.util.function.BiConsumer
-import java.util.function.Function
-
 
 class CameraAimAssistPresetsPacket : DataPacket() {
     private val categories: MutableList<CameraAimAssistCategories> = ObjectArrayList()
@@ -18,145 +13,118 @@ class CameraAimAssistPresetsPacket : DataPacket() {
 
     override fun decode(byteBuf: HandleByteBuf) {
         categories.addAll(
-            List.of(
-                *byteBuf.readArray<CameraAimAssistCategories>(
-                    CameraAimAssistCategories::class.java,
-                    Function { byteBuf: HandleByteBuf -> this.readCategories(byteBuf) })
-            )
+            byteBuf.readArray(
+                    CameraAimAssistCategories::class.java
+            ) { this.readCategories(byteBuf) }
         )
         presets.addAll(
-            List.of(
-                *byteBuf.readArray<CameraAimAssistPreset>(
-                    CameraAimAssistPreset::class.java,
-                    Function { byteBuf: HandleByteBuf -> this.readPreset(byteBuf) })
-            )
+            byteBuf.readArray(
+                CameraAimAssistPreset::class.java
+            ) { this.readPreset(byteBuf) }
         )
-        this.cameraAimAssistPresetsPacketOperation =
-            CameraAimAssistPresetsPacketOperation.Companion.VALUES.get(byteBuf.readByte().toInt())
+        this.cameraAimAssistPresetsPacketOperation = CameraAimAssistPresetsPacketOperation.VALUES[byteBuf.readByte().toInt()]
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeArray(
-            categories,
-            BiConsumer { byteBuf: HandleByteBuf, categories: CameraAimAssistCategories ->
-                this.writeCategories(
-                    byteBuf,
-                    categories
-                )
-            })
-        byteBuf.writeArray(
-            presets,
-            BiConsumer { byteBuf: HandleByteBuf, preset: CameraAimAssistPreset ->
-                this.writeCameraAimAssist(
-                    byteBuf,
-                    preset
-                )
-            })
-        byteBuf.writeByte(cameraAimAssistPresetsPacketOperation!!.ordinal())
+        byteBuf.writeArray(categories) { buf, categories ->
+            this.writeCategories(
+                buf,
+                categories
+            )
+        }
+        byteBuf.writeArray(presets) { buf, preset ->
+            this.writeCameraAimAssist(
+                buf,
+                preset
+            )
+        }
+        byteBuf.writeByte(cameraAimAssistPresetsPacketOperation!!.ordinal)
     }
 
     private fun writeCategories(byteBuf: HandleByteBuf, categories: CameraAimAssistCategories) {
-        byteBuf.writeString(categories.getIdentifier())
-        byteBuf.writeArray(
-            categories.getCategories(),
-            BiConsumer { byteBuf: HandleByteBuf, category: CameraAimAssistCategory ->
-                this.writeCategory(
-                    byteBuf,
-                    category
-                )
-            })
+        byteBuf.writeString(categories.identifier)
+        byteBuf.writeArray(categories.categories) { buf, category ->
+            this.writeCategory(
+                buf,
+                category
+            )
+        }
     }
 
     private fun writeCategory(byteBuf: HandleByteBuf, category: CameraAimAssistCategory) {
-        byteBuf.writeString(category.getName())
-        writePriorities(byteBuf, category.getPriorities())
+        byteBuf.writeString(category.name)
+        writePriorities(byteBuf, category.priorities)
     }
 
     private fun writePriorities(byteBuf: HandleByteBuf, priorities: CameraAimAssistCategoryPriorities) {
-        byteBuf.writeArray<Map.Entry<String, Int>>(
-            priorities.entities.entrySet(),
-            BiConsumer<HandleByteBuf?, Map.Entry<String, Int>> { byteBuf: HandleByteBuf, priority: Map.Entry<String, Int> ->
-                this.writePriority(
-                    byteBuf,
-                    priority
-                )
-            })
-        byteBuf.writeArray<Map.Entry<String, Int>>(
-            priorities.blocks.entrySet(),
-            BiConsumer<HandleByteBuf?, Map.Entry<String, Int>> { byteBuf: HandleByteBuf, priority: Map.Entry<String, Int> ->
-                this.writePriority(
-                    byteBuf,
-                    priority
-                )
-            })
+        byteBuf.writeArray(priorities.entities.entries) { buf, priority ->
+            this.writePriority(
+                buf,
+                priority
+            )
+        }
+        byteBuf.writeArray(priorities.blocks.entries) { buf, priority ->
+            this.writePriority(
+                buf,
+                priority
+            )
+        }
     }
 
     private fun writePriority(byteBuf: HandleByteBuf, priority: Map.Entry<String, Int>) {
-        byteBuf.writeString(priority.getKey())
-        byteBuf.writeIntLE(priority.getValue())
+        byteBuf.writeString(priority.key)
+        byteBuf.writeIntLE(priority.value)
     }
 
     private fun writeCameraAimAssist(byteBuf: HandleByteBuf, preset: CameraAimAssistPreset) {
-        byteBuf.writeString(preset.getIdentifier())
-        byteBuf.writeString(preset.getCategories())
-        byteBuf.writeArray(
-            preset.getExclusionList()
-        ) { str: String? -> byteBuf.writeString(str!!) }
-        byteBuf.writeArray(
-            preset.getLiquidTargetingList()
-        ) { str: String? -> byteBuf.writeString(str!!) }
-        byteBuf.writeArray<Map.Entry<String, String>>(
-            preset.getItemSettings().entrySet(),
-            BiConsumer<HandleByteBuf?, Map.Entry<String, String>> { byteBuf: HandleByteBuf, itemSetting: Map.Entry<String, String> ->
-                this.writeItemSetting(
-                    byteBuf,
-                    itemSetting
-                )
-            })
-        byteBuf.writeOptional(
-            preset.getDefaultItemSettings()
-        ) { str: String? -> byteBuf.writeString(str!!) }
-        byteBuf.writeOptional(
-            preset.getHandSettings()
-        ) { str: String? -> byteBuf.writeString(str!!) }
+        byteBuf.writeString(preset.identifier)
+        byteBuf.writeString(preset.categories)
+        byteBuf.writeArray(preset.exclusionList) { str -> byteBuf.writeString(str) }
+        byteBuf.writeArray(preset.liquidTargetingList) { str -> byteBuf.writeString(str) }
+        byteBuf.writeArray(preset.itemSettings.entries) { buf, itemSetting ->
+            this.writeItemSetting(
+                buf,
+                itemSetting
+            )
+        }
+        byteBuf.writeOptional(preset.defaultItemSettings) { str -> byteBuf.writeString(str) }
+        byteBuf.writeOptional(preset.handSettings) { str -> byteBuf.writeString(str) }
     }
 
     private fun writeItemSetting(byteBuf: HandleByteBuf, itemSetting: Map.Entry<String, String>) {
-        byteBuf.writeString(itemSetting.getKey())
-        byteBuf.writeString(itemSetting.getValue())
+        byteBuf.writeString(itemSetting.key)
+        byteBuf.writeString(itemSetting.value)
     }
 
-    // READ
     private fun readCategories(byteBuf: HandleByteBuf): CameraAimAssistCategories {
-        val categories = CameraAimAssistCategories()
-        categories.setIdentifier(byteBuf.readString())
-        val categoryLength = byteBuf.readUnsignedVarInt()
-        for (i in 0..<categoryLength) {
-            categories.getCategories().add(readCategory(byteBuf))
-        }
-        return categories
+        return CameraAimAssistCategories(
+            identifier = byteBuf.readString(),
+            categories = List(byteBuf.readUnsignedVarInt()) {
+                readCategory(byteBuf)
+            }
+        )
     }
 
     private fun readCategory(byteBuf: HandleByteBuf): CameraAimAssistCategory {
-        val category = CameraAimAssistCategory()
-        category.setName(byteBuf.readString())
-        category.setPriorities(readPriorities(byteBuf))
-        return category
+        return CameraAimAssistCategory(
+            name = byteBuf.readString(),
+            priorities = readPriorities(byteBuf),
+        )
     }
 
     private fun readPriorities(byteBuf: HandleByteBuf): CameraAimAssistCategoryPriorities {
-        val priorities = CameraAimAssistCategoryPriorities()
-        val entityPriorityLength = byteBuf.readUnsignedVarInt()
-        for (i in 0..<entityPriorityLength) {
-            val entry = readPriority(byteBuf)
-            priorities.getEntities()[entry.getKey()] = entry.getValue()
-        }
-        val blockPriorityLength = byteBuf.readUnsignedVarInt()
-        for (i in 0..<blockPriorityLength) {
-            val entry = readPriority(byteBuf)
-            priorities.getBlocks()[entry.getKey()] = entry.getValue()
-        }
-        return priorities
+        return CameraAimAssistCategoryPriorities(
+            entities = List(byteBuf.readUnsignedVarInt()) {
+                readPriority(byteBuf).let {
+                    it.key to it.value
+                }
+            }.toMap(),
+            blocks = List(byteBuf.readUnsignedVarInt()) {
+                readPriority(byteBuf).let {
+                    it.key to it.value
+                }
+            }.toMap()
+        )
     }
 
     private fun readPriority(byteBuf: HandleByteBuf): Map.Entry<String, Int> {
@@ -164,41 +132,23 @@ class CameraAimAssistPresetsPacket : DataPacket() {
     }
 
     private fun readPreset(byteBuf: HandleByteBuf): CameraAimAssistPreset {
-        val preset = CameraAimAssistPreset()
-        preset.setIdentifier(byteBuf.readString())
-        preset.setCategories(byteBuf.readString())
-        preset.getExclusionList().addAll(
-            List.of(
-                *byteBuf.readArray<String>(
-                    String::class.java,
-                    Function { obj: HandleByteBuf -> obj.readString() })
-            )
+        return CameraAimAssistPreset(
+            identifier = byteBuf.readString(),
+            categories = byteBuf.readString(),
+            exclusionList = byteBuf.readArray(
+                String::class.java,
+            ) { obj: HandleByteBuf -> obj.readString() }.toList(),
+            liquidTargetingList = byteBuf.readArray(
+                String::class.java,
+            ) { obj: HandleByteBuf -> obj.readString() }.toList(),
+            itemSettings = List(byteBuf.readUnsignedVarInt()) {
+                readItemSetting(byteBuf).let {
+                    it.key to it.value
+                }
+            }.toMap(),
+            defaultItemSettings = OptionalValue.ofNullable(byteBuf.readOptional(null) { byteBuf.readString() }),
+            handSettings = OptionalValue.ofNullable(byteBuf.readOptional(null) { byteBuf.readString() })
         )
-        preset.getLiquidTargetingList().addAll(
-            List.of(
-                *byteBuf.readArray<String>(
-                    String::class.java,
-                    Function { obj: HandleByteBuf -> obj.readString() })
-            )
-        )
-        val itemSettingsLength = byteBuf.readUnsignedVarInt()
-        for (i in 0..<itemSettingsLength) {
-            val entry = readItemSetting(byteBuf)
-            preset.getItemSettings()[entry.getKey()] = entry.getValue()
-        }
-        preset.setDefaultItemSettings(
-            OptionalValue.of(
-                byteBuf.readOptional(
-                    null
-                ) { byteBuf.readString() })
-        )
-        preset.setHandSettings(
-            OptionalValue.of(
-                byteBuf.readOptional(
-                    null
-                ) { byteBuf.readString() })
-        )
-        return preset
     }
 
     private fun readItemSetting(byteBuf: HandleByteBuf): Map.Entry<String, String> {
@@ -206,7 +156,7 @@ class CameraAimAssistPresetsPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CAMERA_AIM_ASSIST_PRESETS_PACKET
+        return ProtocolInfo.CAMERA_AIM_ASSIST_PRESETS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

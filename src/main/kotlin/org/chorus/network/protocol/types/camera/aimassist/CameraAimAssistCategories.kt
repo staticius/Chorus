@@ -1,9 +1,6 @@
 package org.chorus.network.protocol.types.camera.aimassist
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
-
-class CameraAimAssistCategories {
-    var identifier: String? = null
-    var categories: List<CameraAimAssistCategory> = ObjectArrayList()
-}
+data class CameraAimAssistCategories(
+    val identifier: String,
+    val categories: List<CameraAimAssistCategory>,
+)

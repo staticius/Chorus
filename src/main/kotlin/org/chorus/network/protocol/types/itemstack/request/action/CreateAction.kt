@@ -8,8 +8,8 @@ package org.chorus.network.protocol.types.itemstack.request.action
  * that are not fully consumed when used for a recipe should not be destroyed there, but instead, should be
  * turned into their respective resulting items.
  */
-class CreateAction(
-    var slot: Int,
+data class CreateAction(
+    val slot: Int,
 ) : ItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CREATE

@@ -4,13 +4,13 @@ package org.chorus.network.protocol.types.itemstack.request.action
  * CraftCreativeStackRequestActionData is sent by the client when it takes an item out of the creative inventory.
  * The item is thus not really crafted, but instantly created.
  */
-class CraftCreativeAction(
+data class CraftCreativeAction(
     /**
      * creativeItemNetworkId is the network ID of the creative item that is being created. This is one of the
      * creative item network IDs sent in the CreativeContent packet.
      */
-    var creativeItemNetworkId: Int,
-    var numberOfRequestedCrafts: Int,
+    val creativeItemNetworkId: Int,
+    val numberOfRequestedCrafts: Int,
 ) : ItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_CREATIVE

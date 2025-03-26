@@ -7,9 +7,9 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotD
  * container to the cursor.
  */
 class TakeAction(
-    override var count: Int,
-    override var source: ItemStackRequestSlotData,
-    override var destination: ItemStackRequestSlotData,
+    override val count: Int,
+    override val source: ItemStackRequestSlotData,
+    override val destination: ItemStackRequestSlotData,
 ) : TransferItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.TAKE

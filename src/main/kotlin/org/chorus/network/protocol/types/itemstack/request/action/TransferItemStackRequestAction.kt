@@ -4,8 +4,6 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotD
 
 interface TransferItemStackRequestAction : ItemStackRequestAction {
     val count: Int
-
     val source: ItemStackRequestSlotData
-
     val destination: ItemStackRequestSlotData
 }
