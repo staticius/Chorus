@@ -7,16 +7,14 @@ import java.security.PublicKey
 import java.security.spec.InvalidKeySpecException
 import java.util.*
 
-class ChainValidationResult(private val signed: Boolean, parsedPayload: Map<String?, Any?>?) {
-    private val parsedPayload: Map<String?, Any?> =
-        Objects.requireNonNull(parsedPayload)
+class ChainValidationResult(private val signed: Boolean, parsedPayload: Map<String, Any?>?) {
+    private val parsedPayload: Map<String, Any?> = parsedPayload!!
     private var identityClaims: IdentityClaims? = null
 
 
     constructor(signed: Boolean, rawPayload: String?) : this(
         signed,
-        JSONUtils.from<Map<String?, Any?>>(rawPayload, object : TypeToken<Map<String?, Any?>?>() {
-        })
+        JSONUtils.from<Map<String, Any?>>(rawPayload, object : TypeToken<Map<String, Any?>>() {})
     )
 
     fun signed(): Boolean {
@@ -34,9 +32,9 @@ class ChainValidationResult(private val signed: Boolean, parsedPayload: Map<Stri
                 parsedPayload, "identityPublicKey",
                 String::class.java
             )
-            val extraData = JSONUtils.childAsType<Map<*, *>>(
+            val extraData = JSONUtils.childAsType(
                 parsedPayload, "extraData",
-                MutableMap::class.java
+                Map::class.java
             )
 
             val displayName = JSONUtils.childAsType(extraData, "displayName", String::class.java)

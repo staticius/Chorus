@@ -8,24 +8,23 @@ import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
+import java.net.URI
 import java.net.URL
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ForkJoinPool
 
-@UtilityClass
 object XblUtils {
     private val log: InternalLogger = InternalLoggerFactory.getInstance(XblUtils::class.java)
 
     private const val TOKEN_URL_STRING = "https://login.live.com/oauth20.srf"
-    private const val REQUEST_URL_STRING =
-        "https://login.live.com/oauth20_authorize.srf?client_id=00000000441cc96b&redirect_uri=https://login.live.com/oauth20_desktop.srf&response_type=token&display=touch&scope=service::user.auth.xboxlive.com::MBI_SSL&locale=en"
-    private var TOKEN_URL: URL? = null
-    private var REQUEST_URL: URL? = null
+    private const val REQUEST_URL_STRING = "https://login.live.com/oauth20_authorize.srf?client_id=00000000441cc96b&redirect_uri=https://login.live.com/oauth20_desktop.srf&response_type=token&display=touch&scope=service::user.auth.xboxlive.com::MBI_SSL&locale=en"
+    private var TOKEN_URL: URL
+    private var REQUEST_URL: URL
 
     init {
         try {
-            TOKEN_URL = URL(TOKEN_URL_STRING)
-            REQUEST_URL = URL(REQUEST_URL_STRING)
+            TOKEN_URL = URI(TOKEN_URL_STRING).toURL()
+            REQUEST_URL = URI(REQUEST_URL_STRING).toURL()
         } catch (e: MalformedURLException) {
             throw AssertionError("Unable to create XBL URLs", e)
         }
@@ -36,7 +35,7 @@ object XblUtils {
         val future: CompletableFuture<*> = CompletableFuture<Any>()
         ForkJoinPool.commonPool().execute {
             try {
-                val connection = TOKEN_URL!!.openConnection() as HttpURLConnection
+                val connection = TOKEN_URL.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
 
                 val response: String

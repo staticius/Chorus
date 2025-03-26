@@ -1,6 +1,5 @@
 package org.chorus.network.connection
 
-
 import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason
 import java.util.*
 import kotlin.collections.set

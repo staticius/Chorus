@@ -9,11 +9,11 @@ import org.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotD
  * in the cursor into a slot.
  */
 
-class PlaceAction : TransferItemStackRequestAction {
-    override var count: Int = 0
-    override var source: ItemStackRequestSlotData = null
-    override var destination: ItemStackRequestSlotData = null
-
+class PlaceAction(
+    override var count: Int,
+    override var source: ItemStackRequestSlotData,
+    override var destination: ItemStackRequestSlotData,
+) : TransferItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.PLACE
 }

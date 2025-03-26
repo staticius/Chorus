@@ -14,7 +14,7 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
     override fun encode(ctx: ChannelHandlerContext, msg: BedrockBatchWrapper, out: MutableList<Any>) {
         check(!(msg.compressed == null && msg.uncompressed == null)) { "Batch was not encoded before" }
 
-        if (msg.compressed != null && !msg.isModified) {
+        if (msg.compressed != null && !msg.modified) {
             this.onPassedThrough(ctx, msg)
             out.add(msg.retain())
             return
@@ -23,7 +23,7 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
         val compression = strategy.getCompression(msg)
         check(!(!this.prefixed && strategy.defaultCompression.algorithm !== compression.algorithm)) { "Non-default compression algorithm used without prefixing" }
 
-        val compressed = compression.encode(ctx, msg.uncompressed)
+        val compressed = compression.encode(ctx, msg.uncompressed!!)
         try {
             val outBuf: ByteBuf
             if (this.prefixed) {
@@ -46,9 +46,9 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
 
     @Throws(Exception::class)
     override fun decode(ctx: ChannelHandlerContext, msg: BedrockBatchWrapper, out: MutableList<Any>) {
-        val compressed = msg.compressed.slice()
+        val compressed = msg.compressed!!.slice()
         Preconditions.checkArgument(
-            compressed.capacity() <= Server.instance.settings.networkSettings().maxDecompressSize(),
+            compressed.capacity() <= Server.instance.settings.networkSettings.maxDecompressSize,
             "Compressed data size is too big: %s",
             compressed.capacity()
         )
@@ -61,21 +61,18 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
             compression = strategy.defaultCompression
         }
 
-        msg.algorithm = compression.algorithm
+        msg.algorithm = compression!!.algorithm
 
-        msg.uncompressed = compression!!.decode(ctx, compressed.slice())
+        msg.uncompressed = compression.decode(ctx, compressed.slice())
         this.onDecompressed(ctx, msg)
         out.add(msg.retain())
     }
 
-    protected fun onPassedThrough(ctx: ChannelHandlerContext?, msg: BedrockBatchWrapper?) {
-    }
+    protected fun onPassedThrough(ctx: ChannelHandlerContext?, msg: BedrockBatchWrapper?) {}
 
-    protected fun onCompressed(ctx: ChannelHandlerContext?, msg: BedrockBatchWrapper?) {
-    }
+    protected fun onCompressed(ctx: ChannelHandlerContext?, msg: BedrockBatchWrapper?) {}
 
-    protected fun onDecompressed(ctx: ChannelHandlerContext?, msg: BedrockBatchWrapper?) {
-    }
+    protected fun onDecompressed(ctx: ChannelHandlerContext?, msg: BedrockBatchWrapper?) {}
 
     protected fun getCompressionHeader(algorithm: CompressionAlgorithm): Byte {
         if (algorithm == PacketCompressionAlgorithm.NONE) {
@@ -92,10 +89,10 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
     }
 
     protected fun getCompressionAlgorithm(header: Byte): CompressionAlgorithm {
-        when (header) {
+        when (header.toInt()) {
             0x00 -> return PacketCompressionAlgorithm.ZLIB
             0x01 -> return PacketCompressionAlgorithm.SNAPPY
-            0xff.toByte() -> return PacketCompressionAlgorithm.NONE
+            0xff -> return PacketCompressionAlgorithm.NONE
         }
 
         val algorithm = this.getCompressionAlgorithm0(header)

@@ -8,8 +8,6 @@ import org.chorus.utils.*
 
 
 class ZlibCompression(private val zlib: CompressionProvider) : BatchCompression {
-
-
     override val level: Int = 7
 
     @Throws(Exception::class)

@@ -3,9 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.utils.SemVersion
 import org.chorus.utils.Utils
 
-/**
- * @author MagicDroidX &amp; iNevet (Nukkit Project)
- */
 interface ProtocolInfo {
     companion object {
         /**

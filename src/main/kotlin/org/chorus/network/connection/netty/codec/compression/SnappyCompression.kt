@@ -40,8 +40,5 @@ class SnappyCompression : BatchCompression {
     override val algorithm: CompressionAlgorithm
         get() = PacketCompressionAlgorithm.SNAPPY
 
-    override var level: Int
-        get() = -1
-        set(level) {
-        }
+    override val level: Int = -1
 }

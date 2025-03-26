@@ -13,5 +13,5 @@ interface BatchCompression {
 
     val algorithm: CompressionAlgorithm
 
-    var level: Int
+    val level: Int
 }

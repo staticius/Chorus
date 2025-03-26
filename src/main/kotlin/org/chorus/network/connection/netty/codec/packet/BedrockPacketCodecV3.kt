@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf
 import org.chorus.network.connection.netty.BedrockPacketWrapper
 import org.chorus.utils.ByteBufVarInt
 
-class BedrockPacketCodec_v3 : BedrockPacketCodec() {
+class BedrockPacketCodecV3 : BedrockPacketCodec() {
     override fun encodeHeader(buf: ByteBuf, msg: BedrockPacketWrapper) {
         var header = 0
         header = header or (msg.packetId and 0x3ff)

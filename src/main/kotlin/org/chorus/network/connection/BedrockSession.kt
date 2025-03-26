@@ -1,6 +1,5 @@
 package org.chorus.network.connection
 
-
 import com.github.oxo42.stateless4j.StateMachine
 import com.github.oxo42.stateless4j.StateMachineConfig
 import com.github.oxo42.stateless4j.delegates.Action
@@ -128,7 +127,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
                 this.setPacketHandler(SpawnResponseHandler(this))
                 // The reason why teleport player to their position is for gracefully client-side spawn,
                 // although we need some hacks, It is definitely a fairly worthy trade.
-                handle!!.player.setImmobile(true) //TODO: HACK: fix client-side falling pre-spawn
+                handle!!.player.setImmobile(true) // TODO: HACK: fix client-side falling pre-spawn
             })
             .onExit(Action { this.onClientSpawned() })
             .permit(SessionState.IN_GAME, SessionState.IN_GAME)

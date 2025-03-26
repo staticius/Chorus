@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageCodec
 import org.chorus.network.connection.netty.BedrockBatchWrapper
+import org.chorus.utils.Loggable
 import org.cloudburstmc.netty.channel.raknet.RakReliability
 import org.cloudburstmc.netty.channel.raknet.packet.RakMessage
 
@@ -20,7 +21,7 @@ class FrameIdCodec(private val frameId: Int) : MessageToMessageCodec<RakMessage,
         val buf = ctx.alloc().compositeDirectBuffer(2)
         try {
             buf.addComponent(true, ctx.alloc().ioBuffer(1).writeByte(frameId))
-            buf.addComponent(true, msg.compressed.retainedSlice())
+            buf.addComponent(true, msg.compressed!!.retainedSlice())
 
             out.add(buf.retain())
         } finally {
@@ -42,7 +43,7 @@ class FrameIdCodec(private val frameId: Int) : MessageToMessageCodec<RakMessage,
         out.add(BedrockBatchWrapper.Companion.newInstance(`in`.readRetainedSlice(`in`.readableBytes()), null))
     }
 
-    companion object {
+    companion object : Loggable {
         const val NAME: String = "frame-id-codec"
     }
 }

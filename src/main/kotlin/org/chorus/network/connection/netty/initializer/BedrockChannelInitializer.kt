@@ -9,9 +9,9 @@ import org.chorus.network.connection.netty.codec.batch.BedrockBatchDecoder
 import org.chorus.network.connection.netty.codec.batch.BedrockBatchEncoder
 import org.chorus.network.connection.netty.codec.compression.*
 import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodec
-import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodec_v1
-import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodec_v2
-import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodec_v3
+import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodecV1
+import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodecV2
+import org.chorus.network.connection.netty.codec.packet.BedrockPacketCodecV3
 import org.chorus.network.protocol.types.*
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
 
@@ -19,31 +19,29 @@ import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
 abstract class BedrockChannelInitializer<T : BedrockSession?> : ChannelInitializer<Channel>() {
     @Throws(Exception::class)
     override fun initChannel(channel: Channel) {
-        // Decode
-        // RAKNET_FRAME_CODEC -> CompressionCodec -> BATCH_DECODER ->  BedrockPacketCodec -> BedrockPeer
-        // Encode
-        // BedrockPeer -> BedrockPacketCodec-> BATCH_ENCODER -> CompressionCodec -> RAKNET_FRAME_CODEC
+        // Decode: RAKNET_FRAME_CODEC -> CompressionCodec -> BATCH_DECODER ->  BedrockPacketCodec -> BedrockPeer
+        // Encode: BedrockPeer -> BedrockPacketCodec-> BATCH_ENCODER -> CompressionCodec -> RAKNET_FRAME_CODEC
         this.preInitChannel(channel)
 
         channel.pipeline()
-            .addLast(BedrockBatchDecoder.Companion.NAME, BATCH_DECODER)
-            .addLast(BedrockBatchEncoder.Companion.NAME, BedrockBatchEncoder())
+            .addLast(BedrockBatchDecoder.NAME, BATCH_DECODER)
+            .addLast(BedrockBatchEncoder.NAME, BedrockBatchEncoder())
 
         this.initPacketCodec(channel)
 
-        channel.pipeline().addLast(BedrockPeer.Companion.NAME, this.createPeer(channel))
+        channel.pipeline().addLast(BedrockPeer.NAME, this.createPeer(channel))
 
         this.postInitChannel(channel)
     }
 
     protected fun preInitChannel(channel: Channel) {
-        channel.pipeline().addLast(FrameIdCodec.Companion.NAME, RAKNET_FRAME_CODEC)
+        channel.pipeline().addLast(FrameIdCodec.NAME, RAKNET_FRAME_CODEC)
 
         val rakVersion = channel.config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION)
 
         val compression = getCompression(PacketCompressionAlgorithm.ZLIB, rakVersion, true)
         // At this point all connections use not prefixed compression
-        channel.pipeline().addLast(CompressionCodec.Companion.NAME, CompressionCodec(compression, false))
+        channel.pipeline().addLast(CompressionCodec.NAME, CompressionCodec(compression, false))
     }
 
     @Throws(Exception::class)
@@ -53,9 +51,9 @@ abstract class BedrockChannelInitializer<T : BedrockSession?> : ChannelInitializ
     @Throws(Exception::class)
     protected fun initPacketCodec(channel: Channel) {
         when (val rakVersion = channel.config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION)) {
-            11, 10, 9 -> channel.pipeline().addLast(BedrockPacketCodec.Companion.NAME, BedrockPacketCodec_v3())
-            8 -> channel.pipeline().addLast(BedrockPacketCodec.Companion.NAME, BedrockPacketCodec_v2())
-            7 -> channel.pipeline().addLast(BedrockPacketCodec.Companion.NAME, BedrockPacketCodec_v1())
+            11, 10, 9 -> channel.pipeline().addLast(BedrockPacketCodec.NAME, BedrockPacketCodecV3())
+            8 -> channel.pipeline().addLast(BedrockPacketCodec.NAME, BedrockPacketCodecV2())
+            7 -> channel.pipeline().addLast(BedrockPacketCodec.NAME, BedrockPacketCodecV1())
             else -> throw UnsupportedOperationException("Unsupported RakNet protocol version: $rakVersion")
         }
     }

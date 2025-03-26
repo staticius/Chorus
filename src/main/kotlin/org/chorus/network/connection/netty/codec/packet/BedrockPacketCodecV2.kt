@@ -3,12 +3,16 @@ package org.chorus.network.connection.netty.codec.packet
 import io.netty.buffer.ByteBuf
 import org.chorus.network.connection.netty.BedrockPacketWrapper
 
-class BedrockPacketCodec_v1 : BedrockPacketCodec() {
+class BedrockPacketCodecV2 : BedrockPacketCodec() {
     override fun encodeHeader(buf: ByteBuf, msg: BedrockPacketWrapper) {
-        buf.writeByte(msg.packetId and 0xff)
+        buf.writeByte(msg.packetId)
+        buf.writeByte(msg.senderSubClientId)
+        buf.writeByte(msg.targetSubClientId)
     }
 
     override fun decodeHeader(buf: ByteBuf, msg: BedrockPacketWrapper) {
         msg.packetId = buf.readUnsignedByte().toInt()
+        msg.senderSubClientId = buf.readUnsignedByte().toInt()
+        msg.targetSubClientId = buf.readUnsignedByte().toInt()
     }
 }

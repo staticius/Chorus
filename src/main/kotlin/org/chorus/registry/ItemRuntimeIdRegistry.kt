@@ -75,8 +75,8 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
         return i
     }
 
-    fun getIdentifier(runtimeId: Int): String? {
-        return ID2NAME[runtimeId]
+    fun getIdentifier(runtimeId: Int): String {
+        return ID2NAME[runtimeId] ?: throw RegisterException("Runtime ID not registered: $runtimeId")
     }
 
     override fun reload() {

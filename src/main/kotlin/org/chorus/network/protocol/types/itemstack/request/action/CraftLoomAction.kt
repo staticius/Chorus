@@ -1,9 +1,9 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
 
-class CraftLoomAction : ItemStackRequestAction {
-    var patternId: String? = null
-
+class CraftLoomAction(
+    var patternId: String
+) : ItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_LOOM
 }

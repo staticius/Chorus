@@ -36,15 +36,14 @@ import javax.crypto.SecretKey
  * A Bedrock peer that represents a single network connection to the remote peer.
  * It can hold one or more [BedrockSession]s.
  */
-
-class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSessionFactory) :
+class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessionFactory) :
     ChannelInboundHandlerAdapter(), Loggable {
-    protected val sessions: Int2ObjectMap<BedrockSession> = Int2ObjectOpenHashMap()
-    protected val packetQueue: Queue<BedrockPacketWrapper> = PlatformDependent.newMpscQueue()
-    protected var tickFuture: ScheduledFuture<*>? = null
-    protected var closed: AtomicBoolean = AtomicBoolean()
+    private val sessions: Int2ObjectMap<BedrockSession> = Int2ObjectOpenHashMap()
+    private val packetQueue: Queue<BedrockPacketWrapper> = PlatformDependent.newMpscQueue()
+    private var tickFuture: ScheduledFuture<*>? = null
+    private var closed: AtomicBoolean = AtomicBoolean()
 
-    protected fun onBedrockPacket(wrapper: BedrockPacketWrapper) {
+    private fun onBedrockPacket(wrapper: BedrockPacketWrapper) {
         val targetId = wrapper.targetSubClientId
         val session = sessions.computeIfAbsent(
             targetId,
@@ -52,11 +51,11 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
         session.onPacket(wrapper)
     }
 
-    protected fun onSessionCreated(sessionId: Int): BedrockSession? {
+    private fun onSessionCreated(sessionId: Int): BedrockSession? {
         return sessionFactory.createSession(this, sessionId)
     }
 
-    protected fun checkForClosed() {
+    private fun checkForClosed() {
         check(!closed.get()) { "Peer has been closed" }
     }
 
@@ -64,7 +63,7 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
         sessions.remove(session.subClientId, session as Any)
     }
 
-    protected fun onTick() {
+    private fun onTick() {
         if (closed.get()) {
             return
         }
@@ -84,7 +83,7 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
         }
     }
 
-    private fun onRakNetDisconnect(ctx: ChannelHandlerContext, reason: RakDisconnectReason) {
+    private fun onRakNetDisconnect(reason: RakDisconnectReason) {
         val disconnectReason = BedrockDisconnectReasons.getReason(reason)
         for (session in sessions.values) {
             session.close(disconnectReason)
@@ -159,29 +158,29 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
     fun setCompression(algorithm: PacketCompressionAlgorithm) {
         Objects.requireNonNull(algorithm, "algorithm")
         this.setCompression(
-            BedrockChannelInitializer.Companion.getCompression(
+            BedrockChannelInitializer.getCompression(
                 algorithm,
                 rakVersion, false
             )
         )
     }
 
-    fun setCompression(strategy: CompressionStrategy) {
+    private fun setCompression(strategy: CompressionStrategy) {
         Objects.requireNonNull(strategy, "strategy")
 
         val needsPrefix = ProtocolInfo.CURRENT_PROTOCOL >= 649 // TODO: do not hardcode
 
-        val handler = channel.pipeline()[CompressionCodec.Companion.NAME]
+        val handler = channel.pipeline()[CompressionCodec.NAME]
         if (handler == null) {
             channel.pipeline().addBefore(
-                BedrockBatchDecoder.Companion.NAME,
-                CompressionCodec.Companion.NAME,
+                BedrockBatchDecoder.NAME,
+                CompressionCodec.NAME,
                 CompressionCodec(strategy, needsPrefix)
             )
         } else {
             channel.pipeline().replace(
-                CompressionCodec.Companion.NAME,
-                CompressionCodec.Companion.NAME,
+                CompressionCodec.NAME,
+                CompressionCodec.NAME,
                 CompressionCodec(strategy, needsPrefix)
             )
         }
@@ -189,8 +188,7 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
 
     val compressionStrategy: CompressionStrategy?
         get() {
-            val handler =
-                channel.pipeline()[CompressionCodec.Companion.NAME] as? CompressionCodec ?: return null
+            val handler = channel.pipeline()[CompressionCodec.NAME] as? CompressionCodec ?: return null
             return handler.strategy
         }
 
@@ -199,7 +197,7 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
         channel.disconnect()
     }
 
-    protected fun onClose() {
+    private fun onClose() {
         if (channel.isOpen) {
             log.warn("Tried to close peer, but channel is open!", Throwable())
             return
@@ -265,7 +263,7 @@ class BedrockPeer(val channel: Channel, protected val sessionFactory: BedrockSes
     @Throws(Exception::class)
     override fun userEventTriggered(ctx: ChannelHandlerContext, evt: Any) {
         if (evt is RakDisconnectReason) {
-            onRakNetDisconnect(ctx, evt)
+            onRakNetDisconnect(evt)
         }
     }
 

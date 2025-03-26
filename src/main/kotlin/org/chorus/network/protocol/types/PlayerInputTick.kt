@@ -1,6 +1,3 @@
 package org.chorus.network.protocol.types
 
-
-class PlayerInputTick {
-    private val inputTick: Long = 0
-}
+data class PlayerInputTick(val inputTick: Long)

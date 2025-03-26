@@ -1,6 +1,5 @@
 package org.chorus.network.protocol.types.itemstack.request.action
 
-
 /**
  * CreateStackRequestActionData is sent by the client when an item is created through being used as part of a
  * recipe. For example, when milk is used to craft a cake, the buckets are leftover. The buckets are moved to
@@ -9,10 +8,9 @@ package org.chorus.network.protocol.types.itemstack.request.action
  * that are not fully consumed when used for a recipe should not be destroyed there, but instead, should be
  * turned into their respective resulting items.
  */
-
-class CreateAction : ItemStackRequestAction {
-    var slot: Int = 0
-
+class CreateAction(
+    var slot: Int,
+) : ItemStackRequestAction {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CREATE
 }

@@ -2,10 +2,7 @@ package org.chorus.recipe.descriptor
 
 import org.chorus.item.Item
 
-
-class ComplexAliasDescriptor : ItemDescriptor {
-    var name: String? = null
-
+class ComplexAliasDescriptor(var name: String) : ItemDescriptor, Cloneable {
     override val type: ItemDescriptorType
         get() = ItemDescriptorType.COMPLEX_ALIAS
 
@@ -13,9 +10,8 @@ class ComplexAliasDescriptor : ItemDescriptor {
         throw UnsupportedOperationException()
     }
 
-    @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super.clone()
+        return super<Cloneable>.clone() as ItemDescriptor
     }
 
     override val count: Int

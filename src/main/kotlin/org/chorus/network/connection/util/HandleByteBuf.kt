@@ -25,9 +25,7 @@ import org.chorus.nbt.NBTIO.read
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.stream.LittleEndianByteBufInputStreamNBTInputStream
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.nbt.tag.ListTag.get
 import org.chorus.nbt.tag.StringTag
-import org.chorus.nbt.tag.Tag
 import org.chorus.network.protocol.types.EntityLink
 import org.chorus.network.protocol.types.PlayerInputTick
 import org.chorus.network.protocol.types.PropertySyncData
@@ -55,8 +53,8 @@ import java.util.*
 import java.util.function.*
 import java.util.function.Function
 
-class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
-    protected val buf: ByteBuf = ObjectUtil.checkNotNull(buf, "buf")
+class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
+    private val buf: ByteBuf = ObjectUtil.checkNotNull(buf, "buf")
 
     override fun hasMemoryAddress(): Boolean {
         return buf.hasMemoryAddress()
@@ -87,11 +85,15 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         return buf.alloc()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun order(): ByteOrder {
+        @Suppress("DEPRECATION")
         return buf.order()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun order(endianness: ByteOrder): ByteBuf {
+        @Suppress("DEPRECATION")
         return buf.order(endianness)
     }
 
@@ -741,7 +743,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         val present = data.isPresent
         writeBoolean(present)
         if (present) {
-            consumer.accept(data.get())
+            consumer.accept(data.get()!!)
         }
     }
 
@@ -779,8 +781,8 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
     fun writeFullContainerName(fullContainerName: FullContainerName) {
         this.writeByte(fullContainerName.container.id)
         this.writeOptional(
-            OptionalValue.ofNullable(fullContainerName.dynamicId),
-            Consumer { value: Int -> this.writeIntLE(value) })
+            OptionalValue.ofNullable(fullContainerName.dynamicId)
+        ) { value: Int -> this.writeIntLE(value) }
     }
 
     fun readFullContainerName(): FullContainerName {
@@ -817,12 +819,12 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
     }
 
     fun writeSkin(skin: Skin) {
-        this.writeString(skin.getSkinId()!!)
-        this.writeString(skin.getPlayFabId()!!)
+        this.writeString(skin.getSkinId())
+        this.writeString(skin.getPlayFabId())
         this.writeString(skin.getSkinResourcePatch())
         this.writeImage(skin.getSkinData())
 
-        val animations: List<SkinAnimation?> = skin.getAnimations()
+        val animations = skin.getAnimations()
         this.writeIntLE(animations.size)
         for (animation in animations) {
             this.writeImage(animation.image)
@@ -839,7 +841,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         this.writeString(skin.getFullSkinId())
         this.writeString(skin.getArmSize()!!)
         this.writeString(skin.getSkinColor()!!)
-        val pieces: List<PersonaPiece?> = skin.getPersonaPieces()
+        val pieces = skin.getPersonaPieces()
         this.writeIntLE(pieces.size)
         for (piece in pieces) {
             this.writeString(piece.id)
@@ -849,7 +851,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
             this.writeString(piece.productId)
         }
 
-        val tints: List<PersonaPieceTint?> = skin.getTintColors()
+        val tints = skin.getTintColors()
         this.writeIntLE(tints.size)
         for (tint in tints) {
             this.writeString(tint.pieceType)
@@ -985,8 +987,8 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
 
         var blockingTicks: Long = 0
         var compoundTag: CompoundTag? = null
-        val canPlace: Array<String?>
-        val canBreak: Array<String?>
+        val canPlace: Array<String>
+        val canBreak: Array<String>
         val item: Item
         if (blockRuntimeId == 0) {
             item = get(Registries.ITEM_RUNTIMEID.getIdentifier(runtimeId), damage, count)
@@ -1019,37 +1021,30 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
                     compoundTag = ls.readTag() as CompoundTag?
                 }
 
-                canPlace = arrayOfNulls(stream.readInt())
-                for (i in canPlace.indices) {
-                    canPlace[i] = stream.readUTF()
+                canPlace = Array(stream.readInt()) {
+                    stream.readUTF()
                 }
 
-                canBreak = arrayOfNulls(stream.readInt())
-                for (i in canBreak.indices) {
-                    canBreak[i] = stream.readUTF()
+                canBreak = Array(stream.readInt()) {
+                    stream.readUTF()
                 }
 
                 if (item.id == ItemID.SHIELD) {
-                    blockingTicks = stream.readLong() //blockingTicks
+                    blockingTicks = stream.readLong() // blockingTicks
                 }
                 if (compoundTag != null) {
                     if (compoundTag!!.contains("__DamageConflict__")) {
-                        compoundTag!!.put("Damage", compoundTag!!.removeAndGet<Tag>("__DamageConflict__"))
+                        compoundTag!!.put("Damage", compoundTag!!.removeAndGet("__DamageConflict__")!!)
                     }
                     item.setCompoundTag(compoundTag)
                 }
-                val canPlaces = arrayOfNulls<Block>(canPlace.size)
-                for (i in canPlace.indices) {
-                    canPlaces[i] = Block.get(canPlace[i])
+                val canPlaces = canPlace.map { Block.get(it) }.toTypedArray()
+                if (canPlaces.isNotEmpty()) {
+                    item.setCanPlaceOn(canPlaces)
                 }
-                if (canPlaces.size > 0) {
-                    item.setCanDestroy(canPlaces)
-                }
-                val canBreaks = arrayOfNulls<Block>(canBreak.size)
-                for (i in canBreak.indices) {
-                    canBreaks[i] = Block.get(canBreak[i])
-                }
-                if (canBreaks.size > 0) {
+
+                val canBreaks = canBreak.map { Block.get(it) }.toTypedArray()
+                if (canBreaks.isNotEmpty()) {
                     item.setCanPlaceOn(canBreaks)
                 }
                 return item
@@ -1089,13 +1084,13 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
                 val data = item.damage
                 if (item is ItemDurable && data != 0) {
                     val nbt = item.compoundTag
-                    val tag = if (nbt == null || nbt.size == 0) {
+                    val tag = if (nbt.isEmpty()) {
                         CompoundTag()
                     } else {
                         read(nbt, ByteOrder.LITTLE_ENDIAN)
                     }
                     if (tag.contains("Damage")) {
-                        tag.put("__DamageConflict__", tag.removeAndGet<Tag>("Damage"))
+                        tag.put("__DamageConflict__", tag.removeAndGet("Damage")!!)
                     }
                     tag.putInt("Damage", data)
                     stream.writeShort(-1)
@@ -1168,7 +1163,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         when (type) {
             ItemDescriptorType.DEFAULT -> {
                 val ingredient = itemDescriptor.toItem()
-                if (ingredient == null || ingredient.isNothing) {
+                if (ingredient.isNothing) {
                     this.writeShortLE(0)
                     this.writeVarInt(0) // item == null ? 0 : item.getCount()
                     return
@@ -1200,25 +1195,16 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
                 this.writeString(deferredDescriptor.fullName)
                 this.writeShortLE(deferredDescriptor.auxValue)
             }
+            else -> {}
         }
 
         this.writeVarInt(itemDescriptor.count)
     }
 
-    private fun extractStringList(item: Item, tagName: String): List<String?> {
-        val namedTag = item.namedTag ?: return emptyList<String>()
-
+    private fun extractStringList(item: Item, tagName: String): List<String> {
+        val namedTag = item.namedTag ?: return emptyList()
         val listTag = namedTag.getList(tagName, StringTag::class.java)
-
-        val size = listTag.size()
-        val values: MutableList<String?> = ArrayList(size)
-        for (i in 0..<size) {
-            val stringTag = listTag.get(i)
-            if (stringTag != null) {
-                values.add(stringTag.data)
-            }
-        }
-        return values
+        return listTag.all.map { it.data }
     }
 
     fun readSignedBlockPosition(): BlockVector3 {
@@ -1335,7 +1321,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         return EntityLink(
             readEntityUniqueId(),
             readEntityUniqueId(),
-            EntityLink.Type.EntityLink.Type.entries.toTypedArray().get(readByte().toInt()),
+            EntityLink.Type.entries.toTypedArray()[readByte().toInt()],
             readBoolean(),
             readBoolean()
         )
@@ -1350,7 +1336,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
     }
 
     fun <T> writeArray(collection: Collection<T>?, writer: Consumer<T>?) {
-        if (collection == null || collection.isEmpty()) {
+        if (collection.isNullOrEmpty()) {
             writeUnsignedVarInt(0)
             return
         }
@@ -1359,7 +1345,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
     }
 
     fun <T> writeArray(collection: Array<T>?, writer: Consumer<T>) {
-        if (collection == null || collection.size == 0) {
+        if (collection.isNullOrEmpty()) {
             writeUnsignedVarInt(0)
             return
         }
@@ -1409,7 +1395,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
     fun <T> readArray(array: MutableCollection<T>, function: Function<HandleByteBuf, T>) {
         readArray(
             array,
-            { obj: HandleByteBuf -> obj.readUnsignedVarInt().toLong().toLong() }, function
+            { it.readUnsignedVarInt().toLong() }, function
         )
     }
 
@@ -1424,14 +1410,14 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         }
     }
 
-    @SneakyThrows(IOException::class)
+    @Throws(IOException::class)
     fun readTag(): CompoundTag {
         ByteBufInputStream(this).use { `is` ->
             return read(`is`)
         }
     }
 
-    @SneakyThrows(IOException::class)
+    @Throws(IOException::class)
     fun writeTag(tag: CompoundTag) {
         writeBytes(write(tag))
     }
@@ -1439,15 +1425,13 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
 
     fun readItemStackRequest(): ItemStackRequest {
         val requestId = readVarInt()
-        val actions: Array<ItemStackRequestAction> = readArray<ItemStackRequestAction>(
-            ItemStackRequestAction::class.java,
-            Function { s: HandleByteBuf ->
-                val itemStackRequestActionType = ItemStackRequestActionType.fromId(s.readByte().toInt())
-                readRequestActionData(itemStackRequestActionType)
-            })
-        val filteredStrings: Array<String> = readArray<String>(
-            String::class.java,
-            Function { obj: HandleByteBuf -> obj.readString() })
+        val actions: Array<ItemStackRequestAction> = readArray(
+            ItemStackRequestAction::class.java
+        ) { s: HandleByteBuf ->
+            val itemStackRequestActionType = ItemStackRequestActionType.fromId(s.readByte().toInt())
+            readRequestActionData(itemStackRequestActionType)
+        }
+        val filteredStrings: Array<String> = readArray(String::class.java) { it.readString() }
 
         val originVal = readIntLE()
         val origin = if (originVal == -1) null else TextProcessingEventOrigin.fromId(originVal) // new for v552
@@ -1484,9 +1468,7 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
             }
 
             ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED -> CraftResultsDeprecatedAction(
-                readArray<Item>(
-                    Item::class.java,
-                    Function { s: HandleByteBuf -> s.readSlot(true) }),
+                readArray(Item::class.java) { s: HandleByteBuf -> s.readSlot(true) },
                 readUnsignedByte().toInt()
             )
 
@@ -1677,12 +1659,12 @@ class HandleByteBuf protected constructor(buf: ByteBuf) : ByteBuf() {
         return buf.hashCode()
     }
 
-    override fun equals(obj: Any?): Boolean {
-        return buf == obj
+    override fun equals(other: Any?): Boolean {
+        return buf == other
     }
 
-    override fun compareTo(buffer: ByteBuf): Int {
-        return buf.compareTo(buffer)
+    override fun compareTo(other: ByteBuf): Int {
+        return buf.compareTo(other)
     }
 
     override fun toString(): String {

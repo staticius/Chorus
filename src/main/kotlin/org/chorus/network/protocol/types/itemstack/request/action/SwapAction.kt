@@ -12,8 +12,6 @@ data class SwapAction(
     var source: ItemStackRequestSlotData,
     var destination: ItemStackRequestSlotData,
 ) : ItemStackRequestAction {
-
-
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.SWAP
 }

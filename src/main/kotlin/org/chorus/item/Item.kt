@@ -420,7 +420,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         for (ench in customEnch.all) {
             val enchantment: Enchantment = Enchantment.getEnchantment(
                 ench.getString("id")
-            ).setLevel(ench.getShort("lvl").toInt())
+            )!!.setLevel(ench.getShort("lvl").toInt())
             joiner.add(enchantment.lore)
         }
         return joiner.toString()
@@ -1513,7 +1513,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         }
 
         protected fun getItemBlockState(id: String, aux: Int): BlockState {
-            val i = Registries.BLOCKSTATE_ITEMMETA[id, aux]
+            val i = Registries.BLOCKSTATE_ITEMMETA[id, aux] ?: return BlockAir.STATE
             if (i == 0) {
                 val block = Registries.BLOCK[id] ?: return BlockAir.STATE
                 return block.properties.defaultState

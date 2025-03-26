@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 
-class BedrockEncryptionDecoder(val key: SecretKey, val cipher: Cipher) :
+class BedrockEncryptionDecoder(val key: SecretKey, private val cipher: Cipher) :
     MessageToMessageDecoder<BedrockBatchWrapper>() {
     private val packetCounter = AtomicLong()
 

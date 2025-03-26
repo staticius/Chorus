@@ -22,7 +22,6 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-@UtilityClass
 object EncryptionUtils {
     /**
      * Mojang's public key used to verify the JWT during login.
@@ -33,13 +32,11 @@ object EncryptionUtils {
     var oldMojangPublicKey: ECPublicKey? = null
 
     private val SECURE_RANDOM = SecureRandom()
-    private const val MOJANG_PUBLIC_KEY_BASE64 =
-        "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAECRXueJeTDqNRRgJi/vlRufByu/2G0i2Ebt6YMar5QX/R0DIIyrJMcUpruK4QveTfJSTp3Shlq4Gk34cD/4GUWwkv0DVuzeuB+tXija7HBxii03NHDbPAD0AKnLr2wdAp"
-    private const val OLD_MOJANG_PUBLIC_KEY_BASE64 =
-        "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V"
-    private var KEY_PAIR_GEN: KeyPairGenerator? = null
+    private const val MOJANG_PUBLIC_KEY_BASE64 = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAECRXueJeTDqNRRgJi/vlRufByu/2G0i2Ebt6YMar5QX/R0DIIyrJMcUpruK4QveTfJSTp3Shlq4Gk34cD/4GUWwkv0DVuzeuB+tXija7HBxii03NHDbPAD0AKnLr2wdAp"
+    private const val OLD_MOJANG_PUBLIC_KEY_BASE64 = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V"
+    private const val ALGORITHM_TYPE: String = AlgorithmIdentifiers.ECDSA_USING_P384_CURVE_AND_SHA384
 
-    const val ALGORITHM_TYPE: String = AlgorithmIdentifiers.ECDSA_USING_P384_CURVE_AND_SHA384
+    private var KEY_PAIR_GEN: KeyPairGenerator = KeyPairGenerator.getInstance("EC")
     private val ALGORITHM_CONSTRAINTS = AlgorithmConstraints(AlgorithmConstraints.ConstraintType.PERMIT, ALGORITHM_TYPE)
 
     init {
@@ -52,7 +49,6 @@ object EncryptionUtils {
         )
 
         try {
-            KEY_PAIR_GEN = KeyPairGenerator.getInstance("EC")
             KEY_PAIR_GEN.initialize(ECGenParameterSpec("secp384r1"))
             mojangPublicKey = parseKey(MOJANG_PUBLIC_KEY_BASE64)
             oldMojangPublicKey = parseKey(OLD_MOJANG_PUBLIC_KEY_BASE64)
@@ -87,7 +83,7 @@ object EncryptionUtils {
      */
     @JvmStatic
     fun createKeyPair(): KeyPair {
-        return KEY_PAIR_GEN!!.generateKeyPair()
+        return KEY_PAIR_GEN.generateKeyPair()
     }
 
     @Throws(NoSuchAlgorithmException::class, InvalidKeySpecException::class, JoseException::class)
@@ -118,7 +114,7 @@ object EncryptionUtils {
 
             3 -> {
                 var currentKey: ECPublicKey? = null
-                var parsedPayload: Map<String?, Any?>? = null
+                var parsedPayload: Map<String, Any?>? = null
                 var i = 0
                 while (i < 3) {
                     val signature = JsonWebSignature()

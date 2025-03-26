@@ -15,12 +15,12 @@ import java.util.function.Consumer
 class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Handle<BedrockBatchWrapper>) :
     AbstractReferenceCounted() {
     var compressed: ByteBuf? = null
-    private var algorithm: CompressionAlgorithm? = null
+    var algorithm: CompressionAlgorithm? = null
 
     var uncompressed: ByteBuf? = null
     private val packets: MutableList<BedrockPacketWrapper?> = ObjectArrayList()
 
-    private var modified = false
+    var modified = false
     private val flags: MutableSet<BatchFlag> = ObjectOpenHashSet()
 
     override fun deallocate() {
