@@ -11,19 +11,16 @@ interface ProtocolInfo {
         /**
          * Actual Minecraft: PE protocol version
          */
-        @JvmField
         val CURRENT_PROTOCOL: Int = Utils.dynamic(776)
 
         val MINECRAFT_VERSION_NETWORK: String = Utils.dynamic("1.21.60")
 
         val MINECRAFT_SEMVERSION: SemVersion = SemVersion(1, 21, 6, 0, 0)
 
-        @JvmField
         val BLOCK_STATE_VERSION_NO_REVISION: Int = (MINECRAFT_SEMVERSION.major shl 24) or  //major
                 (MINECRAFT_SEMVERSION.minor shl 16) or  //minor
                 (MINECRAFT_SEMVERSION.patch shl 8) //patch
 
-        @JvmField
         val MINECRAFT_VERSION: String = 'v'.toString() + MINECRAFT_VERSION_NETWORK
 
         const val LOGIN_PACKET: Int = 0x01
@@ -49,7 +46,6 @@ interface ProtocolInfo {
         const val UPDATE_BLOCK_PACKET: Int = 0x15
         const val ADD_PAINTING_PACKET: Int = 0x16
         const val TICK_SYNC_PACKET: Int = 0x17
-        const val LEVEL_SOUND_EVENT_PACKET_V1: Int = 0x18
         const val LEVEL_EVENT_PACKET: Int = 0x19
         const val BLOCK_EVENT_PACKET: Int = 0x1a
         const val ENTITY_EVENT_PACKET: Int = 0x1b
@@ -141,10 +137,8 @@ interface ProtocolInfo {
         const val SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET: Int = 0x71
         const val UPDATE_SOFT_ENUM_PACKET: Int = 0x72
         const val NETWORK_STACK_LATENCY_PACKET: Int = 0x73
-        const val SCRIPT_CUSTOM_EVENT_PACKET: Int = 0x75
         const val SPAWN_PARTICLE_EFFECT_PACKET: Int = 0x76
         const val AVAILABLE_ENTITY_IDENTIFIERS_PACKET: Int = 0x77
-        const val LEVEL_SOUND_EVENT_PACKET_V2: Int = 0x78
         const val NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET: Int = 0x79
         const val BIOME_DEFINITION_LIST_PACKET: Int = 0x7a
         const val LEVEL_SOUND_EVENT_PACKET: Int = 0x7b

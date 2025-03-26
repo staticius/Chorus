@@ -86,11 +86,11 @@ class Skin {
         this.skinData = skinData
     }
 
-    fun getSkinId(): String? {
+    fun getSkinId(): String {
         if (this.skinId == null) {
             this.generateSkinId("Custom")
         }
-        return skinId
+        return skinId!!
     }
 
     fun setSkinId(skinId: String?) {

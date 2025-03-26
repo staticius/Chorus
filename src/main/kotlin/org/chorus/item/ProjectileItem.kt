@@ -9,7 +9,7 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.network.protocol.LevelSoundEventPacketV2
+import org.chorus.network.protocol.LevelSoundEventPacket
 
 
 abstract class ProjectileItem(id: String, meta: Int, count: Int, name: String?) :
@@ -77,7 +77,7 @@ abstract class ProjectileItem(id: String, meta: Int, count: Int, name: String?) 
     protected fun addThrowSound(player: Player) {
         player.level!!.addLevelSoundEvent(
             player.position,
-            LevelSoundEventPacketV2.SOUND_THROW,
+            LevelSoundEventPacket.SOUND_THROW,
             -1,
             "minecraft:player",
             false,

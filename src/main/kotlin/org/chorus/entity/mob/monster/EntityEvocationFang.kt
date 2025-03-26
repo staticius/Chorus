@@ -11,7 +11,7 @@ import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
-import org.chorus.network.protocol.LevelSoundEventPacketV2
+import org.chorus.network.protocol.LevelSoundEventPacket
 
 
 /**
@@ -23,7 +23,7 @@ class EntityEvocationFang(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
     private val evocationIllager: EntityEvocationIllager? = null
 
     override fun getIdentifier(): String {
-        return EntityID.Companion.EVOCATION_FANG
+        return EntityID.EVOCATION_FANG
     }
 
     override fun initEntity() {
@@ -31,9 +31,9 @@ class EntityEvocationFang(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
         super.initEntity()
         level!!.addLevelSoundEvent(
             this.position,
-            LevelSoundEventPacketV2.SOUND_FANG,
+            LevelSoundEventPacket.SOUND_FANG,
             -1,
-            EntityID.Companion.EVOCATION_FANG,
+            EntityID.EVOCATION_FANG,
             false,
             false
         )

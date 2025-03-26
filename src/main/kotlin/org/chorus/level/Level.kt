@@ -438,7 +438,7 @@ class Level(
         isBaby: Boolean = false,
         isGlobal: Boolean = false
     ) {
-        val pk: LevelSoundEventPacketV2 = LevelSoundEventPacketV2()
+        val pk = LevelSoundEventPacket()
         pk.sound = type
         pk.extraData = data
         pk.entityIdentifier = identifier

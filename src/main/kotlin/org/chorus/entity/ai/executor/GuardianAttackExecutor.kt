@@ -10,7 +10,7 @@ import org.chorus.entity.mob.monster.EntityMonster
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.network.protocol.EntityEventPacket
-import org.chorus.network.protocol.LevelSoundEventPacketV2
+import org.chorus.network.protocol.LevelSoundEventPacket
 
 class GuardianAttackExecutor(
     protected var memory: MemoryType<out Entity?>,
@@ -117,7 +117,7 @@ class GuardianAttackExecutor(
         entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.id)
         entity.level!!.addLevelSoundEvent(
             entity.position,
-            LevelSoundEventPacketV2.SOUND_MOB_WARNING,
+            LevelSoundEventPacket.SOUND_MOB_WARNING,
             -1,
             entity.getIdentifier(),
             false,

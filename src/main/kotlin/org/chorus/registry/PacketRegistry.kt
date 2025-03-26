@@ -97,7 +97,6 @@ class PacketRegistry : IRegistry<Int, DataPacket?, Class<out DataPacket>> {
         this.register0(ProtocolInfo.INVENTORY_TRANSACTION_PACKET, InventoryTransactionPacket::class.java)
         this.register0(ProtocolInfo.ITEM_FRAME_DROP_ITEM_PACKET, ItemFrameDropItemPacket::class.java)
         this.register0(ProtocolInfo.LEVEL_EVENT_PACKET, LevelEventPacket::class.java)
-        this.register0(ProtocolInfo.LEVEL_SOUND_EVENT_PACKET_V1, LevelSoundEventPacketV1::class.java)
         this.register0(ProtocolInfo.LOGIN_PACKET, LoginPacket::class.java)
         this.register0(ProtocolInfo.MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket::class.java)
         this.register0(ProtocolInfo.MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket::class.java)
@@ -156,8 +155,6 @@ class PacketRegistry : IRegistry<Int, DataPacket?, Class<out DataPacket>> {
             NetworkChunkPublisherUpdatePacket::class.java
         )
         this.register0(ProtocolInfo.AVAILABLE_ENTITY_IDENTIFIERS_PACKET, AvailableEntityIdentifiersPacket::class.java)
-        this.register0(ProtocolInfo.LEVEL_SOUND_EVENT_PACKET_V2, LevelSoundEventPacket::class.java)
-        //        this.registerPacket(ProtocolInfo.SCRIPT_CUSTOM_EVENT_PACKET, ScriptCustomEventPacket.class); // deprecated since 1.20.10
         this.register0(ProtocolInfo.SPAWN_PARTICLE_EFFECT_PACKET, SpawnParticleEffectPacket::class.java)
         this.register0(ProtocolInfo.BIOME_DEFINITION_LIST_PACKET, BiomeDefinitionListPacket::class.java)
         this.register0(ProtocolInfo.LEVEL_SOUND_EVENT_PACKET, LevelSoundEventPacket::class.java)
