@@ -76,10 +76,7 @@ enum class PlayerActionType {
         }
 
         fun fromOrNull(id: Int): PlayerActionType? {
-            if (id >= 0 && id < VALUES.size) {
-                return VALUES[id]
-            }
-            return null
+            return VALUES.getOrNull(id)
         }
     }
 }

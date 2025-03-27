@@ -1,16 +1,17 @@
 package org.chorus.network.protocol.types
 
-enum class PlayerAbility(//用于RequestPermissionsPacket的特征位
+enum class PlayerAbility(
+    // Feature bits for RequestPermissionsPacket
     val bit: Int = 0
 ) {
-    BUILD(1),
-    MINE(2),
-    DOORS_AND_SWITCHES(4),
-    OPEN_CONTAINERS(8),
-    ATTACK_PLAYERS(16),
-    ATTACK_MOBS(32),
-    OPERATOR_COMMANDS(64),
-    TELEPORT(128),
+    BUILD(0x1),
+    MINE(0x2),
+    DOORS_AND_SWITCHES(0x4),
+    OPEN_CONTAINERS(0x8),
+    ATTACK_PLAYERS(0x10),
+    ATTACK_MOBS(0x20),
+    OPERATOR_COMMANDS(0x40),
+    TELEPORT(0x80),
 
     INVULNERABLE,
     FLYING,
@@ -27,6 +28,6 @@ enum class PlayerAbility(//用于RequestPermissionsPacket的特征位
 
     companion object {
         @JvmField
-        val VALUES: List<PlayerAbility> = listOf(*entries.toTypedArray())
+        val VALUES: List<PlayerAbility> = entries.toList()
     }
 }

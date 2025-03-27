@@ -2,8 +2,7 @@ package org.chorus.network.protocol.types
 
 import org.chorus.entity.data.Skin
 import org.chorus.utils.ClientChainData
-
-import java.util.*
+import java.util.UUID
 
 class XboxLivePlayerInfo(
     username: String,

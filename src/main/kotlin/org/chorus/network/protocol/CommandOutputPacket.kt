@@ -27,7 +27,7 @@ class CommandOutputPacket : DataPacket() {
         byteBuf.writeUUID(commandOriginData!!.uuid)
         byteBuf.writeString(commandOriginData!!.requestId) // unknown
         if (commandOriginData!!.type == CommandOriginData.Origin.DEV_CONSOLE || commandOriginData!!.type == CommandOriginData.Origin.TEST) {
-            byteBuf.writeVarLong(commandOriginData!!.varLong.orElse(-1)) // unknown
+            byteBuf.writeVarLong(commandOriginData!!.playerId ?: -1) // unknown
         }
 
         byteBuf.writeByte(type!!.ordinal.toByte().toInt())

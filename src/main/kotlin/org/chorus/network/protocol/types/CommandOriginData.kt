@@ -1,28 +1,13 @@
 package org.chorus.network.protocol.types
 
-
 import java.util.*
 
-/**
- * @author SupremeMortal (Nukkit project)
- */
-
-class CommandOriginData(
-    val type: Origin, val uuid: UUID, val requestId: String, //event
-    private val varlong: Long?
+data class CommandOriginData(
+    val type: Origin,
+    val uuid: UUID,
+    val requestId: String, // event
+    val playerId: Long?
 ) {
-    init {
-        this.varlong = varlong
-    }
-
-    val varLong: OptionalLong
-        get() {
-            if (varlong == null) {
-                return OptionalLong.empty()
-            }
-            return OptionalLong.of(varlong)
-        }
-
     enum class Origin {
         PLAYER,
         BLOCK,

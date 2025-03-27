@@ -41,14 +41,14 @@ class AddEntityPacket : DataPacket() {
     var pitch: Float = 0f
     var headYaw: Float = 0f
 
-    //todo: check what's the usage of this
+    // todo: check what's the usage of this
     var bodyYaw: Float = -1f
     var attributes: Array<Attribute?> = Attribute.EMPTY_ARRAY
 
     @JvmField
     var entityData: EntityDataMap = EntityDataMap()
     var syncedProperties: PropertySyncData = PropertySyncData(intArrayOf(), floatArrayOf())
-    var links: Array<EntityLink?> = EntityLink.Companion.EMPTY_ARRAY
+    var links: Array<EntityLink> = emptyArray()
 
     override fun decode(byteBuf: HandleByteBuf) {
     }

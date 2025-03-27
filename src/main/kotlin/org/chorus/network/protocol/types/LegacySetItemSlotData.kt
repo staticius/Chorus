@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types
 
 
 data class LegacySetItemSlotData(
-    val containerId: Int = 0,
+    val containerId: Int,
     val slots: ByteArray,
 ) {
     override fun equals(other: Any?): Boolean {

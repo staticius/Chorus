@@ -1,6 +1,5 @@
 package org.chorus.network.protocol.types
 
-
 enum class LabTableReactionType {
     NONE,
     ICE_BOMB,

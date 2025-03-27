@@ -20,11 +20,11 @@ class CommandRequestPacket : DataPacket() {
         val type = CommandOriginData.Origin.entries[byteBuf.readVarInt()]
         val uuid = byteBuf.readUUID()
         val requestId = byteBuf.readString()
-        var varLong: Long? = null
+        var playerId: Long? = null
         if (type == CommandOriginData.Origin.DEV_CONSOLE || type == CommandOriginData.Origin.TEST) {
-            varLong = byteBuf.readVarLong()
+            playerId = byteBuf.readVarLong()
         }
-        this.data = CommandOriginData(type, uuid, requestId, varLong)
+        this.data = CommandOriginData(type, uuid, requestId, playerId)
     }
 
     override fun encode(byteBuf: HandleByteBuf) {

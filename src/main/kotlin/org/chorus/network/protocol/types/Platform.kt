@@ -22,12 +22,8 @@ enum class Platform(val platformName: String, val id: Int) {
     companion object {
         private val PLATFORM_BY_ID: Map<Int, Platform> = entries.associateBy { it.id }
 
-        fun getPlatformByID(id: Int): Platform? {
-            if (PLATFORM_BY_ID.containsKey(id)) {
-                return PLATFORM_BY_ID[id]
-            }
-
-            return UNKNOWN
+        fun getPlatformByID(id: Int): Platform {
+            return PLATFORM_BY_ID[id] ?: UNKNOWN
         }
 
         var VALUES: Array<Platform> = entries.toTypedArray()

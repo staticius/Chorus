@@ -63,7 +63,10 @@ enum class DisconnectFailReason {
     INCOMPATIBLE_PACK,
     OUT_OF_STORAGE,
     INVALID_LEVEL,
+
+    @Deprecated("")
     DISCONNECT_PACKET_DEPRECATED,
+
     BLOCK_MISMATCH,
     INVALID_HEIGHTS,
     INVALID_WIDTHS,
@@ -93,6 +96,7 @@ enum class DisconnectFailReason {
 
     @Deprecated("since v685")
     REALMS_SESSION_NOT_FOUND_DEPRECATED,
+
     BAD_PACKET,
     CONN_CLIENT_SIGNALING_ERROR,
     SUB_CLIENT_LOGIN_DISABLED,

@@ -16,11 +16,10 @@ enum class TeleportationCause {
         private val VALUES = entries.toTypedArray()
 
         fun byId(id: Int): TeleportationCause {
-            if (id >= 0 && id < VALUES.size) {
-                return VALUES[id]
+            return VALUES.getOrNull(id) ?: run {
+                log.debug("Unknown teleportation cause ID: {}", id)
+                UNKNOWN
             }
-            log.debug("Unknown teleportation cause ID: {}", id)
-            return UNKNOWN
         }
     }
 }

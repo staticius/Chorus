@@ -54,12 +54,12 @@ enum class BannerPatternType(val typeId: Int, val code: String, val patternName:
             }
         }
 
-        fun fromCode(code: String): BannerPatternType? {
-            return code2PatternType[code]
+        fun fromCode(code: String): BannerPatternType {
+            return code2PatternType[code] ?: throw RuntimeException("Unknown BannerPatternType Code: $code")
         }
 
-        fun fromTypeId(typeId: Int): BannerPatternType? {
-            return typeId2PatternType[typeId]
+        fun fromTypeId(typeId: Int): BannerPatternType {
+            return typeId2PatternType[typeId] ?: throw RuntimeException("Unknown BannerPatternType TypeId: $typeId")
         }
     }
 }

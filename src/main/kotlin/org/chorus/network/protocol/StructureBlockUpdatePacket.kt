@@ -70,9 +70,9 @@ class StructureBlockUpdatePacket : DataPacket() {
             size,
             offset,
             lastEditedByEntityId,
-            StructureRotation.Companion.from(rotation.toInt()),
-            StructureMirror.Companion.from(mirror.toInt()),
-            StructureAnimationMode.Companion.from(animationMode.toInt()),
+            StructureRotation.from(rotation.toInt()),
+            StructureMirror.from(mirror.toInt()),
+            StructureAnimationMode.from(animationMode.toInt()),
             animationSeconds,
             integrityValue,
             integritySeed,
@@ -84,24 +84,24 @@ class StructureBlockUpdatePacket : DataPacket() {
         byteBuf.writeString(editorData.name)
         byteBuf.writeString(editorData.filteredName)
         byteBuf.writeString(editorData.dataField)
-        byteBuf.writeBoolean(editorData.isIncludingPlayers)
-        byteBuf.writeBoolean(editorData.isBoundingBoxVisible)
-        byteBuf.writeVarInt(editorData.type.ordinal())
+        byteBuf.writeBoolean(editorData.includingPlayers)
+        byteBuf.writeBoolean(editorData.boundingBoxVisible)
+        byteBuf.writeVarInt(editorData.type.ordinal)
         writeStructureSettings(byteBuf, editorData.settings)
-        byteBuf.writeVarInt(editorData.redstoneSaveMode.ordinal())
+        byteBuf.writeVarInt(editorData.redstoneSaveMode.ordinal)
     }
 
     private fun writeStructureSettings(byteBuf: HandleByteBuf, settings: StructureSettings) {
         byteBuf.writeString(settings.paletteName)
-        byteBuf.writeBoolean(settings.isIgnoringEntities)
-        byteBuf.writeBoolean(settings.isIgnoringBlocks)
-        byteBuf.writeBoolean(settings.isNonTickingPlayersAndTickingAreasEnabled)
+        byteBuf.writeBoolean(settings.ignoringEntities)
+        byteBuf.writeBoolean(settings.ignoringBlocks)
+        byteBuf.writeBoolean(settings.nonTickingPlayersAndTickingAreasEnabled)
         byteBuf.writeBlockVector3(settings.size)
         byteBuf.writeBlockVector3(settings.offset)
         byteBuf.writeVarLong(settings.lastEditedByEntityId)
-        byteBuf.writeByte(settings.rotation.ordinal().toByte().toInt())
-        byteBuf.writeByte(settings.mirror.ordinal().toByte().toInt())
-        byteBuf.writeByte(settings.animationMode.ordinal().toByte().toInt())
+        byteBuf.writeByte(settings.rotation.ordinal)
+        byteBuf.writeByte(settings.mirror.ordinal)
+        byteBuf.writeByte(settings.animationMode.ordinal)
         byteBuf.writeFloatLE(settings.animationSeconds)
         byteBuf.writeFloatLE(settings.integrityValue)
         byteBuf.writeIntLE(settings.integritySeed)
@@ -109,7 +109,7 @@ class StructureBlockUpdatePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.STRUCTURE_BLOCK_UPDATE_PACKET
+        return ProtocolInfo.STRUCTURE_BLOCK_UPDATE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

@@ -3,7 +3,6 @@ package org.chorus.network.protocol.types
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.recipe.descriptor.ItemDescriptor
 
-
 class RecipeUnlockingRequirement(var context: UnlockingContext) {
     var ingredients: List<ItemDescriptor> = ObjectArrayList()
 

@@ -1,15 +1,13 @@
 package org.chorus.network.protocol.types
 
-class EntityLink(
-    var fromEntityUniqueId: Long,
-    var toEntityUniqueId: Long,
-    type: Type,
-    var immediate: Boolean,
-    var riderInitiated: Boolean,
-    var vehicleAngularVelocity: Float
+data class EntityLink(
+    val fromEntityUniqueId: Long,
+    val toEntityUniqueId: Long,
+    val type: Type,
+    val immediate: Boolean,
+    val riderInitiated: Boolean,
+    val vehicleAngularVelocity: Float
 ) {
-    var type: Byte = type.ordinal.toByte()
-
     @Deprecated("")
     constructor(
         fromEntityUniqueId: Long,
@@ -23,9 +21,5 @@ class EntityLink(
         REMOVE,
         RIDER,
         PASSENGER
-    }
-
-    companion object {
-        val EMPTY_ARRAY: Array<EntityLink?> = arrayOfNulls(0)
     }
 }
